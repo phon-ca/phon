@@ -503,7 +503,8 @@ public class ProjectWindow extends CommonModuleFrame
 		sessionDecoration.add(showCreateSessionBtn);
 
 		sessionPanel = new TitledPanel("Session");
-		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType(".xml", IconSize.SMALL));
+		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType(
+				(OSInfo.isNix() ? "text-xml" : "xml"), IconSize.SMALL));
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
@@ -742,9 +743,10 @@ public class ProjectWindow extends CommonModuleFrame
 	}
 
 	private ImageIcon createNewSessionIcon() {
-		final String xmlIconName = "mimetypes/text-xml";
+		final String defaultIconName = "mimetypes/text-xml";
+		final String type = (NativeUtilities.isLinux() ? "text-xml" : "xml");
 		final ImageIcon xmlIcon =
-				IconManager.getInstance().getSystemIconForFileType("xml", xmlIconName, IconSize.MEDIUM);
+				IconManager.getInstance().getSystemIconForFileType(type, defaultIconName, IconSize.MEDIUM);
 		final ImageIcon addIcon =
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
 

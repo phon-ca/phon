@@ -139,10 +139,10 @@ public class SessionCheckAction extends SessionEditorAction {
 						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
 				}
-				
-				// setup status bar message
-				setupStatusBar(validator, bufferPanel);
-				
+				SwingUtilities.invokeLater( () -> {
+					// setup status bar message
+					setupStatusBar(validator, bufferPanel);
+				});
 				setStatus(TaskStatus.FINISHED);
 			}
 			

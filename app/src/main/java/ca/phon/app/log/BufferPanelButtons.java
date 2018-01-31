@@ -67,7 +67,7 @@ public class BufferPanelButtons extends JComponent {
 		buttonGroup = new ButtonGroup();
 		
 		final ImageIcon txtIcon = 
-				IconManager.getInstance().getSystemIconForFileType(".txt", TEXT_ICON, IconSize.SMALL);
+				IconManager.getInstance().getSystemIconForFileType("txt", TEXT_ICON, IconSize.SMALL);
 		final PhonUIAction txtAct = new PhonUIAction(getBufferPanel(), "showBuffer");
 		txtAct.putValue(PhonUIAction.NAME, "Text");
 		txtAct.putValue(PhonUIAction.SHORT_DESCRIPTION, TEXT_TEXT);
@@ -78,7 +78,7 @@ public class BufferPanelButtons extends JComponent {
 		buttonGroup.add(textButton);
 		
 		final ImageIcon tblIcon =
-				IconManager.getInstance().getSystemIconForFileType(".csv", TABLE_ICON, IconSize.SMALL);
+				IconManager.getInstance().getSystemIconForFileType("csv", TABLE_ICON, IconSize.SMALL);
 		final PhonUIAction tblAct = new PhonUIAction(getBufferPanel(), "showTable");
 		tblAct.putValue(PhonUIAction.NAME, "Table");
 		tblAct.putValue(PhonUIAction.SHORT_DESCRIPTION, TABLE_TEXT);
@@ -89,7 +89,7 @@ public class BufferPanelButtons extends JComponent {
 		buttonGroup.add(tableButton);
 		
 		final ImageIcon htmlIcon =
-				IconManager.getInstance().getSystemIconForFileType(".html", HTML_ICON, IconSize.SMALL);
+				IconManager.getInstance().getSystemIconForFileType("html", HTML_ICON, IconSize.SMALL);
 		final PhonUIAction htmlAct = new PhonUIAction(getBufferPanel(), "showHtml");
 		htmlAct.putValue(PhonUIAction.NAME, "HTML");
 		htmlAct.putValue(PhonUIAction.SHORT_DESCRIPTION, HTML_TEXT);

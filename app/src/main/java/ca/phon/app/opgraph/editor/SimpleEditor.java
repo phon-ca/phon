@@ -1368,8 +1368,9 @@ public class SimpleEditor extends CommonModuleFrame {
 									: IconManager.getInstance().getIcon("actions/open", IconSize.SMALL)));
 			super.setOpenIcon(folderOpenIcon);
 
+			final String type = (OSInfo.isNix() ? "text-xml" : "xml");
 			final ImageIcon xmlIcon =
-					IconManager.getInstance().getSystemIconForFileType("xml", "mimetypes/document", IconSize.SMALL);
+					IconManager.getInstance().getSystemIconForFileType(type, "mimetypes/text-xml", IconSize.SMALL);
 			super.setLeafIcon(xmlIcon);
 		}
 

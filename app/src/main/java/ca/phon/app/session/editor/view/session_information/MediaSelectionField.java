@@ -110,10 +110,12 @@ public class MediaSelectionField extends FileSelectionField {
 			
 			scanPath(mediaFolder, true);
 		}
-		final TextCompleter completer = new TextCompleter(completerModel);
-		// completion should not be in lower-case
-		completer.setUseDataForCompletion(true);
-		SwingUtilities.invokeLater( () -> completer.install(getTextField()) );
+		SwingUtilities.invokeLater( () -> {
+			final TextCompleter completer = new TextCompleter(completerModel);
+			// completion should not be in lower-case
+			completer.setUseDataForCompletion(true);
+			completer.install(getTextField());
+		});
 	}
 
 	public void setEditor(SessionEditor editor) {
