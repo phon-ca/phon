@@ -92,8 +92,16 @@ public class LocalProject implements Project, ProjectRefresh {
 		extSupport.initExtensions();
 
 		// load project data
-		projectData = loadProjectData();
-		refresh();
+		try {
+			projectData = loadProjectData();
+		} catch (ProjectConfigurationException e) {
+			projectData = (new ObjectFactory()).createProjectType();
+			projectData.setName(projectFolder.getName());
+		}
+		final List<CorpusType> corpora = scanProjectFolder();
+
+		projectData.getCorpus().clear();
+		projectData.getCorpus().addAll(corpora);
 
 		putExtension(ProjectRefresh.class, this);
 	}
@@ -1102,7 +1110,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 		projectData.getCorpus().clear();
 		projectData.getCorpus().addAll(corpora);
-
+		
 		try {
 			saveProjectData();
 		} catch (IOException e) {
