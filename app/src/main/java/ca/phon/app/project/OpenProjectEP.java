@@ -111,6 +111,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 			}
 			
 			final ProjectFactory factory = new DesktopProjectFactory();
+			
+			
 			final Project proj = factory.openProject(myFile);
 			
 			// check project version and see if an update is needed

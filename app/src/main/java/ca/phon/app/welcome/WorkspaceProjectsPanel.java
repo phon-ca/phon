@@ -198,7 +198,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 				fsIcon = explorerIcon;
 			if(explorerIconL != null)
 				fsIconL = explorerIconL;
-		} else {
+		} else if(OSInfo.isMacOs()) {
 			fsName = "Finder";
 
 			ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
@@ -209,7 +209,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 			if(finderIconL != null)
 				fsIconL = finderIconL;
 		}
-
 
 		final PhonUIAction act = new PhonUIAction(this, "onShowWorkspace");
 		act.putValue(PhonUIAction.NAME, "Show workspace");

@@ -216,7 +216,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 
 		final String defaultFolderIconName = "actions/document-open";
 		final StockIcon stockIcon =
-				(NativeUtilities.isMacOs() ? MacOSStockIcon.OpenFolderIcon : WindowsStockIcon.FOLDEROPEN);
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.OpenFolderIcon :
+					NativeUtilities.isLinux() ? GtkStockIcon.FOLDER_OPEN : WindowsStockIcon.FOLDEROPEN);
 
 		final ImageIcon browseIcn =
 				IconManager.getInstance().getSystemStockIcon(stockIcon, defaultFolderIconName, IconSize.SMALL);
@@ -253,13 +254,12 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createPrefsButton() {
 		MultiActionButton retVal = new MultiActionButton();
 
+		final StockIcon prefIcon = 
+				OSInfo.isMacOs() ? MacOSStockIcon.GenericPreferencesIcon
+						: OSInfo.isNix() ? GtkStockIcon.SETTINGS : WindowsStockIcon.SETTINGS;
 		final String defIcn = "categories/preferences";
-		ImageIcon prefsIcn = (OSInfo.isMacOs()
-				? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericPreferencesIcon, IconSize.SMALL)
-				: IconManager.getInstance().getIcon(defIcn, IconSize.SMALL));
-		ImageIcon prefsIcnL = (OSInfo.isMacOs()
-				? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericPreferencesIcon, IconSize.MEDIUM)
-				: IconManager.getInstance().getIcon(defIcn, IconSize.MEDIUM));
+		ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
+		ImageIcon prefsIcnL = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.MEDIUM);
 
 		String s1 = "Edit Preferences";
 		String s2 = "Modify application settings";
@@ -291,7 +291,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 
 		final String folderIconName = "places/folder-video";
 		final StockIcon stockIcon =
-				(NativeUtilities.isMacOs() ? MacOSStockIcon.VoicesFolderIcon : WindowsStockIcon.VIDEOFILES);
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.VoicesFolderIcon 
+						: NativeUtilities.isLinux() ? GtkStockIcon.FOLDER_VIDEO : WindowsStockIcon.VIDEOFILES);
 		final ImageIcon folderIcon =
 				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
 		final ImageIcon addIcon =

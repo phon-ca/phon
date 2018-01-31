@@ -232,7 +232,7 @@ public class FolderProjectList extends JPanel {
 					fsIcon = explorerIcon;
 				if(explorerIconL != null)
 					fsIconL = explorerIconL;
-			} else {
+			} else if(OSInfo.isMacOs()) {
 				fsName = "Finder";
 				
 				ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);

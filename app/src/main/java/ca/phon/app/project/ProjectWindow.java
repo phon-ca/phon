@@ -476,7 +476,7 @@ public class ProjectWindow extends CommonModuleFrame
 		corpusPanel = new TitledPanel("Corpus");
 		final ImageIcon defCorpusIcn = IconManager.getInstance().getSystemStockIcon(
 				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : 
-					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : null), IconSize.SMALL);
+					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : GtkStockIcon.FOLDER), IconSize.SMALL);
 		corpusPanel.setIcon(defCorpusIcn);
 		
 		corpusPanel.getContentContainer().add(createCorpusButton, BorderLayout.NORTH);
