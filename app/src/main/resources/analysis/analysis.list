@@ -1,6 +1,11 @@
+# General
 analysis/PPC.xml
 analysis/Phone Inventory.xml
 analysis/Phone Clusters.xml
+analysis/PMLU.xml
+analysis/Word List.xml
+analysis/Word Match.xml
+# Phonlogcial Processes
 analysis/Phonological Processes/Coronal Backing.xml
 analysis/Phonological Processes/Deaffrication.xml
 analysis/Phonological Processes/Deletion.xml
@@ -12,8 +17,6 @@ analysis/Phonological Processes/Stopping.xml
 analysis/Phonological Processes/Velar Fronting.xml
 analysis/Phonological Processes/Voicing.xml
 analysis/Phonological Processes/Custom Process.xml
-analysis/PMLU.xml
-analysis/Vocalization.xml
-analysis/Word List.xml
-analysis/Word Match.xml
-analysis/Word-Level Analysis of Polysyllables.xml
+# Specialized
+analysis/Specialized/Vocalization.xml
+analysis/Specialized/Word-Level Analysis of Polysyllables.xml

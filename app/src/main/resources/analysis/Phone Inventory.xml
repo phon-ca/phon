@@ -7,7 +7,7 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="15"/>
+                <oga:meta x="23" y="11"/>
             </extensions>
         </node>
         <node id="39d161f1" name="Selected Sessions" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
@@ -40,8 +40,6 @@ var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var Pcc = require("lib/Pcc").Pcc;
-var PccOptions = require("lib/Pcc").PccOptions;
 var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
 var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
@@ -222,51 +220,49 @@ function run(context) {
                     <oga:property key="filters.primary_target.filter"><![CDATA[\w]]></oga:property>
                     <oga:property key="filters.primary_actual.filter"><![CDATA[\w]]></oga:property>
                 </oga:settings>
-                <oga:meta x="35" y="498"/>
+                <oga:meta x="35" y="499"/>
             </extensions>
         </node>
-        <opqry:queryNode id="6a3320f4" name="Query IPA Target" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-04-20T08:22:35.937-02:30" name="Query IPA Target" uuid="3b077b02-bff4-4627-91e0-12aa8d38e418">
+        <opqry:queryNode id="230571e9" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-02-02T11:07:04.426-03:30" name="Query Node" uuid="4b58e781-79b2-42fc-b299-7cc88fb506ef">
                 <script>
-                    <source>var GroupFilter = require("lib/GroupFilter").GroupFilter;
+                    <source>/*
+params =
+{enum, searchTier, "IPA Target"|"IPA Actual", 0, "Search Tier"}
+;
+ */
+
+var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
+var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var Pcc = require("lib/Pcc").Pcc;
-var PccOptions = require("lib/Pcc").PccOptions;
-var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
-var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
  * Setup params
  *******************************/
 
-var searchTier = "IPA Target";
-
 var filters = {
 	"primary_target": new PatternFilter("filters.primary_target"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
 	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
 	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
 	"group": new GroupFilter("filters.group"),
+	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
 	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
 	"word": new WordFilter("filters.word"),
+	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
 	"syllable": new SyllableFilter("filters.syllable"),
 	"speaker": new ParticipantFilter("filters.speaker")
-};
-
-var metadataOptions = {
-	"pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
-	"pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
-	"stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
-	"cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
 };
 
 var includeAlignedParamInfo = {
@@ -279,10 +275,12 @@ var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
 
 function setup_params(params) {
-
-	filters.primary_target.setSelectedPatternType(PatternType.PHONEX);
-	filters.primary_target.param_setup(params);
-	filters.primary_target.set_required(true);
+	filters.primary = filters.primary_target;
+	
+	filters.primary.setSelectedPatternType(PatternType.PHONEX);
+	filters.primary.param_setup(params);
+	filters.primary.set_required(true);
+	var insertIdx = 1;
 
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
@@ -306,15 +304,24 @@ function setup_params(params) {
 
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
-	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group&lt;/b&gt;&lt;/html&gt;");
+
+	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Groups&lt;/b&gt;&lt;/html&gt;");
 	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var sep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group Filter&lt;/b&gt;&lt;/html&gt;");
+	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
-	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;");
+
+	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Words&lt;/b&gt;&lt;/html&gt;");
 	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+
+	var wordsep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word Filter&lt;/b&gt;&lt;/html&gt;");
+	params.add(wordsep2);
 	filters.alignedWord.param_setup(params);
 	var searchByWordListener = new java.beans.PropertyChangeListener {
 		propertyChange: function (e) {
@@ -323,33 +330,17 @@ function setup_params(params) {
 			filters.alignedWord.setEnabled(enabled);
 		}
 	};
-	filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
-	var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
 
 	filters.syllable.param_setup(params);
+	
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+	
 	filters.speaker.param_setup(params);
-
-	// add metadata options
-	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
-	params.add(metadataSep);
-
-	var spLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Stress Pattern&lt;/b&gt;&lt;/html&gt;");
-	params.add(spLbl);
-	metadataOptions.stressPattern.param_setup(params);
-
-	var cvLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;CGV Pattern&lt;/b&gt;&lt;/html&gt;");
-	params.add(cvLbl);
-	metadataOptions.cvPattern.param_setup(params);
-
-	var pccStandardLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (standard)&lt;/b&gt;&lt;/html&gt;");
-	params.add(pccStandardLbl);
-	metadataOptions.pcc_standard.param_setup(params);
-
-	var pccAlignedLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (aligned)&lt;/b&gt;&lt;/html&gt;");
-	params.add(pccAlignedLbl);
-	metadataOptions.pcc_aligned.param_setup(params);
 }
 
 /*
@@ -368,6 +359,8 @@ function begin_search(s) {
  * 	record - the current record
  *******************************/
 function query_record(recordIndex, record) {
+	filters.primary = filters.primary_target;
+	
 	// check participant filter
 	if (! filters.speaker.check_speaker(record.speaker)) return;
 
@@ -385,11 +378,27 @@ function query_record(recordIndex, record) {
 	// perform searches
 	for (var i = 0; i &lt; groups.length; i++) {
 		var group = groups[i];
+
+		var groupAlignedData = filters.groupTiers.getAlignedTierData(record, group, "Group");
+
+		var groupAlignedResults = groupAlignedData[0];
+		var groupAlignedMeta = groupAlignedData[1];
+
+		if (filters.alignedGroup.isUseFilter()) {
+			var tierList = new TierList("group");
+			tierList.setTiers(filters.alignedGroup.tier);
+
+			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
+			for(var j = 0; j &lt; alignedGroupData[0].length; j++) {
+				groupAlignedResults.push(alignedGroupData[0][j]);
+			}
+		}
+
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
 		var phoneMap = group.phoneAlignment;
 
 		var toSearch = new Array();
-		toSearch.push(ipa);
+		toSearch.push([ipa, groupAlignedResults, groupAlignedMeta]);
 
 		// search by word?
 		if (filters.word.isUseFilter()) {
@@ -397,6 +406,20 @@ function query_record(recordIndex, record) {
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j &lt; selectedWords.length; j++) {
 				var word = selectedWords[j];
+
+				var wordAlignedMeta = new java.util.LinkedHashMap();
+				wordAlignedMeta.putAll(groupAlignedMeta);
+
+				var wordAlignedResults = new Array();
+				for(var k = 0; k &lt; groupAlignedResults.length; k++) {
+					wordAlignedResults.push(groupAlignedResults[k]);
+				}
+
+				var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
+				for(var k = 0; k &lt; wordAlignedData[0].length; k++) {
+					wordAlignedResults.push(wordAlignedData[0][k]);
+				}
+				wordAlignedMeta.putAll(wordAlignedData[1]);
 
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
 				var addWord = (wordIpa != null);
@@ -408,10 +431,18 @@ function query_record(recordIndex, record) {
 				// check aligned word pattern if necessary
 				if (filters.alignedWord.isUseFilter()) {
 					addWord = filters.alignedWord.check_word(word);
+
+					var tierList = new TierList("word");
+					tierList.setTiers(filters.alignedWord.tier);
+
+					var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
+					for(var k = 0; k &lt; alignedWordData[0].length; k++) {
+						wordAlignedResults.push(alignedWordData[0][k]);
+					}
 				}
 
 				if (addWord == true) {
-					toSearch.push(wordIpa);
+					toSearch.push([wordIpa, wordAlignedResults, wordAlignedMeta]);
 				}
 			}
 		}
@@ -420,20 +451,22 @@ function query_record(recordIndex, record) {
 		if (filters.syllable.isUseFilter()) {
 			var syllList = new Array();
 			for (j = 0; j &lt; toSearch.length; j++) {
-				var obj = toSearch[j];
+				var obj = toSearch[j][0];
 				var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
 				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
 
 				for (k = 0; k &lt; sylls.length; k++) {
-					syllList.push(sylls[k]);
+					syllList.push([sylls[k], toSearch[j][1], toSearch[j][2]]);
 				}
 			}
 			toSearch = syllList;
 		}
 
 		for (j = 0; j &lt; toSearch.length; j++) {
-			var obj = toSearch[j];
-			var matches = filters.primary_target.find_pattern(obj);
+			var obj = toSearch[j][0];
+			var alignedResults = toSearch[j][1];
+			var alignedMetadata = toSearch[j][2];
+			var matches = filters.primary.find_pattern(obj);
 			var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
 			var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
 
@@ -478,6 +511,7 @@ function query_record(recordIndex, record) {
 				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
 				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
 
+
 				// find location of aligned value in group
 				var groupStartIdx =
 				(alignedIpaElements.length() &gt; 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)): 0);
@@ -496,7 +530,7 @@ function query_record(recordIndex, record) {
 					var alignedRv = factory.createResultValue();
 					alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
 					alignedRv.groupIndex = group.groupIndex;
-					if (aligned != null &amp;&amp; aligned.length &gt; 0) {
+					if (aligned != null &amp;&amp; aligned.size() &gt; 0) {
 						var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
 						var alignedLength = alignedIpa.toString().length();
 
@@ -509,20 +543,19 @@ function query_record(recordIndex, record) {
 
 					result.addResultValue(alignedRv);
 					result.schema = "ALIGNED";
-					calcMetadata(record, group, result.metadata,
-					(match.value == null ? null: new IPATranscript(match.value)),
-					(aligned == null ? null: new IPATranscript(aligned)));
-				} else {
-					calcMetadata(record, group, result.metadata,
-					(match.value == null ? null: new IPATranscript(match.value)), null);
 				}
+
+				for(var alignedResultIdx = 0; alignedResultIdx &lt; alignedResults.length; alignedResultIdx++) {
+					result.addResultValue(alignedResults[alignedResultIdx]);
+				}
+				result.metadata.putAll(alignedMetadata);
 
 				// append named-group information (if any)
 				if (match.groups) {
 					groupKeys = Object.keys(match.groups);
 					for (keyIdx = 0; keyIdx &lt; groupKeys.length; keyIdx++) {
 						var key = groupKeys[keyIdx];
-						if (! /^[0-9]+$/.test(key) &amp;&amp; key != 'X') {
+						if (/^[a-zA-Z]\w*$/.test(key) &amp;&amp; key != 'X') {
 							result.metadata.put(key, match.groups[key].value.toString());
 						}
 					}
@@ -533,123 +566,68 @@ function query_record(recordIndex, record) {
 		}
 	}
 }
-
-/********************************
- * Functions
- *******************************/
-
-/* Generate metadata based on parmeters */
-function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
-	var retVal = metadata;
-
-	if (metadataOptions.stressPattern.include == true) {
-		var tsp = (ipaTVal == null ? null: ipaTVal.stressPattern);
-		var asp = (ipaAVal == null ? null: ipaAVal.stressPattern)
-
-		if (tsp != null &amp;&amp; asp != null &amp;&amp; metadataOptions.stressPattern.separate == false) {
-			var sp = tsp + " \u2194 " + asp;
-			retVal.put("SP", sp);
-		} else {
-			if (tsp != null) {
-				var name = (metadataOptions.stressPattern.separate == true ? "SP-T": "SP");
-				retVal.put(name, tsp);
-			}
-			if (asp != null) {
-				var name = (metadataOptions.stressPattern.separate == true ? "SP-A": "SP");
-				retVal.put(name, asp);
-			}
-		}
-	}
-
-	if (metadataOptions.cvPattern.include == true) {
-		var tcv = (ipaTVal == null ? null: ipaTVal.cvPattern);
-		var acv = (ipaAVal == null ? null: ipaAVal.cvPattern);
-
-		if (tcv != null &amp;&amp; acv != null &amp;&amp; metadataOptions.cvPattern.separate == false) {
-			var cv = tcv + " \u2194 " + acv;
-			retVal.put("CGV", cv);
-		} else {
-			if (tcv != null) {
-				var name = (metadataOptions.cvPattern.separate == true ? "CGV-T": "SP");
-				retVal.put(name, tcv);
-			}
-			if (acv != null) {
-				var name = (metadataOptions.cvPattern.separate == true ? "CGV-A": "SP");
-				retVal.put(name, acv);
-			}
-		}
-	}
-
-	if (group != null) {
-		metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
-		metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
-	}
-}
 </source>
-                    <param id="filters.actualResultFilter.filterType">Phonex</param>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                     <param id="filters.groupPattern.filterType">Plain text</param>
                     <param id="filters.primary_target.filter">\w</param>
                     <param id="filters.primary_target.filterType">Phonex</param>
+                    <param id="filters.searchBy.searchBy">Word</param>
                     <param id="filters.speaker.age1Comparator">equal to</param>
                     <param id="filters.speaker.age2Comparator">equal to</param>
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                     <param id="filters.syllable.syllableType">Any syllable</param>
-                    <param id="filters.targetResultFilter.filterType">Phonex</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
                     <param id="includeAligned">false</param>
                 </script>
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="299" y="55"/>
+                <oga:meta x="305" y="67"/>
             </extensions>
         </opqry:queryNode>
-        <opqry:queryNode id="82fb4fee099f40c2" name="Query IPA Actual" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2017-04-20T08:22:35.947-02:30" name="Query IPA Target" uuid="2bfc4b34-5844-4963-a0d7-141111f5acea">
+        <opqry:queryNode id="34c3c8ef8e8547ce" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-02-02T11:07:04.437-03:30" name="Query Node" uuid="c2563c4a-2ccd-48e7-ad6e-d07a9e200cf7">
                 <script>
-                    <source>var GroupFilter = require("lib/GroupFilter").GroupFilter;
+                    <source>/*
+params =
+{enum, searchTier, "IPA Target"|"IPA Actual", 0, "Search Tier"}
+;
+ */
+
+var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
+var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var Pcc = require("lib/Pcc").Pcc;
-var PccOptions = require("lib/Pcc").PccOptions;
-var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
-var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
  * Setup params
  *******************************/
 
-var searchTier = "IPA Actual";
-
 var filters = {
 	"primary_actual": new PatternFilter("filters.primary_actual"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
 	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
 	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
 	"group": new GroupFilter("filters.group"),
+	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
 	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
 	"word": new WordFilter("filters.word"),
+	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
 	"syllable": new SyllableFilter("filters.syllable"),
 	"speaker": new ParticipantFilter("filters.speaker")
-};
-
-var metadataOptions = {
-	"pcc_aligned": new PccOptions("metadataOptions.pcc_aligned", true),
-	"pcc_standard": new PccOptions("metadataOptions.pcc_standard", false),
-	"stressPattern": new StressPatternOptions("metadataOptions.stressPattern"),
-	"cvPattern": new CvPatternOptions("metadataOptions.cvPattern")
 };
 
 var includeAlignedParamInfo = {
@@ -662,10 +640,12 @@ var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
 
 function setup_params(params) {
-
-	filters.primary_actual.setSelectedPatternType(PatternType.PHONEX);
-	filters.primary_actual.param_setup(params);
-	filters.primary_actual.set_required(true);
+	filters.primary = filters.primary_actual;
+	
+	filters.primary.setSelectedPatternType(PatternType.PHONEX);
+	filters.primary.param_setup(params);
+	filters.primary.set_required(true);
+	var insertIdx = 1;
 
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
@@ -689,15 +669,24 @@ function setup_params(params) {
 
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
-	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group&lt;/b&gt;&lt;/html&gt;");
+
+	var sep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Groups&lt;/b&gt;&lt;/html&gt;");
 	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var sep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Group Filter&lt;/b&gt;&lt;/html&gt;");
+	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
-	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word&lt;/b&gt;&lt;/html&gt;");
+
+	var wordsep = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Add Aligned Words&lt;/b&gt;&lt;/html&gt;");
 	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+
+	var wordsep2 = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Aligned Word Filter&lt;/b&gt;&lt;/html&gt;");
+	params.add(wordsep2);
 	filters.alignedWord.param_setup(params);
 	var searchByWordListener = new java.beans.PropertyChangeListener {
 		propertyChange: function (e) {
@@ -706,33 +695,17 @@ function setup_params(params) {
 			filters.alignedWord.setEnabled(enabled);
 		}
 	};
-	filters.word.searchByWordOpt.addPropertyChangeListener(filters.word.searchByWordOpt.paramId, searchByWordListener);
-	var enabled = filters.word.searchByWordOpt.getValue(filters.word.searchByWordOpt.paramId);
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
 
 	filters.syllable.param_setup(params);
+	
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+	
 	filters.speaker.param_setup(params);
-
-	// add metadata options
-	var metadataSep = new SeparatorScriptParam("Metadata Options", true);
-	params.add(metadataSep);
-
-	var spLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;Stress Pattern&lt;/b&gt;&lt;/html&gt;");
-	params.add(spLbl);
-	metadataOptions.stressPattern.param_setup(params);
-
-	var cvLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;CGV Pattern&lt;/b&gt;&lt;/html&gt;");
-	params.add(cvLbl);
-	metadataOptions.cvPattern.param_setup(params);
-
-	var pccStandardLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (standard)&lt;/b&gt;&lt;/html&gt;");
-	params.add(pccStandardLbl);
-	metadataOptions.pcc_standard.param_setup(params);
-
-	var pccAlignedLbl = new LabelScriptParam("", "&lt;html&gt;&lt;b&gt;PCC/PVC (aligned)&lt;/b&gt;&lt;/html&gt;");
-	params.add(pccAlignedLbl);
-	metadataOptions.pcc_aligned.param_setup(params);
 }
 
 /*
@@ -751,6 +724,8 @@ function begin_search(s) {
  * 	record - the current record
  *******************************/
 function query_record(recordIndex, record) {
+	filters.primary = filters.primary_actual;
+	
 	// check participant filter
 	if (! filters.speaker.check_speaker(record.speaker)) return;
 
@@ -768,11 +743,27 @@ function query_record(recordIndex, record) {
 	// perform searches
 	for (var i = 0; i &lt; groups.length; i++) {
 		var group = groups[i];
+
+		var groupAlignedData = filters.groupTiers.getAlignedTierData(record, group, "Group");
+
+		var groupAlignedResults = groupAlignedData[0];
+		var groupAlignedMeta = groupAlignedData[1];
+
+		if (filters.alignedGroup.isUseFilter()) {
+			var tierList = new TierList("group");
+			tierList.setTiers(filters.alignedGroup.tier);
+
+			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
+			for(var j = 0; j &lt; alignedGroupData[0].length; j++) {
+				groupAlignedResults.push(alignedGroupData[0][j]);
+			}
+		}
+
 		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
 		var phoneMap = group.phoneAlignment;
 
 		var toSearch = new Array();
-		toSearch.push(ipa);
+		toSearch.push([ipa, groupAlignedResults, groupAlignedMeta]);
 
 		// search by word?
 		if (filters.word.isUseFilter()) {
@@ -780,6 +771,20 @@ function query_record(recordIndex, record) {
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j &lt; selectedWords.length; j++) {
 				var word = selectedWords[j];
+
+				var wordAlignedMeta = new java.util.LinkedHashMap();
+				wordAlignedMeta.putAll(groupAlignedMeta);
+
+				var wordAlignedResults = new Array();
+				for(var k = 0; k &lt; groupAlignedResults.length; k++) {
+					wordAlignedResults.push(groupAlignedResults[k]);
+				}
+
+				var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
+				for(var k = 0; k &lt; wordAlignedData[0].length; k++) {
+					wordAlignedResults.push(wordAlignedData[0][k]);
+				}
+				wordAlignedMeta.putAll(wordAlignedData[1]);
 
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
 				var addWord = (wordIpa != null);
@@ -791,10 +796,18 @@ function query_record(recordIndex, record) {
 				// check aligned word pattern if necessary
 				if (filters.alignedWord.isUseFilter()) {
 					addWord = filters.alignedWord.check_word(word);
+
+					var tierList = new TierList("word");
+					tierList.setTiers(filters.alignedWord.tier);
+
+					var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
+					for(var k = 0; k &lt; alignedWordData[0].length; k++) {
+						wordAlignedResults.push(alignedWordData[0][k]);
+					}
 				}
 
 				if (addWord == true) {
-					toSearch.push(wordIpa);
+					toSearch.push([wordIpa, wordAlignedResults, wordAlignedMeta]);
 				}
 			}
 		}
@@ -803,20 +816,22 @@ function query_record(recordIndex, record) {
 		if (filters.syllable.isUseFilter()) {
 			var syllList = new Array();
 			for (j = 0; j &lt; toSearch.length; j++) {
-				var obj = toSearch[j];
+				var obj = toSearch[j][0];
 				var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
 				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
 
 				for (k = 0; k &lt; sylls.length; k++) {
-					syllList.push(sylls[k]);
+					syllList.push([sylls[k], toSearch[j][1], toSearch[j][2]]);
 				}
 			}
 			toSearch = syllList;
 		}
 
 		for (j = 0; j &lt; toSearch.length; j++) {
-			var obj = toSearch[j];
-			var matches = filters.primary_actual.find_pattern(obj);
+			var obj = toSearch[j][0];
+			var alignedResults = toSearch[j][1];
+			var alignedMetadata = toSearch[j][2];
+			var matches = filters.primary.find_pattern(obj);
 			var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
 			var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
 
@@ -861,6 +876,7 @@ function query_record(recordIndex, record) {
 				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
 				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
 
+
 				// find location of aligned value in group
 				var groupStartIdx =
 				(alignedIpaElements.length() &gt; 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)): 0);
@@ -879,7 +895,7 @@ function query_record(recordIndex, record) {
 					var alignedRv = factory.createResultValue();
 					alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
 					alignedRv.groupIndex = group.groupIndex;
-					if (aligned != null &amp;&amp; aligned.length &gt; 0) {
+					if (aligned != null &amp;&amp; aligned.size() &gt; 0) {
 						var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
 						var alignedLength = alignedIpa.toString().length();
 
@@ -892,20 +908,19 @@ function query_record(recordIndex, record) {
 
 					result.addResultValue(alignedRv);
 					result.schema = "ALIGNED";
-					calcMetadata(record, group, result.metadata,
-					(match.value == null ? null: new IPATranscript(match.value)),
-					(aligned == null ? null: new IPATranscript(aligned)));
-				} else {
-					calcMetadata(record, group, result.metadata,
-					(match.value == null ? null: new IPATranscript(match.value)), null);
 				}
+
+				for(var alignedResultIdx = 0; alignedResultIdx &lt; alignedResults.length; alignedResultIdx++) {
+					result.addResultValue(alignedResults[alignedResultIdx]);
+				}
+				result.metadata.putAll(alignedMetadata);
 
 				// append named-group information (if any)
 				if (match.groups) {
 					groupKeys = Object.keys(match.groups);
 					for (keyIdx = 0; keyIdx &lt; groupKeys.length; keyIdx++) {
 						var key = groupKeys[keyIdx];
-						if (! /^[0-9]+$/.test(key) &amp;&amp; key != 'X') {
+						if (/^[a-zA-Z]\w*$/.test(key) &amp;&amp; key != 'X') {
 							result.metadata.put(key, match.groups[key].value.toString());
 						}
 					}
@@ -916,85 +931,31 @@ function query_record(recordIndex, record) {
 		}
 	}
 }
-
-/********************************
- * Functions
- *******************************/
-
-/* Generate metadata based on parmeters */
-function calcMetadata(record, group, metadata, ipaTVal, ipaAVal) {
-	var retVal = metadata;
-
-	if (metadataOptions.stressPattern.include == true) {
-		var tsp = (ipaTVal == null ? null: ipaTVal.stressPattern);
-		var asp = (ipaAVal == null ? null: ipaAVal.stressPattern)
-
-		if (tsp != null &amp;&amp; asp != null &amp;&amp; metadataOptions.stressPattern.separate == false) {
-			var sp = tsp + " \u2194 " + asp;
-			retVal.put("SP", sp);
-		} else {
-			if (tsp != null) {
-				var name = (metadataOptions.stressPattern.separate == true ? "SP-T": "SP");
-				retVal.put(name, tsp);
-			}
-			if (asp != null) {
-				var name = (metadataOptions.stressPattern.separate == true ? "SP-A": "SP");
-				retVal.put(name, asp);
-			}
-		}
-	}
-
-	if (metadataOptions.cvPattern.include == true) {
-		var tcv = (ipaTVal == null ? null: ipaTVal.cvPattern);
-		var acv = (ipaAVal == null ? null: ipaAVal.cvPattern);
-
-		if (tcv != null &amp;&amp; acv != null &amp;&amp; metadataOptions.cvPattern.separate == false) {
-			var cv = tcv + " \u2194 " + acv;
-			retVal.put("CGV", cv);
-		} else {
-			if (tcv != null) {
-				var name = (metadataOptions.cvPattern.separate == true ? "CGV-T": "SP");
-				retVal.put(name, tcv);
-			}
-			if (acv != null) {
-				var name = (metadataOptions.cvPattern.separate == true ? "CGV-A": "SP");
-				retVal.put(name, acv);
-			}
-		}
-	}
-
-	if (group != null) {
-		metadataOptions.pcc_standard.setup_pcc_standard_metadata(group, retVal);
-		metadataOptions.pcc_aligned.setup_pcc_aligned_metadata(group, retVal);
-	}
-}
 </source>
-                    <param id="filters.actualResultFilter.filterType">Phonex</param>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                     <param id="filters.groupPattern.filterType">Plain text</param>
                     <param id="filters.primary_actual.filter">\w</param>
                     <param id="filters.primary_actual.filterType">Phonex</param>
+                    <param id="filters.searchBy.searchBy">Word</param>
                     <param id="filters.speaker.age1Comparator">equal to</param>
                     <param id="filters.speaker.age2Comparator">equal to</param>
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                     <param id="filters.syllable.syllableType">Any syllable</param>
-                    <param id="filters.targetResultFilter.filterType">Phonex</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
-                    <param id="includeAligned">false</param>
                 </script>
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="298" y="228"/>
+                <oga:meta x="300" y="263"/>
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="3f6b43f11e6469e" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="31b06253">
+            <graph id="30a648be">
                 <ogcn:macro id="e708252cebcf499e" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="45560347">
+                    <graph id="587afb22">
                         <node id="3f3d532a4537402d" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1108,7 +1069,7 @@ $DATA
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="540" y="246"/>
+                <oga:meta x="552" y="247"/>
             </extensions>
         </node>
         <node id="7ebf94c11c254b8a" name="Split Table by Speaker" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -1310,7 +1271,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="737b3ce1" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="1411b659">
+            <graph id="74e3627b">
                 <node id="57d85ddb" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1346,7 +1307,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="ed7ad328cc134c2b" name="Create Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7bc8f182">
+                    <graph id="3fdfdaa2">
                         <node id="e608a68c057340f5" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1393,7 +1354,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="2513d879596a40c8" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="1f76cd51">
+                    <graph id="41d9240c">
                         <node id="15ad0ef235824211" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1471,7 +1432,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="f7b580dcd80049d7" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="d766ec3">
+                    <graph id="5330987a">
                         <node id="a59f33a7a0e54a94" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1554,7 +1515,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4a1ba1f0" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="1497f492">
+                    <graph id="4450fe68">
                         <node id="37d2f72f" name="IPA Target Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1597,7 +1558,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="365dec32" name="Aggregate IPA Target" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="6bf42d19">
+                            <graph id="2a63a324">
                                 <node id="1eb1b36b43024403" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1625,7 +1586,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="7bc4ca8a" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="1ccef64">
+                                    <graph id="636570d9">
                                         <node id="322ceb5f" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1726,7 +1687,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="827f34d9b454ec8" name="Add to Aggregate Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="dfe5ff1">
+                                    <graph id="57b2cf74">
                                         <node id="cd006d2a11074f3b" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
@@ -1800,7 +1761,7 @@ No Results
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="e289821f9fcb4e23" name="Aggregate IPA Actual" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="53ec9ee4">
+                            <graph id="621fcf97">
                                 <node id="95e9959513da488d" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1828,7 +1789,7 @@ No Results
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="8552fadd7a0040c2" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="7f11a487">
+                                    <graph id="1f3387c7">
                                         <node id="79487f9b37784020" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1929,7 +1890,7 @@ No Results
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="f618e1d4a8ee4d8f" name="Add to Aggregate Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="c19aab1">
+                                    <graph id="4d4e0199">
                                         <node id="a7da9f47fe3345a3" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                             <input name="data" optional="false">Data to print</input>
                                             <extensions>
@@ -2201,7 +2162,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="153d8dd0" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="3441f1ae">
+                            <graph id="56ee29e2">
                                 <node id="63a39ca2" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -2270,7 +2231,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="5200f04eaf4b41b8" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="6c1ebafe">
+                                    <graph id="252f95a6">
                                         <node id="cd727de3e6764379" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2347,7 +2308,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="2e806ecc316b48cf" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="e8c0062">
+                                    <graph id="42e75709">
                                         <node id="7f2a0eb56dd84111" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2424,7 +2385,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="79c23a8b" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                    <graph id="6a120e32">
+                                    <graph id="697643e9">
                                         <node id="7f0afc8c" name="IPA Target Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2484,7 +2445,7 @@ function run(context) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="b6f7d028dd2b443e" name="Setup Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="9c3003a">
+                                            <graph id="5db8ad0">
                                                 <node id="c52959b0584c4c2f" name="StringBuffer#&lt;init&gt;()" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2858,7 +2819,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="1b5f902d17d54d86" name="Add to Breakdown Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="5f8abc72">
+                                            <graph id="4e0106ea">
                                                 <node id="f8d3544b24e44d2f" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                                                     <input name="data" optional="false">Data to print</input>
                                                     <extensions>
@@ -3011,7 +2972,7 @@ No Results
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2c8e6837513a46dd" name="Print Summary Table" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="76f13e72">
+                    <graph id="597e433e">
                         <node id="84d7621903c24f6f" type="class:ca.gedge.opgraph.nodes.general.PassThroughNode">
                             <extensions>
                                 <oga:meta x="79" y="165"/>
@@ -3034,7 +2995,7 @@ No Results
                             </extensions>
                         </node>
                         <ogcn:macro id="c3af0e5959a64b09" name="Summary Buffer Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="97e819d">
+                            <graph id="207837c7">
                                 <node id="e08f744cf8274e00" name="StringBuffer#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                                     <extensions>
                                         <oga:settings>
@@ -3110,7 +3071,7 @@ No Results
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2068afe951f40ee" name="Add to Summary Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="1ae48357">
+                    <graph id="44d2701b">
                         <node id="8ddc107ea77444ee" name="Set Caption" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                             <input name="data" optional="false">Data to print</input>
                             <extensions>
@@ -3192,9 +3153,9 @@ No Results
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="eb9ba08882cd4286" name="Finish Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="237caec8">
+            <graph id="1d173c0f">
                 <ogcn:macro id="a112484bc01a4c30" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3def7217">
+                    <graph id="5bd984fe">
                         <node id="5da952f1a8274239" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -3205,7 +3166,7 @@ No Results
                             </extensions>
                         </node>
                         <ogcn:macro id="d9c4ce30eb24ccf" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="25fa8f0b">
+                            <graph id="2a623319">
                                 <node id="17635ec60c5745b9" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -3265,7 +3226,7 @@ $DATA
                     </extensions>
                 </node>
                 <ogcn:macro id="5d24f00bffc4e3c" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="3ad6f96c">
+                    <graph id="4e7af42d">
                         <node id="f346b3c24a424f52" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -3276,7 +3237,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="1078e03ae7b3461e" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="102346f4">
+                            <graph id="6c5e743f">
                                 <node id="e177223678e24867" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -3331,7 +3292,7 @@ $DATA
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="5347dc1967ff4596" name="Add Buffer to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="23cbe03">
+                    <graph id="262613be">
                         <node id="49466be4c73548fa" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -3342,7 +3303,7 @@ $DATA
                             </extensions>
                         </node>
                         <ogcn:macro id="659ef2c324f84ab5" name="Add to Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="76def6a2">
+                            <graph id="c069ab8">
                                 <node id="20a76d9ea2b54d2b" type="class:ca.phon.app.opgraph.nodes.log.GetBufferNode">
                                     <extensions>
                                         <oga:meta x="518" y="147">
@@ -3407,25 +3368,25 @@ $DATA
                 <oga:meta x="797" y="511"/>
             </extensions>
         </ogcn:macro>
-        <link dest="6a3320f4" destField="project" source="fb2027c" sourceField="obj"/>
-        <link dest="82fb4fee099f40c2" destField="project" source="fb2027c" sourceField="obj"/>
-        <link dest="6a3320f4" destField="sessions" source="39d161f1" sourceField="obj"/>
-        <link dest="82fb4fee099f40c2" destField="sessions" source="39d161f1" sourceField="obj"/>
-        <link dest="7df461c2" destField="project" source="6a3320f4" sourceField="project"/>
-        <link dest="7df461c2" destField="results" source="6a3320f4" sourceField="results"/>
-        <link dest="6dfac37ee1204f60" destField="project" source="82fb4fee099f40c2" sourceField="project"/>
-        <link dest="6dfac37ee1204f60" destField="results" source="82fb4fee099f40c2" sourceField="results"/>
         <link dest="7ebf94c11c254b8a" destField="table" source="7df461c2" sourceField="table"/>
         <link dest="132ebfd991bc4754" destField="table" source="6dfac37ee1204f60" sourceField="table"/>
         <link dest="3f6b43f11e6469e" destField="script" source="6df4d2f7" sourceField="script"/>
         <link dest="3f6b43f11e6469e" destField="parameters" source="6df4d2f7" sourceField="parameters"/>
         <link dest="737b3ce1" destField="collection" source="3e038096" sourceField="obj"/>
         <link dest="eb9ba08882cd4286" destField="input" source="737b3ce1" sourceField="collection"/>
-        <link dest="6a3320f4" destField="parameters" source="6df4d2f7" sourceField="parameters"/>
-        <link dest="82fb4fee099f40c2" destField="parameters" source="6df4d2f7" sourceField="parameters"/>
         <link dest="737b3ce1" destField="ipaTargetTableMap" source="7ebf94c11c254b8a" sourceField="tableMap"/>
         <link dest="737b3ce1" destField="ipaActualTableMap" source="132ebfd991bc4754" sourceField="tableMap"/>
         <link dest="737b3ce1" destField="selectedSessions" source="39d161f1" sourceField="obj"/>
+        <link dest="230571e9" destField="parameters" source="6df4d2f7" sourceField="parameters"/>
+        <link dest="230571e9" destField="project" source="fb2027c" sourceField="obj"/>
+        <link dest="230571e9" destField="sessions" source="39d161f1" sourceField="obj"/>
+        <link dest="7df461c2" destField="project" source="230571e9" sourceField="project"/>
+        <link dest="7df461c2" destField="results" source="230571e9" sourceField="results"/>
+        <link dest="6dfac37ee1204f60" destField="project" source="34c3c8ef8e8547ce" sourceField="project"/>
+        <link dest="6dfac37ee1204f60" destField="results" source="34c3c8ef8e8547ce" sourceField="results"/>
+        <link dest="34c3c8ef8e8547ce" destField="parameters" source="6df4d2f7" sourceField="parameters"/>
+        <link dest="34c3c8ef8e8547ce" destField="project" source="fb2027c" sourceField="obj"/>
+        <link dest="34c3c8ef8e8547ce" destField="sessions" source="39d161f1" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Phone Inventory">
