@@ -107,7 +107,7 @@ public class ProjectWindow extends CommonModuleFrame
 	private String projectLoadPath = new String();
 
 	private final ProjectListener myProjectListener;
-	
+
 	private ProjectGitController gitController;
 
 	/** Constructor */
@@ -118,7 +118,7 @@ public class ProjectWindow extends CommonModuleFrame
 
 		putExtension(Project.class, project);
 		gitController = new ProjectGitController(project);
-		if(gitController.hasGitFolder()) { 
+		if(gitController.hasGitFolder()) {
 			try {
 				gitController.open();
 			} catch (IOException e) {
@@ -183,7 +183,7 @@ public class ProjectWindow extends CommonModuleFrame
 	public boolean isBlindMode() {
 		return this.blindMode;
 	}
-	
+
 	public void setBlindMode(boolean blindMode) {
 		this.blindMode = blindMode;
 		PrefHelper.getUserPreferences().putBoolean(BLIND_MODE_PROPERTY, blindMode);
@@ -237,6 +237,10 @@ public class ProjectWindow extends CommonModuleFrame
 		projectMenu.add(newSessionItem);
 
 		projectMenu.addSeparator();
+
+//		projectMenu.add(new BrowseForCorpusMediaFolder(this));
+//
+//		projectMenu.addSeparator();
 
 		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
 		projectMenu.add(anonymizeParticipantInfoItem);
@@ -374,7 +378,7 @@ public class ProjectWindow extends CommonModuleFrame
 				// clear details if more than one session is selected
 				if(sessionList.getSelectedIndices().length > 1)
 					session = null;
-				
+
 				sessionDetails.setSession(corpus, session);
 			}
 		});
@@ -432,14 +436,14 @@ public class ProjectWindow extends CommonModuleFrame
 
 		sessionList.setDragEnabled(true);
 		sessionList.setTransferHandler(transferHandler);
-		
+
 		final ActionMap sessionListAM = sessionList.getActionMap();
 		final InputMap sessionListIM = sessionList.getInputMap(JComponent.WHEN_FOCUSED);
-		
+
 		final PhonUIAction openSessionAct = new PhonUIAction(this, "onOpenSelectedSession");
 		sessionListAM.put("openSelectedSession", openSessionAct);
 		sessionListIM.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "openSelectedSession");
-		
+
 		sessionList.setActionMap(sessionListAM);
 		sessionList.setInputMap(JComponent.WHEN_FOCUSED, sessionListIM);
 
@@ -475,10 +479,10 @@ public class ProjectWindow extends CommonModuleFrame
 
 		corpusPanel = new TitledPanel("Corpus");
 		final ImageIcon defCorpusIcn = IconManager.getInstance().getSystemStockIcon(
-				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : 
+				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon :
 					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : GtkStockIcon.FOLDER), IconSize.SMALL);
 		corpusPanel.setIcon(defCorpusIcn);
-		
+
 		corpusPanel.getContentContainer().add(createCorpusButton, BorderLayout.NORTH);
 		corpusPanel.getContentContainer().add(corpusScroller, BorderLayout.CENTER);
 		corpusPanel.setRightDecoration(showCreateCorpusBtn);
@@ -516,13 +520,13 @@ public class ProjectWindow extends CommonModuleFrame
 
 		final TitledPanel detailsPanel = new TitledPanel("Details", bottomPanel);
 		detailsPanel.setIcon(IconManager.getInstance().getIcon("categories/info-white", IconSize.SMALL));
-		
+
 		final JXMultiSplitPane multiSplitPane = new JXMultiSplitPane();
 		final String multiSplitLayout = "(COLUMN "
 				+ "(ROW weight=1.0 (LEAF weight=0.5 name=corpus) (LEAF weight=0.5 name=session) ) "
 				+ "(LEAF weight=0.0 name=details))";
 		final MultiSplitLayout.Node rootLayoutNode = MultiSplitLayout.parseModel(multiSplitLayout);
-		
+
 		corpusPanel.setPreferredSize(new Dimension(500, 600));
 		sessionPanel.setPreferredSize(new Dimension(500, 600));
 
@@ -539,7 +543,7 @@ public class ProjectWindow extends CommonModuleFrame
 		statusLabel = new JLabel();
 		statusBar.add(statusLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 		statusBar.add(blindModeBox, new JXStatusBar.Constraint(ResizeBehavior.FIXED));
-		
+
 		String projectName = null;
 		projectName = getProject().getName();
 
@@ -548,7 +552,7 @@ public class ProjectWindow extends CommonModuleFrame
 		header.getBottomLabel().setToolTipText(projectLoadPath);
 		header.getBottomLabel().setForeground(Color.blue);
 		header.getBottomLabel().addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				try {
@@ -558,11 +562,11 @@ public class ProjectWindow extends CommonModuleFrame
 					LogUtil.warning(e);
 				}
 			}
-			
+
 		});
 		header.getBottomLabel().setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, IconSize.MEDIUM));
 		header.getBottomLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
+
 		add(header, BorderLayout.NORTH);
 		add(multiSplitPane, BorderLayout.CENTER);
 		add(statusBar, BorderLayout.SOUTH);
@@ -579,29 +583,29 @@ public class ProjectWindow extends CommonModuleFrame
 			});
 		}
 	}
-	
+
 	public void onOpenSelectedSession(PhonActionEvent pae) {
 		final PhonWorker worker = PhonWorker.createWorker();
 		busyLabel.setBusy(true);
-		
+
 		for(int selectedIdx:sessionList.getSelectedIndices()) {
 			final String session = ((SessionListModel)sessionList.getModel()).getSessions().get(selectedIdx);
 			final String corpus =
 				((SessionListModel)sessionList.getModel()).getCorpus();
-	
+
 			worker.invokeLater( () -> {
 				try {
 					SwingUtilities.invokeAndWait( () -> statusLabel.setText("Opening " + corpus + "." + session + "...") );
 				} catch (InvocationTargetException | InterruptedException e) {
 				}
 			});
-	
+
 			worker.invokeLater(() -> {
 				final ActionEvent ae = new ActionEvent(sessionList, -1, "openSession");
 				(new OpenSessionAction(ProjectWindow.this, corpus, session)).actionPerformed(ae);
 			});
 		}
-		
+
 		worker.invokeLater( () -> {;
 			SwingUtilities.invokeLater( () -> {
 				statusLabel.setText("");
@@ -1032,30 +1036,30 @@ public class ProjectWindow extends CommonModuleFrame
 			updateLists();
 		}
 	}
-	
+
 	private class CorpusListCellRenderer extends DefaultListCellRenderer {
-		
+
 		@Override
 		public Component getListCellRendererComponent(
-				JList list, Object value, int index, 
+				JList list, Object value, int index,
 				boolean isSelected, boolean cellHasFocus) {
 			JLabel comp = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected,
 					cellHasFocus);
-			
+
 			final String corpus = comp.getText();
 			final String corpusPath = getProject().getCorpusPath(corpus);
-			
+
 			ImageIcon icon = IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL);
-			
+
 			if(gitController.hasGitFolder() && gitController.isOpen()) {
 				try {
 					final Status status = gitController.status(corpus);
-					
+
 					if(status.hasUncommittedChanges() || status.getUntracked().size() > 0) {
-						ImageIcon modifiedIcn = 
-								IconManager.getInstance().createGlyphIcon('*', 
+						ImageIcon modifiedIcn =
+								IconManager.getInstance().createGlyphIcon('*',
 										FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
-						icon = 
+						icon =
 								IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
 					}
 				} catch (NoWorkTreeException | GitAPIException e) {
@@ -1063,72 +1067,72 @@ public class ProjectWindow extends CommonModuleFrame
 				}
 			}
 			comp.setIcon(icon);
-			
+
 			return comp;
 		}
 
 	}
-	
+
 	private class SessionListCellRenderer extends DefaultListCellRenderer {
-			
+
 			private static final long serialVersionUID = 576253657524546120L;
 
 			@Override
 			public Component getListCellRendererComponent(
-					JList list, Object value, int index, 
+					JList list, Object value, int index,
 					boolean isSelected, boolean cellHasFocus) {
 				JLabel comp = (JLabel)
 					super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				
+
 				final String corpus = getCorpusList().getSelectedValue();
 				final String session = comp.getText();
-				
+
 				final String projectLocation = getProject().getLocation();
 				final String sessionLocation = getProject().getSessionPath(corpus, session);
-				
+
 				// get relative path for session
 				final Path projectPath = FileSystems.getDefault().getPath(projectLocation);
 				final Path sessionPath = FileSystems.getDefault().getPath(sessionLocation);
 				final Path relPath = projectPath.relativize(sessionPath);
 				final String sessionRelPath = relPath.toString();
-				
-			    ImageIcon icon = 
+
+			    ImageIcon icon =
 			    		IconManager.getInstance().getSystemIconForPath(getProject().getSessionPath(corpus, session), IconSize.SMALL);
 
 				if(gitController.hasGitFolder() && gitController.isOpen()) {
 					try {
 						final Status status = gitController.status(sessionRelPath);
-						
+
 						if(status.hasUncommittedChanges()) {
-							ImageIcon modifiedIcn = 
+							ImageIcon modifiedIcn =
 									IconManager.getInstance().createGlyphIcon('*', FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
-							icon = 
+							icon =
 									IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
 						} else if(status.getUntracked().contains(sessionRelPath)) {
-							ImageIcon modifiedIcn = 
+							ImageIcon modifiedIcn =
 									IconManager.getInstance().createGlyphIcon('?', FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
-							icon = 
+							icon =
 									IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
 						} else if(status.getConflicting().contains(sessionRelPath)) {
-							ImageIcon modifiedIcn = 
+							ImageIcon modifiedIcn =
 									IconManager.getInstance().createGlyphIcon('C', FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
-							icon = 
+							icon =
 									IconManager.getInstance().createIconStrip(new ImageIcon[] { icon, modifiedIcn });
 						}
 					} catch (NoWorkTreeException | GitAPIException e) {
 						LogUtil.warning(e);
 					}
 				}
-				
+
 				// see if the transcript it locked...
 				SessionListModel model = (SessionListModel)list.getModel();
 				if(model.getProject().isSessionLocked(model.getCorpus(), value.toString())) {
 					comp.setIcon(
 							IconManager.getInstance().getIcon("emblems/emblem-readonly", IconSize.SMALL));
 				}
-				
+
 				comp.setIcon(icon);
-			
+
 				return comp;
 			}
 		}

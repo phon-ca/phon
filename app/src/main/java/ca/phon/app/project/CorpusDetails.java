@@ -15,7 +15,7 @@ import ca.phon.util.icons.*;
 
 /**
  * Corpus details for project manager.
- * 
+ *
  */
 public class CorpusDetails extends JPanel {
 
@@ -24,32 +24,35 @@ public class CorpusDetails extends JPanel {
 
 	// location of corpus folder
 	private JLabel locationLabel;
-	
+
+	// location of corpus media folder
+	private JLabel mediaFolderLabel;
+
 	// description
 	private JTextArea corpusDescriptionArea;
-	
+
 	// model
 	private final Project project;
-	
+
 	private String corpus;
-	
+
 	public CorpusDetails(Project project, String corpus) {
 		super();
-		
+
 		this.project = project;
 		this.corpus = corpus;
-		
+
 		init();
 	}
-	
+
 	private void init() {
 		setLayout(new BorderLayout());
-		
+
 		locationLabel = new JLabel();
 		locationLabel.setForeground(new Color(0, 90, 140));
 		locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		locationLabel.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				if(corpus != null) {
@@ -60,14 +63,26 @@ public class CorpusDetails extends JPanel {
 					} catch (MalformedURLException e) {
 						LogUtil.warning(e);
 					}
-					
+
 				}
 			}
-			
+
 		});
-		
+
+		mediaFolderLabel = new JLabel();
+		String mediaFolderURI = project.getCorpusMediaFolder(getCorpus());
+		if(mediaFolderURI != null) {
+			final File file = new File(mediaFolderURI);
+			if(!file.isAbsolute()) {
+				mediaFolderURI = project.getLocation() + File.separator + mediaFolderURI;
+			}
+
+			mediaFolderLabel.setText(file.getName());
+			mediaFolderLabel.setToolTipText(mediaFolderURI);
+		}
+
 		numSessionsLabel = new JLabel();
-		
+
 		final JPanel folderPanel = new JPanel(new GridBagLayout());
 		folderPanel.setOpaque(false);
 		final GridBagConstraints gbc = new GridBagConstraints();
@@ -84,7 +99,18 @@ public class CorpusDetails extends JPanel {
 		gbc.weightx = 1.0;
 		gbc.insets = new Insets(0, 5, 0, 0);
 		folderPanel.add(locationLabel, gbc);
-		
+
+//		++gbc.gridy;
+//		gbc.gridx = 0;
+//		gbc.fill = GridBagConstraints.NONE;
+//		gbc.weightx = 0.0;
+//		gbc.insets.left = 0;
+//		folderPanel.add(new JLabel("Media folder:"), gbc);
+//		++gbc.gridx;
+//		gbc.weightx = 1.0;
+//		gbc.insets.left = 5;
+//		folderPanel.add(mediaFolderLabel, gbc);
+
 		++gbc.gridy;
 		gbc.gridx = 0;
 		gbc.fill = GridBagConstraints.NONE;
@@ -95,64 +121,64 @@ public class CorpusDetails extends JPanel {
 		gbc.weightx = 1.0;
 		gbc.insets.left = 5;
 		folderPanel.add(numSessionsLabel, gbc);
-		
+
 //		folderPanel.setBorder(BorderFactory.createTitledBorder(""));
-				
+
 		corpusDescriptionArea = new JTextArea();
 		corpusDescriptionArea.setLineWrap(true);
 		corpusDescriptionArea.setWrapStyleWord(true);
 		corpusDescriptionArea.setRows(5);
 		corpusDescriptionArea.addFocusListener(new FocusListener() {
-			
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(corpus != null) {
 					project.setCorpusDescription(corpus, corpusDescriptionArea.getText());
 				}
 			}
-			
+
 			@Override
 			public void focusGained(FocusEvent e) {
-				
+
 			}
-			
+
 		});
-		
+
 		final JScrollPane textScroller = new JScrollPane(corpusDescriptionArea);
 		textScroller.setOpaque(false);
 		textScroller.setBorder(BorderFactory.createTitledBorder("Description"));
-		
+
 		add(folderPanel, BorderLayout.NORTH);
 		add(textScroller, BorderLayout.CENTER);
 	}
-	
+
 	public String getCorpus() {
 		return this.corpus;
 	}
-	
+
 	public void setCorpus(String corpus) {
 		if(this.corpus != null && project.getCorpora().contains(this.corpus)) {
 			project.setCorpusDescription(this.corpus, corpusDescriptionArea.getText());
 		}
-		
+
 		this.corpus = corpus;
 		update();
 	}
-	
+
 	private void update() {
 		if(corpus == null || !project.getCorpora().contains(corpus)) {
 			// clear
 			numSessionsLabel.setText("");
-			
+
 			corpusDescriptionArea.setText("");
 			corpusDescriptionArea.setEnabled(false);
-			
+
 			locationLabel.setText("");
 			locationLabel.setIcon(null);
 			locationLabel.setToolTipText("");
 		} else {
 			numSessionsLabel.setText("" + project.getCorpusSessions(corpus).size());
-			
+
 			final String corpusAbsolutePath = project.getCorpusPath(corpus);
 			final Path corpusPath = FileSystems.getDefault().getPath(corpusAbsolutePath);
 			final Path projectPath = FileSystems.getDefault().getPath(project.getLocation());
@@ -160,11 +186,11 @@ public class CorpusDetails extends JPanel {
 			locationLabel.setText("<html><u>" + relativePath.toString() + "</u></html>");
 			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, IconSize.SMALL));
 			locationLabel.setToolTipText(corpusAbsolutePath);
-			
+
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));
 			corpusDescriptionArea.setEnabled(true);
 			corpusDescriptionArea.setCaretPosition(0);
 		}
 	}
-	
+
 }

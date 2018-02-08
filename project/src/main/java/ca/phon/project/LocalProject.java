@@ -23,6 +23,7 @@ import java.net.*;
 import java.time.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.*;
@@ -34,6 +35,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import ca.phon.extensions.ExtensionSupport;
+import ca.phon.ipa.parser.exceptions.HangingStressException;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.project.io.*;
 import ca.phon.session.*;
@@ -61,6 +63,10 @@ public class LocalProject implements Project, ProjectRefresh {
 	public final static String PROJECT_XML_FILE = "project.xml";
 
 	public final static String PROJECT_PROPERTIES_FILE = "props";
+
+	public final static String PROJECT_MEDIAFOLDER_PROP = "project.mediaFolder";
+
+	public final static String CORPUS_MEDIAFOLDER_PROP = "corpus.mediaFolder";
 
 	private final static String sessionTemplateFile = "__sessiontemplate.xml";
 
@@ -103,6 +109,9 @@ public class LocalProject implements Project, ProjectRefresh {
 		projectData.getCorpus().clear();
 		projectData.getCorpus().addAll(corpora);
 
+		if(!getExtensions().contains(Properties.class)) {
+			putExtension(Properties.class, new Properties());
+		}
 		putExtension(ProjectRefresh.class, this);
 	}
 
@@ -137,7 +146,6 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new ProjectConfigurationException(e);
 			}
 		}
-
 
 		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
 		if(propsFile.exists()) {
@@ -432,7 +440,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		CorpusType ct = getCorpusInfo(corpus);
 		String old = null;
 		if(ct == null) {
-			old = ct.getDescription();
+			old = "";
 			ct = (new ObjectFactory()).createCorpusType();
 			ct.setName(corpus);
 			getProjectData().getCorpus().add(ct);
@@ -446,6 +454,44 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 
 		ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
+		fireProjectDataChanged(pe);
+	}
+
+	@Override
+	public String getProjectMediaFolder() {
+		final Properties props = getExtension(Properties.class);
+		String retVal = props.getProperty(PROJECT_MEDIAFOLDER_PROP,
+				getResourceLocation() + File.separator + "media");
+		return retVal;
+	}
+
+	@Override
+	public void setProjectMediaFolder(String mediaFolder) {
+		final Properties props = getExtension(Properties.class);
+		props.setProperty(PROJECT_MEDIAFOLDER_PROP, mediaFolder);
+	}
+
+	@Override
+	public String getCorpusMediaFolder(String corpus) {
+		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
+		final Properties props = getExtension(Properties.class);
+		return props.getProperty(propName, getProjectMediaFolder());
+	}
+
+	@Override
+	public void setCorpusMediaFolder(String corpus, String mediaFolder) {
+		final String old = getCorpusMediaFolder(corpus);
+		final Properties props = getExtension(Properties.class);
+		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
+		props.setProperty(propName, mediaFolder);
+
+		try {
+			saveProjectData();
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+
+		ProjectEvent pe = ProjectEvent.newCorpusMediaFolderChangedEvent(corpus, old, mediaFolder);
 		fireProjectDataChanged(pe);
 	}
 
@@ -1110,7 +1156,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 		projectData.getCorpus().clear();
 		projectData.getCorpus().addAll(corpora);
-		
+
 		try {
 			saveProjectData();
 		} catch (IOException e) {

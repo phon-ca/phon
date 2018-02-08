@@ -154,6 +154,34 @@ public interface Project extends IExtendable {
 	public void setCorpusDescription(String corpus, String description);
 
 	/**
+	 * Get media folder for the project.
+	 *
+	 */
+	public String getProjectMediaFolder();
+
+	/**
+	 * Set media folder for project.
+	 *
+	 * @param folder.  If <code>null</code> sets the media folder
+	 * back to default.
+	 */
+	public void setProjectMediaFolder(String mediaFolder);
+
+	/**
+	 * Get the media folder for the specified corpus.
+	 *
+	 * @return mediaFolder or the project media folder if not specified
+	 */
+	public String getCorpusMediaFolder(String corpus);
+
+	/**
+	 * Set the media folder for the specified corpus.
+	 *
+	 * @param mediaFolder
+	 */
+	public void setCorpusMediaFolder(String corpus, String mediaFolder);
+
+	/**
 	 * Get the Session template for the given corpus.
 	 *
 	 * @param corpus
