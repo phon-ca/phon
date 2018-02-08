@@ -128,9 +128,9 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
-		"choices": ["Percent Phones Correct (PPC)", "Percent Consonants Correct (PCC)", "Percent Vowels Correct (PVC)", "Percent Correct (custom)"],
-		"colnames": ["PPC", "PCC", "PVC", "PC"],
-		"phonex": ["\\w", "\\c", "\\v" ],
+		"choices": ["Percent Consonants Correct (PCC)", "Percent Vowels Correct (PVC)", "Percent Phones Correct (PPC)", "Percent Correct (custom)"],
+		"colnames": ["PCC", "PVC", "PPC", "PC"],
+		"phonex": [ "\\c", "\\v", "\\w" ],
 		"def": 0,
 		"cols": 1,
 		"type": "radiobutton"
@@ -180,7 +180,7 @@ exports.PPCOptions = function (id, aligned) {
 		// setup listeners
 		var patternFilter = this.pattern;
 		patternFilter.setEnabled(false);
-		patternFilter.setPattern("\\w");
+		patternFilter.setPattern("\\c");
 		ppcTypeParam.addPropertyChangeListener(ppcTypeParamInfo.id, new java.beans.PropertyChangeListener() {
 			propertyChange: function(e) {
 				var idx = e.source.getValue(e.source.paramId).index;
