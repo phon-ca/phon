@@ -455,7 +455,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
 	public void setCurrentRecordIndex(int index) {
-		if(index < 0 || index >= getDataModel().getRecordCount()) {
+		if(getDataModel().getRecordCount() > 0 && (index < 0 || index >= getDataModel().getRecordCount())) {
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
 		this.currentRecord = index;
@@ -545,8 +545,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	@RunOnEDT
 	public void onRecordDeleted(EditorEvent ee) {
-		if(getCurrentRecordIndex() >= getDataModel().getRecordCount()) {
+		if(getDataModel().getRecordCount() > 0 && getCurrentRecordIndex() >= getDataModel().getRecordCount()) {
 			setCurrentRecordIndex(getDataModel().getRecordCount()-1);
+		} else if(getDataModel().getRecordCount() == 0) {
+			setCurrentRecordIndex(-1);
 		} else {
 			final EditorEvent refreshAct = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
 			getEventManager().queueEvent(refreshAct);

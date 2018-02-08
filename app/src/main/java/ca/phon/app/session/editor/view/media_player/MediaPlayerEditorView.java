@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,39 +43,39 @@ import ca.phon.util.icons.*;
  *
  */
 public class MediaPlayerEditorView extends EditorView {
-	
+
 	private final static Logger LOGGER = Logger
 			.getLogger(MediaPlayerEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Media Player";
 
 	private PhonMediaPlayer mediaPlayer;
-	
+
 	public MediaPlayerEditorView(SessionEditor editor) {
 		super(editor);
 
 		init();
 	}
-	
+
 	private void init() {
 		setLayout(new BorderLayout());
 		mediaPlayer = new PhonMediaPlayer();
 		mediaPlayer.addMediaMenuFilter(new MediaMenuFilter());
 		add(mediaPlayer, BorderLayout.CENTER);
-		
+
 		setupEditorActions();
-		
+
 		// load media if available
 		final String mediaFilePath = getMediaFilePath();
 		if(mediaFilePath != null)
 			mediaPlayer.setMediaFile(mediaFilePath);
 	}
-	
+
 	@Override
 	public String getName() {
 		return VIEW_TITLE;
 	}
-	
+
 	public PhonMediaPlayer getPlayer() {
 		return this.mediaPlayer;
 	}
@@ -92,7 +92,7 @@ public class MediaPlayerEditorView extends EditorView {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Called when we need to refresh the media player.
 	 * Media players need to be refreshed when the
@@ -104,7 +104,7 @@ public class MediaPlayerEditorView extends EditorView {
 	public void onLoadMedia(PhonActionEvent pae) {
 		loadMedia();
 	}
-	
+
 	public void onPlayCustomSegment(PhonActionEvent pae) {
 		final PlayCustomSegmentDialog dialog = new PlayCustomSegmentDialog(getEditor(), mediaPlayer);
 		dialog.setSize(new Dimension(300, 320));
@@ -119,7 +119,7 @@ public class MediaPlayerEditorView extends EditorView {
 	public void reloadMedia() {
 		loadMedia();
 	}
-	
+
 	private void loadMedia() {
 		final Session t = getEditor().getSession();
 		final File mediaFile =
@@ -130,7 +130,7 @@ public class MediaPlayerEditorView extends EditorView {
 			if(!VLCHelper.checkNativeLibrary(true)) return;
 
 			mediaPlayer.loadMedia(mediaFile.getAbsolutePath());
-		} 
+		}
 //		else {
 //			mediaPlayer.getCanvas().setMessage("Media not found");
 //			mediaPlayer.getCanvas().repaint();
@@ -142,8 +142,8 @@ public class MediaPlayerEditorView extends EditorView {
 				new DelegateEditorAction(this, "onMediaChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED,
 				mediaChangedAct);
-		
-		final EditorAction recordChangedAct = 
+
+		final EditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 
@@ -172,19 +172,21 @@ public class MediaPlayerEditorView extends EditorView {
 			mediaPlayer.setMediaFile(null);
 		mediaPlayer.loadMedia();
 	}
-	
+
 	public void onRecordChanged(EditorEvent ee) {
 		if(!isAdjustVideo()) return;
 		final Record utt = getEditor().currentRecord();
+		if(utt == null) return;
+
 		final MediaSegment media = utt.getSegment().getGroup(0);
-		
+
 		// check for necessary vars
 		if(media == null) return;
 		if(!mediaPlayer.willPlay()) return;
-		
+
 		// don't set position if player is playing
 		if(mediaPlayer.isPlaying()) return;
-		
+
 		mediaPlayer.setTime((long)media.getStartValue());
 	}
 
@@ -202,7 +204,7 @@ public class MediaPlayerEditorView extends EditorView {
 	public void doCleanup(EditorEvent ee) {
 		mediaPlayer.cleanup();
 	}
-	
+
 	// called when the docking window containing this component is closed
 	@Override
 	public void onClose() {
@@ -224,7 +226,7 @@ public class MediaPlayerEditorView extends EditorView {
 //			if(extDotIdx > 0) {
 //				ext = name.substring(extDotIdx);
 //			}
-//			
+//
 //			File projFile = new File(getEditor().getProject().getLocation());
 //			File resFile = new File(projFile, "__res");
 //			File mediaResFile = new File(resFile, "media");
@@ -232,16 +234,16 @@ public class MediaPlayerEditorView extends EditorView {
 //			if(!segmentFile.exists()) {
 //				segmentFile.mkdirs();
 //			}
-//			
-//			File outputFile = new File(segmentFile, 
+//
+//			File outputFile = new File(segmentFile,
 //					getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ext);
 //						int fIdx = 0;
 //			while(outputFile.exists()) {
-//				outputFile = new File(segmentFile, 
+//				outputFile = new File(segmentFile,
 //						getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) +
 //						"(" + (++fIdx) + ")" + ext);
 //			}
-//			
+//
 //			final VLCMediaExporter exporter =
 //					new VLCMediaExporter(new File(mediaFilePath), outputFile, Preset.H264_HIGH);
 //			getEditor().getStatusBar().watchTask(exporter);
@@ -287,7 +289,7 @@ public class MediaPlayerEditorView extends EditorView {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			}
-			
+
 		});
 
 		JButton menuBtn = mediaPlayer.getMenuButton();
@@ -337,7 +339,7 @@ public class MediaPlayerEditorView extends EditorView {
 			for(int uttIdx = t.getRecordCount()-1; uttIdx >= 0; uttIdx--) {
 				final Record utt = t.getRecord(uttIdx);
 				if(utt.getSegment().numberOfGroups() == 0) continue;
-				
+
 				if(utt.getSegment().getGroup(0).getEndValue() > lastSegment.getEndValue())
 					lastSegment = utt.getSegment().getGroup(0);
 			}
@@ -355,11 +357,11 @@ public class MediaPlayerEditorView extends EditorView {
 
 		mediaPlayer.setTime((long) lastSegment.getEndValue());
 	}
-	
+
 	public void onMenuPlayto(PhonActionEvent pae) {
-		
+
 	}
-	
+
 	/**
 	 * Play the media from the beginning of the current record's
 	 * segment to the end of the contiguous section for the
@@ -372,10 +374,10 @@ public class MediaPlayerEditorView extends EditorView {
 
 		final Participant speaker = utt.getSpeaker();
 		if(speaker == null) return;
-		
+
 		Record firstRecord = utt;
 		Record lastRecord = utt;
-		
+
 		// if contiguous
 		if(pae.getData() != null && pae.getData() instanceof Boolean && ((Boolean)pae.getData()).booleanValue()) {
 			for(int rIdx = editor.getCurrentRecordIndex()-1; rIdx >= 0; rIdx--) {
@@ -385,7 +387,7 @@ public class MediaPlayerEditorView extends EditorView {
 					break;
 				}
 			}
-			
+
 			for(int rIdx = editor.getCurrentRecordIndex()+1; rIdx < session.getRecordCount(); rIdx++) {
 				if(session.getRecord(rIdx).getSpeaker() == speaker) {
 					lastRecord = session.getRecord(rIdx);
@@ -394,30 +396,30 @@ public class MediaPlayerEditorView extends EditorView {
 				}
 			}
 		}
-		
+
 		final MediaSegment firstSegment = firstRecord.getSegment().getGroup(0);
 		final MediaSegment lastSegment = lastRecord.getSegment().getGroup(0);
-		
+
 		if(firstSegment != null && lastSegment != null) {
 			final long startTime = (long)firstSegment.getStartValue();
 			final long endTime = (long)lastSegment.getEndValue();
-			
+
 			mediaPlayer.playSegment(startTime, (endTime-startTime));
 		}
-		
+
 	}
-	
+
 	public void onPlayConvPeriod() {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
-		final MediaSegment segment = 
+		final MediaSegment segment =
 				SegmentCalculator.conversationPeriod(session, editor.getCurrentRecordIndex());
-		
+
 		final long len = (long)(segment.getEndValue() - segment.getStartValue());
 		if(len > 0)
 			mediaPlayer.playSegment((long)segment.getStartValue(), len);
 	}
-	
+
 	private final static String ADJUST_VIDEO = MediaPlayerEditorView.class.getName() + ".adjustVideo";
 	/**
 	 * Toggle the option to trun on/off moving
@@ -428,7 +430,7 @@ public class MediaPlayerEditorView extends EditorView {
 		final Boolean isAdjustVideo = isAdjustVideo();
 		PrefHelper.getUserPreferences().putBoolean(ADJUST_VIDEO, !isAdjustVideo);
 	}
-	
+
 	/**
 	 * Should the media position move with the
 	 * current record.
@@ -437,7 +439,7 @@ public class MediaPlayerEditorView extends EditorView {
 		final Boolean isAdjustVideo = PrefHelper.getBoolean(ADJUST_VIDEO, Boolean.TRUE);
 		return isAdjustVideo;
 	}
-	
+
 	/**
 	 * Media player menu filter
 	 */
@@ -446,26 +448,26 @@ public class MediaPlayerEditorView extends EditorView {
 		@Override
 		public JPopupMenu makeMenuChanges(JPopupMenu menu) {
 			JPopupMenu retVal = menu;
-			
+
 			setupPlaytoItems(menu);
-			
+
 			menu.addSeparator();
-			
+
 			setupGotoItems(menu);
 
 			return retVal;
 		}
-		
+
 		private void setupPlaytoItems(JPopupMenu menu) {
 			final JMenuItem playCustomItem = new JMenuItem(new PlayCustomSegmentAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playCustomItem);
-			
+
 			final JMenuItem playSegmentItem = new JMenuItem(new PlaySegmentAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playSegmentItem);
-			
+
 			final JMenuItem playContiguousItem = new JMenuItem(new PlaySpeechTurnAction(getEditor(), MediaPlayerEditorView.this));
 			menu.add(playContiguousItem);
-			
+
 //			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(getEditor(), MediaPlayerEditorView.this));
 //			menu.add(playConvPeriodItem);
 		}
@@ -474,15 +476,15 @@ public class MediaPlayerEditorView extends EditorView {
 			final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
 			adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
 			JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
-			menu.add(adjustVideoItem); 
-			
+			menu.add(adjustVideoItem);
+
 			final GoToAction gotoSelectAct = new GoToAction(getEditor(), MediaPlayerEditorView.this);
 			JMenuItem gotoSelectItem = new JMenuItem(gotoSelectAct);
 			menu.add(gotoSelectItem);
 
 			final GoToEndOfSegmentedAction gotoLastSegmentAct = new GoToEndOfSegmentedAction(getEditor(), MediaPlayerEditorView.this);
 			menu.add(gotoLastSegmentAct);
-			
+
 			final SessionEditor editor = getEditor();
 			final Session session = editor.getSession();
 
@@ -505,7 +507,7 @@ public class MediaPlayerEditorView extends EditorView {
 	@Override
 	public JMenu getMenu() {
 		final JMenu menu = new JMenu();
-		
+
 		menu.add(new TakeSnapshotAction(getEditor(), this));
 		menu.addSeparator();
 		menu.add(new PlayCustomSegmentAction(getEditor(), this));
@@ -516,11 +518,11 @@ public class MediaPlayerEditorView extends EditorView {
 		final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
 		adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
 		JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
-		menu.add(adjustVideoItem); 
+		menu.add(adjustVideoItem);
 		menu.addSeparator();
 		menu.add(new GoToAction(getEditor(), this));
 		menu.add(new GoToEndOfSegmentedAction(getEditor(), this));
-		
+
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		// for each participant
@@ -530,7 +532,7 @@ public class MediaPlayerEditorView extends EditorView {
 					new GoToEndOfSegmentedAction(getEditor(), this, p);
 			menu.add(gotoPartSegmentAct);
 		}
-		
+
 		return menu;
 	}
 
@@ -538,5 +540,5 @@ public class MediaPlayerEditorView extends EditorView {
 	public DockPosition getPreferredDockPosition() {
 		return DockPosition.WEST;
 	}
-	
+
 }
