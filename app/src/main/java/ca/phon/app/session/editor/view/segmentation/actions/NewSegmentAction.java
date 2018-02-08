@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,7 +34,7 @@ public class NewSegmentAction extends SegmentationViewAction {
 	private static final long serialVersionUID = 593003680580794252L;
 
 	private final Participant speaker;
-	
+
 	public NewSegmentAction(SessionEditor editor, SegmentationEditorView view, Participant speaker) {
 		super(editor, view);
 		this.speaker = speaker;
@@ -43,22 +43,23 @@ public class NewSegmentAction extends SegmentationViewAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final MediaSegment m = getSegmentationView().getCurrentSegement();
-			
+
 		// should we create a new record or overwrite
 		// the data in the curent?
 		final SessionFactory factory = SessionFactory.newFactory();
 		Record utt = factory.createRecord();
-		
+
 		// setup orthography
 		utt.getOrthography().addGroup(new Orthography());
 		utt.getSegment().setGroup(0, m);
-		
+
 		// should we replace segment for current record instead?
 		SegmentationMode mode = (SegmentationMode)getSegmentationView().getSegmentationMode();
-		if(mode == SegmentationMode.REPLACE_CURRENT) {
-			utt = getEditor().currentRecord();
+		if(mode == SegmentationMode.REPLACE_CURRENT && getEditor().currentRecord() == null) {
+			// switch to 'add record' mode
+			mode = SegmentationMode.INSERT_AT_END;
 		}
-	
+
 		if(mode == SegmentationMode.REPLACE_CURRENT) {
 			final CompoundEdit edit = new CompoundEdit() {
 
@@ -71,20 +72,20 @@ public class NewSegmentAction extends SegmentationViewAction {
 				public String getRedoPresentationName() {
 					return "Redo replace segment";
 				}
-				
+
 			};
-			
+
 			// don't replace speaker if no speaker was defined
 			if(this.speaker != null) {
 				final ChangeSpeakerEdit speakerEdit = new ChangeSpeakerEdit(getEditor(), utt, speaker);
 				speakerEdit.doIt();
 				edit.addEdit(speakerEdit);
 			}
-			
+
 			final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), utt.getSegment(), 0, m);
 			segEdit.doIt();
 			edit.addEdit(segEdit);
-			
+
 			edit.end();
 			getEditor().getUndoSupport().postEdit(edit);
 
@@ -95,15 +96,15 @@ public class NewSegmentAction extends SegmentationViewAction {
 				getEditor().getUndoSupport().postEdit(addRecordEdit);
 			}
 			getEditor().setCurrentRecordIndex(idx);
-			
+
 		} else {
 			// setup speaker
 			utt.setSpeaker(speaker);
-			
+
 			int idx = getEditor().getDataModel().getRecordCount();
 			// where are we going to insert
 			if(mode == SegmentationMode.INSERT_AFTER_CURRENT) {
-				idx = getEditor().getCurrentRecordIndex() + 1;
+				idx = (getEditor().getSession().getRecordCount() == 0 ? 0 : getEditor().getCurrentRecordIndex() + 1);
 			}
 			final AddRecordEdit edit = new AddRecordEdit(getEditor(), utt, idx);
 			getEditor().getUndoSupport().postEdit(edit);
