@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -51,13 +51,13 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	private PhonScript script;
 
 	private ScriptPanel scriptPanel;
-	
+
 //	private InputField showDebuggerInputField = new InputField("showDebugger", "Show debug UI when executing this node",
 //			true, true, Boolean.class);
 
 	private InputField paramsInputField = new InputField("parameters", "Map of script parameters, these will override node settings.",
 			true, true, Map.class);
-	
+
 
 	private OutputField paramsOutputField = new OutputField("parameters",
 			"Parameters used for script, including those entered using the node settings dialog", true, Map.class);
@@ -83,7 +83,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		putField(paramsInputField);
 		putField(scriptOutputField);
 		putField(paramsOutputField);
-		
+
 		reloadFields();
 
 		putExtension(NodeSettings.class, this);
@@ -178,7 +178,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 //		final boolean showDebugger = (context.get(showDebuggerInputField) != null ? (boolean)context.get(showDebuggerInputField) : false);
-		
+
 		final PhonScript phonScript = getScript();
 		PhonScriptContext ctx = phonScript.getContext();
 
@@ -225,41 +225,42 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 //					// reset context
 //					((BasicScript)phonScript).resetContext();
 //					ctx = phonScript.getContext();
-//					
+//
 //					final Main debugger = Main.mainEmbedded("Debugger : " + getName());
 //					debugger.setBreakOnEnter(true);
 //					debugger.setBreakOnExceptions(true);
-//					
+//
 //					final Context jsContext = ctx.enter();
 //					jsContext.setOptimizationLevel(-1);
 //					final ScriptableObject debugScope = jsContext.initStandardObjects();
-//					
+//
 //					debugger.attachTo(jsContext.getFactory());
 //					debugger.setScope(debugScope);
 //					ctx.exit();
-//					
+//
 //					final ScriptParameters newParams = ctx.getScriptParameters(ctx.getEvaluatedScope(debugScope));
 //					ScriptParameters.copyParams(scriptParams, newParams);
-//					
+//
 //					debugger.setExitAction(new Runnable() {
-//						
+//
 //						@Override
 //						public void run() {
 //							debugger.detach();
 //							debugger.setVisible(false);
 //						}
-//						
+//
 //					});
 //					// break on entering main query script
 //					debugger.doBreak();
 //					debugger.pack();
 //					debugger.setVisible(true);
 ////					debugger.go();
-//				} 
+//				}
 				ctx.callFunction(scope, "run", context);
 			}
 		} catch (PhonScriptException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			throw new ProcessingException(null, e.getLocalizedMessage(), e);
 		}
 
 		context.put(scriptOutputField, getScript());
