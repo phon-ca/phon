@@ -158,7 +158,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		final List<InputField> fixedInputs =
 				getInputFields().stream().filter( f -> f.isFixed() && f != ENABLED_FIELD ).collect( Collectors.toList() );
 		final List<OutputField> fixedOutputs =
-				getOutputFields().stream().filter( OutputField::isFixed ).collect( Collectors.toList() );
+				getOutputFields().stream().filter( f-> f.isFixed() && f != COMPLETED_FIELD ).collect( Collectors.toList() );
 
 		// setup fields on temporary node
 		final OpNode tempNode = new OpNode("temp", "temp", "temp") {
