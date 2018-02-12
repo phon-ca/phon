@@ -2,30 +2,38 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ca.phon.app.project;
 
 import java.io.*;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.UUID;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.sun.jna.platform.FileUtils;
 
+import ca.phon.app.prefs.PhonProperties;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.project.io.*;
+import ca.phon.util.PrefHelper;
 
 /**
  * Local project which will send files to trash instead of
@@ -45,15 +53,15 @@ public class DesktopProject extends LocalProject {
 
 		final File[] toTrash = new File[] { new File(corpusPath) };
 		moveToTrash(toTrash);
-		
+
 		// remove entry from project data
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
 			getProjectData().getCorpus().remove(ct);
 		}
-		
+
 		saveProjectData();
-		
+
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
 	}
@@ -62,10 +70,10 @@ public class DesktopProject extends LocalProject {
 	public void removeSession(String corpus, String session, UUID writeLock) throws IOException {
 		checkSessionWriteLock(corpus, session, writeLock);
 		final String sessionPath = getSessionPath(corpus, session);
-		
+
 		final File[] toTrash = new File[] { new File(sessionPath) };
 		moveToTrash(toTrash);
-		
+
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
 			final SessionType st = getSessionInfo(corpus, session);
@@ -73,13 +81,72 @@ public class DesktopProject extends LocalProject {
 				ct.getSession().remove(st);
 			}
 		}
-		
+
 		saveProjectData();
-		
+
 		final ProjectEvent pe = ProjectEvent.newSessionRemovedEvent(corpus, session);
 		fireProjectStructureChanged(pe);
 	}
-	
+
+	@Override
+	protected void saveProperties() throws IOException {
+		final Properties props = getExtension(Properties.class);
+		if(props != null) {
+			// adjust media paths as required by application settings
+			final boolean makePathsRelative = PrefHelper.getBoolean(PhonProperties.MEDIA_PATHS_RELATIVE, PhonProperties.DEFAULT_MEDIA_PATHS_RELATIVE);
+
+			if(props.containsKey(LocalProject.PROJECT_MEDIAFOLDER_PROP)) {
+				String currentValue = props.getProperty(LocalProject.PROJECT_MEDIAFOLDER_PROP);
+				File currentFile = new File(currentValue);
+				if(!currentFile.isAbsolute()) {
+					currentValue = getLocation() + File.separator + currentValue;
+				}
+
+				final Path projectFolder = Paths.get(getLocation());
+				Path currentPath = Paths.get(currentValue);
+
+				if(makePathsRelative) {
+					if(projectFolder.getRoot().equals(currentPath.getRoot())) {
+						currentPath = projectFolder.relativize(currentPath);
+					} else {
+						currentPath = currentPath.toRealPath();
+					}
+				} else {
+					currentPath = currentPath.toRealPath();
+				}
+				props.setProperty(PROJECT_MEDIAFOLDER_PROP, currentPath.toString());
+			}
+
+			for(String corpus:getCorpora()) {
+				final String corpusProp = LocalProject.CORPUS_MEDIAFOLDER_PROP + "." + corpus;
+				if(props.containsKey(corpusProp)) {
+					String currentValue = props.getProperty(corpusProp);
+					File currentFile = new File(currentValue);
+					// make current value absolute
+					if(!currentFile.isAbsolute()) {
+						currentValue = getLocation() + File.separator + currentValue;
+					}
+
+					final Path projectFolder = Paths.get(getLocation());
+					Path currentPath = Paths.get(currentValue);
+
+					if(makePathsRelative) {
+						if(projectFolder.getRoot().equals(currentPath.getRoot())) {
+							currentPath = projectFolder.relativize(currentPath);
+						} else {
+							currentPath = currentPath.toRealPath();
+						}
+					} else {
+						currentPath = currentPath.toRealPath();
+					}
+					props.setProperty(corpusProp, currentPath.toString());
+				}
+			}
+		}
+
+		super.saveProperties();
+	}
+
 	private void moveToTrash(File[] files) throws IOException {
 		FileUtils fileUtils = FileUtils.getInstance();
 		if(fileUtils.hasTrash()) {

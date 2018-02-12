@@ -126,10 +126,8 @@ public class ProjectWindow extends CommonModuleFrame
 			}
 		}
 
-		myProjectListener = new ProjectWindowProjectListener(project);
-
+		myProjectListener = new ProjectWindowProjectListener(this);
 		project.addProjectListener(myProjectListener);
-
 
 		this.projectLoadPath = projectPath;
 
@@ -238,9 +236,10 @@ public class ProjectWindow extends CommonModuleFrame
 
 		projectMenu.addSeparator();
 
-//		projectMenu.add(new BrowseForCorpusMediaFolder(this));
-//
-//		projectMenu.addSeparator();
+		projectMenu.add(new SelectProjectMediaFolder(this));
+		projectMenu.add(new SelectCorpusMediaFolder(this));
+
+		projectMenu.addSeparator();
 
 		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
 		projectMenu.add(anonymizeParticipantInfoItem);
@@ -912,6 +911,13 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 		contextMenu.add(deleteItem);
 
+		contextMenu.addSeparator();
+
+		contextMenu.add(new SelectProjectMediaFolder(this));
+		if(corpora.size() == 1) {
+			contextMenu.add(new SelectCorpusMediaFolder(this));
+		}
+
 		contextMenu.show(corpusList, clickPoint.x, clickPoint.y);
 	}
 
@@ -1015,6 +1021,7 @@ public class ProjectWindow extends CommonModuleFrame
 			(CorpusListModel)corpusList.getModel();
 		corpusListModel.refresh();
 		corpusList.repaint();
+		corpusDetails.update();
 
 		SessionListModel sessionListModel =
 			(SessionListModel)sessionList.getModel();
@@ -1024,7 +1031,6 @@ public class ProjectWindow extends CommonModuleFrame
 			sessionListModel.setCorpus(corpusList.getSelectedValue().toString());
 		else
 			sessionListModel.setCorpus(null);
-
 		sessionList.repaint();
 	}
 

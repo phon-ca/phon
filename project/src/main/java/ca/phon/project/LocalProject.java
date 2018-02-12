@@ -125,6 +125,18 @@ public class LocalProject implements Project, ProjectRefresh {
 		final ObjectFactory factory = new ObjectFactory();
 
 		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
+		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
+
+		if(propsFile.exists()) {
+			// load properties
+			Properties props = new Properties();
+			try {
+				props.load(new FileInputStream(propsFile));
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, "Could not load project properties. " + e.getLocalizedMessage(), e);
+			}
+			putExtension(Properties.class, props);
+		}
 
 		if(dataFile.exists()) {
 			try {
@@ -145,25 +157,14 @@ public class LocalProject implements Project, ProjectRefresh {
 			} catch (XMLStreamException e) {
 				throw new ProjectConfigurationException(e);
 			}
+		} else {
+			// create new project element
+			final ProjectType retVal = factory.createProjectType();
+			final UUID projectUUID = UUID.randomUUID();
+			retVal.setName(getFolder().getName());
+			retVal.setUuid(projectUUID.toString());
+			return retVal;
 		}
-
-		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
-		if(propsFile.exists()) {
-			// load properties
-			Properties props = new Properties();
-			try {
-				props.load(new FileInputStream(propsFile));
-			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, "Could not load project properties. " + e.getLocalizedMessage(), e);
-			}
-			putExtension(Properties.class, props);
-		}
-
-		final ProjectType retVal = factory.createProjectType();
-		final UUID projectUUID = UUID.randomUUID();
-		retVal.setName(getFolder().getName());
-		retVal.setUuid(projectUUID.toString());
-		return retVal;
 	}
 
 	/**
@@ -193,15 +194,15 @@ public class LocalProject implements Project, ProjectRefresh {
 			throw new IOException(e);
 		}
 
+		saveProperties();
+	}
+
+	protected void saveProperties() throws IOException {
 		// save properties
 		final Properties properties = getExtension(Properties.class);
 		if(properties != null) {
 			final File propFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
-			try {
-				properties.store(new FileOutputStream(propFile), "Phon " + VersionInfo.getInstance().getLongVersion());
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
+			properties.store(new FileOutputStream(propFile), "Phon " + VersionInfo.getInstance().getLongVersion());
 		}
 	}
 
@@ -467,8 +468,22 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public void setProjectMediaFolder(String mediaFolder) {
+		final String old = getProjectMediaFolder();
 		final Properties props = getExtension(Properties.class);
-		props.setProperty(PROJECT_MEDIAFOLDER_PROP, mediaFolder);
+		if(mediaFolder == null) {
+			props.remove(PROJECT_MEDIAFOLDER_PROP);
+		} else {
+			props.setProperty(PROJECT_MEDIAFOLDER_PROP, mediaFolder);
+		}
+
+		try {
+			saveProperties();
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+
+		ProjectEvent pe = ProjectEvent.newProjectMediaFolderChangedEVent(old, mediaFolder);
+		fireProjectDataChanged(pe);
 	}
 
 	@Override
@@ -483,10 +498,15 @@ public class LocalProject implements Project, ProjectRefresh {
 		final String old = getCorpusMediaFolder(corpus);
 		final Properties props = getExtension(Properties.class);
 		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
-		props.setProperty(propName, mediaFolder);
+
+		if(mediaFolder == null) {
+			props.remove(propName);
+		} else {
+			props.setProperty(propName, mediaFolder);
+		}
 
 		try {
-			saveProjectData();
+			saveProperties();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}

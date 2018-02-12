@@ -3,6 +3,7 @@ package ca.phon.app.project;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.*;
 import java.nio.file.*;
 
@@ -70,16 +71,28 @@ public class CorpusDetails extends JPanel {
 		});
 
 		mediaFolderLabel = new JLabel();
-		String mediaFolderURI = project.getCorpusMediaFolder(getCorpus());
-		if(mediaFolderURI != null) {
-			final File file = new File(mediaFolderURI);
-			if(!file.isAbsolute()) {
-				mediaFolderURI = project.getLocation() + File.separator + mediaFolderURI;
+		mediaFolderLabel.setForeground(new Color(0, 90, 140));
+		mediaFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mediaFolderLabel.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(corpus != null) {
+					String corpusPath = project.getCorpusMediaFolder(corpus);
+					File corpusFile = new File(corpusPath);
+					if(!corpusFile.isAbsolute()) {
+						corpusPath = project.getLocation() + File.separator + corpusPath;
+					}
+					try {
+						final URL url = new File(corpusPath).toURI().toURL();
+						OpenFileLauncher.openURL(url);
+					} catch (MalformedURLException e) {
+						LogUtil.warning(e);
+					}
+				}
 			}
 
-			mediaFolderLabel.setText(file.getName());
-			mediaFolderLabel.setToolTipText(mediaFolderURI);
-		}
+		});
 
 		numSessionsLabel = new JLabel();
 
@@ -100,16 +113,16 @@ public class CorpusDetails extends JPanel {
 		gbc.insets = new Insets(0, 5, 0, 0);
 		folderPanel.add(locationLabel, gbc);
 
-//		++gbc.gridy;
-//		gbc.gridx = 0;
-//		gbc.fill = GridBagConstraints.NONE;
-//		gbc.weightx = 0.0;
-//		gbc.insets.left = 0;
-//		folderPanel.add(new JLabel("Media folder:"), gbc);
-//		++gbc.gridx;
-//		gbc.weightx = 1.0;
-//		gbc.insets.left = 5;
-//		folderPanel.add(mediaFolderLabel, gbc);
+		++gbc.gridy;
+		gbc.gridx = 0;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0.0;
+		gbc.insets.left = 0;
+		folderPanel.add(new JLabel("Media folder:"), gbc);
+		++gbc.gridx;
+		gbc.weightx = 1.0;
+		gbc.insets.left = 5;
+		folderPanel.add(mediaFolderLabel, gbc);
 
 		++gbc.gridy;
 		gbc.gridx = 0;
@@ -121,8 +134,6 @@ public class CorpusDetails extends JPanel {
 		gbc.weightx = 1.0;
 		gbc.insets.left = 5;
 		folderPanel.add(numSessionsLabel, gbc);
-
-//		folderPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 		corpusDescriptionArea = new JTextArea();
 		corpusDescriptionArea.setLineWrap(true);
@@ -165,7 +176,7 @@ public class CorpusDetails extends JPanel {
 		update();
 	}
 
-	private void update() {
+	void update() {
 		if(corpus == null || !project.getCorpora().contains(corpus)) {
 			// clear
 			numSessionsLabel.setText("");
@@ -176,6 +187,10 @@ public class CorpusDetails extends JPanel {
 			locationLabel.setText("");
 			locationLabel.setIcon(null);
 			locationLabel.setToolTipText("");
+
+			mediaFolderLabel.setText("");
+			mediaFolderLabel.setToolTipText("");
+			mediaFolderLabel.setIcon(null);
 		} else {
 			numSessionsLabel.setText("" + project.getCorpusSessions(corpus).size());
 
@@ -186,6 +201,21 @@ public class CorpusDetails extends JPanel {
 			locationLabel.setText("<html><u>" + relativePath.toString() + "</u></html>");
 			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, IconSize.SMALL));
 			locationLabel.setToolTipText(corpusAbsolutePath);
+
+			String mediaFolderURI = project.getCorpusMediaFolder(getCorpus());
+			File file = new File(mediaFolderURI);
+			if(!file.isAbsolute()) {
+				mediaFolderURI = project.getLocation() + File.separator + mediaFolderURI;
+				file = new File(mediaFolderURI);
+			}
+
+			if(file.exists() && file.isDirectory()) {
+				mediaFolderLabel.setText("<html><u>" + file.getName() + "</u></html>");
+				try {
+					mediaFolderLabel.setToolTipText(file.getCanonicalPath());
+					mediaFolderLabel.setIcon(IconManager.getInstance().getSystemIconForPath(file.getCanonicalPath(), IconSize.SMALL));
+				} catch (IOException e) {}
+			}
 
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));
 			corpusDescriptionArea.setEnabled(true);

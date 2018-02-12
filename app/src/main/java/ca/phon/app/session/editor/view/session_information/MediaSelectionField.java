@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,20 +39,20 @@ import ca.phon.worker.PhonWorker;
  * This field adds a text completer for media files found in the
  * list of media folders setup in application preferences.  Files
  * found in one of these folders are displayed with a relative path.
- * 
+ *
  */
 public class MediaSelectionField extends FileSelectionField {
-	
+
 	private final static Logger LOGGER = Logger.getLogger(MediaSelectionField.class.getName());
-	
+
 	private static final long serialVersionUID = 5171333221664140205L;
-	
+
 	private WeakReference<SessionEditor> editorRef;
-	
+
 	private Project project;
-	
+
 	private final DefaultTextCompleterModel completerModel = new DefaultTextCompleterModel();
-	
+
 	public MediaSelectionField() {
 		this(null);
 	}
@@ -63,9 +63,9 @@ public class MediaSelectionField extends FileSelectionField {
 		textField.setPrompt("Session media location");
 		PhonWorker.getInstance().invokeLater( () -> setupTextCompleter() );
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param rootPath
 	 * @param mediaFile
 	 */
@@ -74,21 +74,21 @@ public class MediaSelectionField extends FileSelectionField {
 		completerModel.addCompletion(path.getFileName().toString(), name);
 		completerModel.addCompletion(name, name);
 	}
-	
+
 	private void scanPath(Path mediaPath, boolean recursive) {
 		scanPath(mediaPath, mediaPath, true);
 	}
-	
+
 	private void scanPath(Path rootPath, Path path, boolean recursive) {
 		try(DirectoryStream<Path> dirStream = Files.newDirectoryStream(path)) {
 			final Iterator<Path> childItr = dirStream.iterator();
 			while(childItr.hasNext()) {
 				final Path child = childItr.next();
-				
+
 				if(Files.isHidden(child)) continue;
 				final File file = child.toFile();
 				if(getFileFilter() != null && !getFileFilter().accept(file)) continue;
-				
+
 				if(Files.isDirectory(child) && recursive) {
 					scanPath(rootPath, child, recursive);
 				} else {
@@ -102,12 +102,12 @@ public class MediaSelectionField extends FileSelectionField {
 	}
 
 	private void setupTextCompleter() {
-		final List<String> mediaIncludePaths = ( project != null ? 
-				MediaLocator.getMediaIncludePaths(project) : MediaLocator.getMediaIncludePaths());
+		final List<String> mediaIncludePaths = ( project != null ?
+				MediaLocator.getMediaIncludePaths(project, getEditor().getSession().getCorpus()) : MediaLocator.getMediaIncludePaths());
 		for(String path:mediaIncludePaths) {
 			final Path mediaFolder = Paths.get(path);
 			if(!Files.exists(mediaFolder)) continue;
-			
+
 			scanPath(mediaFolder, true);
 		}
 		SwingUtilities.invokeLater( () -> {
@@ -121,32 +121,32 @@ public class MediaSelectionField extends FileSelectionField {
 	public void setEditor(SessionEditor editor) {
 		this.editorRef = new WeakReference<>(editor);
 	}
-	
+
 	public SessionEditor getEditor() {
 		return this.editorRef.get();
 	}
-	
+
 	public void setProject(Project project) {
 		this.project = project;
 	}
-	
+
 	public Project getProject() {
 		return this.project;
 	}
-	
+
 	@Override
 	public void setFile(File f) {
 		if(f == null) {
 			textField.setText("");
 		} else {
 			textField.setState(FieldState.INPUT);
-			
+
 			String txt = f.getPath();
-			
-			for(String includePath:MediaLocator.getMediaIncludePaths(getProject())) {
+
+			for(String includePath:MediaLocator.getMediaIncludePaths(getProject(), getEditor().getSession().getCorpus())) {
 				final Path path = Paths.get(includePath);
 				Path mediaPath = f.toPath();
-				
+
 				if(mediaPath.startsWith(path)) {
 					mediaPath = path.relativize(mediaPath).normalize();
 					final String relativePath = mediaPath.toString();
@@ -154,17 +154,17 @@ public class MediaSelectionField extends FileSelectionField {
 					break;
 				}
 			}
-			
+
 			textField.setText(txt);
 		}
 		super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
 		lastSelectedFile = f;
 	}
-	
+
 	@Override
 	public void onBrowse() {
 		if(getEditor() != null) {
-			final MediaPlayerEditorView mediaPlayerView = 
+			final MediaPlayerEditorView mediaPlayerView =
 					(MediaPlayerEditorView)getEditor().getViewModel()
 					.getView(MediaPlayerEditorView.VIEW_TITLE);
 			if(mediaPlayerView != null) {
@@ -174,22 +174,22 @@ public class MediaSelectionField extends FileSelectionField {
 		}
 		super.onBrowse();
 	}
-	
+
 	@Override
 	public File getSelectedFile() {
 		final String txt = super.getText();
 		File retVal = null;
-		
+
 		if(getTextField().getState() == FieldState.INPUT && txt.length() > 0) {
-			File mediaLocatorFile = MediaLocator.findMediaFile(txt, project, null);
+			File mediaLocatorFile = MediaLocator.findMediaFile(txt, project, getEditor().getSession().getCorpus());
 			if(mediaLocatorFile != null) {
 				retVal = mediaLocatorFile;
 			} else {
 				retVal = new File(txt);
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 }

@@ -33,6 +33,7 @@ public class ProjectEvent {
 	public static enum ProjectEventType {
 		CORPUS_ADDED,
 		CORPUS_REMOVED,
+		PROJECT_MEDIAFOLDER_CHANGED,
 		CORPUS_DESCRIPTION_CHANGED,
 		CORPUS_MEDIAFOLDER_CHANGED,
 		SESSION_ADDED,
@@ -50,8 +51,8 @@ public class ProjectEvent {
 		SESSION,
 		OLD_CORPUS_DESCRIPTION,
 		NEW_CORPUS_DESCRIPTION,
-		OLD_CORPUS_MEDIAFOLDER,
-		NEW_CORPUS_MEDIAFOLDER,
+		OLD_MEDIAFOLDER,
+		NEW_MEDIAFOLDER,
 		OLD_PROJECT_NAME,
 		NEW_PROJECT_NAME,
 		OLD_PROJECT_UUID,
@@ -120,8 +121,15 @@ public class ProjectEvent {
 	public static ProjectEvent newCorpusMediaFolderChangedEvent(String corpus, String oldFolder, String newFolder) {
 		final ProjectEvent retVal = new ProjectEvent(ProjectEventType.CORPUS_MEDIAFOLDER_CHANGED);
 		retVal.setProperty(ProjectEventProp.CORPUS, corpus);
-		retVal.setProperty(ProjectEventProp.OLD_CORPUS_MEDIAFOLDER, oldFolder);
-		retVal.setProperty(ProjectEventProp.NEW_CORPUS_MEDIAFOLDER, newFolder);
+		retVal.setProperty(ProjectEventProp.OLD_MEDIAFOLDER, oldFolder);
+		retVal.setProperty(ProjectEventProp.NEW_MEDIAFOLDER, newFolder);
+		return retVal;
+	}
+
+	public static ProjectEvent newProjectMediaFolderChangedEVent(String oldFolder, String newFolder) {
+		final ProjectEvent retVal = new ProjectEvent(ProjectEventType.PROJECT_MEDIAFOLDER_CHANGED);
+		retVal.setProperty(ProjectEventProp.OLD_MEDIAFOLDER, oldFolder);
+		retVal.setProperty(ProjectEventProp.NEW_MEDIAFOLDER, newFolder);
 		return retVal;
 	}
 

@@ -161,9 +161,7 @@ public class MediaPlayerEditorView extends EditorView {
 		if(mediaPlayer.getMediaFile() != null) {
 			mediaPlayer.stop();
 		}
-//		final PathExpander pe = new PathExpander();
 		String mediaRef = getEditor().getSession().getMediaLocation();
-//				pe.expandPath(getEditor().getSession().getMediaLocation());
 		File mediaFile =
 				MediaLocator.findMediaFile(mediaRef, getEditor().getProject(), getEditor().getSession().getCorpus());
 		if(mediaFile != null)

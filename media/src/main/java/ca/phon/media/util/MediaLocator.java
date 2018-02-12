@@ -65,13 +65,35 @@ public class MediaLocator {
 		return parseMediaIncludePaths();
 	}
 
+	/**
+	 * @param project
+	 * @return
+	 */
 	public static List<String> getMediaIncludePaths(Project project) {
-		List<String> retVal = new ArrayList<String>(getMediaIncludePaths());
+		return getMediaIncludePaths(project, null);
+	}
+
+	public static List<String> getMediaIncludePaths(Project project, String corpus) {
+		List<String> retVal = new ArrayList<String>();
 
 		if(project != null) {
-			final File projectResFolder = new File(project.getResourceLocation(), "media");
-			retVal.add(projectResFolder.getAbsolutePath());
+			String projectMediaPath = project.getProjectMediaFolder();
+			final File projectMediaFolder = new File(projectMediaPath);
+			if(!projectMediaFolder.isAbsolute())
+				projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
+			retVal.add(projectMediaPath);
+			if(corpus != null) {
+				String corpusMediaPath = project.getCorpusMediaFolder(corpus);
+				final File corpusMediaFolder = new File(corpusMediaPath);
+				if(!corpusMediaFolder.isAbsolute())
+					corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
+				if(!corpusMediaPath.equals(projectMediaPath))
+					retVal.add(corpusMediaPath);
+			}
 		}
+
+		// add global paths
+		retVal.addAll(getMediaIncludePaths());
 
 		return retVal;
 	}
@@ -128,7 +150,6 @@ public class MediaLocator {
 
 		try {
 			while((retVal == null) && (mediaLocations.peek() != null)) {
-
 				String mediaLocation = mediaLocations.dequeue();
 				retVal = findMediaFile(mediaLocation, project, session.getCorpus());
 			}
@@ -190,17 +211,24 @@ public class MediaLocator {
 			 }
 			 checkList.add(File.separator + filename);
 
+			 // check project media folder, corpus media folder then global include paths
 			 final List<String> mediaPaths =
 					 new ArrayList<String>();
-			 mediaPaths.addAll(getMediaIncludePaths());
-
 			 if(project != null) {
-				 // check resources
-				 File resFile = new File(project.getResourceLocation());
-				 File resMediaFile = new File(resFile, "media");
-				 mediaPaths.add(0, resMediaFile.getAbsolutePath());
+				 String projectMediaPath = project.getProjectMediaFolder();
+				 if(!(new File(projectMediaPath)).isAbsolute()) {
+					 projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
+				 }
+				 mediaPaths.add(projectMediaPath);
+				 if(corpus != null && !project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
+					 String corpusMediaPath = project.getCorpusMediaFolder(corpus);
+					 if(!(new File(corpusMediaPath)).isAbsolute()) {
+						 corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
+					 }
+					 mediaPaths.add(corpusMediaPath);
+				 }
 			 }
-
+			 mediaPaths.addAll(getMediaIncludePaths());
 
 			 // look in rest of search paths
 			 for(String path:mediaPaths) {
