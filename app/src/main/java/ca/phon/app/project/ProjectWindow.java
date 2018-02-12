@@ -958,6 +958,12 @@ public class ProjectWindow extends CommonModuleFrame
 		}
 		contextMenu.add(deleteItem);
 
+
+		contextMenu.addSeparator();
+
+		contextMenu.add(new SelectProjectMediaFolder(this));
+		contextMenu.add(new SelectCorpusMediaFolder(this));
+
 		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
 	}
 
