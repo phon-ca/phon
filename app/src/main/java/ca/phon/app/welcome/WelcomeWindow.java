@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -254,7 +254,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 	private MultiActionButton createPrefsButton() {
 		MultiActionButton retVal = new MultiActionButton();
 
-		final StockIcon prefIcon = 
+		final StockIcon prefIcon =
 				OSInfo.isMacOs() ? MacOSStockIcon.GenericPreferencesIcon
 						: OSInfo.isNix() ? GtkStockIcon.SETTINGS : WindowsStockIcon.SETTINGS;
 		final String defIcn = "categories/preferences";
@@ -291,7 +291,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 
 		final String folderIconName = "places/folder-video";
 		final StockIcon stockIcon =
-				(NativeUtilities.isMacOs() ? MacOSStockIcon.VoicesFolderIcon 
+				(NativeUtilities.isMacOs() ? MacOSStockIcon.VoicesFolderIcon
 						: NativeUtilities.isLinux() ? GtkStockIcon.FOLDER_VIDEO : WindowsStockIcon.VIDEOFILES);
 		final ImageIcon folderIcon =
 				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
