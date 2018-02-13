@@ -115,11 +115,12 @@ public class WelcomeWindow extends CommonModuleFrame {
 		mediaPrefsButton = createMediaButton();
 
 		actionsPanel.setLayout(new VerticalLayout());
+		actionsPanel.setPreferredSize(new Dimension(250, 0));
 		actionsPanel.add(newProjectButton);
 		actionsPanel.add(browseProjectButton);
-		actionsPanel.add(new JXTitledSeparator("Settings"));
+//		actionsPanel.add(new JXTitledSeparator("Settings"));
 		actionsPanel.add(openPrefsButton);
-		actionsPanel.add(mediaPrefsButton);
+//		actionsPanel.add(mediaPrefsButton);
 
 		// add plug-in actions
 		int pluginActions = 0;
