@@ -62,7 +62,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	private ProjectType projectData;
 	public final static String PROJECT_XML_FILE = "project.xml";
 
-	public final static String PROJECT_PROPERTIES_FILE = "props";
+	public final static String PROJECT_PROPERTIES_FILE = ".properties";
 
 	public final static String PROJECT_MEDIAFOLDER_PROP = "project.mediaFolder";
 
@@ -121,7 +121,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 *
 	 * @return projectData
 	 */
-	private ProjectType loadProjectData() throws ProjectConfigurationException {
+	private synchronized ProjectType loadProjectData() throws ProjectConfigurationException {
 		final ObjectFactory factory = new ObjectFactory();
 
 		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
@@ -172,7 +172,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 *
 	 * @throws IOException
 	 */
-	protected void saveProjectData()
+	protected synchronized void saveProjectData()
 		throws IOException {
 		final ObjectFactory factory = new ObjectFactory();
 		try {
@@ -197,7 +197,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		saveProperties();
 	}
 
-	protected void saveProperties() throws IOException {
+	protected synchronized void saveProperties() throws IOException {
 		// save properties
 		final Properties properties = getExtension(Properties.class);
 		if(properties != null) {
@@ -388,8 +388,15 @@ public class LocalProject implements Project, ProjectRefresh {
 		final File corpusFolder = getCorpusFolder(corpus);
 		final File newCorpusFolder = getCorpusFolder(newName);
 
+		final String corpusMediaFolder = getCorpusMediaFolder(corpus);
+		setCorpusMediaFolder(corpus, null);
+
 		// rename folder
 		corpusFolder.renameTo(newCorpusFolder);
+
+		if(!corpusMediaFolder.equals(getProjectMediaFolder())) {
+			setCorpusMediaFolder(newName, corpusMediaFolder);
+		}
 
 		final CorpusType ct = getCorpusInfo(corpus);
 		if(ct != null) {
@@ -417,6 +424,8 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new IOException("Unable to remove corpus folder.");
 			}
 		}
+
+		setCorpusMediaFolder(corpus, null);
 
 		// remove entry from project data
 		final CorpusType ct = getCorpusInfo(corpus);

@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,19 +33,19 @@ import ca.phon.util.CollatorFactory;
 /**
  * Duplicate selected corpora in the project window. Corpus names
  * are suffixed with an index.
- * 
+ *
  * E.g., <code>MyCorpus</code> becomes <code>MyCorpus (1)</code>
  *
  */
 public class DuplicateCorpusAction extends ProjectWindowAction {
 
 	private final static Logger LOGGER = Logger.getLogger(DuplicateCorpusAction.class.getName());
-	
+
 	private static final long serialVersionUID = -500973090454907775L;
 
 	public DuplicateCorpusAction(ProjectWindow projectWindow) {
 		super(projectWindow);
-		
+
 		putValue(NAME, "Duplicate Corpus");
 		putValue(SHORT_DESCRIPTION, "Duplicate selected corpus/corpora");
 	}
@@ -69,6 +69,11 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				FileUtils.copyDirectory(oldCorpusFile, dupCorpusFile);
 				dupCorpusNames.add(corpusName);
 				corpusDescs.add(project.getCorpusDescription(corpus));
+
+				if(!project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
+					project.setCorpusMediaFolder(corpusName, project.getCorpusMediaFolder(corpus));
+				}
+
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				Toolkit.getDefaultToolkit().beep();
@@ -78,7 +83,7 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 		if(corpora.size() > 0) {
 			int indices[] = new int[dupCorpusNames.size()];
 			getWindow().refreshProject();
-			
+
 			List<String> sessions = project.getCorpora();
 			Collections.sort(sessions, CollatorFactory.defaultCollator());
 			for(int i = 0; i < dupCorpusNames.size(); i++) {
@@ -87,7 +92,7 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				// apply corpus descriptions to duplicated corpora
 				String corpusDesc = corpusDescs.get(i);
 				project.setCorpusDescription(corpusName, corpusDesc);
-				
+
 				indices[i] = sessions.indexOf(corpusName);
 			}
 			getWindow().getCorpusList().setSelectedIndices(indices);

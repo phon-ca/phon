@@ -914,7 +914,7 @@ public class ProjectWindow extends CommonModuleFrame
 		contextMenu.addSeparator();
 
 		contextMenu.add(new SelectProjectMediaFolder(this));
-		if(corpora.size() == 1) {
+		if(corpora.size() > 0) {
 			contextMenu.add(new SelectCorpusMediaFolder(this));
 		}
 
@@ -1027,7 +1027,9 @@ public class ProjectWindow extends CommonModuleFrame
 			(CorpusListModel)corpusList.getModel();
 		corpusListModel.refresh();
 		corpusList.repaint();
-		corpusDetails.update();
+
+		if(getSelectedCorpus() != null)
+			corpusDetails.setCorpus(getSelectedCorpus());
 
 		SessionListModel sessionListModel =
 			(SessionListModel)sessionList.getModel();

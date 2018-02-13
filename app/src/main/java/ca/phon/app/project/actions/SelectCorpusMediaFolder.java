@@ -2,6 +2,7 @@ package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -27,13 +28,36 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final Project project = getWindow()	.getProject();
-		final String corpus = getWindow().getSelectedCorpus();
-		if(corpus == null) return;
+		final List<String> corpora = getWindow().getSelectedCorpora();
+		if(corpora.size() == 0) return;
 
-		final String defaultMediaFolder = project.getProjectMediaFolder();
-		final String currentMediaFolder = project.getCorpusMediaFolder(corpus);
-		if(currentMediaFolder.equals(defaultMediaFolder)) {
-			browseForMediaFolder();
+		if(corpora.size() == 1) {
+			final String corpus = corpora.get(0);
+			final String defaultMediaFolder = project.getProjectMediaFolder();
+			final String currentMediaFolder = project.getCorpusMediaFolder(corpus);
+			if(currentMediaFolder.equals(defaultMediaFolder)) {
+				browseForMediaFolder();
+			} else {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(getWindow());
+				props.setRunAsync(true);
+				final String[] options = {"Cancel", "Reset to project default", "Browse for folder..."};
+				props.setOptions(options);
+				props.setDefaultOption(options[0]);
+				props.setMessage("Select media folder for corpus '" + corpus + "'");
+				props.setHeader("Select corpus media folder");
+				props.setListener( (e) -> {
+					int result = e.getDialogResult();
+					if(result == 0) {
+						return;
+					} else if(result == 1) {
+						project.setCorpusMediaFolder(corpus, null);
+					} else if(result == 2) {
+						SwingUtilities.invokeLater( this::browseForMediaFolder );
+					}
+				});
+				NativeDialogs.showMessageDialog(props);
+			}
 		} else {
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setParentWindow(getWindow());
@@ -41,14 +65,16 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 			final String[] options = {"Cancel", "Reset to project default", "Browse for folder..."};
 			props.setOptions(options);
 			props.setDefaultOption(options[0]);
-			props.setMessage("Select media folder for corpus '" + corpus + "'");
-			props.setHeader("Select corpus media folder");
+			props.setMessage("Select media folder for corproa");
+			props.setHeader("Select media folder for corpora");
 			props.setListener( (e) -> {
 				int result = e.getDialogResult();
 				if(result == 0) {
 					return;
 				} else if(result == 1) {
-					project.setCorpusMediaFolder(corpus, null);
+					for(String corpus:corpora) {
+						project.setCorpusMediaFolder(corpus, null);
+					}
 				} else if(result == 2) {
 					SwingUtilities.invokeLater( this::browseForMediaFolder );
 				}
@@ -58,31 +84,22 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 	}
 
 	private void browseForMediaFolder() {
-		final Project project = getWindow()	.getProject();
-		final String corpus = getWindow().getSelectedCorpus();
-		if(corpus == null) return;
-
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(getWindow());
 		props.setRunAsync(true);
 		props.setCanChooseDirectories(true);
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
-		final String currentPath = project.getCorpusMediaFolder(corpus);
-		if(currentPath != null) {
-			File currentFolder = new File(currentPath);
-			if(!currentFolder.isAbsolute()) {
-				currentFolder = new File(project.getLocation(), currentPath);
-			}
-			props.setInitialFolder(currentFolder.getAbsolutePath());
-		}
 		props.setPrompt("Select Folder");
 		props.setTitle("Corpus Media Folder");
 		props.setListener( (e) -> {
 			if(e.getDialogData() == null) return;
 
-			final String selectedFolder = e.getDialogData().toString();
-			project.setCorpusMediaFolder(corpus, selectedFolder);
+			final Project project = getWindow().getProject();
+			for(String corpus:getWindow().getSelectedCorpora()) {
+				final String selectedFolder = e.getDialogData().toString();
+				project.setCorpusMediaFolder(corpus, selectedFolder);
+			}
 		});
 		NativeDialogs.showOpenDialog(props);
 	}
