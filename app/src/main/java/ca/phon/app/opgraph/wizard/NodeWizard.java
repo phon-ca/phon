@@ -207,7 +207,7 @@ public class NodeWizard extends WizardFrame {
 			if(hasReport) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
-				final String[] options = new String[] { "Close without saving", "Save Report as HTML", "Export Report as Excel\u2122 Workbook", "Cancel" };
+				final String[] options = new String[] { "Close without saving", "Save Report as HTML", "Export Report to Excel\u2122", "Cancel" };
 				props.setTitle("Save Results");
 				props.setHeader("Save Results");
 				props.setMessage("Save results before closing?");
@@ -249,7 +249,7 @@ public class NodeWizard extends WizardFrame {
 			super.close();
 		});
 	}
-	
+
 	private void init() {
 		// turn off parent navigation controls
 		super.btnBack.setVisible(false);

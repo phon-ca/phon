@@ -65,7 +65,7 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 			final String[] options = {"Cancel", "Reset to project default", "Browse for folder..."};
 			props.setOptions(options);
 			props.setDefaultOption(options[0]);
-			props.setMessage("Select media folder for corproa");
+			props.setMessage("Select media folder for corpora");
 			props.setHeader("Select media folder for corpora");
 			props.setListener( (e) -> {
 				int result = e.getDialogResult();

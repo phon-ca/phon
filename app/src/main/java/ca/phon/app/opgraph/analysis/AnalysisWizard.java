@@ -165,20 +165,4 @@ public class AnalysisWizard extends NodeWizard {
 		context.put("selectedParticipants", participantsPanel.getCheckedParticipants());
 	}
 
-	@Override
-	public boolean saveData() throws IOException {
-		final MessageDialogProperties props = new MessageDialogProperties();
-		final String[] options = new String[] { "Save all to folder", "Export Report as XSLX", "Save Report as HTML" };
-		props.setOptions(options);
-		props.setDefaultOption(options[2]);
-		props.setTitle("Save Report");
-		props.setMessage("Save Report before closing?");
-		props.setRunAsync(true);
-		props.setListener((e) -> {;
-
-		});
-
-		return false;
-	}
-
 }
