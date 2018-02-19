@@ -6,6 +6,10 @@
             <serialized version="19.0" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
+                        <String>enable.project.master.files.support</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                    <entry>
                         <String>scenario.associations</String>
                         <scenarioAssociation-array>
                             <scenarioAssociation>
@@ -747,6 +751,9 @@
         </options>
     </meta>
     <projectTree name="phon-doc.xpr">
+        <folder masterFiles="true" name="Master Files">
+            <file name="src/main/dita/phon_application_manual.ditamap"/>
+        </folder>
         <folder path="src/main/dita/"/>
         <folder path="src/main/xslt/"/>
     </projectTree>
