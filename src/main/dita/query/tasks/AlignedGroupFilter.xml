@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
 <task id="taskId">
-    <title>Aligned Group Filter</title>
+    <title>Aligned Group Options</title>
     <shortdesc>You may also limit the results based on an expression defining an aligned word group
         in another tier.</shortdesc>
     <taskbody>

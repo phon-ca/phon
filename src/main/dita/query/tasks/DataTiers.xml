@@ -29,9 +29,7 @@
     </taskbody>
     <related-links>
         <link href="GroupFilter.xml#taskId"/>
-        <link href="AlignedGroupFilter.xml#taskId"/>
         <link href="WordFilter.xml#taskId"/>
-        <link href="AlignedWordFilter.xml#taskId"/>
         <link href="ParticipantFilter.xml#taskId"/>
     </related-links>
 </task>

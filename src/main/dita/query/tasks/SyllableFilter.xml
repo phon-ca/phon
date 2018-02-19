@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
 <task id="taskId">
-    <title>Syllable Filter</title>
+    <title>Syllable Options</title>
     <shortdesc>Limit the results based on position or an expression defining the
         syllable.</shortdesc>
     <taskbody>

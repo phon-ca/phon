@@ -1,12 +1,8 @@
 # Analysis: PPC
 
-This document describes the PPC report in Phon.
+The PPC analysis will calculate the percent phones/consonants/vowels correct (PPC/PCC/PVC) in the sampled data.
 
-## Information
-
-The PPC report will calculate the percent phones/consonants/vowels correct (PPC/PCC/PVC) in the sampled data. An option for selecting which report is generated is presented during execution of the graph along with other filtering options.
-
-## Outline
+## Report Outline
 
 The report will be composed of two types of tables:
 
@@ -31,7 +27,7 @@ Session data is queried by word for each IPA Target and IPA Actual tuple. Proper
 
 ## Parameters
 
-During execution of the analysis options for the *PCC/PVC* query are available.  The parameters for the query are printed in the report.
+
     
 ## PPC Summary
 

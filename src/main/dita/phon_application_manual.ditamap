@@ -35,10 +35,10 @@
             <topicref href="prefs/tasks/ChangeDictionaryLanguage.xml"/>
             <topicref href="prefs/tasks/ChangeSyllabifierLanguage.xml"/>
             <topicref href="prefs/concepts/AboutMediaDirs.xml"/>
-            <topicref href="prefs/tasks/ChangeMediaDirs.xml"/>
         </topicref>
         <topicref href="projman/project_manager.md" format="markdown">
             <topicref href="misc/concepts/AboutProjectFileStructure.xml"/>
+            <topicref href="misc/concepts/AboutProjectMediaFolders.xml"/>
             <topicref href="projman/concepts/AboutCorpora.xml">
                 <topicref href="projman/tasks/CreateCorpus.xml"/>
                 <topicref href="projman/tasks/DuplicateCorpus.xml"/>
@@ -222,13 +222,18 @@
             <topicref href="phonex/concepts/comb.dita"/>
             <topicref href="phonex/concepts/tone_plugin.dita"/>
         </topichead>
+        <topichead navtitle="Examples"/>
     </chapter>
-    <chapter navtitle="CHAT Support"/>
+    <chapter navtitle="CHAT Support">
+        <topichead navtitle="Main Line Coding">
+            <topicref href="chat/markers.md" format="markdown"/>
+        </topichead>
+    </chapter>
     <chapter navtitle="Queries" audience="intermediate">
         <topicref href="query/tasks/QueryProject.xml"/>
         <topicref href="query/tasks/SaveQueryScript.xml"/>
         <topicref href="query/tasks/OpenQueryScript.xml"/>
-        <topichead navtitle="Common Query Filters">
+        <topichead navtitle="Common Query Options">
             <topicref href="query/tasks/GroupFilter.xml"/>
             <topicref href="query/tasks/AlignedGroupFilter.xml"/>
             <topicref href="query/tasks/WordFilter.xml"/>
@@ -238,8 +243,6 @@
         </topichead>
         <topicref href="query/query-data_tiers.dita" format="dita"/>
         <topicref href="query/query_phones.dita" format="dita"/>
-        <topicref href="query/query_deletions.md" format="markdown"/>
-        <topicref href="query/query_epenthesis.md" format="markdown"/>
         <topicref href="query/query_segmental_relations.md" format="markdown"/>
         <topicref href="query/tasks/ViewResultSet.xml">
             <topicref href="query/tasks/SaveTableAsCSV.xml"/>
@@ -270,13 +273,14 @@
             <topicref href="report/report-pitch.md" format="markdown"/>
             <topicref href="report/report-formants.md" format="markdown"/>
             <topicref href="report/report-spectral_moments.md" format="markdown"/>
+            <topicref href="report/report-vot.md" format="markdown"/>
         </topicref>
         <topicref href="report/report_composer.md" format="markdown"/>
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/PPC.md" format="markdown"/>
         <topicref href="analysis/Phone%20Inventory.md" format="markdown"/>
-        <topicref href="analysis/Phone%20Clusters.md" format="markdown"/>
+        <topicref href="analysis/consonants.md" format="markdown"/>
         <topicref href="analysis/Phonological%20Processes.md" format="markdown"/>
         <topicref href="analysis/PMLU.md" format="markdown"/>
         <topicref href="analysis/Vocalization.md" format="markdown"/>
