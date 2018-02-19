@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,65 +25,65 @@ import ca.phon.query.TableUtils;
 /**
  * Basic implementation of a {@link TableDataSource}.  Data
  * is stored in a list of arrays.
- * 
+ *
  */
 public class DefaultTableDataSource implements TableDataSource {
-	
+
 	private String[] columnNames = new String[0];
-	
+
 	private List<Object[]> rowData = new ArrayList<Object[]>();
-	
+
 	public DefaultTableDataSource() {
 		super();
 	}
-	
+
 	public DefaultTableDataSource(DefaultTableDataSource from) {
 		super();
 		rowData.addAll(from.rowData);
 	}
-	
+
 	public List<Object[]> getRowData() {
 		return this.rowData;
 	}
-	
+
 	public Object[] getRow(int row) {
 		return rowData.get(row);
 	}
-	
+
 	public void deleteRow(int row) {
 		rowData.remove(row);
 	}
-	
+
 	public void insertRow(int idx, Object[] row) {
 		if(row.length < getColumnCount()) {
 			row = Arrays.copyOf(row, getColumnCount());
 		} else if(row.length > getColumnCount()) {
 			setColumnCount(row.length);
 		}
-		
+
 		rowData.add(idx, row);
 	}
-	
+
 	public void addRow(Object[] row) {
 		if(row.length < getColumnCount()) {
 			row = Arrays.copyOf(row, getColumnCount());
 		} else if(row.length > getColumnCount()) {
 			setColumnCount(row.length);
 		}
-		
+
 		rowData.add(row);
 	}
-	
+
 	protected void setColumnCount(int columns) {
 		if(columns == getColumnCount()) return;
-		
+
 		columnNames = Arrays.copyOf(columnNames, columns);
-		
+
 		List<Object[]> newRowData = new ArrayList<>();
 		rowData.forEach( (row) -> newRowData.add(Arrays.copyOf(row, columns)) );
 		rowData = newRowData;
 	}
-	
+
 	@Override
 	public int getColumnCount() {
 		return columnNames.length;
@@ -93,7 +93,8 @@ public class DefaultTableDataSource implements TableDataSource {
 	public int getRowCount() {
 		return rowData.size();
 	}
-	
+
+	@Override
 	public int getColumnIndex(String columnName) {
 		int colIdx = -1;
 		for(int c = 0; c < getColumnCount(); c++) {
@@ -104,40 +105,40 @@ public class DefaultTableDataSource implements TableDataSource {
 		}
 		return colIdx;
 	}
-	
+
 	public Object getValueAt(int row, String columnName) {
 		Object retVal = null;
-		
+
 		if(row < rowData.size()) {
 			int colIdx = getColumnIndex(columnName);
 			if(colIdx > 0 && colIdx < getColumnCount()) {
 				retVal = getValueAt(row, colIdx);
 			}
 		}
-		
+
 		return retVal;
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
 		Object retVal = null;
-		
+
 		if(row < rowData.size()) {
 			final Object[] rowVal = rowData.get(row);
 			if(col < rowVal.length) {
 				retVal = rowVal[col];
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	/**
 	 * Return the value at cell for given rowKey, colName.
-	 * 
-	 * This method assumes that each row begins with a unique 
-	 * key.  
-	 * 
+	 *
+	 * This method assumes that each row begins with a unique
+	 * key.
+	 *
 	 * @param rowKey
 	 * @param colName
 	 * @return cellValue at given rowKey, colName intersection.
@@ -145,27 +146,27 @@ public class DefaultTableDataSource implements TableDataSource {
 	public Object getValueAt(String rowKey, String colName) {
 		return getValueAt(0, rowKey, colName);
 	}
-	
+
 	public Object getValueAt(String keyCol, String rowKey, String colName) {
 		return getValueAt(getColumnIndex(keyCol), rowKey, colName);
 	}
-	
+
 	public Object getValueAt(int keyCol, String rowKey, String colName) {
 		return getValueAt(new int[] {keyCol}, new String[] {rowKey}, colName);
 	}
-	
+
 	public Object getValueAt(final int[] keyCols, final String[] rowKey, String colName) {
 		return getValueAt(keyCols, rowKey, colName, false, true);
 	}
-	
+
 	public Object getValueAt(final int[] keyCols, final String[] rowKey, String colName, boolean ignoreDiacritics, boolean caseSensitive) {
-		Optional<Object[]> row = 
+		Optional<Object[]> row =
 				rowData.parallelStream()
 					.filter( r -> {
 						boolean equals = true;
 						for(int i = 0; i < keyCols.length && equals; i++) {
 							String testVal = TableUtils.objToString(r[keyCols[i]], ignoreDiacritics);
-							equals &= 
+							equals &=
 									(caseSensitive ? rowKey[i].equals(testVal) : rowKey[i].equalsIgnoreCase(testVal));
 						}
 						return equals;
@@ -178,19 +179,19 @@ public class DefaultTableDataSource implements TableDataSource {
 			return null;
 		}
 	}
-	
+
 	public void setValueAt(final int[] keyCols, final String[] rowKey, String colName, Object value) {
 		setValueAt(keyCols, rowKey, colName, false, true, value);
 	}
-	
+
 	public void setValueAt(final int[] keyCols, final String[] rowKey, String colName, boolean ignoreDiacritics, boolean caseSensitive, Object value) {
-		Optional<Object[]> row = 
+		Optional<Object[]> row =
 				rowData.parallelStream()
 					.filter( r -> {
 						boolean equals = true;
 						for(int i = 0; i < keyCols.length && equals; i++) {
 							String testVal = TableUtils.objToString(r[keyCols[i]], ignoreDiacritics);
-							equals &= 
+							equals &=
 									(caseSensitive ? rowKey[i].equals(testVal) : rowKey[i].equalsIgnoreCase(testVal));
 						}
 						return equals;
@@ -201,17 +202,17 @@ public class DefaultTableDataSource implements TableDataSource {
 			row.get()[colIdx] = value;
 		}
 	}
-	
+
 	public void setValueAt(int row, int col, Object newVal) {
 		final Object[] rowVals = getRow(row);
 		rowVals[col] = newVal;
 	}
-	
+
 	public String getDefaultColumnTitle(int col) {
 		int let1 = col / 26;
 		int let2 = col % 26;
-		
-		String retVal = "" + 
+
+		String retVal = "" +
 				(let1 > 0 ? (char)('A' + (let1-1)) : "") +
 				(char)('A' + let2);
 		return retVal;
@@ -220,33 +221,33 @@ public class DefaultTableDataSource implements TableDataSource {
 	@Override
 	public String getColumnTitle(int col) {
 		String retVal = null;
-		
+
 		if(col < columnNames.length) {
-			retVal = 
+			retVal =
 				(columnNames[col] != null ? columnNames[col] : getDefaultColumnTitle(col));
 		}
-		
+
 		return retVal;
 	}
-	
+
 	public void setColumnTitle(int col, String title) {
 		if(col >= getColumnCount()) {
 			setColumnCount(col+1);
 		}
 		columnNames[col] = title;
 	}
-	
+
 	/**
 	 * Return the type of the first non-null value encountered
 	 * in the specified column.
-	 * 
+	 *
 	 * @param col
-	 * 
+	 *
 	 * @return class of the first real value in the columm
 	 */
 	public Class<?> inferColumnType(int col) {
 		Class<?> retVal = Object.class;
-		
+
 		for(int row = 0; row < getRowCount(); row++) {
 			Object val = getValueAt(row, col);
 			if(val != null) {
@@ -254,12 +255,12 @@ public class DefaultTableDataSource implements TableDataSource {
 				break;
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	public void append(DefaultTableDataSource otherTable) {
 		rowData.addAll(otherTable.rowData);
 	}
-	
+
 }

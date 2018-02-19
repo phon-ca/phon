@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,7 +28,7 @@ import ca.phon.util.*;
 
 /**
  * Inventory data source for (now deprecated) reports.
- * 
+ *
  * @deprecated
  */
 @Deprecated
@@ -38,12 +38,12 @@ public class InventoryDataSource implements TableDataSource {
 	 * Inventory format info
 	 */
 	private InventorySection invData;
-	
+
 	/**
 	 * List of searches
 	 */
 	private ResultSet[] searches;
-	
+
 	/**
 	 * Map of inventories based on result format.
 	 * By default (i.e., not grouped by format) all
@@ -51,14 +51,14 @@ public class InventoryDataSource implements TableDataSource {
 	 */
 	private Map<String, Map<String, Integer[]>> inventories =
 		new HashMap<String, Map<String, Integer[]>>();
-	private Map<String, ArrayList<String>> orderedKeys = 
+	private Map<String, ArrayList<String>> orderedKeys =
 		new HashMap<String, ArrayList<String>>();
-	
+
 	/**
 	 * Include excluded results in report?
 	 */
 	private boolean includeExcluded;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -66,17 +66,17 @@ public class InventoryDataSource implements TableDataSource {
 		this.invData = data;
 		this.searches = searches;
 		this.includeExcluded = data.isIncludeExcluded();
-		
-		TreeMap<String, Integer[]> defaultCounter = 
+
+		TreeMap<String, Integer[]> defaultCounter =
 			new TreeMap<String, Integer[]>();
 		inventories.put("ALL", defaultCounter);
-		
+
 		generateInventory();
 	}
-	
+
 	@Override
 	public int getColumnCount() {
-		int numCols = 
+		int numCols =
 			1 + // result string
 			searches.length + // col for each session
 			(invData.isGroupByFormat() ? 1 : 0); // result format when changing
@@ -99,31 +99,31 @@ public class InventoryDataSource implements TableDataSource {
 	@Override
 	public Object getValueAt(int row, int col) {
 		Object retVal = "";
-		
+
 		if(invData.isGroupByFormat()) {
 			List<String> formatKeys = new ArrayList<String>();
 			formatKeys.addAll(inventories.keySet());
 			formatKeys.remove("ALL");
 			Collections.sort(formatKeys, CollatorFactory.defaultCollator());
-			
+
 			int cIdx = 0;
 			for(int i = 0; i < formatKeys.size(); i++) {
 				String format = formatKeys.get(i);
-				
+
 				Map<String, Integer[]> counter = inventories.get(format);
 				if(row < cIdx + counter.size()) {
 					final List<String> resultKeys = orderedKeys.get(format);
-					
+
 					int subIdx = row - cIdx;
-					
+
 					String rVal = resultKeys.get(subIdx);
-					if(col == 0) 
+					if(col == 0)
 						retVal = rVal;
 					else if (col < getColumnCount()-1)
 						retVal = counter.get(rVal)[col-1];
-					else 
+					else
 						retVal = (subIdx == 0 ? format : "");
-					
+
 					break;
 				} else {
 					cIdx += counter.size();
@@ -132,21 +132,21 @@ public class InventoryDataSource implements TableDataSource {
 		} else {
 			Map<String, Integer[]> counter = inventories.get("ALL");
 			final List<String> keys = orderedKeys.get("ALL");
-			
+
 			String key = keys.get(row);
 			Integer[] count = counter.get(key);
-			
+
 			if (col == 0) retVal = key;
 			else retVal = count[col-1];
 		}
-		
+
 		return retVal;
 	}
 
 	@Override
 	public String getColumnTitle(int col) {
 		String retVal = "";
-		
+
 		if(col == 0) {
 			retVal = "";
 		} else {
@@ -156,29 +156,41 @@ public class InventoryDataSource implements TableDataSource {
 			else
 				retVal = "Result Format";
 		}
-		
+
 		return retVal;
 	}
-	
+
+	@Override
+	public int getColumnIndex(String columnName) {
+		int colIdx = -1;
+		for(int c = 0; c < getColumnCount(); c++) {
+			if(getColumnTitle(c).equals(columnName)) {
+				colIdx = c;
+				break;
+			}
+		}
+		return colIdx;
+	}
+
 	/*
 	 * Generate inventory
 	 */
 	private void generateInventory() {
 		int len = searches.length;
-		
+
 		int sIdx = 0;
 		for(ResultSet s:searches) {
 			final int numResults = s.size();
 			for(int rIdx = 0; rIdx < numResults; rIdx++) {
 				Result result = s.getResult(rIdx);
-				
+
 				if(result.isExcluded()) {
 					if(!isIncludeExcluded()) continue;
 				}
-				
+
 //				String resultStr = ReportHelper.createResultString(result);
 				Tuple<String, String> data = createResultData(result);
-				
+
 				Map<String, Integer[]> counter = null;
 				if(invData.isGroupByFormat()) {
 					counter = inventories.get(data.getObj2());
@@ -189,7 +201,7 @@ public class InventoryDataSource implements TableDataSource {
 				} else {
 					counter = inventories.get("ALL");
 				}
-				
+
 				Integer[] vals = counter.get(data.getObj1());
 				if(vals == null) {
 					vals = new Integer[len];
@@ -200,14 +212,14 @@ public class InventoryDataSource implements TableDataSource {
 			}
 			sIdx++;
 		}
-		
+
 		for(String key:inventories.keySet()) {
 			final ArrayList<String> ordered = new ArrayList<String>(inventories.get(key).keySet());
 			Collections.sort(ordered, CollatorFactory.defaultCollator());
 			orderedKeys.put(key, ordered);
 		}
 	}
-	
+
 	/*
 	 * String helper methods
 	 */
@@ -224,27 +236,27 @@ public class InventoryDataSource implements TableDataSource {
 
 	/*
 	 * Returns a tuple of result value, result format
-	 * 
+	 *
 	 */
 	private Tuple<String, String> createResultData(Result result) {
 		String resVal = ReportHelper.createResultString(result);
 		String resFormat = ReportHelper.createResultSchemaString(result);
-		
+
 		String retVal = "";
 		String retFormat = "";
-		
+
 		// data to include
 		if(invData.isIncludeResultValue()) {
 			retVal = resVal;
 			retFormat = resFormat;
 		}
-		
+
 		if(invData.isIncludeMetadata()) {
 			Map<String, String> metadata = result.getMetadata();
-			
+
 			String metaFormat = "(";
 			String metaVal = "(";
-			
+
 			for(String metakey:metadata.keySet()) {
 				String metaval = metadata.get(metakey);
 				if(metaval != null && metaval.length() > 0) {
@@ -252,24 +264,24 @@ public class InventoryDataSource implements TableDataSource {
 					metaVal += metaval + ";";
 				}
 			}
-			
+
 			metaFormat += ")";
 			metaVal += ")";
-			
+
 			retVal += (retVal.length() > 0 ? " " : "") + metaVal;
 			retFormat += (retFormat.length  () > 0 ? " " : "") + metaFormat;
 		}
-		
+
 		// diacritics/case sensitivity
 		if(!invData.isCaseSensitive()) {
 			retVal = retVal.toLowerCase();
 			retFormat = retFormat.toLowerCase();
 		}
-		
+
 		if(invData.isIgnoreDiacritics()) {
 			retVal = stripDiacritics(retVal);
 		}
-		
+
 		return new Tuple<String, String>(retVal, retFormat);
 	}
 
@@ -280,5 +292,5 @@ public class InventoryDataSource implements TableDataSource {
 	public void setIncludeExcluded(boolean includeExcluded) {
 		this.includeExcluded = includeExcluded;
 	}
-	
+
 }

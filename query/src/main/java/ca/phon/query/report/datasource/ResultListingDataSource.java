@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2016, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ import ca.phon.session.*;
  */
 @Deprecated
 public class ResultListingDataSource extends AbstractScriptTableModel implements TableDataSource {
-	
+
 	private static final long serialVersionUID = 6508115371509706432L;
 
 	private final static Logger LOGGER = Logger.getLogger(ResultListingDataSource.class.getName());
@@ -50,22 +50,22 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	 * Section information
 	 */
 	private ResultListing invData;
-	
+
 	/**
 	 * Project
 	 */
 	private Project project;
-	
+
 	/**
-	 * Search 
+	 * Search
 	 */
 	private ResultSet resultSet;
-	
+
 	/**
 	 * Include excluded results?
 	 */
 	private boolean includeExcluded;
-	
+
 //	/**
 //	 * Default pkg and class imports
 //	 */
@@ -75,25 +75,25 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 //			"Packages.ca.phon.engines.search.script.params",
 //			"Packages.ca.phon.featureset"
 //	};
-//	
+//
 //	private final String scriptClazzImports[] = {
 //			"Packages.ca.phon.featureset.FeatureSet",
 //			"Packages.ca.phon.util.Range",
 //			"Packages.ca.phon.util.StringUtils"
 //	};
-	
+
 	/**
 	 * Session
 	 */
 	private Session session;
-	
-	
+
+
 	public ResultListingDataSource(Project project, ResultSet s, ResultListing section) {
 		this.project = project;
 		this.resultSet = s;
 		this.invData = section;
 		this.includeExcluded = section.isIncludeExcluded();
-		
+
 		try {
 			session = project.openSession(s.getCorpus(), s.getSession());
 		} catch (IOException e) {
@@ -101,7 +101,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		}
 		setupColumns();
 	}
-	
+
 	public ResultListingDataSource(Session session, ResultSet rs, ResultListing section) {
 		this.resultSet = rs;
 		this.session = session;
@@ -109,7 +109,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		this.includeExcluded = section.isIncludeExcluded();
 		setupColumns();
 	}
-	
+
 	public ResultListingFormatType getFormat() {
 		return invData.getFormat();
 	}
@@ -117,12 +117,12 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	public void setResultSet(ResultSet rs) {
 		this.resultSet = rs;
 	}
-	
+
 	public void setListing(ResultListing listing) {
 		this.invData = listing;
 		setupColumns();
 	}
-	
+
 	private void setupColumns() {
 		int colIdx = 0;
 		for(ResultListingField field:invData.getField()) {
@@ -130,19 +130,19 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 			final PhonScript ps = new BasicScript(sc.getScript());
 			try {
 				setColumnScript(colIdx, ps);
-				
+
 				// setup static column mappings
 				final Map<String, Object> bindings = new HashMap<String, Object>();
-				
+
 				final PhonScriptContext ctx = ps.getContext();
 				final Scriptable scope = ctx.getEvaluatedScope();
 				final ScriptParameters params = ctx.getScriptParameters(scope);
 //				final ScriptParam[] params = ps.getScriptParams();
-				
+
 				// setup script parameters
 				for(ScriptParam param:params) {
 					for(String paramId:param.getParamIds()) {
-						
+
 						Object paramVal = null;
 						ScriptParameter savedParam = null;
 						for(ScriptParameter sp:sc.getParam()) {
@@ -151,7 +151,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 								break;
 							}
 						}
-						
+
 						if(savedParam != null) {
 							try {
 								if(param.getParamType().equals("bool")) {
@@ -165,7 +165,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 											break;
 										}
 									}
-									if(rVal != null) 
+									if(rVal != null)
 										paramVal = rVal;
 									else
 										paramVal = esp.getDefaultValue(paramId);
@@ -178,7 +178,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 						} else {
 							paramVal = param.getDefaultValue(paramId);
 						}
-						
+
 						bindings.put(paramId, paramVal);
 					}
 				}
@@ -190,33 +190,33 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 			}
 		}
 	}
-	
+
 	@Override
 	public int getColumnCount() {
 		int retVal = 0;
-		
+
 		if(invData.getFormat() == ResultListingFormatType.LIST)
 			retVal = 2;
 		else
 			retVal = invData.getField().size();
-		
+
 		return retVal;
 	}
 
 	@Override
 	public int getRowCount() {
 		int retVal = 0;
-		
+
 		final int numResults = resultSet.numberOfResults(includeExcluded);
 		if(invData.getFormat() == ResultListingFormatType.LIST)
 			retVal = invData.getField().size() * numResults +
 				(numResults - 1);
 		else
 			retVal = numResults;
-		
+
 		return retVal;
 	}
-	
+
 	@Override
 	public Object getValueAt(int row, int col) {
 		Object retVal = null;
@@ -224,10 +224,10 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 			final int rowsPerResult = invData.getField().size() + 1;
 			final int result = row / rowsPerResult;
 			final int fieldIdx = row % rowsPerResult;
-			
+
 			// space between results
 			if(fieldIdx == rowsPerResult-1) return "";
-			
+
 			if(col == 0) {
 				retVal = invData.getField().get(fieldIdx).getTitle();
 			} else {
@@ -242,7 +242,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	@Override
 	public String getColumnName(int col) {
 		String retVal = super.getColumnName(col);
-		
+
 		if(invData.getFormat() == ResultListingFormatType.LIST) {
 			if(col == 0) {
 				retVal = "Field Name";
@@ -252,10 +252,10 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		} else {
 			retVal = invData.getField().get(col).getTitle();
 		}
-		
+
 		return retVal;
 	}
-	
+
 	public boolean isIncludeExcluded() {
 		return includeExcluded;
 	}
@@ -263,7 +263,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	public void setIncludeExcluded(boolean includeExcluded) {
 		this.includeExcluded = includeExcluded;
 	}
-	
+
 //	@Override
 //	public void setColumnScript(int col, PhonScript script)
 //		throws PhonScriptException {
@@ -272,20 +272,20 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 ////		for(String imp:scriptPkgImports) {
 ////			buffer.append(String.format("importPackage(%s)\n", imp));
 ////		}
-////		
+////
 ////		for(String imp:scriptClazzImports) {
 ////			buffer.append(String.format("importClass(%s)\n", imp));
 ////		}
-//		
+//
 //		buffer.append(script);
-//		
+//
 //		super.setColumnScript(col, buffer.toString(), mimetype);
 //	}
 
 	@Override
 	public Map<String, Object> getMappingsAt(int row, int col) {
 		final Map<String, Object> bindings = super.getMappingsAt(row, col);
-		
+
 		Result result = null;
 		if(includeExcluded) {
 			result = resultSet.getResult(row);
@@ -299,11 +299,11 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 				}
 			}
 		}
-		
+
 		if(result == null) return bindings;
-		
+
 		Record record = session.getRecord(result.getRecordIndex());
-		
+
 		bindings.put("project", project);
 		bindings.put("session", session);
 		bindings.put("resultSet", resultSet);
@@ -311,7 +311,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		bindings.put("record", record);
 		bindings.put("recordIndex", result.getRecordIndex());
 		bindings.put("table", this);
-		
+
 		return bindings;
 	}
 
@@ -319,5 +319,17 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 	public String getColumnTitle(int col) {
 		return getColumnName(col);
 	}
-	
+
+	@Override
+	public int getColumnIndex(String columnName) {
+		int colIdx = -1;
+		for(int c = 0; c < getColumnCount(); c++) {
+			if(getColumnTitle(c).equals(columnName)) {
+				colIdx = c;
+				break;
+			}
+		}
+		return colIdx;
+	}
+
 }
