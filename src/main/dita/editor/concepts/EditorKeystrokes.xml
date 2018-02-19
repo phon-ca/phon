@@ -48,14 +48,14 @@
                 </strow>
                 <strow>
                     <stentry>Next Record</stentry>
-                    <stentry><userinput>PAGE_UP</userinput></stentry>
-                    <stentry><userinput>PAGE_UP</userinput></stentry>
+                    <stentry><userinput>CMD+]</userinput></stentry>
+                    <stentry><userinput>CTRL+]</userinput></stentry>
                     <stentry/>
                 </strow>
                 <strow>
                     <stentry>Previous Record</stentry>
-                    <stentry><userinput>PAGE_DOWN</userinput></stentry>
-                    <stentry><userinput>PAGE_DOWN</userinput></stentry>
+                    <stentry><userinput>CMD+[</userinput></stentry>
+                    <stentry><userinput>CTRL+[</userinput></stentry>
                     <stentry/>
                 </strow>
                 <strow>
