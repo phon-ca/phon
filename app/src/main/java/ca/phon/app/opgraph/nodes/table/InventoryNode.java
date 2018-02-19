@@ -117,6 +117,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				generateInventory(groupKeys, inputTable);
 
 		final List<String> colNames = getColumns();
+		colNames.removeIf( colname -> inputTable.getColumnIndex(colname) < 0 );
 		groupKeys.forEach( key -> colNames.add(key.toString()) );
 
 		for(InventoryRowData key:inventory.keySet()) {
