@@ -31,7 +31,12 @@
         <primary_family>place</primary_family>
         <secondary_family>labial</secondary_family>
     </feature>
-    <feature name="round">
+    <feature name="rounded">
+        <synonym>round</synonym>
+        <primary_family>place</primary_family>
+        <secondary_family>labial</secondary_family>
+    </feature>
+    <feature name="unrounded">
         <primary_family>place</primary_family>
         <secondary_family>labial</secondary_family>
     </feature>
@@ -149,6 +154,10 @@
         <secondary_family>voicing</secondary_family>
     </feature>
     <feature name="aspirated">
+        <primary_family>voicing</primary_family>
+        <secondary_family>voicing</secondary_family>
+    </feature>
+    <feature name="plain">
         <primary_family>voicing</primary_family>
         <secondary_family>voicing</secondary_family>
     </feature>
@@ -488,7 +497,7 @@
     <feature name="transition">
         <primary_family>place</primary_family>
     </feature>
-    <named_feature_set name="primary">vowel glide labial bilabial round palatal dorsal velar uvular
+    <named_feature_set name="primary">vowel glide labial bilabial rounded palatal dorsal velar uvular
         guttural pharyngeal laryngeal labiodental interdental coronal alveolar alveopalatal
         retroflex voiceless voiced lateral rhotic stop fricative affricate nasal oral low mid high
         tense lax front central back</named_feature_set>
@@ -847,55 +856,55 @@
     <!--ı (0x131)-->
     <feature_set char="ı">vowel high tense atr front</feature_set>
     <!--y (0x79)-->
-    <feature_set char="y">vowel round high tense atr front</feature_set>
+    <feature_set char="y">vowel rounded high tense atr front</feature_set>
     <!--ɨ (0x268)-->
     <feature_set char="ɨ">vowel high tense atr central</feature_set>
     <!--ʉ (0x289)-->
-    <feature_set char="ʉ">vowel round high tense atr central</feature_set>
+    <feature_set char="ʉ">vowel rounded high tense atr central</feature_set>
     <!--ɯ (0x26f)-->
     <feature_set char="ɯ">vowel high tense atr back</feature_set>
     <!--u (0x75)-->
-    <feature_set char="u">vowel round high tense atr back</feature_set>
+    <feature_set char="u">vowel rounded high tense atr back</feature_set>
     <!--ɪ (0x26a)-->
     <feature_set char="ɪ">vowel high rtr lax front</feature_set>
     <!--ɩ (0x269)-->
     <feature_set char="ɩ">vowel high rtr lax front</feature_set>
     <!--ʏ (0x28f)-->
-    <feature_set char="ʏ">vowel round high rtr lax front</feature_set>
+    <feature_set char="ʏ">vowel rounded high rtr lax front</feature_set>
     <!--ʊ (0x28a)-->
-    <feature_set char="ʊ">vowel round high rtr lax back</feature_set>
+    <feature_set char="ʊ">vowel rounded high rtr lax back</feature_set>
     <!--ɷ (0x277)-->
-    <feature_set char="ɷ">vowel round high rtr lax back</feature_set>
+    <feature_set char="ɷ">vowel rounded high rtr lax back</feature_set>
     <!--ʮ (0x2ae)-->
-    <feature_set char="ʮ">vowel round high rtr lax back</feature_set>
+    <feature_set char="ʮ">vowel rounded high rtr lax back</feature_set>
     <!--e (0x65)-->
     <feature_set char="e">vowel mid tense atr front</feature_set>
     <!--ø (0xf8)-->
-    <feature_set char="ø">vowel round mid tense atr front</feature_set>
+    <feature_set char="ø">vowel rounded mid tense atr front</feature_set>
     <!--ɘ (0x258)-->
     <feature_set char="ɘ">vowel mid tense atr central</feature_set>
     <!--ɵ (0x275)-->
-    <feature_set char="ɵ">vowel round mid tense atr central</feature_set>
+    <feature_set char="ɵ">vowel rounded mid tense atr central</feature_set>
     <!--ɤ (0x264)-->
     <feature_set char="ɤ">vowel mid tense atr back</feature_set>
     <!--o (0x6f)-->
-    <feature_set char="o">vowel round mid tense atr back</feature_set>
+    <feature_set char="o">vowel rounded mid tense atr back</feature_set>
     <!--ə (0x259)-->
     <feature_set char="ə">vowel schwa mid rtr lax central</feature_set>
     <!--ɛ (0x25b)-->
     <feature_set char="ɛ">vowel mid rtr lax front</feature_set>
     <!--œ (0x153)-->
-    <feature_set char="œ">vowel round mid rtr lax front</feature_set>
+    <feature_set char="œ">vowel rounded mid rtr lax front</feature_set>
     <!--ɜ (0x25c)-->
     <feature_set char="ɜ">vowel mid rtr lax central</feature_set>
     <!--ʚ (0x29a)-->
-    <feature_set char="ʚ">vowel round mid rtr lax central</feature_set>
+    <feature_set char="ʚ">vowel rounded mid rtr lax central</feature_set>
     <!--ɞ (0x25e)-->
-    <feature_set char="ɞ">vowel round mid rtr lax central</feature_set>
+    <feature_set char="ɞ">vowel rounded mid rtr lax central</feature_set>
     <!--ʌ (0x28c)-->
     <feature_set char="ʌ">vowel mid rtr lax back</feature_set>
     <!--ɔ (0x254)-->
-    <feature_set char="ɔ">vowel round mid rtr lax back</feature_set>
+    <feature_set char="ɔ">vowel rounded mid rtr lax back</feature_set>
     <!--ɚ (0x25a)-->
     <feature_set char="ɚ">vowel schwa rhotic mid rtr lax central</feature_set>
     <!--ɝ (0x25d)-->
@@ -905,7 +914,7 @@
     <!--a (0x61)-->
     <feature_set char="a">vowel low lax central</feature_set>
     <!--ɶ (0x276)-->
-    <feature_set char="ɶ">vowel round low lax front</feature_set>
+    <feature_set char="ɶ">vowel rounded low lax front</feature_set>
     <!--ɐ (0x250)-->
     <feature_set char="ɐ">vowel low lax central</feature_set>
     <!--α (0x3b1)-->
@@ -913,7 +922,7 @@
     <!--ɑ (0x251)-->
     <feature_set char="ɑ">vowel low lax back</feature_set>
     <!--ɒ (0x252)-->
-    <feature_set char="ɒ">vowel round low lax back</feature_set>
+    <feature_set char="ɒ">vowel rounded low lax back</feature_set>
     <!--A (0x41)-->
     <feature_set char="A">cover</feature_set>
     <!--B (0x42)-->
