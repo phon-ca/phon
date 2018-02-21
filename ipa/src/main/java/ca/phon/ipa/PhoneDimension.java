@@ -1,137 +1,64 @@
 package ca.phon.ipa;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.phon.ipa.features.FeatureSet;
+
 /**
  * Phonetic dimensions
  *
  */
 public enum PhoneDimension {
-	PLACE(2, new String[]{ 
-			"{labial}",
-			"{interdental}", 
-			"{alveolar}", 
-			"{alveopalatal}", 
-			"{lateral}", 
-			"{retroflex}", 
-			"{palatal}",
-			"{velar}", 
-			"{uvular}",
-			"{pharyngeal}", 
-			"{laryngeal}" },
-		new String[]{
-			"Labial",
-			"Interdental",
-			"Alveolar",
-			"Alveopalatal",
-			"Lateral",
-			"Retroflex",
-			"Palatal",
-			"Velar",
-			"Uvular",
-			"Pharyngeal",
-			"Laryngeal"}
+	PLACE(2, new String[] {
+			"labial,coronal,dorsal,guttural",
+			"labiodental,bilabial,anterior,posterior",
+			"interdental,alveolar,alveopalatal,palatal,retroflex,velar,uvular,pharyngeal,laryngeal"}
 		),
-	MANNER(2, new String[]{ 
-			"{stop, -nasal}",
-			"{fricative}", 
-			"{affricate}", 
-			"{nasal}",
-			"{lateral}", 
-			"{rhotic}", 
-			"{glide}", 
-			"{vowel}" },
-		new String[]{
-			"Stop",
-			"Fricative",
-			"Affricate",
-			"Nasal",
-			"Lateral",
-			"Rhotic",
-			"Glide",
-			"Vowel"
-		}),
-	VOICING(1, new String[]{ 
-			"{voiceless, -aspirated}",
-			"{voiced, -aspirated}",
-			"{voiceless, aspirated}", 
-			"{voiced, aspirated}" },
-		new String[]{
-			"Voiceless",
-			"Voiced",
-			"VoicelessAsp",
-			"VoicedAsp"
-		}),
-	
+	MANNER(2, new String[]{
+			"obstruent,approximant,consonant,vowel",
+			"stop,fricative,affricate,oral,nasal,sonorant,lateral,rhotic,flap,trill,glide"}
+		),
+	VOICING(1, new String[]{ "voiced,voiceless,aspirated,plain"}),
+
 	/* Vowels */
-	HEIGHT(3, new String[]{ "{high}", "{mid}", "{low}" },
-			new String[]{"High", "Mid", "Low"}),
-	BACKNESS(2, new String[]{ "{front}", "{central}", "{back}" },
-			new String[]{"Front", "Central", "Back"}),
-	TENSENESS(2, new String[]{ "{tense}", "{lax}" },
-			new String[]{"Tense", "Lax"}),
-	ROUNDING(1, new String[]{ "{round}", "{-round}" },
-			new String[]{"Round", "Not round"});
-	
+	HEIGHT(3, new String[]{ "high,mid,low" }),
+	BACKNESS(2, new String[]{ "front,central,back" }),
+	TENSENESS(2, new String[]{ "tense,lax" }),
+	ROUNDING(1, new String[]{ "rounded,unrounded" });
+
 	private int weight;
-	
-	private String[] categories;
-	
-	private String[] labels;
-	
-	private PhoneDimension(int weight, String[] categories, String[] labels) {
+
+	private List<FeatureSet> featureSets;
+
+	private PhoneDimension(int weight, String[] featuresLists) {
 		this.weight = weight;
-		this.categories = categories;
-		this.labels = labels;
+
+		this.featureSets = new ArrayList<>();
+		for(String featureList:featuresLists)
+			featureSets.add(FeatureSet.fromArray(featureList.split(",")));
 	}
-	
-	public String[] getCategories() {
-		return this.categories;
-	}
-	
-	public String[] getCategoryLabels() {
-		return this.labels;
-	}
-	
-	public int getCategoryIndex(IPAElement ele) {
-		int retVal = -1;
-		
-		if((ele.getFeatureSet().hasFeature("Consonant") && ordinal() < 3) || 
-				(ele.getFeatureSet().hasFeature("Vowel") && ordinal() >= 3)) {
-			for(int i = 0; i < categories.length; i++) {
-				final IPATranscript t = (new IPATranscriptBuilder()).append(ele).toIPATranscript();
-				if(t.matches(categories[i])) {
-					retVal = i;
-					break;
-				}
-			}
-		}
-		
-		return retVal;
-	}
-	
+
 	public int getWeight() {
 		return this.weight;
 	}
-	
-	public String getCategory(IPAElement ele) {
-		int idx = getCategoryIndex(ele);
-		if(idx >= 0)
-			return categories[idx];
-		else
-			return null;
+
+	public FeatureSet getFeatures() {
+		FeatureSet retVal = new FeatureSet();
+		for(FeatureSet featureSet:featureSets) {
+			retVal = FeatureSet.union(retVal, featureSet);
+		}
+		return retVal;
 	}
-	
-	public String getCategoryLabel(IPAElement ele) {
-		int idx = getCategoryIndex(ele);
-		if(idx >= 0)
-			return labels[idx];
-		else
-			return null;
+
+	public FeatureSet getTerminalFeatures() {
+		return featureSets.stream().findFirst().orElse(null);
 	}
-	
+
 	@Override
 	public String toString() {
 		final String name = super.toString();
 		return name.charAt(0) + name.substring(1).toLowerCase();
 	}
-	
+
 }

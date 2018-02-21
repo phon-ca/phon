@@ -4,6 +4,7 @@ import java.util.List;
 
 import ca.phon.alignment.*;
 import ca.phon.ipa.*;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.*;
 
 public class PhoneAligner extends IndelAligner<IPAElement> {
@@ -32,11 +33,18 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
 			++tally;
 		} else {
-			// align if toString() matches
-			if(ele1.toString().equals(ele2.toString())) {
-				return 2;
+			final IPAElement vowel = (ele1.getFeatureSet().hasFeature("Vowel") ? ele1 : ele2);
+			final IPAElement notvowel = (vowel == ele1 ? ele2 : ele1);
+
+			if(notvowel.getFeatureSet().hasFeature("syllabic")) {
+				return 1;
 			} else {
-				return -1;
+				// align if toString() matches
+				if(ele1.toString().equals(ele2.toString())) {
+					return 2;
+				} else {
+					return -1;
+				}
 			}
 		}
 
@@ -61,7 +69,7 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		final PhoneticProfile p1 = new PhoneticProfile(ele1);
 		final PhoneticProfile p2 = new PhoneticProfile(ele2);
 		int featureTally = 0;
-		if(p1.getDimensions().size() == 3) {
+		if(p1.isConsonant()) {
 			featureTally += checkDimension(p1, p2, PhoneDimension.PLACE);
 			featureTally += checkDimension(p1, p2, PhoneDimension.MANNER);
 //			featureTally += checkDimension(p1, p2, PhoneDimension.VOICING);
@@ -80,12 +88,11 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 	private int checkDimension(PhoneticProfile p1, PhoneticProfile p2, PhoneDimension dimension) {
 		int retVal = 0;
 
-		int v1 = p1.get(dimension);
-		int v2 = p2.get(dimension);
+		final FeatureSet fs1 = FeatureSet.intersect(p1.get(dimension), dimension.getTerminalFeatures());
+		final FeatureSet fs2 = FeatureSet.intersect(p2.get(dimension), dimension.getTerminalFeatures());
 
-		if(v1 < 0 && v2 < 0) return retVal;
-
-		if(v1 == v2)
+		// return if any terminal features intersect
+		if(fs1.intersects(fs2))
 			retVal = 1;
 		else
 			retVal = -1;

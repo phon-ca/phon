@@ -12,10 +12,10 @@ exports.SegmentalRelationsOptions = function(id) {
 				id+".includeAssimilation"
 			],
 		"descs": [
-				  "Reduplication (X\u2205 \u2194 XX, X\u2026\u2205 \u2194 X\u2026X)", 
-				  "Migration (X\u2026Y \u2194 \u2205\u2026X, X\u2026\u2205 \u2194 \u2205\u2026X)", 
-				  "Metathesis (XY \u2194 YX, X\u2026Y \u2194 Y\u2026X)", 
-				  "Harmony (X\u2026Y \u2194 X\u2026X) ", 
+				  "Reduplication (X\u2205 \u2194 XX, X\u2026\u2205 \u2194 X\u2026X)",
+				  "Migration (X\u2026Y \u2194 \u2205\u2026X, X\u2026\u2205 \u2194 \u2205\u2026X)",
+				  "Metathesis (XY \u2194 YX, X\u2026Y \u2194 Y\u2026X)",
+				  "Harmony (X\u2026Y \u2194 X\u2026X) ",
 				  "Assimilation (XY \u2194 XX)"
 			],
 		"title": "Relations",
@@ -28,7 +28,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	this.includeMetathesis = relationTypesInfo.def[2];
 	this.includeHarmony = relationTypesInfo.def[3];
 	this.includeAssimliation = relationTypesInfo.def[4];
-	
+
 	var directionTypesInfo = {
 		"ids": [id+".includeProgressive", id+".includeRegressive"],
 		"descs": ["Progressive", "Regressive"],
@@ -39,7 +39,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	var directionTypesParam;
 	this.includeProgressive = directionTypesInfo.def[0];
 	this.includeRegressive = directionTypesInfo.def[1];
-	
+
 	var localityTypesInfo = {
 		"ids": [id+".includeLocal", id+".includeNonlocal"],
 		"descs": ["Local (XY)", "Nonlocal (X\u2026Y)"],
@@ -50,7 +50,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	var localityParam;
 	this.includeLocal = localityTypesInfo.def[0];
 	this.includeNonlocal = localityTypesInfo.def[1];
-	
+
 	var includeConsonantsInfo = {
 		"id": id+".includeConsonantRelations",
 		"desc": "Include consonant relations",
@@ -59,7 +59,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	};
 	var includeConsonantsParam;
 	this.includeConsonantRelations = includeConsonantsInfo.def;
-	
+
 	var consonantDimensionsInfo = {
 		"ids": [id+".includePlace",id+".includeManner",id+".includeVoicing"],
 		"descs": ["Place", "Manner", "Voicing"],
@@ -71,7 +71,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	this.includePlace = consonantDimensionsInfo.def[0];
 	this.includeManner = consonantDimensionsInfo.def[1];
 	this.includeVoicing = consonantDimensionsInfo.def[2];
-	
+
 	var dimensionOptionsInfo = {
 		"id": id + ".dimensionsRequiredOption",
 		"title": "Dimensions",
@@ -85,7 +85,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		"index": 0,
 		"toString": dimensionOptionsInfo.choices[0]
 	};
-	
+
 	var includeVowelsInfo = {
 		"id": id+".includeVowelRelations",
 		"desc": "Include vowel relations",
@@ -94,7 +94,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	};
 	var includeVowelsParam;
 	this.includeVowelRelations = includeVowelsInfo.def;
-	
+
 	var vowelDimensionsInfo = {
 		"ids": [id+".includeHeight",id+".includeBackness",
 				id+".includeTenseness",id+".includeRounding"],
@@ -117,7 +117,7 @@ exports.SegmentalRelationsOptions = function(id) {
 			relationTypesInfo.title,
 			relationTypesInfo.cols);
 		params.add(relationTypesParam);
-		
+
 		directionTypesParam = new MultiboolScriptParam(
 			directionTypesInfo.ids,
 			directionTypesInfo.def,
@@ -125,7 +125,7 @@ exports.SegmentalRelationsOptions = function(id) {
 			directionTypesInfo.title,
 			directionTypesInfo.cols);
 		params.add(directionTypesParam);
-		
+
 		localityParam = new MultiboolScriptParam(
 			localityTypesInfo.ids,
 			localityTypesInfo.def,
@@ -133,7 +133,7 @@ exports.SegmentalRelationsOptions = function(id) {
 			localityTypesInfo.title,
 			localityTypesInfo.cols);
 		params.add(localityParam);
-		
+
 		dimensionOptionsParam = new EnumScriptParam(
 			dimensionOptionsInfo.id,
 			dimensionOptionsInfo.title,
@@ -154,7 +154,7 @@ exports.SegmentalRelationsOptions = function(id) {
 				consonantDimensionsParam.setEnabled(includeConsonantsParam.getValue(includeConsonantsInfo.id) == true);
 			}
 		});
-		
+
 		consonantDimensionsParam = new MultiboolScriptParam(
 			consonantDimensionsInfo.ids,
 			consonantDimensionsInfo.def,
@@ -162,7 +162,7 @@ exports.SegmentalRelationsOptions = function(id) {
 			consonantDimensionsInfo.title,
 			consonantDimensionsInfo.cols);
 		params.add(consonantDimensionsParam);
-		
+
 		includeVowelsParam = new BooleanScriptParam(
 			includeVowelsInfo.id,
 			includeVowelsInfo.desc,
@@ -174,7 +174,7 @@ exports.SegmentalRelationsOptions = function(id) {
 				vowelDimensionsParam.setEnabled(includeVowelsParam.getValue(includeVowelsInfo.id) == true);
 			}
 		})
-		
+
 		vowelDimensionsParam = new MultiboolScriptParam(
 			vowelDimensionsInfo.ids,
 			vowelDimensionsInfo.def,
@@ -184,7 +184,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		params.add(vowelDimensionsParam);
 		vowelDimensionsParam.setEnabled(this.includeVowelRelations);
 	};
-	
+
 	this.filterRelationType = function(segmentalRelation) {
 		if(segmentalRelation.relation == SegmentalRelation.Relation.Reduplication)
 			return this.includeReduplication == true;
@@ -199,7 +199,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		else
 			return false;
 	};
-	
+
 	this.filterLocality = function(segmentalRelation) {
 		if((segmentalRelation.locality == SegmentalRelation.Locality.Nonlocal && this.includeNonlocal == true)
 			|| (segmentalRelation.locality == SegmentalRelation.Locality.Local && this.includeLocal == true) )
@@ -207,7 +207,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		else
 			return false;
 	};
-	
+
 	this.filterDirection = function(segmentalRelation) {
 		if((segmentalRelation.direction == SegmentalRelation.Direction.Progressive && this.includeProgressive == true)
 			|| (segmentalRelation.direction == SegmentalRelation.Direction.Regressive && this.includeRegressive == true))
@@ -215,20 +215,20 @@ exports.SegmentalRelationsOptions = function(id) {
 		else
 			return false;
 	};
-	
+
 	this.isConsonantRelation = function(segmentalRelation) {
 		return segmentalRelation.dimensions.contains(PhoneDimension.PLACE)
 			|| segmentalRelation.dimensions.contains(PhoneDimension.MANNER)
 			|| segmentalRelation.dimensions.contains(PhoneDimension.VOICING);
 	};
-	
+
 	this.filterDimensions = function(segmentalRelation) {
 		if(this.dimensionsRequiredOption.index == 0) {
 			// already done in detectors
 			return true;
 		} else {
 			var retVal = true;
-			
+
 			if(this.isConsonantRelation(segmentalRelation)) {
 				if(this.includePlace == true) {
 					retVal &= segmentalRelation.dimensions.contains(PhoneDimension.PLACE);
@@ -253,120 +253,120 @@ exports.SegmentalRelationsOptions = function(id) {
 					retVal &= segmentalRelation.dimensions.contains(PhoneDimension.ROUNDING);
 				}
 			}
-			
+
 			return retVal;
 		}
 	};
-	
+
 	this.filterRelation = function(segmentalRelation) {
 		return (this.filterRelationType(segmentalRelation)
-					&& this.filterLocality(segmentalRelation) 
+					&& this.filterLocality(segmentalRelation)
 					&& this.filterDirection(segmentalRelation)
 					&& this.filterDimensions(segmentalRelation));
 	};
-	
+
 	this.setupDetector = function(detector) {
-		detector.setIncludePlace(this.includeConsonantRelations == true && this.includePlace == true); 
+		detector.setIncludePlace(this.includeConsonantRelations == true && this.includePlace == true);
 		detector.setIncludeManner(this.includeConsonantRelations == true && this.includeManner == true);
 		detector.setIncludeVoicing(this.includeConsonantRelations == true && this.includeVoicing == true);
-		
+
 		detector.setIncludeHeight(this.includeVowelRelations == true && this.includeHeight == true);
 		detector.setIncludeBackness(this.includeVowelRelations == true && this.includeBackness == true);
 		detector.setIncludeTenseness(this.includeVowelRelations == true && this.includeTenseness == true);
 		detector.setIncludeRounding(this.includeVowelRelations == true && this.includeRounding == true);
 	};
-	
+
 	this.createDetector = function() {
 		var retVal = new SegmentalRelations(this.includeConsonantRelations == true, this.includeVowelRelations == true);
-		
+
 		var detector = new ReduplicationDetector();
 		this.setupDetector(detector);
 		retVal.addDetector(detector);
-			
+
 		var detector = MetathesisDetector();
 		this.setupDetector(detector);
 		retVal.addDetector(detector);
-			
+
 		var detector = new MigrationDetector();
 		this.setupDetector(detector);
 		retVal.addDetector(detector);
-		
+
 		var detector = new HarmonyDetector();
 		this.setupDetector(detector);
 		retVal.addDetector(detector);
-		
+
 		var detector = new AssimilationDetector();
 		this.setupDetector(detector);
 		retVal.addDetector(detector);
-	
+
 		return retVal;
 	};
-	
+
 	this.createResultValue = function(phoneMap, groupIndex, isTarget, index) {
 	    var rv = factory.createResultValue();
 		rv.tierName = (isTarget == true ? "IPA Target" : "IPA Actual");
 		rv.groupIndex = groupIndex;
-		
+
 		var ipaE = null;
 		if(index >= 0) {
 		    ipaE = (isTarget == true ? phoneMap.topAlignmentElements.get(index)
 		        : phoneMap.bottomAlignmentElements.get(index));
 		}
-		
+
 		var ipa = (isTarget == true ? phoneMap.targetRep : phoneMap.actualRep);
 		stringIdx = (ipaE == null ? -1: ipa.stringIndexOfElement(ipaE));
-		rv.range = 
+		rv.range =
 		    (stringIdx < 0 ? new Range(0, 0, true) : new Range(stringIdx, stringIdx+(ipaE.toString().length()), false));
 		rv.data = (ipaE == null ? "\u2205": ipaE.text);
-		
+
 		return rv;
 	};
-	
+
 	this.createQueryResult = function (recordIndex, groupIndex, relation) {
 		var SCHEMA = "DETECTOR";
-		
+
 		var retVal = factory.createResult();
 		retVal.schema = SCHEMA;
 		retVal.recordIndex = recordIndex;
-		
+
 		var phoneMap = relation.getPhoneMap();
 		var ipaT = phoneMap.targetRep;
 		var ipaA = phoneMap.actualRep;
-		
+
 		var p1 = Math.min(relation.position1, relation.position2);
 		var p2 = Math.max(relation.position1, relation.position2);
-		
+
 		// result values
 		var rv1 = this.createResultValue(phoneMap, groupIndex, true, p1);
 		var rv2 = this.createResultValue(phoneMap, groupIndex, true, p2);
 		var rv3 = this.createResultValue(phoneMap, groupIndex, false, p1);
 		var rv4 = this.createResultValue(phoneMap, groupIndex, false, p2);
-		
+
 		retVal.addResultValue(rv1);
 		retVal.addResultValue(rv2);
 		retVal.addResultValue(rv3);
 		retVal.addResultValue(rv4);
-		
+
 		var metadata = retVal.metadata;
 		metadata.put("Type", relation.relation.toString());
 		metadata.put("Direction", relation.direction.toString());
 		metadata.put("Locality", relation.locality.toString());
-		
+
 		var dimTxt = "";
 		var featureTxt = "";
 		var dimItr = relation.dimensions.iterator();
 		while(dimItr.hasNext()) {
 			var dim = dimItr.next();
 			dimTxt += (dimTxt.length > 0 ? ", " : "") + dim;
-			
+
 			featureTxt += (featureTxt.length > 0 ? ", " : "")
-	    		+ dim + " = " + relation.profile1.getCategoryLabel(dim) + 
-	    			(relation.profile2.get(dim) != null ? " \u2194 " + relation.profile2.getCategoryLabel(dim) : "");
+	    		+ dim + " = " + relation.profile1.get(dim) +
+	    			(relation.profile2.get(dim).size() > 0 ? " \u2194 " + relation.profile2.get(dim) : "");
 		}
 		metadata.put("Dimensions", dimTxt);
 		metadata.put("Features", featureTxt);
-		
+
 		return retVal;
 	};
-	
+
 };
