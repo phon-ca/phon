@@ -1,4 +1,4 @@
 dependency-reduced-pom.xml
 /target
-/external-resources
+src/temp/
 velocity.log*
