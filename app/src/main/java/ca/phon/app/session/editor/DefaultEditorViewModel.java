@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -406,44 +406,26 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			if(is != null) {
 				final XElement xele = XIO.readUTF(is);
 
-				final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
 				final XElement boundsEle = xele.getElement("bounds");
 				if(boundsEle != null) {
 					int x = boundsEle.getAttribute("x").getInt();
 					int y = boundsEle.getAttribute("y").getInt();
 					int width = boundsEle.getAttribute("width").getInt();
 					int height = boundsEle.getAttribute("height").getInt();
-
-					if(x + width > screenSize.width) {
-						if(screenSize.width - width >= 0) {
-							x = screenSize.width - width;
-						} else {
-							x = 0;
-							if(width > screenSize.width) {
-								width = screenSize.width;
-							}
-						}
-					}
-
-					if(y + height > screenSize.height) {
-						if(screenSize.height - height >= 0) {
-							y = screenSize.height - height;
-							if(height > screenSize.height) {
-								height = screenSize.height;
-							}
-						}
+					final XAttribute extendedStateAttr = boundsEle.getAttribute("extendedState");
+					int extendedState = JFrame.NORMAL;
+					if(extendedStateAttr != null) {
+						extendedState = extendedStateAttr.getInt();
 					}
 
 					if(width >= 0 && height >= 0) {
 						getEditor().setSize(width, height);
 					}
-					if(x >= 0 && y >= 0) {
-						getEditor().setLocation(x, y);
-					} else {
-						if(!getEditor().isVisible())
-							getEditor().cascadeWindow(CommonModuleFrame.getCurrentFrame());
-					}
+					getEditor().setLocation(x, y);
+					getEditor().setExtendedState(extendedState);
+				} else {
+					if(!getEditor().isVisible())
+						getEditor().cascadeWindow(CommonModuleFrame.getCurrentFrame());
 				}
 
 				final XElement windowsEle = xele.getElement("windows");
@@ -459,35 +441,17 @@ public class DefaultEditorViewModel implements EditorViewModel {
 						int y = winEle.getAttribute("y").getInt();
 						int width = winEle.getAttribute("width").getInt();
 						int height = winEle.getAttribute("height").getInt();
-
-						if(x + width > screenSize.width) {
-							if(screenSize.width - width >= 0) {
-								x = screenSize.width - width;
-							} else {
-								x = 0;
-								if(width > screenSize.width) {
-									width = screenSize.width;
-								}
-							}
-						}
-
-						if(y + height > screenSize.height) {
-							if(screenSize.height - height >= 0) {
-								y = screenSize.height - height;
-								if(height > screenSize.height) {
-									height = screenSize.height;
-								}
-							}
+						final XAttribute extendedStateAttr = winEle.getAttribute("extendedState");
+						int extendedState = JFrame.NORMAL;
+						if(extendedStateAttr != null) {
+							extendedState = extendedStateAttr.getInt();
 						}
 
 						if(width >= 0 && height >= 0) {
 							window.setSize(width, height);
 						}
-						if(x >= 0 && y >= 0) {
-							window.setLocation(x, y);
-						} else {
-							window.cascadeWindow(getEditor());
-						}
+						window.setLocation(x, y);
+						window.setExtendedState(extendedState);
 						window.setVisible(true);
 					}
 				}
@@ -573,6 +537,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		final XAttribute heightAttr = new XAttribute("height");
 		heightAttr.setInt(frame.getHeight());
 		rootBoundsEle.addAttribute(heightAttr);
+
+		final XAttribute extendedStateAttr = new XAttribute("extendedState");
+		extendedStateAttr.setInt(frame.getExtendedState());
+		rootBoundsEle.addAttribute(extendedStateAttr);
 	}
 
 	private void savePreviousPerspective() {
