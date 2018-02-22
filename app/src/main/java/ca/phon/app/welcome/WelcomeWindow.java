@@ -257,7 +257,7 @@ public class WelcomeWindow extends CommonModuleFrame {
 
 		final StockIcon prefIcon =
 				OSInfo.isMacOs() ? MacOSStockIcon.GenericPreferencesIcon
-						: OSInfo.isNix() ? GtkStockIcon.SETTINGS : WindowsStockIcon.SETTINGS;
+						: OSInfo.isNix() ? GtkStockIcon.SETTINGS : WindowsStockIcon.APPLICATION;
 		final String defIcn = "categories/preferences";
 		ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
 		ImageIcon prefsIcnL = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.MEDIUM);

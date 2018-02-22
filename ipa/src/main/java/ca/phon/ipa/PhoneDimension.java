@@ -19,7 +19,7 @@ public enum PhoneDimension {
 			"obstruent,approximant,consonant,vowel",
 			"stop,fricative,affricate,oral,nasal,sonorant,lateral,rhotic,flap,trill,glide"}
 		),
-	VOICING(1, new String[]{ "voiced,voiceless,aspirated,plain"}),
+	VOICING(1, new String[]{ "voiced,voiceless,aspirated,plain" }),
 
 	/* Vowels */
 	HEIGHT(3, new String[]{ "high,mid,low" }),
