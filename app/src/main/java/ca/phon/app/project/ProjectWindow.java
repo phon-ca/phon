@@ -865,7 +865,10 @@ public class ProjectWindow extends CommonModuleFrame
 		newSessionAct.actionPerformed(pae.getActionEvent());
 		if(newSessionAct.isSessionCreated()) {
 			onHideCreateSessionButton();
-			sessionList.setSelectedValue(sessionName, true);
+			SwingUtilities.invokeLater( () -> {
+				sessionList.setSelectedValue(sessionName, true);
+				sessionList.requestFocus();
+			});
 		}
 	}
 
