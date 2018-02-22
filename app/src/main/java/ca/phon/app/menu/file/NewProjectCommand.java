@@ -33,6 +33,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.PhonWorker;
 import ca.phon.workspace.Workspace;
 
 public class NewProjectCommand extends HookableAction {
@@ -70,65 +71,73 @@ private final static String TXT = "New project...";
 			if(e.getDialogData() != null) {
 				final String folderName = e.getDialogData().toString();
 				final File folder = new File(folderName);
-
-				if(folder.exists()) {
-					final MessageDialogProperties p2 = new MessageDialogProperties();
-					p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
-					p2.setHeader("Create Project Failed");
-					p2.setMessage("Cannot create project, an item already exists at path " + folderName);
-					p2.setOptions(MessageDialogProperties.okOptions);
-					p2.setRunAsync(true);
-					NativeDialogs.showMessageDialog(p2);
-
-					return;
-				}
-
-				final File parentFolder = folder.getParentFile();
-				final File testFile = new File(parentFolder, "project.xml");
-				if(testFile.exists()) {
-					final MessageDialogProperties p2 = new MessageDialogProperties();
-					p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
-					p2.setHeader("Create Project Failed");
-					p2.setMessage("Cannot create project inside of another");
-					p2.setOptions(MessageDialogProperties.okOptions);
-					p2.setRunAsync(true);
-					NativeDialogs.showMessageDialog(p2);
-
-					return;
-				}
-
-				try {
-					final ProjectFactory factory = new DesktopProjectFactory();
-					factory.createProject(folder);
-
-					// open project
-					final EntryPointArgs args = new EntryPointArgs();
-					args.put(EntryPointArgs.PROJECT_LOCATION, folderName);
-
-					PluginEntryPointRunner.executePluginInBackground(OpenProjectEP.EP_NAME, args);
-
-					final File workspaceFolder = Workspace.userWorkspaceFolder();
-					if(workspaceFolder.equals(parentFolder)) {
-						// update welcome window (if visible)
-						for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-							if(cmf instanceof WelcomeWindow) {
-								((WelcomeWindow)cmf).refreshWorkspaceProjects();
-							}
-						}
-					}
-				} catch (IOException ex) {
-					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), e);
-					final MessageDialogProperties p2 = new MessageDialogProperties();
-					p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
-					p2.setHeader("Create Project Failed");
-					p2.setMessage("Cannot create project: " + ex.getLocalizedMessage());
-					p2.setOptions(MessageDialogProperties.okOptions);
-					p2.setRunAsync(true);
-					NativeDialogs.showMessageDialog(p2);
-				}
+				
+				PhonWorker.getInstance().invokeLater( () -> createProject(folder) );
 			}
 		});
 		NativeDialogs.showDialog(props);
+	}
+	
+	// executed on worker thread
+	private void createProject(File folder) {
+		if(folder.exists()) {
+			final MessageDialogProperties p2 = new MessageDialogProperties();
+			p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			p2.setHeader("Create Project Failed");
+			try {
+				p2.setMessage("Cannot create project, an item already exists at path " + folder.getCanonicalPath());
+			} catch (IOException e) {
+			}
+			p2.setOptions(MessageDialogProperties.okOptions);
+			p2.setRunAsync(true);
+			NativeDialogs.showMessageDialog(p2);
+
+			return;
+		}
+
+		final File parentFolder = folder.getParentFile();
+		final File testFile = new File(parentFolder, "project.xml");
+		if(testFile.exists()) {
+			final MessageDialogProperties p2 = new MessageDialogProperties();
+			p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			p2.setHeader("Create Project Failed");
+			p2.setMessage("Cannot create project inside of another");
+			p2.setOptions(MessageDialogProperties.okOptions);
+			p2.setRunAsync(true);
+			NativeDialogs.showMessageDialog(p2);
+
+			return;
+		}
+
+		try {
+			final ProjectFactory factory = new DesktopProjectFactory();
+			factory.createProject(folder);
+
+			// open project
+			final EntryPointArgs args = new EntryPointArgs();
+			args.put(EntryPointArgs.PROJECT_LOCATION, folder.getCanonicalPath());
+
+			PluginEntryPointRunner.executePluginInBackground(OpenProjectEP.EP_NAME, args);
+
+			final File workspaceFolder = Workspace.userWorkspaceFolder();
+			if(workspaceFolder.equals(parentFolder)) {
+				// update welcome window (if visible)
+				for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+					if(cmf instanceof WelcomeWindow) {
+						((WelcomeWindow)cmf).refreshWorkspaceProjects();
+					}
+				}
+			}
+		} catch (IOException ex) {
+			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			final MessageDialogProperties p2 = new MessageDialogProperties();
+			p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			p2.setHeader("Create Project Failed");
+			p2.setMessage("Cannot create project: " + ex.getLocalizedMessage());
+			p2.setOptions(MessageDialogProperties.okOptions);
+			p2.setRunAsync(true);
+			NativeDialogs.showMessageDialog(p2);
+		}
 	}
 
 }
