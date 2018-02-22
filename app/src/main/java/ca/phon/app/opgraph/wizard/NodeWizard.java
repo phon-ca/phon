@@ -143,6 +143,8 @@ public class NodeWizard extends WizardFrame {
 
 	boolean inInit = true;
 
+	boolean reportSaved = false;
+
 	private volatile boolean running = false;
 
 	private WebViewInterface webViewInterface = new WebViewInterface();
@@ -204,7 +206,7 @@ public class NodeWizard extends WizardFrame {
 			NativeDialogs.showMessageDialog(props);
 		} else {
 			final boolean hasReport = getBufferPanel().getBufferNames().contains("Report");
-			if(hasReport) {
+			if(hasReport && !reportSaved) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
 				final String[] options = new String[] { "Close without saving", "Save Report as HTML", "Export Report to Excel\u2122", "Cancel" };
@@ -238,7 +240,8 @@ public class NodeWizard extends WizardFrame {
 		final SaveBufferAction saveBufferAct = new SaveBufferAction(getBufferPanel(), "Report");
 		SwingUtilities.invokeLater( () -> {
 			saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save"));
-			super.close();
+			reportSaved = true;
+//			super.close();
 		});
 	}
 
@@ -246,7 +249,8 @@ public class NodeWizard extends WizardFrame {
 		final SaveBufferAsWorkbookAction saveBufferAct = new SaveBufferAsWorkbookAction(getBufferPanel(), "Report");
 		SwingUtilities.invokeLater( () -> {
 			saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "export"));
-			super.close();
+			reportSaved = true;
+//			super.close();
 		});
 	}
 
@@ -542,6 +546,8 @@ public class NodeWizard extends WizardFrame {
 				writer.flush();
 				writer.close();
 			}
+
+			reportSaved = false;
 
 			processor.stepAll();
 
