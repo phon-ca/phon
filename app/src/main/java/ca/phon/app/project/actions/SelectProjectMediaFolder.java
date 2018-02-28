@@ -7,9 +7,8 @@ import javax.swing.SwingUtilities;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.PhonWorker;
 
 public class SelectProjectMediaFolder extends ProjectWindowAction {
 
@@ -45,7 +44,7 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 				if(result == 0) {
 					return;
 				} else if(result == 1) {
-					project.setProjectMediaFolder(null);
+					PhonWorker.getInstance().invokeLater( () -> project.setProjectMediaFolder(null) );
 				} else if(result == 2) {
 					SwingUtilities.invokeLater( this::browseForMediaFolder );
 				}
@@ -79,7 +78,8 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 			if(e.getDialogData() == null) return;
 
 			final String selectedFolder = e.getDialogData().toString();
-			project.setProjectMediaFolder(selectedFolder);
+			
+			PhonWorker.getInstance().invokeLater( () -> project.setProjectMediaFolder(selectedFolder) );
 		});
 		NativeDialogs.showOpenDialog(props);
 	}

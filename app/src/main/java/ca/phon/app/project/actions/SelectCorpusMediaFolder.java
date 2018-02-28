@@ -1,16 +1,14 @@
 package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.PhonWorker;
 
 public class SelectCorpusMediaFolder extends ProjectWindowAction {
 
@@ -72,9 +70,11 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 				if(result == 0) {
 					return;
 				} else if(result == 1) {
-					for(String corpus:corpora) {
-						project.setCorpusMediaFolder(corpus, null);
-					}
+					PhonWorker.getInstance().invokeLater( () -> {
+						for(String corpus:corpora) {
+							project.setCorpusMediaFolder(corpus, null);
+						}
+					} );
 				} else if(result == 2) {
 					SwingUtilities.invokeLater( this::browseForMediaFolder );
 				}
@@ -94,12 +94,14 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 		props.setTitle("Corpus Media Folder");
 		props.setListener( (e) -> {
 			if(e.getDialogData() == null) return;
-
-			final Project project = getWindow().getProject();
-			for(String corpus:getWindow().getSelectedCorpora()) {
-				final String selectedFolder = e.getDialogData().toString();
-				project.setCorpusMediaFolder(corpus, selectedFolder);
-			}
+			final String selectedFolder = e.getDialogData().toString();
+			
+			PhonWorker.getInstance().invokeLater( () -> {
+				final Project project = getWindow().getProject();
+				for(String corpus:getWindow().getSelectedCorpora()) {
+					project.setCorpusMediaFolder(corpus, selectedFolder);
+				}
+			});
 		});
 		NativeDialogs.showOpenDialog(props);
 	}
