@@ -208,23 +208,22 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 	}
 
 	public int getSubAlignmentIndex(IPATranscript ipaT, IPATranscript ipaA) {
-		final PhoneMap grpAlignment = this;
 		final int ipaTAlignStart =
-				(ipaT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(ipaT.elementAt(0)) : -1);
+				(ipaT.length() > 0 ? getTopAlignmentElements().indexOf(ipaT.elementAt(0)) : -1);
 		final int ipaAAlignStart =
-				(ipaA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(ipaA.elementAt(0)) : -1);
+				(ipaA.length() > 0 ? getBottomAlignmentElements().indexOf(ipaA.elementAt(0)) : ipaTAlignStart);
+
 		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
 		return alignStart;
 	}
 
 	public int getSubAlignmentEnd(IPATranscript ipaT, IPATranscript ipaA) {
-		final PhoneMap grpAlignment = this;
 		final int ipaTAlignEnd =
-				(ipaT.length() > 0 ? grpAlignment.getTopAlignmentElements().indexOf(ipaT.elementAt(ipaT.length()-1)) : -1);
+				(ipaT.length() > 0 ? getTopAlignmentElements().indexOf(ipaT.elementAt(ipaT.length()-1)) : -1);
 		final int ipaAAlignEnd =
-				(ipaA.length() > 0 ? grpAlignment.getBottomAlignmentElements().indexOf(ipaA.elementAt(ipaA.length()-1)) : -1);
-		final int alignEnd = Math.max(ipaTAlignEnd, ipaAAlignEnd);
+				(ipaA.length() > 0 ? getBottomAlignmentElements().indexOf(ipaA.elementAt(ipaA.length()-1)) : ipaTAlignEnd);
 
+		final int alignEnd = Math.max(ipaTAlignEnd, ipaAAlignEnd);
 		return alignEnd;
 	}
 
