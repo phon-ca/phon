@@ -51,7 +51,7 @@ function setup_params(params) {
 	filters.primary.setSelectedPatternType(PatternType.PHONEX);
 	filters.primary.param_setup(params);
 	filters.primary.set_required(true);
-	
+
 	var insertIdx = 1;
 
 	// setup result filter section
@@ -108,10 +108,10 @@ function setup_params(params) {
 	filters.alignedWord.setEnabled(enabled);
 
 	filters.syllable.param_setup(params);
-	
+
 	filters.searchBy.includeSyllableOption = true;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
-	
+
 	filters.speaker.param_setup(params);
 }
 
@@ -281,7 +281,6 @@ function query_record(recordIndex, record) {
 				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
 				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
 
-
 				// find location of aligned value in group
 				var groupStartIdx =
 				(alignedIpaElements.length() > 0 ? alignedGroup.indexOf(alignedIpaElements.elementAt(0)): 0);
@@ -297,6 +296,11 @@ function query_record(recordIndex, record) {
 				}
 
 				if (includeAligned == true) {
+				    var targetIPA = (searchTier == "IPA Target" ? match.value : alignedIpaElements);
+				    var actualIPA = (searchTier == "IPA Target" ? alignedIpaElements : match.value);
+
+				    var alignment = (phoneMap != null ? phoneMap.getSubAlignment(targetIPA, actualIPA) : new PhoneMap(targetIPA, actualIPA));
+
 					var alignedRv = factory.createResultValue();
 					alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
 					alignedRv.groupIndex = group.groupIndex;
@@ -311,8 +315,11 @@ function query_record(recordIndex, record) {
 						alignedRv.data = "";
 					}
 
-					result.addResultValue(alignedRv);
+                    result.addResultValue(alignedRv);
 					result.schema = "ALIGNED";
+
+                    // TODO
+                    result.metadata.put("Alignment", alignment.toString());
 				}
 
 				for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
