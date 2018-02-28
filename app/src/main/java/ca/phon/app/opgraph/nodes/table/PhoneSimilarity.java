@@ -1,6 +1,8 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JCheckBox;
@@ -8,20 +10,27 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.gedge.opgraph.InputField;
 import ca.gedge.opgraph.OpContext;
 import ca.gedge.opgraph.OpNodeInfo;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
-import jxl.demo.Features;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 
+/**
+ * Calculate feature similarity between two {@link IPATranscript}s.
+ *
+ */
 @OpNodeInfo(
 		name="Phone Similarity",
 		category="IPA Table Analysis",
-		description="Calculate similarity between phones/transcripts based on features",
+		description="Calculate similarity between phones/transcripts based on features.  Requires columns 'IPA Target', 'IPA Actual' and 'Alignment' from the Phones query.",
 		showInLibrary=true
 )
 public class PhoneSimilarity extends TableOpNode implements NodeSettings {
@@ -30,33 +39,120 @@ public class PhoneSimilarity extends TableOpNode implements NodeSettings {
 
 	private JCheckBox placeBox;
 	private boolean includePlace = true;
+	private InputField placeInputField =
+			new InputField("includePlace", "Include place features", true, true, Boolean.class);
+
 	private JCheckBox mannerBox;
 	private boolean includeManner = true;
+	private InputField mannerInputField =
+			new InputField("includeManner", "Include manner features", true, true, Boolean.class);
+
 	private JCheckBox voicingBox;
 	private boolean includeVoicing = true;
+	private InputField voicingInputField =
+			new InputField("includeVoicing", "Include voicing features", true, true, Boolean.class);
 
 	private JCheckBox heightBox;
 	private boolean includeHeight = true;
+	private InputField heightInputField =
+			new InputField("includeHeight", "Include height features", true, true, Boolean.class);
+
 	private JCheckBox backnessBox;
 	private boolean includeBackness = true;
+	private InputField backnessInputField =
+			new InputField("includeBackness", "Include backness features", true, true, Boolean.class);
+
 	private JCheckBox tensenessBox;
 	private boolean includeTenseness = true;
+	private InputField tensenessInputField =
+			new InputField("includeTenseness", "Include tenseness features", true, true, Boolean.class);
+
 	private JCheckBox roundingBox;
 	private boolean includeRounding = true;
+	private InputField roundingInputField =
+			new InputField("includeRounding", "Include rounding features", true, true, Boolean.class);
 
 	private class FeatureSimilarity {
 		int numFeatures = 0;
-		float similarity = 0.0f;
+		int numMatched = 0;
 	}
 
 	public PhoneSimilarity() {
 		super();
+
+		putField(placeInputField);
+		putField(mannerInputField);
+		putField(voicingInputField);
+
+		putField(heightInputField);
+		putField(backnessInputField);
+		putField(tensenessInputField);
+		putField(roundingInputField);
 
 		putExtension(NodeSettings.class, this);
 	}
 
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
+		final DefaultTableDataSource table = (DefaultTableDataSource)context.get(super.tableInput);
+		if(table == null) throw new ProcessingException(null, new NullPointerException("table"));
+
+		// check for required columns
+		final int targetColIdx = table.getColumnIndex("IPA Target");
+		final int actualColIdx = table.getColumnIndex("IPA Actual");
+		final int alignColIdx = table.getColumnIndex("Alignment");
+
+		if(targetColIdx < 0)
+			throw new ProcessingException(null, "Missing required column: IPA Target");
+		if(actualColIdx < 0)
+			throw new ProcessingException(null, "Missing required column: IPA Actual");
+		if(alignColIdx < 0)
+			throw new ProcessingException(null, "Missing required column: Alignment");
+
+		// setup output table
+		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
+		int colIdx = 0;
+		for(; colIdx < table.getColumnCount(); colIdx++) {
+			outputTable.setColumnTitle(colIdx, table.getColumnTitle(colIdx));
+		}
+		final int featuresColIdx = colIdx++;
+		outputTable.setColumnTitle(featuresColIdx, "# Features Compared");
+		final int simColIdx = colIdx++;
+		outputTable.setColumnTitle(simColIdx, "Similarity");
+
+		boolean includePlace =
+				(context.get(placeInputField) != null ? (Boolean)context.get(placeInputField) : isIncludePlace());
+		boolean includeManner =
+				(context.get(mannerInputField) != null ? (Boolean)context.get(mannerInputField) : isIncludeManner());
+		boolean includeVoicing =
+				(context.get(voicingInputField) != null? (Boolean)context.get(voicingInputField) : isIncludeVoicing());
+
+		boolean includeHeight =
+				(context.get(heightInputField) != null ? (Boolean)context.get(heightInputField) : isIncludeHeight());
+		boolean includeBackness =
+				(context.get(backnessInputField) != null ? (Boolean)context.get(backnessInputField) : isIncludeBackness());
+		boolean includeTenseness =
+				(context.get(tensenessInputField) != null ? (Boolean)context.get(tensenessInputField) : isIncludeTenseness());
+		boolean includeRounding =
+				(context.get(roundingInputField) != null ? (Boolean)context.get(roundingInputField) : isIncludeRounding());
+
+		for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
+			Object[] rowData = table.getRow(rowIdx);
+			Object[] newRow = Arrays.copyOf(rowData, outputTable.getColumnCount());
+
+			final IPATranscript ipaTarget = (IPATranscript)rowData[targetColIdx];
+			final IPATranscript ipaActual = (IPATranscript)rowData[actualColIdx];
+			final String alignment = (String)rowData[alignColIdx];
+
+			final FeatureSimilarity sim = calculateSimilarity(ipaTarget, ipaActual, alignment,
+					includePlace, includeManner, includeVoicing,
+					includeHeight, includeBackness, includeTenseness, includeRounding);
+			newRow[featuresColIdx] = new Integer(sim.numFeatures);
+			newRow[simColIdx] = (sim.numFeatures > 0 ? new Float((float)sim.numMatched/sim.numFeatures) : 0.0f);
+			outputTable.addRow(newRow);
+		}
+
+		context.put(super.tableOutput, outputTable);
 	}
 
 	/**
@@ -65,40 +161,68 @@ public class PhoneSimilarity extends TableOpNode implements NodeSettings {
 	 *
 	 * @return
 	 */
-	public FeatureSet getComparsionFeatures() {
+	public FeatureSet getComparsionFeatures(boolean includePlace, boolean includeManner, boolean includeVoicing,
+			boolean includeHeight, boolean includeBackness, boolean includeTenseness, boolean includeRounding) {
 		FeatureSet retVal = new FeatureSet();
 
-		if(isIncludePlace())
+		if(includePlace)
 			retVal = FeatureSet.union(retVal, PhoneDimension.PLACE.getFeatures());
-		if(isIncludeManner())
+		if(includeManner)
 			retVal = FeatureSet.union(retVal, PhoneDimension.MANNER.getFeatures());
-		if(isIncludeVoicing())
+		if(includeVoicing)
 			retVal = FeatureSet.union(retVal, PhoneDimension.VOICING.getFeatures());
 
-		if(isIncludeHeight())
+		if(includeHeight)
 			retVal = FeatureSet.union(retVal, PhoneDimension.HEIGHT.getFeatures());
-		if(isIncludeBackness())
+		if(includeBackness)
 			retVal = FeatureSet.union(retVal, PhoneDimension.BACKNESS.getFeatures());
-		if(isIncludeTenseness())
+		if(includeTenseness)
 			retVal = FeatureSet.union(retVal, PhoneDimension.TENSENESS.getFeatures());
-		if(isIncludeRounding())
+		if(includeRounding)
 			retVal = FeatureSet.union(retVal, PhoneDimension.ROUNDING.getFeatures());
 
 		return retVal;
 	}
 
-	private FeatureSimilarity calculateSimilarity(IPAElement a, IPAElement b) {
+	private FeatureSimilarity calculateSimilarity(IPATranscript a, IPATranscript b, String alignment,
+			boolean includePlace, boolean includeManner, boolean includeVoicing,
+			boolean includeHeight, boolean includeBackness, boolean includeTenseness, boolean includeRounding) {
+		final PhoneMap phoneMap = PhoneMap.fromString(a, b, alignment);
+
 		FeatureSimilarity retVal = new FeatureSimilarity();
-		if(a == null || b == null) return retVal;
 
-		final FeatureSet allFeatures = getComparsionFeatures();
-		final FeatureSet aFeatures = FeatureSet.intersect(a.getFeatureSet(), allFeatures);
-		final FeatureSet bFeatures = FeatureSet.intersect(b.getFeatureSet(), allFeatures);
+		for(int i = 0; i < phoneMap.getAlignmentLength(); i++) {
+			List<IPAElement> alignedEles = phoneMap.getAlignedElements(i);
+			FeatureSimilarity sim = calculateSimilarity(alignedEles.get(0), alignedEles.get(1),
+					includePlace, includeManner, includeVoicing,
+					includeHeight, includeBackness, includeTenseness, includeRounding);
+			retVal.numFeatures += sim.numFeatures;
+			retVal.numMatched += sim.numMatched;
+		}
 
-		final FeatureSet sameFeatures = FeatureSet.intersect(aFeatures, bFeatures);
+		return retVal;
+	}
 
-		retVal.numFeatures = Math.max(aFeatures.size(), bFeatures.size());
-		retVal.similarity = (float)sameFeatures.size()/(float)retVal.numFeatures;
+	private FeatureSimilarity calculateSimilarity(IPAElement a, IPAElement b,
+			boolean includePlace, boolean includeManner, boolean includeVoicing,
+			boolean includeHeight, boolean includeBackness, boolean includeTenseness, boolean includeRounding) {
+		FeatureSimilarity retVal = new FeatureSimilarity();
+		final FeatureSet allFeatures = getComparsionFeatures(includePlace, includeManner, includeVoicing,
+				includeHeight, includeBackness, includeTenseness, includeRounding);
+		if(a == null || b == null) {
+			FeatureSet features = (a != null ? a.getFeatureSet() : b.getFeatureSet());
+			features = FeatureSet.intersect(features, allFeatures);
+
+			retVal.numFeatures = features.size();
+		} else {
+			final FeatureSet aFeatures = FeatureSet.intersect(a.getFeatureSet(), allFeatures);
+			final FeatureSet bFeatures = FeatureSet.intersect(b.getFeatureSet(), allFeatures);
+
+			final FeatureSet sameFeatures = FeatureSet.intersect(aFeatures, bFeatures);
+
+			retVal.numFeatures = Math.max(aFeatures.size(), bFeatures.size());
+			retVal.numMatched = sameFeatures.size();
+		}
 
 		return retVal;
 	}

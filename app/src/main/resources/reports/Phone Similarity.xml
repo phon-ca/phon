@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
-        <node id="895c6bc9f7d4498f" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="5897d31c5e1642ec" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
@@ -10,61 +10,134 @@
                 <oga:meta x="15" y="15"/>
             </extensions>
         </node>
-        <node id="2c177ddbb37a43de" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="27a0c0b98e1245d6" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
                 </oga:settings>
-                <oga:meta x="113" y="279"/>
+                <oga:meta x="121" y="274"/>
             </extensions>
         </node>
-        <node id="12c8da1400874aab" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+        <node id="a70fbe38d034432f" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <output name="includePlace" type="java.lang.Boolean"/>
+            <output name="includeManner" type="java.lang.Boolean"/>
+            <output name="includeVoicing" type="java.lang.Boolean"/>
+            <output name="includeHeight" type="java.lang.Boolean"/>
+            <output name="includeBackness" type="java.lang.Boolean"/>
+            <output name="includeTenseness" type="java.lang.Boolean"/>
+            <output name="includeRounding" type="java.lang.Boolean"/>
             <extensions>
                 <oga:settings>
                     <oga:property key="__script"><![CDATA[var reportTitleParamInfo = {
 	"id": "reportTitle",
 	"title": "Report Title",
-	"def": "Phone Dispersion",
+	"def": "Phone Similarity",
 	"prompt": "Enter report title"
 };
 var reportTitleParam;
 var reportTitle = reportTitleParamInfo.def;
 
+var consonantFeatureOptsInfo = {
+	"title": "Consonant Features",
+	"ids": ["includePlace", "includeManner", "includeVoicing"],
+	"descs": ["Place", "Manner", "Voicing"],
+	"defs": [true, true, true],
+	"numcols": 1
+};
+var consonantFeatureOptsParam;
+var includePlace = true;
+var includeManner = true;
+var includeVoicing = true;
+
+var vowelFeatureOptsInfo = {
+	"title": "Vowel Features",
+	"ids": ["includeHeight", "includeBackness", "includeTenseness", "includeRounding"],
+	"descs": ["Height", "Backness", "Tenseness", "Rounding"],
+	"defs": [true, true, true, true],
+	"numcols": 1
+}
+var vowelFeatureOptsParam;
+var includeHeight = true;
+var includeBackness = true;
+var includeTenseness = true;
+var includeRounding = true;
+
+function init(inputs, outputs) {
+	outputs.add("includePlace", "", false, java.lang.Boolean);
+	outputs.add("includeManner", "", false, java.lang.Boolean);
+	outputs.add("includeVoicing", "", false, java.lang.Boolean);
+
+	outputs.add("includeHeight", "", false, java.lang.Boolean);
+	outputs.add("includeBackness", "", false, java.lang.Boolean);
+	outputs.add("includeTenseness", "", false, java.lang.Boolean);
+	outputs.add("includeRounding", "", false, java.lang.Boolean);
+}
+
+function run(context) {
+	context.put("includePlace", includePlace);
+	context.put("includeManner", includeManner);
+	context.put("includeVocing", includeVoicing);
+
+	context.put("includeHeight", includeHeight);
+	context.put("includeBackness", includeBackness);
+	context.put("includeTenseness", includeTenseness);
+	context.put("includeRounding", includeRounding);
+}
+
 function setup_params(params) {
 	reportTitleParam = new StringScriptParam(
-			reportTitleParamInfo.id,
-			reportTitleParamInfo.title,
-			reportTitleParamInfo.def);
+		reportTitleParamInfo.id,
+		reportTitleParamInfo.title,
+		reportTitleParamInfo.def);
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
+
+	var sep = new SeparatorScriptParam("Feature Options", false);
+	params.add(sep);
+
+	consonantFeatureOptsParam = new MultiboolScriptParam(
+		consonantFeatureOptsInfo.ids,
+		consonantFeatureOptsInfo.defs,
+		consonantFeatureOptsInfo.descs,
+		consonantFeatureOptsInfo.title,
+		consonantFeatureOptsInfo.numcols);
+	params.add(consonantFeatureOptsParam);
+
+	vowelFeatureOptsParam = new MultiboolScriptParam(
+		vowelFeatureOptsInfo.ids,
+		vowelFeatureOptsInfo.defs,
+		vowelFeatureOptsInfo.descs,
+		vowelFeatureOptsInfo.title,
+		vowelFeatureOptsInfo.numcols);
+	params.add(vowelFeatureOptsParam);
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="97" y="428"/>
+                <oga:meta x="104" y="423"/>
             </extensions>
         </node>
         <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
-                <oga:meta x="370" y="95"/>
+                <oga:meta x="386" y="106"/>
             </extensions>
         </node>
-        <ogcn:macro id="832984f038bc42d6" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6a732160">
-                <ogcn:macro id="12afca3d6ee54b00" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="6baf18b2">
-                        <node id="e71578ab3e424921" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
+        <ogcn:macro id="7eaf84778f524ae2" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="67334582">
+                <ogcn:macro id="b25e38b33fe54a4f" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
+                    <graph id="49ffe58">
+                        <node id="8eb73f49ac434947" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="78" y="88">
+                                <oga:meta x="48" y="101">
                                     <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="9ce7515d9995402c" name="Map#get(Object)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                        <node id="d34284ef04554f63" name="Map#get(Object)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
@@ -73,7 +146,7 @@ function setup_params(params) {
                                 <oga:meta x="236" y="91"/>
                             </extensions>
                         </node>
-                        <node id="62d4fd73e2b84089" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                        <node id="f9d6a2f2baa34e8f" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
@@ -82,16 +155,16 @@ function setup_params(params) {
                                 <oga:meta x="393" y="100"/>
                             </extensions>
                         </node>
-                        <link dest="9ce7515d9995402c" destField="arg1" source="e71578ab3e424921" sourceField="value"/>
-                        <link dest="62d4fd73e2b84089" destField="obj" source="9ce7515d9995402c" sourceField="value"/>
+                        <link dest="d34284ef04554f63" destField="arg1" source="8eb73f49ac434947" sourceField="value"/>
+                        <link dest="f9d6a2f2baa34e8f" destField="obj" source="d34284ef04554f63" sourceField="value"/>
                     </graph>
-                    <ogcn:published_input field="obj" name="parameters" ref="9ce7515d9995402c"/>
-                    <ogcn:published_output field="value" name="value" ref="62d4fd73e2b84089"/>
+                    <ogcn:published_input field="obj" name="parameters" ref="d34284ef04554f63"/>
+                    <ogcn:published_output field="value" name="value" ref="f9d6a2f2baa34e8f"/>
                     <extensions>
                         <oga:meta x="35" y="48"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="3642c8a9558e4bd4" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+                <node id="2f58cbbf36ef4eca" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                     <input name="data" optional="false">Data to print</input>
                     <extensions>
                         <oga:settings>
@@ -108,15 +181,15 @@ function setup_params(params) {
                         </oga:meta>
                     </extensions>
                 </node>
-                <link dest="3642c8a9558e4bd4" destField="data" source="12afca3d6ee54b00" sourceField="value"/>
+                <link dest="2f58cbbf36ef4eca" destField="data" source="b25e38b33fe54a4f" sourceField="value"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
                 </extensions>
             </graph>
-            <ogcn:published_input field="parameters" name="parameters" ref="12afca3d6ee54b00"/>
-            <ogcn:published_output field="value" name="reportTitle" ref="12afca3d6ee54b00"/>
+            <ogcn:published_input field="parameters" name="parameters" ref="b25e38b33fe54a4f"/>
+            <ogcn:published_output field="value" name="reportTitle" ref="b25e38b33fe54a4f"/>
             <extensions>
-                <oga:meta x="371" y="428"/>
+                <oga:meta x="518" y="568"/>
             </extensions>
         </ogcn:macro>
         <node id="24049103" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -127,40 +200,21 @@ function setup_params(params) {
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="580" y="95"/>
+                <oga:meta x="596" y="106"/>
             </extensions>
         </node>
-        <node id="3790be87" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
-            <extensions>
-                <opqry:inventoryoptions>
-                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                    <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="true"/>
-                    <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
-                </opqry:inventoryoptions>
-                <oga:settings/>
-                <oga:meta x="765" y="95"/>
-            </extensions>
-        </node>
-        <node id="50f011e9" type="class:ca.phon.app.opgraph.nodes.table.PhoneDispersion">
+        <node id="6cdc30a2" type="class:ca.phon.app.opgraph.nodes.table.PhoneSimilarity">
             <extensions>
                 <oga:settings>
-                    <oga:property key="includeVoicing"><![CDATA[true]]></oga:property>
-                    <oga:property key="useMajorPlace"><![CDATA[true]]></oga:property>
-                    <oga:property key="includePlace"><![CDATA[true]]></oga:property>
-                    <oga:property key="useFeatureVariability"><![CDATA[false]]></oga:property>
-                    <oga:property key="includeManner"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeRounding"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeHeight"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includePlace"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeBackness"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeManner"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeVoicing"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeTenseness"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="385" y="253"/>
-            </extensions>
-        </node>
-        <node id="b5aa672" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
-            <extensions>
-                <opqry:sortoptions>
-                    <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
-                    <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
-                </opqry:sortoptions>
-                <oga:settings/>
-                <oga:meta x="577" y="249"/>
+                <oga:meta x="631" y="238"/>
             </extensions>
         </node>
         <node id="6f7c2ffa" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -172,58 +226,60 @@ function setup_params(params) {
                     <oga:property key="showTable"><![CDATA[true]]></oga:property>
                     <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                 </oga:settings>
-                <oga:meta x="752" y="249">
-                    <oga:default for="buffer" type="java.lang.String">Phone Dispersion</oga:default>
+                <oga:meta x="863" y="127">
+                    <oga:default for="buffer" type="java.lang.String">Listing</oga:default>
                 </oga:meta>
             </extensions>
         </node>
-        <node id="c58ebe9ff4f4425f" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
+        <node id="2485369cedb4006" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
             <input name="data" optional="false">Data to print</input>
             <extensions>
                 <oga:settings>
                     <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTable( $table [] )
+#set($tableName = "$DATA")
+#set($table = $tables.get($tableName))
+#set($caption = "")
+#printTableWithIdAndCaptionExcludingColumns( $table $tableName $caption ["Group #", "Range", "Date", "Age", "Tier", "Result"] )
 ]]></oga:property>
                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
                     <oga:property key="showHTML"><![CDATA[false]]></oga:property>
                 </oga:settings>
-                <oga:meta x="750" y="428">
+                <oga:meta x="887" y="515">
                     <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
                     <oga:default for="append" type="java.lang.Boolean">true</oga:default>
                 </oga:meta>
             </extensions>
         </node>
         <link dest="24049103" destField="project" source="3b7dacf0" sourceField="project"/>
-        <link dest="3790be87" destField="table" source="24049103" sourceField="table"/>
-        <link dest="6f7c2ffa" destField="data" source="b5aa672" sourceField="table"/>
         <link dest="24049103" destField="results" source="3b7dacf0" sourceField="result sets"/>
-        <link dest="50f011e9" destField="table" source="3790be87" sourceField="table"/>
-        <link dest="b5aa672" destField="table" source="50f011e9" sourceField="table"/>
-        <link dest="3b7dacf0" destField="project" source="895c6bc9f7d4498f" sourceField="obj"/>
-        <link dest="3b7dacf0" destField="queryId" source="2c177ddbb37a43de" sourceField="obj"/>
-        <link dest="832984f038bc42d6" destField="parameters" source="12c8da1400874aab" sourceField="parameters"/>
-        <link dest="6f7c2ffa" destField="buffer" source="832984f038bc42d6" sourceField="reportTitle"/>
-        <link dest="c58ebe9ff4f4425f" destField="data" source="6f7c2ffa" sourceField="buffer"/>
+        <link dest="3b7dacf0" destField="project" source="5897d31c5e1642ec" sourceField="obj"/>
+        <link dest="3b7dacf0" destField="queryId" source="27a0c0b98e1245d6" sourceField="obj"/>
+        <link dest="7eaf84778f524ae2" destField="parameters" source="a70fbe38d034432f" sourceField="parameters"/>
+        <link dest="6f7c2ffa" destField="buffer" source="7eaf84778f524ae2" sourceField="reportTitle"/>
+        <link dest="2485369cedb4006" destField="data" source="6f7c2ffa" sourceField="buffer"/>
+        <link dest="6cdc30a2" destField="table" source="24049103" sourceField="table"/>
+        <link dest="6f7c2ffa" destField="data" source="6cdc30a2" sourceField="table"/>
+        <link dest="6cdc30a2" destField="includePlace" source="a70fbe38d034432f" sourceField="includePlace"/>
+        <link dest="6cdc30a2" destField="includeManner" source="a70fbe38d034432f" sourceField="includeManner"/>
+        <link dest="6cdc30a2" destField="includeVoicing" source="a70fbe38d034432f" sourceField="includeVoicing"/>
+        <link dest="6cdc30a2" destField="includeHeight" source="a70fbe38d034432f" sourceField="includeHeight"/>
+        <link dest="6cdc30a2" destField="includeBackness" source="a70fbe38d034432f" sourceField="includeBackness"/>
+        <link dest="6cdc30a2" destField="includeTenseness" source="a70fbe38d034432f" sourceField="includeTenseness"/>
+        <link dest="6cdc30a2" destField="includeRounding" source="a70fbe38d034432f" sourceField="includeRounding"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Phone Dispersion">
+                <opqry:info format="html" title="Phone Similarity">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="b5aa672">
-                    <opqry:info format="html" title="Sort">
+                <opqry:node ref="24049103">
+                    <opqry:info format="html" title="Results To Table">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:node ref="3790be87">
-                    <opqry:info format="html" title="Inventory">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
-                <opqry:node ref="50f011e9" showAsStep="true">
-                    <opqry:info format="html" title="Phone Dispersion">
+                <opqry:node ref="a70fbe38d034432f" showAsStep="true">
+                    <opqry:info format="html" title="Parameters">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
@@ -233,17 +289,17 @@ function setup_params(params) {
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund &lt;ghedlund@mun.ca&gt; and Yvan Rose &lt;yrose@mun.ca&gt;
  * Dept of Linguistics, Memorial University &lt;https://phon.ca&gt;
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
  *#
