@@ -2,17 +2,17 @@
  * Phon - An open source tool for research in phonology.
  * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
  * Dept of Linguistics, Memorial University <https://phon.ca>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,10 +34,10 @@ import ca.phon.util.OSInfo;
  */
 @PhonPlugin(name="default", minPhonVersion="1.6.2")
 public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHook {
-	
+
 	private final Logger LOGGER = Logger.getLogger(BootHook.class.getName());
-	
-	/* 
+
+	/*
 	 * Resource files
 	 */
 	private final static String PHON_VM_OPTIONS_FILE = "Phon.vmoptions";
@@ -47,9 +47,9 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 	private Enumeration<URL> getResourceURLs(String resource) {
 		final String os =
 				(OSInfo.isWindows() ? "windows" : (OSInfo.isMacOs() ? "mac" : "unix"));
-		final String respath = 
+		final String respath =
 				resource.replaceAll("\\$OS", os);
-		
+
 		Enumeration<URL> retVal = null;
 		try {
 			retVal = ClassLoader.getSystemClassLoader().getResources(respath);
@@ -58,13 +58,13 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public void setupVMOptions(List<String> cmd) {
 		loadFromFile(cmd, PHON_VM_OPTIONS_FILE);
 		loadFromResourcePath(cmd, VM_OPTIONS_FILE);
 	}
-	
+
 	private void loadFromFile(List<String> cmd, String path) {
 		final File file = new File(path);
 		try {
@@ -76,13 +76,13 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
-	
+
 	private void loadFromResourcePath(List<String> cmd, String path) {
 		final Enumeration<URL> optURLs = getResourceURLs(path);
 		while(optURLs.hasMoreElements()) {
 			URL url = optURLs.nextElement();
 			LOGGER.info("Loading vmoptions from URL " + url.toString());
-			
+
 			try {
 				final InputStream is = url.openStream();
 				loadFromInputStream(cmd, is);
@@ -91,7 +91,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 			}
 		}
 	}
-	
+
 	private void loadFromInputStream(List<String> cmd, InputStream is)
 			throws IOException {
 		final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
@@ -106,7 +106,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		}
 		isr.close();
 	}
-	
+
 	@Override
 	public void setupEnvironment(Map<String, String> environment) {
 		final String libPath = System.getProperty("java.library.path");
@@ -114,7 +114,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		while(envURLs.hasMoreElements()) {
 			URL url = envURLs.nextElement();
 			LOGGER.info("Loading environment settings from URL " + url.toString());
-			
+
 			try {
 				final InputStream is = url.openStream();
 				final BufferedReader isr = new BufferedReader(new InputStreamReader(is));
@@ -135,7 +135,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
-		
+
 		// windows needs libPath include in the PATH var
 		if(OSInfo.isWindows()) {
 			String path = environment.get("PATH");
@@ -143,7 +143,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 			environment.put("PATH", path);
 		}
 	}
-	
+
 	@Override
 	public Class<?> getExtensionType() {
 		return PhonBootHook.class;
@@ -151,15 +151,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 
 	@Override
 	public IPluginExtensionFactory<PhonBootHook> getFactory() {
-		return factory;
+		return (args) -> this;
 	}
 
-	private final IPluginExtensionFactory<PhonBootHook> factory = new IPluginExtensionFactory<PhonBootHook>() {
-		
-		@Override
-		public PhonBootHook createObject(Object... args) {
-			return BootHook.this;
-		}
-		
-	};
 }
