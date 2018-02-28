@@ -28,7 +28,7 @@ ca.phon.app.query.QueryHistoryEP
 # Session template
 ca.phon.app.corpus.CorpusTemplateEP
 # About Phon
-ca.phon.app.about.AboutDialogEP
+ca.phon.app.about.AboutEP
 # Log Viewer
 ca.phon.app.log.LogViewerEP
 # Node editor
