@@ -278,8 +278,8 @@ function query_record(recordIndex, record) {
 				result.addResultValue(rv);
 
 				var alignedGroup = (searchTier == "IPA Target" ? group.getIPAActual(): group.getIPATarget());
-				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()): null);
-				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned): new IPATranscript());
+				var aligned = (phoneMap != null ? phoneMap.getAligned(match.value.audiblePhones()) : null);
+				var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
 
 				// find location of aligned value in group
 				var groupStartIdx =
@@ -318,7 +318,6 @@ function query_record(recordIndex, record) {
                     result.addResultValue(alignedRv);
 					result.schema = "ALIGNED";
 
-                    // TODO
                     result.metadata.put("Alignment", alignment.toString());
 				}
 
