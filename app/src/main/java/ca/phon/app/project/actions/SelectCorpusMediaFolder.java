@@ -49,7 +49,7 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 					if(result == 0) {
 						return;
 					} else if(result == 1) {
-						project.setCorpusMediaFolder(corpus, null);
+						PhonWorker.getInstance().invokeLater( this::resetCorpusMediaFolder );
 					} else if(result == 2) {
 						SwingUtilities.invokeLater( this::browseForMediaFolder );
 					}
@@ -70,16 +70,21 @@ public class SelectCorpusMediaFolder extends ProjectWindowAction {
 				if(result == 0) {
 					return;
 				} else if(result == 1) {
-					PhonWorker.getInstance().invokeLater( () -> {
-						for(String corpus:corpora) {
-							project.setCorpusMediaFolder(corpus, null);
-						}
-					} );
+					PhonWorker.getInstance().invokeLater( this::resetCorpusMediaFolder );
 				} else if(result == 2) {
 					SwingUtilities.invokeLater( this::browseForMediaFolder );
 				}
 			});
 			NativeDialogs.showMessageDialog(props);
+		}
+	}
+	
+	private void resetCorpusMediaFolder() {
+		final Project project = getWindow().getProject();
+		List<String> corpora = getWindow().getSelectedCorpora();
+		
+		for(String corpus:corpora) {
+			project.setCorpusMediaFolder(corpus, null);
 		}
 	}
 
