@@ -96,8 +96,7 @@ public class IPALexer implements TokenSource {
 			
 			if(expectingScType) {
 				final SyllableConstituentType scType = SyllableConstituentType.fromString(currentChar+"");
-				if(scType == SyllableConstituentType.UNKNOWN
-						|| scType == SyllableConstituentType.WORDBOUNDARYMARKER
+				if(scType == SyllableConstituentType.WORDBOUNDARYMARKER
 						|| scType == SyllableConstituentType.SYLLABLEBOUNDARYMARKER
 						|| scType == SyllableConstituentType.SYLLABLESTRESSMARKER) {
 					IPAParserException ex = new IPAParserException("Invalid syllable constituent type '" +
