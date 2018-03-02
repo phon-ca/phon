@@ -2,8 +2,7 @@ package ca.phon.app.project;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 
@@ -215,6 +214,10 @@ public class CorpusDetails extends JPanel {
 					mediaFolderLabel.setToolTipText(file.getCanonicalPath());
 					mediaFolderLabel.setIcon(IconManager.getInstance().getSystemIconForPath(file.getCanonicalPath(), IconSize.SMALL));
 				} catch (IOException e) {}
+			} else {
+				mediaFolderLabel.setText("");
+				mediaFolderLabel.setToolTipText("");
+				mediaFolderLabel.setIcon(null);
 			}
 
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));
