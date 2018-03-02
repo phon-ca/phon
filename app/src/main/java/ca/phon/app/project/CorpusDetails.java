@@ -209,9 +209,10 @@ public class CorpusDetails extends JPanel {
 			}
 
 			if(file.exists() && file.isDirectory()) {
-				mediaFolderLabel.setText("<html><u>" + file.getName() + "</u></html>");
 				try {
-					mediaFolderLabel.setToolTipText(file.getCanonicalPath());
+					final File canonicalFile = file.getCanonicalFile();
+					mediaFolderLabel.setToolTipText(canonicalFile.getAbsolutePath());
+					mediaFolderLabel.setText("<html><u>" + canonicalFile.getName() + "</u></html>");
 					mediaFolderLabel.setIcon(IconManager.getInstance().getSystemIconForPath(file.getCanonicalPath(), IconSize.SMALL));
 				} catch (IOException e) {}
 			} else {
