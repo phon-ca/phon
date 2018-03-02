@@ -19,31 +19,17 @@
 package ca.phon.app.about;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.*;
-import java.util.List;
+import java.util.Set;
 import java.util.logging.*;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.PhonSplasher;
-import ca.phon.app.VersionInfo;
-import ca.phon.app.hooks.PhonBootHook;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.*;
+import ca.phon.app.*;
+import ca.phon.extensions.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.PrefHelper;
-import javafx.scene.layout.Border;
 
 public class AboutPanel extends JPanel implements IExtendable {
 
@@ -71,7 +57,7 @@ public class AboutPanel extends JPanel implements IExtendable {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 
-		setPreferredSize(new Dimension(bootImage.getWidth(this), bootImage.getHeight(this)+25));
+		setPreferredSize(new Dimension(bootImage.getWidth(this), bootImage.getHeight(this)));
 		init();
 
 		setFocusable(true);
