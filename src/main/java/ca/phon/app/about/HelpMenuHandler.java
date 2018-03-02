@@ -16,7 +16,7 @@ public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint
 	// use github pages mirror
 	private final static String WEBSITE_ROOT = "https://phon-ca.github.io/phon/";
 
-	private final static String ONLINE_MANUAL = "phon-manual/";
+	private final static String ONLINE_MANUAL = "phon-manual/misc/concepts/Introduction.html";
 	
 	public HelpMenuHandler() {
 	}

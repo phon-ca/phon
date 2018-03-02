@@ -262,10 +262,10 @@
                                     <String>${cfd}</String>
                                 </field>
                                 <field name="outputDir">
-                                    <String>${pd}/target/classes/META-INF/doc/pdf/</String>
+                                    <String>${pd}/src/main/dita/webhelp-resources</String>
                                 </field>
                                 <field name="tempDir">
-                                    <String>${pd}/target/temp/</String>
+                                    <String>${pd}/target</String>
                                 </field>
                                 <field name="transtype">
                                     <String>pdf2</String>
@@ -542,7 +542,107 @@
                                     <String></String>
                                 </field>
                                 <field name="ditaParams">
-                                    <list/>
+                                    <list>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>args.copycss</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <String>no</String>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                    <null/>
+                                                </String-array>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <String-array>
+                                                    <String></String>
+                                                    <String></String>
+                                                </String-array>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>args.css</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>${pd}/src/main/dita/webhelp-resources/custom-css/webhelp.css</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>2</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <null/>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <null/>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>webhelp.custom.resources</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>${pd}/src/main/dita/webhelp-resources</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>3</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <null/>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <null/>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>webhelp.logo.image</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>database-phon.png</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>2</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <null/>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <null/>
+                                            </field>
+                                        </ditaParameter>
+                                    </list>
                                 </field>
                                 <field name="jvmArgs">
                                     <String>-Xmx384m</String>
@@ -755,6 +855,7 @@
             <file name="src/main/dita/phon_application_manual.ditamap"/>
         </folder>
         <folder path="src/main/dita/"/>
+        <folder path="src/main/dita/webhelp-resources/"/>
         <folder path="src/main/xslt/"/>
     </projectTree>
 </project>
