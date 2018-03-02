@@ -19,28 +19,20 @@
       <timezone>-3.5</timezone>
     </developer>
     <developer>
-      <id>kburkin</id>
-      <name>Kelly Burkinshaw</name>
-      <email>kburkinshaw@mun.ca</email>
-      <timezone>-3.5</timezone>
-    </developer>
-    <developer>
       <id>yrose</id>
       <name>Yvan Rose</name>
       <email>yrose@mun.ca</email>
       <timezone>-3.5</timezone>
     </developer>
-    <developer>
-      <id>sknee</id>
-      <name>Sarah Knee</name>
-      <timezone>-3.5</timezone>
-    </developer>
-    <developer>
-      <id>cdunphy</id>
-      <name>Carla Dunphy</name>
-      <timezone>-3.5</timezone>
-    </developer>
   </developers>
+
+  <contributors>
+  	<contributor>
+      <name>Kelly Burkinshaw</name>
+      <email>kburkinshaw@mun.ca</email>
+      <timezone>-3.5</timezone>
+  	</contributor>
+  </contributors>
 
   <licenses>
     <license>
@@ -105,16 +97,14 @@
 
     <phon-manual-fonts.version>0.1</phon-manual-fonts.version>
     <ca.phon.version>2.2.0-SNAPSHOT</ca.phon.version>
+    
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<project.build.sourceVersion>1.8</project.build.sourceVersion>
+	<project.build.targetVersion>1.8</project.build.targetVersion>
   </properties>
 
   <dependencies>
   
-  	<dependency>
-  		<groupId>org.codehaus.groovy</groupId>
-  		<artifactId>groovy-all</artifactId>
-  		<version>2.4.0</version>
-  	</dependency>
-  	
   	<dependency>
   		<groupId>ca.phon</groupId>
   		<artifactId>phon-app</artifactId>
@@ -271,43 +261,6 @@
         </dependencies>
       </plugin>
       
-      <!-- Phon plug-in code (groovy) -->
-      <plugin>
-        <groupId>org.codehaus.groovy</groupId>
-        <artifactId>groovy-eclipse-compiler</artifactId>
-        <version>2.9.0-01</version>
-        <extensions>true</extensions>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-          <sourceEncoding>UTF-8</sourceEncoding>
-          <compilerId>groovy-eclipse-compiler</compilerId>
-          <!-- set verbose to be true if you want lots of uninteresting messages -->
-          <!-- <verbose>true</verbose> -->
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-eclipse-compiler</artifactId>
-            <version>2.9.0-01</version>
-          </dependency>
-          <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-eclipse-batch</artifactId>
-            <version>2.3.7-01</version>
-            <!-- or choose a different compiler version -->
-            <!-- <version>1.8.6-01</version> -->
-            <!-- <version>1.7.10-06</version> -->
-          </dependency>
-        </dependencies>
-      </plugin>
-      
     </plugins>
     <pluginManagement>
     	<plugins>
@@ -315,6 +268,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.1</version>
+            <configuration>
+				<source>${project.build.sourceVersion}</source>
+				<target>${project.build.targetVersion}</target>
+				<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+			</configuration>
           </plugin>
     		
     	<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
