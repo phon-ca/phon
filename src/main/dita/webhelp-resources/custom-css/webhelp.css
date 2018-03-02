@@ -1,5 +1,22 @@
 
+/* Overrides */
+
 .wh_publication_title {
     display: inline;
     margin-left: 1em;
 }
+
+.wh_top_menu *[data-id='topic_introduction'] {
+    display:none;
+}
+
+/* Custom elements */
+
+.wh_alternative_links {
+    display: inline;
+    margin-left: 1em;
+}
+
+.wh_alternative_link {
+}
+
