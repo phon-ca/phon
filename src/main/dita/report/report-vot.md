@@ -14,7 +14,7 @@ This report requires the use of TextGrid intervals.  A TextGrid must be assigned
 
 Given a TextGrid interval, T, and a point, P, VoT is calculated as:
  
- * TODO
+ * ```VoT = P - T.end```
 
 ## Example
 
