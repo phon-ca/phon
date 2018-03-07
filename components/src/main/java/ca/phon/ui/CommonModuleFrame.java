@@ -23,7 +23,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -36,6 +36,7 @@ import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 
 
 /**
@@ -225,16 +226,17 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			props.setListener( (e) -> {
 				int retVal = e.getDialogResult();
 				if(retVal == 0) {
-					try {
-						if(saveData()) {
-							SwingUtilities.invokeLater( () -> dispose() );
-						}
-					} catch (IOException ex) {
-						Toolkit.getDefaultToolkit().beep();
-						LOGGER.severe(ex.getMessage());
-
-						showMessageDialog("Save Failed", ex.getLocalizedMessage(), MessageDialogProperties.okOptions);
-					}
+					PhonWorker.getInstance().invokeLater( this::saveAndClose );
+//					try {
+//						if(saveData()) {
+//							SwingUtilities.invokeLater( () -> dispose() );
+//						}
+//					} catch (IOException ex) {
+//						Toolkit.getDefaultToolkit().beep();
+//						LOGGER.severe(ex.getMessage());
+//
+//						showMessageDialog("Save Failed", ex.getLocalizedMessage(), MessageDialogProperties.okOptions);
+//					}
 				} else if(retVal == 1) {
 					SwingUtilities.invokeLater( () -> dispose() );
 				}
@@ -574,6 +576,21 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		getRootPane().putClientProperty("Window.documentModified", hasUnsavedChanges());
 	}
 
+	/**
+	 * Save data and close window if save was successful.
+	 * 
+	 */
+	public void saveAndClose() {
+		try {
+			if(saveData()) {
+				SwingUtilities.invokeLater( this::dispose );
+			}
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+	}
+	
 	/**
 	 * Save window changes
 	 *

@@ -222,9 +222,9 @@ public class NodeWizard extends WizardFrame {
 					if(result == 0) {
 						SwingUtilities.invokeLater( () -> super.close() );
 					} else if(result == 1) {
-						saveReportAsHTML();
+						SwingUtilities.invokeLater( this::saveReportAsHTML );
 					} else if(result == 2) {
-						saveReportAsExcel();
+						SwingUtilities.invokeLater( this::saveReportAsExcel );
 					} else if(result == 3) {
 						return;
 					}
