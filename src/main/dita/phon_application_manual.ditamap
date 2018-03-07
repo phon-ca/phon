@@ -2,13 +2,13 @@
 <!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
 <bookmap>
     <booktitle>
-        <mainbooktitle>Phon Application Manual</mainbooktitle>
+        <mainbooktitle>Phon</mainbooktitle>
     </booktitle>
     <frontmatter>
-        <topicref href="misc/concepts/Introduction.xml"/>
         <booklists>
             <toc/>
         </booklists>
+        <topicref href="misc/Welcome.md" format="markdown"/>
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.md" format="markdown">
