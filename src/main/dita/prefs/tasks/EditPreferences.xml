@@ -28,9 +28,8 @@
                         Sessions</i> as you see fit.</cmd>
             </step>
             <step>
-                <cmd>From the <uicontrol>Media</uicontrol> tab, specify any default media folders
-                    you wish to use, following instructions in <xref href="ChangeMediaDirs.xml"/>.
-                </cmd>
+                <cmd>From the <uicontrol>Media</uicontrol> tab, specify any global media folders you
+                    wish to use</cmd>
             </step>
             <step>
                 <cmd>From the <uicontrol>Fonts</uicontrol> tab, change font sizes or options for

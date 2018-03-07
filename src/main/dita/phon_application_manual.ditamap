@@ -264,7 +264,7 @@
         <topicref href="report/report-inventory_by_session_non-IPA.md" format="markdown"/>
         <topicref href="report/report-listing.md" format="markdown"/>
         <topicref href="report/report-listing_by_session.md" format="markdown"/>
-        <topicref href="report/report-phone_dispersion.md" format="markdown"/>
+        <topicref href="report/report-phone_similarity.md" format="markdown"/>
         <topicref href="report/report-transcript_variability.md" format="markdown"/>
         <topicref href="report/report-query_information.md" format="markdown"/>
         <topicref href="report/acoustic_data_reports.md" format="markdown">
