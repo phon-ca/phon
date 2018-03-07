@@ -42,7 +42,7 @@ public class NewSegmentAction extends SegmentationViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		final MediaSegment m = getSegmentationView().getCurrentSegement();
+		final MediaSegment m = getSegmentationView().getCurrentSegment();
 
 		// should we create a new record or overwrite
 		// the data in the curent?
@@ -82,7 +82,7 @@ public class NewSegmentAction extends SegmentationViewAction {
 				edit.addEdit(speakerEdit);
 			}
 
-			final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), utt.getSegment(), 0, m);
+			final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), getEditor().currentRecord().getSegment(), 0, m);
 			segEdit.doIt();
 			edit.addEdit(segEdit);
 

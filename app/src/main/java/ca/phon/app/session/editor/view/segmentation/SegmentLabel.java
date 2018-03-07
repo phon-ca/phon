@@ -132,6 +132,10 @@ public class SegmentLabel extends JComponent {
 			startTime = startLockTime;
 		return startTime;
 	}
+	
+	public long getStartLockTime() {
+		return this.startLockTime;
+	}
 
 	public void refreshLabels() {
 		//call _refreshLabels on the EDT

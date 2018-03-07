@@ -187,7 +187,7 @@ public class SegmentationEditorView extends EditorView {
 		participantPanel.repaint();
 	}
 	
-	public MediaSegment getCurrentSegement() {
+	public MediaSegment getCurrentSegment() {
 		// get the segment time
 		long segStart = 0L;
 		long segEnd = 0L;
@@ -357,6 +357,16 @@ public class SegmentationEditorView extends EditorView {
 			super.timeChanged(mediaPlayer, newTime);
 			synchronized(segmentLabel) {
 				segmentLabel.setCurrentTime(newTime);
+			}
+		}
+
+		@Override
+		public void playing(MediaPlayer mediaPlayer) {
+			synchronized (segmentLabel) {
+				if(segmentLabel.getStartLockTime() > segmentLabel.getCurrentTime()) {
+					// unlock segment start time
+					segmentLabel.lockSegmentStartTime(-1L);
+				}
 			}
 		}
 
