@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
-   <appContext helpID="topic_introduction" path="misc/concepts/Introduction.html"/>
+   <appContext helpID="getting_started" path="misc/Welcome.html"/>
    <appContext helpID="welcome_window" path="welcome/welcome_window.html"/>
    <appContext helpID="createProject" path="welcome/tasks/CreateProject.html"/>
    <appContext helpID="taskId" path="welcome/tasks/OpenProject.html"/>
@@ -217,8 +217,8 @@
    <appContext helpID="report_listing" path="report/report-listing.html"/>
    <appContext helpID="report_listing_by_session"
                path="report/report-listing_by_session.html"/>
-   <appContext helpID="report_phone_dispersion"
-               path="report/report-phone_dispersion.html"/>
+   <appContext helpID="report_phone_similarity"
+               path="report/report-phone_similarity.html"/>
    <appContext helpID="report_transcript_variability"
                path="report/report-transcript_variability.html"/>
    <appContext helpID="report_query_information"
