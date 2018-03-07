@@ -22,13 +22,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Set;
 import java.util.logging.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
@@ -37,6 +37,7 @@ import ca.phon.app.VersionInfo;
 import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.menu.file.*;
 import ca.phon.app.project.*;
+import ca.phon.extensions.*;
 import ca.phon.plugin.*;
 import ca.phon.ui.*;
 import ca.phon.ui.action.PhonUIAction;
@@ -51,7 +52,7 @@ import ca.phon.util.icons.*;
  * recent projects, and workspace setup.
  *
  */
-public class WelcomeWindow extends CommonModuleFrame {
+public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
 	private final static Logger LOGGER = Logger.getLogger(WelcomeWindow.class.getName());
 
@@ -80,6 +81,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 	// workspace projects
 	private TitledPanel workspaceContainer;
 	private WorkspaceProjectsPanel workspaceProjectsPanel;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(WelcomeWindow.class, this);
 
 	public WelcomeWindow() {
 		super();
@@ -87,6 +90,8 @@ public class WelcomeWindow extends CommonModuleFrame {
 		setWindowName("Welcome");
 		addWindowListener(windowListener);
 		init();
+		
+		extSupport.initExtensions();
 	}
 
 	private void init() {
@@ -336,24 +341,15 @@ public class WelcomeWindow extends CommonModuleFrame {
 		return retVal;
 	}
 
-	private class BtnBgPainter extends MouseInputAdapter implements Painter<MultiActionButton> {
+	public static class BtnBgPainter extends MouseInputAdapter implements Painter<MultiActionButton> {
 
 		private Color selectedColor = new Color(0, 100, 200, 100);
 
 		private boolean useSelected = false;
-
+		
 		@Override
 		public void paint(Graphics2D g, MultiActionButton obj, int width,
 				int height) {
-
-			if(obj.isOpaque()) {
-				GradientPaint gp = new GradientPaint(new Point(0,0), Color.white,
-						new Point(width, height), PhonGuiConstants.PHON_UI_STRIP_COLOR);
-				MattePainter gpPainter = new MattePainter(gp);
-
-				gpPainter.paint(g, obj, width, height);
-			}
-
 			if(useSelected) {
 				GlowPathEffect effect = new GlowPathEffect();
 				effect.setRenderInsideShape(true);
@@ -365,7 +361,6 @@ public class WelcomeWindow extends CommonModuleFrame {
 
 				effect.apply(g, boundRect, 0, 0);
 			}
-
 		}
 
 		@Override
@@ -429,4 +424,26 @@ public class WelcomeWindow extends CommonModuleFrame {
 	public void refreshWorkspaceProjects() {
 		workspaceProjectsPanel.refresh();
 	}
+
+	public Container getActionList() {
+		return actionsPanel;
+	}
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
+	
+	
 }
