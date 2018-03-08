@@ -14,9 +14,10 @@ import ca.phon.util.OpenFileLauncher;
 public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
 	
 	// use github pages mirror
-	private final static String WEBSITE_ROOT = "https://phon-ca.github.io/phon/";
+	private final static String WEBSITE_ROOT = "http://phon-ca.github.io/phon/";
 
-	private final static String ONLINE_MANUAL = "phon-manual/misc/concepts/Introduction.html";
+	
+	private final static String ONLINE_MANUAL = "phon-manual/misc/Welcome.html";
 	
 	public HelpMenuHandler() {
 	}
