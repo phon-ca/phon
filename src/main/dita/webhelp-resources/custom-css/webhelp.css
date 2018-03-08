@@ -6,9 +6,13 @@
     margin-left: 1em;
 }
 
+/* 
+ * Example of removing ToC item with given id
+ * 
 .wh_top_menu *[data-id='topic_introduction'] {
     display:none;
 }
+*/
 
 /* Custom elements */
 
@@ -20,3 +24,10 @@
 .wh_alternative_link {
 }
 
+.topictitle2 {
+    font-style: normal;
+}
+
+.topictitle3 {
+    font-style: normal;
+}
