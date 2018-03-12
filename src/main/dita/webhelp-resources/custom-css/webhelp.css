@@ -3,7 +3,24 @@
 
 .wh_publication_title {
     display: inline;
-    margin-left: 1em;
+    margin-left: 10px;
+}
+
+.topictitle2 {
+    font-style: normal;
+}
+
+.topictitle3 {
+    font-style: normal;
+}
+
+.wh_search_input {
+    padding: 10px 0 10px 0;
+}
+
+.wh_publication_title > a {
+    font-size: 2em;
+    margin: 0.5em 0 0.5em 0;
 }
 
 /* 
@@ -24,10 +41,3 @@
 .wh_alternative_link {
 }
 
-.topictitle2 {
-    font-style: normal;
-}
-
-.topictitle3 {
-    font-style: normal;
-}

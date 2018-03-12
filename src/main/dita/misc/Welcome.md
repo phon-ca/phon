@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phon is a software program that greatly facilitates a number of tasks related to the analysis of transcript-based and acoustically-measured speech data. Built to support research in phonological development (including babbling), second language acquisition, and phonological disorders, Phon can also be used for virtually all types of phonological investigations (e.g. loanword phonology, fieldwork in phonology, sociolinguistic studies). Phon supports multimedia data linkage, unit segmentation (e.g. utterance, word), multiple-blind transcription, automatic labeling of data (features, syllabification), and systematic comparisons between target (model) and actual (produced) phonological forms. Phon is also equipped with many facilities for data analysis, including query methods for phonology (e.g. phones, features, syllables, …) as well as acoustic data.
+Phon is a software platform that greatly facilitates a number of tasks related to the analysis of transcript-based and acoustically-measured speech data. Built to support research in phonological development (including babbling), second language acquisition, and phonological disorders, Phon can also be used for virtually all types of phonological investigations (e.g. loanword phonology, fieldwork in phonology, sociolinguistic studies). Phon supports multimedia data linkage, unit segmentation (e.g. utterance, word), multiple-blind transcription, automatic labeling of data (features, syllabification), and systematic comparisons between target (model) and actual (produced) phonological forms. Phon is also equipped with many facilities for data analysis, including query methods for phonology (e.g. phones, features, syllables, …) as well as acoustic data.
 
 Version 2 of Phon brings together two of the most important areas of empirical investigation in the are of child phonology, as it integrates transcript-based analyses of phonological data with the facilities for acoustic analysis provided by Praat. With this new version of Phon, and in addition to the functions listed above, the user can now: 
 
@@ -38,7 +38,7 @@ All of these functions are accessible through a user-friendly graphical interfac
 
 ## Citing Phon
 
-Hedlund, Gregory & Yvan Rose. 2016. Phon 2.1.8 \[Computer Software\]. Retrieved from ​https://phon.ca. St. John's, Newfoundland, Canada.
+Hedlund, Gregory & Yvan Rose. 2016. Phon 2.1.8 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
 
 Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, Philip O’Brien & Todd Wareham. 2006. Introducing Phon: A Software Solution for the Study of Phonological Acquisition. In David Bamman, Tatiana Magnitskaia & Colleen Zaller (eds.), 
 *Proceedings of the 30th Annual Boston University Conference on Language Development*. Somerville, MA: Cascadilla Press. 489-500.
