@@ -184,7 +184,6 @@
         </topichead>
     </chapter>
     <chapter navtitle="IPA Transcription" audience="novice">
-        <topicref href="ipa/concepts/ipa_intro.dita"/>
         <topichead navtitle="IPA Elements">
             <topicref href="ipa/concepts/phone.dita"/>
             <topicref href="ipa/concepts/compound_phone.dita"/>
@@ -273,21 +272,21 @@
             <topicref href="report/report-pitch.md" format="markdown"/>
             <topicref href="report/report-formants.md" format="markdown"/>
             <topicref href="report/report-spectral_moments.md" format="markdown"/>
-            <topicref href="report/report-vot.md" format="markdown"/>
         </topicref>
         <topicref href="report/report_composer.md" format="markdown"/>
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/PPC.md" format="markdown"/>
         <topicref href="analysis/Phone%20Inventory.md" format="markdown"/>
-        <topicref href="analysis/consonants.md" format="markdown"/>
         <topicref href="analysis/Phonological%20Processes.md" format="markdown"/>
         <topicref href="analysis/PMLU.md" format="markdown"/>
-        <topicref href="analysis/Vocalization.md" format="markdown"/>
         <topicref href="analysis/Word%20List.md" format="markdown"/>
-        <topicref href="analysis/Word%20Match.md" format="markdown"/>
-        <topicref href="analysis/Multisyllabic%20Noninear%20Analysis.md" format="markdown"/>
-        <topicref href="analysis/WAP.md" format="markdown"/>
+        <topichead navtitle="Specialized">
+            <topicref href="analysis/Word%20Match.md" format="markdown"/>
+            <topicref href="analysis/Multisyllabic%20Noninear%20Analysis.md" format="markdown"/>
+            <topicref href="analysis/Vocalization.md" format="markdown"/>
+            <topicref href="analysis/WAP.md" format="markdown"/>
+        </topichead>
         <topicref href="analysis/analysis_composer.md" format="markdown"/>
     </chapter>
 </bookmap>
