@@ -153,7 +153,6 @@
    <appContext helpID="taskId" path="ipamap/tasks/HighlightRecentlyUsed.html"/>
    <appContext helpID="phonshell" path="tools/PhonShell.html"/>
    <appContext helpID="iso_language_codes" path="tools/LanguageCodes.html"/>
-   <appContext helpID="concept_trw_j2l_2n" path="ipa/concepts/ipa_intro.html"/>
    <appContext helpID="concept_51v_4vv_4g" path="ipa/concepts/phone.html"/>
    <appContext helpID="concept_mpb_svv_4g" path="ipa/concepts/compound_phone.html"/>
    <appContext helpID="concept_fw1_tvv_4g" path="ipa/concepts/intrawordpause.html"/>
@@ -230,22 +229,20 @@
    <appContext helpID="report_formants" path="report/report-formants.html"/>
    <appContext helpID="report_spectral_moments"
                path="report/report-spectral_moments.html"/>
-   <appContext helpID="report_vot" path="report/report-vot.html"/>
    <appContext helpID="custom_reports_using_composer_simple"
                path="report/report_composer.html"/>
    <appContext helpID="analysis_ppc" path="analysis/PPC.html"/>
    <appContext helpID="analysis_phone_inventory"
                path="analysis/Phone%20Inventory.html"/>
-   <appContext helpID="analysis_consonants" path="analysis/consonants.html"/>
    <appContext helpID="analyses_phonological_processes"
                path="analysis/Phonological%20Processes.html"/>
    <appContext helpID="analysis_phonological_mean_length_of_utterance_pmlu"
                path="analysis/PMLU.html"/>
-   <appContext helpID="analysis_vocaliztion" path="analysis/Vocalization.html"/>
    <appContext helpID="analysis_word_list" path="analysis/Word%20List.html"/>
    <appContext helpID="analysis_word_match" path="analysis/Word%20Match.html"/>
    <appContext helpID="analysis_multisyllabic_nonlinear_analysis"
                path="analysis/Multisyllabic%20Noninear%20Analysis.html"/>
+   <appContext helpID="analysis_vocalization" path="analysis/Vocalization.html"/>
    <appContext helpID="analysis_word_level_analysis_of_polysyllables_wap"
                path="analysis/WAP.html"/>
    <appContext helpID="custom_analysis_using_composer_simple"
