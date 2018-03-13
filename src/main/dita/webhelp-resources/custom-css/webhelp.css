@@ -20,7 +20,15 @@
 
 .wh_publication_title > a {
     font-size: 2em;
-    margin: 0.5em 0 0.5em 0;
+    margin: 0 0 0 0;
+}
+
+.wh_top_menu {
+    margin: 1em 0 0 0;
+}
+
+.wh_header {
+    padding: 2em 0 1em 0;
 }
 
 /* 
@@ -41,3 +49,42 @@
 .wh_alternative_link {
 }
 
+#wh_download_links {
+    display: inline-flex;
+    position: absolute;
+    top: 0px;
+    right: 10px;
+}
+
+#wh_forkme_banner {
+  padding: 5px 50px 5px 5px;
+  color: #fff;
+  margin-right: 5px;
+  background: url('images/blacktocat.png') #4282c1 no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+#wh_download_banner {
+ padding: 5px 50px 5px 5px;
+  color: #fff;
+  margin-right: 5px;
+  background: url('images/icon_download.png') #4282c1 no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+#wh_download_beta_banner {
+ padding: 5px 50px 5px 5px;
+  color: #fff;
+  margin-right: 5px;
+  background: url('images/icon_download.png') #4282c1 no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
