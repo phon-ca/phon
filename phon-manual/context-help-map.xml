@@ -182,7 +182,6 @@
    <appContext helpID="concept_psh_xgn_gg" path="phonex/concepts/suffix.html"/>
    <appContext helpID="concept_jj4_ygn_gg" path="phonex/concepts/comb.html"/>
    <appContext helpID="concept_djv_zhg_dn" path="phonex/concepts/tone_plugin.html"/>
-   <appContext helpID="markers" path="chat/markers.html"/>
    <appContext helpID="taskId" path="query/tasks/QueryProject.html"/>
    <appContext helpID="taskId" path="query/tasks/SaveQueryScript.html"/>
    <appContext helpID="taskId" path="query/tasks/OpenQueryScript.html"/>
@@ -205,6 +204,7 @@
    <appContext helpID="taskId" path="history/tasks/DeleteQuery.html"/>
    <appContext helpID="taskId" path="history/tasks/EditQueryDetails.html"/>
    <appContext helpID="conceptId" path="history/concepts/AboutStarredQueries.html"/>
+   <appContext helpID="about_query_reports" path="report/AboutQueryReports.html"/>
    <appContext helpID="report_aggregate_ipa_results"
                path="report/report-aggregate_IPA.html"/>
    <appContext helpID="report_aggregate_non_ipa_results"
@@ -247,4 +247,5 @@
                path="analysis/WAP.html"/>
    <appContext helpID="custom_analysis_using_composer_simple"
                path="analysis/analysis_composer.html"/>
+   <appContext helpID="markers" path="chat/markers.html"/>
 </map>
