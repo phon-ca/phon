@@ -223,11 +223,6 @@
         </topichead>
         <topichead navtitle="Examples"/>
     </chapter>
-    <chapter navtitle="CHAT Support">
-        <topichead navtitle="Main Line Coding">
-            <topicref href="chat/markers.md" format="markdown"/>
-        </topichead>
-    </chapter>
     <chapter navtitle="Queries" audience="intermediate">
         <topicref href="query/tasks/QueryProject.xml"/>
         <topicref href="query/tasks/SaveQueryScript.xml"/>
@@ -257,6 +252,7 @@
         </topicref>
     </chapter>
     <chapter navtitle="Query Reports" audience="intermediate">
+        <topicref href="report/AboutQueryReports.md" format="markdown"/>
         <topicref href="report/report-aggregate_IPA.md" format="markdown"/>
         <topicref href="report/report-aggregate_non-IPA.md" format="markdown"/>
         <topicref href="report/report-inventory_by_session_IPA.md" format="markdown"/>
@@ -288,5 +284,10 @@
             <topicref href="analysis/WAP.md" format="markdown"/>
         </topichead>
         <topicref href="analysis/analysis_composer.md" format="markdown"/>
+    </chapter>
+    <chapter navtitle="CHAT Support">
+        <topichead navtitle="Main Line Coding">
+            <topicref href="chat/markers.md" format="markdown"/>
+        </topichead>
     </chapter>
 </bookmap>

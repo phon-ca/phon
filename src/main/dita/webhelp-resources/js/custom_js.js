@@ -5,7 +5,7 @@ String.prototype.replaceAll = function (search, replacement) {
 
 function getOS() {
 	var OSName = "";
-	if (navigator.appVersion.indexOf("Win64" != -1)) {
+	if (navigator.appVersion.indexOf("Win64") != -1) {
 		OSName = "windows-x64";
 	} else if (navigator.appVersion.indexOf("Win") != -1) {
 		OSName = "windows";
