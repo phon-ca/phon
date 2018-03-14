@@ -30,7 +30,7 @@
             
             This component will be replaced at generation time with links to the JS files associated with the WebHelp search function.            
         -->
-        <script type="text/javascript" src="oxygen-webhelp/search/nwSearchFnt.js?buildId=2017062918"></script><script type="text/javascript" src="oxygen-webhelp/search/searchCommon.js?buildId=2017062918"></script><script type="text/javascript" src="oxygen-webhelp/search/responsive/search.js?buildId=2017062918"></script><script type="text/javascript" src="oxygen-webhelp/search/searchOptions.js?uniqueId=20180313030900"></script><script type="text/javascript" src="oxygen-webhelp/search/htmlFileInfoList.js?uniqueId=20180313030900"></script><script type="text/javascript" src="oxygen-webhelp/search/index-1.js?uniqueId=20180313030900"></script><script type="text/javascript" src="oxygen-webhelp/search/index-2.js?uniqueId=20180313030900"></script><script type="text/javascript" src="oxygen-webhelp/search/index-3.js?uniqueId=20180313030900"></script>
+        <script type="text/javascript" src="oxygen-webhelp/search/nwSearchFnt.js?buildId=2017062918"></script><script type="text/javascript" src="oxygen-webhelp/search/searchCommon.js?buildId=2017062918"></script><script type="text/javascript" src="oxygen-webhelp/search/responsive/search.js?buildId=2017062918"></script><script type="text/javascript" src="oxygen-webhelp/search/searchOptions.js?uniqueId=20180314101451"></script><script type="text/javascript" src="oxygen-webhelp/search/htmlFileInfoList.js?uniqueId=20180314101451"></script><script type="text/javascript" src="oxygen-webhelp/search/index-1.js?uniqueId=20180314101451"></script><script type="text/javascript" src="oxygen-webhelp/search/index-2.js?uniqueId=20180314101451"></script><script type="text/javascript" src="oxygen-webhelp/search/index-3.js?uniqueId=20180314101451"></script>
 
         <link rel="stylesheet" type="text/css" href="oxygen-webhelp/template/resources/css/wt_default.css" />
         
@@ -43,7 +43,21 @@
         <link rel="stylesheet" type="text/css" href="oxygen-webhelp/template/variants/tree/oxygen/skin.css?buildId=2017062918" />
         <!-- EXM-36950 - Expand the args.hdf parameter here -->
         
-        <script src="js/downloads.js" type="text/javascript"></script>
+        <script type="text/javascript">
+$(document).ready( function () {
+	// add custom js to head element
+	var headEle = document.getElementsByTagName("head")[0];
+	
+	var origin = window.parent.navigator.origin;
+	var customJSUrl = origin + "/phon-manual/js/custom_js.js";
+	
+	var scriptEle = document.createElement("script");
+	scriptEle.setAttribute("src", customJSUrl);
+	scriptEle.setAttribute("type", "text/javascript");
+	
+	headEle.appendChild(scriptEle);
+});
+</script>
     <title>Phon</title><link rel="stylesheet" type="text/css" href="webhelp.css" data-css-role="args.css"><!----></link></head>
     <body class="wh_search_page">
         <!-- EXM-36950 - Expand the args.hdr parameter here -->
@@ -79,7 +93,7 @@
                 <div id="wh_download_links">
     <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/2.1.8">Phon 2.1.8 (stable)</a>
     <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/2.2.0b23">Phon 2.2.0b23 (beta)</a>
-    <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon">View on GitHub</a>
+    <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
 </div>
             </div>
         </div>
@@ -106,7 +120,7 @@
         
         
         <!-- Search autocomplete -->
-        <script type="text/javascript" src="oxygen-webhelp/search/keywords.js?uniqueId=20180313030900"><!----></script>
+        <script type="text/javascript" src="oxygen-webhelp/search/keywords.js?uniqueId=20180314101451"><!----></script>
         <script type="text/javascript" src="oxygen-webhelp/search/searchAutocomplete.js?buildId=2017062918"><!----></script>
         <script type="text/javascript" src="oxygen-webhelp/resources/js/jquery.bootpag.min.js?buildId=2017062918"></script>
         <script type="text/javascript" src="oxygen-webhelp/search/searchHistoryItems.js?buildId=2017062918"><!----></script>
