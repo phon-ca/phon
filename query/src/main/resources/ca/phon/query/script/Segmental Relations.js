@@ -207,7 +207,8 @@ function query_record(recordIndex, record) {
         		relation.position1 += offset;
         		relation.position2 += offset;
         		
-        		if(filters.segmentalRelationsOptions.filterRelation(relation)) {
+        		var includeRelation = filters.segmentalRelationsOptions.filterRelation(relation);
+        		if(includeRelation == true) {
 	        		var result = filters.segmentalRelationsOptions.createQueryResult(recordIndex, i, relation);
 	        		
 	        		for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
