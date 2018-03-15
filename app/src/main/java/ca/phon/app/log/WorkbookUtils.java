@@ -56,9 +56,16 @@ public class WorkbookUtils {
 				Object val = rowData[tableCol];
 				
 				if(val != null && val instanceof Number) {
-					final jxl.write.Number cell = 
-							new jxl.write.Number(col, startRow+row+1, ((Number)val).doubleValue());
-					sheet.addCell(cell);
+					// don't write infinity values to excel
+					final Number number = (Number)val;
+					if(number.doubleValue() == Double.POSITIVE_INFINITY || number.doubleValue() == Double.POSITIVE_INFINITY) {
+						final Label cell = new Label(col, startRow+row+1, "");
+						sheet.addCell(cell);
+					} else {
+						final jxl.write.Number cell = 
+								new jxl.write.Number(col, startRow+row+1, ((Number)val).doubleValue());
+						sheet.addCell(cell);
+					}
 				} else if (val instanceof LocalDate) {
 					final DateTime cell = new DateTime(col, startRow+row+1, 
 							Date.from(((LocalDate)val).atStartOfDay(ZoneId.systemDefault()).toInstant()));
@@ -112,9 +119,15 @@ public class WorkbookUtils {
 				Object val = tableModel.getValueAt(row, tableCol);
 				
 				if(val != null && val instanceof Number) {
-					final jxl.write.Number cell = 
-							new jxl.write.Number(col, startRow+row+1, ((Number)val).doubleValue());
-					sheet.addCell(cell);
+					final Number number = (Number)val;
+					if(number.doubleValue() == Double.POSITIVE_INFINITY || number.doubleValue() == Double.POSITIVE_INFINITY) {
+						final Label cell = new Label(col, startRow+row+1, "");
+						sheet.addCell(cell);
+					} else {
+						final jxl.write.Number cell = 
+								new jxl.write.Number(col, startRow+row+1, ((Number)val).doubleValue());
+						sheet.addCell(cell);
+					}
 				} else if (val instanceof LocalDate) {
 					final DateTime cell = new DateTime(col, startRow+row+1, 
 							Date.from(((LocalDate)val).atStartOfDay(ZoneId.systemDefault()).toInstant()));
