@@ -64,10 +64,7 @@ public class TableDataSourceFormatter implements Formatter<TableDataSource> {
 						if(val instanceof IPATranscript && ((IPATranscript)val).length() == 0) {
 							row[i] = PhonConstants.nullChar + "";
 						} else {
-							@SuppressWarnings("unchecked")
-							final Formatter<Object> formatter =
-									(Formatter<Object>)FormatterFactory.createFormatter(val.getClass());
-							row[i] = (formatter != null ? formatter.format(val) : val.toString());
+							row[i] = FormatterUtil.format(val);
 						}
 					}
 				}

@@ -27,7 +27,7 @@ exports.SegmentalRelationsOptions = function(id) {
 	this.includeMigration = relationTypesInfo.def[1];
 	this.includeMetathesis = relationTypesInfo.def[2];
 	this.includeHarmony = relationTypesInfo.def[3];
-	this.includeAssimliation = relationTypesInfo.def[4];
+	this.includeAssimilation = relationTypesInfo.def[4];
 
 	var directionTypesInfo = {
 		"ids": [id+".includeProgressive", id+".includeRegressive"],
@@ -195,7 +195,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		else if(segmentalRelation.relation == SegmentalRelation.Relation.Harmony)
 			return this.includeHarmony == true;
 		else if(segmentalRelation.relation == SegmentalRelation.Relation.Assimilation)
-			return this.includeAssimliation == true;
+			return this.includeAssimilation == true;
 		else
 			return false;
 	};
