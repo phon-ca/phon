@@ -147,6 +147,8 @@ public class NodeWizard extends WizardFrame {
 
 	private volatile boolean running = false;
 
+	private NodeWizardBreadcrumbButton btnRunAgain;
+
 	private WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
@@ -254,6 +256,13 @@ public class NodeWizard extends WizardFrame {
 		});
 	}
 
+	private void setBounds(JButton endBtn) {
+		final Rectangle bounds =
+				new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1,
+						0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+		endBtn.setBounds(bounds);
+	}
+
 	private void init() {
 		// turn off parent navigation controls
 		super.btnBack.setVisible(false);
@@ -263,7 +272,7 @@ public class NodeWizard extends WizardFrame {
 
 		bufferPanel = new MultiBufferPanel();
 
-		final JButton btnNext = new NodeWizardBreadcrumbButton();
+		btnNext = new NodeWizardBreadcrumbButton();
 		btnNext.setFont(FontPreferences.getTitleFont());
 		btnNext.setText("Next");
 		btnNext.addActionListener( (e) -> next() );
@@ -275,46 +284,38 @@ public class NodeWizard extends WizardFrame {
 		btnCancel.setForeground(Color.white);
 		btnCancel.addActionListener( (e) -> cancel() );
 
-		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
+		btnRunAgain = new NodeWizardBreadcrumbButton();
+		btnRunAgain.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
+		btnRunAgain.setText("Run again");
+		btnRunAgain.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
+		btnRunAgain.setVisible(false);
 
-//		final NodeWizardBreadcrumbButton gotoReportBtn = new NodeWizardBreadcrumbButton();
-//		gotoReportBtn.setBackground(Color.green);
-//		gotoReportBtn.setText("Use defaults and goto Report");
-//		gotoReportBtn.setFont(FontPreferences.getTitleFont());
-//		gotoReportBtn.addActionListener( (e) -> gotoReport() );
+		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
 
 		final Runnable updateBreadcrumbButtons = () -> {
 			JButton endBtn = btnNext;
 			if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
 				breadCrumbViewer.remove(btnNext);
+
+				breadCrumbViewer.add(btnRunAgain);
+				setBounds(btnRunAgain);
+
 				breadCrumbViewer.add(btnCancel);
+				setBounds(btnCancel);
+
 				endBtn = btnCancel;
 			} else {
+				breadCrumbViewer.remove(btnRunAgain);
 				breadCrumbViewer.remove(btnCancel);
+
 				breadCrumbViewer.add(btnNext);
+				setBounds(btnNext);
 			}
-
-			final Rectangle bounds =
-					new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1,
-							0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-			endBtn.setBounds(bounds);
-
-//			if(breadCrumbViewer.getBreadcrumb().size() == 1
-//					&& breadCrumbViewer.getBreadcrumb().getCurrentState() != reportDataStep) {
-//				// show goto report button
-//				breadCrumbViewer.add(gotoReportBtn);
-//
-//				final Rectangle gotoBounds = new Rectangle(
-//						bounds.x + bounds.width, 0, gotoReportBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-//				gotoReportBtn.setBounds(gotoBounds);
-//			} else {
-//				breadCrumbViewer.remove(gotoReportBtn);
-//			}
 
 			getRootPane().setDefaultButton(endBtn);
 
 			breadCrumbViewer.revalidate();
-			breadCrumbViewer.scrollRectToVisible(bounds);
+			breadCrumbViewer.scrollRectToVisible(endBtn.getBounds());
 		};
 
 		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
@@ -491,6 +492,10 @@ public class NodeWizard extends WizardFrame {
 		running = false;
 		breadCrumbViewer.setEnabled(true);
 		btnCancel.setVisible(false);
+
+		btnRunAgain.setVisible(true);
+		getRootPane().setDefaultButton(btnRunAgain);
+
 		btnBack.setEnabled(true);
 	}
 
@@ -531,6 +536,7 @@ public class NodeWizard extends WizardFrame {
 		try {
 			SwingUtilities.invokeLater( () -> {
 				btnCancel.setVisible(true);
+				btnRunAgain.setVisible(false);
 				breadCrumbViewer.setEnabled(false);
 			});
 

@@ -51,9 +51,9 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="4dda153c86d9426b" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5a2fba55">
+            <graph id="5d8d7d21">
                 <ogcn:macro id="9b02d808273c4363" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="24b1939b">
+                    <graph id="2bac9808">
                         <node id="29a1303215c48f9" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -231,7 +231,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="25d9b53bbd6c4f5b" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="6843d7ed">
+            <graph id="5cbc4abc">
                 <node id="b4b4a2d86ece4175" name="Session Name" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -250,7 +250,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="cdc1b795ab804c5d" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="7c800136">
+                    <graph id="4288332c">
                         <node id="bc3d78aeec9d40de" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -304,7 +304,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="35ad0608ffea4b10" name="If Has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="73e97334">
+                    <graph id="4b263a7">
                         <node id="bd79875b979f480c" name="table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -374,7 +374,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="964c2feab53044f0" name="Add to Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="6c6dc553">
+                            <graph id="6d696917">
                                 <node id="5625dfeb66234dc9" name="data1" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -415,7 +415,7 @@ function run(context) {
                                             <oga:property key="dataTemplate"><![CDATA[
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
-#printTableWithIdAndCaptionExcludingColumns( $table $tableName $caption ["Group #", "Range", "Date", "Age", "Tier", "Result"] )
+#printTableWithIdAndCaptionExcludingColumns( $table $tableName $caption ["Group #", "Range", "Date", "Tier", "Result"] )
 ]]></oga:property>
                                             <oga:property key="showText"><![CDATA[false]]></oga:property>
                                             <oga:property key="showTable"><![CDATA[true]]></oga:property>
