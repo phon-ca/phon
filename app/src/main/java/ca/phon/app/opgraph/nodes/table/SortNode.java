@@ -102,12 +102,15 @@ public class SortNode extends TableOpNode implements NodeSettings {
 					Float f2 = ((Number)v2).floatValue();
 					retVal = f1.compareTo(f2);
 				} else {
-					final String v1Txt = (v1 != null ? v1.toString() : "");
-					final String v2Txt = (v2 != null ? v2.toString() : "");
+					String v1Txt = (v1 != null ? v1.toString() : "");
+					String v2Txt = (v2 != null ? v2.toString() : "");
 					if(sc.getType() == SortType.PLAIN) {
 						retVal = v1Txt.compareTo(v2Txt);
 					} else if(sc.getType() == SortType.IPA) {
 						try {
+							// HACK remove all '.' now so segmental relations results pass through
+							v1Txt = v1Txt.replaceAll("\\.", "");
+							v2Txt = v2Txt.replaceAll("\\.", "");
 							IPATranscript v1ipa =
 									(v1 != null && v1 instanceof IPATranscript ? (IPATranscript)v1 : IPATranscript.parseIPATranscript(v1Txt));
 							IPATranscript v2ipa =
