@@ -52,17 +52,17 @@ exports.PPC = {
 		var actualGroup = (group.getIPAActual() == null ? new IPATranscript(): group.getIPAActual());
 		var alignment = group.getPhoneAlignment();
 
-		// check target side for numTarget, numDeleted and numCorrect
-		for (pIdx = 0; pIdx < targetGroup.length();
-		pIdx++) {
-			var phone = targetGroup.elementAt(pIdx);
-			var testIPA = (new IPATranscriptBuilder()).append(phone).toIPATranscript();
-
-			if (filter.check_filter(testIPA)) {
-				numTarget++;
-
-				// check aligned phone
-				var alignedData = alignment[ "getAligned(java.lang.Iterable)"]([phone]);
+ 
+		// check target side
+		var targetResults = filter.find_pattern(targetGroup);
+		for(var i = 0; i < targetResults.length; i++) {
+			var targetResult = targetResults[i];
+			var audiblePhones = targetResult.value.audiblePhones();
+			numTarget += audiblePhones.length();
+			
+			for(var j = 0; j < audiblePhones.length(); j++) {
+				var phone = audiblePhones.elementAt(j);
+				var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
 				if (alignedData.size() > 0) {
 					var actualPhone = alignedData.get(0);
 					if (actualPhone != null) {
@@ -84,27 +84,18 @@ exports.PPC = {
 				}
 			}
 		}
-
-		// check actual side for numActual, numEpenthesized
-		// check target side for numTarget, numDeleted and numCorrect
-		for (pIdx = 0; pIdx < actualGroup.length();
-		pIdx++) {
-			var phone = actualGroup.elementAt(pIdx);
-			var testIPA = (new IPATranscriptBuilder()).append(phone).toIPATranscript();
-
-			if (filter.check_filter(testIPA)) {
-				numActual++;
-
-				// check aligned phone
-				var alignedData = alignment[ "getAligned(java.lang.Iterable)"]([phone]);
-				if (alignedData.size() > 0) {
-					var targetPhone = alignedData.get(0);
-					if (targetPhone == null) {
-						numEpenthesized++;
-					}
-				} else {
+		
+		var actualResults = filter.find_pattern(actualGroup);
+		for(var i = 0; i < actualResults.length; i++) {
+			var actualResult = actualResults[i];
+			var audiblePhones = actualResult.value.audiblePhones();
+			numActual += audiblePhones.length();
+			
+			for(var j = 0; j < audiblePhones.length(); j++) {
+				var phone = audiblePhones.elementAt(j);
+				var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
+				if(alignedData.size() == 0)
 					numEpenthesized++;
-				}
 			}
 		}
 
@@ -128,9 +119,14 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
-		"choices": ["Percent Consonants Correct (PCC)", "Percent Vowels Correct (PVC)", "Percent Phones Correct (PPC)", "Percent Correct (custom)"],
-		"colnames": ["PCC", "PVC", "PPC", "PC"],
-		"phonex": [ "\\c", "\\v", "\\w" ],
+		"choices": ["Percent Consonants Correct (PCC)",
+					"Percent Singleton Consonants Correct (PCC)",
+					"Percent Cluster Consonants Correct (PCC)",
+					"Percent Vowels Correct (PVC)", 
+					"Percent Phones Correct (PPC)", 
+					"Percent Correct (custom)"],
+		"colnames": ["PCC", "PCC", "PCC", "PVC", "PPC", "PC"],
+		"phonex": [ "\\c", "(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$", "\\c+\\s?\\c+", "\\v", "\\w" ],
 		"def": 0,
 		"cols": 1,
 		"type": "radiobutton"
@@ -173,9 +169,9 @@ exports.PPCOptions = function (id, aligned) {
 		var patternParams = new java.util.ArrayList();
 		this.pattern.setSelectedPatternType(PatternType.PHONEX);
 		this.pattern.param_setup(patternParams);
-		this.pattern.setExactMatch(true);
+		//this.pattern.setExactMatch(true);
 		this.pattern.set_required(true);
-		params.add(patternParams.get(1));	
+		params.add(patternParams.get(1));
 		
 		// setup listeners
 		var patternFilter = this.pattern;
@@ -185,7 +181,7 @@ exports.PPCOptions = function (id, aligned) {
 			propertyChange: function(e) {
 				var idx = e.source.getValue(e.source.paramId).index;
 				
-				if(idx < 3) {
+				if(idx < 5) {
 					patternFilter.setPattern(ppcTypeParamInfo.phonex[idx]);
 					patternFilter.setEnabled(false);
 				} else
