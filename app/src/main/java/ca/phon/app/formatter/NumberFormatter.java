@@ -13,7 +13,7 @@ public class NumberFormatter implements Formatter<Number> {
 	private int minPrecision = PrefHelper.getInt(MIN_PRECISION, DEFAULT_MIN_PRECISION);
 	
 	public final static String MAX_PRECISION = NumberFormatter.class.getName() + ".maxPrecision";
-	public final int DEFAULT_MAX_PRECISION = 4;
+	public final int DEFAULT_MAX_PRECISION = 3;
 	private int maxPrecision = PrefHelper.getInt(MAX_PRECISION, DEFAULT_MAX_PRECISION);
 	
 	public NumberFormatter() {

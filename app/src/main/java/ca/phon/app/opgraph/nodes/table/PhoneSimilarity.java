@@ -1,24 +1,17 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.gedge.opgraph.InputField;
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.OpNodeInfo;
+import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
@@ -115,26 +108,54 @@ public class PhoneSimilarity extends TableOpNode implements NodeSettings {
 		for(; colIdx < table.getColumnCount(); colIdx++) {
 			outputTable.setColumnTitle(colIdx, table.getColumnTitle(colIdx));
 		}
-		final int featuresColIdx = colIdx++;
-		outputTable.setColumnTitle(featuresColIdx, "# Features Compared");
-		final int simColIdx = colIdx++;
-		outputTable.setColumnTitle(simColIdx, "Similarity");
-
+		final int featuresColIdx = colIdx;
+		final Set<PhoneDimension> dimensions = new LinkedHashSet<>();
+		
 		boolean includePlace =
 				(context.get(placeInputField) != null ? (Boolean)context.get(placeInputField) : isIncludePlace());
+		if(includePlace) {
+			dimensions.add(PhoneDimension.PLACE);
+		}
 		boolean includeManner =
 				(context.get(mannerInputField) != null ? (Boolean)context.get(mannerInputField) : isIncludeManner());
+		if(includeManner) {
+			dimensions.add(PhoneDimension.MANNER);
+		}
 		boolean includeVoicing =
 				(context.get(voicingInputField) != null? (Boolean)context.get(voicingInputField) : isIncludeVoicing());
+		if(includeVoicing) {
+			dimensions.add(PhoneDimension.VOICING);
+		}
 
 		boolean includeHeight =
 				(context.get(heightInputField) != null ? (Boolean)context.get(heightInputField) : isIncludeHeight());
+		if(includeHeight) {
+			dimensions.add(PhoneDimension.HEIGHT);
+		}
 		boolean includeBackness =
 				(context.get(backnessInputField) != null ? (Boolean)context.get(backnessInputField) : isIncludeBackness());
+		if(includeBackness) {
+			dimensions.add(PhoneDimension.BACKNESS);
+		}
 		boolean includeTenseness =
 				(context.get(tensenessInputField) != null ? (Boolean)context.get(tensenessInputField) : isIncludeTenseness());
+		if(includeTenseness) {
+			dimensions.add(PhoneDimension.TENSENESS);
+		}
 		boolean includeRounding =
 				(context.get(roundingInputField) != null ? (Boolean)context.get(roundingInputField) : isIncludeRounding());
+		if(includeRounding) {
+			dimensions.add(PhoneDimension.ROUNDING);
+		}
+		
+		dimensions.forEach((dim) -> {
+			outputTable.setColumnTitle(outputTable.getColumnCount(), "#Fs " + dim);
+			outputTable.setColumnTitle(outputTable.getColumnCount(), "Sim " + dim);
+		});
+		
+		outputTable.setColumnTitle(outputTable.getColumnCount(), "#Fs");
+		outputTable.setColumnTitle(outputTable.getColumnCount(), "Sim");
+		
 
 		for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
 			Object[] rowData = table.getRow(rowIdx);
@@ -144,11 +165,24 @@ public class PhoneSimilarity extends TableOpNode implements NodeSettings {
 			final IPATranscript ipaActual = (IPATranscript)rowData[actualColIdx];
 			final String alignment = (String)rowData[alignColIdx];
 
-			final FeatureSimilarity sim = calculateSimilarity(ipaTarget, ipaActual, alignment,
+			final Map<PhoneDimension, FeatureSimilarity> sim = calculateSimilarity(ipaTarget, ipaActual, alignment,
 					includePlace, includeManner, includeVoicing,
 					includeHeight, includeBackness, includeTenseness, includeRounding);
-			newRow[featuresColIdx] = new Integer(sim.numFeatures);
-			newRow[simColIdx] = (sim.numFeatures > 0 ? new Float((float)sim.numMatched/sim.numFeatures) : 0.0f);
+			
+			int totalFs = 0;
+			int totalMatched = 0;
+			colIdx = featuresColIdx;
+			for(PhoneDimension dim:dimensions) {
+				FeatureSimilarity s = sim.get(dim);
+				totalFs += s.numFeatures;
+				totalMatched += s.numMatched;
+				
+				newRow[colIdx++] = new Integer(s.numFeatures);
+				newRow[colIdx++] = (s.numFeatures > 0 ? new Float( ((float)s.numMatched / (float)s.numFeatures) * 100.0f ) : new Float(0.0f));
+			}
+			newRow[colIdx++] = new Integer(totalFs);
+			newRow[colIdx++] = (totalFs > 0 ? new Float( ((float)totalMatched/(float)totalFs) * 100.0f) : new Float(0.0f) );
+						
 			outputTable.addRow(newRow);
 		}
 
@@ -184,46 +218,74 @@ public class PhoneSimilarity extends TableOpNode implements NodeSettings {
 		return retVal;
 	}
 
-	private FeatureSimilarity calculateSimilarity(IPATranscript a, IPATranscript b, String alignment,
+	private Map<PhoneDimension, FeatureSimilarity> calculateSimilarity(IPATranscript a, IPATranscript b, String alignment,
 			boolean includePlace, boolean includeManner, boolean includeVoicing,
 			boolean includeHeight, boolean includeBackness, boolean includeTenseness, boolean includeRounding) {
 		final PhoneMap phoneMap = PhoneMap.fromString(a, b, alignment);
 
-		FeatureSimilarity retVal = new FeatureSimilarity();
-
+		final Map<PhoneDimension, FeatureSimilarity> retVal = new HashMap<>();
+		for(PhoneDimension dim:PhoneDimension.values())
+			retVal.put(dim, new FeatureSimilarity());
+		
 		for(int i = 0; i < phoneMap.getAlignmentLength(); i++) {
 			List<IPAElement> alignedEles = phoneMap.getAlignedElements(i);
-			FeatureSimilarity sim = calculateSimilarity(alignedEles.get(0), alignedEles.get(1),
+			Map<PhoneDimension, FeatureSimilarity> phoneSim = calculateSimilarity(alignedEles.get(0), alignedEles.get(1),
 					includePlace, includeManner, includeVoicing,
 					includeHeight, includeBackness, includeTenseness, includeRounding);
-			retVal.numFeatures += sim.numFeatures;
-			retVal.numMatched += sim.numMatched;
+			for(PhoneDimension dim:phoneSim.keySet()) {
+				FeatureSimilarity fs = retVal.get(dim);
+				FeatureSimilarity sim = phoneSim.get(dim);
+				
+				fs.numFeatures += sim.numFeatures;
+				fs.numMatched += sim.numMatched;
+			}
 		}
 
 		return retVal;
 	}
 
-	private FeatureSimilarity calculateSimilarity(IPAElement a, IPAElement b,
+	private Map<PhoneDimension, FeatureSimilarity> calculateSimilarity(IPAElement a, IPAElement b,
 			boolean includePlace, boolean includeManner, boolean includeVoicing,
 			boolean includeHeight, boolean includeBackness, boolean includeTenseness, boolean includeRounding) {
+		final Map<PhoneDimension, FeatureSimilarity> retVal = new HashMap<>();
+		
+		if(includePlace)
+			retVal.put(PhoneDimension.PLACE, calculateSimilarity(a, b, PhoneDimension.PLACE));
+		if(includeManner)
+			retVal.put(PhoneDimension.MANNER, calculateSimilarity(a, b, PhoneDimension.MANNER));
+		if(includeVoicing)
+			retVal.put(PhoneDimension.VOICING, calculateSimilarity(a, b, PhoneDimension.VOICING));
+		
+		if(includeHeight)
+			retVal.put(PhoneDimension.HEIGHT, calculateSimilarity(a, b, PhoneDimension.HEIGHT));
+		if(includeBackness)
+			retVal.put(PhoneDimension.BACKNESS, calculateSimilarity(a, b, PhoneDimension.BACKNESS));
+		if(includeTenseness)
+			retVal.put(PhoneDimension.TENSENESS, calculateSimilarity(a, b, PhoneDimension.TENSENESS));
+		if(includeRounding)
+			retVal.put(PhoneDimension.ROUNDING, calculateSimilarity(a, b, PhoneDimension.ROUNDING));
+		
+		return retVal;
+	}
+	
+	private FeatureSimilarity calculateSimilarity(IPAElement a, IPAElement b, PhoneDimension dim) {
 		FeatureSimilarity retVal = new FeatureSimilarity();
-		final FeatureSet allFeatures = getComparsionFeatures(includePlace, includeManner, includeVoicing,
-				includeHeight, includeBackness, includeTenseness, includeRounding);
+		
 		if(a == null || b == null) {
-			FeatureSet features = (a != null ? a.getFeatureSet() : b.getFeatureSet());
-			features = FeatureSet.intersect(features, allFeatures);
-
+			FeatureSet features = (a != null ? a.getFeatureSet() : b.getFeatureSet() );
+			features = FeatureSet.intersect(features, dim.getFeatures());
+			
 			retVal.numFeatures = features.size();
 		} else {
-			final FeatureSet aFeatures = FeatureSet.intersect(a.getFeatureSet(), allFeatures);
-			final FeatureSet bFeatures = FeatureSet.intersect(b.getFeatureSet(), allFeatures);
-
+			final FeatureSet aFeatures = FeatureSet.intersect(a.getFeatureSet(), dim.getFeatures());
+			final FeatureSet bFeatures = FeatureSet.intersect(b.getFeatureSet(), dim.getFeatures());
+			
 			final FeatureSet sameFeatures = FeatureSet.intersect(aFeatures, bFeatures);
-
+			
 			retVal.numFeatures = Math.max(aFeatures.size(), bFeatures.size());
 			retVal.numMatched = sameFeatures.size();
 		}
-
+		
 		return retVal;
 	}
 

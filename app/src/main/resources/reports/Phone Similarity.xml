@@ -123,9 +123,9 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="7eaf84778f524ae2" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="67334582">
+            <graph id="3ac255b9">
                 <ogcn:macro id="b25e38b33fe54a4f" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="49ffe58">
+                    <graph id="6f406f6a">
                         <node id="8eb73f49ac434947" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -214,7 +214,7 @@ function setup_params(params) {
                     <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeVoicing"><![CDATA[true]]></oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.table.PhoneSimilarity.includeTenseness"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="631" y="238"/>
+                <oga:meta x="532" y="277"/>
             </extensions>
         </node>
         <node id="6f7c2ffa" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
@@ -239,7 +239,7 @@ function setup_params(params) {
 #set($tableName = "$DATA")
 #set($table = $tables.get($tableName))
 #set($caption = "")
-#printTableWithIdAndCaptionExcludingColumns( $table $tableName $caption ["Group #", "Range", "Date", "Age", "Tier", "Result"] )
+#printTableWithIdAndCaptionExcludingColumns( $table $tableName $caption ["Group #", "Range", "Date", "Tier", "Result", "Alignment"] )
 ]]></oga:property>
                     <oga:property key="showText"><![CDATA[true]]></oga:property>
                     <oga:property key="showTable"><![CDATA[false]]></oga:property>
