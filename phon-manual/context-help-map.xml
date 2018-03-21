@@ -182,6 +182,12 @@
    <appContext helpID="concept_psh_xgn_gg" path="phonex/concepts/suffix.html"/>
    <appContext helpID="concept_jj4_ygn_gg" path="phonex/concepts/comb.html"/>
    <appContext helpID="concept_djv_zhg_dn" path="phonex/concepts/tone_plugin.html"/>
+   <appContext helpID="basic_phone_matching"
+               path="phonex/examples/example-consonants.html"/>
+   <appContext helpID="example_singleton_consonants"
+               path="phonex/examples/singleton_consonants.html"/>
+   <appContext helpID="example_consonant_clusters"
+               path="phonex/examples/consonant_clusters.html"/>
    <appContext helpID="taskId" path="query/tasks/QueryProject.html"/>
    <appContext helpID="taskId" path="query/tasks/SaveQueryScript.html"/>
    <appContext helpID="taskId" path="query/tasks/OpenQueryScript.html"/>
