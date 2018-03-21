@@ -221,7 +221,11 @@
             <topicref href="phonex/concepts/comb.dita"/>
             <topicref href="phonex/concepts/tone_plugin.dita"/>
         </topichead>
-        <topichead navtitle="Examples"/>
+        <topichead navtitle="Examples">
+            <topicref href="phonex/examples/example-consonants.md" format="markdown"/>
+            <topicref href="phonex/examples/singleton_consonants.md" format="markdown"/>
+            <topicref href="phonex/examples/consonant_clusters.md" format="markdown"/>
+        </topichead>
     </chapter>
     <chapter navtitle="Queries" audience="intermediate">
         <topicref href="query/tasks/QueryProject.xml"/>

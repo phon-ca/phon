@@ -10,7 +10,7 @@
    <title>Character matchers</title>
    <p>Character matchers are defined by simply typing the character for the desired phone. Character
     matchers will match any phone with the specified <i>base-character</i> - regardless of attached
-    diacritics. Characters can be also be written using their unicode values.</p>
+    diacritics. Characters may also be written using their unicode values.</p>
   </section>
   <example>
    <p>
