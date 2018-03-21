@@ -126,7 +126,11 @@ exports.PPCOptions = function (id, aligned) {
 					"Percent Phones Correct (PPC)", 
 					"Percent Correct (custom)"],
 		"colnames": ["PCC", "PCC", "PCC", "PVC", "PPC", "PC"],
-		"phonex": [ "\\c", "(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$", "\\c+\\s?\\c+", "\\v", "\\w" ],
+		"phonex": [ "\\c", 
+					"(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$", 
+					"(\\c<2,>)(?>\\s?\\v) || (\\c<2,>)$ || (\\c+[\\s\\.]\\c+)", 
+					"\\v", 
+					"\\w" ],
 		"def": 0,
 		"cols": 1,
 		"type": "radiobutton"
