@@ -45,6 +45,7 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 	@Override
 	public boolean follow(FSAState<IPAElement> currentState) {
 		boolean retVal = false;
+		matchLength = 0;
 
 		final IPATranscript transcript = new IPATranscript(currentState.getTape());
 		final List<IPATranscript> sylls = transcript.syllables();
@@ -62,11 +63,11 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		}
 
 		// edges
-		if(tapeIdx == 0 ||
-				tapeIdx == currentState.getTape().length) {
-			retVal = true;
-			matchLength = 0;
-		} else {
+//		if(tapeIdx == 0 ||
+//				tapeIdx == currentState.getTape().length) {
+//			retVal = true;
+//			matchLength = 0;
+//		} else {
 			final IPAElement p = currentState.getTape()[tapeIdx];
 		// punctuation
 			final PunctuationTest test = new PunctuationTest();
@@ -79,13 +80,16 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		// implicit syllable edges
 			if(!retVal) {
 				for(IPATranscript syll:sylls) {
-					if(p == syll.elementAt(0) || p == syll.elementAt(syll.length()-1)) {
+					if(p == syll.elementAt(0) && (getOffsetType() == OffsetType.NORMAL || getOffsetType() == OffsetType.LOOK_AHEAD)) {
+						retVal = true;
+						matchLength = 0;
+					} else if(p == syll.elementAt(syll.length()-1) && getOffsetType() == OffsetType.LOOK_BEHIND) {
 						retVal = true;
 						matchLength = 0;
 					}
 				}
 			}
-		}
+//		}
 
 		return retVal;
 	}
@@ -105,6 +109,8 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		SyllableBoundaryTransition retVal = new SyllableBoundaryTransition();
 		retVal.setFirstState(getFirstState());
 		retVal.setToState(getToState());
+		retVal.setType(getType());
+		retVal.setOffsetType(getOffsetType());
 		return retVal;
 	}
 
