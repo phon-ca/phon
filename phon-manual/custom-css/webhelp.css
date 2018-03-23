@@ -32,6 +32,10 @@
     padding: 1em 0 1em 0;
 }
 
+.pre {
+	margin-left: 1em;
+}
+
 /* 
  * Example of removing ToC item with given id
  * 

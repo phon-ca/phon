@@ -73,8 +73,7 @@
    <appContext helpID="taskId" path="editor/tasks/AddParticipant.html"/>
    <appContext helpID="taskId" path="editor/tasks/EditParticipants.html"/>
    <appContext helpID="taskId" path="editor/tasks/InputSessionLanguage.html"/>
-   <appContext helpID="view_tier_management"
-               path="editor/editor_view-tier_management.html"/>
+   <appContext helpID="view_tier_management" path="editor/editor_view-tier_management.html"/>
    <appContext helpID="taskId" path="editor/tasks/CreateUserDefinedTiers.html"/>
    <appContext helpID="taskId" path="editor/tasks/RemoveUserDefinedTiers.html"/>
    <appContext helpID="taskId" path="editor/tasks/EditTierDisplayOptions.html"/>
@@ -93,8 +92,7 @@
    <appContext helpID="taskId" path="editor/tasks/VerifyAlignment.html"/>
    <appContext helpID="conceptId" path="editor/concepts/AboutAlignment.html"/>
    <appContext helpID="taskId" path="editor/tasks/VerifySyllabification.html"/>
-   <appContext helpID="view_ipa_validation"
-               path="editor/editor_view-ipa_validation.html"/>
+   <appContext helpID="view_ipa_validation" path="editor/editor_view-ipa_validation.html"/>
    <appContext helpID="conceptId" path="editor/concepts/AboutBlindTranscription.html"/>
    <appContext helpID="taskId" path="editor/tasks/ValidateBlindTranscriptions.html"/>
    <appContext helpID="taskId" path="editor/tasks/Auto-validate.html"/>
@@ -109,8 +107,7 @@
    <appContext helpID="taskId" path="editor/tasks/PlayCustomSegment.html"/>
    <appContext helpID="taskId" path="editor/tasks/ExportMedia.html"/>
    <appContext helpID="taskId" path="editor/tasks/TakeSnapshot.html"/>
-   <appContext helpID="view_speech_analysis"
-               path="editor/editor_view-speech_analysis.html"/>
+   <appContext helpID="view_speech_analysis" path="editor/editor_view-speech_analysis.html"/>
    <appContext helpID="taskId" path="editor/tasks/ViewWaveform.html"/>
    <appContext helpID="taskId" path="editor/tasks/AdjustSegmentTimes.html"/>
    <appContext helpID="taskId" path="editor/tasks/ExportAudioSegment.html"/>
@@ -119,30 +116,22 @@
    <appContext helpID="concept_tj1_2nx_qp"
                path="praat-plugin/concepts/spectrogram_settings.html"/>
    <appContext helpID="task_myf_dpt_rp" path="praat-plugin/tasks/formant_listing.html"/>
-   <appContext helpID="concept_uwj_cnx_qp"
-               path="praat-plugin/concepts/formant_settings.html"/>
-   <appContext helpID="task_xq4_npt_rp"
-               path="praat-plugin/tasks/intensity_listing.html"/>
+   <appContext helpID="concept_uwj_cnx_qp" path="praat-plugin/concepts/formant_settings.html"/>
+   <appContext helpID="task_xq4_npt_rp" path="praat-plugin/tasks/intensity_listing.html"/>
    <appContext helpID="concept_kzy_cnx_qp"
                path="praat-plugin/concepts/intensity_settings.html"/>
    <appContext helpID="task_oby_gpt_rp" path="praat-plugin/tasks/pitch_listing.html"/>
-   <appContext helpID="concept_zqx_bnx_qp"
-               path="praat-plugin/concepts/pitch_settings.html"/>
-   <appContext helpID="concept_dj5_xmx_qp"
-               path="praat-plugin/concepts/textgrid_viewer.html"/>
-   <appContext helpID="task_qw3_1v4_rp"
-               path="praat-plugin/tasks/generate_textgrids.html"/>
-   <appContext helpID="task_g5w_st4_rp"
-               path="praat-plugin/tasks/import_textgrids.html"/>
-   <appContext helpID="task_wyb_sv4_rp"
-               path="praat-plugin/tasks/open_textgrid_in_praat.html"/>
+   <appContext helpID="concept_zqx_bnx_qp" path="praat-plugin/concepts/pitch_settings.html"/>
+   <appContext helpID="concept_dj5_xmx_qp" path="praat-plugin/concepts/textgrid_viewer.html"/>
+   <appContext helpID="task_qw3_1v4_rp" path="praat-plugin/tasks/generate_textgrids.html"/>
+   <appContext helpID="task_g5w_st4_rp" path="praat-plugin/tasks/import_textgrids.html"/>
+   <appContext helpID="task_wyb_sv4_rp" path="praat-plugin/tasks/open_textgrid_in_praat.html"/>
    <appContext helpID="view_segmentation" path="editor/editor_view-segmentation.html"/>
    <appContext helpID="taskId" path="editor/tasks/SegmentMedia.html"/>
    <appContext helpID="view_ipa_lookup" path="editor/editor_view-ipa_lookup.html"/>
    <appContext helpID="taskId" path="editor/tasks/Auto-transcribe.html"/>
    <appContext helpID="topic-1" path="editor/concepts/AboutIPALookupConsole.html"/>
-   <appContext helpID="view_find_replace"
-               path="editor/editor_view-find_and_replace.html"/>
+   <appContext helpID="view_find_replace" path="editor/editor_view-find_and_replace.html"/>
    <appContext helpID="taskId" path="editor/tasks/FindReplace.html"/>
    <appContext helpID="conceptId" path="ipamap/concepts/AboutIPAMap.html"/>
    <appContext helpID="taskId" path="ipamap/tasks/InputTextwithIPAMap.html"/>
@@ -171,23 +160,18 @@
    <appContext helpID="concept_2cb_tlm_gg" path="phonex/concepts/groups.html"/>
    <appContext helpID="concept_qb1_dhn_gg" path="phonex/concepts/boundaries.html"/>
    <appContext helpID="concept_ddz_ttt_gg" path="phonex/concepts/quantifiers.html"/>
-   <appContext helpID="concept_n15_2qc_sv"
-               path="phonex/concepts/lookahead-behind.html"/>
+   <appContext helpID="concept_n15_2qc_sv" path="phonex/concepts/lookahead-behind.html"/>
    <appContext helpID="concept_zkq_nnm_gg" path="phonex/concepts/plug-ins.html"/>
    <appContext helpID="concept_5w3_qnm_gg" path="phonex/concepts/stress.html"/>
    <appContext helpID="concept_33z_pnm_gg" path="phonex/concepts/sctype.html"/>
-   <appContext helpID="concept_wqv_w2g_dn"
-               path="phonex/concepts/diacritic_plugin.html"/>
+   <appContext helpID="concept_wqv_w2g_dn" path="phonex/concepts/diacritic_plugin.html"/>
    <appContext helpID="concept_qy2_wgn_gg" path="phonex/concepts/prefix.html"/>
    <appContext helpID="concept_psh_xgn_gg" path="phonex/concepts/suffix.html"/>
    <appContext helpID="concept_jj4_ygn_gg" path="phonex/concepts/comb.html"/>
    <appContext helpID="concept_djv_zhg_dn" path="phonex/concepts/tone_plugin.html"/>
-   <appContext helpID="basic_phone_matching"
-               path="phonex/examples/example-consonants.html"/>
-   <appContext helpID="example_singleton_consonants"
-               path="phonex/examples/singleton_consonants.html"/>
-   <appContext helpID="example_consonant_clusters"
-               path="phonex/examples/consonant_clusters.html"/>
+   <appContext helpID="basic_phone_matching" path="phonex/examples/example-consonants.html"/>
+   <appContext helpID="singleton_consonants" path="phonex/examples/singleton_consonants.html"/>
+   <appContext helpID="consonant_clusters" path="phonex/examples/consonant_clusters.html"/>
    <appContext helpID="taskId" path="query/tasks/QueryProject.html"/>
    <appContext helpID="taskId" path="query/tasks/SaveQueryScript.html"/>
    <appContext helpID="taskId" path="query/tasks/OpenQueryScript.html"/>
@@ -199,8 +183,7 @@
    <appContext helpID="taskId" path="query/tasks/ParticipantFilter.html"/>
    <appContext helpID="query_data_tiers" path="query/query-data_tiers.html"/>
    <appContext helpID="query_phones" path="query/query_phones.html"/>
-   <appContext helpID="query_segmental_relations"
-               path="query/query_segmental_relations.html"/>
+   <appContext helpID="query_segmental_relations" path="query/query_segmental_relations.html"/>
    <appContext helpID="taskId" path="query/tasks/ViewResultSet.html"/>
    <appContext helpID="taskId" path="query/tasks/SaveTableAsCSV.html"/>
    <appContext helpID="taskId" path="query/tasks/EditTableColumns.html"/>
@@ -211,8 +194,7 @@
    <appContext helpID="taskId" path="history/tasks/EditQueryDetails.html"/>
    <appContext helpID="conceptId" path="history/concepts/AboutStarredQueries.html"/>
    <appContext helpID="about_query_reports" path="report/AboutQueryReports.html"/>
-   <appContext helpID="report_aggregate_ipa_results"
-               path="report/report-aggregate_IPA.html"/>
+   <appContext helpID="report_aggregate_ipa_results" path="report/report-aggregate_IPA.html"/>
    <appContext helpID="report_aggregate_non_ipa_results"
                path="report/report-aggregate_non-IPA.html"/>
    <appContext helpID="report_inventory_by_session_ipa_results"
@@ -220,26 +202,21 @@
    <appContext helpID="report_inventory_by_session_non_ipa_results"
                path="report/report-inventory_by_session_non-IPA.html"/>
    <appContext helpID="report_listing" path="report/report-listing.html"/>
-   <appContext helpID="report_listing_by_session"
-               path="report/report-listing_by_session.html"/>
-   <appContext helpID="report_phone_similarity"
-               path="report/report-phone_similarity.html"/>
+   <appContext helpID="report_listing_by_session" path="report/report-listing_by_session.html"/>
+   <appContext helpID="report_phone_similarity" path="report/report-phone_similarity.html"/>
    <appContext helpID="report_transcript_variability"
                path="report/report-transcript_variability.html"/>
-   <appContext helpID="report_query_information"
-               path="report/report-query_information.html"/>
+   <appContext helpID="report_query_information" path="report/report-query_information.html"/>
    <appContext helpID="acoustic_data_reports" path="report/acoustic_data_reports.html"/>
    <appContext helpID="report_duration" path="report/report-duration.html"/>
    <appContext helpID="report_intensity" path="report/report-intensity.html"/>
    <appContext helpID="report_pitch" path="report/report-pitch.html"/>
    <appContext helpID="report_formants" path="report/report-formants.html"/>
-   <appContext helpID="report_spectral_moments"
-               path="report/report-spectral_moments.html"/>
+   <appContext helpID="report_spectral_moments" path="report/report-spectral_moments.html"/>
    <appContext helpID="custom_reports_using_composer_simple"
                path="report/report_composer.html"/>
    <appContext helpID="analysis_ppc" path="analysis/PPC.html"/>
-   <appContext helpID="analysis_phone_inventory"
-               path="analysis/Phone%20Inventory.html"/>
+   <appContext helpID="analysis_phone_inventory" path="analysis/Phone%20Inventory.html"/>
    <appContext helpID="analyses_phonological_processes"
                path="analysis/Phonological%20Processes.html"/>
    <appContext helpID="analysis_phonological_mean_length_of_utterance_pmlu"
