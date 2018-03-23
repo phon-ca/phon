@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="19.0">
+<project version="20.0">
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="19.0" xml:space="preserve">
+            <serialized version="20.0" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>enable.project.master.files.support</String>
@@ -301,6 +301,9 @@
                                 <field name="webhelpResponsiveTemplate">
                                     <null/>
                                 </field>
+                                <field name="publishingTemplateDataPO">
+                                    <null/>
+                                </field>
                                 <field name="additionalAntArgs">
                                     <String></String>
                                 </field>
@@ -517,6 +520,9 @@
                                     <null/>
                                 </field>
                                 <field name="webhelpResponsiveTemplate">
+                                    <null/>
+                                </field>
+                                <field name="publishingTemplateDataPO">
                                     <null/>
                                 </field>
                                 <field name="additionalAntArgs">
@@ -788,6 +794,9 @@
                                         </field>
                                     </webhelpTemplate>
                                 </field>
+                                <field name="publishingTemplateDataPO">
+                                    <null/>
+                                </field>
                                 <field name="additionalAntArgs">
                                     <String></String>
                                 </field>
@@ -854,29 +863,6 @@
                                         </ditaParameter>
                                         <ditaParameter>
                                             <field name="name">
-                                                <String>webhelp.copyright</String>
-                                            </field>
-                                            <field name="description">
-                                                <null/>
-                                            </field>
-                                            <field name="value">
-                                                <String>(C) 2018 The Phon Project</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>0</Integer>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <null/>
-                                            </field>
-                                            <field name="possibleValuesDescriptions">
-                                                <null/>
-                                            </field>
-                                        </ditaParameter>
-                                        <ditaParameter>
-                                            <field name="name">
                                                 <String>webhelp.custom.resources</String>
                                             </field>
                                             <field name="description">
@@ -932,18 +918,20 @@
                                                 <String>4</String>
                                             </field>
                                             <field name="defaultValue">
-                                                <String>2</String>
+                                                <String>3</String>
                                             </field>
                                             <field name="type">
                                                 <Integer>0</Integer>
                                             </field>
                                             <field name="possibleValues">
                                                 <String-array>
-                                                    <String>2</String>
+                                                    <String>0</String>
+                                                    <String>3</String>
                                                 </String-array>
                                             </field>
                                             <field name="possibleValuesDescriptions">
                                                 <String-array>
+                                                    <String>The menu has unlimited depth.</String>
                                                     <String></String>
                                                 </String-array>
                                             </field>
@@ -1000,6 +988,29 @@
                                                 <String-array>
                                                     <String></String>
                                                 </String-array>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>webhelp.copyright</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>(C) 2018 The Phon Project</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>0</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <null/>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <null/>
                                             </field>
                                         </ditaParameter>
                                     </list>
