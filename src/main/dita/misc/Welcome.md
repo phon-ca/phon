@@ -24,11 +24,11 @@ All of these functions are accessible through a user-friendly graphical interfac
  * [Windows (32-bit) (installer)](https://github.com/phon-ca/phon/releases/download/2.1.8/Phon_windows_2_1_8.exe) | [Windows (32-bit) (zip)](https://github.com/phon-ca/phon/releases/download/2.1.8/Phon_windows_2_1_8.zip) 
  * [Linux (64-bit) (tgz)](https://github.com/phon-ca/phon/releases/download/2.1.8/Phon_unix_2_1_8.tar.gz)
   
-### Phon 2.2.0b21 (Current beta)
+### Phon 2.2.0b24 (Current beta)
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/2.2.0b21/Phon_macos_2_2_0b21.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/2.2.0b21/Phon_windows-x64_2_2_0b21.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/2.2.0b21/Phon_windows-x64_2_2_0b21.zip) 
- * [Windows (32-bit) (installer)](https://github.com/phon-ca/phon/releases/download/2.2.0b21/Phon_windows_2_2_0b21.exe) | [Windows (32-bit) (zip)](https://github.com/phon-ca/phon/releases/download/2.2.0b21/Phon_windows_2_2_0b21.zip)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/2.2.0b24/Phon_macos_2_2_0b24.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/2.2.0b24/Phon_windows-x64_2_2_0b24.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/2.2.0b24/Phon_windows-x64_2_2_0b24.zip) 
+ * [Windows (32-bit) (installer)](https://github.com/phon-ca/phon/releases/download/2.2.0b24/Phon_windows_2_2_0b24.exe) | [Windows (32-bit) (zip)](https://github.com/phon-ca/phon/releases/download/2.2.0b24/Phon_windows_2_2_0b24.zip)
 
 ## Other Information 
 
