@@ -12,13 +12,13 @@ import ca.phon.util.OpenFileLauncher;
 
 @PhonPlugin(author="Greg J. Hedlund", comments="Add manual items to Help menu", minPhonVersion="2.2.0", name="HelpMenuHandler", version="1")
 public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
-	
+
 	// use github pages mirror
 	private final static String WEBSITE_ROOT = "http://phon-ca.github.io/phon/";
 
-	
+
 	private final static String ONLINE_MANUAL = "phon-manual/misc/Welcome.html";
-	
+
 	public HelpMenuHandler() {
 	}
 
@@ -31,16 +31,16 @@ public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint
 			}
 		}
 		assert menu != null;
-	
+
 		final String path = WEBSITE_ROOT + ONLINE_MANUAL;
-		final PhonUIAction showOnlineManualAct = new PhonUIAction(this, "showOnlineManual", path);
+		final PhonUIAction showOnlineManualAct = new PhonUIAction(HelpMenuHandler.class, "showOnlineManual", path);
 		showOnlineManualAct.putValue(PhonUIAction.NAME, "Show manual (online)...");
 		showOnlineManualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, path);
-		
+
 		menu.add(new JMenuItem(showOnlineManualAct), 0);
 	}
-	
-	public void showOnlineManual(String path) {
+
+	public static void showOnlineManual(String path) {
 		try {
 			OpenFileLauncher.openURL(new URL(path));
 		} catch (MalformedURLException e) {
@@ -56,5 +56,5 @@ public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint
 	public IPluginExtensionFactory<IPluginMenuFilter> getFactory() {
 		return (args) -> this;
 	}
-	
+
 }
