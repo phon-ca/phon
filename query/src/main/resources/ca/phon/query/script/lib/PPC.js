@@ -52,14 +52,14 @@ exports.PPC = {
 		var actualGroup = (group.getIPAActual() == null ? new IPATranscript(): group.getIPAActual());
 		var alignment = group.getPhoneAlignment();
 
- 
+
 		// check target side
 		var targetResults = filter.find_pattern(targetGroup);
 		for(var i = 0; i < targetResults.length; i++) {
 			var targetResult = targetResults[i];
 			var audiblePhones = targetResult.value.audiblePhones();
 			numTarget += audiblePhones.length();
-			
+
 			for(var j = 0; j < audiblePhones.length(); j++) {
 				var phone = audiblePhones.elementAt(j);
 				var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
@@ -84,13 +84,13 @@ exports.PPC = {
 				}
 			}
 		}
-		
+
 		var actualResults = filter.find_pattern(actualGroup);
 		for(var i = 0; i < actualResults.length; i++) {
 			var actualResult = actualResults[i];
 			var audiblePhones = actualResult.value.audiblePhones();
 			numActual += audiblePhones.length();
-			
+
 			for(var j = 0; j < audiblePhones.length(); j++) {
 				var phone = audiblePhones.elementAt(j);
 				var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
@@ -115,21 +115,21 @@ exports.PPC = {
 exports.PPCOptions = function (id, aligned) {
 
 	this.pattern = new PatternFilter(id + ".pattern");
-	
+
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
 		"choices": ["Percent Consonants Correct (PCC)",
 					"Percent Singleton Consonants Correct (PCC)",
 					"Percent Cluster Consonants Correct (PCC)",
-					"Percent Vowels Correct (PVC)", 
-					"Percent Phones Correct (PPC)", 
+					"Percent Vowels Correct (PVC)",
+					"Percent Phones Correct (PPC)",
 					"Percent Correct (custom)"],
 		"colnames": ["PCC", "PCC", "PCC", "PVC", "PPC", "PC"],
-		"phonex": [ "\\c", 
-					"(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$", 
-					"(\\c<2,>)(?>\\s?\\v) || (\\c<2,>)$ || (\\c+[\\s\\.]\\c+)", 
-					"\\v", 
+		"phonex": [ "\\c",
+					"see singletonTypeParamInfo",
+					"see clusterTypeParamInfo",
+					"\\v",
 					"\\w" ],
 		"def": 0,
 		"cols": 1,
@@ -138,7 +138,41 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParam;
 	this.ppcTypeParameter;
 	this.ppcType = { index:0, toString: function() { return ppcTypeParamInfo.choices[0]; } };
-	
+
+	var singletonTypeParamInfo = {
+	    "id": id + ".singletonType",
+		"title": "Singleton type:",
+		"choices": ["All singleton consonants",
+					"Singleton onsets",
+					"Singleton codas"],
+		"phonex": [ "(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$",
+		            "(?<^\\s?)(\\c:sctype(\"Onset|OEHS\"))$ || (?<\\S)(\\c:O)(?>\\v)",
+		            "(?<^\\s?)(\\c:C)$ || (?<\\v)(\\c:C)(?>\\S)" ],
+		"def": 0,
+		"cols": 0,
+		"type": "radiobutton"
+	};
+	var singletonTypeParam;
+	this.singletonTypeParameter;
+	this.singletonType = { index:0, toString: function() { return singletonTypeParamInfo.choices[0]; } };
+
+	var clusterTypeParamInfo = {
+	    "id": id + ".clusterType",
+		"title": "Cluster type:",
+		"choices": ["All clusters",
+					"Tautosyllabic clusters",
+					"Heterosyllabic clusters"],
+		"phonex": [ "(\\c<2,>)(?>\\s?\\v) || (\\c<2,>)$ || (\\c+[\\s\\.]\\c+)",
+		            "(\\c:sctype(\"LeftAppendix|Onset|OEHS\")<2,>) || (\\c:sctype(\"Coda|RightAppendix\")<2,>)",
+		            "(\\c+\\S\\c+)" ],
+		"def": 0,
+		"cols": 0,
+		"type": "radiobutton"
+	};
+	var clusterTypeParam;
+	this.clusterTypeParameter;
+	this.clusterType = { index:0, toString: function() { return clusterTypeParamInfo.choices[0]; } };
+
 	var ignoreDiacriticsParamInfo = {
 		"id": id +(".ignoreDiacritics"),
 		"title": "",
@@ -147,11 +181,11 @@ exports.PPCOptions = function (id, aligned) {
 	};
 	var ignoreDiacriticsParam;
 	this.ignoreDicacritics = ignoreDiacriticsParamInfo.def;
-	
+
 	this.getColumnName = function () {
 		return ppcTypeParamInfo.colnames[ppcTypeParam.getValue(ppcTypeParamInfo.id).index];
 	};
-	
+
 	this.param_setup = function (params) {
 		ppcTypeParam = new EnumScriptParam(
 			ppcTypeParamInfo.id,
@@ -161,22 +195,55 @@ exports.PPCOptions = function (id, aligned) {
 			ppcTypeParamInfo.type,
 			ppcTypeParamInfo.cols);
 		this.ppcTypeParameter = ppcTypeParam;
-	
+		params.add(ppcTypeParam);
+
+		singletonTypeParam = new EnumScriptParam(
+		    singletonTypeParamInfo.id,
+		    singletonTypeParamInfo.title,
+		    singletonTypeParamInfo.def,
+		    singletonTypeParamInfo.choices,
+		    singletonTypeParamInfo.type,
+		    singletonTypeParamInfo.cols);
+		singletonTypeParam.setVisible(false);
+		singletonTypeParam.addPropertyChangeListener(singletonTypeParamInfo.id, new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				var idx = e.source.getValue(e.source.paramId).index;
+                patternFilter.setPattern(singletonTypeParamInfo.phonex[idx]);
+			}
+		});
+		this.singletonTypeParameters = singletonTypeParam;
+		params.add(singletonTypeParam);
+
+		clusterTypeParam = new EnumScriptParam(
+		    clusterTypeParamInfo.id,
+		    clusterTypeParamInfo.title,
+		    clusterTypeParamInfo.def,
+		    clusterTypeParamInfo.choices,
+		    clusterTypeParamInfo.type,
+		    clusterTypeParamInfo.cols);
+		clusterTypeParam.setVisible(false);
+		clusterTypeParam.addPropertyChangeListener(clusterTypeParamInfo.id, new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				var idx = e.source.getValue(e.source.paramId).index;
+                patternFilter.setPattern(clusterTypeParamInfo.phonex[idx]);
+			}
+		});
+		this.clusterTypeParameter = clusterTypeParam;
+	    params.add(clusterTypeParam);
+
 		ignoreDiacriticsParam = new BooleanScriptParam(
 			ignoreDiacriticsParamInfo.id,
 			ignoreDiacriticsParamInfo.desc,
 			ignoreDiacriticsParamInfo.title,
 			ignoreDiacriticsParamInfo.def);
-			
-		params.add(ppcTypeParam);
-		
+
 		var patternParams = new java.util.ArrayList();
 		this.pattern.setSelectedPatternType(PatternType.PHONEX);
 		this.pattern.param_setup(patternParams);
 		//this.pattern.setExactMatch(true);
 		this.pattern.set_required(true);
 		params.add(patternParams.get(1));
-		
+
 		// setup listeners
 		var patternFilter = this.pattern;
 		patternFilter.setEnabled(false);
@@ -184,15 +251,38 @@ exports.PPCOptions = function (id, aligned) {
 		ppcTypeParam.addPropertyChangeListener(ppcTypeParamInfo.id, new java.beans.PropertyChangeListener() {
 			propertyChange: function(e) {
 				var idx = e.source.getValue(e.source.paramId).index;
-				
+
 				if(idx < 5) {
-					patternFilter.setPattern(ppcTypeParamInfo.phonex[idx]);
-					patternFilter.setEnabled(false);
+    				patternFilter.setEnabled(false);
+				    if(idx == 1) {
+				        patternFilter.setPattern(singletonTypeParamInfo.phonex[singletonTypeParam.getValue(singletonTypeParam.paramId).index]);
+				    } else if(idx == 2) {
+				        patternFilter.setPattern(clusterTypeParamInfo.phonex[clusterTypeParam.getValue(clusterTypeParam.paramId).index]);
+				    } else {
+    					patternFilter.setPattern(ppcTypeParamInfo.phonex[idx]);
+					}
 				} else
 					patternFilter.setEnabled(true);
+
+			    switch(idx) {
+			    case 1:
+			        singletonTypeParam.setVisible(true);
+			        clusterTypeParam.setVisible(false);
+			        break;
+
+			    case 2:
+			        singletonTypeParam.setVisible(false);
+			        clusterTypeParam.setVisible(true);
+			        break;
+
+			    default:
+			        singletonTypeParam.setVisible(false);
+			        clusterTypeParam.setVisible(false);
+			    };
 			}
 		});
+
 		params.add(ignoreDiacriticsParam);
 	};
-	
+
 };

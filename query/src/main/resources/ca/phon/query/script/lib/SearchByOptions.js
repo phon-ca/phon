@@ -7,23 +7,23 @@ exports.SearchByOptions = function(id) {
 		"desc":[ "Plain text", "Regular expression", "Phonex", "Stress pattern", "CGV pattern"],
 		"def": 0
 	};
-	
+
     var searchByParamInfo = {
         "id" : id + ".searchBy",
         "title": "Search by",
         "desc": [ "Group", "Word" ],
         "def": 0,
         "type": "radiobutton",
-        "cols": 3
+        "cols": 0
     };
     var searchByParam;
     this.searchBy = {
         "index": 0,
         "toString": "Group"
     };
-    
+
     this.includeSyllableOption = false;
-    
+
     var thenBySyllableParamInfo = {
         "id": id + ".searchBySyllable",
         "title": "",
@@ -32,17 +32,17 @@ exports.SearchByOptions = function(id) {
     };
     var thenBySyllableParam;
     this.thenBySyllable = thenBySyllableParamInfo.def;
-    
+
     // these params are given during param_setup and references are kept here
     this.searchByWordParam = null;
     this.searchBySyllableParam = null;
-    
+
     this.param_setup = function(params, searchByWordParam, searchBySyllableParam, index) {
         this.searchByWordParam = searchByWordParam;
         this.searchBySyllableParam = searchBySyllableParam;
-        
+
         if(index < 0) index = params.size();
-        
+
         searchByParam = new EnumScriptParam(
             searchByParamInfo.id,
             searchByParamInfo.title,
@@ -53,7 +53,7 @@ exports.SearchByOptions = function(id) {
         if(searchByWordParam && searchByWordParam.getValue(searchByWordParam.getParamId()) == true) {
             searchByParam.setValue(searchByParamInfo.id, new java.lang.Integer(1));
         }
-        
+
         var searchByWordListener = new java.beans.PropertyChangeListener() {
             propertyChange: function (e) {
                 var isSearchByWord = searchByWordParam.getValue(searchByWordParam.getParamId());
@@ -62,7 +62,7 @@ exports.SearchByOptions = function(id) {
             }
         };
         searchByWordParam.addPropertyChangeListener(searchByWordParam.getParamId(), searchByWordListener);
-        
+
         var searchByParamListener = new java.beans.PropertyChangeListener() {
 			propertyChange: function (e) {
 		        if(searchByWordParam) {
@@ -72,7 +72,7 @@ exports.SearchByOptions = function(id) {
 	    };
         searchByParam.addPropertyChangeListener(searchByParamInfo.id, searchByParamListener);
         params.add(index++, searchByParam);
-        
+
         if(this.includeSyllableOption == true && searchBySyllableParam) {
             thenBySyllableParam = new BooleanScriptParam(
                 thenBySyllableParamInfo.id,
@@ -80,24 +80,24 @@ exports.SearchByOptions = function(id) {
                 thenBySyllableParamInfo.title,
                 thenBySyllableParamInfo.def);
             params.add(index++, thenBySyllableParam);
-            
+
             var searchBySyllListener = new java.beans.PropertyChangeListener() {
                 propertyChange: function (e) {
-                    thenBySyllableParam.setValue(thenBySyllableParamInfo.id, searchBySyllableParam.getValue(searchBySyllableParam.getParamId()));   
+                    thenBySyllableParam.setValue(thenBySyllableParamInfo.id, searchBySyllableParam.getValue(searchBySyllableParam.getParamId()));
                 }
             };
             searchBySyllableParam.addPropertyChangeListener(searchBySyllableParam.getParamId(), searchBySyllListener);
-            
+
             var thenBySyllableListener = new java.beans.PropertyChangeListener() {
                 propertyChange: function (e) {
                     if(searchBySyllableParam) {
-                        searchBySyllableParam.setValue(searchBySyllableParam.getParamId(), 
+                        searchBySyllableParam.setValue(searchBySyllableParam.getParamId(),
                             thenBySyllableParam.getValue(thenBySyllableParamInfo.id));
                     }
-                }  
+                }
             };
             thenBySyllableParam.addPropertyChangeListener(thenBySyllableListener);
         }
     };
-    
+
 };

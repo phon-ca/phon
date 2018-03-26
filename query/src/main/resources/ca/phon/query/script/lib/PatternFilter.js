@@ -67,7 +67,7 @@ exports.PatternFilter = function (id) {
 		"title": "",
 		"desc":[ "Case sensitive", "Exact match", "Allow overlapping matches"],
 		"def":[ false, false, false],
-		"numCols": 3
+		"numCols": 0
 	};
 	var matchGroupParam;
 	this.caseSensitive = matchGroupParamInfo.def[0];
@@ -345,9 +345,9 @@ exports.PatternFilter = function (id) {
 			}
 		};
 		filterTypeParam.addPropertyChangeListener(filterTypeParamInfo.id, filterTypeListener);
-		this.filterType = 
+		this.filterType =
 			{ "index": filterTypeParamInfo.def, "toString": function () { return filterTypeParamInfo.desc[filterTypeParamInfo.def]; } };
-			
+
 		var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
 		helpLabelParam = new LabelScriptParam(
 		helpLabelDesc,
