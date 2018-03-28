@@ -290,8 +290,7 @@
         <topicref href="analysis/analysis_composer.md" format="markdown"/>
     </chapter>
     <chapter navtitle="CHAT Support">
-        <topichead navtitle="Main Line Coding">
-            <topicref href="chat/markers.md" format="markdown"/>
-        </topichead>
+        <topicref href="chat/phontalk.md" format="markdown"/>
+        <topicref href="chat/main_line.md" format="markdown"/>
     </chapter>
 </bookmap>
