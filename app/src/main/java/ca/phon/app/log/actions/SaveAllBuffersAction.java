@@ -32,6 +32,7 @@ import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 
 public class SaveAllBuffersAction extends HookableAction {
 
@@ -72,24 +73,29 @@ public class SaveAllBuffersAction extends HookableAction {
 			@SuppressWarnings("unchecked")
 			final List<String> selectedFolders = (List<String>)e.getDialogData();
 			if(selectedFolders != null && selectedFolders.size() > 0) {
-				for(String bufferName:buffers.getBufferNames()) {
-					final BufferPanel bufferPanel = buffers.getBuffer(bufferName);
-					final LogBuffer logBuffer = bufferPanel.getLogBuffer();
-					final File bufferFile = new File(selectedFolders.get(0), bufferName + "." + bufferPanel.getDefaultExtension());
-					try {
-						final FileOutputStream out = new FileOutputStream(bufferFile);
-						final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
-						writer.write(logBuffer.getText());
-						writer.flush();
-						writer.close();
-					} catch (IOException ex) {
-						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-						ToastFactory.makeToast(ex.getLocalizedMessage()).start(logBuffer);
-					}
-				}
+				final String folder = selectedFolders.get(0);
+				PhonWorker.getInstance().invokeLater(() -> saveBuffers(folder));
 			}
 		});
 		NativeDialogs.showSaveDialog(props);
 	}
 
+	private void saveBuffers(String saveFolder) {
+		for(String bufferName:buffers.getBufferNames()) {
+			final BufferPanel bufferPanel = buffers.getBuffer(bufferName);
+			final LogBuffer logBuffer = bufferPanel.getLogBuffer();
+			final File bufferFile = new File(saveFolder, bufferName + "." + bufferPanel.getDefaultExtension());
+			try {
+				final FileOutputStream out = new FileOutputStream(bufferFile);
+				final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
+				writer.write(logBuffer.getText());
+				writer.flush();
+				writer.close();
+			} catch (IOException ex) {
+				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+				ToastFactory.makeToast(ex.getLocalizedMessage()).start(logBuffer);
+			}
+		}
+	}
+	
 }

@@ -28,6 +28,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 
 public class SaveLogBufferAction extends HookableAction {
 	
@@ -60,24 +61,27 @@ public class SaveLogBufferAction extends HookableAction {
 			props.setInitialFile(logBuffer.getBufferName() + ".txt");
 			
 			props.setListener( (e) -> {
-				final String bufferFile = (e.getDialogData() != null ? e.getDialogData().toString() : null);
-				if(bufferFile != null) {
-					try {
-						final FileOutputStream out = new FileOutputStream(new File(bufferFile));
-						final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
-						writer.write(logBuffer.getText());
-						writer.flush();
-						writer.close();
-					} catch (IOException ex) {
-						LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-						ToastFactory.makeToast(ex.getLocalizedMessage()).start(logBuffer);
-					}
+				if(e.getDialogData() != null) {
+					final String saveAs = e.getDialogData().toString();
+					PhonWorker.getInstance().invokeLater(() -> saveBuffer(saveAs));
 				}
-				
 			});
 			
 			NativeDialogs.showSaveDialog(props);
 		}
 	}
 
+	private void saveBuffer(String saveAs) {
+		try {
+			final FileOutputStream out = new FileOutputStream(new File(saveAs));
+			final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
+			writer.write(logBuffer.getText());
+			writer.flush();
+			writer.close();
+		} catch (IOException ex) {
+			LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			ToastFactory.makeToast(ex.getLocalizedMessage()).start(logBuffer);
+		}
+	}
+	
 }

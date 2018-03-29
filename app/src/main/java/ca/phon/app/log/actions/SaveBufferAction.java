@@ -30,6 +30,7 @@ import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 
 public class SaveBufferAction extends HookableAction {
 
@@ -90,25 +91,36 @@ public class SaveBufferAction extends HookableAction {
 		props.setListener( (e) -> {
 			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION && e.getDialogData() != null) {
 				final String saveAs = e.getDialogData().toString();
-
-				try {
-					if(panel.isShowingBuffer() || panel.isShowingHtml()) {
-						panel.writeToTextFile(saveAs, "UTF-8");
-					} else if(panel.isShowingTable()) {
-						panel.writeToCSV(saveAs, "UTF-8");
-					}
-
-					if(this.container.isOpenAfterSaving()) {
-						OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
-					}
-				} catch (IOException ex) {
-					Toolkit.getDefaultToolkit().beep();
-					LogUtil.severe(ex);
-				}
+				PhonWorker.getInstance().invokeLater( () -> save(saveAs) );
 			}
 		});
 
 		NativeDialogs.showSaveDialog(props);
+	}
+	
+	private void save(String saveAs) {
+		final BufferPanel panel =
+				(this.bufferName == null ? this.container.getCurrentBuffer()
+						: this.container.getBuffer(bufferName));
+		if(panel == null) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		
+		try {
+			if(panel.isShowingBuffer() || panel.isShowingHtml()) {
+				panel.writeToTextFile(saveAs, "UTF-8");
+			} else if(panel.isShowingTable()) {
+				panel.writeToCSV(saveAs, "UTF-8");
+			}
+
+			if(this.container.isOpenAfterSaving()) {
+				OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
+			}
+		} catch (IOException ex) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(ex);
+		}
 	}
 
 }

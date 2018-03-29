@@ -10,6 +10,7 @@ import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
 import jxl.write.*;
 
@@ -48,31 +49,29 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION
 					&& e.getDialogData() != null) {
 				final String saveAs = e.getDialogData().toString();
-				try {
-					WritableWorkbook workbook = saveTablesToWorkbook(buffers, saveAs);
-					workbook.close();
-				} catch (IOException | WriteException ex) {
-					Toolkit.getDefaultToolkit().beep();
-					LogUtil.severe(ex);
-				}
+				PhonWorker.getInstance().invokeLater( () -> saveTablesToWorkbook(buffers, saveAs) );
 			}
 		});
 		NativeDialogs.showSaveDialog(props);
 	}
 	
-	public WritableWorkbook saveTablesToWorkbook(BufferPanelContainer buffers, String saveAs) 
-			throws IOException, WriteException {
-		final WritableWorkbook retVal = Workbook.createWorkbook(new File(saveAs));
-		
-		for(String bufferName:buffers.getBufferNames()) {
-			final BufferPanel bp = buffers.getBuffer(bufferName);
-			if(bp.isShowingTable()) {
-				bp.createSheetInExcelWorkbook(retVal);
+	public void saveTablesToWorkbook(BufferPanelContainer buffers, String saveAs) {
+		try {
+			final WritableWorkbook retVal = Workbook.createWorkbook(new File(saveAs));
+			
+			for(String bufferName:buffers.getBufferNames()) {
+				final BufferPanel bp = buffers.getBuffer(bufferName);
+				if(bp.isShowingTable()) {
+					bp.createSheetInExcelWorkbook(retVal);
+				}
 			}
+			
+			retVal.write();
+			retVal.close();
+		} catch (IOException | WriteException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(e);
 		}
-		
-		retVal.write();
-		return retVal;
 	}
 
 }

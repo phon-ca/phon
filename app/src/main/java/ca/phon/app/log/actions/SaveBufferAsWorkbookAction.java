@@ -13,6 +13,7 @@ import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
 import jxl.write.*;
 
@@ -62,28 +63,41 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 		props.setListener( (e) -> {
 			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION && e.getDialogData() != null) {
 				final String saveAs = e.getDialogData().toString();
-				try {
-					final WritableWorkbook workbook = Workbook.createWorkbook(new File(saveAs));
-					if(panel.isShowingTable()) {
-						panel.createSheetInExcelWorkbook(workbook);
-					} else if(panel.isShowingHtml()) {
-						String html = panel.getLogBuffer().getText();
-						final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter((MultiBufferPanel)this.container);
-						writer.writeToWorkbook(workbook, html);
-					}
-					workbook.write();
-					workbook.close();
-
-					if(this.container.isOpenAfterSaving()) {
-						OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
-					}
-				} catch (IOException | WriteException ex) {
-					Toolkit.getDefaultToolkit().beep();
-					LogUtil.severe(ex);
-				}
+				PhonWorker.getInstance().invokeLater( () -> saveWorkbook(saveAs) );
 			}
 		});
 
 		NativeDialogs.showSaveDialog(props);
 	}
+	
+	private void saveWorkbook(String saveAs) {
+		final BufferPanel panel =
+				(this.bufferName == null ? this.container.getCurrentBuffer()
+						: this.container.getBuffer(bufferName));
+		if(panel == null) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		
+		try {
+			final WritableWorkbook workbook = Workbook.createWorkbook(new File(saveAs));
+			if(panel.isShowingTable()) {
+				panel.createSheetInExcelWorkbook(workbook);
+			} else if(panel.isShowingHtml()) {
+				String html = panel.getLogBuffer().getText();
+				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter((MultiBufferPanel)this.container);
+				writer.writeToWorkbook(workbook, html);
+			}
+			workbook.write();
+			workbook.close();
+
+			if(this.container.isOpenAfterSaving()) {
+				OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
+			}
+		} catch (IOException | WriteException ex) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(ex);
+		}
+	}
+	
 }
