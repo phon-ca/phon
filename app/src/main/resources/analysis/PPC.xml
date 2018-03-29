@@ -80,19 +80,7 @@ function setup_params(params) {
 	params.add(reportTitleParam);
 
 	filters.ppc.param_setup(params);
-	filters.ppc.ppcTypeParameter.addPropertyChangeListener(filters.ppc.ppcTypeParameter.paramId, new java.beans.PropertyChangeListener() {
-		propertyChange: function(e) {
-			reportTitleParam.setValue(reportTitleParamInfo.id, filters.ppc.getColumnName());
-
-		}
-	});
-
-	filters.ppc.singletonTypeParameter.addPropertyChangeListener(filters.ppc.singletonTypeParameter.paramId, new java.beans.PropertyChangeListener() {
-		propertyChange: function(e) {
-			reportTitleParam.setValue(reportTitleParamInfo.id, filters.ppc.singletonTypeParameters.reportNames[filters.ppc.singletonType.index]);	
-		}
-	});
-
+	
 	var insertIdx = params.size();
 
 	filters.group.param_setup(params);
@@ -133,12 +121,14 @@ function setup_params(params) {
 	filters.searchBy.includeSyllableOption = true;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
 }]]></oga:property>
+                    <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
+                    <oga:property key="filters.ppc.pattern.filter"><![CDATA[\c]]></oga:property>
                 </oga:settings>
                 <oga:meta x="62" y="570"/>
             </extensions>
         </node>
         <opqry:queryNode id="1db7b6c2" name="Query : PPC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-03-26T08:19:35.479-02:30" name="Query : PPC" uuid="fc3f79a9-68ee-457d-a9fc-78c098f2a3ef">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-03-29T16:02:25.865-02:30" name="Query : PPC" uuid="a4319622-2c96-4abf-b695-7ba6b0d9e91d">
                 <script>
                     <source>var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -437,7 +427,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="4b18886ea00b48b3" name="Report" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="73e9e0a2">
+            <graph id="3e21e4fa">
                 <node id="e6d45b5e5a1847a0" name="reportTitle" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -709,7 +699,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="9be63edf7454f48" name="For Each Participant" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="4e0c65c2">
+                    <graph id="544cba30">
                         <node id="f07c16119afe452e" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -819,7 +809,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="cb86895b929e40c4" name="Get Table of Results For Speaker" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="50b3945e">
+                            <graph id="681574d9">
                                 <node id="709f2e57dcf44ec5" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -877,7 +867,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="f597c5aaf39b442f" name="If Speaker has Results" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="71a7d6d">
+                            <graph id="5da709a4">
                                 <node id="d779e16362c04d76" name="Table" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1011,7 +1001,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="44ede451a63843e8" name="For Each Session" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="53fbbbbd">
+                                    <graph id="6c3a97e9">
                                         <node id="f87a720cdb874d57" name="Current Object" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1055,7 +1045,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="71b15afc5b9d47f5" name="Get Table for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="397ce310">
+                                            <graph id="18fe8d94">
                                                 <node id="257ee0628b94c4f" name="Map" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1109,7 +1099,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="73704a9fac14603" name="If Speaker has Results for Session" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                                            <graph id="5a29e6b7">
+                                            <graph id="1e93a729">
                                                 <node id="c15eafc9d07d4fa3" name="DefaultTableDataSource" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1263,7 +1253,7 @@ function tableOp(context, table) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="6e89d296" name="Print Participant Listing" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="f53268a">
+                            <graph id="1aa0a098">
                                 <node id="1908a532" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1419,7 +1409,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="495563a1" name="Print Participant Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                            <graph id="33bcf8b9">
+                            <graph id="35e9c018">
                                 <node id="5e637044" name="data" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1549,7 +1539,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2bc124ee" name="Print Global Summary" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="e389e25">
+                    <graph id="620dfca7">
                         <node id="4e0d648a" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
                             <input name="data" optional="false">Data to print</input>
                             <extensions>
