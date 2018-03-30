@@ -213,6 +213,7 @@
    <appContext helpID="report_pitch" path="report/report-pitch.html"/>
    <appContext helpID="report_formants" path="report/report-formants.html"/>
    <appContext helpID="report_spectral_moments" path="report/report-spectral_moments.html"/>
+   <appContext helpID="report_voice_onset_time_vot" path="report/report-vot.html"/>
    <appContext helpID="custom_reports_using_composer_simple"
                path="report/report_composer.html"/>
    <appContext helpID="analysis_ppc" path="analysis/PPC.html"/>
@@ -230,5 +231,6 @@
                path="analysis/WAP.html"/>
    <appContext helpID="custom_analysis_using_composer_simple"
                path="analysis/analysis_composer.html"/>
-   <appContext helpID="markers" path="chat/markers.html"/>
+   <appContext helpID="phontalk" path="chat/phontalk.html"/>
+   <appContext helpID="chat_main_line" path="chat/main_line.html"/>
 </map>

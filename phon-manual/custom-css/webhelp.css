@@ -72,6 +72,17 @@
   border-bottom-right-radius: 2px;
 }
 
+#wh_download_pdf {
+ padding: 5px 50px 5px 5px;
+  color: #fff;
+  margin-right: 5px;
+  background: url('images/pdf-file-format-symbol.png') #4282c1 no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
 #wh_download_banner {
  padding: 5px 50px 5px 5px;
   color: #fff;
