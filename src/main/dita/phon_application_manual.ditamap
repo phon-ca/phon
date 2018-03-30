@@ -272,6 +272,7 @@
             <topicref href="report/report-pitch.md" format="markdown"/>
             <topicref href="report/report-formants.md" format="markdown"/>
             <topicref href="report/report-spectral_moments.md" format="markdown"/>
+            <topicref href="report/report-vot.md" format="markdown"/>
         </topicref>
         <topicref href="report/report_composer.md" format="markdown"/>
     </chapter>

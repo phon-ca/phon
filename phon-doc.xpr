@@ -18,13 +18,11 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>Phon Manual (PDF)</String>
                                         <String>PhonManual - Web</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
                                     <list>
-                                        <String>DITAMAP</String>
                                         <String>DITAMAP</String>
                                     </list>
                                 </field>
@@ -742,7 +740,7 @@
                                     <String>${cfd}</String>
                                 </field>
                                 <field name="outputDir">
-                                    <String>${pd}/target/webhelp-responsive</String>
+                                    <String>${pd}/target/phon-manual</String>
                                 </field>
                                 <field name="tempDir">
                                     <String>${pd}/target/webhelp-responsive-temp</String>
@@ -779,23 +777,20 @@
                                     <null/>
                                 </field>
                                 <field name="webhelpResponsiveTemplate">
-                                    <webhelpTemplate>
-                                        <field name="templateName">
-                                            <String>bootstrap</String>
-                                        </field>
-                                        <field name="variantName">
-                                            <String>tree</String>
-                                        </field>
-                                        <field name="skinName">
-                                            <String>oxygen</String>
-                                        </field>
-                                        <field name="customSkinPath">
-                                            <null/>
-                                        </field>
-                                    </webhelpTemplate>
+                                    <null/>
                                 </field>
                                 <field name="publishingTemplateDataPO">
-                                    <null/>
+                                    <publishingTemplate>
+                                        <field name="templateRoot">
+                                            <String>${configured.ditaot.dir}/plugins/com.oxygenxml.webhelp.responsive/templates/oxygen</String>
+                                        </field>
+                                        <field name="descriptorRelativePath">
+                                            <String>oxygen-tree.opt</String>
+                                        </field>
+                                        <field name="isCustomTemplate">
+                                            <Boolean>false</Boolean>
+                                        </field>
+                                    </publishingTemplate>
                                 </field>
                                 <field name="additionalAntArgs">
                                     <String></String>

@@ -12,7 +12,7 @@ In *Phon*, the main line is mapped to the *Orthography* tier.  Each main line in
 
 ## Special Form Markers
 
-The following special form markers are available in *Phon*.  For more information see https://talkbank.org/manuals/CHAT.html#_Toc486414397.
+The following special form markers are available in *Phon*.  For more information about special form markers see https://talkbank.org/manuals/CHAT.html#_Toc486414397.
 
 | Letters | Category | Example | Meaning |
 |--|--|--|--|
