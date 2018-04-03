@@ -18,11 +18,13 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
+                                        <String>Phon Manual (PDF)</String>
                                         <String>PhonManual - Web</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
                                     <list>
+                                        <String>DITAMAP</String>
                                         <String>DITAMAP</String>
                                     </list>
                                 </field>
