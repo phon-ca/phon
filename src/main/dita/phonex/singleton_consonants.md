@@ -1,3 +1,0 @@
-# Phonex Example: Singleton Consonants
-
-

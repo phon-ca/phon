@@ -202,7 +202,7 @@
         <topicref href="generated/features.xml"/>
     </chapter>
     <chapter navtitle="Phonex" audience="intermediate">
-        <topicref href="phonex/concepts/intro.dita"/>
+        <topicref href="phonex/phonex_introduction.md" format="markdown"/>
         <topichead navtitle="Language Reference">
             <topicref href="phonex/concepts/constructs.dita"/>
             <topicref href="phonex/concepts/phone-matchers.dita"/>
