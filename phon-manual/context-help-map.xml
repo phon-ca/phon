@@ -154,7 +154,7 @@
    <appContext helpID="concept_omj_cyj_2n" path="ipa/concepts/sandhi.html"/>
    <appContext helpID="concept_ipa_listing" path="generated/ipa.html"/>
    <appContext helpID="concept_feature_listing" path="generated/features.html"/>
-   <appContext helpID="concept_1wx_dhn_gg" path="phonex/concepts/intro.html"/>
+   <appContext helpID="introduction" path="phonex/phonex_introduction.html"/>
    <appContext helpID="concept_tpv_vc3_gg" path="phonex/concepts/constructs.html"/>
    <appContext helpID="concept_pjp_4nm_gg" path="phonex/concepts/phone-matchers.html"/>
    <appContext helpID="concept_2cb_tlm_gg" path="phonex/concepts/groups.html"/>

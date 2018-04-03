@@ -207,7 +207,8 @@ function handleSideTocPosition(scrollPosition) {
     var $navSection = $(".wh_tools");
     var bottomNavOffset = 0;
     var $slideSection = $('#wh_topic_body');
-    var topOffset = 33;
+    var topOffset = 20;
+    var visibleAreaHeight = parseInt($(window).height()) - parseInt($(".wh_footer").outerHeight());
 
     if ($sideToc.length > 0 && $slideSection.length > 0) {
         var minVisibleOffset = $(window).scrollTop();
@@ -231,14 +232,16 @@ function handleSideTocPosition(scrollPosition) {
         if (bottomNavOffset > minVisibleOffset) {
             minVisibleOffset = bottomNavOffset;
         }
-        if (tocHeight < $slideSection.height()) {
-            if (parseInt(minVisibleOffset - topOffset) <= $(window).scrollTop()) {
-                $sideToc.css("top", "20px").css("width", tocWidth + "px").css("position", "fixed");
+        if (tocHeight  <=   visibleAreaHeight) {
+            var cHeight = parseInt($('.wh_content_area').height());
+            if (parseInt(minVisibleOffset - topOffset) <=  $(window).scrollTop()) {
+                $('.wh_content_area').css('height', cHeight+'px');
+                $sideToc.css("top", topOffset + "px").css("width", tocWidth + "px").css("position", "fixed");
             } else {
                 $sideToc.removeAttr('style');
             }
         } else {
-           // $slideSection.css("top", "0").css("min-height", tocHeight + "px").css("width", tocWidth + "px");
+            $sideToc.removeAttr('style');
         }
         scrollPosition = $(window).scrollTop();
     }

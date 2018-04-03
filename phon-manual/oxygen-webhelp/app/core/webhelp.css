@@ -1,5 +1,5 @@
-@import "fonts.css?buildId=2018031511";
-@import "../indexterms/indexterms.css?buildId=2018031511";
+@import "fonts.css?buildId=2018032809";
+@import "../indexterms/indexterms.css?buildId=2018032809";
 
 .container-fluid {
   margin-right: auto;
@@ -9,6 +9,10 @@
 
 div.wh_content_area {
     visibility: hidden;
+}
+
+.embed-responsive {
+    background-color: #000;
 }
 
 /*
