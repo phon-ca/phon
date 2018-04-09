@@ -93,6 +93,18 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 		return retVal;
 	}
 	
+	public ReportTreePath getPath() {
+		ReportTreePath path = new ReportTreePath(Collections.singleton(this).toArray(new ReportTreeNode[0]));
+		
+		ReportTreeNode parent = getParent();
+		while(parent != null) {
+			path = path.pathWithNewParent(parent);
+			parent = parent.getParent();
+		}
+		
+		return path;
+	}
+	
 	/**
 	 * Return the markdown template code for this report node.
 	 * 

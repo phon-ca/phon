@@ -46,6 +46,8 @@ import ca.phon.app.log.*;
 import ca.phon.app.log.actions.*;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
+import ca.phon.app.opgraph.nodes.report.NewReportNode;
+import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.app.session.editor.SessionEditorEP;
@@ -540,7 +542,7 @@ public class NodeWizard extends WizardFrame {
 				breadCrumbViewer.setEnabled(false);
 			});
 
-			// if the graph has a 'Report Prefix' template, add it to the 'Report Template' buffer
+			/*// if the graph has a 'Report Prefix' template, add it to the 'Report Template' buffer
 			final NodeWizardReportTemplate reportPrefixTemplate = ext.getReportTemplate("Report Prefix");
 			final String reportPrefix = ( reportPrefixTemplate != null ? reportPrefixTemplate.getTemplate() : "");
 			if(reportPrefix.trim().length() > 0) {
@@ -551,13 +553,24 @@ public class NodeWizard extends WizardFrame {
 				writer.write(reportPrefix + "\n");
 				writer.flush();
 				writer.close();
-			}
+			}*/
 
 			reportSaved = false;
 
 			processor.stepAll();
+			
+			final ReportTree reportTree = (ReportTree)processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
+			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
+				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer(reportTemplateBufferName);
 
-			// if the graph has a 'Report Suffix' template, add it to the 'Report Template' buffer
+				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
+				final PrintWriter writer = new PrintWriter(os);
+				writer.write(reportTree.getReportTemplate() + "\n");
+				writer.flush();
+				writer.close();
+			}
+
+			/*// if the graph has a 'Report Suffix' template, add it to the 'Report Template' buffer
 			final NodeWizardReportTemplate reportSuffixTemplate = ext.getReportTemplate("Report Suffix");
 			final String reportSuffix = ( reportSuffixTemplate != null ? reportSuffixTemplate.getTemplate() : "");
 			if(reportSuffix.trim().length() > 0) {
@@ -568,26 +581,26 @@ public class NodeWizard extends WizardFrame {
 				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
 				final PrintWriter writer = new PrintWriter(os);
 				writer.write(reportSuffix + "\n");
-			}
+			}*/
 
 			// generate report
-			final BufferPanel reportTemplateBuffer = bufferPanel.getBuffer(reportTemplateBufferName);
+			/*final BufferPanel reportTemplateBuffer = bufferPanel.getBuffer(reportTemplateBufferName);
 			String template = null;
 			if(reportTemplateBuffer == null) {
 				template = loadDefaultReport();
 			} else {
 				template = reportTemplateBuffer.getLogBuffer().getText();
-			}
+			}*/
 
 			// create temp file
 			File tempFile = null;
 			try {
-				tempFile = File.createTempFile("phon", reportTemplateBufferName);
+				tempFile = File.createTempFile("phon", "report");
 				tempFile.deleteOnExit();
 
 				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
 					final NodeWizardReportGenerator reportGenerator =
-							new NodeWizardReportGenerator(this, template, fout);
+							new NodeWizardReportGenerator(this, reportTree.getReportTemplate(), fout);
 
 					SwingUtilities.invokeLater(() -> {
 						statusLabel.setText("Generating report...");
@@ -600,12 +613,18 @@ public class NodeWizard extends WizardFrame {
 				}
 
 				// create buffer
+				final String reportURL = tempFile.toURI().toString();
+				System.out.println(reportURL);
 				final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
 				try {
-					SwingUtilities.invokeAndWait( () -> bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report")));
+					SwingUtilities.invokeAndWait( () -> { 
+						bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report")); 
+						bufferPanelRef.get().showHtml();
+					});
 					final BufferPanel reportBufferPanel = bufferPanelRef.get();
 					final WebView webView = reportBufferPanel.getWebView();
 					javafx.application.Platform.runLater(() -> {
+												
 						webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
 
 							@Override
@@ -614,17 +633,24 @@ public class NodeWizard extends WizardFrame {
 									final JSObject window = (JSObject) webView.getEngine().executeScript("window");
 									window.setMember("project", getExtension(Project.class));
 									window.setMember("buffers", bufferPanel);
+									window.setMember("reportTree", reportTree);
+									
+									final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
+									searchForTables(reportTree.getRoot(), tableMap);
+									window.setMember("tableMap", tableMap);
+									
 									window.setMember("app", webViewInterface);
 
 									// call functions to display app-specific UI elements
 									webView.getEngine().executeScript("addMenuButtons()");
-									webView.getEngine().executeScript("addSessionLinks()");
 								}
 							}
 
 						});
 
+//						webView.getEngine().load(reportURL);
 					});
+					
 					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
 					reader.execute();
 				} catch (InterruptedException | InvocationTargetException e) {
@@ -707,17 +733,19 @@ public class NodeWizard extends WizardFrame {
 	public void setupReportContext(NodeWizardReportContext ctx) {
 		final Map<String, String> buffers = new HashMap<>();
 		final Map<String, DefaultTableDataSource> tables = new HashMap<>();
-		for(String bufferName:bufferPanel.getBufferNames()) {
-			final String data =
-					bufferPanel.getBuffer(bufferName).getLogBuffer().getText();
-			buffers.put(bufferName, data);
-
-			final DefaultTableDataSource table =
-					bufferPanel.getBuffer(bufferName).getExtension(DefaultTableDataSource.class);
-			if(table != null) {
-				tables.put(bufferName, table);
-			}
-		}
+//		for(String bufferName:bufferPanel.getBufferNames()) {
+//			final String data =
+//					bufferPanel.getBuffer(bufferName).getLogBuffer().getText();
+//			buffers.put(bufferName, data);
+//
+//			final DefaultTableDataSource table =
+//					bufferPanel.getBuffer(bufferName).getExtension(DefaultTableDataSource.class);
+//			if(table != null) {
+//				tables.put(bufferName, table);
+//			}
+//		}
+		final ReportTree reportTree = (ReportTree)processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
+		searchForTables(reportTree.getRoot(), tables);
 
 		ctx.put("Class", Class.class);
 		ctx.put("FormatterUtil", FormatterUtil.class);
@@ -727,7 +755,18 @@ public class NodeWizard extends WizardFrame {
 		ctx.put("graph", getGraph());
 		ctx.put("bufferNames", bufferPanel.getBufferNames());
 		ctx.put("buffers", buffers);
-		ctx.put("tables", tables);
+		ctx.put("tableMap", tables);
+	}
+	
+	private void searchForTables(ReportTreeNode node, Map<String, DefaultTableDataSource> tableMap) {
+		if(node instanceof TableNode) {
+			final TableNode tableNode = (TableNode)node;
+			tableMap.put(tableNode.getPath().toString(), (DefaultTableDataSource)tableNode.getTable());
+		}
+		
+		for(ReportTreeNode child:node.getChildren()) {
+			searchForTables(child, tableMap);
+		}
 	}
 
 	public WizardOptionalsCheckboxTree getOptionalsTree() {
@@ -736,6 +775,7 @@ public class NodeWizard extends WizardFrame {
 
 	protected void setupContext(OpContext ctx) {
 		ctx.put(BufferNodeConstants.BUFFER_CONTEXT_KEY, bufferPanel);
+		ctx.put(NewReportNode.REPORT_TREE_KEY, new ReportTree());
 	}
 
 	protected void setupOptionals(OpContext ctx) {
@@ -1003,6 +1043,10 @@ public class NodeWizard extends WizardFrame {
 	}
 
 	public class WebViewInterface {
+		
+		public void log(String log) {
+			java.lang.System.out.println(log);
+		}
 
 		public void openSession(String sessionName) {
 			final SessionPath sessionPath = new SessionPath(sessionName);

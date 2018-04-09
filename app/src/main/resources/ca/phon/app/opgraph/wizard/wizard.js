@@ -380,94 +380,78 @@ function makeSessionLink(documentRef, cell, onclick) {
     var cellText = cell.textContent;
     cell.textContent = "";
     div.textContent = cellText;
-
+    
     cell.appendChild(div);
 }
 
-function addSessionLinks(documentRef) {
-    var documentRef = documentRef || document;
+function addSessionLinks(documentRef, row) {
+	if(!tableMap) return;
+	
+	if(row.style.className == "session_links_done") return;
+	row.style.className = "session_links_done";
 
-    var tables =[].slice.call(documentRef.body.querySelectorAll("table"));
-    tables.forEach(function (table, index) {
-        var tableId = table.getAttribute("id");
+	var htmlTable = row.parentElement.parentElement;
+	var tableId = htmlTable.getAttribute("id");
+	if(tableId == null) return;
+	
+	var tableModel = tableMap.get(tableId);
+	if(tableModel == null) return;
 
-        if (buffers) {
-            var buffer = buffers.getBuffer(tableId);
-            if (buffer != null) {
-                var tableModel = buffer.getUserObject();
-                if (tableModel != null) {
-                    // check for session and Record # columns
-                    var hasSession = (tableModel.getColumnIndex("Session") >= 0);
-                    var hasRecord = (tableModel.getColumnIndex("Record #") >= 0);
+	var hasSession = (tableModel.getColumnIndex("Session") >= 0);
+	
+	var rows = [].slice.call(htmlTable.querySelectorAll("tr"));
+	var rowIdx = rows.indexOf(row);
+	
+	var cols = [].slice.call(row.querySelectorAll("td"));
+	
+    var sessionColIdx = getColumnIndex(htmlTable, "Session");
+    if (hasSession && sessionColIdx >= 0) {
+	    if (sessionColIdx < cols.length) {
+	        var col = cols[sessionColIdx];
+	        
+	        var sessionName = col.textContent;
+	        makeSessionLink(documentRef, col, "app.openSession('" + sessionName + "')");
+	    }
+    }
+        
+    var hasRecord = (tableModel.getColumnIndex("Record #") >= 0);
+    var recordColIdx = getColumnIndex(htmlTable, "Record #");
+    if (hasSession && hasRecord && recordColIdx >= 0) {
+        if (recordColIdx < cols.length) {
+            var col = cols[recordColIdx];
+            var rowData = tableModel.getRow(rowIdx -1);
+            var modelSessionIdx = tableModel.getColumnIndex("Session");
+            var sessionName = rowData[modelSessionIdx];
+            var recordNumber = col.textContent;
+            
+            makeSessionLink(documentRef, col, "app.openSessionAtRecord('" + sessionName + "', (" + recordNumber + "-1))");
+        }
+    }
+    
+ 	var resultCol = tableModel.getColumnIndex("Result");
+    if (resultCol >= 0) {
+    	if(hasSession && resultCol >= 0) {
+            var rowData = tableModel.getRow(rowIdx -1);
+            var modelSessionIdx = tableModel.getColumnIndex("Session");
+            var sessionName = rowData[modelSessionIdx];
+            var result = rowData[resultCol];
+            
+            for (var i = 0; i < result.getNumberOfResultValues(); i++) {
+                var rv = result.getResultValue(i);
+                var tableColIdx = getColumnIndex(htmlTable, rv.getName());
 
-                    // find column indicies in HTML table
-                    var sessionColIdx = getColumnIndex(table, "Session");
-                    var recordColIdx = getColumnIndex(table, "Record #");
+                if (tableColIdx >= 0) {
+                    var cols =[].slice.call(row.querySelectorAll("td"));
 
-                    if (hasSession && sessionColIdx >= 0) {
-                        // add session links
-                        var trs =[].slice.call(table.querySelectorAll("tr"));
-                        for (var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
-                            var row = trs[rowIdx];
-                            var cols =[].slice.call(row.querySelectorAll("td"));
-
-                            if (sessionColIdx < cols.length) {
-                                var col = cols[sessionColIdx];
-                                var sessionName = col.textContent;
-                                makeSessionLink(documentRef, col, "app.openSession('" + sessionName + "')");
-                            }
-                        }
-                    }
-
-                    if (hasSession && hasRecord && recordColIdx >= 0) {
-                        // add session links
-                        var trs =[].slice.call(table.querySelectorAll("tr"));
-                        for (var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
-                            var row = trs[rowIdx];
-                            var cols =[].slice.call(row.querySelectorAll("td"));
-
-                            if (recordColIdx < cols.length) {
-                                var col = cols[recordColIdx];
-                                var rowData = tableModel.getRow(rowIdx -1);
-                                var modelSessionIdx = tableModel.getColumnIndex("Session");
-                                var sessionName = rowData[modelSessionIdx];
-                                var recordNumber = col.textContent;
-                                makeSessionLink(documentRef, col, "app.openSessionAtRecord('" + sessionName + "', (" + recordNumber + "-1))");
-                            }
-                        }
-                    }
-
-                    var resultCol = tableModel.getColumnIndex("Result");
-                    if (resultCol >= 0) {
-                        var trs =[].slice.call(table.querySelectorAll("tr"));
-                        for (var rowIdx = 1; rowIdx < trs.length; rowIdx++) {
-                            var rowData = tableModel.getRow(rowIdx -1);
-                            var modelSessionIdx = tableModel.getColumnIndex("Session");
-                            var sessionName = rowData[modelSessionIdx];
-                            var result = rowData[resultCol];
-
-                            for (var i = 0; i < result.getNumberOfResultValues();
-                            i++) {
-                                var rv = result.getResultValue(i);
-                                var tableColIdx = getColumnIndex(table, rv.getName());
-
-                                if (tableColIdx >= 0) {
-                                    var row = trs[rowIdx];
-                                    var cols =[].slice.call(row.querySelectorAll("td"));
-
-                                    if (tableColIdx < cols.length) {
-                                        var col = cols[tableColIdx];
-                                        makeSessionLink(documentRef, col,
-                                        "app.onHighlightResultValue('" + tableId + "',(" + rowIdx + "-1), '" + rv.getName() + "')");
-                                    }
-                                }
-                            }
-                        }
+                    if (tableColIdx < cols.length) {
+                        var col = cols[tableColIdx];
+                        makeSessionLink(documentRef, col,
+                        "app.onHighlightResultValue('" + tableId + "',(" + rowIdx + "-1), '" + rv.getName() + "')");
                     }
                 }
             }
-        }
-    });
+    	}
+    }
 }
 
 window.onclick = function(event) {

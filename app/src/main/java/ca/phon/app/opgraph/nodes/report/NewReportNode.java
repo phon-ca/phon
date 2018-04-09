@@ -3,7 +3,7 @@ package ca.phon.app.opgraph.nodes.report;
 import java.awt.*;
 import java.util.Properties;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
@@ -16,8 +16,8 @@ public class NewReportNode extends OpNode implements NodeSettings {
 
 	public final static String REPORT_TREE_KEY = "__reportTree";
 
-	private final InputField reportRootInput =
-			new InputField("root", "Report root node", true, true, ReportTreeNode.class);
+	private final InputField reportNameInput =
+			new InputField("root", "Report name", true, true, String.class);
 
 	private final OutputField reportOutput =
 			new OutputField("reportTree", "Report tree", true, ReportTree.class);
@@ -25,53 +25,37 @@ public class NewReportNode extends OpNode implements NodeSettings {
 	private final OutputField reportRootOutput =
 			new OutputField("root", "Root node of report tree", true, ReportTreeNode.class);
 
-	private final static String GLOBAL_REPORT_PROP = NewReportNode.class.getName() + ".setGlobalReport";
-	private boolean isSetGlobalReport = true;
-
 	private JPanel settingsPanel;
-	private JCheckBox setGlobalReportBox;
 
 	public NewReportNode() {
 		super();
 
-		putField(reportRootInput);
+		putField(reportNameInput);
 		putField(reportOutput);
 		putField(reportRootOutput);
 
 		putExtension(NodeSettings.class, this);
 	}
 
-	public boolean isSetGlobalReport() {
-		return (this.setGlobalReportBox != null ? this.setGlobalReportBox.isSelected() : this.isSetGlobalReport);
-	}
-
-	public void setSetGlobalReport(boolean setGlobalReport) {
-		this.isSetGlobalReport = setGlobalReport;
-		if(this.setGlobalReportBox != null)
-			this.setGlobalReportBox.setSelected(setGlobalReport);
-	}
-
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final ReportTreeNode root =
-				(context.get(reportRootInput) != null ? (ReportTreeNode)context.get(reportRootInput) : new SectionHeaderNode("root"));
+				(context.get(reportNameInput) != null ? new SectionHeaderNode(context.get(reportNameInput).toString()) : new SectionHeaderNode("root"));
 
 		final ReportTree reportTree = new ReportTree(root);
 		context.put(reportOutput, reportTree);
 		context.put(reportRootOutput, root);
-
-		if(isSetGlobalReport())
-			context.getParent().put(REPORT_TREE_KEY, reportTree);
+		
+		if(context.containsKey(REPORT_TREE_KEY)) {
+			final ReportTree masterReport = (ReportTree)context.get(REPORT_TREE_KEY);
+			masterReport.getRoot().add(root);
+		}
 	}
 
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
 			settingsPanel = new JPanel(new BorderLayout());
-
-			setGlobalReportBox = new JCheckBox("Set as global report");
-			setGlobalReportBox.setSelected(isSetGlobalReport);
-			settingsPanel.add(setGlobalReportBox, BorderLayout.NORTH);
 		}
 		return settingsPanel;
 	}
@@ -79,13 +63,11 @@ public class NewReportNode extends OpNode implements NodeSettings {
 	@Override
 	public Properties getSettings() {
 		Properties retVal = new Properties();
-		retVal.setProperty(GLOBAL_REPORT_PROP, Boolean.toString(isSetGlobalReport()));
 		return retVal;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		setSetGlobalReport(Boolean.parseBoolean(properties.getProperty(GLOBAL_REPORT_PROP, "true")));
 	}
 
 }

@@ -30,7 +30,7 @@ public class ReportTree {
 		
 		return buffer.toString();
 	}
-	
+		
 	private void append(StringBuffer buffer, ReportTreeNode node) {
 		buffer.append(node.getReportTemplateBlock());
 		buffer.append("\n");

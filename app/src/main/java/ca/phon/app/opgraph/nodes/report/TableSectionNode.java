@@ -16,12 +16,13 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.query.report.datasource.TableDataSource;
 
 @OpNodeInfo(name="Table Section", category="Report", description="Add/Create a new table section for the report", showInLibrary=true)
 public class TableSectionNode extends ReportSectionNode implements NodeSettings {
 
-	private final InputField tableNameField =
-			new InputField("tableName", "Name of table (buffer)", true, true, String.class);
+	private final InputField tableField =
+			new InputField("table", "Table", true, true, TableDataSource.class);
 
 	/* UI */
 	private JPanel settingsPanel;
@@ -38,7 +39,7 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 	public TableSectionNode() {
 		super();
 
-		putField(tableNameField);
+		putField(tableField);
 
 		putExtension(NodeSettings.class, this);
 	}
@@ -47,10 +48,10 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 	protected ReportTreeNode createReportSectionNode(OpContext context) {
 		final String title =
 				(context.get(sectionNameInput) != null ? context.get(sectionNameInput).toString() : "");
-		final String tableName =
-				(context.get(tableNameField) != null ? context.get(tableNameField).toString() : "");
+		final TableDataSource table =
+				(context.get(tableField) != null ? (TableDataSource)context.get(tableField) : null);
 
-		return new TableNode(title, tableName, isIncludeColumns(), getColumns());
+		return new TableNode(title, table, isIncludeColumns(), getColumns());
 	}
 
 	public boolean isIncludeColumns() {

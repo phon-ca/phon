@@ -40,7 +40,7 @@
 	#set($maxRow = $table.rowCount - 1)
 	#if($maxRow >= 0 && $maxCol >= 0)
 		#foreach($row in [0..$maxRow])
-			<tr>
+			<tr onmouseover="addSessionLinks(document, this)">
 			#foreach($col in [0..$maxCol])
 				#set($columnName = $table.getColumnTitle($col))
 				#if($columnNames.size() == 0 || $columnNames.contains($columnName))

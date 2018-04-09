@@ -3,25 +3,27 @@ package ca.phon.app.opgraph.report.tree;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import ca.phon.query.report.datasource.TableDataSource;
+
 public class TableNode extends ReportTreeNode {
 	
-	private String tableName;
+	private TableDataSource table;
 	
 	private boolean includeColumns = true;
 	
 	private List<String> columnList;
 	
-	public TableNode(String title, String tableName) {
-		this(title, tableName, new ArrayList<>());
+	public TableNode(String title, TableDataSource table) {
+		this(title, table, new ArrayList<>());
 	}
 	
-	public TableNode(String title, String tableName, List<String> columns) {
-		this(title, tableName, true, columns);
+	public TableNode(String title, TableDataSource table, List<String> columns) {
+		this(title, table, true, columns);
 	}
 
-	public TableNode(String title, String tableName, boolean includeColumns, List<String> columns) {
+	public TableNode(String title, TableDataSource table, boolean includeColumns, List<String> columns) {
 		super(title);
-		this.tableName = tableName;
+		this.table = table;
 		this.includeColumns = includeColumns;
 		this.columnList = columns;
 	}
@@ -38,12 +40,12 @@ public class TableNode extends ReportTreeNode {
 		this.includeColumns = includeCols;
 	}
 	
-	public String getTableName() {
-		return this.tableName;
+	public TableDataSource getTable() {
+		return this.table;
 	}
 	
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
+	public void setTable(TableDataSource table) {
+		this.table = table;
 	}
 	
 	public void setColumns(List<String> columns) {
@@ -64,20 +66,20 @@ public class TableNode extends ReportTreeNode {
 			.append(getTitle())
 			.append("</h").append(getLevel()).append(">\")\n");
 		
-		buffer.append("#set($tableName = \"").append(getTableName()).append("\")\n");
+		buffer.append("#set($tablePath = \"").append(getPath()).append("\")\n");
 		
-		buffer.append("#set($table = $tables.get($tableName))\n");
+		buffer.append("#set($table = $tableMap.get($tablePath))\n");
 		
 		if(includeAllColumns()) {
-			buffer.append("#printTableWithIdAndCaption($table $tableName $caption [])\n");
+			buffer.append("#printTableWithIdAndCaption($table $tablePath $caption [])\n");
 		} else {
 			final String columnTxt = columnList.stream()
 					.map( (col) -> "\"" + col + "\"" ).collect(Collectors.joining(","));
 			if(isIncludeColumns()) {
-				buffer.append("#printTableWithIdAndCaption($table $tableName $caption [")
+				buffer.append("#printTableWithIdAndCaption($table $tablePath $caption [")
 					.append(columnTxt).append("])\n");
 			} else {
-				buffer.append("#printTableWithIdAndCaptionExcludingColumns($table $tableName $caption [")
+				buffer.append("#printTableWithIdAndCaptionExcludingColumns($table $tablePath $caption [")
 					.append(columnTxt).append("])\n");
 			}
 		}
