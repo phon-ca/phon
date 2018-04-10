@@ -56,6 +56,10 @@ public class ResultSetSelector extends JPanel {
 	
 	private Project project;
 	
+	public ResultSetSelector() {
+		super();
+	}
+	
 	/** Constructor */
 	public ResultSetSelector(Project project, Query q) {
 		super();

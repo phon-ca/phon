@@ -44,8 +44,13 @@ public class ReportNodeInstantiator extends MacroNodeInstantiator {
 		if(queryIdNode == null)
 			throw new InstantiationException("Query ID node not found in report document");
 		
+		final OpNode selectedResultsNode = graph.getNodesByName("Selected Results").stream().findFirst().orElse(null);
+		if(selectedResultsNode == null)
+			throw new InstantiationException("Selected Results node not found in report document");
+		
 		node.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
 		node.publish("queryId", queryIdNode, queryIdNode.getInputFieldWithKey("obj"));
+		node.publish("selectedResults", selectedResultsNode, selectedResultsNode.getInputFieldWithKey("obj"));
 		
 		return node;
 	}

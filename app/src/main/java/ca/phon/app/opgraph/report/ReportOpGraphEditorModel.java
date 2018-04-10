@@ -101,6 +101,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 
 		final OpNode parentProjectNode = parentGraph.getNodesByName("Project").stream().findFirst().orElse(null);
 		final OpNode parentQueryIDNode = parentGraph.getNodesByName("Query ID").stream().findFirst().orElse(null);
+		final OpNode parentSelectedResultsNode = parentGraph.getNodesByName("Selected Results").stream().findFirst().orElse(null);
 
 		if(parentProjectNode != null) {
 			try {
@@ -117,6 +118,16 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 				final OpLink queryIdLink =
 						new OpLink(parentQueryIDNode, "obj", reportNode, "queryId");
 				parentGraph.add(queryIdLink);
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+			}
+		}
+		
+		if(parentSelectedResultsNode != null) {
+			try {
+				final OpLink resultsLink = 
+						new OpLink(parentSelectedResultsNode, "obj", reportNode, "selectedResults");
+				parentGraph.add(resultsLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
 				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
 			}

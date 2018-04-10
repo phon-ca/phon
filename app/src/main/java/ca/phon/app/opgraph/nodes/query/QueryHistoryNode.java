@@ -19,11 +19,13 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
+import ca.phon.session.SessionPath;
 
 @OpNodeInfo(
 		name="Query History",
@@ -35,6 +37,8 @@ public class QueryHistoryNode extends OpNode {
 	private InputField projectInput = new InputField("project", "Phon project", true, true, Project.class);
 
 	private InputField queryIdInput = new InputField("queryId", "Query history id", true, true, String.class);
+	
+	private InputField selectedResultsInput = new InputField("selectedResults", "Selected result sets", true, true, Collection.class);
 
 	private OutputField projectOutput = new OutputField("project", "Phon project", true, Project.class);
 
@@ -49,12 +53,14 @@ public class QueryHistoryNode extends OpNode {
 
 		putField(projectInput);
 		putField(queryIdInput);
+		putField(selectedResultsInput);
 
 		putField(projectOutput);
 		putField(queryField);
 		putField(outputField);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		Project project = null;
@@ -75,6 +81,12 @@ public class QueryHistoryNode extends OpNode {
 			throw new ProcessingException(null, "No query id given");
 		}
 
+		Object obj = context.get(selectedResultsInput);
+		final Collection<SessionPath> selectedResults = new ArrayList<>();
+		if(obj != null && obj instanceof Collection) {
+			selectedResults.addAll((Collection<SessionPath>)obj);
+		}
+				
 		final QueryManager queryManager = QueryManager.getSharedInstance();
 		final ResultSetManager rsManager = queryManager.createResultSetManager();
 		final List<Query> projectQueries = rsManager.getQueries(project);
@@ -86,7 +98,18 @@ public class QueryHistoryNode extends OpNode {
 					.findAny();
 		if(selectedQuery.isPresent()) {
 
-			final List<ResultSet> resultSets = rsManager.getResultSetsForQuery(project, selectedQuery.get());
+			final List<ResultSet> allResultSets = rsManager.getResultSetsForQuery(project, selectedQuery.get())
+					.stream()
+					.sorted( (rs1, rs2) -> rs1.getSessionPath().compareTo(rs2.getSessionPath()) )
+					.collect( Collectors.toList() );
+			final List<ResultSet> resultSets = 
+					(selectedResults == null || selectedResults.size() == 0
+						? allResultSets
+						: allResultSets.stream()
+								.filter( (rs) -> selectedResults.contains(new SessionPath(rs.getSessionPath())) )
+								.collect( Collectors.toList() ) 
+					);
+			
 			// make sure result sets are sorted
 			Collections.sort(resultSets, (r1, r2) -> r1.getSessionPath().toString().compareTo(r2.getSessionPath().toString()) );
 

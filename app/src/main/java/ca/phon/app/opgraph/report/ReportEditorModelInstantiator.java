@@ -18,6 +18,8 @@
  */
 package ca.phon.app.opgraph.report;
 
+import java.util.ArrayList;
+
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.dag.*;
 import ca.gedge.opgraph.exceptions.ItemMissingException;
@@ -53,6 +55,11 @@ public class ReportEditorModelInstantiator implements EditorModelInstantiator, I
 		queryIdNode.setContextKey("_queryId");
 		graph.add(queryIdNode);
 		
+		final ObjectNode sessionListNode = new ObjectNode(ArrayList.class);
+		sessionListNode.setContextKey("_selectedSessions");
+		sessionListNode.setName("Selected Results");
+		graph.add(sessionListNode);
+		
 		final QueryHistoryNode historyNode = new QueryHistoryNode();
 		graph.add(historyNode);
 		
@@ -64,6 +71,10 @@ public class ReportEditorModelInstantiator implements EditorModelInstantiator, I
 			final OpLink idLink = 
 					new OpLink(queryIdNode, queryIdNode.getOutputFieldWithKey("obj"), historyNode, historyNode.getInputFieldWithKey("queryId"));
 			graph.add(idLink);
+			
+			final OpLink sessionLink = 
+					new OpLink(sessionListNode, sessionListNode.getOutputFieldWithKey("obj"), historyNode, historyNode.getInputFieldWithKey("selectedResults"));
+			graph.add(sessionLink);
 		} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
 		}
 	}

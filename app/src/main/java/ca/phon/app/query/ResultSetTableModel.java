@@ -293,13 +293,12 @@ public class ResultSetTableModel extends AbstractTableModel {
 						super.setStatus(TaskStatus.TERMINATED);
 						break;
 					}
-//					rs.getResults();
-					rowCount = getRowCount();
 					synchronized(resultSetList) {
 						resultSetList.add(rs);
 					}
-					fireTableRowsInserted(rowCount, rowCount);
 				}
+				resultSetList.sort( (rs1, rs2) -> rs1.getSessionPath().compareTo(rs2.getSessionPath()) );
+				fireTableRowsInserted(0, getRowCount());
 			}
 			
 			if(getStatus() != TaskStatus.TERMINATED)

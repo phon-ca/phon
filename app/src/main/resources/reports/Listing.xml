@@ -16,7 +16,16 @@
                     <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
                 </oga:settings>
-                <oga:meta x="143" y="305"/>
+                <oga:meta x="15" y="296"/>
+            </extensions>
+        </node>
+        <node id="b569fd6fba9b4741" name="Selected Results" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="417"/>
             </extensions>
         </node>
         <node id="a70fbe38d034432f" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -41,16 +50,16 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="103" y="429"/>
+                <oga:meta x="15" y="518"/>
             </extensions>
         </node>
         <node id="3b7dacf0" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
-                <oga:meta x="370" y="106"/>
+                <oga:meta x="368" y="92"/>
             </extensions>
         </node>
         <ogcn:macro id="e427d9aa23ab4b01" name="Get Report Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="4caaa384">
+            <graph id="43a45939">
                 <node id="7f11a30608e64fee" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -86,7 +95,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="a07c74c058f24994"/>
             <ogcn:published_output field="value" name="value" ref="9da9a6419f294bd6"/>
             <extensions>
-                <oga:meta x="370" y="441"/>
+                <oga:meta x="368" y="517"/>
             </extensions>
         </ogcn:macro>
         <node id="24049103" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -97,13 +106,13 @@ function setup_params(params) {
                     <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
                     <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="580" y="106"/>
+                <oga:meta x="627" y="92"/>
             </extensions>
         </node>
         <node id="675c8bf7" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="586" y="438"/>
+                <oga:meta x="584" y="517"/>
             </extensions>
         </node>
         <node id="4026874c" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -116,8 +125,8 @@ Range
 Result]]></oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[false]]></oga:property>
                 </oga:settings>
-                <oga:meta x="795" y="438">
-                    <oga:default for="sectionName" type="java.lang.String"/>
+                <oga:meta x="793" y="517">
+                    <oga:default for="sectionName" type="java.lang.String">All results</oga:default>
                 </oga:meta>
             </extensions>
         </node>
@@ -129,7 +138,7 @@ Result]]></oga:property>
         <link dest="675c8bf7" destField="root" source="e427d9aa23ab4b01" sourceField="value"/>
         <link dest="4026874c" destField="table" source="24049103" sourceField="table"/>
         <link dest="4026874c" destField="parent" source="675c8bf7" sourceField="root"/>
-        <link dest="4026874c" destField="sectionName" source="e427d9aa23ab4b01" sourceField="value"/>
+        <link dest="3b7dacf0" destField="selectedResults" source="b569fd6fba9b4741" sourceField="obj"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
