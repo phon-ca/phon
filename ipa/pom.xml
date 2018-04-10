@@ -75,7 +75,7 @@
 						<configuration>
 							<schemaDirectory>src/main/resources/xml/xsd</schemaDirectory>
 							<bindingDirectory>src/main/resources/xml/xjb</bindingDirectory>
-							<specVersion>2.0</specVersion>
+							<specVersion>2.2</specVersion>
 							<extension>true</extension>
 						</configuration>
 					</execution>
