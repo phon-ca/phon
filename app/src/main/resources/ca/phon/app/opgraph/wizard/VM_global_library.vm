@@ -35,16 +35,63 @@
 	#end
 #end
 
-#macro( printBody $table $columnNames )
+#macro( printSessionLink $sessionPath )
+<td class='sessionLink'><div onclick="app.openSession('$sessionPath')">$sessionPath</div></td>
+#end
+
+#macro( printRecordLink $sessionPath $recordNum )
+<td class='sessionLink'><div onclick="app.openSessionAtRecord('$sessionPath', ($recordNum - 1))">$recordNum</div></td>
+#end
+
+#macro( printResultValue $tableId $row $columnName $v )
+#set($txt = $FormatterUtil.format($v))
+<td class='sessionLink'><div onclick="app.onHighlightResult('$tableId', $row, '$columnName')">$txt</div></td>
+#end
+
+#macro( printBody $table $id $columnNames )
 	#set($maxCol = $table.columnCount - 1)
 	#set($maxRow = $table.rowCount - 1)
+	#set($sessionColIdx = $table.getColumnIndex("Session"))
+	#set($recordColIdx = $table.getColumnIndex("Record #"))
+	#set($resultColIdx = $table.getColumnIndex("Result"))
 	#if($maxRow >= 0 && $maxCol >= 0)
 		#foreach($row in [0..$maxRow])
-			<tr onmouseover="addSessionLinks(document, this)">
+			<tr>
 			#foreach($col in [0..$maxCol])
 				#set($columnName = $table.getColumnTitle($col))
 				#if($columnNames.size() == 0 || $columnNames.contains($columnName))
-					#printValue($table.getValueAt($row, $col))
+					#set($val = $table.getValueAt($row, $col))
+					
+					#if($sessionColIdx >= 0)
+					#set($sessionPath = $table.getValueAt($row, $sessionColIdx))
+					#end
+					
+					#if($resultColIdx >= 0)
+					#set($result = $table.getValueAt($row, $resultColIdx))
+					#end
+					
+					#if($columnName.equals("Session"))
+						#printSessionLink( $val )
+					#elseif($columnName.equals("Record #"))
+						#printRecordLink ( $sessionPath $val )
+					#else
+						#set($rv = "")
+						#if($resultColIdx >= 0)
+							#set($maxrv = $result.getNumberOfResultValues() - 1)
+							#foreach($rvIdx in [0..$maxrv])
+								#set($resultValue = $result.getResultValue($rvIdx))
+								#if($resultValue.getName().equals($columnName))
+									#set($rv = $resultValue)
+									#set($hasRv = true)
+								#end
+							#end
+						#end
+						#if($rv != "")
+							#printResultValue ( $id $row $columnName $val )
+						#else
+							#printValue( $val )
+						#end
+					#end
 				#end
 			#end
 			</tr>
@@ -77,7 +124,7 @@
 <table id='$id'>
 <caption>$caption</caption>
 #printHeader( $table $columnNames )
-#printBody( $table $columnNames )
+#printBody( $table $id $columnNames )
 </table>
 #end
 #end
