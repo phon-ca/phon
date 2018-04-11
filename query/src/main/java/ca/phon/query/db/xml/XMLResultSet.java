@@ -135,7 +135,7 @@ public class XMLResultSet implements ResultSet, JAXBWrapper<ResultSetType> {
 
 	@Override
 	public String[] getMetadataKeys() {
-		if(!resultSet.isSetMetaKeys()) {
+		if(resultSet.getMetaKeys() == null) {
 			setupMetadataKeys();
 		}
 		return resultSet.getMetaKeys().getMetaKey().toArray(new String[0]);

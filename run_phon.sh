@@ -2,8 +2,9 @@
 
 PHON_OPTS="-Dphon.debug=true"
 
-JAVA_HOME=`/usr/libexec/java_home -v1.8` \
+JAVA_HOME=`/usr/libexec/java_home -v9` \
 java -Xms250m -Xmx1024m \
+--add-modules java.xml.bind \
 -Xdock:name=Phon \
 -Xdock:icon=app/src/main/resources/data/icons/Phon.icns \
 -cp "app/target/phon-app-2.2.0-SNAPSHOT.jar:app/target/deps/*" \

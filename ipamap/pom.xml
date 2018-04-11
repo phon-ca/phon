@@ -40,21 +40,30 @@
 	
 	<build>
 		<plugins>
-			<!-- Generate source for xml schema -->
 			<plugin>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin</artifactId>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-xjc-plugin</artifactId>
+				<configuration>
+					<extensions>
+						<extension>org.apache.cxf.xjcplugins:cxf-xjc-dv:2.3.0</extension>
+					</extensions>
+				</configuration>
 				<executions>
 					<execution>
-						<id>generate</id>
+						<id>generate-sources</id>
+						<phase>generate-sources</phase>
 						<goals>
-							<goal>generate</goal>
+							<goal>xsdtojava</goal>
 						</goals>
 						<configuration>
-							<schemaDirectory>src/main/resources/xml/xsd</schemaDirectory>
-							<bindingDirectory>src/main/resources/xml/xjb</bindingDirectory>
-							<specVersion>2.0</specVersion>
-							<extension>true</extension>
+							<sourceRoot>${basedir}/target/generated-sources/xjc</sourceRoot>
+							<xsdOptions>
+								<xsdOption>
+									<xsd>${basedir}/src/main/resources/xml/xsd/ipamap.xsd</xsd>
+									<packagename>ca.phon.ui.ipamap.io</packagename>
+									<bindingFile>${basedir}/src/main/resources/xml/xjb/ipamap.xjb</bindingFile>
+								</xsdOption>
+							</xsdOptions>
 						</configuration>
 					</execution>
 				</executions>

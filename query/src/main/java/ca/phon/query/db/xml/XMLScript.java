@@ -67,9 +67,9 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 	@Override
 	public String getSource() {
 		String retVal = null;
-		if(script.isSetSource()) {
+		if(script.getSource() != null) {
 			retVal = script.getSource();
-		} else if(script.isSetUrl()) {
+		} else if(script.getUrl() != null) {
 			if(cachedSource == null) {
 				try {
 					cachedSource = readFromUrl(script.getUrl());
@@ -157,7 +157,7 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 	
 	@Override
 	public ScriptURL getUrl() {
-		if(script.isSetUrl()) {
+		if(script.getUrl() != null) {
 			final ScriptURL retVal = new ScriptURL();
 			retVal.setPath(script.getUrl().getRef());
 			switch(script.getUrl().getRel()) {

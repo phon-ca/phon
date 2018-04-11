@@ -111,7 +111,7 @@ public class XMLResultValue implements ResultValue, JAXBWrapper<ResultValueType>
 
 	@Override
 	public String getName() {
-		if(resultValue.isSetName())
+		if(resultValue.getName() != null)
 			return resultValue.getName();
 		else
 			return getTierName();

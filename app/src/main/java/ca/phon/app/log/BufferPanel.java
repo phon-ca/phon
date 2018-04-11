@@ -35,7 +35,7 @@ import javax.swing.table.TableModel;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
-import com.sun.javafx.application.PlatformImpl;
+import javafx.application.*;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
@@ -269,7 +269,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 		final JFXPanel fxpanel = new JFXPanel();
 		final AtomicReference<JFXPanel> panelRef = new AtomicReference<JFXPanel>(fxpanel);
 		final AtomicReference<WebView> viewRef = new AtomicReference<WebView>();
-		PlatformImpl.runAndWait( () -> {
+		java.util.concurrent.CountDownLatch countDownLatch = new java.util.concurrent.CountDownLatch(1);
+		Platform.runLater( () -> {
 			final WebView webView = new WebView();
 			fxpanel.setScene(new Scene(webView));
 
@@ -280,8 +281,16 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 			panelRef.set(fxpanel);
 			viewRef.set(webView);
+
+			countDownLatch.countDown();
 		});
-		contentPanel.add(panelRef.get(), HTML_VIEW_ID);
+		try {
+			boolean released = countDownLatch.await(10, java.util.concurrent.TimeUnit.SECONDS);
+			if(released) {
+				contentPanel.add(panelRef.get(), HTML_VIEW_ID);
+			}
+		} catch (InterruptedException e) {
+		}
 		return new Tuple<>(panelRef.get(), viewRef.get());
 	}
 

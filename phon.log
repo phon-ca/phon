@@ -1,0 +1,130 @@
+(I) Phon 2.2.0 (XXXXXXXXXXXX) 
+(I) Process 66746@thebe.local 
+[ENV] PATH = /Users/ghedlund/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin
+[ENV] JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk-9.0.4.jdk/Contents/Home
+[ENV] TERM = xterm-256color
+[ENV] LANG = en_CA.UTF-8
+[ENV] ITERM_SESSION_ID = w0t0p0:0EEBE3C0-C7A6-4539-A1D7-2CD80298E7C4
+[ENV] COLORTERM = truecolor
+[ENV] LOGNAME = ghedlund
+[ENV] XPC_SERVICE_NAME = 0
+[ENV] PWD = /Users/ghedlund/Documents/Phon/gitprojects/phon
+[ENV] TERM_PROGRAM_VERSION = 3.1.6beta5
+[ENV] APP_NAME_66746 = Phon
+[ENV] _ = /usr/bin/java
+[ENV] JAVA_MAIN_CLASS_66746 = ca.phon.app.Main
+[ENV] APP_ICON_66746 = app/src/main/resources/data/icons/Phon.icns
+[ENV] SHELL = /bin/zsh
+[ENV] TERM_PROGRAM = iTerm.app
+[ENV] PAGER = less
+[ENV] LSCOLORS = Gxfxcxdxbxegedabagacad
+[ENV] DBUS_LAUNCHD_SESSION_BUS_SOCKET = /private/tmp/com.apple.launchd.QBu3B51BgE/unix_domain_listener
+[ENV] USER = ghedlund
+[ENV] ZSH = /Users/ghedlund/.oh-my-zsh
+[ENV] ITERM_PROFILE = Default Programming
+[ENV] TMPDIR = /var/folders/26/jkk95fj15x335sf_j4r4m2ww0000gn/T/
+[ENV] SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.MWJM7577dl/Listeners
+[ENV] XPC_FLAGS = 0x0
+[ENV] TERM_SESSION_ID = w0t0p0:0EEBE3C0-C7A6-4539-A1D7-2CD80298E7C4
+[ENV] __CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x52
+[ENV] Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.d0yLoDZbvo/Render
+[ENV] LESS = -R
+[ENV] LC_CTYPE = en_CA.UTF-8
+[ENV] COLORFGBG = 7;0
+[ENV] HOME = /Users/ghedlund
+[ENV] SHLVL = 2
+(I) [VM Property] gopherProxySet = false 
+(I) [VM Property] awt.toolkit = sun.lwawt.macosx.LWCToolkit 
+(I) [VM Property] java.specification.version = 9 
+(I) [VM Property] file.encoding.pkg = sun.io 
+(I) [VM Property] sun.cpu.isalist =  
+(I) [VM Property] sun.jnu.encoding = UTF-8 
+(I) [VM Property] java.class.path = app/target/phon-app-2.2.0-SNAPSHOT.jar:app/target/deps/tst-0.3.jar:app/target/deps/phon-ipa-alignment-2.2.0-SNAPSHOT.jar:app/target/deps/phon-project-2.2.0-SNAPSHOT.jar:app/target/deps/velocity-tools-2.0.jar:app/target/deps/swingx-core-1.6.3.jar:app/target/deps/jgoodies-common-1.8.1.jar:app/target/deps/phon-util-2.2.0-SNAPSHOT.jar:app/target/deps/org.eclipse.jgit-4.0.0.201506020755-rc3.jar:app/target/deps/struts-tiles-1.3.8.jar:app/target/deps/commons-logging-1.1.jar:app/target/deps/jna-3.5.2.jar:app/target/deps/commons-beanutils-1.7.0.jar:app/target/deps/phon-design-patterns-2.2.0-SNAPSHOT.jar:app/target/deps/phon-orthography-2.2.0-SNAPSHOT.jar:app/target/deps/phon-session-2.2.0-SNAPSHOT.jar:app/target/deps/phon-syllabifier-opgraph-2.2.0-SNAPSHOT.jar:app/target/deps/commonmark-ext-gfm-tables-0.6.0.jar:app/target/deps/struts-taglib-1.3.8.jar:app/target/deps/oro-2.0.8.jar:app/target/deps/antlr-runtime-3.5.2.jar:app/target/deps/opgraph-library-0.5-SNAPSHOT.jar:app/target/deps/opgraph-core-0.5-SNAPSHOT.jar:app/target/deps/log4j-1.2.14.jar:app/target/deps/opencsv-2.3.jar:app/target/deps/rhino-1.7.7.1.jar:app/target/deps/jbreadcrumb-1-SNAPSHOT.jar:app/target/deps/opgraph-common-nodes-0.5-SNAPSHOT.jar:app/target/deps/swingx-all-1.6.5-1.jar:app/target/deps/commons-validator-1.3.1.jar:app/target/deps/commons-cli-1.2.jar:app/target/deps/httpclient-4.1.3.jar:app/target/deps/ST4-4.0.8.jar:app/target/deps/commons-digester-1.8.jar:app/target/deps/slf4j-api-1.7.2.jar:app/target/deps/docking-frames-common-1.1.2-phon.jar:app/target/deps/jgoodies-looks-2.7.0.jar:app/target/deps/phon-media-2.2.0-SNAPSHOT.jar:app/target/deps/commons-collections4-4.0.jar:app/target/deps/phon-alignment-2.2.0-SNAPSHOT.jar:app/target/deps/phon-ipadictionary-2.2.0-SNAPSHOT.jar:app/target/deps/native-dialogs-10.jar:app/target/deps/servlet-api-2.3.jar:app/target/deps/derby-10.10.2.0.jar:app/target/deps/docking-frames-core-1.1.2-phon.jar:app/target/deps/swingx-common-1.6.3.jar:app/target/deps/jsoup-1.11.2.jar:app/target/deps/commons-codec-1.4.jar:app/target/deps/commons-chain-1.1.jar:app/target/deps/velocity-1.7.jar:app/target/deps/swingx-painters-1.6.3.jar:app/target/deps/JavaEWAH-0.7.9.jar:app/target/deps/phon-components-2.2.0-SNAPSHOT.jar:app/target/deps/laf-widget-7.2.1.jar:app/target/deps/struts-core-1.3.8.jar:app/target/deps/phon-script-2.2.0-SNAPSHOT.jar:app/target/deps/zip4j-1.3.2.jar:app/target/deps/httpcore-4.1.4.jar:app/target/deps/rsyntaxtextarea-2.6.0.jar:app/target/deps/jgoodies-forms-1.9.0.jar:app/target/deps/phon-syllabifier-2.2.0-SNAPSHOT.jar:app/target/deps/phon-xml-2.2.0-SNAPSHOT.jar:app/target/deps/commons-collections-3.2.1.jar:app/target/deps/jtopas-0.8.jar:app/target/deps/trident-7.2.1-swing.jar:app/target/deps/substance-7.2.1.jar:app/target/deps/phon-opgraph-2.2.0-SNAPSHOT.jar:app/target/deps/stringtemplate-3.2.1.jar:app/target/deps/org.eclipse.jgit.ui-4.0.0.201506020755-rc3.jar:app/target/deps/commons-lang3-3.1.jar:app/target/deps/phon-query-2.2.0-SNAPSHOT.jar:app/target/deps/antlr-3.5.2.jar:app/target/deps/commons-io-1.3.2.jar:app/target/deps/commons-lang-2.4.jar:app/target/deps/dom4j-1.1.jar:app/target/deps/jxl-2.6.12.jar:app/target/deps/groovy-all-2.4.0.jar:app/target/deps/opgraph-app-0.5-SNAPSHOT.jar:app/target/deps/platform-3.5.2.jar:app/target/deps/antlr-2.7.7.jar:app/target/deps/phon-workspace-2.2.0-SNAPSHOT.jar:app/target/deps/swingx-plaf-1.6.3.jar:app/target/deps/opgraph-xml-io-0.5-SNAPSHOT.jar:app/target/deps/sslext-1.2-0.jar:app/target/deps/phon-ipa-2.2.0-SNAPSHOT.jar:app/target/deps/swingx-action-1.6.3.jar:app/target/deps/phon-ipamap-2.2.0-SNAPSHOT.jar:app/target/deps/vlcj-3.9.0.jar:app/target/deps/swingx-autocomplete-1.6.3.jar:app/target/deps/substance-swingx-7.2.1.jar:app/target/deps/laf-plugin-7.2.1.jar:app/target/deps/jsch-0.1.51.jar:app/target/deps/commonmark-0.6.0.jar:app/target/deps/desktopicons-2-SNAPSHOT.jar 
+(I) [VM Property] java.vm.vendor = Oracle Corporation 
+(I) [VM Property] sun.arch.data.model = 64 
+(I) [VM Property] swing.aatext = true 
+(I) [VM Property] java.vendor.url = http://java.oracle.com/ 
+(I) [VM Property] user.timezone = America/St_Johns 
+(I) [VM Property] os.name = Mac OS X 
+(I) [VM Property] java.vm.specification.version = 9 
+(I) [VM Property] apple.laf.useScreenMenuBar = true 
+(I) [VM Property] sun.java.launcher = SUN_STANDARD 
+(I) [VM Property] user.country = CA 
+(I) [VM Property] sun.boot.library.path = /Library/Java/JavaVirtualMachines/jdk-9.0.4.jdk/Contents/Home/lib 
+(I) [VM Property] sun.java.command = ca.phon.app.Main 
+(I) [VM Property] http.nonProxyHosts = local|*.local|169.254/16|*.169.254/16 
+(I) [VM Property] jdk.debug = release 
+(I) [VM Property] sun.cpu.endian = little 
+(I) [VM Property] user.home = /Users/ghedlund 
+(I) [VM Property] user.language = en 
+(I) [VM Property] com.apple.mrj.application.live-resize = true 
+(I) [VM Property] java.specification.vendor = Oracle Corporation 
+(I) [VM Property] java.home = /Library/Java/JavaVirtualMachines/jdk-9.0.4.jdk/Contents/Home 
+(I) [VM Property] file.separator = / 
+(I) [VM Property] java.vm.compressedOopsMode = Zero based 
+(I) [VM Property] line.separator = 
+ 
+(I) [VM Property] java.specification.name = Java Platform API Specification 
+(I) [VM Property] java.vm.specification.vendor = Oracle Corporation 
+(I) [VM Property] java.awt.graphicsenv = sun.awt.CGraphicsEnvironment 
+(I) [VM Property] apple.awt.textantialiasing = on 
+(I) [VM Property] apple.awt.graphics.UseQuartz = true 
+(I) [VM Property] com.apple.macos.smallTabs = true 
+(I) [VM Property] sun.management.compiler = HotSpot 64-Bit Tiered Compilers 
+(I) [VM Property] ftp.nonProxyHosts = local|*.local|169.254/16|*.169.254/16 
+(I) [VM Property] java.runtime.version = 9.0.4+11 
+(I) [VM Property] user.name = ghedlund 
+(I) [VM Property] path.separator = : 
+(I) [VM Property] apple.awt.showGrowBox = true 
+(I) [VM Property] os.version = 10.13.4 
+(I) [VM Property] java.runtime.name = Java(TM) SE Runtime Environment 
+(I) [VM Property] phon.debug = true 
+(I) [VM Property] file.encoding = UTF-8 
+(I) [VM Property] java.vm.name = Java HotSpot(TM) 64-Bit Server VM 
+(I) [VM Property] com.apple.mrj.application.apple.menu.about.name = Phon 
+(I) [VM Property] java.vendor.url.bug = http://bugreport.java.com/bugreport/ 
+(I) [VM Property] java.io.tmpdir = /var/folders/26/jkk95fj15x335sf_j4r4m2ww0000gn/T/ 
+(I) [VM Property] java.version = 9.0.4 
+(I) [VM Property] user.dir = /Users/ghedlund/Documents/Phon/gitprojects/phon 
+(I) [VM Property] os.arch = x86_64 
+(I) [VM Property] java.vm.specification.name = Java Virtual Machine Specification 
+(I) [VM Property] java.awt.printerjob = sun.lwawt.macosx.CPrinterJob 
+(I) [VM Property] sun.os.patch.level = unknown 
+(I) [VM Property] java.library.path = /Users/ghedlund/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:. 
+(I) [VM Property] java.vm.info = mixed mode 
+(I) [VM Property] java.vendor = Oracle Corporation 
+(I) [VM Property] java.vm.version = 9.0.4+11 
+(I) [VM Property] sun.io.unicode.encoding = UnicodeBig 
+(I) [VM Property] java.class.version = 53.0 
+(I) [VM Property] socksNonProxyHosts = local|*.local|169.254/16|*.169.254/16 
+(I) [Other] Locale = en_CA 
+(I) Initializing VLC library 
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+(I) Using vlcj 3.9.0 
+(I) Found libVLC 2.2.6 Umbrella at /Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib 
+(I) Initializing IPA Dictionaries 
+(I) [IPADatabaseManager]: Loading JDBC driver - org.apache.derby.jdbc.EmbeddedDriver 
+(I) [IPADatabaseManager]: Database location = /Users/ghedlund/Documents/Phon/ipadb, maxConnections = 10 
+(I) Setting JavaFX Platform implicit exit to false 
+(I) Initializing JavaFX 
+(I) Loading syllabifiers 
+(I) Starting WelcomeWindow 
+[00007fd5191c0768] core vout display error: Failed to change zoom
+[00007fd5191c0768] core vout display error: Failed to set on top
+[00007fd5191c0768] core vout display error: Failed to change source AR
+[00007fd5191c0768] core vout display error: Failed to change zoom
+[00007fd5191c0768] core vout display error: Failed to change source AR
+log4j:WARN No appenders could be found for logger (org.apache.commons.digester.Digester).
+log4j:WARN Please initialize the log4j system properly.
+file:/var/folders/26/jkk95fj15x335sf_j4r4m2ww0000gn/T/phon7456376898612678367report.html
+=========== Performance Statistics =============
+
+Time:
+com.sun.webkit.perf.Locks.TOTALTIME: 86745ms, 100.00%
+
+Invocations count:
+com.sun.webkit.perf.Locks.TOTALTIME: 1
+================================================
+

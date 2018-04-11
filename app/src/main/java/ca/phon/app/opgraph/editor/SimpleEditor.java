@@ -39,8 +39,6 @@ import org.apache.commons.lang.WordUtils;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
-import com.sun.glass.events.KeyEvent;
-
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.edits.graph.*;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
