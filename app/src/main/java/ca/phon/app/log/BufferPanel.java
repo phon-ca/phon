@@ -296,6 +296,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 
 	public void showHtml() {
+		showHtml(true);
+	}
+	
+	public void showHtml(boolean loadTextContent) {
 		JComponent oldComp = currentView;
 
 		final WebView htmlView = getWebView();
@@ -312,7 +316,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 			});
 
-			htmlView.getEngine().loadContent(logBuffer.getText());
+			if(loadTextContent)
+				htmlView.getEngine().loadContent(logBuffer.getText());
 
 			SwingUtilities.invokeLater(() -> {
 				currentView = fxPanel;

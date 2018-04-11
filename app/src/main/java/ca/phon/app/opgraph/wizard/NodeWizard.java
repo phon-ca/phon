@@ -522,8 +522,6 @@ public class NodeWizard extends WizardFrame {
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
 		processor.addProcessorListener(processorListener);
-		final WizardExtension ext = processor.getGraph().getExtension(WizardExtension.class);
-		final String reportTemplateBufferName = "Report Template";
 
 		reportStartTime = System.currentTimeMillis();
 		reportTimer = new Timer(500, (e) -> {
@@ -561,7 +559,7 @@ public class NodeWizard extends WizardFrame {
 			
 			final ReportTree reportTree = (ReportTree)processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
 			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
-				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer(reportTemplateBufferName);
+				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer("Report Template");
 
 				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
 				final PrintWriter writer = new PrintWriter(os);
@@ -595,8 +593,9 @@ public class NodeWizard extends WizardFrame {
 			// create temp file
 			File tempFile = null;
 			try {
-				tempFile = File.createTempFile("phon", "report");
-				tempFile.deleteOnExit();
+				tempFile = //new File("/Users/ghedlund/Desktop/Report.htm"); 
+						File.createTempFile("phon", "report.html");
+//				tempFile.deleteOnExit();
 
 				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
 					final NodeWizardReportGenerator reportGenerator =
@@ -619,7 +618,7 @@ public class NodeWizard extends WizardFrame {
 				try {
 					SwingUtilities.invokeAndWait( () -> { 
 						bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report")); 
-						bufferPanelRef.get().showHtml();
+						bufferPanelRef.get().showHtml(false);
 					});
 					final BufferPanel reportBufferPanel = bufferPanelRef.get();
 					final WebView webView = reportBufferPanel.getWebView();
@@ -648,11 +647,11 @@ public class NodeWizard extends WizardFrame {
 
 						});
 
-//						webView.getEngine().load(reportURL);
+						webView.getEngine().load(reportURL);
 					});
 					
-					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
-					reader.execute();
+//					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
+//					reader.execute();
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}

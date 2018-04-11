@@ -150,10 +150,22 @@ public class NodeWizardReportGenerator {
 	}
 
 	private String markdownToHTML(String md) {
+		// remove all of velocity's excess whitespace
+		final StringBuffer buffer = new StringBuffer();
+		final StringReader reader = new StringReader(md);
+		try(BufferedReader in = new BufferedReader(reader)) {
+		String line = null;
+			while((line = in.readLine()) != null) {
+				buffer.append(line.trim()).append("\n");
+			}
+		} catch (IOException e) {
+			
+		}
+				
 		List<Extension> extensions = Arrays.asList(TablesExtension.create());
 
 		final Parser parser = Parser.builder().extensions(extensions).build();
-		final Node doc = parser.parse(md);
+		final Node doc = parser.parse(buffer.toString());
 		final HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
 		return renderer.render(doc);
 	}
