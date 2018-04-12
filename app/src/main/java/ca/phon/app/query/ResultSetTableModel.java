@@ -298,7 +298,7 @@ public class ResultSetTableModel extends AbstractTableModel {
 					}
 				}
 				resultSetList.sort( (rs1, rs2) -> rs1.getSessionPath().compareTo(rs2.getSessionPath()) );
-				fireTableRowsInserted(0, getRowCount());
+				fireTableRowsInserted(0, getRowCount()-1);
 			}
 			
 			if(getStatus() != TaskStatus.TERMINATED)

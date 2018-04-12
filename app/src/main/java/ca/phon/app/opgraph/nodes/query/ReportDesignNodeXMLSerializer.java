@@ -26,8 +26,10 @@ import javax.xml.bind.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.extensions.Extendable;

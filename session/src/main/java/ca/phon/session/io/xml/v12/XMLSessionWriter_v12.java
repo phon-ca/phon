@@ -24,7 +24,10 @@ import java.util.*;
 import java.util.logging.*;
 
 import javax.xml.bind.*;
-import javax.xml.datatype.*;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 
 import org.apache.commons.lang3.StringUtils;

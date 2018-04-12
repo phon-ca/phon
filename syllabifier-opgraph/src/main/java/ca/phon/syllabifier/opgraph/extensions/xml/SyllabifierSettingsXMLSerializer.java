@@ -23,7 +23,8 @@ import java.io.IOException;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.io.xml.*;
