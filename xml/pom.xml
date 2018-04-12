@@ -26,11 +26,6 @@
       <groupId>org.antlr</groupId>
       <artifactId>antlr</artifactId>
     </dependency>
-    <dependency> 
-    <groupId>xml-apis</groupId>
-    <artifactId>xml-apis</artifactId>
-    <version>1.4.01</version>
-</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

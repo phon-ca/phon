@@ -31,7 +31,9 @@ import javax.xml.parsers.*;
 import javax.xml.stream.*;
 import javax.xml.xpath.*;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import ca.phon.extensions.ExtensionSupport;

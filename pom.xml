@@ -120,7 +120,7 @@
 
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>2-SNAPSHOT</ca.hedlund.desktopicons.version>
-		<ca.gedge.opgraph.version>0.5-SNAPSHOT</ca.gedge.opgraph.version>
+		<ca.gedge.opgraph.version>0.6-SNAPSHOT</ca.gedge.opgraph.version>
 		<ca.phon.native-dialogs.version>10</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>1-SNAPSHOT</ca.phon.jbreadcrumb.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
@@ -144,7 +144,7 @@
 
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
-		<org.codehaus.groovy.groovy-all.version>2.4.0</org.codehaus.groovy.groovy-all.version>
+		<org.codehaus.groovy.groovy-all.version>2.4.15</org.codehaus.groovy.groovy-all.version>
 		<org.dockingframes.docking-frames-common.version>1.1.2-phon</org.dockingframes.docking-frames-common.version>
 		<org.dockingframes.docking-frames-core.version>1.1.2-phon</org.dockingframes.docking-frames-core.version>
 		<org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
