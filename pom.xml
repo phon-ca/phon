@@ -514,6 +514,7 @@
 				<configuration>
 					<reuseForks>false</reuseForks>
 					<forkCount>1</forkCount>
+					<argLine>--add-modules java.xml.bind</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
