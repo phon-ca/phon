@@ -69,6 +69,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 	@Override
 	public void loadSettings(Properties properties) {
+		System.out.println("Hello world");
 	}
 
 	private String getGroupBy() {

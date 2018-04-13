@@ -22,6 +22,18 @@ import java.util.*;
 
 
 public class InventorySettings {
+	
+	private boolean configureAutomatically = true;
+	
+	private boolean caseSensitive = false;
+	
+	private boolean ignoreDiacritics = false;
+	
+	private boolean includeMetadata = true;
+	
+	private boolean includeAdditionalGroupData = false;
+	
+	private boolean includeAdditionalWordData = false;
 
 	private ColumnInfo groupBy;
 	
@@ -33,6 +45,54 @@ public class InventorySettings {
 		columns = new ArrayList<>();
 	}
 	
+	public boolean isConfigureAutomatically() {
+		return configureAutomatically;
+	}
+
+	public void setConfigureAutomatically(boolean configureAutomatically) {
+		this.configureAutomatically = configureAutomatically;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
+	}
+
+	public boolean isIgnoreDiacritics() {
+		return ignoreDiacritics;
+	}
+
+	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
+		this.ignoreDiacritics = ignoreDiacritics;
+	}
+
+	public boolean isIncludeMetadata() {
+		return includeMetadata;
+	}
+
+	public void setIncludeMetadata(boolean includeMetadata) {
+		this.includeMetadata = includeMetadata;
+	}
+
+	public boolean isIncludeAdditionalGroupData() {
+		return includeAdditionalGroupData;
+	}
+
+	public void setIncludeAdditionalGroupData(boolean includeAdditionalGroupData) {
+		this.includeAdditionalGroupData = includeAdditionalGroupData;
+	}
+
+	public boolean isIncludeAdditionalWordData() {
+		return includeAdditionalWordData;
+	}
+
+	public void setIncludeAdditionalWordData(boolean includeAdditionalWordData) {
+		this.includeAdditionalWordData = includeAdditionalWordData;
+	}
+
 	public ColumnInfo getGroupBy() {
 		return this.groupBy;
 	}
