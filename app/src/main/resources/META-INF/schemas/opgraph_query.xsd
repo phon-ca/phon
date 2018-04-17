@@ -103,14 +103,39 @@
         <xs:complexContent mixed="false">
             <xs:extension base="og:AbstractExtensionType">
                 <xs:sequence>
+                	<xs:element ref="automaticConfiguration" minOccurs="0" maxOccurs="1"/>
                     <xs:element ref="groupBy" minOccurs="0" maxOccurs="1"/>
-                    <xs:element ref="column" minOccurs="1" maxOccurs="unbounded"/>
+                    <xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+	
+	<xs:complexType name="InventoryAutomaticConfigType">
+		<xs:sequence>
+			<xs:element ref="autoGrouping" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="autoColumns" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+        <xs:attribute name="configureAutomatically" type="xs:boolean" default="true"/>
+	</xs:complexType>
+	
+	<xs:complexType name="AutoGroupingType" mixed="false">
+		<xs:attribute name="grouping" type="xs:boolean" use="required"/>
+		<xs:attribute name="column" type="og:nonEmptyString" use="optional"/>
+	</xs:complexType>
+	
+	<xs:complexType name="AutoColumnSettingsType" mixed="false">
+		<xs:attribute name="ignoreDiacritics" type="xs:boolean" default="false"/>
+		<xs:attribute name="caseSensitive" type="xs:boolean" default="true"/>
+		<xs:attribute name="includeAdditionalGroupData" type="xs:boolean" default="false"/>
+		<xs:attribute name="includeAdditionalWordData" type="xs:boolean" default="false"/>
+		<xs:attribute name="includeMetadata" type="xs:boolean" default="false"/>
+	</xs:complexType>
     
     <xs:element name="inventoryoptions" type="InventoryOptionsType" substitutionGroup="og:extension"/>
+    <xs:element name="automaticConfiguration" type="InventoryAutomaticConfigType"/>
+	<xs:element name="autoGrouping" type="AutoGroupingType"/>
+	<xs:element name="autoColumns" type="AutoColumnSettingsType"/>
     
     <xs:complexType name="NodeWizardType">
         <xs:complexContent mixed="false">

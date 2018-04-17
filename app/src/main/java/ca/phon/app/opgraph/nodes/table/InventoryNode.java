@@ -22,6 +22,8 @@ import java.awt.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.swing.SwingUtilities;
+
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
@@ -30,6 +32,8 @@ import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.query.TableUtils;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(
@@ -69,7 +73,6 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 	@Override
 	public void loadSettings(Properties properties) {
-		System.out.println("Hello world");
 	}
 
 	private String getGroupBy() {
@@ -79,6 +82,60 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	private List<String> getColumns() {
 		return getInventorySettings().getColumns().stream()
 			.map(info -> info.getName()).collect(Collectors.toList());
+	}
+	
+	private void automaticConfiguration(OpContext context, Result result) {
+		final InventorySettings settings = getInventorySettings();
+		final boolean ignoreDiacritics = 
+				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) ? 
+						(boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) : settings.isIgnoreDiacritics());
+		final boolean caseSensitive = 
+				(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) ? 
+						(boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) : settings.isCaseSensitive());
+		
+		if(settings.isAutoGrouping()) {
+			ColumnInfo groupBy = new ColumnInfo();
+			groupBy.name = settings.getAutoGroupingColumn();
+			groupBy.caseSensitive = caseSensitive;
+			groupBy.ignoreDiacritics = ignoreDiacritics;
+			settings.setGroupBy(groupBy);
+		}
+		
+		// clear previous auto config settings if they exist
+		settings.clearColumns();
+		
+		List<String> colNames = new ArrayList<>();
+		
+		// result values first
+		for(ResultValue rv:result) {
+			final String colName = rv.getName();
+			
+			if(colName.equals(rv.getTierName())) {
+				// primary result value, always include
+				colNames.add(colName);
+			} else if(colName.equals(rv.getTierName() + " (Group)") 
+					&& settings.isIncludeAdditionalGroupData()) {
+				colNames.add(colName);
+			} else if(colName.equals(rv.getTierName() + " (Word)")
+					&& settings.isIncludeAdditionalWordData()) {
+				colNames.add(colName);
+			}
+		}
+		if(settings.isIncludeMetadata()) {
+			colNames.addAll(result.getMetadata().keySet());
+		}
+		
+		for(String colName:colNames) {
+			ColumnInfo colInfo = new ColumnInfo();
+			colInfo.caseSensitive = caseSensitive;
+			colInfo.ignoreDiacritics = ignoreDiacritics;
+			colInfo.name = colName;
+			settings.addColumn(colInfo);
+		}
+		
+		if(settingsPanel != null) {
+			SwingUtilities.invokeLater( settingsPanel::updateManualConfig );
+		}
 	}
 
 	@Override
@@ -90,7 +147,19 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 		if(inputTable == null)
 			return;
-
+		
+		// auto config if necessary
+		if(getInventorySettings().isConfigureAutomatically()) {
+			int resultColIdx = inputTable.getColumnIndex("Result");
+			if(resultColIdx < 0) 
+				throw new ProcessingException(null, "Unable to automatically configure columns; 'Result' column not found in input table.");
+			
+			if(inputTable.getRowCount() > 0) {
+				Result r = (Result)inputTable.getValueAt(0, resultColIdx);
+				automaticConfiguration(context, r);
+			}
+		}
+		
 		// setup options based on global inputs
 		ColumnInfo groupBy = getInventorySettings().getGroupBy();
 		if(groupBy == null) {

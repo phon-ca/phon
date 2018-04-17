@@ -19,14 +19,18 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
+import ca.phon.session.impl.GroupImpl;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.util.icons.*;
@@ -37,13 +41,30 @@ import ca.phon.util.icons.*;
 public class InventorySettingsPanel extends JPanel {
 
 	private static final long serialVersionUID = -3897702215563994515L;
-
-	private JButton addColumnButton;
+	
+	TitledPanel autoConfigPanel;
+	TitledPanel manualConfigPanel;
+	
+	private ButtonGroup configTypeGroup;
+	private JRadioButton autoConfigBtn;
+	private JRadioButton manualConfigBtn;
+	private JCheckBox autoGroupBox;
+	
+	private ButtonGroup groupByGroup;
+	private JRadioButton groupByAgeBtn;
+	private JRadioButton groupBySessionBtn;
+	
+	private JCheckBox ignoreDiacriticsBox;
+	private JCheckBox caseSensitiveBox;
+	private JCheckBox includeGroupDataBox;
+	private JCheckBox includeWordDataBox;
+	private JCheckBox includeMetadataBox;
 
 	private ColumnPanel groupByPanel;
-
+	private JButton addColumnButton;
 	private JPanel columnPanel;
 
+	// model
 	private InventorySettings settings;
 
 	public InventorySettingsPanel(InventorySettings settings) {
@@ -52,9 +73,114 @@ public class InventorySettingsPanel extends JPanel {
 		this.settings = settings;
 		init();
 	}
-
+	
 	private void init() {
-		setLayout(new GridBagLayout());
+		configTypeGroup = new ButtonGroup();
+		
+		// auto config options
+		autoConfigBtn = new JRadioButton("Automatic Configuration");
+		configTypeGroup.add(autoConfigBtn);
+		autoConfigPanel = new TitledPanel("");
+		autoConfigPanel.setLeftDecoration(autoConfigBtn);
+		autoConfigBtn.setSelected(settings.isConfigureAutomatically());
+		
+		groupByGroup = new ButtonGroup();
+		groupByAgeBtn = new JRadioButton("Age");
+		groupByAgeBtn.setSelected(settings.getAutoGroupingColumn().equals("Age"));
+		groupByAgeBtn.setEnabled(settings.isAutoGrouping());
+		groupByGroup.add(groupByAgeBtn);
+		
+		groupBySessionBtn = new JRadioButton("Session");
+		groupBySessionBtn.setSelected(settings.getAutoGroupingColumn().equals("Session"));
+		groupBySessionBtn.setEnabled(settings.isAutoGrouping());
+		groupByGroup.add(groupBySessionBtn);
+		
+		autoGroupBox = new JCheckBox("Group by:");
+		autoGroupBox.addActionListener( (e) -> {
+			groupByAgeBtn.setEnabled(autoGroupBox.isSelected());
+			groupBySessionBtn.setEnabled(autoGroupBox.isSelected());
+			settings.setAutoGrouping(autoGroupBox.isSelected());
+		});
+		autoGroupBox.setSelected(settings.isAutoGrouping());
+
+		final ActionListener groupByListener = (e) -> {
+			if(groupByAgeBtn.isSelected())
+				settings.setAutoGroupingColumn("Age");
+			else if(groupBySessionBtn.isSelected())
+				settings.setAutoGroupingColumn("Session");
+		};
+		groupByAgeBtn.addActionListener(groupByListener);
+		groupBySessionBtn.addActionListener(groupByListener);
+		
+		final JPanel autoGroupingPanel = new JPanel(new HorizontalLayout());
+		autoGroupingPanel.add(autoGroupBox);
+		autoGroupingPanel.add(groupByAgeBtn);
+		autoGroupingPanel.add(groupBySessionBtn);
+		
+		includeMetadataBox = new JCheckBox("Include metadata");
+		includeMetadataBox.setSelected(settings.isIncludeMetadata());
+		includeMetadataBox.addActionListener( (e) -> settings.setIncludeMetadata(includeMetadataBox.isSelected()) );
+		
+		includeGroupDataBox = new JCheckBox("Include additional group data");
+		includeGroupDataBox.setSelected(settings.isIncludeAdditionalGroupData());
+		includeGroupDataBox.addActionListener( (e) -> settings.setIncludeAdditionalGroupData(includeGroupDataBox.isSelected()) );
+		
+		includeWordDataBox = new JCheckBox("Include additional word data");
+		includeWordDataBox.setSelected(settings.isIncludeAdditionalWordData());
+		includeWordDataBox.addActionListener( (e) -> settings.setIncludeAdditionalWordData(includeWordDataBox.isSelected()) );
+		
+		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
+		ignoreDiacriticsBox.setSelected(settings.isIgnoreDiacritics());
+		ignoreDiacriticsBox.addActionListener( (e) -> settings.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected()) );
+		
+		caseSensitiveBox = new JCheckBox("Case sensititve");
+		caseSensitiveBox.setSelected(settings.isCaseSensitive());
+		caseSensitiveBox.addActionListener( (e) -> settings.setCaseSensitive(caseSensitiveBox.isSelected()) );
+
+		autoConfigPanel.getContentContainer().setLayout(new VerticalLayout());
+		autoConfigPanel.getContentContainer().add(autoGroupingPanel);
+		autoConfigPanel.getContentContainer().add(includeMetadataBox);
+		autoConfigPanel.getContentContainer().add(includeGroupDataBox);
+		autoConfigPanel.getContentContainer().add(includeWordDataBox);
+		autoConfigPanel.getContentContainer().add(ignoreDiacriticsBox);
+		autoConfigPanel.getContentContainer().add(caseSensitiveBox);
+		
+		// manual config options
+		manualConfigBtn = new JRadioButton("Manual Configuration");
+		configTypeGroup.add(manualConfigBtn);
+		manualConfigPanel = new TitledPanel("");
+		manualConfigPanel.setLeftDecoration(manualConfigBtn);
+		manualConfigBtn.setSelected(!settings.isConfigureAutomatically());
+		
+		final ActionListener configListener = (e) -> {
+			autoConfigPanel.getContentContainer().setEnabled(settings.isConfigureAutomatically());
+			manualConfigPanel.getContentContainer().setEnabled(!settings.isConfigureAutomatically());
+			settings.setConfigureAutomatically(autoConfigBtn.isSelected());
+		};
+		autoConfigBtn.addActionListener(configListener);
+		manualConfigBtn.addActionListener(configListener);
+		
+		groupByPanel = new ColumnPanel(new ColumnInfo());
+		columnPanel = new JPanel(new VerticalLayout());
+		
+		final ImageIcon icon = IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
+		final Action onAddAction = new PhonUIAction(this, "onAddColumn");
+		onAddAction.putValue(Action.NAME, "Add");
+		onAddAction.putValue(Action.SHORT_DESCRIPTION, "Add column to sort");
+		onAddAction.putValue(Action.SMALL_ICON, icon);
+		addColumnButton = new JButton(onAddAction);
+		
+		updateManualConfig();
+		
+		setLayout(new BorderLayout());
+		add(autoConfigPanel, BorderLayout.NORTH);
+		add(manualConfigPanel, BorderLayout.CENTER);
+	}
+
+	public void updateManualConfig() {
+		manualConfigPanel.getContentContainer().removeAll();
+		manualConfigPanel.getContentContainer().setLayout(new GridBagLayout());
+		
 		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -63,22 +189,15 @@ public class InventorySettingsPanel extends JPanel {
 		gbc.anchor = GridBagConstraints.NORTHWEST;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		final ImageIcon icon = IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final Action onAddAction = new PhonUIAction(this, "onAddColumn");
-		onAddAction.putValue(Action.NAME, "Add");
-		onAddAction.putValue(Action.SHORT_DESCRIPTION, "Add column to sort");
-		onAddAction.putValue(Action.SMALL_ICON, icon);
-		addColumnButton = new JButton(onAddAction);
-
 		ColumnInfo groupBy = settings.getGroupBy();
 		if(groupBy == null) {
 			groupBy = new ColumnInfo();
 			settings.setGroupBy(groupBy);
 		}
-		groupByPanel = new ColumnPanel(groupBy);
+		groupByPanel.setColumnInfo(settings.getGroupBy());
 		groupByPanel.setBorder(BorderFactory.createTitledBorder("Group by"));
 
-		columnPanel = new JPanel(new VerticalLayout());
+		columnPanel.removeAll();
 		if(settings.getColumns().size() == 0) {
 			settings.addColumn(new ColumnInfo());
 		}
@@ -97,13 +216,13 @@ public class InventorySettingsPanel extends JPanel {
 		btmPanel.add(columnPanel);
 		btmPanel.add(ButtonBarBuilder.buildOkBar(addColumnButton));
 
-		add(groupByPanel, gbc);
+		manualConfigPanel.getContentContainer().add(groupByPanel, gbc);
 		++gbc.gridy;
-		add(btmPanel, gbc);
+		manualConfigPanel.getContentContainer().add(btmPanel, gbc);
 		++gbc.gridy;
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
-		add(Box.createVerticalGlue(), gbc);
+		manualConfigPanel.getContentContainer().add(Box.createVerticalGlue(), gbc);
 	}
 
 	private JComponent createSeparator(ColumnPanel colPanel) {
@@ -185,6 +304,11 @@ public class InventorySettingsPanel extends JPanel {
 		public ColumnInfo getColumnInfo() {
 			return this.info;
 		}
+		
+		public void setColumnInfo(ColumnInfo info) {
+			this.info = info;
+			update();
+		}
 
 		private void init() {
 			setLayout(new GridBagLayout());
@@ -206,12 +330,12 @@ public class InventorySettingsPanel extends JPanel {
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
-					updateColumn();
+					updateColumnInfo();
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					updateColumn();
+					updateColumnInfo();
 				}
 
 				@Override
@@ -238,8 +362,14 @@ public class InventorySettingsPanel extends JPanel {
 			ignoreDiacriticsBox.addChangeListener( (e) -> info.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected()) );
 			add(ignoreDiacriticsBox, gbc);
 		}
+		
+		private void update() {
+			nameField.setText(info.getName());
+			caseSensitiveBox.setSelected(info.caseSensitive);
+			ignoreDiacriticsBox.setSelected(info.ignoreDiacritics);
+		}
 
-		private void updateColumn() {
+		private void updateColumnInfo() {
 			info.setName(nameField.getText());
 		}
 	}

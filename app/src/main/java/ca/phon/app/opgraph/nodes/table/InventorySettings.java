@@ -29,6 +29,10 @@ public class InventorySettings {
 	
 	private boolean ignoreDiacritics = false;
 	
+	private boolean autoGrouping = true;
+	
+	private String autoGroupingColumn = "Age";
+	
 	private boolean includeMetadata = true;
 	
 	private boolean includeAdditionalGroupData = false;
@@ -45,6 +49,22 @@ public class InventorySettings {
 		columns = new ArrayList<>();
 	}
 	
+	public boolean isAutoGrouping() {
+		return autoGrouping;
+	}
+
+	public void setAutoGrouping(boolean autoGrouping) {
+		this.autoGrouping = autoGrouping;
+	}
+
+	public String getAutoGroupingColumn() {
+		return autoGroupingColumn;
+	}
+
+	public void setAutoGroupingColumn(String autoGroupingColumn) {
+		this.autoGroupingColumn = autoGroupingColumn;
+	}
+
 	public boolean isConfigureAutomatically() {
 		return configureAutomatically;
 	}
@@ -103,6 +123,10 @@ public class InventorySettings {
 	
 	public List<ColumnInfo> getColumns() {
 		return this.columns;
+	}
+	
+	public void clearColumns() {
+		this.columns.clear();
 	}
 	
 	public void removeColumn(ColumnInfo info) {

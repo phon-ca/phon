@@ -57,6 +57,25 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		final Element settingsEle =
 				doc.createElementNS(NAMESPACE, PREFIX + ":" + QNAME.getLocalPart());
 		
+		// auto config
+		final Element autoConfigSettings = doc.createElementNS(NAMESPACE, PREFIX + ":automaticConfiguration");
+		autoConfigSettings.setAttribute("configureAutomatically", Boolean.toString(settings.isConfigureAutomatically()));
+		
+		final Element autoGroupBySettings = doc.createElementNS(NAMESPACE, PREFIX + ":autoGrouping");
+		autoGroupBySettings.setAttribute("grouping", Boolean.toString(settings.isAutoGrouping()));
+		autoGroupBySettings.setAttribute("column", settings.getAutoGroupingColumn());
+		autoConfigSettings.appendChild(autoGroupBySettings);
+		
+		final Element autoColumnSettings = doc.createElementNS(NAMESPACE, PREFIX + ":autoColumns");
+		autoColumnSettings.setAttribute("ignoreDiacritics", Boolean.toString(settings.isIgnoreDiacritics()));
+		autoColumnSettings.setAttribute("caseSensitive", Boolean.toString(settings.isCaseSensitive()));
+		autoColumnSettings.setAttribute("includeAdditionalGroupData", Boolean.toString(settings.isIncludeAdditionalGroupData()));
+		autoColumnSettings.setAttribute("includeAdditionalWordData", Boolean.toString(settings.isIncludeAdditionalWordData()));
+		autoColumnSettings.setAttribute("includeMetadata", Boolean.toString(settings.isIncludeMetadata()));
+		autoConfigSettings.appendChild(autoColumnSettings);
+		
+		settingsEle.appendChild(autoConfigSettings);
+		
 		if(settings.getGroupBy() != null
 				&& settings.getGroupBy().getName().trim().length() > 0) {
 			final Element groupByEle = 
@@ -91,13 +110,20 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		final InventorySettings retVal = new InventorySettings();
 		retVal.getColumns().clear();
 		NodeList childNodes = elem.getChildNodes();
+		boolean hasAutoConfig = false;
 		for(int i = 0; i < childNodes.getLength(); i++) {
 			final Node childNode = childNodes.item(i);
 			if(childNode.getNodeName().equals(PREFIX + ":groupBy")) {
 				retVal.setGroupBy(readColumnInfo(childNode));
 			} else if(childNode.getNodeName().equals(PREFIX + ":column")) {
 				retVal.getColumns().add(readColumnInfo(childNode));
+			} else if(childNode.getNodeName().equals(PREFIX + ":automaticConfiguration")) {
+				hasAutoConfig = true;
+				readAutoConfigSettings(retVal, childNode);
 			}
+		}
+		if(!hasAutoConfig) {
+			retVal.setConfigureAutomatically(false);
 		}
 		
 		if(parent instanceof OpNode) {
@@ -106,6 +132,33 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		}
 		
 		return retVal;
+	}
+	
+	private boolean checkBooleanAttr(NamedNodeMap attrs, String name) {
+		Node n = attrs.getNamedItem(name);
+		return (n != null ? Boolean.parseBoolean(n.getNodeValue()) : false);
+	}
+	
+	private void readAutoConfigSettings(InventorySettings settings, Node autoConfigNode) {
+		settings.setConfigureAutomatically(checkBooleanAttr(autoConfigNode.getAttributes(), "configureAutomatically"));
+		
+		NodeList childNodes = autoConfigNode.getChildNodes();
+		for(int i = 0; i < childNodes.getLength(); i++) {
+			Node childNode = childNodes.item(i);
+			NamedNodeMap attrs = childNode.getAttributes();
+			if(childNode.getNodeName().equals(PREFIX + ":autoGrouping")) {
+				settings.setAutoGrouping(checkBooleanAttr(attrs, "grouping"));
+				
+				Node n = attrs.getNamedItem("column");
+				settings.setAutoGroupingColumn(n != null ? n.getNodeValue() : "");
+			} else if(childNode.getNodeName().equals(PREFIX + ":autoColumns")) {
+				settings.setIgnoreDiacritics(checkBooleanAttr(attrs, "ignoreDiacritics"));
+				settings.setCaseSensitive(checkBooleanAttr(attrs, "caseSensitive"));
+				settings.setIncludeAdditionalGroupData(checkBooleanAttr(attrs, "includeAdditionalGroupData"));
+				settings.setIncludeAdditionalWordData(checkBooleanAttr(attrs, "includeAdditionalWordData"));
+				settings.setIncludeMetadata(checkBooleanAttr(attrs, "includeMetadata"));
+			}
+		}
 	}
 	
 	private ColumnInfo readColumnInfo(Node columnInfoNode) {
