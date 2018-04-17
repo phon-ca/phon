@@ -43,10 +43,10 @@ public class OpenSimpleReportComposerAction extends HookableAction {
 						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
 						(qs) -> new MacroNode(),
 						(graph, project) -> new ReportRunner(graph, project, queryId) );
-		frame.setIncludeQueries(true);
+		frame.getEditor().setIncludeQueries(true);
 
 		if(reportGraph != null) {
-			frame.addGraph(reportGraph);
+			frame.getEditor().addGraph(reportGraph);
 		}
 		
 		frame.pack();

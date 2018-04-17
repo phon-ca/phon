@@ -64,10 +64,10 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 						return new MacroNode();
 					} ,
 					AnalysisRunner::new );
-		frame.setIncludeQueries(true);
+		frame.getEditor().setIncludeQueries(true);
 
 		if(analysisGraph != null) {
-			frame.addGraph(analysisGraph);
+			frame.getEditor().addGraph(analysisGraph);
 		}
 		
 		frame.pack();
