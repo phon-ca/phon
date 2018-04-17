@@ -23,6 +23,7 @@ ca.phon.app.query.ResultSetEP
 ca.phon.app.session.editor.SessionEditorEP
 # Query Editor
 ca.phon.app.query.QueryEditorEP
+ca.phon.app.query.QueryAndReportWizardEP
 # Query History
 ca.phon.app.query.QueryHistoryEP
 # Session template

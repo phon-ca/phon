@@ -251,6 +251,15 @@ public class QueryRunnerPanel extends JPanel {
 	public Project getProject() {
 		return project;
 	}
+	
+	/**
+	 * Temporary project folder used to store query results.
+	 * 
+	 * @return
+	 */
+	public Project getTempProject() {
+		return this.tempProject;
+	}
 
 	public void setProject(Project project) {
 		this.project = project;

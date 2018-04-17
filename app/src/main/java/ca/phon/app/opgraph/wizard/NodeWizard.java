@@ -109,9 +109,9 @@ public class NodeWizard extends WizardFrame {
 
 	private final static Logger LOGGER = Logger.getLogger(NodeWizard.class.getName());
 
-	private final Processor processor;
+	private Processor processor;
 
-	private final OpGraph graph;
+	private OpGraph graph;
 
 	private MultiBufferPanel bufferPanel;
 
@@ -143,7 +143,7 @@ public class NodeWizard extends WizardFrame {
 	private final static String WIZARD_LIST = "_wizard_list_";
 	private final static String SETTINGS = "_settings_";
 
-	boolean inInit = true;
+	protected boolean inInit = true;
 
 	boolean reportSaved = false;
 
@@ -339,7 +339,9 @@ public class NodeWizard extends WizardFrame {
 		statusLabel = new JLabel();
 
 		final WizardExtension nodeWizardList =
-				graph.getExtension(WizardExtension.class);
+				(graph.getExtensionClasses().contains(WizardExtension.class)
+				? graph.getExtension(WizardExtension.class)
+				: new WizardExtension(getGraph()));
 		int stepIdx = 0;
 
 		if(nodeWizardList.getWizardMessage() != null
@@ -353,7 +355,6 @@ public class NodeWizard extends WizardFrame {
 
 			addWizardStep(aboutStep);
 		}
-
 
 		if(nodeWizardList.getOptionalNodeCount() > 0) {
 			optionalsStep = createOptionalsStep();
@@ -456,6 +457,11 @@ public class NodeWizard extends WizardFrame {
 
 	public Processor getProcessor() {
 		return processor;
+	}
+	
+	public void setProcessor(Processor processor) {
+		this.processor = processor;
+		this.graph = processor.getGraph();
 	}
 
 	public WizardExtension getWizardExtension() {
@@ -778,10 +784,11 @@ public class NodeWizard extends WizardFrame {
 	}
 
 	protected void setupOptionals(OpContext ctx) {
+		if(optionalsTree == null) return;
 		for(OpNode node:getWizardExtension().getOptionalNodes()) {
 			final TreePath nodePath = optionalsTree.getNodePath(node);
-			boolean enabled = optionalsTree.isPathChecked(nodePath)
-					|| optionalsTree.isPathPartiallyChecked(nodePath);
+			boolean enabled = 
+					(optionalsTree != null ? optionalsTree.isPathChecked(nodePath) || optionalsTree.isPathPartiallyChecked(nodePath) : true);
 
 			OpContext nodeCtx = ctx;
 			for(int i = 1; i < nodePath.getPathCount(); i++) {
