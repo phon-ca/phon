@@ -17,7 +17,7 @@ public class NewReportNode extends OpNode implements NodeSettings {
 	public final static String REPORT_TREE_KEY = "__reportTree";
 
 	private final InputField reportNameInput =
-			new InputField("root", "Report name", true, true, String.class);
+			new InputField("reportName", "Report name", true, true, String.class);
 
 	private final OutputField reportOutput =
 			new OutputField("reportTree", "Report tree", true, ReportTree.class);
