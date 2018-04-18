@@ -1,9 +1,7 @@
-reports/Aggregate (IPA results).xml
-reports/Aggregate (non-IPA results).xml
-reports/Inventory by Session (IPA results).xml
-reports/Inventory by Session (non-IPA results).xml
+reports/Query Information.xml
 reports/Listing.xml
 reports/Listing by Session.xml
+reports/Aggregate.xml
+reports/Inventory by Session.xml
 reports/Phone Similarity.xml
 reports/Transcript Variability.xml
-reports/Query Information.xml

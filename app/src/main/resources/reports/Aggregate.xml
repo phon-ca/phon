@@ -27,9 +27,25 @@
                 <oga:meta x="15" y="296"/>
             </extensions>
         </node>
+        <node id="eb703f69b3c4634" name="Selected Results" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_selectedSessions]]>
+                    </oga:property>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.util.ArrayList]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="417"/>
+            </extensions>
+        </node>
         <node id="3e35caf8" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
+                    <oga:property key="reportTitle">
+                        <![CDATA[Aggregate]]>
+                    </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var reportTitleParamInfo = {
 	"id": "reportTitle",
@@ -51,7 +67,7 @@ function setup_params(params) {
 ]]>
                     </oga:property>
                 </oga:settings>
-                <oga:meta x="24" y="421"/>
+                <oga:meta x="19" y="521"/>
             </extensions>
         </node>
         <node id="87e30b6166544cc8" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
@@ -60,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="6e5409f3">
+            <graph id="5736846">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -108,7 +124,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="4e27bffc6a634d9e"/>
             <ogcn:published_output field="value" name="value" ref="a2e71a7ce914ac5"/>
             <extensions>
-                <oga:meta x="386" y="425"/>
+                <oga:meta x="381" y="525"/>
             </extensions>
         </ogcn:macro>
         <node id="c2c36aa400ff4f50" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -133,29 +149,25 @@ function setup_params(params) {
         <node id="dea1829" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="613" y="425"/>
+                <oga:meta x="608" y="525"/>
             </extensions>
         </node>
-        <node id="c41947665b034a0e" name="Aggregate" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+        <node id="c41947665b034a0e" name="Inventory Options" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
             <extensions>
                 <opqry:inventoryoptions>
-                    <opqry:automaticConfiguration configureAutomatically="false">
-                        <opqry:autoGrouping column="Age" grouping="true"/>
-                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                    <opqry:automaticConfiguration configureAutomatically="true">
+                        <opqry:autoGrouping column="Session" grouping="true"/>
+                        <opqry:autoColumns caseSensitive="true" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="false"/>
                     </opqry:automaticConfiguration>
-                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                    <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="true"/>
-                    <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
                 </opqry:inventoryoptions>
                 <oga:settings/>
                 <oga:meta x="810" y="15"/>
             </extensions>
         </node>
-        <node id="1271664e64514bf6" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+        <node id="1271664e64514bf6" name="Sort Settings" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
             <extensions>
-                <opqry:sortoptions>
-                    <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
-                    <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
+                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
+                    <opqry:sortBy column="" order="ascending" type="plain"/>
                 </opqry:sortoptions>
                 <oga:settings/>
                 <oga:meta x="1007" y="16"/>
@@ -169,7 +181,7 @@ function setup_params(params) {
                     </oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
-                <oga:meta x="834" y="427">
+                <oga:meta x="829" y="527">
                     <oga:default for="sectionName" type="java.lang.String">Aggregate</oga:default>
                 </oga:meta>
             </extensions>
@@ -184,18 +196,19 @@ function setup_params(params) {
         <link dest="2e06273e" destField="parent" source="dea1829" sourceField="root"/>
         <link dest="8f217ce063e147ac" destField="parameters" source="3e35caf8" sourceField="parameters"/>
         <link dest="dea1829" destField="reportName" source="8f217ce063e147ac" sourceField="value"/>
+        <link dest="87e30b6166544cc8" destField="selectedResults" source="eb703f69b3c4634" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate (IPA results)">
+                <opqry:info format="html" title="Aggregate">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="c41947665b034a0e">
-                    <opqry:info format="html" title="Aggregate">
+                <opqry:node ref="1271664e64514bf6">
+                    <opqry:info format="html" title="Sort">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:node ref="1271664e64514bf6">
-                    <opqry:info format="html" title="Sort">
+                <opqry:node ref="c41947665b034a0e" showAsStep="true">
+                    <opqry:info format="html" title="Aggregate">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
