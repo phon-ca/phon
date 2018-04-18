@@ -4,8 +4,12 @@
         <node id="b050ef7b39d24677" name="Project" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
-                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                    <oga:property key="contextKey">
+                        <![CDATA[_project]]>
+                    </oga:property>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[ca.phon.project.Project]]>
+                    </oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="15"/>
             </extensions>
@@ -13,16 +17,34 @@
         <node id="f81ad5ace0d54cec" name="Query ID" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
-                    <oga:property key="contextKey"><![CDATA[_queryId]]></oga:property>
+                    <oga:property key="contextKey">
+                        <![CDATA[_queryId]]>
+                    </oga:property>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.lang.String]]>
+                    </oga:property>
                 </oga:settings>
-                <oga:meta x="116" y="246"/>
+                <oga:meta x="15" y="296"/>
+            </extensions>
+        </node>
+        <node id="1eb34cf97e284ab0" name="Selected Results" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_selectedSessions]]>
+                    </oga:property>
+                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.util.ArrayList]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="15" y="417"/>
             </extensions>
         </node>
         <node id="2465d065b8f8463e" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="__script"><![CDATA[var reportTitleParamInfo = {
+                    <oga:property key="__script">
+                        <![CDATA[var reportTitleParamInfo = {
 	"id": "reportTitle",
 	"title": "Report Title",
 	"def": "Transcript Variability",
@@ -39,146 +61,127 @@ function setup_params(params) {
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
 }
-]]></oga:property>
+]]>
+                    </oga:property>
                 </oga:settings>
-                <oga:meta x="100" y="395"/>
+                <oga:meta x="15" y="532"/>
             </extensions>
         </node>
         <node id="21367d23" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
-                <oga:meta x="332" y="81"/>
+                <oga:meta x="352" y="15"/>
             </extensions>
         </node>
-        <ogcn:macro id="eefe4bce88e04db3" name="Start Report Template" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="21de6cb5">
-                <ogcn:macro id="440276bf644d4b0d" name="Get Process Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-                    <graph id="5abbfbd8">
-                        <node id="22c61d5082b24899" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember"><![CDATA[<init>(java.lang.String)]]></oga:property>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="78" y="88">
-                                    <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
-                                </oga:meta>
-                            </extensions>
-                        </node>
-                        <node id="2fb57e680a6c4bc7" name="Map#get(Object)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="236" y="91"/>
-                            </extensions>
-                        </node>
-                        <node id="c1be62db9d7c400f" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
-                            <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
-                                </oga:settings>
-                                <oga:meta x="393" y="100"/>
-                            </extensions>
-                        </node>
-                        <link dest="2fb57e680a6c4bc7" destField="arg1" source="22c61d5082b24899" sourceField="value"/>
-                        <link dest="c1be62db9d7c400f" destField="obj" source="2fb57e680a6c4bc7" sourceField="value"/>
-                    </graph>
-                    <ogcn:published_input field="obj" name="parameters" ref="2fb57e680a6c4bc7"/>
-                    <ogcn:published_output field="value" name="value" ref="c1be62db9d7c400f"/>
-                    <extensions>
-                        <oga:meta x="35" y="48"/>
-                    </extensions>
-                </ogcn:macro>
-                <node id="978bfdfe223f4547" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-                    <input name="data" optional="false">Data to print</input>
+        <ogcn:macro id="5d36951fc4114075" name="Get Report Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
+            <graph id="6f0c9cbe">
+                <node id="f13988b6aac4452a" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="dataTemplate"><![CDATA[
-#h1("$DATA")
-]]></oga:property>
-                            <oga:property key="showText"><![CDATA[true]]></oga:property>
-                            <oga:property key="showTable"><![CDATA[false]]></oga:property>
-                            <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.classMember">
+                                <![CDATA[<init>(java.lang.String)]]>
+                            </oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ConstructorNode.declaredClass">
+                                <![CDATA[java.lang.String]]>
+                            </oga:property>
                         </oga:settings>
-                        <oga:meta x="229" y="39">
-                            <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
-                            <oga:default for="append" type="java.lang.Boolean">true</oga:default>
+                        <oga:meta x="78" y="88">
+                            <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
-                <link dest="978bfdfe223f4547" destField="data" source="440276bf644d4b0d" sourceField="value"/>
-                <extensions>
-                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
-                </extensions>
+                <node id="faa1cd91e0e497b" name="Map#get(Object)" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember">
+                                <![CDATA[get(java.lang.Object)]]>
+                            </oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                <![CDATA[java.util.Map]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="236" y="91"/>
+                    </extensions>
+                </node>
+                <node id="d5e3bd59d50476e" name="Object#toString()" type="class:ca.gedge.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.classMember">
+                                <![CDATA[toString()]]>
+                            </oga:property>
+                            <oga:property key="ca.gedge.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                <![CDATA[java.lang.Object]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="393" y="100"/>
+                    </extensions>
+                </node>
+                <link dest="faa1cd91e0e497b" destField="arg1" source="f13988b6aac4452a" sourceField="value"/>
+                <link dest="d5e3bd59d50476e" destField="obj" source="faa1cd91e0e497b" sourceField="value"/>
             </graph>
-            <ogcn:published_input field="parameters" name="parameters" ref="440276bf644d4b0d"/>
-            <ogcn:published_output field="value" name="reportTitle" ref="440276bf644d4b0d"/>
+            <ogcn:published_input field="obj" name="parameters" ref="faa1cd91e0e497b"/>
+            <ogcn:published_output field="value" name="value" ref="d5e3bd59d50476e"/>
             <extensions>
-                <oga:meta x="374" y="395"/>
+                <oga:meta x="368" y="517"/>
             </extensions>
         </ogcn:macro>
         <node id="58b853f2" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSessionInfo">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="includeSpeakerInfo">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="includeMetadata">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="includeTierInfo">
+                        <![CDATA[true]]>
+                    </oga:property>
                 </oga:settings>
-                <oga:meta x="511" y="81"/>
+                <oga:meta x="613" y="15"/>
+            </extensions>
+        </node>
+        <node id="4dc868fca73c4846" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="586" y="517"/>
             </extensions>
         </node>
         <node id="4172dddc06ea48a3" type="class:ca.phon.app.opgraph.nodes.table.IPAVariabilityNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
+                    <oga:property key="ignoreDiacritics">
+                        <![CDATA[true]]>
+                    </oga:property>
                 </oga:settings>
-                <oga:meta x="664" y="81"/>
+                <oga:meta x="810" y="15"/>
             </extensions>
         </node>
-        <node id="87ea9b5646534325" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-            <input name="data" optional="true">Data to print</input>
+        <node id="e04c35d7d8ad41ea" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="dataTemplate"><![CDATA[$DATA]]></oga:property>
-                    <oga:property key="showText"><![CDATA[false]]></oga:property>
-                    <oga:property key="showTable"><![CDATA[true]]></oga:property>
-                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
-                <oga:meta x="668" y="197">
-                    <oga:default for="buffer" type="java.lang.String">Transcript Variability</oga:default>
+                <oga:meta x="822" y="517">
+                    <oga:default for="sectionName" type="java.lang.String">All results</oga:default>
                 </oga:meta>
             </extensions>
         </node>
-        <node id="7e69669d2a65417f" name="Add to Report Template" type="class:ca.phon.app.opgraph.nodes.log.PrintBufferNode">
-            <input name="data" optional="false">Data to print</input>
-            <extensions>
-                <oga:settings>
-                    <oga:property key="dataTemplate"><![CDATA[
-#set($table = $tables.get("$DATA"))
-#printTable( $table [] )
-]]></oga:property>
-                    <oga:property key="showText"><![CDATA[true]]></oga:property>
-                    <oga:property key="showTable"><![CDATA[false]]></oga:property>
-                    <oga:property key="showHTML"><![CDATA[false]]></oga:property>
-                </oga:settings>
-                <oga:meta x="704" y="397">
-                    <oga:default for="buffer" type="java.lang.String">Report Template</oga:default>
-                    <oga:default for="append" type="java.lang.Boolean">true</oga:default>
-                </oga:meta>
-            </extensions>
-        </node>
-        <link dest="87ea9b5646534325" destField="data" source="4172dddc06ea48a3" sourceField="table"/>
         <link dest="58b853f2" destField="results" source="21367d23" sourceField="result sets"/>
         <link dest="58b853f2" destField="project" source="21367d23" sourceField="project"/>
         <link dest="4172dddc06ea48a3" destField="table" source="58b853f2" sourceField="table"/>
         <link dest="21367d23" destField="project" source="b050ef7b39d24677" sourceField="obj"/>
         <link dest="21367d23" destField="queryId" source="f81ad5ace0d54cec" sourceField="obj"/>
-        <link dest="eefe4bce88e04db3" destField="parameters" source="2465d065b8f8463e" sourceField="parameters"/>
-        <link dest="87ea9b5646534325" destField="buffer" source="eefe4bce88e04db3" sourceField="reportTitle"/>
-        <link dest="7e69669d2a65417f" destField="data" source="87ea9b5646534325" sourceField="buffer"/>
+        <link dest="21367d23" destField="selectedResults" source="1eb34cf97e284ab0" sourceField="obj"/>
+        <link dest="e04c35d7d8ad41ea" destField="parent" source="4dc868fca73c4846" sourceField="root"/>
+        <link dest="4dc868fca73c4846" destField="reportName" source="5d36951fc4114075" sourceField="value"/>
+        <link dest="5d36951fc4114075" destField="parameters" source="2465d065b8f8463e" sourceField="parameters"/>
+        <link dest="e04c35d7d8ad41ea" destField="table" source="4172dddc06ea48a3" sourceField="table"/>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
