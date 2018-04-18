@@ -73,7 +73,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="3940ba9741044933" name="Get Report Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="35f626df">
+            <graph id="3bb4d6f9">
                 <node id="64b8397ffe9049cf" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -125,7 +125,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="a71911e6a705459c" name="Load Query Script" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="2c7ae86f">
+            <graph id="d3206b6">
                 <node id="50dc926ad1674114" name="Query" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -224,12 +224,6 @@ function setup_params(params) {
                 <oga:meta x="613" y="15"/>
             </extensions>
         </ogcn:macro>
-        <node id="70ae2526" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="549" y="538"/>
-            </extensions>
-        </node>
         <node id="64a20d4a" type="class:ca.phon.app.opgraph.nodes.log.PrintScriptParameters">
             <extensions>
                 <oga:settings>
@@ -272,7 +266,13 @@ function setup_params(params) {
                 <oga:settings>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"/>
                 </oga:settings>
-                <oga:meta x="810" y="541"/>
+                <oga:meta x="513" y="547"/>
+            </extensions>
+        </node>
+        <node id="70ae2526" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="765" y="548"/>
             </extensions>
         </node>
         <link dest="1052be62" destField="project" source="7971e251" sourceField="obj"/>
@@ -282,11 +282,11 @@ function setup_params(params) {
         <link dest="2cce558e" destField="object1" source="a71911e6a705459c" sourceField="name"/>
         <link dest="64f1122e" destField="objects" source="2cce558e" sourceField="array"/>
         <link dest="2cce558e" destField="object2" source="64a20d4a" sourceField="text"/>
-        <link dest="196d1d55" destField="parent" source="70ae2526" sourceField="root"/>
         <link dest="196d1d55" destField="text" source="64f1122e" sourceField="value"/>
         <link dest="3940ba9741044933" destField="parameters" source="aca4840b5b94bad" sourceField="parameters"/>
-        <link dest="70ae2526" destField="reportName" source="3940ba9741044933" sourceField="value"/>
         <link dest="1052be62" destField="selectedResults" source="cb0bcca98fef4ee3" sourceField="obj"/>
+        <link dest="70ae2526" destField="root" source="196d1d55" sourceField="section"/>
+        <link dest="196d1d55" destField="sectionName" source="3940ba9741044933" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="Query Information">

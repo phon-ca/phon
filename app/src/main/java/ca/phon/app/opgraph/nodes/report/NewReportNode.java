@@ -18,6 +18,9 @@ public class NewReportNode extends OpNode implements NodeSettings {
 
 	private final InputField reportNameInput =
 			new InputField("reportName", "Report name", true, true, String.class);
+	
+	private final InputField reportRootInput =
+			new InputField("root", "Report root (overrides name)", true, true, ReportTreeNode.class);
 
 	private final OutputField reportOutput =
 			new OutputField("reportTree", "Report tree", true, ReportTree.class);
@@ -30,6 +33,7 @@ public class NewReportNode extends OpNode implements NodeSettings {
 	public NewReportNode() {
 		super();
 
+		putField(reportRootInput);
 		putField(reportNameInput);
 		putField(reportOutput);
 		putField(reportRootOutput);
@@ -40,7 +44,8 @@ public class NewReportNode extends OpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final ReportTreeNode root =
-				(context.get(reportNameInput) != null ? new SectionHeaderNode(context.get(reportNameInput).toString()) : new SectionHeaderNode("root"));
+				(context.get(reportRootInput) != null ? (ReportTreeNode)context.get(reportRootInput) : 
+						( context.get(reportNameInput) != null ? new SectionHeaderNode(context.get(reportNameInput).toString()) : new SectionHeaderNode("root") ) );
 
 		final ReportTree reportTree = new ReportTree(root);
 		context.put(reportOutput, reportTree);

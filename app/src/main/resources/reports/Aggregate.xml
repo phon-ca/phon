@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.gedge.opgraph.nodes.general.MacroNode">
-            <graph id="5736846">
+            <graph id="5e4b6745">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.gedge.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -146,12 +146,6 @@ function setup_params(params) {
                 <oga:meta x="613" y="15"/>
             </extensions>
         </node>
-        <node id="dea1829" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="608" y="525"/>
-            </extensions>
-        </node>
         <node id="c41947665b034a0e" name="Inventory Options" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
             <extensions>
                 <opqry:inventoryoptions>
@@ -181,9 +175,15 @@ function setup_params(params) {
                     </oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
-                <oga:meta x="829" y="527">
+                <oga:meta x="599" y="531">
                     <oga:default for="sectionName" type="java.lang.String">Aggregate</oga:default>
                 </oga:meta>
+            </extensions>
+        </node>
+        <node id="dea1829" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="845" y="533"/>
             </extensions>
         </node>
         <link dest="1271664e64514bf6" destField="table" source="c41947665b034a0e" sourceField="table"/>
@@ -193,10 +193,10 @@ function setup_params(params) {
         <link dest="87e30b6166544cc8" destField="project" source="5354ffb7" sourceField="obj"/>
         <link dest="87e30b6166544cc8" destField="queryId" source="61300356" sourceField="obj"/>
         <link dest="2e06273e" destField="table" source="1271664e64514bf6" sourceField="table"/>
-        <link dest="2e06273e" destField="parent" source="dea1829" sourceField="root"/>
         <link dest="8f217ce063e147ac" destField="parameters" source="3e35caf8" sourceField="parameters"/>
-        <link dest="dea1829" destField="reportName" source="8f217ce063e147ac" sourceField="value"/>
         <link dest="87e30b6166544cc8" destField="selectedResults" source="eb703f69b3c4634" sourceField="obj"/>
+        <link dest="dea1829" destField="root" source="2e06273e" sourceField="section"/>
+        <link dest="2e06273e" destField="sectionName" source="8f217ce063e147ac" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="Aggregate">
