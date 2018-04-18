@@ -24,6 +24,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 import ca.phon.plugin.PluginAction;
+import ca.phon.util.OSInfo;
 
 /**
  * Command for exiting the application.
@@ -38,8 +39,9 @@ public class ExitCommand extends PluginAction {
 		super(EP);
 		putValue(Action.NAME, "Exit");
 		putValue(Action.SHORT_DESCRIPTION, "Exit the application.");
-		putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		if(!OSInfo.isMacOs())
+			putValue(Action.ACCELERATOR_KEY, 
+					KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 
 }
