@@ -80,8 +80,8 @@ public class VersionInfo {
 			try {
 				InputStream is = VersionInfo.class.getClassLoader().getResourceAsStream(VERSION_PROP_FILE);
 				if(is == null) {
-					_instance.versionProps.put(MAJOR_VERSION, "2");
-					_instance.versionProps.put(BUILD_MINOR, "2");
+					_instance.versionProps.put(MAJOR_VERSION, "3");
+					_instance.versionProps.put(BUILD_MINOR, "0");
 					_instance.versionProps.put(BUILD_REVISION, ".0");
 					_instance.versionProps.put(BUILD_SCREVISION, "XXXXXXXXXXXX");
 				} else {
