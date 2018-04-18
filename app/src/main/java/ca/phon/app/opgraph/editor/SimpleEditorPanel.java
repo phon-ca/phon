@@ -50,6 +50,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -151,6 +152,11 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JButton runButton;
 	private JButton openInComposerButton;
 
+	private JPanel documentPanel;
+	private JTree documentTree;
+	
+	private CardLayout cardLayout;
+	private JPanel nodePanel;
 	private JXTable nodeTable;
 	private List<MacroNode> macroNodes;
 	
@@ -284,7 +290,35 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		inputMap.put(removeKs, "delete");
 		am.put("delete", removeAct);
+		
+		// document tree
+		documentTree = new JTree(createTreeModel());
+		documentTree.setRootVisible(false);
+		documentTree.setVisibleRowCount(20);
+		documentTree.setCellRenderer(new TreeNodeRenderer());
+		documentTree.setPreferredSize(new Dimension(350, 0));
+		documentTree.addMouseListener(new MouseInputAdapter() {
 
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+					final int clickedRow = documentTree.getRowForLocation(e.getX(), e.getY());
+					if(clickedRow >= 0 && clickedRow < documentTree.getRowCount()) {
+						addSelectedDocuments(documentTree);
+					}
+				}
+			}
+
+		});
+		
+		final JScrollPane documentScroller = new JScrollPane(documentTree);
+		
+		documentPanel = new JPanel(new BorderLayout());
+		documentPanel.add(documentScroller, BorderLayout.CENTER);
+		
+		cardLayout = new CardLayout();
+		nodePanel = new JPanel(cardLayout);
+		
 		// setup settings column
 		final JScrollPane nodeScroller = new JScrollPane(nodeTable);
 
@@ -315,8 +349,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		statusBar.add(busyLabel, new JXStatusBar.Constraint(16));
 		statusBar.add(statusLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 
+		nodePanel.add(nodeScroller, "node_table");
+		
+		final JSplitPane splitPane = new JSplitPane();
+		splitPane.setLeftComponent(documentPanel);
+		splitPane.setRightComponent(nodePanel);
+		
 		setLayout(new BorderLayout());
-		add(nodeScroller, BorderLayout.CENTER);
+		add(splitPane, BorderLayout.CENTER);
 		add(toolbar, BorderLayout.NORTH);
 		add(statusBar, BorderLayout.SOUTH);
 	}

@@ -1,6 +1,7 @@
 package ca.phon.app.query;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -80,6 +81,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		retVal.setTitle("Query : " + qn.getName());
 		
 		sessionSelector = new SessionSelector(this.project);
+		sessionSelector.setPreferredSize(new Dimension(350, 0));
 		TitledPanel sessionsPanel = new TitledPanel("Select Sessions", new JScrollPane(sessionSelector));
 		
 		scriptPanel = new ScriptPanel(queryScript);
@@ -88,8 +90,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(sessionsPanel);
 		splitPane.setRightComponent(queryPanel);
-		
-		SwingUtilities.invokeLater( ()-> splitPane.setDividerLocation(0.4f) );
 		
 		retVal.setLayout(new BorderLayout());
 		retVal.add(splitPane, BorderLayout.CENTER);
@@ -112,14 +112,14 @@ public class QueryAndReportWizard extends NodeWizard {
 	
 	private WizardStep createReportConfigStep() {
 		WizardStep retVal = new WizardStep();
-		retVal.setTitle("Report Setup");
+		retVal.setTitle("Report Composer");
 		
 		reportEditor = new SimpleEditorPanel(
 				project,
 				new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
 				(qs) -> new MacroNode(),
 				(graph, project) -> new ReportRunner(graph, getCurrentQueryProject(), getCurrentQueryId()) );
-		TitledPanel configPane = new TitledPanel("Report Configuration", reportEditor);
+		TitledPanel configPane = new TitledPanel("Report Composer", reportEditor);
 		
 		retVal.setLayout(new BorderLayout());
 		retVal.add(configPane, BorderLayout.CENTER);

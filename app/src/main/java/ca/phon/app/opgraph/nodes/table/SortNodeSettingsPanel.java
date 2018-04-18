@@ -16,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
 import org.jdesktop.swingx.*;
 
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.*;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.SortOrder;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortOrder;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.util.icons.*;
@@ -38,8 +40,17 @@ public class SortNodeSettingsPanel extends JPanel {
 	
 	private final SortNodeSettings settings;
 	
-	private JPanel sortByPanel;
+	private TitledPanel autoConfigPanel;
+	private TitledPanel manualConfigPanel;
+
+	private ButtonGroup configTypeGroup;
+	private JRadioButton autoConfigBtn;
+	private JRadioButton manualConfigBtn;
 	
+	private JCheckBox autoConfigBox;
+	private JComboBox<SortOrder> autoSortOrderBox;
+	
+	private JPanel sortByPanel;
 	private JButton addSortButton;
 	
 	public SortNodeSettingsPanel(SortNodeSettings settings) {
@@ -50,7 +61,35 @@ public class SortNodeSettingsPanel extends JPanel {
 	}
 	
 	private void init() {
-		setLayout(new VerticalLayout());
+		configTypeGroup = new ButtonGroup();
+		
+		// auto config options
+		autoConfigBtn = new JRadioButton("Automatic Configuration");
+		configTypeGroup.add(autoConfigBtn);
+		autoConfigPanel = new TitledPanel("");
+		autoConfigPanel.setLeftDecoration(autoConfigBtn);
+		autoConfigBtn.setSelected(settings.isConfigureAutomatically());
+		
+		autoSortOrderBox = new JComboBox<>(SortOrder.values());
+		autoSortOrderBox.setSelectedItem(settings.getAutoSortOrder());
+		autoSortOrderBox.addItemListener( (e) -> settings.setAutoSortOrder((SortOrder)autoSortOrderBox.getSelectedItem()) );
+		autoConfigPanel.getContentContainer().setLayout(new BorderLayout());
+		autoConfigPanel.getContentContainer().add(new JLabel("Sort order:"), BorderLayout.WEST);
+		autoConfigPanel.getContentContainer().add(autoSortOrderBox, BorderLayout.CENTER);
+		
+		manualConfigBtn = new JRadioButton("Manual Configuration");
+		configTypeGroup.add(manualConfigBtn);
+		manualConfigPanel = new TitledPanel("");
+		manualConfigPanel.setLeftDecoration(manualConfigBtn);
+		manualConfigBtn.setSelected(!settings.isConfigureAutomatically());
+		
+		final ActionListener configListener = (e) -> {
+			autoConfigPanel.getContentContainer().setEnabled(settings.isConfigureAutomatically());
+			manualConfigPanel.getContentContainer().setEnabled(!settings.isConfigureAutomatically());
+			settings.setConfigureAutomatically(autoConfigBtn.isSelected());
+		};
+		autoConfigBtn.addActionListener(configListener);
+		manualConfigBtn.addActionListener(configListener);
 		
 		sortByPanel = new JPanel(new VerticalLayout());
 		
@@ -60,6 +99,20 @@ public class SortNodeSettingsPanel extends JPanel {
 		onAddAction.putValue(Action.SHORT_DESCRIPTION, "Add column to sort");
 		onAddAction.putValue(Action.SMALL_ICON, icon);
 		addSortButton = new JButton(onAddAction);
+		
+		manualConfigPanel.getContentContainer().setLayout(new VerticalLayout());
+		manualConfigPanel.getContentContainer().add(sortByPanel);
+		manualConfigPanel.getContentContainer().add(ButtonBarBuilder.buildOkBar(addSortButton));
+		
+		updateManualConfig();
+		
+		setLayout(new BorderLayout());
+		add(autoConfigPanel, BorderLayout.NORTH);
+		add(manualConfigPanel, BorderLayout.CENTER);
+	}
+	
+	public void updateManualConfig() {
+		sortByPanel.removeAll();
 		
 		int scIdx = 0;
 		for(SortColumn sc:settings.getSorting()) {
@@ -71,12 +124,6 @@ public class SortNodeSettingsPanel extends JPanel {
 			sortByPanel.add(scPanel);
 			++scIdx;
 		}
-		
-		final JPanel btmPanel = new JPanel(new VerticalLayout());
-		btmPanel.setBorder(BorderFactory.createTitledBorder("Sort by"));
-		btmPanel.add(sortByPanel);
-		btmPanel.add(ButtonBarBuilder.buildOkBar(addSortButton));
-		add(btmPanel);
 	}
 	
 	public void onAddColumn() {
@@ -94,7 +141,7 @@ public class SortNodeSettingsPanel extends JPanel {
 		if(scPanel.getSeparator() != null)
 			sortByPanel.remove(scPanel.getSeparator());
 		settings.getSorting().remove(scPanel.getSortColumn());
-		revalidate();
+		sortByPanel.revalidate();
 	}
 
 	public SortNodeSettings getSettings() {

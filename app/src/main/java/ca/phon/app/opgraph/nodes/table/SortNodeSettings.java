@@ -16,9 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.app.opgraph.nodes.table;
 
 import java.util.*;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+
+import ca.phon.ui.decorations.TitledPanel;
 
 public class SortNodeSettings {
 
@@ -59,6 +64,10 @@ public class SortNodeSettings {
 			return retVal;
 		}
 	};
+	
+	private boolean configureAutomatically = true;
+	
+	private SortOrder autoSortOrder = SortOrder.ASCENDING;
 
 	private final List<SortColumn> sorting = new ArrayList<>();
 	
@@ -68,8 +77,36 @@ public class SortNodeSettings {
 		sorting.add(new SortColumn());
 	}
 	
+	public boolean isConfigureAutomatically() {
+		return this.configureAutomatically;
+	}
+	
+	public void setConfigureAutomatically(boolean configureAutomatically) {
+		this.configureAutomatically = configureAutomatically;
+	}
+	
+	public SortOrder getAutoSortOrder() {
+		return this.autoSortOrder;
+	}
+	
+	public void setAutoSortOrder(SortOrder sortOrder) {
+		this.autoSortOrder = sortOrder;
+	}
+	
+	public void addColumn(String colName, SortType sortType, SortOrder sortOrder) {
+		final SortColumn sc = new SortColumn();
+		sc.column = colName;
+		sc.type = sortType;
+		sc.order = sortOrder;
+		this.sorting.add(sc);
+	}
+	
 	public List<SortColumn> getSorting() {
 		return this.sorting;
+	}
+	
+	public void clear() {
+		this.sorting.clear();
 	}
 
 	public static class SortColumn {

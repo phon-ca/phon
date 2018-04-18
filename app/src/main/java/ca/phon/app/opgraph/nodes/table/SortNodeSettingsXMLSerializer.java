@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.nodes.query;
+package ca.phon.app.opgraph.nodes.table;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ import org.w3c.dom.Node;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.extensions.Extendable;
 import ca.gedge.opgraph.io.xml.*;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.*;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
 
 public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 	
@@ -58,6 +58,9 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 		final Element settingsEle = 
 				doc.createElementNS(NAMESPACE, PREFIX + ":" + QNAME.getLocalPart());
 		
+		settingsEle.setAttribute("configureAutomatically", Boolean.toString(settings.isConfigureAutomatically()));
+		settingsEle.setAttribute("autoSortOrder", settings.getAutoSortOrder().toString().toLowerCase());
+		
 		for(SortColumn sc:settings.getSorting()) {
 			final Element scEle = doc.createElementNS(NAMESPACE, PREFIX + ":sortBy");
 			writeSortColumn(doc, scEle, sc);
@@ -80,6 +83,20 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 		
 		final SortNodeSettings retVal = new SortNodeSettings();
 		retVal.getSorting().clear();
+		
+		NamedNodeMap attrs = elem.getAttributes();
+		Node autoConfigureNode = attrs.getNamedItem("configureAutomatically");
+		if(autoConfigureNode != null) {
+			retVal.setConfigureAutomatically(Boolean.parseBoolean(autoConfigureNode.getNodeValue()));
+		} else {
+			retVal.setConfigureAutomatically(false);
+		}
+		
+		Node autoSortOrderNode = attrs.getNamedItem("autoSortOrder");
+		if(autoSortOrderNode != null) {
+			retVal.setAutoSortOrder(SortOrder.fromString(autoSortOrderNode.getNodeValue()));
+		}
+		
 		NodeList childNodes = elem.getChildNodes();
 		for(int i = 0; i < childNodes.getLength(); i++) {
 			final Node childNode = childNodes.item(i);

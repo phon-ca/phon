@@ -21,12 +21,14 @@ package ca.phon.app.opgraph.nodes.table;
 import java.awt.Component;
 import java.util.*;
 
+import javax.swing.SwingUtilities;
+
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.query.*;
-import ca.phon.app.opgraph.nodes.query.SortNodeSettings.*;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.query.report.datasource.*;
 
@@ -46,9 +48,34 @@ public class SortNode extends TableOpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 
+	private void automaticConfiguration(OpContext context, DefaultTableDataSource table) {
+		getSortSettings().clear();
+		
+		for(int col = 0; col < table.getColumnCount(); col++) {
+			String colName = table.getColumnTitle(col);
+			Class<?> colType = table.inferColumnType(col);
+		
+			// stop at number columns
+			if(colType.isAssignableFrom(Number.class)) {
+				break;
+			}
+			
+			getSortSettings().addColumn(colName, (colType == IPATranscript.class ? SortType.IPA : SortType.PLAIN), 
+					getSortSettings().getAutoSortOrder());
+		}
+		
+		if(nodeSettingsPanel != null) {
+			SwingUtilities.invokeLater( nodeSettingsPanel::updateManualConfig );
+		}
+	}
+	
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final DefaultTableDataSource table = (DefaultTableDataSource)context.get(tableInput);
+		
+		if(getSortSettings().isConfigureAutomatically()) {
+			automaticConfiguration(context, table);
+		}
 
 		List<Object[]> rowData = table.getRowData();
 		Collections.sort(rowData, new RowComparator(table));
