@@ -7,7 +7,7 @@
 
 /*
 params = {label, "<html><p>Phonological Mean Length of Utterance (PMLU) [Ingram 2002] for aligned words</p></html>",  "<html><b>Phonological Mean Length of Utterance</b></html>"};
- */
+*/
 
 importClass(Packages.ca.phon.syllable.SyllableConstituentType)
 
@@ -74,51 +74,51 @@ function begin_search(session) {
 function setup_params(params) {
 	var cvOptionsSep = new SeparatorScriptParam("Comparison Options", false);
 	params.add(cvOptionsSep);
-	
+
 	ignoreTruncatedParam = new BooleanScriptParam(
-	ignoreTruncatedParamInfo.id,
-	ignoreTruncatedParamInfo.desc,
-	ignoreTruncatedParamInfo.title,
-	ignoreTruncatedParamInfo.def);
+		ignoreTruncatedParamInfo.id,
+		ignoreTruncatedParamInfo.desc,
+		ignoreTruncatedParamInfo.title,
+		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
-	
+
 	includePMLUParam = new BooleanScriptParam(
-	includePMLUParamInfo.id,
-	includePMLUParamInfo.desc,
-	includePMLUParamInfo.title,
-	includePMLUParamInfo.def);
+		includePMLUParamInfo.id,
+		includePMLUParamInfo.desc,
+		includePMLUParamInfo.title,
+		includePMLUParamInfo.def);
 	params.add(includePMLUParam);
-	
+
 	includeEPMLUParam = new BooleanScriptParam(
-	includeEPMLUParamInfo.id,
-	includeEPMLUParamInfo.desc,
-	includeEPMLUParamInfo.title,
-	includeEPMLUParamInfo.def);
+		includeEPMLUParamInfo.id,
+		includeEPMLUParamInfo.desc,
+		includeEPMLUParamInfo.title,
+		includeEPMLUParamInfo.def);
 	params.add(includeEPMLUParam);
-	
+
 	ePMLUClosedSyllBonusParam = new StringScriptParam(
-	ePMLUClosedSyllBonusParamInfo.id,
-	ePMLUClosedSyllBonusParamInfo.desc,
-	ePMLUClosedSyllBonusParamInfo.def);
+		ePMLUClosedSyllBonusParamInfo.id,
+		ePMLUClosedSyllBonusParamInfo.desc,
+		ePMLUClosedSyllBonusParamInfo.def);
 	ePMLUClosedSyllBonusParam.setPrompt(ePMLUClosedSyllBonusParamInfo.prompt);
 	params.add(ePMLUClosedSyllBonusParam);
-	
+
 	filters.group.param_setup(params);
 	var sep = new LabelScriptParam("", "<html><b>Aligned Group</b></html>");
 	params.add(sep);
 	filters.alignedGroup.param_setup(params);
-	
+
 	filters.word.searchByWordEnabled = false;
 	filters.word.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Aligned Word</b></html>");
 	params.add(wordsep);
 	filters.alignedWord.param_setup(params);
-	
+
 	ignoreTruncatedParam = new BooleanScriptParam(ignoreTruncatedParamInfo.id,
-	ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
-	ignoreTruncatedParamInfo.def);
+		ignoreTruncatedParamInfo.title, ignoreTruncatedParamInfo.desc,
+		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
-	
+
 	filters.speaker.param_setup(params);
 }
 
@@ -134,84 +134,85 @@ function setup_params(params) {
  * returns:
  *	void
  *******************************/
-function query_record(recordIndex, record) {
-	if (! filters.speaker.check_speaker(record.speaker)) return;
-	
+function query_record(recordIndex, record)
+{
+	if(!filters.speaker.check_speaker(record.speaker)) return;
+
 	var searchObjects = filters.group.getRequestedGroups(record);
 	// check aligned group for each group returned
-	if (filters.alignedGroup.isUseFilter()) {
-		searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
+	if(filters.alignedGroup.isUseFilter()) {
+	    searchObjects = filters.alignedGroup.filter_groups(record, searchObjects);
 	}
-	
-	for (var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
+
+	for(var gIdx = 0; gIdx < searchObjects.length; gIdx++) {
 		var group = searchObjects[gIdx];
 		var words = filters.word.getRequestedWords(group, "IPA Target");
-		
-		for (var wIdx = 0; wIdx < words.length; wIdx++) {
+
+		for(var wIdx = 0; wIdx < words.length; wIdx++) {
 			var word = words[wIdx];
-			if (filters.alignedWord.isUseFilter()) {
+			if(filters.alignedWord.isUseFilter()) {
 				var alignedWord = word.getTier(filters.alignedWord.tierName);
-				if (! filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
+				if(!filters.alignedWord.patternFilter.check_filter(alignedWord)) continue;
 			}
-			
-			if (ignoreTruncated && word.getIPAActual() == null || word.getIPAActual().length() == 0) {
+
+			if(ignoreTruncated && word.getIPAActual() == null || word.getIPAActual().length() == 0) {
 				continue;
 			}
-			
-			var ipaT = (word.getIPATarget() != null ? word.getIPATarget(): new IPATranscript());
-			var ipaA = (word.getIPAActual() != null ? word.getIPAActual(): new IPATranscript());
-			
-			var result = factory.createResult();
-			result.schema = "ALIGNED";
-			result.recordIndex = recordIndex;
-			
-			var rvt = factory.createResultValue();
-			rvt.tierName = "IPA Target";
-			rvt.groupIndex = gIdx;
-			var startIndex = word.getIPATargetWordLocation();
-			var endIndex = startIndex + ipaT.toString().length();
-			rvt.range = new Range(startIndex, endIndex, false);
-			rvt.data = ipaT;
-			result.addResultValue(rvt);
-			
-			var rva = factory.createResultValue();
-			rva.tierName = "IPA Actual";
-			rva.groupIndex = gIdx;
-			startIndex = word.getIPAActualWordLocation();
-			endIndex = startIndex + ipaA.toString().length();
-			rva.range = new Range(startIndex, endIndex, false);
-			rva.data = ipaA;
-			result.addResultValue(rva);
-			
-			result.metadata.put("Word", wIdx + "");
-			
-			var nf = java.text.NumberFormat.getNumberInstance();
-			nf.setMaximumFractionDigits(6);
-			
-			var pm = (word.phoneAlignment != null ? word.phoneAlignment: new PhoneMap(ipaT, ipaA));
-			if (includePMLU == true) {
-				var pmlu = pm.PMLU;
-				result.metadata.put("target PMLU", nf.format(pmlu.targetPMLU()));
-				result.metadata.put("actual PMLU", nf.format(pmlu.actualPMLU()));
-				result.metadata.put("PWP", nf.format(pmlu.PWP()));
-			}
-			
-			if (includeEPMLU == true) {
-				var emplu = pm.EPMLU;
-				result.metadata.put("target ePMLU-Features", nf.format(emplu.targetEPMLUFeatures()));
-				result.metadata.put("actual ePMLU-Features", nf.format(emplu.actualEPMLUFeatures()));
-				result.metadata.put("ePWP-Features", nf.format(emplu.ePWPFeatures()));
-				
-				result.metadata.put("target ePMLU-Syllables", nf.format(emplu.targetEPMLUSyllables(closedSyllBonus)));
-				result.metadata.put("actual ePMLU-Syllables", nf.format(emplu.actualEPMLUSyllables(closedSyllBonus)));
-				result.metadata.put("ePWP-Syllables", nf.format(emplu.ePWPSyllables(closedSyllBonus)));
-				
-				result.metadata.put("target ePMLU", nf.format(emplu.targetEPMLU(closedSyllBonus)));
-				result.metadata.put("actual ePMLU", nf.format(emplu.actualEPMLU(closedSyllBonus)));
-				result.metadata.put("ePWP", nf.format(emplu.ePWP(closedSyllBonus)));
-			}
-			
-			results.addResult(result);
+
+		    var ipaT = (word.getIPATarget() != null ? word.getIPATarget() : new IPATranscript());
+		    var ipaA = (word.getIPAActual() != null ? word.getIPAActual() : new IPATranscript());
+
+		    var result = factory.createResult();
+		    result.schema = "ALIGNED";
+		    result.recordIndex = recordIndex;
+
+		    var rvt = factory.createResultValue();
+		    rvt.tierName = "IPA Target";
+	    	rvt.groupIndex = gIdx;
+	    	var startIndex = word.getIPATargetWordLocation();
+	    	var endIndex = startIndex + ipaT.toString().length();
+	    	rvt.range = new Range(startIndex, endIndex, false);
+	    	rvt.data = ipaT;
+	    	result.addResultValue(rvt);
+
+	    	var rva = factory.createResultValue();
+	    	rva.tierName = "IPA Actual";
+	    	rva.groupIndex = gIdx;
+	    	startIndex = word.getIPAActualWordLocation();
+	    	endIndex = startIndex + ipaA.toString().length();
+	    	rva.range = new Range(startIndex, endIndex, false);
+	    	rva.data = ipaA;
+	        result.addResultValue(rva);
+
+	        result.metadata.put("Word", wIdx + "");
+
+	        var nf = java.text.NumberFormat.getNumberInstance();
+	    	nf.setMaximumFractionDigits(6);
+
+	        var pm = (word.phoneAlignment != null ? word.phoneAlignment : new PhoneMap(ipaT, ipaA));
+	        if(includePMLU == true) {
+	        	var pmlu = pm.PMLU;
+	        	result.metadata.put("Target PMLU", nf.format(pmlu.targetPMLU()));
+	        	result.metadata.put("Actual PMLU", nf.format(pmlu.actualPMLU()));
+	        	result.metadata.put("PWP", nf.format(pmlu.PWP()));
+	        }
+
+	        if(includeEPMLU == true) {
+	        	var emplu = pm.EPMLU;
+	        	result.metadata.put("Target ePMLU-Features", nf.format(emplu.targetEPMLUFeatures()));
+	        	result.metadata.put("Actual ePMLU-Features", nf.format(emplu.actualEPMLUFeatures()));
+	        	result.metadata.put("ePWP-Features", nf.format(emplu.ePWPFeatures()));
+
+	        	result.metadata.put("Target ePMLU-Syllables", nf.format(emplu.targetEPMLUSyllables(closedSyllBonus)));
+	        	result.metadata.put("Actual ePMLU-Syllables", nf.format(emplu.actualEPMLUSyllables(closedSyllBonus)));
+	        	result.metadata.put("ePWP-Syllables", nf.format(emplu.ePWPSyllables(closedSyllBonus)));
+
+	        	result.metadata.put("Target ePMLU", nf.format(emplu.targetEPMLU(closedSyllBonus)));
+	        	result.metadata.put("Actual ePMLU", nf.format(emplu.actualEPMLU(closedSyllBonus)));
+	        	result.metadata.put("ePWP", nf.format(emplu.ePWP(closedSyllBonus)));
+	        }
+
+	        results.addResult(result);
 		}
 	}
 }
