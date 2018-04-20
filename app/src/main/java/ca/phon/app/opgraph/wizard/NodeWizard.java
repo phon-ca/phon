@@ -46,6 +46,7 @@ import ca.phon.app.log.*;
 import ca.phon.app.log.actions.*;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
+import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.nodes.report.NewReportNode;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
@@ -134,11 +135,6 @@ public class NodeWizard extends WizardFrame {
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
 
-	private JPanel centerPanel;
-	private CardLayout cardLayout;
-	private AbstractButton advancedSettingsButton;
-
-	private AdvancedSettingsPanel advancedSettingsPanel;
 
 	private final static String WIZARD_LIST = "_wizard_list_";
 	private final static String SETTINGS = "_settings_";
@@ -151,7 +147,7 @@ public class NodeWizard extends WizardFrame {
 
 	private NodeWizardBreadcrumbButton btnRunAgain;
 
-	private WebViewInterface webViewInterface = new WebViewInterface();
+	private final WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
@@ -386,52 +382,9 @@ public class NodeWizard extends WizardFrame {
 		addWizardStep(reportDataStep);
 
 		// setup card layout
-		cardLayout = new CardLayout();
-		centerPanel = new JPanel(cardLayout);
-		centerPanel.add(stepPanel, WIZARD_LIST);
-		advancedSettingsPanel = new AdvancedSettingsPanel(nodeWizardList);
-		final TitledPanel advPanel = new TitledPanel("Advanced Settings", advancedSettingsPanel);
+		add(stepPanel, BorderLayout.CENTER);
 
-		ImageIcon closeIcon = IconManager.getInstance().getIcon("misc/x-bold-white", IconSize.XSMALL);
-		JButton closeBtn = new JButton(closeIcon);
-		closeBtn.setBorderPainted(false);
-		closeBtn.setToolTipText("Close advanced settings");
-		closeBtn.addActionListener( (e) -> cardLayout.show(centerPanel, WIZARD_LIST) );
-		advPanel.setRightDecoration(closeBtn);
-
-		centerPanel.add(advPanel, SETTINGS);
-		add(centerPanel, BorderLayout.CENTER);
-
-		final JPanel settingsPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		settingsPanel.setOpaque(false);
 		globalOptionsPanel = new WizardGlobalOptionsPanel();
-
-		final ImageIcon icn =
-				IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL);
-		advancedSettingsButton = new JButton();
-//		advancedSettingsButton.setBorder(
-//				BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
-//		advancedSettingsButton.setMargin(new Insets(0, 5, 0, 25));
-		advancedSettingsButton.setIcon(icn);
-		advancedSettingsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		advancedSettingsButton.setToolTipText("Show advanced settings");
-		advancedSettingsButton.setVisible(nodeWizardList.size() > 0);
-		advancedSettingsButton.addActionListener( (e) -> {
-			cardLayout.show(centerPanel, SETTINGS);
-		});
-
-//		settingsPanel.add(advancedSettingsButton);
-		settingsPanel.add(globalOptionsPanel);
-
-		final GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		gbc.gridwidth = 1;
-
-		buttonPanel.add(settingsPanel, gbc);
 	}
 
 	/**
@@ -628,8 +581,10 @@ public class NodeWizard extends WizardFrame {
 					});
 					final BufferPanel reportBufferPanel = bufferPanelRef.get();
 					final WebView webView = reportBufferPanel.getWebView();
+					final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
+					searchForTables(reportTree.getRoot(), tableMap);
 					javafx.application.Platform.runLater(() -> {
-												
+						
 						webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
 
 							@Override
@@ -640,8 +595,6 @@ public class NodeWizard extends WizardFrame {
 									window.setMember("buffers", bufferPanel);
 									window.setMember("reportTree", reportTree);
 									
-									final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
-									searchForTables(reportTree.getRoot(), tableMap);
 									window.setMember("tableMap", tableMap);
 									
 									window.setMember("app", webViewInterface);
@@ -780,7 +733,8 @@ public class NodeWizard extends WizardFrame {
 
 	protected void setupContext(OpContext ctx) {
 		ctx.put(BufferNodeConstants.BUFFER_CONTEXT_KEY, bufferPanel);
-		ctx.put(NewReportNode.REPORT_TREE_KEY, new ReportTree());
+		ReportTree reportTree = new ReportTree(new SectionHeaderNode(getWizardExtension().getWizardTitle()));
+		ctx.put(NewReportNode.REPORT_TREE_KEY, reportTree);
 	}
 
 	protected void setupOptionals(OpContext ctx) {
@@ -930,9 +884,6 @@ public class NodeWizard extends WizardFrame {
 	public void gotoStep(int step) {
 		super.gotoStep(step);
 
-		if(cardLayout != null)
-			cardLayout.show(centerPanel, WIZARD_LIST);
-
 		if(!inInit && getCurrentStep() == reportDataStep) {
 			if(bufferPanel.getBufferNames().size() > 0) {
 				final MessageDialogProperties props = new MessageDialogProperties();
@@ -1077,6 +1028,50 @@ public class NodeWizard extends WizardFrame {
 			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, recordIndex);
 
 			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
+		}
+		
+		public void createTableBuffer(String tableId, DefaultTableDataSource table) {
+			final PrintBufferNode printBuffer = new PrintBufferNode();
+			printBuffer.setShowTable(true);
+			printBuffer.setShowBuffer(false);
+			
+			final OpContext ctx = new OpContext();
+			ctx.put("_buffers", bufferPanel);
+			ctx.put("buffer", tableId);
+			ctx.put("data", table);
+			
+			try {
+				printBuffer.operate(ctx);
+			} catch (ProcessingException pe) {
+				LogUtil.severe(pe);
+			}
+		}
+		
+		public void showTable(String tableId, DefaultTableDataSource table) {
+			SwingUtilities.invokeLater( () -> {
+				if(!bufferPanel.getBufferNames().contains(tableId)) {
+					createTableBuffer(tableId, table);
+				}
+				bufferPanel.selectBuffer(tableId);
+			});
+		}
+		
+		public void saveTableAsCSV(String tableId, DefaultTableDataSource table) {
+			SwingUtilities.invokeLater(() -> {
+				if(!bufferPanel.getBufferNames().contains(tableId)) {
+					createTableBuffer(tableId, table);
+				}
+				bufferPanel.saveAsCSV(tableId);
+			});
+		}
+		
+		public void saveTableAsWorkbook(String tableId, DefaultTableDataSource table) {
+			SwingUtilities.invokeLater( () -> {
+				if(!bufferPanel.getBufferNames().contains(tableId)) {
+					createTableBuffer(tableId, table);
+				}
+				bufferPanel.saveAsWorkbook(tableId);
+			});
 		}
 
 		public void onHighlightResultValue(String tableId, int row, String columnName) {

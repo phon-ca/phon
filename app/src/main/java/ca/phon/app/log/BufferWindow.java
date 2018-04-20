@@ -79,6 +79,10 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 		add(bufferPanel, BorderLayout.CENTER);
 	}
 	
+	public BufferPanel createBuffer(String name, boolean showBuffer) {
+		return bufferPanel.createBuffer(name, showBuffer);
+	}
+	
 	public BufferPanel createBuffer(String name) {
 		return bufferPanel.createBuffer(name);
 	}
@@ -160,4 +164,5 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 	public List<BufferPanelSelectionListener> getSelectionListeners() {
 		return bufferPanel.getSelectionListeners();
 	}
+
 }

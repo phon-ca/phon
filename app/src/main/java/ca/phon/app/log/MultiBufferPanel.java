@@ -135,8 +135,12 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
 		return panel;
 	}
-
+	
 	public BufferPanel createBuffer(String bufferName) {
+		return createBuffer(bufferName, true);
+	}
+	
+	public BufferPanel createBuffer(String bufferName, boolean select) {
 		int idx = 0;
 		final String rootName = bufferName;
 		while(bufferPanelMap.containsKey(bufferName)) {
@@ -151,7 +155,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
 		fireBufferAdded(bufferName);
 
-		selectBuffer(bufferName);
+		if(select)
+			selectBuffer(bufferName);
 
 		return bp;
 	}

@@ -17,6 +17,7 @@ import ca.phon.app.opgraph.report.ReportEditorModelInstantiator;
 import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.opgraph.report.ReportRunner;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
@@ -181,6 +182,11 @@ public class QueryAndReportWizard extends NodeWizard {
 			
 			// install correct processor
 			final OpGraph graph = reportEditor.getGraph();
+			
+			final WizardExtension ext = graph.getExtension(WizardExtension.class);
+			if(ext != null)
+				ext.setWizardTitle(queryScript.getExtension(QueryName.class).getName());
+			
 			final Processor processor = new Processor(graph);
 			processor.getContext().put("_project", getCurrentQueryProject());
 			processor.getContext().put("_queryId", getCurrentQueryId());

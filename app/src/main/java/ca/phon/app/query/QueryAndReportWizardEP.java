@@ -70,6 +70,7 @@ public class QueryAndReportWizardEP implements IPluginEntryPoint {
 		
 		final QueryAndReportWizard wizard = new QueryAndReportWizard(project, script);
 		wizard.pack();
+		wizard.setSize(1024, 768);
 		wizard.centerWindow();
 		wizard.setVisible(true);
 	}

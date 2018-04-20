@@ -24,6 +24,8 @@ public interface BufferPanelContainer {
 
 	public BufferPanel createBuffer(String name);
 	
+	public BufferPanel createBuffer(String name, boolean showBuffer);
+	
 	public BufferPanel getBuffer(String name);
 	
 	public void removeBuffer(String name);

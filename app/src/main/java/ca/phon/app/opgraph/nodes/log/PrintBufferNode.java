@@ -72,6 +72,8 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	private boolean showTable = true;
 	private boolean showText = false;
 	private boolean showHTML = false;
+	
+	private boolean showBuffer = true;
 
 	private JPanel settingsPanel;
 
@@ -79,6 +81,8 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 	private JRadioButton showAsText;
 	private JRadioButton showAsCSV;
 	private JRadioButton showAsHTML;
+	
+	private JCheckBox showBufferBox;
 
 	private RSyntaxTextArea dataInputArea;
 
@@ -140,7 +144,10 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 
 			BufferPanel bufferPanel = bpc.getBuffer(bufferName);
 			if(bufferPanel == null) {
-				bufferPanel = bpc.createBuffer(bufferName);
+				bufferPanel = bpc.createBuffer(bufferName, isShowBuffer());
+			} else {
+				if(isShowBuffer())
+					bpc.selectBuffer(bufferName);
 			}
 
 			if(data instanceof DefaultTableDataSource) {
@@ -267,6 +274,16 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		if(this.showAsHTML != null)
 			this.showAsHTML.setSelected(showHTML);
 	}
+	
+	public boolean isShowBuffer() {
+		return (this.showBufferBox != null ? this.showBufferBox.isSelected() : showBuffer);
+	}
+	
+	public void setShowBuffer(boolean showBuffer) {
+		this.showBuffer = showBuffer;
+		if(this.showBufferBox != null)
+			this.showBufferBox.setSelected(showBuffer);
+	}
 
 	@Override
 	public Component getComponent(GraphDocument document) {
@@ -284,10 +301,14 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 			showAsText.setSelected(this.showText);
 			showAsCSV.setSelected(this.showTable);
 			showAsHTML.setSelected(this.showHTML);
+			
+			showBufferBox = new JCheckBox("Show buffer");
+			showBufferBox.setSelected(this.showBuffer);
 
 			btnPanel.add(showAsText);
 			btnPanel.add(showAsCSV);
 			btnPanel.add(showAsHTML);
+			btnPanel.add(showBufferBox);
 			btnPanel.setBorder(BorderFactory.createTitledBorder("Data Format"));
 			settingsPanel.add(btnPanel, BorderLayout.NORTH);
 
@@ -317,6 +338,8 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		retVal.setProperty("showText", Boolean.toString(isShowText()));
 		retVal.setProperty("showTable", Boolean.toString(isShowTable()));
 		retVal.setProperty("showHTML", Boolean.toString(isShowHTML()));
+		
+		retVal.setProperty("showBuffer", Boolean.toString(isShowBuffer()));
 
 		retVal.setProperty("dataTemplate", getDataTemplate());
 
@@ -328,6 +351,8 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 		setShowText(Boolean.parseBoolean(properties.getProperty("showText", "false")));
 		setShowTable(Boolean.parseBoolean(properties.getProperty("showTable", "true")));
 		setShowHTML(Boolean.parseBoolean(properties.getProperty("showHTML", "false")));
+		
+		setShowBuffer(Boolean.parseBoolean(properties.getProperty("showBuffer", "true")));
 
 		setDataTemplate(properties.getProperty("dataTemplate", DEFAULT_TEMPLATE));
 	}

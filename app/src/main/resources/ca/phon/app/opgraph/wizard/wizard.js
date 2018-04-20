@@ -261,8 +261,8 @@ function page_init(documentRef) {
 /*
  * Functions called by the application when using the embedded viewer
  */
-function showBuffer(bufferName) {
-    buffers.selectBuffer(bufferName);
+function showTable(tableId) {
+	app.showTable(tableId, tableMap.get(tableId));
 }
 
 function showTableMenu(tablePopupId) {
@@ -270,11 +270,11 @@ function showTableMenu(tablePopupId) {
 }
 
 function saveTableAsCSV(tableId) {
-	buffers.saveAsCSV(tableId);
+	app.saveTableAsCSV(tableId, tableMap.get(tableId));
 }
 
 function saveTableAsExcel(tableId) {
-	buffers.saveAsWorkbook(tableId);
+	app.saveTableAsWorkbook(tableId, tableMap.get(tableId));
 }
 
 function addMenuButtons(documentRef) {
@@ -317,7 +317,7 @@ function addMenuButtons(documentRef) {
 		tableMenu.appendChild(saveAsExcelItem);
 
 		var showBufferItem = document.createElement("div");
-		showBufferItem.setAttribute("onclick", "showBuffer('" + table.getAttribute("id") + "')");
+		showBufferItem.setAttribute("onclick", "showTable('" + table.getAttribute("id") + "')");
 		showBufferItem.setAttribute("class", "tableMenuItem");
 		showBufferItem.append("Show table");
 		tableMenu.appendChild(showBufferItem);

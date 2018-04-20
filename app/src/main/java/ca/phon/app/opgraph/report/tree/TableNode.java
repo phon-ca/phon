@@ -65,7 +65,7 @@ public class TableNode extends ReportTreeNode {
 			.append(getLevel()).append(">")
 			.append(getTitle())
 			.append("</h").append(getLevel()).append(">\")\n");
-		
+				
 		buffer.append("#set($tablePath = \"").append(getPath()).append("\")\n");
 		
 		buffer.append("#set($table = $tableMap.get($tablePath))\n");
