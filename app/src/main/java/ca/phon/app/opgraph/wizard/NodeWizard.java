@@ -1074,14 +1074,7 @@ public class NodeWizard extends WizardFrame {
 			});
 		}
 
-		public void onHighlightResultValue(String tableId, int row, String columnName) {
-			final BufferPanel buffer = bufferPanel.getBuffer(tableId);
-			final Object obj = buffer.getUserObject();
-			if(obj == null || !(obj instanceof DefaultTableDataSource)) {
-				return;
-			}
-			final DefaultTableDataSource tableModel = (DefaultTableDataSource)obj;
-
+		public void onHighlightResultValue(DefaultTableDataSource tableModel, int row, String columnName) {
 			if(row < 0 || row >= tableModel.getRowCount()) return;
 
 			final Object[] rowData = tableModel.getRow(row);

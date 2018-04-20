@@ -45,7 +45,7 @@
 
 #macro( printResultValue $tableId $row $columnName $v )
 #set($txt = $FormatterUtil.format($v))
-<td class='sessionLink'><div onclick="app.onHighlightResult('$tableId', $row, '$columnName')">$txt</div></td>
+<td class='sessionLink'><div onclick="highlightResultValue('$tableId', $row, '$columnName')">$txt</div></td>
 #end
 
 #macro( printBody $table $id $columnNames )

@@ -277,6 +277,10 @@ function saveTableAsExcel(tableId) {
 	app.saveTableAsWorkbook(tableId, tableMap.get(tableId));
 }
 
+function highlightResultValue(tableId, row, column) {
+	app.onHighlightResultValue(tableMap.get(tableId), row, column);
+}
+
 function addMenuButtons(documentRef) {
 	var documentRef = documentRef || document;
 
