@@ -200,7 +200,7 @@ public class ScriptPanel extends JPanel {
 		cardLayout = new CardLayout();
 		cardPanel.setLayout(cardLayout);
 
-		paramPanel = new JPanel(new BorderLayout());
+		paramPanel = new ParamPanel(new BorderLayout());
 		try {
 			updateParamPanel();
 		} catch (PhonScriptException e1) {
@@ -239,6 +239,7 @@ public class ScriptPanel extends JPanel {
 			}
 
 		});
+		scriptViewButton.setVisible(false);
 
 		final FlowLayout layout = new FlowLayout(FlowLayout.RIGHT);
 		layout.setVgap(0);
@@ -273,6 +274,10 @@ public class ScriptPanel extends JPanel {
 			}
 		}
 		return true;
+	}
+	
+	public void setSwapButtonVisible(boolean visible) {
+		this.scriptViewButton.setVisible(visible);
 	}
 
 	/**
@@ -344,5 +349,52 @@ public class ScriptPanel extends JPanel {
 		}
 
 	};
+	
+	private final class ParamPanel extends JPanel implements Scrollable {
+
+		
+		
+		public ParamPanel() {
+			super();
+		}
+
+		public ParamPanel(boolean isDoubleBuffered) {
+			super(isDoubleBuffered);
+		}
+
+		public ParamPanel(LayoutManager layout, boolean isDoubleBuffered) {
+			super(layout, isDoubleBuffered);
+		}
+
+		public ParamPanel(LayoutManager layout) {
+			super(layout);
+		}
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			return null;
+		}
+
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 10;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 100;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
+		
+	}
 
 }

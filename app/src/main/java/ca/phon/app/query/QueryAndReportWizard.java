@@ -3,6 +3,10 @@ package ca.phon.app.query;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -23,8 +27,13 @@ import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.Tuple;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class QueryAndReportWizard extends NodeWizard {
 	
@@ -32,6 +41,8 @@ public class QueryAndReportWizard extends NodeWizard {
 	private JSplitPane splitPane;
 	private SessionSelector sessionSelector;
 	private ScriptPanel scriptPanel;
+	private JCheckBox includeExcludedBox;
+	private JButton saveQuerySettingsButton;
 
 	private WizardStep queryResultsStep;
 	private JTabbedPane queryResultsPane;
@@ -83,10 +94,26 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		sessionSelector = new SessionSelector(this.project);
 		sessionSelector.setPreferredSize(new Dimension(350, 0));
-		TitledPanel sessionsPanel = new TitledPanel("Select Sessions", new JScrollPane(sessionSelector));
+		final JPanel leftPanel = new JPanel(new BorderLayout());
+		leftPanel.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
+		includeExcludedBox = new JCheckBox("Include excluded records");
+		leftPanel.add(includeExcludedBox, BorderLayout.SOUTH);
+		TitledPanel sessionsPanel = new TitledPanel("Select Sessions", leftPanel);
 		
 		scriptPanel = new ScriptPanel(queryScript);
-		TitledPanel queryPanel = new TitledPanel("Query : " + qn.getName(), scriptPanel);
+		
+		final PhonUIAction saveSettingsAct = new PhonUIAction(this, "onSaveQuerySettings");
+		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query parameters");
+		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query parameters");
+		final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
+		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
+		saveQuerySettingsButton = new JButton(saveSettingsAct);
+		
+		final JPanel rightPanel = new JPanel(new BorderLayout());
+		rightPanel.add(scriptPanel, BorderLayout.CENTER);
+		rightPanel.add(ButtonBarBuilder.buildOkBar(saveQuerySettingsButton), BorderLayout.SOUTH);
+		
+		TitledPanel queryPanel = new TitledPanel("Query Parameters", rightPanel);
 		
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(sessionsPanel);
@@ -96,6 +123,16 @@ public class QueryAndReportWizard extends NodeWizard {
 		retVal.add(splitPane, BorderLayout.CENTER);
 		
 		return retVal;
+	}
+	
+	public void onSaveQuerySettings() {
+		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript);
+		dialog.setModal(true);
+		
+		dialog.pack();
+		dialog.setLocationRelativeTo(this);
+		
+		dialog.setVisible(true);
 	}
 	
 	private WizardStep createQueryResultsStep() {
@@ -157,16 +194,23 @@ public class QueryAndReportWizard extends NodeWizard {
 	}
 	
 	public boolean isIncludeExcluded() {
-		return false;
+		return this.includeExcludedBox.isSelected();
+	}
+	
+	@Override
+	public Tuple<String, String> getNoun() {
+		return new Tuple<>("Report", "Reports");
 	}
 
 	@Override
 	public void next() {
 		if(getCurrentStep() == queryStep) {
 			if(sessionSelector.getSelectedSessions().size() == 0) {
+				showMessageDialog("Select Sessions", "Please select at least one session", new String[] {"Ok"});
 				return;
 			}
 			if(!scriptPanel.checkParams()) {
+				showMessageDialog("Query Parameters", "Check query parameters.", new String[] {"Ok"});
 				return;
 			}
 		}
