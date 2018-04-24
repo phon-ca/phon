@@ -121,7 +121,7 @@
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>2-SNAPSHOT</ca.hedlund.desktopicons.version>
 		<ca.gedge.opgraph.version>0.6-SNAPSHOT</ca.gedge.opgraph.version>
-		<ca.phon.native-dialogs.version>10</ca.phon.native-dialogs.version>
+		<ca.phon.native-dialogs.version>11</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>1-SNAPSHOT</ca.phon.jbreadcrumb.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
 		<com.fifesoft.rsyntaxtextarea.version>2.6.0</com.fifesoft.rsyntaxtextarea.version>
