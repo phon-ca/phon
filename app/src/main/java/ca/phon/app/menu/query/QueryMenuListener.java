@@ -18,20 +18,26 @@
  */
 package ca.phon.app.menu.query;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.query.script.*;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
  * Dynamic building of query menu
  */
 public class QueryMenuListener implements MenuListener {
+	
+	private final static String STOCK_MENU_QUERIES[] = new String[] { "Data Tiers", "Deletions", "Epenthesis", "Phones", "Segmental Relations" };
 	
 	public void menuCanceled(MenuEvent e) {
 		
@@ -58,8 +64,11 @@ public class QueryMenuListener implements MenuListener {
 		while(stockScriptIterator.hasNext()) {
 			final QueryScript qs = stockScriptIterator.next();
 			
-			final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
-			queryMenu.add(sItem);
+			final QueryName qn = qs.getExtension(QueryName.class);
+			if(qn != null && Arrays.binarySearch(STOCK_MENU_QUERIES, qn.getName()) >= 0) {
+				final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
+				queryMenu.add(sItem);
+			}
 		}
 
 		// add user library scripts
@@ -67,8 +76,16 @@ public class QueryMenuListener implements MenuListener {
 		final Iterator<QueryScript> userScriptIterator = userScriptLoader.iterator();
 		if(userScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
+			
 			final JMenuItem lbl = new JMenuItem("-- User Library --");
-			lbl.setEnabled(false);
+			
+			lbl.addActionListener( (evt) -> { 
+					try {
+						OpenFileLauncher.openURL((new File(QueryScriptLibrary.USER_SCRIPT_FOLDER)).toURI().toURL());
+					} catch (MalformedURLException e1) {
+						LogUtil.severe(e1);
+					}
+			} );
 			queryMenu.add(lbl);
 		}
 		while(userScriptIterator.hasNext()) {
@@ -84,7 +101,13 @@ public class QueryMenuListener implements MenuListener {
 		if(projectScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
 			final JMenuItem lbl = new JMenuItem("-- Project Library --");
-			lbl.setEnabled(false);
+			lbl.addActionListener( (evt) -> { 
+				try {
+					OpenFileLauncher.openURL((new File(QueryScriptLibrary.projectScriptFolder(project))).toURI().toURL());
+				} catch (MalformedURLException e1) {
+					LogUtil.severe(e1);
+				}
+			} );
 			queryMenu.add(lbl);
 		}
 		while(projectScriptIterator.hasNext()) {
