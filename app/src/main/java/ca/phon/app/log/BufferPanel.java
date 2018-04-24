@@ -23,8 +23,12 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
@@ -450,6 +454,48 @@ public class BufferPanel extends JPanel implements IExtendable {
 		final BufferedWriter out =
 				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), encoding));
 		out.write(logBuffer.getText());
+		out.flush();
+		out.close();
+	}
+	
+	public String getHTML() {
+		final StringBuffer buffer = new StringBuffer();
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		Platform.runLater( () -> {
+			String docLocation = getWebView().getEngine().getDocument().getDocumentURI();
+			
+			final URI uri = URI.create(docLocation);
+			try {
+				final URL url = uri.toURL();
+				
+				final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+				String line = null;
+				while((line = in.readLine()) != null) {
+					buffer.append(line).append("\n");
+				}
+				in.close();
+			} catch (IOException e) {
+				LogUtil.severe(e);
+			} finally {
+				latch.countDown();
+			}
+		} );
+		
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			LogUtil.severe(e);
+		}
+		
+		return buffer.toString();
+	}
+	
+	public void writeHMTLFile(String file, String encoding) throws IOException {
+		final File f = new File(file);
+		final BufferedWriter out =
+				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), encoding));
+		out.write(getHTML());
 		out.flush();
 		out.close();
 	}

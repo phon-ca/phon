@@ -108,10 +108,12 @@ public class SaveBufferAction extends HookableAction {
 		}
 		
 		try {
-			if(panel.isShowingBuffer() || panel.isShowingHtml()) {
+			if(panel.isShowingBuffer()) {
 				panel.writeToTextFile(saveAs, "UTF-8");
 			} else if(panel.isShowingTable()) {
 				panel.writeToCSV(saveAs, "UTF-8");
+			} else if(panel.isShowingHtml()) {
+				panel.writeHMTLFile(saveAs, "UTF-8");
 			}
 
 			if(this.container.isOpenAfterSaving()) {

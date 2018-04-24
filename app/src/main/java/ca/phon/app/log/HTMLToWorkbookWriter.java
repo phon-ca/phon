@@ -12,11 +12,15 @@ import jxl.write.biff.RowsExceededException;
 
 public class HTMLToWorkbookWriter {
 
-	private MultiBufferPanel multiBufferPanel;
-
-	public HTMLToWorkbookWriter(MultiBufferPanel bufferPanel) {
+	private Map<String, DefaultTableDataSource> tableMap;
+	
+	public HTMLToWorkbookWriter() {
+		this(new HashMap<>());
+	}
+	
+	public HTMLToWorkbookWriter(Map<String, DefaultTableDataSource> tableMap) {
 		super();
-		this.multiBufferPanel = bufferPanel;
+		this.tableMap = tableMap;
 	}
 
 	public void writeToWorkbook(WritableWorkbook workbook, String html) throws RowsExceededException, WriteException {
@@ -61,10 +65,9 @@ public class HTMLToWorkbookWriter {
 	public int writeTableToSheet(WritableSheet sheet, int startRow, Element tableEle, List<String> columns) throws RowsExceededException, WriteException {
 		// id of table is the table/buffer name
 		final String tableId = tableEle.attr("id");
-		final BufferPanel bufferPanel = this.multiBufferPanel.getBuffer(tableId);
-		if(bufferPanel != null && bufferPanel.getUserObject() instanceof DefaultTableDataSource) {
-			return WorkbookUtils.addTableToSheet(sheet, startRow,
-					(DefaultTableDataSource)bufferPanel.getUserObject(), columns);
+		final DefaultTableDataSource table = tableMap.get(tableId);
+		if(table != null) {
+			return WorkbookUtils.addTableToSheet(sheet, startRow, table, columns);
 		} else {
 			// TODO print table data from HTML
 			return startRow;

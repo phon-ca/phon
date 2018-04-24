@@ -3,17 +3,23 @@ package ca.phon.app.log.actions;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.ImageIcon;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.*;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
+import javafx.application.Platform;
+import javafx.scene.web.WebView;
 import jxl.Workbook;
 import jxl.write.*;
 
@@ -84,8 +90,30 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 			if(panel.isShowingTable()) {
 				panel.createSheetInExcelWorkbook(workbook);
 			} else if(panel.isShowingHtml()) {
-				String html = panel.getLogBuffer().getText();
-				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter((MultiBufferPanel)this.container);
+				String html = panel.getHTML();
+				
+				final WebView webView = panel.getWebView();
+				final CountDownLatch latch = new CountDownLatch(1);
+				
+				final Map<String, DefaultTableDataSource> tableMap = new HashMap<>();
+				Platform.runLater( () -> {
+					final Object obj = webView.getEngine().executeScript("window.tableMap");
+					if(obj != null && obj instanceof Map) {
+						final Map<?, ?> objMap = (Map<?, ?>)obj;
+						for(Object key:objMap.keySet()) {
+							Object val = objMap.get(key);
+							if(val != null && val instanceof DefaultTableDataSource) {
+								tableMap.put(key.toString(), (DefaultTableDataSource)val);
+							}
+						}
+					}
+					latch.countDown();
+				} );
+				try {
+					latch.await();
+				} catch (InterruptedException e) {}
+				
+				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter(tableMap);
 				writer.writeToWorkbook(workbook, html);
 			}
 			workbook.write();
