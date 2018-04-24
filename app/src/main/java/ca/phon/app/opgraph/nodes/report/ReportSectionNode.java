@@ -6,19 +6,19 @@ import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 
 public abstract class ReportSectionNode extends OpNode {
 
-	protected InputField sectionNameInput = 
+	public final InputField sectionNameInput = 
 			new InputField("sectionName", "Title of element in ToC", true, true, String.class);
 	
-	protected InputField parentNodeInput = 
+	public final InputField parentNodeInput = 
 			new InputField("parent", "Parent report tree node", true, true, ReportTreeNode.class);
 	
-	protected InputField addToBeginningInput =
+	public final InputField addToBeginningInput =
 			new InputField("addToBeginning", "Add new section node to start of child list", true, true, Boolean.class);
 	
-	protected OutputField parentNodeOutput =
+	public final OutputField parentNodeOutput =
 			new OutputField("parent", "Parent report tree node", true, ReportTreeNode.class);
 	
-	protected OutputField sectionNodeOutput = 
+	public final OutputField sectionNodeOutput = 
 			new OutputField("section", "Section report node created", true, ReportTreeNode.class);
 	
 	public ReportSectionNode() {

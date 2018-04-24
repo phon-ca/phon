@@ -20,12 +20,16 @@ package ca.phon.app.opgraph.wizard;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 import java.util.stream.Collectors;
@@ -38,16 +42,23 @@ import javax.swing.tree.TreePath;
 
 import org.apache.velocity.tools.generic.MathTool;
 import org.jdesktop.swingx.JXBusyLabel;
+import org.mozilla.javascript.ast.GeneratorExpressionLoop;
+
+import com.oracle.nio.BufferSecrets;
 
 import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.*;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
+import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.report.NewReportNode;
+import ca.phon.app.opgraph.nodes.report.ReportSectionNode;
+import ca.phon.app.opgraph.nodes.report.TableSectionNode;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
@@ -58,6 +69,9 @@ import ca.phon.project.*;
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.XMLQueryFactory;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryTask;
+import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
@@ -67,6 +81,8 @@ import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.wizard.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonWorker;
 import javafx.beans.value.*;
 import javafx.concurrent.Worker.State;
@@ -131,7 +147,7 @@ public class NodeWizard extends WizardFrame {
 
 	private Map<OpNode, WizardStep> optionalSteps;
 
-	private WizardGlobalOptionsPanel globalOptionsPanel;
+	protected WizardGlobalOptionsPanel globalOptionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
 
@@ -420,24 +436,120 @@ public class NodeWizard extends WizardFrame {
 	public WizardExtension getWizardExtension() {
 		return this.graph.getExtension(WizardExtension.class);
 	}
-
-	final ProcessorListener processorListener =  (ProcessorEvent pe) -> {
-		if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
-			final String nodeName = pe.getNode().getName();
-			SwingUtilities.invokeLater( () -> {
-				if(!busyLabel.isBusy()) {
-					busyLabel.setBusy(true);
-				}
-				statusLabel.setText(nodeName + "...");
-				btnBack.setEnabled(false);
-			});
-			executionStarted(pe);
-		} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
-		} else if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
-
-			executionEnded(pe);
+	
+	private BufferPanel getLogBuffer() {
+		if(!bufferPanel.getBufferNames().contains("Log")) {
+			bufferPanel.createBuffer("Log");
 		}
-	};
+		return bufferPanel.getBuffer("Log");
+	}
+	
+	private class QueryNodeListener implements PropertyChangeListener {
+		
+		private QueryNode qn;
+		
+		public QueryNodeListener(QueryNode qn) {
+			this.qn = qn;
+		}
+
+		private int lastPrintedProgress = 0;
+		private QueryTask currentTask = null;
+		@Override
+		public void propertyChange(PropertyChangeEvent e) {
+			StringBuffer buffer = new StringBuffer();
+			if(e.getPropertyName().equals("session")) {
+				// start new session query
+				Session session = (Session)e.getNewValue();
+				buffer.append(session.getCorpus()).append('.').append(session.getName());
+			} else if(e.getPropertyName().equals("task")) {
+				// task status
+				TaskStatus ts = (TaskStatus)e.getNewValue();
+				if(ts == TaskStatus.FINISHED) {
+					int currentP = lastPrintedProgress;
+					while((currentP += 5) <= 100) {
+						buffer.append('*');
+					}
+					buffer.append(currentTask.getResultSet().size());
+					buffer.append("\t\n");
+					lastPrintedProgress = 0;
+				} else if (ts == TaskStatus.ERROR) {
+					buffer.append("\tError\n");
+					qn.removePropertyChangeListener(this);
+				} else if(ts == TaskStatus.TERMINATED) {
+					buffer.append("\tTerminated\n");
+					qn.removePropertyChangeListener(this);
+				}
+			} else if(e.getPropertyName().equals(PhonTask.PROGRESS_PROP)) {
+				// query progress
+				int progress = (int)Math.ceil((float)e.getNewValue());
+				if(progress % 5 == 0 && progress != lastPrintedProgress) {
+					int currentP = lastPrintedProgress;
+					while((currentP += 5) <= progress) {
+						buffer.append('*');
+					}
+					lastPrintedProgress = progress;						
+				}
+			} else if(e.getPropertyName().equals("queryTask")) {
+				currentTask = (QueryTask)e.getNewValue();
+			} else if(e.getPropertyName().equals("numCompleted")) {
+				// only called at end of query
+				qn.removePropertyChangeListener(this);
+			}
+			
+			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+				out.print(buffer.toString());
+				out.flush();
+			}
+		}
+		
+	}
+
+	private final ProcessorListener processorListener = new CurrentNodeProcessorListener();
+	private class CurrentNodeProcessorListener implements ProcessorListener {
+
+		@Override
+		public void processorEvent(ProcessorEvent pe) {
+			if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
+				if(!running) executionStarted(pe);
+				
+				final String nodeName = pe.getNode().getName();
+				if(pe.getNode() instanceof MacroNode) {
+					MacroNode mn = (MacroNode)pe.getNode();
+					mn.addProcessorListener(this);
+				}
+				SwingUtilities.invokeLater( () -> {
+					if(!busyLabel.isBusy()) {
+						busyLabel.setBusy(true);
+					}
+					statusLabel.setText(nodeName + "...");
+					btnBack.setEnabled(false);
+				});
+				
+				if(pe.getNode() instanceof QueryNode) {
+					QueryNode qn = (QueryNode)pe.getNode();
+					qn.addPropertyChangeListener(new QueryNodeListener(qn));
+					try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+						out.println("Query : " + qn.getQueryScript().getExtension(QueryName.class).getName());
+						out.flush();
+					}
+				}
+				
+			} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
+				if(pe.getNode() instanceof ReportSectionNode) {
+					ReportSectionNode node = (ReportSectionNode)pe.getNode();
+					final OpContext ctx = pe.getProcessor().getContext().getChildContext(node);
+					if(ctx != null && ctx.get(node.sectionNodeOutput) != null) {
+						ReportTreeNode treeNode = (ReportTreeNode)ctx.get(node.sectionNodeOutput);
+						try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+							out.println("New report section: " + treeNode.getPath().toString());
+							out.flush();
+						}						
+					}
+				}
+			}
+		}
+		
+	}
 
 	/**
 	 * Called when the processors begins
@@ -465,6 +577,29 @@ public class NodeWizard extends WizardFrame {
 			processor.stop();
 		}
 	}
+	
+	private String getSizeString(long bytes) {
+		int kb = 1024;
+		int mb = kb * 1024;
+		int gb = mb * 1024;
+		
+		NumberFormat nf = NumberFormat.getNumberInstance();
+		nf.setMaximumFractionDigits(2);
+		
+		String retVal = bytes + " B";
+		if(bytes > gb) {
+			double numgbs = (double)bytes/(double)gb;
+			retVal = nf.format(numgbs) + " GB";
+		} else if(bytes > mb) {
+			double nummbs = (double)bytes/(double)mb;
+			retVal = nf.format(nummbs) + " MB";
+		} else if(bytes > kb) {
+			double numkbs = (double)bytes/(double)kb;
+			retVal = nf.format(numkbs) + " KB";
+		}
+		
+		return retVal;
+	}
 
 	/**
 	 * Executes graph. During execution, data generated may be printed
@@ -481,6 +616,11 @@ public class NodeWizard extends WizardFrame {
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
 		processor.addProcessorListener(processorListener);
+		processor.addProcessorListener( (pe) -> {
+			if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
+				executionEnded(pe);
+			}
+		});
 
 		reportStartTime = System.currentTimeMillis();
 		reportTimer = new Timer(500, (e) -> {
@@ -499,21 +639,7 @@ public class NodeWizard extends WizardFrame {
 				breadCrumbViewer.setEnabled(false);
 			});
 
-			/*// if the graph has a 'Report Prefix' template, add it to the 'Report Template' buffer
-			final NodeWizardReportTemplate reportPrefixTemplate = ext.getReportTemplate("Report Prefix");
-			final String reportPrefix = ( reportPrefixTemplate != null ? reportPrefixTemplate.getTemplate() : "");
-			if(reportPrefix.trim().length() > 0) {
-				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer(reportTemplateBufferName);
-
-				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
-				final PrintWriter writer = new PrintWriter(os);
-				writer.write(reportPrefix + "\n");
-				writer.flush();
-				writer.close();
-			}*/
-
 			reportSaved = false;
-
 			processor.stepAll();
 			
 			final ReportTree reportTree = (ReportTree)processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
@@ -527,44 +653,32 @@ public class NodeWizard extends WizardFrame {
 				writer.close();
 			}
 
-			/*// if the graph has a 'Report Suffix' template, add it to the 'Report Template' buffer
-			final NodeWizardReportTemplate reportSuffixTemplate = ext.getReportTemplate("Report Suffix");
-			final String reportSuffix = ( reportSuffixTemplate != null ? reportSuffixTemplate.getTemplate() : "");
-			if(reportSuffix.trim().length() > 0) {
-				final BufferPanel reportTemplateBuffer =
-						(bufferPanel.getBufferNames().contains(reportTemplateBufferName) ? bufferPanel.getBuffer(reportTemplateBufferName) :
-							bufferPanel.createBuffer(reportTemplateBufferName) );
-
-				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
-				final PrintWriter writer = new PrintWriter(os);
-				writer.write(reportSuffix + "\n");
-			}*/
-
-			// generate report
-			/*final BufferPanel reportTemplateBuffer = bufferPanel.getBuffer(reportTemplateBufferName);
-			String template = null;
-			if(reportTemplateBuffer == null) {
-				template = loadDefaultReport();
-			} else {
-				template = reportTemplateBuffer.getLogBuffer().getText();
-			}*/
-
 			// create temp file
 			File tempFile = null;
 			try {
-				tempFile = //new File("/Users/ghedlund/Desktop/Report.htm"); 
-						File.createTempFile("phon", "report.html");
-//				tempFile.deleteOnExit();
+				tempFile = File.createTempFile("phon", "report.html");
+				tempFile.deleteOnExit();
 
 				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
 					final NodeWizardReportGenerator reportGenerator =
 							new NodeWizardReportGenerator(this, reportTree.getReportTemplate(), fout);
 
+					try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+						out.print("Generating report...");
+						out.flush();
+					}
+					
 					SwingUtilities.invokeLater(() -> {
 						statusLabel.setText("Generating report...");
 					});
-
+					
 					reportGenerator.generateReport();
+					try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+						FileInputStream fin = new FileInputStream(tempFile);
+						out.println(getSizeString(fin.getChannel().size()));
+						out.flush();
+						fin.close();
+					}
 				} catch (IOException | NodeWizardReportException e) {
 					// throw to outer try
 					throw new IOException(e);
@@ -572,7 +686,6 @@ public class NodeWizard extends WizardFrame {
 
 				// create buffer
 				final String reportURL = tempFile.toURI().toString();
-				System.out.println(reportURL);
 				final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
 				try {
 					SwingUtilities.invokeAndWait( () -> { 
@@ -608,16 +721,13 @@ public class NodeWizard extends WizardFrame {
 
 						webView.getEngine().load(reportURL);
 					});
-					
-//					final ReportReader reader = new ReportReader(reportBufferPanel, tempFile);
-//					reader.execute();
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 
-				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
+				final BufferPanel errPanel = getLogBuffer();
 				errPanel.getLogBuffer().setForeground(Color.red);
 				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
 				e.printStackTrace(writer);
@@ -627,6 +737,7 @@ public class NodeWizard extends WizardFrame {
 
 			SwingUtilities.invokeLater( () -> {
 				busyLabel.setBusy(false);
+				reportTimer.stop();
 				statusLabel.setText("");
 				btnBack.setEnabled(true);
 
@@ -636,9 +747,10 @@ public class NodeWizard extends WizardFrame {
 		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
 				busyLabel.setBusy(false);
+				reportTimer.stop();
 				statusLabel.setText(pe.getLocalizedMessage());
 
-				final BufferPanel errPanel = bufferPanel.createBuffer("Error");
+				final BufferPanel errPanel = getLogBuffer();
 				errPanel.getLogBuffer().setForeground(Color.red);
 				final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
 
@@ -691,17 +803,7 @@ public class NodeWizard extends WizardFrame {
 	public void setupReportContext(NodeWizardReportContext ctx) {
 		final Map<String, String> buffers = new HashMap<>();
 		final Map<String, DefaultTableDataSource> tables = new HashMap<>();
-//		for(String bufferName:bufferPanel.getBufferNames()) {
-//			final String data =
-//					bufferPanel.getBuffer(bufferName).getLogBuffer().getText();
-//			buffers.put(bufferName, data);
-//
-//			final DefaultTableDataSource table =
-//					bufferPanel.getBuffer(bufferName).getExtension(DefaultTableDataSource.class);
-//			if(table != null) {
-//				tables.put(bufferName, table);
-//			}
-//		}
+		
 		final ReportTree reportTree = (ReportTree)processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
 		searchForTables(reportTree.getRoot(), tables);
 

@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.logging.*;
 import java.util.stream.Collectors;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 import org.mozilla.javascript.*;
 
 import ca.gedge.opgraph.*;
@@ -32,11 +35,13 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.nodes.general.script.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.plugin.PluginManager;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
+import ca.phon.ui.CommonModuleFrame;
 
 @OpNodeInfo(
 		name="Script",
@@ -276,6 +281,10 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		if(this.scriptPanel == null) {
 			this.scriptPanel = new ScriptPanel(getScript());
 			scriptPanel.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
+			
+			if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
+				this.scriptPanel.setSwapButtonVisible(true);
+			}
 		}
 		return this.scriptPanel;
 	}

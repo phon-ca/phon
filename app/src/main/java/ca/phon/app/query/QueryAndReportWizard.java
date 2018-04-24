@@ -1,7 +1,12 @@
 package ca.phon.app.query;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,6 +20,8 @@ import javax.swing.SwingUtilities;
 import ca.gedge.opgraph.OpGraph;
 import ca.gedge.opgraph.Processor;
 import ca.gedge.opgraph.nodes.general.MacroNode;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.app.opgraph.report.ReportEditorModelInstantiator;
@@ -24,18 +31,33 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 public class QueryAndReportWizard extends NodeWizard {
+	
+	public final static String PREVIOUS_QUERY_PARAMETERS_FOLDER = QueryAndReportWizard.class.getName() + ".prevQueryParametersFolder";
+	public final static String DEFAULT_QUERY_PARAMETERS_FOLDER = 
+			PrefHelper.getUserDataFolder() + File.separator + "previous_query_parameters";
+	private String prevQueryParametersFolder = 
+			PrefHelper.get(PREVIOUS_QUERY_PARAMETERS_FOLDER, DEFAULT_QUERY_PARAMETERS_FOLDER);
+	
+	public final static String PREVIOUS_REPORT_FOLDER = QueryAndReportWizard.class.getName() + ".prevReportFolder";
+	public final static String DEFAULT_REPORT_FOLDER = 
+			PrefHelper.getUserDataFolder() + File.separator + "previous_query_reports";
+	private String prevQueryReportFolder = 
+			PrefHelper.get(PREVIOUS_REPORT_FOLDER, DEFAULT_REPORT_FOLDER);
 	
 	private WizardStep queryStep;
 	private JSplitPane splitPane;
@@ -60,7 +82,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		this.project = project;
 		putExtension(Project.class, project);
 		
-		this.queryScript = queryScript;
+		this.queryScript = loadPreviousQueryParameters(queryScript);
 
 		// add query steps
 		init();
@@ -93,15 +115,17 @@ public class QueryAndReportWizard extends NodeWizard {
 		retVal.setTitle("Query : " + qn.getName());
 		
 		sessionSelector = new SessionSelector(this.project);
-		sessionSelector.setPreferredSize(new Dimension(350, 0));
-		final JPanel leftPanel = new JPanel(new BorderLayout());
-		leftPanel.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
+		final JScrollPane sessionScroller = new JScrollPane(sessionSelector);
+		sessionScroller.setPreferredSize(new Dimension(350, 0));
 		includeExcludedBox = new JCheckBox("Include excluded records");
-		leftPanel.add(includeExcludedBox, BorderLayout.SOUTH);
-		TitledPanel sessionsPanel = new TitledPanel("Select Sessions", leftPanel);
+		includeExcludedBox.setForeground(Color.WHITE);
+		
+		TitledPanel sessionsPanel = new TitledPanel("Select Sessions");
+		sessionsPanel.getContentContainer().setLayout(new BorderLayout());
+		sessionsPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
+		sessionsPanel.setRightDecoration(includeExcludedBox);
 		
 		scriptPanel = new ScriptPanel(queryScript);
-		
 		final PhonUIAction saveSettingsAct = new PhonUIAction(this, "onSaveQuerySettings");
 		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query parameters");
 		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query parameters");
@@ -109,11 +133,8 @@ public class QueryAndReportWizard extends NodeWizard {
 		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 		saveQuerySettingsButton = new JButton(saveSettingsAct);
 		
-		final JPanel rightPanel = new JPanel(new BorderLayout());
-		rightPanel.add(scriptPanel, BorderLayout.CENTER);
-		rightPanel.add(ButtonBarBuilder.buildOkBar(saveQuerySettingsButton), BorderLayout.SOUTH);
-		
-		TitledPanel queryPanel = new TitledPanel("Query Parameters", rightPanel);
+		TitledPanel queryPanel = new TitledPanel("Query Parameters", scriptPanel);
+		queryPanel.setRightDecoration(saveQuerySettingsButton);
 		
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(sessionsPanel);
@@ -123,6 +144,95 @@ public class QueryAndReportWizard extends NodeWizard {
 		retVal.add(splitPane, BorderLayout.CENTER);
 		
 		return retVal;
+	}
+	
+	private QueryScript loadPreviousQueryParameters(QueryScript queryScript) {
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		final File previousParametersFile = new File(prevQueryParametersFolder, qn.getName() + ".xml");
+		
+		if(previousParametersFile.exists()) {
+			try {
+				QueryScript qs = new QueryScript(previousParametersFile.toURI().toURL());
+				return qs;
+			} catch (IOException e) {
+				LogUtil.severe(e);
+			}
+		}
+		return queryScript;
+	}
+	
+	private void savePreviousQueryParameters() {
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		final File folder = new File(prevQueryParametersFolder);
+		final File previousParametersFile = new File(prevQueryParametersFolder, qn.getName() + ".xml");
+		
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		if(!previousParametersFile.getParentFile().exists()) {
+			previousParametersFile.getParentFile().mkdirs();
+		}
+		
+		try {
+			QueryScriptLibrary.saveScriptToFile(queryScript, previousParametersFile.getAbsolutePath());
+		} catch (IOException e) {
+			LogUtil.severe(e);
+		}
+	}
+	
+	/**
+	 * Load either the previous query report, or the default.
+	 * 
+	 */
+	private void loadInitialQueryReport() {
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		final File folder = new File(prevQueryReportFolder);
+		final File prevReportFile = new File(folder, qn.getName() + ".xml");
+		
+		final URL defaultReportURL = getClass().getResource("default_report.xml");
+		
+		if(prevReportFile.exists()) {
+			try {
+				reportEditor.addDocument(prevReportFile);
+			} catch (InstantiationException | IOException e) {
+				LogUtil.severe(e);
+				try {
+					reportEditor.addDocument(defaultReportURL);
+				} catch (InstantiationException | IOException e1) {
+					LogUtil.severe(e1);
+				}
+			}
+		} else {
+			try {
+				reportEditor.addDocument(defaultReportURL);
+			} catch (InstantiationException | IOException e) {
+				LogUtil.severe(e);
+			}
+		}
+		
+		reportEditor.getModel().getDocument().markAsUnmodified();
+	}
+	
+	private void savePreviousQueryReport() {
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		final File folder = new File(prevQueryReportFolder);
+		final File prevReportFile = new File(folder, qn.getName() + ".xml");
+		
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		if(!prevReportFile.getParentFile().exists()) {
+			prevReportFile.getParentFile().mkdirs();
+		}
+
+		// make sure editor extension is up2d8
+		reportEditor.getGraph().putExtension(SimpleEditorExtension.class, new SimpleEditorExtension(reportEditor.getMacroNodes()));
+		
+		try {
+			OpgraphIO.write(reportEditor.getGraph(), prevReportFile);
+		} catch (IOException e) {
+			LogUtil.severe(e);
+		}
 	}
 	
 	public void onSaveQuerySettings() {
@@ -157,12 +267,23 @@ public class QueryAndReportWizard extends NodeWizard {
 				new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
 				(qs) -> new MacroNode(),
 				(graph, project) -> new ReportRunner(graph, getCurrentQueryProject(), getCurrentQueryId()) );
+		// toolbar customizations
+		reportEditor.getRunButton().setVisible(false);
+		reportEditor.getToolbar().add(super.globalOptionsPanel);
+		
 		TitledPanel configPane = new TitledPanel("Report Composer", reportEditor);
 		
 		retVal.setLayout(new BorderLayout());
 		retVal.add(configPane, BorderLayout.CENTER);
 		
+		loadInitialQueryReport();
+		
 		return retVal;
+	}
+	
+	private QueryRunnerPanel getCurrentQueryRunner() {
+		if(queryResultsPane == null || queryResultsPane.getTabCount() == 0) return null;
+		return (QueryRunnerPanel)queryResultsPane.getComponentAt(queryResultsPane.getSelectedIndex());
 	}
 	
 	private String getCurrentQueryId() {
@@ -190,6 +311,13 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryResultsPane.setSelectedComponent(runnerPanel);
 		queryResultsPane.revalidate();
 		
+		// save previous query paramters on successful query
+		runnerPanel.addPropertyChangeListener("numberComplete", (e) -> {
+			if(((Integer)e.getNewValue()) == sessionSelector.getSelectedSessions().size()) {
+				savePreviousQueryParameters();
+			}
+		});
+		
 		runnerPanel.startQuery();
 	}
 	
@@ -213,6 +341,8 @@ public class QueryAndReportWizard extends NodeWizard {
 				showMessageDialog("Query Parameters", "Check query parameters.", new String[] {"Ok"});
 				return;
 			}
+		} else if(getCurrentStep() == reportEditorStep) {
+			savePreviousQueryReport();
 		}
 		super.next();
 	}
@@ -222,6 +352,12 @@ public class QueryAndReportWizard extends NodeWizard {
 		if(stepIdx == super.getStepIndex(queryResultsStep) && getCurrentStep() == queryStep) {
 			// create a new query runner panel
 			executeQuery();
+		} else if(getCurrentStep() == queryResultsStep) {
+			QueryRunnerPanel queryRunner = getCurrentQueryRunner();
+			if(queryRunner != null && queryRunner.isRunning()) {
+				showMessageDialog("Results", "Please wait for query to complete", new String[] {"Ok"});
+				return;
+			}
 		} else if(!inInit && stepIdx == super.getStepIndex(reportDataStep)) {
 			
 			// install correct processor

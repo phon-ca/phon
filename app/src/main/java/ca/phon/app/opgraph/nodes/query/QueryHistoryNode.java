@@ -97,7 +97,6 @@ public class QueryHistoryNode extends OpNode {
 					.filter( q -> q.getUUID().toString().equals(qId) )
 					.findAny();
 		if(selectedQuery.isPresent()) {
-
 			final List<ResultSet> allResultSets = rsManager.getResultSetsForQuery(project, selectedQuery.get())
 					.stream()
 					.sorted( (rs1, rs2) -> rs1.getSessionPath().compareTo(rs2.getSessionPath()) )

@@ -30,10 +30,10 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 	private JRadioButton excludeColumnsButton;
 	private JTextArea columnsArea;
 
-	private final static String INCLUDE_COLUMNS_PROP = TableSectionNode.class.getName() + ".includeColumns";
+	public final static String INCLUDE_COLUMNS_PROP = TableSectionNode.class.getName() + ".includeColumns";
 	private boolean includeColumns = true;
 
-	private final static String COLUMNS_PROP = TableSectionNode.class.getName() + ".columns";
+	public final static String COLUMNS_PROP = TableSectionNode.class.getName() + ".columns";
 	private List<String> columns = new ArrayList<>();
 
 	public TableSectionNode() {

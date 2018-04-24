@@ -72,16 +72,27 @@ public class WizardGlobalOptionsPanel extends JPanel {
 				"no"
 		};
 		
-		add(new JLabel("Case sensitive:"), gbc);
+		JLabel csLbl = new JLabel("Case sensitive:");
+		csLbl.putClientProperty("JComponent.sizeVariant", "small");
+		add(csLbl, gbc);
+		
 		++gbc.gridx;
 		caseSensitiveBox = new JComboBox<>(comboBoxItems);
+		caseSensitiveBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
+		caseSensitiveBox.putClientProperty("JComponent.sizeVariant", "small");
 		caseSensitiveBox.setSelectedItem(PrefHelper.get(CASE_SENSITIVE_PROP, comboBoxItems[0]));
 		add(caseSensitiveBox, gbc);
 
+		
 		++gbc.gridx;
-		add(new JLabel("Ignore diacritics:"), gbc);
+		JLabel diaLbl = new JLabel("Ignore diacritics:");
+		diaLbl.putClientProperty("JComponent.sizeVariant", "small");
+		add(diaLbl, gbc);
+		
 		++gbc.gridx;
 		ignoreDiacriticsBox = new JComboBox<>(comboBoxItems);
+		ignoreDiacriticsBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
+		ignoreDiacriticsBox.putClientProperty("JComponent.sizeVariant", "small");
 		ignoreDiacriticsBox.setSelectedItem(PrefHelper.get(IGNORE_DIACRITICS_PROP, comboBoxItems[0]));
 		add(ignoreDiacriticsBox, gbc);
 		

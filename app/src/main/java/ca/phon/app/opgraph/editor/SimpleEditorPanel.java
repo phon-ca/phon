@@ -72,6 +72,7 @@ import org.apache.commons.lang.WordUtils;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import ca.gedge.opgraph.OpGraph;
@@ -85,6 +86,7 @@ import ca.gedge.opgraph.library.instantiators.Instantiator;
 import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.MacroNodeData;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
@@ -143,6 +145,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	private JToolBar toolbar;
 	private JButton saveButton;
+	private JButton browseButton;
 	private JButton addButton;
 	private JButton removeButton;
 	private JButton settingsButton;
@@ -152,7 +155,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JButton runButton;
 	private JButton openInComposerButton;
 
-	private JPanel documentPanel;
 	private JTree documentTree;
 	
 	private CardLayout cardLayout;
@@ -200,7 +202,43 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		extSupport.initExtensions();
 	}
 	
+	private void expandAllDocuments(TreePath path) {
+		final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)path.getLastPathComponent();
+		for(int i = 0; i < treeNode.getChildCount(); i++) {
+			final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)treeNode.getChildAt(i);
+			final TreePath tp = path.pathByAddingChild(childNode);
+			documentTree.expandPath(tp);
+			
+			if(childNode.getChildCount() > 0) {
+				expandAllDocuments(tp);
+			}
+		}
+	}
+	
 	private void init() {
+		// document tree
+		TreeModel treeModel = createTreeModel();
+		documentTree = new JTree(treeModel);
+		documentTree.setRootVisible(false);
+		documentTree.setVisibleRowCount(20);
+		documentTree.setCellRenderer(new TreeNodeRenderer());
+		documentTree.addMouseListener(new MouseInputAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+					final int clickedRow = documentTree.getRowForLocation(e.getX(), e.getY());
+					if(clickedRow >= 0 && clickedRow < documentTree.getRowCount()) {
+						addSelectedDocuments(documentTree);
+					}
+				}
+			}
+
+		});
+		final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
+		final TreePath rootPath = new TreePath(rootNode);
+		expandAllDocuments(rootPath);
+				
 		// create components for popup window selection
 		final ImageIcon saveIcn =
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
@@ -208,10 +246,17 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save");
 		saveAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 		saveButton = new JButton(saveAct);
+		
+		final PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
+		final ImageIcon openIcn =
+				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
+		browseAct.putValue(PhonUIAction.SMALL_ICON, openIcn);
+		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for report file...");
+		browseButton = new JButton(browseAct);
 
 		final ImageIcon addIcn =
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final PhonUIAction addAct = new PhonUIAction(this, "onAdd");
+		final PhonUIAction addAct = new PhonUIAction(this, "addSelectedDocuments", documentTree);
 		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add " + getModel().getNoun().getObj1());
 		addAct.putValue(PhonUIAction.SMALL_ICON, addIcn);
 		addButton = new JButton(addAct);
@@ -291,30 +336,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		inputMap.put(removeKs, "delete");
 		am.put("delete", removeAct);
 		
-		// document tree
-		documentTree = new JTree(createTreeModel());
-		documentTree.setRootVisible(false);
-		documentTree.setVisibleRowCount(20);
-		documentTree.setCellRenderer(new TreeNodeRenderer());
-		documentTree.setPreferredSize(new Dimension(350, 0));
-		documentTree.addMouseListener(new MouseInputAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-					final int clickedRow = documentTree.getRowForLocation(e.getX(), e.getY());
-					if(clickedRow >= 0 && clickedRow < documentTree.getRowCount()) {
-						addSelectedDocuments(documentTree);
-					}
-				}
-			}
-
-		});
-		
 		final JScrollPane documentScroller = new JScrollPane(documentTree);
-		
-		documentPanel = new JPanel(new BorderLayout());
-		documentPanel.add(documentScroller, BorderLayout.CENTER);
+		documentScroller.setPreferredSize(new Dimension(350, 0));
 		
 		cardLayout = new CardLayout();
 		nodePanel = new JPanel(cardLayout);
@@ -323,7 +346,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final JScrollPane nodeScroller = new JScrollPane(nodeTable);
 
 		toolbar = new JToolBar();
+		toolbar.setFloatable(false);
 		toolbar.add(saveButton);
+		toolbar.add(browseButton);
 		toolbar.addSeparator();
 
 		toolbar.add(addButton);
@@ -338,8 +363,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		toolbar.add(moveDownButton);
 		toolbar.addSeparator();
 
-		toolbar.add(openInComposerButton);
-		toolbar.addSeparator();
 		toolbar.add(runButton);
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
@@ -352,7 +375,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		nodePanel.add(nodeScroller, "node_table");
 		
 		final JSplitPane splitPane = new JSplitPane();
-		splitPane.setLeftComponent(documentPanel);
+		splitPane.setLeftComponent(documentScroller);
 		splitPane.setRightComponent(nodePanel);
 		
 		setLayout(new BorderLayout());
@@ -360,9 +383,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		add(toolbar, BorderLayout.NORTH);
 		add(statusBar, BorderLayout.SOUTH);
 	}
-	
+		
 	public OpgraphEditorModel getModel() {
 		return this.model;
+	}
+	
+	public List<MacroNode> getMacroNodes() {
+		return Collections.unmodifiableList(this.macroNodes);
 	}
 	
 	public OpGraph getGraph() {
@@ -373,91 +400,12 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		return this.project;
 	}
 	
-	public void onAdd(PhonActionEvent pae) {
-		final JComponent comp = addButton;
-
-		final JTree tree = new JTree(createTreeModel());
-		tree.setRootVisible(false);
-		tree.setVisibleRowCount(20);
-		tree.setCellRenderer(new TreeNodeRenderer());
-
-
-		// expand all first-level siblings
-		final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
-		final TreePath rootPath = new TreePath(rootNode);
-		for(int i = 0; i < rootNode.getChildCount(); i++) {
-			final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)rootNode.getChildAt(i);
-			final TreePath childPath = rootPath.pathByAddingChild(childNode);
-			tree.expandPath(childPath);
-		}
-
-		final JScrollPane scroller = new JScrollPane(tree);
-		scroller.setPreferredSize(new Dimension(300, tree.getPreferredScrollableViewportSize().height));
-
-		final Point p = new Point(0, comp.getHeight());
-		SwingUtilities.convertPointToScreen(p, comp);
-
-		final JFrame popup = new JFrame("Add " + getModel().getNoun().getObj1());
-		popup.setUndecorated(true);
-		popup.addWindowFocusListener(new WindowFocusListener() {
-
-			@Override
-			public void windowLostFocus(WindowEvent e) {
-				destroyPopup(popup);
-			}
-
-			@Override
-			public void windowGainedFocus(WindowEvent e) {
-			}
-
-		});
-
-		tree.addMouseListener(new MouseInputAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-					final int clickedRow = tree.getRowForLocation(e.getX(), e.getY());
-					if(clickedRow >= 0 && clickedRow < tree.getRowCount()) {
-						destroyPopup(popup);
-						addSelectedDocuments(tree);
-					}
-				}
-			}
-
-
-		});
-
-		final PhonUIAction cancelAct = new PhonUIAction(this, "destroyPopup", popup);
-		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
-		final JButton cancelBtn = new JButton(cancelAct);
-
-		final PhonUIAction okAct = new PhonUIAction(this, "addSelectedDocuments", tree);
-		okAct.putValue(PhonUIAction.NAME, "Add selected");
-		final JButton okBtn = new JButton(okAct);
-		okBtn.addActionListener( (e) -> destroyPopup(popup) );
-
-		final PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
-		browseAct.putValue(PhonUIAction.NAME, "Browse...");
-		final JButton browseBtn = new JButton(browseAct);
-		browseBtn.addActionListener( (e) -> destroyPopup(popup) );
-
-		final JComponent btnBar = ButtonBarBuilder.buildOkCancelBar(okBtn, cancelBtn, browseBtn);
-
-		popup.setLayout(new BorderLayout());
-		popup.add(scroller, BorderLayout.CENTER);
-		popup.add(btnBar, BorderLayout.SOUTH);
-
-		popup.pack();
-		popup.setLocation(p.x, p.y);
-		popup.setVisible(true);
-
-		popup.getRootPane().setDefaultButton(okBtn);
+	public JButton getRunButton() {
+		return this.runButton;
 	}
 	
-	public void destroyPopup(JFrame popup) {
-		popup.setVisible(false);
-		popup.dispose();
+	public JToolBar getToolbar() {
+		return this.toolbar;
 	}
 	
 	public void addSelectedDocuments(JTree tree) {
@@ -465,8 +413,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		if(selectedPaths != null && selectedPaths.length > 0) {
 			for(TreePath selectedPath:selectedPaths)
 				addDocuments((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
-			if(selectedPaths.length == 1) 
-				SwingUtilities.invokeLater( this::onShowSettings );
 		}
 	}
 
@@ -591,22 +537,45 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator);
 
 			final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData);
-			analysisNode.setName(documentName);
-			final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + macroNodes.size() * Y_SEP);
-			analysisNode.putExtension(NodeMetadata.class, nodeMeta);
-
-			SwingUtilities.invokeLater( () -> {
-				final AddNodeEdit addEdit = new AddNodeEdit(getGraph(), analysisNode);
-				getModel().getDocument().getUndoSupport().postEdit(addEdit);
-
-				final NodeWizardOptionalsEdit optEdit =
-						new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), analysisNode, true, true);
-				getModel().getDocument().getUndoSupport().postEdit(optEdit);
-
-				macroNodes.add(analysisNode);
-				((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
-				nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
-			});
+			
+			final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
+			if(editorExt != null) {
+				// load macro nodes
+				SwingUtilities.invokeLater( () -> {
+					for(MacroNode node:editorExt.getMacroNodes()) {
+						final AddNodeEdit addNodeEdit = 
+								new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
+						model.getDocument().getUndoSupport().postEdit(addNodeEdit);
+						
+						final NodeWizardOptionalsEdit optEdit =
+								new NodeWizardOptionalsEdit(getGraph(),  getGraph().getExtension(WizardExtension.class), node, true, true);
+						model.getDocument().getUndoSupport().postEdit(optEdit);
+						
+						updateNodeName(node);
+						
+						macroNodes.add(node);
+						((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
+						nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
+					}
+				});
+			} else {
+				analysisNode.setName(documentName);
+				final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + macroNodes.size() * Y_SEP);
+				analysisNode.putExtension(NodeMetadata.class, nodeMeta);
+	
+				SwingUtilities.invokeLater( () -> {
+					final AddNodeEdit addEdit = new AddNodeEdit(getGraph(), analysisNode);
+					getModel().getDocument().getUndoSupport().postEdit(addEdit);
+	
+					final NodeWizardOptionalsEdit optEdit =
+							new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), analysisNode, true, true);
+					getModel().getDocument().getUndoSupport().postEdit(optEdit);
+	
+					macroNodes.add(analysisNode);
+					((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
+					nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
+				});
+			}
 		} catch (IOException | InstantiationException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			throw e;
@@ -707,6 +676,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	}
 
 	public void onBrowse() {
+	
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setAllowMultipleSelection(true);
@@ -720,10 +690,39 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		List<String> selectedFiles = NativeDialogs.showOpenDialog(props);
 		final List<File> fileList =
-				selectedFiles.stream().map( (s) -> new File(s) ).collect(Collectors.toList());
-		addDocuments(fileList);
-		if(fileList.size() == 1) {
-			SwingUtilities.invokeLater( this::onShowSettings );
+				(selectedFiles != null ? selectedFiles.stream().map( (s) -> new File(s) ).collect(Collectors.toList()) : new ArrayList<>());
+		if(fileList.size() > 0) {
+			if(getModel().getDocument().hasModifications() && getMacroNodes().size() > 0) {
+				final MessageDialogProperties msgProps = new MessageDialogProperties();
+				msgProps.setRunAsync(false);
+				msgProps.setParentWindow(CommonModuleFrame.getCurrentFrame());
+				msgProps.setTitle("Composer");
+				msgProps.setHeader("Save Changes");
+				msgProps.setMessage("Save current changes before opening new document?");
+				msgProps.setOptions(MessageDialogProperties.yesNoCancelOptions);
+				
+				int retVal = NativeDialogs.showMessageDialog(msgProps);
+				if(retVal == 0) {
+					try {
+						saveData();
+					} catch (IOException e) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.severe(e);
+						return;
+					}
+				} else if(retVal == 2) {
+					return;
+				}
+				
+				ArrayList<OpNode> nodes = new ArrayList<>();
+				nodes.addAll(macroNodes);
+				final DeleteNodesEdit edit = new DeleteNodesEdit(getGraph(), nodes);
+				getModel().getDocument().getUndoSupport().postEdit(edit);
+				
+				macroNodes.clear();
+				((NodeTableModel)nodeTable.getModel()).fireTableRowsDeleted(0, nodes.size()-1);
+			}
+			addDocuments(fileList);
 		}
 	}
 	
@@ -733,6 +732,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 	public void setIncludeQueries(boolean includeQueries) {
 		this.includeQueries = includeQueries;
+		
+		documentTree.setModel(createTreeModel());
+		expandAllDocuments(new TreePath(documentTree.getModel().getRoot()));
 	}
 	
 	private class ListCellRenderer extends DefaultListCellRenderer {
@@ -1128,11 +1130,15 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		if(getCurrentFile() == null) {
 			if(!chooseFile()) return false;
 		}
+		
+		// add extension to document
+		getGraph().putExtension(SimpleEditorExtension.class, new SimpleEditorExtension(macroNodes));
+		
 		OpgraphIO.write(getModel().getDocument().getRootGraph(), getCurrentFile());
 		getModel().getDocument().markAsUnmodified();
 		return true;
 	}
-	
+		
 	/**
 	 * If the given analysis/report node has a settings node 'Parameters' which
 	 * is a {@link PhonScriptNode} and has a parameter 'reportTitle' this
@@ -1239,7 +1245,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			setupQueryLibraryTree(queryRoot);
 			root.add(queryRoot);
 		}
-
 
 		return new DefaultTreeModel(root);
 	}

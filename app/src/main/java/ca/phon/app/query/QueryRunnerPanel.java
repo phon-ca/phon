@@ -181,6 +181,7 @@ public class QueryRunnerPanel extends JPanel {
 			
 			menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
 		});
+		reportButton.setVisible(false);
 		
 		hideRowsBox = new JCheckBox("Hide empty results");
 		hideRowsBox.setEnabled(false);
@@ -281,6 +282,7 @@ public class QueryRunnerPanel extends JPanel {
 	private void taskCompleted() {
 		numberComplete++;
 		completedLabel.setText("Completed: " + numberComplete + "/" + tableModel.getRowCount());
+		super.firePropertyChange("numberComplete", numberComplete-1, numberComplete);
 	}
 
 	/**
@@ -602,7 +604,7 @@ public class QueryRunnerPanel extends JPanel {
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			
 			if(property.equals(QueryTask.PROGRESS_PROP)) {
-				tableModel.setValueAt((Integer)queryTask.getProperty(QueryTask.PROGRESS_PROP), rowIdx, 2);
+				tableModel.setValueAt((int)Math.ceil((Float)queryTask.getProperty(QueryTask.PROGRESS_PROP)), rowIdx, 2);
 
 				int size = (queryTask.getResultSet() != null ? queryTask.getResultSet().size() : 0);
 				tableModel.setValueAt(size, rowIdx, 3);

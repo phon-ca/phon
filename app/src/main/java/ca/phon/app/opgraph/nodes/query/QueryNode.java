@@ -19,6 +19,9 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -27,6 +30,7 @@ import ca.gedge.opgraph.*;
 import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.*;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
@@ -35,6 +39,11 @@ import ca.phon.query.db.*;
 import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.*;
+import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonTask.TaskStatus;
 
 @OpNodeInfo(
 	category="Query",
@@ -69,6 +78,8 @@ public class QueryNode extends OpNode implements NodeSettings {
 
 	private OutputField paramsOutputField = new OutputField("parameters",
 			"Parameters used for query, including those entered using the settings dialog", true, Map.class);
+	
+	private PropertyChangeSupport propSupport;
 
 	public QueryNode() {
 		this(new QueryScript(""));
@@ -88,8 +99,56 @@ public class QueryNode extends OpNode implements NodeSettings {
 		super.putField(resultsField);
 		super.putField(scriptOutputField);
 		super.putField(bufferOutputField);
+		
+		this.propSupport = new PropertyChangeSupport(this);
 
 		putExtension(NodeSettings.class, this);
+	}
+	
+	
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(listener);
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return propSupport.getPropertyChangeListeners();
+	}
+
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+		return propSupport.getPropertyChangeListeners(propertyName);
+	}
+
+	public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+		propSupport.firePropertyChange(propertyName, oldValue, newValue);
+	}
+
+	public void firePropertyChange(String propertyName, int oldValue, int newValue) {
+		propSupport.firePropertyChange(propertyName, oldValue, newValue);
+	}
+
+	public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
+		propSupport.firePropertyChange(propertyName, oldValue, newValue);
+	}
+
+	public void firePropertyChange(PropertyChangeEvent event) {
+		propSupport.firePropertyChange(event);
+	}
+
+	public boolean hasListeners(String propertyName) {
+		return propSupport.hasListeners(propertyName);
 	}
 
 	@Override
@@ -166,16 +225,37 @@ public class QueryNode extends OpNode implements NodeSettings {
 		ctx.redirectStdOut(scriptOutputStream);
 
 		int serial = 0;
+		Session currentSession = null;
+		QueryTask currentTask = null;
 		for(RecordContainer rc:recordContainers) {
 			checkCanceled();
+			Session session = rc.getSession();
+			firePropertyChange("session", currentSession, session);
+			currentSession = session;
 			try {
-				QueryTask task = new QueryTask(project, rc.getSession(), rc.idxIterator(), queryScript, ++serial);
+				QueryTask task = new QueryTask(project, currentSession, rc.idxIterator(), queryScript, ++serial);
+				task.addTaskListener( new PhonTaskListener() {
+					
+					@Override
+					public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+						firePropertyChange("task", oldStatus, newStatus);
+					}
+					
+					@Override
+					public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+						firePropertyChange(property, oldValue, newValue);
+					}
+					
+				});
+				firePropertyChange("queryTask", currentTask, task);
+				currentTask = task;
 				task.run();
 				results[serial-1] = task.getResultSet();
 			} catch (Exception e) {
 				throw new ProcessingException(null, e);
 			}
 		}
+		firePropertyChange("numCompleted", serial-1, serial);
 
 		// setup outputs
 		opCtx.put(projectOutputField, project);
@@ -199,6 +279,10 @@ public class QueryNode extends OpNode implements NodeSettings {
 	public Component getComponent(GraphDocument arg0) {
 		if(scriptPanel == null) {
 			scriptPanel = new ScriptPanel(getQueryScript());
+			
+			if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
+				scriptPanel.setSwapButtonVisible(true);
+			}
 		}
 		return scriptPanel;
 	}

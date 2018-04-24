@@ -35,12 +35,14 @@ import ca.gedge.opgraph.app.GraphDocument;
 import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.gedge.opgraph.nodes.general.script.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.plugin.PluginManager;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.resources.*;
 
 /**
@@ -250,6 +252,10 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		scriptPanel = new ScriptPanel(getScript());
 		retVal.add(scriptPanel, BorderLayout.CENTER);
 		scriptPanel.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
+		
+		if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
+			scriptPanel.setSwapButtonVisible(true);
+		}
 
 		return retVal;
 	}

@@ -172,7 +172,7 @@ public class QueryTask extends PhonTask {
 		while(recordItr.hasNext()) {
 			int i = recordItr.next();
 			try {
-				final int progress = Math.round(((float)(i+1)/(float)totalRecords) * 100.0f);
+				final float progress = ((float)(i+1)/(float)totalRecords) * 100.0f;
 				setProperty(PROGRESS_PROP, progress);
 				
 				final Record record = session.getRecord(i);
