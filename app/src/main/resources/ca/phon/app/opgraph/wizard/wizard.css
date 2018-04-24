@@ -224,7 +224,7 @@ img {
 
 #toc .h1 {
     font-weight: bold;
-    font-size: normal;
+    font-size: inherit;
     color: rgb(50, 50, 50);
 
     padding-bottom: 4px;
