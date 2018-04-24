@@ -150,7 +150,7 @@ public class QueryMenuListener implements MenuListener {
 		final JMenuItem historyItem = new JMenuItem(new QueryHistoryCommand(project));
 		
 		queryMenu.addSeparator();
-		queryMenu.add(scriptItem);
+//		queryMenu.add(scriptItem);
 		queryMenu.add(historyItem);
 	}
 
