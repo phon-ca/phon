@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:og="http://gedge.ca/ns/opgraph"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:og="https://www.phon.ca/ns/opgraph"
     xmlns="https://www.phon.ca/ns/node_editor" targetNamespace="https://www.phon.ca/ns/node_editor"
     version="1.0">
     
-    <xs:import namespace="http://gedge.ca/ns/opgraph" 
+    <xs:import namespace="https://www.phon.ca/ns/opgraph" 
         schemaLocation="https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd"/>
     
     <xs:complexType name="SettingsType">

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://phon.ca/ns/opgraph_query"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:og="http://gedge.ca/ns/opgraph"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:og="https://www.phon.ca/ns/opgraph"
 	xmlns:qry="http://phon.ling.mun.ca/ns/query" xmlns:rpt="http://phon.ling.mun.ca/ns/report"
 	targetNamespace="https://phon.ca/ns/opgraph_query" elementFormDefault="unqualified">
 
-	<xs:import namespace="http://gedge.ca/ns/opgraph"
+	<xs:import namespace="https://www.phon.ca/ns/opgraph"
 		schemaLocation="https://raw.githubusercontent.com/ghedlund/opgraph/master/xml-io/src/main/resources/META-INF/schemas/opgraph.xsd"/>
 	<xs:import namespace="http://phon.ling.mun.ca/ns/query"
 		schemaLocation="https://raw.githubusercontent.com/phon-ca/phon/master/query/src/main/resources/xml/xsd/query.xsd"/>
