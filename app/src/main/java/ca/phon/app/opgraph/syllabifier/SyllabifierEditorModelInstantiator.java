@@ -18,13 +18,13 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.dag.*;
-import ca.gedge.opgraph.exceptions.ItemMissingException;
-import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.plugin.*;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 import ca.phon.syllabifier.opgraph.nodes.SonorityNode;

@@ -30,14 +30,14 @@ import javax.swing.SwingUtilities;
 
 import org.mozilla.javascript.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.gedge.opgraph.nodes.general.script.*;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.opgraph.nodes.general.script.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.script.*;
 import ca.phon.script.params.*;

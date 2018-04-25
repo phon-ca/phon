@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:ops="https://www.phon.ca/ns/syllabifier">
+<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:ops="https://www.phon.ca/ns/syllabifier">
     <graph id="root">
-        <node id="3d4e52ca" name="IPATranscript" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="3d4e52ca" name="IPATranscript" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[__ipa]]></oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="15"/>
@@ -37,7 +37,7 @@
                 <oga:meta x="566" y="15"/>
             </extensions>
         </node>
-        <ogcn:macro id="3c60223e" name="Mark Nucleus Liquid" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="3c60223e" name="Mark Nucleus Liquid" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="4b373ece">
                 <node id="420620d0" name="Mark Nucleus Liquid" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -80,7 +80,7 @@
                 <oga:meta x="922" y="15"/>
             </extensions>
         </node>
-        <ogcn:macro id="775f46c4433e462c" name="Mark Nucleus Nasal" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="775f46c4433e462c" name="Mark Nucleus Nasal" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="3a797c19">
                 <node id="420620d0" name="Mark Nucleus Nasal" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -139,7 +139,7 @@
                 <oga:meta x="765" y="151"/>
             </extensions>
         </node>
-        <ogcn:macro id="67767e7084b3434a" name="Obs Patterns" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="67767e7084b3434a" name="Obs Patterns" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="2c3aeb0">
                 <ogcn:macro id="42978a93" name="4x0bs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="19d45a43">
@@ -183,22 +183,22 @@
                                 <oga:meta x="100" y="470"/>
                             </extensions>
                         </node>
-                        <ogcn:macro id="7a3d1139" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="7a3d1139" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="5cc277f">
-                                <node id="3a311120" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="3a311120" name="SyllableConstituentType.ONSET" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
                                 </node>
-                                <node id="6b5b69b8" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="6b5b69b8" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -207,27 +207,27 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="348" y="410"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="2c6b4325" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="2c6b4325" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="3801fe48">
-                                <node id="40472e64" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="40472e64" name="SyllableConstituentType.NUCLEUS" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
                                 </node>
-                                <node id="136c834" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="136c834" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -236,27 +236,27 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="343" y="523"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="29b2148a" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="29b2148a" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="4a0152f8">
-                                <node id="241880aa" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="241880aa" name="SyllableConstituentType.ONSET" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
                                 </node>
-                                <node id="6a24a568" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="6a24a568" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -265,27 +265,27 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="339" y="206"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="3451b8b2" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="3451b8b2" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="55475e65">
-                                <node id="fc877f5" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="fc877f5" name="SyllableConstituentType.NUCLEUS" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
                                 </node>
-                                <node id="3a78c4cd" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="3a78c4cd" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -294,7 +294,7 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="358" y="303"/>
                             </extensions>
@@ -345,22 +345,22 @@
                                 <oga:meta x="100" y="70"/>
                             </extensions>
                         </node>
-                        <ogcn:macro id="7f131719" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="7f131719" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="4e8e33d2">
-                                <node id="772c59a3" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="772c59a3" name="SyllableConstituentType.ONSET" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
                                 </node>
-                                <node id="b11975" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="b11975" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -369,27 +369,27 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="339" y="206"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="eddb59a" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="eddb59a" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="434b2857">
-                                <node id="e9fdbf7" name="SyllableConstituentType.CODA" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="e9fdbf7" name="SyllableConstituentType.CODA" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[CODA]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[CODA]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="367" y="216"/>
                                     </extensions>
                                 </node>
-                                <node id="3bccdcdd" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="3bccdcdd" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -398,27 +398,27 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="348" y="410"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="47bedb42" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="47bedb42" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="13cea5f3">
-                                <node id="522906e1" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="522906e1" name="SyllableConstituentType.NUCLEUS" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
                                 </node>
-                                <node id="382c7eb" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="382c7eb" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -427,7 +427,7 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="358" y="303"/>
                             </extensions>
@@ -469,22 +469,22 @@
                                 <oga:meta x="100" y="70"/>
                             </extensions>
                         </node>
-                        <ogcn:macro id="642e89d" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="642e89d" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="65f17757">
-                                <node id="35c1b25e" name="SyllableConstituentType.ONSET" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="35c1b25e" name="SyllableConstituentType.ONSET" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[ONSET]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="386" y="189"/>
                                     </extensions>
                                 </node>
-                                <node id="3fa554e4" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="3fa554e4" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -493,27 +493,27 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="339" y="206"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="2e0f09b2" name="IPATranscript" type="ca.gedge.opgraph.nodes.reflect.IterableClassNode">
+                        <ogcn:macro id="2e0f09b2" name="IPATranscript" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
                             <graph id="4b4ee979">
-                                <node id="6e5e53d" name="SyllableConstituentType.NUCLEUS" type="class:ca.gedge.opgraph.nodes.reflect.StaticFieldNode">
+                                <node id="6e5e53d" name="SyllableConstituentType.NUCLEUS" type="class:ca.phon.opgraph.nodes.reflect.StaticFieldNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.classMember"><![CDATA[NUCLEUS]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticFieldNode.declaredClass"><![CDATA[ca.phon.syllable.SyllableConstituentType]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="358" y="224"/>
                                     </extensions>
                                 </node>
-                                <node id="5f2d0b54" name="IPAElement" type="class:ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode">
+                                <node id="5f2d0b54" name="IPAElement" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
-                                            <oga:property key="ca.gedge.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.ipa.IPAElement]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="692" y="190"/>
                                     </extensions>
@@ -522,7 +522,7 @@
                             </graph>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.gedge.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="358" y="303"/>
                             </extensions>

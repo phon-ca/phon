@@ -24,8 +24,8 @@ import java.util.*;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.ui.tristatecheckbox.*;
 
 public class OpGraphCheckBoxTree extends TristateCheckBoxTree {

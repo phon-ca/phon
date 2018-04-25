@@ -27,8 +27,8 @@ import javax.swing.*;
 
 import org.mozilla.javascript.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.*;
 import ca.phon.script.*;
 import ca.phon.ui.text.PromptedTextField;

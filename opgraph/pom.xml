@@ -37,23 +37,23 @@
 		<artifactId>docking-frames-common</artifactId>
 	</dependency>
     <dependency>
-      <groupId>ca.gedge.opgraph</groupId>
+      <groupId>ca.phon.opgraph</groupId>
       <artifactId>opgraph-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>ca.gedge.opgraph</groupId>
+      <groupId>ca.phon.opgraph</groupId>
       <artifactId>opgraph-library</artifactId>
     </dependency>
     <dependency>
-      <groupId>ca.gedge.opgraph</groupId>
+      <groupId>ca.phon.opgraph</groupId>
       <artifactId>opgraph-xml-io</artifactId>
     </dependency>
     <dependency>
-      <groupId>ca.gedge.opgraph</groupId>
+      <groupId>ca.phon.opgraph</groupId>
       <artifactId>opgraph-app</artifactId>
     </dependency>
     <dependency>
-      <groupId>ca.gedge.opgraph</groupId>
+      <groupId>ca.phon.opgraph</groupId>
       <artifactId>opgraph-common-nodes</artifactId>
     </dependency>
   </dependencies>

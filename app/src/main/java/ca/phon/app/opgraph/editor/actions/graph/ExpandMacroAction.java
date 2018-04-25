@@ -23,13 +23,13 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.components.canvas.GraphCanvasSelectionModel;
-import ca.gedge.opgraph.nodes.general.MacroNode;
-import ca.gedge.opgraph.nodes.menu.edits.ExplodeMacroEdit;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionModel;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.menu.edits.ExplodeMacroEdit;
 import ca.phon.util.icons.*;
 
 public class ExpandMacroAction extends OpgraphEditorAction {

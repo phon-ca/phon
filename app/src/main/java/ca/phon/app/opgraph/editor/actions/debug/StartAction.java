@@ -22,12 +22,12 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.app.opgraph.wizard.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 

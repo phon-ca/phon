@@ -21,11 +21,11 @@ package ca.phon.syllabifier.opgraph.nodes;
 import java.awt.Component;
 import java.util.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.phonex.*;
 import ca.phon.phonex.*;
 import ca.phon.syllable.*;

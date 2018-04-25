@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ResultSetSelector;
+import ca.phon.opgraph.*;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.session.SessionPath;

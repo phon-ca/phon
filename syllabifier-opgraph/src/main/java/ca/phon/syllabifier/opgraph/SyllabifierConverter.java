@@ -20,13 +20,13 @@ package ca.phon.syllabifier.opgraph;
 
 import java.util.logging.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.AutoLayoutManager;
-import ca.gedge.opgraph.dag.*;
-import ca.gedge.opgraph.exceptions.ItemMissingException;
-import ca.gedge.opgraph.nodes.general.MacroNode;
-import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.AutoLayoutManager;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.syllabifier.basic.BasicSyllabifier;
 import ca.phon.syllabifier.basic.io.*;
 import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;

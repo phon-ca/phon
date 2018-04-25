@@ -21,10 +21,10 @@ package ca.phon.app.opgraph.nodes.table;
 import java.awt.Component;
 import java.util.*;
 
-import ca.gedge.opgraph.OpContext;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.TableDataSource;
 
 /**

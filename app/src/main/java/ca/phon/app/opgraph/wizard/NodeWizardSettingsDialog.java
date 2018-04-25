@@ -22,7 +22,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.OpGraph;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

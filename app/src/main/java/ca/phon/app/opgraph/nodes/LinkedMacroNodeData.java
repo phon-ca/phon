@@ -2,9 +2,9 @@ package ca.phon.app.opgraph.nodes;
 
 import java.net.URI;
 
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.library.NodeData;
-import ca.gedge.opgraph.library.instantiators.Instantiator;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.instantiators.Instantiator;
 
 public class LinkedMacroNodeData extends NodeData {
 

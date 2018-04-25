@@ -21,7 +21,7 @@ package ca.phon.app.opgraph.editor.library;
 import java.awt.datatransfer.*;
 import java.io.IOException;
 
-import ca.gedge.opgraph.library.NodeData;
+import ca.phon.opgraph.library.NodeData;
 
 public class NodeDataTransferable implements Transferable {
 

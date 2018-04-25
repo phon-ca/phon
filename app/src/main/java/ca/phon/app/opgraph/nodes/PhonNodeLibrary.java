@@ -26,15 +26,15 @@ import java.util.logging.*;
 
 import org.apache.commons.io.FilenameUtils;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.app.components.canvas.NodeStyle;
-import ca.gedge.opgraph.library.NodeLibrary;
-import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
 import ca.phon.app.opgraph.macro.MacroLibrary;
 import ca.phon.app.opgraph.nodes.query.*;
 import ca.phon.app.opgraph.nodes.table.*;
 import ca.phon.app.opgraph.report.ReportLibrary;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.components.canvas.NodeStyle;
+import ca.phon.opgraph.library.NodeLibrary;
+import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.util.icons.*;

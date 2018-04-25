@@ -22,12 +22,12 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.app.extensions.*;
-import ca.gedge.opgraph.extensions.NodeMetadata;
-import ca.gedge.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.extensions.NodeMetadata;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 

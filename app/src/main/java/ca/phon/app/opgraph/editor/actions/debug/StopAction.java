@@ -22,9 +22,9 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.app.GraphDocument;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.util.icons.*;
 
 public class StopAction extends OpgraphEditorAction {

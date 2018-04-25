@@ -23,7 +23,7 @@ import java.util.*;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreePath;
 
-import ca.gedge.opgraph.*;
+import ca.phon.opgraph.*;
 import ca.phon.ui.tristatecheckbox.*;
 import ca.phon.util.icons.*;
 

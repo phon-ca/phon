@@ -1,7 +1,7 @@
 package ca.phon.app.opgraph.nodes;
 
-import ca.gedge.opgraph.library.instantiators.Instantiator;
-import ca.gedge.opgraph.nodes.general.LinkedMacroNode;
+import ca.phon.opgraph.library.instantiators.Instantiator;
+import ca.phon.opgraph.nodes.general.LinkedMacroNode;
 
 public class LinkedMacroNodeInstantiator implements Instantiator<LinkedMacroNode> {
 

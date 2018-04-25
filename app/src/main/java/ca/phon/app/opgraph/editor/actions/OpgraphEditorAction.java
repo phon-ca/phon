@@ -20,8 +20,8 @@ package ca.phon.app.opgraph.editor.actions;
 
 import java.lang.ref.WeakReference;
 
-import ca.gedge.opgraph.app.commands.HookableCommand;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.opgraph.app.commands.HookableCommand;
 
 public abstract class OpgraphEditorAction extends HookableCommand {
 	

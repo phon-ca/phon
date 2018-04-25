@@ -20,8 +20,8 @@ package ca.phon.app.opgraph.editor;
 
 import java.util.*;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.plugin.*;
 
 public class OpgraphEditorModelFactory {

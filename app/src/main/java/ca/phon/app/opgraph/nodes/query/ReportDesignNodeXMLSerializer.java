@@ -31,9 +31,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.extensions.Extendable;
-import ca.gedge.opgraph.io.xml.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.extensions.Extendable;
+import ca.phon.opgraph.io.xml.*;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
 

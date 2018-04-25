@@ -26,10 +26,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.components.*;
 import ca.phon.app.opgraph.wizard.edits.*;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;

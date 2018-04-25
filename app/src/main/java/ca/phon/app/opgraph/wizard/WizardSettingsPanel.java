@@ -29,7 +29,7 @@ import javax.swing.tree.*;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import ca.gedge.opgraph.*;
+import ca.phon.opgraph.*;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

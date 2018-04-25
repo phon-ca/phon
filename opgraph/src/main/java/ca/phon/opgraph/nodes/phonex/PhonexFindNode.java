@@ -21,13 +21,13 @@ package ca.phon.opgraph.nodes.phonex;
 import java.awt.Component;
 import java.util.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.gedge.opgraph.extensions.NodeMetadata;
-import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.opgraph.extensions.NodeMetadata;
+import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.phonex.*;
 
 @OpNodeInfo(

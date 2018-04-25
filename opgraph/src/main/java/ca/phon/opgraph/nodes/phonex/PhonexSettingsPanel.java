@@ -24,8 +24,8 @@ import java.util.Properties;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.node.NodeSettingsEdit;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.edits.node.NodeSettingsEdit;
 
 /**
  * Phonex node settings panel.

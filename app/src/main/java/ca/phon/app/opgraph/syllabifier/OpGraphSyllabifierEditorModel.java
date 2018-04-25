@@ -27,10 +27,10 @@ import javax.swing.event.*;
 
 import com.jgoodies.forms.layout.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.ui.fonts.FontPreferences;

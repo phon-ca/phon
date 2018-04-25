@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.AbstractListModel;
 
-import ca.gedge.opgraph.library.NodeData;
+import ca.phon.opgraph.library.NodeData;
 
 /**
  *

@@ -33,8 +33,8 @@ import javax.swing.event.*;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 
-import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
-import ca.gedge.opgraph.library.*;
+import ca.phon.opgraph.app.components.canvas.GraphCanvas;
+import ca.phon.opgraph.library.*;
 import ca.phon.ui.text.SearchField;
 import ca.phon.util.PrefHelper;
 

@@ -27,11 +27,11 @@ import javax.swing.*;
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.query.report.ReportEditor;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.*;

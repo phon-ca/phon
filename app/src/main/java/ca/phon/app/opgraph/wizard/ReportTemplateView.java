@@ -26,8 +26,8 @@ import javax.swing.event.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import ca.gedge.opgraph.app.GraphDocument;
 import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
+import ca.phon.opgraph.app.GraphDocument;
 
 /**
  * View for editing report prefix/suffix templates.

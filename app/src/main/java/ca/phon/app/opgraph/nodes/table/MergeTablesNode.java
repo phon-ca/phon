@@ -28,11 +28,11 @@ import javax.swing.*;
 
 import org.jdesktop.swingx.JXTitledSeparator;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.nodes.query.ColumnOptionsPanel;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.TableUtils;
 import ca.phon.query.report.datasource.*;
 import ca.phon.ui.text.PromptedTextField;

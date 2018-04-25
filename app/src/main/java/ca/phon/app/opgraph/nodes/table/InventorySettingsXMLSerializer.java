@@ -29,9 +29,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.io.xml.*;
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.io.xml.*;
 
 public class InventorySettingsXMLSerializer implements XMLSerializer {
 	

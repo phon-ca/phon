@@ -26,14 +26,14 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.undo.UndoableEdit;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphEditorModel;
-import ca.gedge.opgraph.app.components.canvas.GraphCanvas;
-import ca.gedge.opgraph.app.edits.graph.DeleteNodesEdit;
-import ca.gedge.opgraph.extensions.CompositeNode;
-import ca.gedge.opgraph.library.NodeLibrary;
 import ca.phon.app.opgraph.editor.library.LibraryView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphEditorModel;
+import ca.phon.opgraph.app.components.canvas.GraphCanvas;
+import ca.phon.opgraph.app.edits.graph.DeleteNodesEdit;
+import ca.phon.opgraph.extensions.CompositeNode;
+import ca.phon.opgraph.library.NodeLibrary;
 import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
 import ca.phon.util.*;
 

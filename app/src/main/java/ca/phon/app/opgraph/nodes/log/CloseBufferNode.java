@@ -23,9 +23,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.SwingUtilities;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 
 /**
  * Close the buffer with given name.

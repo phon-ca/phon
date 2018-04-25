@@ -27,9 +27,9 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;

@@ -46,10 +46,6 @@ import org.mozilla.javascript.ast.GeneratorExpressionLoop;
 
 import com.oracle.nio.BufferSecrets;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
-import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.*;
 import ca.phon.app.modules.EntryPointArgs;
@@ -64,6 +60,10 @@ import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.*;
 import ca.phon.query.db.*;

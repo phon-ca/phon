@@ -3,11 +3,11 @@ package ca.phon.app.opgraph.report;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.nodes.general.MacroNode;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
 
 public class OpenSimpleReportComposerAction extends HookableAction {

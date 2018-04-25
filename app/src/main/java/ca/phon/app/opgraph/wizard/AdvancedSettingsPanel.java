@@ -28,8 +28,8 @@ import javax.swing.tree.*;
 
 import org.jdesktop.swingx.JXTree;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.util.icons.*;
 
 /**

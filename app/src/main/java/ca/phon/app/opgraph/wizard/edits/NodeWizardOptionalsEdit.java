@@ -20,8 +20,8 @@ package ca.phon.app.opgraph.wizard.edits;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.*;
 
 public class NodeWizardOptionalsEdit extends AbstractUndoableEdit {
 

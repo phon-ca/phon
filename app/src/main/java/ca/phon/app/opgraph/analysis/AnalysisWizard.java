@@ -24,10 +24,10 @@ import java.util.*;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.project.ParticipantsPanel;
+import ca.phon.opgraph.*;
 import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;

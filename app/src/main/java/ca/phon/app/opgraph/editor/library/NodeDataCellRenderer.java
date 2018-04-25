@@ -25,7 +25,7 @@ import javax.swing.border.*;
 
 import org.jdesktop.swingx.JXPanel;
 
-import ca.gedge.opgraph.library.NodeData;
+import ca.phon.opgraph.library.NodeData;
 
 public class NodeDataCellRenderer implements ListCellRenderer<NodeData> {
 	

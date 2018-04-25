@@ -21,7 +21,7 @@ package ca.phon.app.opgraph.nodes.table;
 
 import java.util.*;
 
-import ca.gedge.opgraph.*;
+import ca.phon.opgraph.*;
 import ca.phon.query.report.datasource.TableDataSource;
 
 public abstract class TableOpNode extends OpNode {

@@ -11,11 +11,11 @@ import javax.swing.event.*;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.query.report.datasource.TableDataSource;
 
 @OpNodeInfo(name="Table Section", category="Report", description="Add/Create a new table section for the report", showInLibrary=true)

@@ -1,7 +1,7 @@
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.opgraph.*;
 
 @OpNodeInfo(name="Add Report Section", category="Report", description="Add section to report tree", showInLibrary=true)
 public class AddReportSectionNode extends ReportSectionNode {

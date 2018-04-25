@@ -5,11 +5,11 @@ import java.util.Properties;
 
 import javax.swing.JPanel;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.extensions.NodeSettings;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 
 @OpNodeInfo(name="New Report", description="New report tree", category="Report", showInLibrary=true)
 public class NewReportNode extends OpNode implements NodeSettings {

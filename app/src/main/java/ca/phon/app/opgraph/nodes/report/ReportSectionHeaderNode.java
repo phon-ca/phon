@@ -1,7 +1,7 @@
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.opgraph.*;
 
 @OpNodeInfo(name="Section Header", category="Report", description="New section header node", showInLibrary=true)
 public class ReportSectionHeaderNode extends ReportSectionNode {

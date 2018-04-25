@@ -26,15 +26,15 @@ import java.util.logging.Logger;
 import javax.swing.KeyStroke;
 import javax.swing.undo.CompoundEdit;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.graph.*;
-import ca.gedge.opgraph.app.util.GraphUtils;
-import ca.gedge.opgraph.dag.*;
-import ca.gedge.opgraph.exceptions.ItemMissingException;
-import ca.gedge.opgraph.extensions.NodeMetadata;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.edits.graph.*;
+import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.extensions.NodeMetadata;
 
 public class DuplicateAction extends OpgraphEditorAction {
 	

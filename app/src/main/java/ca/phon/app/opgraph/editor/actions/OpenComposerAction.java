@@ -23,10 +23,10 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.*;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpgraphIO;
 
 public class OpenComposerAction extends HookableAction {

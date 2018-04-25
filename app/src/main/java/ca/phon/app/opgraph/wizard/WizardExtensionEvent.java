@@ -18,7 +18,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.gedge.opgraph.OpNode;
+import ca.phon.opgraph.OpNode;
 
 /**
  * Event class for {@link WizardExtension} changes.

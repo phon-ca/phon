@@ -20,11 +20,10 @@ package ca.phon.app.opgraph.nodes;
 
 import java.io.*;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.util.GraphUtils;
-import ca.gedge.opgraph.library.instantiators.Instantiator;
-import ca.gedge.opgraph.nodes.general.MacroNode;
-import ca.phon.opgraph.OpgraphIO;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.library.instantiators.Instantiator;
+import ca.phon.opgraph.nodes.general.MacroNode;
 
 /**
  * This class will generate a new macro node given the location

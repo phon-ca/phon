@@ -21,8 +21,8 @@ package ca.phon.app.opgraph.wizard;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
+import ca.phon.opgraph.*;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are

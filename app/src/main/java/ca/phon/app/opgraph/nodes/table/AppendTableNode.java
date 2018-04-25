@@ -18,8 +18,8 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.exceptions.ProcessingException;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(

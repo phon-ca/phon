@@ -18,8 +18,8 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.plugin.*;
 
 @PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Syllabifier Opgraph Editor Model")

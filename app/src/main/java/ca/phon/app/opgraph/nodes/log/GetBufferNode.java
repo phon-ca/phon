@@ -23,9 +23,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.SwingUtilities;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.log.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 
 /**
  * Node for reading the current text of a given buffer.

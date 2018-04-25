@@ -26,8 +26,8 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.io.xml.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.io.xml.*;
 
 public class NodeEditorSettingsSerializer implements XMLSerializer {
 

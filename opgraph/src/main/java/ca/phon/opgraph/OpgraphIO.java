@@ -20,8 +20,8 @@ package ca.phon.opgraph;
 
 import java.io.*;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.io.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.io.*;
 
 /**
  * Utility class providing easy access to open/save methods for opgraph

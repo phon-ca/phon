@@ -29,8 +29,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.io.xml.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.io.xml.*;
 
 public class NodeWizardXMLSerializer implements XMLSerializer {
 	

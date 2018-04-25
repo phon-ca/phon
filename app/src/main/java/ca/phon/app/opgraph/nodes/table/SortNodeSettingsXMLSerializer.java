@@ -29,10 +29,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import ca.gedge.opgraph.OpGraph;
-import ca.gedge.opgraph.extensions.Extendable;
-import ca.gedge.opgraph.io.xml.*;
 import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.extensions.Extendable;
+import ca.phon.opgraph.io.xml.*;
 
 public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 	

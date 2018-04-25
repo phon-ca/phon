@@ -28,9 +28,9 @@ import java.util.logging.*;
 
 import javax.swing.SwingWorker;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.report.ReportAction;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;

@@ -20,7 +20,7 @@ package ca.phon.app.opgraph.nodes;
 
 import java.util.*;
 
-import ca.gedge.opgraph.validators.TypeValidator;
+import ca.phon.opgraph.validators.TypeValidator;
 import ca.phon.query.db.ResultSet;
 import ca.phon.session.*;
 

@@ -22,9 +22,9 @@ import java.awt.Window;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.actions.WizardSettingsAction;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.plugin.*;
 import ca.phon.ui.menu.MenuBuilder;
 

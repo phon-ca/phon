@@ -18,8 +18,8 @@
  */
 package ca.phon.app.opgraph.report;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.opgraph.wizard.*;
+import ca.phon.opgraph.*;
 
 public class ReportWizardExtension extends WizardExtension {
 

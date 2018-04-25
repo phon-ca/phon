@@ -22,9 +22,9 @@ import java.awt.Toolkit;
 
 import javax.swing.SwingUtilities;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.exceptions.ProcessingException;
 import ca.phon.app.opgraph.wizard.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 

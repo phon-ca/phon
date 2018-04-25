@@ -33,9 +33,6 @@ import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.perspective.*;
 import bibliothek.util.Filter;
-import ca.gedge.opgraph.app.MenuProvider;
-import ca.gedge.opgraph.app.components.PathAddressableMenuImpl;
-import ca.gedge.opgraph.app.components.canvas.GridLayer;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel.ViewLocation;
 import ca.phon.app.opgraph.editor.actions.debug.*;
 import ca.phon.app.opgraph.editor.actions.file.*;
@@ -44,6 +41,9 @@ import ca.phon.app.opgraph.editor.actions.view.*;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpgraphIO;
+import ca.phon.opgraph.app.MenuProvider;
+import ca.phon.opgraph.app.components.PathAddressableMenuImpl;
+import ca.phon.opgraph.app.components.canvas.GridLayer;
 import ca.phon.plugin.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.*;
@@ -385,7 +385,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 								? getModel().getDocument().getSelectionModel().getSelectedNode()
 								: getModel().getDocument().getGraph());
 				final PathAddressableMenuImpl addressable = new PathAddressableMenuImpl(nodeMenu);
-				final ca.gedge.opgraph.app.MenuManager manager = new ca.gedge.opgraph.app.MenuManager();
+				final ca.phon.opgraph.app.MenuManager manager = new ca.phon.opgraph.app.MenuManager();
 				for(MenuProvider menuProvider : manager.getMenuProviders())
 					menuProvider.installPopupItems(context,
 							new MouseEvent(getModel().getCanvas(), -1, System.currentTimeMillis(), 0, 0, 0, 1, true, 1), getModel().getDocument(), addressable);

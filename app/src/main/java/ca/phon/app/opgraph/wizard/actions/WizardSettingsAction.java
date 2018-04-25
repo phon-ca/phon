@@ -20,11 +20,11 @@ package ca.phon.app.opgraph.wizard.actions;
 
 import java.awt.event.ActionEvent;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.opgraph.wizard.edits.WizardExtensionUndoableEdit;
+import ca.phon.opgraph.OpGraph;
 
 public class WizardSettingsAction extends HookableAction {
 

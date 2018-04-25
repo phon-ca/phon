@@ -22,11 +22,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.SwingUtilities;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.app.opgraph.editor.actions.graph.AutoLayoutAction;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.ui.nativedialogs.*;
 
 /**

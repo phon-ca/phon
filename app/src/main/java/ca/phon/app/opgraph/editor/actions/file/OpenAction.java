@@ -26,9 +26,9 @@ import java.util.logging.*;
 
 import javax.swing.KeyStroke;
 
-import ca.gedge.opgraph.OpGraph;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpgraphIO;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.RecentFiles;

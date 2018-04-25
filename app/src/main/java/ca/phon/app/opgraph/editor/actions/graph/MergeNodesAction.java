@@ -24,12 +24,12 @@ import java.util.Collection;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.components.canvas.GraphCanvasSelectionModel;
-import ca.gedge.opgraph.nodes.menu.edits.CreateMacroEdit;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionModel;
+import ca.phon.opgraph.nodes.menu.edits.CreateMacroEdit;
 import ca.phon.util.icons.*;
 
 /**

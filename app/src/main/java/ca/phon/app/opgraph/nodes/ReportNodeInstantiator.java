@@ -18,9 +18,9 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.app.util.GraphUtils;
-import ca.gedge.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.nodes.general.MacroNode;
 
 /**
  * Add Query Reports as {@link MacroNode}s in the graph.  Fields for project

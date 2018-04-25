@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<opgraph xmlns="http://gedge.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="http://gedge.ca/ns/opgraph-app" xmlns:ogcn="http://gedge.ca/ns/opgraph-common-nodes" xmlns:ops="https://www.phon.ca/ns/syllabifier">
+<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:ops="https://www.phon.ca/ns/syllabifier">
     <graph id="root">
-        <node id="7bc85ef4" name="IPATranscript" type="class:ca.gedge.opgraph.nodes.reflect.ObjectNode">
+        <node id="7bc85ef4" name="IPATranscript" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.gedge.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                     <oga:property key="contextKey"><![CDATA[__ipa]]></oga:property>
                 </oga:settings>
                 <oga:meta x="15" y="15"/>
@@ -22,7 +22,7 @@
                 <oga:meta x="241" y="15"/>
             </extensions>
         </node>
-        <ogcn:macro id="2416b7b2" name="MarkNuclei" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="2416b7b2" name="MarkNuclei" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="4f7b5f7a">
                 <node id="76fd979f" name="MarkNuclei #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -66,7 +66,7 @@
                 <oga:meta x="404" y="15"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="1707cfa5" name="MarkOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="1707cfa5" name="MarkOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="6da973e">
                 <node id="5c5803b3" name="MarkOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -92,7 +92,7 @@
                 <oga:meta x="567" y="15"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="f3b84bbe3b034ff6" name="MaxOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="f3b84bbe3b034ff6" name="MaxOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="f03374f">
                 <node id="d1fdebc09d274853" name="MaxOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -131,7 +131,7 @@
                 <oga:meta x="730" y="15"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="2b2a9345" name="MaxOnsetCoronalNasal" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="2b2a9345" name="MaxOnsetCoronalNasal" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="2d14237a">
                 <node id="7a284b30" name="MaxOnsetCoronalNasal #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -148,7 +148,7 @@
                 <oga:meta x="893" y="15"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="56fb9b1f" name="MarkCoda" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="56fb9b1f" name="MarkCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="3dcbfe48">
                 <node id="51f10b28" name="MarkCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -165,7 +165,7 @@
                 <oga:meta x="1093" y="15"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="1f5ed371" name="MaxCoda" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="1f5ed371" name="MaxCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="5e32d3ac">
                 <node id="5f9a3206" name="MaxCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -182,7 +182,7 @@
                 <oga:meta x="241" y="116"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="4f83cf16" name="Fix Branching Codas" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="4f83cf16" name="Fix Branching Codas" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="4dcccb04">
                 <node id="4233f876" name="Fix Branching Codas #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -199,7 +199,7 @@
                 <oga:meta x="404" y="116"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="1a0a10a4" name="MarkLA" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="1a0a10a4" name="MarkLA" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="35991691">
                 <node id="1f3bcae2" name="MarkLA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -216,7 +216,7 @@
                 <oga:meta x="584" y="116"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="13dd048e" name="Coda-s-ComplexOnset" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="13dd048e" name="Coda-s-ComplexOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="5b196f3b">
                 <node id="74e6a2dd" name="Coda-s-ComplexOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -242,7 +242,7 @@
                 <oga:meta x="747" y="116"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="2a055bcb" name="MarkRA" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="2a055bcb" name="MarkRA" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="78202ed0">
                 <node id="3e0631b8" name="MarkRA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -259,7 +259,7 @@
                 <oga:meta x="946" y="116"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="1d682d50" name="MarkLeftoverOnsets" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="1d682d50" name="MarkLeftoverOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="3577a429">
                 <node id="43c04375" name="MarkLeftoverOnsets #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
@@ -276,7 +276,7 @@
                 <oga:meta x="241" y="217"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="26ecda7f" name="Ambisyllabicity" type="ca.gedge.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="26ecda7f" name="Ambisyllabicity" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="22dbf516">
                 <node id="fd7694b" name="Ambisyllabicity #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>

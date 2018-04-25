@@ -21,9 +21,9 @@ package ca.phon.syllabifier.opgraph;
 import java.io.*;
 import java.util.List;
 
-import ca.gedge.opgraph.*;
-import ca.gedge.opgraph.io.*;
 import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.io.*;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;

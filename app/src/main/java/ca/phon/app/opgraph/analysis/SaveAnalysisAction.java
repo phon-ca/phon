@@ -24,10 +24,9 @@ import java.util.logging.*;
 
 import javax.swing.tree.TreePath;
 
-import ca.gedge.opgraph.*;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.OpgraphIO;
+import ca.phon.opgraph.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
 

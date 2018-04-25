@@ -23,11 +23,11 @@ import java.util.Collection;
 
 import javax.swing.*;
 
-import ca.gedge.opgraph.OpNode;
-import ca.gedge.opgraph.app.GraphDocument;
-import ca.gedge.opgraph.app.edits.graph.AlignNodesEdit;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.edits.graph.AlignNodesEdit;
 import ca.phon.util.icons.*;
 
 public class AlignNodesAction extends OpgraphEditorAction {
