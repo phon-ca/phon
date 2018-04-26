@@ -195,7 +195,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			try {
 				reportEditor.addDocument(prevReportFile);
 			} catch (InstantiationException | IOException e) {
-				LogUtil.severe(e);
+				LogUtil.warning(e);
 				try {
 					reportEditor.addDocument(defaultReportURL);
 				} catch (InstantiationException | IOException e1) {
