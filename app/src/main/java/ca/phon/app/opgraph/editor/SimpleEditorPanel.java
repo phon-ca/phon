@@ -57,6 +57,7 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.TransferHandler;
 import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.event.MouseInputAdapter;
@@ -222,6 +223,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		documentTree.setRootVisible(false);
 		documentTree.setVisibleRowCount(20);
 		documentTree.setCellRenderer(new TreeNodeRenderer());
+		documentTree.setDragEnabled(true);
+		documentTree.setTransferHandler(new NodeTreeTransferHandler());
 		documentTree.addMouseListener(new MouseInputAdapter() {
 
 			@Override
@@ -409,98 +412,83 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	}
 	
 	public void addSelectedDocuments(JTree tree) {
+		addSelectedDocuments(tree, -1);
+	}
+	
+	public void addSelectedDocuments(JTree tree, int idx) {
 		final TreePath[] selectedPaths = tree.getSelectionPaths();
-		if(selectedPaths != null && selectedPaths.length > 0) {
-			for(TreePath selectedPath:selectedPaths)
-				addDocuments((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+		
+		List<Object> selectedDocuments = new ArrayList<>();
+		for(TreePath path:selectedPaths) {
+			querySelectedDocuments((DefaultMutableTreeNode)path.getLastPathComponent(), selectedDocuments);
 		}
+		
+		final AddDocumentsWorker worker = new AddDocumentsWorker(selectedDocuments, idx);
+		worker.execute();
 	}
-
-	private void addDocuments(List<File> fileList) {
-		for(File f:fileList) {
-			if(f.isFile()
-					&& f.getName().endsWith(".xml")) {
-				
-				Runnable r = () -> {};
-				try {
-					OpgraphIO.read(f);
-					r = () -> { 
-						try {
-							addDocument(f);
-						} catch (InstantiationException | IOException e) {
-							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-						} 
-					};
-				} catch (IOException e) {
-					try {
-						final QueryScript queryScript = new QueryScript(f.toURI().toURL());
-						r = () -> { addQuery(queryScript); };
-					} catch (IOException e2) {
-						final MessageDialogProperties props = new MessageDialogProperties();
-						props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-						props.setHeader("Add Analysis");
-						props.setTitle("Unable to add analysis");
-						props.setMessage("Document is not an analysis or query");
-						props.setOptions(MessageDialogProperties.okOptions);
-						NativeDialogs.showMessageDialog(props);
-					}
-				}
-				
-				PhonWorker.getInstance().invokeLater( r );
-			}
-		}
-		if(fileList.size() == 1) {
-			SwingUtilities.invokeLater( this::onShowSettings );
-		}
-	}
-
-	private void addDocuments(DefaultMutableTreeNode node) {
+	
+	private void querySelectedDocuments(DefaultMutableTreeNode node, List<Object> documents) {
 		if(node.isLeaf()) {
-			if(node.getUserObject() instanceof URL) {
-				final URL documentURL = (URL)node.getUserObject();
-				PhonWorker.getInstance().invokeLater( () -> {
-					try {
-						addDocument(documentURL);
-					} catch (IOException | InstantiationException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					}
-				} );
-			} else if(isIncludeQueries() && node.getUserObject() instanceof QueryScript) {
-				addQuery((QueryScript)node.getUserObject());
-			}
+			documents.add(node.getUserObject());
 		} else {
 			for(int i = 0; i < node.getChildCount(); i++) {
 				final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)node.getChildAt(i);
-				addDocuments(childNode);
+				querySelectedDocuments(childNode, documents);
 			}
 		}
 	}
 	
+	private void addDocuments(List<File> fileList) {
+		addDocuments(fileList, -1);
+	}
+
+	private void addDocuments(List<File> fileList, int idx) {
+		busyLabel.setBusy(true);
+		PhonWorker.getInstance().invokeLater( () -> {
+			List<Object> documents = new ArrayList<>();
+			for(File f:fileList) {
+				if(f.isFile()
+						&& f.getName().endsWith(".xml")) {
+					try {
+						OpgraphIO.read(f);
+						documents.add(f.toURI().toURL());
+					} catch (IOException e) {
+						try {
+							final QueryScript queryScript = new QueryScript(f.toURI().toURL());
+							documents.add(queryScript);
+						} catch (IOException e2) {
+							final MessageDialogProperties props = new MessageDialogProperties();
+							props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+							props.setHeader("Add Analysis");
+							props.setTitle("Unable to add analysis");
+							props.setMessage("Document is not an analysis or query");
+							props.setOptions(MessageDialogProperties.okOptions);
+							NativeDialogs.showMessageDialog(props);
+						}
+					}
+				}
+			}
+			final AddDocumentsWorker worker = new AddDocumentsWorker(documents, idx);
+			worker.execute();
+		});
+	}
+	
 	public void addGraph(OpGraph graph) {
-		try {
-			final MacroNode node = nodeInstantiator.newInstance(graph);
-			
-			final AddNodeEdit addNodeEdit = 
-					new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
-			model.getDocument().getUndoSupport().postEdit(addNodeEdit);
-			
-			final NodeWizardOptionalsEdit optEdit =
-					new NodeWizardOptionalsEdit(getGraph(),  getGraph().getExtension(WizardExtension.class), node, true, true);
-			model.getDocument().getUndoSupport().postEdit(optEdit);
-			
-			updateNodeName(node);
-			
-			macroNodes.add(node);
-			((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
-			nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
-		} catch (InstantiationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
+		addGraph(graph, -1);
+	}
+	
+	public void addGraph(OpGraph graph, int idx) {
+		final AddDocumentsWorker worker = new AddDocumentsWorker(List.of(graph), idx);
+		worker.execute();
 	}
 
 	public void addQuery(QueryScript queryScript) {
-		final MacroNode node = queryNodeInstantiator.apply(queryScript);
-
+		addQuery(queryScript, -1);
+	}
+	
+	public void addNode(MacroNode node, int idx) {
+		getModel().getDocument().getUndoSupport().beginUpdate();
+		
 		final AddNodeEdit addNodeEdit =
 				new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
 		model.getDocument().getUndoSupport().postEdit(addNodeEdit);
@@ -508,85 +496,47 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final NodeWizardOptionalsEdit optEdit =
 				new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), node, true, true);
 		model.getDocument().getUndoSupport().postEdit(optEdit);
+		
 
 		updateReportTitle(node);
 
-		macroNodes.add(node);
-		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
-		nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
+		if(idx >= 0 && idx < macroNodes.size())
+			macroNodes.add(idx, node);
+		else
+			macroNodes.add(node);
+		
+		updateNodeLocations();
+		
+		getModel().getDocument().getUndoSupport().endUpdate();
+		
+		int rowIdx = (idx >= 0 ? idx : macroNodes.size()-1);
+		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(rowIdx, rowIdx);
+		nodeTable.setRowSelectionInterval(rowIdx, rowIdx);
+	}
+	
+	public void addQuery(QueryScript queryScript, int idx) {
+		final MacroNode node = queryNodeInstantiator.apply(queryScript);
+		addNode(node, idx);
+	}
+	
+	public void addDocument(File file) throws IOException, InstantiationException {
+		addDocument(file.toURI().toURL(), -1);
 	}
 
-	public void addDocument(File file) throws IOException, InstantiationException {
-		addDocument(file.toURI().toURL());
+	public void addDocument(File file, int idx) throws IOException, InstantiationException {
+		addDocument(file.toURI().toURL(), idx);
+	}
+	
+	public void addDocument(URL documentURL) throws IOException, InstantiationException {
+		addDocument(documentURL, -1);
 	}
 
 	/*
 	 * This method should be executed on a background thread
 	 */
-	public void addDocument(URL documentURL) throws IOException, InstantiationException {
-		// create analysis node
-		try(InputStream is = documentURL.openStream()) {
-			final String documentFile = URLDecoder.decode(documentURL.toString(), "UTF-8");
-			final String documentName = FilenameUtils.getBaseName(documentFile);
-			SwingUtilities.invokeLater( () -> {
-				busyLabel.setBusy(true);
-				statusLabel.setText("Adding " + documentName + "...");
-			});
-
-			final URI uri = new URI("class", MacroNode.class.getName(), documentName);
-			final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator);
-
-			final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData);
-			
-			final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
-			if(editorExt != null) {
-				// load macro nodes
-				SwingUtilities.invokeLater( () -> {
-					for(MacroNode node:editorExt.getMacroNodes()) {
-						final AddNodeEdit addNodeEdit = 
-								new AddNodeEdit(getGraph(), node, X_START, Y_START + macroNodes.size() * Y_SEP);
-						model.getDocument().getUndoSupport().postEdit(addNodeEdit);
-						
-						final NodeWizardOptionalsEdit optEdit =
-								new NodeWizardOptionalsEdit(getGraph(),  getGraph().getExtension(WizardExtension.class), node, true, true);
-						model.getDocument().getUndoSupport().postEdit(optEdit);
-						
-						updateNodeName(node);
-						
-						macroNodes.add(node);
-						((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
-						nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
-					}
-				});
-			} else {
-				analysisNode.setName(documentName);
-				final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + macroNodes.size() * Y_SEP);
-				analysisNode.putExtension(NodeMetadata.class, nodeMeta);
-	
-				SwingUtilities.invokeLater( () -> {
-					final AddNodeEdit addEdit = new AddNodeEdit(getGraph(), analysisNode);
-					getModel().getDocument().getUndoSupport().postEdit(addEdit);
-	
-					final NodeWizardOptionalsEdit optEdit =
-							new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), analysisNode, true, true);
-					getModel().getDocument().getUndoSupport().postEdit(optEdit);
-	
-					macroNodes.add(analysisNode);
-					((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(macroNodes.size()-1, macroNodes.size()-1);
-					nodeTable.setRowSelectionInterval(macroNodes.size()-1, macroNodes.size()-1);
-				});
-			}
-		} catch (IOException | InstantiationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			throw e;
-		} catch (URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		} finally {
-			SwingUtilities.invokeLater( () -> {
-				busyLabel.setBusy(false);
-				statusLabel.setText("");
-			});
-		}
+	public void addDocument(URL documentURL, int idx) throws IOException, InstantiationException {
+		final AddDocumentsWorker worker = new AddDocumentsWorker(List.of(documentURL), idx);
+		worker.execute();
 	}
 
 	public void onRemove() {
@@ -594,6 +544,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		if(selectedRow >= 0 && selectedRow < macroNodes.size()) {
 			final OpNode selectedNode = macroNodes.get(selectedRow);
 
+			getModel().getDocument().getUndoSupport().beginUpdate();
+			
 			final DeleteNodesEdit removeEdit =
 					new DeleteNodesEdit(getGraph(), Collections.singleton(selectedNode));
 			getModel().getDocument().getUndoSupport().postEdit(removeEdit);
@@ -603,6 +555,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 			updateNodeLocations();
 
+			getModel().getDocument().getUndoSupport().endUpdate();
+			
 			if(macroNodes.size() > 0) {
 				if(selectedRow < macroNodes.size()) {
 					nodeTable.setRowSelectionInterval(selectedRow, selectedRow);
@@ -634,7 +588,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(newLocation, newLocation);
 			nodeTable.getSelectionModel().setSelectionInterval(newLocation, newLocation);
 
-			updateNodeLocations();
+			getModel().getDocument().getUndoSupport().beginUpdate();
+            updateNodeLocations();
+            getModel().getDocument().getUndoSupport().endUpdate();
 		}
 	}
 
@@ -651,7 +607,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(newLocation, newLocation);
 			nodeTable.getSelectionModel().setSelectionInterval(newLocation, newLocation);
 
-			updateNodeLocations();
+			getModel().getDocument().getUndoSupport().beginUpdate();
+            updateNodeLocations();
+            getModel().getDocument().getUndoSupport().endUpdate();
 		}
 	}
 
@@ -735,286 +693,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		documentTree.setModel(createTreeModel());
 		expandAllDocuments(new TreePath(documentTree.getModel().getRoot()));
-	}
-	
-	private class ListCellRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			final JLabel retVal = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-			if(value instanceof OpNode) {
-				retVal.setText(((OpNode)value).getName());
-			}
-
-			return retVal;
-		}
-
-	}
-
-	private class NodeTableTransferHandler extends TransferHandler {
-
-		@Override
-		public int getSourceActions(JComponent c) {
-			return MOVE;
-		}
-
-		@Override
-		public boolean importData(TransferSupport support) {
-			boolean retVal = false;
-			final JTable.DropLocation dropLocation =
-					(JTable.DropLocation)support.getDropLocation();
-			if(support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-				try {
-					@SuppressWarnings("unchecked")
-					final List<File> fileList =
-							(List<File>)support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-					addDocuments(fileList);
-					retVal = true;
-				} catch (IOException | UnsupportedFlavorException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
-			} else {
-				try {
-	                // convert data to string
-	                String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-
-	                int idx = dropLocation.getRow();
-	                int origIdx = Integer.parseInt(s);
-	                MacroNode srcNode = macroNodes.remove(origIdx);
-
-	                if(idx < 0) {
-	                	idx = macroNodes.size();
-	                } else if(idx > origIdx) {
-	                	--idx;
-	                }
-	                macroNodes.add(idx, srcNode);
-
-	                ((NodeTableModel)nodeTable.getModel()).fireTableDataChanged();
-	                updateNodeLocations();
-
-	                retVal = true;
-	            } catch (IOException | UnsupportedFlavorException e) {
-	            	LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-	            }
-			}
-			if(!retVal) {
-				Toolkit.getDefaultToolkit().beep();
-			}
-            return retVal;
-		}
-
-		@Override
-		public boolean canImport(TransferSupport support) {
-			return support.isDataFlavorSupported(DataFlavor.stringFlavor)
-					|| support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
-		}
-
-		@Override
-		protected Transferable createTransferable(JComponent c) {
-			int selectedRow = nodeTable.getSelectedRow();
-			return new StringSelection(""+selectedRow);
-		}
-
-	}
-
-	private class NodeTableModel extends AbstractTableModel {
-
-		@Override
-		public int getRowCount() {
-			return macroNodes.size();
-		}
-
-		@Override
-		public int getColumnCount() {
-			return 2;
-		}
-
-		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			final OpNode node = macroNodes.get(rowIndex);
-			final WizardExtension ext = getModel().getDocument().getRootGraph().getExtension(WizardExtension.class);
-			switch(columnIndex) {
-			case 0:
-				return node.getName();
-
-			case 1:
-				return (ext != null && ext.isNodeOptional(node));
-
-			default:
-				return null;
-			}
-		}
-
-		@Override
-		public String getColumnName(int columnIndex) {
-			switch(columnIndex) {
-			case 0:
-				return WordUtils.capitalize(getModel().getNoun().getObj1()) + " Name";
-
-			case 1:
-				return "Optional";
-
-			default:
-				return super.getColumnName(columnIndex);
-			}
-		}
-
-		@Override
-		public Class<?> getColumnClass(int columnIndex) {
-			switch(columnIndex) {
-			case 0:
-				return String.class;
-
-			case 1:
-				return Boolean.class;
-
-			default:
-				return super.getColumnClass(columnIndex);
-			}
-		}
-
-		@Override
-		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return true;
-		}
-
-		@Override
-		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			final OpNode node = macroNodes.get(rowIndex);
-			if(columnIndex == 0) {
-				if(aValue.toString().trim().length() == 0) return;
-
-				node.setName(aValue.toString());
-
-				updateReportTitle((MacroNode)node);
-			} else if (columnIndex == 1) {
-				if((Boolean)aValue) {
-					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).addOptionalNode(node);
-					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).setOptionalNodeDefault(node, true);
-				} else {
-					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).removeOptionalNode(node);
-				}
-			}
-		}
-
-	}
-
-	private class TreeNodeRenderer extends DefaultTreeCellRenderer {
-
-		public TreeNodeRenderer() {
-			super();
-
-			final ImageIcon folderIcon =
-					(OSInfo.isMacOs() ? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericFolderIcon, IconSize.SMALL)
-							: (OSInfo.isWindows() ? IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDER, IconSize.SMALL)
-									: IconManager.getInstance().getIcon("actions/open", IconSize.SMALL)));
-			super.setClosedIcon(folderIcon);
-
-			final ImageIcon folderOpenIcon =
-					(OSInfo.isMacOs() ? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.OpenFolderIcon, IconSize.SMALL)
-							: (OSInfo.isWindows() ? IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDEROPEN, IconSize.SMALL)
-									: IconManager.getInstance().getIcon("actions/open", IconSize.SMALL)));
-			super.setOpenIcon(folderOpenIcon);
-
-			final String type = (OSInfo.isNix() ? "text-xml" : "xml");
-			final ImageIcon xmlIcon =
-					IconManager.getInstance().getSystemIconForFileType(type, "mimetypes/text-xml", IconSize.SMALL);
-			super.setLeafIcon(xmlIcon);
-		}
-
-		@Override
-		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-				boolean leaf, int row, boolean hasFocus) {
-			JLabel retVal = (JLabel)super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-			if(value instanceof DefaultMutableTreeNode) {
-				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
-				if(node.getUserObject() instanceof URL) {
-					final URL analysisURL = (URL)node.getUserObject();
-					try {
-						final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");
-						final String analysisName = FilenameUtils.getBaseName(analysisFile);
-						retVal.setText(analysisName);
-					} catch (UnsupportedEncodingException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-					}
-				} else if(node.getUserObject() instanceof QueryScript) {
-					final QueryScript queryScript = (QueryScript)node.getUserObject();
-					final QueryName queryName = queryScript.getExtension(QueryName.class);
-					if(queryName != null) {
-						retVal.setText(queryName.getName());
-					}
-				}
-			}
-
-			return retVal;
-		}
-
-	}
-
-	private class DocumentSettingsPanel extends JPanel {
-
-		private final MacroNode analysisNode;
-
-		private JComboBox<OpNode> settingsNodeBox;
-		private CardLayout settingsLayout;
-		private JPanel settingsPanel;
-
-		public DocumentSettingsPanel(MacroNode analysisNode) {
-			super();
-
-			this.analysisNode = analysisNode;
-
-			init();
-			update();
-		}
-
-		private void init() {
-			setLayout(new BorderLayout());
-
-			this.settingsNodeBox = new JComboBox<>();
-			this.settingsNodeBox.setRenderer(new ListCellRenderer());
-			settingsNodeBox.addItemListener( (e) -> {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					final OpNode node = (OpNode)e.getItem();
-					settingsLayout.show(settingsPanel, node.getId());
-				}
-			});
-			this.settingsLayout = new CardLayout();
-			this.settingsPanel = new JPanel(settingsLayout);
-
-			add(settingsNodeBox, BorderLayout.NORTH);
-			add(settingsPanel, BorderLayout.CENTER);
-		}
-
-		private void update() {
-			final OpGraph analysisGraph = analysisNode.getGraph();
-			final WizardExtension analysisExt = analysisGraph.getExtension(WizardExtension.class);
-
-			settingsPanel.removeAll();
-			final List<OpNode> settingsNodes = new ArrayList<>();
-			for(int i = 0; i < analysisExt.size(); i++) {
-				final OpNode node = analysisExt.getNode(i);
-				final NodeSettings nodeSettings = node.getExtension(NodeSettings.class);
-				if(nodeSettings != null) {
-					settingsNodes.add(node);
-
-					settingsPanel.add(nodeSettings.getComponent(getModel().getDocument()),
-							node.getId());
-				}
-			}
-
-			final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes.toArray(new OpNode[0]));
-			settingsNodeBox.setModel(boxModel);
-
-			if(settingsNodes.size() > 0) {
-				settingsNodeBox.setSelectedIndex(0);
-				settingsLayout.show(settingsPanel, settingsNodes.get(0).getId());
-			}
-		}
-
 	}
 	
 	public void showDocumentSettings(MacroNode documentNode) {
@@ -1213,7 +891,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	}
 
 	private void updateNodeLocations() {
-		getModel().getDocument().getUndoSupport().beginUpdate();
 		for(int i = 0; i < macroNodes.size(); i++) {
 			final OpNode node = macroNodes.get(i);
 
@@ -1228,7 +905,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					deltaX, deltaY);
 			getModel().getDocument().getUndoSupport().postEdit(moveEdit);
 		}
-		getModel().getDocument().getUndoSupport().endUpdate();
 	}
 
 	private TreeModel createTreeModel() {
@@ -1419,6 +1095,435 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 	}
 	
+	private class AddDocumentsWorker extends SwingWorker<List<MacroNode>, MacroNode> {
+
+		// either URL, OpGraph or QueryScript objects
+		private List<Object> documents;
+		
+		private int idx;
+		
+		public AddDocumentsWorker(List<Object> documents) {
+			this(documents, -1);
+		}
+		
+		public AddDocumentsWorker(List<Object> documents, int idx) {
+			this.documents = documents;
+			this.idx = idx;
+		}
+		
+		@Override
+		protected void done() {
+			busyLabel.setBusy(false);
+			statusLabel.setText("");
+		}
+		
+		@Override
+		protected void process(List<MacroNode> chunks) {
+			for(MacroNode macroNode:chunks) {
+				addNode(macroNode, idx++);
+			}
+		}
+
+		@Override
+		protected List<MacroNode> doInBackground() throws Exception {
+			SwingUtilities.invokeLater(() -> busyLabel.setBusy(true));
+			List<MacroNode> retVal = new ArrayList<>();
+			for(Object document:documents) {
+				if(document instanceof URL) {
+					final URL documentURL = (URL)document;
+					try(InputStream is = documentURL.openStream()) {
+						final String documentFile = URLDecoder.decode(documentURL.toString(), "UTF-8");
+						final String documentName = FilenameUtils.getBaseName(documentFile);
+
+						final URI uri = new URI("class", MacroNode.class.getName(), documentName);
+						final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator);
+
+						final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData);
+						
+						final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
+						if(editorExt != null) {
+							retVal.addAll(editorExt.getMacroNodes());
+							
+							super.publish(editorExt.getMacroNodes().toArray(new MacroNode[0]));
+						} else {
+							analysisNode.setName(documentName);
+							final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + macroNodes.size() * Y_SEP);
+							analysisNode.putExtension(NodeMetadata.class, nodeMeta);
+							
+							retVal.add(analysisNode);
+							super.publish(analysisNode);
+						}
+					} catch (IOException | InstantiationException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						throw e;
+					} catch (URISyntaxException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				} else if(document instanceof OpGraph) {
+					final MacroNode node = nodeInstantiator.newInstance((OpGraph)document);
+					retVal.add(node);
+					super.publish(node);
+				} else if(document instanceof QueryScript) {
+					final QueryScript queryScript = (QueryScript)document;
+					final MacroNode node = queryNodeInstantiator.apply(queryScript);
+					
+					retVal.add(node);
+					super.publish(node);
+				} else {
+					Toolkit.getDefaultToolkit().beep();
+					LogUtil.warning(document.getClass().getName() + " is not a valid document type");
+				}
+			}
+			return retVal;
+		}
+		
+	}
+	
+	private class ListCellRenderer extends DefaultListCellRenderer {
+	
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			final JLabel retVal = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	
+			if(value instanceof OpNode) {
+				retVal.setText(((OpNode)value).getName());
+			}
+	
+			return retVal;
+		}
+	
+	}
+
+	private final DataFlavor nodeTreeDataFlavor = new DataFlavor(DefaultMutableTreeNode[].class, "DefaultMutableTreeNode Array");
+
+	private class NodeTreeTransferHandler extends TransferHandler {
+	
+		@Override
+		public int getSourceActions(JComponent c) {
+			return MOVE;
+		}
+	
+		@Override
+		public boolean canImport(TransferSupport support) {
+			return false;
+		}
+	
+		@Override
+		public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+			return false;
+		}
+	
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			final TreePath[] selectedPaths = documentTree.getSelectionPaths();
+			List<DefaultMutableTreeNode> selectedNodes = new ArrayList<>();
+			for(TreePath selectedPath:selectedPaths) {
+				selectedNodes.add((DefaultMutableTreeNode)selectedPath.getLastPathComponent());
+			}
+			
+			return new NodeTreeTransferrable(selectedNodes.toArray(new DefaultMutableTreeNode[0]));
+		}
+		
+	}
+
+	private class NodeTreeTransferrable implements Transferable {
+		
+		public final DefaultMutableTreeNode[] treeNodes;
+		
+		public NodeTreeTransferrable(DefaultMutableTreeNode[] nodes) {
+			this.treeNodes = nodes;
+		}
+	
+		@Override
+		public DataFlavor[] getTransferDataFlavors() {
+			return new DataFlavor[] {nodeTreeDataFlavor};
+		}
+	
+		@Override
+		public boolean isDataFlavorSupported(DataFlavor flavor) {
+			return (flavor.equals(nodeTreeDataFlavor));
+		}
+	
+		@Override
+		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+			return this.treeNodes;
+		}
+		
+	}
+
+	private class NodeTableTransferHandler extends TransferHandler {
+	
+		@Override
+		public int getSourceActions(JComponent c) {
+			return MOVE;
+		}
+	
+		@Override
+		public boolean importData(TransferSupport support) {
+			boolean retVal = false;
+			final JTable.DropLocation dropLocation =
+					(JTable.DropLocation)support.getDropLocation();
+			if(support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+				// files dropped into list
+				try {
+					@SuppressWarnings("unchecked")
+					final List<File> fileList =
+							(List<File>)support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					addDocuments(fileList, dropLocation.getRow());
+					retVal = true;
+				} catch (IOException | UnsupportedFlavorException e) {
+					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				}
+			} else if(support.isDataFlavorSupported(nodeTreeDataFlavor)) {
+				addSelectedDocuments(documentTree, dropLocation.getRow());
+				retVal = true;
+			} else {
+				// Re-ordering nodes
+				try {
+	                // convert data to string
+	                String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+	
+	                int idx = dropLocation.getRow();
+	                int origIdx = Integer.parseInt(s);
+	                MacroNode srcNode = macroNodes.remove(origIdx);
+	
+	                if(idx < 0) {
+	                	idx = macroNodes.size();
+	                } else if(idx > origIdx) {
+	                	--idx;
+	                }
+	                macroNodes.add(idx, srcNode);
+	
+	                ((NodeTableModel)nodeTable.getModel()).fireTableDataChanged();
+	                getModel().getDocument().getUndoSupport().beginUpdate();
+	                updateNodeLocations();
+	                getModel().getDocument().getUndoSupport().endUpdate();
+	
+	                retVal = true;
+	            } catch (IOException | UnsupportedFlavorException e) {
+	            	LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	            }
+			}
+			if(!retVal) {
+				Toolkit.getDefaultToolkit().beep();
+			}
+	        return retVal;
+		}
+	
+		@Override
+		public boolean canImport(TransferSupport support) {
+			return support.isDataFlavorSupported(DataFlavor.stringFlavor)
+					|| support.isDataFlavorSupported(nodeTreeDataFlavor)
+					|| support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+		}
+	
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			int selectedRow = nodeTable.getSelectedRow();
+			return new StringSelection(""+selectedRow);
+		}
+	
+	}
+
+	private class NodeTableModel extends AbstractTableModel {
+	
+		@Override
+		public int getRowCount() {
+			return macroNodes.size();
+		}
+	
+		@Override
+		public int getColumnCount() {
+			return 2;
+		}
+	
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			final OpNode node = macroNodes.get(rowIndex);
+			final WizardExtension ext = getModel().getDocument().getRootGraph().getExtension(WizardExtension.class);
+			switch(columnIndex) {
+			case 0:
+				return node.getName();
+	
+			case 1:
+				return (ext != null && ext.isNodeOptional(node));
+	
+			default:
+				return null;
+			}
+		}
+	
+		@Override
+		public String getColumnName(int columnIndex) {
+			switch(columnIndex) {
+			case 0:
+				return WordUtils.capitalize(getModel().getNoun().getObj1()) + " Name";
+	
+			case 1:
+				return "Optional";
+	
+			default:
+				return super.getColumnName(columnIndex);
+			}
+		}
+	
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			switch(columnIndex) {
+			case 0:
+				return String.class;
+	
+			case 1:
+				return Boolean.class;
+	
+			default:
+				return super.getColumnClass(columnIndex);
+			}
+		}
+	
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			return true;
+		}
+	
+		@Override
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+			final OpNode node = macroNodes.get(rowIndex);
+			if(columnIndex == 0) {
+				if(aValue.toString().trim().length() == 0) return;
+	
+				node.setName(aValue.toString());
+	
+				updateReportTitle((MacroNode)node);
+			} else if (columnIndex == 1) {
+				if((Boolean)aValue) {
+					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).addOptionalNode(node);
+					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).setOptionalNodeDefault(node, true);
+				} else {
+					getModel().getDocument().getRootGraph().getExtension(WizardExtension.class).removeOptionalNode(node);
+				}
+			}
+		}
+	
+	}
+
+	private class TreeNodeRenderer extends DefaultTreeCellRenderer {
+	
+		public TreeNodeRenderer() {
+			super();
+	
+			final ImageIcon folderIcon =
+					(OSInfo.isMacOs() ? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericFolderIcon, IconSize.SMALL)
+							: (OSInfo.isWindows() ? IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDER, IconSize.SMALL)
+									: IconManager.getInstance().getIcon("actions/open", IconSize.SMALL)));
+			super.setClosedIcon(folderIcon);
+	
+			final ImageIcon folderOpenIcon =
+					(OSInfo.isMacOs() ? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.OpenFolderIcon, IconSize.SMALL)
+							: (OSInfo.isWindows() ? IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDEROPEN, IconSize.SMALL)
+									: IconManager.getInstance().getIcon("actions/open", IconSize.SMALL)));
+			super.setOpenIcon(folderOpenIcon);
+	
+			final String type = (OSInfo.isNix() ? "text-xml" : "xml");
+			final ImageIcon xmlIcon =
+					IconManager.getInstance().getSystemIconForFileType(type, "mimetypes/text-xml", IconSize.SMALL);
+			super.setLeafIcon(xmlIcon);
+		}
+	
+		@Override
+		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+				boolean leaf, int row, boolean hasFocus) {
+			JLabel retVal = (JLabel)super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+	
+			if(value instanceof DefaultMutableTreeNode) {
+				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
+				if(node.getUserObject() instanceof URL) {
+					final URL analysisURL = (URL)node.getUserObject();
+					try {
+						final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");
+						final String analysisName = FilenameUtils.getBaseName(analysisFile);
+						retVal.setText(analysisName);
+					} catch (UnsupportedEncodingException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				} else if(node.getUserObject() instanceof QueryScript) {
+					final QueryScript queryScript = (QueryScript)node.getUserObject();
+					final QueryName queryName = queryScript.getExtension(QueryName.class);
+					if(queryName != null) {
+						retVal.setText(queryName.getName());
+					}
+				}
+			}
+	
+			return retVal;
+		}
+	
+	}
+
+	private class DocumentSettingsPanel extends JPanel {
+	
+		private final MacroNode analysisNode;
+	
+		private JComboBox<OpNode> settingsNodeBox;
+		private CardLayout settingsLayout;
+		private JPanel settingsPanel;
+	
+		public DocumentSettingsPanel(MacroNode analysisNode) {
+			super();
+	
+			this.analysisNode = analysisNode;
+	
+			init();
+			update();
+		}
+	
+		private void init() {
+			setLayout(new BorderLayout());
+	
+			this.settingsNodeBox = new JComboBox<>();
+			this.settingsNodeBox.setRenderer(new ListCellRenderer());
+			settingsNodeBox.addItemListener( (e) -> {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					final OpNode node = (OpNode)e.getItem();
+					settingsLayout.show(settingsPanel, node.getId());
+				}
+			});
+			this.settingsLayout = new CardLayout();
+			this.settingsPanel = new JPanel(settingsLayout);
+	
+			add(settingsNodeBox, BorderLayout.NORTH);
+			add(settingsPanel, BorderLayout.CENTER);
+		}
+	
+		private void update() {
+			final OpGraph analysisGraph = analysisNode.getGraph();
+			final WizardExtension analysisExt = analysisGraph.getExtension(WizardExtension.class);
+	
+			settingsPanel.removeAll();
+			final List<OpNode> settingsNodes = new ArrayList<>();
+			for(int i = 0; i < analysisExt.size(); i++) {
+				final OpNode node = analysisExt.getNode(i);
+				final NodeSettings nodeSettings = node.getExtension(NodeSettings.class);
+				if(nodeSettings != null) {
+					settingsNodes.add(node);
+	
+					settingsPanel.add(nodeSettings.getComponent(getModel().getDocument()),
+							node.getId());
+				}
+			}
+	
+			final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes.toArray(new OpNode[0]));
+			settingsNodeBox.setModel(boxModel);
+	
+			if(settingsNodes.size() > 0) {
+				settingsNodeBox.setSelectedIndex(0);
+				settingsLayout.show(settingsPanel, settingsNodes.get(0).getId());
+			}
+		}
+	
+	}
+
 	@Override
 	public Set<Class<?>> getExtensions() {
 		return extSupport.getExtensions();

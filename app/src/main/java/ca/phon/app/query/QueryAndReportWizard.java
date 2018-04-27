@@ -47,6 +47,8 @@ import ca.phon.util.icons.IconSize;
 
 public class QueryAndReportWizard extends NodeWizard {
 	
+	private static final long serialVersionUID = -3028026575633555881L;
+
 	public final static String PREVIOUS_QUERY_PARAMETERS_FOLDER = QueryAndReportWizard.class.getName() + ".prevQueryParametersFolder";
 	public final static String DEFAULT_QUERY_PARAMETERS_FOLDER = 
 			PrefHelper.getUserDataFolder() + File.separator + "previous_query_parameters";
