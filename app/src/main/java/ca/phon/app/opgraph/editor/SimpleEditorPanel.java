@@ -26,8 +26,10 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -70,6 +72,7 @@ import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXTable;
@@ -109,6 +112,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -120,6 +124,7 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.util.resources.ResourceLoader;
 import ca.phon.worker.PhonWorker;
+import javafx.scene.control.TitledPane;
 
 public class SimpleEditorPanel extends JPanel implements IExtendable {
 
@@ -156,9 +161,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JButton runButton;
 	private JButton openInComposerButton;
 
+	private TitledPanel leftTitledPanel;
 	private JTree documentTree;
 	
+	private TitledPanel rightTitledPanel;
 	private CardLayout cardLayout;
+	private JButton showListButton;
+	private Map<String, DocumentSettingsPanel> panelMap = new HashMap<>();
 	private JPanel nodePanel;
 	private JXTable nodeTable;
 	private List<MacroNode> macroNodes;
@@ -370,21 +379,27 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		statusLabel = new JLabel();
-
-		statusBar = new JXStatusBar();
-		statusBar.add(busyLabel, new JXStatusBar.Constraint(16));
-		statusBar.add(statusLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
+		
+		final String listTitle = StringUtils.capitalize(getModel().getNoun().getObj1()) + " List";
+		
+		final PhonUIAction showListAction = new PhonUIAction(this, "showList");
+		showListAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/view-list-text", IconSize.SMALL));
+		showListAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show " + listTitle);
+		showListButton = new JButton(showListAction);
 
 		nodePanel.add(nodeScroller, "node_table");
 		
+		leftTitledPanel = new TitledPanel(StringUtils.capitalize(getModel().getNoun().getObj2()), documentScroller);
+		rightTitledPanel = new TitledPanel(listTitle, nodePanel);
+		rightTitledPanel.setLeftDecoration(busyLabel);
+		
 		final JSplitPane splitPane = new JSplitPane();
-		splitPane.setLeftComponent(documentScroller);
-		splitPane.setRightComponent(nodePanel);
+		splitPane.setLeftComponent(leftTitledPanel);
+		splitPane.setRightComponent(rightTitledPanel);
 		
 		setLayout(new BorderLayout());
 		add(splitPane, BorderLayout.CENTER);
 		add(toolbar, BorderLayout.NORTH);
-		add(statusBar, BorderLayout.SOUTH);
 	}
 		
 	public OpgraphEditorModel getModel() {
@@ -543,6 +558,11 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final int selectedRow = nodeTable.getSelectedRow();
 		if(selectedRow >= 0 && selectedRow < macroNodes.size()) {
 			final OpNode selectedNode = macroNodes.get(selectedRow);
+			
+			if(panelMap.containsKey(selectedNode.getId())) {
+				cardLayout.removeLayoutComponent(panelMap.get(selectedNode.getId()));
+				panelMap.remove(selectedNode.getId());
+			}
 
 			getModel().getDocument().getUndoSupport().beginUpdate();
 			
@@ -695,61 +715,22 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		expandAllDocuments(new TreePath(documentTree.getModel().getRoot()));
 	}
 	
+	public void showList() {
+		cardLayout.show(nodePanel, "node_table");
+		rightTitledPanel.setLeftDecoration(busyLabel);
+		rightTitledPanel.setTitle(StringUtils.capitalize(getModel().getNoun().getObj1()) + " List");
+	}
+	
 	public void showDocumentSettings(MacroNode documentNode) {
-		final DocumentSettingsPanel settingsPanel = new DocumentSettingsPanel(documentNode);
-		final JDialog settingsDialog = new JDialog(CommonModuleFrame.getCurrentFrame(), "Settings : " + documentNode.getName(), true);
-
-		final DialogHeader header = new DialogHeader("Settings : " + documentNode.getName(), "Edit settings for the " + documentNode.getName() + " " + getModel().getNoun().getObj1() + ".");
-		settingsDialog.getContentPane().setLayout(new BorderLayout());
-		settingsDialog.getContentPane().add(header, BorderLayout.NORTH);
-		settingsDialog.getContentPane().add(settingsPanel, BorderLayout.CENTER);
-
-		final PhonUIAction closeSettingsAct = new PhonUIAction(this, "onCloseSettings", settingsDialog);
-		closeSettingsAct.putValue(PhonUIAction.NAME, "Ok");
-		final JButton closeSettingsBtn = new JButton(closeSettingsAct);
-		closeSettingsBtn.addActionListener( (e) -> updateNodeName(documentNode) );
-
-		settingsDialog.getContentPane().add(ButtonBarBuilder.buildOkBar(closeSettingsBtn), BorderLayout.SOUTH);
-		settingsDialog.getRootPane().setDefaultButton(closeSettingsBtn);
-
-		settingsDialog.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				updateNodeName(documentNode);
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-			}
-
-		});
-
-		settingsDialog.pack();
-		settingsDialog.setSize(900, 700);
-		settingsDialog.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
-		settingsDialog.setVisible(true);
-
+		final String id = documentNode.getId();
+		if(!panelMap.containsKey(id)) {
+			final DocumentSettingsPanel settingsPanel = new DocumentSettingsPanel(documentNode);
+			nodePanel.add(settingsPanel, id);
+			panelMap.put(id, settingsPanel);
+		}
+		cardLayout.show(nodePanel, id);
+		rightTitledPanel.setLeftDecoration(showListButton);
+		rightTitledPanel.setTitle(documentNode.getName() + " Settings");
 	}
 
 	public void onCloseSettings(JDialog dialog) {
