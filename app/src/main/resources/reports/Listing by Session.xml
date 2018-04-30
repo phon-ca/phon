@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="1b5e9c85caf14436" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1e82b099">
+            <graph id="1b4874e2">
                 <node id="febe595b2811496c" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -256,15 +256,15 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="25d9b53bbd6c4f5b" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="793c5d91">
+            <graph id="573d0942">
                 <node id="b4b4a2d86ece4175" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
-                                <![CDATA[currentValue]]>
-                            </oga:property>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
                                 <![CDATA[java.lang.Object]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
+                                <![CDATA[currentValue]]>
                             </oga:property>
                         </oga:settings>
                         <oga:meta x="84" y="51"/>
@@ -291,7 +291,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="cdc1b795ab804c5d" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1a070d0b">
+                    <graph id="5db48e7c">
                         <node id="bc3d78aeec9d40de" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -353,11 +353,10 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="35ad0608ffea4b10" name="If Has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="db0ebea">
+                    <graph id="78322abb">
                         <node id="bd79875b979f480c" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                         <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
                                     </oga:property>
@@ -378,7 +377,6 @@ function run(context) {
                         <node id="18a197e9" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                         <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
                                     </oga:property>
@@ -399,7 +397,7 @@ function run(context) {
                                 <oga:meta x="231" y="225"/>
                             </extensions>
                         </node>
-                        <node id="d76c26740c704d40" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="d76c26740c704d40" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
@@ -413,7 +411,7 @@ Range
 Result]]>
                                     </oga:property>
                                 </oga:settings>
-                                <oga:meta x="530" y="168">
+                                <oga:meta x="532" y="175">
                                     <oga:default for="sectionName" type="java.lang.String">All results</oga:default>
                                 </oga:meta>
                             </extensions>
@@ -467,6 +465,11 @@ Result]]>
                 <opqry:info format="html" title="Listing by Session">
                     <opqry:message/>
                 </opqry:info>
+                <opqry:node ref="d76c26740c704d40">
+                    <opqry:info format="html" title="Table Options">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
                 <opqry:report-template name="Report Prefix"/>
                 <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>

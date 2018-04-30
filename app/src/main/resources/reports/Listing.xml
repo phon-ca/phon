@@ -73,7 +73,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="e427d9aa23ab4b01" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="2db16c3f">
+            <graph id="7b1987fe">
                 <node id="7f11a30608e64fee" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -143,7 +143,7 @@ function setup_params(params) {
                 <oga:meta x="627" y="92"/>
             </extensions>
         </node>
-        <node id="4026874c" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+        <node id="4026874c" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
@@ -183,8 +183,8 @@ Result]]>
                 <opqry:info format="html" title="Listing">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="24049103">
-                    <opqry:info format="html" title="Results To Table">
+                <opqry:node ref="4026874c">
+                    <opqry:info format="html" title="Table Options">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
