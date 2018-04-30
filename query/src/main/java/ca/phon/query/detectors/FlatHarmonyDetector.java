@@ -93,7 +93,7 @@ public class FlatHarmonyDetector {
 		
 		for(PhoneDimension dimension:dimensions) {
 			retVal &= 
-				(profile1.getProfile().get(dimension) == profile2.getProfile().get(dimension));
+				(profile1.getProfile().get(dimension).equals(profile2.getProfile().get(dimension)));
 		}
 		
 		return retVal;
