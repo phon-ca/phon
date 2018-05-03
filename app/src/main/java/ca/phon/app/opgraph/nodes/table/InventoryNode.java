@@ -104,7 +104,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		// clear previous auto config settings if they exist
 		settings.clearColumns();
 		
-		List<String> colNames = new ArrayList<>();
+		Set<String> colNames = new LinkedHashSet<>();
 		
 		// result values first
 		for(ResultValue rv:result) {

@@ -178,17 +178,6 @@ public class InventorySettingsPanel extends JPanel {
 	}
 
 	public void updateManualConfig() {
-		manualConfigPanel.getContentContainer().removeAll();
-		manualConfigPanel.getContentContainer().setLayout(new GridBagLayout());
-		
-		final GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
-		gbc.weighty = 0.0;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-
 		ColumnInfo groupBy = settings.getGroupBy();
 		if(groupBy == null) {
 			groupBy = new ColumnInfo();
@@ -211,18 +200,15 @@ public class InventorySettingsPanel extends JPanel {
 			columnPanel.add(panel);
 		}
 
-		final JPanel btmPanel = new JPanel(new VerticalLayout());
+		final JPanel btmPanel = new JPanel(new BorderLayout());
 		btmPanel.setBorder(BorderFactory.createTitledBorder("Columns"));
-		btmPanel.add(columnPanel);
-		btmPanel.add(ButtonBarBuilder.buildOkBar(addColumnButton));
+		btmPanel.add(new JScrollPane(columnPanel), BorderLayout.CENTER);
+		btmPanel.add(ButtonBarBuilder.buildOkBar(addColumnButton), BorderLayout.SOUTH);
 
-		manualConfigPanel.getContentContainer().add(groupByPanel, gbc);
-		++gbc.gridy;
-		manualConfigPanel.getContentContainer().add(btmPanel, gbc);
-		++gbc.gridy;
-		gbc.weighty = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		manualConfigPanel.getContentContainer().add(Box.createVerticalGlue(), gbc);
+		manualConfigPanel.getContentContainer().removeAll();
+		manualConfigPanel.getContentContainer().setLayout(new BorderLayout());
+		manualConfigPanel.getContentContainer().add(groupByPanel, BorderLayout.NORTH);
+		manualConfigPanel.getContentContainer().add(btmPanel, BorderLayout.CENTER);
 	}
 
 	private JComponent createSeparator(ColumnPanel colPanel) {
@@ -271,7 +257,8 @@ public class InventorySettingsPanel extends JPanel {
 		if(scPanel.getSeparator() != null)
 			columnPanel.remove(scPanel.getSeparator());
 		settings.getColumns().remove(scPanel.getColumnInfo());
-		revalidate();
+		manualConfigPanel.getContentContainer().revalidate();
+		repaint();
 	}
 
 	private class ColumnPanel extends JPanel {

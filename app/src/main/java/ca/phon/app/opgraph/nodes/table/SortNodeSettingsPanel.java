@@ -100,9 +100,9 @@ public class SortNodeSettingsPanel extends JPanel {
 		onAddAction.putValue(Action.SMALL_ICON, icon);
 		addSortButton = new JButton(onAddAction);
 		
-		manualConfigPanel.getContentContainer().setLayout(new VerticalLayout());
-		manualConfigPanel.getContentContainer().add(sortByPanel);
-		manualConfigPanel.getContentContainer().add(ButtonBarBuilder.buildOkBar(addSortButton));
+		manualConfigPanel.getContentContainer().setLayout(new BorderLayout());
+		manualConfigPanel.getContentContainer().add(new JScrollPane(sortByPanel), BorderLayout.CENTER);
+		manualConfigPanel.getContentContainer().add(ButtonBarBuilder.buildOkBar(addSortButton), BorderLayout.SOUTH);
 		
 		updateManualConfig();
 		
