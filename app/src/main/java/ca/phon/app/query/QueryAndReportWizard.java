@@ -37,13 +37,17 @@ import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.ActionTabComponent;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask.TaskStatus;
 
 public class QueryAndReportWizard extends NodeWizard {
 	
@@ -79,7 +83,7 @@ public class QueryAndReportWizard extends NodeWizard {
 
 	public QueryAndReportWizard(Project project, QueryScript queryScript) {
 		// init with 'dummy' processor and graph as these will be created 0during the wizard
-		super(queryScript.getExtension(QueryName.class).getName(), new Processor(new OpGraph()), new OpGraph());
+		super("Query : " + queryScript.getExtension(QueryName.class).getName(), new Processor(new OpGraph()), new OpGraph());
 		
 		this.project = project;
 		putExtension(Project.class, project);
@@ -111,6 +115,18 @@ public class QueryAndReportWizard extends NodeWizard {
 		reportDataStep.setPrevStep(2);
 	}
 	
+	@Override
+	public void close() {
+		if(getCurrentStep() == queryResultsStep) {
+			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
+			if(runnerPanel != null && runnerPanel.isRunning()) {
+				int retVal = showMessageDialog("Cancel query?", "Stop query and close window?", MessageDialogProperties.okCancelOptions);
+				if(retVal == 1) return;
+			}
+		}
+		super.close();
+	}
+	
 	private WizardStep createQueryStep() {
 		WizardStep retVal = new WizardStep();
 		QueryName qn = queryScript.getExtension(QueryName.class);
@@ -120,6 +136,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		final JScrollPane sessionScroller = new JScrollPane(sessionSelector);
 		sessionScroller.setPreferredSize(new Dimension(350, 0));
 		includeExcludedBox = new JCheckBox("Include excluded records");
+		includeExcludedBox.setOpaque(false);
 		includeExcludedBox.setForeground(Color.WHITE);
 		
 		TitledPanel sessionsPanel = new TitledPanel("Select Sessions");
@@ -129,13 +146,13 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		scriptPanel = new ScriptPanel(queryScript);
 		final PhonUIAction saveSettingsAct = new PhonUIAction(this, "onSaveQuerySettings");
-		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query parameters");
-		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query parameters");
+		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
+		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
 		final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 		saveQuerySettingsButton = new JButton(saveSettingsAct);
 		
-		TitledPanel queryPanel = new TitledPanel("Query Parameters", scriptPanel);
+		TitledPanel queryPanel = new TitledPanel("Query", scriptPanel);
 		queryPanel.setRightDecoration(saveQuerySettingsButton);
 		
 		splitPane = new JSplitPane();
@@ -320,7 +337,42 @@ public class QueryAndReportWizard extends NodeWizard {
 			}
 		});
 		
+		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/process-stop", IconSize.XSMALL);
+		final PhonUIAction closeAction = new PhonUIAction(this, "discardResults", runnerPanel);
+		closeAction.putValue(PhonUIAction.SMALL_ICON, closeIcon);
+		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results and close tab");
+		final ActionTabComponent atc = new ActionTabComponent(queryResultsPane, closeAction);
+		final int tabIdx = queryResultsPane.getTabCount()-1;
+		queryResultsPane.setTabComponentAt(tabIdx, atc);
+		
 		runnerPanel.startQuery();
+	}
+	
+	public void discardResults(QueryRunnerPanel panel) {
+		final int idx = queryResultsPane.indexOfComponent(panel);
+		if(idx >= 0) {
+			if(panel.isRunning()) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setRunAsync(true);
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+				props.setTitle("Cancel Query");
+				props.setMessage("Stop query?");
+				props.setHeader("Cancel Query");
+				props.setListener( (e) -> {
+					if(e.getDialogResult() == 0) {
+						if(idx >= 0 && idx < queryResultsPane.getTabCount()) {
+							panel.stopQuery();
+						}
+					}
+				});
+				NativeDialogs.showMessageDialog(props);
+			} else {
+				if(idx >= 0 && idx < queryResultsPane.getTabCount()) {
+					queryResultsPane.removeTabAt(idx);
+				}
+			}
+		}
 	}
 	
 	public boolean isIncludeExcluded() {
@@ -336,12 +388,26 @@ public class QueryAndReportWizard extends NodeWizard {
 	public void next() {
 		if(getCurrentStep() == queryStep) {
 			if(sessionSelector.getSelectedSessions().size() == 0) {
-				showMessageDialog("Select Sessions", "Please select at least one session", new String[] {"Ok"});
+				showMessageDialog("Select Sessions", "Please select at least one session", MessageDialogProperties.okOptions);
 				return;
 			}
 			if(!scriptPanel.checkParams()) {
-				showMessageDialog("Query Parameters", "Check query parameters.", new String[] {"Ok"});
+				showMessageDialog("Query Parameters", "Check query parameters.", MessageDialogProperties.okOptions);
 				return;
+			}
+		} else if(getCurrentStep() == queryResultsStep) {
+			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
+			
+			if(runnerPanel == null) {
+				showMessageDialog("Results", "No results", MessageDialogProperties.okOptions);
+				return;
+			} else {
+				if(runnerPanel.getTaskStatus() != TaskStatus.FINISHED) {
+					int retVal = showMessageDialog("Results", "Query did not complete, continue anyway?", MessageDialogProperties.yesNoOptions);
+					if(retVal == 1) {
+						return;
+					}
+				}
 			}
 		} else if(getCurrentStep() == reportEditorStep) {
 			savePreviousQueryReport();
@@ -357,7 +423,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		} else if(getCurrentStep() == queryResultsStep) {
 			QueryRunnerPanel queryRunner = getCurrentQueryRunner();
 			if(queryRunner != null && queryRunner.isRunning()) {
-				showMessageDialog("Results", "Please wait for query to complete", new String[] {"Ok"});
+				showMessageDialog("Results", "Please wait for query to complete", MessageDialogProperties.okOptions);
 				return;
 			}
 		} else if(!inInit && stepIdx == super.getStepIndex(reportDataStep)) {

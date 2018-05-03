@@ -249,6 +249,10 @@ public class QueryRunnerPanel extends JPanel {
 		return queryTask.getStatus() == TaskStatus.RUNNING;
 	}
 	
+	public TaskStatus getTaskStatus() {
+		return queryTask.getStatus();
+	}
+	
 	public Project getProject() {
 		return project;
 	}
@@ -508,7 +512,8 @@ public class QueryRunnerPanel extends JPanel {
 			topPanel.revalidate();
 			hideRowsBox.setEnabled(true);
 			
-			super.setStatus(TaskStatus.FINISHED);
+			if(getStatus() != TaskStatus.TERMINATED && getStatus() != TaskStatus.ERROR)
+				super.setStatus(TaskStatus.FINISHED);
 		}
 		
 	};

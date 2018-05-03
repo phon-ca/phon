@@ -78,10 +78,10 @@ public class WizardFrame extends CommonModuleFrame {
 
 			@Override
 			public void gotoState(WizardStep state) {
-				super.gotoState(state);
-				
-				if(getCurrentStep() != state)
+				if(getCurrentStep() != state) {
 					WizardFrame.this.gotoStep(getStepIndex(state));
+					super.gotoState(getCurrentStep());
+				}
 			}
 			
 		};

@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5e4b6745">
+            <graph id="5849f0f1">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -202,13 +202,13 @@ function setup_params(params) {
                 <opqry:info format="html" title="Aggregate">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="1271664e64514bf6">
-                    <opqry:info format="html" title="Sort">
+                <opqry:node ref="c41947665b034a0e" showAsStep="true">
+                    <opqry:info format="html" title="Inventory Options">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:node ref="c41947665b034a0e" showAsStep="true">
-                    <opqry:info format="html" title="Aggregate">
+                <opqry:node ref="1271664e64514bf6" showAsStep="true">
+                    <opqry:info format="html" title="Sort Settings">
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>

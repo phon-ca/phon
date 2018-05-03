@@ -155,6 +155,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JButton addButton;
 	private JButton removeButton;
 	private JButton settingsButton;
+	private JButton showListToolbarButton;
 	private JButton renameButton;
 	private JButton moveUpButton;
 	private JButton moveDownButton;
@@ -287,6 +288,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		settingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show settings for selected " + getModel().getNoun().getObj1());
 		settingsAct.putValue(PhonUIAction.SMALL_ICON, settingsIcn);
 		settingsButton = new JButton(settingsAct);
+		
+		final ImageIcon showListIcn =
+				IconManager.getInstance().getIcon("actions/view-list-text", IconSize.SMALL);
+		final PhonUIAction showListAct = new PhonUIAction(this, "onShowList");
+		showListAct.putValue(PhonUIAction.SMALL_ICON, showListIcn);
+		showListAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show " + getModel().getNoun().getObj1() + " List");
+		showListToolbarButton = new JButton(showListAct);
 
 		final ImageIcon renameIcn =
 				IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
@@ -365,10 +373,11 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		toolbar.add(addButton);
 		toolbar.add(removeButton);
+		toolbar.add(renameButton);
 		toolbar.addSeparator();
 
 		toolbar.add(settingsButton);
-		toolbar.add(renameButton);
+		toolbar.add(showListToolbarButton);
 		toolbar.addSeparator();
 
 		toolbar.add(moveUpButton);
@@ -382,10 +391,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		final String listTitle = StringUtils.capitalize(getModel().getNoun().getObj1()) + " List";
 		
-		final PhonUIAction showListAction = new PhonUIAction(this, "showList");
-		showListAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/view-list-text", IconSize.SMALL));
-		showListAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show " + listTitle);
-		showListButton = new JButton(showListAction);
+		showListButton = new JButton(showListAct);
 
 		nodePanel.add(nodeScroller, "node_table");
 		
@@ -590,7 +596,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	public void onRename() {
 		final int selectedRow = nodeTable.getSelectedRow();
 		if(selectedRow >= 0 && selectedRow < macroNodes.size()) {
-			nodeTable.editCellAt(selectedRow, 1);
+			nodeTable.editCellAt(selectedRow, 0);
 			nodeTable.requestFocusInWindow();
 		}
 	}
@@ -715,7 +721,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		expandAllDocuments(new TreePath(documentTree.getModel().getRoot()));
 	}
 	
-	public void showList() {
+	public void onShowList() {
 		cardLayout.show(nodePanel, "node_table");
 		rightTitledPanel.setLeftDecoration(busyLabel);
 		rightTitledPanel.setTitle(StringUtils.capitalize(getModel().getNoun().getObj1()) + " List");
@@ -1101,7 +1107,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		@Override
 		protected void process(List<MacroNode> chunks) {
 			for(MacroNode macroNode:chunks) {
-				addNode(macroNode, idx++);
+				addNode(macroNode, (idx >= 0 ? idx++ : -1));
 			}
 		}
 
