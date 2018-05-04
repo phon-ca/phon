@@ -619,10 +619,19 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			final String msg = "Save finished.  " +
 					ByteSize.humanReadableByteCount(byteSize, true) + " written to disk.";
 			LOGGER.info(msg);
-
-			// show a short messgae next to the save button to indicate save completed
+			
+			final SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
 			ToastFactory.makeToast(msg).start(getToolbar());
 			setModified(false);
+			if(warnings != null && warnings.size() > 0) {
+				warnings.clear();
+				
+				// show message
+				int retVal = showMessageDialog("Save", "Session saved with errors, see log for details.", MessageDialogProperties.okCancelOptions);
+				if(retVal == 1) return false;
+			}
+
+			// show a short messgae next to the save button to indicate save completed
 			return true;
 		} catch (IOException e) {
 			final MessageDialogProperties props = new MessageDialogProperties();

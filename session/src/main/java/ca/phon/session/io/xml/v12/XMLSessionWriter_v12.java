@@ -149,24 +149,35 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			}
 
 			// copy record data
-			final RecordType rt = copyRecord(factory, retVal, record);
-
-			rt.setId(record.getUuid().toString());
-
-			if(record.isExcludeFromSearches())
-				rt.setExcludeFromSearches(record.isExcludeFromSearches());
-
-			// setup participant
-			if(record.getSpeaker() != null) {
-				for(ParticipantType pt:parts.getParticipant()) {
-					if(pt.getId().equals(record.getSpeaker().getId())) {
-						rt.setSpeaker(pt);
-						break;
+			try {
+				final RecordType rt = copyRecord(factory, retVal, record);
+	
+				rt.setId(record.getUuid().toString());
+	
+				if(record.isExcludeFromSearches())
+					rt.setExcludeFromSearches(record.isExcludeFromSearches());
+	
+				// setup participant
+				if(record.getSpeaker() != null) {
+					for(ParticipantType pt:parts.getParticipant()) {
+						if(pt.getId().equals(record.getSpeaker().getId())) {
+							rt.setSpeaker(pt);
+							break;
+						}
 					}
 				}
+	
+				transcript.getUOrComment().add(rt);
+			} catch (Exception e) {
+				// catch all record-specific errors and recover
+				LOGGER.log(Level.SEVERE, "Record #" + (i+1) + " " + e.getLocalizedMessage(), e);
+				SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
+				if(warnings == null) {
+					warnings = new SerializationWarnings();
+					session.putExtension(SerializationWarnings.class, warnings);
+				}
+				warnings.add(new SerializationWarning(i, e));
 			}
-
-			transcript.getUOrComment().add(rt);
 		}
 		retVal.setTranscript(transcript);
 
@@ -414,7 +425,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 
 		// notes
 		final Tier<TierString> notesTier = record.getNotes();
-		if(notesTier.numberOfGroups() > 0 && notesTier.getGroup(0).length() > 0) {
+		if(notesTier.numberOfGroups() > 0 && notesTier.getGroup(0) != null && notesTier.getGroup(0).length() > 0) {
 			final FlatTierType notesType = factory.createFlatTierType();
 			notesType.setContent(notesTier.getGroup(0).toString());
 			notesType.setTierName(notesTier.getName());
