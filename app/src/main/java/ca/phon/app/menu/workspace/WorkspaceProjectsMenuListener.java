@@ -23,9 +23,9 @@ import javax.swing.event.*;
 
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.OpenProjectEP;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
-import ca.phon.workspace.Workspace;
 
 public class WorkspaceProjectsMenuListener implements MenuListener {
 

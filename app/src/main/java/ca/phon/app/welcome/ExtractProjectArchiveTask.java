@@ -25,11 +25,11 @@ import java.util.zip.*;
 
 import org.apache.commons.io.FileUtils;
 
+import ca.phon.app.workspace.Workspace;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.Tuple;
 import ca.phon.worker.PhonTask;
-import ca.phon.workspace.Workspace;
 
 /**
  * Task to extract a .phon or .zip project archive

@@ -25,10 +25,10 @@ import java.util.logging.*;
 import org.apache.commons.cli.*;
 
 import ca.phon.app.project.DesktopProjectFactory;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
-import ca.phon.workspace.Workspace;
 
 /**
  * Argument information for plug-in entry points.

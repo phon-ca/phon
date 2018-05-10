@@ -23,10 +23,10 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import ca.phon.app.welcome.ProjectArchiveTask;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.DateFormatter;
-import ca.phon.workspace.Workspace;
 
 @PhonPlugin(name="default")
 public class ProjectArchiveEP implements IPluginEntryPoint {

@@ -32,6 +32,7 @@ import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.query.QueryHistoryTableModel;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.edits.graph.AddNodeEdit;
 import ca.phon.opgraph.dag.*;
@@ -40,7 +41,6 @@ import ca.phon.opgraph.extensions.CompositeNode;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.util.Tuple;
-import ca.phon.workspace.Workspace;
 
 public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 

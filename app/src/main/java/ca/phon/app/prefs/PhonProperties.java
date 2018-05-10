@@ -19,11 +19,11 @@
 package ca.phon.app.prefs;
 
 import ca.phon.app.autosave.AutosaveManager;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.workspace.Workspace;
 
 /**
  * Property names used in the application.

@@ -22,9 +22,9 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.workspace.Workspace;
 
 public class SelectWorkspaceCommand extends HookableAction {
 

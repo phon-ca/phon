@@ -34,13 +34,13 @@ import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import ca.hedlund.desktopicons.*;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
+import ca.phon.app.workspace.*;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
-import ca.phon.workspace.*;
 
 /**
  * Start window panel for workspace projects.

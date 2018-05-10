@@ -38,6 +38,7 @@ import com.jgoodies.forms.layout.*;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -50,7 +51,6 @@ import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.workspace.Workspace;
 
 /**
  * List for displaying project in a given directory.

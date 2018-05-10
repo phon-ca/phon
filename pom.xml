@@ -174,7 +174,6 @@
 		<module>media</module>
 		<module>query</module>
 		<module>app</module>
-		<module>workspace</module>
 	</modules>
 
 	<dependencyManagement>

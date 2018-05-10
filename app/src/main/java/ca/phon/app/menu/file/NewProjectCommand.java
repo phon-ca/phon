@@ -29,12 +29,12 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.*;
 import ca.phon.app.welcome.WelcomeWindow;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.worker.PhonWorker;
-import ca.phon.workspace.Workspace;
 
 public class NewProjectCommand extends HookableAction {
 
