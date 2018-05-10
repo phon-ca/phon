@@ -18,8 +18,10 @@
  */
 package ca.phon.app.menu.query;
 
+import java.awt.Toolkit;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 import javax.swing.*;
@@ -29,6 +31,11 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.query.script.*;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
 
@@ -146,12 +153,46 @@ public class QueryMenuListener implements MenuListener {
 			}
 		}
 		
-		final JMenuItem scriptItem = new JMenuItem(new QueryScriptEditorCommand(project));
+		final PhonUIAction browseAct = new PhonUIAction(QueryMenuListener.class, "onBrowseForQuery", project);
+		browseAct.putValue(PhonUIAction.NAME, "Browse...");
+		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query...");
+		final JMenuItem browseItem = new JMenuItem(browseAct);
+		
 		final JMenuItem historyItem = new JMenuItem(new QueryHistoryCommand(project));
 		
 		queryMenu.addSeparator();
-//		queryMenu.add(scriptItem);
+		queryMenu.add(browseItem);
 		queryMenu.add(historyItem);
 	}
 
+	public static void onBrowseForQuery(PhonActionEvent pae) {
+		final Project project = (Project)pae.getData();
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setRunAsync(true);
+		props.setTitle("Open Query");
+		props.setCanChooseDirectories(false);
+		props.setCanChooseFiles(true);
+		props.setAllowMultipleSelection(false);
+		
+		final FileFilter filter = new FileFilter(new FileFilter[] {FileFilter.jsFilter, FileFilter.xmlFilter});
+		props.setFileFilter(filter);
+		props.setListener( (e) -> {
+			if(e.getDialogData() != null) {
+				final String selectedFile = e.getDialogData().toString();
+				SwingUtilities.invokeLater( () -> {
+					try {
+						URL url = (new File(selectedFile)).toURI().toURL();
+						final QueryScriptCommand cmd = new QueryScriptCommand(project, new QueryScript(url));
+						cmd.actionPerformed(pae.getActionEvent());
+					} catch (MalformedURLException e1) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.severe(e1);
+					}
+				});
+			}
+		});
+		NativeDialogs.showOpenDialog(props);
+	}
+	
 }
