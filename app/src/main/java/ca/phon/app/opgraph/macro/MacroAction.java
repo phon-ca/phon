@@ -27,9 +27,9 @@ import java.util.logging.*;
 import javax.swing.SwingWorker;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.report.ReportAction;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.worker.PhonWorker;
 

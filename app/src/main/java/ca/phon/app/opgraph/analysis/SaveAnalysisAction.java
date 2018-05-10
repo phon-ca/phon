@@ -25,6 +25,7 @@ import java.util.logging.*;
 import javax.swing.tree.TreePath;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.*;
 import ca.phon.ui.nativedialogs.*;

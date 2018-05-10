@@ -24,8 +24,8 @@ import java.util.logging.*;
 
 import org.apache.commons.io.FileUtils;
 
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpgraphIO;
 import ca.phon.syllabifier.*;
 import ca.phon.syllabifier.basic.BasicSyllabifierIO;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;

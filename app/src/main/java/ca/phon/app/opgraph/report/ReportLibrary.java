@@ -27,10 +27,10 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;

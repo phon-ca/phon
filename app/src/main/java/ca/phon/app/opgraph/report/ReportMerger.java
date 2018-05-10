@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.UUID;
 
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.NodeEditorSettings;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.*;

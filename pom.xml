@@ -167,7 +167,6 @@
 		<module>ipadictionary</module>
 		<module>ipamap</module>
 		<module>components</module>
-		<module>opgraph</module>
 		<module>orthography</module>
 		<module>session</module>
 		<module>project</module>

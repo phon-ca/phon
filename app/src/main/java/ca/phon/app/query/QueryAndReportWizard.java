@@ -18,6 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
@@ -29,7 +30,6 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpgraphIO;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;

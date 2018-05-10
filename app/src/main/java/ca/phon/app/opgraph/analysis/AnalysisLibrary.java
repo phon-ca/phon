@@ -27,6 +27,7 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.nodes.query.*;
 import ca.phon.app.opgraph.wizard.WizardExtension;

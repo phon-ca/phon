@@ -26,10 +26,10 @@ import java.util.logging.*;
 
 import javax.swing.KeyStroke;
 
+import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpgraphIO;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.RecentFiles;
 
