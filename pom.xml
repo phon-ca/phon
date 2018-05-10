@@ -169,8 +169,6 @@
 		<module>components</module>
 		<module>opgraph</module>
 		<module>orthography</module>
-		<module>syllabifier</module>
-		<module>syllabifier-opgraph</module>
 		<module>session</module>
 		<module>project</module>
 		<module>script</module>

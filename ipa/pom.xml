@@ -28,6 +28,10 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ca.phon.opgraph</groupId>
+			<artifactId>opgraph-common-nodes</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-util</artifactId>
 			<version>${project.version}</version>
@@ -110,6 +114,11 @@
 									<xsd>${basedir}/src/main/resources/xml/xsd/ipa.xsd</xsd>
 									<packagename>ca.phon.ipa.xml</packagename>
 									<bindingFile>${basedir}/src/main/resources/xml/xjb/ipa.xjb</bindingFile>
+								</xsdOption>
+								<xsdOption>
+									<xsd>${basedir}/src/main/resources/xml/xsd/syllabifier.xsd</xsd>
+									<packagename>ca.phon.syllabifier.basic.io</packagename>
+									<bindingFile>${basedir}/src/main/resources/xml/xjb/syllabifier.xjb</bindingFile>
 								</xsdOption>
 							</xsdOptions>
 						</configuration>
