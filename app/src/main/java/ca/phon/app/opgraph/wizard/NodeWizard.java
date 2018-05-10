@@ -348,6 +348,7 @@ public class NodeWizard extends WizardFrame {
 		add(breadcrumbScroller, BorderLayout.NORTH);
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
+		busyLabel.getBusyPainter().setHighlightColor(Color.white);
 		statusLabel = new JLabel();
 
 		final WizardExtension nodeWizardList =

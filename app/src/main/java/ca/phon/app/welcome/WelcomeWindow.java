@@ -149,12 +149,22 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		gbc.gridheight = 2;
 		gbc.gridwidth = 1;
 		add(actionsContainer, gbc);
+		
+		if(OSInfo.isMacOs()) {
+			final ImageIcon actionsIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarUtilitiesFolderIcon, IconSize.SMALL);
+			actionsContainer.setLeftDecoration(new JLabel(actionsIcn));
+		}
 
 		workspaceProjectsPanel = new WorkspaceProjectsPanel();
 		workspaceContainer = new TitledPanel("Workspace", workspaceProjectsPanel);
 		gbc.gridx++;
 		gbc.gridheight = 1;
 		add(workspaceContainer, gbc);
+		
+		if(OSInfo.isMacOs()) {
+			final ImageIcon workspaceIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarDocumentsFolderIcon, IconSize.SMALL);
+			workspaceContainer.setLeftDecoration(new JLabel(workspaceIcn));
+		}
 
 		recentProjectsPanel = new JPanel();
 		recentProjectsPanel.setLayout(new BorderLayout());
@@ -162,6 +172,11 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		final JScrollPane recentProjectsScroller = new JScrollPane(recentProjectsList);
 		recentProjectsPanel.add(recentProjectsScroller, BorderLayout.CENTER);
 		recentProjectsContainer = new TitledPanel("Recent Projects", recentProjectsPanel);
+		
+		if(OSInfo.isMacOs()) {
+			final ImageIcon recentsIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarSitesFolderIcon, IconSize.SMALL);
+			recentProjectsContainer.setLeftDecoration(new JLabel(recentsIcn));
+		}
 
 		PrefHelper.getUserPreferences().addPreferenceChangeListener( (p) -> {
 			if(p.getKey().equals(RecentProjects.PROJECT_HISTORY_PROP)) {
@@ -261,7 +276,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		MultiActionButton retVal = new MultiActionButton();
 
 		final StockIcon prefIcon =
-				OSInfo.isMacOs() ? MacOSStockIcon.GenericPreferencesIcon
+				OSInfo.isMacOs() ? MacOSStockIcon.ToolbarCustomizeIcon
 						: OSInfo.isNix() ? GtkStockIcon.SETTINGS : WindowsStockIcon.APPLICATION;
 		final String defIcn = "categories/preferences";
 		ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);

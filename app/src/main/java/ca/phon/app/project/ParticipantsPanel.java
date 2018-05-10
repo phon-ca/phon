@@ -87,6 +87,7 @@ public class ParticipantsPanel extends JPanel {
 		participantPanel.getContentContainer().add(participantScroller, BorderLayout.CENTER);
 
 		participantBusyLabel = new JXBusyLabel(new Dimension(16, 16));
+		participantBusyLabel.getBusyPainter().setHighlightColor(Color.white);
 		participantPanel.setLeftDecoration(participantBusyLabel);
 
 		final GridBagConstraints gbc = new GridBagConstraints();

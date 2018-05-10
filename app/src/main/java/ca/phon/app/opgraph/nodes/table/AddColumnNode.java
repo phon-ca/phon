@@ -33,6 +33,7 @@ import ca.phon.query.report.datasource.*;
 import ca.phon.script.*;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.util.resources.*;
+import javafx.scene.layout.Border;
 
 /**
  * Add a new column to the given table using
@@ -157,8 +158,8 @@ public class AddColumnNode extends TableScriptNode {
 	}
 
 	@Override
-	protected JPanel createSettingsPanel() {
-		final JPanel retVal = super.createSettingsPanel();
+	protected JComponent createSettingsPanel() {
+		final JComponent scriptPanel = super.createSettingsPanel();
 
 		final GridBagLayout layout = new GridBagLayout();
 		final JPanel settingsPanel = new JPanel(layout);
@@ -170,8 +171,6 @@ public class AddColumnNode extends TableScriptNode {
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-
-
 
 		settingsPanel.add(new JLabel("Column Name:"), gbc);
 		++gbc.gridx;
@@ -190,8 +189,11 @@ public class AddColumnNode extends TableScriptNode {
 		if(columnIndex >= 0)
 			columnIndexField.setText(Integer.toString(columnIndex));
 		settingsPanel.add(columnIndexField, gbc);
+		
+		JPanel retVal = new JPanel(new BorderLayout());
 
 		retVal.add(settingsPanel, BorderLayout.NORTH);
+		retVal.add(scriptPanel, BorderLayout.CENTER);
 
 		return retVal;
 	}

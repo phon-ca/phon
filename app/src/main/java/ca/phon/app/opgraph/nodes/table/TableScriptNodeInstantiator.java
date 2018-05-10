@@ -18,9 +18,16 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.logging.*;
 
 import ca.phon.opgraph.library.instantiators.Instantiator;
+import ca.phon.plugin.PluginManager;
+import ca.phon.query.script.QueryScript;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 
@@ -39,7 +46,12 @@ public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode
 
 		final PhonScript templateScript = tableScriptNodeData.getPhonScript();
 		final BasicScript script = new BasicScript(templateScript.getScript());
-
+		
+		script.putExtension(TableScriptNode.TableScriptName.class, new TableScriptNode.TableScriptName(tableScriptNodeData.name));
+		
+		QueryScript.setupScriptRequirements(templateScript);
+		QueryScript.setupScriptRequirements(script);
+		
 		// load parameters
 		try {
 			final ScriptParameters templateParams =

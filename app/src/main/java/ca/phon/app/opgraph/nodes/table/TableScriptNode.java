@@ -19,15 +19,22 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.*;
 import java.util.List;
 import java.util.logging.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.mozilla.javascript.Scriptable;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
@@ -40,6 +47,8 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.script.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -89,8 +98,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	private PhonScript script;
 
 	// UI
-	private JPanel settingsPanel;
-	private ScriptPanel scriptPanel = new ScriptPanel();
+	private ScriptPanel scriptPanel;
 
 	public TableScriptNode() {
 		this("");
@@ -103,7 +111,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	public TableScriptNode(PhonScript script) {
 		super();
 		this.script = script;
-		addQueryLibrary();
+		QueryScript.setupScriptRequirements(this.script);
 
 		putField(paramsInputField);
 		putField(paramsOutputField);
@@ -118,36 +126,6 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 
 	public ScriptPanel getScriptPanel() {
 		return this.scriptPanel;
-	}
-
-	/**
-	 * Make query library functions available to scripts.
-	 *
-	 */
-	private void addQueryLibrary() {
-		script.addPackageImport("Packages.ca.phon.session");
-		script.addPackageImport("Packages.ca.phon.project");
-		script.addPackageImport("Packages.ca.phon.ipa");
-		script.addPackageImport("Packages.ca.phon.query");
-		script.addPackageImport("Packages.ca.phon.query.report");
-		script.addPackageImport("Packages.ca.phon.query.report.datasource");
-
-		final ClassLoader cl = PluginManager.getInstance();
-		Enumeration<URL> libUrls;
-		try {
-			libUrls = cl.getResources("ca/phon/query/script/");
-			while(libUrls.hasMoreElements()) {
-				final URL url = libUrls.nextElement();
-				try {
-					final URI uri = url.toURI();
-					script.addRequirePath(uri);
-				} catch (URISyntaxException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
-			}
-		} catch (IOException e1) {
-			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
-		}
 	}
 
 	/**
@@ -240,21 +218,18 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 
 	@Override
 	public Component getComponent(GraphDocument document) {
-		if(settingsPanel == null) {
-			settingsPanel = createSettingsPanel();
+		if(scriptPanel == null) {
+			scriptPanel = (ScriptPanel)createSettingsPanel();
 		}
-		return settingsPanel;
+		return scriptPanel;
 	}
 
-	protected JPanel createSettingsPanel() {
-		JPanel retVal = new JPanel(new BorderLayout());
-
-		scriptPanel = new ScriptPanel(getScript());
-		retVal.add(scriptPanel, BorderLayout.CENTER);
-		scriptPanel.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
+	protected JComponent createSettingsPanel() {
+		ScriptPanel retVal = new ScriptPanel(getScript());
+		retVal.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
 		
 		if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
-			scriptPanel.setSwapButtonVisible(true);
+			retVal.setSwapButtonVisible(true);
 		}
 
 		return retVal;
@@ -264,8 +239,13 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	public Properties getSettings() {
 		final Properties retVal = new Properties();
 
-		retVal.setProperty("__script", getScript().getScript());
-
+		final TableScriptName scriptName = getScript().getExtension(TableScriptName.class);
+		if(scriptName != null) {
+			retVal.setProperty("__scriptName", scriptName.name);
+		} else {
+			retVal.setProperty("__script", getScript().getScript());
+		}
+		
 		try {
 			final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
 					getScript().getContext().getEvaluatedScope());
@@ -288,24 +268,56 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	public void loadSettings(Properties properties) {
 		if(properties.containsKey("__script")) {
 			this.script = new BasicScript(properties.getProperty("__script"));
-			addQueryLibrary();
 			if(scriptPanel != null)
 				scriptPanel.setScript(this.script);
-			reloadFields();
+		} else if(properties.containsKey("__scriptName")) {
+			final String scriptName = properties.getProperty("__scriptName");
+			final ResourceLoader<URL> stockScripts = getTableScriptResourceLoader();
+			final Optional<URL> scriptURL = StreamSupport.stream(stockScripts.spliterator(), true)
+				.filter( (url) -> {
+					try {
+						final String name = FilenameUtils.getBaseName(
+								URLDecoder.decode(url.getFile(), "UTF-8"));
+						return name.equals(scriptName);
+					} catch (UnsupportedEncodingException e1) {
+						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					}
+					return false;
+				} )
+				.findFirst();
+			if(scriptURL.isPresent()) {
+				try(BufferedReader reader = new BufferedReader(new InputStreamReader(scriptURL.get().openStream(), "UTF-8"))) {
+					StringBuffer buffer = new StringBuffer();
+					String line = null;
+					while((line = reader.readLine()) != null) {
+						buffer.append(line).append("\n");
+					}
+					final PhonScript script = new BasicScript(buffer.toString());
+					this.script = script;
+					
+					this.script.putExtension(TableScriptName.class, new TableScriptName(scriptName));
+				} catch (IOException e) {
+					LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+				}
+			} else {
+				LOGGER.warning("Unable to locate table script: " + scriptName);
+			}
+		}
+		QueryScript.setupScriptRequirements(getScript());
+		reloadFields();
 
-			try {
-				final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
-						getScript().getContext().getEvaluatedScope());
-				for(ScriptParam param:scriptParams) {
-					for(String paramId:param.getParamIds()) {
-						if(properties.containsKey(paramId)) {
-							param.setValue(paramId, properties.get(paramId));
-						}
+		try {
+			final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
+					getScript().getContext().getEvaluatedScope());
+			for(ScriptParam param:scriptParams) {
+				for(String paramId:param.getParamIds()) {
+					if(properties.containsKey(paramId)) {
+						param.setValue(paramId, properties.get(paramId));
 					}
 				}
-			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
+		} catch (PhonScriptException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -363,4 +375,16 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		context.put(paramsOutputField, allParams);
 	}
 
+	static class TableScriptName {
+		String name;
+		
+		public TableScriptName() {
+			this("");
+		}
+		
+		public TableScriptName(String name) {
+			this.name = name;
+		}
+	}
+	
 }

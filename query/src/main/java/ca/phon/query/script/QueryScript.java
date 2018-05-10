@@ -39,6 +39,52 @@ public class QueryScript extends LazyQueryScript {
 	private final AtomicReference<QueryScriptContext> contextRef 
 		= new AtomicReference<QueryScriptContext>();
 	
+	private static final class ScriptRequirementsInstalled {}
+	/**
+	 * Setup required package imports and require() library paths.
+	 *
+	 * @param script
+	 */
+	public static void setupScriptRequirements(PhonScript script) {
+		if(script.getExtension(ScriptRequirementsInstalled.class) == null) {
+			final ClassLoader cl = PluginManager.getInstance();
+			Enumeration<URL> libUrls;
+			try {
+				libUrls = cl.getResources("ca/phon/query/script/");
+				while(libUrls.hasMoreElements()) {
+					final URL url = libUrls.nextElement();
+					try {
+						final URI uri = url.toURI();
+						script.addRequirePath(uri);
+					} catch (URISyntaxException e) {
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
+				}
+			} catch (IOException e1) {
+				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			}
+			
+			script.addPackageImport("Packages.ca.phon.orthography");
+			script.addPackageImport("Packages.ca.phon.ipa");
+			script.addPackageImport("Packages.ca.phon.ipa.features");
+			script.addPackageImport("Packages.ca.phon.phonex");
+			script.addPackageImport("Packages.ca.phon.syllable");
+			script.addPackageImport("Packages.ca.phon.util");
+			script.addPackageImport("Packages.ca.phon.project");
+			script.addPackageImport("Packages.ca.phon.session");
+			script.addPackageImport("Packages.ca.phon.session");
+			script.addPackageImport("Packages.ca.phon.project");
+			script.addPackageImport("Packages.ca.phon.query");
+			script.addPackageImport("Packages.ca.phon.query.report");
+			script.addPackageImport("Packages.ca.phon.query.report.datasource");
+
+			
+			script.addClassImport("Packages.org.apache.commons.lang3.StringUtils");
+			
+			script.putExtension(ScriptRequirementsInstalled.class, new ScriptRequirementsInstalled());
+		}
+	}
+	
 	/**
 	 * Query functions
 	 */

@@ -56,20 +56,26 @@ function init(inputs, outputs) {
 
 // run operation on table
 function tableOp(context, table) {
-	// find table column index
-	col = table.getColumnIndex(columnName);
-	if(col < 0) 
-		return; // column not found
-	
 	// create output tables
 	trueTable = new DefaultTableDataSource();
 	falseTable = new DefaultTableDataSource();
+	
 	for(c = 0; c < table.columnCount; c++) {
 	    var colTitle = table.getColumnTitle(c);
 	    trueTable.setColumnTitle(c, colTitle);
 	    falseTable.setColumnTitle(c, colTitle);
 	}
+
+	context.put("trueTable", trueTable);
+	context.put("falseTable", falseTable);
 	
+	// find table column index
+	col = table.getColumnIndex(columnName);
+	if(col < 0) {
+		context.put("falseTable", table);	
+		return; // column not found
+	}
+		
 	for(row = 0; row < table.rowCount; row++) {
 		rowData = table.getRow(row);
 		rowMatches = filterRow(table, row, col);
@@ -81,8 +87,6 @@ function tableOp(context, table) {
 		}
 	}
 	
-	context.put("trueTable", trueTable);
-	context.put("falseTable", falseTable);
 }
 
 function filterRow(table, row, col) {

@@ -63,13 +63,16 @@ function setupTable(inputTable) {
 
 // run operation on table
 function tableOp(context, table) {
+	var tableMap = new java.util.LinkedHashMap();
+	context.put("tableMap", tableMap);
+	context.put("keySet", new java.util.HashSet());
+	
 	// find table column index
 	col = table.getColumnIndex(columnName);
 	
 	if(col < 0) 
 		return; // column not found
 	
-	var tableMap = new java.util.LinkedHashMap();
 	
 	for(row = 0; row < table.rowCount; row++) {
 	    // use string value as row key
@@ -84,5 +87,4 @@ function tableOp(context, table) {
 	}
 	
 	context.put("keySet", tableMap.keySet());
-	context.put("tableMap", tableMap);
 }
