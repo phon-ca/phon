@@ -23,13 +23,13 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.logging.*;
 
 import javax.swing.*;
@@ -39,13 +39,10 @@ import javax.swing.table.TableModel;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
-import javafx.application.*;
-
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
 import ca.phon.extensions.*;
-import ca.phon.functor.Functor;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
@@ -551,138 +548,131 @@ public class BufferPanel extends JPanel implements IExtendable {
 	 * Returns: Void
 	 * Params: Integer (table row index)
 	 */
-	private final Functor<Void, Integer> tableAct = new Functor<Void, Integer>() {
+	private final Consumer<Integer> tableAct = (row) -> {
+		final JXTable tbl = getDataTable();
+		if(tbl == null) return;
 
-		@Override
-		public Void op(Integer row) {
-			final JXTable tbl = getDataTable();
-			if(tbl == null) return null;
+		final TableModel tblModel = tbl.getModel();
+		if(tblModel == null) return;
+		if(row < 0 || row >= tblModel.getRowCount()) return;
 
-			final TableModel tblModel = tbl.getModel();
-			if(tblModel == null) return null;
-			if(row < 0 || row >= tblModel.getRowCount()) return null;
+		// fix row number if sorted
+		row = tbl.convertRowIndexToModel(row);
 
-			// fix row number if sorted
-			row = tbl.convertRowIndexToModel(row);
+		// get project reference from parent window
+		final CommonModuleFrame cmf =
+				(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, BufferPanel.this);
+		if(cmf == null) return;
 
-			// get project reference from parent window
-			final CommonModuleFrame cmf =
-					(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, BufferPanel.this);
-			if(cmf == null) return null;
+		final Project project = cmf.getExtension(Project.class);
+		if(project == null) return;
 
-			final Project project = cmf.getExtension(Project.class);
-			if(project == null) return null;
+		// look for a session reference, if not found try to find a column
+		// with name 'session'
+		final Session primarySession = cmf.getExtension(Session.class);
+		int sessionColumn = -1;
+		int recordColumn = -1;
 
-			// look for a session reference, if not found try to find a column
-			// with name 'session'
-			final Session primarySession = cmf.getExtension(Session.class);
-			int sessionColumn = -1;
-			int recordColumn = -1;
+		for(int i = 0; i < tblModel.getColumnCount(); i++) {
+			final String colName = tblModel.getColumnName(i);
 
-			for(int i = 0; i < tblModel.getColumnCount(); i++) {
-				final String colName = tblModel.getColumnName(i);
-
-				if(colName.equalsIgnoreCase("session")) {
-					sessionColumn = i;
-				} else if(colName.equalsIgnoreCase("record")
-						|| colName.equalsIgnoreCase("record #")) {
-					recordColumn = i;
-				}
+			if(colName.equalsIgnoreCase("session")) {
+				sessionColumn = i;
+			} else if(colName.equalsIgnoreCase("record")
+					|| colName.equalsIgnoreCase("record #")) {
+				recordColumn = i;
 			}
-
-			// check for required items
-			if(primarySession == null && sessionColumn == -1) return null;
-			if(recordColumn == -1) return null;
-
-			// load session
-			SessionEditor editor = null;
-			// get values for each column
-
-			SessionPath sp = new SessionPath();
-
-			if(sessionColumn >= 0 && primarySession == null) {
-				String sessionTxt = tblModel.getValueAt(row, sessionColumn).toString();
-				if(sessionTxt == null || sessionTxt.length() == 0 || sessionTxt.indexOf('.') < 0) return null;
-				String[] sessionPath = sessionTxt.split("\\.");
-				if(sessionPath.length != 2) return null;
-				sp.setCorpus(sessionPath[0]);
-				sp.setSession(sessionPath[1]);
-			} else if(primarySession != null) {
-				sp.setCorpus(primarySession.getCorpus());
-				sp.setSession(primarySession.getName());
-			}
-			// load session editor (if necessary)
-			final EntryPointArgs epArgs = new EntryPointArgs();
-			epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
-			epArgs.put(EntryPointArgs.CORPUS_NAME, sp.getCorpus());
-			epArgs.put(EntryPointArgs.SESSION_NAME, sp.getSession());
-			try {
-				PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
-			} catch (PluginException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				return null;
-			}
-
-			// find session editor
-			for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
-				if(openWindow instanceof SessionEditor) {
-					final SessionEditor currentEditor = (SessionEditor)openWindow;
-					if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
-							&& currentEditor.getSession().getName().equals(sp.getSession())) {
-						editor = (SessionEditor)openWindow;
-						break;
-					}
-				}
-			}
-			if(editor == null) return null;
-
-			// get record index
-			String recordTxt = tblModel.getValueAt(row, recordColumn).toString();
-			int recordNum = Integer.parseInt(recordTxt) - 1;
-			if(recordNum < 0 || recordNum >= editor.getDataModel().getRecordCount()) return null;
-
-			editor.setCurrentRecordIndex(recordNum);
-
-			// setup result highlighting if we have the appropriate column and user object
-			if(getUserObject() != null && getUserObject() instanceof DefaultTableDataSource) {
-				final DefaultTableDataSource tableData = (DefaultTableDataSource)getUserObject();
-				final int resultColumn = tableData.getColumnIndex("Result");
-				if(resultColumn >= 0) {
-					final Object resultVal = tableData.getValueAt(row, resultColumn);
-					if(resultVal != null && resultVal instanceof Result) {
-						final Result result = (Result)resultVal;
-
-						// setup highlighting
-						final EditorSelectionModel selectionModel = editor.getSelectionModel();
-						selectionModel.clear();
-						for(ResultValue rv:result) {
-							final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
-							final SessionEditorSelection selection =
-									new SessionEditorSelection(result.getRecordIndex(), rv.getTierName(),
-											rv.getGroupIndex(), range);
-							selectionModel.addSelection(selection);
-						}
-					}
-				}
-			}
-
-			return null; /* Void return type */
 		}
 
+		// check for required items
+		if(primarySession == null && sessionColumn == -1) return;
+		if(recordColumn == -1) return;
+
+		// load session
+		SessionEditor editor = null;
+		// get values for each column
+
+		SessionPath sp = new SessionPath();
+
+		if(sessionColumn >= 0 && primarySession == null) {
+			String sessionTxt = tblModel.getValueAt(row, sessionColumn).toString();
+			if(sessionTxt == null || sessionTxt.length() == 0 || sessionTxt.indexOf('.') < 0) return;
+			String[] sessionPath = sessionTxt.split("\\.");
+			if(sessionPath.length != 2) return;
+			sp.setCorpus(sessionPath[0]);
+			sp.setSession(sessionPath[1]);
+		} else if(primarySession != null) {
+			sp.setCorpus(primarySession.getCorpus());
+			sp.setSession(primarySession.getName());
+		}
+		// load session editor (if necessary)
+		final EntryPointArgs epArgs = new EntryPointArgs();
+		epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
+		epArgs.put(EntryPointArgs.CORPUS_NAME, sp.getCorpus());
+		epArgs.put(EntryPointArgs.SESSION_NAME, sp.getSession());
+		try {
+			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
+		} catch (PluginException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			return;
+		}
+
+		// find session editor
+		for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
+			if(openWindow instanceof SessionEditor) {
+				final SessionEditor currentEditor = (SessionEditor)openWindow;
+				if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
+						&& currentEditor.getSession().getName().equals(sp.getSession())) {
+					editor = (SessionEditor)openWindow;
+					break;
+				}
+			}
+		}
+		if(editor == null) return;
+
+		// get record index
+		String recordTxt = tblModel.getValueAt(row, recordColumn).toString();
+		int recordNum = Integer.parseInt(recordTxt) - 1;
+		if(recordNum < 0 || recordNum >= editor.getDataModel().getRecordCount()) return;
+
+		editor.setCurrentRecordIndex(recordNum);
+
+		// setup result highlighting if we have the appropriate column and user object
+		if(getUserObject() != null && getUserObject() instanceof DefaultTableDataSource) {
+			final DefaultTableDataSource tableData = (DefaultTableDataSource)getUserObject();
+			final int resultColumn = tableData.getColumnIndex("Result");
+			if(resultColumn >= 0) {
+				final Object resultVal = tableData.getValueAt(row, resultColumn);
+				if(resultVal != null && resultVal instanceof Result) {
+					final Result result = (Result)resultVal;
+
+					// setup highlighting
+					final EditorSelectionModel selectionModel = editor.getSelectionModel();
+					selectionModel.clear();
+					for(ResultValue rv:result) {
+						final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
+						final SessionEditorSelection selection =
+								new SessionEditorSelection(result.getRecordIndex(), rv.getTierName(),
+										rv.getGroupIndex(), range);
+						selectionModel.addSelection(selection);
+					}
+				}
+			}
+		}
 	};
 
 	private final class TableMouseAdapter extends MouseInputAdapter {
 
-		private Functor<Void, Integer> functor;
+		private Consumer<Integer> functor;
 
-		public TableMouseAdapter(Functor<Void, Integer> functor) {
+		public TableMouseAdapter(Consumer<Integer> functor) {
 			this.functor = functor;
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent me) {
 			if(me.getClickCount() == 2 && me.getButton() == MouseEvent.BUTTON1) {
-				functor.op(getDataTable().getSelectedRow());
+				functor.accept(getDataTable().getSelectedRow());
 			}
 		}
 
@@ -690,15 +680,15 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	private final class TableAction extends AbstractAction {
 
-		private Functor<Void, Integer> functor;
+		private Consumer<Integer> functor;
 
-		public TableAction(Functor<Void, Integer> functor) {
+		public TableAction(Consumer<Integer> functor) {
 			this.functor = functor;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			functor.op(getDataTable().getSelectedRow());
+			functor.accept(getDataTable().getSelectedRow());
 		}
 
 	}
