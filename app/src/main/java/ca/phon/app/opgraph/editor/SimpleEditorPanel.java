@@ -2,8 +2,10 @@ package ca.phon.app.opgraph.editor;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -87,6 +89,7 @@ import ca.phon.app.opgraph.nodes.MacroNodeData;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
+import ca.phon.app.query.ScriptPanel;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.opgraph.OpGraph;
@@ -154,26 +157,23 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JButton browseButton;
 	private JButton addButton;
 	private JButton removeButton;
-	private JButton settingsButton;
-	private JButton showListToolbarButton;
 	private JButton renameButton;
 	private JButton moveUpButton;
 	private JButton moveDownButton;
 	private JButton runButton;
-	private JButton openInComposerButton;
 
 	private TitledPanel leftTitledPanel;
 	private JTree documentTree;
 	
-	private TitledPanel rightTitledPanel;
-	private CardLayout cardLayout;
-	private JButton showListButton;
-	private Map<String, DocumentSettingsPanel> panelMap = new HashMap<>();
-	private JPanel nodePanel;
+	private TitledPanel listTitledPanel;
 	private JXTable nodeTable;
 	private List<MacroNode> macroNodes;
 	
-	private JXStatusBar statusBar;
+	private TitledPanel settingsTitledPanel;
+	private CardLayout cardLayout;
+	private Map<String, DocumentSettingsPanel> panelMap = new HashMap<>();
+	private JPanel nodePanel;
+	
 	private JXBusyLabel busyLabel;
 	private JLabel statusLabel;
 	
@@ -282,20 +282,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final KeyStroke removeKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 		removeButton = new JButton(removeAct);
 
-		final ImageIcon settingsIcn =
-				IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL);
-		final PhonUIAction settingsAct = new PhonUIAction(this, "onShowSettings");
-		settingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show settings for selected " + getModel().getNoun().getObj1());
-		settingsAct.putValue(PhonUIAction.SMALL_ICON, settingsIcn);
-		settingsButton = new JButton(settingsAct);
-		
-		final ImageIcon showListIcn =
-				IconManager.getInstance().getIcon("actions/view-list-text", IconSize.SMALL);
-		final PhonUIAction showListAct = new PhonUIAction(this, "onShowList");
-		showListAct.putValue(PhonUIAction.SMALL_ICON, showListIcn);
-		showListAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show " + getModel().getNoun().getObj1() + " List");
-		showListToolbarButton = new JButton(showListAct);
-
 		final ImageIcon renameIcn =
 				IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
 		final PhonUIAction renameAct = new PhonUIAction(this, "onRename");
@@ -327,22 +313,23 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		runAct.putValue(PhonUIAction.SMALL_ICON, runIcn);
 		runButton = new JButton(runAct);
 
-		final ImageIcon graphIcn =
-				IconManager.getInstance().getIcon("opgraph/graph", IconSize.SMALL);
-		final PhonUIAction openInComposerAct = new PhonUIAction(this, "onOpenInComposer");
-		openInComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open in Composer (advanced)");
-		openInComposerAct.putValue(PhonUIAction.SMALL_ICON, graphIcn);
-		openInComposerButton = new JButton(openInComposerAct);
-
 		macroNodes = Collections.synchronizedList(new ArrayList<>());
 		nodeTable = new JXTable(new NodeTableModel());
 		nodeTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		nodeTable.getSelectionModel().addListSelectionListener( (e) -> {
+			int selectedIdx = nodeTable.getSelectedRow();
+			if(selectedIdx >= 0 && selectedIdx < macroNodes.size()) {
+				showDocumentSettings(macroNodes.get(selectedIdx));
+			} else {
+				settingsTitledPanel.setTitle("Settings");
+				cardLayout.show(nodePanel, "none");
+			}
+		});
 		nodeTable.setSortable(false);
 		nodeTable.setDragEnabled(true);
 		nodeTable.setTransferHandler(new NodeTableTransferHandler());
 		nodeTable.setDropMode(DropMode.INSERT);
 		nodeTable.setVisibleRowCount(10);
-		nodeTable.getColumn(1).setMaxWidth(100);
 
 		final ActionMap am = nodeTable.getActionMap();
 		final InputMap inputMap = nodeTable.getInputMap(JComponent.WHEN_FOCUSED);
@@ -362,6 +349,11 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		cardLayout = new CardLayout();
 		nodePanel = new JPanel(cardLayout);
 		
+		final ImageIcon settingsIcn = IconManager.getInstance().getIcon("actions/settings-white", IconSize.SMALL);
+		settingsTitledPanel = new TitledPanel("Settings", nodePanel);
+		settingsTitledPanel.setLeftDecoration(new JLabel(settingsIcn));
+		nodePanel.add(new JPanel(), "none");
+		
 		// setup settings column
 		final JScrollPane nodeScroller = new JScrollPane(nodeTable);
 
@@ -371,15 +363,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		toolbar.add(browseButton);
 		toolbar.addSeparator();
 
-		toolbar.add(addButton);
 		toolbar.add(removeButton);
 		toolbar.add(renameButton);
 		toolbar.addSeparator();
-
-		toolbar.add(settingsButton);
-		toolbar.add(showListToolbarButton);
-		toolbar.addSeparator();
-
+		
 		toolbar.add(moveUpButton);
 		toolbar.add(moveDownButton);
 		toolbar.addSeparator();
@@ -387,25 +374,31 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		toolbar.add(runButton);
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
+		busyLabel.getBusyPainter().setHighlightColor(Color.white);
 		statusLabel = new JLabel();
 		
 		final String listTitle = StringUtils.capitalize(getModel().getNoun().getObj1()) + " List";
 		
-		showListButton = new JButton(showListAct);
-
-		nodePanel.add(nodeScroller, "node_table");
-		
 		leftTitledPanel = new TitledPanel(StringUtils.capitalize(getModel().getNoun().getObj2()), documentScroller);
-		rightTitledPanel = new TitledPanel(listTitle, nodePanel);
-		rightTitledPanel.setLeftDecoration(busyLabel);
+		listTitledPanel = new TitledPanel(listTitle);
+		listTitledPanel.getContentContainer().setLayout(new BorderLayout());
+		listTitledPanel.getContentContainer().add(toolbar, BorderLayout.NORTH);
+		listTitledPanel.getContentContainer().add(nodeScroller, BorderLayout.CENTER);
+		listTitledPanel.setLeftDecoration(busyLabel);
+		
+		leftTitledPanel.setRightDecoration(addButton);
+		
+		final JSplitPane rightSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		rightSplit.setLeftComponent(listTitledPanel);
+		rightSplit.setRightComponent(settingsTitledPanel);
+		SwingUtilities.invokeLater( () -> rightSplit.setDividerLocation(0.33f) );
 		
 		final JSplitPane splitPane = new JSplitPane();
 		splitPane.setLeftComponent(leftTitledPanel);
-		splitPane.setRightComponent(rightTitledPanel);
+		splitPane.setRightComponent(rightSplit);
 		
 		setLayout(new BorderLayout());
 		add(splitPane, BorderLayout.CENTER);
-		add(toolbar, BorderLayout.NORTH);
 	}
 		
 	public OpgraphEditorModel getModel() {
@@ -532,7 +525,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		int rowIdx = (idx >= 0 ? idx : macroNodes.size()-1);
 		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(rowIdx, rowIdx);
-		nodeTable.setRowSelectionInterval(rowIdx, rowIdx);
+	//	nodeTable.setRowSelectionInterval(rowIdx, rowIdx);
 	}
 	
 	public void addQuery(QueryScript queryScript, int idx) {
@@ -723,8 +716,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	public void onShowList() {
 		cardLayout.show(nodePanel, "node_table");
-		rightTitledPanel.setLeftDecoration(busyLabel);
-		rightTitledPanel.setTitle(StringUtils.capitalize(getModel().getNoun().getObj1()) + " List");
+		listTitledPanel.setLeftDecoration(busyLabel);
+		listTitledPanel.setTitle(StringUtils.capitalize(getModel().getNoun().getObj1()) + " List");
 	}
 	
 	public void showDocumentSettings(MacroNode documentNode) {
@@ -735,8 +728,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			panelMap.put(id, settingsPanel);
 		}
 		cardLayout.show(nodePanel, id);
-		rightTitledPanel.setLeftDecoration(showListButton);
-		rightTitledPanel.setTitle(documentNode.getName() + " Settings");
+		settingsTitledPanel.setTitle(documentNode.getName() + " Settings");
 	}
 
 	public void onCloseSettings(JDialog dialog) {
@@ -1322,7 +1314,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 		@Override
 		public int getColumnCount() {
-			return 2;
+			return 1;
 		}
 	
 		@Override
@@ -1478,8 +1470,12 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			});
 			this.settingsLayout = new CardLayout();
 			this.settingsPanel = new JPanel(settingsLayout);
+			
+			final JPanel topPanel = new JPanel(new BorderLayout());
+			topPanel.add(new JLabel("Step:"), BorderLayout.WEST);
+			topPanel.add(settingsNodeBox, BorderLayout.CENTER);
 	
-			add(settingsNodeBox, BorderLayout.NORTH);
+			add(topPanel, BorderLayout.NORTH);
 			add(settingsPanel, BorderLayout.CENTER);
 		}
 	
@@ -1495,8 +1491,16 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				if(nodeSettings != null) {
 					settingsNodes.add(node);
 	
-					settingsPanel.add(nodeSettings.getComponent(getModel().getDocument()),
-							node.getId());
+					final Component nodeSettingsPanel = nodeSettings.getComponent(getModel().getDocument());
+					if(nodeSettingsPanel != null) {
+						if(nodeSettingsPanel instanceof ScriptPanel)
+							settingsPanel.add(nodeSettingsPanel, node.getId());
+						else {
+							final JScrollPane scroller = new JScrollPane(nodeSettingsPanel);
+							scroller.getVerticalScrollBar().setUnitIncrement(10);
+							settingsPanel.add(scroller, node.getId());
+						}
+					}
 				}
 			}
 	

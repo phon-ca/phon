@@ -290,10 +290,10 @@ public class QueryAndReportWizard extends NodeWizard {
 		reportEditor.getRunButton().setVisible(false);
 		reportEditor.getToolbar().add(super.globalOptionsPanel);
 		
-		TitledPanel configPane = new TitledPanel("Report Composer", reportEditor);
+//		TitledPanel configPane = new TitledPanel("Report Composer", reportEditor);
 		
 		retVal.setLayout(new BorderLayout());
-		retVal.add(configPane, BorderLayout.CENTER);
+		retVal.add(reportEditor, BorderLayout.CENTER);
 		
 		loadInitialQueryReport();
 		

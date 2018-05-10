@@ -28,10 +28,13 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.opgraph.editor.library.LibraryView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphEditorModel;
+import ca.phon.opgraph.app.components.NodeSettingsPanel;
 import ca.phon.opgraph.app.components.canvas.GraphCanvas;
 import ca.phon.opgraph.app.edits.graph.DeleteNodesEdit;
+import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.extensions.CompositeNode;
 import ca.phon.opgraph.library.NodeLibrary;
 import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
@@ -43,6 +46,8 @@ import ca.phon.util.*;
 public abstract class OpgraphEditorModel extends GraphEditorModel {
 
 	private Map<String, JComponent> viewMap;
+
+	private NodeSettingsPanel nodeSettingsPanel;
 
 	public static enum ViewLocation {
 		NORTH,
@@ -106,6 +111,25 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		return this.viewMap;
 	}
 
+	@Override
+	public NodeSettingsPanel getNodeSettings() {
+		if(nodeSettingsPanel == null) {
+			nodeSettingsPanel = new NodeSettingsPanel(getDocument()) {
+				@Override
+				protected Component getNodeSettingsComponent(NodeSettings settings) {
+					Component comp = settings.getComponent(getDocument());
+					if(!(comp instanceof ScriptPanel)) {
+						final JScrollPane scroller = new JScrollPane(comp);
+						scroller.getVerticalScrollBar().setUnitIncrement(10);
+						comp = scroller;
+					}
+					return comp;
+				}
+			};
+		}
+		return nodeSettingsPanel;
+	}
+	
 	/**
 	 * Get custom node library view.
 	 *

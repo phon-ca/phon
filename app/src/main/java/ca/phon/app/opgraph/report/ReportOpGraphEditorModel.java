@@ -272,11 +272,13 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 	public void setupContext(OpContext context) {
 		if(projectList.getSelectedItem() != null) {
 			context.put("_project", projectList.getSelectedItem());
-			final QueryHistoryTableModel model = (QueryHistoryTableModel)queryTable.getModel();
-			final int selectedIdx = queryTable.convertRowIndexToModel(queryTable.getSelectedRow());
-			if(selectedIdx >= 0) {
-				final Query selectedQuery = model.getQueryForRow(selectedIdx);
-				context.put("_queryId", selectedQuery.getUUID().toString());
+			if(queryTable.getModel() instanceof QueryHistoryTableModel) {
+				final QueryHistoryTableModel model = (QueryHistoryTableModel)queryTable.getModel();
+				final int selectedIdx = queryTable.convertRowIndexToModel(queryTable.getSelectedRow());
+				if(selectedIdx >= 0) {
+					final Query selectedQuery = model.getQueryForRow(selectedIdx);
+					context.put("_queryId", selectedQuery.getUUID().toString());
+				}
 			}
 		}
 	}

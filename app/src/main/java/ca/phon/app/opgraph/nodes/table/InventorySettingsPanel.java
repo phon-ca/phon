@@ -202,7 +202,7 @@ public class InventorySettingsPanel extends JPanel {
 
 		final JPanel btmPanel = new JPanel(new BorderLayout());
 		btmPanel.setBorder(BorderFactory.createTitledBorder("Columns"));
-		btmPanel.add(new JScrollPane(columnPanel), BorderLayout.CENTER);
+		btmPanel.add(columnPanel, BorderLayout.CENTER);
 		btmPanel.add(ButtonBarBuilder.buildOkBar(addColumnButton), BorderLayout.SOUTH);
 
 		manualConfigPanel.getContentContainer().removeAll();
