@@ -73,7 +73,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="5d36951fc4114075" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="71fb2c81">
+            <graph id="695fb931">
                 <node id="f13988b6aac4452a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -188,11 +188,6 @@ function setup_params(params) {
                 <opqry:info format="html" title="Transcript Variability">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="58b853f2">
-                    <opqry:info format="html" title="Results To Table">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
                 <opqry:node ref="4172dddc06ea48a3">
                     <opqry:info format="html" title="IPA Variability">
                         <opqry:message/>

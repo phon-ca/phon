@@ -146,7 +146,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="b8b62803a7ad4ecf" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4b676bf5">
+            <graph id="36c143ac">
                 <node id="f4baeb321b80450d" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -292,11 +292,6 @@ Result]]>
                 <opqry:info format="html" title="Phone Similarity">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="24049103">
-                    <opqry:info format="html" title="Results To Table">
-                        <opqry:message/>
-                    </opqry:info>
-                </opqry:node>
                 <opqry:node ref="a70fbe38d034432f" showAsStep="true">
                     <opqry:info format="html" title="Parameters">
                         <opqry:message/>
