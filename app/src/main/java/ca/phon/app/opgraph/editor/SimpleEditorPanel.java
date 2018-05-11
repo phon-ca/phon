@@ -364,8 +364,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		toolbar.add(browseButton);
 		toolbar.addSeparator();
 
+		toolbar.add(addButton);
 		toolbar.add(removeButton);
-		toolbar.add(renameButton);
 		toolbar.addSeparator();
 		
 		toolbar.add(moveUpButton);
@@ -386,8 +386,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		listTitledPanel.getContentContainer().add(toolbar, BorderLayout.NORTH);
 		listTitledPanel.getContentContainer().add(nodeScroller, BorderLayout.CENTER);
 		listTitledPanel.setLeftDecoration(busyLabel);
-		
-		leftTitledPanel.setRightDecoration(addButton);
 		
 		final JSplitPane rightSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		rightSplit.setLeftComponent(listTitledPanel);
