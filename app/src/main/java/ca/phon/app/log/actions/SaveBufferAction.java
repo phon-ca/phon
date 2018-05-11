@@ -86,7 +86,11 @@ public class SaveBufferAction extends HookableAction {
 		}
 		props.setFileFilter(filter);
 
-		props.setInitialFile(panel.getBufferName() + "." + filter.getDefaultExtension());
+		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
+		String initialFilename = panel.getBufferName();
+		initialFilename = initialFilename.trim().replaceAll(illegalCharRegex, "_");
+		
+		props.setInitialFile(initialFilename + "." + filter.getDefaultExtension());
 		props.setRunAsync(true);
 		props.setListener( (e) -> {
 			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION && e.getDialogData() != null) {

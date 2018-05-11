@@ -29,16 +29,16 @@ public class HTMLToWorkbookWriter {
 		// find all tables
 		final List<Element> tableList = soupDoc.getElementsByTag("table");
 		for(Element tableEle:tableList) {
-			// caption is the title of the table
-			final Element captionEle = tableEle.getElementsByTag("caption").first();
-			String title = captionEle.text();
+			final String tableId = tableEle.attr("id");
 
-			final WritableSheet sheet = createSheet(workbook, title);
+			final WritableSheet sheet = createSheet(workbook, tableId);
 			writeTableToSheet(sheet, 0, tableEle);
 		}
 	}
 
 	public WritableSheet createSheet(WritableWorkbook workbook, String sheetName) {
+		sheetName = WorkbookUtils.sanitizeTabName(sheetName);
+		
 		final List<String> currentSheetNames = Arrays.asList(workbook.getSheetNames());
 
 		if(sheetName.trim().length() == 0)

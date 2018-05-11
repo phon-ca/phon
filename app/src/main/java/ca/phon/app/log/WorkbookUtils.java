@@ -6,6 +6,8 @@ import java.util.*;
 
 import javax.swing.table.TableModel;
 
+import org.apache.commons.lang.StringUtils;
+
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import jxl.write.*;
@@ -154,6 +156,26 @@ public class WorkbookUtils {
 				break;
 			}
 		}
+		return retVal;
+	}
+	
+	/**
+	 * Sanitize name of excel tab.
+	 * 
+	 * @param name
+	 * @return version of name which complies to excel specification
+	 */
+	public static String sanitizeTabName(String name) {
+		// reduce string length, keep end
+		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
+		String retVal = name.trim();
+		retVal = retVal.replaceAll(illegalCharRegex, "_");
+		retVal.replaceAll(illegalCharRegex, "_");
+		
+		if(retVal.length() > 31) {
+			retVal = StringUtils.abbreviate(retVal, retVal.length()-31+3, 31);
+		}
+				
 		return retVal;
 	}
 	
