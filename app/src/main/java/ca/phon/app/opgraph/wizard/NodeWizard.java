@@ -530,7 +530,7 @@ public class NodeWizard extends WizardFrame {
 					QueryNode qn = (QueryNode)pe.getNode();
 					qn.addPropertyChangeListener(new QueryNodeListener(qn));
 					try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-						out.println("Query : " + qn.getQueryScript().getExtension(QueryName.class).getName());
+						out.println(pe.getNode().getName());
 						out.flush();
 					}
 				}

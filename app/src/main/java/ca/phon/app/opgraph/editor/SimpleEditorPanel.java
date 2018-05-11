@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -1493,9 +1494,27 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 					final Component nodeSettingsPanel = nodeSettings.getComponent(getModel().getDocument());
 					if(nodeSettingsPanel != null) {
-						if(nodeSettingsPanel instanceof ScriptPanel)
+						if(nodeSettingsPanel instanceof ScriptPanel) {
+							if(node.getName().equals("Parameters")) {
+								// add listener to 'reportTitle' param if it exists
+								final PhonScript script = ((ScriptPanel)nodeSettingsPanel).getScript();
+								try {
+									final ScriptParameters params = script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
+									
+									final Optional<ScriptParam> reportTitleParam = 
+											params.stream().filter( (sp) -> sp.getParamId().equals("reportTitle") ).findFirst();
+									if(reportTitleParam.isPresent()) {
+										reportTitleParam.get().addPropertyChangeListener("reportTitle", (e) -> {
+											updateNodeName(analysisNode);
+										});
+									}
+								} catch (PhonScriptException e) {
+									LogUtil.severe(e);
+								}
+								
+							}
 							settingsPanel.add(nodeSettingsPanel, node.getId());
-						else {
+						} else {
 							final JScrollPane scroller = new JScrollPane(nodeSettingsPanel);
 							scroller.getVerticalScrollBar().setUnitIncrement(10);
 							settingsPanel.add(scroller, node.getId());

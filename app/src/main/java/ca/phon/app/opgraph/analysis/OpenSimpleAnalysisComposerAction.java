@@ -23,7 +23,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 
 	private final static Logger LOGGER = Logger.getLogger(OpenSimpleAnalysisComposerAction.class.getName());
 	
-	private final static String TXT = "Composer (simple)...";
+	private final static String TXT = "Analysis Composer...";
 	
 	private final Project project;
 	
@@ -71,7 +71,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 		}
 		
 		frame.pack();
-		frame.setSize(new Dimension(700, 500));
+		frame.setSize(new Dimension(1024, 768));
 		frame.centerWindow();
 		frame.setVisible(true);
 	}

@@ -14,7 +14,7 @@ public class OpenSimpleReportComposerAction extends HookableAction {
 	
 	private static final long serialVersionUID = 3781206121705628643L;
 
-	private final static String TXT = "Composer (simple)...";
+	private final static String TXT = "Report Composer...";
 	
 	private final OpGraph reportGraph;
 	
