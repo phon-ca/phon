@@ -203,7 +203,7 @@ function query_record(recordIndex, record) {
 
 			var rvt = factory.createResultValue();
 			rvt.tierName = "IPA Target";
-			rvt.groupIndex = i;
+			rvt.groupIndex = group.groupIndex;
 			var startIndex = (ipaT.length() == 0 ? 0 :
 				(filters.word.isUseFilter()
 					? (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : obj.getIPATargetWordLocation())
@@ -215,7 +215,7 @@ function query_record(recordIndex, record) {
 
 			var rva = factory.createResultValue();
 			rva.tierName = "IPA Actual";
-			rva.groupIndex = i;
+			rva.groupIndex = group.groupIndex;
 			startIndex = (ipaA.length() == 0 ? 0 :
 				(filters.word.isUseFilter()
 					? (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : obj.getIPAActualWordLocation())
