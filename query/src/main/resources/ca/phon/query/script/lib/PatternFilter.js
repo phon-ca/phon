@@ -530,19 +530,25 @@ exports.PatternFilter = function (id) {
 			}
 		} else {
 			while (regexMatcher.find()) {
-				var myValue;
+				var myValue = null;
 				if (obj instanceof IPATranscript) {
 					var startIpaIdx = obj.ipaIndexOf(regexMatcher.start());
 					var endIpaIdx = obj.ipaIndexOf(regexMatcher.end() -1);
-					myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
+					
+					if(startIpaIdx >= 0 && startIpaIdx < obj.length()
+						&& endIpaIdx >= 0 && endIpaIdx >= startIpaIdx && endIpaIdx < obj.length()) {
+						myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
+					}
 				} else {
 					myValue = regexMatcher.group();
 				}
-				v = {
-					start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher
-				};
-
-				retVal.push(v);
+				if(myValue != null) {
+					v = {
+						start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher
+					};
+	
+					retVal.push(v);
+				}
 			}
 		}
 
