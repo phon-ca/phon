@@ -68,7 +68,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="18948ace" name="Queries" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="2f68a958">
+            <graph id="791d5d73">
                 <node id="67f5f47f" name="project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -100,7 +100,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <opqry:queryNode id="fd2da9e" name="Query : Phones (Singleton Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-11T09:03:59.881-02:30" name="Phones" uuid="3e2117fc-8ddd-4cd9-a4f0-98f3a54fa7d5">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-16T10:25:34.621-02:30" name="Phones" uuid="1d4c1677-11d8-40d0-8b14-c0a8da68416e">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -127,7 +127,7 @@ function setup_params(params) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="7febea1731aa4205" name="Query : Phones (Singleton Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-11T09:03:59.885-02:30" name="Phones" uuid="7e1fbf12-6999-4f25-91d6-cd70e1b18139">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-16T10:25:34.629-02:30" name="Phones" uuid="0e41987e-42ab-4487-95b3-c51937f5aa80">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -154,7 +154,7 @@ function setup_params(params) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="3c92e493c5c048e1" name="Query : Phones (Singleton OEHS)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-11T09:03:59.889-02:30" name="Phones" uuid="48cdeffc-5841-409c-91e9-66c594485e50">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-16T10:25:34.634-02:30" name="Phones" uuid="5a5e3471-4ec7-40bb-aab3-709f6755f90a">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -181,7 +181,7 @@ function setup_params(params) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="e74f408073a54f0f" name="Query : Phones (Tautosyllabic Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-11T09:03:59.893-02:30" name="Phones" uuid="3d9cabfc-1911-4937-a7f9-6e0832f1bb1a">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-16T10:25:34.639-02:30" name="Phones" uuid="3498ef79-666a-4307-b309-441972cc48f5">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -208,7 +208,7 @@ function setup_params(params) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="b68612eae61c4a46" name="Query : Phones (Tautosyllabic Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-11T09:03:59.897-02:30" name="Phones" uuid="ff4916e8-6f16-4375-9f23-ddc0c6df0948">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-16T10:25:34.645-02:30" name="Phones" uuid="12c8094b-969b-4bc3-ba48-398aa3cfb12e">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -235,7 +235,7 @@ function setup_params(params) {
                     </extensions>
                 </opqry:queryNode>
                 <opqry:queryNode id="3f2f079556514067" name="Query : Phones (Heterosyllabic)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-11T09:03:59.901-02:30" name="Phones" uuid="9e58005d-0843-4b81-9150-4e8e4e596f1e">
+                    <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-16T10:25:34.649-02:30" name="Phones" uuid="8d220cde-91cc-4f4c-b635-af93dc8b76b3">
                         <script>
                             <url ref="Phones" rel="stock"/>
                             <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -375,6 +375,210 @@ function setup_params(params) {
                         <oga:meta x="777" y="1152"/>
                     </extensions>
                 </node>
+                <node id="6304084b" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="column">
+                                <![CDATA[Type]]>
+                            </oga:property>
+                            <oga:property key="columnIndex">
+                                <![CDATA[-1]]>
+                            </oga:property>
+                            <oga:property key="__script">
+                                <![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return new String("Singleton Onset");
+}
+]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1045" y="57"/>
+                    </extensions>
+                </node>
+                <node id="bf0f214fe7234962" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="column">
+                                <![CDATA[Type]]>
+                            </oga:property>
+                            <oga:property key="columnIndex">
+                                <![CDATA[-1]]>
+                            </oga:property>
+                            <oga:property key="__script">
+                                <![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return new String("Singleton Coda");
+}
+]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1059" y="248"/>
+                    </extensions>
+                </node>
+                <node id="c091c72ba61f492d" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="column">
+                                <![CDATA[Type]]>
+                            </oga:property>
+                            <oga:property key="columnIndex">
+                                <![CDATA[-1]]>
+                            </oga:property>
+                            <oga:property key="__script">
+                                <![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return new String("Singleton OEHS");
+}
+]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1070" y="461"/>
+                    </extensions>
+                </node>
+                <node id="7bf6be0f489844ed" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="column">
+                                <![CDATA[Type]]>
+                            </oga:property>
+                            <oga:property key="columnIndex">
+                                <![CDATA[-1]]>
+                            </oga:property>
+                            <oga:property key="__script">
+                                <![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return new String("Tautosyllabic Onsets");
+}
+]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1082" y="726"/>
+                    </extensions>
+                </node>
+                <node id="16245e6f0e8d4b90" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="column">
+                                <![CDATA[Type]]>
+                            </oga:property>
+                            <oga:property key="columnIndex">
+                                <![CDATA[-1]]>
+                            </oga:property>
+                            <oga:property key="__script">
+                                <![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return new String("Tautosyllabic Codas");
+}
+]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1097" y="932"/>
+                    </extensions>
+                </node>
+                <node id="517cd387b81f49a4" type="class:ca.phon.app.opgraph.nodes.table.AddColumnNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="column">
+                                <![CDATA[Type]]>
+                            </oga:property>
+                            <oga:property key="columnIndex">
+                                <![CDATA[-1]]>
+                            </oga:property>
+                            <oga:property key="__script">
+                                <![CDATA[/*
+params = {label, "Add a new column to the input table using javascript.", "<html><b>Add column to table</b></html>"}
+;
+*/
+
+function getRowValue(table, row) {
+	return new String("Heterosyllabic Cluster");
+}
+]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1095" y="1138"/>
+                    </extensions>
+                </node>
+                <node id="6cb993a4" name="Singleton Onsets" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1325" y="69"/>
+                    </extensions>
+                </node>
+                <node id="be4a20263d994298" name="Singleton Codas" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1339" y="260"/>
+                    </extensions>
+                </node>
+                <node id="e8b8ef088e34a4a" name="Singleton OEHS" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1350" y="473"/>
+                    </extensions>
+                </node>
+                <node id="a2de408b461548e9" name="Singleton OEHS" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1362" y="738"/>
+                    </extensions>
+                </node>
+                <node id="1ea5e215e847490b" name="Singleton OEHS" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1377" y="944"/>
+                    </extensions>
+                </node>
+                <node id="5afad14307824553" name="Singleton OEHS" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="1375" y="1150"/>
+                    </extensions>
+                </node>
                 <link dest="6e605bdc49b346c0" destField="results" source="7febea1731aa4205" sourceField="results"/>
                 <link dest="7febea1731aa4205" destField="sessions" source="3da51847" sourceField="obj"/>
                 <link dest="578e6133" destField="project" source="fd2da9e" sourceField="project"/>
@@ -405,6 +609,18 @@ function setup_params(params) {
                 <link dest="3f2f079556514067" destField="project" source="67f5f47f" sourceField="obj"/>
                 <link dest="3f2f079556514067" destField="sessions" source="3da51847" sourceField="obj"/>
                 <link dest="3f2f079556514067" destField="parameters" source="157702be" sourceField="obj"/>
+                <link dest="6cb993a4" destField="obj" source="6304084b" sourceField="table"/>
+                <link dest="6304084b" destField="table" source="578e6133" sourceField="table"/>
+                <link dest="be4a20263d994298" destField="obj" source="bf0f214fe7234962" sourceField="table"/>
+                <link dest="bf0f214fe7234962" destField="table" source="6e605bdc49b346c0" sourceField="table"/>
+                <link dest="e8b8ef088e34a4a" destField="obj" source="c091c72ba61f492d" sourceField="table"/>
+                <link dest="c091c72ba61f492d" destField="table" source="58154cfe06ec4a62" sourceField="table"/>
+                <link dest="a2de408b461548e9" destField="obj" source="7bf6be0f489844ed" sourceField="table"/>
+                <link dest="7bf6be0f489844ed" destField="table" source="c26fb08a1c4647d8" sourceField="table"/>
+                <link dest="1ea5e215e847490b" destField="obj" source="16245e6f0e8d4b90" sourceField="table"/>
+                <link dest="16245e6f0e8d4b90" destField="table" source="8c35be4c0a584a47" sourceField="table"/>
+                <link dest="5afad14307824553" destField="obj" source="517cd387b81f49a4" sourceField="table"/>
+                <link dest="517cd387b81f49a4" destField="table" source="9a489e2202824ee7" sourceField="table"/>
                 <extensions>
                     <oga:notes>
                         <oga:note color="0x9696ff" height="658" title="Singletons" width="595" x="420" y="10"/>
@@ -417,18 +633,18 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="sessions" ref="3da51847"/>
             <ogcn:published_input field="obj" name="parameters" ref="157702be"/>
             <ogcn:published_input field="obj" name="project" ref="67f5f47f"/>
-            <ogcn:published_output field="table" name="singleton onsets" ref="578e6133"/>
-            <ogcn:published_output field="table" name="singleton codas" ref="6e605bdc49b346c0"/>
-            <ogcn:published_output field="table" name="singleton OEHS" ref="58154cfe06ec4a62"/>
-            <ogcn:published_output field="table" name="tautosyllabic onsets" ref="c26fb08a1c4647d8"/>
-            <ogcn:published_output field="table" name="tautosyllabic codas" ref="8c35be4c0a584a47"/>
-            <ogcn:published_output field="table" name="heterosyllabic" ref="9a489e2202824ee7"/>
+            <ogcn:published_output field="obj" name="obj" ref="6cb993a4"/>
+            <ogcn:published_output field="obj" name="obj1" ref="be4a20263d994298"/>
+            <ogcn:published_output field="obj" name="obj2" ref="e8b8ef088e34a4a"/>
+            <ogcn:published_output field="obj" name="obj3" ref="a2de408b461548e9"/>
+            <ogcn:published_output field="obj" name="obj4" ref="1ea5e215e847490b"/>
+            <ogcn:published_output field="obj" name="obj5" ref="5afad14307824553"/>
             <extensions>
                 <oga:meta x="453" y="59"/>
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="9e8c5e24f7a94a99" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="49661777">
+            <graph id="4c5c7e2d">
                 <node id="47a85e1d278d479b" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -1104,7 +1320,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="5385cf81" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="16662849">
+            <graph id="1843985d">
                 <node id="2e0d09f" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1161,7 +1377,6 @@ function tableOp(context, table) {
                 <node id="8de7aabb1eed4ea5" name="Tautosyllabic Onsets Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[java.util.Map]]>
                             </oga:property>
@@ -1172,7 +1387,6 @@ function tableOp(context, table) {
                 <node id="7039fbda902949f4" name="Tautosyllabic Codas Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[java.util.Map]]>
                             </oga:property>
@@ -1183,7 +1397,6 @@ function tableOp(context, table) {
                 <node id="7e62202e44a54c17" name="Heterosyllabic Clusters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[java.util.Map]]>
                             </oga:property>
@@ -1215,7 +1428,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="bae62edfac2d4d4c" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="6878d394">
+                    <graph id="192f0375">
                         <node id="8cfb76d53cd749bd" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1283,7 +1496,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="205cdcd179aa4be9" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="36868466">
+                    <graph id="63a356a6">
                         <node id="428f623055044426" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1351,7 +1564,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2ef8ef3db0b54d4f" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="57e88b07">
+                    <graph id="6fe398f1">
                         <node id="8c796c639da144c8" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1419,7 +1632,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="c9f37976b859477b" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="560ab807">
+                    <graph id="1fdbd0f2">
                         <node id="4d7a0b61d16a4be2" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1487,7 +1700,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="cb36203d2f764f43" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4cc777e8">
+                    <graph id="2198614f">
                         <node id="32592206136a4771" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1555,7 +1768,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="9a3d292cdf9e45bd" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="7a349612">
+                    <graph id="3d37222f">
                         <node id="b25f7180523c4559" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1628,7 +1841,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="1b4c0091" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="d3dc5bb">
+                    <graph id="8caac3">
                         <node id="25182e61" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1686,22 +1899,7 @@ function run(context) {
                                 <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
-                                    <opqry:sortBy column="Catootje.1_10_10" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_10_24" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_11_09" order="ascending" type="plain"/>
                                     <opqry:sortBy column="Catootje.1_11_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_19" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_01_03" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_14" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_28" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_03_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_11" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_08" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_06_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_07_04" order="ascending" type="plain"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
                                 <oga:meta x="494" y="85"/>
@@ -1763,7 +1961,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="e9a13a36751a48ac" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4744ff24">
+                    <graph id="4bb9dd8d">
                         <node id="70a7d818cbc8444f" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1821,22 +2019,7 @@ Result]]>
                                 <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
-                                    <opqry:sortBy column="Catootje.1_10_10" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_10_24" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_11_09" order="ascending" type="plain"/>
                                     <opqry:sortBy column="Catootje.1_11_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_19" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_01_03" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_14" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_28" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_03_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_11" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_08" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_06_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_07_04" order="ascending" type="plain"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
                                 <oga:meta x="494" y="85"/>
@@ -1898,7 +2081,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7db1c848277d40c2" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="37d5bb3b">
+                    <graph id="70c4d7c5">
                         <node id="31e727cc4575496c" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2033,7 +2216,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="956512938a024d98" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="7482d545">
+                    <graph id="6e6654f2">
                         <node id="fc0e47a27bd14489" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2091,22 +2274,7 @@ Result]]>
                                 <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
-                                    <opqry:sortBy column="Catootje.1_10_10" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_10_24" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_11_09" order="ascending" type="plain"/>
                                     <opqry:sortBy column="Catootje.1_11_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_19" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_01_03" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_14" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_28" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_03_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_11" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_08" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_06_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_07_04" order="ascending" type="plain"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
                                 <oga:meta x="494" y="85"/>
@@ -2168,7 +2336,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="1fe410da68f443db" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4b0ae73">
+                    <graph id="53180449">
                         <node id="905cff77472f449d" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2226,22 +2394,7 @@ Result]]>
                                 <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
-                                    <opqry:sortBy column="Catootje.1_10_10" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_10_24" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_11_09" order="ascending" type="plain"/>
                                     <opqry:sortBy column="Catootje.1_11_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_19" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_01_03" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_14" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_28" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_03_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_11" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_08" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_06_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_07_04" order="ascending" type="plain"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
                                 <oga:meta x="494" y="85"/>
@@ -2303,7 +2456,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="a8a8861fa6b04d5f" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="545c00ef">
+                    <graph id="5ade2e7b">
                         <node id="59f81b1dec554e09" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2361,22 +2514,7 @@ Result]]>
                                 <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
-                                    <opqry:sortBy column="Catootje.1_10_10" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_10_24" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.1_11_09" order="ascending" type="plain"/>
                                     <opqry:sortBy column="Catootje.1_11_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_00_19" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_01_03" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_14" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_02_28" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_03_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_11" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_04_25" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_08" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_05_22" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_06_06" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Catootje.2_07_04" order="ascending" type="plain"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
                                 <oga:meta x="494" y="85"/>
@@ -2501,18 +2639,18 @@ Result]]>
         <link dest="9e8c5e24f7a94a99" destField="parameters" source="1e818ead" sourceField="parameters"/>
         <link dest="47cf155f" destField="reportName" source="9e8c5e24f7a94a99" sourceField="value"/>
         <link dest="5385cf81" destField="reportNode" source="47cf155f" sourceField="root"/>
-        <link dest="8d6a489b95024a23" destField="table" source="18948ace" sourceField="singleton onsets"/>
         <link dest="5385cf81" destField="singleton onsets map" source="8d6a489b95024a23" sourceField="tableMap"/>
-        <link dest="3bac661f82a14049" destField="table" source="18948ace" sourceField="singleton codas"/>
         <link dest="5385cf81" destField="singleton codas map" source="3bac661f82a14049" sourceField="tableMap"/>
-        <link dest="e6ddb759e74347d1" destField="table" source="18948ace" sourceField="singleton OEHS"/>
         <link dest="5385cf81" destField="singleton OEHS map" source="e6ddb759e74347d1" sourceField="tableMap"/>
-        <link dest="5b3c6bfa6a364ef2" destField="table" source="18948ace" sourceField="tautosyllabic onsets"/>
         <link dest="5385cf81" destField="tautosyllabic onsets" source="5b3c6bfa6a364ef2" sourceField="tableMap"/>
-        <link dest="437edc75b9664034" destField="table" source="18948ace" sourceField="tautosyllabic codas"/>
         <link dest="5385cf81" destField="tautosyllabic codas" source="437edc75b9664034" sourceField="tableMap"/>
-        <link dest="78ff12d275b4bb2" destField="table" source="18948ace" sourceField="heterosyllabic"/>
         <link dest="5385cf81" destField="heterosyllabic clusters" source="78ff12d275b4bb2" sourceField="tableMap"/>
+        <link dest="8d6a489b95024a23" destField="table" source="18948ace" sourceField="obj"/>
+        <link dest="3bac661f82a14049" destField="table" source="18948ace" sourceField="obj1"/>
+        <link dest="e6ddb759e74347d1" destField="table" source="18948ace" sourceField="obj2"/>
+        <link dest="5b3c6bfa6a364ef2" destField="table" source="18948ace" sourceField="obj3"/>
+        <link dest="437edc75b9664034" destField="table" source="18948ace" sourceField="obj4"/>
+        <link dest="78ff12d275b4bb2" destField="table" source="18948ace" sourceField="obj5"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Consonants">
