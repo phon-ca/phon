@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/2.2.0b25/">
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_2_2_0b25.sh" newVersion="2.2.0b25" newMediaFileId="linux64" fileSize="117636781" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b1/">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b1.sh" newVersion="3.0.0b1" newMediaFileId="linux64" fileSize="113055187" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -81,8 +107,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win32" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b25.exe" newVersion="2.2.0b25" newMediaFileId="win32" fileSize="222505984" bundledJre="../../../external-resources/jres/jre-8u162-windows-x86" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.exe" newVersion="3.0.0b1" newMediaFileId="win64" fileSize="220475904" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -162,8 +214,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1520" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b25.exe" newVersion="2.2.0b25" newMediaFileId="win32" fileSize="222505984" bundledJre="../../../external-resources/jres/jre-8u162-windows-x86" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.exe" newVersion="3.0.0b1" newMediaFileId="win64" fileSize="220475904" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -243,8 +321,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1527" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b25.exe" newVersion="2.2.0b25" newMediaFileId="win32" fileSize="222505984" bundledJre="../../../external-resources/jres/jre-8u162-windows-x86" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.exe" newVersion="3.0.0b1" newMediaFileId="win64" fileSize="220475904" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -324,8 +428,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b25.exe" newVersion="2.2.0b25" newMediaFileId="win64" fileSize="227205120" bundledJre="../../../external-resources/jres/jre-8u162-windows-amd64" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.zip" newVersion="3.0.0b1" newMediaFileId="win64zip" fileSize="219512835" bundledJre="windows-amd64-9.0.4" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -405,8 +535,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b25.exe" newVersion="2.2.0b25" newMediaFileId="win64" fileSize="227205120" bundledJre="../../../external-resources/jres/jre-8u162-windows-amd64" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b1.deb" newVersion="3.0.0b1" newMediaFileId="linux64deb" fileSize="113237786" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -486,8 +642,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b25.exe" newVersion="2.2.0b25" newMediaFileId="win64" fileSize="227205120" bundledJre="../../../external-resources/jres/jre-8u162-windows-amd64" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b1.dmg" newVersion="3.0.0b1" newMediaFileId="macos" fileSize="208150301" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
@@ -567,332 +749,34 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win32zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows_2_2_0b25.zip" newVersion="2.2.0b25" newMediaFileId="win32zip" fileSize="221674248" bundledJre="../../../external-resources/jres/jre-8u162-windows-x86" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
-
- * Added VOT acoustic data query report.
- * Added speaker name and age to acoustic data reports.
- * Fixed an issue with PPC form.
- * Fixed a freeze on macos when saving data from the report buffer panel.
-
-## Changes from Phon 2.2.0b21
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b1.dmg" newVersion="3.0.0b1" newMediaFileId="macos" fileSize="208150301" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 2.2.0b25
 
 ### General
- * Significantly improved phone alignment algorithm.
- * IPA Map will now be displayed if iconified when requested.
- * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
- * Button to setup global media folders has been removed from the Welcome window.
- * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
- * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
-
-### Queries and Analyses
- * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
- * Updated menus of Query Reports and Analyses
- * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
- * Added Word Level Analysis of Polysyllables to list of specialized analyses.
- * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
- * Added ability to export reports and tables to Excel.
-
-### Session Editor
- * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
- * New sessions now have zero records when created.
- * Fixed issues with segmentation.
- * Default layout for Session editor is now maximized.
- * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
-
-## Changes from Phon 2.2.0b20
-
- * Added global summaries to PCC and Phone Accuracy analyses.
- * Reverted to UTF-8 when saving CSV files in reports.
- * Reduce the size of fonts in reports.
- * Updated French syllabifiers.
- * Workspace and project windows now display file modification times in 24-hour format with timezone.
- * Added phonex matcher '\p' for matching intra-word pauses.
- * Added Ewe transliteration IPA dictionary.
-
-## Changes from Phon 2.2.0b18
-
-### UI
  
- * Added link to project folder in the header of the Project Manager window.
- * Added link to the corpus folder in corpus details of the Project Manager window.
- * Improved editor for corpus description in Project Manager window.
- * Added participant list for selected session in session details of the Project Manager window.
- * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
 
-### Queries and Analyses
+### Queries
 
- * Removed Harmony and Metathesis queries.
- * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
- * Added new table 'All Results', to the 'Word Match' analysis.
- * Added 'Phone Cluster' analysis.
- * Revised PCC analysis and report to be clearer and more concise.
- * Improved text for copy/show buffer buttons in reports.
- * CSV files are now written in UTF-16 format.
-
-### General
-
- * Fixed an issue with French syllabifiers.
- * Added support for TalkBank 2.5.0
-
-## Changes from Phon 2.2.0b17
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
 
 ### Analyses
-
- * Added Phone Clusters analysis
- * Added 'All Results' table for each selected participant in the Word Match analysis
-
-### General
-
- * New installers for Windows
-
-</comment>
-  </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_2_2_0b25.zip" newVersion="2.2.0b25" newMediaFileId="win64zip" fileSize="226270356" bundledJre="../../../external-resources/jres/jre-8u162-windows-amd64" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
-
- * Added VOT acoustic data query report.
- * Added speaker name and age to acoustic data reports.
- * Fixed an issue with PPC form.
- * Fixed a freeze on macos when saving data from the report buffer panel.
-
-## Changes from Phon 2.2.0b21
-
-### General
- * Significantly improved phone alignment algorithm.
- * IPA Map will now be displayed if iconified when requested.
- * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
- * Button to setup global media folders has been removed from the Welcome window.
- * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
- * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
-
-### Queries and Analyses
- * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
- * Updated menus of Query Reports and Analyses
- * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
- * Added Word Level Analysis of Polysyllables to list of specialized analyses.
- * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
- * Added ability to export reports and tables to Excel.
-
-### Session Editor
- * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
- * New sessions now have zero records when created.
- * Fixed issues with segmentation.
- * Default layout for Session editor is now maximized.
- * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
-
-## Changes from Phon 2.2.0b20
-
- * Added global summaries to PCC and Phone Accuracy analyses.
- * Reverted to UTF-8 when saving CSV files in reports.
- * Reduce the size of fonts in reports.
- * Updated French syllabifiers.
- * Workspace and project windows now display file modification times in 24-hour format with timezone.
- * Added phonex matcher '\p' for matching intra-word pauses.
- * Added Ewe transliteration IPA dictionary.
-
-## Changes from Phon 2.2.0b18
-
-### UI
  
- * Added link to project folder in the header of the Project Manager window.
- * Added link to the corpus folder in corpus details of the Project Manager window.
- * Improved editor for corpus description in Project Manager window.
- * Added participant list for selected session in session details of the Project Manager window.
- * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
 
-### Queries and Analyses
-
- * Removed Harmony and Metathesis queries.
- * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
- * Added new table 'All Results', to the 'Word Match' analysis.
- * Added 'Phone Cluster' analysis.
- * Revised PCC analysis and report to be clearer and more concise.
- * Improved text for copy/show buffer buttons in reports.
- * CSV files are now written in UTF-16 format.
-
-### General
-
- * Fixed an issue with French syllabifiers.
- * Added support for TalkBank 2.5.0
-
-## Changes from Phon 2.2.0b17
-
-### Analyses
-
- * Added Phone Clusters analysis
- * Added 'All Results' table for each selected participant in the Word Match analysis
-
-### General
-
- * New installers for Windows
-
-</comment>
-  </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_2_2_0b25.deb" newVersion="2.2.0b25" newMediaFileId="linux64deb" fileSize="116907046" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b24
-
- * Added VOT acoustic data query report.
- * Added speaker name and age to acoustic data reports.
- * Fixed an issue with PPC form.
- * Fixed a freeze on macos when saving data from the report buffer panel.
-
-## Changes from Phon 2.2.0b21
-
-### General
- * Significantly improved phone alignment algorithm.
- * IPA Map will now be displayed if iconified when requested.
- * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
- * Button to setup global media folders has been removed from the Welcome window.
- * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
- * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
-
-### Queries and Analyses
- * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
- * Updated menus of Query Reports and Analyses
- * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
- * Added Word Level Analysis of Polysyllables to list of specialized analyses.
- * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
- * Added ability to export reports and tables to Excel.
-
-### Session Editor
- * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
- * New sessions now have zero records when created.
- * Fixed issues with segmentation.
- * Default layout for Session editor is now maximized.
- * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
-
-## Changes from Phon 2.2.0b20
-
- * Added global summaries to PCC and Phone Accuracy analyses.
- * Reverted to UTF-8 when saving CSV files in reports.
- * Reduce the size of fonts in reports.
- * Updated French syllabifiers.
- * Workspace and project windows now display file modification times in 24-hour format with timezone.
- * Added phonex matcher '\p' for matching intra-word pauses.
- * Added Ewe transliteration IPA dictionary.
-
-## Changes from Phon 2.2.0b18
-
-### UI
- 
- * Added link to project folder in the header of the Project Manager window.
- * Added link to the corpus folder in corpus details of the Project Manager window.
- * Improved editor for corpus description in Project Manager window.
- * Added participant list for selected session in session details of the Project Manager window.
- * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
-
-### Queries and Analyses
-
- * Removed Harmony and Metathesis queries.
- * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
- * Added new table 'All Results', to the 'Word Match' analysis.
- * Added 'Phone Cluster' analysis.
- * Revised PCC analysis and report to be clearer and more concise.
- * Improved text for copy/show buffer buttons in reports.
- * CSV files are now written in UTF-16 format.
-
-### General
-
- * Fixed an issue with French syllabifiers.
- * Added support for TalkBank 2.5.0
-
-## Changes from Phon 2.2.0b17
-
-### Analyses
-
- * Added Phone Clusters analysis
- * Added 'All Results' table for each selected participant in the Word Match analysis
-
-### General
-
- * New installers for Windows
-
-</comment>
-  </entry>
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b25.dmg" newVersion="2.2.0b25" newMediaFileId="macos" fileSize="247939176" bundledJre="../../../external-resources/jres/jre-8u162-macosx-amd64_unpacked" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.2.0b24
-
- * Added VOT acoustic data query report.
- * Added speaker name and age to acoustic data reports.
- * Fixed an issue with PPC form.
- * Fixed a freeze on macos when saving data from the report buffer panel.
-
-## Changes from Phon 2.2.0b21
-
-### General
- * Significantly improved phone alignment algorithm.
- * IPA Map will now be displayed if iconified when requested.
- * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
- * Button to setup global media folders has been removed from the Welcome window.
- * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
- * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
-
-### Queries and Analyses
- * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
- * Updated menus of Query Reports and Analyses
- * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
- * Added Word Level Analysis of Polysyllables to list of specialized analyses.
- * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
- * Added ability to export reports and tables to Excel.
-
-### Session Editor
- * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
- * New sessions now have zero records when created.
- * Fixed issues with segmentation.
- * Default layout for Session editor is now maximized.
- * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
-
-## Changes from Phon 2.2.0b20
-
- * Added global summaries to PCC and Phone Accuracy analyses.
- * Reverted to UTF-8 when saving CSV files in reports.
- * Reduce the size of fonts in reports.
- * Updated French syllabifiers.
- * Workspace and project windows now display file modification times in 24-hour format with timezone.
- * Added phonex matcher '\p' for matching intra-word pauses.
- * Added Ewe transliteration IPA dictionary.
-
-## Changes from Phon 2.2.0b18
-
-### UI
- 
- * Added link to project folder in the header of the Project Manager window.
- * Added link to the corpus folder in corpus details of the Project Manager window.
- * Improved editor for corpus description in Project Manager window.
- * Added participant list for selected session in session details of the Project Manager window.
- * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
-
-### Queries and Analyses
-
- * Removed Harmony and Metathesis queries.
- * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
- * Added new table 'All Results', to the 'Word Match' analysis.
- * Added 'Phone Cluster' analysis.
- * Revised PCC analysis and report to be clearer and more concise.
- * Improved text for copy/show buffer buttons in reports.
- * CSV files are now written in UTF-16 format.
-
-### General
-
- * Fixed an issue with French syllabifiers.
- * Added support for TalkBank 2.5.0
-
-## Changes from Phon 2.2.0b17
-
-### Analyses
-
- * Added Phone Clusters analysis
- * Added 'All Results' table for each selected participant in the Word Match analysis
-
-### General
-
- * New installers for Windows
-
-</comment>
-  </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_2_2_0b25.dmg" newVersion="2.2.0b25" newMediaFileId="macos" fileSize="247939176" bundledJre="../../../external-resources/jres/jre-8u162-macosx-amd64_unpacked" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.2.0b24
+## Changes from Phon 2.2.0b24
 
  * Added VOT acoustic data query report.
  * Added speaker name and age to acoustic data reports.
