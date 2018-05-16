@@ -296,6 +296,8 @@ public class NodeWizard extends WizardFrame {
 	}
 
 	private void init() {
+		globalOptionsPanel = new WizardGlobalOptionsPanel();
+		
 		// turn off parent navigation controls
 		super.btnBack.setVisible(false);
 		super.btnCancel.setVisible(false);
@@ -419,7 +421,6 @@ public class NodeWizard extends WizardFrame {
 		// setup card layout
 		add(stepPanel, BorderLayout.CENTER);
 
-		globalOptionsPanel = new WizardGlobalOptionsPanel();
 	}
 
 	/**
@@ -909,7 +910,9 @@ public class NodeWizard extends WizardFrame {
 				step.setLayout(layout);
 
 				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), new JScrollPane(comp));
-
+				if(globalOptionsPanel.getParent() == null)
+					panel.setRightDecoration(globalOptionsPanel);
+				
 				step.add(panel, BorderLayout.CENTER);
 
 				step.setTitle(ext.getNodeTitle(node));

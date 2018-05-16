@@ -56,6 +56,8 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	private void init() {
 		final GridBagLayout layout = new GridBagLayout();
 		setLayout(layout);
+		setOpaque(false);
+		
 		final GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(2, 2, 2, 2);
 		gbc.anchor = GridBagConstraints.WEST;
