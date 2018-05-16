@@ -126,27 +126,7 @@ public interface Record extends IExtendable {
 	 * @param idx the group to remove
 	 */
 	public void removeGroup(int idx);
-	
-//	/**
-//	 * Merge groups from the given start index
-//	 * to the given end index. This will affect
-//	 * all grouped tiers.
-//	 * 
-//	 * @param startIdx
-//	 * @param endIdx
-//	 */
-//	public void mergeGroups(int startIdx, int endIdx);
-//	
-//	/**
-//	 * Split the specified group at the given orthography word index.
-//	 * To split the group at the beginning use index 0,
-//	 * to split the group at the end use (number of elements in orthography)+1.
-//	 * 
-//	 * @param groupIdx
-//	 * @param wordIdx
-//	 */
-//	public void splitGroup(int groupIdx, int wordIdx);
-	
+		
 	/**
 	 * Add a new group to the end of the record data
 	 * 

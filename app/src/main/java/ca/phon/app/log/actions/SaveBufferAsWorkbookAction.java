@@ -115,6 +115,8 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 				
 				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter(tableMap);
 				writer.writeToWorkbook(workbook, html);
+			} else if(panel.isShowingBuffer()) {
+				// TODO write text data to new sheet
 			}
 			workbook.write();
 			workbook.close();

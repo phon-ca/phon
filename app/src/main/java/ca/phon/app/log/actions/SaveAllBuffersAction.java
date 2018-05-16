@@ -70,11 +70,9 @@ public class SaveAllBuffersAction extends HookableAction {
 		props.setPrompt("Save Buffers to Folder");
 		props.setRunAsync(true);
 		props.setListener( (e) -> {
-			@SuppressWarnings("unchecked")
-			final List<String> selectedFolders = (List<String>)e.getDialogData();
-			if(selectedFolders != null && selectedFolders.size() > 0) {
-				final String folder = selectedFolders.get(0);
-				PhonWorker.getInstance().invokeLater(() -> saveBuffers(folder));
+			final String selectedFolder = (String)e.getDialogData();
+			if(selectedFolder != null) {
+				PhonWorker.getInstance().invokeLater(() -> saveBuffers(selectedFolder));
 			}
 		});
 		NativeDialogs.showSaveDialog(props);

@@ -57,6 +57,8 @@ import ca.phon.app.opgraph.nodes.report.ReportSectionNode;
 import ca.phon.app.opgraph.nodes.report.TableSectionNode;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.formatter.FormatterUtil;
@@ -181,25 +183,41 @@ public class NodeWizard extends WizardFrame {
 		super.setJMenuBar(menuBar);
 
 		final MenuBuilder builder = new MenuBuilder(menuBar);
-		builder.addSeparator("File@1", "saveBuffers");
+		
+		JMenu menu = builder.addMenu(".@File", "Report");
+		
+		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, ExportType.CSV);
+		saveTablesCSVAct.putValue(Action.NAME, "Save tables to folder (CSV)...");
+		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables in CSV format to selected folder - one file per table.");
+		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
+		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, ExportType.EXCEL);
+		saveTablesExcelAct.putValue(Action.NAME, "Save tables to folder (XLS)...");
+		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables in Excel format to selected folder - one file per table.");
+		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+		
 		final SaveAllBuffersAction saveAllAct = new SaveAllBuffersAction(getBufferPanel());
 		saveAllAct.putValue(PhonUIAction.ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAllAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		builder.addItem("File@saveBuffers", saveAllAct);
 
 		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
-		builder.addItem("File@saveBuffers", saveAsExcelAct);
+		saveAsExcelAct.putValue(Action.NAME, "Export Report to Excel (XLS)...");
+		saveAsExcelAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables to a single Excel workbook.");
+		
 
 		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
+		saveAct.putValue(SaveBufferAction.NAME, "Save Report (HTML)...");
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		builder.addItem("File@saveBuffers", saveAct);
-
-		builder.addSeparator("File@"+saveAllAct.getValue(PhonUIAction.NAME), "openProject");
+		
+		menu.add(saveAct);
+		menu.add(saveAsExcelAct); 
+		menu.addSeparator();
+		menu.add(saveTablesCSVAct);
+		menu.add(saveTablesExcelAct);
 	}
 
 	@Override
@@ -697,6 +715,7 @@ public class NodeWizard extends WizardFrame {
 					final WebView webView = reportBufferPanel.getWebView();
 					final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
 					searchForTables(reportTree.getRoot(), tableMap);
+					reportBufferPanel.setUserObject(reportTree);
 					javafx.application.Platform.runLater(() -> {
 						
 						webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
@@ -819,7 +838,7 @@ public class NodeWizard extends WizardFrame {
 		ctx.put("tableMap", tables);
 	}
 	
-	private void searchForTables(ReportTreeNode node, Map<String, DefaultTableDataSource> tableMap) {
+	public void searchForTables(ReportTreeNode node, Map<String, DefaultTableDataSource> tableMap) {
 		if(node instanceof TableNode) {
 			final TableNode tableNode = (TableNode)node;
 			tableMap.put(tableNode.getPath().toString(), (DefaultTableDataSource)tableNode.getTable());
