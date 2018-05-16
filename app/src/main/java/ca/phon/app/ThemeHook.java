@@ -64,7 +64,7 @@ public class ThemeHook implements PhonStartupHook,
 					try {
 						 String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
-								OSInfo.isNix() ? PhonSubstanceLookAndFeel.class.getName() :
+//								OSInfo.isNix() ? PhonSubstanceLookAndFeel.class.getName() :
 										UIManager.getSystemLookAndFeelClassName()
 								);
 						if(uiClassName != null) {
