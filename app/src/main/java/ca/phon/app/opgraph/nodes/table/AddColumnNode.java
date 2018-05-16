@@ -207,7 +207,7 @@ public class AddColumnNode extends TableScriptNode {
 	}
 
 	public int getColumnIndex() {
-		return (columnIndexField != null ? Integer.parseInt(columnIndexField.getText()) : columnIndex);
+		return (columnIndexField != null && columnIndexField.getText().trim().length() > 0 ? Integer.parseInt(columnIndexField.getText()) : columnIndex);
 	}
 
 	public void setColumnIndex(int colIndex) {

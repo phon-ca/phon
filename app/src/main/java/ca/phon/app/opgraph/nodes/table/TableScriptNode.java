@@ -98,6 +98,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 	private PhonScript script;
 
 	// UI
+	private JComponent settingsComponent;
 	private ScriptPanel scriptPanel;
 
 	public TableScriptNode() {
@@ -218,21 +219,26 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 
 	@Override
 	public Component getComponent(GraphDocument document) {
-		if(scriptPanel == null) {
-			scriptPanel = (ScriptPanel)createSettingsPanel();
+		if(settingsComponent == null) {
+			scriptPanel = createScriptPanel();
+			settingsComponent = createSettingsPanel();
 		}
-		return scriptPanel;
+		return settingsComponent;
 	}
 
-	protected JComponent createSettingsPanel() {
+	private ScriptPanel createScriptPanel() {
 		ScriptPanel retVal = new ScriptPanel(getScript());
 		retVal.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
 		
 		if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
 			retVal.setSwapButtonVisible(true);
 		}
-
-		return retVal;
+		
+		return retVal;		
+	}
+	
+	protected JComponent createSettingsPanel() {
+		return scriptPanel;
 	}
 
 	@Override
