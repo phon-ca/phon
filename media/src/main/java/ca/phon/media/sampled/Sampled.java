@@ -183,11 +183,5 @@ public interface Sampled {
 	 * @return raw bytes
 	 */
 	public byte[] getBytes(float startTime, float endTime);
-	
-	/**
-	 * Get 16-bit samples.
-	 * 
-	 */
-	public byte[] get16BitSample(float startTime, float endTime);
-	
+		
 }
