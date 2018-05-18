@@ -311,7 +311,7 @@ public class PCMSampled implements Sampled {
 	protected int byteOffsetForFrame(long frame) {
 		return dataOffset + (int)(frame * getAudioFileFormat().getFormat().getFrameSize());
 	}
-
+	
 	@Override
 	public float getStartTime() {
 		return startTime;
@@ -373,6 +373,31 @@ public class PCMSampled implements Sampled {
 		double[] retVal = new double[2];
 		getWindowExtrema(channel, startTime, endTime, retVal);
 		return retVal;
+	}
+	
+	@Override
+	public byte[] get16BitSample(float startTime, float endTime) {
+		long startIdx = sampleForTime(startTime);
+		long endIdx = sampleForTime(endTime);
+		
+		byte[] bytes = getBytes(startIdx, endIdx);
+		
+		final AudioFormat format = getAudioFileFormat().getFormat();
+		if(format.getEncoding() != Encoding.PCM_SIGNED &&
+				format.getEncoding() != Encoding.PCM_UNSIGNED)
+			throw new IllegalStateException("Unknown format");
+		
+		switch(format.getSampleSizeInBits()) {
+		case 8:
+			break;
+			
+		case 16:
+			break;
+			
+		default:
+			break;
+		}
+		return bytes;
 	}
 	
 	@Override

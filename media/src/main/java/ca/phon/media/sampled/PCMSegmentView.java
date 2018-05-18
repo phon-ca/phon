@@ -349,6 +349,9 @@ public class PCMSegmentView extends JComponent {
 	}
 	
 	public Info getMixerInfo() {
+		if(this.mixerInfo == null) {
+			this.mixerInfo = defaultMixerInfo();
+		}
 		return this.mixerInfo;
 	}
 	
@@ -436,16 +439,70 @@ public class PCMSegmentView extends JComponent {
 				getSampled().isSigned(), false);
 		return format;
 	}
+		
+	private Mixer.Info defaultMixerInfo() {
+		// return first mixer with target lines
+		final Optional<Mixer.Info> mixerInfo = 
+				Arrays.stream(AudioSystem.getMixerInfo())
+					.filter( (info) -> {
+						final Mixer mixer = AudioSystem.getMixer(info);
+						boolean include = false;
+						for(Line.Info lineInfo:mixer.getSourceLineInfo()) {
+							if(lineInfo instanceof DataLine.Info) {
+								final DataLine.Info dataLineInfo = (DataLine.Info)lineInfo;
+								include = dataLineInfo.getFormats().length > 0;
+							}
+						}
+						return include;
+					} )
+					.findFirst();
+		return mixerInfo.get();
+	}
+	
+	private boolean canPlayAudioFormat(Mixer.Info mixerInfo, AudioFormat audioFormat) {
+		final Mixer mixer = AudioSystem.getMixer(mixerInfo);
+		boolean canPlay = false;
+		if(mixer != null) {
+			for(Line.Info lineInfo:mixer.getSourceLineInfo()) {
+				if(lineInfo instanceof DataLine.Info) {
+					final DataLine.Info dataLineInfo = (DataLine.Info)lineInfo;
+					canPlay |= dataLineInfo.isFormatSupported(audioFormat);
+				}
+			}
+			
+		}
+		return canPlay;
+	}
 	
 	private void playSection(final float startTime, float length) {
 		if(isPlaying()) return;
 		
-		final AudioFormat format = getAudioFormat();
+		AudioFormat format = getAudioFormat();
 		final byte[] audioData = getSampled().getBytes(startTime, startTime+length);
+		AudioInputStream ais = new AudioInputStream(new ByteArrayInputStream(audioData), format, audioData.length);
+		
+		final boolean canPlayFormat = canPlayAudioFormat(getMixerInfo(), format);
+		if(!canPlayFormat) {
+			// playback 16-bit audio
+			final AudioFormat playbackFormat = new AudioFormat(
+					format.getEncoding(),
+					format.getSampleRate(),
+					16,
+					format.getChannels(),
+					format.getChannels() * 2,
+					format.getFrameRate(),
+					format.isBigEndian());
+			
+			if(AudioSystem.isConversionSupported(format, playbackFormat)) {
+				AudioInputStream convertedAis = AudioSystem.getAudioInputStream(playbackFormat, ais);
+				ais = convertedAis;
+			}
+		}
+		
 		// playback audio using Clip
 		try {
 			final Clip audioClip = (getMixerInfo() == null ? AudioSystem.getClip() : AudioSystem.getClip(getMixerInfo()));
-			audioClip.open(format, audioData, 0, audioData.length);
+			audioClip.open(ais);
 			final LineListener lineListener = new LineListener() {
 				
 				@Override
@@ -470,8 +527,13 @@ public class PCMSegmentView extends JComponent {
 			else
 				audioClip.start();
 			
-		} catch (LineUnavailableException e) {
+		} catch (IOException | LineUnavailableException e) {
 			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} finally {
+			try {
+				ais.close();
+			} catch (IOException e) {
+			}
 		}
 	}
 	
