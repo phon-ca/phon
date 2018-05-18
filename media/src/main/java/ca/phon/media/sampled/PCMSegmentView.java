@@ -349,10 +349,7 @@ public class PCMSegmentView extends JComponent {
 	}
 	
 	public Info getMixerInfo() {
-		if(this.mixerInfo == null) {
-			return AudioSystem.getMixerInfo()[0];
-		} else 
-			return this.mixerInfo;
+		return this.mixerInfo;
 	}
 	
 	public void setMixerInfo(Info info) {
@@ -447,7 +444,7 @@ public class PCMSegmentView extends JComponent {
 		final byte[] audioData = getSampled().getBytes(startTime, startTime+length);
 		// playback audio using Clip
 		try {
-			final Clip audioClip = AudioSystem.getClip(getMixerInfo());
+			final Clip audioClip = (getMixerInfo() == null ? AudioSystem.getClip() : AudioSystem.getClip(getMixerInfo()));
 			audioClip.open(format, audioData, 0, audioData.length);
 			final LineListener lineListener = new LineListener() {
 				
