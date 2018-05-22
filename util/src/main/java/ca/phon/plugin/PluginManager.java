@@ -42,6 +42,27 @@ public class PluginManager extends URLClassLoader {
 	 */
 	private static PluginManager _instance;
 	
+	private List<ClassLoader> classloaders = new ArrayList<>();
+	
+	private ClassLoader selfProvider = new ClassLoader() {
+
+		@Override
+		public URL getResource(String name) {
+			return PluginManager.this.getResource(name, false);
+		}
+
+		@Override
+		public Enumeration<URL> getResources(String name) throws IOException {
+			return PluginManager.this.getResources(name, false);
+		}
+
+		@Override
+		public InputStream getResourceAsStream(String name) {
+			return PluginManager.this.getResourceAsStream(name, false);
+		}
+		
+	};
+	
 	/**
 	 * Get singleton instance
 	 */
@@ -56,6 +77,17 @@ public class PluginManager extends URLClassLoader {
 	 */
 	private PluginManager(URL[] urls) {
 		super(urls);
+		classloaders.add(this);
+		if(getClass().getClassLoader() != ClassLoader.getSystemClassLoader())
+			classloaders.add(getClass().getClassLoader());
+	}
+	
+	public void addClassLoader(ClassLoader classloader) {
+		classloaders.add(classloader);
+	}
+	
+	public void removeClassLoader(ClassLoader classloader) {
+		classloaders.remove(classloader);
 	}
 	
 	/**
@@ -102,6 +134,60 @@ public class PluginManager extends URLClassLoader {
 		}
 	}
 	
+	@Override
+	public URL getResource(String name) {
+		return getResource(name, true);
+	}
+	
+	public URL getResource(String name, boolean deep) {
+		URL retVal = null;
+		if(!deep) {
+			retVal = super.getResource(name);
+		} else {
+			for(ClassLoader cl:classloaders) {
+				retVal = (cl == this ? super.getResource(name) : cl.getResource(name));
+				if(retVal != null) break;
+			}
+		}
+		return retVal;
+	}
+
+	@Override
+	public Enumeration<URL> getResources(String name) throws IOException {
+		return getResources(name, true);
+	}
+	
+	public Enumeration<URL> getResources(String name, boolean deep) throws IOException {
+		List<URL> urls = new ArrayList<>();
+		if(!deep) {
+			return super.getResources(name);
+		} else {
+			for(ClassLoader cl:classloaders) {
+				Enumeration<URL> e = (cl == this ? super.getResources(name) : cl.getResources(name));
+				while(e.hasMoreElements()) urls.add(e.nextElement());
+			}
+		}
+		return Collections.enumeration(urls);
+	}
+
+	@Override
+	public InputStream getResourceAsStream(String name) {
+		return getResourceAsStream(name, true);
+	}
+	
+	public InputStream getResourceAsStream(String name, boolean deep) {
+		InputStream retVal = null;
+		if(!deep) {
+			retVal = super.getResourceAsStream(name);
+		} else {
+			for(ClassLoader cl:classloaders) {
+				retVal = (cl == this ? super.getResourceAsStream(name) : cl.getResourceAsStream(name));
+				if(retVal != null) break;
+			}
+		}
+		return retVal;
+	}
+
 	/**
 	 * Get entry point names
 	 * 
@@ -110,20 +196,22 @@ public class PluginManager extends URLClassLoader {
 	public List<String> getEntryPoints() {
 		List<String> epIds = new ArrayList<String>();
 		
-		ServiceLoader<IPluginEntryPoint> entryPointProvider = 
-			ServiceLoader.load(IPluginEntryPoint.class, this);
-		Iterator<IPluginEntryPoint> epItr = entryPointProvider.iterator();
-		while(epItr.hasNext()) {
-			IPluginEntryPoint pluginEp = epItr.next();
-			
-			try {
-				checkVersionInfo(pluginEp.getClass());
-				String epId = pluginEp.getName();
+		for(ClassLoader cl:classloaders) {
+			ServiceLoader<IPluginEntryPoint> entryPointProvider = 
+				ServiceLoader.load(IPluginEntryPoint.class, (cl == this ? selfProvider : cl));
+			Iterator<IPluginEntryPoint> epItr = entryPointProvider.iterator();
+			while(epItr.hasNext()) {
+				IPluginEntryPoint pluginEp = epItr.next();
 				
-				epIds.add(epId);
-			} catch (PluginException e) {
-				LOGGER.warning(e.getMessage());
-				e.printStackTrace();
+				try {
+					checkVersionInfo(pluginEp.getClass());
+					String epId = pluginEp.getName();
+					
+					epIds.add(epId);
+				} catch (PluginException e) {
+					LOGGER.warning(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -143,69 +231,31 @@ public class PluginManager extends URLClassLoader {
 	public IPluginEntryPoint getEntryPoint(String name) {
 		IPluginEntryPoint retVal = null;
 		
-		ServiceLoader<IPluginEntryPoint> entryPointProvider = 
-			ServiceLoader.load(IPluginEntryPoint.class, this);
-		Iterator<IPluginEntryPoint> epItr = entryPointProvider.iterator();
-		while(epItr.hasNext()) {
-			IPluginEntryPoint pluginEp = epItr.next();
-			
-			try {
-				checkVersionInfo(pluginEp.getClass());
-				String epId = pluginEp.getName();
+		for(ClassLoader cl:classloaders) {
+			ServiceLoader<IPluginEntryPoint> entryPointProvider = 
+				ServiceLoader.load(IPluginEntryPoint.class, (cl == this ? selfProvider : cl));
+			Iterator<IPluginEntryPoint> epItr = entryPointProvider.iterator();
+			while(epItr.hasNext()) {
+				IPluginEntryPoint pluginEp = epItr.next();
 				
-				if(epId.equals(name)) {
-					retVal = pluginEp;
-					break;
+				try {
+					checkVersionInfo(pluginEp.getClass());
+					String epId = pluginEp.getName();
+					
+					if(epId.equals(name)) {
+						retVal = pluginEp;
+						break;
+					}
+				} catch (PluginException e) {
+					LOGGER.warning(e.getMessage());
+					e.printStackTrace();
 				}
-			} catch (PluginException e) {
-				LOGGER.warning(e.getMessage());
-				e.printStackTrace();
 			}
 		}
 		
 		return retVal;
 	}
-	
-//	/**
-//	 * Get static arguments to an entry point as
-//	 * defined in the plugin's xml file.
-//	 * 
-//	 * @param name of the entry point
-//	 * @return map of static arguments
-//	 */
-//	public Map<String, Object> getEntryPointStaticArgs(String name) {
-//		Map<String, Object> retVal = 
-//			new HashMap<String, Object>();
-//		
-//		for(PluginInfoType pinfo:pluginData) {
-//			for(EntryPointType entryPt:pinfo.getPluginep()) {
-//				if(entryPt.getId().equalsIgnoreCase(name)) {
-//					
-//					for(ArgType arg:entryPt.getBoolOrIntOrString()) {
-//						if(arg instanceof BooleanArgType) {
-//							BooleanArgType barg = (BooleanArgType)arg;
-//							
-//							retVal.put(barg.getName(), new Boolean(barg.isValue()));
-//						} else if(arg instanceof IntArgType) {
-//							IntArgType iarg = (IntArgType)arg;
-//							
-//							retVal.put(iarg.getName(), new Integer(iarg.getValue()));
-//						} else if(arg instanceof StringArgType) {
-//							StringArgType sarg = (StringArgType)arg;
-//							
-//							retVal.put(sarg.getName(), sarg.getValue());
-//						} else {
-//							PhonLogger.warning(getClass(), "Invalid plugin argument type: " + arg.getName());
-//						}
-//					}
-//					
-//				}
-//			}
-//		}
-//		
-//		return retVal;
-//	}
-	
+		
 	/**
 	 * Get initilized extension points for the given class.
 	 * This method should only be used when there is a default
@@ -250,26 +300,27 @@ public class PluginManager extends URLClassLoader {
 		// load extension point from specific files - preferred method!
 		retVal.addAll(loadExtensionPoints(clazz));
 		
-		// deprecated method, supported while things get converted in plug-ins
-		ServiceLoader<IPluginExtensionPoint> extPtProvider = 
-			ServiceLoader.load(IPluginExtensionPoint.class, this);
-		Iterator<IPluginExtensionPoint> extPtItr = 
-			extPtProvider.iterator();
-		
-		while(extPtItr.hasNext()) {
-			IPluginExtensionPoint<?> extPt = 
-				(IPluginExtensionPoint<?>)extPtItr.next();
+		for(ClassLoader cl:classloaders) {
+			// deprecated method, supported while things get converted in plug-ins
+			ServiceLoader<IPluginExtensionPoint> extPtProvider = 
+				ServiceLoader.load(IPluginExtensionPoint.class, (cl == this ? selfProvider : cl));
+			Iterator<IPluginExtensionPoint> extPtItr = extPtProvider.iterator();
 			
-			try {
-				checkVersionInfo(extPt.getClass());
-				Class<?> extPtClass = extPt.getExtensionType();
+			while(extPtItr.hasNext()) {
+				IPluginExtensionPoint<?> extPt = 
+					(IPluginExtensionPoint<?>)extPtItr.next();
 				
-				if(extPtClass == clazz) {
-					retVal.add((IPluginExtensionPoint<T>)extPt);
+				try {
+					checkVersionInfo(extPt.getClass());
+					Class<?> extPtClass = extPt.getExtensionType();
+					
+					if(extPtClass == clazz) {
+						retVal.add((IPluginExtensionPoint<T>)extPt);
+					}
+				} catch (PluginException e) {
+					LOGGER.warning(e.getMessage());
+					e.printStackTrace();
 				}
-			} catch (PluginException e) {
-				LOGGER.warning(e.getMessage());
-				e.printStackTrace();
 			}
 		}
 		
@@ -292,45 +343,47 @@ public class PluginManager extends URLClassLoader {
 		
 		final String extPtFile = "META-INF/extpts/" + clazz.getName();
 		
-		try {
-			final Enumeration<URL> urlList = getResources(extPtFile);
-			while(urlList.hasMoreElements()) {
-				final URL url = urlList.nextElement();
-				final InputStream in = url.openStream();
-				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-				String line = null;
-				while((line = reader.readLine()) != null) {
-					if(line.startsWith("#") || line.trim().length() == 0) continue;
-					
-					final String extPtName = line.trim();
-					try {
-						final Class<?> extPtClazz = Class.forName(extPtName, true, this);
+		for(ClassLoader cl:classloaders) {
+			try {
+				final Enumeration<URL> urlList = (cl == this ? super.getResources(extPtFile) : cl.getResources(extPtFile));
+				while(urlList.hasMoreElements()) {
+					final URL url = urlList.nextElement();
+					final InputStream in = url.openStream();
+					final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+					String line = null;
+					while((line = reader.readLine()) != null) {
+						if(line.startsWith("#") || line.trim().length() == 0) continue;
 						
-						// make sure we have an extension point
-						if(IPluginExtensionPoint.class.isAssignableFrom(extPtClazz)) {
-							try {
-								final IPluginExtensionPoint<?> extPt = 
-										IPluginExtensionPoint.class.cast(extPtClazz.newInstance());
-								
-								if(extPt.getExtensionType().isAssignableFrom(clazz)) {
-									retVal.add((IPluginExtensionPoint<T>)extPt);
+						final String extPtName = line.trim();
+						try {
+							final Class<?> extPtClazz = Class.forName(extPtName, true, cl);
+							
+							// make sure we have an extension point
+							if(IPluginExtensionPoint.class.isAssignableFrom(extPtClazz)) {
+								try {
+									final IPluginExtensionPoint<?> extPt = 
+											IPluginExtensionPoint.class.cast(extPtClazz.newInstance());
+									
+									if(extPt.getExtensionType().isAssignableFrom(clazz)) {
+										retVal.add((IPluginExtensionPoint<T>)extPt);
+									}
+								} catch (InstantiationException e) {
+									LOGGER.log(Level.SEVERE,
+											e.getLocalizedMessage(), e);
+								} catch (IllegalAccessException e) {
+									LOGGER.log(Level.SEVERE,
+											e.getLocalizedMessage(), e);
 								}
-							} catch (InstantiationException e) {
-								LOGGER.log(Level.SEVERE,
-										e.getLocalizedMessage(), e);
-							} catch (IllegalAccessException e) {
-								LOGGER.log(Level.SEVERE,
-										e.getLocalizedMessage(), e);
 							}
+						} catch (ClassNotFoundException e) {
+							LOGGER.log(Level.SEVERE,
+									e.getLocalizedMessage(), e);
 						}
-					} catch (ClassNotFoundException e) {
-						LOGGER.log(Level.SEVERE,
-								e.getLocalizedMessage(), e);
 					}
 				}
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;
