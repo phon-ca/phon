@@ -60,14 +60,17 @@ function tableOp(context, table) {
 	trueTable = new DefaultTableDataSource();
 	falseTable = new DefaultTableDataSource();
 	
+	context.put("trueTable", trueTable);
+	context.put("falseTable", falseTable);
+	
+	if(table == null) return;
+	
 	for(c = 0; c < table.columnCount; c++) {
 	    var colTitle = table.getColumnTitle(c);
 	    trueTable.setColumnTitle(c, colTitle);
 	    falseTable.setColumnTitle(c, colTitle);
 	}
 
-	context.put("trueTable", trueTable);
-	context.put("falseTable", falseTable);
 	
 	// find table column index
 	col = table.getColumnIndex(columnName);

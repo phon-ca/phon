@@ -67,6 +67,8 @@ function tableOp(context, table) {
 	context.put("tableMap", tableMap);
 	context.put("keySet", new java.util.HashSet());
 	
+	if(table == null) return;
+	
 	// find table column index
 	col = table.getColumnIndex(columnName);
 	
