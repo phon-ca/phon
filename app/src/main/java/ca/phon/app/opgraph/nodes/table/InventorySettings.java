@@ -21,17 +21,17 @@ package ca.phon.app.opgraph.nodes.table;
 import java.util.*;
 
 
-public class InventorySettings {
+public class InventorySettings implements Cloneable {
 	
 	private boolean configureAutomatically = true;
 	
-	private boolean caseSensitive = false;
+	private boolean caseSensitive = true;
 	
 	private boolean ignoreDiacritics = false;
 	
 	private boolean autoGrouping = true;
 	
-	private String autoGroupingColumn = "Age";
+	private String autoGroupingColumn = "Session";
 	
 	private boolean includeMetadata = true;
 	
@@ -173,6 +173,30 @@ public class InventorySettings {
 			this.ignoreDiacritics = ignoreDiacritics;
 		}
 		
+	}
+	
+	@Override
+	public Object clone() {
+		InventorySettings retVal = new InventorySettings();
+		
+		if(getGroupBy() != null) {
+			ColumnInfo groupBy = new ColumnInfo();
+			groupBy.caseSensitive = getGroupBy().caseSensitive;
+			groupBy.ignoreDiacritics = getGroupBy().ignoreDiacritics;
+			groupBy.name = getGroupBy().name;
+			
+			retVal.setGroupBy(groupBy);
+		}
+		
+		for(ColumnInfo columnInfo:getColumns()) {
+			ColumnInfo colInfo = new ColumnInfo();
+			colInfo.caseSensitive = columnInfo.caseSensitive;
+			colInfo.ignoreDiacritics = columnInfo.ignoreDiacritics;
+			colInfo.name = columnInfo.name;
+			retVal.addColumn(colInfo);
+		}
+		
+		return retVal;
 	}
 	
 }

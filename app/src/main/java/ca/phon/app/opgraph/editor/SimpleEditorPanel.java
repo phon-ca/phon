@@ -80,6 +80,7 @@ import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTree;
+import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
@@ -167,6 +168,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JTree documentTree;
 	
 	private TitledPanel listTitledPanel;
+	private JPanel listTopPanel;
 	private JXTable nodeTable;
 	private List<MacroNode> macroNodes;
 	
@@ -351,7 +353,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		nodePanel = new JPanel(cardLayout);
 		
 		final ImageIcon settingsIcn = IconManager.getInstance().getIcon("actions/settings-white", IconSize.SMALL);
-		settingsTitledPanel = new TitledPanel("Settings", nodePanel);
+		settingsTitledPanel = new TitledPanel("Settings");
+		settingsTitledPanel.getContentContainer().setLayout(new BorderLayout());
+		settingsTitledPanel.getContentContainer().add(nodePanel, BorderLayout.CENTER);
 		settingsTitledPanel.setLeftDecoration(new JLabel(settingsIcn));
 		nodePanel.add(new JPanel(), "none");
 		
@@ -380,10 +384,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		final String listTitle = StringUtils.capitalize(getModel().getNoun().getObj1()) + " List";
 		
+		listTopPanel = new JPanel(new VerticalLayout(0));
+		listTopPanel.add(toolbar);
+		
 		leftTitledPanel = new TitledPanel(StringUtils.capitalize(getModel().getNoun().getObj2()), documentScroller);
 		listTitledPanel = new TitledPanel(listTitle);
 		listTitledPanel.getContentContainer().setLayout(new BorderLayout());
-		listTitledPanel.getContentContainer().add(toolbar, BorderLayout.NORTH);
+		listTitledPanel.getContentContainer().add(listTopPanel, BorderLayout.NORTH);
 		listTitledPanel.getContentContainer().add(nodeScroller, BorderLayout.CENTER);
 		listTitledPanel.setLeftDecoration(busyLabel);
 		
@@ -422,6 +429,22 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	public JToolBar getToolbar() {
 		return this.toolbar;
+	}
+	
+	public TitledPanel getDocumentsPanel() {
+		return this.leftTitledPanel;
+	}
+	
+	public TitledPanel getListPanel() {
+		return this.listTitledPanel;
+	}
+	
+	public JPanel getListTopPanel() {
+		return this.listTopPanel;
+	}
+	
+	public TitledPanel getSettingsPanel() {
+		return this.settingsTitledPanel;
 	}
 	
 	public void addSelectedDocuments(JTree tree) {
@@ -510,7 +533,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				new NodeWizardOptionalsEdit(getGraph(), getGraph().getExtension(WizardExtension.class), node, true, true);
 		model.getDocument().getUndoSupport().postEdit(optEdit);
 		
-
 		updateReportTitle(node);
 
 		if(idx >= 0 && idx < macroNodes.size())
@@ -524,7 +546,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		int rowIdx = (idx >= 0 ? idx : macroNodes.size()-1);
 		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(rowIdx, rowIdx);
-	//	nodeTable.setRowSelectionInterval(rowIdx, rowIdx);
 	}
 	
 	public void addQuery(QueryScript queryScript, int idx) {

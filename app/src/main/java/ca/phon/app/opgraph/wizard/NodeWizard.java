@@ -152,7 +152,7 @@ public class NodeWizard extends WizardFrame {
 	protected WizardGlobalOptionsPanel globalOptionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
-
+	public final static String INVENTORY_GROUPING_GLOBAL_OPTION = "__inventoryGroupingColumn";
 
 	private final static String WIZARD_LIST = "_wizard_list_";
 	private final static String SETTINGS = "_settings_";
@@ -881,6 +881,8 @@ public class NodeWizard extends WizardFrame {
 			ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, globalOptionsPanel.isCaseSensitive());
 		if(globalOptionsPanel.isUseGlobalIgnoreDiacritics())
 			ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.isIgnoreDiacritics());
+		if(globalOptionsPanel.isUseInventoryGrouping())
+			ctx.put(INVENTORY_GROUPING_GLOBAL_OPTION, globalOptionsPanel.getInventoryGrouping());
 
 		for(WizardGlobalOption pluginGlobalOption:globalOptionsPanel.getPluginGlobalOptions()) {
 			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());

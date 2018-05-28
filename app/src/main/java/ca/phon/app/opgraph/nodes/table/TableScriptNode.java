@@ -350,12 +350,14 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 				}
 
 				if(paramId.endsWith("ignoreDiacritics")
-						&& context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+						&& context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)
+						&& !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 					sp.setValue(paramId, context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
 				}
 
 				if(paramId.endsWith("caseSensitive")
-						&& context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+						&& context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)
+						&& !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
 					sp.setValue(paramId, context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
 				}
 

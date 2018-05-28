@@ -48,8 +48,8 @@ public class SortNode extends TableOpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 
-	private void automaticConfiguration(OpContext context, DefaultTableDataSource table) {
-		getSortSettings().clear();
+	private void automaticConfiguration(SortNodeSettings settings, OpContext context, DefaultTableDataSource table) {
+		settings.clear();
 		
 		for(int col = 0; col < table.getColumnCount(); col++) {
 			String colName = table.getColumnTitle(col);
@@ -60,12 +60,8 @@ public class SortNode extends TableOpNode implements NodeSettings {
 				break;
 			}
 			
-			getSortSettings().addColumn(colName, (colType == IPATranscript.class ? SortType.IPA : SortType.PLAIN), 
-					getSortSettings().getAutoSortOrder());
-		}
-		
-		if(nodeSettingsPanel != null) {
-			SwingUtilities.invokeLater( nodeSettingsPanel::updateManualConfig );
+			settings.addColumn(colName, (colType == IPATranscript.class ? SortType.IPA : SortType.PLAIN), 
+					settings.getAutoSortOrder());
 		}
 	}
 	
@@ -73,12 +69,13 @@ public class SortNode extends TableOpNode implements NodeSettings {
 	public void operate(OpContext context) throws ProcessingException {
 		final DefaultTableDataSource table = (DefaultTableDataSource)context.get(tableInput);
 		
-		if(getSortSettings().isConfigureAutomatically()) {
-			automaticConfiguration(context, table);
+		final SortNodeSettings settings = (SortNodeSettings)getSortSettings().clone();
+		if(settings.isConfigureAutomatically()) {
+			automaticConfiguration(settings, context, table);
 		}
 
 		List<Object[]> rowData = table.getRowData();
-		Collections.sort(rowData, new RowComparator(table));
+		Collections.sort(rowData, new RowComparator(settings, table));
 
 		context.put(tableOutput, table);
 	}
@@ -109,7 +106,10 @@ public class SortNode extends TableOpNode implements NodeSettings {
 
 		private TableDataSource table;
 
-		public RowComparator(TableDataSource table) {
+		private SortNodeSettings settings;
+		
+		public RowComparator(SortNodeSettings settings, TableDataSource table) {
+			this.settings = settings;
 			this.table = table;
 		}
 
@@ -117,7 +117,7 @@ public class SortNode extends TableOpNode implements NodeSettings {
 		public int compare(Object[] row1, Object[] row2) {
 			int retVal = 0;
 
-			for(SortColumn sc:getSortSettings().getSorting()) {
+			for(SortColumn sc:settings.getSorting()) {
 				final int colIdx = getColumnIndex(table, sc.getColumn());
 				if(colIdx < 0) continue;
 				final Object v1 = row1[colIdx];

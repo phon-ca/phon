@@ -66,7 +66,7 @@ public class WizardSettingsPanel extends JPanel {
 	private JPanel advancedSettingsContentPanel;
 	
 	private JPanel optionalsPanel;
-	private final static String OPTIONALS_PROP = WizardSettingsPanel.class.getName() + "optinalsMessage";
+	private final static String OPTIONALS_PROP = WizardSettingsPanel.class.getName() + ".optionalsMessage";
 	private HidablePanel optionalsMessagePanel;
 	private OpGraphCheckBoxTree optionalsTree;
 	private CardLayout optionalsCardLayout;

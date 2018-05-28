@@ -41,9 +41,14 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	private final static String IGNORE_DIACRITICS_PROP =
 			WizardGlobalOptionsPanel.class.getName() + ".ignoreDiacritics";
 	
+	private final static String INVENTORY_GROUPING_PROP = 
+			WizardGlobalOptionsPanel.class.getName() + ".inventoryGrouping";
+	
 	private JComboBox<String> caseSensitiveBox;
 	
 	private JComboBox<String> ignoreDiacriticsBox;
+	
+	private JComboBox<String> inventoryGroupingBox;
 	
 	private List<WizardGlobalOption> pluginGlobalOptions = new ArrayList<>();
 	
@@ -59,7 +64,6 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		setOpaque(false);
 		
 		final GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(2, 2, 2, 2);
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridheight = 1;
@@ -98,6 +102,19 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		ignoreDiacriticsBox.setSelectedItem(PrefHelper.get(IGNORE_DIACRITICS_PROP, comboBoxItems[0]));
 		add(ignoreDiacriticsBox, gbc);
 		
+		++gbc.gridx;
+		JLabel grpingLbl = new JLabel("Inventory grouping:");
+		grpingLbl.putClientProperty("JComponent.sizeVariant", "small");
+		add(grpingLbl, gbc);
+		
+		final String groupingOptions[] = new String[] { "default", "Session", "Age" };
+		++gbc.gridx;
+		inventoryGroupingBox = new JComboBox<>(groupingOptions);
+		inventoryGroupingBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
+		inventoryGroupingBox.putClientProperty("JComponent.sizeVariant", "small");
+		inventoryGroupingBox.setSelectedItem(PrefHelper.get(INVENTORY_GROUPING_PROP, groupingOptions[0]));
+		add(inventoryGroupingBox, gbc);
+		
 		// add global options
 		final List<IPluginExtensionPoint<WizardGlobalOption>> pluginOptions =
 				PluginManager.getInstance().getExtensionPoints(WizardGlobalOption.class);
@@ -128,6 +145,14 @@ public class WizardGlobalOptionsPanel extends JPanel {
 
 	public boolean isIgnoreDiacritics() {
 		return this.ignoreDiacriticsBox.getSelectedIndex() == 1;
+	}
+	
+	public boolean isUseInventoryGrouping() {
+		return this.inventoryGroupingBox.getSelectedIndex() > 0;
+	}
+	
+	public String getInventoryGrouping() {
+		return inventoryGroupingBox.getSelectedItem().toString();
 	}
 	
 	public List<WizardGlobalOption> getPluginGlobalOptions() {

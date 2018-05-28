@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -288,9 +289,7 @@ public class QueryAndReportWizard extends NodeWizard {
 				(graph, project) -> new ReportRunner(graph, getCurrentQueryProject(), getCurrentQueryId()) );
 		// toolbar customizations
 		reportEditor.getRunButton().setVisible(false);
-		reportEditor.getToolbar().add(super.globalOptionsPanel);
-		
-//		TitledPanel configPane = new TitledPanel("Report Composer", reportEditor);
+		reportEditor.getListTopPanel().add(super.globalOptionsPanel);
 		
 		retVal.setLayout(new BorderLayout());
 		retVal.add(reportEditor, BorderLayout.CENTER);

@@ -196,12 +196,14 @@ public class QueryNode extends OpNode implements NodeSettings {
 				}
 
 				if(paramId.endsWith("ignoreDiacritics")
-						&& opCtx.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)) {
+						&& opCtx.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)
+						&& !opCtx.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 					sp.setValue(paramId, opCtx.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
 				}
 
 				if(paramId.endsWith("caseSensitive")
-						&& opCtx.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)) {
+						&& opCtx.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)
+						&& !opCtx.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
 					sp.setValue(paramId, opCtx.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));
 				}
 

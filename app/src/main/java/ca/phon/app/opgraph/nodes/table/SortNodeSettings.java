@@ -23,9 +23,11 @@ import java.util.*;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
+import org.apache.derby.catalog.GetProcedureColumns;
+
 import ca.phon.ui.decorations.TitledPanel;
 
-public class SortNodeSettings {
+public class SortNodeSettings implements Cloneable {
 
 	public static enum SortOrder {
 		ASCENDING,
@@ -151,6 +153,25 @@ public class SortNodeSettings {
 			this.featureOrder = order;
 		}
 		
+	}
+	
+	@Override
+	public Object clone() {
+		final SortNodeSettings settings = new SortNodeSettings();
+		
+		settings.setAutoSortOrder(getAutoSortOrder());
+		settings.setConfigureAutomatically(isConfigureAutomatically());
+		
+		for(SortColumn sc:sorting) {
+			SortColumn col = new SortColumn();
+			col.column = sc.column;
+			col.featureOrder = sc.featureOrder;
+			col.order = sc.order;
+			col.type = sc.type;
+			settings.sorting.add(col);
+		}
+		
+		return settings;
 	}
 
 }
