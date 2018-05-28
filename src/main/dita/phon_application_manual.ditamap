@@ -228,9 +228,9 @@
         </topichead>
     </chapter>
     <chapter navtitle="Queries" audience="intermediate">
-        <topicref href="query/tasks/QueryProject.xml"/>
-        <topicref href="query/tasks/SaveQueryScript.xml"/>
-        <topicref href="query/tasks/OpenQueryScript.xml"/>
+        <topicref href="query/query-data_tiers.dita" format="dita"/>
+        <topicref href="query/query_phones.dita" format="dita"/>
+        <topicref href="query/query_segmental_relations.md" format="markdown"/>
         <topichead navtitle="Common Query Options">
             <topicref href="query/tasks/GroupFilter.xml"/>
             <topicref href="query/tasks/AlignedGroupFilter.xml"/>
@@ -239,9 +239,6 @@
             <topicref href="query/tasks/SyllableFilter.xml"/>
             <topicref href="query/tasks/ParticipantFilter.xml"/>
         </topichead>
-        <topicref href="query/query-data_tiers.dita" format="dita"/>
-        <topicref href="query/query_phones.dita" format="dita"/>
-        <topicref href="query/query_segmental_relations.md" format="markdown"/>
         <topicref href="query/tasks/ViewResultSet.xml">
             <topicref href="query/tasks/SaveTableAsCSV.xml"/>
             <topicref href="query/tasks/EditTableColumns.xml"/>
@@ -254,27 +251,27 @@
             <topicref href="history/tasks/EditQueryDetails.xml"/>
             <topicref href="history/concepts/AboutStarredQueries.xml"/>
         </topicref>
-    </chapter>
-    <chapter navtitle="Query Reports" audience="intermediate">
-        <topicref href="report/AboutQueryReports.md" format="markdown"/>
-        <topicref href="report/report-aggregate_IPA.md" format="markdown"/>
-        <topicref href="report/report-aggregate_non-IPA.md" format="markdown"/>
-        <topicref href="report/report-inventory_by_session_IPA.md" format="markdown"/>
-        <topicref href="report/report-inventory_by_session_non-IPA.md" format="markdown"/>
-        <topicref href="report/report-listing.md" format="markdown"/>
-        <topicref href="report/report-listing_by_session.md" format="markdown"/>
-        <topicref href="report/report-phone_similarity.md" format="markdown"/>
-        <topicref href="report/report-transcript_variability.md" format="markdown"/>
-        <topicref href="report/report-query_information.md" format="markdown"/>
-        <topicref href="report/acoustic_data_reports.md" format="markdown">
-            <topicref href="report/report-duration.md" format="markdown"/>
-            <topicref href="report/report-intensity.md" format="markdown"/>
-            <topicref href="report/report-pitch.md" format="markdown"/>
-            <topicref href="report/report-formants.md" format="markdown"/>
-            <topicref href="report/report-spectral_moments.md" format="markdown"/>
-            <topicref href="report/report-vot.md" format="markdown"/>
-        </topicref>
-        <topicref href="report/report_composer.md" format="markdown"/>
+        <topichead navtitle="Query Reports">
+            <topicref href="report/AboutQueryReports.md" format="markdown"/>
+            <topicref href="report/report-aggregate_IPA.md" format="markdown"/>
+            <topicref href="report/report-aggregate_non-IPA.md" format="markdown"/>
+            <topicref href="report/report-inventory_by_session_IPA.md" format="markdown"/>
+            <topicref href="report/report-inventory_by_session_non-IPA.md" format="markdown"/>
+            <topicref href="report/report-listing.md" format="markdown"/>
+            <topicref href="report/report-listing_by_session.md" format="markdown"/>
+            <topicref href="report/report-phone_similarity.md" format="markdown"/>
+            <topicref href="report/report-transcript_variability.md" format="markdown"/>
+            <topicref href="report/report-query_information.md" format="markdown"/>
+            <topicref href="report/acoustic_data_reports.md" format="markdown">
+                <topicref href="report/report-duration.md" format="markdown"/>
+                <topicref href="report/report-intensity.md" format="markdown"/>
+                <topicref href="report/report-pitch.md" format="markdown"/>
+                <topicref href="report/report-formants.md" format="markdown"/>
+                <topicref href="report/report-spectral_moments.md" format="markdown"/>
+                <topicref href="report/report-vot.md" format="markdown"/>
+            </topicref>
+            <topicref href="report/report_composer.md" format="markdown"/>
+        </topichead>
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/PPC.md" format="markdown"/>
