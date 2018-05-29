@@ -171,6 +171,14 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				info.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
 			}
 		}
+		
+		if(settings.getGroupBy() != null && settings.getGroupBy().name != null) {
+			final String groupByColumn = settings.getGroupBy().name;
+			if(context.containsKey(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION) && !context.get(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION).equals("default") 
+				 &&	(groupByColumn.equals("Session") || groupByColumn.equals("Age")) ) {
+				settings.getGroupBy().name = context.get(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION).toString();
+			}
+		}
 
 		Set<GroupKey> groupKeys = collectGroupKeys(settings, inputTable);
 

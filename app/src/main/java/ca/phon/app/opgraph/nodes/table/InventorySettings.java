@@ -179,6 +179,15 @@ public class InventorySettings implements Cloneable {
 	public Object clone() {
 		InventorySettings retVal = new InventorySettings();
 		
+		retVal.setConfigureAutomatically(isConfigureAutomatically());
+		retVal.setAutoGrouping(isAutoGrouping());
+		retVal.setAutoGroupingColumn(getAutoGroupingColumn());
+		retVal.setIncludeMetadata(isIncludeMetadata());
+		retVal.setIncludeAdditionalGroupData(isIncludeAdditionalGroupData());
+		retVal.setIncludeAdditionalWordData(isIncludeAdditionalWordData());
+		retVal.setCaseSensitive(isCaseSensitive());
+		retVal.setIgnoreDiacritics(isIgnoreDiacritics());
+				
 		if(getGroupBy() != null) {
 			ColumnInfo groupBy = new ColumnInfo();
 			groupBy.caseSensitive = getGroupBy().caseSensitive;

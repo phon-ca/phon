@@ -152,13 +152,8 @@ public class InventorySettingsPanel extends JPanel {
 		manualConfigPanel.setLeftDecoration(manualConfigBtn);
 		manualConfigBtn.setSelected(!settings.isConfigureAutomatically());
 		
-		final ActionListener configListener = (e) -> {
-			autoConfigPanel.getContentContainer().setEnabled(settings.isConfigureAutomatically());
-			manualConfigPanel.getContentContainer().setEnabled(!settings.isConfigureAutomatically());
-			settings.setConfigureAutomatically(autoConfigBtn.isSelected());
-		};
-		autoConfigBtn.addActionListener(configListener);
-		manualConfigBtn.addActionListener(configListener);
+		autoConfigBtn.addActionListener( (e) -> settings.setConfigureAutomatically(true) );
+		manualConfigBtn.addActionListener( (e) -> settings.setConfigureAutomatically(false) );
 		
 		groupByPanel = new ColumnPanel(new ColumnInfo());
 		columnPanel = new JPanel(new VerticalLayout());

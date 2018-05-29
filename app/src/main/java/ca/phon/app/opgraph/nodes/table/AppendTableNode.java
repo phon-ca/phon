@@ -55,20 +55,28 @@ public class AppendTableNode extends TableOpNode {
 	public void operate(OpContext context) throws ProcessingException {
 		final DefaultTableDataSource table1 = (DefaultTableDataSource)context.get(table1InputField);
 		final DefaultTableDataSource table2 = (DefaultTableDataSource)context.get(table2InputField);
-
-		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
-		// setup column names
-		int numCols = Math.max(table1.getColumnCount(), table2.getColumnCount());
-		for(int col = 0; col < numCols; col++) {
-			String colName =
-					(col < table1.getColumnCount() ? table1.getColumnTitle(col) : table2.getColumnTitle(col));
-			outputTable.setColumnTitle(col, colName);
+		
+		if(table1 != null && table2 != null) {
+			final DefaultTableDataSource outputTable = new DefaultTableDataSource();
+			// setup column names
+			int numCols = Math.max(table1.getColumnCount(), table2.getColumnCount());
+			for(int col = 0; col < numCols; col++) {
+				String colName =
+						(col < table1.getColumnCount() ? table1.getColumnTitle(col) : table2.getColumnTitle(col));
+				outputTable.setColumnTitle(col, colName);
+			}
+	
+			outputTable.append(table1);
+			outputTable.append(table2);
+			
+			context.put(tableOutput, outputTable);
+		} else if(table1 == null && table2 != null) {
+			context.put(tableOutput, table2);
+		} else if(table2 == null && table1 != null) {
+			context.put(tableOutput, table1);
+		} else {
+			context.put(tableOutput, null);
 		}
-
-		outputTable.append(table1);
-		outputTable.append(table2);
-
-		context.put(tableOutput, outputTable);
 	}
 
 }
