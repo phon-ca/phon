@@ -121,25 +121,25 @@ public class ReportWizard extends NodeWizard {
 		super.gotoStep(stepIdx);
 	}
 	
-	@Override
-	public void setJMenuBar(JMenuBar menuBar) {
-		super.setJMenuBar(menuBar);
-		
-		final Processor processor = getProcessor();
-		final Project project = (Project)processor.getContext().get("_project");
-		final String queryId = (String)processor.getContext().get("_queryId");
-		
-		final MenuBuilder builder = new MenuBuilder(menuBar);
-		builder.addSeparator("File@1", "composer");
-		
-		final OpenSimpleReportComposerAction openSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId, getGraph());
-		openSimpleComposerAct.putValue(Action.NAME, "Open report in Composer (simple)...");
-		builder.addItem("File@composer", openSimpleComposerAct).addActionListener( (e) -> close() );
-		
-		final OpenComposerAction openComposerAct = new OpenComposerAction(getGraph());
-		openComposerAct.putValue(Action.NAME, "Open report in Composer (advanced)...");
-		builder.addItem("File@" + openSimpleComposerAct.getValue(Action.NAME), openComposerAct).addActionListener( (e) -> close() );
-	}
+//	@Override
+//	public void setJMenuBar(JMenuBar menuBar) {
+//		super.setJMenuBar(menuBar);
+//		
+//		final Processor processor = getProcessor();
+//		final Project project = (Project)processor.getContext().get("_project");
+//		final String queryId = (String)processor.getContext().get("_queryId");
+//		
+//		final MenuBuilder builder = new MenuBuilder(menuBar);
+//		builder.addSeparator("File@1", "composer");
+//		
+//		final OpenSimpleReportComposerAction openSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId, getGraph());
+//		openSimpleComposerAct.putValue(Action.NAME, "Open report in Composer (simple)...");
+//		builder.addItem("File@composer", openSimpleComposerAct).addActionListener( (e) -> close() );
+//		
+//		final OpenComposerAction openComposerAct = new OpenComposerAction(getGraph());
+//		openComposerAct.putValue(Action.NAME, "Open report in Composer (advanced)...");
+//		builder.addItem("File@" + openSimpleComposerAct.getValue(Action.NAME), openComposerAct).addActionListener( (e) -> close() );
+//	}
 	
 	@Override
 	public Tuple<String, String> getNoun() {
