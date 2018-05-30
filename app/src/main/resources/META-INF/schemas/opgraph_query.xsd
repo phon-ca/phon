@@ -134,6 +134,21 @@
 	<xs:element name="automaticConfiguration" type="InventoryAutomaticConfigType"/>
 	<xs:element name="autoGrouping" type="AutoGroupingType"/>
 	<xs:element name="autoColumns" type="AutoColumnSettingsType"/>
+	
+	<xs:simpleType name="inventoryGroupingType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Session"/>
+			<xs:enumeration value="Age"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="GlobalParametersType" mixed="false">
+		<xs:attribute name="caseSensitive" type="xs:boolean" use="optional"/>
+		<xs:attribute name="ignoreDiacritics" type="xs:boolean" use="optional"/>
+		<xs:attribute name="inventoryGrouping" type="inventoryGroupingType" use="optional"/>
+	</xs:complexType>
+	
+	<xs:element name="globalparameters" type="GlobalParametersType"/>
 
 	<xs:complexType name="NodeWizardType">
 		<xs:complexContent mixed="false">
