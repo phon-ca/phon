@@ -49,6 +49,8 @@ import com.oracle.nio.BufferSecrets;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.*;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.opgraph.GlobalParameter;
+import ca.phon.app.opgraph.GlobalParameterPanel;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
@@ -149,13 +151,10 @@ public class NodeWizard extends WizardFrame {
 
 	private Map<OpNode, WizardStep> optionalSteps;
 
-	protected WizardGlobalOptionsPanel globalOptionsPanel;
-	public final static String CASE_SENSITIVE_GLOBAL_OPTION = "__caseSensitive";
-	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = "__ignoreDiacritics";
-	public final static String INVENTORY_GROUPING_GLOBAL_OPTION = "__inventoryGroupingColumn";
-
-	private final static String WIZARD_LIST = "_wizard_list_";
-	private final static String SETTINGS = "_settings_";
+	protected GlobalParameterPanel globalOptionsPanel;
+	public final static String CASE_SENSITIVE_GLOBAL_OPTION = GlobalParameter.CASE_SENSITIVE.getParamId();
+	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = GlobalParameter.IGNORE_DIACRITICS.getParamId();
+	public final static String INVENTORY_GROUPING_GLOBAL_OPTION = GlobalParameter.INVENTORY_GROUPING_COLUMN.getParamId();
 
 	protected boolean inInit = true;
 
@@ -296,7 +295,7 @@ public class NodeWizard extends WizardFrame {
 	}
 
 	private void init() {
-		globalOptionsPanel = new WizardGlobalOptionsPanel();
+		globalOptionsPanel = new GlobalParameterPanel();
 		
 		// turn off parent navigation controls
 		super.btnBack.setVisible(false);
@@ -883,10 +882,6 @@ public class NodeWizard extends WizardFrame {
 			ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.isIgnoreDiacritics());
 		if(globalOptionsPanel.isUseInventoryGrouping())
 			ctx.put(INVENTORY_GROUPING_GLOBAL_OPTION, globalOptionsPanel.getInventoryGrouping());
-
-		for(WizardGlobalOption pluginGlobalOption:globalOptionsPanel.getPluginGlobalOptions()) {
-			ctx.put(pluginGlobalOption.getName(), pluginGlobalOption.getValue());
-		}
 	}
 
 	protected WizardStep createStep(WizardExtension ext, OpNode node) {

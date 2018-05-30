@@ -16,24 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.wizard;
-
-import javax.swing.JComponent;
+package ca.phon.app.opgraph;
 
 /**
- * Interface for adding global options to the node wizard
- * from plug-ins.
+ * Global parameters which override local node settings.
  */
-public interface WizardGlobalOption {
+public enum GlobalParameter {
+	CASE_SENSITIVE("__caseSensitive"),
+	IGNORE_DIACRITICS("__ignoreDiacritics"),
+	INVENTORY_GROUPING_COLUMN("__inventoryGroupingColumn");
 	
-	public String getName();
+	private String paramId;
 	
-	public Class<?> getType();
+	private GlobalParameter(String paramId) {
+		this.paramId = paramId;
+	}
 	
-	public Object getDefaultValue();
+	public String getParamId() {
+		return this.paramId;
+	}
 	
-	public Object getValue();
-	
-	public JComponent getGlobalOptionsComponent();
-
 }

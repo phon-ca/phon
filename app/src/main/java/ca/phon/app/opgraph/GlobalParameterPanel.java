@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.app.opgraph.wizard;
+package ca.phon.app.opgraph;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,16 +33,16 @@ import ca.phon.util.PrefHelper;
  * content area.
  * 
  */
-public class WizardGlobalOptionsPanel extends JPanel {
+public class GlobalParameterPanel extends JPanel {
 	
 	private final static String CASE_SENSITIVE_PROP = 
-			WizardGlobalOptionsPanel.class.getName() + ".caseSensitive";
+			GlobalParameterPanel.class.getName() + ".caseSensitive";
 	
 	private final static String IGNORE_DIACRITICS_PROP =
-			WizardGlobalOptionsPanel.class.getName() + ".ignoreDiacritics";
+			GlobalParameterPanel.class.getName() + ".ignoreDiacritics";
 	
 	private final static String INVENTORY_GROUPING_PROP = 
-			WizardGlobalOptionsPanel.class.getName() + ".inventoryGrouping";
+			GlobalParameterPanel.class.getName() + ".inventoryGrouping";
 	
 	private JComboBox<String> caseSensitiveBox;
 	
@@ -50,9 +50,7 @@ public class WizardGlobalOptionsPanel extends JPanel {
 	
 	private JComboBox<String> inventoryGroupingBox;
 	
-	private List<WizardGlobalOption> pluginGlobalOptions = new ArrayList<>();
-	
-	public WizardGlobalOptionsPanel() {
+	public GlobalParameterPanel() {
 		super();
 		
 		init();
@@ -115,17 +113,6 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		inventoryGroupingBox.setSelectedItem(PrefHelper.get(INVENTORY_GROUPING_PROP, groupingOptions[0]));
 		add(inventoryGroupingBox, gbc);
 		
-		// add global options
-		final List<IPluginExtensionPoint<WizardGlobalOption>> pluginOptions =
-				PluginManager.getInstance().getExtensionPoints(WizardGlobalOption.class);
-		for(IPluginExtensionPoint<WizardGlobalOption> extPt:pluginOptions) {
-			final WizardGlobalOption globalOption = extPt.getFactory().createObject();
-			
-			++gbc.gridx;
-			add(globalOption.getGlobalOptionsComponent(), gbc);
-			this.pluginGlobalOptions.add(globalOption);
-		}
-		
 		gbc.weightx = 1.0;
 		++gbc.gridx;
 		add(Box.createHorizontalGlue(), gbc);
@@ -155,8 +142,20 @@ public class WizardGlobalOptionsPanel extends JPanel {
 		return inventoryGroupingBox.getSelectedItem().toString();
 	}
 	
-	public List<WizardGlobalOption> getPluginGlobalOptions() {
-		return this.pluginGlobalOptions;
+	public Object getValue(GlobalParameter param) {
+		switch(param) {
+		case CASE_SENSITIVE:
+			return isCaseSensitive();
+		
+		case IGNORE_DIACRITICS:
+			return isIgnoreDiacritics();
+			
+		case INVENTORY_GROUPING_COLUMN:
+			return getInventoryGrouping();
+	
+		default:
+			return null;
+		}
 	}
 
 }
