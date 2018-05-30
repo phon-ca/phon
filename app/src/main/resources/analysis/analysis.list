@@ -17,7 +17,7 @@ analysis/Phonological Processes/Velar Fronting.xml
 analysis/Phonological Processes/Voicing.xml
 analysis/Phonological Processes/Custom Process.xml
 # Specialized
-analysis/Specialized/Phone Clusters.xml
+#analysis/Specialized/Phone Clusters.xml
 analysis/Specialized/Vocalization.xml
 analysis/Specialized/Word Match.xml
 analysis/Specialized/Word-Level Analysis of Polysyllables.xml
