@@ -100,8 +100,8 @@ var clusterTypeParamInfo = {
 	"labels": [ "Singleton Onsets",
 			 "Singleton Codas",
 			 "Singleton OEHS",
-			 "Tautosyllabic Onsets (including appendicies)",
-			 "Tautosyllabic Codas (including appendicies)",
+			 "Tautosyllabic Onsets (including appendices)",
+			 "Tautosyllabic Codas (including appendices)",
 			 "Heterosylabic clusters" ], 
 	"desc": "Cluster types",
 	"defs": [ true, true, true, true, true, true ],
@@ -175,7 +175,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="9e8c5e24f7a94a99" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="237c85fd">
+            <graph id="382ca673">
                 <node id="47a85e1d278d479b" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -241,7 +241,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="18948ace" name="Queries" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="425d8e9e">
+            <graph id="102c8a6f">
                 <node id="67f5f47f" name="project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -273,7 +273,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="ea9b98a478524179" name="Get Parameter: includeSingletonOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1a5bb1b">
+                    <graph id="1f6ea624">
                         <node id="3c58973d0fa74000" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -325,7 +325,7 @@ function setup_params(params) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="8b4e5f4ef40c47ac" name="Get Parameter: includeSingletonCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4f3d1270">
+                    <graph id="1fc9c4db">
                         <node id="2a6bbb6da035478e" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -377,7 +377,7 @@ function setup_params(params) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="89f97f322bc046b0" name="Get Parameter: includeSingletonOEHS" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="35ec6542">
+                    <graph id="3975fc8c">
                         <node id="3be9f52aa56142b1" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -429,7 +429,7 @@ function setup_params(params) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7e3da7d728e74340" name="Get Parameter: includeTautosyllabicOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="316ec7a3">
+                    <graph id="40f54a65">
                         <node id="c3a7dd8f279f4160" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -481,7 +481,7 @@ function setup_params(params) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="15b5849b2c324899" name="Get Parameter: includeTautosyllabicCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2bb3d1a4">
+                    <graph id="1e81cb7c">
                         <node id="e2e0840803214eb2" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -533,7 +533,7 @@ function setup_params(params) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2a0f0ddb2f04bde" name="Get Parameter: includeHeterosyllabicClusters" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1584f7bf">
+                    <graph id="1f1606">
                         <node id="15e7f6cf66df4dbd" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -585,7 +585,7 @@ function setup_params(params) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="52f76711" name="Singleton Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="422d560c">
+                    <graph id="795545f">
                         <node id="4cae3d8a" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -617,7 +617,7 @@ function setup_params(params) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="fd2da9e" name="Query : Phones (Singleton Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-29T08:11:10.438-02:30" name="Phones" uuid="3a92d997-db73-486c-b064-3069ab4b1ee8">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-30T13:52:21.699-02:30" name="Phones" uuid="fbc4d739-b32b-4230-9cd3-7f5b107e739a">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -713,7 +713,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="505551f4" name="Singleton Codas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2c73912b">
+                    <graph id="56c0d670">
                         <node id="4f327877" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -745,7 +745,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="7febea1731aa4205" name="Query : Phones (Singleton Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-29T08:11:10.446-02:30" name="Phones" uuid="6b5cf814-a0a4-4b83-a358-1420d9539664">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-30T13:52:21.725-02:30" name="Phones" uuid="e995f07e-8dd1-4e39-9191-58226343ca9e">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -841,7 +841,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="4c04c260" name="Singleton OEHS" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="5de74bf5">
+                    <graph id="207cc1e4">
                         <node id="3e51cd94" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -873,7 +873,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="3c92e493c5c048e1" name="Query : Phones (Singleton OEHS)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-29T08:11:10.452-02:30" name="Phones" uuid="a3bf8a0e-ce51-46c1-84f9-08e3940b5293">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-30T13:52:21.734-02:30" name="Phones" uuid="9d1a39fa-6c18-401f-9205-045734ba70cb">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -969,7 +969,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="b5f5c7c" name="Tautosyllabic Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4109fa36">
+                    <graph id="4c8d0cd9">
                         <node id="14696f6e" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1001,7 +1001,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="e74f408073a54f0f" name="Query : Phones (Tautosyllabic Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-29T08:11:10.457-02:30" name="Phones" uuid="868f484c-e6ad-4b7c-9961-7602d9fb1349">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-30T13:52:21.743-02:30" name="Phones" uuid="c679754e-c797-4926-8ac7-54293e448b3a">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1097,7 +1097,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="19e6f4a0" name="Tautosyllabic Codas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2e17f22f">
+                    <graph id="5d834683">
                         <node id="147f1dd3" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1129,7 +1129,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="b68612eae61c4a46" name="Query : Phones (Tautosyllabic Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-29T08:11:10.464-02:30" name="Phones" uuid="bd368d9a-edbb-4741-aa24-fab578963056">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-30T13:52:21.753-02:30" name="Phones" uuid="c728c15f-5d1e-4175-8a55-271a2b99c75a">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1225,7 +1225,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="5a71d389" name="Heterosyllabic Clusters" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="782a1f9a">
+                    <graph id="5074b104">
                         <node id="4c0ec08a" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1257,7 +1257,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="3f2f079556514067" name="Query : Phones (Heterosyllabic)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-29T08:11:10.470-02:30" name="Phones" uuid="cb630067-3ea5-4548-98d6-2d63615ba3c8">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-05-30T13:52:21.763-02:30" name="Phones" uuid="ef8f07ba-3274-42b4-b2f8-2bbd7f68a428">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1511,7 +1511,7 @@ function getRowValue(table, row) {
             </extensions>
         </node>
         <ogcn:macro id="5385cf81" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="4a2f557a">
+            <graph id="2dd9ab5a">
                 <node id="2e0d09f" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1619,7 +1619,7 @@ function getRowValue(table, row) {
                     </extensions>
                 </node>
                 <ogcn:macro id="bae62edfac2d4d4c" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="33b02437">
+                    <graph id="30627600">
                         <node id="8cfb76d53cd749bd" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1687,7 +1687,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="205cdcd179aa4be9" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="8d6c6a3">
+                    <graph id="526d0db8">
                         <node id="428f623055044426" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1755,7 +1755,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="2ef8ef3db0b54d4f" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="3839b106">
+                    <graph id="bbe1eda">
                         <node id="8c796c639da144c8" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1823,7 +1823,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="c9f37976b859477b" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2334b758">
+                    <graph id="3a4ccf2a">
                         <node id="4d7a0b61d16a4be2" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1891,7 +1891,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="cb36203d2f764f43" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="69292d81">
+                    <graph id="6f49bac2">
                         <node id="32592206136a4771" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1959,7 +1959,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="9a3d292cdf9e45bd" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1b55e4aa">
+                    <graph id="356fe668">
                         <node id="b25f7180523c4559" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -2037,7 +2037,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="1b4c0091" name="If Speaker Has Results (singleton onsets)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="547f7ff4">
+                    <graph id="77ebb684">
                         <node id="25182e61" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2157,7 +2157,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="e9a13a36751a48ac" name="If Speaker Has Results (singleton codas)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="383f7f84">
+                    <graph id="500743f5">
                         <node id="70a7d818cbc8444f" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2277,7 +2277,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7db1c848277d40c2" name="If Speaker Has Results (singleton OEHS)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="37d5a7a2">
+                    <graph id="cdc0a06">
                         <node id="31e727cc4575496c" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2412,7 +2412,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="956512938a024d98" name="If Speaker Has Results (tautosyllabic onsets)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4c6a282e">
+                    <graph id="1073d147">
                         <node id="fc0e47a27bd14489" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2532,7 +2532,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="1fe410da68f443db" name="If Speaker Has Results (tautosyllabic codas)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4d92d0a5">
+                    <graph id="64e2a689">
                         <node id="905cff77472f449d" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -2652,7 +2652,7 @@ Result]]>
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="a8a8861fa6b04d5f" name="If Speaker Has Results (heterosyllabic clusters)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="672834d9">
+                    <graph id="183ce427">
                         <node id="59f81b1dec554e09" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
