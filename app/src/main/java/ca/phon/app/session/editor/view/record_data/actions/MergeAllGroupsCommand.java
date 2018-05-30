@@ -18,14 +18,15 @@
  */
 package ca.phon.app.session.editor.view.record_data.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
-import javax.swing.undo.CompoundEdit;
+import javax.swing.KeyStroke;
 
-import ca.phon.app.session.editor.undo.MergeGroupEdit;
+import ca.phon.app.session.editor.undo.MergeAllGroupsEdit;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
-import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 
 public class MergeAllGroupsCommand extends RecordDataEditorViewAction {
@@ -42,44 +43,19 @@ public class MergeAllGroupsCommand extends RecordDataEditorViewAction {
 
 		putValue(NAME, "Merge all groups");
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_DOWN_MASK));
 	}
 		
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final Record r = getRecord();
+		editor.getEditor().getUndoSupport().beginUpdate();
 		if(r.numberOfGroups() > 1) {
-			// confirm
-			final MessageDialogProperties props = new MessageDialogProperties();
-			props.setRunAsync(false);
-			props.setTitle("Merge All Groups");
-			props.setHeader("Merge all groups");
-			props.setMessage("Merge all groups for current record?");
-			props.setOptions(MessageDialogProperties.okCancelOptions);
-			final int retVal = NativeDialogs.showMessageDialog(props);
-			if(retVal != 0) return;
-			
-			final CompoundEdit cmpEdit = new CompoundEdit(){
-
-				@Override
-				public String getUndoPresentationName() {
-					return "Undo merge all groups";
-				}
-
-				@Override
-				public String getRedoPresentationName() {
-					return "Redo merge all groups";
-				}
-				
-			};
-			while(r.numberOfGroups() > 1) {
-				final MergeGroupEdit edit = new MergeGroupEdit(getEditorView().getEditor(), r, 0);
-				edit.doIt();
-				cmpEdit.addEdit(edit);
-			}
-			cmpEdit.end();
-			
-			getEditorView().getEditor().getUndoSupport().postEdit(cmpEdit);
+						
+			final MergeAllGroupsEdit edit = new MergeAllGroupsEdit(editor.getEditor(), editor.getEditor().currentRecord());			
+			getEditorView().getEditor().getUndoSupport().postEdit(edit);
 		}
+		editor.getEditor().getUndoSupport().endUpdate();
 	}
 
 }
