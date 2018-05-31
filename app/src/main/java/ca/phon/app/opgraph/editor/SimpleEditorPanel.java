@@ -1114,6 +1114,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		protected void done() {
 			busyLabel.setBusy(false);
 			statusLabel.setText("");
+			
+			// select last document added to list
+			int rowIdx = (idx < 0 ? nodeTable.getModel().getRowCount()-1 : idx-1);
+			nodeTable.setRowSelectionInterval(rowIdx, rowIdx);
 		}
 		
 		@Override
