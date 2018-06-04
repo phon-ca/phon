@@ -72,6 +72,8 @@ public class SortNode extends TableOpNode implements NodeSettings {
 		final SortNodeSettings settings = (SortNodeSettings)getSortSettings().clone();
 		if(settings.isConfigureAutomatically()) {
 			automaticConfiguration(settings, context, table);
+		} else {
+			System.out.println("Here");
 		}
 
 		List<Object[]> rowData = table.getRowData();

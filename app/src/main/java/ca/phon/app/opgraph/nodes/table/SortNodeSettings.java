@@ -161,13 +161,16 @@ public class SortNodeSettings implements Cloneable {
 		
 		settings.setAutoSortOrder(getAutoSortOrder());
 		settings.setConfigureAutomatically(isConfigureAutomatically());
+		settings.sorting.clear();
 		
-		for(SortColumn sc:sorting) {
+		for(SortColumn sc:this.sorting) {
 			SortColumn col = new SortColumn();
+			
 			col.column = sc.column;
 			col.featureOrder = sc.featureOrder;
 			col.order = sc.order;
 			col.type = sc.type;
+			
 			settings.sorting.add(col);
 		}
 		
