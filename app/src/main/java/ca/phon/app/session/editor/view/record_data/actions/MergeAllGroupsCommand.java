@@ -27,6 +27,7 @@ import javax.swing.KeyStroke;
 import ca.phon.app.session.editor.undo.MergeAllGroupsEdit;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
 
 public class MergeAllGroupsCommand extends RecordDataEditorViewAction {
@@ -43,7 +44,8 @@ public class MergeAllGroupsCommand extends RecordDataEditorViewAction {
 
 		putValue(NAME, "Merge all groups");
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_DOWN_MASK));
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_M, 
+				(OSInfo.isMacOs() ? Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() : KeyEvent.ALT_DOWN_MASK ) | KeyEvent.SHIFT_DOWN_MASK));
 	}
 		
 	@Override
