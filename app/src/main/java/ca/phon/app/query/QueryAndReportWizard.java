@@ -7,16 +7,20 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+
+import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.OpgraphIO;
@@ -37,6 +41,7 @@ import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.ActionTabComponent;
 import ca.phon.ui.decorations.TitledPanel;
@@ -72,6 +77,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private ScriptPanel scriptPanel;
 	private JCheckBox includeExcludedBox;
 	private JButton saveQuerySettingsButton;
+	private JButton resetQueryButton;
 
 	private WizardStep queryResultsStep;
 	private JTabbedPane queryResultsPane;
@@ -153,8 +159,20 @@ public class QueryAndReportWizard extends NodeWizard {
 		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 		saveQuerySettingsButton = new JButton(saveSettingsAct);
 		
-		TitledPanel queryPanel = new TitledPanel("Query", scriptPanel);
-		queryPanel.setRightDecoration(saveQuerySettingsButton);
+		TitledPanel queryPanel = new TitledPanel("Query");
+		queryPanel.getContentContainer().setLayout(new BorderLayout());
+		queryPanel.getContentContainer().add(scriptPanel, BorderLayout.CENTER);
+		
+		final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters", queryPanel);
+		resetQueryAct.putValue(PhonUIAction.NAME, "Reset query");
+		resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset query parameters to default");
+		resetQueryButton = new JButton(resetQueryAct);
+		
+		final JComponent buttonBar = new JPanel(new HorizontalLayout());
+		buttonBar.add(resetQueryButton);
+		buttonBar.add(saveQuerySettingsButton);
+		buttonBar.setOpaque(false);
+		queryPanel.setRightDecoration(buttonBar);
 		
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(sessionsPanel);
@@ -164,6 +182,20 @@ public class QueryAndReportWizard extends NodeWizard {
 		retVal.add(splitPane, BorderLayout.CENTER);
 		
 		return retVal;
+	}
+	
+	public void resetQueryParameters(PhonActionEvent pae) {
+		final TitledPanel parent = (TitledPanel)pae.getData();
+		final ScriptPanel oldScriptPanel = this.scriptPanel;
+		
+		queryScript.resetContext();
+		
+		ScriptPanel newScriptPanel = new ScriptPanel(queryScript);
+		parent.getContentContainer().remove(oldScriptPanel);
+		parent.getContentContainer().add(newScriptPanel, BorderLayout.CENTER);
+		parent.revalidate();
+		
+		this.scriptPanel = newScriptPanel;
 	}
 	
 	private QueryScript loadPreviousQueryParameters(QueryScript queryScript) {
@@ -213,21 +245,20 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		if(prevReportFile.exists()) {
 			try {
+				final Consumer<SimpleEditorPanel.DocumentError> errHandler = (err) -> {
+					try {
+						if(err.getDocument().equals(prevReportFile.toURI().toURL()))
+							reportEditor.addDocument(defaultReportURL);
+					} catch (MalformedURLException e) {}
+				};
+				reportEditor.addDocumentErrorListener( errHandler );
 				reportEditor.addDocument(prevReportFile);
-			} catch (InstantiationException | IOException e) {
+			} catch (IOException e) {
 				LogUtil.warning(e);
-				try {
-					reportEditor.addDocument(defaultReportURL);
-				} catch (InstantiationException | IOException e1) {
-					LogUtil.severe(e1);
-				}
+				reportEditor.addDocument(defaultReportURL);
 			}
 		} else {
-			try {
-				reportEditor.addDocument(defaultReportURL);
-			} catch (InstantiationException | IOException e) {
-				LogUtil.severe(e);
-			}
+			reportEditor.addDocument(defaultReportURL);
 		}
 		
 		reportEditor.getModel().getDocument().markAsUnmodified();

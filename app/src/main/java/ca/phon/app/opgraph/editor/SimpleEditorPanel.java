@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,6 +126,7 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.OSInfo;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.util.resources.ResourceLoader;
@@ -185,6 +187,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private final Project project;
 
 	private boolean includeQueries = false;
+	
+	private final List<Consumer<DocumentError>> documentErrorListeners = new ArrayList<>();
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SimpleEditorPanel.class, this);
 	
@@ -553,22 +557,22 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		addNode(node, idx);
 	}
 	
-	public void addDocument(File file) throws IOException, InstantiationException {
+	public void addDocument(File file) throws IOException {
 		addDocument(file.toURI().toURL(), -1);
 	}
 
-	public void addDocument(File file, int idx) throws IOException, InstantiationException {
+	public void addDocument(File file, int idx) throws IOException {
 		addDocument(file.toURI().toURL(), idx);
 	}
 	
-	public void addDocument(URL documentURL) throws IOException, InstantiationException {
+	public void addDocument(URL documentURL) {
 		addDocument(documentURL, -1);
 	}
 
 	/*
 	 * This method should be executed on a background thread
 	 */
-	public void addDocument(URL documentURL, int idx) throws IOException, InstantiationException {
+	public void addDocument(URL documentURL, int idx) {
 		final AddDocumentsWorker worker = new AddDocumentsWorker(List.of(documentURL), idx);
 		worker.execute();
 	}
@@ -1094,6 +1098,44 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 	}
 	
+	public void addDocumentErrorListener(Consumer<DocumentError> listener) {
+		if(!documentErrorListeners.contains(listener))
+			documentErrorListeners.add(listener);
+	}
+	
+	public void removeDocumentErrorListener(Consumer<DocumentError> listener) {
+		documentErrorListeners.remove(listener);
+	}
+	
+	public List<Consumer<DocumentError>> getDocumentErrorListeners() {
+		return Collections.unmodifiableList(documentErrorListeners);
+	}
+	
+	public void fireDocumentError(Object document, IOException exception) {
+		final DocumentError err = new DocumentError(document, exception);
+		getDocumentErrorListeners().stream().forEach( (l) -> l.accept(err) );
+	}
+	
+	public class DocumentError extends Tuple<Object, IOException> {
+
+		public DocumentError() {
+			super();
+		}
+
+		public DocumentError(Object document, IOException obj2) {
+			super(document, obj2);
+		}
+		
+		public Object getDocument() {
+			return super.getObj1();
+		}
+		
+		public IOException getError() {
+			return super.getObj2();
+		}
+		
+	}
+	
 	private class AddDocumentsWorker extends SwingWorker<List<MacroNode>, MacroNode> {
 
 		// either URL, OpGraph or QueryScript objects
@@ -1128,7 +1170,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 
 		@Override
-		protected List<MacroNode> doInBackground() throws Exception {
+		protected List<MacroNode> doInBackground() {
 			SwingUtilities.invokeLater(() -> busyLabel.setBusy(true));
 			List<MacroNode> retVal = new ArrayList<>();
 			for(Object document:documents) {
@@ -1156,16 +1198,22 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							retVal.add(analysisNode);
 							super.publish(analysisNode);
 						}
-					} catch (IOException | InstantiationException e) {
+					} catch (IOException e) {
+						fireDocumentError(documentURL, e);
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-						throw e;
-					} catch (URISyntaxException e) {
+					} catch (URISyntaxException | InstantiationException e) {
+						fireDocumentError(documentURL, new IOException(e));
 						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 					}
 				} else if(document instanceof OpGraph) {
-					final MacroNode node = nodeInstantiator.newInstance((OpGraph)document);
-					retVal.add(node);
-					super.publish(node);
+					try {
+						final MacroNode node = nodeInstantiator.newInstance((OpGraph)document);
+						retVal.add(node);
+						super.publish(node);
+					} catch (InstantiationException e) {
+						fireDocumentError(document, new IOException(e));
+						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					}
 				} else if(document instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)document;
 					final MacroNode node = queryNodeInstantiator.apply(queryScript);
@@ -1174,6 +1222,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					super.publish(node);
 				} else {
 					Toolkit.getDefaultToolkit().beep();
+					fireDocumentError(document, new IOException(new IllegalArgumentException()));
 					LogUtil.warning(document.getClass().getName() + " is not a valid document type");
 				}
 			}
