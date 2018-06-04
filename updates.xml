@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b1/">
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b1.sh" newVersion="3.0.0b1" newMediaFileId="linux64" fileSize="113055187" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b25
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b2/">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b2.sh" newVersion="3.0.0b2" newMediaFileId="linux64" fileSize="113069683" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -107,8 +118,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.exe" newVersion="3.0.0b1" newMediaFileId="win64" fileSize="220475904" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.exe" newVersion="3.0.0b2" newMediaFileId="win64" fileSize="220490240" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -214,8 +236,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.exe" newVersion="3.0.0b1" newMediaFileId="win64" fileSize="220475904" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.exe" newVersion="3.0.0b2" newMediaFileId="win64" fileSize="220490240" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -321,8 +354,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.exe" newVersion="3.0.0b1" newMediaFileId="win64" fileSize="220475904" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.exe" newVersion="3.0.0b2" newMediaFileId="win64" fileSize="220490240" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -428,8 +472,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b1.zip" newVersion="3.0.0b1" newMediaFileId="win64zip" fileSize="219512835" bundledJre="windows-amd64-9.0.4" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.zip" newVersion="3.0.0b2" newMediaFileId="win64zip" fileSize="219527289" bundledJre="windows-amd64-9.0.4" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -535,8 +590,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b1.deb" newVersion="3.0.0b1" newMediaFileId="linux64deb" fileSize="113237786" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b2.deb" newVersion="3.0.0b2" newMediaFileId="linux64deb" fileSize="113248790" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -642,8 +708,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b1.dmg" newVersion="3.0.0b1" newMediaFileId="macos" fileSize="208150301" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b2.dmg" newVersion="3.0.0b2" newMediaFileId="macos" fileSize="208164778" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
@@ -749,8 +826,19 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b1.dmg" newVersion="3.0.0b1" newMediaFileId="macos" fileSize="208150301" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.2.0b25
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b2.dmg" newVersion="3.0.0b2" newMediaFileId="macos" fileSize="208164778" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
 
 ### General
  
