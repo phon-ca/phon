@@ -65,6 +65,7 @@ public class SortNodeSettingsPanel extends JPanel {
 		
 		// auto config options
 		autoConfigBtn = new JRadioButton("Automatic Configuration");
+		autoConfigBtn.setOpaque(false);
 		configTypeGroup.add(autoConfigBtn);
 		autoConfigPanel = new TitledPanel("");
 		autoConfigPanel.setLeftDecoration(autoConfigBtn);
@@ -78,6 +79,7 @@ public class SortNodeSettingsPanel extends JPanel {
 		autoConfigPanel.getContentContainer().add(autoSortOrderBox, BorderLayout.CENTER);
 		
 		manualConfigBtn = new JRadioButton("Manual Configuration");
+		manualConfigBtn.setOpaque(false);
 		configTypeGroup.add(manualConfigBtn);
 		manualConfigPanel = new TitledPanel("");
 		manualConfigPanel.setLeftDecoration(manualConfigBtn);

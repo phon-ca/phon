@@ -79,6 +79,7 @@ public class InventorySettingsPanel extends JPanel {
 		
 		// auto config options
 		autoConfigBtn = new JRadioButton("Automatic Configuration");
+		autoConfigBtn.setOpaque(false);
 		configTypeGroup.add(autoConfigBtn);
 		autoConfigPanel = new TitledPanel("");
 		autoConfigPanel.setLeftDecoration(autoConfigBtn);
@@ -147,6 +148,7 @@ public class InventorySettingsPanel extends JPanel {
 		
 		// manual config options
 		manualConfigBtn = new JRadioButton("Manual Configuration");
+		manualConfigBtn.setOpaque(false);
 		configTypeGroup.add(manualConfigBtn);
 		manualConfigPanel = new TitledPanel("");
 		manualConfigPanel.setLeftDecoration(manualConfigBtn);

@@ -69,6 +69,7 @@ public class GlobalParameterPanel extends JPanel {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 0.0;
+		gbc.insets = new Insets(0, 0, 0, 2);
 		
 		final String[] comboBoxItems = new String[] {
 				"default",
