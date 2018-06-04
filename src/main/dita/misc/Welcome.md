@@ -13,7 +13,7 @@ Version 2 of Phon brings together two of the most important areas of empirical i
  * Run speech analysis functions directly from the Phon Query menu
  * Export speech measurement data for further analysis
 
-All of these functions are accessible through a user-friendly graphical interface. Databases managed within Phon can also be queried using a powerful search system adapted for the needs of the phonologist. This software program works on Mac OS X, Windows and Linux platforms and is compliant with the CHILDES [TalkBank](http://talkbank.org/) XML data format. Phon is being made freely available to the community as open-source software. Phon facilitates data exchange among researchers and is currently used for the elaboration of the shared [PhonBank](http://childes.psy.cmu.edu/phon/) database, designed to support empirical needs of research in all areas of phonology and phonological development. 
+All of these functions are accessible through a user-friendly graphical interface. Databases managed within Phon can also be queried using a powerful search system adapted for the needs of the phonologist. This software program works on Mac OS X, Windows and Linux platforms and is compliant with the CHILDES [TalkBank](http://talkbank.org/) XML data format. Phon is being made freely available to the community as open-source software. Phon facilitates data exchange among researchers and is currently used for the elaboration of the shared [PhonBank](http://phonbank.talkbank.org) database, designed to support empirical needs of research in all areas of phonology and phonological development. 
 
 ## Download Phon
 
@@ -24,12 +24,12 @@ All of these functions are accessible through a user-friendly graphical interfac
  * [Windows (32-bit) (installer)](https://github.com/phon-ca/phon/releases/download/2.1.8/Phon_windows_2_1_8.exe) | [Windows (32-bit) (zip)](https://github.com/phon-ca/phon/releases/download/2.1.8/Phon_windows_2_1_8.zip) 
  * [Linux (64-bit) (tgz)](https://github.com/phon-ca/phon/releases/download/2.1.8/Phon_unix_2_1_8.tar.gz)
   
-### Phon 3.0.0b1 (Current beta)
+### Phon 3.0.0b2 (Current beta)
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.0b1/Phon_macos_3_0_0b1.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0b1/Phon_windows-x64_3_0_0b1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.0b1/Phon_windows-x64_3_0_0b1.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.0b1/Phon_linux_3_0_0b1.deb) 
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0b1/Phon_unix_3_0_0b1.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.0b2/Phon_macos_3_0_0b2.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0b2/Phon_windows-x64_3_0_0b2.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.0b2/Phon_windows-x64_3_0_0b2.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.0b2/Phon_linux_3_0_0b2.deb) 
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0b2/Phon_unix_3_0_0b2.sh)
 
 ## Other Information 
 
@@ -44,12 +44,12 @@ Hedlund, Gregory & Yvan Rose. 2016. Phon 2.1.8 \[Computer Software\]. Retrieved 
 Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, Philip O’Brien & Todd Wareham. 2006. Introducing Phon: A Software Solution for the Study of Phonological Acquisition. In David Bamman, Tatiana Magnitskaia & Colleen Zaller (eds.), 
 *Proceedings of the 30th Annual Boston University Conference on Language Development*. Somerville, MA: Cascadilla Press. 489-500.
 
-Rose, Yvan & Brian MacWhinney. 2014. The PhonBank Project: Data and Software-Assisted Methods for the Study of Phonology and Phonological Development. In Jacques Durand, Ulrike Gut & Gjert Kristoffersen (eds.), 
+Rose, Yvan & Brian MacWhinney. 2014. The [PhonBank](http://phonbank.talkbank.org) Project: Data and Software-Assisted Methods for the Study of Phonology and Phonological Development. In Jacques Durand, Ulrike Gut & Gjert Kristoffersen (eds.), 
 *The Oxford Handbook of Corpus Phonology*. Oxford: Oxford University Press. 308-401.
 
 ## Discussion group & Support
 
-We encourage you to subscribe to the discussion group for helpful information and technical support. Please click on the following link to request membership to the PhonBank (or other TalkBank-related) discussion group: 
+We encourage you to subscribe to the discussion group for helpful information and technical support. Please click on the following link to request membership to the [PhonBank](http://phonbank.talkbank.org) (or other TalkBank-related) discussion group: 
 
  * http://talkbank.org/share/email.html
     * No Google mail (gmail) account is required to subscribe
@@ -57,7 +57,7 @@ We encourage you to subscribe to the discussion group for helpful information an
 
 ## Acknowledgments
 
-__Funding__: Current development of Phon and !PhonBank is supported by the National Institutes of Health. Earlier development of Phon was funded by grants from National Science Foundation, Canada Fund for Innovation, Social Sciences and Humanities Research Council of Canada, Petro-Canada Fund for Young Innovators, and the Office of the Vice-President (Research) and the Faculty of Arts at Memorial University of Newfoundland.
+__Funding__: Current development of Phon and [PhonBank](http://phonbank.talkbank.org) is supported by the National Institutes of Health. Earlier development of Phon was funded by grants from National Science Foundation, Canada Fund for Innovation, Social Sciences and Humanities Research Council of Canada, Petro-Canada Fund for Young Innovators, and the Office of the Vice-President (Research) and the Faculty of Arts at Memorial University of Newfoundland.
 
 __Dictionaries__: Built-in dictionaries of pronounced forms were obtained from generous organizations and people, to whom we are indebted:
 
