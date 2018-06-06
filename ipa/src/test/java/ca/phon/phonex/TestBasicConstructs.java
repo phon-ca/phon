@@ -121,4 +121,19 @@ public class TestBasicConstructs {
 		Assert.assertEquals(ipa.elementAt(5), matcher.group().get(0));
 	}
 	
+	@Test
+	public void testfOredGroup() throws ParseException {
+		final String text1 = "ˈk:oʀ:oi:di:dt͡j:oi:n";
+		final IPATranscript ipa1 = IPATranscript.parseIPATranscript(text1);
+		
+		final String phonex = "(k\\c|d\\c)\\v";
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		
+		final PhonexMatcher matcher = pattern.matcher(ipa1);
+		
+		while(matcher.find()) {
+			System.out.println(matcher.group());
+		}
+	}
+	
 }
