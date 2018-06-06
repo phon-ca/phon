@@ -27,6 +27,7 @@ tokens {
 	ARG;
 	ARG_LIST;
 	BACK_REF;
+	BASEEXPR;
 	BOUNDARY_MATCHER;
 	COMPOUND_MATCHER;
 	EXPR;
@@ -66,13 +67,18 @@ public void reportError(RecognitionException e) {
  * Start
  */
 expr
-	:	exprele+ flags?
-	->	^(EXPR exprele+ flags?)
+	:	baseexpr flags?
+	->	^(EXPR baseexpr flags?)
 	;
 
 flags
 	:	FORWARDSLASH LETTER+
 	->	^(FORWARDSLASH LETTER+)
+	;
+	
+baseexpr
+	:	exprele+
+	-> ^(BASEEXPR exprele+)
 	;
 
 exprele
@@ -82,14 +88,14 @@ exprele
 	;
 
 group
-	:	OPEN_PAREN exprele+ CLOSE_PAREN quantifier?
-	->	^(GROUP exprele+ quantifier?)
-	|	OPEN_PAREN NON_CAPTURING_GROUP exprele+ CLOSE_PAREN quantifier?
-	->	^(GROUP["?"] NON_CAPTURING_GROUP exprele+ quantifier?)
-	|	OPEN_PAREN group_name '=' exprele+ CLOSE_PAREN quantifier?
-	->	^(GROUP[$group_name.text] exprele+ quantifier?)
-	|	OPEN_PAREN LOOK_BEHIND_GROUP (exprTrees+=exprele)+ CLOSE_PAREN quantifier?
-	{
+	:	OPEN_PAREN baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
+	->	^(GROUP baseexpr+ quantifier?)
+	|	OPEN_PAREN NON_CAPTURING_GROUP baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
+	->	^(GROUP["?"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
+	|	OPEN_PAREN group_name '=' baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
+	->	^(GROUP[$group_name.text] baseexpr+ quantifier?)
+	|	OPEN_PAREN LOOK_BEHIND_GROUP baseexpr (PIPE baseexpr)*  CLOSE_PAREN quantifier?
+	/*{
 
 		// reverse order of expressions here
 		stream_exprele = new RewriteRuleSubtreeStream(adaptor,"rule exprele");
@@ -98,10 +104,10 @@ group
 			stream_exprele.add((CommonTree)tree);
 		}
 
-	}
-	->	^(GROUP["?<"] NON_CAPTURING_GROUP exprele+ quantifier?)
-	|	OPEN_PAREN LOOK_AHEAD_GROUP exprele+ CLOSE_PAREN quantifier?
-	->	^(GROUP["?>"] NON_CAPTURING_GROUP exprele+ quantifier?)
+	}*/
+	->	^(GROUP["?<"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
+	|	OPEN_PAREN LOOK_AHEAD_GROUP baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
+	->	^(GROUP["?>"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
 	;
 
 group_name

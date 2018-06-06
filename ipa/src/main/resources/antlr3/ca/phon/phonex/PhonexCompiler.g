@@ -49,43 +49,21 @@ import ca.phon.phonex.plugins.*;
 private final static Logger LOGGER =
 	Logger.getLogger(PhonexCompiler.class.getName());
 
-private final Stack<PhonexFSA> fsaStack = new Stack<PhonexFSA>();
-
-private int groupIndex = 0;
-private final Stack<Integer> groupStack = new Stack<Integer>();
-
-private PhonexFSA primaryFSA = null;
-
 private int flags = 0;
-
-public PhonexFSA getPrimaryFSA() {
-	return this.primaryFSA;
-}
 
 public int getFlags() {
 	return this.flags;
 }
 
-private PhonexFSA getFSA() {
-	if(fsaStack.isEmpty()) {
-		primaryFSA = new PhonexFSA();
-		fsaStack.push(primaryFSA);
-	}
-	return fsaStack.peek();
-}
 }
 
 /**
  * Start
  */
 expr returns [PhonexFSA fsa]
-@init {
-	getFSA();
-	groupStack.push(groupIndex++);
-}
-	:	^(EXPR exprele+ flags?)
+	:	^(EXPR e=baseexpr flags?)
 	{
-		$fsa = primaryFSA;
+		$fsa = $e.fsa;
 	}
 	;
 
@@ -109,6 +87,28 @@ scope {
 		}
 	}
 	;
+	
+baseexpr returns [PhonexFSA fsa]
+scope {
+	PhonexFSA primaryFSA;
+	Stack<PhonexFSA> fsaStack;
+	int groupIndex;
+	Stack<Integer> groupStack;
+}
+@init {
+	$baseexpr::primaryFSA = new PhonexFSA();
+	$baseexpr::fsaStack = new Stack<>();
+	$baseexpr::fsaStack.push($baseexpr::primaryFSA);
+	
+	$baseexpr::groupIndex = 0;
+	$baseexpr::groupStack = new Stack<>();
+	$baseexpr::groupStack.push($baseexpr::groupIndex++);
+}
+	: ^(BASEEXPR exprele+)
+	{
+		$fsa = $baseexpr::primaryFSA;
+	}
+	;
 
 /**
  *
@@ -119,26 +119,34 @@ exprele	:	matcher
 	;
 
 group
+scope {
+	List<PhonexFSA> orList;
+}
 @init {
 	boolean nonCapturing = (input.LA(3) == NON_CAPTURING_GROUP);
-	//if(!nonCapturing) {
-		fsaStack.push(new PhonexFSA());
-		groupStack.push(groupIndex++);
-	//}
+	$baseexpr::fsaStack.push(new PhonexFSA());
+	$baseexpr::groupStack.push($baseexpr::groupIndex++);
+	
+	$group::orList = new ArrayList<>();
 }
 @after {
-//	if(!nonCapturing)
-		groupStack.pop();
+		$baseexpr::groupStack.pop();
 }
-	:	^(GROUP NON_CAPTURING_GROUP? exprele+ q=quantifier?)
+	:	^(GROUP NON_CAPTURING_GROUP? (e=baseexpr {$group::orList.add($e.fsa);})+ q=quantifier?)
 	{
 		String groupName = $GROUP.text;
-		int groupIndex = groupStack.peek();
+		int groupIndex = $baseexpr::groupStack.peek();
 
 		// pop our group fsa, apply quantifier
 		// and add it to the fsa now on top
 		// of the stack
-		PhonexFSA grpFsa = fsaStack.pop();
+		PhonexFSA grpFsa = $baseexpr::fsaStack.pop();
+		
+		if($group::orList.size() == 1) {
+			grpFsa = $group::orList.get(0);
+		} else {
+			// TODO
+		}
 
 		if(!nonCapturing) {
 			grpFsa.setGroupIndex(groupIndex);
@@ -158,32 +166,32 @@ group
 		// if the expression starts with a group
 		// make the group expression the new
 		// primary fsa
-		if(getFSA() == primaryFSA && getFSA().getFinalStates().length == 0) {
-			fsaStack.pop();
-			fsaStack.push(grpFsa);
+		if($baseexpr::fsaStack.peek() == $baseexpr::primaryFSA && $baseexpr::primaryFSA.getFinalStates().length == 0) {
+			$baseexpr::fsaStack.pop();
+			$baseexpr::fsaStack.push(grpFsa);
 
 			// copy group names
-			if(primaryFSA.getNumberOfGroups() > grpFsa.getNumberOfGroups())
-				grpFsa.setNumberOfGroups(primaryFSA.getNumberOfGroups());
+			if($baseexpr::primaryFSA.getNumberOfGroups() > grpFsa.getNumberOfGroups())
+				grpFsa.setNumberOfGroups($baseexpr::primaryFSA.getNumberOfGroups());
 
-			for(int gIdx = 1; gIdx <= primaryFSA.getNumberOfGroups(); gIdx++) {
-				String gName = primaryFSA.getGroupName(gIdx);
+			for(int gIdx = 1; gIdx <= $baseexpr::primaryFSA.getNumberOfGroups(); gIdx++) {
+				String gName = $baseexpr::primaryFSA.getGroupName(gIdx);
 				if(gName != null)
 					grpFsa.setGroupName(gIdx, gName);
 			}
-			primaryFSA = grpFsa;
+			$baseexpr::primaryFSA = grpFsa;
 		} else {
-			getFSA().appendGroup(grpFsa);
+			$baseexpr::fsaStack.peek().appendGroup(grpFsa);
 		}
 
 		if(!nonCapturing)
-			if(groupIndex > primaryFSA.getNumberOfGroups())
-					primaryFSA.setNumberOfGroups(groupIndex);
+			if(groupIndex > $baseexpr::primaryFSA.getNumberOfGroups())
+					$baseexpr::primaryFSA.setNumberOfGroups(groupIndex);
 
 		// set group name (if available)
 		if(!nonCapturing && !groupName.equals("GROUP")) {
 
-			primaryFSA.setGroupName(groupIndex, groupName);
+			$baseexpr::primaryFSA.setGroupName(groupIndex, groupName);
 		}
 
 	}
@@ -207,9 +215,9 @@ scope {
 
 
 		if(q == null)
-			getFSA().appendMatcher(matcher, pMatchers);
+			$baseexpr::fsaStack.peek().appendMatcher(matcher, pMatchers);
 		else
-			getFSA().appendMatcher(matcher, q, pMatchers);
+			$baseexpr::fsaStack.peek().appendMatcher(matcher, q, pMatchers);
 	}
 	|	^(groupIndex=back_reference (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
 	{
@@ -218,9 +226,9 @@ scope {
 			pMatchers[i] = PhoneMatcher.class.cast($matcher::pluginMatchers.get(i));
 
 		if(q == null)
-			getFSA().appendBackReference(groupIndex, pMatchers);
+			$baseexpr::fsaStack.peek().appendBackReference(groupIndex, pMatchers);
 		else
-			getFSA().appendBackReference(groupIndex, q, pMatchers);
+			$baseexpr::fsaStack.peek().appendBackReference(groupIndex, q, pMatchers);
 	}
 	;
 
@@ -589,19 +597,19 @@ boundary_matchers returns [PhoneMatcher value]
 
 		switch(bChar) {
 		case '^':
-			getFSA().appendTransition(new BeginningOfInputTransition());
+			$baseexpr::fsaStack.peek().appendTransition(new BeginningOfInputTransition());
 			break;
 
 		case '$':
-			getFSA().appendTransition(new EndOfInputTransition());
+			$baseexpr::fsaStack.peek().appendTransition(new EndOfInputTransition());
 			break;
 
 		case 'b':
-			getFSA().appendTransition(new WordBoundaryTransition());
+			$baseexpr::fsaStack.peek().appendTransition(new WordBoundaryTransition());
 			break;
 
 		case 'S':
-			getFSA().appendTransition(new SyllableBoundaryTransition());
+			$baseexpr::fsaStack.peek().appendTransition(new SyllableBoundaryTransition());
 			break;
 
 		default:
