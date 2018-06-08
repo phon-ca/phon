@@ -140,14 +140,11 @@ scope {
 	
 	$group::orList = new ArrayList<>();
 }
-@after {
-	$baseexpr::groupStack.pop();
-}
 	:	^(GROUP NON_CAPTURING_GROUP? (e=baseexpr {$group::orList.add($e.fsa);})+ q=quantifier?)
 	{
 		String groupName = $GROUP.text;
 		// value pushed to stack during @init
-		int groupIndex = $baseexpr::groupStack.peek();
+		int groupIndex = $baseexpr::groupStack.pop();
 
 		// pop our group fsa, apply quantifier
 		// and add it to the fsa now on top
@@ -216,6 +213,9 @@ scope {
 					$baseexpr::primaryFSA.setGroupName(fsa.getGroupIndex(gn), gn);
 				}
 			}
+		} else {
+			grpFsa.stripGroups();
+			grpFsa.setNumberOfGroups(0);
 		}
 
 		// set group name (if available)

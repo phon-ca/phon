@@ -85,6 +85,8 @@ public class WordBoundaryTransition extends PhonexTransition {
 		retVal.setToState(getToState());
 		retVal.setType(getType());
 		retVal.setOffsetType(getOffsetType());
+		retVal.getInitGroups().addAll(getInitGroups());
+		retVal.getMatcherGroups().addAll(getMatcherGroups());
 		return retVal;
 	}
 

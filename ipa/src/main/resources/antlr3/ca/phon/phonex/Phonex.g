@@ -61,6 +61,8 @@ public void reportError(RecognitionException e) {
 	throw new PhonexPatternException(e);
 }
 
+private boolean reverseExpr = false;
+
 }
 
 /**
@@ -77,7 +79,17 @@ flags
 	;
 	
 baseexpr
-	:	exprele+
+	:	(exprTrees+=exprele)+
+	{
+		if(reverseExpr) {
+			// reverse elements in stream
+			stream_exprele = new RewriteRuleSubtreeStream(adaptor,"rule exprele");
+			java.util.Collections.reverse(list_exprTrees);
+			for(Object tree:list_exprTrees) {
+				stream_exprele.add((CommonTree)tree);
+			}
+		}
+	}
 	-> ^(BASEEXPR exprele+)
 	;
 
@@ -94,19 +106,12 @@ group
 	->	^(GROUP["?"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
 	|	OPEN_PAREN group_name '=' baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
 	->	^(GROUP[$group_name.text] baseexpr+ quantifier?)
-	|	OPEN_PAREN LOOK_BEHIND_GROUP baseexpr (PIPE baseexpr)*  CLOSE_PAREN quantifier?
-	/*{
-
-		// reverse order of expressions here
-		stream_exprele = new RewriteRuleSubtreeStream(adaptor,"rule exprele");
-		java.util.Collections.reverse(list_exprTrees);
-		for(Object tree:list_exprTrees) {
-			stream_exprele.add((CommonTree)tree);
-		}
-
-	}*/
+	|	OPEN_PAREN LOOK_BEHIND_GROUP { reverseExpr = true; } baseexpr CLOSE_PAREN quantifier?
+	{
+		reverseExpr = false;
+	}
 	->	^(GROUP["?<"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
-	|	OPEN_PAREN LOOK_AHEAD_GROUP baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
+	|	OPEN_PAREN LOOK_AHEAD_GROUP baseexpr CLOSE_PAREN quantifier?
 	->	^(GROUP["?>"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
 	;
 

@@ -303,11 +303,60 @@ public class TestBasicConstructs {
 		testNamedGroups(ipa, phonex, answers);
 	}
 	
+	@Test
+	public void testNonCapturingGroup1() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(\\S\\c+\\v)(?=\\S\\c+\\v)";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(0, 4) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testNonCapturingGroup2() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(?=(\\S\\c+\\v)(\\S\\c+\\v))";
+		IPATranscript[][] answers = {
+				{} 
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testNonCapturingGroup3() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((?=\\S\\c+\\v)(\\c+\\v))";
+		IPATranscript[][] answers = {
+				{ ipa, ipa.subsection(4, 6) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testLookBehind() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(?<\\s\\c\\v)(\\c\\v)";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(5, 7) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
 	private void testGroups(IPATranscript t, String phonex, IPATranscript[][] groupData) {
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(t);
-
+		
 		System.out.println(phonex + " = " + pattern.getFsa().getDotText());
+		System.out.println("# groups = " + pattern.numberOfGroups());
 		
 		int idx = 0;
 		while(matcher.find()) {
@@ -321,6 +370,7 @@ public class TestBasicConstructs {
 				Assert.assertEquals(data[i-1], test);
 			}
 		}
+		Assert.assertEquals(groupData.length, idx);
 	}
 	
 	private void testNamedGroups(IPATranscript t, String phonex, List<Map<String, IPATranscript>> groupData) {
@@ -341,7 +391,8 @@ public class TestBasicConstructs {
 				final IPATranscript test = new IPATranscript(matcher.group(groupIdx));
 				Assert.assertEquals(data.get(groupName), test);				
 			}
-		}			
+		}	
+		Assert.assertEquals(groupData.size(), idx);
 	}
 	
 	

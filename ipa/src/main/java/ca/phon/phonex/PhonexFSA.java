@@ -146,6 +146,15 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		}
 	}
 	
+	void stripGroups() {
+		for(String state:getStates()) {
+			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
+				trans.getInitGroups().clear();
+				trans.getMatcherGroups().clear();
+			}
+		}
+	}
+	
 	/**
 	 * Add a new state and return
 	 * the name of the state.
