@@ -84,6 +84,36 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	}
 	
 	/**
+	 * Get a list of all named groups
+	 * 
+	 * @return list of group names
+	 */
+	public List<String> getGroupNames() {
+		List<String> retVal = new ArrayList<>();
+		
+		for(int gIdx = 1; gIdx <= numberOfGroups; gIdx++) {
+			if(groupNames[gIdx-1] != null) {
+				retVal.add(groupNames[gIdx-1]);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	/**
+	 * Get index of named group.
+	 * 
+	 * @return index of named group or -1 if not found
+	 */
+	public int getGroupIndex(String groupName) {
+		int retVal = Arrays.asList(groupNames).indexOf(groupName);
+		if(retVal >= 0) {
+			return retVal+1;
+		}
+		return -1;
+	}
+	
+	/**
 	 * Get the group name for the given 
 	 * index.
 	 * 
@@ -509,6 +539,48 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		}
 	}
 	
+	public void appendOredGroups(int parentGroupIndex, List<PhonexFSA> orFsas) {
+		String[] oldFinalStates = stripFinalStates();
+		
+		if(oldFinalStates.length == 0) {
+			// use initial state
+			oldFinalStates = new String[]{ getInitialState() };
+		}
+		
+		for(PhonexFSA fsa:orFsas) {
+			String fsaInitialState = appendState();
+			// create new empty transitions to group initial state
+			for(String finalState:oldFinalStates) {
+				EmptyTransition e = new EmptyTransition();
+				e.setFirstState(finalState);
+				e.setToState(fsaInitialState);
+				addTransition(e);
+			}
+			
+			Map<String, String> stateMap = new HashMap<String, String>();
+			stateMap.put(fsa.getInitialState(), fsaInitialState);
+			for(String state:fsa.getStates()) {
+				if(state.equals(fsa.getInitialState())) continue;
+				
+				String newState = appendState();
+				stateMap.put(state, newState);
+				
+				if(fsa.isFinalState(state))
+					addFinalState(newState);
+			}
+			
+			for(FSATransition<IPAElement> transition:fsa.getTransitions()) {
+				PhonexTransition pTrans = 
+						PhonexTransition.class.cast(transition);
+				PhonexTransition cpyTrans = 
+						PhonexTransition.class.cast(pTrans.clone());
+				cpyTrans.setFirstState(stateMap.get(pTrans.getFirstState()));
+				cpyTrans.setToState(stateMap.get(pTrans.getToState()));
+				addTransition(cpyTrans);
+			}
+		}
+	}
+	
 	/**
 	 * Append a machine to this machine
 	 * 
@@ -744,13 +816,13 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	}
 	
 	/**
-	 * Decrement group indicies on all transitions by one.
+	 * Decrement group indices on all transitions by one.
 	 */
 	public void decrementGroups() {
 		for(String state:getStates()) {
 			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
 				Integer[] initGroups = trans.getInitGroups().toArray(new Integer[0]);
-				Integer[] matcherGroups = trans.getInitGroups().toArray(new Integer[0]);
+				Integer[] matcherGroups = trans.getMatcherGroups().toArray(new Integer[0]);
 				
 
 				trans.getInitGroups().clear();
@@ -765,6 +837,46 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 			}
 		}
 	}
+	
+	public void incrementGroups() {
+		for(String state:getStates()) {
+			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
+				Integer[] initGroups = trans.getInitGroups().toArray(new Integer[0]);
+				Integer[] matcherGroups = trans.getMatcherGroups().toArray(new Integer[0]);
+				
+
+				trans.getInitGroups().clear();
+				for(int i = 0; i < initGroups.length; i++) {
+					trans.getInitGroups().add(initGroups[i]+1);
+				}
+				trans.getMatcherGroups().clear();
+				for(int i = 0; i < matcherGroups.length; i++) {
+					trans.getMatcherGroups().add(matcherGroups[i]+1);
+				}
+			}
+		}
+	}
+	
+	public void setParentGroupIndex(int parentGroupIndex) {
+		for(String state:getStates()) {
+			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
+				Integer[] initGroups = trans.getInitGroups().toArray(new Integer[0]);
+				Integer[] matcherGroups = trans.getMatcherGroups().toArray(new Integer[0]);
+				
+
+				trans.getInitGroups().clear();
+				for(int i = 0; i < initGroups.length; i++) {
+					trans.getInitGroups().add(initGroups[i]+1);
+				}
+				trans.getMatcherGroups().clear();
+				for(int i = 0; i < matcherGroups.length; i++) {
+					trans.getMatcherGroups().add(matcherGroups[i]+1);
+				}
+				
+			}
+		}
+	}
+	
 	
 	@Override
 	public Object clone() {

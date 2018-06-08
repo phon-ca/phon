@@ -648,7 +648,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		final Tier<PhoneMap> retVal = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, true);
 
 		// create 'sound-only' lists from the ipa transcripts.  These are used for alignment
-		// indicies
+		// indices
 		final Tier<IPATranscript> ipaT = record.getIPATarget();
 		final Tier<IPATranscript> ipaA = record.getIPAActual();
 

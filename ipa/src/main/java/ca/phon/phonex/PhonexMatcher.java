@@ -155,6 +155,7 @@ public class PhonexMatcher {
 			lastMatchState.setTapeIndex(currentIdx);
 			lastMatchState.setLookAheadOffset(0);
 			lastMatchState.setLookBehindOffset(1);
+			lastMatchState.resetGroupData();
 
 			lastMatchState =
 					pattern.getFsa().runWithTape(input.toArray(new IPAElement[0]), lastMatchState);

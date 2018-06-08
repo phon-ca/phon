@@ -102,8 +102,17 @@ scope {
 	
 	$baseexpr::groupIndex = 0;
 	$baseexpr::groupStack = new Stack<>();
-	$baseexpr::groupStack.push($baseexpr::groupIndex++);
+	if(baseexpr_stack.size() > 1) {
+		// use stacked group index
+		$baseexpr::groupIndex = baseexpr_stack.get(baseexpr_stack.size()-2).groupIndex;
+		$baseexpr::groupStack.push($baseexpr::groupIndex);
+	} else {
+		$baseexpr::groupStack.push($baseexpr::groupIndex++);
+	}
 }
+@after {
+	
+}	
 	: ^(BASEEXPR exprele+)
 	{
 		$fsa = $baseexpr::primaryFSA;
@@ -125,16 +134,19 @@ scope {
 @init {
 	boolean nonCapturing = (input.LA(3) == NON_CAPTURING_GROUP);
 	$baseexpr::fsaStack.push(new PhonexFSA());
-	$baseexpr::groupStack.push($baseexpr::groupIndex++);
+	
+	$baseexpr::groupStack.push($baseexpr::groupIndex);
+	if(!nonCapturing) $baseexpr::groupIndex++;
 	
 	$group::orList = new ArrayList<>();
 }
 @after {
-		$baseexpr::groupStack.pop();
+	$baseexpr::groupStack.pop();
 }
 	:	^(GROUP NON_CAPTURING_GROUP? (e=baseexpr {$group::orList.add($e.fsa);})+ q=quantifier?)
 	{
 		String groupName = $GROUP.text;
+		// value pushed to stack during @init
 		int groupIndex = $baseexpr::groupStack.peek();
 
 		// pop our group fsa, apply quantifier
@@ -142,10 +154,11 @@ scope {
 		// of the stack
 		PhonexFSA grpFsa = $baseexpr::fsaStack.pop();
 		
-		if($group::orList.size() == 1) {
-			grpFsa = $group::orList.get(0);
+		if($group::orList.size() > 1) {
+			grpFsa = new PhonexFSA();
+			grpFsa.appendOredGroups(groupIndex, $group::orList);
 		} else {
-			// TODO
+			grpFsa = $group::orList.get(0);
 		}
 
 		if(!nonCapturing) {
@@ -184,13 +197,29 @@ scope {
 			$baseexpr::fsaStack.peek().appendGroup(grpFsa);
 		}
 
-		if(!nonCapturing)
-			if(groupIndex > $baseexpr::primaryFSA.getNumberOfGroups())
-					$baseexpr::primaryFSA.setNumberOfGroups(groupIndex);
+		if(!nonCapturing) {
+			int maxGroupCount = groupIndex;
+			for(PhonexFSA fsa:$group::orList) {
+				maxGroupCount = Math.max(maxGroupCount, fsa.getNumberOfGroups());
+			}
+			if(maxGroupCount > $baseexpr::primaryFSA.getNumberOfGroups())
+				$baseexpr::primaryFSA.setNumberOfGroups(maxGroupCount);
+			// update parent group index
+			if(maxGroupCount >= $baseexpr::groupIndex) {
+				$baseexpr::groupIndex = maxGroupCount+1;
+			}
+			
+			// copy all named groups
+			for(PhonexFSA fsa:$group::orList) {
+				for(String gn:fsa.getGroupNames()) {
+					// TODO throw exception if re-defining group names
+					$baseexpr::primaryFSA.setGroupName(fsa.getGroupIndex(gn), gn);
+				}
+			}
+		}
 
 		// set group name (if available)
 		if(!nonCapturing && !groupName.equals("GROUP")) {
-
 			$baseexpr::primaryFSA.setGroupName(groupIndex, groupName);
 		}
 

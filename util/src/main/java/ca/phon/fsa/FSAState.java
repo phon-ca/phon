@@ -47,7 +47,7 @@ public class FSAState<T> {
 	/** Current look-ahead offset */
 	private int lookAheadOffset = 0;
 	
-	/** Group start indicies */
+	/** Group start indices */
 	private int[] groupStarts = new int[0];
 	/** Group lengths */
 	private int[] groupLengths = new int[0];
@@ -142,7 +142,7 @@ public class FSAState<T> {
 	 * @param groupIndex
 	 * 
 	 */
-	public void markGroup(int groupIndex) {
+	public void markGroup(int groupIndex, int matchLength) {
 		// ensure capacity
 		if(groupStarts.length < groupIndex) {
 			int numberOfGroups = groupIndex;
@@ -150,7 +150,7 @@ public class FSAState<T> {
 			groupLengths = Arrays.copyOf(groupLengths, numberOfGroups);
 		}
 		groupStarts[groupIndex-1] = tapeIndex;
-		groupLengths[groupIndex-1] = 1;
+		groupLengths[groupIndex-1] = matchLength;
 	}
 	
 	/**
@@ -195,6 +195,15 @@ public class FSAState<T> {
 	 */
 	public int[] getGroupLengths() {
 		return this.groupLengths;
+	}
+	
+	/** 
+	 * Reset group start and length data.
+	 * 
+	 */
+	public void resetGroupData() {
+		this.groupStarts = new int[0];
+		this.groupLengths = new int[0];
 	}
 	
 	/**

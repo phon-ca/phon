@@ -19,6 +19,10 @@
 package ca.phon.phonex;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -122,18 +126,223 @@ public class TestBasicConstructs {
 	}
 	
 	@Test
-	public void testfOredGroup() throws ParseException {
-		final String text1 = "ˈk:oʀ:oi:di:dt͡j:oi:n";
-		final IPATranscript ipa1 = IPATranscript.parseIPATranscript(text1);
+	public void testGrouping1() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
-		final String phonex = "(k\\c|d\\c)\\v";
+		final String phonex = "\\S(\\c)(\\v)";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(1, 2) }, 
+				{ ipa.subsection(3, 4), ipa.subsection(4, 5) },
+				{ ipa.subsection(5, 6), ipa.subsection(6, 7) },
+				
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testNamedGrouping1() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "\\S(C=\\c)(V=\\v)";
+		
+		final Map<String, IPATranscript> hm1 = new HashMap<>();
+		hm1.put("C", ipa.subsection(0, 1));
+		hm1.put("V", ipa.subsection(1, 2));
+		
+		final Map<String, IPATranscript> hm2 = new HashMap<>();
+		hm2.put("C", ipa.subsection(3, 4));
+		hm2.put("V", ipa.subsection(4, 5));
+		
+		final Map<String, IPATranscript> hm3 = new HashMap<>();
+		hm3.put("C", ipa.subsection(5, 6));
+		hm3.put("V", ipa.subsection(6, 7));
+		
+		final List<Map<String, IPATranscript>> answers = List.of(hm1, hm2, hm3);
+		testNamedGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testGrouping2() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(\\S(\\c)(\\v))";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(0, 2), ipa.subsection(0, 1), ipa.subsection(1, 2) }, 
+				{ ipa.subsection(2, 5), ipa.subsection(3, 4), ipa.subsection(4, 5) },
+				{ ipa.subsection(5, 7), ipa.subsection(5, 6), ipa.subsection(6, 7) },
+				
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testNamedGrouping2() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(\\S(C=\\c)(V=\\v))";
+		
+		final Map<String, IPATranscript> hm1 = new HashMap<>();
+		hm1.put("C", ipa.subsection(0, 1));
+		hm1.put("V", ipa.subsection(1, 2));
+		
+		final Map<String, IPATranscript> hm2 = new HashMap<>();
+		hm2.put("C", ipa.subsection(3, 4));
+		hm2.put("V", ipa.subsection(4, 5));
+		
+		final Map<String, IPATranscript> hm3 = new HashMap<>();
+		hm3.put("C", ipa.subsection(5, 6));
+		hm3.put("V", ipa.subsection(6, 7));
+		
+		final List<Map<String, IPATranscript>> answers = List.of(hm1, hm2, hm3);
+		testNamedGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testGrouping3() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(\\S((\\c)(\\v)))";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(0, 2), ipa.subsection(0, 2), ipa.subsection(0, 1), ipa.subsection(1, 2) }, 
+				{ ipa.subsection(2, 5), ipa.subsection(3, 5), ipa.subsection(3, 4), ipa.subsection(4, 5) },
+				{ ipa.subsection(5, 7), ipa.subsection(5, 7), ipa.subsection(5, 6), ipa.subsection(6, 7) },
+				
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testNamedGrouping3() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(syll=\\S((C=\\c)(V=\\v)))";
+		
+		final Map<String, IPATranscript> hm1 = new HashMap<>();
+		hm1.put("C", ipa.subsection(0, 1));
+		hm1.put("V", ipa.subsection(1, 2));
+		hm1.put("syll", ipa.subsection(0, 2));
+		
+		final Map<String, IPATranscript> hm2 = new HashMap<>();
+		hm2.put("C", ipa.subsection(3, 4));
+		hm2.put("V", ipa.subsection(4, 5));
+		hm2.put("syll", ipa.subsection(2, 5));
+		
+		final Map<String, IPATranscript> hm3 = new HashMap<>();
+		hm3.put("C", ipa.subsection(5, 6));
+		hm3.put("V", ipa.subsection(6, 7));
+		hm3.put("syll", ipa.subsection(5, 7));
+		
+		final List<Map<String, IPATranscript>> answers = List.of(hm1, hm2, hm3);
+		testNamedGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testGrouping4() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((\\c)(\\c))(\\v)";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(1, 3), ipa.subsection(1, 2), ipa.subsection(2, 3), ipa.subsection(3, 4) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testNamedGrouping4() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((C1=\\c)(C2=\\c))(V=\\v)";
+		
+		final HashMap<String, IPATranscript> hm1 = new HashMap<>();
+		hm1.put("C1", ipa.subsection(1, 2));
+		hm1.put("C2", ipa.subsection(2, 3));
+		hm1.put("V", ipa.subsection(3, 4));
+		
+		final List<Map<String, IPATranscript>> answers = List.of(hm1);
+		testNamedGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testOrExprGroups() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((C1=\\c)(C2=\\c)|(C1=\\c))\\v";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(1, 3), ipa.subsection(1, 2), ipa.subsection(2, 3) }, 
+				{ ipa.subsection(4, 5), ipa.subsection(4, 5), ipa.subsection(0, 0) }
+				
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testOrExprNamedGroups() throws ParseException {
+		final String text = "ˈkʀət͡jə";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((C1=\\c)(C2=\\c)|(C1=\\c))\\v";
+		
+		final Map<String, IPATranscript> hm1 = new HashMap<>();
+		hm1.put("C1", ipa.subsection(1, 2));
+		hm1.put("C2", ipa.subsection(2, 3));
+		
+		final Map<String, IPATranscript> hm2 = new HashMap<>();
+		hm2.put("C1", ipa.subsection(4, 5));
+		hm2.put("C2", ipa.subsection(0, 0));
+		
+		final List<Map<String, IPATranscript>> answers = List.of(hm1, hm2);
+		testNamedGroups(ipa, phonex, answers);
+	}
+	
+	private void testGroups(IPATranscript t, String phonex, IPATranscript[][] groupData) {
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher matcher = pattern.matcher(t);
+
+		System.out.println(phonex + " = " + pattern.getFsa().getDotText());
 		
-		final PhonexMatcher matcher = pattern.matcher(ipa1);
-		
+		int idx = 0;
 		while(matcher.find()) {
-			System.out.println(matcher.group());
+			boolean expectingData = idx < groupData.length;
+			Assert.assertTrue(expectingData);
+			IPATranscript[] data = groupData[idx++];
+			
+			Assert.assertEquals(data.length, matcher.groupCount());
+			for(int i = 1; i <= matcher.groupCount(); i++) {
+				final IPATranscript test = new IPATranscript(matcher.group(i));
+				Assert.assertEquals(data[i-1], test);
+			}
 		}
 	}
+	
+	private void testNamedGroups(IPATranscript t, String phonex, List<Map<String, IPATranscript>> groupData) {
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		final PhonexMatcher matcher = pattern.matcher(t);
+
+		int idx = 0;
+		while(matcher.find()) {
+			boolean expectingData = idx < groupData.size();
+			Assert.assertTrue(expectingData);
+			Map<String, IPATranscript> data = groupData.get(idx++);
+			
+			// make sure groups exist
+			for(String groupName:data.keySet()) {
+				int groupIdx = pattern.groupIndex(groupName);
+				Assert.assertTrue(groupIdx > 0);
+				
+				final IPATranscript test = new IPATranscript(matcher.group(groupIdx));
+				Assert.assertEquals(data.get(groupName), test);				
+			}
+		}			
+	}
+	
 	
 }

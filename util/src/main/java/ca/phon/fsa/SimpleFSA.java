@@ -252,7 +252,7 @@ public class SimpleFSA<T> {
 			if(nextState != null) {
 				// mark groups
 				for(int grpIdx:toFollow.getInitGroups()) {
-					machineState.markGroup(grpIdx);
+					machineState.markGroup(grpIdx, toFollow.getMatchLength());
 				}
 				for(int grpIdx:toFollow.getMatcherGroups()) {
 					for(int i = 0; i < toFollow.getMatchLength(); i++)
