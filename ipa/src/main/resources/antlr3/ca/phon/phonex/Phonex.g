@@ -100,17 +100,22 @@ exprele
 	;
 
 group
+	// normal group
 	:	OPEN_PAREN baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
 	->	^(GROUP baseexpr+ quantifier?)
+	// non capturing group
 	|	OPEN_PAREN NON_CAPTURING_GROUP baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
 	->	^(GROUP["?"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
+	// named group
 	|	OPEN_PAREN group_name '=' baseexpr (PIPE baseexpr)* CLOSE_PAREN quantifier?
 	->	^(GROUP[$group_name.text] baseexpr+ quantifier?)
+	// look-behind
 	|	OPEN_PAREN LOOK_BEHIND_GROUP { reverseExpr = true; } baseexpr CLOSE_PAREN quantifier?
 	{
 		reverseExpr = false;
 	}
 	->	^(GROUP["?<"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
+	// look ahead
 	|	OPEN_PAREN LOOK_AHEAD_GROUP baseexpr CLOSE_PAREN quantifier?
 	->	^(GROUP["?>"] NON_CAPTURING_GROUP baseexpr+ quantifier?)
 	;

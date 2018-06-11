@@ -303,6 +303,18 @@ public class TestBasicConstructs {
 		testNamedGroups(ipa, phonex, answers);
 	}
 	
+	@Test(expected=PhonexPatternException.class)
+	public void testDuplicateGroupName1() throws ParseException {
+		final String phonex = "(C=\\c)(C=\\c)\\v";
+		PhonexPattern.compile(phonex);
+	}
+	
+	@Test(expected=PhonexPatternException.class)
+	public void testDuplicateGroupName2() throws ParseException {
+		final String phonex = "((C1=\\c)(C2=\\c)|(C2=\\c))\\v";
+		PhonexPattern.compile(phonex);
+	}
+	
 	@Test
 	public void testNonCapturingGroup1() throws ParseException {
 		final String text = "ˈkʀət͡jə";
@@ -340,7 +352,7 @@ public class TestBasicConstructs {
 	}
 	
 	@Test
-	public void testLookBehind() throws ParseException {
+	public void testLookBehind1() throws ParseException {
 		final String text = "zuˈkini";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
@@ -351,12 +363,21 @@ public class TestBasicConstructs {
 		testGroups(ipa, phonex, answers);
 	}
 	
+	@Test
+	public void testLookBehind2() throws ParseException {
+		final String text = "zuˈkini";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(?<(\\s?\\c\\v)+)(\\c\\v)";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(5, 7) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
 	private void testGroups(IPATranscript t, String phonex, IPATranscript[][] groupData) {
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(t);
-		
-		System.out.println(phonex + " = " + pattern.getFsa().getDotText());
-		System.out.println("# groups = " + pattern.numberOfGroups());
 		
 		int idx = 0;
 		while(matcher.find()) {

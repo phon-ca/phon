@@ -209,7 +209,11 @@ scope {
 			// copy all named groups
 			for(PhonexFSA fsa:$group::orList) {
 				for(String gn:fsa.getGroupNames()) {
-					// TODO throw exception if re-defining group names
+					int gidx = fsa.getGroupIndex(gn);
+					int currentGroupIdx = $baseexpr::primaryFSA.getGroupIndex(gn);
+					if(currentGroupIdx > 0 && gidx != currentGroupIdx) {
+						throw new PhonexPatternException("Duplicate group name: " + gn);
+					}
 					$baseexpr::primaryFSA.setGroupName(fsa.getGroupIndex(gn), gn);
 				}
 			}
@@ -220,6 +224,10 @@ scope {
 
 		// set group name (if available)
 		if(!nonCapturing && !groupName.equals("GROUP")) {
+			int currentGroupIdx = $baseexpr::primaryFSA.getGroupIndex(groupName);
+			if(currentGroupIdx > 0 && groupIndex != currentGroupIdx) {
+				throw new PhonexPatternException("Duplicate group name: " + groupName);
+			}
 			$baseexpr::primaryFSA.setGroupName(groupIndex, groupName);
 		}
 
