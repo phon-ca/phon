@@ -69,6 +69,11 @@ private boolean reverseExpr = false;
  * Start
  */
 expr
+@after {
+	if(input.LA(1) != EOF) {
+		throw new PhonexPatternException("Unexpected symbol: " + input.LT(1).getText());
+	}
+}
 	:	baseexpr flags?
 	->	^(EXPR baseexpr flags?)
 	;
