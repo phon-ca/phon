@@ -32,7 +32,7 @@ import junit.framework.Assert;
  *
  */
 @RunWith(JUnit4.class)
-public class TestPluginMatchers {
+public class TestPluginMatchers extends PhonexTest {
 
 	@Test(expected=NoSuchPluginException.class)
 	public void testNoSuchPlugin() throws Exception {
@@ -131,6 +131,18 @@ public class TestPluginMatchers {
 		Assert.assertEquals(5, ipa.indexOf(".:e"));
 		Assert.assertEquals(5, ipa.indexOf(".:sctype(\"E\")"));
 		Assert.assertEquals(5, ipa.indexOf(".:sctype(\"OEHS\")"));
+	}
+	
+	@Test
+	public void testCombinedScType() throws ParseException {
+		final String text = "s:Ltʰ:Ouː:Nd:Cbʷ:Rd:E";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(\\c:L:O+)";
+		final IPATranscript[][] answers = new IPATranscript[][] { 
+			{ ipa.subsection(0, 2) }
+		};
+		testGroups(ipa, phonex, answers);
 	}
 
 	@Test

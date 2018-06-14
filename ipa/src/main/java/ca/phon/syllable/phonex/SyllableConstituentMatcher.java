@@ -22,12 +22,13 @@ import java.util.*;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.plugins.CombinableMatcher;
 import ca.phon.syllable.*;
 
 /**
  * Syllable constituent type matcher for phonex.
  */
-public final class SyllableConstituentMatcher implements PhoneMatcher {
+public final class SyllableConstituentMatcher implements PhoneMatcher, CombinableMatcher {
 	
 	/**
 	 * Allowed constituent types
@@ -104,4 +105,16 @@ public final class SyllableConstituentMatcher implements PhoneMatcher {
 		
 		return retVal;
 	}
+
+	@Override
+	public void combineMatcher(PhoneMatcher matcher) {
+		if(!(matcher instanceof SyllableConstituentMatcher))
+			throw new IllegalArgumentException();
+		
+		final SyllableConstituentMatcher scMatcher = (SyllableConstituentMatcher)matcher;
+		
+		allowedTypes.addAll(scMatcher.allowedTypes);
+		disallowedTypes.addAll(scMatcher.disallowedTypes);
+	}
+	
 }
