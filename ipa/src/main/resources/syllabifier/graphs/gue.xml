@@ -158,7 +158,7 @@
                 <node id="478a8f1c" name="MaxCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:C(C=\c:U):mdc("-1","false")]]></oga:property>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:C(C=\c:U:mdc("-1","false"))]]></oga:property>
                         </oga:settings>
                         <oga:meta x="15" y="15"/>
                     </extensions>

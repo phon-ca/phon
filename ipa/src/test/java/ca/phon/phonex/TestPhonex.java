@@ -425,13 +425,19 @@ public class TestPhonex {
 	@Test(expected=PhonexPatternException.class)
 	public void testUnbalancedParenthesis1() throws ParseException {
 		final String phonex = "((C1=\\c)(C2=\\c)))\\v";
-		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		PhonexPattern.compile(phonex);
 	}
 	
 	@Test(expected=PhonexPatternException.class)
 	public void testUnbalancedParenthesis2() throws ParseException {
 		final String phonex = "((C1=\\c)(C2=\\c)\\v";
-		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		PhonexPattern.compile(phonex);
+	}
+	
+	@Test(expected=PhonexPatternException.class)
+	public void testUnbalancedParenthesis3() throws ParseException {
+		final String phonex = "((C1=\\c(C2=\\c))\\v";
+		PhonexPattern.compile(phonex);
 	}
 	
 	private void testGroups(IPATranscript t, String phonex, IPATranscript[][] groupData) {
