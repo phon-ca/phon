@@ -197,8 +197,8 @@ argument_list
 	;
 
 back_reference
-	:	BACKSLASH INT
-	->	BACK_REF[$INT]
+	:	BACKSLASH MINUS? INT
+	->	^(BACK_REF[$INT] MINUS?)
 	;
 
 feature_set_matcher

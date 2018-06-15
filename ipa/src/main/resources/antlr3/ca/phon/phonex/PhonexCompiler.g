@@ -55,6 +55,31 @@ public int getFlags() {
 	return this.flags;
 }
 
+public PhoneMatcher[] filterPluginMatchers(List<PhoneMatcher> pluginMatchers) {
+	// only keep one of each of these matchers
+	Map<Class<? extends CombinableMatcher>, CombinableMatcher> combinableMatchers = new HashMap<>(); 
+
+	List<PhoneMatcher> pMatchers = new ArrayList<>();
+	for(int i = 0; i < pluginMatchers.size(); i++) {
+		PhoneMatcher pMatcher = pluginMatchers.get(i);
+	
+		if(pMatcher instanceof CombinableMatcher) {
+			CombinableMatcher cm = combinableMatchers.get(pMatcher.getClass());
+			if(cm != null) {
+				cm.combineMatcher(pMatcher);
+			} else {
+				cm = (CombinableMatcher)pMatcher;
+				combinableMatchers.put(cm.getClass(), cm);
+				pMatchers.add(pMatcher);
+			}
+		} else {
+			pMatchers.add(pMatcher);
+		}
+	}
+	
+	return pMatchers.toArray(new PhoneMatcher[0]);
+}
+
 }
 
 /**
@@ -245,39 +270,16 @@ scope {
 	{
 		// append matcher to fsa
 		PhoneMatcher matcher = bm;
-
-		// only keep one of each of these matchers
-		Map<Class<? extends CombinableMatcher>, CombinableMatcher> combinableMatchers = new HashMap<>(); 
-		
-		List<PhoneMatcher> pMatchers = new ArrayList<>();
-		for(int i = 0; i < $matcher::pluginMatchers.size(); i++) {
-			PhoneMatcher pMatcher = $matcher::pluginMatchers.get(i);
-			
-			if(pMatcher instanceof CombinableMatcher) {
-				CombinableMatcher cm = combinableMatchers.get(pMatcher.getClass());
-				if(cm != null) {
-					cm.combineMatcher(pMatcher);
-				} else {
-					cm = (CombinableMatcher)pMatcher;
-					combinableMatchers.put(cm.getClass(), cm);
-					pMatchers.add(pMatcher);
-				}
-			} else {
-				pMatchers.add(pMatcher);
-			}
-		}
-
+		PhoneMatcher pMatchers[] = filterPluginMatchers($matcher::pluginMatchers);
 
 		if(q == null)
-			$baseexpr::fsaStack.peek().appendMatcher(matcher, pMatchers.toArray(new PhoneMatcher[0]));
+			$baseexpr::fsaStack.peek().appendMatcher(matcher, pMatchers);
 		else
-			$baseexpr::fsaStack.peek().appendMatcher(matcher, q, pMatchers.toArray(new PhoneMatcher[0]));
+			$baseexpr::fsaStack.peek().appendMatcher(matcher, q, pMatchers);
 	}
 	|	^(groupIndex=back_reference (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
 	{
-		PhoneMatcher[] pMatchers = new PhoneMatcher[$matcher::pluginMatchers.size()];
-		for(int i = 0; i < $matcher::pluginMatchers.size(); i++)
-			pMatchers[i] = PhoneMatcher.class.cast($matcher::pluginMatchers.get(i));
+		PhoneMatcher[] pMatchers = filterPluginMatchers($matcher::pluginMatchers);
 
 		if(q == null)
 			$baseexpr::fsaStack.peek().appendBackReference(groupIndex, pMatchers);
@@ -422,9 +424,24 @@ argument returns [String value]
 	;
 
 back_reference returns [Integer groupNumber]
-	:	BACK_REF
+scope {
+	boolean isRelative;
+}
+@init {
+	$back_reference::isRelative = false;
+}
+	:	^(BACK_REF (MINUS {$back_reference::isRelative = true;})?) 
 	{
-		$groupNumber = Integer.parseInt($BACK_REF.text);
+		if($back_reference::isRelative) {
+			$groupNumber = $baseexpr::groupIndex - Integer.parseInt($BACK_REF.text);
+		} else {
+			$groupNumber = Integer.parseInt($BACK_REF.text);
+		}
+		
+		// test group number
+		if($groupNumber >= $baseexpr::groupIndex || $groupNumber < 1) {
+			throw new PhonexPatternException("Invalid group number " + $groupNumber);
+		}
 	}
 	;
 

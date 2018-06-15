@@ -440,6 +440,40 @@ public class TestPhonex extends PhonexTest {
 		PhonexPattern.compile(phonex);
 	}
 	
+	@Test(expected=PhonexPatternException.class)
+	public void testInvalidBackReference1() throws ParseException {
+		final String phonex = "(\\c)\\2";
+		PhonexPattern.compile(phonex);
+	}
 	
+	@Test(expected=PhonexPatternException.class)
+	public void testInvalidBackReference2() throws ParseException {
+		final String phonex = "(\\c)\\-2";
+		PhonexPattern.compile(phonex);
+	}
+	
+	@Test
+	public void testBackReference() throws ParseException {
+		final String text = "hello";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((\\c)\\2)";
+		final IPATranscript[][] answers = new IPATranscript[][] {
+			{ ipa.subsection(2, 4), ipa.subsection(2, 3) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+
+	@Test
+	public void testRelativeReference() throws ParseException {
+		final String text = "hello";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((\\c)\\-1)";
+		final IPATranscript[][] answers = new IPATranscript[][] {
+			{ ipa.subsection(2, 4), ipa.subsection(2, 3) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
 	
 }
