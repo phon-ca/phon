@@ -214,7 +214,7 @@ public class QueryAndReportWizard extends NodeWizard {
 				qs.getContext().getEvaluatedScope();
 				// scripts should be exactly the same, if not bail
 				if(!qs.getScript().equals(queryScript.getScript())) {
-					throw new IOException("Issue loading previous query parameters - source and previous scripts do not match");
+					throw new IOException("Issue loading previous query parameters; source and previous scripts do not match");
 				}
 				
 				return qs;
