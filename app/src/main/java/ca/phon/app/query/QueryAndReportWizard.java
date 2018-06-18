@@ -3,6 +3,7 @@ package ca.phon.app.query;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.xml.bind.UnmarshalException;
+import javax.xml.stream.XMLStreamException;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
@@ -38,9 +41,11 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
+import ca.phon.query.script.LazyQueryScript;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.PhonScriptException;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.ActionTabComponent;
@@ -205,8 +210,21 @@ public class QueryAndReportWizard extends NodeWizard {
 		if(previousParametersFile.exists()) {
 			try {
 				QueryScript qs = new QueryScript(previousParametersFile.toURI().toURL());
+			
+				qs.getContext().getEvaluatedScope();
+				// scripts should be exactly the same, if not bail
+				if(!qs.getScript().equals(queryScript.getScript())) {
+					throw new IOException("Issue loading previous query parameters - source and previous scripts do not match");
+				}
+				
 				return qs;
-			} catch (IOException e) {
+			} catch (IOException | PhonScriptException e) {
+				// invalid parameters file - delete
+				boolean deleted = previousParametersFile.delete();
+				if(!deleted) {
+					LogUtil.severe("Could not delete query parameters file: " + previousParametersFile.getAbsolutePath());
+					Toolkit.getDefaultToolkit().beep();
+				}
 				LogUtil.severe(e);
 			}
 		}
