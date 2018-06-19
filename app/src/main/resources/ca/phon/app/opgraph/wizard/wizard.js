@@ -180,7 +180,7 @@ function onCopyTableData(button, tableId) {
     if (table != null) {
         var tableCSV = tableToCSV(table);
 
-        if (buffer == undefined) {
+        if (window.buffer == undefined) {
             var textArea = document.createElement("textarea");
             textArea.style.position = 'fixed';
             textArea.style.top = 0;
@@ -213,7 +213,7 @@ function onCopyTableData(button, tableId) {
 
             document.body.removeChild(textArea);
         } else {
-            buffer.copyTextToClipboard(tableCSV);
+            window.buffer.copyTextToClipboard(tableCSV);
         }
     }
 }
