@@ -53,7 +53,7 @@
                         <![CDATA[Orthography]]>
                     </oga:property>
                     <oga:property key="filters.wordTiers.tiers">
-                        <![CDATA[Target Syllabification, Actual Syllabification, Phone Alignment]]>
+                        <![CDATA[IPA Target, IPA Actual, Target Syllabification, Actual Syllabification, Phone Alignment]]>
                     </oga:property>
                     <oga:property key="filters.primary.patternFilter.filter">
                         <![CDATA[.+]]>
@@ -151,7 +151,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="7ca6b2ef" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-06-19T10:29:09.562-02:30" name="Data Tiers" uuid="bb00087d-5985-49e0-bc27-1dccdd3e209b">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-06-19T11:56:18.909-02:30" name="Data Tiers" uuid="7c023a38-649d-4be4-96f2-de0681009a2a">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
@@ -165,7 +165,7 @@ function setup_params(params) {
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.word.searchByWord">true</param>
-                    <param id="filters.wordTiers.tiers">Target Syllabification, Actual Syllabification, Phone Alignment</param>
+                    <param id="filters.wordTiers.tiers">IPA Target, IPA Actual, Target Syllabification, Actual Syllabification, Phone Alignment</param>
                 </script>
             </qry:query>
             <extensions>
@@ -174,7 +174,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7cf36fbab95146a8" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1937fabe">
+            <graph id="1256ed97">
                 <node id="222e35ac315499b" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -246,7 +246,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="7e7f6d0b48264831" name="Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="207b9c57">
+            <graph id="3ef61412">
                 <node id="2564dd40d5ce4021" name="project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -430,7 +430,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4bb42cb62a99463c" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="22554648">
+                    <graph id="67d117e4">
                         <node id="4579a77279ca4a66" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -488,7 +488,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="e8ae4a39fdd74375" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="5b024a66">
+                            <graph id="4101322f">
                                 <node id="7a99452f69514e84" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -556,7 +556,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="e9d3beb84fbe42d4" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="6c9b9847">
+                            <graph id="2f4379dd">
                                 <node id="fda3b374aa2e4b57" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -619,7 +619,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="bc3959aa86624ad3" name="Non-linear Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="6d105fd6">
+                                    <graph id="2617bdee">
                                         <node id="963cf1005af4056" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -641,7 +641,7 @@ function run(context) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="ec4a79822c44797" name="Create Participant Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="60dea9f7">
+                                            <graph id="172de653">
                                                 <node id="659e068660694f1f" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -661,13 +661,20 @@ function run(context) {
                                                             <oga:property key="__script">
                                                                 <![CDATA[function tableOp(context, table) {
 	// add headers to table
-	table.setColumnTitle(0, "Word");
-	table.setColumnTitle(1, "Productions");
-	table.setColumnTitle(2, "Stress Subtotal");
-	table.setColumnTitle(3, "Syllable Subtotal");
-	table.setColumnTitle(4, "Phone/Timing Unit Subtotal");
-	table.setColumnTitle(5, "Feature Subtotal");
-	table.setColumnTitle(6, "Total");
+	var col = 0;
+	table.setColumnTitle(col++, "Word");
+	table.setColumnTitle(col++, "Productions");
+	table.setColumnTitle(col++, "Stress Subtotal");
+	table.setColumnTitle(col++, "Syllable Subtotal");
+	table.setColumnTitle(col++, "Phone/Timing Unit Subtotal");
+	table.setColumnTitle(col++, "Word Structure Subtotal");
+	table.setColumnTitle(col++, "Place Subtotal");
+	table.setColumnTitle(col++, "Manner Subtotal");
+	table.setColumnTitle(col++, "Voicing Subtotal");
+	table.setColumnTitle(col++, "Vowel Feature Subtotal");
+	table.setColumnTitle(col++, "Segmental Relations Subtotal");
+	table.setColumnTitle(col++, "Feature Subtotal");
+	table.setColumnTitle(col++, "Total");
 }
 ]]>
                                                             </oga:property>
@@ -799,7 +806,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="5d82e146" name="Sort Words" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="1dc283d7">
+                                            <graph id="2a7a3a85">
                                                 <node id="2972cc35" name="arg1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -846,7 +853,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="66c46f3" name="For Each Word" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                                            <graph id="24e02678">
+                                            <graph id="63c231bc">
                                                 <node id="6509644b" name="Current Word" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -896,7 +903,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="d24944a725434695" name="Create Word Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7cf23608">
+                                                    <graph id="488c0a28">
                                                         <node id="981191cde88847b4" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -917,8 +924,10 @@ function tableOp(context, table) {
                                                                         <![CDATA[function tableOp(context, table) {
 	// add headers to table
 	var col = 0;
+	table.setColumnTitle(col++, "Session");
+	table.setColumnTitle(col++, "Record #");
 	table.setColumnTitle(col++, "Result");
-	table.setColumnTitle(col++, "IPA Actual");
+	table.setColumnTitle(col++, "IPA Actual (Word)");
 	table.setColumnTitle(col++, "Stress Subtotal");
 	table.setColumnTitle(col++, "Syllable Subtotal");
 	table.setColumnTitle(col++, "Phone/Timing Unit Subtotal");
@@ -927,6 +936,7 @@ function tableOp(context, table) {
 	table.setColumnTitle(col++, "Manner Subtotal");
 	table.setColumnTitle(col++, "Voicing Subtotal");
 	table.setColumnTitle(col++, "Vowel Feature Subtotal");
+	table.setColumnTitle(col++, "Segmental Relations Subtotal");
 	table.setColumnTitle(col++, "Feature Subtotal");
 	table.setColumnTitle(col++, "Total");
 }
@@ -967,7 +977,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="3b6ad62cb6cb44c2" name="Get Table For Word" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="69c34c3">
+                                                    <graph id="95e8fc8">
                                                         <node id="b41e4a0365274c66" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1051,7 +1061,6 @@ function run(context) {
                                                 <node id="3dcd32be" name="Word Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
-                                                            <oga:property key="contextKey"/>
                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                                                 <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
                                                             </oga:property>
@@ -1078,7 +1087,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="16b901d9" name="For Each Row" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                                                    <graph id="7c39b076">
+                                                    <graph id="1bfd3ef3">
                                                         <node id="e621d9b" name="Current Index" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1125,7 +1134,7 @@ function run(context) {
 ]]>
                                                                     </oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="414" y="286"/>
+                                                                <oga:meta x="421" y="315"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="c71ad97d594442ba" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1179,7 +1188,7 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="53ea1651" name="Get Row Data" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="1829e36">
+                                                            <graph id="45afb571">
                                                                 <node id="2a8fae9a" name="row" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -1193,7 +1202,6 @@ function run(context) {
                                                                 <node id="1755106e" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
-                                                                            <oga:property key="contextKey"/>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                                                                 <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
                                                                             </oga:property>
@@ -1274,12 +1282,29 @@ function run(context) {
                                                                         </oga:meta>
                                                                     </extensions>
                                                                 </node>
+                                                                <node id="c4a492c1a2144860" name="DefaultTableDataSource#getColumnIndex(String)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                                                                    <extensions>
+                                                                        <oga:settings>
+                                                                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
+                                                                                <![CDATA[getColumnIndex(java.lang.String)]]>
+                                                                            </oga:property>
+                                                                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                                                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
+                                                                            </oga:property>
+                                                                        </oga:settings>
+                                                                        <oga:meta x="469" y="637">
+                                                                            <oga:default for="arg1" type="java.lang.String">Session</oga:default>
+                                                                        </oga:meta>
+                                                                    </extensions>
+                                                                </node>
                                                                 <node id="4d3155cac954ee6" name="Get Row Data" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                                     <input name="row" optional="false"/>
                                                                     <input name="targetCol" optional="false"/>
                                                                     <input name="actualCol" optional="false"/>
                                                                     <input name="alignmentCol" optional="false"/>
                                                                     <input name="resultCol" optional="false"/>
+                                                                    <input name="sessionCol" optional="false"/>
+                                                                    <output name="session" type="ca.phon.session.SessionPath"/>
                                                                     <output name="result" type="ca.phon.query.db.Result"/>
                                                                     <output name="target" type="ca.phon.ipa.IPATranscript"/>
                                                                     <output name="actual" type="ca.phon.ipa.IPATranscript"/>
@@ -1293,7 +1318,9 @@ function run(context) {
 	inputs.add("actualCol", "", false, false);
 	inputs.add("alignmentCol", "", false, false);
 	inputs.add("resultCol", "", false, false);
+	inputs.add("sessionCol", "", false, false);
 
+	outputs.add("session", "", false, Packages.ca.phon.session.SessionPath);
 	outputs.add("result", "", false, Packages.ca.phon.query.db.Result);
 	outputs.add("target", "", false, Packages.ca.phon.ipa.IPATranscript);
 	outputs.add("actual", "", false, Packages.ca.phon.ipa.IPATranscript);
@@ -1302,11 +1329,13 @@ function run(context) {
 
 function run(context) {
 	var rowData = context.get("row");
+	var sessionCol = context.get("sessionCol");
 	var resultCol = context.get("resultCol");
 	var targetCol = context.get("targetCol");
 	var actualCol = context.get("actualCol");
 	var alignmentCol = context.get("alignmentCol");
 
+	var session = rowData[sessionCol];
 	var result = rowData[resultCol];
 	var targetData = rowData[targetCol];
 	var actualData = rowData[actualCol];
@@ -1319,6 +1348,7 @@ function run(context) {
 	var alignment = 
 		(alignData != null && alignData.length() > 0 ? Packages.ca.phon.ipa.alignment.PhoneMap.fromString(target, actual, rowData[alignmentCol]) : new Packages.ca.phon.ipa.alignment.PhoneMap(target, actual));
 
+	context.put("session", session);
 	context.put("result", result);
 	context.put("target", target);
 	context.put("actual", actual);
@@ -1341,6 +1371,8 @@ function run(context) {
                                                                 <link dest="4d3155cac954ee6" destField="row" source="40dbe8b" sourceField="value"/>
                                                                 <link dest="dae83f2d116441cb" destField="obj" source="1755106e" sourceField="obj"/>
                                                                 <link dest="4d3155cac954ee6" destField="resultCol" source="dae83f2d116441cb" sourceField="value"/>
+                                                                <link dest="c4a492c1a2144860" destField="obj" source="1755106e" sourceField="obj"/>
+                                                                <link dest="4d3155cac954ee6" destField="sessionCol" source="c4a492c1a2144860" sourceField="value"/>
                                                                 <extensions>
                                                                     <oga:notes>
                                                                         <oga:note color="0xffff96" height="624" title="Inputs" width="274" x="28" y="30"/>
@@ -1354,6 +1386,7 @@ function run(context) {
                                                             <ogcn:published_output field="actual" name="actual" ref="4d3155cac954ee6"/>
                                                             <ogcn:published_output field="alignment" name="alignment" ref="4d3155cac954ee6"/>
                                                             <ogcn:published_output field="result" name="result" ref="4d3155cac954ee6"/>
+                                                            <ogcn:published_output field="session" name="session" ref="4d3155cac954ee6"/>
                                                             <extensions>
                                                                 <oga:meta x="414" y="139"/>
                                                             </extensions>
@@ -1710,6 +1743,7 @@ function checkCompensatoryVowelLengthening(table, target, actual, alignment) {
                                                             <input name="actual" optional="false"/>
                                                             <input name="alignment" optional="false"/>
                                                             <output name="total" type="java.lang.Integer"/>
+                                                            <output name="segrelTotal" type="java.lang.Integer"/>
                                                             <output name="featureTotalMap" type="java.util.Map"/>
                                                             <extensions>
                                                                 <oga:settings>
@@ -1727,6 +1761,7 @@ function init(inputs, outputs) {
 	inputs.add("alignment", "", false, false);
 
 	outputs.add("total", "", false, java.lang.Integer);
+	outputs.add("segrelTotal", "", false, java.lang.Integer);
 	outputs.add("featureTotalMap", "", false, java.util.Map);
 }
 
@@ -1805,7 +1840,7 @@ function tableOp(context, table) {
 
 	categoryPrinted = false;
 	var total = 0;
-
+	var segrelTotal = 0;
 	var featureTotalMap = new java.util.HashMap();
 
 	// check insertions/deletions
@@ -1843,6 +1878,7 @@ function tableOp(context, table) {
 		rowData[3] = "";
 		table.addRow(rowData);
 
+		segrelTotal += segrel.dimensions.size();
 		total += segrel.dimensions.size();
 		categoryPrinted = true;
 	}
@@ -1856,6 +1892,7 @@ function tableOp(context, table) {
 	table.addRow(rowData);
 
 	context.put("total", new java.lang.Integer(total));
+	context.put("segrelTotal", new java.lang.Integer(segrelTotal));
 	context.put("featureTotalMap", featureTotalMap);
 }
 ]]>
@@ -1901,46 +1938,57 @@ function tableOp(context, table) {
                                                             </extensions>
                                                         </node>
                                                         <node id="cdc7388f9dba46d5" name="Add row to Word Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                            <input name="session" optional="false"/>
                                                             <input name="result" optional="false"/>
                                                             <input name="ipaActual" optional="false"/>
                                                             <input name="stress subtotal" optional="false"/>
                                                             <input name="syllable subtotal" optional="false"/>
                                                             <input name="phone subtotal" optional="false"/>
                                                             <input name="featureTotalMap" optional="false"/>
+                                                            <input name="segrel subtotal" optional="false"/>
                                                             <input name="feature subtotal" optional="false"/>
                                                             <extensions>
                                                                 <oga:settings>
                                                                     <oga:property key="__script">
                                                                         <![CDATA[function init(inputs, outputs) {
+	inputs.add("session", "", false, false);
 	inputs.add("result", "", false, false);
 	inputs.add("ipaActual", "", false, false);
 	inputs.add("stress subtotal", "", false, false);
 	inputs.add("syllable subtotal", "", false, false);
 	inputs.add("phone subtotal", "", false, false);
 	inputs.add("featureTotalMap", "", false, false);
+	inputs.add("segrel subtotal", "", false, false);
 	inputs.add("feature subtotal", "", false, false);
 }
 
 function tableOp(context, table) {
 	var row = [];
 
+	var session = context.get("session");
 	var result = context.get("result");
 	var ipaActual = context.get("ipaActual");
 	var stressSubtotal = context.get("stress subtotal");
 	var syllableSubtotal = context.get("syllable subtotal");
 	var phoneSubtotal = context.get("phone subtotal");
 	var featureSubtotal = context.get("feature subtotal");
+	var segrelSubtotal = context.get("segrel subtotal");
 	var featureTotalMap = context.get("featureTotalMap");
 	var total = stressSubtotal.intValue() + syllableSubtotal.intValue() + phoneSubtotal.intValue() + featureSubtotal.intValue();
 
 	var col = 0;
+	row[col++] = session;
+	row[col++] = new java.lang.Integer(result.recordIndex+1);
 	row[col++] = result;
 	row[col++] = ipaActual;
 	row[col++] = new java.lang.Integer(stressSubtotal);
 	row[col++] = new java.lang.Integer(syllableSubtotal);
 	row[col++] = new java.lang.Integer(phoneSubtotal);
 
-	var wordStructureSubtotal = stressSubtotal + syllableSubtotal + phoneSubtotal;
+	var wordStructureSubtotal = 
+		stressSubtotal.intValue() + 
+		syllableSubtotal.intValue() + 
+		phoneSubtotal.intValue();
 	row[col++] = new java.lang.Integer(wordStructureSubtotal);
 
 	row[col++] = new java.lang.Integer( featureTotalMap.get(PhoneDimension.PLACE) );
@@ -1954,6 +2002,7 @@ function tableOp(context, table) {
 		featureTotalMap.get(PhoneDimension.ROUNDING).intValue();
 		
 	row[col++] = new java.lang.Integer(vowelFeatureSubtotal);
+	row[col++] = new java.lang.Integer(segrelSubtotal);
 	row[col++] = new java.lang.Integer(featureSubtotal);
 	row[col++] = new java.lang.Integer(total);
 
@@ -2016,6 +2065,8 @@ function tableOp(context, table) {
                                                         <link dest="cdc7388f9dba46d5" destField="ipaActual" source="53ea1651" sourceField="actual"/>
                                                         <link dest="cdc7388f9dba46d5" destField="result" source="53ea1651" sourceField="result"/>
                                                         <link dest="cdc7388f9dba46d5" destField="featureTotalMap" source="1c51e75f8c9046d2" sourceField="featureTotalMap"/>
+                                                        <link dest="cdc7388f9dba46d5" destField="session" source="53ea1651" sourceField="session"/>
+                                                        <link dest="cdc7388f9dba46d5" destField="segrel subtotal" source="1c51e75f8c9046d2" sourceField="segrelTotal"/>
                                                         <extensions>
                                                             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                                             <oga:notes>
@@ -2043,9 +2094,11 @@ function tableOp(context, table) {
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                                                                <![CDATA[true]]>
+                                                                <![CDATA[false]]>
                                                             </oga:property>
-                                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns">
+                                                                <![CDATA[Result]]>
+                                                            </oga:property>
                                                         </oga:settings>
                                                         <oga:meta x="1024" y="481">
                                                             <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
@@ -2071,6 +2124,12 @@ function tableOp(context, table) {
 	var stressTotal = 0;
 	var syllableTotal = 0;
 	var phoneTotal = 0;
+	var wordStructureTotal = 0;
+	var placeTotal = 0;
+	var mannerTotal = 0;
+	var voicingTotal = 0;
+	var vowelFeatureTotal = 0;
+	var segrelTotal = 0;
 	var featureTotal = 0;
 	var total = 0;
 
@@ -2078,24 +2137,43 @@ function tableOp(context, table) {
 		var stressSubtotal = wordSummary.getValueAt(row, "Stress Subtotal");
 		var syllableSubtotal = wordSummary.getValueAt(row, "Syllable Subtotal");
 		var phoneSubtotal = wordSummary.getValueAt(row, "Phone/Timing Unit Subtotal");
+		var wordStructureSubtotal = wordSummary.getValueAt(row, "Word Structure Subtotal");
+		var placeSubtotal = wordSummary.getValueAt(row, "Place Subtotal");
+		var mannerSubtotal = wordSummary.getValueAt(row, "Manner Subtotal");
+		var voicingSubtotal = wordSummary.getValueAt(row, "Voicing Subtotal");
+		var segrelSubtotal = wordSummary.getValueAt(row, "Segmental Relations Subtotal");
+		var vowelFeatureSubtotal = wordSummary.getValueAt(row, "Vowel Feature Subtotal");
 		var featureSubtotal = wordSummary.getValueAt(row, "Feature Subtotal");
 		var subtotal = wordSummary.getValueAt(row, "Total");
 
 		stressTotal += stressSubtotal.intValue();
 		syllableTotal += syllableSubtotal.intValue();
 		phoneTotal += phoneSubtotal.intValue();
+		wordStructureTotal += wordStructureSubtotal.intValue();
+		placeTotal += placeSubtotal.intValue();
+		mannerTotal += mannerSubtotal.intValue();
+		voicingTotal += voicingSubtotal.intValue();
+		vowelFeatureTotal += vowelFeatureSubtotal.intValue();
+		segrelTotal += segrelSubtotal.intValue();
 		featureTotal += featureSubtotal.intValue();
 		total += subtotal.intValue();
 	}
 
 	var row = new Array();
-	row[0] = word;
-	row[1] = new java.lang.Integer( wordSummary.rowCount );
-	row[2] = new java.lang.Float( stressTotal / wordSummary.rowCount );
-	row[3] = new java.lang.Float( syllableTotal / wordSummary.rowCount );
-	row[4] = new java.lang.Float( phoneTotal / wordSummary.rowCount );
-	row[5] = new java.lang.Float( featureTotal / wordSummary.rowCount );
-	row[6] = new java.lang.Float( total / wordSummary.rowCount );
+	var col = 0;
+	row[col++] = word;
+	row[col++] = new java.lang.Integer( wordSummary.rowCount );
+	row[col++] = new java.lang.Float( stressTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( syllableTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( phoneTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( wordStructureTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( placeTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( mannerTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( voicingTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( vowelFeatureTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( segrelTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( featureTotal / wordSummary.rowCount );
+	row[col++] = new java.lang.Float( total / wordSummary.rowCount );
 	table.addRow(row);
 }
 ]]>
