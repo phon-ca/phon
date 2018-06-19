@@ -283,6 +283,8 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		final UserTierType retVal = factory.createUserTierType();
 		retVal.setGrouped(grouped);
 		retVal.setTierName(name);
+		if(td.getDeclaredType() != TierString.class)
+			retVal.setType(td.getDeclaredType().getName());
 		return retVal;
 	}
 

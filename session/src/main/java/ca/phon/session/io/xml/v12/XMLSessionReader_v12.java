@@ -41,6 +41,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Comment;
 import ca.phon.session.io.*;
@@ -282,7 +283,13 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	private TierDescription copyTierDescription(SessionFactory factory, UserTierType utt) {
 		final boolean grouped = utt.isGrouped();
 		final String name = utt.tierName;
-		return factory.createTierDescription(name, grouped);
+		
+		try {
+			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
+			return factory.createTierDescription(name, grouped, type);
+		} catch (ClassNotFoundException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	private TierViewItem copyTierViewItem(SessionFactory factory, TvType tvt) {

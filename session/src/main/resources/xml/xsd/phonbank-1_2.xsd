@@ -347,8 +347,7 @@ Schema for Phon sessions.
         </xs:annotation>
         <xs:attribute name="tierName" type="xs:ID"/>
         <xs:attribute name="grouped" type="xs:boolean"/>
-        <!-- deprecated - use tier view items for font info -->
-        <xs:attribute name="tierFont" type="xs:string"/>
+    	<xs:attribute name="type" type="xs:string" use="optional" default="ca.phon.session.TierString"/>
     </xs:complexType>
 
     <xs:element name="transcriber" type="transcriberType"/>
