@@ -23,10 +23,13 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import ca.phon.app.log.actions.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.menu.MenuBuilder;
 
 public class BufferWindow extends CommonModuleFrame implements BufferPanelContainer {
 
@@ -54,19 +57,25 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
 		
-		final JMenu fileMenu = menuBar.getMenu(0);
-		if(!fileMenu.getText().equals("File")) return;
-		
-		final SaveBufferAction saveBufferAct = new SaveBufferAction(bufferPanel);
-		fileMenu.add(new JMenuItem(saveBufferAct), 0);
-		fileMenu.add(new JSeparator(), 1);
-		
-		final CloseCurrentBufferAction closeBufferAct = new CloseCurrentBufferAction(bufferPanel);
-		fileMenu.add(new JMenuItem(closeBufferAct), 2);
-		
-		final CloseAllBuffersAction closeAllBuffersAct = new CloseAllBuffersAction(bufferPanel);
-		fileMenu.add(new JMenuItem(closeAllBuffersAct), 3);
-		fileMenu.add(new JSeparator(), 4);
+		final MenuBuilder builder = new MenuBuilder(menuBar);
+		final JMenu bufferMenu = builder.addMenu(".@Edit", "Buffer");
+		bufferMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				bufferPanel.setupMenu(bufferMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				
+			}
+		});
 	}
 	
 	private void init() {

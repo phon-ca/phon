@@ -34,6 +34,7 @@ import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 
 import ca.phon.app.log.actions.*;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
 
@@ -116,6 +117,68 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
 	public JTable getBufferTable() {
 		return this.bufferList;
+	}
+	
+	public void setupMenu(JMenu menu) {
+		menu.removeAll();
+		final MenuBuilder builder = new MenuBuilder(menu);
+		
+		if(getBufferNames().size() == 0) {
+			return;
+		}
+		
+		// save actions
+		final SaveBufferAction saveAct = new SaveBufferAction(this);
+		builder.addItem(".", saveAct);
+		
+		final SaveAllBuffersAction saveAllAct = new SaveAllBuffersAction(this);
+		builder.addItem(".", saveAllAct);
+		
+		builder.addSeparator(".", "_saveActions");
+		
+		// close actions
+		final CloseCurrentBufferAction closeAct = new CloseCurrentBufferAction(this);
+		builder.addItem(".", closeAct);
+		
+		final CloseAllBuffersAction closeAllAct = new CloseAllBuffersAction(this);
+		builder.addItem(".", closeAllAct);
+		
+		builder.addSeparator(".", "_closeActions");
+		
+		if(getBufferNames().size() > 1) {
+			final JMenu bufferMenu = builder.addMenu(".", "Show buffer");
+			for(String bufferName:getBufferNames()) {
+				final PhonUIAction showBufferAct = new PhonUIAction(this, "selectBuffer", bufferName);
+				showBufferAct.putValue(PhonUIAction.NAME, bufferName);
+				showBufferAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show buffer " + bufferName);
+				showBufferAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer() != null && getCurrentBuffer().getName().equals(bufferName));
+				bufferMenu.add(new JCheckBoxMenuItem(showBufferAct));				
+			}
+			builder.addSeparator(".", "_buffers");
+		}
+		
+		if(getCurrentBuffer() != null) {
+			// view actions
+			final PhonUIAction viewAsTextAct = new PhonUIAction(getCurrentBuffer(), "showBuffer");
+			viewAsTextAct.putValue(PhonUIAction.NAME, "View as text");
+			viewAsTextAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View current buffer data as text");
+			viewAsTextAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingBuffer());
+			builder.addItem(".", new JCheckBoxMenuItem(viewAsTextAct));
+		
+			final PhonUIAction viewAsTableAct = new PhonUIAction(getCurrentBuffer(), "showTable");
+			viewAsTableAct.putValue(PhonUIAction.NAME, "View as table");
+			viewAsTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View current buffer data as table");
+			viewAsTableAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingTable());
+			builder.addItem(".", new JCheckBoxMenuItem(viewAsTableAct));
+			
+			final PhonUIAction viewAsHtmlAct = new PhonUIAction(getCurrentBuffer(), "showHtml");
+			viewAsHtmlAct.putValue(PhonUIAction.NAME, "View as HTML");
+			viewAsHtmlAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View current buffer data as HTML");
+			viewAsHtmlAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingHtml());
+			builder.addItem(".", new JCheckBoxMenuItem(viewAsHtmlAct));
+			
+			builder.addSeparator(".", "_viewActions");
+		}
 	}
 
 	private JPanel createNoSelectionPanel() {
