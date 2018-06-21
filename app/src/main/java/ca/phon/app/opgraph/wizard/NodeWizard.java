@@ -35,7 +35,8 @@ import java.util.logging.*;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
-import javax.swing.Timer;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.html.*;
 import javax.swing.tree.TreePath;
@@ -183,7 +184,139 @@ public class NodeWizard extends WizardFrame {
 
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		
-		JMenu menu = builder.addMenu(".@File", "Report");
+		final JMenu reportMenu = builder.addMenu(".@Edit", "Report");
+		reportMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				setupReportMenu(reportMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		});
+		
+		
+		final JMenu bufferMenu = builder.addMenu(".@Report", "Buffer");
+		bufferMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				bufferPanel.setupMenu(bufferMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				
+			}
+		});
+	}
+	
+	public void setupReportMenu(JMenu menu) {
+		menu.removeAll();
+		final MenuBuilder builder = new MenuBuilder(menu);
+		
+		// add global options
+		if(globalOptionsPanel != null) {
+			builder.addItem(".", "-- Global Options --").setEnabled(false);
+			
+			final String caseSensitiveValue = (globalOptionsPanel.isUseGlobalCaseSensitive()
+					? (globalOptionsPanel.isCaseSensitive() ? "yes" : "no")
+					: "default");
+			final JMenu caseSensitiveMenu = builder.addMenu(".", "Case sensitive: " + caseSensitiveValue);
+			
+			final PhonUIAction defCSAct = new PhonUIAction(globalOptionsPanel, "useDefaultCaseSensitive");
+			defCSAct.putValue(PhonUIAction.NAME, "default");
+			defCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+			defCSAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalCaseSensitive());
+			final JCheckBoxMenuItem defCSItem = new JCheckBoxMenuItem(defCSAct);
+			caseSensitiveMenu.add(defCSItem);
+			
+			final PhonUIAction yesCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", true);
+			yesCSAct.putValue(PhonUIAction.NAME, "yes");
+			yesCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
+			yesCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && globalOptionsPanel.isCaseSensitive());
+			final JCheckBoxMenuItem yesCSItem = new JCheckBoxMenuItem(yesCSAct);
+			caseSensitiveMenu.add(yesCSItem);
+			
+			final PhonUIAction noCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", false);
+			noCSAct.putValue(PhonUIAction.NAME, "no");
+			noCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
+			noCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && !globalOptionsPanel.isCaseSensitive());
+			final JCheckBoxMenuItem noCSItem = new JCheckBoxMenuItem(noCSAct);
+			caseSensitiveMenu.add(noCSItem);
+			
+			final String ignoreDiacriticsValue = (globalOptionsPanel.isUseGlobalIgnoreDiacritics()
+					? (globalOptionsPanel.isIgnoreDiacritics() ? "yes" : "no")
+					: "default");
+			final JMenu ignoreDiacriticsMenu = builder.addMenu(".", "Ignore diacritics: " + ignoreDiacriticsValue);
+			
+			final PhonUIAction defIDAct = new PhonUIAction(globalOptionsPanel, "useDefaultIgnoreDiacritics");
+			defIDAct.putValue(PhonUIAction.NAME, "default");
+			defIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+			defIDAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalIgnoreDiacritics());
+			final JCheckBoxMenuItem defIDItem = new JCheckBoxMenuItem(defIDAct);
+			ignoreDiacriticsMenu.add(defIDItem);
+			
+			final PhonUIAction yesIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", true);
+			yesIDAct.putValue(PhonUIAction.NAME, "yes");
+			yesIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
+			yesIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && globalOptionsPanel.isIgnoreDiacritics());
+			final JCheckBoxMenuItem yesIDItem = new JCheckBoxMenuItem(yesIDAct);
+			ignoreDiacriticsMenu.add(yesIDItem);
+			
+			final PhonUIAction noIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", false);
+			noIDAct.putValue(PhonUIAction.NAME, "no");
+			noIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
+			noIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && !globalOptionsPanel.isIgnoreDiacritics());
+			final JCheckBoxMenuItem noIDItem = new JCheckBoxMenuItem(noIDAct);
+			ignoreDiacriticsMenu.add(noIDItem);
+			
+			final String inventoryGroupingValue = (globalOptionsPanel.isUseInventoryGrouping()
+					? globalOptionsPanel.getInventoryGrouping()
+					: "default");
+			final JMenu inventoryGroupingMenu = builder.addMenu(".", "Inventory grouping: " + inventoryGroupingValue);
+			
+			final PhonUIAction defIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "default");
+			defIGAct.putValue(PhonUIAction.NAME, "default");
+			defIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+			defIGAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseInventoryGrouping());
+			final JCheckBoxMenuItem defIGItem = new JCheckBoxMenuItem(defIGAct);
+			inventoryGroupingMenu.add(defIGItem);
+			
+			final PhonUIAction sessionIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Session");
+			sessionIGAct.putValue(PhonUIAction.NAME, "Session");
+			sessionIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
+			sessionIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Session"));
+			final JCheckBoxMenuItem sessionIGItem = new JCheckBoxMenuItem(sessionIGAct);
+			inventoryGroupingMenu.add(sessionIGItem);
+			
+			final PhonUIAction ageIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Age");
+			ageIGAct.putValue(PhonUIAction.NAME, "Age");
+			ageIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
+			ageIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Age"));
+			final JCheckBoxMenuItem ageIGItem = new JCheckBoxMenuItem(ageIGAct);
+			inventoryGroupingMenu.add(ageIGItem);
+			
+			builder.addSeparator(".", "_globalOptions");
+		}
+		
+		final boolean hasReport = reportBufferAvailable();
+		final JMenuItem runAgainItem = new JMenuItem("Run again");
+		runAgainItem.setToolTipText("Clear results and run report again");
+		runAgainItem.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
+		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+		runAgainItem.setEnabled(hasReport);
 		
 		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, ExportType.CSV);
 		saveTablesCSVAct.putValue(Action.NAME, "Save tables to folder (CSV)...");
@@ -194,29 +327,24 @@ public class NodeWizard extends WizardFrame {
 		saveTablesExcelAct.putValue(Action.NAME, "Save tables to folder (XLS)...");
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		
-		final SaveAllBuffersAction saveAllAct = new SaveAllBuffersAction(getBufferPanel());
-		saveAllAct.putValue(PhonUIAction.ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		saveAllAct.putValue(PhonUIAction.SMALL_ICON,
-				IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
 		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
 		saveAsExcelAct.putValue(Action.NAME, "Export Report to Excel (XLS)...");
 		saveAsExcelAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables to a single Excel workbook.");
 		
-
 		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
 		saveAct.putValue(SaveBufferAction.NAME, "Save Report (HTML)...");
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		
-		menu.add(saveAct);
-		menu.add(saveAsExcelAct); 
-		menu.addSeparator();
-		menu.add(saveTablesCSVAct);
-		menu.add(saveTablesExcelAct);
+
+		builder.addItem(".", runAgainItem);
+		builder.addSeparator(".", "_run");
+		builder.addItem(".", saveAct).setEnabled(hasReport);
+		builder.addItem(".", saveAsExcelAct).setEnabled(hasReport);
+		builder.addSeparator(".", "_save");
+		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
+		builder.addItem(".", saveTablesExcelAct).setEnabled(hasReport);
 	}
 
 	@Override
@@ -267,6 +395,10 @@ public class NodeWizard extends WizardFrame {
 				super.close();
 			}
 		}
+	}
+	
+	public boolean reportBufferAvailable() {
+		return bufferPanel.getBufferNames().contains("Report");
 	}
 
 	private void saveReportAsHTML() {

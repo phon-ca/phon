@@ -123,20 +123,40 @@ public class GlobalParameterPanel extends JPanel {
 		return this.caseSensitiveBox.getSelectedIndex() > 0;
 	}
 	
+	public void useDefaultCaseSensitive() {
+		this.caseSensitiveBox.setSelectedIndex(0);
+	}
+	
 	public boolean isCaseSensitive() {
 		return this.caseSensitiveBox.getSelectedIndex() == 1;
+	}
+	
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitiveBox.setSelectedIndex( caseSensitive ? 1 : 2 );
 	}
 
 	public boolean isUseGlobalIgnoreDiacritics() {
 		return this.ignoreDiacriticsBox.getSelectedIndex() > 0;
+	}
+	
+	public void useDefaultIgnoreDiacritics() {
+		this.ignoreDiacriticsBox.setSelectedIndex(0);
 	}
 
 	public boolean isIgnoreDiacritics() {
 		return this.ignoreDiacriticsBox.getSelectedIndex() == 1;
 	}
 	
+	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
+		this.ignoreDiacriticsBox.setSelectedIndex( ignoreDiacritics ? 1 : 2 );
+	}
+	
 	public boolean isUseInventoryGrouping() {
 		return this.inventoryGroupingBox.getSelectedIndex() > 0;
+	}
+	
+	public void setInventoryGrouping(String grouping) {
+		inventoryGroupingBox.setSelectedItem(grouping);
 	}
 	
 	public String getInventoryGrouping() {

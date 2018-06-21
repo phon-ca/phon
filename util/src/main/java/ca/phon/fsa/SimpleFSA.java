@@ -216,8 +216,7 @@ public class SimpleFSA<T> {
 		cachedState.setLookBehindOffset(machineState.getLookBehindOffset());
 		
 		// keep track of possible path choices using a stack
-		Stack<DecisionTracker> decisions =
-			new Stack<DecisionTracker>();
+		Stack<DecisionTracker> decisions = new Stack<DecisionTracker>();
 		
 		while(machineState.getRunningState() == FSAState.RunningState.Running) {
 			FSATransition<T> toFollow = delta(machineState, decisions);

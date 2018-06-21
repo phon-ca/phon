@@ -122,40 +122,37 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	public void setupMenu(JMenu menu) {
 		menu.removeAll();
 		final MenuBuilder builder = new MenuBuilder(menu);
-		
-		if(getBufferNames().size() == 0) {
-			return;
-		}
-		
+	
+		final boolean hasBuffers = getBufferNames().size() > 0;
+	
 		// save actions
 		final SaveBufferAction saveAct = new SaveBufferAction(this);
-		builder.addItem(".", saveAct);
+		JMenuItem saveItem = builder.addItem(".", saveAct);
+		saveItem.setEnabled(hasBuffers);
 		
 		final SaveAllBuffersAction saveAllAct = new SaveAllBuffersAction(this);
-		builder.addItem(".", saveAllAct);
+		builder.addItem(".", saveAllAct).setEnabled(hasBuffers);
 		
 		builder.addSeparator(".", "_saveActions");
 		
 		// close actions
 		final CloseCurrentBufferAction closeAct = new CloseCurrentBufferAction(this);
-		builder.addItem(".", closeAct);
+		builder.addItem(".", closeAct).setEnabled(hasBuffers);
 		
 		final CloseAllBuffersAction closeAllAct = new CloseAllBuffersAction(this);
-		builder.addItem(".", closeAllAct);
+		builder.addItem(".", closeAllAct).setEnabled(hasBuffers);
 		
 		builder.addSeparator(".", "_closeActions");
 		
-		if(getBufferNames().size() > 1) {
-			final JMenu bufferMenu = builder.addMenu(".", "Show buffer");
-			for(String bufferName:getBufferNames()) {
-				final PhonUIAction showBufferAct = new PhonUIAction(this, "selectBuffer", bufferName);
-				showBufferAct.putValue(PhonUIAction.NAME, bufferName);
-				showBufferAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show buffer " + bufferName);
-				showBufferAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer() != null && getCurrentBuffer().getName().equals(bufferName));
-				bufferMenu.add(new JCheckBoxMenuItem(showBufferAct));				
-			}
-			builder.addSeparator(".", "_buffers");
+		final JMenu bufferMenu = builder.addMenu(".", "Show buffer");
+		for(String bufferName:getBufferNames()) {
+			final PhonUIAction showBufferAct = new PhonUIAction(this, "selectBuffer", bufferName);
+			showBufferAct.putValue(PhonUIAction.NAME, bufferName);
+			showBufferAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show buffer " + bufferName);
+			showBufferAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer() != null && getCurrentBuffer().getName().equals(bufferName));
+			bufferMenu.add(new JCheckBoxMenuItem(showBufferAct));				
 		}
+		builder.addSeparator(".", "_buffers");
 		
 		if(getCurrentBuffer() != null) {
 			// view actions
