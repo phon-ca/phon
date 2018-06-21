@@ -20,6 +20,7 @@ package ca.phon.app.log;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -45,18 +46,12 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
 	private static final long serialVersionUID = 8474621417321331439L;
 
-	private BufferListModel bufferTableModel;
-	private JTable bufferList;
-
 	private JComponent bufferPanel;
 	private CardLayout cardLayout;
-
-	private JXCollapsiblePane listPane;
 
 	private JToolBar toolbar;
 
 	private JComboBox<String> bufferNameBox;
-	private JButton toggleListButton;
 
 	private JButton saveBufferButton;
 
@@ -67,6 +62,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	private boolean openFileAfterSaving =
 			PrefHelper.getBoolean(OPEN_AFTER_SAVING_PROP, Boolean.TRUE);
 
+	private BufferPanel currentBufferPanel = null;
+	
 	private LinkedHashMap<String, BufferPanel> bufferPanelMap = new LinkedHashMap<>();
 
 	private EventListenerList listenerList = new EventListenerList();
@@ -83,19 +80,10 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		toolbar = setupToolbar();
 		add(toolbar, BorderLayout.NORTH);
 
-		bufferList = setupTable();
-		final JScrollPane scroller = new JScrollPane(bufferList);
-
 		cardLayout = new CardLayout();
 		bufferPanel = new JPanel(cardLayout);
 		bufferPanel.add(createNoSelectionPanel(), "no_selection");
 
-		listPane = new JXCollapsiblePane(Direction.LEFT);
-		listPane.getContentPane().setLayout(new BorderLayout());
-		listPane.getContentPane().add(scroller, BorderLayout.CENTER);
-		listPane.setCollapsed(true);
-
-		add(listPane, BorderLayout.WEST);
 		add(bufferPanel, BorderLayout.CENTER);
 	}
 
@@ -103,22 +91,10 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		return this.openFileAfterSaving;
 	}
 
-	public boolean isListShowing() {
-		return !this.listPane.isCollapsed();
-	}
-
-	public void toggleList() {
-		this.listPane.setCollapsed(!this.listPane.isCollapsed());
-	}
-
 	public JToolBar getToolbar() {
 		return this.toolbar;
 	}
 
-	public JTable getBufferTable() {
-		return this.bufferList;
-	}
-	
 	public void setupMenu(JMenu menu) {
 		menu.removeAll();
 		final MenuBuilder builder = new MenuBuilder(menu);
@@ -210,7 +186,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 //		bp.setBorder(BorderFactory.createTitledBorder("Buffer: " + bufferName));
 		bp.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		bufferPanelMap.put(bufferName, bp);
-		bufferTableModel.fireBufferAdded();
 		bufferPanel.add(bp, bufferName);
 
 		fireBufferAdded(bufferName);
@@ -219,21 +194,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			selectBuffer(bufferName);
 
 		return bp;
-	}
-
-	public void onRemoveSelectedBuffers() {
-		int selectedIdx[] = bufferList.getSelectedRows();
-		List<String> selectedNames = new ArrayList<>();
-		for(int idx:selectedIdx) {
-			final String selectedName = bufferList.getModel().getValueAt(idx, 0).toString();
-			selectedNames.add(selectedName);
-		}
-
-		for(int i = 0; i < selectedNames.size(); i++) {
-			final String name = selectedNames.get(i);
-			removeBuffer(name);
-			bufferTableModel.fireBufferRemoved(selectedIdx[i] - i);
-		}
 	}
 
 	public void removeBuffer(String bufferName) {
@@ -254,8 +214,9 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		final List<String> list = new ArrayList<>(bufferPanelMap.keySet());
 		int idx = list.indexOf(bufferName);
 		if(idx >= 0) {
-			bufferList.setRowSelectionInterval(idx, idx);
-
+			currentBufferPanel = bufferPanelMap.get(bufferName);
+			
+			cardLayout.show(bufferPanel, bufferName);
 			if(bufferNameBox.getSelectedItem() != bufferName) {
 				bufferNameBox.setSelectedItem(bufferName);
 
@@ -269,13 +230,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	}
 
 	public BufferPanel getCurrentBuffer() {
-		int selectedRow = bufferList.getSelectedRow();
-		if(selectedRow >= 0) {
-			final String selection = bufferList.getModel().getValueAt(selectedRow, 0).toString();
-			return bufferPanelMap.get(selection);
-		} else {
-			return null;
-		}
+		return currentBufferPanel;
 	}
 
 	@Override
@@ -285,8 +240,6 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			cardLayout.removeLayoutComponent(bp);
 		}
 		bufferPanelMap.clear();
-
-		bufferList.revalidate();
 	}
 
 	/*
@@ -325,61 +278,19 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		retVal.add(openFileAfterSavingBox);
 		retVal.addSeparator();
 
-		final ImageIcon toggleIcn =
-				IconManager.getInstance().getIcon("actions/view-list-text", IconSize.SMALL);
-		final PhonUIAction toggleListAct = new PhonUIAction(this, "toggleList");
-		toggleListAct.putValue(PhonUIAction.NAME, "");
-		toggleListAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle buffer list");
-		toggleListAct.putValue(PhonUIAction.SMALL_ICON, toggleIcn);
-		toggleListButton = new JButton(toggleListAct);
-
-		retVal.add(toggleListButton);
-
-//		retVal.add(new JLabel("Buffer:"));
+		retVal.add(new JLabel("Buffer:"));
 		bufferNameBox = new JComboBox<>(new BufferBoxModel());
+		bufferNameBox.addItemListener( (e) -> {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				selectBuffer(bufferNameBox.getSelectedItem().toString());
+			}
+		});
 		retVal.add(bufferNameBox);
 
 		return retVal;
 	}
-
-	private JTable setupTable() {
-		bufferTableModel = new BufferListModel();
-		final JTable retVal = new JTable(bufferTableModel);
-
-		retVal.getSelectionModel().addListSelectionListener( (l) -> {
-			final int selectedRow = bufferList.getSelectedRow();
-			if(selectedRow >= 0 && selectedRow < bufferList.getRowCount()) {
-				final String bufferName = bufferList.getModel().getValueAt(selectedRow, 0).toString();
-				cardLayout.show(bufferPanel, bufferName);
-			} else {
-				cardLayout.show(bufferPanel, "no_selection");
-			}
-			SwingUtilities.invokeLater( () -> {
-				retVal.scrollRectToVisible(retVal.getCellRect(selectedRow, 0, true));
-				bufferNameBox.repaint();
-			} );
-		});
-
-		return retVal;
-	}
-
-//	public void setupSaveAsMenu(JMenu menu) {
-////		final SaveBufferAction saveBufferAct = new SaveBufferAction(this);
-////		menu.add(new JMenuItem(saveBufferAct));
-//
-//		final SaveBufferAsWorkbookAction saveAsWorkbookAct = new SaveBufferAsWorkbookAction(this);
-//		menu.add(new JMenuItem(saveAsWorkbookAct));
-//
-//		final SaveAllBuffersAction saveAllBuffersAct = new SaveAllBuffersAction(this);
-//		menu.add(new JMenuItem(saveAllBuffersAct));
-//
-//		final SaveTablesToWorkbookAction saveTablesAct = new SaveTablesToWorkbookAction(this);
-//		menu.add(new JMenuItem(saveTablesAct));
-//	}
-
-	private class BufferBoxModel implements ComboBoxModel<String> {
-
-		private EventListenerList listeners = new EventListenerList();
+	
+	private class BufferBoxModel extends DefaultComboBoxModel<String> {
 
 		@Override
 		public int getSize() {
@@ -392,100 +303,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			final String name = list.get(index);
 			return name;
 		}
-
-		@Override
-		public void addListDataListener(ListDataListener l) {
-			listeners.add(ListDataListener.class, l);
-		}
-
-		@Override
-		public void removeListDataListener(ListDataListener l) {
-			listeners.remove(ListDataListener.class, l);
-		}
-
-		@Override
-		public void setSelectedItem(Object anItem) {
-			selectBuffer(anItem.toString());
-		}
-
-		@Override
-		public Object getSelectedItem() {
-			return (bufferList != null && getCurrentBuffer() != null ? getCurrentBuffer().getName() : null);
-		}
-
-	}
-
-	private class BufferListModel extends AbstractTableModel {
-
-		private static final long serialVersionUID = 5255792755244100880L;
-
-		public void fireBufferAdded() {
-			super.fireTableRowsInserted(getRowCount()-1, getRowCount()-1);
-		}
-
-		public void fireBufferRemoved(int idx) {
-			super.fireTableRowsDeleted(idx, idx);
-		}
-
-		@Override
-		public int getRowCount() {
-			return bufferPanelMap.size();
-		}
-
-		@Override
-		public int getColumnCount() {
-			return 2;
-		}
-
-		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			final List<String> list = new ArrayList<>(bufferPanelMap.keySet());
-			final String name = list.get(rowIndex);
-
-			Object retVal = new String();
-
-			if(columnIndex == 0) {
-				retVal = name;
-			} else {
-				final BufferPanel bp = bufferPanelMap.get(name);
-				int size = bp.getLogBuffer().getText().getBytes().length;
-				retVal = ByteSize.humanReadableByteCount(size, true);
-			}
-
-			return retVal;
-		}
-
-		@Override
-		public String getColumnName(int column) {
-			String retVal = new String();
-
-			if(column == 0) {
-				retVal = "Buffer Name";
-			} else if(column == 1) {
-				retVal = "Size";
-			}
-
-			return retVal;
-		}
-
-		@Override
-		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return false;
-		}
-
-		@Override
-		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-			final List<String> list = new ArrayList<>(bufferPanelMap.keySet());
-			final String name = list.get(rowIndex);
-
-			final BufferPanel bp = bufferPanelMap.get(name);
-			bp.setBufferName(aValue.toString());
-			bp.setBorder(BorderFactory.createTitledBorder(bp.getBufferName()));
-
-			bufferPanelMap.remove(name);
-			bufferPanelMap.put(bp.getBufferName(), bp);
-		}
-
+		
 	}
 
 	@Override
