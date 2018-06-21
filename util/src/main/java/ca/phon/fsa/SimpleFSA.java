@@ -201,11 +201,17 @@ public class SimpleFSA<T> {
 		machineState.setRunningState(FSAState.RunningState.Running);
 		
 		// cached state
-		FSAState<T> cachedState = new FSAState<T>();
+		FSAState<T> cachedState = 
+				new FSAState<T>();
 		cachedState.setCurrentState(initialState);
 		cachedState.setTape(tape);
 		cachedState.setTapeIndex(machineState.getTapeIndex());
+		
+		// cached running state is used to determine if we have
+		// an actual cached value.  This should be set to 'EndOfInput'
+		// if cached value is set
 		cachedState.setRunningState(RunningState.Running);
+		
 		cachedState.setLookAheadOffset(machineState.getLookAheadOffset());
 		cachedState.setLookBehindOffset(machineState.getLookBehindOffset());
 		
@@ -228,6 +234,7 @@ public class SimpleFSA<T> {
 					if(isFinalState(machineState.getCurrentState())) {
 						// only keep longest matches
 						if(cachedState.getTapeIndex() < machineState.getTapeIndex()) {
+							cachedState.setRunningState(RunningState.EndOfInput);
 							cachedState.setCurrentState(machineState.getCurrentState());
 							cachedState.setTapeIndex(machineState.getTapeIndex());
 							cachedState.setGroups(Arrays.copyOf(machineState.getGroupStarts(), machineState.numberOfGroups()), 
@@ -272,8 +279,10 @@ public class SimpleFSA<T> {
 			}
 		}
 		
-		if(cachedState.getTapeIndex() >= machineState.getTapeIndex()
-				&& !isFinalState(machineState.getCurrentState())) {
+		// return longest match
+		if(cachedState.getRunningState() == RunningState.EndOfInput && 
+				cachedState.getTapeIndex() >= machineState.getTapeIndex()) {
+				//&& !isFinalState(machineState.getCurrentState())) {
 			machineState.setCurrentState(cachedState.getCurrentState());
 			machineState.setTapeIndex(cachedState.getTapeIndex());
 			machineState.setGroups(Arrays.copyOf(cachedState.getGroupStarts(), cachedState.numberOfGroups()), 

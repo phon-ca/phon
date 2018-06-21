@@ -115,8 +115,9 @@ public class TestPhonex extends PhonexTest {
 	@Test
 	public void testEmptyQuery() throws ParseException {
 		final IPATranscript ipa = new IPATranscript();
+		boolean matches = ipa.matches("^$");
 		
-		Assert.assertEquals(true, ipa.matches("^$"));
+		Assert.assertEquals(true, matches);
 	}
 	
 	@Test
@@ -316,6 +317,20 @@ public class TestPhonex extends PhonexTest {
 				{ ipa.subsection(5, 6), ipa.subsection(5, 6), ipa.subsection(0, 0), ipa.subsection(0, 0) }
 				
 		};
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testOrExprGroups3() throws ParseException {
+		final String text = "k:Oə:Nn:Cˈs:Lt:Oɹ:Oe:Dɪ:Dn:Ct:Cs:R";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((C1=\\c:L:O)(C2=\\c:L:O)(C3=\\c:L:O)|(C1=\\c:L:O)(C2=\\c:L:O)|(C1=\\c:L:O))";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(0, 1), ipa.subsection(0, 0), ipa.subsection(0, 0) },
+				{ ipa.subsection(4, 7), ipa.subsection(4, 5), ipa.subsection(5, 6), ipa.subsection(6, 7) }
+		};
+		
 		testGroups(ipa, phonex, answers);
 	}
 	
