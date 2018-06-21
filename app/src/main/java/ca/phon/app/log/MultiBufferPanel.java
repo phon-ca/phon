@@ -21,6 +21,7 @@ package ca.phon.app.log;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -49,15 +50,12 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	private JComponent bufferPanel;
 	private CardLayout cardLayout;
 
-	private JToolBar toolbar;
+	protected JToolBar toolbar;
+	protected JButton saveBufferButton;
+	protected JButton exportAsWorkbookButton;
+	protected JCheckBox openFileAfterSavingBox;
+	protected JComboBox<String> bufferNameBox;
 
-	private JComboBox<String> bufferNameBox;
-
-	private JButton saveBufferButton;
-
-	private JButton exportAsWorkbookButton;
-
-	private JCheckBox openFileAfterSavingBox;
 	public final static String OPEN_AFTER_SAVING_PROP = MultiBufferPanel.class.getName() + ".openFileAfterSaving";
 	private boolean openFileAfterSaving =
 			PrefHelper.getBoolean(OPEN_AFTER_SAVING_PROP, Boolean.TRUE);
@@ -77,7 +75,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 	private void init() {
 		setLayout(new BorderLayout());
 
-		toolbar = setupToolbar();
+		toolbar = new JToolBar();
+		setupToolbar(toolbar);
 		add(toolbar, BorderLayout.NORTH);
 
 		cardLayout = new CardLayout();
@@ -183,10 +182,12 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 			bufferName = rootName + " (" + (++idx) + ")";
 		}
 		final BufferPanel bp = new BufferPanel(bufferName);
-//		bp.setBorder(BorderFactory.createTitledBorder("Buffer: " + bufferName));
 		bp.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		bufferPanelMap.put(bufferName, bp);
 		bufferPanel.add(bp, bufferName);
+		
+		bp.addPropertyChangeListener(BufferPanel.SHOWING_BUFFER_PROP, 
+				(e) -> setupToolbar(toolbar) );
 
 		fireBufferAdded(bufferName);
 
@@ -215,8 +216,8 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		int idx = list.indexOf(bufferName);
 		if(idx >= 0) {
 			currentBufferPanel = bufferPanelMap.get(bufferName);
-			
 			cardLayout.show(bufferPanel, bufferName);
+			setupToolbar(toolbar);
 			if(bufferNameBox.getSelectedItem() != bufferName) {
 				bufferNameBox.setSelectedItem(bufferName);
 
@@ -257,37 +258,51 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		SwingUtilities.invokeLater( () -> act.actionPerformed(new ActionEvent(this, -1, "save")) );
 	}
 
-	private JToolBar setupToolbar() {
-		final JToolBar retVal = new JToolBar();
-		retVal.setFloatable(false);
-
+	/**
+	 * Setup toolbar for current buffer.  This method is called whenever the buffer is changed
+	 * or the buffer view type has changed.
+	 * 
+	 * @param toolbar
+	 */
+	protected void setupToolbar(JToolBar toolbar) {
+		toolbar.setFloatable(false);
+		toolbar.removeAll();
+		
 		final SaveBufferAction saveAct = new SaveBufferAction(this);
-		saveBufferButton = new JButton(saveAct);
-		retVal.add(saveBufferButton);
-
+		if(saveBufferButton == null) {
+			saveBufferButton = new JButton(saveAct);
+		}
+		saveBufferButton.setEnabled(currentBufferPanel != null);
+		toolbar.add(saveBufferButton);
+		
 		final SaveBufferAsWorkbookAction exportAsWorkbookAct = new SaveBufferAsWorkbookAction(this);
-		exportAsWorkbookButton = new JButton(exportAsWorkbookAct);
-		retVal.add(exportAsWorkbookButton);
+		if(exportAsWorkbookButton == null) {
+			exportAsWorkbookButton = new JButton(exportAsWorkbookAct);
+		}
+		exportAsWorkbookButton.setEnabled( currentBufferPanel != null && currentBufferPanel.isShowingTable() );
+		toolbar.add(exportAsWorkbookButton);
+		
+		if(openFileAfterSavingBox == null) {
+			openFileAfterSavingBox = new JCheckBox("Open after saving");
+			openFileAfterSavingBox.setSelected(openFileAfterSaving);
+			openFileAfterSavingBox.addChangeListener( e -> {
+				MultiBufferPanel.this.openFileAfterSaving = openFileAfterSavingBox.isSelected();
+				PrefHelper.getUserPreferences().putBoolean(OPEN_AFTER_SAVING_PROP, MultiBufferPanel.this.openFileAfterSaving);
+			});
+		}
+		toolbar.add(openFileAfterSavingBox);
+		toolbar.addSeparator();
 
-		openFileAfterSavingBox = new JCheckBox("Open after saving");
-		openFileAfterSavingBox.setSelected(openFileAfterSaving);
-		openFileAfterSavingBox.addChangeListener( e -> {
-			MultiBufferPanel.this.openFileAfterSaving = openFileAfterSavingBox.isSelected();
-			PrefHelper.getUserPreferences().putBoolean(OPEN_AFTER_SAVING_PROP, MultiBufferPanel.this.openFileAfterSaving);
-		});
-		retVal.add(openFileAfterSavingBox);
-		retVal.addSeparator();
-
-		retVal.add(new JLabel("Buffer:"));
-		bufferNameBox = new JComboBox<>(new BufferBoxModel());
-		bufferNameBox.addItemListener( (e) -> {
-			if(e.getStateChange() == ItemEvent.SELECTED) {
-				selectBuffer(bufferNameBox.getSelectedItem().toString());
-			}
-		});
-		retVal.add(bufferNameBox);
-
-		return retVal;
+		toolbar.add(new JLabel("Buffer:"));
+		if(bufferNameBox == null) {
+			bufferNameBox = new JComboBox<>(new BufferBoxModel());
+			bufferNameBox.addItemListener( (e) -> {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					selectBuffer(bufferNameBox.getSelectedItem().toString());
+				}
+			});
+		}
+		toolbar.add(bufferNameBox);
 	}
 	
 	private class BufferBoxModel extends DefaultComboBoxModel<String> {
