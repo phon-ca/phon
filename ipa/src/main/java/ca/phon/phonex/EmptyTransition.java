@@ -11,7 +11,8 @@ public class EmptyTransition extends PhonexTransition {
 
 	@Override
 	public boolean follow(FSAState<IPAElement> currentState) {
-		return true;
+		// only follow if we are not at end of tape
+		return (currentState.getTapeIndex() < currentState.getTape().length);
 	}
 
 	@Override
@@ -22,6 +23,18 @@ public class EmptyTransition extends PhonexTransition {
 	@Override
 	public int getMatchLength() {
 		return 0;
+	}
+	
+	@Override
+	public Object clone() {
+		EmptyTransition retVal = new EmptyTransition();
+		retVal.setFirstState(getFirstState());
+		retVal.setToState(getToState());
+		retVal.getInitGroups().addAll(getInitGroups());
+		retVal.getMatcherGroups().addAll(getMatcherGroups());
+		retVal.setType(getType());
+		retVal.setOffsetType(getOffsetType());
+		return retVal;
 	}
 
 }

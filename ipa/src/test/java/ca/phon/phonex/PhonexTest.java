@@ -12,6 +12,8 @@ public class PhonexTest {
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
 		final PhonexMatcher matcher = pattern.matcher(t);
 		
+		System.out.println(pattern.getFsa().getDotText());
+		
 		int idx = 0;
 		while(matcher.find()) {
 			boolean expectingData = idx < groupData.length;

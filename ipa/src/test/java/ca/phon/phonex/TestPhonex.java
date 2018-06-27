@@ -335,7 +335,64 @@ public class TestPhonex extends PhonexTest {
 	}
 	
 	@Test
-	public void testOrExprNamedGroups() throws ParseException {
+	public void testOrExprGroups4() throws ParseException {
+		final String text = "k:Oə:Nn:Cˈs:Lt:Oɹ:Oe:Dɪ:Dn:Ct:Cs:R";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "( (C1=\\c:L:O)(C2=\\c:L:O)(C3=\\c:O) | (C1=\\c:L:O)(C2=\\c:O) | (C1=\\c:O) ) ( (N1=.:N) (N2=.:N) | (N1=.:N) )";
+		IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(0, 1), ipa.subsection(0, 0), ipa.subsection(0, 0), ipa.subsection(1, 2), ipa.subsection(1, 2), ipa.subsection(0, 0) },
+				{ ipa.subsection(4, 7), ipa.subsection(4, 5), ipa.subsection(5, 6), ipa.subsection(6, 7), ipa.subsection(7, 9), ipa.subsection(7, 8), ipa.subsection(8, 9) }
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testOrExprGroups5() throws ParseException {
+		final String text = "ˈæ:Nt:C ˈb:Oʌ:Nɹ:Cθ:Cˌd:Oe:Dɪ:D";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = 
+			"(O=\n" + 
+			"	(O1=\\c:L:O)(O2=\\c:L:O)(O3=\\c:O) | (\\c:L:O)(\\c:O) | (\\c:O)\n" + 
+			")?\n" + 
+			"(R=\n" + 
+			"	(N=\n" + 
+			"		(N1=.:D)(N2=.:D) | (.:N)\n" + 
+			"	)\n" + 
+			"	(C=\n" + 
+			"		(C1=\\c:C)(C2=\\c:C:R)(C3=\\c:C:R) | (\\c:C)(\\c:C:R) | (\\c:C)\n" + 
+			"	)?\n" + 
+			")";
+		final IPATranscript[][] answers = {
+			{   // ˈæ:Nt:C (0-3)
+				ipa.subsection(0, 0), ipa.subsection(0, 0), ipa.subsection(0, 0), ipa.subsection(0, 0), // O, O1, O2, O3
+				ipa.subsection(1, 3), // R
+				ipa.subsection(1, 2), ipa.subsection(1, 2), ipa.subsection(0, 0), // N, N1, N2
+				ipa.subsection(2, 3), ipa.subsection(2, 3), ipa.subsection(0, 0), ipa.subsection(0, 0) // C, C1, C2, C3
+			},
+			{
+				// ˈb:Oʌ:Nɹ:Cθ:C (5-9)
+				ipa.subsection(5, 6), ipa.subsection(5, 6), ipa.subsection(0, 0), ipa.subsection(0, 0), // O, O1, O2, O3
+				ipa.subsection(6, 9), // R
+				ipa.subsection(6, 7), ipa.subsection(6, 7), ipa.subsection(0, 0), // N, N1, N2
+				ipa.subsection(7, 9), ipa.subsection(7, 8), ipa.subsection(8, 9), ipa.subsection(0, 0) // C, C1, C2, C3
+			},
+			{
+				// ˌd:Oe:Dɪ:D (10-13)
+				ipa.subsection(10, 11), ipa.subsection(10, 11), ipa.subsection(0, 0), ipa.subsection(0, 0), // O, O1, O2, O3
+				ipa.subsection(11, 13), // R
+				ipa.subsection(11, 13), ipa.subsection(11, 12), ipa.subsection(12, 13), // N, N1, N2
+				ipa.subsection(0, 0), ipa.subsection(0, 0), ipa.subsection(0, 0), ipa.subsection(0, 0) // C, C1, C2, C3
+			}
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testOrExprNamedGroups1() throws ParseException {
 		final String text = "ˈkʀət͡jə";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
@@ -350,6 +407,52 @@ public class TestPhonex extends PhonexTest {
 		hm2.put("C2", ipa.subsection(0, 0));
 		
 		final List<Map<String, IPATranscript>> answers = List.of(hm1, hm2);
+		testNamedGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testOrExprNamedGroups2() throws ParseException {
+		final String text = "k:Oə:Nn:Cˈs:Lt:Oɹ:Oe:Dɪ:Dn:Ct:Cs:R";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = 
+				"(O=\n" + 
+				"	(O1=\\c:L:O)(O2=\\c:L:O)(O3=\\c:O) | (\\c:L:O)(\\c:O) | (\\c:O)\n" + 
+				")?\n" +
+				"(R=\n" + 
+				"	(N=\n" + 
+				"		(N1=.:N) (N2=.:N) | (.:N)\n" + 
+				"	)\n" + 
+				"	(C=\n" + 
+				"		(C1=\\c:C)(C2=\\c:C:R)(C3=\\c:C:R) | (\\c:C)(\\c:C:R) | (\\c:C)\n" + 
+				"	)?\n" + 
+				")";
+		
+		final Map<String, IPATranscript> hm1 = new HashMap<>();
+		hm1.put("O", ipa.subsection(0, 1));
+		hm1.put("O1", ipa.subsection(0, 1));
+		hm1.put("R", ipa.subsection(1, 3));
+		hm1.put("N", ipa.subsection(1, 2));
+		hm1.put("N1", ipa.subsection(1, 2));
+		hm1.put("C", ipa.subsection(2, 3));
+		hm1.put("C1", ipa.subsection(2, 3));
+		
+		final Map<String, IPATranscript> hm2 = new HashMap<>();
+		hm2.put("O", ipa.subsection(4, 7));
+		hm2.put("O1", ipa.subsection(4, 5));
+		hm2.put("O2", ipa.subsection(5, 6));
+		hm2.put("O3", ipa.subsection(6, 7));
+		hm2.put("R", ipa.subsection(7, 12));
+		hm2.put("N", ipa.subsection(7, 9));
+		hm2.put("N1", ipa.subsection(7, 8));
+		hm2.put("N2", ipa.subsection(8, 9));
+		hm2.put("C", ipa.subsection(9, 12));
+		hm2.put("C1", ipa.subsection(9, 10));
+		hm2.put("C2", ipa.subsection(10, 11));
+		hm2.put("C3", ipa.subsection(11, 12));
+		
+		final List<Map<String, IPATranscript>> answers = List.of(hm1, hm2);
+		
 		testNamedGroups(ipa, phonex, answers);
 	}
 	

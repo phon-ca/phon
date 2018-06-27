@@ -153,4 +153,5 @@ public class PhonexTransition extends FSATransition<IPAElement> implements Clone
 		retVal.setOffsetType(getOffsetType());
 		return retVal;
 	}
+	
 }
