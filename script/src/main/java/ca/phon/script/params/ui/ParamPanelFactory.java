@@ -20,6 +20,8 @@ package ca.phon.script.params.ui;
 
 import javax.swing.*;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.*;
 
 import com.jgoodies.forms.layout.*;
@@ -128,6 +130,24 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		final PromptedTextField textField = factory.createStringScriptParamComponent(param);
 		textField.setFont(FontPreferences.getUIIpaFont());
 		final JPanel panel = createComponentPanel(paramLabel, textField);
+		currentContainer.add(panel);
+	}
+	
+	@Visits
+	public void visitPatternScriptParam(PatternScriptParam param) {
+		final JLabel paramLabel = factory.createParamLabel(param);
+		final RSyntaxTextArea textArea = factory.createPatternScriptParamComponent(param);
+		final RTextScrollPane scroller = new RTextScrollPane(textArea);
+		scroller.setLineNumbersEnabled(true);
+		
+		final JComponent container = currentContainer;
+		param.addPropertyChangeListener( PatternScriptParam.VISIBLE_ROWS_PROP, (e) -> {
+			textArea.setRows(param.getVisibleRows());
+			scroller.revalidate();
+			container.revalidate();
+		});
+		
+		final JPanel panel = createComponentPanel(paramLabel, scroller);
 		currentContainer.add(panel);
 	}
 

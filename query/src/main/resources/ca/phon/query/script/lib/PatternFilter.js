@@ -301,11 +301,11 @@ exports.PatternFilter = function (id) {
 		matchGroupParam.setEnabled(0, this.filterType.index < exports.PatternType.PHONEX);
 		matchGroupParam.setVisible(2, filterTypeParamInfo.def == exports.PatternType.PHONEX);
 
-		filterParam = new StringScriptParam(
+		filterParam = new PatternScriptParam(
 		filterParamInfo.id,
 		filterParamInfo.title,
-		filterParamInfo.def);
-		filterParam.setPrompt(filterParamInfo.prompt);
+		filterParamInfo.def, "PHONEX", 1, 10);
+	//	filterParam.setPrompt(filterParamInfo.prompt);
 
 		var filterListener = new java.beans.PropertyChangeListener() {
 			propertyChange: function (e) {
@@ -340,7 +340,7 @@ exports.PatternFilter = function (id) {
 				var filterPrompt = filterTypePromptText[idx];
 				var filterHelp = filterTypeHelpText[idx];
 
-				filterParam.setPrompt(filterPrompt);
+			//	filterParam.setPrompt(filterPrompt);
 				helpLabelParam.setText(filterHelp);
 			}
 		};

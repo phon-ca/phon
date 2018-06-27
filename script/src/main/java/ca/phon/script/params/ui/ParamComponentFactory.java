@@ -19,10 +19,17 @@
 package ca.phon.script.params.ui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.beans.*;
 
 import javax.swing.*;
+import javax.swing.text.StyleConstants;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.ToolTipSupplier;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 import org.jdesktop.swingx.painter.MattePainter;
@@ -190,6 +197,34 @@ public class ParamComponentFactory {
 
 		return retVal;
 	}
+	
+	/**
+	 * Pattern field
+	 * 
+	 * @param patternScriptParam
+	 * @return text field with syntax highlighting
+	 */
+	public RSyntaxTextArea createPatternScriptParamComponent(PatternScriptParam patternScriptParam) {
+		final String paramId = patternScriptParam.getParamIds().iterator().next();
+		
+		final String initialText =
+				(patternScriptParam.getValue(paramId) != null  ? patternScriptParam.getValue(paramId).toString() : patternScriptParam.getDefaultValue(paramId).toString());
+		final RSyntaxTextArea retVal = new RSyntaxTextArea(initialText);
+		retVal.setToolTipSupplier( (textArea, evt) -> patternScriptParam.getTooltipText() );
+		
+		final PatternScriptParamListener listener = new PatternScriptParamListener(patternScriptParam, paramId, retVal);
+		retVal.getDocument().addDocumentListener(listener);
+//		retVal.setText(initialText);
+		
+		int lc = retVal.getLineCount();
+		int numVisibleLines = Math.min(patternScriptParam.getMaxRows(), Math.max(lc, patternScriptParam.getMinRows()));
+		retVal.setRows(numVisibleLines);
+		
+		installParamListener(retVal, patternScriptParam);
+		installPatternParamListener(retVal, patternScriptParam);
+		
+		return retVal;
+	}
 
 	/**
 	 * Creates a new collapsible container for a script param group.
@@ -271,6 +306,22 @@ public class ParamComponentFactory {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				panel.setCollapsed(param.isCollapsed());
+			}
+		});
+	}
+	
+	private void installPatternParamListener(final RSyntaxTextArea textArea, final PatternScriptParam param) {
+		param.addPropertyChangeListener(StringScriptParam.VALIDATE_PROP, (e) -> {
+			if(!(Boolean)e.getNewValue()) {
+				textArea.setForeground(Color.red);
+			} else {
+				textArea.setForeground(Color.black);
+			}
+		});
+		param.addPropertyChangeListener(param.getParamId(), (e) -> {
+			String val = param.getValue(param.getParamId()).toString();
+			if(!textArea.getText().equals(val)) {
+				textArea.setText(param.getValue(param.getParamId()).toString());
 			}
 		});
 	}
