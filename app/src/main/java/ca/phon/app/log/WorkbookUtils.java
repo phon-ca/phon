@@ -175,7 +175,7 @@ public class WorkbookUtils {
 		if(retVal.length() > 31) {
 			retVal = StringUtils.abbreviate(retVal, retVal.length()-31+3, 31);
 		}
-				
+						
 		return retVal;
 	}
 	

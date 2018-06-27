@@ -62,6 +62,7 @@ import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.formatter.FormatterUtil;
@@ -135,7 +136,7 @@ public class NodeWizard extends WizardFrame {
 
 	private OpGraph graph;
 
-	private MultiBufferPanel bufferPanel;
+	private WizardMultiBufferPanel bufferPanel;
 
 	private JXBusyLabel busyLabel;
 
@@ -310,7 +311,7 @@ public class NodeWizard extends WizardFrame {
 			
 			builder.addSeparator(".", "_globalOptions");
 		}
-		
+				
 		final boolean hasReport = reportBufferAvailable();
 		final JMenuItem runAgainItem = new JMenuItem("Run again");
 		runAgainItem.setToolTipText("Clear results and run report again");
@@ -318,19 +319,20 @@ public class NodeWizard extends WizardFrame {
 		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		runAgainItem.setEnabled(hasReport);
 		
+		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this);
+		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
+		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
+		saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+		
 		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, ExportType.CSV);
-		saveTablesCSVAct.putValue(Action.NAME, "Save tables to folder (CSV)...");
-		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables in CSV format to selected folder - one file per table.");
+		saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
+		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
 		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
 		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, ExportType.EXCEL);
-		saveTablesExcelAct.putValue(Action.NAME, "Save tables to folder (XLS)...");
-		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables in Excel format to selected folder - one file per table.");
+		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
+		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-
-		final SaveBufferAsWorkbookAction saveAsExcelAct = new SaveBufferAsWorkbookAction(getBufferPanel());
-		saveAsExcelAct.putValue(Action.NAME, "Export Report to Excel (XLS)...");
-		saveAsExcelAct.putValue(Action.SHORT_DESCRIPTION, "Save all report tables to a single Excel workbook.");
 		
 		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
 		saveAct.putValue(SaveBufferAction.NAME, "Save Report (HTML)...");
@@ -341,10 +343,10 @@ public class NodeWizard extends WizardFrame {
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
 		builder.addItem(".", saveAct).setEnabled(hasReport);
-		builder.addItem(".", saveAsExcelAct).setEnabled(hasReport);
 		builder.addSeparator(".", "_save");
-		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
+		builder.addItem(".", saveTablesToWorkbookAct).setEnabled(hasReport);
 		builder.addItem(".", saveTablesExcelAct).setEnabled(hasReport);
+		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
 	}
 
 	@Override
@@ -400,7 +402,7 @@ public class NodeWizard extends WizardFrame {
 	public boolean reportBufferAvailable() {
 		return bufferPanel.getBufferNames().contains("Report");
 	}
-
+	
 	private void saveReportAsHTML() {
 		final SaveBufferAction saveBufferAct = new SaveBufferAction(getBufferPanel(), "Report");
 		SwingUtilities.invokeLater( () -> {
@@ -435,7 +437,7 @@ public class NodeWizard extends WizardFrame {
 		super.btnFinish.setVisible(false);
 		super.btnNext.setVisible(false);
 
-		bufferPanel = new MultiBufferPanel();
+		bufferPanel = new WizardMultiBufferPanel(this);
 
 		btnNext = new NodeWizardBreadcrumbButton();
 		btnNext.setFont(FontPreferences.getTitleFont());

@@ -2,14 +2,22 @@ package ca.phon.app.opgraph.wizard.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
+
 import org.apache.derby.impl.load.Export;
+import org.jdesktop.swingx.VerticalLayout;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.hooks.HookableAction;
@@ -17,13 +25,19 @@ import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.WorkbookUtils;
 import ca.phon.app.opgraph.report.tree.ReportTree;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.ReportTreePath;
+import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.ReportTableExportDialog;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
@@ -32,9 +46,15 @@ import jxl.write.WriteException;
 
 public class SaveTablesToFolderAction extends HookableAction {
 	
+	private final static String EXPORT_WITH_FOLDERS_PROP = SaveTablesToFolderAction.class.getName() + ".exportWithFolders";
+	private final static boolean DEFAULT_EXPORT_WITH_FOLDERS = Boolean.TRUE;
+	private boolean exportWithFolders = PrefHelper.getBoolean(EXPORT_WITH_FOLDERS_PROP, DEFAULT_EXPORT_WITH_FOLDERS);
+	
+	private JCheckBox exportWithFoldersBox;
+	
 	private final NodeWizard wizard;
 	
-	private final static String TXT = "Save tables to folder ";
+	private final static String TXT = "Export tables to folder ";
 		
 	public static enum ExportType {
 		CSV,
@@ -54,59 +74,86 @@ public class SaveTablesToFolderAction extends HookableAction {
 	public ExportType getType() {
 		return this.type;
 	}
-
-	@Override
-	public void hookableActionPerformed(ActionEvent ae) {
+	
+	public boolean exportTable(String folder, ReportTreeNode node) {
+		if(!(node instanceof TableNode)) return false;
+		final TableNode tableNode = (TableNode)node;
+		
+		final DefaultTableDataSource table = (DefaultTableDataSource)tableNode.getTable();
+		ReportTreePath treePath = tableNode.getPath();
+		// remove root from path and use path as filename
+		treePath = treePath.pathByRemovingRoot();
+		
+		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
+		String subPath = File.separator;
+		for(int i = 0; i < treePath.getPath().length; i++) {
+			ReportTreeNode ele = treePath.getPath()[i];
+			if(i > 0)
+				subPath += (exportWithFolders ? File.separator : "_");
+			subPath += ele.getTitle().trim().replaceAll(illegalCharRegex, "_");
+		}
+		final String tableFilePath = folder + subPath + (type == ExportType.CSV ? ".csv" : ".xls");
+		
+		final File tableFile = new File(tableFilePath);
+		final File parentFolder = tableFile.getParentFile();
+		
+		if(!parentFolder.exists()) {
+			parentFolder.mkdirs();
+		}
+		if(!parentFolder.isDirectory()) {
+			return false;
+		}
+		
+		try {
+			writeTableToFile(table, tableFile, "UTF-8");
+			return true;
+		} catch (IOException e) {
+			LogUtil.severe(e);
+			return false;
+		}
+	}
+	
+	public void done(List<ReportTreeNode> processedNodes) {
+		
+	}
+	
+	public String getFolder() {
 		final OpenDialogProperties props = new OpenDialogProperties();
-		props.setParentWindow(wizard);
-		props.setRunAsync(true);
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setRunAsync(false);
 		props.setAllowMultipleSelection(false);
 		props.setCanChooseDirectories(true);
 		props.setCanChooseFiles(false);
 		props.setCanCreateDirectories(true);
 		props.setPrompt("Save to folder");
 		props.setNameFieldLabel("Report folder:");
-		props.setListener( (e) -> {
-			if(e.getDialogData() != null) {
-				final String path = e.getDialogData().toString();
-				PhonWorker.getInstance().invokeLater( () -> {
-					try {
-						saveTablesToFolder(path);
-					} catch (IOException e1) {
-						Toolkit.getDefaultToolkit().beep();
-						wizard.showErrorMessage(e1.getLocalizedMessage());
-						LogUtil.severe(e1.getMessage());
-					}
-				} );
-			}
-		});
-		NativeDialogs.showOpenDialog(props);
+		
+		final List<String> retVal = NativeDialogs.showOpenDialog(props);
+		return (retVal != null && retVal.size() > 0 ? retVal.get(0) : null);
 	}
-	
-	private void saveTablesToFolder(String path) throws IOException {
+
+	@Override
+	public void hookableActionPerformed(ActionEvent ae) {
 		final BufferPanel reportBuffer = wizard.getBufferPanel().getBuffer("Report");
 		if(reportBuffer != null) {
 			final ReportTree tree = (ReportTree)reportBuffer.getUserObject();
-			final Map<String, DefaultTableDataSource> tableMap = new LinkedHashMap<>();
-			wizard.searchForTables(tree.getRoot(), tableMap);
-
-			final File outputFolder = new File(path);
-			if(!outputFolder.exists()) {
-				outputFolder.mkdirs();
-			}
 			
-			for(String tableId:tableMap.keySet()) {
-				final DefaultTableDataSource table = tableMap.get(tableId);
-				
-				final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
-				String initialFilename = tableId.trim() + (getType() == ExportType.CSV ? ".csv" : ".xls");
-				initialFilename = initialFilename.replaceAll(illegalCharRegex, "_");
-				
-				final File tableFile = new File(outputFolder, initialFilename);
-				writeTableToFile(table, tableFile, "UTF-8");
-			}
-		} else {
-			Toolkit.getDefaultToolkit().beep();
+			exportWithFoldersBox = new JCheckBox("Create subfolders based on report hierarchy");
+			exportWithFoldersBox.setSelected(exportWithFolders);
+			
+			final ActionListener l = (e) -> {
+				exportWithFolders = exportWithFoldersBox.isSelected();
+				PrefHelper.getUserPreferences().putBoolean(EXPORT_WITH_FOLDERS_PROP, exportWithFolders);
+			};
+			exportWithFoldersBox.addActionListener(l);
+			
+			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportTable, this::done);
+			exportDialog.setParentFrame(wizard);
+			
+			exportDialog.getCustomOptionsPanel().setLayout(new VerticalLayout());
+			exportDialog.getCustomOptionsPanel().add(exportWithFoldersBox);
+			
+			exportDialog.showDialog();
 		}
 	}
 	

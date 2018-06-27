@@ -27,9 +27,9 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 
 	private static final long serialVersionUID = -2827879669257916438L;
 
-	private final static String CMD_NAME = "Export to Excel\u2122...";
+	private final static String CMD_NAME = "Export as Excel...";
 
-	private final static String SHORT_DESC = "Save as Excel\u2122 workbook";
+	private final static String SHORT_DESC = "Export as Excel workbook";
 
 	private final MultiBufferPanel container;
 
@@ -43,7 +43,7 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 
-		ImageIcon excelIcn = IconManager.getInstance().getSystemIconForFileType("xlsx", IconSize.SMALL);
+		ImageIcon excelIcn = IconManager.getInstance().getSystemIconForFileType("xls", IconSize.SMALL);
 		putValue(SMALL_ICON, excelIcn);
 
 		this.bufferName = bufferName;
