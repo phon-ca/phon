@@ -13,8 +13,10 @@ import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
 
 import ca.phon.phonex.PhonexLexer;
+import ca.phon.phonex.PhonexPlugin;
+import ca.phon.phonex.PhonexPluginManager;
 import ca.phon.phonex.PhonexTokenizerLexer;
-import ca.phon.phonex.PhonexTokenizerParser;
+import ca.phon.phonex.PluginProvider;
 
 public class PhonexTokenMaker extends AbstractTokenMaker {
 	
@@ -88,6 +90,62 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("EOL_COMMENT_START"))) {
 					currentTokenType = Token.COMMENT_EOL;
 					shouldBreak = true;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_PAREN"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_PAREN"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_BRACE"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_BRACE"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_BRACKET"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_BRACKET"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("BOUND_START"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("BOUND_END"))) {
+					currentTokenType = Token.SEPARATOR;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("PIPE"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("EQUALS"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("COLON"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("EXC"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("AMP"))) {
+					currentTokenType = Token.OPERATOR;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("NON_CAPTURING_GROUP"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("LOOK_AHEAD_GROUP"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("LOOK_BEHIND_GROUP"))) {
+					currentTokenType = Token.ANNOTATION;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("STRING"))) {
+					currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("INT"))) {
+					currentTokenType = Token.LITERAL_NUMBER_DECIMAL_INT;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("REGEX_STRING"))) {
+					currentTokenType = Token.REGEX;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("ESCAPED_PHONE_CLASS"))) {
+					currentTokenType = Token.LITERAL_BACKQUOTE;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("ESCAPED_BOUNDARY"))) {
+					currentTokenType = Token.LITERAL_CHAR;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("BACKREF"))) {
+					currentTokenType = Token.LITERAL_BACKQUOTE;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("HEX_CHAR"))) {
+					currentTokenType = Token.LITERAL_NUMBER_HEXADECIMAL;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("SINGLE_QUANTIFIER"))) {
+					currentTokenType = Token.OPERATOR;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("IDENTIFIER"))) {
+					currentTokenType = Token.IDENTIFIER;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("GROUP_NAME"))) {
+					
+					// add two tokens
+					currentTokenType = Token.ANNOTATION;
+					int tokenStart = offset+antlrToken.getCharPositionInLine();
+					int tokenEnd = tokenStart + antlrToken.getText().length()-2;
+					addToken(text, tokenStart, tokenEnd, currentTokenType, newStartOffset+currentTokenStart);
+					currentTokenStart = tokenEnd+1;
+					
+					currentTokenType = Token.OPERATOR;
+					tokenStart += antlrToken.getText().length()-1;
+					tokenEnd = tokenStart;
+					addToken(text, tokenStart, tokenEnd, currentTokenType, newStartOffset+currentTokenStart);
+					currentTokenStart = tokenEnd+1;
+					
+					continue;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("SCTYPE"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("STRESS_TYPE"))) {
+					currentTokenType = Token.FUNCTION;
 				} else {
 					switch(currentTokenType) {
 					case Token.COMMENT_MULTILINE:
@@ -121,10 +179,30 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 		
 		return firstToken;
 	}
+	
+	@Override
+	public void addToken(Segment segment, int start, int end, int tokenType, int startOffset) {
+		if(tokenType == Token.IDENTIFIER && segment.count > 0) {
+			int value = wordsToHighlight.get(segment, start, end);
+			if(value != -1) {
+				tokenType = value;
+			}
+		}
+		
+		super.addToken(segment, start, end, tokenType, startOffset);
+	}
 
 	@Override
 	public TokenMap getWordsToHighlight() {
 		TokenMap map = new TokenMap();
+		
+		PhonexPluginManager pluginManager = PhonexPluginManager.getSharedInstance();
+		for(PluginProvider provider:pluginManager.getPluginProviders()) {
+			final PhonexPlugin pluginInfo = provider.getClass().getAnnotation(PhonexPlugin.class);
+			if(pluginInfo != null) {
+				map.put(pluginInfo.name(), Token.FUNCTION);
+			}
+		}
 		
 		return map;
 	}
