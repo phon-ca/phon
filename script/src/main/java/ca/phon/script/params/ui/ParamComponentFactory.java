@@ -25,9 +25,11 @@ import java.beans.*;
 import javax.swing.*;
 import javax.swing.text.StyleConstants;
 
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.ToolTipSupplier;
 import org.jdesktop.swingx.*;
@@ -216,6 +218,10 @@ public class ParamComponentFactory {
 		retVal.getDocument().addDocumentListener(listener);
 //		retVal.setText(initialText);
 		
+		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
+		retVal.setSyntaxEditingStyle("text/phonex");
+		
 		int lc = retVal.getLineCount();
 		int numVisibleLines = Math.min(patternScriptParam.getMaxRows(), Math.max(lc, patternScriptParam.getMinRows()));
 		retVal.setRows(numVisibleLines);
@@ -311,13 +317,13 @@ public class ParamComponentFactory {
 	}
 	
 	private void installPatternParamListener(final RSyntaxTextArea textArea, final PatternScriptParam param) {
-		param.addPropertyChangeListener(StringScriptParam.VALIDATE_PROP, (e) -> {
-			if(!(Boolean)e.getNewValue()) {
-				textArea.setForeground(Color.red);
-			} else {
-				textArea.setForeground(Color.black);
-			}
-		});
+//		param.addPropertyChangeListener(StringScriptParam.VALIDATE_PROP, (e) -> {
+//			if(!(Boolean)e.getNewValue()) {
+//				textArea.setForeground(Color.red);
+//			} else {
+//				textArea.setForeground(Color.black);
+//			}
+//		});
 		param.addPropertyChangeListener(param.getParamId(), (e) -> {
 			String val = param.getValue(param.getParamId()).toString();
 			if(!textArea.getText().equals(val)) {
