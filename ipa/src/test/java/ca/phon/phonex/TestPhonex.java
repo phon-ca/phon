@@ -43,6 +43,92 @@ public class TestPhonex extends PhonexTest {
 	public void textInvalidFeature() throws Exception {
 		PhonexPattern.compile("{invalid}");
 	}
+	
+	@Test
+	public void testComment1() throws Exception {
+		final String text = "bbadd";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "/* First consonant */(\\c) /* Second consonant */ (\\c)";
+		PhonexPattern.compile(phonex);
+		
+		final IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
+				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testComment2() throws Exception {
+		final String text = "bbadd";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "/* First consonant */(\\c) (/* Second consonant */ \\c)";
+		PhonexPattern.compile(phonex);
+		
+		final IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
+				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testComment3() throws Exception {
+		final String text = "bbadd";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "/* First consonant */\n"
+				+ "(\\c) (/* Second consonant */ \\c)";
+		PhonexPattern.compile(phonex);
+		
+		final IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
+				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testComment4() throws Exception {
+		final String text = "bbadd";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "// First consonant\n"
+				+ "(\\c)\n"
+				+ "// Second consonant\n"
+				+ "(\\c)";
+		PhonexPattern.compile(phonex);
+		
+		final IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
+				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testComment5() throws Exception {
+		final String text = "bbadd";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = 
+				"(\\c) // First consonant\n"
+				+ "(\\c) // Second consonant";
+		PhonexPattern.compile(phonex);
+		
+		final IPATranscript[][] answers = {
+				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
+				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
 
 	@Test
 	public void testBacktracking() throws Exception {
@@ -354,7 +440,7 @@ public class TestPhonex extends PhonexTest {
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final String phonex = 
-			"(O=\n" + 
+			"/* this is a test */ (O=\n" + 
 			"	(O1=\\c:L:O)(O2=\\c:L:O)(O3=\\c:O) | (\\c:L:O)(\\c:O) | (\\c:O)\n" + 
 			")?\n" + 
 			"(R=\n" + 

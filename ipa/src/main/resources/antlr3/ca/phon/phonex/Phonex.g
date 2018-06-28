@@ -82,7 +82,7 @@ flags
 	:	FORWARDSLASH LETTER+
 	->	^(FORWARDSLASH LETTER+)
 	;
-	
+
 baseexpr
 	:	(exprTrees+=exprele)+
 	{
@@ -401,6 +401,16 @@ BOUND_START
 BOUND_END
 	:	'>'
 	;
+	
+COMMENT
+	:	'/*' .* '*/'
+	{$channel=HIDDEN;}
+	;
+
+EOL_COMMENT
+	:	'//' .* '\n'
+	{$channel=HIDDEN;}
+	;
 
 /**
  * TODO - this set should match exactly what is supported
@@ -424,7 +434,7 @@ INT :	NUMBER+
 WS  :   ( ' '
         | '\t'
         | '\r'
-        | '\n'
+		| '\n'
         ) {$channel=HIDDEN;}
     ;
 
