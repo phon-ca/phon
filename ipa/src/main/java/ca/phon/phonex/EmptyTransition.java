@@ -11,8 +11,7 @@ public class EmptyTransition extends PhonexTransition {
 
 	@Override
 	public boolean follow(FSAState<IPAElement> currentState) {
-		// only follow if we are not at end of tape
-		return (currentState.getTapeIndex() < currentState.getTape().length);
+		return true;
 	}
 
 	@Override

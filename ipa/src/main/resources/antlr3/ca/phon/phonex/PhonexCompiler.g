@@ -89,6 +89,16 @@ expr returns [PhonexFSA fsa]
 	:	^(EXPR e=baseexpr flags?)
 	{
 		$fsa = $e.fsa;
+		
+		// if initial state is final, follow empty transitions and make those states final as well
+		for(String finalState:$fsa.getFinalStates()) {
+			for(FSATransition<IPAElement> transition:$fsa.getTransitionsForState(finalState)) {
+				if(transition instanceof EmptyTransition) {
+					$fsa.addFinalState(transition.getToState());
+				}
+			}
+		}
+		
 	}
 	;
 
