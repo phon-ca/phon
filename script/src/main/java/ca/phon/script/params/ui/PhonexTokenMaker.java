@@ -10,8 +10,11 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMaker;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.TokenImpl;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
 
+import ca.phon.ipa.features.Feature;
+import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.phonex.PhonexLexer;
 import ca.phon.phonex.PhonexPlugin;
 import ca.phon.phonex.PhonexPluginManager;
@@ -57,16 +60,16 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 		// if lexer failed...
 		if(tokenStream.size() == 1) {
 			// only EOF found
-			if(initialTokenType == Token.COMMENT_MULTILINE) {
-				addToken(text, offset, end-1, Token.COMMENT_MULTILINE, newStartOffset+currentTokenStart);
-			} else if(initialTokenType == Token.NULL) {
-				addToken(text, offset, end-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+			int tokenType = (initialTokenType == Token.NULL ? Token.IDENTIFIER : initialTokenType);
+			addToken(text, offset, end-1, tokenType, newStartOffset+currentTokenStart);
+			if(initialTokenType == Token.NULL) {
 				addNullToken();
 			}
 			return firstToken;
 		}
 		
 		boolean insideMultiLineComment = (currentTokenType == Token.COMMENT_MULTILINE);
+		boolean insideFeatureList = (currentTokenType == Token.ERROR_IDENTIFIER);		
 		for(int i = 0; i < tokenStream.size(); i++) {
 			final org.antlr.runtime.Token antlrToken = tokenStream.get(i);
 			
@@ -85,6 +88,12 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("COMMENT_END"))) {
 					currentTokenType = Token.COMMENT_MULTILINE;
 					insideMultiLineComment = false;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_BRACE"))) {
+					currentTokenType = Token.SEPARATOR;
+					insideFeatureList = true;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_BRACE"))) {
+					currentTokenType = Token.SEPARATOR;
+					insideFeatureList = false;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("WS"))) {
 					currentTokenType = Token.WHITESPACE;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("EOL_COMMENT_START"))) {
@@ -92,8 +101,6 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 					shouldBreak = true;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_PAREN"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_PAREN"))
-						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_BRACE"))
-						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_BRACE"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("OPEN_BRACKET"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("CLOSE_BRACKET"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("BOUND_START"))
@@ -103,7 +110,8 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("EQUALS"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("COLON"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("EXC"))
-						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("AMP"))) {
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("AMP"))
+						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("COMMA"))) {
 					currentTokenType = Token.OPERATOR;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("NON_CAPTURING_GROUP"))
 						|| antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("LOOK_AHEAD_GROUP"))
@@ -127,6 +135,11 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 					currentTokenType = Token.OPERATOR;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("IDENTIFIER"))) {
 					currentTokenType = Token.IDENTIFIER;
+					
+					if(insideFeatureList) {
+						// use error identifier to indicate a feature name
+						currentTokenType = Token.ERROR_IDENTIFIER;
+					}
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("GROUP_NAME"))) {
 					
 					// add two tokens
@@ -151,10 +164,9 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 					case Token.COMMENT_MULTILINE:
 						break;
 						
-					case Token.NULL:
-						currentTokenType = Token.IDENTIFIER;
+					case Token.ERROR_IDENTIFIER:
 						break;
-						
+												
 					default:
 						currentTokenType = Token.IDENTIFIER;
 						break;
@@ -174,9 +186,19 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 			addToken(text, currentTokenStart, end-1, currentTokenType, newStartOffset+currentTokenStart);
 		}
 		
-		if(!insideMultiLineComment)
+		if(!insideMultiLineComment && !insideFeatureList)
 			addNullToken();
 		
+		if(insideFeatureList) {
+			TokenImpl next = new TokenImpl();
+			next.setOffset(0);
+			next.textCount = 0;
+			next.setType(Token.ERROR_IDENTIFIER);
+			currentToken.setNextToken(next);
+			previousToken = currentToken;
+			currentToken = next;
+		}
+				
 		return firstToken;
 	}
 	
@@ -184,7 +206,12 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 	public void addToken(Segment segment, int start, int end, int tokenType, int startOffset) {
 		if(tokenType == Token.IDENTIFIER && segment.count > 0) {
 			int value = wordsToHighlight.get(segment, start, end);
-			if(value != -1) {
+			if(value == Token.FUNCTION) {
+				tokenType = value;
+			}
+		} else if(tokenType == Token.ERROR_IDENTIFIER && segment.count > 0) {
+			int value = wordsToHighlight.get(segment, start, end);
+			if(value == Token.RESERVED_WORD) {
 				tokenType = value;
 			}
 		}
@@ -201,6 +228,14 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 			final PhonexPlugin pluginInfo = provider.getClass().getAnnotation(PhonexPlugin.class);
 			if(pluginInfo != null) {
 				map.put(pluginInfo.name(), Token.FUNCTION);
+			}
+		}
+		
+		FeatureMatrix fm = FeatureMatrix.getInstance();
+		for(Feature feature:fm.getFeatureData()) {
+			map.put(feature.getName(), Token.RESERVED_WORD);
+			for(String syn:feature.getSynonyms()) {
+				map.put(syn, Token.RESERVED_WORD);
 			}
 		}
 		
