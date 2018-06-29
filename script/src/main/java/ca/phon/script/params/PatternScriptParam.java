@@ -2,14 +2,8 @@ package ca.phon.script.params;
 
 public class PatternScriptParam extends StringScriptParam {
 	
-	public static enum Format {
-		TEXT,
-		REGEX,
-		PHONEX;
-	}
-	
 	public final static String FORMAT_PROP = PatternScriptParam.class.getName() + ".format";
-	private Format format = Format.TEXT;
+	private String format = "text/plain";
 	
 	public final static String MIN_ROWS_PROP = PatternScriptParam.class.getName() + ".minRows";
 	private int minRows = 1;
@@ -25,7 +19,7 @@ public class PatternScriptParam extends StringScriptParam {
 		
 		setParamType("pattern");
 				
-		setFormat(Format.valueOf(format));
+		setFormat(format);
 		setMinRows(minRows);
 		setMaxRows(maxRows);
 	}
@@ -60,13 +54,13 @@ public class PatternScriptParam extends StringScriptParam {
 		return this.visibleRows;
 	}
 	
-	public void setFormat(Format format) {
-		Format oldVal = this.format;
+	public void setFormat(String format) {
+		String oldVal = this.format;
 		this.format = format;
 		propSupport.firePropertyChange(FORMAT_PROP, oldVal, this.format);
 	}
 	
-	public Format getFormat() {
+	public String getFormat() {
 		return this.format;
 	}
 	

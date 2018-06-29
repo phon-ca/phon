@@ -1,4 +1,4 @@
-package ca.phon.script.params.ui;
+package ca.phon.ui.text;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -124,9 +124,9 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("REGEX_STRING"))) {
 					currentTokenType = Token.REGEX;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("ESCAPED_PHONE_CLASS"))) {
-					currentTokenType = Token.LITERAL_BACKQUOTE;
+					currentTokenType = Token.RESERVED_WORD;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("ESCAPED_BOUNDARY"))) {
-					currentTokenType = Token.LITERAL_CHAR;
+					currentTokenType = Token.RESERVED_WORD;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("BACKREF"))) {
 					currentTokenType = Token.LITERAL_BACKQUOTE;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("HEX_CHAR"))) {
@@ -211,7 +211,7 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 			}
 		} else if(tokenType == Token.ERROR_IDENTIFIER && segment.count > 0) {
 			int value = wordsToHighlight.get(segment, start, end);
-			if(value == Token.RESERVED_WORD) {
+			if(value != Token.FUNCTION && value >= 0) {
 				tokenType = value;
 			}
 		}
@@ -233,9 +233,9 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 		
 		FeatureMatrix fm = FeatureMatrix.getInstance();
 		for(Feature feature:fm.getFeatureData()) {
-			map.put(feature.getName(), Token.RESERVED_WORD);
+			map.put(feature.getName(), Token.RESERVED_WORD_2);
 			for(String syn:feature.getSynonyms()) {
-				map.put(syn, Token.RESERVED_WORD);
+				map.put(syn, Token.RESERVED_WORD_2);
 			}
 		}
 		

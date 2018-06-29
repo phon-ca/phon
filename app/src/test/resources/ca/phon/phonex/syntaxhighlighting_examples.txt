@@ -1,0 +1,78 @@
+/*
+ * Phonex constructs
+ *
+ * Test for syntax highlighting
+ */
+
+// plain text
+test is a test
+
+// regular expressions
+'.+'
+b'[oa]'k
+
+// features
+{consonant,-vowel,glide}
+{c,g,v}
+{c,
+	g,
+	v}
+{c
+,g
+,v}
+{errFeature,consonant}
+
+// custom phone class
+[bdf]
+[\g\v]
+
+// pre-defined phone classes
+\c
+\g
+\v
+\w
+\p
+\P
+
+// boundary matchers
+\b
+\S
+
+// groups
+(\c)(\v)
+
+// backreference
+(\c)\S\1
+
+// relative backreference
+(\w)(\c)\S\-1
+
+// named group
+(myGroup=\c\v)
+
+// non-capturing group
+(?=\c\v)
+
+// look-behind
+(?<\c\v)
+
+// look-ahead
+(?>\c\v)
+
+// sctype plug-in
+b:L:O:N:D:C:R:E
+b:l:o:n:d:c:r:e
+.:-n
+.:q
+b:sctype("Onset|LA")
+
+// stress plug-in
+.!1
+.!2
+.!A
+.!a
+.!U
+.!u
+.!d
+.:stress("1|U")
+

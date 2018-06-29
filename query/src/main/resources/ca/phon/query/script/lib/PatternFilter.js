@@ -86,6 +86,13 @@ exports.PatternFilter = function (id) {
 	"Enter phonex",
 	"Enter stress pattern",
 	"Enter CGV pattern"];
+	
+	var filterMimetype = [
+		"text/plain",
+		"text/regex",
+		"text/phonex",
+		"text/plain",
+		"text/plain" ];
 
 	var filterTypeHelpText =[
 	HelpText.plainTextHelpText,
@@ -304,7 +311,7 @@ exports.PatternFilter = function (id) {
 		filterParam = new PatternScriptParam(
 		filterParamInfo.id,
 		filterParamInfo.title,
-		filterParamInfo.def, "PHONEX", 1, 10);
+		filterParamInfo.def, filterMimetype[this.filterType.index], 1, 10);
 	//	filterParam.setPrompt(filterParamInfo.prompt);
 
 		var filterListener = new java.beans.PropertyChangeListener() {
@@ -337,11 +344,11 @@ exports.PatternFilter = function (id) {
 					matchGroupParam.setVisible(2, false);
 				}
 
-				var filterPrompt = filterTypePromptText[idx];
 				var filterHelp = filterTypeHelpText[idx];
-
-			//	filterParam.setPrompt(filterPrompt);
 				helpLabelParam.setText(filterHelp);
+				
+				var mimetype = filterMimetype[idx];
+				filterParam.setFormat(mimetype);
 			}
 		};
 		filterTypeParam.addPropertyChangeListener(filterTypeParamInfo.id, filterTypeListener);

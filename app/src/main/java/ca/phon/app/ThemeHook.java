@@ -25,10 +25,14 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.theme.PhonSubstanceLookAndFeel;
 import ca.phon.plugin.*;
+import ca.phon.ui.text.PhonexTokenMaker;
 import ca.phon.util.*;
 
 /**
@@ -45,6 +49,11 @@ public class ThemeHook implements PhonStartupHook,
 	public void startup() throws PluginException {
 		if (GraphicsEnvironment.isHeadless())
 			return;
+		
+		// XXX This should probably go a custom book hook 
+		// add phonex syntax highlighter
+		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
 
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {

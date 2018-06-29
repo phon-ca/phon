@@ -39,6 +39,7 @@ import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.script.params.*;
 import ca.phon.script.params.EnumScriptParam.ReturnValue;
+import ca.phon.ui.text.PhonexTokenMaker;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 
@@ -216,11 +217,6 @@ public class ParamComponentFactory {
 		
 		final PatternScriptParamListener listener = new PatternScriptParamListener(patternScriptParam, paramId, retVal);
 		retVal.getDocument().addDocumentListener(listener);
-//		retVal.setText(initialText);
-		
-		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
-		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
-		retVal.setSyntaxEditingStyle("text/phonex");
 		
 		int lc = retVal.getLineCount();
 		int numVisibleLines = Math.min(patternScriptParam.getMaxRows(), Math.max(lc, patternScriptParam.getMinRows()));
@@ -324,6 +320,9 @@ public class ParamComponentFactory {
 //				textArea.setForeground(Color.black);
 //			}
 //		});
+		param.addPropertyChangeListener(PatternScriptParam.FORMAT_PROP, (e) -> {
+			textArea.setSyntaxEditingStyle(param.getFormat());
+		});
 		param.addPropertyChangeListener(param.getParamId(), (e) -> {
 			String val = param.getValue(param.getParamId()).toString();
 			if(!textArea.getText().equals(val)) {
