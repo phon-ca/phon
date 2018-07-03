@@ -100,9 +100,9 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 			retVal.pattern = phonex;
 			return retVal;
 		} catch (RecognitionException e) {
-			throw new PhonexPatternException(e);
+			throw new PhonexPatternException(e.line, e.charPositionInLine, e);
 		} catch (RewriteEarlyExitException e) {
-			throw new PhonexPatternException(e);
+			throw new PhonexPatternException(0, -1, e);
 		}
 	}
 

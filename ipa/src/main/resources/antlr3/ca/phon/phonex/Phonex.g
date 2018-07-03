@@ -58,7 +58,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 @members {
 
 public void reportError(RecognitionException e) {
-	throw new PhonexPatternException(e);
+	throw new PhonexPatternException(e.line, e.charPositionInLine, e);
 }
 
 private boolean reverseExpr = false;
@@ -71,7 +71,7 @@ private boolean reverseExpr = false;
 expr
 @after {
 	if(input.LA(1) != EOF) {
-		throw new PhonexPatternException("Unexpected symbol: " + input.LT(1).getText());
+		throw new PhonexPatternException(input.LT(1).getLine(), input.LT(1).getCharPositionInLine(), "Unexpected symbol: " + input.LT(1).getText());
 	}
 }
 	:	baseexpr flags?

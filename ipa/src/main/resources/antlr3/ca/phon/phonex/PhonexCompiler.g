@@ -104,20 +104,20 @@ expr returns [PhonexFSA fsa]
 
 flags
 scope {
-	List<String> myflags;
+	List<CommonTree> myflags;
 }
 @init {
 	$flags::myflags = new ArrayList<>();
 }
-	:	^(FORWARDSLASH (myFlag=LETTER {$flags::myflags.add($LETTER.text);})+)
+	:	^(FORWARDSLASH (myFlag=LETTER {$flags::myflags.add($myFlag);})+)
 	{
-		for(String flag:$flags::myflags) {
-			char flagChar = flag.charAt(0);
+		for(CommonTree flag:$flags::myflags) {
+			char flagChar = flag.getText().charAt(0);
 			PhonexFlag phonexFlag = PhonexFlag.fromChar(flagChar);
 			if(phonexFlag != null) {
 				flags |= phonexFlag.getBitmask();
 			} else {
-				throw new PhonexPatternException("Invalid flag " + flagChar);
+				throw new PhonexPatternException(flag.getLine(), flag.getCharPositionInLine(), "Invalid flag " + flagChar);
 			}
 		}
 	}
@@ -247,7 +247,7 @@ scope {
 					int gidx = fsa.getGroupIndex(gn);
 					int currentGroupIdx = $baseexpr::primaryFSA.getGroupIndex(gn);
 					if(currentGroupIdx > 0 && gidx != currentGroupIdx) {
-						throw new PhonexPatternException("Duplicate group name: " + gn);
+						throw new PhonexPatternException($GROUP.line, $GROUP.getCharPositionInLine(), "Duplicate group name: " + gn);
 					}
 					$baseexpr::primaryFSA.setGroupName(fsa.getGroupIndex(gn), gn);
 				}
@@ -261,7 +261,7 @@ scope {
 		if(!nonCapturing && !groupName.equals("GROUP")) {
 			int currentGroupIdx = $baseexpr::primaryFSA.getGroupIndex(groupName);
 			if(currentGroupIdx > 0 && groupIndex != currentGroupIdx) {
-				throw new PhonexPatternException("Duplicate group name: " + groupName);
+				throw new PhonexPatternException($GROUP.line, $GROUP.getCharPositionInLine(), "Duplicate group name: " + groupName);
 			}
 			$baseexpr::primaryFSA.setGroupName(groupIndex, groupName);
 		}
@@ -363,7 +363,7 @@ scope {
 			if($argument_list.args != null) argList = $argument_list.args;
 			$value = pluginProvider.createMatcher(argList);
 		} else {
-			final NoSuchPluginException ex = new NoSuchPluginException(typeName);
+			final NoSuchPluginException ex = new NoSuchPluginException($PLUGIN.line, $PLUGIN.getCharPositionInLine(), typeName);
 			throw ex;
 		}
 	}
@@ -407,7 +407,7 @@ sctype returns [SyllableConstituentType value]
 		}
 
 		if(scType == null)
-			throw new PhonexPluginException("Invalid syllable constituent type '" + $SCTYPE.text + "'");
+			throw new PhonexPluginException($SCTYPE.line, $SCTYPE.getCharPositionInLine(), "Invalid syllable constituent type '" + $SCTYPE.text + "'");
 		$value = scType;
 	}
 	;
@@ -450,26 +450,27 @@ scope {
 		
 		// test group number
 		if($groupNumber >= $baseexpr::groupIndex || $groupNumber < 1) {
-			throw new PhonexPatternException("Invalid group number " + $groupNumber);
+			throw new PhonexPatternException($BACK_REF.line, $BACK_REF.getCharPositionInLine(), "Invalid group number " + $groupNumber);
 		}
 	}
 	;
 
 feature_set_matcher returns [FeatureSetMatcher matcher]
 scope {
-	List<String> features;
+	List<negatable_identifier_return> features;
 }
 @init {
-	$feature_set_matcher::features = new ArrayList<String>();
+	$feature_set_matcher::features = new ArrayList<negatable_identifier_return>();
 }
-	:	^(FEATURE_SET (f=negatable_identifier {$feature_set_matcher::features.add($f.value);})*)
+	:	^(FEATURE_SET (f=negatable_identifier {$feature_set_matcher::features.add((negatable_identifier_return)f);})*)
 	{
 		$matcher = new FeatureSetMatcher();
 
 		final FeatureMatrix fm = FeatureMatrix.getInstance();
 
-		for(String feature:$feature_set_matcher::features) {
+		for(negatable_identifier_return featureReturn:$feature_set_matcher::features) {
 			boolean not = false;
+			String feature = featureReturn.value;
 			if(feature.startsWith("-")) {
 				not = true;
 				feature = feature.substring(1);
@@ -478,7 +479,7 @@ scope {
 			// check feature name
 			final Feature featureObj = fm.getFeature(feature);
 			if(featureObj == null) {
-				throw new PhonexPatternException("Invalid feature name " + feature);
+				throw new PhonexPatternException(featureReturn.line, featureReturn.charPositionInLine, "Invalid feature name " + feature);
 			}
 
 			if(not)
@@ -517,13 +518,15 @@ identifier returns [String value]
 	}
 	;
 
-negatable_identifier returns [String value]
+negatable_identifier returns [String value, int line, int charPositionInLine]
 	:	^(NAME n=MINUS? chars+=LETTER+)
 	{
 		$value = ($n == null ? "" : "-");
 		for(Object obj:$chars) {
 			$value += ((CommonTree)obj).getToken().getText();
 		}
+		$line = ((CommonTree)$chars.get(0)).getToken().getLine();
+		$charPositionInLine = ((CommonTree)$chars.get(0)).getToken().getCharPositionInLine();
 	}
 	;
 

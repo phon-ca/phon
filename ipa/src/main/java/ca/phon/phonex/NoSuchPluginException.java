@@ -18,6 +18,7 @@
  */
 package ca.phon.phonex;
 
+import org.antlr.runtime.tree.TreeNodeStream;
 
 /**
  * Thrown during compilation when the specified plug-in 
@@ -27,19 +28,20 @@ public class NoSuchPluginException extends PhonexPatternException {
 
 	private static final long serialVersionUID = -1787675745486985284L;
 
-	public NoSuchPluginException() {
-		super();
+	public NoSuchPluginException(int line, int charInLine, String message, Throwable cause) {
+		super(line, charInLine, message, cause);
 	}
 
-	public NoSuchPluginException(String message, Throwable cause) {
-		super(message, cause);
+	public NoSuchPluginException(int line, int charInLine, String message) {
+		super(line, charInLine, message);
 	}
 
-	public NoSuchPluginException(String message) {
-		super(message);
+	public NoSuchPluginException(int line, int charInLine, Throwable cause) {
+		super(line, charInLine, cause);
 	}
 
-	public NoSuchPluginException(Throwable cause) {
-		super(cause);
+	public NoSuchPluginException(int line, int charInLine) {
+		super(line, charInLine);
 	}
+	
 }

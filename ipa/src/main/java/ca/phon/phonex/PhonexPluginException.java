@@ -18,24 +18,26 @@
  */
 package ca.phon.phonex;
 
+import org.antlr.runtime.tree.TreeNodeStream;
+
 public class PhonexPluginException extends PhonexPatternException {
 
 	private static final long serialVersionUID = -6852419990439710113L;
 
-	public PhonexPluginException() {
-		super();
+	public PhonexPluginException(int line, int charInLine, String message, Throwable cause) {
+		super(line, charInLine, message, cause);
 	}
 
-	public PhonexPluginException(String message, Throwable cause) {
-		super(message, cause);
+	public PhonexPluginException(int line, int charInLine, String message) {
+		super(line, charInLine, message);
 	}
 
-	public PhonexPluginException(String message) {
-		super(message);
+	public PhonexPluginException(int line, int charInLine, Throwable cause) {
+		super(line, charInLine, cause);
 	}
 
-	public PhonexPluginException(Throwable cause) {
-		super(cause);
+	public PhonexPluginException(int line, int charInLine) {
+		super(line, charInLine);
 	}
-
+	
 }

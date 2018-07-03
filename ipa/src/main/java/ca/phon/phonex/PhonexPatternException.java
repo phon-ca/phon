@@ -18,6 +18,9 @@
  */
 package ca.phon.phonex;
 
+import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.TreeNodeStream;
 
 /**
  * Exception for phonex pattern errors.
@@ -26,21 +29,51 @@ package ca.phon.phonex;
 public class PhonexPatternException extends RuntimeException {
 
 	private static final long serialVersionUID = 5982555937562885148L;
-
-	public PhonexPatternException() {
+	
+	private TreeNodeStream nodeStream;
+	
+	private int line = -1;
+	
+	private int charInLine = -1;
+	
+	public PhonexPatternException(int line, int charInLine) {
 		super();
+		this.line = line;
+		this.charInLine = charInLine;
 	}
 
-	public PhonexPatternException(String message, Throwable cause) {
+	public PhonexPatternException(int line, int charInLine, String message, Throwable cause) {
 		super(message, cause);
+		this.line = line;
+		this.charInLine = charInLine;
 	}
 
-	public PhonexPatternException(String message) {
+	public PhonexPatternException(int line, int charInLine, String message) {
 		super(message);
+		this.line = line;
+		this.charInLine = charInLine;
 	}
 
-	public PhonexPatternException(Throwable cause) {
+	public PhonexPatternException(int line, int charInLine, Throwable cause) {
 		super(cause);
+		this.line = line;
+		this.charInLine = charInLine;
 	}
 
+	public int getLine() {
+		return line;
+	}
+
+	public void setLine(int line) {
+		this.line = line;
+	}
+
+	public int getCharInLine() {
+		return charInLine;
+	}
+
+	public void setCharInLine(int charInLine) {
+		this.charInLine = charInLine;
+	}
+	
 }

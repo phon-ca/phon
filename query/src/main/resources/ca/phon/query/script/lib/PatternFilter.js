@@ -115,12 +115,14 @@ exports.PatternFilter = function (id) {
 		matchGroupParam.setVisible(visible);
 	};
 
-	var setPatternFilterInvalid = function (message, loc) {
+	var setPatternFilterInvalid = function (message, line, loc) {
 		var msg = (loc >= 0 ?
 		"Error at index " + loc + ": " + message:
 		message);
-		filterParam.setValidate(false);
 		filterParam.setTooltipText(message);
+		filterParam.setErrLine(line);
+		filterParam.setErrChar(loc);
+		filterParam.setValidate(false);
 	};
 
 	var setPatternFilterOk = function () {
@@ -166,6 +168,7 @@ exports.PatternFilter = function (id) {
 		var retVal = {
 			valid: false,
 			message: "",
+			line: 0,
 			loc: 0
 		};
 		try {
@@ -184,6 +187,7 @@ exports.PatternFilter = function (id) {
 		var retVal = {
 			valid: false,
 			message: "",
+			line: 0,
 			loc: 0
 		};
 		try {
@@ -193,7 +197,8 @@ exports.PatternFilter = function (id) {
 		catch (e) {
 			retVal.valid = false;
 			retVal.messge = e.message;
-			retVal.loc = e.javaException.index;
+			retVal.line = e.javaException.line;
+			retVal.loc = e.javaException.charInLine;
 		}
 		return retVal;
 	};
@@ -202,6 +207,7 @@ exports.PatternFilter = function (id) {
 		var retVal = {
 			valid: false,
 			message: "",
+			line: 0,
 			loc: 0
 		};
 		retVal.valid = stressPatternRegex.test(filter);
@@ -216,6 +222,7 @@ exports.PatternFilter = function (id) {
 		var retVal = {
 			valid: false,
 			message: "",
+			line: 0,
 			loc: 0
 		};
 		retVal.valid = cvPatternRegex.test(filter);
@@ -238,6 +245,7 @@ exports.PatternFilter = function (id) {
 		var retVal = {
 			valid: false,
 			message: "",
+			line: 0,
 			loc: 0
 		};
 
@@ -286,8 +294,8 @@ exports.PatternFilter = function (id) {
 
 		var filterType = filterTypeParam.getValue(filterTypeParamInfo.id);
 		var filterCheck = checkFilter(txt, filterType.index);
-		if (! filterCheck.valid) {
-			setPatternFilterInvalid(filterCheck.message, filterCheck.loc);
+		if (filterCheck.valid == false) {
+			setPatternFilterInvalid(filterCheck.message, filterCheck.line, filterCheck.loc);
 		} else {
 			setPatternFilterOk();
 		}

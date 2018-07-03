@@ -21,15 +21,24 @@ package ca.phon.script.params.ui;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.beans.*;
+import java.net.URL;
+import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.StyleConstants;
 
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SquiggleUnderlineHighlightPainter;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.parser.ExtendedHyperlinkListener;
+import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
+import org.fife.ui.rsyntaxtextarea.parser.Parser;
+import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.ToolTipSupplier;
 import org.jdesktop.swingx.*;
@@ -321,6 +330,7 @@ public class ParamComponentFactory {
 //				textArea.setForeground(Color.black);
 //			}
 //		});
+		
 		param.addPropertyChangeListener(PatternScriptParam.FORMAT_PROP, (e) -> {
 			textArea.setSyntaxEditingStyle(param.getFormat());
 		});

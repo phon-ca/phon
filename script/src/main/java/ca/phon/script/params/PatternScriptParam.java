@@ -14,6 +14,12 @@ public class PatternScriptParam extends StringScriptParam {
 	public final static String VISIBLE_ROWS_PROP = PatternScriptParam.class.getName() + ".visibleRows";
 	private int visibleRows = 1;
 	
+	public final static String ERROR_LINE_PROP = PatternScriptParam.class.getName() + ".errLine";
+	private int errLine = -1;
+	
+	public final static String ERROR_CHAR_PROP = PatternScriptParam.class.getName() + ".errChar";
+	private int errChar = -1;
+	
 	public PatternScriptParam(String id, String desc, String defaultValue, String format, int minRows, int maxRows) {
 		super(id, desc, defaultValue);
 		
@@ -62,6 +68,26 @@ public class PatternScriptParam extends StringScriptParam {
 	
 	public String getFormat() {
 		return this.format;
+	}
+	
+	public int getErrLine() {
+		return this.errLine;
+	}
+	
+	public void setErrLine(int errLine) {
+		int oldVal = this.errLine;
+		this.errLine = errLine;
+		propSupport.firePropertyChange(ERROR_LINE_PROP, oldVal, errLine);
+	}
+	
+	public int getErrChar() {
+		return this.errChar;
+	}
+	
+	public void setErrChar(int errChar) {
+		int oldVal = this.errChar;
+		this.errChar = errChar;
+		propSupport.firePropertyChange(ERROR_CHAR_PROP, oldVal, errChar);
 	}
 	
 	@Override
