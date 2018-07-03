@@ -311,8 +311,7 @@ exports.PatternFilter = function (id) {
 		filterParam = new PatternScriptParam(
 		filterParamInfo.id,
 		filterParamInfo.title,
-		filterParamInfo.def, filterMimetype[this.filterType.index], 1, 10);
-	//	filterParam.setPrompt(filterParamInfo.prompt);
+		filterParamInfo.def, filterMimetype[filterTypeParamInfo.def], 1, 10);
 
 		var filterListener = new java.beans.PropertyChangeListener() {
 			propertyChange: function (e) {
@@ -364,9 +363,6 @@ exports.PatternFilter = function (id) {
 		params.add(filterParam);
 
 		params.add(matchGroupParam);
-
-		var sepLine = new LabelScriptParam("<html>&nbsp;</html>", "");
-		//   params.add(sepLine);
 
 		params.add(helpLabelParam);
 	};

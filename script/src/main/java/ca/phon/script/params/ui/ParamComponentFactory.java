@@ -214,6 +214,7 @@ public class ParamComponentFactory {
 				(patternScriptParam.getValue(paramId) != null  ? patternScriptParam.getValue(paramId).toString() : patternScriptParam.getDefaultValue(paramId).toString());
 		final RSyntaxTextArea retVal = new RSyntaxTextArea(initialText);
 		retVal.setToolTipSupplier( (textArea, evt) -> patternScriptParam.getTooltipText() );
+		retVal.setSyntaxEditingStyle(patternScriptParam.getFormat());
 		
 		final PatternScriptParamListener listener = new PatternScriptParamListener(patternScriptParam, paramId, retVal);
 		retVal.getDocument().addDocumentListener(listener);
