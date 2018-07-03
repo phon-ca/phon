@@ -76,7 +76,7 @@ public enum SyllableConstituentType {
 	 *  not found
 	 */
 	public static SyllableConstituentType fromString(String identifier) {
-		SyllableConstituentType retVal = SyllableConstituentType.UNKNOWN;
+		SyllableConstituentType retVal = null;
 		
 		// special case for diphthongs
 		if(identifier.equalsIgnoreCase("D")) {

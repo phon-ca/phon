@@ -361,9 +361,14 @@ scope {
 		if(pluginProvider != null) {
 			List<String> argList = new ArrayList<String>();
 			if($argument_list.args != null) argList = $argument_list.args;
-			$value = pluginProvider.createMatcher(argList);
+			
+			try {
+				$value = pluginProvider.createMatcher(argList);
+			} catch (Exception createEx) {
+				throw new PhonexPatternException($OPEN_PAREN.line, $OPEN_PAREN.getToken().getCharPositionInLine()+1, createEx);
+			}
 		} else {
-			final NoSuchPluginException ex = new NoSuchPluginException($PLUGIN.line, $PLUGIN.getCharPositionInLine(), typeName);
+			final NoSuchPluginException ex = new NoSuchPluginException($PLUGIN.line, $PLUGIN.getCharPositionInLine(), "Invalid plug-in matcher: " + typeName);
 			throw ex;
 		}
 	}
@@ -407,7 +412,7 @@ sctype returns [SyllableConstituentType value]
 		}
 
 		if(scType == null)
-			throw new PhonexPluginException($SCTYPE.line, $SCTYPE.getCharPositionInLine(), "Invalid syllable constituent type '" + $SCTYPE.text + "'");
+			throw new PhonexPluginException($SCTYPE.getToken().getLine(), $SCTYPE.getToken().getCharPositionInLine(), "Invalid syllable constituent type '" + $SCTYPE.text + "'");
 		$value = scType;
 	}
 	;

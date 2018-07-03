@@ -116,9 +116,6 @@ exports.PatternFilter = function (id) {
 	};
 
 	var setPatternFilterInvalid = function (message, line, loc) {
-		var msg = (loc >= 0 ?
-		"Error at index " + loc + ": " + message:
-		message);
 		filterParam.setTooltipText(message);
 		filterParam.setErrLine(line);
 		filterParam.setErrChar(loc);
@@ -196,9 +193,9 @@ exports.PatternFilter = function (id) {
 		}
 		catch (e) {
 			retVal.valid = false;
-			retVal.messge = e.message;
-			retVal.line = e.javaException.line;
-			retVal.loc = e.javaException.charInLine;
+			retVal.message = e.javaException.message;
+			retVal.line = (typeof(e.javaException.line) != "undefined" ? e.javaException.line : -1);
+			retVal.loc = (typeof(e.javaException.charInLine) != "undefined" ? e.javaException.charInLine : -1);
 		}
 		return retVal;
 	};

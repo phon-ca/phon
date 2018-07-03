@@ -330,7 +330,7 @@ public class ParamComponentFactory {
 //				textArea.setForeground(Color.black);
 //			}
 //		});
-		
+		textArea.addParser(new PatternScriptParamParser(param));
 		param.addPropertyChangeListener(PatternScriptParam.FORMAT_PROP, (e) -> {
 			textArea.setSyntaxEditingStyle(param.getFormat());
 		});

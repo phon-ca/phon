@@ -172,8 +172,8 @@ class_matcher
 	;
 
 plugin_matcher
-	:	COLON identifier OPEN_PAREN argument_list? CLOSE_PAREN
-	->	^(PLUGIN[$identifier.text] OPEN_PAREN argument_list? CLOSE_PAREN)
+	:	COLON id=identifier OPEN_PAREN argument_list? CLOSE_PAREN
+	->	^(PLUGIN[$id.text] OPEN_PAREN argument_list? CLOSE_PAREN)
 	|	COLON MINUS? sctype
 	->	^(PLUGIN["sctype"] MINUS? sctype)
 	|	AMP single_phone_matcher
@@ -260,14 +260,14 @@ boundary_matchers
 
 stress_type
 	:	INT
-	->	^(STRESS[$INT.text])
+	->	^(STRESS[$INT])
 	|	LETTER
-	->	^(STRESS[$LETTER.text])
+	->	^(STRESS[$LETTER])
 	;
 
 sctype
 	:	LETTER
-	->	^(SCTYPE[$LETTER.text])
+	->	^(SCTYPE[$LETTER])
 	;
 
 ESCAPED_PHONE_CLASS

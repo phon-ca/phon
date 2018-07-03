@@ -70,7 +70,7 @@ public class MarkConstituentNode extends OpNode implements PhonexNode {
 				final String grpName = pattern.groupName(i);
 				if(grpName != null) {
 					final SyllableConstituentType scType = 
-							SyllableConstituentType.fromString(grpName);
+							(SyllableConstituentType.fromString(grpName) != null ? SyllableConstituentType.fromString(grpName) : SyllableConstituentType.UNKNOWN);
 					final List<IPAElement> grp = matcher.group(i);
 					grp.forEach( (e) -> e.setScType(scType) );
 					
