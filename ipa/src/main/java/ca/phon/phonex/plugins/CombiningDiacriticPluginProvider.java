@@ -38,7 +38,7 @@ import ca.phon.phonex.*;
  * </p>
  *
  */
-@PhonexPlugin(name = "comb")
+@PhonexPlugin(name = "comb", description="Match combining diacritics", arguments={"diacritics"} )
 public class CombiningDiacriticPluginProvider implements PluginProvider {
 
 	@Override

@@ -5,7 +5,7 @@ ca.phon.phonex.plugins.SuffixDiacriticPluginProvider
 
 ca.phon.syllable.phonex.SyllableConstituentPluginProvider
 ca.phon.syllable.phonex.StressPluginProvider
-ca.phon.syllable.phonex.DiphthongPluginProvider
+#ca.phon.syllable.phonex.DiphthongPluginProvider
 ca.phon.syllable.phonex.TonePluginProvider
 
 ca.phon.syllabifier.phonex.SonorityMdcPlugin

@@ -28,6 +28,8 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.StyleConstants;
 
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -48,6 +50,8 @@ import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.script.params.*;
 import ca.phon.script.params.EnumScriptParam.ReturnValue;
+import ca.phon.ui.text.PatternEditor;
+import ca.phon.ui.text.PhonexAutocompleteProvider;
 import ca.phon.ui.text.PhonexTokenMaker;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
@@ -221,7 +225,7 @@ public class ParamComponentFactory {
 		
 		final String initialText =
 				(patternScriptParam.getValue(paramId) != null  ? patternScriptParam.getValue(paramId).toString() : patternScriptParam.getDefaultValue(paramId).toString());
-		final RSyntaxTextArea retVal = new RSyntaxTextArea(initialText);
+		final PatternEditor retVal = new PatternEditor(initialText, PatternEditor.SyntaxStyle.fromMimetype(patternScriptParam.getFormat()));
 		retVal.setToolTipSupplier( (textArea, evt) -> patternScriptParam.getTooltipText() );
 		retVal.setSyntaxEditingStyle(patternScriptParam.getFormat());
 		

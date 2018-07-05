@@ -32,7 +32,7 @@ import ca.phon.phonex.*;
  * and the boolean indicates if flat sonority is
  * allowed.
  */
-@PhonexPlugin(name = "mdc")
+@PhonexPlugin(name = "mdc", description="Minimum distance constraint", arguments= {"distance", "allowFlat"} )
 public class SonorityMdcPlugin
 implements PluginProvider {
 

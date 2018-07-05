@@ -28,7 +28,7 @@ import ca.phon.phonex.*;
  * <code>toneX</code> features across elements in syllable.
  *
  */
-@PhonexPlugin(name="tone")
+@PhonexPlugin(name="tone", description="Match tone", arguments= {"tone"})
 public class TonePluginProvider implements PluginProvider {
 
 	@Override

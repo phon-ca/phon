@@ -34,7 +34,7 @@ import ca.phon.syllable.SyllableConstituentType;
  * without the plug-in matcher identifier.  E.g., <code>{}:O|LA == {}:sctype("O|LA")</code>.
  * </p>
  */
-@PhonexPlugin(name = "sctype")
+@PhonexPlugin(name = "sctype", description="Match syllable constituent type", arguments= {"type"} )
 public class SyllableConstituentPluginProvider implements PluginProvider {
 	
 	@Override

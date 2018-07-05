@@ -62,7 +62,9 @@ rule
 	: IDENTIFIER+
 	;
 
-
+FLAGS
+	: FORWARDSLASH ('o'|'O')
+	;
 	
 IDENTIFIER
 	: LETTER (LETTER | NUMBER)*
@@ -152,7 +154,7 @@ COMMA
 	:	','
 	;
 
-fragment	
+	
 FORWARDSLASH
 	:	'/'
 	;
@@ -257,8 +259,12 @@ HEX_CHAR
 	:	BACKSLASH 'u' NUMBER NUMBER NUMBER NUMBER
 	;
 	
+PLUGIN
+	: COLON ( 'sctype' | 'stress' | 'mdc' | 'diacritic' | 'tone' | 'comb' | 'prefix' | 'suffix' )
+	;
+	
 SCTYPE
-	: COLON MINUS? ('L' | 'l' | 'O' | 'o' | 'N' | 'n' | 'D' | 'd' | 'C' | 'c' | 'R' | 'r' | 'E' | 'e' )
+	: COLON MINUS? ( 'A' | 'a' | 'L' | 'l' | 'O' | 'o' | 'N' | 'n' | 'D' | 'd' | 'C' | 'c' | 'R' | 'r' | 'E' | 'e' )
 	;
 	
 STRESS_TYPE

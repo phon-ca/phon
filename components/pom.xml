@@ -33,6 +33,10 @@
 		<groupId>com.fifesoft</groupId>
 		<artifactId>rsyntaxtextarea</artifactId>
 	</dependency>
+	<dependency>
+		<groupId>com.fifesoft</groupId>
+		<artifactId>autocomplete</artifactId>
+	</dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>native-dialogs</artifactId>

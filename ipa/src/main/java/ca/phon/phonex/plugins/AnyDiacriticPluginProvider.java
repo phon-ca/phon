@@ -22,7 +22,7 @@ import java.util.List;
 
 import ca.phon.phonex.*;
 
-@PhonexPlugin(name="diacritic")
+@PhonexPlugin(name="diacritic", description="Match diacritics of a phone", arguments= {"diacritics"})
 public class AnyDiacriticPluginProvider implements PluginProvider {
 
 	@Override

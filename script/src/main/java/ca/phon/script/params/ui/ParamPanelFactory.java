@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.*;
 
+import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -31,6 +32,7 @@ import com.jgoodies.forms.layout.*;
 
 import ca.phon.script.params.*;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.text.PhonexAutocompleteProvider;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -82,6 +84,31 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		CellConstraints cc = new CellConstraints();
 		compPanel.add(label, cc.xyw(1,1,2));
 		compPanel.add(comp, cc.xy(2, 2));
+		
+		return compPanel;
+	}
+	
+	private JPanel createComponentPanel(JLabel label, JComponent leftSide, JComponent comp) {
+		String cols = "20px, fill:pref:grow";
+		String rows = "pref, pref";
+		FormLayout layout = new FormLayout(cols, rows);
+		JPanel compPanel = new JPanel(layout);
+		CellConstraints cc = new CellConstraints();
+		compPanel.add(label, cc.xyw(1,1,2));
+		compPanel.add(leftSide, cc.xy(1,2));
+		compPanel.add(comp, cc.xy(2, 2));
+		
+		return compPanel;
+	}
+	
+	private JPanel createComponentPanelNoSpace(JLabel label, JComponent comp) {
+		String cols = "fill:pref:grow";
+		String rows = "pref, pref";
+		FormLayout layout = new FormLayout(cols, rows);
+		JPanel compPanel = new JPanel(layout);
+		CellConstraints cc = new CellConstraints();
+		compPanel.add(label, cc.xy(1,1));
+		compPanel.add(comp, cc.xy(1, 2));
 		
 		return compPanel;
 	}
@@ -155,7 +182,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		p.add(scroller, BorderLayout.CENTER);
 		p.add(strip, BorderLayout.LINE_START);
 		
-		final JPanel panel = createComponentPanel(paramLabel, p);
+		final JPanel panel = createComponentPanelNoSpace(paramLabel, p);
 		currentContainer.add(panel);
 	}
 

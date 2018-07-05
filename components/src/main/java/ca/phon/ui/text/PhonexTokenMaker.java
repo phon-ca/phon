@@ -133,6 +133,10 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 					currentTokenType = Token.LITERAL_NUMBER_HEXADECIMAL;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("SINGLE_QUANTIFIER"))) {
 					currentTokenType = Token.OPERATOR;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("FLAGS"))) {
+					currentTokenType = Token.ANNOTATION;
+				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("PLUGIN"))) {
+					currentTokenType = Token.FUNCTION;
 				} else if(antlrTokenType == Integer.parseInt(antlrTokenMap.getProperty("IDENTIFIER"))) {
 					currentTokenType = Token.IDENTIFIER;
 					
@@ -204,12 +208,7 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 	
 	@Override
 	public void addToken(Segment segment, int start, int end, int tokenType, int startOffset) {
-		if(tokenType == Token.IDENTIFIER && segment.count > 0) {
-			int value = wordsToHighlight.get(segment, start, end);
-			if(value == Token.FUNCTION) {
-				tokenType = value;
-			}
-		} else if(tokenType == Token.ERROR_IDENTIFIER && segment.count > 0) {
+		if(tokenType == Token.ERROR_IDENTIFIER && segment.count > 0) {
 			int value = wordsToHighlight.get(segment, start, end);
 			if(value != Token.FUNCTION && value >= 0) {
 				tokenType = value;
@@ -223,13 +222,13 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 	public TokenMap getWordsToHighlight() {
 		TokenMap map = new TokenMap();
 		
-		PhonexPluginManager pluginManager = PhonexPluginManager.getSharedInstance();
-		for(PluginProvider provider:pluginManager.getPluginProviders()) {
-			final PhonexPlugin pluginInfo = provider.getClass().getAnnotation(PhonexPlugin.class);
-			if(pluginInfo != null) {
-				map.put(pluginInfo.name(), Token.FUNCTION);
-			}
-		}
+//		PhonexPluginManager pluginManager = PhonexPluginManager.getSharedInstance();
+//		for(PluginProvider provider:pluginManager.getPluginProviders()) {
+//			final PhonexPlugin pluginInfo = provider.getClass().getAnnotation(PhonexPlugin.class);
+//			if(pluginInfo != null) {
+//				map.put(pluginInfo.name(), Token.FUNCTION);
+//			}
+//		}
 		
 		FeatureMatrix fm = FeatureMatrix.getInstance();
 		for(Feature feature:fm.getFeatureData()) {

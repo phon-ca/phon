@@ -26,7 +26,7 @@ import ca.phon.phonex.*;
  * Provides the suffix diacritic plug-in matcher.
  *
  */
-@PhonexPlugin(name="suffix")
+@PhonexPlugin(name="suffix", description="Match suffix diacritics", arguments={"diacritics"})
 public class SuffixDiacriticPluginProvider implements PluginProvider {
 
 	@Override

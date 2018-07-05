@@ -20,20 +20,22 @@ package ca.phon.app;
 
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.logging.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
-
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
-import ca.phon.app.theme.PhonSubstanceLookAndFeel;
-import ca.phon.plugin.*;
-import ca.phon.ui.text.PhonexTokenMaker;
-import ca.phon.util.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginException;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
 /**
  * Sets UI theme
@@ -50,11 +52,6 @@ public class ThemeHook implements PhonStartupHook,
 		if (GraphicsEnvironment.isHeadless())
 			return;
 		
-		// XXX This should probably go a custom book hook 
-		// add phonex syntax highlighter
-		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
-		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
-
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {

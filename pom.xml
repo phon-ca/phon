@@ -124,7 +124,8 @@
 		<ca.phon.native-dialogs.version>11</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>2-SNAPSHOT</ca.phon.jbreadcrumb.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
-		<com.fifesoft.rsyntaxtextarea.version>2.6.0</com.fifesoft.rsyntaxtextarea.version>
+		<com.fifesoft.rsyntaxtextarea.version>2.6.1</com.fifesoft.rsyntaxtextarea.version>
+		<com.fifesoft.autocomplete.version>2.6.1</com.fifesoft.autocomplete.version>
 		<com.jgoodies.jgoodies-common.version>1.8.1</com.jgoodies.jgoodies-common.version>
 		<com.jgoodies.jgoodies-forms.version>1.9.0</com.jgoodies.jgoodies-forms.version>
 		<com.jgoodies.jgoodies-looks.version>2.7.0</com.jgoodies.jgoodies-looks.version>
@@ -297,6 +298,12 @@
 				<groupId>com.fifesoft</groupId>
 				<artifactId>rsyntaxtextarea</artifactId>
 				<version>${com.fifesoft.rsyntaxtextarea.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fifesoft</groupId>
+				<artifactId>autocomplete</artifactId>
+				<version>${com.fifesoft.autocomplete.version}</version>
 			</dependency>
 
 			<dependency>

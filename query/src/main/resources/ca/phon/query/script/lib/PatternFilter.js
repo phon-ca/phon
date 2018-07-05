@@ -44,7 +44,7 @@ exports.PatternFilter = function (id) {
 
 	var filterParamInfo = {
 		"id": id + ".filter",
-		"title": "Expression:",
+		"title": "Expression: (Press Ctrl+Space to show autocomplete options)",
 		"prompt": "Enter expression",
 		"def": ""
 	};
@@ -348,9 +348,6 @@ exports.PatternFilter = function (id) {
 					matchGroupParam.setVisible(2, false);
 				}
 
-				var filterHelp = filterTypeHelpText[idx];
-				helpLabelParam.setText(filterHelp);
-				
 				var mimetype = filterMimetype[idx];
 				filterParam.setFormat(mimetype);
 			}
@@ -359,17 +356,10 @@ exports.PatternFilter = function (id) {
 		this.filterType =
 			{ "index": filterTypeParamInfo.def, "toString": function () { return filterTypeParamInfo.desc[filterTypeParamInfo.def]; } };
 
-		var helpLabelDesc = filterTypeHelpText[filterTypeParamInfo.def];
-		helpLabelParam = new LabelScriptParam(
-		helpLabelDesc,
-		helpLabelParamInfo.title);
-
 		params.add(filterTypeParam);
 		params.add(filterParam);
 
 		params.add(matchGroupParam);
-
-		params.add(helpLabelParam);
 	};
 
 	this.isUseFilter = function () {

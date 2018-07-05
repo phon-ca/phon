@@ -37,7 +37,7 @@ import ca.phon.phonex.*;
  * </p>
  *
  */
-@PhonexPlugin(name="prefix")
+@PhonexPlugin(name="prefix", description="Match prefix diacritics", arguments={"diacritics"})
 public class PrefixDiacriticPluginProvider implements PluginProvider {
 
 	@Override

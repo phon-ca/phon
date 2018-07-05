@@ -49,4 +49,16 @@ public @interface PhonexPlugin {
 	 */
 	public String name();
 	
+	/**
+	 * Description of plug-in
+	 */
+	public String description() default "";
+	
+	/**
+	 * List of argument names
+	 * 
+	 * 
+	 */
+	public String[] arguments() default {};
+		
 }
