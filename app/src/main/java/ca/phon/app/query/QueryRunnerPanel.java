@@ -32,6 +32,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
@@ -56,15 +58,10 @@ public class QueryRunnerPanel extends JPanel {
 	private static final long serialVersionUID = 1427147887370979071L;
 
 	private final static Logger LOGGER = Logger.getLogger(QueryRunnerPanel.class.getName());
-	
-	/* UI Elements */
-	/** The report button */
-	private JButton reportButton;
-	
-	/** The save results button */
-	private JButton saveButton;
-	
+
 	private JXBusyLabel busyLabel;
+	
+	private JLabel completedLabel;
 	
 	/** The table */
 	private JXTable resultsTable;
@@ -77,12 +74,8 @@ public class QueryRunnerPanel extends JPanel {
 	/** Top panel */
 	private JPanel topPanel;
 	
-	/** Completed Label */
-	private JLabel completedLabel;
-	
 	/** Hide no-result rows */
 	private JCheckBox hideRowsBox;
-	private JCheckBox openEditorBox;
 	
 	/**
 	 * Load from temporary folder or project folder?
@@ -147,41 +140,8 @@ public class QueryRunnerPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		// top panel
-		FormLayout topLayout = new FormLayout(
-				"pref, 3dlu, left:pref, left:pref, fill:pref:grow, pref, right:pref",
-				"pref");
 		CellConstraints cc = new CellConstraints();
-		topPanel = new JPanel(topLayout);
-		
-		saveButton = new JButton("Save results");
-		ImageIcon saveIcon = 
-				IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
-		saveButton.setIcon(saveIcon);
-		saveButton.setEnabled(false);
-		saveButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showSaveQueryDialog();
-			}
-			
-		});
-		
-		reportButton = new JButton("Report");
-		ImageIcon ssIcon = 
-			IconManager.getInstance().getIcon("mimetypes/x-office-spreadsheet", IconSize.SMALL);
-		reportButton.setIcon(ssIcon);
-		reportButton.setEnabled(false);
-		reportButton.setVisible(true);
-		reportButton.addActionListener( (e) -> {
-			// show menu
-			final JMenu menu = new JMenu();
-			final ReportLibrary library = new ReportLibrary();
-			library.setupMenu(tempProject, query.getUUID().toString(), menu.getPopupMenu());
-			
-			menu.getPopupMenu().show(reportButton, 0, reportButton.getHeight());
-		});
-		reportButton.setVisible(false);
+		topPanel = new JPanel(new BorderLayout());
 		
 		hideRowsBox = new JCheckBox("Hide empty results");
 		hideRowsBox.setEnabled(false);
@@ -199,24 +159,22 @@ public class QueryRunnerPanel extends JPanel {
 			
 		});
 		
-		openEditorBox = new JCheckBox("Open session with results");
-		openEditorBox.setSelected(true);
-		openEditorBox.setVisible(false);
-		
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		busyLabel.setBusy(true);
 		
-		String labelText = "Completed: 0/" + tableModel.getRowCount();
+		String labelText = "0/" + tableModel.getRowCount();
 		completedLabel = new JLabel(labelText);
-
-		topPanel.add(completedLabel, cc.xy(3,1));
-		topPanel.add(busyLabel, cc.xy(1, 1));
-		topPanel.add(openEditorBox, cc.xy(4, 1));
-		topPanel.add(saveButton, cc.xy(6, 1));
-		topPanel.add(reportButton, cc.xy(7, 1));
+		
+		busyLabel.setText(labelText);
+	
+		JPanel leftPanel = new JPanel(new HorizontalLayout(5));
+		leftPanel.add(busyLabel);
+		leftPanel.add(completedLabel);
+		topPanel.add(leftPanel,BorderLayout.WEST);
+		
+		topPanel.add(hideRowsBox,BorderLayout.CENTER);
 		
 		// table
-		
 		resultsTable = new JXTable(tableModel);
 		resultsTable.addHighlighter(HighlighterFactory.createSimpleStriping());
 		resultsTable.setRowSorter(resultsTableSorter);
@@ -238,7 +196,20 @@ public class QueryRunnerPanel extends JPanel {
 		final PhonWorker worker = PhonWorker.createWorker();
 		worker.setFinishWhenQueueEmpty(true);
 		worker.invokeLater(queryTask);
+		queryTask.addTaskListener(new PhonTaskListener() {
+			
+			@Override
+			public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+				firePropertyChange("taskStatus", oldStatus, newStatus);
+			}
+			
+			@Override
+			public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+				
+			}
+		});
 		worker.start();
+		
 	}
 	
 	public void stopQuery() {
@@ -285,79 +256,8 @@ public class QueryRunnerPanel extends JPanel {
 	private int numberComplete = 0;
 	private void taskCompleted() {
 		numberComplete++;
-		completedLabel.setText("Completed: " + numberComplete + "/" + tableModel.getRowCount());
+		completedLabel.setText(numberComplete + "/" + tableModel.getRowCount());
 		super.firePropertyChange("numberComplete", numberComplete-1, numberComplete);
-	}
-
-	/**
-	 * Show ui for editing query details.
-	 */
-	private void showSaveQueryDialog() {
-		final EditQueryDialog queryDialog = new EditQueryDialog(getProject(), getQuery());
-		queryDialog.setLocationRelativeTo(this);
-		if(queryDialog.showModal() == ReturnStatus.OK)
-			saveQuery();
-	}
-	
-	/**
-	 * Perform save query.
-	 */
-	private void saveQuery() {
-		final Runnable beginningTask = new Runnable() {
-			@Override
-			public void run() {
-				busyLabel.setBusy(true);
-				saveButton.setEnabled(false);
-			}
-		};
-		
-		final Runnable successTask = new Runnable() {
-			
-			@Override
-			public void run() {
-				saveButton.setVisible(false);
-			}
-		};
-		final Runnable finalTask = new Runnable() {
-			@Override
-			public void run() {
-				saveButton.setEnabled(true);
-				busyLabel.setBusy(false);
-				
-			}
-		};
-		
-		// place save task on background thread
-		final Runnable saveTask = new Runnable() { public void run() {
-			SwingUtilities.invokeLater(beginningTask);
-			final QueryManager qManager = QueryManager.getSharedInstance();
-			final ResultSetManager rsManager = qManager.createResultSetManager();
-			
-			// save query first
-			try {
-				rsManager.saveQuery(getProject(), getQuery());
-				
-				// load from temp project
-				for(SessionPath sessionLocation:tableModel.sessions) {
-					final String sessionName = sessionLocation.getCorpus() + "." + sessionLocation.getSession();
-					final ResultSet tempResults = rsManager.loadResultSet(tempProject, getQuery(), sessionName);
-					
-					// save to project
-					rsManager.saveResultSet(getProject(), getQuery(), tempResults);
-				}
-				
-				loadFromTemp = false;
-				
-				SwingUtilities.invokeLater(successTask);
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			} finally {
-				SwingUtilities.invokeLater(finalTask);
-			}
-		}};
-		PhonWorker.getInstance().invokeLater(saveTask);
-		
-		super.firePropertyChange(QUERY_SAVED_PROP, Boolean.FALSE, Boolean.TRUE);
 	}
 	
 	private final PhonTask queryTask = new PhonTask() {
@@ -503,14 +403,11 @@ public class QueryRunnerPanel extends JPanel {
 			bufferOut.flush();
 			
 			busyLabel.setBusy(false);
-			saveButton.setEnabled(true);
-			reportButton.setEnabled(true);
+//			saveButton.setEnabled(true);
+//			reportButton.setEnabled(true);
 			
-			topPanel.remove(completedLabel);
-			topPanel.add(hideRowsBox, (new CellConstraints()).xy(3,1));
-			openEditorBox.setVisible(true);
-			topPanel.revalidate();
 			hideRowsBox.setEnabled(true);
+			topPanel.add(hideRowsBox, BorderLayout.CENTER);
 			
 			if(getStatus() != TaskStatus.TERMINATED && getStatus() != TaskStatus.ERROR)
 				super.setStatus(TaskStatus.FINISHED);
@@ -549,7 +446,7 @@ public class QueryRunnerPanel extends JPanel {
 						initInfo.put("tempProject", tempProject);
 					}
 					initInfo.put("query", query);
-					initInfo.put("opensession", openEditorBox.isSelected());
+//					initInfo.put("opensession", openEditorBox.isSelected());
 					
 					// open editor first....
 					try {
@@ -825,6 +722,8 @@ public class QueryRunnerPanel extends JPanel {
 			} else if(status == TaskStatus.FINISHED) {
 				retVal.setIcon(finishedIcon);
 			}
+			
+			retVal.setText(WordUtils.capitalize(retVal.getText().toLowerCase()));
 			
 			return retVal;
 		}

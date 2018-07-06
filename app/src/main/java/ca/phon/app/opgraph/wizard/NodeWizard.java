@@ -185,7 +185,7 @@ public class NodeWizard extends WizardFrame {
 
 		final MenuBuilder builder = new MenuBuilder(menuBar);
 		
-		final JMenu reportMenu = builder.addMenu(".@Edit", "Report");
+		final JMenu reportMenu = builder.addMenu(".@Analysis", "Report");
 		reportMenu.addMenuListener(new MenuListener() {
 			
 			@Override
@@ -316,7 +316,7 @@ public class NodeWizard extends WizardFrame {
 		final JMenuItem runAgainItem = new JMenuItem("Run again");
 		runAgainItem.setToolTipText("Clear results and run report again");
 		runAgainItem.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
-		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.SHIFT_DOWN_MASK));
 		runAgainItem.setEnabled(hasReport);
 		
 		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this);

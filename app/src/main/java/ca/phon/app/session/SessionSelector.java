@@ -18,16 +18,21 @@
  */
 package ca.phon.app.session;
 
+import java.awt.Component;
 import java.text.Collator;
 import java.util.*;
 
 import javax.swing.ImageIcon;
+import javax.swing.JTree;
 import javax.swing.tree.*;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.tristatecheckbox.*;
 import ca.phon.util.CollatorFactory;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
 
 /**
@@ -43,7 +48,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 		if(project == null)
 			return new TristateCheckBoxTreeModel(new DefaultMutableTreeNode("No project"));
 
-		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode(project);
+		final ProjectTreeNode root = new ProjectTreeNode(project);
 		root.setEnablePartialCheck(false);
 
 		// create new tree structure
@@ -51,14 +56,14 @@ public class SessionSelector extends TristateCheckBoxTree {
 		List<String> corpora = project.getCorpora();
 		Collections.sort(corpora, collator);
 		for(String corpus:corpora) {
-			TristateCheckBoxTreeNode corpusNode = new TristateCheckBoxTreeNode(corpus);
+			CorpusTreeNode corpusNode = new CorpusTreeNode(corpus);
 			corpusNode.setEnablePartialCheck(false);
 
 			List<String> sessions = project.getCorpusSessions(corpus);
 			if(sessions.size() == 0 && hideEmptyCorpora) continue;
 			Collections.sort(sessions, collator);
 			for(String session:sessions) {
-				TristateCheckBoxTreeNode sessionNode = new TristateCheckBoxTreeNode(session);
+				SessionTreeNode sessionNode = new SessionTreeNode(session);
 				sessionNode.setEnablePartialCheck(false);
 				corpusNode.add(sessionNode);
 			}
@@ -113,19 +118,10 @@ public class SessionSelector extends TristateCheckBoxTree {
 	}
 
 	private void init() {
-		ImageIcon sessionIcon = IconManager.getInstance().getIcon(
-				"mimetypes/text-xml", IconSize.SMALL);
-		final ImageIcon folderIcon = IconManager.getInstance().getIcon("places/folder", IconSize.SMALL);
+		
+		final SessionSelectorCellRenderer renderer = new SessionSelectorCellRenderer();
 
-		final TristateCheckBoxTreeCellRenderer renderer = new TristateCheckBoxTreeCellRenderer();
-		renderer.setLeafIcon(sessionIcon);
-		renderer.setClosedIcon(folderIcon);
-		renderer.setOpenIcon(folderIcon);
-
-		final TristateCheckBoxTreeCellRenderer editorRenderer = new TristateCheckBoxTreeCellRenderer();
-		editorRenderer.setLeafIcon(sessionIcon);
-		editorRenderer.setClosedIcon(folderIcon);
-		editorRenderer.setOpenIcon(folderIcon);
+		final SessionSelectorCellRenderer editorRenderer = new SessionSelectorCellRenderer();
 		final TristateCheckBoxTreeCellEditor editor = new TristateCheckBoxTreeCellEditor(this, editorRenderer);
 
 		setCellRenderer(renderer);
@@ -183,4 +179,63 @@ public class SessionSelector extends TristateCheckBoxTree {
 			expandPath(path.getParentPath());
 		}
 	}
+	
+	public TristateCheckBoxTreeModel getCheckboxTreeModel() {
+		return (TristateCheckBoxTreeModel)getModel();
+	}
+	
+	public static class ProjectTreeNode extends TristateCheckBoxTreeNode {
+		
+		public ProjectTreeNode(Project project) {
+			super(project);
+		}
+		
+	}
+	
+	public static class CorpusTreeNode extends TristateCheckBoxTreeNode {
+		
+		public CorpusTreeNode(String corpusName) {
+			super(corpusName);
+		}
+		
+	}
+	
+	public static class SessionTreeNode extends TristateCheckBoxTreeNode {
+		
+		public SessionTreeNode(String sessionName) {
+			super(sessionName);
+		}
+		
+	}
+	
+	
+	public class SessionSelectorCellRenderer extends TristateCheckBoxTreeCellRenderer {
+
+		final ImageIcon folderIcon = (OSInfo.isMacOs() ? IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.GenericFolderIcon, IconSize.SMALL)
+				: OSInfo.isWindows() ? IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDER, IconSize.SMALL)
+						: IconManager.getInstance().getIcon("places/folder", IconSize.SMALL));
+		
+		final ImageIcon sessionIcon = IconManager.getInstance().getSystemIconForFileType("xml", IconSize.SMALL);
+		
+		@Override
+		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+				boolean leaf, int row, boolean hasFocus) {
+			Component retVal = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+			if(value instanceof TristateCheckBoxTreeNode) {
+				TristateCheckBoxTreeNode node = (TristateCheckBoxTreeNode)value;
+				TristateCheckBoxTreeCellRenderer.TristateCheckBoxTreeNodePanel panel = 
+						(TristateCheckBoxTreeCellRenderer.TristateCheckBoxTreeNodePanel)retVal;
+				
+				if(node instanceof SessionTreeNode) {
+					panel.getLabel().setIcon(sessionIcon);
+				} else if(node instanceof ProjectTreeNode || node instanceof CorpusTreeNode) {
+					panel.getLabel().setIcon(folderIcon);
+				}
+			}
+			
+			return retVal;
+		}
+		
+	}
+	
 }

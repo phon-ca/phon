@@ -57,12 +57,22 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 @members {
 
+@Override
 public void reportError(RecognitionException e) {
 	throw new PhonexPatternException(e.line, e.charPositionInLine, e);
 }
 
 private boolean reverseExpr = false;
 
+}
+
+@lexer::members {
+	
+@Override
+public void reportError(RecognitionException e) {
+	throw new PhonexPatternException(e.line, e.charPositionInLine, e);
+}	
+	
 }
 
 /**

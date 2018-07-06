@@ -54,7 +54,16 @@ package ca.phon.phonex;
 import org.apache.commons.lang3.StringEscapeUtils;
 }
 
-@members {
+@lexer::members {
+	
+public void reportError(RecognitionException e) {
+	throw new PhonexPatternException(e.line, e.charPositionInLine, e);
+}
+
+@Override
+public void emitErrorMessage(String msg) {
+	// do nothing
+}
 
 }
 
@@ -258,13 +267,13 @@ STRING
 HEX_CHAR
 	:	BACKSLASH 'u' NUMBER NUMBER NUMBER NUMBER
 	;
+		
+SCTYPE
+	: COLON MINUS? ( 'A' | 'a' | 'L' | 'l' | 'O' | 'o' | 'N' | 'n' | 'D' | 'd' | 'C' | 'c' | 'R' | 'r' | 'E' | 'e' )
+	;
 	
 PLUGIN
 	: COLON ( 'sctype' | 'stress' | 'mdc' | 'diacritic' | 'tone' | 'comb' | 'prefix' | 'suffix' )
-	;
-	
-SCTYPE
-	: COLON MINUS? ( 'A' | 'a' | 'L' | 'l' | 'O' | 'o' | 'N' | 'n' | 'D' | 'd' | 'C' | 'c' | 'R' | 'r' | 'E' | 'e' )
 	;
 	
 STRESS_TYPE

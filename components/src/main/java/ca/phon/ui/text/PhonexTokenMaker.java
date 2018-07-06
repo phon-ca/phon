@@ -2,6 +2,7 @@ package ca.phon.ui.text;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.swing.text.Segment;
 
@@ -12,10 +13,12 @@ import org.fife.ui.rsyntaxtextarea.AbstractTokenMaker;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenImpl;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
+import org.fife.ui.rsyntaxtextarea.modes.PlainTextTokenMaker;
 
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.phonex.PhonexLexer;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.phonex.PhonexPlugin;
 import ca.phon.phonex.PhonexPluginManager;
 import ca.phon.phonex.PhonexTokenizerLexer;
@@ -32,7 +35,12 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 			e.printStackTrace();
 		}
 	}
-
+	
+	private Token getDefaultTokenList(Segment text, int initialTokenType, int startOffset) {
+		PlainTextTokenMaker plainTokenMaker = new PlainTextTokenMaker();
+		return plainTokenMaker.getTokenList(text, initialTokenType, startOffset);
+	}
+	
 	@Override
 	public Token getTokenList(Segment text, int initialTokenType, int startOffset) {
 		resetTokenList();
@@ -55,17 +63,15 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 		PhonexTokenizerLexer lexer = new PhonexTokenizerLexer(exprStream);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 		
-		tokenStream.fill();
+		try {
+			tokenStream.fill();
+		} catch (PhonexPatternException e) {
+			return getDefaultTokenList(text, initialTokenType, newStartOffset);
+		}
 		
 		// if lexer failed...
 		if(tokenStream.size() == 1) {
-			// only EOF found
-			int tokenType = (initialTokenType == Token.NULL ? Token.IDENTIFIER : initialTokenType);
-			addToken(text, offset, end-1, tokenType, newStartOffset+currentTokenStart);
-			if(initialTokenType == Token.NULL) {
-				addNullToken();
-			}
-			return firstToken;
+			return getDefaultTokenList(text, initialTokenType, newStartOffset);
 		}
 		
 		boolean insideMultiLineComment = (currentTokenType == Token.COMMENT_MULTILINE);

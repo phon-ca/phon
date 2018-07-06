@@ -158,11 +158,11 @@ public class QueryMenuListener implements MenuListener {
 		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query...");
 		final JMenuItem browseItem = new JMenuItem(browseAct);
 		
-		final JMenuItem historyItem = new JMenuItem(new QueryHistoryCommand(project));
+//		final JMenuItem historyItem = new JMenuItem(new QueryHistoryCommand(project));
 		
 		queryMenu.addSeparator();
 		queryMenu.add(browseItem);
-		queryMenu.add(historyItem);
+//		queryMenu.add(historyItem);
 	}
 
 	public static void onBrowseForQuery(PhonActionEvent pae) {
