@@ -73,8 +73,6 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 			final SyllableStress s2 = stressForElement(ele2);
 			if(s1 == s2) {
 				++tally;
-			} else {
-				--tally;
 			}
 		}
 
