@@ -15,7 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -48,8 +54,12 @@ import javax.swing.event.MenuListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.UnmarshalException;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.log.LogUtil;
@@ -76,11 +86,24 @@ import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.xml.XMLResultSetManager;
+import ca.phon.query.history.ObjectFactory;
+import ca.phon.query.history.ParamType;
+import ca.phon.query.history.ParamsType;
+import ca.phon.query.history.ProjectInfoType;
+import ca.phon.query.history.QueryHistoryManager;
+import ca.phon.query.history.QueryHistoryType;
+import ca.phon.query.history.QueryInfoType;
+import ca.phon.query.history.SessionInfoType;
+import ca.phon.query.report.io.ScriptParameter;
 import ca.phon.query.script.LazyQueryScript;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.SeparatorScriptParam;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -150,8 +173,9 @@ public class QueryAndReportWizard extends NodeWizard {
 		this.project = project;
 		putExtension(Project.class, project);
 		
-		this.queryScript = loadPreviousQueryParameters(queryScript);
-
+		this.queryScript = queryScript;
+		loadPreviousQueryParameters(queryScript);
+		
 		// add query steps
 		init();
 		
@@ -208,7 +232,7 @@ public class QueryAndReportWizard extends NodeWizard {
 						boolean stopEnabled = (getCurrentQueryRunner() != null && getCurrentQueryRunner().isRunning());
 						stopItem.setEnabled(stopEnabled);
 						
-						final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters", queryRightPanel);
+						final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters");
 						resetQueryAct.putValue(PhonUIAction.NAME, "Reset query");
 						resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/parameters-black", IconSize.SMALL));
 						resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset query parameters to default");
@@ -460,12 +484,18 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryLeftPanelLayout.show(queryLeftPanel, "sessionSelector");
 	}
 	
-	public void resetQueryParameters(PhonActionEvent pae) {
-		final TitledPanel parent = (TitledPanel)pae.getData();
-		final ScriptPanel oldScriptPanel = this.scriptPanel;
-		
+	public void resetQueryParameters() {
 		queryScript.resetContext();
 		
+		updateQueryForm();
+	}
+	
+	private void updateQueryForm() {
+		// don't update before init()
+		if(this.scriptPanel == null) return;
+		
+		final TitledPanel parent = queryRightPanel;
+		final ScriptPanel oldScriptPanel = this.scriptPanel;
 		ScriptPanel newScriptPanel = new ScriptPanel(queryScript);
 		parent.getContentContainer().remove(oldScriptPanel);
 		parent.getContentContainer().add(newScriptPanel, BorderLayout.CENTER);
@@ -474,50 +504,86 @@ public class QueryAndReportWizard extends NodeWizard {
 		this.scriptPanel = newScriptPanel;
 	}
 	
-	private QueryScript loadPreviousQueryParameters(QueryScript queryScript) {
+	private void loadPreviousQueryParameters(QueryScript queryScript) {
 		final QueryName qn = queryScript.getExtension(QueryName.class);
-		final File previousParametersFile = new File(prevQueryParametersFolder, qn.getName() + ".xml");
 		
-		if(previousParametersFile.exists()) {
-			try {
-				QueryScript qs = new QueryScript(previousParametersFile.toURI().toURL());
-			
-				qs.getContext().getEvaluatedScope();
-				// scripts should be exactly the same, if not bail
-				if(!qs.getScript().equals(queryScript.getScript())) {
-					throw new IOException("Issue loading previous query parameters; source and previous scripts do not match");
-				}
-				
-				return qs;
-			} catch (IOException | PhonScriptException e) {
-				// invalid parameters file - delete
-				boolean deleted = previousParametersFile.delete();
-				if(!deleted) {
-					LogUtil.severe("Could not delete query parameters file: " + previousParametersFile.getAbsolutePath());
-					Toolkit.getDefaultToolkit().beep();
-				}
-				LogUtil.severe(e);
-			}
+		final QueryHistoryManager manager = new QueryHistoryManager();
+		final QueryHistoryType history = manager.getQueryHistory(qn.getName());
+		
+		if(history.getQuery().size() > 0) {
+			final QueryInfoType queryInfo = history.getQuery().get(0);
+			loadParamsFromQueryInfo(queryInfo);
 		}
-		return queryScript;
 	}
 	
-	private void savePreviousQueryParameters() {
-		final QueryName qn = queryScript.getExtension(QueryName.class);
-		final File folder = new File(prevQueryParametersFolder);
-		final File previousParametersFile = new File(prevQueryParametersFolder, qn.getName() + ".xml");
+	private void loadParamsFromQueryInfo(QueryInfoType queryInfo) {
+		this.queryScript.resetContext();
 		
-		if(!folder.exists()) {
-			folder.mkdirs();
-		}
-		if(!previousParametersFile.getParentFile().exists()) {
-			previousParametersFile.getParentFile().mkdirs();
+		final Map<String, Object> paramMap = new LinkedHashMap<>();
+		final ParamsType previousParams = queryInfo.getParams();
+		for(ParamType paramType:previousParams.getParam()) {
+			paramMap.put(paramType.getId(), paramType.getValue());
 		}
 		
 		try {
-			QueryScriptLibrary.saveScriptToFile(queryScript, previousParametersFile.getAbsolutePath());
-		} catch (IOException e) {
+			ScriptParameters scriptParams = this.queryScript.getContext().getScriptParameters(
+					this.queryScript.getContext().getEvaluatedScope());
+			scriptParams.loadFromMap(paramMap);
+		} catch (PhonScriptException e) {
 			LogUtil.severe(e);
+			Toolkit.getDefaultToolkit().beep();
+		}
+		
+		updateQueryForm();
+	}
+	
+	private void addToQueryHistory(Project project, Query query) throws IOException {
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		
+		final ObjectFactory factory = new ObjectFactory();
+		final QueryHistoryManager manager = new QueryHistoryManager();
+		
+		try {
+			final QueryHistoryType queryHistory = manager.getQueryHistory(qn.getName());
+			
+			final QueryInfoType queryInfo = factory.createQueryInfoType();
+			final ZonedDateTime date = ZonedDateTime.now(ZoneId.systemDefault());
+			GregorianCalendar gcal = GregorianCalendar.from(date);
+			XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);		
+			queryInfo.setDate(xcal);
+			queryInfo.setHash( DigestUtils.sha256Hex(queryScript.getScript()) );
+			
+			final ScriptParameters scriptParams = queryScript.getContext().getScriptParameters(queryScript.getContext().getEvaluatedScope());
+			final ParamsType params = factory.createParamsType();
+			queryInfo.setParams(params);
+			for(ScriptParam param:scriptParams) {	
+				if(param.hasChanged()) {
+					for(String paramId:param.getParamIds()) {
+						final ParamType paramType = factory.createParamType();
+						paramType.setId(paramId);
+						paramType.setValue(param.getValue(paramId).toString());
+						params.getParam().add(paramType);
+					}
+				}
+			}
+			
+			final ProjectInfoType projectInfo = factory.createProjectInfoType();
+			queryInfo.setProject(projectInfo);
+	
+			final ResultSetManager rsManager = new XMLResultSetManager();
+			List<ResultSet> resultSets = rsManager.getResultSetsForQuery(project, query);
+			
+			for(ResultSet rs:resultSets) {
+				final SessionInfoType sessionInfoType = factory.createSessionInfoType();
+				sessionInfoType.setName(rs.getSessionPath());
+				sessionInfoType.setResults(rs.numberOfResults(true));
+				projectInfo.getSession().add(sessionInfoType);
+			}
+			
+			manager.addQueryInfo(queryHistory, queryInfo);
+			manager.saveQueryHistory(queryHistory, qn.getName());
+		} catch (DatatypeConfigurationException | PhonScriptException e) {
+			throw new IOException(e);
 		}
 	}
 	
@@ -666,12 +732,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryRunnerBox.setSelectedItem(queryName);
 		
 		runnerPanel.addPropertyChangeListener("taskStatus", (e) -> {
-			if(e.getNewValue() == TaskStatus.FINISHED) {
-				savePreviousQueryParameters();
+			if(e.getNewValue() == TaskStatus.FINISHED || e.getNewValue() == TaskStatus.TERMINATED) {
 				SwingUtilities.invokeLater( () -> addNodesToSessionSelector(queryName, runnerPanel) );
-			} else if (e.getNewValue() == TaskStatus.TERMINATED) {
-				// add any completed results sets
-				SwingUtilities.invokeLater( () -> addNodesToSessionSelector(queryName, runnerPanel) );
+				try {
+					addToQueryHistory(runnerPanel.getTempProject(), runnerPanel.getQuery());
+				} catch (IOException e1) {
+					LogUtil.severe(e1);
+					Toolkit.getDefaultToolkit().beep();
+				}
 			}
 			
 			if(e.getNewValue() == TaskStatus.RUNNING) {
