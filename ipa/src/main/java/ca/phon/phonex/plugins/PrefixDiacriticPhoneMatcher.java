@@ -54,7 +54,7 @@ public class PrefixDiacriticPhoneMatcher extends DiacriticPhoneMatcher {
 	/**
 	 * Visitor for match
 	 */
-	private class PrefixDiacriticVisitor extends VisitorAdapter<IPAElement> {
+	public class PrefixDiacriticVisitor extends VisitorAdapter<IPAElement> {
 		
 		public boolean matches = false;
 

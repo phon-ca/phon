@@ -77,11 +77,6 @@ public class TestPluginMatchers extends PhonexTest {
 	}
 
 	@Test
-	public void testPositionalDiacriticMatchers() throws Exception {
-
-	}
-
-	@Test
 	public void testScTypeMatcher() throws ParseException {
 		final String text = "s:Ltʰ:Ouː:Nd:Cbʷ:Rd:E";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
@@ -234,6 +229,23 @@ public class TestPluginMatchers extends PhonexTest {
 			Assert.assertEquals(allTones[numFound++], new IPATranscript(matcher.group()));
 		}
 		Assert.assertEquals(allTones.length, numFound);
+	}
+	
+	@Test
+	public void testPrefixMatcher() throws ParseException {
+		final String txt = "stʰuːⁿdbʷ";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		Assert.assertEquals(3, ipa.indexOf(".:prefix(\"{nasal}\")"));
+	}
+	
+	@Test
+	public void testSuffixMatcher() throws ParseException {
+		final String txt = "stʰuːⁿdbʷ";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+		
+		Assert.assertEquals(1, ipa.indexOf(".:suffix(\"{aspirated}\")"));
+		Assert.assertEquals(4, ipa.indexOf(".:suffix(\"{labial}\")"));
 	}
 
 }
