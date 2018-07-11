@@ -1,6 +1,8 @@
 package ca.phon.ipa.alignment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ca.phon.alignment.AlignmentMap;
 import ca.phon.alignment.IndelAligner;
@@ -11,7 +13,12 @@ import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableStress;
+import ca.phon.util.Tuple;
 
+/**
+ * Implementation of {@link IndelAligner} for {@link IPATranscript}s.
+ * 
+ */
 public class PhoneAligner extends IndelAligner<IPAElement> {
 
 	private IPATranscript targetRep;
@@ -189,42 +196,95 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 	 * @return
 	 */
 	public PhoneMap calculatePhoneAlignment(IPATranscript ipaTarget, IPATranscript ipaActual) {
-		setTargetRep(ipaTarget);
-		setActualRep(ipaActual);
+		// create word pairs
+		int targetEleOffset = 0;
+		int actualEleOffset = 0;
+		final List<IPATranscript> targetWords = ipaTarget.words();
+		final List<IPATranscript> actualWords = ipaActual.words();
+		
+		int maxWords = Math.max(targetWords.size(), actualWords.size());
+		final List<PhoneMap> alignmentMaps = new ArrayList<>();
+		for(int i = 0 ; i < maxWords; i++) {
+			final IPATranscript targetWord = (i < targetWords.size() ? targetWords.get(i) : new IPATranscript());
+			final IPATranscript actualWord = (i < actualWords.size() ? actualWords.get(i) : new IPATranscript());
+			
+			setTargetRep(targetWord);
+			setActualRep(actualWord);
 
-		setTargetSyllables(ipaTarget.syllables());
-		setActualSyllables(ipaActual.syllables());
+			setTargetSyllables(targetWord.syllables());
+			setActualSyllables(actualWord.syllables());
 
-		for(IPATranscript syll:getTargetSyllables()) {
-			final SyllableStress stress = syll.getExtension(SyllableStress.class);
-			if(stress == SyllableStress.PrimaryStress || stress == SyllableStress.SecondaryStress) {
-				hasStressedSyllables = true;
-				break;
+			for(IPATranscript syll:getTargetSyllables()) {
+				final SyllableStress stress = syll.getExtension(SyllableStress.class);
+				if(stress == SyllableStress.PrimaryStress || stress == SyllableStress.SecondaryStress) {
+					hasStressedSyllables = true;
+					break;
+				}
+			}
+
+			final IPATranscript targetPhones = targetWord.audiblePhones();
+			final IPATranscript actualPhones = actualWord.audiblePhones();
+
+			final IPAElement targetEles[] = new IPAElement[targetPhones.length()];
+			for(int j = 0; j < targetPhones.length(); j++) targetEles[j] = targetPhones.elementAt(j);
+
+			final IPAElement actualEles[] = new IPAElement[actualPhones.length()];
+			for(int j = 0; j < actualPhones.length(); j++) actualEles[j] = actualPhones.elementAt(j);
+
+			final AlignmentMap<IPAElement> alignment = calculateAlignment(targetEles, actualEles);
+			
+			// fix indices
+			Integer[] topAlignment = alignment.getTopAlignment();
+			for(int j = 0; j < topAlignment.length; j++) {
+				topAlignment[j] = (topAlignment[j] != null && topAlignment[j] >= 0 ? topAlignment[j]+targetEleOffset : topAlignment[j]);
+			}
+			Integer[] bottomAlignment = alignment.getBottomAlignment();
+			for(int j = 0; j < bottomAlignment.length; j++) {
+				bottomAlignment[j] = (bottomAlignment[j] != null && bottomAlignment[j] >= 0 ? bottomAlignment[j]+actualEleOffset : bottomAlignment[j]);
+			}
+
+			final PhoneMap retVal = new PhoneMap(ipaTarget, ipaActual);
+			retVal.setTopElements(targetEles);
+			retVal.setBottomElements(actualEles);
+			retVal.setTopAlignment(topAlignment);
+			retVal.setBottomAlignment(bottomAlignment);
+			alignmentMaps.add(retVal);
+			
+			targetEleOffset += targetWord.length();
+			actualEleOffset += actualWord.length();
+		}
+		
+		// add all alignments together
+		int alignmentLength = alignmentMaps.stream().map( (pm) -> pm.getAlignmentLength() ).collect( Collectors.summingInt(Integer::intValue) );
+		Integer topAlignment[] = new Integer[alignmentLength];
+		Integer bottomAlignment[] = new Integer[alignmentLength];
+		
+		int alignIdx = 0;
+		for(int i = 0; i < alignmentMaps.size(); i++) {
+			final PhoneMap pm = alignmentMaps.get(i);
+			for(int j = 0; j < pm.getAlignmentLength(); j++) {
+				topAlignment[alignIdx] = pm.getTopAlignment()[j];
+				bottomAlignment[alignIdx] = pm.getBottomAlignment()[j];
+				alignIdx++;
 			}
 		}
-
-		final IPATranscript targetPhones = ipaTarget.audiblePhones();
-		final IPATranscript actualPhones = ipaActual.audiblePhones();
-
+		
+		final IPATranscript targetPhones = ipaActual.audiblePhones();
+		final IPATranscript actualPhones = ipaTarget.audiblePhones();
+		
 		final IPAElement targetEles[] = new IPAElement[targetPhones.length()];
-		for(int i = 0; i < targetPhones.length(); i++) targetEles[i] = targetPhones.elementAt(i);
-
+		for(int j = 0; j < targetPhones.length(); j++) targetEles[j] = targetPhones.elementAt(j);
+		
 		final IPAElement actualEles[] = new IPAElement[actualPhones.length()];
-		for(int i = 0; i < actualPhones.length(); i++) actualEles[i] = actualPhones.elementAt(i);
-
-		final AlignmentMap<IPAElement> alignment = calculateAlignment(targetEles, actualEles);
-
-		// sort mappings
-		Integer[] topAlignment = alignment.getTopAlignment();
-		Integer[] bottomAlignment = alignment.getBottomAlignment();
-
+		for(int j = 0; j < actualPhones.length(); j++) actualEles[j] = actualPhones.elementAt(j);
+		
 		final PhoneMap retVal = new PhoneMap(ipaTarget, ipaActual);
 		retVal.setTopElements(targetEles);
 		retVal.setBottomElements(actualEles);
 		retVal.setTopAlignment(topAlignment);
 		retVal.setBottomAlignment(bottomAlignment);
-
+		
 		return retVal;
 	}
-
+	
 }
