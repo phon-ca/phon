@@ -18,12 +18,21 @@
  */
 package ca.phon.session.io.xml.v12;
 
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.*;
+import ca.phon.session.Comment;
+import ca.phon.session.Group;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 
 public class LazyRecord implements Record {
 	

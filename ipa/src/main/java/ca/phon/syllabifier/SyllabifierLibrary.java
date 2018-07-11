@@ -18,10 +18,18 @@
  */
 package ca.phon.syllabifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.Set;
 
-import ca.phon.extensions.*;
-import ca.phon.util.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

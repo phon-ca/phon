@@ -18,11 +18,17 @@
  */
 package ca.phon.query.report;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.io.ReportDesign;
 
 /**

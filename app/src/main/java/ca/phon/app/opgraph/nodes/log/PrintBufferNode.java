@@ -18,22 +18,39 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.log.*;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.app.log.BufferWindow;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;

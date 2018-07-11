@@ -19,21 +19,42 @@
 package ca.phon.ipa;
 
 import java.text.ParseException;
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.antlr.runtime.*;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenStream;
 
-import ca.phon.cvseq.*;
-import ca.phon.extensions.*;
+import ca.phon.cvseq.CVSeqPattern;
+import ca.phon.cvseq.CVSeqType;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.features.IPAElementComparator;
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.parser.IPALexer;
+import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
-import ca.phon.phonex.*;
-import ca.phon.stresspattern.*;
-import ca.phon.syllable.*;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
+import ca.phon.stresspattern.StressMatcherType;
+import ca.phon.stresspattern.StressPattern;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableAndPausesVisitor;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.SyllableVisitor;
 import ca.phon.util.Range;
-import ca.phon.visitor.*;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
 
 /**
  * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements

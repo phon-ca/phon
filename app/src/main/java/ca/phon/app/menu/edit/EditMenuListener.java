@@ -21,8 +21,10 @@ package ca.phon.app.menu.edit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.undo.UndoManager;
 
 import ca.phon.extensions.IExtendable;

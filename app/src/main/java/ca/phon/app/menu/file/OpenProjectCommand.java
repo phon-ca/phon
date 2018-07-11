@@ -19,7 +19,8 @@
 package ca.phon.app.menu.file;
 
 import java.awt.Toolkit;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
@@ -28,7 +29,10 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.OpenProjectEP;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
 public class OpenProjectCommand extends HookableAction {
 

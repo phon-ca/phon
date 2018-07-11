@@ -18,7 +18,9 @@
  */
 package ca.phon.app.query;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.datasource.ResultListingDataSource;

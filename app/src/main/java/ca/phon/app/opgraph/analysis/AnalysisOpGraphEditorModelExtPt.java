@@ -20,7 +20,9 @@ package ca.phon.app.opgraph.analysis;
 
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Analysis Opgraph Editor Model")
 public class AnalysisOpGraphEditorModelExtPt implements IPluginExtensionPoint<OpgraphEditorModel> {

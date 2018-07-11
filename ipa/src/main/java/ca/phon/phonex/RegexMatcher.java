@@ -18,7 +18,8 @@
  */
 package ca.phon.phonex;
 
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ca.phon.ipa.IPAElement;
 

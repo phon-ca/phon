@@ -18,9 +18,12 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 import ca.phon.ui.text.PromptedTextField;
 

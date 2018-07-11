@@ -22,7 +22,8 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 import ca.phon.ui.CommonModuleFrame;
 
 /**

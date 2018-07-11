@@ -20,7 +20,8 @@ package ca.phon.app.log;
 
 import java.util.Map;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 
 @PhonPlugin(name="default")
 public class LogViewerEP implements IPluginEntryPoint {

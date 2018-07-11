@@ -23,7 +23,9 @@ import java.awt.event.ActionEvent;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.session.*;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
+import ca.phon.session.SessionFactory;
 
 public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 

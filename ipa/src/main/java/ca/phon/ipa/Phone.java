@@ -18,10 +18,13 @@
  */
 package ca.phon.ipa;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 
 /**
  * <p>A basic phone consists of the following parts:

@@ -2,7 +2,8 @@ package ca.phon.session;
 
 import java.util.Set;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 

@@ -19,11 +19,16 @@
 package ca.phon.app.log;
 
 import java.awt.Component;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
-import javax.swing.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
 
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * List renderer for {@link LogRecord}s

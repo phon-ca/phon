@@ -20,12 +20,15 @@ package ca.phon.app.opgraph.wizard;
 
 import java.awt.Window;
 
-import javax.swing.*;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.actions.WizardSettingsAction;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.ui.menu.MenuBuilder;
 
 public class NodeWizardMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {

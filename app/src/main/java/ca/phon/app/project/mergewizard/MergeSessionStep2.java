@@ -18,21 +18,40 @@
  */
 package ca.phon.app.project.mergewizard;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.text.Collator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.logging.*;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.jdesktop.swingx.JXList;
 
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
-import ca.phon.session.*;
+import ca.phon.session.AbstractRecordFilter;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.CollatorFactory;

@@ -20,7 +20,8 @@ package ca.phon.app.prefs;
 
 import java.awt.BorderLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import org.jdesktop.swingx.JXList;
 

@@ -18,7 +18,8 @@
  */
 package ca.phon.app.project.git;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 

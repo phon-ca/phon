@@ -24,7 +24,8 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Tuple;
 

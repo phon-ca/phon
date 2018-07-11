@@ -19,13 +19,15 @@
 package ca.phon.app.session.editor.actions;
 
 import java.awt.Toolkit;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.RecordTransferable;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.*;
+import ca.phon.session.Record;
+import ca.phon.session.SessionFactory;
 
 /**
  * Copy record data into system clipboard. 

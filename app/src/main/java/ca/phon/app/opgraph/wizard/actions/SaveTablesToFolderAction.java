@@ -1,22 +1,14 @@
 package ca.phon.app.opgraph.wizard.actions;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
 
-import org.apache.derby.impl.load.Export;
 import org.jdesktop.swingx.VerticalLayout;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -30,15 +22,12 @@ import ca.phon.app.opgraph.report.tree.ReportTreePath;
 import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.ReportTableExportDialog;
-import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
-import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;

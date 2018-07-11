@@ -22,8 +22,9 @@ import java.util.logging.Logger;
 
 import ca.phon.query.script.QueryTask;
 import ca.phon.ui.PhonLoggerConsole;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
 
 public class QueryTimer implements PhonTaskListener {
 	

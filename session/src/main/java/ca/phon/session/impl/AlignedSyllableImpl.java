@@ -3,8 +3,12 @@ package ca.phon.session.impl;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.*;
-import ca.phon.session.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.SyllableMap;
+import ca.phon.session.AlignedSyllable;
+import ca.phon.session.Group;
+import ca.phon.session.Record;
+import ca.phon.session.Word;
 
 public class AlignedSyllableImpl extends AlignedSyllable {
 

@@ -18,9 +18,11 @@
  */
 package ca.phon.app.autosave;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import ca.phon.project.Project;

@@ -18,9 +18,11 @@
  */
 package ca.phon.worker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.worker.PhonTask.TaskStatus;
 

@@ -2,10 +2,15 @@ package ca.phon.ipa.alignment;
 
 import java.util.List;
 
-import ca.phon.alignment.*;
-import ca.phon.ipa.*;
+import ca.phon.alignment.AlignmentMap;
+import ca.phon.alignment.IndelAligner;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.SyllableStress;
 
 public class PhoneAligner extends IndelAligner<IPAElement> {
 

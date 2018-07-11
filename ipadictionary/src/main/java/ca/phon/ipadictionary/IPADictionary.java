@@ -18,13 +18,29 @@
  */
 package ca.phon.ipadictionary;
 
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ca.phon.extensions.*;
-import ca.phon.ipadictionary.exceptions.*;
-import ca.phon.ipadictionary.spi.*;
-import ca.phon.util.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.ipadictionary.exceptions.CapabilityNotImplemented;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.spi.AddEntry;
+import ca.phon.ipadictionary.spi.GenerateSuggestions;
+import ca.phon.ipadictionary.spi.IPADictionarySPI;
+import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.ipadictionary.spi.Metadata;
+import ca.phon.ipadictionary.spi.NameInfo;
+import ca.phon.ipadictionary.spi.OrthoKeyIterator;
+import ca.phon.ipadictionary.spi.PrefixSearch;
+import ca.phon.ipadictionary.spi.RemoveEntry;
+import ca.phon.util.Language;
+import ca.phon.util.LanguageEntry;
 
 /**
  * API for the IPA dictionary.  This class is final.

@@ -20,7 +20,9 @@ package ca.phon.syllable.phonex;
 
 import java.util.List;
 
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.PhonexPlugin;
+import ca.phon.phonex.PluginProvider;
 
 /**
  * Provides the 'diphthong' phonex plug-in matcher. 

@@ -19,7 +19,8 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.session.Tier;
 
 @TierEditorInfo(type=String.class,tierName="Notes")

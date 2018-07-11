@@ -18,7 +18,15 @@
  */
 package ca.phon.app.query.report;
 
-import ca.phon.query.report.io.*;
+import ca.phon.query.report.io.AggregrateInventory;
+import ca.phon.query.report.io.CommentSection;
+import ca.phon.query.report.io.Group;
+import ca.phon.query.report.io.InventorySection;
+import ca.phon.query.report.io.ParamSection;
+import ca.phon.query.report.io.ReportDesign;
+import ca.phon.query.report.io.ResultListing;
+import ca.phon.query.report.io.Section;
+import ca.phon.query.report.io.SummarySection;
 
 /**
  * Provide a utility method for generating 

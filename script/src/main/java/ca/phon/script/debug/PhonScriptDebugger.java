@@ -19,7 +19,9 @@
 package ca.phon.script.debug;
 
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.debug.*;
+import org.mozilla.javascript.debug.DebugFrame;
+import org.mozilla.javascript.debug.DebuggableScript;
+import org.mozilla.javascript.debug.Debugger;
 
 
 public class PhonScriptDebugger implements Debugger {

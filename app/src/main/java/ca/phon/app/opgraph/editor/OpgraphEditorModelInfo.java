@@ -18,7 +18,10 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Provides class metadata to editor models.  This information 

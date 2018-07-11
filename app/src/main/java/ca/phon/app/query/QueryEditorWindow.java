@@ -18,38 +18,75 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.net.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PipedReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
 import javax.swing.undo.UndoManager;
 
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.debugger.Main;
 
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
-import ca.phon.query.script.*;
-import ca.phon.script.*;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.decorations.ActionTabComponent;
+import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.toast.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Editor for query scripts.  Includes tabs for viewing the query form

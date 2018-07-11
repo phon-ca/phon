@@ -18,7 +18,8 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.net.*;
+import java.net.URI;
+import java.net.URL;
 
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.library.NodeData;

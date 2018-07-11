@@ -18,13 +18,15 @@
  */
 package ca.phon.app.opgraph;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import ca.phon.plugin.*;
 import ca.phon.util.PrefHelper;
 
 /**

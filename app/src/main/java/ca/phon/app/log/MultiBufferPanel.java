@@ -18,27 +18,44 @@
  */
 package ca.phon.app.log;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.*;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.event.EventListenerList;
 
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.JXCollapsiblePane.Direction;
-
-import ca.phon.app.log.actions.*;
+import ca.phon.app.log.actions.CloseAllBuffersAction;
+import ca.phon.app.log.actions.CloseCurrentBufferAction;
+import ca.phon.app.log.actions.SaveAllBuffersAction;
+import ca.phon.app.log.actions.SaveBufferAction;
+import ca.phon.app.log.actions.SaveBufferAsWorkbookAction;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.PrefHelper;
 
 /**
  * Container for multiple {@link BufferPanels}

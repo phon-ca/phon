@@ -21,7 +21,8 @@ package ca.phon.ui;
 import java.awt.Font;
 import java.text.ParseException;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 
 /**
  * Formatter for {@link Font}s

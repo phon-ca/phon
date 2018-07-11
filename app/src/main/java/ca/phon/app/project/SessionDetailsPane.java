@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.*;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import ca.phon.project.Project;
 import ca.phon.worker.PhonWorker;

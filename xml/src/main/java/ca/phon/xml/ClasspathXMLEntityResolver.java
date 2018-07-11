@@ -18,13 +18,17 @@
  */
 package ca.phon.xml;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.logging.Logger;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.xml.stream.*;
+import javax.xml.stream.XMLResolver;
+import javax.xml.stream.XMLStreamException;
 
 /**
  * <p>XML entity resolver that will look for catalog files

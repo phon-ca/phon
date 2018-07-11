@@ -6,7 +6,6 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
 import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.util.LanguageEntry;
 
 public class ObjectLoaderHook implements PhonStartupHook , IPluginExtensionPoint<PhonStartupHook> {
 

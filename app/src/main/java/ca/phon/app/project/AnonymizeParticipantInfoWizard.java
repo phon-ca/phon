@@ -22,18 +22,29 @@ import java.awt.BorderLayout;
 import java.io.IOException;
 import java.time.Period;
 import java.util.UUID;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.Participants;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
+import ca.phon.session.Sex;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.participant.AnonymizeParticipantOptionsPanel;
-import ca.phon.ui.wizard.*;
-import ca.phon.worker.*;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Wizard for stripping participant info.

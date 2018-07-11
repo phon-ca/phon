@@ -18,7 +18,8 @@
  */
 package ca.phon.xml;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 import javax.xml.namespace.QName;
 

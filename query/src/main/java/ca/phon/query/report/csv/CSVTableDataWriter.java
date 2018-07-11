@@ -18,7 +18,9 @@
  */
 package ca.phon.query.report.csv;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.JTable;
 

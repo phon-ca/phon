@@ -2,7 +2,6 @@ package ca.phon.ui.text;
 
 import java.io.IOException;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import javax.swing.text.Segment;
 
@@ -17,12 +16,8 @@ import org.fife.ui.rsyntaxtextarea.modes.PlainTextTokenMaker;
 
 import ca.phon.ipa.features.Feature;
 import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.phonex.PhonexLexer;
 import ca.phon.phonex.PhonexPatternException;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PhonexPluginManager;
 import ca.phon.phonex.PhonexTokenizerLexer;
-import ca.phon.phonex.PluginProvider;
 
 public class PhonexTokenMaker extends AbstractTokenMaker {
 	

@@ -18,7 +18,8 @@
  */
 package ca.phon.ipa.features;
 
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import org.junit.Test;

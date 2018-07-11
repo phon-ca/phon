@@ -18,26 +18,55 @@
  */
 package ca.phon.ui.participant;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.time.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
-import ca.phon.session.*;
+import ca.phon.session.AgeFormatter;
+import ca.phon.session.Participant;
+import ca.phon.session.ParticipantRole;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.Sex;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.text.*;
+import ca.phon.ui.text.DatePicker;
+import ca.phon.ui.text.FormatterTextField;
+import ca.phon.ui.text.LanguageField;
 import ca.phon.ui.toast.ToastFactory;
 
 /**

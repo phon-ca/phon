@@ -20,8 +20,10 @@ package ca.phon.session;
 
 import java.util.Set;
 
-import ca.phon.extensions.*;
-import ca.phon.visitor.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
 
 /**
  * Iteratable/visitable access for {@link Session} {@link Record}s

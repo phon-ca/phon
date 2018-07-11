@@ -21,7 +21,9 @@ package ca.phon.ui.text;
 import java.util.List;
 
 import ca.phon.formatter.Formatter;
-import ca.phon.util.*;
+import ca.phon.util.Language;
+import ca.phon.util.LanguageEntry;
+import ca.phon.util.LanguageParser;
 
 public class LanguageField extends FormatterTextField<List<Language>> {
 	

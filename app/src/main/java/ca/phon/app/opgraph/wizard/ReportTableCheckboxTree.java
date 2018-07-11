@@ -2,11 +2,7 @@ package ca.phon.app.opgraph.wizard;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-
-import org.jdesktop.swingx.renderer.DefaultTreeRenderer;
 
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;

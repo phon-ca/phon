@@ -18,8 +18,11 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.NodeWizardReportContext;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.Processor;
 
 public class AnalysisWizardExtension extends WizardExtension {
 	

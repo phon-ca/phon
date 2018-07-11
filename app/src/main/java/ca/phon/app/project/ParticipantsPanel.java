@@ -18,21 +18,37 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingWorker;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
-import ca.phon.app.session.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.app.session.ParticipantSelector;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.project.ParticipantCache;
+import ca.phon.project.Project;
+import ca.phon.session.Participant;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModelEvent;
 
 /**
  * UI for viewing participants in a project.  This view has has two parts,

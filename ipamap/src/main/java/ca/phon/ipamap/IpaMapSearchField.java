@@ -18,9 +18,11 @@
  */
 package ca.phon.ipamap;
 
-import javax.swing.*;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JPopupMenu;
 
-import ca.phon.ui.action.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.SearchField;
 
 /**

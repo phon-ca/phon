@@ -22,9 +22,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.SyllableAligner;
+import ca.phon.ipa.alignment.SyllableMap;
+import ca.phon.orthography.OrthoElement;
+import ca.phon.orthography.OrthoWordExtractor;
+import ca.phon.orthography.Orthography;
+import ca.phon.session.AlignedSyllable;
+import ca.phon.session.Group;
+import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierString;
+import ca.phon.session.Word;
 
 public class WordImpl implements Word {
 

@@ -23,7 +23,8 @@ import java.awt.event.ActionEvent;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.RemoveTierEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.session.*;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierViewItem;
 
 public class RemoveTierAction extends TierManagementAction {
 

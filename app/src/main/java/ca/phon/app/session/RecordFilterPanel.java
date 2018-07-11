@@ -18,32 +18,67 @@
  */
 package ca.phon.app.session;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.*;
-import java.util.regex.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.query.ResultSetEditor;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.toast.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.ResultSetRecordFilter;
+import ca.phon.session.AbstractRecordFilter;
+import ca.phon.session.DateFormatter;
+import ca.phon.session.Participant;
+import ca.phon.session.ParticipantRecordFilter;
+import ca.phon.session.RangeRecordFilter;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.ui.AbstractVerifier;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.VerifierListener;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Tuple;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Displays options for identify records by range, 

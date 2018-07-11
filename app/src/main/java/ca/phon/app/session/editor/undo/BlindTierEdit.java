@@ -19,8 +19,10 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.ipa.*;
-import ca.phon.session.*;
+import ca.phon.ipa.AlternativeTranscript;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 
 public class BlindTierEdit extends TierEdit<IPATranscript> {
 

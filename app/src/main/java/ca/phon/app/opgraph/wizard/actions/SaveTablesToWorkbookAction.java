@@ -1,14 +1,9 @@
 package ca.phon.app.opgraph.wizard.actions;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import javax.swing.JCheckBox;
-
-import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
@@ -20,16 +15,11 @@ import ca.phon.app.opgraph.report.tree.ReportTreePath;
 import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.ReportTableExportDialog;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.util.PrefHelper;
-import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;

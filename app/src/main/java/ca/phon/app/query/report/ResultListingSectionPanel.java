@@ -18,32 +18,87 @@
  */
 package ca.phon.app.query.report;
 
-import static ca.phon.query.report.util.ResultListingFieldBuilder.*;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.ALIGNMENT_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.METADATA_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RECORD_NUMBER_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RECORD_TIER_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RESULT_EXCLUDED_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RESULT_FORMAT_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.RESULT_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SESSION_DATE_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SESSION_MEDIA_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SESSION_NAME_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SPEAKER_AGE_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SPEAKER_GENDER_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SPEAKER_NAME_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.SYLLABIFICATION_SCRIPT;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.createEmptyField;
+import static ca.phon.query.report.util.ResultListingFieldBuilder.getDefaultFields;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.*;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptEngineFactory;
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.ActionMap;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.jdesktop.swingx.JXList;
 
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.query.ScriptPanel;
-import ca.phon.query.report.io.*;
-import ca.phon.query.script.*;
+import ca.phon.query.report.io.ObjectFactory;
+import ca.phon.query.report.io.ResultListing;
+import ca.phon.query.report.io.ResultListingField;
+import ca.phon.query.report.io.ResultListingFormatType;
+import ca.phon.query.report.io.ScriptParameter;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptContext;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.*;
+import ca.phon.script.params.EnumScriptParam;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.session.SystemTierType;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Section panel for customizable result listings.

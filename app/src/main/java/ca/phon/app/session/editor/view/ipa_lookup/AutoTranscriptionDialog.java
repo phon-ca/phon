@@ -18,9 +18,12 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import ca.phon.project.Project;
 import ca.phon.session.Session;

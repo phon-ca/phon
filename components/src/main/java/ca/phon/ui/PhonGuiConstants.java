@@ -18,7 +18,8 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 import javax.swing.UIManager;
 

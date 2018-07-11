@@ -19,7 +19,8 @@
 package ca.phon.app.project;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.util.RecentFiles;
 

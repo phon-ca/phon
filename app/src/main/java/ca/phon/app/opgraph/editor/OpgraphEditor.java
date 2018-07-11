@@ -18,36 +18,71 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 
 import org.apache.commons.io.FilenameUtils;
 
-import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
+import bibliothek.gui.dock.common.SingleCDockable;
+import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
-import bibliothek.gui.dock.common.perspective.*;
+import bibliothek.gui.dock.common.perspective.CControlPerspective;
+import bibliothek.gui.dock.common.perspective.CGridPerspective;
+import bibliothek.gui.dock.common.perspective.CPerspective;
+import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
+import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.util.Filter;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel.ViewLocation;
-import ca.phon.app.opgraph.editor.actions.debug.*;
-import ca.phon.app.opgraph.editor.actions.file.*;
-import ca.phon.app.opgraph.editor.actions.graph.*;
-import ca.phon.app.opgraph.editor.actions.view.*;
+import ca.phon.app.opgraph.editor.actions.debug.StartAction;
+import ca.phon.app.opgraph.editor.actions.debug.StepAction;
+import ca.phon.app.opgraph.editor.actions.debug.StepIntoAction;
+import ca.phon.app.opgraph.editor.actions.debug.StepOutOfAction;
+import ca.phon.app.opgraph.editor.actions.debug.StopAction;
+import ca.phon.app.opgraph.editor.actions.file.NewAction;
+import ca.phon.app.opgraph.editor.actions.file.OpenAction;
+import ca.phon.app.opgraph.editor.actions.file.SaveAction;
+import ca.phon.app.opgraph.editor.actions.file.SaveAsAction;
+import ca.phon.app.opgraph.editor.actions.graph.AlignNodesAction;
+import ca.phon.app.opgraph.editor.actions.graph.AutoLayoutAction;
+import ca.phon.app.opgraph.editor.actions.graph.DeleteAction;
+import ca.phon.app.opgraph.editor.actions.graph.DistributeNodesAction;
+import ca.phon.app.opgraph.editor.actions.graph.ExpandMacroAction;
+import ca.phon.app.opgraph.editor.actions.graph.MergeNodesAction;
+import ca.phon.app.opgraph.editor.actions.graph.MoveNodeAction;
+import ca.phon.app.opgraph.editor.actions.view.ResetViewAction;
+import ca.phon.app.opgraph.editor.actions.view.ToggleViewAction;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.app.MenuProvider;
 import ca.phon.opgraph.app.components.PathAddressableMenuImpl;
 import ca.phon.opgraph.app.components.canvas.GridLayer;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.menu.*;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.menu.MenuManager;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.RecentFiles;
 
 /**

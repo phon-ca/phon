@@ -18,7 +18,8 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.ipa.IPAElement;
 

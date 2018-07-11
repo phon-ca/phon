@@ -19,13 +19,25 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
-import javax.xml.bind.*;
-import javax.xml.stream.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.io.query.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ResultSetManager;
+import ca.phon.query.db.xml.io.query.ObjectFactory;
+import ca.phon.query.db.xml.io.query.QueryType;
 
 /**
  * XML-based implementation of {@link QueryManager}.

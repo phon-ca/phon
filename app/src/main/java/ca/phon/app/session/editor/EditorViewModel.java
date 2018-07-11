@@ -19,9 +19,14 @@
 package ca.phon.app.session.editor;
 
 import java.awt.Container;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.MenuElement;
 
 /**
  * <p>View model for the {@link SessionEditor}.  This class

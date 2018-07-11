@@ -19,10 +19,14 @@
 package ca.phon.stresspattern;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import ca.phon.fsa.*;
-import ca.phon.ipa.*;
+import ca.phon.fsa.FSAState;
+import ca.phon.fsa.SimpleFSA;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.stresspattern.fsa.StressPatternCompiler;
 import ca.phon.syllable.SyllableStress;
 import ca.phon.util.Range;

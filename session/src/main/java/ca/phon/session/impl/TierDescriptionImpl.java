@@ -18,7 +18,8 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.*;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierString;
 
 /**
  * Basic description of a tier.

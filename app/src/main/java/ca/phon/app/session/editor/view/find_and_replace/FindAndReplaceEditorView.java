@@ -18,34 +18,83 @@
  */
 package ca.phon.app.session.editor.view.find_and_replace;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.undo.CompoundEdit;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.DelegateEditorAction;
+import ca.phon.app.session.editor.EditorAction;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.RunOnEDT;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.app.session.editor.search.SearchType;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.find_and_replace.FindManager.*;
-import ca.phon.app.session.editor.view.find_and_replace.actions.*;
+import ca.phon.app.session.editor.view.common.GroupField;
+import ca.phon.app.session.editor.view.common.TierDataConstraint;
+import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
+import ca.phon.app.session.editor.view.common.TierEditorListener;
+import ca.phon.app.session.editor.view.find_and_replace.FindManager.FindDirection;
+import ca.phon.app.session.editor.view.find_and_replace.FindManager.FindStatus;
+import ca.phon.app.session.editor.view.find_and_replace.actions.FindNextAction;
+import ca.phon.app.session.editor.view.find_and_replace.actions.FindPrevAction;
+import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAction;
+import ca.phon.app.session.editor.view.find_and_replace.actions.ReplaceAllAction;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.*;
-import ca.phon.session.*;
-import ca.phon.syllabifier.*;
+import ca.phon.ipa.alignment.PhoneAligner;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.session.GroupLocation;
+import ca.phon.session.Record;
+import ca.phon.session.RecordLocation;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionLocation;
+import ca.phon.session.SessionRange;
+import ca.phon.session.SyllabifierInfo;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
+import ca.phon.session.TierViewItem;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.toast.*;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.Language;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * An {@link SessionEditor} {@link EditorView} implementing Find & Replace

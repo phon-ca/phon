@@ -18,13 +18,18 @@
  */
 package ca.phon.project;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.*;
+import ca.phon.project.io.ObjectFactory;
+import ca.phon.project.io.ProjectType;
 
 /**
  * Default project factory implementation.

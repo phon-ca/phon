@@ -18,8 +18,6 @@
  */
 package ca.phon.phonex;
 
-import org.antlr.runtime.tree.TreeNodeStream;
-
 public class PhonexPluginException extends PhonexPatternException {
 
 	private static final long serialVersionUID = -6852419990439710113L;

@@ -18,7 +18,8 @@
  */
 package ca.phon.app;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 

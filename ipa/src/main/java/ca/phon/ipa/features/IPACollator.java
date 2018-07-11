@@ -18,8 +18,10 @@
  */
 package ca.phon.ipa.features;
 
-import java.text.*;
-import java.util.*;
+import java.text.ParseException;
+import java.text.RuleBasedCollator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Text collation for IPA transcriptions.  The ordering used is the same

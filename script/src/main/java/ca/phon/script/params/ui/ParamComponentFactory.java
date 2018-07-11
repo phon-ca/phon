@@ -18,41 +18,41 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.beans.*;
-import java.net.URL;
-import java.util.List;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.text.StyleConstants;
+import javax.swing.Action;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
-import org.fife.ui.autocomplete.AutoCompletion;
-import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SquiggleUnderlineHighlightPainter;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.parser.ExtendedHyperlinkListener;
-import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
-import org.fife.ui.rsyntaxtextarea.parser.Parser;
-import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
-import org.fife.ui.rtextarea.RTextArea;
-import org.fife.ui.rtextarea.ToolTipSupplier;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 
-import ca.phon.script.params.*;
+import ca.phon.script.params.BooleanScriptParam;
+import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.EnumScriptParam.ReturnValue;
+import ca.phon.script.params.LabelScriptParam;
+import ca.phon.script.params.MultiboolScriptParam;
+import ca.phon.script.params.PatternScriptParam;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.SeparatorScriptParam;
+import ca.phon.script.params.StringScriptParam;
 import ca.phon.ui.text.PatternEditor;
-import ca.phon.ui.text.PhonexAutocompleteProvider;
-import ca.phon.ui.text.PhonexTokenMaker;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 

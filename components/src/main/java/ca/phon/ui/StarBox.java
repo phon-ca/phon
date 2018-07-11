@@ -18,12 +18,19 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
+import java.awt.Composite;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
 
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class StarBox extends JCheckBox {
 	

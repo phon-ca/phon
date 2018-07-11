@@ -18,9 +18,12 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;

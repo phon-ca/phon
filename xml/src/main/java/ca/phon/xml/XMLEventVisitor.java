@@ -18,7 +18,16 @@
  */
 package ca.phon.xml;
 
-import javax.xml.stream.events.*;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndDocument;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.EntityDeclaration;
+import javax.xml.stream.events.EntityReference;
+import javax.xml.stream.events.NotationDeclaration;
+import javax.xml.stream.events.ProcessingInstruction;
+import javax.xml.stream.events.StartDocument;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;

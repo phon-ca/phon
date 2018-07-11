@@ -18,7 +18,8 @@
  */
 package ca.phon.util;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * An entry in the ISO-639-3 code set.  May also

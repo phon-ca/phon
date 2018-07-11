@@ -19,11 +19,15 @@
 package ca.phon.ui.participant;
 
 import java.awt.BorderLayout;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import ca.phon.session.Participant;
 import ca.phon.ui.decorations.DialogHeader;

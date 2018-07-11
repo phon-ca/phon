@@ -25,14 +25,17 @@ import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortColumn;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortOrder;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortType;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.extensions.Extendable;
-import ca.phon.opgraph.io.xml.*;
+import ca.phon.opgraph.io.xml.XMLSerializer;
+import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 
 public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 	

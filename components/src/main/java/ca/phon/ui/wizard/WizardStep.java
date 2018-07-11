@@ -22,7 +22,8 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 
 /**
  * A single step in a wizard.

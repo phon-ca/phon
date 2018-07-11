@@ -20,8 +20,10 @@ package ca.phon.app.session.editor.undo;
 
 import javax.swing.undo.CannotUndoException;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
 
 public class RecordMoveEdit extends SessionEditorUndoableEdit {
 

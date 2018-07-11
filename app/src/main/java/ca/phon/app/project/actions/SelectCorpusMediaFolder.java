@@ -7,7 +7,9 @@ import javax.swing.SwingUtilities;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.worker.PhonWorker;
 
 public class SelectCorpusMediaFolder extends ProjectWindowAction {

@@ -19,15 +19,41 @@
 
 package ca.phon.ipa.features;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import javax.xml.bind.*;
-import javax.xml.stream.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.stream.StreamSource;
 
-import ca.phon.featureset.xml.*;
+import ca.phon.featureset.xml.Family;
+import ca.phon.featureset.xml.FeatureMatrixType;
+import ca.phon.featureset.xml.FeatureSetType;
+import ca.phon.featureset.xml.FeatureType;
+import ca.phon.featureset.xml.NamedFeatureSetType;
+import ca.phon.featureset.xml.ObjectFactory;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in

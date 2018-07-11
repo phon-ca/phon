@@ -20,7 +20,8 @@ package ca.phon.session.impl;
 
 import java.util.Iterator;
 
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.Participants;
 
 /**
  * Implementation of the {@link Participants} helper class.

@@ -18,13 +18,26 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
-import ca.phon.ipadictionary.spi.*;
-import ca.phon.util.*;
+import ca.phon.ipadictionary.spi.AddEntry;
+import ca.phon.ipadictionary.spi.IPADictionarySPI;
+import ca.phon.ipadictionary.spi.LanguageInfo;
+import ca.phon.ipadictionary.spi.NameInfo;
+import ca.phon.ipadictionary.spi.OrthoKeyIterator;
+import ca.phon.ipadictionary.spi.PrefixSearch;
+import ca.phon.ipadictionary.spi.RemoveEntry;
+import ca.phon.util.Language;
+import ca.phon.util.Tuple;
 
 /**
  * Perform lookups on multiple dictionaries at once.

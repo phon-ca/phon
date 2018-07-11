@@ -18,12 +18,20 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation;
 
-import javax.swing.undo.*;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.ipa.*;
-import ca.phon.session.*;
-import ca.phon.syllabifier.*;
+import ca.phon.ipa.AlternativeTranscript;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.SyllabifierInfo;
+import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Language;
 
 /**

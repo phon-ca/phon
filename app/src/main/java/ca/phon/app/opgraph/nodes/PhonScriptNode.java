@@ -20,27 +20,41 @@ package ca.phon.app.opgraph.nodes;
 
 import java.awt.Component;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
-import java.util.logging.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.RhinoException;
+import org.mozilla.javascript.Scriptable;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptPanel;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.opgraph.nodes.general.script.*;
+import ca.phon.opgraph.nodes.general.script.InputFields;
+import ca.phon.opgraph.nodes.general.script.OutputFields;
 import ca.phon.plugin.PluginManager;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import ca.phon.script.BasicScript;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 import ca.phon.ui.CommonModuleFrame;
 
 @OpNodeInfo(

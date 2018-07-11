@@ -20,7 +20,8 @@ package ca.phon.app.session.editor.undo;
 
 import java.lang.ref.WeakReference;
 
-import javax.swing.undo.*;
+import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.UndoableEditSupport;
 
 import ca.phon.app.session.editor.SessionEditor;
 

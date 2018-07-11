@@ -18,11 +18,21 @@
  */
 package ca.phon.session;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ca.phon.session.io.*;
+import ca.phon.session.io.SessionInputFactory;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionReader;
+import ca.phon.session.io.SessionWriter;
 
 /**
  * A factory for creating mutable session objects.

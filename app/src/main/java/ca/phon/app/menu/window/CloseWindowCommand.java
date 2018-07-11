@@ -18,10 +18,13 @@
  */
 package ca.phon.app.menu.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
 
 import ca.phon.ui.CommonModuleFrame;
 

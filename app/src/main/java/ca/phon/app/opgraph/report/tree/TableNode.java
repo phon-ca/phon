@@ -1,6 +1,8 @@
 package ca.phon.app.opgraph.report.tree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import ca.phon.query.report.datasource.TableDataSource;

@@ -18,15 +18,29 @@
  */
 package ca.phon.query.script;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Consumer;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ca.phon.extensions.*;
-import ca.phon.plugin.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.Script;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.util.PrefHelper;

@@ -18,15 +18,18 @@
  */
 package ca.phon.app.syllabifier;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.syllabifier.*;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierProvider;
 import ca.phon.syllabifier.basic.BasicSyllabifierIO;
 import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;

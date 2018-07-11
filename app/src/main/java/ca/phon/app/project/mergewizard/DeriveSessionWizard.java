@@ -19,19 +19,33 @@
 package ca.phon.app.project.mergewizard;
 
 import java.awt.BorderLayout;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.logging.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.project.SessionMerger;
 import ca.phon.project.Project;
-import ca.phon.session.*;
+import ca.phon.session.DateFormatter;
+import ca.phon.session.Participant;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.wizard.*;
+import ca.phon.ui.wizard.WizardFrame;
+import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonWorker;
 
 /**

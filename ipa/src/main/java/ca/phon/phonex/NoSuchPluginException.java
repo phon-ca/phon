@@ -18,8 +18,6 @@
  */
 package ca.phon.phonex;
 
-import org.antlr.runtime.tree.TreeNodeStream;
-
 /**
  * Thrown during compilation when the specified plug-in 
  * is not available.

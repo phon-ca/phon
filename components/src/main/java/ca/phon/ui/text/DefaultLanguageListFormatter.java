@@ -19,7 +19,9 @@
 package ca.phon.ui.text;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.util.Language;

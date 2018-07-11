@@ -18,10 +18,12 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 import ca.phon.app.opgraph.OpgraphIO;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.MacroNode;

@@ -18,14 +18,8 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.util.*;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-
-import org.apache.derby.catalog.GetProcedureColumns;
-
-import ca.phon.ui.decorations.TitledPanel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SortNodeSettings implements Cloneable {
 

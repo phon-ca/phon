@@ -18,13 +18,19 @@
  */
 package ca.phon.ipa;
 
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Set;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.Extension;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.*;
-import ca.phon.visitor.*;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
 
 /**
  * <p>{@link IPAElement}s represent the atomic unit of IPA transcriptions.

@@ -18,11 +18,16 @@
  */
 package ca.phon.app.workspace;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ca.phon.project.*;
+import ca.phon.project.DefaultProjectFactory;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.util.PrefHelper;
 

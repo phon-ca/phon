@@ -19,10 +19,15 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.io.resultset.*;
+import ca.phon.query.db.ReportHelper;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
+import ca.phon.query.db.xml.io.resultset.MetaType;
+import ca.phon.query.db.xml.io.resultset.ResultType;
 
 /**
  * XML-based implementation of {@link Result}.

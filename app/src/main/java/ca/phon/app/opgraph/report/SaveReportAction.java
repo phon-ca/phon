@@ -20,7 +20,8 @@ package ca.phon.app.opgraph.report;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.tree.TreePath;
 
@@ -28,8 +29,12 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.analysis.SaveAnalysisAction;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.*;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpNode;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.PrefHelper;
 
 public class SaveReportAction extends HookableAction {

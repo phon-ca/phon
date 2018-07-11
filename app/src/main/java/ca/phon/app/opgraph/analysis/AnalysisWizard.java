@@ -19,20 +19,17 @@
 package ca.phon.app.opgraph.analysis;
 
 import java.awt.BorderLayout;
-import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
-import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.NodeWizardReportContext;
 import ca.phon.app.project.ParticipantsPanel;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.Processor;
 import ca.phon.project.Project;
-import ca.phon.session.*;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.session.Participant;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
 

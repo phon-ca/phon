@@ -18,31 +18,71 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.undo.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
 
 import org.jdesktop.swingx.JXStatusBar;
 
 import ca.phon.app.project.ProjectFrame;
-import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.actions.CopyRecordAction;
+import ca.phon.app.session.editor.actions.CutRecordAction;
+import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.actions.DuplicateRecordAction;
+import ca.phon.app.session.editor.actions.FirstRecordAction;
+import ca.phon.app.session.editor.actions.LastRecordAction;
+import ca.phon.app.session.editor.actions.MoveRecordBackwardAction;
+import ca.phon.app.session.editor.actions.MoveRecordForwardAction;
+import ca.phon.app.session.editor.actions.MoveRecordToBeginningAction;
+import ca.phon.app.session.editor.actions.MoveRecordToEndAction;
+import ca.phon.app.session.editor.actions.NewRecordAction;
+import ca.phon.app.session.editor.actions.NextRecordAction;
+import ca.phon.app.session.editor.actions.PasteRecordAction;
+import ca.phon.app.session.editor.actions.PreviousRecordAction;
+import ca.phon.app.session.editor.actions.SaveAsAction;
+import ca.phon.app.session.editor.actions.SaveSessionAction;
+import ca.phon.app.session.editor.actions.SessionCheckAction;
+import ca.phon.app.session.editor.actions.SortRecordsAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
-import ca.phon.session.*;
-import ca.phon.session.io.*;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SyllabifierInfo;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.Transcriber;
+import ca.phon.session.io.OriginalFormat;
+import ca.phon.session.io.SerializationWarnings;
+import ca.phon.session.io.SessionIO;
+import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.io.SessionWriter;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuManager;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.*;
+import ca.phon.util.ByteSize;
+import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 
 /**
  * <p>Main UI for the application.  This window provides the interface for

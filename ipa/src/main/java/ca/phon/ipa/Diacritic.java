@@ -18,8 +18,10 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 
 /**
  * Diacritics are attached to phones as either prefix, suffix

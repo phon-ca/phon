@@ -18,17 +18,28 @@
  */
 package ca.phon.ui.toast;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.script.*;
-import javax.swing.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JWindow;
+import javax.swing.Popup;
+import javax.swing.SwingUtilities;
 
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
 /**
  * <p>A message to the user that is displayed in an 

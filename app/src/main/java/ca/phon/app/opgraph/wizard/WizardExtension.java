@@ -18,11 +18,20 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.Processor;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are

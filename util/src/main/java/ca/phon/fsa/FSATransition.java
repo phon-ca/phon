@@ -18,7 +18,8 @@
  */
 package ca.phon.fsa;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class FSATransition<T> {
 	

@@ -20,7 +20,8 @@
 
 package ca.phon.session;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 import ca.phon.extensions.IExtendable;
 

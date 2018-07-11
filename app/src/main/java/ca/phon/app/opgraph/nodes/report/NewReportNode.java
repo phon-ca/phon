@@ -1,12 +1,19 @@
 package ca.phon.app.opgraph.nodes.report;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.Properties;
 
 import javax.swing.JPanel;
 
-import ca.phon.app.opgraph.report.tree.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.report.tree.ReportTree;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;

@@ -1,9 +1,14 @@
 package ca.phon.query.detectors;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.util.Tuple;
 
 /**

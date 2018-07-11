@@ -18,9 +18,14 @@
  */
 package ca.phon.app.session.editor.view.record_data;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
-import ca.phon.app.session.editor.view.record_data.actions.*;
+import ca.phon.app.session.editor.view.record_data.actions.DeleteGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.MergeAllGroupsCommand;
+import ca.phon.app.session.editor.view.record_data.actions.MergeGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.NewGroupCommand;
+import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
 
 /**
  * Menu for the Record Data editor view.

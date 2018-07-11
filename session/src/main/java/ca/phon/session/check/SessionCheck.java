@@ -18,9 +18,12 @@
  */
 package ca.phon.session.check;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.Session;
 
 public interface SessionCheck {

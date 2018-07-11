@@ -19,19 +19,26 @@
 package ca.phon.app.log.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.*;
-import java.util.List;
-import java.util.logging.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.*;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.app.log.LogBuffer;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
 public class SaveAllBuffersAction extends HookableAction {

@@ -21,7 +21,8 @@ package ca.phon.session.impl;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
-import ca.phon.session.*;
+import ca.phon.session.Comment;
+import ca.phon.session.CommentEnum;
 
 /**
  * Implemtation for comment elements.

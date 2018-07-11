@@ -17,7 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ca.phon.script;
-import java.net.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

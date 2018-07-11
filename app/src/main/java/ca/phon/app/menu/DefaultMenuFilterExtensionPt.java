@@ -18,7 +18,10 @@
  */
 package ca.phon.app.menu;
 
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.IPluginMenuFilter;
+import ca.phon.plugin.PhonPlugin;
 
 
 /**

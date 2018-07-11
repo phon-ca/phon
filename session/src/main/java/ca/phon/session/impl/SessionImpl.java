@@ -19,11 +19,24 @@
 package ca.phon.session.impl;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.ExtensionSupport;
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.Participants;
+import ca.phon.session.Record;
+import ca.phon.session.Records;
+import ca.phon.session.Session;
+import ca.phon.session.SessionMetadata;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierDescriptions;
+import ca.phon.session.TierViewItem;
+import ca.phon.session.Transcriber;
+import ca.phon.session.Transcribers;
 
 public class SessionImpl implements Session {
 	

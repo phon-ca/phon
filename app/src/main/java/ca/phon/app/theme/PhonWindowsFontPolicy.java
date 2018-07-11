@@ -21,7 +21,8 @@ package ca.phon.app.theme;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.FontUIResource;
 
-import com.jgoodies.looks.*;
+import com.jgoodies.looks.FontPolicy;
+import com.jgoodies.looks.FontSet;
 
 import ca.phon.ui.fonts.FontPreferences;
 

@@ -18,15 +18,27 @@
  */
 package ca.phon.app.about;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.net.URL;
 import java.util.Set;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-import ca.phon.app.*;
-import ca.phon.extensions.*;
+import ca.phon.app.PhonSplasher;
+import ca.phon.app.VersionInfo;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;

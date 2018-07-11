@@ -1,14 +1,27 @@
 package ca.phon.app.project;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 
@@ -17,12 +30,19 @@ import org.jdesktop.swingx.JXTable;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.project.*;
+import ca.phon.project.ParticipantHistory;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectEvent;
 import ca.phon.project.ProjectEvent.ProjectEventProp;
-import ca.phon.session.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import ca.phon.project.ProjectListener;
+import ca.phon.session.Participant;
+import ca.phon.session.SessionPath;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 public class SessionDetails extends JPanel {
 

@@ -19,9 +19,11 @@
 package ca.phon.ui.participant;
 
 import java.awt.GridLayout;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 import ca.phon.util.PrefHelper;
 

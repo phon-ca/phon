@@ -19,11 +19,14 @@
 package ca.phon.app.session.editor.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.undo.CompoundEdit;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.RecordSortDialog;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.RecordMoveEdit;
 import ca.phon.session.Record;
 

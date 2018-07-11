@@ -20,7 +20,17 @@ package ca.phon.session.impl;
 
 import java.util.logging.Logger;
 
-import ca.phon.session.*;
+import ca.phon.session.Comment;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionMetadata;
+import ca.phon.session.Tier;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierViewItem;
+import ca.phon.session.Transcriber;
 
 /**
  * Default implementation of a session factory.

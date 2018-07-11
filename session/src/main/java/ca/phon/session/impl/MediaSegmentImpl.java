@@ -18,7 +18,9 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.*;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaSegmentFormatter;
+import ca.phon.session.MediaUnit;
 
 /**
  * Media segment

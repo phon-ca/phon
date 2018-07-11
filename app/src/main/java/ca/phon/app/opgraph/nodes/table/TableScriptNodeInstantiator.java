@@ -18,18 +18,16 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.opgraph.library.instantiators.Instantiator;
-import ca.phon.plugin.PluginManager;
 import ca.phon.query.script.QueryScript;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import ca.phon.script.BasicScript;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode> {
 

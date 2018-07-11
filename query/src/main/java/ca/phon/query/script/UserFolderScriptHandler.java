@@ -18,7 +18,9 @@
  */
 package ca.phon.query.script;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 
 import ca.phon.query.db.ScriptLibrary;
 import ca.phon.util.resources.FolderHandler;

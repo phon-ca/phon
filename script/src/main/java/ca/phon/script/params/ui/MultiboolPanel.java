@@ -20,9 +20,11 @@ package ca.phon.script.params.ui;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 import ca.phon.script.params.MultiboolScriptParam;
 

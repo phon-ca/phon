@@ -19,16 +19,21 @@
 package ca.phon.app.opgraph.editor.actions.graph;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.edits.graph.DistributeNodesEdit;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class DistributeNodesAction extends OpgraphEditorAction {
 

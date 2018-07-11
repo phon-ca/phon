@@ -18,12 +18,19 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.undo.CannotUndoException;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.Tier;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierViewItem;
 
 public class TierNameEdit extends SessionEditorUndoableEdit {
 

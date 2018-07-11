@@ -18,7 +18,8 @@
  */
 package ca.phon.query.report.csv;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.query.report.datasource.TableDataSource;

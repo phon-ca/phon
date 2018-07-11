@@ -19,8 +19,10 @@
 package ca.phon.plugin;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
-import java.util.logging.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 

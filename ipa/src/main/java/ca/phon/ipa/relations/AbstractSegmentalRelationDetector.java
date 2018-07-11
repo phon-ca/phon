@@ -1,8 +1,12 @@
 package ca.phon.ipa.relations;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.relations.SegmentalRelation.Relation;
 

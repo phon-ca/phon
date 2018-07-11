@@ -23,11 +23,16 @@ import java.awt.event.ActionEvent;
 import javax.swing.undo.CompoundEdit;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.segmentation.SegmentationEditorView;
 import ca.phon.app.session.editor.view.segmentation.SegmentationEditorView.SegmentationMode;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.*;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
+import ca.phon.session.Record;
+import ca.phon.session.SessionFactory;
 
 public class NewSegmentAction extends SegmentationViewAction {
 

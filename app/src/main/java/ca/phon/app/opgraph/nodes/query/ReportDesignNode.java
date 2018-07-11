@@ -18,23 +18,38 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.xml.bind.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
 import ca.phon.app.query.report.ReportEditor;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
-import ca.phon.query.db.*;
-import ca.phon.query.report.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.ReportBuilder;
+import ca.phon.query.report.ReportBuilderException;
+import ca.phon.query.report.ReportBuilderFactory;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
 

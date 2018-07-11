@@ -19,7 +19,8 @@
 package ca.phon.ui.text;
 
 import java.text.ParseException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;

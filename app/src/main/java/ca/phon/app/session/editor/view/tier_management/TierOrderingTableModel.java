@@ -18,11 +18,16 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import ca.phon.session.*;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierViewItem;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 

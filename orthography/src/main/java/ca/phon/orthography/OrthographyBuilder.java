@@ -19,7 +19,8 @@
 package ca.phon.orthography;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for building {@link Orthography} from various sources.  This class

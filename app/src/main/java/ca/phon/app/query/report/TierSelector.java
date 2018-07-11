@@ -20,17 +20,25 @@ package ca.phon.app.query.report;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
 
 import ca.phon.project.Project;
-import ca.phon.session.*;
-import ca.phon.worker.*;
+import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierDescription;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 
 /**

@@ -20,7 +20,8 @@ package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
 
-import ca.phon.app.project.*;
+import ca.phon.app.project.AnonymizeParticipantInfoWizard;
+import ca.phon.app.project.ProjectWindow;
 
 public class AnonymizeAction extends ProjectWindowAction {
 

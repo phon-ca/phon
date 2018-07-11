@@ -18,12 +18,19 @@
  */
 package ca.phon.session.check;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
 
 /**
  * Check IPA transcriptions for a session. 

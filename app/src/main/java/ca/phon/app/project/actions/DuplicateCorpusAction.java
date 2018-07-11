@@ -20,9 +20,13 @@ package ca.phon.app.project.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 

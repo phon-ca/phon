@@ -18,12 +18,17 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.phonex.*;
-import ca.phon.syllabifier.basic.io.*;
-import ca.phon.syllable.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.syllabifier.basic.io.ConstituentType;
+import ca.phon.syllabifier.basic.io.MarkGroup;
+import ca.phon.syllabifier.basic.io.StageType;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableConstituentType;
 
 public class Stage implements SyllabifierStage {
 	

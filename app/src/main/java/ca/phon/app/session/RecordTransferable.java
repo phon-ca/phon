@@ -18,16 +18,26 @@
  */
 package ca.phon.app.session;
 
-import java.awt.datatransfer.*;
-import java.io.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.*;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
+import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 
 /**
  * Clipboard transferable implementation for {@link Record}s.

@@ -18,21 +18,41 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.FeatureFamily;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortColumn;
 import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortOrder;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortType;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PromptedTextField;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class SortNodeSettingsPanel extends JPanel {
 

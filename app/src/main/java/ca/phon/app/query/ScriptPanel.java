@@ -18,24 +18,46 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.logging.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
+import javax.swing.Scrollable;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import ca.phon.query.script.QueryScript;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptContext;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.StringScriptParam;
 import ca.phon.script.params.ui.ParamPanelFactory;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * A container for a query script with displays the

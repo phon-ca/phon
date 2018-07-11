@@ -1,12 +1,19 @@
 package ca.phon.app.about;
 
-import java.awt.*;
-import java.net.*;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.IPluginMenuFilter;
+import ca.phon.plugin.PhonPlugin;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;

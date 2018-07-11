@@ -27,8 +27,10 @@ import javax.swing.JToolTip;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
-import ca.phon.session.*;
+import ca.phon.ipa.AlternativeTranscript;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.syllabifier.Syllabifier;
 
 /**

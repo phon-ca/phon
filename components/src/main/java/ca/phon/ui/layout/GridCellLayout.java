@@ -18,8 +18,13 @@
  */
 package ca.phon.ui.layout;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.LayoutManager2;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Layout components in a rigid (i.e., non-scaling) grid.  

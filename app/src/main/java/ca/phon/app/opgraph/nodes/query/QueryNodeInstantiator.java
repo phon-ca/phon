@@ -18,12 +18,15 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.opgraph.library.instantiators.Instantiator;
-import ca.phon.query.script.*;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 public class QueryNodeInstantiator implements Instantiator<QueryNode> {
 

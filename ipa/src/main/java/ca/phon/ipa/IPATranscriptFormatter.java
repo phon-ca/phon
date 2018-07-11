@@ -20,7 +20,8 @@ package ca.phon.ipa;
 
 import java.text.ParseException;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 
 /**
  * IPA transcript formatter

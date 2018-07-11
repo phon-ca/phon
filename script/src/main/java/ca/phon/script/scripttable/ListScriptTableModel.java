@@ -18,7 +18,8 @@
  */
 package ca.phon.script.scripttable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A table model that uses a list of object as row data.  The following

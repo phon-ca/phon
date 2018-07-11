@@ -18,10 +18,13 @@
  */
 package ca.phon.ui;
 
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
 
 /**
  * Abstract verifier for text fields.

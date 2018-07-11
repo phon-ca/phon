@@ -19,14 +19,17 @@
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
 import java.text.ParseException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllable.*;
+import ca.phon.syllable.StripSyllabifcationVisitor;
+import ca.phon.syllable.SyllabificationInfo;
 
 public class SyllabifyEdit extends SessionEditorUndoableEdit {
 	

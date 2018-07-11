@@ -24,7 +24,10 @@ import java.io.File;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.workspace.Workspace;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
 public class SelectWorkspaceCommand extends HookableAction {
 

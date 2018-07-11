@@ -21,7 +21,10 @@ package ca.phon.app.session.editor;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
 
-import ca.phon.session.*;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 /**
  * Default data model for the {@link SessionEditor}

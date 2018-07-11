@@ -19,14 +19,21 @@
 package ca.phon.app.corpus;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
-import ca.phon.session.*;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierViewItem;
 
 @PhonPlugin
 public class CorpusTemplateEP implements IPluginEntryPoint {

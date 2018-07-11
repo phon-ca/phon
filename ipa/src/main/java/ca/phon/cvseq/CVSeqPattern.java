@@ -19,10 +19,13 @@
 package ca.phon.cvseq;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import ca.phon.cvseq.fsa.CVSeqCompiler;
-import ca.phon.fsa.*;
+import ca.phon.fsa.FSAState;
+import ca.phon.fsa.SimpleFSA;
 import ca.phon.ipa.IPAElement;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Range;

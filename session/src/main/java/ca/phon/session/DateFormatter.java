@@ -19,10 +19,12 @@
 package ca.phon.session;
 
 import java.text.ParseException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 
 @FormatterType(LocalDate.class)
 public class DateFormatter implements Formatter<LocalDate> {

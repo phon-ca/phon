@@ -19,26 +19,39 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.extensions.Extendable;
-import ca.phon.opgraph.io.xml.*;
-import ca.phon.query.db.*;
+import ca.phon.opgraph.io.xml.XMLSerializer;
+import ca.phon.opgraph.io.xml.XMLSerializerFactory;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.QueryFactory;
+import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.Script;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.db.ScriptURL;
 import ca.phon.query.db.xml.XMLQuery;
 import ca.phon.query.db.xml.io.query.QueryType;
-import ca.phon.query.script.*;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 public class QueryNodeXMLSerializer implements XMLSerializer {
 

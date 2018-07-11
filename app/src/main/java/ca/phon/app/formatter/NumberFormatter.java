@@ -1,8 +1,10 @@
 package ca.phon.app.formatter;
 
-import java.text.*;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
-import ca.phon.formatter.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterType;
 import ca.phon.util.PrefHelper;
 
 @FormatterType(value=Number.class)

@@ -18,21 +18,39 @@
  */
 package ca.phon.ipadictionary.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.logging.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.ipadictionary.cmd.*;
+import ca.phon.ipadictionary.cmd.IPADictLexer;
+import ca.phon.ipadictionary.cmd.IPADictParser;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
-import ca.phon.util.*;
+import ca.phon.util.LanguageEntry;
+import ca.phon.util.LanguageParser;
+import ca.phon.util.MsFormatter;
 import ca.phon.worker.PhonTask;
 
 /**

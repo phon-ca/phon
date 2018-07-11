@@ -18,9 +18,12 @@
  */
 package ca.phon.query.detectors;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.PhoneDimension;
 import ca.phon.ipa.alignment.PhoneMap;
 

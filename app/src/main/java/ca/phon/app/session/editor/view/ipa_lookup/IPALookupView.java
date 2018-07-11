@@ -18,21 +18,48 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.logging.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
+import ca.phon.app.session.editor.DelegateEditorAction;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.RunOnEDT;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.AutoTranscribeCommand;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.ExportIPACommand;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.ImportIPACommand;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
-import ca.phon.ipadictionary.ui.*;
-import ca.phon.session.*;
+import ca.phon.ipadictionary.ui.IPALookupContext;
+import ca.phon.ipadictionary.ui.IPALookupContextListener;
+import ca.phon.ipadictionary.ui.IPALookupPanel;
+import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
 import ca.phon.util.Language;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class IPALookupView extends EditorView {
 	

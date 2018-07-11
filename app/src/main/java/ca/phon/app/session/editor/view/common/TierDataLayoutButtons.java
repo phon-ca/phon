@@ -18,15 +18,20 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Buttons for controlling layout options for a given

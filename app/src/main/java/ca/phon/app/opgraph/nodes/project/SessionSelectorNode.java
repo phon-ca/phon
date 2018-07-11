@@ -18,15 +18,25 @@
  */
 package ca.phon.app.opgraph.nodes.project;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.session.SessionSelector;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;

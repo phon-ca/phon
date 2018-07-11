@@ -22,8 +22,11 @@ import java.awt.Toolkit;
 
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;

@@ -2,7 +2,8 @@ package ca.phon.app.log.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -10,18 +11,25 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.ImageIcon;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.*;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.HTMLToWorkbookWriter;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.OpenFileLauncher;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 import javafx.application.Platform;
 import javafx.scene.web.WebView;
 import jxl.Workbook;
-import jxl.write.*;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
 public class SaveBufferAsWorkbookAction extends HookableAction {
 

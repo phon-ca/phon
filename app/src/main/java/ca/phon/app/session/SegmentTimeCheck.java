@@ -2,11 +2,17 @@ package ca.phon.app.session;
 
 import java.util.Map;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
-import ca.phon.session.check.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
+import ca.phon.session.check.SessionCheck;
+import ca.phon.session.check.SessionValidator;
 
 public class SegmentTimeCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
 

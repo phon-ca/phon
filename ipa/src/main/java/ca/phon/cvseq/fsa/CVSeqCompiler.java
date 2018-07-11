@@ -19,11 +19,21 @@
 package ca.phon.cvseq.fsa;
 
 import java.text.ParseException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.cvseq.CVSeqType;
-import ca.phon.fsa.*;
-import de.susebox.jtopas.*;
+import ca.phon.fsa.FSATransition;
+import ca.phon.fsa.SimpleFSA;
+import de.susebox.jtopas.Flags;
+import de.susebox.jtopas.StandardTokenizer;
+import de.susebox.jtopas.StandardTokenizerProperties;
+import de.susebox.jtopas.StringSource;
+import de.susebox.jtopas.Token;
+import de.susebox.jtopas.Tokenizer;
+import de.susebox.jtopas.TokenizerException;
+import de.susebox.jtopas.TokenizerProperties;
+import de.susebox.jtopas.TokenizerSource;
 
 /**
  *

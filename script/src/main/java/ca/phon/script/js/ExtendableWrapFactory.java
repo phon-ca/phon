@@ -18,7 +18,9 @@
  */
 package ca.phon.script.js;
 
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.WrapFactory;
 
 import ca.phon.extensions.IExtendable;
 

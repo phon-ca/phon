@@ -19,7 +19,9 @@
 package ca.phon.ui.tristatecheckbox;
 
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 public class TristateCheckBoxTreeModel extends DefaultTreeModel {
 	

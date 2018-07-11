@@ -18,7 +18,8 @@
  */
 package ca.phon.project;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 
 import org.junit.Test;

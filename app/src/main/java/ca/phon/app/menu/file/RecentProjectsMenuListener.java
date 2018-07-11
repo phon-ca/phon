@@ -20,8 +20,11 @@ package ca.phon.app.menu.file;
 
 import java.io.File;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.Action;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.RecentProjects;

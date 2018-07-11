@@ -18,7 +18,9 @@
  */
 package ca.phon.syllable;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.Extension;
+import ca.phon.extensions.ExtensionProvider;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPAElement;
 
 /**

@@ -21,15 +21,25 @@ package ca.phon.app.actions;
 
 
 import java.io.IOException;
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.app.actions.SaveOnExitDialog.QuitOption;
 import ca.phon.app.hooks.PhonShutdownHook;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.PluginException;
+import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
 
 @PhonPlugin(name="default")
 public class ExitEP implements IPluginEntryPoint

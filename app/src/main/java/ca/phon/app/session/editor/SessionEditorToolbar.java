@@ -18,19 +18,33 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JToggleButton;
 
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.actions.DuplicateRecordAction;
+import ca.phon.app.session.editor.actions.NewRecordAction;
+import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Session editor toolbar

@@ -18,23 +18,36 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.util.Map;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.CompoundBorder;
 import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
+import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
+import ca.phon.app.opgraph.wizard.ReportTemplateView;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.app.workspace.Workspace;
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpContext;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpLink;
+import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.edits.graph.AddNodeEdit;
-import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.extensions.CompositeNode;
 import ca.phon.project.Project;

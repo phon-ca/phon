@@ -27,7 +27,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.io.xml.*;
+import ca.phon.opgraph.io.xml.XMLSerializer;
+import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 
 public class NodeEditorSettingsSerializer implements XMLSerializer {
 

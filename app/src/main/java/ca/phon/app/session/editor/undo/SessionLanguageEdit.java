@@ -18,7 +18,9 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 
 public class SessionLanguageEdit extends SessionEditorUndoableEdit {
 

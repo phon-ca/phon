@@ -19,10 +19,13 @@
 package ca.phon.app.project.git.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.*;
-import java.util.logging.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.eclipse.jgit.api.*;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.PushResult;
 

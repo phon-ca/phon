@@ -18,7 +18,8 @@
  */
 package ca.phon.app.hooks;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 import ca.phon.app.BootWindow;
 

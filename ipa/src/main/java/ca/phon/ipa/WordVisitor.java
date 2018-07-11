@@ -18,7 +18,8 @@
  */
 package ca.phon.ipa;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;

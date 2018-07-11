@@ -24,7 +24,8 @@ import javax.swing.ImageIcon;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class PlayAction extends SpeechAnalysisEditorViewAction {
 

@@ -18,10 +18,13 @@
  */
 package ca.phon.script.debug;
 
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.debug.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.debug.DebugFrame;
+import org.mozilla.javascript.debug.DebuggableScript;
 
 public class PhonScriptDebugFrame implements DebugFrame {
 	

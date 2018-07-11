@@ -22,7 +22,8 @@ import javax.swing.UIDefaults;
 
 import org.pushingpixels.lafwidget.LafWidget;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.fonts.*;
+import org.pushingpixels.substance.api.fonts.FontPolicy;
+import org.pushingpixels.substance.api.fonts.FontSet;
 
 public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
 

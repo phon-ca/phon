@@ -2,8 +2,6 @@ package ca.phon.alignment;
 
 import java.util.Stack;
 
-import ca.phon.alignment.*;
-
 /**
  * 
  * @param <T>

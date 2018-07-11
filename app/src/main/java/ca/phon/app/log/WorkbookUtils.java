@@ -1,8 +1,11 @@
 package ca.phon.app.log;
 
-import java.lang.Number;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.table.TableModel;
 
@@ -10,7 +13,12 @@ import org.apache.commons.lang.StringUtils;
 
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
-import jxl.write.*;
+import jxl.write.DateTime;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
 /**

@@ -19,9 +19,14 @@
 package ca.phon.app.modules;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 /**
  * Custom parser for entry point arguments.

@@ -10,8 +10,8 @@ import javax.swing.JToolBar;
 
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;

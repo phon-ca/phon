@@ -18,13 +18,19 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.*;
+import javax.swing.RowFilter;
 import javax.swing.RowFilter.Entry;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.SwingWorker;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import ca.phon.worker.PhonWorker;
 

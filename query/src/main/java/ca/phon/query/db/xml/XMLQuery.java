@@ -19,13 +19,21 @@
 
 package ca.phon.query.db.xml;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.UUID;
 
-import javax.xml.datatype.*;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.io.query.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.Script;
+import ca.phon.query.db.xml.io.query.QueryType;
+import ca.phon.query.db.xml.io.query.ScriptType;
 
 
 /**

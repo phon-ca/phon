@@ -19,14 +19,18 @@
 package ca.phon.app.session.editor.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.app.hooks.ActionHook;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.util.PrefHelper;

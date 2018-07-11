@@ -18,21 +18,55 @@
  */
 package ca.phon.media.sampled;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer.Info;
-import javax.swing.*;
+import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.event.MouseInputAdapter;
 
-import ca.phon.media.sampled.actions.*;
+import ca.phon.media.sampled.actions.PlayAction;
+import ca.phon.media.sampled.actions.PlaySegmentAction;
+import ca.phon.media.sampled.actions.PlaySelectionAction;
+import ca.phon.media.sampled.actions.SaveSegmentAction;
+import ca.phon.media.sampled.actions.SaveSelectionAction;
+import ca.phon.media.sampled.actions.SelectMixerAction;
+import ca.phon.media.sampled.actions.SelectSegmentAction;
+import ca.phon.media.sampled.actions.StopAction;
+import ca.phon.media.sampled.actions.ToggleChannelVisible;
+import ca.phon.media.sampled.actions.ToggleLoop;
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.util.MsFormatter;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 
 /**

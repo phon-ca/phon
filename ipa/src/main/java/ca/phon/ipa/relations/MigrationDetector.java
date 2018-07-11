@@ -1,6 +1,7 @@
 package ca.phon.ipa.relations;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.relations.SegmentalRelation.Relation;
 

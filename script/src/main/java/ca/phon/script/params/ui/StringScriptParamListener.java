@@ -21,7 +21,8 @@ package ca.phon.script.params.ui;
 import java.awt.event.ActionEvent;
 import java.lang.ref.WeakReference;
 
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import ca.phon.script.params.ScriptParam;
 import ca.phon.ui.text.PromptedTextField;

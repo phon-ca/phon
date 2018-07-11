@@ -20,16 +20,22 @@ package ca.phon.app.project;
 
 import java.awt.GraphicsEnvironment;
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.project.Project;
+import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {

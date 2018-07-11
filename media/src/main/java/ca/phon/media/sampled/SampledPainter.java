@@ -18,9 +18,16 @@
  */
 package ca.phon.media.sampled;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.beans.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import ca.phon.ui.painter.BufferedPainter;
 

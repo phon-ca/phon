@@ -22,7 +22,8 @@ import java.awt.event.ActionEvent;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.opgraph.wizard.NodeWizardSettingsDialog;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.WizardExtensionUndoableEdit;
 import ca.phon.opgraph.OpGraph;
 

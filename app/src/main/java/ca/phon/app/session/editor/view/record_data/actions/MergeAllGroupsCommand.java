@@ -28,7 +28,8 @@ import ca.phon.app.session.editor.undo.MergeAllGroupsEdit;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
 import ca.phon.util.OSInfo;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class MergeAllGroupsCommand extends RecordDataEditorViewAction {
 

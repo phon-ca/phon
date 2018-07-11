@@ -18,9 +18,11 @@
  */
 package ca.phon.query.report.csv;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.query.report.datasource.ResultListingDataSource;

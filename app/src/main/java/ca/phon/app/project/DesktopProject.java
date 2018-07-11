@@ -18,21 +18,21 @@
  */
 package ca.phon.app.project;
 
-import java.io.*;
-import java.nio.file.LinkOption;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.sun.jna.platform.FileUtils;
 
 import ca.phon.app.prefs.PhonProperties;
-import ca.phon.project.*;
+import ca.phon.project.LocalProject;
+import ca.phon.project.ProjectEvent;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.*;
+import ca.phon.project.io.CorpusType;
+import ca.phon.project.io.SessionType;
 import ca.phon.util.PrefHelper;
 
 /**

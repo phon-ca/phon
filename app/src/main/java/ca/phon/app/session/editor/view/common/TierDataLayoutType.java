@@ -18,7 +18,8 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Enumeration of available tier data layout types.

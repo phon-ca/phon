@@ -2,17 +2,23 @@ package ca.phon.app.log.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.*;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.app.log.LogUtil;
 import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
-import jxl.write.*;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
 /**
  * Save all buffers with {@link TableDataSource} user objects to a new

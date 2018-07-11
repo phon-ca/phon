@@ -18,11 +18,17 @@
  */
 package ca.phon.app.session.editor.view.session_information;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.nio.file.*;
-import java.util.*;
-import java.util.logging.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
@@ -30,8 +36,10 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
-import ca.phon.ui.text.*;
+import ca.phon.ui.text.DefaultTextCompleterModel;
+import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.ui.text.TextCompleter;
 import ca.phon.worker.PhonWorker;
 
 /**

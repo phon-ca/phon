@@ -20,7 +20,8 @@ package ca.phon.app.session.editor.view.media_player.actions;
 
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;

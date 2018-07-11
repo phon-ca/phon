@@ -18,7 +18,8 @@
  */
 package ca.phon.util.resources;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
 import java.util.Iterator;
 
 /**

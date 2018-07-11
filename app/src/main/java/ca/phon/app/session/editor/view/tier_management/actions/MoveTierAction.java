@@ -19,7 +19,8 @@
 package ca.phon.app.session.editor.view.tier_management.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierViewEdit;

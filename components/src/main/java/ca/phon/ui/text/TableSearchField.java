@@ -20,16 +20,27 @@ package ca.phon.ui.text;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.SwingWorker;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.phonex.*;
-import ca.phon.ui.action.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Tuple;
 
 /**

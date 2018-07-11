@@ -18,12 +18,23 @@
  */
 package ca.phon.ui;
 
-import java.util.*;
-import java.util.logging.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.ImageIcon;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 /**
  * A panel which prints messages from a given {@link Logger}

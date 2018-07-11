@@ -18,11 +18,16 @@
  */
 package ca.phon.ipa;
 
-import java.text.*;
-import java.util.*;
+import java.text.CollationKey;
+import java.text.Collator;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
 
 public class FeatureCollator extends Collator {
 

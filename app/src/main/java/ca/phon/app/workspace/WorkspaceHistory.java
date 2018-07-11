@@ -19,7 +19,9 @@
 package ca.phon.app.workspace;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import ca.phon.util.PrefHelper;
 

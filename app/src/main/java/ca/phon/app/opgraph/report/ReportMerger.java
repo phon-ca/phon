@@ -18,15 +18,22 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
 
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.NodeEditorSettings;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.InputField;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpLink;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.OutputField;
+import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;

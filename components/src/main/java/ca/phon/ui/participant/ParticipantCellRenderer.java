@@ -19,13 +19,16 @@
 package ca.phon.ui.participant;
 
 import java.awt.Component;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ca.phon.session.*;
+import ca.phon.session.AgeFormatter;
+import ca.phon.session.Sex;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 

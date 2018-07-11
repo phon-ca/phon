@@ -25,9 +25,11 @@ import javax.swing.ImageIcon;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddParticipantEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.SessionFactory;
 import ca.phon.ui.participant.ParticipantEditor;
-import ca.phon.util.icons.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class NewParticipantAction extends SessionInfoAction {
 

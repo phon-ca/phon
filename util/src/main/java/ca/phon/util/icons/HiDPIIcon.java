@@ -18,8 +18,13 @@
  */
 package ca.phon.util.icons;
 
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 import javax.swing.ImageIcon;
 

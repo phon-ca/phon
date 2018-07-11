@@ -18,54 +18,29 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
-import java.util.function.*;
-import java.util.logging.*;
-import java.util.stream.Collectors;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.tree.*;
+import javax.swing.ImageIcon;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.WordUtils;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
-
-import ca.hedlund.desktopicons.*;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.opgraph.nodes.*;
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.edits.graph.*;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.extensions.NodeMetadata;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
-import ca.phon.query.script.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import ca.phon.query.script.QueryScript;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.OSInfo;
-import ca.phon.util.icons.*;
-import ca.phon.util.resources.ResourceLoader;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * UI for creating new {@link OpgraphEditor} documents using existing

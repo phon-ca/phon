@@ -18,29 +18,50 @@
  */
 package ca.phon.app.session.editor.view.media_player;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.media.player.PhonMediaPlayer;
-import ca.phon.session.*;
-import ca.phon.ui.*;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
+import ca.phon.session.SegmentCalculator;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.ui.AbstractVerifier;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.VerifierListener;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.text.MediaSegmentField;
-import ca.phon.ui.toast.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import ca.phon.ui.toast.Toast;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.MsFormatter;
+import ca.phon.util.Range;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Dialog to play custom segments.

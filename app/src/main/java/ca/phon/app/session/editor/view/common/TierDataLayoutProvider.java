@@ -18,7 +18,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 
 /**
  * Interface implemented by layout provider implementations.

@@ -18,7 +18,8 @@
  */
 package ca.phon.script.params.ui;
 
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 
 import javax.swing.JComponent;

@@ -19,12 +19,15 @@
 package ca.phon.app.session.editor.view.tier_management.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierViewEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.session.*;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.TierViewItem;
 
 public class ToggleLockAllTiersAction extends TierManagementAction {
 

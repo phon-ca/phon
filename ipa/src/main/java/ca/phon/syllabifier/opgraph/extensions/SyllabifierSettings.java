@@ -18,7 +18,8 @@
  */
 package ca.phon.syllabifier.opgraph.extensions;
 
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import ca.phon.util.Language;
 

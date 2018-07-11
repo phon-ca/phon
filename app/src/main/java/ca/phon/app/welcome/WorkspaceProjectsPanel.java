@@ -18,29 +18,43 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
-import ca.hedlund.desktopicons.*;
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
-import ca.phon.app.workspace.*;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.app.workspace.WorkspaceHistory;
 import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.action.*;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import ca.phon.util.OSInfo;
+import ca.phon.util.OpenFileLauncher;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Start window panel for workspace projects.

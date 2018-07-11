@@ -2,13 +2,18 @@ package ca.phon.script.params.ui;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
-import ca.phon.script.params.*;
+import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.EnumScriptParam.ReturnValue;
 
 public class RadiobuttonEnumPanel extends JPanel {

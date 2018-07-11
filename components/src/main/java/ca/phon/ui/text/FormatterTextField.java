@@ -18,11 +18,17 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.*;
-import java.util.logging.*;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;

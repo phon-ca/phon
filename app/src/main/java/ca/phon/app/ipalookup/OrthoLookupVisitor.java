@@ -18,11 +18,19 @@
  */
 package ca.phon.app.ipalookup;
 
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.orthography.*;
+import ca.phon.orthography.OrthoComment;
+import ca.phon.orthography.OrthoElement;
+import ca.phon.orthography.OrthoWord;
+import ca.phon.orthography.OrthoWordnet;
+import ca.phon.orthography.Orthography;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

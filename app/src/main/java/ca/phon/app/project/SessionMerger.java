@@ -19,11 +19,26 @@
 package ca.phon.app.project;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.project.Project;
-import ca.phon.session.*;
+import ca.phon.session.Participant;
+import ca.phon.session.RangeRecordFilter;
+import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
+import ca.phon.session.TierDescription;
+import ca.phon.session.TierViewItem;
 import ca.phon.worker.PhonTask;
 
 /**

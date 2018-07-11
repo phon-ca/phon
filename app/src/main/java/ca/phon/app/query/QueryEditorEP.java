@@ -21,12 +21,15 @@ package ca.phon.app.query;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Map;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
-import ca.phon.query.script.*;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
 
 /**
  * Show the query editor window.

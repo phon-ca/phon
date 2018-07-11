@@ -23,7 +23,8 @@ import java.awt.Component;
 import javax.swing.FocusManager;
 import javax.swing.undo.CannotUndoException;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.GroupField;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;

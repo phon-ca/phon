@@ -4,18 +4,21 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 
 public class OpenSimpleAnalysisComposerAction extends HookableAction {
 	

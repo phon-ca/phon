@@ -18,7 +18,8 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
