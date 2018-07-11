@@ -67,7 +67,7 @@ exports.WordFilter = function (id) {
 	 */
 	this.param_setup = function (params) {
 		// create a new section (collapsed by default)
-		var sep = new SeparatorScriptParam(sectionTitle, true);
+		var sep = new SeparatorScriptParam(id+".sectionHeader", sectionTitle, true);
 		params.add(sep);
 
 		// search singleton groups.

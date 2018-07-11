@@ -24,10 +24,19 @@ public class SeparatorScriptParam extends ScriptParam {
 
 	private boolean collapsed = false;
 	
+	public SeparatorScriptParam(String id, String title, boolean collapsed) {
+		super(new String[] {id + ".collapsed"}, new Object[] {collapsed});
+		setParamDesc(title);
+		setParamType("separator");
+		setCollapsed(collapsed);
+	}
+	
+	@Deprecated
 	public SeparatorScriptParam(String desc) {
 		this(desc, false);
 	}
 	
+	@Deprecated
 	public SeparatorScriptParam(String desc, boolean collapsed) {
 		super(new String[0], new Object[0]);
 		setParamType("separator");
@@ -42,9 +51,20 @@ public class SeparatorScriptParam extends ScriptParam {
 	public void setCollapsed(boolean collapsed) {
 		final boolean wasCollapsed = this.collapsed;
 		this.collapsed = collapsed;
+		if(getParamId() != null)
+			super.setValue(getParamId(), collapsed);
 		super.propSupport.firePropertyChange(COLLAPSED_PROP, wasCollapsed, collapsed);
 	}
 
+	@Override
+	public void setValue(String paramId, Object val) {
+		if(paramId.equals(getParamId()) && val != null) {
+			setCollapsed(Boolean.parseBoolean(val.toString()));
+		} else {
+			super.setValue(paramId, val);
+		}
+	}
+	
 	@Override
 	public String getStringRepresentation() {
 		String retVal = "{";

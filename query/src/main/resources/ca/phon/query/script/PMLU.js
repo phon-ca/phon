@@ -72,7 +72,7 @@ function begin_search(session) {
 }
 
 function setup_params(params) {
-	var cvOptionsSep = new SeparatorScriptParam("Comparison Options", false);
+	var cvOptionsSep = new SeparatorScriptParam(id+".sectionHeader", "Comparison Options", false);
 	params.add(cvOptionsSep);
 
 	ignoreTruncatedParam = new BooleanScriptParam(

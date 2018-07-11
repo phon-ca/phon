@@ -55,7 +55,7 @@ function setup_params(params) {
 	var insertIdx = 1;
 
 	// setup result filter section
-	var resultFilterSection = new SeparatorScriptParam("Aligned Phones", true);
+	var resultFilterSection = new SeparatorScriptParam("alignedPhonesHeader", "Aligned Phones", true);
 	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
 	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
 

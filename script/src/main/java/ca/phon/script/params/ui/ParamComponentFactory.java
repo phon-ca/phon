@@ -252,6 +252,10 @@ public class ParamComponentFactory {
 		panel.setAnimated(false);
 		panel.setLayout(new VerticalLayout());
 		panel.setCollapsed(separatorScriptParam.isCollapsed());
+		
+		panel.addPropertyChangeListener("collapsed", (e) -> {
+			separatorScriptParam.setCollapsed(panel.isCollapsed());
+		});
 
 		installParamListener(panel, separatorScriptParam);
 		installSeparatorParamListener(panel, separatorScriptParam);
