@@ -250,9 +250,18 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 			retVal.setBottomAlignment(bottomAlignment);
 			alignmentMaps.add(retVal);
 			
-			targetEleOffset += targetWord.length();
-			actualEleOffset += actualWord.length();
+			targetEleOffset += targetWord.audiblePhones().length();
+			actualEleOffset += actualWord.audiblePhones().length();
 		}
+		
+		final IPATranscript targetPhones = ipaTarget.audiblePhones();
+		final IPATranscript actualPhones = ipaActual.audiblePhones();
+		
+		final IPAElement targetEles[] = new IPAElement[targetPhones.length()];
+		for(int j = 0; j < targetPhones.length(); j++) targetEles[j] = targetPhones.elementAt(j);
+		
+		final IPAElement actualEles[] = new IPAElement[actualPhones.length()];
+		for(int j = 0; j < actualPhones.length(); j++) actualEles[j] = actualPhones.elementAt(j);
 		
 		// add all alignments together
 		int alignmentLength = alignmentMaps.stream().map( (pm) -> pm.getAlignmentLength() ).collect( Collectors.summingInt(Integer::intValue) );
@@ -262,21 +271,33 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		int alignIdx = 0;
 		for(int i = 0; i < alignmentMaps.size(); i++) {
 			final PhoneMap pm = alignmentMaps.get(i);
+		
+			Integer[] tAlign = pm.getTopAlignment();
+			Integer[] aAlign = pm.getBottomAlignment();
+			
+			// XXX check for special case involving alignment with '*'
+			if(     pm.getAlignmentLength() >= 2
+					&&
+					// initial indel on top for first position
+					(tAlign[0] < 0 && tAlign[1] >= 0 && targetEles[tAlign[1]].toString().equals("*"))
+			  )
+			{
+				// swap first and second alignment values
+				int tempTAlign = tAlign[0];
+				tAlign[0] = tAlign[1];
+				tAlign[1] = tempTAlign;
+				
+				int tempAAlign = aAlign[0];
+				aAlign[0] = aAlign[1];
+				aAlign[1] = tempAAlign;
+			}
+			
 			for(int j = 0; j < pm.getAlignmentLength(); j++) {
-				topAlignment[alignIdx] = pm.getTopAlignment()[j];
-				bottomAlignment[alignIdx] = pm.getBottomAlignment()[j];
+				topAlignment[alignIdx] = tAlign[j];
+				bottomAlignment[alignIdx] = aAlign[j];
 				alignIdx++;
 			}
 		}
-		
-		final IPATranscript targetPhones = ipaActual.audiblePhones();
-		final IPATranscript actualPhones = ipaTarget.audiblePhones();
-		
-		final IPAElement targetEles[] = new IPAElement[targetPhones.length()];
-		for(int j = 0; j < targetPhones.length(); j++) targetEles[j] = targetPhones.elementAt(j);
-		
-		final IPAElement actualEles[] = new IPAElement[actualPhones.length()];
-		for(int j = 0; j < actualPhones.length(); j++) actualEles[j] = actualPhones.elementAt(j);
 		
 		final PhoneMap retVal = new PhoneMap(ipaTarget, ipaActual);
 		retVal.setTopElements(targetEles);
