@@ -57,7 +57,7 @@ exports.SyllableFilter = function (id) {
 		"def":[ true, true, true],
 		"title": "Multiple syllables:",
 		"desc":[ "Initial", "Medial", "Final"],
-		"numCols": 3
+		"numCols": 0
 	};
 	this.sInitial = posParamInfo.def[0];
 	this.sMedial = posParamInfo.def[1];
@@ -68,7 +68,7 @@ exports.SyllableFilter = function (id) {
 		"def":[ true, true, true],
 		"title": "Syllable stress:",
 		"desc":[ "Primary", "Secondary", "Unstressed"],
-		"numCols": 3
+		"numCols": 0
 	};
 	this.sPrimary = stressParamInfo.def[0];
 	this.sSecondary = stressParamInfo.def[1];

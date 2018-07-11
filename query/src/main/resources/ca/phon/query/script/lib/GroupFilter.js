@@ -38,7 +38,7 @@ exports.GroupFilter = function (id) {
 		"def":[ true, true, true],
 		"title": "Multiple groups:",
 		"desc":[ "Initial", "Medial", "Final"],
-		"numCols": 3
+		"numCols": 0
 	};
 	this.gInitial = posParamInfo.def[0];
 	this.gMedial = posParamInfo.def[1];

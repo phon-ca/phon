@@ -39,7 +39,7 @@ exports.WordFilter = function (id) {
 		"def":[ true, true, true],
 		"title": "Multiple words:",
 		"desc":[ "Initial", "Medial", "Final"],
-		"numCols": 3
+		"numCols": 0
 	};
 	this.wInitial = posParamInfo.def[0];
 	this.wMedial = posParamInfo.def[1];
