@@ -191,9 +191,9 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		
 		final JPanel p = new JPanel(new BorderLayout());
 		p.add(scroller, BorderLayout.CENTER);
-		p.add(strip, BorderLayout.LINE_START);
+		p.add(strip, BorderLayout.LINE_END);
 		
-		final JPanel panel = createComponentPanelNoSpace(paramLabel, p);
+		final JPanel panel = createComponentPanel(paramLabel, p);
 		currentContainer.add(panel);
 	}
 
