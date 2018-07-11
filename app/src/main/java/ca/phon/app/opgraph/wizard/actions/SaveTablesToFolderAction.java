@@ -127,7 +127,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 		if(reportBuffer != null) {
 			final ReportTree tree = (ReportTree)reportBuffer.getUserObject();
 			
-			exportWithFoldersBox = new JCheckBox("Create subfolders based on report hierarchy");
+			exportWithFoldersBox = new JCheckBox("Create subfolders as shown");
 			exportWithFoldersBox.setSelected(exportWithFolders);
 			
 			final ActionListener l = (e) -> {
