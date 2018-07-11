@@ -77,15 +77,19 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		if(p1.isConsonant()) {
 			featureTally += checkDimension(p1, p2, PhoneDimension.PLACE);
 			featureTally += checkDimension(p1, p2, PhoneDimension.MANNER);
-//			featureTally += checkDimension(p1, p2, PhoneDimension.VOICING);
+			featureTally += checkDimension(p1, p2, PhoneDimension.VOICING);
 		} else {
 			featureTally += checkDimension(p1, p2, PhoneDimension.HEIGHT);
 			featureTally += checkDimension(p1, p2, PhoneDimension.BACKNESS);
 			featureTally += checkDimension(p1, p2, PhoneDimension.TENSENESS);
-//			featureTally += checkDimension(p1, p2, PhoneDimension.ROUNDING);
+			featureTally += checkDimension(p1, p2, PhoneDimension.ROUNDING);
 		}
 		// if no features match, only subtract 1
 		tally += Math.max(-1, featureTally);
+		
+		// add extra point if both phones are the exact same string
+		if(ele1.toString().equals(ele2.toString()))
+			tally += 1;
 
 		return tally;
 	}
@@ -96,9 +100,11 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		final FeatureSet fs1 = FeatureSet.intersect(p1.get(dimension), dimension.getTerminalFeatures());
 		final FeatureSet fs2 = FeatureSet.intersect(p2.get(dimension), dimension.getTerminalFeatures());
 
+		final FeatureSet t = FeatureSet.intersect(fs1, fs2);
+
 		// return if any terminal features intersect
 		if(fs1.intersects(fs2))
-			retVal = 1;
+			retVal = t.size();
 		else
 			retVal = -1;
 
