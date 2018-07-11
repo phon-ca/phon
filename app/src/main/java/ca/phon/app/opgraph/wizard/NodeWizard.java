@@ -57,6 +57,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -1091,7 +1092,8 @@ public class NodeWizard extends WizardFrame {
 				final BorderLayout layout = new BorderLayout();
 				step.setLayout(layout);
 
-				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), new JScrollPane(comp));
+				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), 
+						(comp instanceof ScriptPanel ? comp : new JScrollPane(comp)) );
 				if(globalOptionsPanel.getParent() == null)
 					panel.setRightDecoration(globalOptionsPanel);
 				

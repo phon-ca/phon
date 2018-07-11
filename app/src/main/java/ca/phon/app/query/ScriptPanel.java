@@ -288,7 +288,7 @@ public class ScriptPanel extends JPanel {
 			return false;
 		}
 		for(ScriptParam sp:params) {
-			if(sp.getParamType().equals("string")) {
+			if(sp instanceof StringScriptParam) {
 				final StringScriptParam stringParam = (StringScriptParam)sp;
 				if(!stringParam.isValidate()) {
 					return false;

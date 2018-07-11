@@ -18,11 +18,13 @@
  */
 package ca.phon.app.log.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,10 +34,13 @@ import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferPanelContainer;
 import ca.phon.app.log.LogBuffer;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -82,24 +87,42 @@ public class SaveAllBuffersAction extends HookableAction {
 				PhonWorker.getInstance().invokeLater(() -> saveBuffers(selectedFolder));
 			}
 		});
-		NativeDialogs.showSaveDialog(props);
+		NativeDialogs.showOpenDialog(props);
 	}
 
 	private void saveBuffers(String saveFolder) {
 		for(String bufferName:buffers.getBufferNames()) {
 			final BufferPanel bufferPanel = buffers.getBuffer(bufferName);
-			final LogBuffer logBuffer = bufferPanel.getLogBuffer();
 			final File bufferFile = new File(saveFolder, bufferName + "." + bufferPanel.getDefaultExtension());
+			save(bufferPanel, bufferFile.getAbsolutePath());
+		}
+		
+		if( ((MultiBufferPanel)buffers).isOpenAfterSaving() ) {
 			try {
-				final FileOutputStream out = new FileOutputStream(bufferFile);
-				final OutputStreamWriter writer = new OutputStreamWriter(out, logBuffer.getEncoding());
-				writer.write(logBuffer.getText());
-				writer.flush();
-				writer.close();
-			} catch (IOException ex) {
-				LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-				ToastFactory.makeToast(ex.getLocalizedMessage()).start(logBuffer);
+				OpenFileLauncher.openURL((new File(saveFolder)).toURI().toURL());
+			} catch (MalformedURLException e) {
+				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
+		}
+	}
+	
+	private void save(BufferPanel panel, String saveAs) {
+		if(panel == null) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		
+		try {
+			if(panel.isShowingBuffer()) {
+				panel.writeToTextFile(saveAs, "UTF-8");
+			} else if(panel.isShowingTable()) {
+				panel.writeToCSV(saveAs, "UTF-8");
+			} else if(panel.isShowingHtml()) {
+				panel.writeHMTLFile(saveAs, "UTF-8");
+			}
+		} catch (IOException ex) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(ex);
 		}
 	}
 	
