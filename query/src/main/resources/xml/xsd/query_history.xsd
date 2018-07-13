@@ -31,29 +31,20 @@
 	
 	<xs:complexType name="QueryInfoType">
 		<xs:sequence>
-			<xs:element ref="project" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="params" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
-		<xs:attribute name="date" type="xs:dateTime" use="required"/>
+		<xs:attribute name="date" type="xs:dateTime" use="required">
+			<xs:annotation>
+				<xs:documentation>Last time this query was executed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="hash" type="xs:string" use="optional">
 			<xs:annotation>
-				<xs:documentation>SHA1 hash of query script used to track if script has changed over time.</xs:documentation>
+				<xs:documentation>Hash of query parameters</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
-
-	<xs:complexType name="ProjectInfoType">
-		<xs:sequence>
-			<xs:element ref="session" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-	</xs:complexType>
-
-	<xs:complexType name="SessionInfoType">
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="results" type="xs:int" use="required"/>
-	</xs:complexType>
-
+	
 	<xs:complexType name="ParamsType">
 		<xs:sequence>
 			<xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
@@ -83,8 +74,6 @@
  
  	<xs:element name="query_history" type="QueryHistoryType"/>
  	<xs:element name="query" type="QueryInfoType"/>
- 	<xs:element name="project" type="ProjectInfoType"/>
- 	<xs:element name="session" type="SessionInfoType"/>
  	<xs:element name="params" type="ParamsType"/>
 	<xs:element name="param" type="ParamType"/>
 

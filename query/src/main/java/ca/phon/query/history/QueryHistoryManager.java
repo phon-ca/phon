@@ -58,7 +58,7 @@ public class QueryHistoryManager {
 		PrefHelper.getUserPreferences().putInt(QUERY_HISTORY_MAXLENGTH, maxLength);
 		this.maxLength = PrefHelper.getInt(QUERY_HISTORY_MAXLENGTH, DEFAULT_QUERY_HISTORY_MAXLENGTH);
 	}
-	
+
 	public void createQueryHistoryFolder() {
 		final File queryHistoryFolder = new File(getQueryHistoryFolder());
 		if(!queryHistoryFolder.exists()) {
@@ -151,7 +151,21 @@ public class QueryHistoryManager {
 	public List<QueryInfoType> addQueryInfo(QueryHistoryType queryHistory, QueryInfoType queryInfo) {
 		List<QueryInfoType> retVal = new ArrayList<>();
 		
-		queryHistory.getQuery().add(0, queryInfo);
+		// search for existing query based on hash of parameters
+		int queryIndex = -1;
+		for(int i = 0; i < queryHistory.getQuery().size(); i++) {
+			final QueryInfoType current = queryHistory.getQuery().get(i);
+			if(current.getHash().equalsIgnoreCase(queryInfo.getHash())) {
+				queryIndex = i;
+				break;
+			}
+		}
+		QueryInfoType qi = (queryIndex >= 0 ? queryHistory.getQuery().remove(queryIndex) : queryInfo);
+		if(queryIndex >= 0) {
+			qi.setDate(queryInfo.getDate());
+		}
+		qi.setParams(queryInfo.getParams());
+		queryHistory.getQuery().add(qi);
 		
 		while(queryHistory.getQuery().size() > getHistoryMaxLength()) {
 			retVal.add(queryHistory.getQuery().remove(queryHistory.getQuery().size()-1));

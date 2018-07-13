@@ -161,9 +161,9 @@ public class QueryRunnerPanel extends JPanel {
 			final String tmpFolder = System.getProperty("java.io.tmpdir");
 			final String tmpProjectFolder =
 					tmpFolder + File.separator + "phon-" + Long.toHexString(uuid.getLeastSignificantBits());
-//			tempProjectFile.mkdirs();
 			final ProjectFactory factory = new DefaultProjectFactory();
 			tempProject = factory.createProject(new File(tmpProjectFolder));
+			tempProject.setName(project.getName());
 			
 			for(String corpusName:project.getCorpora()) {
 				tempProject.addCorpus(corpusName, "");

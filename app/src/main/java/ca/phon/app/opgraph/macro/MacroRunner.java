@@ -88,10 +88,7 @@ public class MacroRunner implements Runnable {
 				final NodeWizard wizard = wizardExt.createWizard(processor);
 				wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
 				wizard.pack();
-				int padding = 100;
-				wizard.setSize(
-						Toolkit.getDefaultToolkit().getScreenSize().width - padding, 
-						Toolkit.getDefaultToolkit().getScreenSize().height - padding);
+				wizard.setSize(1024, 768);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
 			});

@@ -236,6 +236,8 @@ public class ParamComponentFactory {
 		int numVisibleLines = Math.min(patternScriptParam.getMaxRows(), Math.max(lc, patternScriptParam.getMinRows()));
 		retVal.setRows(numVisibleLines);
 		
+		retVal.setCaretPosition(0);
+		
 		installParamListener(retVal, patternScriptParam);
 		installPatternParamListener(retVal, patternScriptParam);
 		

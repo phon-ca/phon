@@ -20,6 +20,8 @@ package ca.phon.script.params;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -231,6 +233,35 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 				}
 			}
 		}
+	}
+	
+	public String getHashString() {
+		final StringBuffer buffer = new StringBuffer();
+		for(ScriptParam param:this) {	
+			if(param instanceof SeparatorScriptParam) continue; // don't include separator collapsed state
+			for(String paramId:param.getParamIds()) {
+				buffer.append(paramId).append("=").append(param.getValue(paramId)).append("\n");
+			}
+		}
+		
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA1");
+			byte[] hash = digest.digest(buffer.toString().getBytes());
+			
+			buffer.setLength(0);
+			for(int i = 0; i < hash.length; i++) {
+				if((0xff & hash[i]) < 0x10) {
+					buffer.append('0');
+				}
+				buffer.append(Integer.toHexString(0xff & hash[i]));
+			}
+			return buffer.toString();
+		} catch (NoSuchAlgorithmException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		}
+		
+		// shouldn't get here!
+		return Integer.toHexString(buffer.hashCode());
 	}
 
 	@Override
