@@ -113,24 +113,6 @@ public class TestPhonex extends PhonexTest {
 	}
 	
 	@Test
-	public void testComment5() throws Exception {
-		final String text = "bbadd";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
-		
-		final String phonex = 
-				"(\\c) // First consonant\n"
-				+ "(\\c) // Second consonant";
-		PhonexPattern.compile(phonex);
-		
-		final IPATranscript[][] answers = {
-				{ ipa.subsection(0, 1), ipa.subsection(1, 2) },
-				{ ipa.subsection(3, 4), ipa.subsection(4, 5) }
-		};
-		
-		testGroups(ipa, phonex, answers);
-	}
-
-	@Test
 	public void testBacktracking() throws Exception {
 		final String phonex = "(\\c*\\v+\\c*)*";
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
