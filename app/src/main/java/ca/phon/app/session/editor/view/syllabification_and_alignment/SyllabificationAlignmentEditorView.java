@@ -92,7 +92,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	// components
 	private final List<SyllabificationDisplay> targetDisplays = new ArrayList<SyllabificationDisplay>();
 	private final List<SyllabificationDisplay> actualDisplays = new ArrayList<SyllabificationDisplay>();
-	private final List<PhoneMapDisplay> alignmentDisplayus = new ArrayList<PhoneMapDisplay>();
+	private final List<PhoneMapDisplay> alignmentDisplays = new ArrayList<PhoneMapDisplay>();
 
 	public SyllabificationAlignmentEditorView(SessionEditor editor) {
 		super(editor);
@@ -231,12 +231,12 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	private PhoneMapDisplay getAlignmentDisplay(int group) {
 		PhoneMapDisplay retVal = null;
-		if(group < alignmentDisplayus.size()) {
-			retVal = alignmentDisplayus.get(group);
+		if(group < alignmentDisplays.size()) {
+			retVal = alignmentDisplays.get(group);
 		} else {
 			retVal = new PhoneMapDisplay();
 			retVal.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, alignmentDisplayListener);
-			alignmentDisplayus.add(retVal);
+			alignmentDisplays.add(retVal);
 		}
 		return retVal;
 	}
@@ -248,7 +248,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			final AlignmentChangeData newVal = (AlignmentChangeData)evt.getNewValue();
 			final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
 
-			final int gIdx = alignmentDisplayus.indexOf(display);
+			final int gIdx = alignmentDisplays.indexOf(display);
 
 			final SyllabificationDisplay tDisplay = targetDisplays.get(gIdx);
 			final SyllabificationDisplay aDisplay = actualDisplays.get(gIdx);
@@ -274,7 +274,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		if(record == null) return;
 
 		int maxExtra = Math.max(targetDisplays.size(), actualDisplays.size());
-		maxExtra = Math.max(maxExtra, alignmentDisplayus.size());
+		maxExtra = Math.max(maxExtra, alignmentDisplays.size());
 		contentPane.removeAll();
 
 		final ImageIcon reloadIcn = IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
@@ -385,6 +385,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				final PhoneMapDisplay pmDisplay = getAlignmentDisplay(gIndex);
 				pmDisplay.setFont(FontPreferences.getTierFont());
 				pmDisplay.setPhoneMapForGroup(0, pm);
+				pmDisplay.setFocusedPosition(0);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
 
 				if(!layout.hasLayoutComponent(pmDisplay)) {
@@ -447,7 +448,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 					found = true;
 				}
 				if(found) {
-					alignmentDisplayus.get(i).repaint();
+					alignmentDisplays.get(i).repaint();
 					return;
 				}
 			}

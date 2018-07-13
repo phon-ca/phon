@@ -44,7 +44,7 @@ exports.PatternFilter = function (id) {
 
 	var filterParamInfo = {
 		"id": id + ".filter",
-		"title": "Expression: (Press Ctrl+Space to show autocomplete options)",
+		"title": "Expression:",
 		"prompt": "Enter expression",
 		"def": ""
 	};
@@ -358,6 +358,9 @@ exports.PatternFilter = function (id) {
 
 		params.add(filterTypeParam);
 		params.add(filterParam);
+
+		var lblParam = new LabelScriptParam("<html><p style='font-size: small;'>(Press Ctrl+Space to show autocomplete options)</p></html>", "");
+		params.add(lblParam);
 
 		params.add(matchGroupParam);
 	};

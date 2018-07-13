@@ -37,7 +37,7 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 		"\\c", "Any consonant",
 		"\\v", "Any vowel",
 		"\\s", "Stress (primary or secondary)",
-		"\\w", "Any word character (i.e., consonants, vowels, syllable boundaries, and stress)",
+		"\\w", "Any consonant or vowel - same as [\\c\\v]",
 		"\\W", "Any non-word character - same as [^\\w]",
 		"\\b", "Word boundary including beginning of input, end of input, and whitespace.",
 		"\\S", "A syllable boundary including implicit boundaries",
@@ -317,6 +317,11 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 				scCompletion.setShortDescription(scType.name().toLowerCase());
 				scTypeCompletions.add(scCompletion);
 			}
+			// add diphthong
+			final BasicCompletion scCompletion = new BasicCompletion(this, ":D");
+			scCompletion.setRelevance(SCTYPE_RELEVANCE + SyllableConstituentType.values().length - SyllableConstituentType.NUCLEUS.ordinal());
+			scCompletion.setShortDescription("diphthong");
+			scTypeCompletions.add(scCompletion);
 		}
 		return scTypeCompletions;
 	}

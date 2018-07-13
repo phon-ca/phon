@@ -264,7 +264,11 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 
 		private void printValue(Object value) {
 			if(value == null || value.toString().length() == 0) return;
-			buffer.append("__").append(value).append("__");
+			if(value.toString().contains("\n")) {
+				buffer.append("\n```\n").append(value).append("\n```\n");
+			} else {
+				buffer.append("```").append(value).append("```");
+			}
 		}
 
 		private boolean checkIncludeParam(ScriptParam param) {

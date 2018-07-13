@@ -88,6 +88,7 @@ public class AutoTranscriptionForm extends JPanel {
 		setIPATargetBox.setSelected(true);
 
 		setIPAActualBox = new JCheckBox("IPA Actual");
+		setIPAActualBox.setSelected(true);
 
 		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
 
