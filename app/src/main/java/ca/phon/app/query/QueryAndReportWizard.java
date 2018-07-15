@@ -364,12 +364,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		showResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/right-arrow-white", IconSize.SMALL));
 		showResultsButton = new JButton(showResultsAct);
 		showResultsButton.setBorderPainted(false);
+		showResultsButton.setOpaque(false);
 		
 		final PhonUIAction showSessionSelectorAct = new PhonUIAction(this, "showSessionSelector");
 		showSessionSelectorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show session selector");
 		showSessionSelectorAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/left-arrow-white", IconSize.SMALL));
 		showSessionsButton = new JButton(showSessionSelectorAct);
 		showSessionsButton.setBorderPainted(false);
+		showSessionsButton.setOpaque(false);
 		
 		final JPanel sessionSelectorRightDecoration = new JPanel(new HorizontalLayout());
 		sessionSelectorRightDecoration.setOpaque(false);
@@ -413,6 +415,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		discardResultsButton = new JButton(discardResultsAct);
 		discardResultsButton.setBorderPainted(false);
 		discardResultsButton.setEnabled(false);
+		discardResultsButton.setOpaque(false);
 		
 		final JPanel queryResultsRightDecoration = new JPanel(new HorizontalLayout());
 		queryResultsRightDecoration.setOpaque(false);
@@ -446,6 +449,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 		saveQuerySettingsButton = new JButton(saveSettingsAct);
+		saveQuerySettingsButton.setOpaque(false);
 		
 		queryPanel = new TitledPanel("Query");
 		queryPanel.getContentContainer().setLayout(new BorderLayout());
@@ -456,12 +460,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/parameters-black", IconSize.SMALL));
 		resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset query parameters to default");
 		resetQueryButton = new JButton(resetQueryAct);
+		resetQueryButton.setOpaque(false);
 		
 		final PhonUIAction runAct = new PhonUIAction(QueryAndReportWizard.this, "executeQuery");
 		runAct.putValue(PhonUIAction.NAME, "Run query");
 		runAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		runAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		runQueryButton = new JButton(runAct);
+		runQueryButton.setOpaque(false);
 		
 		queryHistoryPanel = new QueryHistoryPanel(queryHistory, scriptPanel);
 		if(queryHistory.getQuery().size() > 0)
