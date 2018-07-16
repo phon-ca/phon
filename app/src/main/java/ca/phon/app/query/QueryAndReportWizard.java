@@ -218,6 +218,7 @@ public class QueryAndReportWizard extends NodeWizard {
 					public void menuSelected(MenuEvent e) {
 						super.menuSelected(e);
 						
+						int idx = 0;
 						final PhonUIAction runAct = new PhonUIAction(QueryAndReportWizard.this, "executeQuery");
 						runAct.putValue(PhonUIAction.NAME, "Run query");
 						runAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
@@ -285,14 +286,35 @@ public class QueryAndReportWizard extends NodeWizard {
 							}
 						});
 						
-						menu.addSeparator();
-						menu.add(new JMenuItem(saveSettingsAct));
-						menu.add(new JMenuItem(resetQueryAct));
-						menu.add(new JMenuItem(runAct));
-						menu.add(stopItem);
-						menu.addSeparator();
-						menu.add(discardResultsItem);
-						menu.add(queryResultsMenu);
+						final PhonUIAction historyPrevAct = new PhonUIAction(queryHistoryPanel, "goPrevious");
+						historyPrevAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
+						historyPrevAct.putValue(PhonUIAction.NAME, "View previous entry in query history");
+						
+						final PhonUIAction historyNextAct = new PhonUIAction(queryHistoryPanel, "goNext");
+						historyNextAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL));
+						historyNextAct.putValue(PhonUIAction.NAME, "View next entry in query history");
+						
+						final PhonUIAction goFirstAct = new PhonUIAction(queryHistoryPanel, "gotoFirst");
+						goFirstAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
+						goFirstAct.putValue(PhonUIAction.NAME, "View oldest entry in query history");
+						
+						final PhonUIAction goLastAct = new PhonUIAction(queryHistoryPanel, "gotoLast");
+						goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
+						goLastAct.putValue(PhonUIAction.NAME, "View most recent entry in query history");					
+						
+						menu.add(new JMenuItem(saveSettingsAct), idx++);
+						menu.add(new JMenuItem(resetQueryAct), idx++);
+						menu.add(new JMenuItem(runAct), idx++);
+						menu.add(stopItem, idx++);
+						menu.insertSeparator(idx++);
+						menu.add(discardResultsItem, idx++);
+						menu.add(queryResultsMenu, idx++);
+						menu.insertSeparator(idx++);
+						menu.add(new JMenuItem(goFirstAct), idx++);
+						menu.add(new JMenuItem(historyPrevAct), idx++);
+						menu.add(new JMenuItem(historyNextAct), idx++);
+						menu.add(new JMenuItem(goLastAct), idx++);
+						menu.insertSeparator(idx++);
 					}
 					
 					@Override

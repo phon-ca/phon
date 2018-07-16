@@ -79,11 +79,11 @@ public class QueryHistoryPanel extends JPanel {
 		
 		final PhonUIAction goFirstAct = new PhonUIAction(this, "gotoFirst");
 		goFirstAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
-		goFirstAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View oldest query in history");
+		goFirstAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View oldest entry in query history");
 		
 		final PhonUIAction goLastAct = new PhonUIAction(this, "gotoLast");
 		goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
-		goLastAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View most recent query in history");
+		goLastAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View most recent entry in query history");
 		
 		SegmentedButtonBuilder<JButton> segButtonBuilder = new SegmentedButtonBuilder<>(JButton::new);
 		ButtonGroup bg = new ButtonGroup();
@@ -106,12 +106,15 @@ public class QueryHistoryPanel extends JPanel {
 		lastButton = buttons.get(3);
 		lastButton.setAction(goLastAct);
 		
-		setLayout(new HorizontalLayout());
+		JPanel buttonPanel = new JPanel(new HorizontalLayout(0));
+		buttonPanel.add(firstButton);
+		buttonPanel.add(prevButton);
+		buttonPanel.add(nextButton);
+		buttonPanel.add(lastButton);
+		
+		setLayout(new HorizontalLayout(5));
 		add(label);
-		add(firstButton);
-		add(prevButton);
-		add(nextButton);
-		add(lastButton);
+		add(buttonPanel);
 	}
 	
 	public void gotoFirst() {
