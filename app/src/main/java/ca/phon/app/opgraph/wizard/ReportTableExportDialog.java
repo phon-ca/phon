@@ -54,7 +54,6 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	
 	private ReportTableCheckboxTree reportTableCheckboxTree;
 	
-	private TitledPanel reportPanel;
 	private JXBusyLabel busyLabel;
 	private ReportTree reportTree;
 	
@@ -112,7 +111,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		} );
 		
 		customOptionsPanel = new JPanel();
-		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(exportButton, cancelButton, openAfterExportBox);
+		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(exportButton, cancelButton, busyLabel, openAfterExportBox);
 		
 		final JPanel bottomPanel = new JPanel(new VerticalLayout());
 		bottomPanel.add(customOptionsPanel);

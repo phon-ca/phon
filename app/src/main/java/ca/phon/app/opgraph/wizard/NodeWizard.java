@@ -424,10 +424,10 @@ public class NodeWizard extends WizardFrame {
 			if(hasReport && !reportSaved) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
-				final String[] options = new String[] { "Close without saving", "Save Report as HTML", "Export Report to Excel\u2122", "Cancel" };
-				props.setTitle("Save Results");
-				props.setHeader("Save Results");
-				props.setMessage("Save results before closing?");
+				final String[] options = MessageDialogProperties.okCancelOptions;
+				props.setTitle("Close");
+				props.setHeader("Close window");
+				props.setMessage("Discard results and close window?");
 				props.setRunAsync(true);
 				props.setOptions(options);
 				props.setDefaultOption(options[0]);
@@ -436,10 +436,6 @@ public class NodeWizard extends WizardFrame {
 					final int result = e.getDialogResult();
 					if(result == 0) {
 						SwingUtilities.invokeLater( () -> super.close() );
-					} else if(result == 1) {
-						SwingUtilities.invokeLater( this::saveReportAsHTML );
-					} else if(result == 2) {
-						SwingUtilities.invokeLater( this::saveReportAsExcel );
 					} else if(result == 3) {
 						return;
 					}
@@ -455,24 +451,6 @@ public class NodeWizard extends WizardFrame {
 		return bufferPanel.getBufferNames().contains("Report");
 	}
 	
-	private void saveReportAsHTML() {
-		final SaveBufferAction saveBufferAct = new SaveBufferAction(getBufferPanel(), "Report");
-		SwingUtilities.invokeLater( () -> {
-			saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "save"));
-			reportSaved = true;
-//			super.close();
-		});
-	}
-
-	private void saveReportAsExcel() {
-		final SaveBufferAsWorkbookAction saveBufferAct = new SaveBufferAsWorkbookAction(getBufferPanel(), "Report");
-		SwingUtilities.invokeLater( () -> {
-			saveBufferAct.actionPerformed(new ActionEvent(NodeWizard.this, 0, "export"));
-			reportSaved = true;
-//			super.close();
-		});
-	}
-
 	private void setBounds(JButton endBtn) {
 		final Rectangle bounds =
 				new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1,
