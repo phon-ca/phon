@@ -580,6 +580,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private final static long CLIP_EXTENSION_MAX = 1000L;
 
 	public void update() {
+		update(false);
+	}
+	
+	public void update(boolean force) {
 		Record utt = getEditor().currentRecord();
 		if(utt == null) return;
 
@@ -624,23 +628,34 @@ public class SpeechAnalysisEditorView extends EditorView {
 			if(segLength == 0.0f) {
 				// using a default display length of 3.0 seconds (or length of sampled)
 				displayLength = Math.min(3.0f, wavDisplay.getSampled().getLength());
-			}
-
-			if((displayStart + displayLength) > wavDisplay.getSampled().getLength()) {
-				displayStart = wavDisplay.getSampled().getLength() - displayLength;
-
-				if(displayStart < wavDisplay.getSampled().getStartTime()) {
-					displayStart = wavDisplay.getSampled().getStartTime();
-					displayLength = wavDisplay.getSampled().getLength();
+			} else if(segLength > 60.0f && !force) {
+				messageButton.setTopLabelText("<html><b>Segment not loaded</b></html>");
+				messageButton.setBottomLabelText("Segment length exceeds 60 seconds, click this message to force loading.");
+				messageButton.clearActions();
+				
+				final PhonUIAction forceUpdateAct = new PhonUIAction(this, "update", true);
+				messageButton.setDefaultAction(forceUpdateAct);
+				
+				wavDisplay.setVisible(false);
+				messageButton.setVisible(true);
+			} else {
+				if((displayStart + displayLength) > wavDisplay.getSampled().getLength()) {
+					displayStart = wavDisplay.getSampled().getLength() - displayLength;
+	
+					if(displayStart < wavDisplay.getSampled().getStartTime()) {
+						displayStart = wavDisplay.getSampled().getStartTime();
+						displayLength = wavDisplay.getSampled().getLength();
+					}
 				}
+	
+				wavDisplay.setWindowStart(displayStart);
+				wavDisplay.setWindowLength(displayLength);
+				wavDisplay.setSegmentStart(segStart);
+				wavDisplay.setSegmentLength(segLength);
+	
+				wavDisplay.setVisible(true);
+				messageButton.setVisible(false);
 			}
-
-			wavDisplay.setWindowStart(displayStart);
-			wavDisplay.setWindowLength(displayLength);
-			wavDisplay.setSegmentStart(segStart);
-			wavDisplay.setSegmentLength(segLength);
-
-			messageButton.setVisible(false);
 		} else {
 			messageButton.setTopLabelText("<html><b>Unable to open audio file</b></html>");
 			messageButton.clearActions();
