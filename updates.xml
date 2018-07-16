@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b2/">
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b2.sh" newVersion="3.0.0b2" newMediaFileId="linux64" fileSize="113069683" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b1
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b3/">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b3.sh" newVersion="3.0.0b3" newMediaFileId="linux64" fileSize="113323471" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -118,8 +138,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.exe" newVersion="3.0.0b2" newMediaFileId="win64" fileSize="220490240" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b3.exe" newVersion="3.0.0b3" newMediaFileId="win64" fileSize="220744192" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -236,8 +276,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.exe" newVersion="3.0.0b2" newMediaFileId="win64" fileSize="220490240" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b3.exe" newVersion="3.0.0b3" newMediaFileId="win64" fileSize="220744192" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -354,8 +414,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.exe" newVersion="3.0.0b2" newMediaFileId="win64" fileSize="220490240" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b3.exe" newVersion="3.0.0b3" newMediaFileId="win64" fileSize="220744192" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -472,8 +552,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b2.zip" newVersion="3.0.0b2" newMediaFileId="win64zip" fileSize="219527289" bundledJre="windows-amd64-9.0.4" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b3.zip" newVersion="3.0.0b3" newMediaFileId="win64zip" fileSize="219781134" bundledJre="windows-amd64-9.0.4" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -590,8 +690,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b2.deb" newVersion="3.0.0b2" newMediaFileId="linux64deb" fileSize="113248790" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b3.deb" newVersion="3.0.0b3" newMediaFileId="linux64deb" fileSize="113490042" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -708,8 +828,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b2.dmg" newVersion="3.0.0b2" newMediaFileId="macos" fileSize="208164778" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b3.dmg" newVersion="3.0.0b3" newMediaFileId="macos" fileSize="208422946" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
@@ -826,8 +966,28 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b2.dmg" newVersion="3.0.0b2" newMediaFileId="macos" fileSize="208164778" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 3.0.0b1
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b3.dmg" newVersion="3.0.0b3" newMediaFileId="macos" fileSize="208422946" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
 
  * Fixed issue with audio playback in the Speech Analysis view
  * Added support for 24/32-bit WAV file playback in Speech Analysis view
