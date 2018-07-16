@@ -1,0 +1,717 @@
+
+<!DOCTYPE html
+  PUBLIC "" "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" xml:lang="en-us" lang="en-us">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />        
+      <meta name="copyright" content="(C) Copyright 2018" /><meta name="DC.rights.owner" content="(C) Copyright 2018" /><meta name="DC.Type" content="concept" /><meta name="DC.Title" content="Phonex Constructs" /><meta name="abstract" content="A summary of phonex constructs." /><meta name="description" content="A summary of phonex constructs." /><meta name="DC.Format" content="XHTML" /><meta name="DC.Identifier" content="concept_tpv_vc3_gg" /><title>Phonex Constructs</title><!--  Generated with Oxygen version 20.0-SNAPSHOT, build number 2018032809.  --><meta name="wh-path2root" content="../../" />
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Latest compiled and minified Bootstrap CSS -->
+        <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" />
+
+        <!-- Bootstrap Optional theme -->
+        <link rel="stylesheet" href="../../oxygen-webhelp/lib/bootstrap/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="../../oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" />
+
+        <!-- Template default styles  -->
+        <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/app/topic-page.css?buildId=2018032809" />
+        
+
+        <script type="text/javascript" src="../../oxygen-webhelp/lib/jquery/jquery-3.1.1.min.js"><!----></script>
+
+        <script data-main="../../oxygen-webhelp/app/topic-page.js" src="../../oxygen-webhelp/lib/requirejs/require.js"></script>
+        
+        <!-- Skin resources -->
+        <link rel="stylesheet" type="text/css" href="../../oxygen-webhelp/template/oxygen.css?buildId=2018032809" />
+        <!-- EXM-36950 - Expand the args.hdf parameter here -->
+        
+        <script type="text/javascript">
+$(document).ready( function () {
+	// add custom js to head element
+	var headEle = document.getElementsByTagName("head")[0];
+	
+	var origin = window.location.origin;
+	var pathname = window.location.pathname;
+	
+	var manualRootIdx = (origin == "file://" 
+		? pathname.lastIndexOf("webhelp-responsive") + ("webhelp-responsive").length 
+		: pathname.lastIndexOf("phon-manual") + ("phon-manual").length );
+	var customJSUrl = origin + "/" + pathname.substring(0, manualRootIdx) + "/js/custom_js.js";
+	
+	var scriptEle = document.createElement("script");
+	scriptEle.setAttribute("src", customJSUrl);
+	scriptEle.setAttribute("type", "text/javascript");
+	
+	headEle.appendChild(scriptEle);
+});
+</script>
+    <link rel="stylesheet" type="text/css" href="../../webhelp.css" /></head>
+
+    <body class="wh_topic_page frmBody" id="concept_tpv_vc3_gg">
+        <!-- EXM-36950 - Expand the args.hdr parameter here -->
+        
+        
+        
+<nav class="navbar navbar-default wh_header">
+    <div class="container-fluid">
+        <div class="wh_header_flex_container">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <!--
+                            This component will be generated when the next parameters are specified in the transformation scenario:
+                            'webhelp.logo.image' and 'webhelp.logo.image.target.url'.
+                            See: http://oxygenxml.com/doc/versions/17.1/ug-editor/#topics/dita_webhelp_output.html.
+                    -->
+                    <a href="../../index.html" class=" wh_logo hidden-xs "><img src="../../images/database-phon.png" alt="  Phon  " /></a>
+                    <div class=" wh_publication_title "><a href="../../index.html"><span class="booktitle">  <span class="ph mainbooktitle">Phon</span>  </span></a></div>
+                    
+                </div>
+                
+                <!-- The menu button for mobile devices is copied in the output only when the 'webhelp.show.top.menu' parameter is set to 'yes' -->
+                <button type="button" data-target=".wh_top_menu_and_indexterms_link" id="wh_menu_mobile_button" data-toggle="collapse" class="navbar-toggle collapsed wh_toggle_button">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse">
+                
+                <div class=" wh_top_menu "><ul>
+   <li class="has-children"><span data-tocid="getting_started-d46e17" data-state="not-ready" class=" topicref "><span class="title"><a href="../../misc/Welcome.html" data-id="getting_started">Getting Started</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d46e41" data-state="not-ready" class=" topicref "><span class="title"><a href="../../welcome/welcome_window.html">User Interface</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d46e1618" data-state="not-ready" class=" topicref "><span class="title"><a href="../../ipa/concepts/phone.html">IPA Transcription</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d46e1727" data-state="not-ready" class=" topicref "><span class="title"><a href="../../phonex/phonex_introduction.html">Phonex</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d46e1937" data-state="not-ready" class=" topicref "><span class="title"><a href="../../query/query-data_tiers.html">Queries</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d46e2281" data-state="not-ready" class=" topicref "><span class="title"><a href="../../analysis/PPC.html">Analyses</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d46e2364" data-state="not-ready" class=" topicref "><span class="title"><a href="../../chat/phontalk.html">CHAT Support</a></span></span></li>
+</ul></div>
+                
+                <div id="wh_download_links">
+    <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
+    <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/2.1.8">Phon 2.1.8 (stable)</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.0.0b2">Phon 3.0.0b2 (beta)</a>
+    <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
+</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+        <div class=" wh_search_input "><form id="searchForm" method="get" action="../../search.html"><div><input type="search" placeholder="Search " class="wh_search_textfield" id="textToSearch" name="searchQuery" /><button type="submit" class="wh_search_button"><span>Search</span></button></div><script><!--
+                                    $(document).ready(function () {
+                                        $('#searchForm').submit(function (e) {
+                                            if ($('.wh_search_textfield').val().length < 1) {
+                                                e.preventDefault();
+                                            }
+                                        });
+                                    });
+                                --></script></form></div>
+        
+        <div class="container-fluid">
+            <div class="row">
+
+                <nav class="wh_tools hidden-print">
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "></div>
+
+                    <div class="wh_right_tools hidden-sm hidden-xs">
+                        <div class=" wh_navigation_links "><span id="topic_navigation_links" class="navheader"></span></div>
+                        <button class="wh_hide_highlight" title="Toggle search highlights"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" title="Collapse sections"></button>
+                        <div class=" wh_print_link print "><a href="javascript:window.print();" title="Print this page"></a></div>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                    
+                    <div id="wh_topic_body" class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+                        <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
+ <h1 class="title topictitle1" id="ariaid-title1">Phonex Constructs</h1>
+
+ 
+ <div class="body conbody"><p class="shortdesc">A summary of phonex constructs.</p>
+
+  <div class="p">
+   
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_ksg_pd3_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 1. </span>Phone matchers</span></caption><colgroup><col style="width:22.522522522522525%" /><col style="width:77.47747747747749%" /></colgroup><thead class="thead" style="text-align:left;">
+      <tr>
+       <th class="entry nocellnorowborder" id="d62190e35">Construct</th>
+
+       <th class="entry cell-norowborder" id="d62190e38">Matches</th>
+
+      </tr>
+
+     </thead>
+<tbody class="tbody">
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 "><em class="ph i">x</em></td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The phone <em class="ph i">x</em>. Matches regardless of diacritics.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 "><em class="ph i">x</em>_<em class="ph i">y</em></td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The compound phone consisting of phones matched by <em class="ph i">x</em> and <em class="ph i">y</em>.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 ">\u<em class="ph i">nnnn</em></td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The phone with unicode value <em class="ph i">nnnn</em> as a hexadecimal number.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 ">\*</td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The * cover symbol.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 ">\.</td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The . syllable boundary marker.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 ">\+</td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The + compound word marker.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 ">\^</td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The ^ intra-word pause maker.</td>
+
+      </tr>
+
+      <tr>
+       <td class="entry nocellnorowborder" headers="d62190e35 ">'<em class="ph i">s</em>'</td>
+
+       <td class="entry cell-norowborder" headers="d62190e38 ">The phone with text that matches the regular expression <em class="ph i">s</em></td>
+
+      </tr>
+
+      <tr>
+       <td class="entry row-nocellborder" headers="d62190e35 ">{<em class="ph i">f<sub class="ph sub">0</sub></em>, <em class="ph i">f<sub class="ph sub">1</sub></em>..., <em class="ph i">f<sub class="ph sub">n</sub></em>}</td>
+
+       <td class="entry cellrowborder" headers="d62190e38 ">The phone with features <em class="ph i">f<sub class="ph sub">0</sub></em> ... <em class="ph i">f<sub class="ph sub">n</sub></em></td>
+
+      </tr>
+
+     </tbody>
+</table>
+</div>
+
+  </div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_hln_dzl_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 2. </span>Grouping</span></caption><colgroup><col style="width:21.978021978021978%" /><col style="width:78.02197802197803%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e195">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e198">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e195 ">(<em class="ph i">X</em>)</td>
+
+      <td class="entry cell-norowborder" headers="d62190e198 "><em class="ph i">X</em>, as a <em class="ph i">capturing</em> group</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e195 ">(<em class="ph i">X</em>|<em class="ph i">Y</em>)</td>
+
+      <td class="entry cell-norowborder" headers="d62190e198 "><em class="ph i">X</em> or Y, as a <em class="ph i">capturing</em> group</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e195 ">(?=<em class="ph i">X</em>)</td>
+
+      <td class="entry cell-norowborder" headers="d62190e198 "><em class="ph i">X</em>, as a <em class="ph i">non-capturing</em> group</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e195 ">(<em class="ph i">name</em>=<em class="ph i">X</em>)</td>
+
+      <td class="entry cell-norowborder" headers="d62190e198 "><em class="ph i">X</em>, as a <em class="ph i">named, capturing</em> group. <em class="ph i">name</em> may consist of letters and
+       numbers, but must start with a letter.</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e195 ">\<em class="ph i">n</em></td>
+
+      <td class="entry cell-norowborder" headers="d62190e198 "> The content matched by group <em class="ph i">n</em></td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e195 ">(?&lt;<em class="ph i">X</em>)</td>
+
+      <td class="entry cell-norowborder" headers="d62190e198 ">Look behind and match <em class="ph i">X</em> as a non-capturing group</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e195 ">(?&gt;<em class="ph i">X</em>)</td>
+
+      <td class="entry cellrowborder" headers="d62190e198 ">Look ahead and match <em class="ph i">X</em> as a non-capturing group</td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_zpv_d23_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 3. </span>Phone classes</span></caption><colgroup><col style="width:22.522522522522525%" /><col style="width:77.47747747747749%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e345">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e348">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e345 ">[<em class="ph i">xyz</em>]</td>
+
+      <td class="entry cell-norowborder" headers="d62190e348 "><em class="ph i">x</em>, <em class="ph i">y</em>, or <em class="ph i">z</em></td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e345 ">[^<em class="ph i">xyz</em>]</td>
+
+      <td class="entry cellrowborder" headers="d62190e348 ">Not <em class="ph i">x</em>, <em class="ph i">y</em>, or <em class="ph i">z</em></td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_jmg_s23_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 4. </span>Predefined phone classes</span></caption><colgroup><col style="width:22.522522522522525%" /><col style="width:77.47747747747749%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e413">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e416">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">.</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Anything</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\c</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any consonant</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\g</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any glide</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\v</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any vowel</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\p</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any intra-word pause (i.e., ^)</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\P</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any inter-word pause (e.g., (.), (..), …)</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\w</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any word character (i.e., consonants, vowels, syllable boundaries, and syllable
+       stress)</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e413 ">\W</td>
+
+      <td class="entry cell-norowborder" headers="d62190e416 ">Any non-word character (i.e., any character not matched by \w, e.g., same as
+        [^\w])</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e413 ">\s</td>
+
+      <td class="entry cellrowborder" headers="d62190e416 ">Any stress marker</td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_xnd_df3_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 5. </span>Boundary matchers</span></caption><colgroup><col style="width:22.371364653243845%" /><col style="width:77.62863534675614%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e524">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e527">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e524 ">^</td>
+
+      <td class="entry cell-norowborder" headers="d62190e527 ">Beginning of input</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e524 ">$</td>
+
+      <td class="entry cell-norowborder" headers="d62190e527 ">End of input</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e524 ">\b</td>
+
+      <td class="entry cell-norowborder" headers="d62190e527 ">A word boundary including beginning of input, end of input, and whitespace.</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e524 ">\S</td>
+
+      <td class="entry cellrowborder" headers="d62190e527 ">A syllable boundary including 'forced' syllable boundaries such as beginning of input,
+       end of input, and whitespace; and, if syllable constituent types are available, 'soft'
+       syllable boundaries detected at syllable edges.</td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_gtc_wcm_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 6. </span>Plug-ins</span></caption><colgroup><col style="width:21.978021978021978%" /><col style="width:78.02197802197803%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e590">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e593">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e590 "><em class="ph i">x</em>:<em class="ph i">plugin</em>('<em class="ph i">s</em>')</td>
+
+      <td class="entry cell-norowborder" headers="d62190e593 "><em class="ph i">x</em> if, and only if, the plug-in matcher identified by <em class="ph i">plugin</em> matches with
+       expression <em class="ph i">s</em></td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e590 "><em class="ph i">x</em>&amp;<em class="ph i">y</em></td>
+
+      <td class="entry cell-norowborder" headers="d62190e593 "><em class="ph i">x</em> if, and only if, a diacritic attached to <em class="ph i">x</em> matches the expression
+        <em class="ph i">y</em>.  (e.g., <em class="ph i">h&amp;{aspirated}</em>will match all 'h's with aspirated
+       diacritics.)</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e590 "><em class="ph i">x</em>ː</td>
+
+      <td class="entry cell-norowborder" headers="d62190e593 ">Same as <em class="ph i">x&amp;{long}</em>.</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e590 "><em class="ph i">x</em>!<em class="ph i">s</em></td>
+
+      <td class="entry cellrowborder" headers="d62190e593 "><em class="ph i">x</em> if, and only if, the syllable stress of the phone matches <em class="ph i">s</em>. </td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_2cd_zf3_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 7. </span>Quantifiers (greedy)</span></caption><colgroup><col style="width:22.421524663677133%" /><col style="width:77.57847533632287%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e699">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e702">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e699 "><em class="ph i">X</em>?</td>
+
+      <td class="entry cell-norowborder" headers="d62190e702 "><em class="ph i">X</em>, once or not at all</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e699 "><em class="ph i">X</em>*</td>
+
+      <td class="entry cell-norowborder" headers="d62190e702 "><em class="ph i">X</em>, zero or more times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e699 "><em class="ph i">X</em>+</td>
+
+      <td class="entry cell-norowborder" headers="d62190e702 "><em class="ph i">X</em>, one or more times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e699 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>&gt;</td>
+
+      <td class="entry cell-norowborder" headers="d62190e702 "><em class="ph i">X</em>, exactly <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e699 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>,&gt;</td>
+
+      <td class="entry cell-norowborder" headers="d62190e702 "><em class="ph i">X</em>, at least <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e699 "><em class="ph i">X</em>&lt;,<em class="ph i">n</em>&gt;</td>
+
+      <td class="entry cell-norowborder" headers="d62190e702 "><em class="ph i">X</em>, zero to <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e699 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>,<em class="ph i">m</em>&gt;</td>
+
+      <td class="entry cellrowborder" headers="d62190e702 "><em class="ph i">X</em>, at least <em class="ph i">n</em> but not more than <em class="ph i">m</em> times</td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_lgt_rxt_gg" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 8. </span>Quantifiers (reluctant)</span></caption><colgroup><col style="width:21.978021978021978%" /><col style="width:78.02197802197803%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e850">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e853">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e850 "><em class="ph i">X</em>??</td>
+
+      <td class="entry cell-norowborder" headers="d62190e853 "><em class="ph i">X</em>, once or not at all</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e850 "><em class="ph i">X</em>*?</td>
+
+      <td class="entry cell-norowborder" headers="d62190e853 "><em class="ph i">X</em>, zero or more times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e850 "><em class="ph i">X</em>+?</td>
+
+      <td class="entry cell-norowborder" headers="d62190e853 "><em class="ph i">X</em>, one or more times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e850 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>&gt;?</td>
+
+      <td class="entry cell-norowborder" headers="d62190e853 "><em class="ph i">X</em>, exactly <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e850 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>,&gt;?</td>
+
+      <td class="entry cell-norowborder" headers="d62190e853 "><em class="ph i">X</em>, at least <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e850 "><em class="ph i">X</em>&lt;,<em class="ph i">n</em>&gt;?</td>
+
+      <td class="entry cell-norowborder" headers="d62190e853 "><em class="ph i">X</em>, zero to <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e850 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>,<em class="ph i">m</em>&gt;?</td>
+
+      <td class="entry cellrowborder" headers="d62190e853 "><em class="ph i">X</em>, at least <em class="ph i">n</em> but not more than <em class="ph i">m</em> times</td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+  <div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="concept_tpv_vc3_gg__table_qxw_hj1_3g" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap"><span class="table--title-label">Table 9. </span>Quantifiers (possessive)</span></caption><colgroup><col style="width:22.421524663677133%" /><col style="width:77.57847533632287%" /></colgroup><thead class="thead" style="text-align:left;">
+     <tr>
+      <th class="entry nocellnorowborder" id="d62190e1001">Construct</th>
+
+      <th class="entry cell-norowborder" id="d62190e1004">Matches</th>
+
+     </tr>
+
+    </thead>
+<tbody class="tbody">
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e1001 "><em class="ph i">X</em>?+</td>
+
+      <td class="entry cell-norowborder" headers="d62190e1004 "><em class="ph i">X</em>, once or not at all</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e1001 "><em class="ph i">X</em>*+</td>
+
+      <td class="entry cell-norowborder" headers="d62190e1004 "><em class="ph i">X</em>, zero or more times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e1001 "><em class="ph i">X</em>++</td>
+
+      <td class="entry cell-norowborder" headers="d62190e1004 "><em class="ph i">X</em>, one or more times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e1001 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>&gt;+</td>
+
+      <td class="entry cell-norowborder" headers="d62190e1004 "><em class="ph i">X</em>, exactly <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e1001 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>,&gt;+</td>
+
+      <td class="entry cell-norowborder" headers="d62190e1004 "><em class="ph i">X</em>, at least <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry nocellnorowborder" headers="d62190e1001 "><em class="ph i">X</em>&lt;,<em class="ph i">n</em>&gt;+</td>
+
+      <td class="entry cell-norowborder" headers="d62190e1004 "><em class="ph i">X</em>, zero to <em class="ph i">n</em> times</td>
+
+     </tr>
+
+     <tr>
+      <td class="entry row-nocellborder" headers="d62190e1001 "><em class="ph i">X</em>&lt;<em class="ph i">n</em>,<em class="ph i">m</em>&gt;+</td>
+
+      <td class="entry cellrowborder" headers="d62190e1004 "><em class="ph i">X</em>, at least <em class="ph i">n</em> but not more than <em class="ph i">m</em> times</td>
+
+     </tr>
+
+    </tbody>
+</table>
+</div>
+</div>
+
+ </div>
+
+</article></main></div>
+                        
+                        
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div> <nav class="navbar navbar-default wh_footer">
+  <div class=" footer-container text-center ">
+    Generated by <a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank"> &lt;oXygen/&gt; XML WebHelp </a>
+  </div>
+</nav>
+
+        
+        <div id="go2top">
+            <span class="glyphicon glyphicon-chevron-up"></span>
+        </div>
+        
+        <!-- The modal container for images -->
+        <div id="modal_img_large" class="modal">
+            <span class="close glyphicon glyphicon-remove"></span>
+            <!-- Modal Content (The Image) -->
+            <img class="modal-content" id="modal-img" />
+            <!-- Modal Caption (Image Text) -->
+            <div id="caption"></div>
+        </div>
+        
+        <script src="../../oxygen-webhelp/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        
+    </body>
+</html>

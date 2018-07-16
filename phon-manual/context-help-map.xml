@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
    <appContext helpID="getting_started" path="misc/Welcome.html"/>
+   <appContext helpID="installing_phon" path="misc/install-linux.html"/>
    <appContext helpID="welcome_window" path="welcome/welcome_window.html"/>
    <appContext helpID="createProject" path="welcome/tasks/CreateProject.html"/>
    <appContext helpID="taskId" path="welcome/tasks/OpenProject.html"/>

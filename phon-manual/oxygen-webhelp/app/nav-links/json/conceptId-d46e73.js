@@ -1,0 +1,1 @@
+define({"topics" : [{"title":"Change Workspace Folder","shortdesc":"\n                     <p class=\"shortdesc\">Change the default workspace folder.</p>\n                  ","id":"taskId","href":"welcome\/tasks\/ChangeWorkspaceFolder.html","menu": {"hasChildren":false,},"tocID":"taskId-d46e81","topics":[]}]});
