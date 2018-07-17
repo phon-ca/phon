@@ -9,7 +9,7 @@
             <toc/>
         </booklists>
         <topicref href="misc/Welcome.md" format="markdown">
-            <topicref href="misc/install-linux.md" format="markdown"/>
+            <topicref href="misc/install.md" format="markdown"/>
         </topicref>
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
