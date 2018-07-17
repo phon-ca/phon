@@ -1,6 +1,6 @@
-# Syllable Decomposition
+# Syllables
 
-The following Phonex expression will decompose a syllable and store each component into it's own group.
+The following Phonex expression will match syllables and store each component into it's own group.
 
 ```
 /*
