@@ -3,20 +3,22 @@
 The following Phonex expression will match syllables and store each component into its own group.
 
 ```
-/*
- * Syllable decomposition
- */
-(S=\s)? // Stress
-(O= // Onset
-	(O1=\c:L:O)(O2=\c:L:O)(O3=\c:O) | (\c:L:O)(\c:O) | (\c:O)
+// Stress
+(S=\s)?
+// Onset
+(O=
+    (O1=\c:L:O)(O2=\c:L:O)(O3=\c:O) | (\c:L:O)(\c:O) | (\c:O)
 )?
-(R= // Rhyme
-	(N= // Nucleus
-		(N1=.:D)(N2=.:D) | (.:N)
-	)
-	(C= // Coda
-		(C1=\c:C)(C2=\c:C:R)(C3=\c:C:R) | (\c:C)(\c:C:R) | (\c:C)
-	)?
+// Rhyme
+(R=
+    // Nucleus
+    (N=
+        (N1=.:D)(N2=.:D) | (.:N)
+    )
+    // Coda
+    (C=
+        (C1=\c:C)(C2=\c:C:R)(C3=\c:C:R) | (\c:C)(\c:C:R) | (\c:C)
+    )?
 )
 ```
 
