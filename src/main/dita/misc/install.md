@@ -10,7 +10,7 @@ Download the newest .exe installer file from the [releases](https://github.com/p
 
 > Note: Phon 3.0+ only supports 64-bit operating systems.
 
-## Mac OS X
+##  macOS
 
 Download the newest .dmg file from the [releases](https://github.com/phon-ca/phon/releases) page.  After opening the disk image, drag Phon into your Applications folder.
 
