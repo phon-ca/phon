@@ -8,7 +8,9 @@
         <booklists>
             <toc/>
         </booklists>
-        <topicref href="misc/Welcome.md" format="markdown"/>
+        <topicref href="misc/Welcome.md" format="markdown">
+            <topicref href="misc/install-linux.md" format="markdown"/>
+        </topicref>
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.md" format="markdown">

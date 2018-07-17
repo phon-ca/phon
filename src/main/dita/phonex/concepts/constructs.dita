@@ -57,7 +57,51 @@
     </tgroup>
    </table>
   </p>
-  <table frame="all" id="table_zpv_d23_gg">
+  <p><table frame="all" id="table_hln_dzl_gg">
+   <title>Grouping</title>
+   <tgroup cols="2">
+    <colspec colname="c1" colnum="1" colwidth="1*"/>
+    <colspec colname="c2" colnum="2" colwidth="3.55*"/>
+    <thead>
+     <row>
+      <entry>Construct</entry>
+      <entry>Matches</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>(<i>X</i>)</entry>
+      <entry><i>X</i>, as a <i>capturing</i> group</entry>
+     </row>
+     <row>
+      <entry>(<i>X</i>|<i>Y</i>)</entry>
+      <entry><i>X</i> or Y, as a <i>capturing</i> group</entry>
+     </row>
+     <row>
+      <entry>(?=<i>X</i>)</entry>
+      <entry><i>X</i>, as a <i>non-capturing</i> group</entry>
+     </row>
+     <row>
+      <entry>(<i>name</i>=<i>X</i>)</entry>
+      <entry><i>X</i>, as a <i>named, capturing</i> group. <i>name</i> may consist of letters and
+       numbers, but must start with a letter.</entry>
+     </row>
+     <row>
+      <entry>\<i>n</i></entry>
+      <entry> The content matched by group <i>n</i></entry>
+     </row>
+     <row>
+      <entry>(?&lt;<i>X</i>)</entry>
+      <entry>Look behind and match <i>X</i> as a non-capturing group</entry>
+     </row>
+     <row>
+      <entry>(?><i>X</i>)</entry>
+      <entry>Look ahead and match <i>X</i> as a non-capturing group</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table></p>
+  <p><table frame="all" id="table_zpv_d23_gg">
    <title>Phone classes</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -79,8 +123,8 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_jmg_s23_gg">
+  </table></p>
+  <p><table frame="all" id="table_jmg_s23_gg">
    <title>Predefined phone classes</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -118,13 +162,12 @@
      </row>
      <row>
       <entry>\w</entry>
-      <entry>Any word character (i.e., consonants, vowels, syllable boundaries, and syllable
-       stress)</entry>
+      <entry>Any consonant or vowel.</entry>
      </row>
      <row>
       <entry>\W</entry>
       <entry>Any non-word character (i.e., any character not matched by \w, e.g., same as
-       [-\w])</entry>
+        [^\w])</entry>
      </row>
      <row>
       <entry>\s</entry>
@@ -132,8 +175,8 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_xnd_df3_gg">
+  </table></p>
+  <p><table frame="all" id="table_xnd_df3_gg">
    <title>Boundary matchers</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -165,8 +208,8 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_gtc_wcm_gg">
+  </table></p>
+  <p><table frame="all" id="table_gtc_wcm_gg">
    <title>Plug-ins</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -199,8 +242,8 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_2cd_zf3_gg">
+  </table></p>
+  <p><table frame="all" id="table_2cd_zf3_gg">
    <title>Quantifiers (greedy)</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -242,8 +285,8 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_lgt_rxt_gg">
+  </table></p>
+  <p><table frame="all" id="table_lgt_rxt_gg">
    <title>Quantifiers (reluctant)</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -285,8 +328,8 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_qxw_hj1_3g">
+  </table></p>
+  <p><table frame="all" id="table_qxw_hj1_3g">
    <title>Quantifiers (possessive)</title>
    <tgroup cols="2">
     <colspec colname="c1" colnum="1" colwidth="1*"/>
@@ -328,46 +371,6 @@
      </row>
     </tbody>
    </tgroup>
-  </table>
-  <table frame="all" id="table_hln_dzl_gg">
-   <title>Grouping</title>
-   <tgroup cols="2">
-    <colspec colname="c1" colnum="1" colwidth="1*"/>
-    <colspec colname="c2" colnum="2" colwidth="3.55*"/>
-    <thead>
-     <row>
-      <entry>Construct</entry>
-      <entry>Matches</entry>
-     </row>
-    </thead>
-    <tbody>
-     <row>
-      <entry>(<i>X</i>)</entry>
-      <entry><i>X</i>, as a <i>capturing</i> group</entry>
-     </row>
-     <row>
-      <entry>(?=<i>X</i>)</entry>
-      <entry><i>X</i>, as a <i>non-capturing</i> group</entry>
-     </row>
-     <row>
-      <entry>(<i>name</i>=<i>X</i>)</entry>
-      <entry><i>X</i>, as a <i>named, capturing</i> group. <i>name</i> may consist of letters and
-       numbers, but must start with a letter.</entry>
-     </row>
-     <row>
-      <entry>\<i>n</i></entry>
-      <entry> The content matched by group <i>n</i></entry>
-     </row>
-     <row>
-      <entry>(?&lt;<i>X</i>)</entry>
-      <entry>Look behind and match <i>X</i> as a non-capturing group</entry>
-     </row>
-     <row>
-      <entry>(?><i>X</i>)</entry>
-      <entry>Look ahead and match <i>X</i> as a non-capturing group</entry>
-     </row>
-    </tbody>
-   </tgroup>
-  </table>
+  </table></p>
  </conbody>
 </concept>
