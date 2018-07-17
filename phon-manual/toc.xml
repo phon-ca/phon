@@ -2030,11 +2030,19 @@
                <linktext class="- map/linktext ">Consonant Clusters</linktext>
             </topicmeta>
          </topic>
+         <topic href="phonex/examples/syllables.html" format="dita" data-id="syllables" wh-toc-id="syllables-d46e1928">
+            <title>Syllables</title>
+            <topicmeta>
+               <resourceid class="- topic/resourceid " oxy-source="topic" appid="syllables"></resourceid>
+               <navtitle class="- topic/navtitle ">Syllables</navtitle><?ditaot gentext?>
+               <linktext class="- map/linktext ">Syllables</linktext>
+            </topicmeta>
+         </topic>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1930">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1938">
       <title>Queries</title>
-      <topic href="query/query-data_tiers.html" format="dita" data-id="query_data_tiers" wh-toc-id="query_data_tiers-d46e1931">
+      <topic href="query/query-data_tiers.html" format="dita" data-id="query_data_tiers" wh-toc-id="query_data_tiers-d46e1939">
          <title>Query: Data Tiers</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="query_data_tiers"></resourceid>
@@ -2042,7 +2050,7 @@
             <linktext class="- map/linktext ">Query: Data Tiers</linktext>
          </topicmeta>
       </topic>
-      <topic href="query/query_phones.html" format="dita" data-id="query_phones" wh-toc-id="query_phones-d46e1939">
+      <topic href="query/query_phones.html" format="dita" data-id="query_phones" wh-toc-id="query_phones-d46e1947">
          <title>Query: Phones</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="query_phones"></resourceid>
@@ -2050,7 +2058,7 @@
             <linktext class="- map/linktext ">Query: Phones</linktext>
          </topicmeta>
       </topic>
-      <topic href="query/query_segmental_relations.html" format="dita" data-id="query_segmental_relations" wh-toc-id="query_segmental_relations-d46e1947">
+      <topic href="query/query_segmental_relations.html" format="dita" data-id="query_segmental_relations" wh-toc-id="query_segmental_relations-d46e1955">
          <title>Query: Segmental Relations</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="query_segmental_relations"></resourceid>
@@ -2058,9 +2066,9 @@
             <linktext class="- map/linktext ">Query: Segmental Relations</linktext>
          </topicmeta>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1955">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1963">
          <title>Common Query Options</title>
-         <topic href="query/tasks/GroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1956">
+         <topic href="query/tasks/GroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1964">
             <title>Group Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on position or an expression defining the word         group.</p>
@@ -2072,7 +2080,7 @@
                <shortdesc class="- map/shortdesc ">Limit the results based on position or an expression defining the word         group.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/AlignedGroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1967">
+         <topic href="query/tasks/AlignedGroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1975">
             <title>Aligned Group Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">You may also limit the results based on an expression defining an aligned word group         in another tier.</p>
@@ -2084,7 +2092,7 @@
                <shortdesc class="- map/shortdesc ">You may also limit the results based on an expression defining an aligned word group         in another tier.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/WordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1978">
+         <topic href="query/tasks/WordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1986">
             <title>Word Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on position or an expression defining the word.</p>
@@ -2096,7 +2104,7 @@
                <shortdesc class="- map/shortdesc ">Limit the results based on position or an expression defining the word.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/AlignedWordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1989">
+         <topic href="query/tasks/AlignedWordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1997">
             <title>Aligned Word Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">You may also limit the results based on an expression defining an aligned word in         another tier.</p>
@@ -2108,7 +2116,7 @@
                <shortdesc class="- map/shortdesc ">You may also limit the results based on an expression defining an aligned word in         another tier.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/SyllableFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2000">
+         <topic href="query/tasks/SyllableFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2008">
             <title>Syllable Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on position or an expression defining the         syllable.</p>
@@ -2120,7 +2128,7 @@
                <shortdesc class="- map/shortdesc ">Limit the results based on position or an expression defining the         syllable.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/ParticipantFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2011">
+         <topic href="query/tasks/ParticipantFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2019">
             <title>Participant Filter</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on participant information.</p>
@@ -2133,7 +2141,7 @@
             </topicmeta>
          </topic>
       </topic>
-      <topic href="query/tasks/ViewResultSet.html" data-id="taskId" wh-toc-id="taskId-d46e2022">
+      <topic href="query/tasks/ViewResultSet.html" data-id="taskId" wh-toc-id="taskId-d46e2030">
          <title>View Result Set</title>
          <shortdesc>
             <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">View a <em class="ph i">Result Set</em> from a query.
@@ -2147,7 +2155,7 @@
                <i class="+ topic/ph hi-d/i ">Result Set</i> from a query.
             </shortdesc>
          </topicmeta>
-         <topic href="query/tasks/SaveTableAsCSV.html" data-id="taskId" wh-toc-id="taskId-d46e2036">
+         <topic href="query/tasks/SaveTableAsCSV.html" data-id="taskId" wh-toc-id="taskId-d46e2044">
             <title>Save Table as CSV</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Save the table visible in the <span class="keyword wintitle">Results</span> window as a CSV         file.
@@ -2162,7 +2170,7 @@
                </shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/EditTableColumns.html" data-id="taskId" wh-toc-id="taskId-d46e2050">
+         <topic href="query/tasks/EditTableColumns.html" data-id="taskId" wh-toc-id="taskId-d46e2058">
             <title>Edit Table Columns</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Add, remove, edit, or reorder columns currently visible in the             <span class="keyword wintitle">Results</span> window.
@@ -2177,7 +2185,7 @@
                </shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/FilterResults.html" data-id="taskId" wh-toc-id="taskId-d46e2064">
+         <topic href="query/tasks/FilterResults.html" data-id="taskId" wh-toc-id="taskId-d46e2072">
             <title>Filter Results</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Search within the results table.</p>
@@ -2188,7 +2196,7 @@
                <linktext class="- map/linktext ">Filter Results</linktext><?ditaot genshortdesc?>
                <shortdesc class="- map/shortdesc ">Search within the results table.</shortdesc>
             </topicmeta>
-            <topic href="editor/concepts/AboutTableQuickSearch_2.html" data-id="conceptId" wh-toc-id="conceptId-d46e2075">
+            <topic href="editor/concepts/AboutTableQuickSearch_2.html" data-id="conceptId" wh-toc-id="conceptId-d46e2083">
                <title>About Table Quick Search</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="conceptId"></resourceid>
@@ -2198,7 +2206,7 @@
             </topic>
          </topic>
       </topic>
-      <topic href="history/tasks/ViewQueryHistory.html" data-id="taskId" wh-toc-id="taskId-d46e2083">
+      <topic href="history/tasks/ViewQueryHistory.html" data-id="taskId" wh-toc-id="taskId-d46e2091">
          <title>View Query History</title>
          <shortdesc>
             <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">View the query history for a project.</p>
@@ -2209,7 +2217,7 @@
             <linktext class="- map/linktext ">View Query History</linktext><?ditaot genshortdesc?>
             <shortdesc class="- map/shortdesc ">View the query history for a project.</shortdesc>
          </topicmeta>
-         <topic href="history/tasks/DeleteQuery.html" data-id="taskId" wh-toc-id="taskId-d46e2094">
+         <topic href="history/tasks/DeleteQuery.html" data-id="taskId" wh-toc-id="taskId-d46e2102">
             <title>Delete Query from History</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Delete a query from the <span class="keyword wintitle">Query History</span>.
@@ -2224,7 +2232,7 @@
                </shortdesc>
             </topicmeta>
          </topic>
-         <topic href="history/tasks/EditQueryDetails.html" data-id="taskId" wh-toc-id="taskId-d46e2108">
+         <topic href="history/tasks/EditQueryDetails.html" data-id="taskId" wh-toc-id="taskId-d46e2116">
             <title>Edit Query Details</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Edit a query's name, contents, and/or star setting.</p>
@@ -2236,7 +2244,7 @@
                <shortdesc class="- map/shortdesc ">Edit a query's name, contents, and/or star setting.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="history/concepts/AboutStarredQueries.html" data-id="conceptId" wh-toc-id="conceptId-d46e2119">
+         <topic href="history/concepts/AboutStarredQueries.html" data-id="conceptId" wh-toc-id="conceptId-d46e2127">
             <title>About Starred Queries</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="conceptId"></resourceid>
@@ -2245,9 +2253,9 @@
             </topicmeta>
          </topic>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2127">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2135">
          <title>Query Reports</title>
-         <topic href="report/AboutQueryReports.html" format="dita" data-id="about_query_reports" wh-toc-id="about_query_reports-d46e2128">
+         <topic href="report/AboutQueryReports.html" format="dita" data-id="about_query_reports" wh-toc-id="about_query_reports-d46e2136">
             <title>About Query Reports</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="about_query_reports"></resourceid>
@@ -2255,7 +2263,7 @@
                <linktext class="- map/linktext ">About Query Reports</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-aggregate_IPA.html" format="dita" data-id="report_aggregate_ipa_results" wh-toc-id="report_aggregate_ipa_results-d46e2136">
+         <topic href="report/report-aggregate_IPA.html" format="dita" data-id="report_aggregate_ipa_results" wh-toc-id="report_aggregate_ipa_results-d46e2144">
             <title>Report: Aggregate (IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_aggregate_ipa_results"></resourceid>
@@ -2263,7 +2271,7 @@
                <linktext class="- map/linktext ">Report: Aggregate (IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-aggregate_non-IPA.html" format="dita" data-id="report_aggregate_non_ipa_results" wh-toc-id="report_aggregate_non_ipa_results-d46e2144">
+         <topic href="report/report-aggregate_non-IPA.html" format="dita" data-id="report_aggregate_non_ipa_results" wh-toc-id="report_aggregate_non_ipa_results-d46e2152">
             <title>Report: Aggregate (non-IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_aggregate_non_ipa_results"></resourceid>
@@ -2271,7 +2279,7 @@
                <linktext class="- map/linktext ">Report: Aggregate (non-IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-inventory_by_session_IPA.html" format="dita" data-id="report_inventory_by_session_ipa_results" wh-toc-id="report_inventory_by_session_ipa_results-d46e2152">
+         <topic href="report/report-inventory_by_session_IPA.html" format="dita" data-id="report_inventory_by_session_ipa_results" wh-toc-id="report_inventory_by_session_ipa_results-d46e2160">
             <title>Report: Inventory by Session (IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_inventory_by_session_ipa_results"></resourceid>
@@ -2279,7 +2287,7 @@
                <linktext class="- map/linktext ">Report: Inventory by Session (IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-inventory_by_session_non-IPA.html" format="dita" data-id="report_inventory_by_session_non_ipa_results" wh-toc-id="report_inventory_by_session_non_ipa_results-d46e2160">
+         <topic href="report/report-inventory_by_session_non-IPA.html" format="dita" data-id="report_inventory_by_session_non_ipa_results" wh-toc-id="report_inventory_by_session_non_ipa_results-d46e2168">
             <title>Report: Inventory by Session (non-IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_inventory_by_session_non_ipa_results"></resourceid>
@@ -2287,7 +2295,7 @@
                <linktext class="- map/linktext ">Report: Inventory by Session (non-IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-listing.html" format="dita" data-id="report_listing" wh-toc-id="report_listing-d46e2168">
+         <topic href="report/report-listing.html" format="dita" data-id="report_listing" wh-toc-id="report_listing-d46e2176">
             <title>Report: Listing</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_listing"></resourceid>
@@ -2295,7 +2303,7 @@
                <linktext class="- map/linktext ">Report: Listing</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-listing_by_session.html" format="dita" data-id="report_listing_by_session" wh-toc-id="report_listing_by_session-d46e2176">
+         <topic href="report/report-listing_by_session.html" format="dita" data-id="report_listing_by_session" wh-toc-id="report_listing_by_session-d46e2184">
             <title>Report: Listing by Session</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_listing_by_session"></resourceid>
@@ -2303,7 +2311,7 @@
                <linktext class="- map/linktext ">Report: Listing by Session</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-phone_similarity.html" format="dita" data-id="report_phone_similarity" wh-toc-id="report_phone_similarity-d46e2184">
+         <topic href="report/report-phone_similarity.html" format="dita" data-id="report_phone_similarity" wh-toc-id="report_phone_similarity-d46e2192">
             <title>Report: Phone Similarity</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_phone_similarity"></resourceid>
@@ -2311,7 +2319,7 @@
                <linktext class="- map/linktext ">Report: Phone Similarity</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-transcript_variability.html" format="dita" data-id="report_transcript_variability" wh-toc-id="report_transcript_variability-d46e2192">
+         <topic href="report/report-transcript_variability.html" format="dita" data-id="report_transcript_variability" wh-toc-id="report_transcript_variability-d46e2200">
             <title>Report: Transcript Variability</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_transcript_variability"></resourceid>
@@ -2319,7 +2327,7 @@
                <linktext class="- map/linktext ">Report: Transcript Variability</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-query_information.html" format="dita" data-id="report_query_information" wh-toc-id="report_query_information-d46e2200">
+         <topic href="report/report-query_information.html" format="dita" data-id="report_query_information" wh-toc-id="report_query_information-d46e2208">
             <title>Report: Query Information</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_query_information"></resourceid>
@@ -2327,14 +2335,14 @@
                <linktext class="- map/linktext ">Report: Query Information</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/acoustic_data_reports.html" format="dita" data-id="acoustic_data_reports" wh-toc-id="acoustic_data_reports-d46e2208">
+         <topic href="report/acoustic_data_reports.html" format="dita" data-id="acoustic_data_reports" wh-toc-id="acoustic_data_reports-d46e2216">
             <title>Acoustic Data Reports</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="acoustic_data_reports"></resourceid>
                <navtitle class="- topic/navtitle ">Acoustic Data Reports</navtitle><?ditaot gentext?>
                <linktext class="- map/linktext ">Acoustic Data Reports</linktext>
             </topicmeta>
-            <topic href="report/report-duration.html" format="dita" data-id="report_duration" wh-toc-id="report_duration-d46e2216">
+            <topic href="report/report-duration.html" format="dita" data-id="report_duration" wh-toc-id="report_duration-d46e2224">
                <title>Report: Duration</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_duration"></resourceid>
@@ -2342,7 +2350,7 @@
                   <linktext class="- map/linktext ">Report: Duration</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-intensity.html" format="dita" data-id="report_intensity" wh-toc-id="report_intensity-d46e2224">
+            <topic href="report/report-intensity.html" format="dita" data-id="report_intensity" wh-toc-id="report_intensity-d46e2232">
                <title>Report: Intensity</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_intensity"></resourceid>
@@ -2350,7 +2358,7 @@
                   <linktext class="- map/linktext ">Report: Intensity</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-pitch.html" format="dita" data-id="report_pitch" wh-toc-id="report_pitch-d46e2232">
+            <topic href="report/report-pitch.html" format="dita" data-id="report_pitch" wh-toc-id="report_pitch-d46e2240">
                <title>Report: Pitch</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_pitch"></resourceid>
@@ -2358,7 +2366,7 @@
                   <linktext class="- map/linktext ">Report: Pitch</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-formants.html" format="dita" data-id="report_formants" wh-toc-id="report_formants-d46e2240">
+            <topic href="report/report-formants.html" format="dita" data-id="report_formants" wh-toc-id="report_formants-d46e2248">
                <title>Report: Formants</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_formants"></resourceid>
@@ -2366,7 +2374,7 @@
                   <linktext class="- map/linktext ">Report: Formants</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-spectral_moments.html" format="dita" data-id="report_spectral_moments" wh-toc-id="report_spectral_moments-d46e2248">
+            <topic href="report/report-spectral_moments.html" format="dita" data-id="report_spectral_moments" wh-toc-id="report_spectral_moments-d46e2256">
                <title>Report: Spectral Moments</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_spectral_moments"></resourceid>
@@ -2374,7 +2382,7 @@
                   <linktext class="- map/linktext ">Report: Spectral Moments</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-vot.html" format="dita" data-id="report_voice_onset_time_vot" wh-toc-id="report_voice_onset_time_vot-d46e2256">
+            <topic href="report/report-vot.html" format="dita" data-id="report_voice_onset_time_vot" wh-toc-id="report_voice_onset_time_vot-d46e2264">
                <title>Report: Voice Onset Time (VOT)</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_voice_onset_time_vot"></resourceid>
@@ -2383,7 +2391,7 @@
                </topicmeta>
             </topic>
          </topic>
-         <topic href="report/report_composer.html" format="dita" data-id="custom_reports_using_composer_simple" wh-toc-id="custom_reports_using_composer_simple-d46e2265">
+         <topic href="report/report_composer.html" format="dita" data-id="custom_reports_using_composer_simple" wh-toc-id="custom_reports_using_composer_simple-d46e2273">
             <title>Custom Reports using Composer (simple)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="custom_reports_using_composer_simple"></resourceid>
@@ -2393,9 +2401,9 @@
          </topic>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2274">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2282">
       <title>Analyses</title>
-      <topic href="analysis/PPC.html" format="dita" data-id="analysis_ppc" wh-toc-id="analysis_ppc-d46e2275">
+      <topic href="analysis/PPC.html" format="dita" data-id="analysis_ppc" wh-toc-id="analysis_ppc-d46e2283">
          <title>Analysis: PPC</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_ppc"></resourceid>
@@ -2403,7 +2411,7 @@
             <linktext class="- map/linktext ">Analysis: PPC</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Phone%20Inventory.html" format="dita" data-id="analysis_phone_inventory" wh-toc-id="analysis_phone_inventory-d46e2283">
+      <topic href="analysis/Phone%20Inventory.html" format="dita" data-id="analysis_phone_inventory" wh-toc-id="analysis_phone_inventory-d46e2291">
          <title>Analysis: Phone Inventory</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_phone_inventory"></resourceid>
@@ -2411,7 +2419,7 @@
             <linktext class="- map/linktext ">Analysis: Phone Inventory</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Phonological%20Processes.html" format="dita" data-id="analyses_phonological_processes" wh-toc-id="analyses_phonological_processes-d46e2291">
+      <topic href="analysis/Phonological%20Processes.html" format="dita" data-id="analyses_phonological_processes" wh-toc-id="analyses_phonological_processes-d46e2299">
          <title>Analyses: Phonological Processes</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analyses_phonological_processes"></resourceid>
@@ -2419,7 +2427,7 @@
             <linktext class="- map/linktext ">Analyses: Phonological Processes</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/PMLU.html" format="dita" data-id="analysis_phonological_mean_length_of_utterance_pmlu" wh-toc-id="analysis_phonological_mean_length_of_utterance_pmlu-d46e2299">
+      <topic href="analysis/PMLU.html" format="dita" data-id="analysis_phonological_mean_length_of_utterance_pmlu" wh-toc-id="analysis_phonological_mean_length_of_utterance_pmlu-d46e2307">
          <title>Analysis: Phonological Mean Length of Utterance (PMLU)</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_phonological_mean_length_of_utterance_pmlu"></resourceid>
@@ -2427,7 +2435,7 @@
             <linktext class="- map/linktext ">Analysis: Phonological Mean Length of Utterance (PMLU)</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Word%20List.html" format="dita" data-id="analysis_word_list" wh-toc-id="analysis_word_list-d46e2307">
+      <topic href="analysis/Word%20List.html" format="dita" data-id="analysis_word_list" wh-toc-id="analysis_word_list-d46e2315">
          <title>Analysis: Word List</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_list"></resourceid>
@@ -2435,9 +2443,9 @@
             <linktext class="- map/linktext ">Analysis: Word List</linktext>
          </topicmeta>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2315">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2323">
          <title>Specialized</title>
-         <topic href="analysis/Word%20Match.html" format="dita" data-id="analysis_word_match" wh-toc-id="analysis_word_match-d46e2316">
+         <topic href="analysis/Word%20Match.html" format="dita" data-id="analysis_word_match" wh-toc-id="analysis_word_match-d46e2324">
             <title>Analysis: Word Match</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_match"></resourceid>
@@ -2445,7 +2453,7 @@
                <linktext class="- map/linktext ">Analysis: Word Match</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/Multisyllabic%20Noninear%20Analysis.html" format="dita" data-id="analysis_multisyllabic_nonlinear_analysis" wh-toc-id="analysis_multisyllabic_nonlinear_analysis-d46e2324">
+         <topic href="analysis/Multisyllabic%20Noninear%20Analysis.html" format="dita" data-id="analysis_multisyllabic_nonlinear_analysis" wh-toc-id="analysis_multisyllabic_nonlinear_analysis-d46e2332">
             <title>Analysis: Multisyllabic Nonlinear Analysis</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_multisyllabic_nonlinear_analysis"></resourceid>
@@ -2453,7 +2461,7 @@
                <linktext class="- map/linktext ">Analysis: Multisyllabic Nonlinear Analysis</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/Vocalization.html" format="dita" data-id="analysis_vocalization" wh-toc-id="analysis_vocalization-d46e2332">
+         <topic href="analysis/Vocalization.html" format="dita" data-id="analysis_vocalization" wh-toc-id="analysis_vocalization-d46e2340">
             <title>Analysis: Vocalization</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_vocalization"></resourceid>
@@ -2461,7 +2469,7 @@
                <linktext class="- map/linktext ">Analysis: Vocalization</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/WAP.html" format="dita" data-id="analysis_word_level_analysis_of_polysyllables_wap" wh-toc-id="analysis_word_level_analysis_of_polysyllables_wap-d46e2340">
+         <topic href="analysis/WAP.html" format="dita" data-id="analysis_word_level_analysis_of_polysyllables_wap" wh-toc-id="analysis_word_level_analysis_of_polysyllables_wap-d46e2348">
             <title>Analysis: Word-level Analysis of Polysyllables (WAP)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_level_analysis_of_polysyllables_wap"></resourceid>
@@ -2470,7 +2478,7 @@
             </topicmeta>
          </topic>
       </topic>
-      <topic href="analysis/analysis_composer.html" format="dita" data-id="custom_analysis_using_composer_simple" wh-toc-id="custom_analysis_using_composer_simple-d46e2348">
+      <topic href="analysis/analysis_composer.html" format="dita" data-id="custom_analysis_using_composer_simple" wh-toc-id="custom_analysis_using_composer_simple-d46e2356">
          <title>Custom Analysis using Composer (simple)</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="custom_analysis_using_composer_simple"></resourceid>
@@ -2479,9 +2487,9 @@
          </topicmeta>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2357">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2365">
       <title>CHAT Support</title>
-      <topic href="chat/phontalk.html" format="dita" data-id="phontalk" wh-toc-id="phontalk-d46e2358">
+      <topic href="chat/phontalk.html" format="dita" data-id="phontalk" wh-toc-id="phontalk-d46e2366">
          <title>PhonTalk</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="phontalk"></resourceid>
@@ -2489,7 +2497,7 @@
             <linktext class="- map/linktext ">PhonTalk</linktext>
          </topicmeta>
       </topic>
-      <topic href="chat/main_line.html" format="dita" data-id="chat_main_line" wh-toc-id="chat_main_line-d46e2366">
+      <topic href="chat/main_line.html" format="dita" data-id="chat_main_line" wh-toc-id="chat_main_line-d46e2374">
          <title>CHAT Main Line</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="chat_main_line"></resourceid>

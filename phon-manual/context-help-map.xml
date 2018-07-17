@@ -173,6 +173,7 @@
    <appContext helpID="basic_phone_matching" path="phonex/examples/example-consonants.html"/>
    <appContext helpID="singleton_consonants" path="phonex/examples/singleton_consonants.html"/>
    <appContext helpID="consonant_clusters" path="phonex/examples/consonant_clusters.html"/>
+   <appContext helpID="syllables" path="phonex/examples/syllables.html"/>
    <appContext helpID="query_data_tiers" path="query/query-data_tiers.html"/>
    <appContext helpID="query_phones" path="query/query_phones.html"/>
    <appContext helpID="query_segmental_relations" path="query/query_segmental_relations.html"/>
