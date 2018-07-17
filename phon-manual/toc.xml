@@ -7,7 +7,7 @@
          <navtitle class="- topic/navtitle ">Getting Started</navtitle><?ditaot gentext?>
          <linktext class="- map/linktext ">Getting Started</linktext>
       </topicmeta>
-      <topic href="misc/install-linux.html" format="dita" data-id="installing_phon" wh-toc-id="installing_phon-d46e25">
+      <topic href="misc/install.html" format="dita" data-id="installing_phon" wh-toc-id="installing_phon-d46e25">
          <title>Installing Phon</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="installing_phon"></resourceid>
