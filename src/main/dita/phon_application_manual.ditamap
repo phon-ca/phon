@@ -249,11 +249,6 @@
                 <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
             </topicref>
         </topicref>
-        <topicref href="history/tasks/ViewQueryHistory.xml">
-            <topicref href="history/tasks/DeleteQuery.xml"/>
-            <topicref href="history/tasks/EditQueryDetails.xml"/>
-            <topicref href="history/concepts/AboutStarredQueries.xml"/>
-        </topicref>
         <topichead navtitle="Query Reports">
             <topicref href="report/AboutQueryReports.md" format="markdown"/>
             <topicref href="report/report-aggregate_IPA.md" format="markdown"/>
