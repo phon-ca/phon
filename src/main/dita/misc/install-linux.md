@@ -22,11 +22,12 @@ Add the java PPA:
 ```
 sudo add-apt-repository ppa:linuxuprising/java
 sudo apt update
+sudo apt install oracle-java10-installer
 ```
 
-Install pre-requisites:
+Install vlc:
 ```
-sudo apt install vlc oracle-java10-installer
+sudo apt install vlc
 ```
 
 Download the newest .deb from the [releases](https://github.com/phon-ca/phon-/releases) page and install using dpkg.
