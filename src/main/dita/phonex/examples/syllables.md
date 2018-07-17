@@ -5,20 +5,22 @@ The following Phonex expression will match syllables and store each component in
 ```
 // Stress
 (S=\s)?
+
 // Onset
 (O=
-    (O1=\c:L:O)(O2=\c:L:O)(O3=\c:O) | (\c:L:O)(\c:O) | (\c:O)
+	(O1=\c:L:O)(O2=\c:L:O)(O3=\c:O) | (\c:L:O)(\c:O) | (\c:O)
 )?
+
 // Rhyme
 (R=
-    // Nucleus
-    (N=
-        (N1=.:D)(N2=.:D) | (.:N)
-    )
-    // Coda
-    (C=
-        (C1=\c:C)(C2=\c:C:R)(C3=\c:C:R) | (\c:C)(\c:C:R) | (\c:C)
-    )?
+	// Nucleus
+	(N=
+		(N1=.:D)(N2=.:D) | (.:N)
+	)
+	// Coda
+	(C=
+		(C1=\c:C)(C2=\c:C:R)(C3=\c:C:R) | (\c:C)(\c:C:R) | (\c:C)
+	)?
 )
 ```
 
