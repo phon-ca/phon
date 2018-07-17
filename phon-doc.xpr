@@ -18,7 +18,7 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>PhonManual - Web</String>
+                                        <String>Phon Manual (PDF)</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">

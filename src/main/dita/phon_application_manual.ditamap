@@ -227,7 +227,7 @@
             <topicref href="phonex/examples/example-consonants.md" format="markdown"/>
             <topicref href="phonex/examples/singleton_consonants.md" format="markdown"/>
             <topicref href="phonex/examples/consonant_clusters.md" format="markdown"/>
-            <topicref href="phonex/examples/syllable_decomposition.md" format="markdown"/>
+            <topicref href="phonex/examples/syllables.md" format="markdown"/>
         </topichead>
     </chapter>
     <chapter navtitle="Queries" audience="intermediate">
