@@ -7,7 +7,7 @@
   <p>The <codeph>len</codeph> supplementary matcher queries the length of a phone.  It accepts a
     <codeph>float</codeph> as a single parameter.  The matcher will match if the phone has the
    specified length.  For more information about how phone length is specified, see the description
-   of <xref href="../../ipa/concepts/phone.dita"/>.</p>
+   of <xref href="../ipa/concepts/phone.dita"/>.</p>
   <example>
    <p>Search for a phone that has a single, long diacritic.<codeblock>.:len("1.0")</codeblock></p>
   </example>

@@ -206,22 +206,23 @@
     <chapter navtitle="Phonex" audience="intermediate">
         <topicref href="phonex/phonex_introduction.md" format="markdown"/>
         <topichead navtitle="Language Reference">
-            <topicref href="phonex/concepts/constructs.dita"/>
-            <topicref href="phonex/concepts/phone-matchers.dita"/>
-            <topicref href="phonex/concepts/groups.dita"/>
-            <topicref href="phonex/concepts/boundaries.dita"/>
-            <topicref href="phonex/concepts/quantifiers.dita"/>
-            <topicref href="phonex/concepts/lookahead-behind.dita"/>
-        </topichead>
-        <topichead navtitle="Supplementary Matchers">
-            <topicref href="phonex/concepts/plug-ins.dita"/>
-            <topicref href="phonex/concepts/stress.dita"/>
-            <topicref href="phonex/concepts/sctype.dita"/>
-            <topicref href="phonex/concepts/diacritic_plugin.dita"/>
-            <topicref href="phonex/concepts/prefix.dita"/>
-            <topicref href="phonex/concepts/suffix.dita"/>
-            <topicref href="phonex/concepts/comb.dita"/>
-            <topicref href="phonex/concepts/tone_plugin.dita"/>
+            <topicref href="phonex/constructs.dita"/>
+            <topicref href="phonex/comments.md" format="markdown"/>
+            <topicref href="phonex/phone-matchers.dita"/>
+            <topicref href="phonex/groups.dita"/>
+            <topicref href="phonex/boundaries.dita"/>
+            <topicref href="phonex/quantifiers.dita"/>
+            <topicref href="phonex/lookahead-behind.dita"/>
+            <topichead navtitle="Supplementary Matchers">
+                <topicref href="phonex/plug-ins.dita"/>
+                <topicref href="phonex/stress.dita"/>
+                <topicref href="phonex/sctype.dita"/>
+                <topicref href="phonex/diacritic_plugin.dita"/>
+                <topicref href="phonex/prefix.dita"/>
+                <topicref href="phonex/suffix.dita"/>
+                <topicref href="phonex/comb.dita"/>
+                <topicref href="phonex/tone_plugin.dita"/>
+            </topichead>
         </topichead>
         <topichead navtitle="Examples">
             <topicref href="phonex/examples/example-consonants.md" format="markdown"/>
