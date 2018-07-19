@@ -154,7 +154,11 @@ public class QueryAndReportWizard extends NodeWizard {
 			final ObjectFactory factory = new ObjectFactory();
 			final ParamHistoryType paramHistory = factory.createParamHistoryType();
 			queryHistoryManager = new QueryHistoryManager(paramHistory);
+			if(queryScript.getExtension(QueryName.class) != null)
+				queryHistoryManager.getParamHistory().setScript(queryScript.getExtension(QueryName.class).getName());
 		}
+		// update hash
+		queryHistoryManager.getParamHistory().setHash(queryScript.getHashString());
 		
 		// setup UI
 		init();
@@ -539,7 +543,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private void addToQueryHistory() throws IOException {
 		try {
 			queryHistoryManager.addParamSet(queryScript);
-			// XXX save history
+			QueryHistoryManager.save(queryHistoryManager, queryScript);
 		} catch (PhonScriptException e) {
 			throw new IOException(e);
 		}

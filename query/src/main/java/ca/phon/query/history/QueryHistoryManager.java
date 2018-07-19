@@ -49,30 +49,24 @@ public class QueryHistoryManager extends ParamHistoryManager {
 	public final static String QUERY_HISTORY_FOLDER = QueryHistoryManager.class.getName() + ".queryHistoryFolder";
 	public final static String DEFAULT_HISTORY_FOLDER = PrefHelper.getUserDataFolder() + File.separator + "query_history";
 	
-	public static QueryHistoryManager newInstance(QueryScript script) throws IOException {
+	private static String getQueryName(QueryScript script) {
 		final QueryName qn = script.getExtension(QueryName.class);
 		if(qn != null) {
-			return newInstance(qn.getName());
+			return qn.getName();
 		} else {
 			// use hash of script as name
-			final String scriptText = script.getScript();
-			try {
-				MessageDigest digest = MessageDigest.getInstance("SHA1");
-				byte[] hash = digest.digest(scriptText.getBytes());
-	
-				StringBuffer buffer = new StringBuffer();
-				for(int i = 0; i < hash.length; i++) {
-					if((0xff & hash[i]) < 0x10) {
-						buffer.append('0');
-					}
-					buffer.append(Integer.toHexString(0xff & hash[i]));
-				}
-							
-				return newInstance(buffer.toString());
-			} catch (NoSuchAlgorithmException e) {
-				throw new IOException(e);
-			}
+			return script.getHashString();
 		}
+	}
+	
+	public static QueryHistoryManager newInstance(QueryScript script) throws IOException {
+		return newInstance(getQueryName(script));
+	}
+	
+	public static void save(QueryHistoryManager manager, QueryScript script) throws IOException {
+		final File queryHistoryFile =
+				new File(PrefHelper.get(QUERY_HISTORY_FOLDER, DEFAULT_HISTORY_FOLDER), getQueryName(script) + ".xml");
+		ParamHistoryManager.saveParamHistory(manager.getParamHistory(), queryHistoryFile);
 	}
 	
 	public static QueryHistoryManager newInstance(String scriptName) throws IOException {

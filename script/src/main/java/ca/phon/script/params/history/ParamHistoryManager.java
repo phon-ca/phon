@@ -59,6 +59,11 @@ public class ParamHistoryManager {
 	}
 	
 	public static void saveParamHistory(ParamHistoryType paramHistory, File paramHistoryFile) throws IOException {
+		// make parent folders if necessary
+		if(!paramHistoryFile.getParentFile().exists()) {
+			paramHistoryFile.getParentFile().mkdirs();
+		}
+		
 		saveParamHistory(paramHistory, new FileOutputStream(paramHistoryFile));
 	}
 	

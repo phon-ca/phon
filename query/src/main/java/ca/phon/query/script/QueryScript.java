@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -184,6 +186,25 @@ public class QueryScript extends LazyQueryScript {
 			contextRef.getAndSet(context);
 		}
 		return contextRef.get();
+	}
+	
+	public String getHashString() {
+		final String scriptText = getScript();
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA1");
+			byte[] hash = digest.digest(scriptText.getBytes());
+
+			StringBuffer buffer = new StringBuffer();
+			for(int i = 0; i < hash.length; i++) {
+				if((0xff & hash[i]) < 0x10) {
+					buffer.append('0');
+				}
+				buffer.append(Integer.toHexString(0xff & hash[i]));
+			}
+			return buffer.toString();
+		} catch (NoSuchAlgorithmException e) {
+			return Integer.toHexString(hashCode());
+		}
 	}
 	
 	@Override

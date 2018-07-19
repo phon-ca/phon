@@ -208,8 +208,8 @@ public class SaveQueryForm extends JPanel {
 	private void nameEntryInQueryHistory() {
 		try {
 			queryHistoryManager.nameParamSet(nameField.getText(), queryScript);
-			// XXX save query history
-		} catch (PhonScriptException e) {
+			QueryHistoryManager.save(queryHistoryManager, queryScript);
+		} catch (PhonScriptException | IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			LogUtil.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		}
