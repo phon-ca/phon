@@ -89,6 +89,11 @@
 									<packagename>ca.phon.script.scripttable.io</packagename>
 									<bindingFile>${basedir}/src/main/resources/xml/xjb/scripttable.xjb</bindingFile>
 								</xsdOption>
+								<xsdOption>
+									<xsd>${basedir}/src/main/resources/xml/xsd/param_history.xsd</xsd>
+									<packagename>ca.phon.script.params.history</packagename>
+									<bindingFile>${basedir}/src/main/resources/xml/xjb/param_history.xjb</bindingFile>
+								</xsdOption>
 							</xsdOptions>
 						</configuration>
 					</execution>

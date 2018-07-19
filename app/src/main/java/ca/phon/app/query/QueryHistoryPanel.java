@@ -1,29 +1,39 @@
 package ca.phon.app.query;
 
+import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.JXComboBox;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
-import ca.phon.query.history.ParamType;
-import ca.phon.query.history.ParamsType;
-import ca.phon.query.history.QueryHistoryType;
-import ca.phon.query.history.QueryInfoType;
+import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.history.ParamHistoryManager;
+import ca.phon.script.params.history.ParamHistoryType;
+import ca.phon.script.params.history.ParamSetType;
+import ca.phon.script.params.history.ParamType;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.text.DefaultTextCompleterModel;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.TextCompleter;
+import ca.phon.ui.text.TextCompleterModel;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -45,23 +55,26 @@ public class QueryHistoryPanel extends JPanel {
 	
 	private JButton prevButton;
 	
+	private DefaultComboBoxModel<String> queryNameModel;
+	private JComboBox<String> queryNameBox;
+	
 	private int currentIndex = -1;
 	
-	private final QueryHistoryType queryHistory;
+	private final QueryHistoryManager queryHistoryManager;
 	
 	private final WeakReference<ScriptPanel> scriptPanelRef;
 	
-	public QueryHistoryPanel(QueryHistoryType queryHistory, ScriptPanel scriptPanel) {
+	public QueryHistoryPanel(QueryHistoryManager queryHistoryManager, ScriptPanel scriptPanel) {
 		super();
 		
-		this.queryHistory = queryHistory;
+		this.queryHistoryManager = queryHistoryManager;
 		this.scriptPanelRef = new WeakReference<ScriptPanel>(scriptPanel);
 		
 		init();
 	}
 	
-	public QueryHistoryType getQueryHistory() {
-		return this.queryHistory;
+	public QueryHistoryManager getQueryHistoryManager() {
+		return this.queryHistoryManager;
 	}
 	
 	public ScriptPanel getScriptPanel() {
@@ -92,7 +105,11 @@ public class QueryHistoryPanel extends JPanel {
 		label = new JLabel();
 		label.setIcon(IconManager.getInstance().getIcon("misc/history-clock-button-black", IconSize.SMALL));
 		label.setToolTipText("Query History");
-		updateLabel();
+		update();
+		
+		queryNameModel = new DefaultComboBoxModel<>();
+		queryNameBox = new JComboBox<>(queryNameModel);
+		queryNameBox.setVisible(queryHistoryManager.getNamedParamSets().size() > 0);
 		
 		firstButton = buttons.get(0);
 		firstButton.setAction(goFirstAct);
@@ -112,9 +129,16 @@ public class QueryHistoryPanel extends JPanel {
 		buttonPanel.add(nextButton);
 		buttonPanel.add(lastButton);
 		
-		setLayout(new HorizontalLayout(5));
-		add(label);
-		add(buttonPanel);
+		JPanel leftPanel = new JPanel(new HorizontalLayout(5));
+		leftPanel.add(label);
+		leftPanel.add(buttonPanel);
+
+		JPanel namePanel = new JPanel(new BorderLayout());
+		namePanel.add(queryNameBox, BorderLayout.CENTER);
+		
+		setLayout(new BorderLayout());
+		add(leftPanel, BorderLayout.WEST);
+		add(namePanel, BorderLayout.CENTER);
 	}
 	
 	public void gotoFirst() {
@@ -122,35 +146,29 @@ public class QueryHistoryPanel extends JPanel {
 	}
 	
 	public void gotoLast() {
-		gotoIndex(queryHistory.getQuery().size()-1);
+		gotoIndex(queryHistoryManager.size()-1);
 	}
 	
 	public void goPrevious() {
-		if(queryHistory.getQuery().size() == 0) return;
+		if(queryHistoryManager.size() == 0) return;
 		gotoIndex(currentIndex > 0 ? currentIndex - 1 : 0);
 	}
 	
 	public void goNext() {
-		if(queryHistory.getQuery().size() == 0) return;
-		gotoIndex(currentIndex < queryHistory.getQuery().size()-1 ? currentIndex + 1 : queryHistory.getQuery().size()-1);
+		if(queryHistoryManager.size() == 0) return;
+		gotoIndex(currentIndex < queryHistoryManager.size()-1 ? currentIndex + 1 : queryHistoryManager.size()-1);
 	}
 
 	public void gotoIndex(int index) {
-		if(index < 0 || index >= getQueryHistory().getQuery().size()) return;
+		if(index < 0 || index >= getQueryHistoryManager().size()) return;
 
 		currentIndex = index;
-		loadParamsFromQueryInfo(queryHistory.getQuery().get(currentIndex));
-		updateLabel();
+		loadFromParamSet(queryHistoryManager.getParamSet(currentIndex));
+		update();
 	}
 	
 	public void gotoHash(String hash) {
-		for(int i = 0; i < getQueryHistory().getQuery().size(); i++) {
-			final QueryInfoType queryInfo = getQueryHistory().getQuery().get(i);
-			if(queryInfo.getHash().equals(hash)) {
-				gotoIndex(i);
-				break;
-			}
-		}
+		gotoIndex(queryHistoryManager.indexOf(hash));
 	}
 	
 	public void updateLabelFromCurrentHash() {
@@ -164,31 +182,50 @@ public class QueryHistoryPanel extends JPanel {
 	}
 	
 	public void updateLabelFromHash(String hash) {
-		currentIndex = -1;
-		for(int i = 0; i < getQueryHistory().getQuery().size(); i++) {
-			final QueryInfoType queryInfo = getQueryHistory().getQuery().get(i);
-			if(queryInfo.getHash().equals(hash)) {
-				currentIndex = i;
-				break;
-			}
+		currentIndex = queryHistoryManager.indexOf(hash);
+		update();
+	}
+	
+	/**
+	 * Returns the name of the current query.
+	 * 
+	 * @return query name or <code>null</code> if not set
+	 */
+	public String getQueryName() {
+		String retVal = null;
+		if(currentIndex >= 0 && currentIndex < queryHistoryManager.size()) {
+			final ParamSetType paramSet = queryHistoryManager.getParamSet(currentIndex);
+			retVal = paramSet.getName();
 		}
-		updateLabel();
+		return retVal;
 	}
 	
-	private void updateLabel() {
-		if(queryHistory.getQuery().size() > 0)
-			label.setText(String.format("%2d/%2d", (currentIndex+1), queryHistory.getQuery().size()));
-		else 
+	private void update() {
+		if(queryHistoryManager.size() > 0) {
+			label.setText(String.format("%2d/%2d", (currentIndex+1), queryHistoryManager.size()));
+			
+			if(currentIndex >= 0 && currentIndex < queryHistoryManager.size()) {
+				List<String> queryNames = 
+						queryHistoryManager.getNamedParamSets().stream()
+							.map( (ps) -> ps.getName() )
+							.sorted()
+							.collect( Collectors.toList() );
+				queryNameModel.removeAllElements();
+				queryNames.forEach( (qn) -> queryNameModel.addElement(qn) );
+				queryNameBox.setVisible(queryNames.size() > 0);
+				queryNameBox.setSelectedItem(getQueryName());
+			}
+		} else {
 			label.setText(String.format("%2d/%2d", 0, 0));
+		}
 	}
 	
-	public void loadParamsFromQueryInfo(QueryInfoType queryInfo) {
+	public void loadFromParamSet(ParamSetType queryInfo) {
 		final QueryScript queryScript = (QueryScript)getScriptPanel().getScript();
 		queryScript.resetContext();
 		
 		final Map<String, Object> paramMap = new LinkedHashMap<>();
-		final ParamsType previousParams = queryInfo.getParams();
-		for(ParamType paramType:previousParams.getParam()) {
+		for(ParamType paramType:queryInfo.getParam()) {
 			paramMap.put(paramType.getId(), paramType.getValue());
 		}
 		

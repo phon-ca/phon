@@ -14,9 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -26,8 +23,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,20 +37,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXTable;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.query.QueryMenuListener;
@@ -69,7 +58,6 @@ import ca.phon.app.opgraph.report.ReportRunner;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.session.SessionSelector;
-import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -80,18 +68,13 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
-import ca.phon.query.db.xml.XMLResultSetManager;
-import ca.phon.query.history.ObjectFactory;
-import ca.phon.query.history.ParamType;
-import ca.phon.query.history.ParamsType;
 import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.history.QueryHistoryType;
-import ca.phon.query.history.QueryInfoType;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.history.ObjectFactory;
+import ca.phon.script.params.history.ParamHistoryType;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -153,7 +136,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private Project project;
 	private QueryScript queryScript;
 
-	private QueryHistoryType queryHistory;
+	private QueryHistoryManager queryHistoryManager;
 	private QueryHistoryPanel queryHistoryPanel;
 	
 	public QueryAndReportWizard(Project project, QueryScript queryScript) {
@@ -165,13 +148,13 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		this.queryScript = queryScript;
 		
-		final QueryName qn = queryScript.getExtension(QueryName.class);		
-		final QueryHistoryManager manager = new QueryHistoryManager();
-		queryHistory = manager.getQueryHistory(qn.getName());
-//		if(queryHistory.getQuery().size() > 0) {
-//			currentHistoryIdx = 0;
-//			loadPreviousQueryParameters();
-//		}
+		try {
+			queryHistoryManager = QueryHistoryManager.newInstance(queryScript);
+		} catch (IOException e) {
+			final ObjectFactory factory = new ObjectFactory();
+			final ParamHistoryType paramHistory = factory.createParamHistoryType();
+			queryHistoryManager = new QueryHistoryManager(paramHistory);
+		}
 		
 		// setup UI
 		init();
@@ -491,8 +474,8 @@ public class QueryAndReportWizard extends NodeWizard {
 		runQueryButton = new JButton(runAct);
 		runQueryButton.setOpaque(false);
 		
-		queryHistoryPanel = new QueryHistoryPanel(queryHistory, scriptPanel);
-		if(queryHistory.getQuery().size() > 0)
+		queryHistoryPanel = new QueryHistoryPanel(queryHistoryManager, scriptPanel);
+		if(queryHistoryManager.size() > 0)
 			queryHistoryPanel.gotoLast();
 		queryHistoryPanel.setOpaque(false);
 		queryPanel.getContentContainer().add(queryHistoryPanel, BorderLayout.NORTH);
@@ -553,40 +536,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryHistoryPanel.updateLabelFromCurrentHash();
 	}
 	
-	private void addToQueryHistory(Project project, Query query) throws IOException {
-		final QueryName qn = queryScript.getExtension(QueryName.class);
-		final ObjectFactory factory = new ObjectFactory();
-		final QueryHistoryManager manager = new QueryHistoryManager();
-		
+	private void addToQueryHistory() throws IOException {
 		try {
-			final QueryInfoType queryInfo = factory.createQueryInfoType();
-			final ZonedDateTime date = ZonedDateTime.now(ZoneId.systemDefault());
-			GregorianCalendar gcal = GregorianCalendar.from(date);
-			XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);		
-			queryInfo.setDate(xcal);
-			
-			final ScriptParameters scriptParams = queryScript.getContext().getScriptParameters(queryScript.getContext().getEvaluatedScope());
-			final ParamsType params = factory.createParamsType();
-			queryInfo.setParams(params);
-			for(ScriptParam param:scriptParams) {	
-				if(param.hasChanged()) {
-					for(String paramId:param.getParamIds()) {
-						final ParamType paramType = factory.createParamType();
-						paramType.setId(paramId);
-						paramType.setValue(param.getValue(paramId).toString());
-						params.getParam().add(paramType);
-					}
-				}
-			}
-			queryInfo.setHash( scriptParams.getHashString() );
-
-			manager.addQueryInfo(queryHistory, queryInfo);
-			manager.saveQueryHistory(queryHistory, qn.getName());
-			
-			queryHistoryPanel.gotoLast();
-		} catch (DatatypeConfigurationException | PhonScriptException e) {
+			queryHistoryManager.addParamSet(queryScript);
+			// XXX save history
+		} catch (PhonScriptException e) {
 			throw new IOException(e);
 		}
+		queryHistoryPanel.gotoLast();
 	}
 	
 	/**
@@ -644,8 +601,12 @@ public class QueryAndReportWizard extends NodeWizard {
 	}
 	
 	public void onSaveQuerySettings() {
-		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript);
+		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript, queryHistoryManager);
 		dialog.setModal(true);
+		
+		String queryName = queryHistoryPanel.getQueryName();
+		if(queryName != null)
+			dialog.getForm().getNameField().setText(queryName);
 		
 		dialog.pack();
 		dialog.setLocationRelativeTo(this);
@@ -737,7 +698,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			if(e.getNewValue() == TaskStatus.FINISHED || e.getNewValue() == TaskStatus.TERMINATED) {
 				SwingUtilities.invokeLater( () -> addNodesToSessionSelector(queryName, runnerPanel) );
 				try {
-					addToQueryHistory(runnerPanel.getTempProject(), runnerPanel.getQuery());
+					addToQueryHistory();
 				} catch (IOException e1) {
 					LogUtil.severe(e1);
 					Toolkit.getDefaultToolkit().beep();

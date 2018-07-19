@@ -64,6 +64,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
+import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
@@ -435,23 +436,30 @@ public class QueryEditorWindow extends CommonModuleFrame {
 	public boolean saveScriptAs() {
 		final QueryScript script = (QueryScript)scriptEditor.getScript();
 		
-		final SaveQueryDialog dialog = new SaveQueryDialog(this, script);
-		dialog.setModal(true);
-		
-		dialog.pack();
-		dialog.setLocationRelativeTo(this);
-		
-		dialog.setVisible(true);
-		
-		final QueryName queryName = script.getExtension(QueryName.class);
-		final URL location = (queryName != null ? queryName.getLocation() : null);
-		
-		if(location != null) {
-			setModified(false);
-			updateComponents();
+		try {
+			QueryHistoryManager manager = QueryHistoryManager.newInstance(script);
+			final SaveQueryDialog dialog = new SaveQueryDialog(this, script, manager);
+			dialog.setModal(true);
+			
+			dialog.pack();
+			dialog.setLocationRelativeTo(this);
+			
+			dialog.setVisible(true);
+			
+			final QueryName queryName = script.getExtension(QueryName.class);
+			final URL location = (queryName != null ? queryName.getLocation() : null);
+			
+			if(location != null) {
+				setModified(false);
+				updateComponents();
+			}
+			return true;
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			Toolkit.getDefaultToolkit().beep();
 		}
 		
-		return true;
+		return false;
 	}
 	
 	public boolean saveScriptToFile(String file) {

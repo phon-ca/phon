@@ -20,37 +20,43 @@
     This file specifies the xml file format for a Phon query. A query contains
     a set of results and information common to all results. 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://www.phon.ca/query_history"
-	targetNamespace="https://www.phon.ca/query_history" elementFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://www.phon.ca/param_history"
+	xmlns:ph="https://www.phon.ca/param_history" targetNamespace="https://www.phon.ca/param_history" 
+	elementFormDefault="qualified">
 	
-	<xs:complexType name="QueryHistoryType">
+	<xs:complexType name="ParamHistoryType">
 		<xs:sequence>
-			<xs:element ref="query" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="param_set" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="script" type="nonEmptyString" use="optional">
+			<xs:annotation>
+				<xs:documentation>Script name (optional)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="hash" type="hashString" use="optional">
+			<xs:annotation>
+				<xs:documentation>Hash of script text (optional)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	
-	<xs:complexType name="QueryInfoType">
+	<xs:complexType name="ParamSetType">
 		<xs:sequence>
-			<xs:element ref="params" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="param" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="date" type="xs:dateTime" use="required">
+		<xs:attribute name="date" type="xs:dateTime" use="optional">
 			<xs:annotation>
 				<xs:documentation>Last time this query was executed.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="hash" type="xs:string" use="optional">
+		<xs:attribute name="hash" type="hashString" use="required">
 			<xs:annotation>
 				<xs:documentation>Hash of query parameters</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="name" type="nonEmptyString" use="optional"/>
 	</xs:complexType>
-	
-	<xs:complexType name="ParamsType">
-		<xs:sequence>
-			<xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-
+		
 	<xs:complexType name="ParamType">
 		<xs:annotation>
 			<xs:documentation>Type definition for the param element.</xs:documentation>
@@ -62,6 +68,12 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	
+	<xs:simpleType name="hashString">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9A-Fa-f]+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
 	<xs:simpleType name="nonEmptyString">
 		<xs:annotation>
 			<xs:documentation>An xs:string that has to have a length of at least
@@ -71,10 +83,20 @@
 			<xs:minLength value="1"/>
 		</xs:restriction>
 	</xs:simpleType>
- 
- 	<xs:element name="query_history" type="QueryHistoryType"/>
- 	<xs:element name="query" type="QueryInfoType"/>
- 	<xs:element name="params" type="ParamsType"/>
+	
+	<xs:element name="param_history" type="ParamHistoryType">
+		<xs:unique name="param_set_hash_unique">
+			<xs:selector xpath="ph:param_set"/>
+			<xs:field xpath="@hash"/>
+		</xs:unique>
+		
+		<xs:unique name="param_set_name_unique">
+			<xs:selector xpath="ph:param_set"/>
+			<xs:field xpath="@name"/>
+		</xs:unique>
+	</xs:element>
+	
+	<xs:element name="param_set" type="ParamSetType"/>
 	<xs:element name="param" type="ParamType"/>
-
+	
 </xs:schema>

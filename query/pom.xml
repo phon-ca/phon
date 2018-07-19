@@ -89,11 +89,6 @@
 									<packagename>ca.phon.query.db.xml.io.resultset</packagename>
 									<bindingFile>${basedir}/src/main/resources/xml/xjb/resultset.xjb</bindingFile>
 								</xsdOption>
-								<xsdOption>
-									<xsd>${basedir}/src/main/resources/xml/xsd/query_history.xsd</xsd>
-									<packagename>ca.phon.query.history</packagename>
-									<bindingFile>${basedir}/src/main/resources/xml/xjb/query_history.xjb</bindingFile>
-								</xsdOption>
 							</xsdOptions>
 						</configuration>
 					</execution>
