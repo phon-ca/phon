@@ -2,6 +2,8 @@ package ca.phon.app.query;
 
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -105,11 +107,11 @@ public class QueryHistoryPanel extends JPanel {
 		label = new JLabel();
 		label.setIcon(IconManager.getInstance().getIcon("misc/history-clock-button-black", IconSize.SMALL));
 		label.setToolTipText("Query History");
-		update();
 		
 		queryNameModel = new DefaultComboBoxModel<>();
 		queryNameBox = new JComboBox<>(queryNameModel);
 		queryNameBox.setVisible(queryHistoryManager.getNamedParamSets().size() > 0);
+		update();
 		
 		firstButton = buttons.get(0);
 		firstButton.setAction(goFirstAct);
@@ -201,6 +203,7 @@ public class QueryHistoryPanel extends JPanel {
 	}
 	
 	private void update() {
+		queryNameBox.removeItemListener(itemListener);
 		if(queryHistoryManager.size() > 0) {
 			label.setText(String.format("%2d/%2d", (currentIndex+1), queryHistoryManager.size()));
 			
@@ -214,10 +217,14 @@ public class QueryHistoryPanel extends JPanel {
 				queryNames.forEach( (qn) -> queryNameModel.addElement(qn) );
 				queryNameBox.setVisible(queryNames.size() > 0);
 				queryNameBox.setSelectedItem(getQueryName());
+			} else {
+				queryNameBox.setSelectedItem(null);
 			}
 		} else {
 			label.setText(String.format("%2d/%2d", 0, 0));
+			queryNameBox.setSelectedItem(null);
 		}
+		queryNameBox.addItemListener(itemListener);
 	}
 	
 	public void loadFromParamSet(ParamSetType queryInfo) {
@@ -240,5 +247,20 @@ public class QueryHistoryPanel extends JPanel {
 		
 		getScriptPanel().setScript(queryScript);
 	}
+	
+	private final ItemListener itemListener = new ItemListener() {
+		
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				final String selectedItem = (String)queryNameBox.getSelectedItem();
+				if(selectedItem != null) {
+					final ParamSetType paramSet = queryHistoryManager.getParamSetByName(selectedItem);
+					gotoHash(paramSet.getHash());
+				}
+			}
+		}
+		
+	};
 	
 }

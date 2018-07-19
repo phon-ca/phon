@@ -207,7 +207,8 @@ public class SaveQueryForm extends JPanel {
 	
 	private void nameEntryInQueryHistory() {
 		try {
-			queryHistoryManager.nameParamSet(nameField.getText(), queryScript);
+			String name = nameField.getText().trim().length() > 0 ? nameField.getText().trim() : null;
+			queryHistoryManager.nameParamSet(name, queryScript);
 			QueryHistoryManager.save(queryHistoryManager, queryScript);
 		} catch (PhonScriptException | IOException e) {
 			Toolkit.getDefaultToolkit().beep();

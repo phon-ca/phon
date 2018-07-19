@@ -616,6 +616,10 @@ public class QueryAndReportWizard extends NodeWizard {
 		dialog.setLocationRelativeTo(this);
 		
 		dialog.setVisible(true);
+		
+		// wait for dialog to finish...
+		
+		queryHistoryPanel.updateLabelFromCurrentHash();
 	}
 	
 	private WizardStep createReportConfigStep() {
