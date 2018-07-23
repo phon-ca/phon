@@ -33,7 +33,7 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 	
 	private final static int PHONE_CLASS_RELEVANCE = 200;
 	private final static String[] PHONE_CLASSES = {
-		".", "Any phone",
+		".", "Anything",
 		"\\c", "Any consonant",
 		"\\v", "Any vowel",
 		"\\s", "Stress (primary or secondary)",

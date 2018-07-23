@@ -44,6 +44,7 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 	public static BufferWindow getInstance() {
 		if(_instance == null) {
 			_instance = new BufferWindow();
+			_instance.setShowInWindowMenu(false);
 		}
 		return _instance;
 	}

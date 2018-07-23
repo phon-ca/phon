@@ -11,6 +11,7 @@ import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.ui.CommonModuleFrame;
 
 public class QueryAndReportWizardEP implements IPluginEntryPoint {
 	
@@ -66,6 +67,16 @@ public class QueryAndReportWizardEP implements IPluginEntryPoint {
 		if(queryName == null) {
 			queryName = new QueryName("Untitled");
 			script.putExtension(QueryName.class, queryName);
+		}
+		
+		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+			if(cmf instanceof QueryAndReportWizard) {
+				final QueryAndReportWizard openWizard = (QueryAndReportWizard)cmf;
+				if(openWizard.getQueryScript().getHashString().equals(script.getHashString())) {
+					openWizard.toFront();
+					return;
+				}
+			}
 		}
 		
 		final QueryAndReportWizard wizard = new QueryAndReportWizard(project, script);

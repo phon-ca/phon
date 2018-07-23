@@ -658,6 +658,10 @@ public class QueryAndReportWizard extends NodeWizard {
 		return this.queryHistoryPanel;
 	}
 	
+	public QueryScript getQueryScript() {
+		return this.queryScript;
+	}
+	
 	private QueryRunnerPanel getCurrentQueryRunner() {
 		if(queryRunnerBox == null || queryRunnerComboBoxModel.getSize() == 0) return null;
 		return queryRunners.get(queryRunnerBox.getSelectedItem());
