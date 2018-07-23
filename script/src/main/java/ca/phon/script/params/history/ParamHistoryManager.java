@@ -9,7 +9,9 @@ import java.io.OutputStream;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -137,6 +139,11 @@ public class ParamHistoryManager {
 			return null;
 	}
 	
+	public ParamSetType getParamSet(PhonScript script) throws PhonScriptException {
+		final String hash = getScriptParameters(script).getHashString();
+		return getParamSet(hash);
+	}
+	
 	public ParamSetType getParamSet(String hash) {
 		int paramSetIdx = indexOf(hash);
 		if(paramSetIdx >= 0)
@@ -249,7 +256,7 @@ public class ParamHistoryManager {
 		for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
 			final ParamSetType ps = paramHistory.getParamSet().get(i);
 			if(ps.getHash().equals(hash)) {
-				paramHistory.getParamSet().remove(i);
+				idx = i;
 				break;
 			}
 		}
@@ -270,6 +277,48 @@ public class ParamHistoryManager {
 	
 	public void save(File paramHistoryFile) throws IOException {
 		saveParamHistory(paramHistory, paramHistoryFile);
+	}
+	
+	public void removeAll() {
+		getParamHistory().getParamSet().clear();
+	}
+	
+	public List<ParamSetType> removeAllUnnamedParamSets() {
+		final List<ParamSetType> retVal = 
+			getParamHistory().getParamSet().stream()
+				.filter( (ps) -> ps.name == null || ps.name.trim().length() == 0 )
+				.collect( Collectors.toList() );
+		
+		getParamHistory().getParamSet().removeAll(retVal);
+		
+		return retVal;
+	}
+	
+	/**
+	 * Update hash values of all entries using provided script.
+	 * (used for stock param sets after loading)
+	 * 
+	 * @param script
+	 */
+	public void fixHashes(PhonScript script) throws PhonScriptException {
+		for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
+			final ParamSetType ps = paramHistory.getParamSet().get(i);
+			
+			script.resetContext();
+			
+			final ScriptParameters scriptParams = 
+					script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
+			final Map<String, Object> paramMap = new HashMap<>();
+			for(int j = 0; j < ps.getParam().size(); j++) {
+				final ParamType param = ps.getParam().get(j);
+				paramMap.put(param.getId(), param.getValue());
+			}
+			
+			scriptParams.loadFromMap(paramMap);
+			
+			// update hash
+			ps.setHash(scriptParams.getHashString());
+		}
 	}
 	
 }

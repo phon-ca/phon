@@ -61,13 +61,13 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 		try {
 			tokenStream.fill();
 		} catch (PhonexPatternException e) {
-			return getDefaultTokenList(text, initialTokenType, newStartOffset);
+			// do nothing...
 		}
 		
 		// if lexer failed...
-		if(tokenStream.size() == 1) {
-			return getDefaultTokenList(text, initialTokenType, newStartOffset);
-		}
+//		if(tokenStream.size() <= 1) {
+//			return getDefaultTokenList(text, initialTokenType, newStartOffset);
+//		}
 		
 		boolean insideMultiLineComment = (currentTokenType == Token.COMMENT_MULTILINE);
 		boolean insideFeatureList = (currentTokenType == Token.ERROR_IDENTIFIER);		
@@ -188,7 +188,7 @@ public class PhonexTokenMaker extends AbstractTokenMaker {
 		}
 		
 		if(currentTokenStart != end) {
-			addToken(text, currentTokenStart, end-1, currentTokenType, newStartOffset+currentTokenStart);
+			addToken(text, currentTokenStart, end-1, (currentTokenType != Token.NULL ? currentTokenType : Token.IDENTIFIER), newStartOffset+currentTokenStart);
 		}
 		
 		if(!insideMultiLineComment && !insideFeatureList)

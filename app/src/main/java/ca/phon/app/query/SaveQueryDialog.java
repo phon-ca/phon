@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 
+import ca.phon.app.opgraph.nodes.query.QueryHistoryNode;
 import ca.phon.project.Project;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;
@@ -45,16 +46,19 @@ public class SaveQueryDialog extends JDialog {
 
 	private QueryScript queryScript;
 	
+	private QueryHistoryManager stockQueries;
+	
 	private QueryHistoryManager queryHistoryManager;
 
 	private SaveQueryForm form;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 
-	public SaveQueryDialog(CommonModuleFrame parent, QueryScript script, QueryHistoryManager queryHistoryManager) {
+	public SaveQueryDialog(CommonModuleFrame parent, QueryScript script, QueryHistoryManager stockQueries, QueryHistoryManager queryHistoryManager) {
 		super(parent);
 		this.parentFrame = parent;
 		this.queryScript = script;
+		this.stockQueries = stockQueries;
 		this.queryHistoryManager = queryHistoryManager;
 		
 		super.setTitle("Save Query");
@@ -81,7 +85,7 @@ public class SaveQueryDialog extends JDialog {
 	}
 
 	private void init() {
-		form = new SaveQueryForm(getProject(), queryScript, queryHistoryManager);
+		form = new SaveQueryForm(getProject(), queryScript, stockQueries, queryHistoryManager);
 		
 		saveBtn = new JButton("Save");
 		saveBtn.addActionListener(new ActionListener() {

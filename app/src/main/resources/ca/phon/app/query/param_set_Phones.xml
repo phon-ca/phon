@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<param_history xmlns="https://www.phon.ca/param_history" script="Phones" hash="b1f9038d9995179d95a8cd80e1efa17eb48b4580">
+    <param_set date="2018-07-19T16:03:04.265-02:30" hash="XXX" name="Any Vowel">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">\v</param>
+    </param_set>
+    <param_set date="2018-07-19T16:03:09.344-02:30" hash="XXX" name="Any Consonant">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">\c</param>
+    </param_set>
+    <param_set date="2018-07-19T16:03:11.888-02:30" hash="XXX" name="Any Phone">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">\w</param>
+    </param_set>
+    <param_set date="2018-07-19T16:05:43.607-02:30" hash="XXX" name="Standalone Consonants">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Standalone Consonants
+// Look-behind '(?&lt;' and match beginning of input '^'
+// followed by an optional stress marker '\s?'
+(?&lt;^\s?)
+// Match a consonant '(\c)' followed by end of input '$'
+(\c)$</param>
+    </param_set>
+    <param_set date="2018-07-19T16:06:17.653-02:30" hash="XXX" name="Initial Singleton Consonants">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Initial Singleton Consonants
+// Look-behind '(?&lt;' and match beginning of input '^'
+// followed by an optional stress marker '\s?'
+(?&lt;^\s?)
+// Match a consonant (\c)
+(\c)
+// Look-ahead '(?&gt;' and match a vowel
+(?&gt;\v)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:07:41.323-02:30" hash="XXX" name="Medial Singleton Consonants">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Medial Singleton Consonants
+// Look-behind '(?&lt;' and match a vowel '\v'
+// followed by an optional stress marker '\s?'
+(?&lt;\v\s?)
+// Match a consonant
+(\c)
+// Look-ahead '(?&gt;' and match an optional stress maker and vowel
+(?&gt;\s?\v)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="XXX" name="Final Singleton Consonants">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Final Singleton Consonants
+// Look-behind '(?&lt;' and match a vowel '\v'
+(?&lt;\v)
+// Match a consonant '(\c)' followed by end of input '$'
+(\c)$</param>
+    </param_set>
+</param_history>

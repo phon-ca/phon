@@ -44,6 +44,11 @@ public interface PhonScript extends IExtendable, Appendable, CharSequence {
 	public String getScript();
 	
 	/**
+	 * Reset context
+	 */
+	public PhonScriptContext resetContext();
+	
+	/**
 	 * Get a script context for this script.  The context
 	 * is used to compile and evaulate the script.
 	 * 

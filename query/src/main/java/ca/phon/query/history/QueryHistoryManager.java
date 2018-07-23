@@ -41,6 +41,7 @@ import ca.phon.util.PrefHelper;
  * Responsible for loading and saving query history files. Also includes
  * utility methods for some useful query history functions like adding
  * to the history.
+ * 
  */
 public class QueryHistoryManager extends ParamHistoryManager {
 	

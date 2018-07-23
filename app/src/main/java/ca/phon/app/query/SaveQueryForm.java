@@ -44,6 +44,8 @@ public class SaveQueryForm extends JPanel {
 
 	private QueryHistoryManager queryHistoryManager;
 	
+	private QueryHistoryManager stockQueries;
+	
 	/** UI */
 	private JTextField nameField;
 	private JRadioButton nameQueryBtn;
@@ -53,10 +55,11 @@ public class SaveQueryForm extends JPanel {
 	private JLabel projSaveLocField;
 	private JLabel libSaveLocField;
 
-	public SaveQueryForm(Project project, QueryScript script, QueryHistoryManager queryHistoryManager) {
+	public SaveQueryForm(Project project, QueryScript script, QueryHistoryManager stockQueries, QueryHistoryManager queryHistoryManager) {
 		super();
 		this.project = project;
 		this.queryScript = script;
+		this.stockQueries = stockQueries;
 		this.queryHistoryManager = queryHistoryManager;
 		
 		init();
@@ -151,11 +154,23 @@ public class SaveQueryForm extends JPanel {
 			return false;
 		} else {
 			if(nameQueryBtn.isSelected()) {
-				final ParamSetType existingParamSet = queryHistoryManager.getParamSetByName(nameField.getText().trim());
-				if(existingParamSet != null) {
+				final ParamSetType existingNamedParamSet = queryHistoryManager.getParamSetByName(nameField.getText().trim());
+				if(existingNamedParamSet != null) {
 					final Toast toast = ToastFactory.makeToast("Query name already exists in history");
 					toast.start(nameField);
 					return false;
+				}
+				
+				try {
+					// check for existing stock query - don't rename
+					final ParamSetType existingStockQuery = stockQueries.getParamSet(queryScript);
+					if(existingStockQuery != null) {
+						final Toast toast = ToastFactory.makeToast("Cannnot rename stock queries");
+						toast.start(nameField);
+						return false;
+					}
+				} catch (PhonScriptException e) {
+					LogUtil.warning(e);
 				}
 			}
 		}
@@ -205,20 +220,33 @@ public class SaveQueryForm extends JPanel {
 		return scriptFile;
 	}
 	
-	private void nameEntryInQueryHistory() {
+	private void nameEntryInQueryHistory() throws IOException {
+		String name = nameField.getText().trim().length() > 0 ? nameField.getText().trim() : null;
 		try {
-			String name = nameField.getText().trim().length() > 0 ? nameField.getText().trim() : null;
 			queryHistoryManager.nameParamSet(name, queryScript);
-			QueryHistoryManager.save(queryHistoryManager, queryScript);
-		} catch (PhonScriptException | IOException e) {
-			Toolkit.getDefaultToolkit().beep();
-			LogUtil.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} catch (PhonScriptException e) {
+			throw new IOException(e);
 		}
+		QueryHistoryManager.save(queryHistoryManager, queryScript);
 	}
 
 	public void save() {
 		if(nameQueryBtn.isSelected()) {
-			nameEntryInQueryHistory();
+			try {
+				nameEntryInQueryHistory();
+			} catch (IOException ex) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+				
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+				props.setRunAsync(false);
+				props.setTitle("Save failed");
+				props.setHeader("Save failed");
+				props.setMessage(ex.getLocalizedMessage());
+				NativeDialogs.showMessageDialog(props);
+				return;
+			}
 		} else {
 			File saveFile = getSaveLocation();
 			if(saveFile == null) {

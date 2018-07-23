@@ -57,6 +57,9 @@ import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.opgraph.report.ReportRunner;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.query.actions.DeleteAllUnnamedEntriesAction;
+import ca.phon.app.query.actions.DeleteQueryHistoryAction;
+import ca.phon.app.query.actions.DeleteQueryHistoryEntryAction;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
@@ -287,7 +290,11 @@ public class QueryAndReportWizard extends NodeWizard {
 						
 						final PhonUIAction goLastAct = new PhonUIAction(queryHistoryPanel, "gotoLast");
 						goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
-						goLastAct.putValue(PhonUIAction.NAME, "View most recent entry in query history");					
+						goLastAct.putValue(PhonUIAction.NAME, "View most recent entry in query history");
+						
+						final DeleteQueryHistoryEntryAction deleteCurrentEntryAct = new DeleteQueryHistoryEntryAction(QueryAndReportWizard.this);
+						final DeleteAllUnnamedEntriesAction deleteUnnamedEntriesAct = new DeleteAllUnnamedEntriesAction(QueryAndReportWizard.this);
+						final DeleteQueryHistoryAction deleteAllEntriesAct = new DeleteQueryHistoryAction(QueryAndReportWizard.this);
 						
 						menu.add(new JMenuItem(saveSettingsAct), idx++);
 						menu.add(new JMenuItem(resetQueryAct), idx++);
@@ -301,6 +308,10 @@ public class QueryAndReportWizard extends NodeWizard {
 						menu.add(new JMenuItem(historyPrevAct), idx++);
 						menu.add(new JMenuItem(historyNextAct), idx++);
 						menu.add(new JMenuItem(goLastAct), idx++);
+						menu.insertSeparator(idx++);
+						menu.add(new JMenuItem(deleteCurrentEntryAct), idx++);
+						menu.add(new JMenuItem(deleteUnnamedEntriesAct), idx++);
+						menu.add(new JMenuItem(deleteAllEntriesAct), idx++);
 						menu.insertSeparator(idx++);
 					}
 					
@@ -605,9 +616,9 @@ public class QueryAndReportWizard extends NodeWizard {
 	}
 	
 	public void onSaveQuerySettings() {
-		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript, queryHistoryManager);
+		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript, queryHistoryPanel.getStockQueries(), queryHistoryManager);
 		dialog.setModal(true);
-		
+	
 		String queryName = queryHistoryPanel.getQueryName();
 		if(queryName != null)
 			dialog.getForm().getNameField().setText(queryName);
@@ -641,6 +652,10 @@ public class QueryAndReportWizard extends NodeWizard {
 		loadInitialQueryReport();
 		
 		return retVal;
+	}
+	
+	public QueryHistoryPanel getQueryHistoryPanel() {
+		return this.queryHistoryPanel;
 	}
 	
 	private QueryRunnerPanel getCurrentQueryRunner() {

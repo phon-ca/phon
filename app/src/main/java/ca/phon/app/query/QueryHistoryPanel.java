@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -24,9 +28,11 @@ import org.jdesktop.swingx.JXComboBox;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
 import ca.phon.query.history.QueryHistoryManager;
+import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.script.params.history.ParamHistoryManager;
 import ca.phon.script.params.history.ParamHistoryType;
 import ca.phon.script.params.history.ParamSetType;
@@ -47,6 +53,8 @@ import ca.phon.util.icons.IconSize;
  */
 public class QueryHistoryPanel extends JPanel {
 	
+	private final static String STOCK_QUERY_PREFIX = "param_set_";
+	
 	private JLabel label;
 
 	private JButton firstButton;
@@ -64,6 +72,8 @@ public class QueryHistoryPanel extends JPanel {
 	
 	private final QueryHistoryManager queryHistoryManager;
 	
+	private QueryHistoryManager stockQueryManager;
+	
 	private final WeakReference<ScriptPanel> scriptPanelRef;
 	
 	public QueryHistoryPanel(QueryHistoryManager queryHistoryManager, ScriptPanel scriptPanel) {
@@ -72,7 +82,34 @@ public class QueryHistoryPanel extends JPanel {
 		this.queryHistoryManager = queryHistoryManager;
 		this.scriptPanelRef = new WeakReference<ScriptPanel>(scriptPanel);
 		
+		loadStockQueries();
 		init();
+	}
+	
+	private void loadStockQueries() {
+		final QueryName qn = getScriptPanel().getScript().getExtension(QueryName.class);
+		
+		if(qn != null) {
+			final InputStream stockQueryInputStream = getClass().getResourceAsStream(STOCK_QUERY_PREFIX + qn.getName() + ".xml");
+			if(stockQueryInputStream != null) {
+				try {
+					stockQueryManager = new QueryHistoryManager(stockQueryInputStream);
+					
+					// XXX TAKE THIS OUT!!!!!
+					stockQueryManager.fixHashes(new QueryScript(getScriptPanel().getScript().getScript()));
+				} catch (IOException | PhonScriptException e) {
+					LogUtil.severe(e);
+				}
+			}
+		}
+		if(stockQueryManager == null) {
+			final ObjectFactory factory = new ObjectFactory();
+			stockQueryManager = new QueryHistoryManager(factory.createParamHistoryType());
+		}
+	}
+	
+	public int getCurrentIndex() {
+		return currentIndex;
 	}
 	
 	public QueryHistoryManager getQueryHistoryManager() {
@@ -81,6 +118,10 @@ public class QueryHistoryPanel extends JPanel {
 	
 	public ScriptPanel getScriptPanel() {
 		return scriptPanelRef.get();
+	}
+	
+	public QueryHistoryManager getStockQueries() {
+		return this.stockQueryManager;
 	}
 	
 	private void init() {
@@ -143,6 +184,11 @@ public class QueryHistoryPanel extends JPanel {
 		add(namePanel, BorderLayout.CENTER);
 	}
 	
+	public ParamSetType currentQuery() {
+		if(currentIndex < 0 || currentIndex >= queryHistoryManager.size()) return null;
+		return queryHistoryManager.getParamSet(currentIndex);
+	}
+	
 	public void gotoFirst() {
 		gotoIndex(0);
 	}
@@ -199,32 +245,49 @@ public class QueryHistoryPanel extends JPanel {
 			final ParamSetType paramSet = queryHistoryManager.getParamSet(currentIndex);
 			retVal = paramSet.getName();
 		}
+		if(retVal == null) {
+			try {
+				final ScriptParameters scriptParams = 
+						getScriptPanel().getScript().getContext().getScriptParameters(getScriptPanel().getScript().getContext().getEvaluatedScope());
+				final String currentHash = scriptParams.getHashString();
+				final ParamSetType stockSet = stockQueryManager.getParamSet(currentHash);
+				if(stockSet != null) {
+					retVal = stockSet.getName();
+				}
+			} catch (PhonScriptException e) {
+				LogUtil.log(Level.WARNING, e.getLocalizedMessage(), e);
+			}
+		}
 		return retVal;
 	}
 	
-	private void update() {
+	private void updateComboBox() {
 		queryNameBox.removeItemListener(itemListener);
+		List<String> queryNames = 
+				queryHistoryManager.getNamedParamSets().stream()
+					.map( (ps) -> ps.getName() )
+					.collect( Collectors.toList() );
+		List<String> stockQueryNames = 
+				stockQueryManager.getNamedParamSets().stream()
+					.map( (ps) -> ps.getName() )
+					.collect( Collectors.toList() );
+		queryNames.addAll(stockQueryNames);
+		Collections.sort(queryNames);
+		queryNameModel.removeAllElements();
+		queryNames.forEach( (qn) -> queryNameModel.addElement(qn) );
+		queryNameBox.setVisible(queryNames.size() > 0);
+		queryNameBox.setSelectedItem(getQueryName());
+		queryNameBox.addItemListener(itemListener);
+	}
+	
+	private void update() {
 		if(queryHistoryManager.size() > 0) {
 			label.setText(String.format("%2d/%2d", (currentIndex+1), queryHistoryManager.size()));
-			
-			if(currentIndex >= 0 && currentIndex < queryHistoryManager.size()) {
-				List<String> queryNames = 
-						queryHistoryManager.getNamedParamSets().stream()
-							.map( (ps) -> ps.getName() )
-							.sorted()
-							.collect( Collectors.toList() );
-				queryNameModel.removeAllElements();
-				queryNames.forEach( (qn) -> queryNameModel.addElement(qn) );
-				queryNameBox.setVisible(queryNames.size() > 0);
-				queryNameBox.setSelectedItem(getQueryName());
-			} else {
-				queryNameBox.setSelectedItem(null);
-			}
 		} else {
 			label.setText(String.format("%2d/%2d", 0, 0));
 			queryNameBox.setSelectedItem(null);
 		}
-		queryNameBox.addItemListener(itemListener);
+		updateComboBox();
 	}
 	
 	public void loadFromParamSet(ParamSetType queryInfo) {
@@ -256,7 +319,15 @@ public class QueryHistoryPanel extends JPanel {
 				final String selectedItem = (String)queryNameBox.getSelectedItem();
 				if(selectedItem != null) {
 					final ParamSetType paramSet = queryHistoryManager.getParamSetByName(selectedItem);
-					gotoHash(paramSet.getHash());
+					if(paramSet != null)
+						gotoHash(paramSet.getHash());
+					else {
+						final ParamSetType stockSet = stockQueryManager.getParamSetByName(selectedItem);
+						if(stockSet != null) {
+							loadFromParamSet(stockSet);
+							updateLabelFromCurrentHash();
+						}
+					}
 				}
 			}
 		}
