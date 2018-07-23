@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <param_history xmlns="https://www.phon.ca/param_history" script="Phones" hash="b1f9038d9995179d95a8cd80e1efa17eb48b4580">
-    <param_set date="2018-07-19T16:03:04.265-02:30" hash="XXX" name="Any Vowel">
+    <param_set date="2018-07-19T16:03:04.265-02:30" hash="fde8cc01a95d2ee3e9465808943e8b603f310879" name="Any Vowel">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\v</param>
     </param_set>
-    <param_set date="2018-07-19T16:03:09.344-02:30" hash="XXX" name="Any Consonant">
+    <param_set date="2018-07-19T16:03:09.344-02:30" hash="e1cdef92659ba0a1d5b3b81156b897e1219dc042" name="Any Consonant">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\c</param>
     </param_set>
-    <param_set date="2018-07-19T16:03:11.888-02:30" hash="XXX" name="Any Phone">
+    <param_set date="2018-07-19T16:03:11.888-02:30" hash="b4fa35c4b42c093ce8505e1285caf8b4ce419585" name="Any Phone">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\w</param>
     </param_set>
-    <param_set date="2018-07-19T16:05:43.607-02:30" hash="XXX" name="Standalone Consonants">
+    <param_set date="2018-07-19T16:05:43.607-02:30" hash="681d5268de1cbeeda9b169595d26b0277ae0671f" name="Standalone Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Standalone Consonants
 // Look-behind '(?&lt;' and match beginning of input '^'
@@ -21,7 +21,7 @@
 // Match a consonant '(\c)' followed by end of input '$'
 (\c)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:06:17.653-02:30" hash="XXX" name="Initial Singleton Consonants">
+    <param_set date="2018-07-19T16:06:17.653-02:30" hash="6d72dd6dba1497f366edc4836e5f7e8e747afd27" name="Initial Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Initial Singleton Consonants
 // Look-behind '(?&lt;' and match beginning of input '^'
@@ -32,7 +32,7 @@
 // Look-ahead '(?&gt;' and match a vowel
 (?&gt;\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:07:41.323-02:30" hash="XXX" name="Medial Singleton Consonants">
+    <param_set date="2018-07-19T16:07:41.323-02:30" hash="14f5fe5b196f677f78d336a3dbb35396df683480" name="Medial Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Medial Singleton Consonants
 // Look-behind '(?&lt;' and match a vowel '\v'
@@ -43,12 +43,137 @@
 // Look-ahead '(?&gt;' and match an optional stress maker and vowel
 (?&gt;\s?\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="XXX" name="Final Singleton Consonants">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="c76f97bfae143f8e9085d9cb8dd9015e02b42e18" name="Final Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Final Singleton Consonants
 // Look-behind '(?&lt;' and match a vowel '\v'
 (?&lt;\v)
 // Match a consonant '(\c)' followed by end of input '$'
 (\c)$</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="de62674e801ff905ff90d35ce307a116b32fef3d" name="Singleton Consonants">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Singleton Consonants
+// The double pipe operator will combine results of independent expressions
+// Standalone Consonants
+(?&lt;^\s?)(\c)$ ||
+// Initial Consonants
+(?&lt;^\s?)(\c)(?&gt;\v) ||
+// Medial Consonants
+(?&lt;\v\s?)(\c)(?&gt;\s?\v) ||
+// Final Consonants
+(?&lt;\v)(\c)$</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="a8033262bc87ad69f77d541d7cafc2e13a19f9f7" name="Singleton Onsets">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Singleton Onsets
+// The double pipe operator will combine results of independent expressions
+// Standalone Onsets
+(?&lt;^\s?)(\c:L:E)$ || 
+// All other Singleton Onsets
+(?&lt;\S)(\c:O)(?&gt;\v)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="939014bbf31d7ee613a3e34ecca5d952c77911e7" name="Singleton Codas">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Singleton Codas
+// The double pipe operator will combine results of independent expressions
+// Medial Singleton Codas
+(?&lt;\v)(\c:C)(?&gt;\s? (\c:O | \v)) ||
+// Final Singleton Codas
+(?&lt;\v)(\c:C)$</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="3b32544563f0e2eab0f242af4ca8fe2431f111fb" name="Initial Consonant Clusters">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Initial Consonant Clusters
+// Look-behind '(?&lt;' and match beginning of input '^'
+// followed by an optional stress marker '\s?'
+(?&lt;^\s?)
+// Match a 2 or more consonants '(\c&lt;2,&gt;)'
+(\c&lt;2,&gt;)
+// Look-ahead '(?&gt;' and match an optional stress marker '\s?' and vowel '\v'
+(?&gt;\s?\v)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="d841948793f112b774edad956cb29364f44eb49a" name="Medial Consonant Clusters">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Medial Consonant Clusters
+// Look-behind '(?&lt;' and match a vowel '\v'
+// followed by an optional stress marker '\s?'
+(?&lt;\v\s?)
+// Match a 2 or more consonants '(\c&lt;2,&gt;)'
+(\c&lt;2,&gt;)
+// Look-ahead '(?&gt;' and match an optional stress marker '\s?' and vowel '\v'
+(?&gt;\s?\v)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="eb4097bf8f939e675d9941ef5ff4868c8756d673" name="Final Consonant Clusters">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Final Consonant Clusters
+// Look-behind '(?&lt;' and match a vowel '\v'
+// followed by an optional stress marker '\s?'
+(?&lt;\v\s?)
+// Match a 2 or more consonants '(\c&lt;2,&gt;)'
+// folled by end of input '$'
+(\c&lt;2,&gt;)$</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="991d48d6b09ed83fc45d36de44a4e8a20a643ec5" name="Heterosyllabic Consonant Clusters">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Heterosyllabic Consonant Clusters
+// match one or more consonants '\c+'
+\c+
+// followed by a syllable boundary '\S' (includes implicit boundaries)
+\S
+// followed by one or more consonants '\c+'
+\c+</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="7716d14e4a6a60648d5b48f3b0ca503cdfe5f5d6" name="Consonant Clusters">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Consonant Clusters
+// The double pipe operator will combine results of independent expressions
+// Initial/medial Consonant Clusters
+(\c&lt;2,&gt;)(?&gt;\s?\v) ||
+// Final Consonant Clusters
+(\c&lt;2,&gt;)$ ||
+// Heterosyllabic Clusters
+(\c+[\s\.]\c+)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="d41fa3ebe5eceeeefcb83391489ccfb540c07057" name="Tautosyllabic Onsets">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Tautosyllabic Onsets
+// Includes left appendicies ':L', onsets ':O' and OEHS ':E'
+(\c:L:O:E&lt;2,&gt;)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="e95502deff5125b6419442f11daf329df75c0c2b" name="Tautosyllabic Codas">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Tautosyllabic Codas
+// Includes right appendicies ':R' and codas ':C'
+(\c:C:R&lt;2,&gt;)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="4d75c22148a97a335c6eb9c6df4857726df86592" name="Tautosyllabic Consonant Clusters">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Tautosyllabic Consonant Clusters
+// The double pipe operator will combine results of independent expressions
+// Tautosyllabic Onsets
+(\c:L:O:E&lt;2,&gt;) ||
+// Tautosyllabic Codas
+(\c:C:R&lt;2,&gt;)</param>
+    </param_set>
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="f92d842e98711a0cba368f7fb690ffc7996bd530" name="Syllables">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Stress
+(S=\s)?
+// Onset
+(O=
+	(O1=\c:L:O)(O2=\c:L:O)(O3=\c:O) | (\c:L:O)(\c:O) | (\c:O)
+)?
+// Rhyme
+(R=
+	// Nucleus
+	(N=
+		(N1=.:D)(N2=.:D) | (.:N)
+	)
+	// Coda
+	(C=
+		(C1=\c:C)(C2=\c:C:R)(C3=\c:C:R) | (\c:C)(\c:C:R) | (\c:C)
+	)?
+)</param>
     </param_set>
 </param_history>

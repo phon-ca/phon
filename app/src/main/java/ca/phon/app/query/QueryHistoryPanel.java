@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -95,9 +96,7 @@ public class QueryHistoryPanel extends JPanel {
 				try {
 					stockQueryManager = new QueryHistoryManager(stockQueryInputStream);
 					
-					// XXX TAKE THIS OUT!!!!!
-					stockQueryManager.fixHashes(new QueryScript(getScriptPanel().getScript().getScript()));
-				} catch (IOException | PhonScriptException e) {
+				} catch (IOException e) {
 					LogUtil.severe(e);
 				}
 			}
