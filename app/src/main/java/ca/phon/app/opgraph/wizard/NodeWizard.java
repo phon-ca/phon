@@ -1061,6 +1061,8 @@ public class NodeWizard extends WizardFrame {
 						if(comp instanceof ScriptPanel) {
 							// validate settings
 							return ((ScriptPanel)comp).checkParams();
+						} else if(comp instanceof QueryNode.QueryNodeSettingsPanel) {
+							return ((QueryNode.QueryNodeSettingsPanel)comp).getScriptPanel().checkParams();
 						} else {
 							return super.validateStep();
 						}
@@ -1070,8 +1072,8 @@ public class NodeWizard extends WizardFrame {
 				final BorderLayout layout = new BorderLayout();
 				step.setLayout(layout);
 
-				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), 
-						(comp instanceof ScriptPanel ? comp : new JScrollPane(comp)) );
+				final JScrollPane scroller = new JScrollPane(comp);
+				final TitledPanel panel = new TitledPanel(ext.getNodeTitle(node), scroller);
 				if(globalOptionsPanel.getParent() == null)
 					panel.setRightDecoration(globalOptionsPanel);
 				

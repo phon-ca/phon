@@ -1,5 +1,7 @@
 package ca.phon.ui.text;
 
+import javax.swing.Scrollable;
+
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
@@ -12,7 +14,7 @@ import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
  * and autocompletion support for phonex.
  *
  */
-public class PatternEditor extends RSyntaxTextArea {
+public class PatternEditor extends RSyntaxTextArea implements Scrollable {
 	
 	static {
 		installSyntaxStyles();
@@ -115,6 +117,11 @@ public class PatternEditor extends RSyntaxTextArea {
 	public void setSyntaxEditingStyle(String arg0) {
 		super.setSyntaxEditingStyle(arg0);
 		setupAutocompletion();
+	}
+	
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return true;
 	}
 	
 }

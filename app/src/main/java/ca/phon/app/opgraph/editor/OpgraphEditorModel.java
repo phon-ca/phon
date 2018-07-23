@@ -128,11 +128,9 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 				@Override
 				protected Component getNodeSettingsComponent(NodeSettings settings) {
 					Component comp = settings.getComponent(getDocument());
-					if(!(comp instanceof ScriptPanel)) {
-						final JScrollPane scroller = new JScrollPane(comp);
-						scroller.getVerticalScrollBar().setUnitIncrement(10);
-						comp = scroller;
-					}
+					final JScrollPane scroller = new JScrollPane(comp);
+					scroller.getVerticalScrollBar().setUnitIncrement(10);
+					comp = scroller;
 					return comp;
 				}
 			};

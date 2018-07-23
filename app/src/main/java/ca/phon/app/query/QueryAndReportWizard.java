@@ -473,7 +473,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		queryPanel = new TitledPanel("Query");
 		queryPanel.getContentContainer().setLayout(new BorderLayout());
-		queryPanel.getContentContainer().add(scriptPanel, BorderLayout.CENTER);
+		queryPanel.getContentContainer().add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
 		
 		final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters", queryPanel);
 		resetQueryAct.putValue(PhonUIAction.NAME, "Clear query");

@@ -70,7 +70,7 @@ import ca.phon.util.icons.IconSize;
  * while the property of the individual script parameters
  * will be <code>PARAM_PREFIX+&lt;paramName&gt;</code>.
  */
-public class ScriptPanel extends JPanel {
+public class ScriptPanel extends JPanel implements Scrollable {
 
 	private static final long serialVersionUID = 3335240056447554685L;
 
@@ -228,7 +228,7 @@ public class ScriptPanel extends JPanel {
 		} catch (PhonScriptException e1) {
 			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
 		}
-		cardPanel.add(new JScrollPane(paramPanel), paramPanelId);
+		cardPanel.add(paramPanel, paramPanelId);
 
 		// setup editor and save button
 		scriptEditor = new RSyntaxTextArea();
@@ -417,6 +417,31 @@ public class ScriptPanel extends JPanel {
 			return false;
 		}
 		
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return null;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 10;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 100;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return true;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
 	}
 
 }

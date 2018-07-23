@@ -18,11 +18,13 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -31,10 +33,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.RecordContainer;
 import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.query.QueryHistoryPanel;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
@@ -50,12 +56,14 @@ import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.Script;
+import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptContext;
 import ca.phon.query.script.QueryTask;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.worker.PhonTask;
@@ -71,6 +79,8 @@ import ca.phon.worker.PhonTaskListener;
 public class QueryNode extends OpNode implements NodeSettings {
 
 	private QueryScript queryScript;
+	
+	private QueryHistoryManager queryHistoryManager;
 
 	private InputField projectInputField = new InputField("project", "Project", false, true, Project.class);
 
@@ -106,7 +116,14 @@ public class QueryNode extends OpNode implements NodeSettings {
 		super();
 
 		this.queryScript = queryScript;
-
+		
+		try {
+			this.queryHistoryManager = QueryHistoryManager.newInstance(queryScript);
+		} catch (IOException e) {
+			final ObjectFactory factory = new ObjectFactory();
+			this.queryHistoryManager = new QueryHistoryManager(factory.createParamHistoryType());
+		}
+		
 		super.putField(projectInputField);
 		super.putField(sessionsInputField);
 		super.putField(paramsInputField);
@@ -293,17 +310,40 @@ public class QueryNode extends OpNode implements NodeSettings {
 		}
 	}
 
+	public class QueryNodeSettingsPanel extends JPanel {
+		
+		private ScriptPanel scriptPanel;
+		
+		public QueryNodeSettingsPanel(ScriptPanel scriptPanel) {
+			super(new BorderLayout());
+			this.scriptPanel = scriptPanel;
+		}
+		
+		public ScriptPanel getScriptPanel() {
+			return this.scriptPanel;
+		}
+		
+	}
+	
+	private QueryNodeSettingsPanel settingsPanel;
 	private ScriptPanel scriptPanel;
+	private QueryHistoryPanel queryHistoryPanel;
 	@Override
 	public Component getComponent(GraphDocument arg0) {
-		if(scriptPanel == null) {
+		if(settingsPanel == null) {
 			scriptPanel = new ScriptPanel(getQueryScript());
+			settingsPanel = new QueryNodeSettingsPanel(scriptPanel);
 			
 			if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
 				scriptPanel.setSwapButtonVisible(true);
 			}
+			
+			queryHistoryPanel = new QueryHistoryPanel(queryHistoryManager, scriptPanel);
+			
+			settingsPanel.add(queryHistoryPanel, BorderLayout.NORTH);
+			settingsPanel.add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
 		}
-		return scriptPanel;
+		return settingsPanel;
 	}
 
 	@Override
