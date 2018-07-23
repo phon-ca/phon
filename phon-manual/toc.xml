@@ -1815,7 +1815,7 @@
       </topic>
       <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1729">
          <title>Language Reference</title>
-         <topic href="phonex/concepts/constructs.html" data-id="concept_tpv_vc3_gg" wh-toc-id="concept_tpv_vc3_gg-d46e1730">
+         <topic href="phonex/constructs.html" data-id="concept_tpv_vc3_gg" wh-toc-id="concept_tpv_vc3_gg-d46e1730">
             <title>Phonex Constructs</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">A summary of phonex constructs.</p>
@@ -1827,7 +1827,15 @@
                <shortdesc class="- map/shortdesc ">A summary of phonex constructs.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="phonex/concepts/phone-matchers.html" data-id="concept_pjp_4nm_gg" wh-toc-id="concept_pjp_4nm_gg-d46e1741">
+         <topic href="phonex/comments.html" format="dita" data-id="comments" wh-toc-id="comments-d46e1741">
+            <title>Comments</title>
+            <topicmeta>
+               <resourceid class="- topic/resourceid " oxy-source="topic" appid="comments"></resourceid>
+               <navtitle class="- topic/navtitle ">Comments</navtitle><?ditaot gentext?>
+               <linktext class="- map/linktext ">Comments</linktext>
+            </topicmeta>
+         </topic>
+         <topic href="phonex/phone-matchers.html" data-id="concept_pjp_4nm_gg" wh-toc-id="concept_pjp_4nm_gg-d46e1749">
             <title>Phone Matchers</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Various methods of matching phones using phonex 2.0.</p>
@@ -1839,7 +1847,7 @@
                <shortdesc class="- map/shortdesc ">Various methods of matching phones using phonex 2.0.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="phonex/concepts/groups.html" data-id="concept_2cb_tlm_gg" wh-toc-id="concept_2cb_tlm_gg-d46e1752">
+         <topic href="phonex/groups.html" data-id="concept_2cb_tlm_gg" wh-toc-id="concept_2cb_tlm_gg-d46e1760">
             <title>Groups</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Grouping in phonex 2.0.</p>
@@ -1851,7 +1859,7 @@
                <shortdesc class="- map/shortdesc ">Grouping in phonex 2.0.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="phonex/concepts/boundaries.html" data-id="concept_qb1_dhn_gg" wh-toc-id="concept_qb1_dhn_gg-d46e1763">
+         <topic href="phonex/boundaries.html" data-id="concept_qb1_dhn_gg" wh-toc-id="concept_qb1_dhn_gg-d46e1771">
             <title>Boundaries</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of special boundary markers.</p>
@@ -1863,7 +1871,7 @@
                <shortdesc class="- map/shortdesc ">Description of special boundary markers.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="phonex/concepts/quantifiers.html" data-id="concept_ddz_ttt_gg" wh-toc-id="concept_ddz_ttt_gg-d46e1774">
+         <topic href="phonex/quantifiers.html" data-id="concept_ddz_ttt_gg" wh-toc-id="concept_ddz_ttt_gg-d46e1782">
             <title>Quantifiers</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of phonex quantifiers.</p>
@@ -1875,7 +1883,7 @@
                <shortdesc class="- map/shortdesc ">Description of phonex quantifiers.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="phonex/concepts/lookahead-behind.html" data-id="concept_n15_2qc_sv" wh-toc-id="concept_n15_2qc_sv-d46e1785">
+         <topic href="phonex/lookahead-behind.html" data-id="concept_n15_2qc_sv" wh-toc-id="concept_n15_2qc_sv-d46e1793">
             <title>Look Ahead/Behind</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_n15_2qc_sv"></resourceid>
@@ -1883,130 +1891,130 @@
                <linktext class="- map/linktext ">Look Ahead/Behind</linktext>
             </topicmeta>
          </topic>
+         <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1801">
+            <title>Supplementary Matchers</title>
+            <topic href="phonex/plug-ins.html" data-id="concept_zkq_nnm_gg" wh-toc-id="concept_zkq_nnm_gg-d46e1802">
+               <title>Overview</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Supplementary matchers in phonex 2.0.</p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_zkq_nnm_gg"></resourceid>
+                  <navtitle class="- topic/navtitle ">Overview</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">Overview</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Supplementary matchers in phonex 2.0.</shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/stress.html" data-id="concept_5w3_qnm_gg" wh-toc-id="concept_5w3_qnm_gg-d46e1813">
+               <title>stress</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the phonex <code class="ph codeph">stress</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_5w3_qnm_gg"></resourceid>
+                  <navtitle class="- topic/navtitle ">stress</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">stress</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the phonex 
+                     <codeph class="+ topic/ph pr-d/codeph ">stress</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/sctype.html" data-id="concept_33z_pnm_gg" wh-toc-id="concept_33z_pnm_gg-d46e1827">
+               <title>sctype</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the phonex <code class="ph codeph">sctype</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_33z_pnm_gg"></resourceid>
+                  <navtitle class="- topic/navtitle ">sctype</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">sctype</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the phonex 
+                     <codeph class="+ topic/ph pr-d/codeph ">sctype</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/diacritic_plugin.html" data-id="concept_wqv_w2g_dn" wh-toc-id="concept_wqv_w2g_dn-d46e1841">
+               <title>diacritic</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the phonex <code class="ph codeph">diacritic</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_wqv_w2g_dn"></resourceid>
+                  <navtitle class="- topic/navtitle ">diacritic</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">diacritic</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the phonex 
+                     <codeph class="+ topic/ph pr-d/codeph ">diacritic</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/prefix.html" data-id="concept_qy2_wgn_gg" wh-toc-id="concept_qy2_wgn_gg-d46e1855">
+               <title>prefix</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">prefix</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_qy2_wgn_gg"></resourceid>
+                  <navtitle class="- topic/navtitle ">prefix</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">prefix</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the 
+                     <codeph class="+ topic/ph pr-d/codeph ">prefix</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/suffix.html" data-id="concept_psh_xgn_gg" wh-toc-id="concept_psh_xgn_gg-d46e1869">
+               <title>suffix</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">suffix</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_psh_xgn_gg"></resourceid>
+                  <navtitle class="- topic/navtitle ">suffix</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">suffix</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the 
+                     <codeph class="+ topic/ph pr-d/codeph ">suffix</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/comb.html" data-id="concept_jj4_ygn_gg" wh-toc-id="concept_jj4_ygn_gg-d46e1883">
+               <title>comb</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">comb</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_jj4_ygn_gg"></resourceid>
+                  <navtitle class="- topic/navtitle ">comb</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">comb</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the 
+                     <codeph class="+ topic/ph pr-d/codeph ">comb</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+            <topic href="phonex/tone_plugin.html" data-id="concept_djv_zhg_dn" wh-toc-id="concept_djv_zhg_dn-d46e1897">
+               <title>tone</title>
+               <shortdesc>
+                  <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">tone</code> supplementary matcher.
+                  </p>
+               </shortdesc>
+               <topicmeta>
+                  <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_djv_zhg_dn"></resourceid>
+                  <navtitle class="- topic/navtitle ">tone</navtitle><?ditaot gentext?>
+                  <linktext class="- map/linktext ">tone</linktext><?ditaot genshortdesc?>
+                  <shortdesc class="- map/shortdesc ">Description of the 
+                     <codeph class="+ topic/ph pr-d/codeph ">tone</codeph> supplementary matcher.
+                  </shortdesc>
+               </topicmeta>
+            </topic>
+         </topic>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1793">
-         <title>Supplementary Matchers</title>
-         <topic href="phonex/concepts/plug-ins.html" data-id="concept_zkq_nnm_gg" wh-toc-id="concept_zkq_nnm_gg-d46e1794">
-            <title>Overview</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Supplementary matchers in phonex 2.0.</p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_zkq_nnm_gg"></resourceid>
-               <navtitle class="- topic/navtitle ">Overview</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">Overview</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Supplementary matchers in phonex 2.0.</shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/stress.html" data-id="concept_5w3_qnm_gg" wh-toc-id="concept_5w3_qnm_gg-d46e1805">
-            <title>stress</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the phonex <code class="ph codeph">stress</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_5w3_qnm_gg"></resourceid>
-               <navtitle class="- topic/navtitle ">stress</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">stress</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the phonex 
-                  <codeph class="+ topic/ph pr-d/codeph ">stress</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/sctype.html" data-id="concept_33z_pnm_gg" wh-toc-id="concept_33z_pnm_gg-d46e1819">
-            <title>sctype</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the phonex <code class="ph codeph">sctype</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_33z_pnm_gg"></resourceid>
-               <navtitle class="- topic/navtitle ">sctype</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">sctype</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the phonex 
-                  <codeph class="+ topic/ph pr-d/codeph ">sctype</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/diacritic_plugin.html" data-id="concept_wqv_w2g_dn" wh-toc-id="concept_wqv_w2g_dn-d46e1833">
-            <title>diacritic</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the phonex <code class="ph codeph">diacritic</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_wqv_w2g_dn"></resourceid>
-               <navtitle class="- topic/navtitle ">diacritic</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">diacritic</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the phonex 
-                  <codeph class="+ topic/ph pr-d/codeph ">diacritic</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/prefix.html" data-id="concept_qy2_wgn_gg" wh-toc-id="concept_qy2_wgn_gg-d46e1847">
-            <title>prefix</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">prefix</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_qy2_wgn_gg"></resourceid>
-               <navtitle class="- topic/navtitle ">prefix</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">prefix</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the 
-                  <codeph class="+ topic/ph pr-d/codeph ">prefix</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/suffix.html" data-id="concept_psh_xgn_gg" wh-toc-id="concept_psh_xgn_gg-d46e1861">
-            <title>suffix</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">suffix</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_psh_xgn_gg"></resourceid>
-               <navtitle class="- topic/navtitle ">suffix</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">suffix</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the 
-                  <codeph class="+ topic/ph pr-d/codeph ">suffix</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/comb.html" data-id="concept_jj4_ygn_gg" wh-toc-id="concept_jj4_ygn_gg-d46e1875">
-            <title>comb</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">comb</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_jj4_ygn_gg"></resourceid>
-               <navtitle class="- topic/navtitle ">comb</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">comb</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the 
-                  <codeph class="+ topic/ph pr-d/codeph ">comb</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="phonex/concepts/tone_plugin.html" data-id="concept_djv_zhg_dn" wh-toc-id="concept_djv_zhg_dn-d46e1889">
-            <title>tone</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Description of the <code class="ph codeph">tone</code> supplementary matcher.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="concept_djv_zhg_dn"></resourceid>
-               <navtitle class="- topic/navtitle ">tone</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">tone</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Description of the 
-                  <codeph class="+ topic/ph pr-d/codeph ">tone</codeph> supplementary matcher.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-      </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1903">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1911">
          <title>Examples</title>
-         <topic href="phonex/examples/example-consonants.html" format="dita" data-id="basic_phone_matching" wh-toc-id="basic_phone_matching-d46e1904">
+         <topic href="phonex/examples/example-consonants.html" format="dita" data-id="basic_phone_matching" wh-toc-id="basic_phone_matching-d46e1912">
             <title>Basic Phone Matching</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="basic_phone_matching"></resourceid>
@@ -2014,7 +2022,7 @@
                <linktext class="- map/linktext ">Basic Phone Matching</linktext>
             </topicmeta>
          </topic>
-         <topic href="phonex/examples/singleton_consonants.html" format="dita" data-id="singleton_consonants" wh-toc-id="singleton_consonants-d46e1912">
+         <topic href="phonex/examples/singleton_consonants.html" format="dita" data-id="singleton_consonants" wh-toc-id="singleton_consonants-d46e1920">
             <title>Singleton Consonants</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="singleton_consonants"></resourceid>
@@ -2022,7 +2030,7 @@
                <linktext class="- map/linktext ">Singleton Consonants</linktext>
             </topicmeta>
          </topic>
-         <topic href="phonex/examples/consonant_clusters.html" format="dita" data-id="consonant_clusters" wh-toc-id="consonant_clusters-d46e1920">
+         <topic href="phonex/examples/consonant_clusters.html" format="dita" data-id="consonant_clusters" wh-toc-id="consonant_clusters-d46e1928">
             <title>Consonant Clusters</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="consonant_clusters"></resourceid>
@@ -2030,7 +2038,7 @@
                <linktext class="- map/linktext ">Consonant Clusters</linktext>
             </topicmeta>
          </topic>
-         <topic href="phonex/examples/syllables.html" format="dita" data-id="syllables" wh-toc-id="syllables-d46e1928">
+         <topic href="phonex/examples/syllables.html" format="dita" data-id="syllables" wh-toc-id="syllables-d46e1936">
             <title>Syllables</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="syllables"></resourceid>
@@ -2040,9 +2048,9 @@
          </topic>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1938">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1946">
       <title>Queries</title>
-      <topic href="query/query-data_tiers.html" format="dita" data-id="query_data_tiers" wh-toc-id="query_data_tiers-d46e1939">
+      <topic href="query/query-data_tiers.html" format="dita" data-id="query_data_tiers" wh-toc-id="query_data_tiers-d46e1947">
          <title>Query: Data Tiers</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="query_data_tiers"></resourceid>
@@ -2050,7 +2058,7 @@
             <linktext class="- map/linktext ">Query: Data Tiers</linktext>
          </topicmeta>
       </topic>
-      <topic href="query/query_phones.html" format="dita" data-id="query_phones" wh-toc-id="query_phones-d46e1947">
+      <topic href="query/query_phones.html" format="dita" data-id="query_phones" wh-toc-id="query_phones-d46e1955">
          <title>Query: Phones</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="query_phones"></resourceid>
@@ -2058,7 +2066,7 @@
             <linktext class="- map/linktext ">Query: Phones</linktext>
          </topicmeta>
       </topic>
-      <topic href="query/query_segmental_relations.html" format="dita" data-id="query_segmental_relations" wh-toc-id="query_segmental_relations-d46e1955">
+      <topic href="query/query_segmental_relations.html" format="dita" data-id="query_segmental_relations" wh-toc-id="query_segmental_relations-d46e1963">
          <title>Query: Segmental Relations</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="query_segmental_relations"></resourceid>
@@ -2066,9 +2074,9 @@
             <linktext class="- map/linktext ">Query: Segmental Relations</linktext>
          </topicmeta>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1963">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e1971">
          <title>Common Query Options</title>
-         <topic href="query/tasks/GroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1964">
+         <topic href="query/tasks/GroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1972">
             <title>Group Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on position or an expression defining the word         group.</p>
@@ -2080,7 +2088,7 @@
                <shortdesc class="- map/shortdesc ">Limit the results based on position or an expression defining the word         group.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/AlignedGroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1975">
+         <topic href="query/tasks/AlignedGroupFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1983">
             <title>Aligned Group Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">You may also limit the results based on an expression defining an aligned word group         in another tier.</p>
@@ -2092,7 +2100,7 @@
                <shortdesc class="- map/shortdesc ">You may also limit the results based on an expression defining an aligned word group         in another tier.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/WordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1986">
+         <topic href="query/tasks/WordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1994">
             <title>Word Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on position or an expression defining the word.</p>
@@ -2104,7 +2112,7 @@
                <shortdesc class="- map/shortdesc ">Limit the results based on position or an expression defining the word.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/AlignedWordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e1997">
+         <topic href="query/tasks/AlignedWordFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2005">
             <title>Aligned Word Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">You may also limit the results based on an expression defining an aligned word in         another tier.</p>
@@ -2116,7 +2124,7 @@
                <shortdesc class="- map/shortdesc ">You may also limit the results based on an expression defining an aligned word in         another tier.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/SyllableFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2008">
+         <topic href="query/tasks/SyllableFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2016">
             <title>Syllable Options</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on position or an expression defining the         syllable.</p>
@@ -2128,7 +2136,7 @@
                <shortdesc class="- map/shortdesc ">Limit the results based on position or an expression defining the         syllable.</shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/ParticipantFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2019">
+         <topic href="query/tasks/ParticipantFilter.html" data-id="taskId" wh-toc-id="taskId-d46e2027">
             <title>Participant Filter</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Limit the results based on participant information.</p>
@@ -2141,7 +2149,7 @@
             </topicmeta>
          </topic>
       </topic>
-      <topic href="query/tasks/ViewResultSet.html" data-id="taskId" wh-toc-id="taskId-d46e2030">
+      <topic href="query/tasks/ViewResultSet.html" data-id="taskId" wh-toc-id="taskId-d46e2038">
          <title>View Result Set</title>
          <shortdesc>
             <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">View a <em class="ph i">Result Set</em> from a query.
@@ -2155,7 +2163,7 @@
                <i class="+ topic/ph hi-d/i ">Result Set</i> from a query.
             </shortdesc>
          </topicmeta>
-         <topic href="query/tasks/SaveTableAsCSV.html" data-id="taskId" wh-toc-id="taskId-d46e2044">
+         <topic href="query/tasks/SaveTableAsCSV.html" data-id="taskId" wh-toc-id="taskId-d46e2052">
             <title>Save Table as CSV</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Save the table visible in the <span class="keyword wintitle">Results</span> window as a CSV         file.
@@ -2170,7 +2178,7 @@
                </shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/EditTableColumns.html" data-id="taskId" wh-toc-id="taskId-d46e2058">
+         <topic href="query/tasks/EditTableColumns.html" data-id="taskId" wh-toc-id="taskId-d46e2066">
             <title>Edit Table Columns</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Add, remove, edit, or reorder columns currently visible in the             <span class="keyword wintitle">Results</span> window.
@@ -2185,7 +2193,7 @@
                </shortdesc>
             </topicmeta>
          </topic>
-         <topic href="query/tasks/FilterResults.html" data-id="taskId" wh-toc-id="taskId-d46e2072">
+         <topic href="query/tasks/FilterResults.html" data-id="taskId" wh-toc-id="taskId-d46e2080">
             <title>Filter Results</title>
             <shortdesc>
                <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Search within the results table.</p>
@@ -2196,7 +2204,7 @@
                <linktext class="- map/linktext ">Filter Results</linktext><?ditaot genshortdesc?>
                <shortdesc class="- map/shortdesc ">Search within the results table.</shortdesc>
             </topicmeta>
-            <topic href="editor/concepts/AboutTableQuickSearch_2.html" data-id="conceptId" wh-toc-id="conceptId-d46e2083">
+            <topic href="editor/concepts/AboutTableQuickSearch_2.html" data-id="conceptId" wh-toc-id="conceptId-d46e2091">
                <title>About Table Quick Search</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="conceptId"></resourceid>
@@ -2206,56 +2214,9 @@
             </topic>
          </topic>
       </topic>
-      <topic href="history/tasks/ViewQueryHistory.html" data-id="taskId" wh-toc-id="taskId-d46e2091">
-         <title>View Query History</title>
-         <shortdesc>
-            <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">View the query history for a project.</p>
-         </shortdesc>
-         <topicmeta>
-            <resourceid class="- topic/resourceid " oxy-source="topic" appid="taskId"></resourceid>
-            <navtitle class="- topic/navtitle ">View Query History</navtitle><?ditaot gentext?>
-            <linktext class="- map/linktext ">View Query History</linktext><?ditaot genshortdesc?>
-            <shortdesc class="- map/shortdesc ">View the query history for a project.</shortdesc>
-         </topicmeta>
-         <topic href="history/tasks/DeleteQuery.html" data-id="taskId" wh-toc-id="taskId-d46e2102">
-            <title>Delete Query from History</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Delete a query from the <span class="keyword wintitle">Query History</span>.
-               </p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="taskId"></resourceid>
-               <navtitle class="- topic/navtitle ">Delete Query from History</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">Delete Query from History</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Delete a query from the 
-                  <wintitle class="+ topic/keyword ui-d/wintitle ">Query History</wintitle>.
-               </shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="history/tasks/EditQueryDetails.html" data-id="taskId" wh-toc-id="taskId-d46e2116">
-            <title>Edit Query Details</title>
-            <shortdesc>
-               <p xmlns="http://www.w3.org/1999/xhtml" class="shortdesc">Edit a query's name, contents, and/or star setting.</p>
-            </shortdesc>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="taskId"></resourceid>
-               <navtitle class="- topic/navtitle ">Edit Query Details</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">Edit Query Details</linktext><?ditaot genshortdesc?>
-               <shortdesc class="- map/shortdesc ">Edit a query's name, contents, and/or star setting.</shortdesc>
-            </topicmeta>
-         </topic>
-         <topic href="history/concepts/AboutStarredQueries.html" data-id="conceptId" wh-toc-id="conceptId-d46e2127">
-            <title>About Starred Queries</title>
-            <topicmeta>
-               <resourceid class="- topic/resourceid " oxy-source="topic" appid="conceptId"></resourceid>
-               <navtitle class="- topic/navtitle ">About Starred Queries</navtitle><?ditaot gentext?>
-               <linktext class="- map/linktext ">About Starred Queries</linktext>
-            </topicmeta>
-         </topic>
-      </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2135">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2099">
          <title>Query Reports</title>
-         <topic href="report/AboutQueryReports.html" format="dita" data-id="about_query_reports" wh-toc-id="about_query_reports-d46e2136">
+         <topic href="report/AboutQueryReports.html" format="dita" data-id="about_query_reports" wh-toc-id="about_query_reports-d46e2100">
             <title>About Query Reports</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="about_query_reports"></resourceid>
@@ -2263,7 +2224,7 @@
                <linktext class="- map/linktext ">About Query Reports</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-aggregate_IPA.html" format="dita" data-id="report_aggregate_ipa_results" wh-toc-id="report_aggregate_ipa_results-d46e2144">
+         <topic href="report/report-aggregate_IPA.html" format="dita" data-id="report_aggregate_ipa_results" wh-toc-id="report_aggregate_ipa_results-d46e2108">
             <title>Report: Aggregate (IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_aggregate_ipa_results"></resourceid>
@@ -2271,7 +2232,7 @@
                <linktext class="- map/linktext ">Report: Aggregate (IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-aggregate_non-IPA.html" format="dita" data-id="report_aggregate_non_ipa_results" wh-toc-id="report_aggregate_non_ipa_results-d46e2152">
+         <topic href="report/report-aggregate_non-IPA.html" format="dita" data-id="report_aggregate_non_ipa_results" wh-toc-id="report_aggregate_non_ipa_results-d46e2116">
             <title>Report: Aggregate (non-IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_aggregate_non_ipa_results"></resourceid>
@@ -2279,7 +2240,7 @@
                <linktext class="- map/linktext ">Report: Aggregate (non-IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-inventory_by_session_IPA.html" format="dita" data-id="report_inventory_by_session_ipa_results" wh-toc-id="report_inventory_by_session_ipa_results-d46e2160">
+         <topic href="report/report-inventory_by_session_IPA.html" format="dita" data-id="report_inventory_by_session_ipa_results" wh-toc-id="report_inventory_by_session_ipa_results-d46e2124">
             <title>Report: Inventory by Session (IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_inventory_by_session_ipa_results"></resourceid>
@@ -2287,7 +2248,7 @@
                <linktext class="- map/linktext ">Report: Inventory by Session (IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-inventory_by_session_non-IPA.html" format="dita" data-id="report_inventory_by_session_non_ipa_results" wh-toc-id="report_inventory_by_session_non_ipa_results-d46e2168">
+         <topic href="report/report-inventory_by_session_non-IPA.html" format="dita" data-id="report_inventory_by_session_non_ipa_results" wh-toc-id="report_inventory_by_session_non_ipa_results-d46e2132">
             <title>Report: Inventory by Session (non-IPA results)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_inventory_by_session_non_ipa_results"></resourceid>
@@ -2295,7 +2256,7 @@
                <linktext class="- map/linktext ">Report: Inventory by Session (non-IPA results)</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-listing.html" format="dita" data-id="report_listing" wh-toc-id="report_listing-d46e2176">
+         <topic href="report/report-listing.html" format="dita" data-id="report_listing" wh-toc-id="report_listing-d46e2140">
             <title>Report: Listing</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_listing"></resourceid>
@@ -2303,7 +2264,7 @@
                <linktext class="- map/linktext ">Report: Listing</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-listing_by_session.html" format="dita" data-id="report_listing_by_session" wh-toc-id="report_listing_by_session-d46e2184">
+         <topic href="report/report-listing_by_session.html" format="dita" data-id="report_listing_by_session" wh-toc-id="report_listing_by_session-d46e2148">
             <title>Report: Listing by Session</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_listing_by_session"></resourceid>
@@ -2311,7 +2272,7 @@
                <linktext class="- map/linktext ">Report: Listing by Session</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-phone_similarity.html" format="dita" data-id="report_phone_similarity" wh-toc-id="report_phone_similarity-d46e2192">
+         <topic href="report/report-phone_similarity.html" format="dita" data-id="report_phone_similarity" wh-toc-id="report_phone_similarity-d46e2156">
             <title>Report: Phone Similarity</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_phone_similarity"></resourceid>
@@ -2319,7 +2280,7 @@
                <linktext class="- map/linktext ">Report: Phone Similarity</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-transcript_variability.html" format="dita" data-id="report_transcript_variability" wh-toc-id="report_transcript_variability-d46e2200">
+         <topic href="report/report-transcript_variability.html" format="dita" data-id="report_transcript_variability" wh-toc-id="report_transcript_variability-d46e2164">
             <title>Report: Transcript Variability</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_transcript_variability"></resourceid>
@@ -2327,7 +2288,7 @@
                <linktext class="- map/linktext ">Report: Transcript Variability</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/report-query_information.html" format="dita" data-id="report_query_information" wh-toc-id="report_query_information-d46e2208">
+         <topic href="report/report-query_information.html" format="dita" data-id="report_query_information" wh-toc-id="report_query_information-d46e2172">
             <title>Report: Query Information</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_query_information"></resourceid>
@@ -2335,14 +2296,14 @@
                <linktext class="- map/linktext ">Report: Query Information</linktext>
             </topicmeta>
          </topic>
-         <topic href="report/acoustic_data_reports.html" format="dita" data-id="acoustic_data_reports" wh-toc-id="acoustic_data_reports-d46e2216">
+         <topic href="report/acoustic_data_reports.html" format="dita" data-id="acoustic_data_reports" wh-toc-id="acoustic_data_reports-d46e2180">
             <title>Acoustic Data Reports</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="acoustic_data_reports"></resourceid>
                <navtitle class="- topic/navtitle ">Acoustic Data Reports</navtitle><?ditaot gentext?>
                <linktext class="- map/linktext ">Acoustic Data Reports</linktext>
             </topicmeta>
-            <topic href="report/report-duration.html" format="dita" data-id="report_duration" wh-toc-id="report_duration-d46e2224">
+            <topic href="report/report-duration.html" format="dita" data-id="report_duration" wh-toc-id="report_duration-d46e2188">
                <title>Report: Duration</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_duration"></resourceid>
@@ -2350,7 +2311,7 @@
                   <linktext class="- map/linktext ">Report: Duration</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-intensity.html" format="dita" data-id="report_intensity" wh-toc-id="report_intensity-d46e2232">
+            <topic href="report/report-intensity.html" format="dita" data-id="report_intensity" wh-toc-id="report_intensity-d46e2196">
                <title>Report: Intensity</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_intensity"></resourceid>
@@ -2358,7 +2319,7 @@
                   <linktext class="- map/linktext ">Report: Intensity</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-pitch.html" format="dita" data-id="report_pitch" wh-toc-id="report_pitch-d46e2240">
+            <topic href="report/report-pitch.html" format="dita" data-id="report_pitch" wh-toc-id="report_pitch-d46e2204">
                <title>Report: Pitch</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_pitch"></resourceid>
@@ -2366,7 +2327,7 @@
                   <linktext class="- map/linktext ">Report: Pitch</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-formants.html" format="dita" data-id="report_formants" wh-toc-id="report_formants-d46e2248">
+            <topic href="report/report-formants.html" format="dita" data-id="report_formants" wh-toc-id="report_formants-d46e2212">
                <title>Report: Formants</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_formants"></resourceid>
@@ -2374,7 +2335,7 @@
                   <linktext class="- map/linktext ">Report: Formants</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-spectral_moments.html" format="dita" data-id="report_spectral_moments" wh-toc-id="report_spectral_moments-d46e2256">
+            <topic href="report/report-spectral_moments.html" format="dita" data-id="report_spectral_moments" wh-toc-id="report_spectral_moments-d46e2220">
                <title>Report: Spectral Moments</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_spectral_moments"></resourceid>
@@ -2382,7 +2343,7 @@
                   <linktext class="- map/linktext ">Report: Spectral Moments</linktext>
                </topicmeta>
             </topic>
-            <topic href="report/report-vot.html" format="dita" data-id="report_voice_onset_time_vot" wh-toc-id="report_voice_onset_time_vot-d46e2264">
+            <topic href="report/report-vot.html" format="dita" data-id="report_voice_onset_time_vot" wh-toc-id="report_voice_onset_time_vot-d46e2228">
                <title>Report: Voice Onset Time (VOT)</title>
                <topicmeta>
                   <resourceid class="- topic/resourceid " oxy-source="topic" appid="report_voice_onset_time_vot"></resourceid>
@@ -2391,7 +2352,7 @@
                </topicmeta>
             </topic>
          </topic>
-         <topic href="report/report_composer.html" format="dita" data-id="custom_reports_using_composer_simple" wh-toc-id="custom_reports_using_composer_simple-d46e2273">
+         <topic href="report/report_composer.html" format="dita" data-id="custom_reports_using_composer_simple" wh-toc-id="custom_reports_using_composer_simple-d46e2237">
             <title>Custom Reports using Composer (simple)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="custom_reports_using_composer_simple"></resourceid>
@@ -2401,9 +2362,9 @@
          </topic>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2282">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2246">
       <title>Analyses</title>
-      <topic href="analysis/PPC.html" format="dita" data-id="analysis_ppc" wh-toc-id="analysis_ppc-d46e2283">
+      <topic href="analysis/PPC.html" format="dita" data-id="analysis_ppc" wh-toc-id="analysis_ppc-d46e2247">
          <title>Analysis: PPC</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_ppc"></resourceid>
@@ -2411,7 +2372,7 @@
             <linktext class="- map/linktext ">Analysis: PPC</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Phone%20Inventory.html" format="dita" data-id="analysis_phone_inventory" wh-toc-id="analysis_phone_inventory-d46e2291">
+      <topic href="analysis/Phone%20Inventory.html" format="dita" data-id="analysis_phone_inventory" wh-toc-id="analysis_phone_inventory-d46e2255">
          <title>Analysis: Phone Inventory</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_phone_inventory"></resourceid>
@@ -2419,7 +2380,7 @@
             <linktext class="- map/linktext ">Analysis: Phone Inventory</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Phonological%20Processes.html" format="dita" data-id="analyses_phonological_processes" wh-toc-id="analyses_phonological_processes-d46e2299">
+      <topic href="analysis/Phonological%20Processes.html" format="dita" data-id="analyses_phonological_processes" wh-toc-id="analyses_phonological_processes-d46e2263">
          <title>Analyses: Phonological Processes</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analyses_phonological_processes"></resourceid>
@@ -2427,7 +2388,7 @@
             <linktext class="- map/linktext ">Analyses: Phonological Processes</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/PMLU.html" format="dita" data-id="analysis_phonological_mean_length_of_utterance_pmlu" wh-toc-id="analysis_phonological_mean_length_of_utterance_pmlu-d46e2307">
+      <topic href="analysis/PMLU.html" format="dita" data-id="analysis_phonological_mean_length_of_utterance_pmlu" wh-toc-id="analysis_phonological_mean_length_of_utterance_pmlu-d46e2271">
          <title>Analysis: Phonological Mean Length of Utterance (PMLU)</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_phonological_mean_length_of_utterance_pmlu"></resourceid>
@@ -2435,7 +2396,7 @@
             <linktext class="- map/linktext ">Analysis: Phonological Mean Length of Utterance (PMLU)</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Word%20List.html" format="dita" data-id="analysis_word_list" wh-toc-id="analysis_word_list-d46e2315">
+      <topic href="analysis/Word%20List.html" format="dita" data-id="analysis_word_list" wh-toc-id="analysis_word_list-d46e2279">
          <title>Analysis: Word List</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_list"></resourceid>
@@ -2443,9 +2404,9 @@
             <linktext class="- map/linktext ">Analysis: Word List</linktext>
          </topicmeta>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2323">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2287">
          <title>Specialized</title>
-         <topic href="analysis/Word%20Match.html" format="dita" data-id="analysis_word_match" wh-toc-id="analysis_word_match-d46e2324">
+         <topic href="analysis/Word%20Match.html" format="dita" data-id="analysis_word_match" wh-toc-id="analysis_word_match-d46e2288">
             <title>Analysis: Word Match</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_match"></resourceid>
@@ -2453,7 +2414,7 @@
                <linktext class="- map/linktext ">Analysis: Word Match</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/Multisyllabic%20Noninear%20Analysis.html" format="dita" data-id="analysis_multisyllabic_nonlinear_analysis" wh-toc-id="analysis_multisyllabic_nonlinear_analysis-d46e2332">
+         <topic href="analysis/Multisyllabic%20Noninear%20Analysis.html" format="dita" data-id="analysis_multisyllabic_nonlinear_analysis" wh-toc-id="analysis_multisyllabic_nonlinear_analysis-d46e2296">
             <title>Analysis: Multisyllabic Nonlinear Analysis</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_multisyllabic_nonlinear_analysis"></resourceid>
@@ -2461,7 +2422,7 @@
                <linktext class="- map/linktext ">Analysis: Multisyllabic Nonlinear Analysis</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/Vocalization.html" format="dita" data-id="analysis_vocalization" wh-toc-id="analysis_vocalization-d46e2340">
+         <topic href="analysis/Vocalization.html" format="dita" data-id="analysis_vocalization" wh-toc-id="analysis_vocalization-d46e2304">
             <title>Analysis: Vocalization</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_vocalization"></resourceid>
@@ -2469,7 +2430,7 @@
                <linktext class="- map/linktext ">Analysis: Vocalization</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/WAP.html" format="dita" data-id="analysis_word_level_analysis_of_polysyllables_wap" wh-toc-id="analysis_word_level_analysis_of_polysyllables_wap-d46e2348">
+         <topic href="analysis/WAP.html" format="dita" data-id="analysis_word_level_analysis_of_polysyllables_wap" wh-toc-id="analysis_word_level_analysis_of_polysyllables_wap-d46e2312">
             <title>Analysis: Word-level Analysis of Polysyllables (WAP)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_level_analysis_of_polysyllables_wap"></resourceid>
@@ -2478,7 +2439,7 @@
             </topicmeta>
          </topic>
       </topic>
-      <topic href="analysis/analysis_composer.html" format="dita" data-id="custom_analysis_using_composer_simple" wh-toc-id="custom_analysis_using_composer_simple-d46e2356">
+      <topic href="analysis/analysis_composer.html" format="dita" data-id="custom_analysis_using_composer_simple" wh-toc-id="custom_analysis_using_composer_simple-d46e2320">
          <title>Custom Analysis using Composer (simple)</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="custom_analysis_using_composer_simple"></resourceid>
@@ -2487,9 +2448,9 @@
          </topicmeta>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2365">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d46e2329">
       <title>CHAT Support</title>
-      <topic href="chat/phontalk.html" format="dita" data-id="phontalk" wh-toc-id="phontalk-d46e2366">
+      <topic href="chat/phontalk.html" format="dita" data-id="phontalk" wh-toc-id="phontalk-d46e2330">
          <title>PhonTalk</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="phontalk"></resourceid>
@@ -2497,7 +2458,7 @@
             <linktext class="- map/linktext ">PhonTalk</linktext>
          </topicmeta>
       </topic>
-      <topic href="chat/main_line.html" format="dita" data-id="chat_main_line" wh-toc-id="chat_main_line-d46e2374">
+      <topic href="chat/main_line.html" format="dita" data-id="chat_main_line" wh-toc-id="chat_main_line-d46e2338">
          <title>CHAT Main Line</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="chat_main_line"></resourceid>

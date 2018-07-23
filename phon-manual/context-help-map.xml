@@ -156,20 +156,21 @@
    <appContext helpID="concept_ipa_listing" path="generated/ipa.html"/>
    <appContext helpID="concept_feature_listing" path="generated/features.html"/>
    <appContext helpID="introduction" path="phonex/phonex_introduction.html"/>
-   <appContext helpID="concept_tpv_vc3_gg" path="phonex/concepts/constructs.html"/>
-   <appContext helpID="concept_pjp_4nm_gg" path="phonex/concepts/phone-matchers.html"/>
-   <appContext helpID="concept_2cb_tlm_gg" path="phonex/concepts/groups.html"/>
-   <appContext helpID="concept_qb1_dhn_gg" path="phonex/concepts/boundaries.html"/>
-   <appContext helpID="concept_ddz_ttt_gg" path="phonex/concepts/quantifiers.html"/>
-   <appContext helpID="concept_n15_2qc_sv" path="phonex/concepts/lookahead-behind.html"/>
-   <appContext helpID="concept_zkq_nnm_gg" path="phonex/concepts/plug-ins.html"/>
-   <appContext helpID="concept_5w3_qnm_gg" path="phonex/concepts/stress.html"/>
-   <appContext helpID="concept_33z_pnm_gg" path="phonex/concepts/sctype.html"/>
-   <appContext helpID="concept_wqv_w2g_dn" path="phonex/concepts/diacritic_plugin.html"/>
-   <appContext helpID="concept_qy2_wgn_gg" path="phonex/concepts/prefix.html"/>
-   <appContext helpID="concept_psh_xgn_gg" path="phonex/concepts/suffix.html"/>
-   <appContext helpID="concept_jj4_ygn_gg" path="phonex/concepts/comb.html"/>
-   <appContext helpID="concept_djv_zhg_dn" path="phonex/concepts/tone_plugin.html"/>
+   <appContext helpID="concept_tpv_vc3_gg" path="phonex/constructs.html"/>
+   <appContext helpID="comments" path="phonex/comments.html"/>
+   <appContext helpID="concept_pjp_4nm_gg" path="phonex/phone-matchers.html"/>
+   <appContext helpID="concept_2cb_tlm_gg" path="phonex/groups.html"/>
+   <appContext helpID="concept_qb1_dhn_gg" path="phonex/boundaries.html"/>
+   <appContext helpID="concept_ddz_ttt_gg" path="phonex/quantifiers.html"/>
+   <appContext helpID="concept_n15_2qc_sv" path="phonex/lookahead-behind.html"/>
+   <appContext helpID="concept_zkq_nnm_gg" path="phonex/plug-ins.html"/>
+   <appContext helpID="concept_5w3_qnm_gg" path="phonex/stress.html"/>
+   <appContext helpID="concept_33z_pnm_gg" path="phonex/sctype.html"/>
+   <appContext helpID="concept_wqv_w2g_dn" path="phonex/diacritic_plugin.html"/>
+   <appContext helpID="concept_qy2_wgn_gg" path="phonex/prefix.html"/>
+   <appContext helpID="concept_psh_xgn_gg" path="phonex/suffix.html"/>
+   <appContext helpID="concept_jj4_ygn_gg" path="phonex/comb.html"/>
+   <appContext helpID="concept_djv_zhg_dn" path="phonex/tone_plugin.html"/>
    <appContext helpID="basic_phone_matching" path="phonex/examples/example-consonants.html"/>
    <appContext helpID="singleton_consonants" path="phonex/examples/singleton_consonants.html"/>
    <appContext helpID="consonant_clusters" path="phonex/examples/consonant_clusters.html"/>
@@ -188,10 +189,6 @@
    <appContext helpID="taskId" path="query/tasks/EditTableColumns.html"/>
    <appContext helpID="taskId" path="query/tasks/FilterResults.html"/>
    <appContext helpID="conceptId" path="editor/concepts/AboutTableQuickSearch.html"/>
-   <appContext helpID="taskId" path="history/tasks/ViewQueryHistory.html"/>
-   <appContext helpID="taskId" path="history/tasks/DeleteQuery.html"/>
-   <appContext helpID="taskId" path="history/tasks/EditQueryDetails.html"/>
-   <appContext helpID="conceptId" path="history/concepts/AboutStarredQueries.html"/>
    <appContext helpID="about_query_reports" path="report/AboutQueryReports.html"/>
    <appContext helpID="report_aggregate_ipa_results" path="report/report-aggregate_IPA.html"/>
    <appContext helpID="report_aggregate_non_ipa_results"
