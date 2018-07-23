@@ -359,7 +359,7 @@ exports.PatternFilter = function (id) {
 		params.add(filterTypeParam);
 		params.add(filterParam);
 
-		var lblParam = new LabelScriptParam("<html><p style='font-size: small;'>(Press Ctrl+Space to show autocomplete options)</p></html>", "");
+		var lblParam = new LabelScriptParam("<html><p style='font-size: small;'>(Press Tab to show autocomplete options)</p></html>", "");
 		params.add(lblParam);
 
 		params.add(matchGroupParam);

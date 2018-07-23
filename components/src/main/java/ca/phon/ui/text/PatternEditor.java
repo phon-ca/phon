@@ -1,5 +1,8 @@
 package ca.phon.ui.text;
 
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
 import javax.swing.Scrollable;
 
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -75,8 +78,7 @@ public class PatternEditor extends RSyntaxTextArea implements Scrollable {
 	
 	
 	public PatternEditor(String text, String format) {
-		super(text);
-		
+		super(text);		
 		setSyntaxEditingStyle(format);
 	}
 	
@@ -91,6 +93,7 @@ public class PatternEditor extends RSyntaxTextArea implements Scrollable {
 	private void setupAutocompletion() {
 		if(autoCompleteEnabled) {
 			autoCompletion = new AutoCompletion(createCompletionProvider());
+			autoCompletion.setTriggerKey(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
 			autoCompletion.setParameterAssistanceEnabled(true);
 			autoCompletion.setAutoCompleteEnabled(true);
 			autoCompletion.setAutoCompleteSingleChoices(true);
