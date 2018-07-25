@@ -154,9 +154,11 @@ public class SaveQueryForm extends JPanel {
 			return false;
 		} else {
 			if(nameQueryBtn.isSelected()) {
-				final ParamSetType existingNamedParamSet = queryHistoryManager.getParamSetByName(nameField.getText().trim());
+				ParamSetType existingNamedParamSet = queryHistoryManager.getParamSetByName(nameField.getText().trim());
+				if(existingNamedParamSet == null)
+					existingNamedParamSet = stockQueries.getParamSetByName(nameField.getText().trim());
 				if(existingNamedParamSet != null) {
-					final Toast toast = ToastFactory.makeToast("Query name already exists in history");
+					final Toast toast = ToastFactory.makeToast("Query name already exists");
 					toast.start(nameField);
 					return false;
 				}
