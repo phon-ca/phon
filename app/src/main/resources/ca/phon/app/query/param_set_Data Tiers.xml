@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<param_history xmlns="https://www.phon.ca/param_history" script="Data Tiers" hash="99fb339eac1698b4a59cd95f6098a862d57116d7">
+    <param_set date="2018-07-25T09:01:04.939-02:30" hash="76838fd812cb9d8a4cf21955ba37cf1b75a6d03b" name="Orthography (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+    </param_set>
+    <param_set date="2018-07-25T09:01:38.556-02:30" hash="cdaacf8a770876eb75882d23f159b73e413d8f07" name="Orthography, IPA Target, IPA Actual (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.wordTiers.tiers">IPA Target, IPA Actual</param>
+    </param_set>
+    <param_set date="2018-07-25T09:02:06.032-02:30" hash="df3aaae054d47c9424429f0a54d96f268eb833ab" name="Orthography, IPA Target (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.wordTiers.tiers">IPA Target</param>
+    </param_set>
+    <param_set date="2018-07-25T09:02:23.706-02:30" hash="325b1c3e6250a0410922171877967820e0b4b83e" name="Orthography, IPA Actual (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.wordTiers.tiers">IPA Actual</param>
+    </param_set>
+    <param_set date="2018-07-25T09:02:59.404-02:30" hash="09788ede46b6cd268663e1eb0e54aea99727ecdf" name="Orthography w/ IPA Actual (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.alignedWord.tier">IPA Actual</param>
+        <param id="filters.alignedWord.patternFilter.filterType">Phonex</param>
+        <param id="filters.alignedWord.patternFilter.filter">.+</param>
+        <param id="filters.alignedWord.patternFilter.caseSensitive">false</param>
+        <param id="filters.alignedWord.patternFilter.exactMatch">true</param>
+        <param id="filters.alignedWord.patternFilter.allowOverlap">false</param>
+    </param_set>
+    <param_set date="2018-07-25T09:03:56.790-02:30" hash="b56b979277e125517e6828aa833d41f0e69c23e4" name="Orthography w/o IPA Actual (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.alignedWord.tier">IPA Actual</param>
+        <param id="filters.alignedWord.patternFilter.filterType">Phonex</param>
+        <param id="filters.alignedWord.patternFilter.filter">^$</param>
+        <param id="filters.alignedWord.patternFilter.caseSensitive">false</param>
+        <param id="filters.alignedWord.patternFilter.exactMatch">true</param>
+        <param id="filters.alignedWord.patternFilter.allowOverlap">false</param>
+    </param_set>
+    <param_set date="2018-07-25T09:05:12.009-02:30" hash="d22bb94aced86c7a32d5d697de1a4798cb9954a4" name="Orthography w/ IPA Target (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.alignedWord.tier">IPA Target</param>
+        <param id="filters.alignedWord.patternFilter.filterType">Phonex</param>
+        <param id="filters.alignedWord.patternFilter.filter">.+</param>
+        <param id="filters.alignedWord.patternFilter.caseSensitive">false</param>
+        <param id="filters.alignedWord.patternFilter.exactMatch">true</param>
+        <param id="filters.alignedWord.patternFilter.allowOverlap">false</param>
+    </param_set>
+    <param_set date="2018-07-25T09:05:27.302-02:30" hash="225c743af6f04649306b69dd7b6c71e309fffb53" name="Orthography w/o IPA Target (by Word)">
+        <param id="filters.primary.tier">Orthography</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+        <param id="filters.primary.patternFilter.filter">.+</param>
+        <param id="filters.word.sectionHeader.collapsed">false</param>
+        <param id="filters.word.searchByWord">true</param>
+        <param id="filters.alignedWord.tier">IPA Target</param>
+        <param id="filters.alignedWord.patternFilter.filterType">Phonex</param>
+        <param id="filters.alignedWord.patternFilter.filter">^$</param>
+        <param id="filters.alignedWord.patternFilter.caseSensitive">false</param>
+        <param id="filters.alignedWord.patternFilter.exactMatch">true</param>
+        <param id="filters.alignedWord.patternFilter.allowOverlap">false</param>
+    </param_set>
+</param_history>

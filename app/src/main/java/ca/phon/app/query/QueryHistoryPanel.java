@@ -1,6 +1,7 @@
 package ca.phon.app.query;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -18,10 +19,13 @@ import java.util.stream.Collectors;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXComboBox;
@@ -150,6 +154,7 @@ public class QueryHistoryPanel extends JPanel {
 		
 		queryNameModel = new DefaultComboBoxModel<>();
 		queryNameBox = new JComboBox<>(queryNameModel);
+		queryNameBox.setToolTipText("Select query by name");
 		queryNameBox.setVisible(queryHistoryManager.getNamedParamSets().size() > 0);
 		update();
 		
@@ -331,6 +336,6 @@ public class QueryHistoryPanel extends JPanel {
 			}
 		}
 		
-	};
+	};	
 	
 }
