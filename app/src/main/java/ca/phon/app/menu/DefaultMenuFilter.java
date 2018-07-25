@@ -48,6 +48,7 @@ import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -64,11 +65,9 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		addFileMenu(owner, menu);
 		addEditMenu(owner, menu);
 		addWorkspaceMenu(owner, menu);
-//		addMacroMenu(owner, menu);
 		addQueryMenu(owner, menu);
 		addAnalysisMenu(owner, menu);
 		addToolsMenu(owner, menu);
-//		addPluginMenu(owner, menu);
 		addWindowMenu(owner, menu);
 		addHelpMenu(owner, menu);
 	}
@@ -77,8 +76,9 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 * Add 'File' menu
 	 */
 	protected void addFileMenu(Window owner, JMenuBar menu) {
-		JMenu fileMenu = new JMenu("File");
-
+		final MenuBuilder builder = new MenuBuilder(menu);
+		final JMenu fileMenu = builder.addMenu(".@^", "File");
+		
 		fileMenu.add(new NewProjectCommand());
 		fileMenu.add(new OpenProjectCommand());
 
@@ -99,8 +99,9 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	 *
 	 */
 	protected void addEditMenu(Window owner, JMenuBar menu) {
-		JMenu editMenu = new JMenu("Edit");
-
+		final MenuBuilder builder = new MenuBuilder(menu);
+		JMenu editMenu = builder.addMenu(".@File", "Edit");
+		
 		final MenuListener editListener = new EditMenuListener(owner);
 		editMenu.addMenuListener(editListener);
 
@@ -111,13 +112,31 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	}
 
 	/**
+	 * Add 'Workspace' menu
+	 */
+	protected void addWorkspaceMenu(Window owner, JMenuBar menu) {
+		final MenuBuilder builder = new MenuBuilder(menu);
+		JMenu workspaceMenu = builder.addMenu(".@Edit", "Workspace");
+	
+		workspaceMenu.add(new SelectWorkspaceCommand());
+	
+		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
+		workspaceProjectsMenu.addMenuListener(new WorkspaceProjectsMenuListener());
+		workspaceMenu.add(workspaceProjectsMenu);
+	
+		menu.add(workspaceMenu);
+	}
+
+	/**
 	 * Add 'Query' menu
 	 */
 	protected void addQueryMenu(Window owner, JMenuBar menu) {
 		if(!(owner instanceof CommonModuleFrame)) return;
 		final CommonModuleFrame frame = (CommonModuleFrame)owner;
 		if(!(frame instanceof WelcomeWindow)) {
-			final JMenu queryMenu  = new JMenu("Query");
+			final MenuBuilder builder = new MenuBuilder(menu);
+			final JMenu queryMenu  = builder.addMenu(".@Workspace", "Query");
+			
 			final QueryMenuListener queryMenuListener = new QueryMenuListener();
 			queryMenu.addMenuListener(queryMenuListener);
 
@@ -126,6 +145,82 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 
 			menu.add(queryMenu);
 		}
+	}
+
+	/**
+	 * Add 'Assessment' menu
+	 */
+	protected void addAnalysisMenu(Window owner, JMenuBar menu) {
+		if(!(owner instanceof CommonModuleFrame)) return;
+		final CommonModuleFrame frame = (CommonModuleFrame)owner;
+		final Project project = frame.getExtension(Project.class);
+		if(project != null) {
+			final MenuBuilder builder = new MenuBuilder(menu);
+			final JMenu assessmentMenu = builder.addMenu(".@Query", "Analysis");
+			
+			final AnalysisMenuListener assessmentMenuListener = new AnalysisMenuListener();
+			assessmentMenu.addMenuListener(assessmentMenuListener);
+	
+			final MenuEvent me = new MenuEvent(assessmentMenu);
+			assessmentMenuListener.menuSelected(me);
+	
+			menu.add(assessmentMenu);
+		}
+	}
+
+	/**
+	 * Add 'Tools' menu
+	 */
+	protected void addToolsMenu(Window owner, JMenuBar menu) {
+		final MenuBuilder builder = new MenuBuilder(menu);
+		JMenu toolsMenu = builder.addMenu(".@Analysis", "Tools");
+	
+		// ipa chart
+		final JMenuItem ipaItem = new JMenuItem(new IpaMapCommand());
+		toolsMenu.add(ipaItem);
+	
+		toolsMenu.addSeparator();
+	
+		// language codes
+		final JMenuItem langItem = new JMenuItem(new LanguageCodesCommand());
+		toolsMenu.add(langItem);
+	
+		if(PrefHelper.getBoolean(PhonProperties.DEBUG, false)) {
+			toolsMenu.add(new BasicSyllabifierTestCommand());
+		}
+	
+		menu.add(toolsMenu);
+	}
+
+	/**
+	 * Add 'Window' menu
+	 */
+	protected void addWindowMenu(Window owner, JMenuBar menu) {
+		final MenuBuilder builder = new MenuBuilder(menu);
+		JMenu windowMenu = builder.addMenu(".@Tools", "Window");
+		
+		final MenuListener openWindowMenuListener = new OpenWindowsMenuListener(owner);
+		windowMenu.addMenuListener(openWindowMenuListener);
+
+		final MenuEvent me = new MenuEvent(windowMenu);
+		openWindowMenuListener.menuSelected(me);
+
+		// keep on tops
+		menu.add(windowMenu);
+	}
+
+	/**
+	 * Add 'Help' menu
+	 */
+	protected void addHelpMenu(Window owner, JMenuBar menu) {
+		final MenuBuilder builder = new MenuBuilder(menu);
+	
+		final JMenuItem logItem = new JMenuItem(new LogCommand());
+		builder.addItem(".@$/Help", logItem);
+	
+		// about
+		final JMenuItem aboutItem = new JMenuItem(new HelpCommand());
+		builder.addItem(".@$/Help", aboutItem);
 	}
 
 	/**
@@ -139,69 +234,12 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 			final JMenu macroMenu = new JMenu("Macro");
 			final MacroMenuListener macroMenuListener = new MacroMenuListener();
 			macroMenu.addMenuListener(macroMenuListener);
-
+	
 			final MenuEvent me = new MenuEvent(macroMenu);
 			macroMenuListener.menuSelected(me);
-
+	
 			menu.add(macroMenu);
 		}
-	}
-
-	/**
-	 * Add 'Assessment' menu
-	 */
-	protected void addAnalysisMenu(Window owner, JMenuBar menu) {
-		if(!(owner instanceof CommonModuleFrame)) return;
-		final CommonModuleFrame frame = (CommonModuleFrame)owner;
-		final Project project = frame.getExtension(Project.class);
-		if(project != null) {
-			final JMenu assessmentMenu = new JMenu("Analysis");
-			final AnalysisMenuListener assessmentMenuListener = new AnalysisMenuListener();
-			assessmentMenu.addMenuListener(assessmentMenuListener);
-
-			final MenuEvent me = new MenuEvent(assessmentMenu);
-			assessmentMenuListener.menuSelected(me);
-
-			menu.add(assessmentMenu);
-		}
-	}
-
-	/**
-	 * Add 'Tools' menu
-	 */
-	protected void addToolsMenu(Window owner, JMenuBar menu) {
-		JMenu toolsMenu = new JMenu("Tools");
-
-		// ipa chart
-		final JMenuItem ipaItem = new JMenuItem(new IpaMapCommand());
-		toolsMenu.add(ipaItem);
-
-		toolsMenu.addSeparator();
-
-		// language codes
-		final JMenuItem langItem = new JMenuItem(new LanguageCodesCommand());
-		toolsMenu.add(langItem);
-
-		if(PrefHelper.getBoolean(PhonProperties.DEBUG, false)) {
-			toolsMenu.add(new BasicSyllabifierTestCommand());
-		}
-
-		menu.add(toolsMenu);
-	}
-
-	/**
-	 * Add 'Window' menu
-	 */
-	protected void addWindowMenu(Window owner, JMenuBar menu) {
-		JMenu windowMenu = new JMenu("Window");
-		final MenuListener openWindowMenuListener = new OpenWindowsMenuListener(owner);
-		windowMenu.addMenuListener(openWindowMenuListener);
-
-		final MenuEvent me = new MenuEvent(windowMenu);
-		openWindowMenuListener.menuSelected(me);
-
-		// keep on tops
-		menu.add(windowMenu);
 	}
 
 	/**
@@ -210,37 +248,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	protected void addPluginMenu(Window owner, JMenuBar menu) {
 		JMenu pluginMenu = new JMenu("Plugins");
 		menu.add(pluginMenu);
-	}
-
-	/**
-	 * Add 'Help' menu
-	 */
-	protected void addHelpMenu(Window owner, JMenuBar menu) {
-		JMenu helpMenu = new JMenu("Help");
-
-		final JMenuItem logItem = new JMenuItem(new LogCommand());
-		helpMenu.add(logItem);
-
-		// about
-		final JMenuItem aboutItem = new JMenuItem(new HelpCommand());
-		helpMenu.add(aboutItem);
-
-		menu.add(helpMenu);
-	}
-
-	/**
-	 * Add 'Workspace' menu
-	 */
-	protected void addWorkspaceMenu(Window owner, JMenuBar menu) {
-		JMenu workspaceMenu = new JMenu("Workspace");
-
-		workspaceMenu.add(new SelectWorkspaceCommand());
-
-		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
-		workspaceProjectsMenu.addMenuListener(new WorkspaceProjectsMenuListener());
-		workspaceMenu.add(workspaceProjectsMenu);
-
-		menu.add(workspaceMenu);
 	}
 
 }
