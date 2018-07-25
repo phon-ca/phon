@@ -99,7 +99,6 @@ public class QueryHistoryPanel extends JPanel {
 			if(stockQueryInputStream != null) {
 				try {
 					stockQueryManager = new QueryHistoryManager(stockQueryInputStream);
-					
 				} catch (IOException e) {
 					LogUtil.severe(e);
 				}

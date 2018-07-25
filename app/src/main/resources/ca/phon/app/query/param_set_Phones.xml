@@ -64,12 +64,12 @@
 // Final Consonants
 (?&lt;\v)(\c)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="a8033262bc87ad69f77d541d7cafc2e13a19f9f7" name="Singleton Onsets">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="dacd306a8f43b6c5948575bc9b12ef9b4f941387" name="Singleton Onsets">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Singleton Onsets
 // The double pipe operator will combine results of independent expressions
 // Standalone Onsets
-(?&lt;^\s?)(\c:L:E)$ || 
+(?&lt;^\s?)(\c:O:E)$ || 
 // All other Singleton Onsets
 (?&lt;\S)(\c:O)(?&gt;\v)</param>
     </param_set>
@@ -104,14 +104,14 @@
 // Look-ahead '(?&gt;' and match an optional stress marker '\s?' and vowel '\v'
 (?&gt;\s?\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="eb4097bf8f939e675d9941ef5ff4868c8756d673" name="Final Consonant Clusters">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="6092a5ff13064d499c260338c703530fbad7b8a3" name="Final Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Final Consonant Clusters
 // Look-behind '(?&lt;' and match a vowel '\v'
 // followed by an optional stress marker '\s?'
 (?&lt;\v\s?)
 // Match a 2 or more consonants '(\c&lt;2,&gt;)'
-// folled by end of input '$'
+// followed by end of input '$'
 (\c&lt;2,&gt;)$</param>
     </param_set>
     <param_set date="2018-07-19T16:11:45.540-02:30" hash="991d48d6b09ed83fc45d36de44a4e8a20a643ec5" name="Heterosyllabic Consonant Clusters">
@@ -135,16 +135,16 @@
 // Heterosyllabic Clusters
 (\c+[\s\.]\c+)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="d41fa3ebe5eceeeefcb83391489ccfb540c07057" name="Tautosyllabic Onsets">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="11a6eb64240b9ca1b8839275711209d71a3e11a4" name="Tautosyllabic Onsets">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Tautosyllabic Onsets
-// Includes left appendicies ':L', onsets ':O' and OEHS ':E'
+// Includes left appendices ':L', onsets ':O' and OEHS ':E'
 (\c:L:O:E&lt;2,&gt;)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="e95502deff5125b6419442f11daf329df75c0c2b" name="Tautosyllabic Codas">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="63e4a0600eb77b7aa31684da649a89336cc5f669" name="Tautosyllabic Codas">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Tautosyllabic Codas
-// Includes right appendicies ':R' and codas ':C'
+// Includes right appendices ':R' and codas ':C'
 (\c:C:R&lt;2,&gt;)</param>
     </param_set>
     <param_set date="2018-07-19T16:11:45.540-02:30" hash="4d75c22148a97a335c6eb9c6df4857726df86592" name="Tautosyllabic Consonant Clusters">
@@ -156,13 +156,35 @@
 // Tautosyllabic Codas
 (\c:C:R&lt;2,&gt;)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="f92d842e98711a0cba368f7fb690ffc7996bd530" name="Syllables">
+    <param_set date="2018-07-25T10:54:08.672-02:30" hash="3d9f564edbb03075d039c25428a966e421246aff" name="Syllables (short)">
         <param id="filters.searchBy.searchBy">Word</param>
-        <param id="filters.primary.filter">// Stress
+        <param id="filters.primary.filter">// Syllables (short)
+// Query all syllables, store each section in a named group
+// Stress
+(S=\s)?
+// Onset
+(O=\c:L:O&lt;,5&gt;)
+// Rhyme
+(R=
+	// Nucleus
+	(N=.:D&lt;2&gt; | .:N)
+	// Coda
+	(C=\c:C:R&lt;,5&gt;)
+)</param>
+    </param_set>
+    <param_set date="2018-07-25T11:03:13.584-02:30" hash="1a494337cba51170e0eb3ec82043be730a2d05f1" name="Syllables (expanded)">
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.primary.filter">// Syllables (expanded)
+// Query all syllables, store each constituent in a named group
+// Stress
 (S=\s)?
 // Onset
 (O=
-	(O1=\c:L:O)(O2=\c:L:O)(O3=\c:O) | (\c:L:O)(\c:O) | (\c:O)
+	(O1=\c:L:O)(O2=\c:L:O)(O3=\c:L:O)(O4=\c:O)(O5=\c:O) 
+	| (\c:L:O)(\c:L:O)(\c:O)(\c:O)
+	| (\c:L:O)(\c:O)(\c:O)
+	| (\c:O)(\c:O) 
+	| (\c:O:E)
 )?
 // Rhyme
 (R=
@@ -172,7 +194,11 @@
 	)
 	// Coda
 	(C=
-		(C1=\c:C)(C2=\c:C:R)(C3=\c:C:R) | (\c:C)(\c:C:R) | (\c:C)
+		(C1=\c:C)(C2=\c:C)(C3=\c:C:R)(C4=\c:C:R)(C5=\c:C:R)
+		| (\c:C)(\c:C)(\c:C:R)(\c:C:R)
+		| (\c:C)(\c:C)(\c:C:R)
+		| (\c:C)(\c:C) 
+		| (\c:C)
 	)?
 )</param>
     </param_set>
