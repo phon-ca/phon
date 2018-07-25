@@ -14,7 +14,7 @@ Download the newest .exe installer file from the [releases](https://github.com/p
 
 Download the newest .dmg file from the [releases](https://github.com/phon-ca/phon/releases) page.  After opening the disk image, drag Phon into your Applications folder.
 
-## Ubuntu 16.04
+## Ubuntu (16.04/18.04)
 
 First, install the newest version of Java 10 using packages provided by linuxuprising.  
 
@@ -33,6 +33,11 @@ sudo apt install vlc
 Download the newest .deb from the [releases](https://github.com/phon-ca/phon/releases) page and install using dpkg.
 ```
 sudo dpkg -i Phon_linux_<version>.deb
+```
+
+To uninstall Phon:
+```
+sudo dpkg --remove phon
 ```
 
 ## \*nix
