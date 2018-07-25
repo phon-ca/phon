@@ -215,12 +215,14 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	protected void addHelpMenu(Window owner, JMenuBar menu) {
 		final MenuBuilder builder = new MenuBuilder(menu);
 	
+		final JMenu helpMenu = builder.addMenu(".@$", "Help");
+		
 		final JMenuItem logItem = new JMenuItem(new LogCommand());
-		builder.addItem(".@$/Help", logItem);
+		helpMenu.add(logItem);
 	
 		// about
 		final JMenuItem aboutItem = new JMenuItem(new HelpCommand());
-		builder.addItem(".@$/Help", aboutItem);
+		helpMenu.add(aboutItem);
 	}
 
 	/**

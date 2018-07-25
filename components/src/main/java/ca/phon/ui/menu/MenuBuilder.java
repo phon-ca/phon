@@ -91,6 +91,15 @@ public final class MenuBuilder {
 
 		return addMenu(elem, insertIdx, text);
 	}
+	
+	public JMenu getMenu(String path) {
+		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
+		if(deepest.getObj2() instanceof JMenu) {
+			return (JMenu)deepest.getObj2();
+		} else {
+			return null;
+		}
+	}
 
 	public JMenu addMenu(MenuElement elem, int insertIdx, String text) {
 		JMenu ret = null;
