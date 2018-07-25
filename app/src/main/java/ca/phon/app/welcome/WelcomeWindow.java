@@ -61,6 +61,7 @@ import ca.phon.app.menu.file.NewProjectCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
 import ca.phon.app.project.RecentProjects;
 import ca.phon.app.project.RecentProjectsList;
+import ca.phon.app.workspace.Workspace;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -188,6 +189,11 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 			actionsContainer.setLeftDecoration(new JLabel(actionsIcn));
 		}
 
+		// make sure workspace exists!
+		if(!Workspace.userWorkspaceFolder().exists()) {
+			Workspace.userWorkspaceFolder().mkdirs();
+		}
+		
 		workspaceProjectsPanel = new WorkspaceProjectsPanel();
 		workspaceContainer = new TitledPanel("Workspace", workspaceProjectsPanel);
 		gbc.gridx++;
