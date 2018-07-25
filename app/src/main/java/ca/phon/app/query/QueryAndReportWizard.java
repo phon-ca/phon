@@ -221,7 +221,7 @@ public class QueryAndReportWizard extends NodeWizard {
 						boolean stopEnabled = (getCurrentQueryRunner() != null && getCurrentQueryRunner().isRunning());
 						stopItem.setEnabled(stopEnabled);
 						
-						final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters");
+						final PhonUIAction resetQueryAct = new PhonUIAction(QueryAndReportWizard.this, "resetQueryParameters");
 						resetQueryAct.putValue(PhonUIAction.NAME, "Reset query");
 						resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/parameters-black", IconSize.SMALL));
 						resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset query parameters to default");
