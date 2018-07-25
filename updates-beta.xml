@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b4/">
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b4.sh" newVersion="3.0.0b4" newMediaFileId="linux64" fileSize="113291987" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0b5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b5.dmg" newVersion="3.0.0b5" newMediaFileId="macos" fileSize="211428494" md5Sum="ab76c169e36f280c0b7e33bc5d69cc33" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -147,8 +153,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b4.exe" newVersion="3.0.0b4" newMediaFileId="win64" fileSize="220712448" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b5.dmg" newVersion="3.0.0b5" newMediaFileId="macos" fileSize="211428494" md5Sum="ab76c169e36f280c0b7e33bc5d69cc33" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -294,8 +306,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b4.exe" newVersion="3.0.0b4" newMediaFileId="win64" fileSize="220712448" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b5.exe" newVersion="3.0.0b5" newMediaFileId="win64" fileSize="223876096" md5Sum="586d04381ce92d904b5cdfe3e6e3c145" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -441,8 +459,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b4.exe" newVersion="3.0.0b4" newMediaFileId="win64" fileSize="220712448" bundledJre="windows-amd64-9.0.4" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b5.exe" newVersion="3.0.0b5" newMediaFileId="win64" fileSize="223876096" md5Sum="586d04381ce92d904b5cdfe3e6e3c145" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -588,8 +612,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b4.zip" newVersion="3.0.0b4" newMediaFileId="win64zip" fileSize="219749631" bundledJre="windows-amd64-9.0.4" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b5.exe" newVersion="3.0.0b5" newMediaFileId="win64" fileSize="223876096" md5Sum="586d04381ce92d904b5cdfe3e6e3c145" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -735,8 +765,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b4.deb" newVersion="3.0.0b4" newMediaFileId="linux64deb" fileSize="113462296" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0b5.zip" newVersion="3.0.0b5" newMediaFileId="win64zip" fileSize="222856054" md5Sum="0c1d7890948b069ec193e8b457467a7c" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -882,8 +918,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b4.dmg" newVersion="3.0.0b4" newMediaFileId="macos" fileSize="208377999" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0b5.deb" newVersion="3.0.0b5" newMediaFileId="linux64deb" fileSize="113606144" md5Sum="90988710d509fb527ffb9f719c6e9e2c" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
@@ -1029,8 +1071,14 @@
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0b4.dmg" newVersion="3.0.0b4" newMediaFileId="macos" fileSize="208377999" bundledJre="macosx-amd64-9.0.4" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 3.0.0b3
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0b5.sh" newVersion="3.0.0b5" newMediaFileId="linux64" fileSize="113441515" md5Sum="116de948480a0462e8f67409f7452bce" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
 
  * Added ability to name entries in Query History
  * Added commands for removing items from Query History
