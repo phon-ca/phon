@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -41,6 +42,7 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
 public class AboutPanel extends JPanel implements IExtendable {
@@ -138,7 +140,14 @@ public class AboutPanel extends JPanel implements IExtendable {
 
 				@Override
 				public void run() {
-					_instance = new CommonModuleFrame("About Phon");
+					_instance = new CommonModuleFrame("About Phon") {
+						@Override
+						public void setJMenuBar(JMenuBar menuBar) {
+							if(!OSInfo.isMacOs()) {
+								super.setJMenuBar(null);
+							}
+						}
+					};
 					_instance.setWindowName("About Phon");
 //					_instance.setUndecorated(true);
 					AboutPanel panel = new AboutPanel(image);
