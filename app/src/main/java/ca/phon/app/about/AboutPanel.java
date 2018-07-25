@@ -141,7 +141,16 @@ public class AboutPanel extends JPanel implements IExtendable {
 
 				@Override
 				public void run() {
-					_instance = new CommonModuleFrame("About Phon");
+					_instance = new CommonModuleFrame("About Phon") {
+						@Override
+						public void setJMenuBar(JMenuBar menuBar) {
+							if(!OSInfo.isMacOs()) {
+								super.setJMenuBar(null);
+							} else {
+								super.setJMenuBar(menuBar);
+							}
+						}
+					};
 					_instance.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					_instance.setWindowName("About Phon");
 //					_instance.setUndecorated(true);
@@ -151,9 +160,7 @@ public class AboutPanel extends JPanel implements IExtendable {
 					_instance.getContentPane().add(panel, BorderLayout.CENTER);
 
 					_instance.pack();
-					if(!OSInfo.isMacOs()) {
-						_instance.setSize(_instance.getWidth(), _instance.getHeight()+_instance.getJMenuBar().getHeight());
-					}
+					
 //					_instance.setLocationByPlatform(true);
 					_instance.centerWindow();
 
