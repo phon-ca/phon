@@ -20,6 +20,8 @@ package ca.phon.app.log;
 
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 
@@ -35,10 +37,12 @@ public class LogViewerEP implements IPluginEntryPoint {
 
 	@Override
 	public void pluginStart(Map<String, Object> args) {
-		final LogViewer viewer = new LogViewer();
-		viewer.setSize(500, 600);
-		viewer.centerWindow();
-		viewer.setVisible(true);
+		SwingUtilities.invokeLater( () -> {
+			final LogViewer viewer = new LogViewer();
+			viewer.setSize(500, 600);
+			viewer.centerWindow();
+			viewer.setVisible(true);
+		});
 	}
 
 }

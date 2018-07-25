@@ -27,6 +27,7 @@ import java.util.logging.LogRecord;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -56,7 +57,9 @@ public class LogViewer extends CommonModuleFrame {
 	
 	public LogViewer() {
 		super();
-		setTitle("Log Viewer");
+		super.setWindowName("Logs");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setShowInWindowMenu(false);
 		
 		init();
 	}
@@ -94,7 +97,7 @@ public class LogViewer extends CommonModuleFrame {
 			
 		});
 		
-		final PhonUIAction closeAct = new PhonUIAction(this, "setVisible", false);
+		final PhonUIAction closeAct = new PhonUIAction(this, "close");
 		closeAct.putValue(PhonUIAction.NAME, "Close");
 		final JButton closeBtn = new JButton(closeAct);
 		
