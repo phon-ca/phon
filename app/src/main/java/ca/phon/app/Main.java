@@ -20,6 +20,10 @@ package ca.phon.app;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +65,7 @@ public class Main {
 			PrefHelper.get(INITIAL_EP_PROP, "WelcomeWindow");
 	
 	public static void main(String[] args) {
+		createDataFolder();
 		startLogging();
 		startWorker();
 		initPlugins();
@@ -77,6 +82,23 @@ public class Main {
 		final String userPluginFolder = 
 				PrefHelper.getUserDataFolder() + File.separator + PluginManager.PLUGIN_FOLDER;
 		pluginManager.scanPluginFolder(new File(userPluginFolder));
+	}
+	
+	private static void createDataFolder() {
+		final File userDataFolder = new File(PrefHelper.getUserDataFolder());
+		if(!userDataFolder.exists()) {
+			userDataFolder.mkdirs();
+		}
+		
+		// write application version to 'version'
+		final File versionFile = new File(userDataFolder, "version");
+		try (PrintWriter out = new PrintWriter(
+				new OutputStreamWriter(new FileOutputStream(versionFile)))) {
+			out.println(VersionInfo.getInstance().getLongVersion());
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void startLogging() {

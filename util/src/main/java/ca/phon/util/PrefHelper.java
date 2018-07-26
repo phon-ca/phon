@@ -68,28 +68,39 @@ public class PrefHelper {
 	public static String getUserDataFolder() {
 		String userHomePath = System.getProperty("user.home");
 		
-//		if(OSInfo.isMacOs()) {
-//			retVal += 
-//				File.separator + "Library" + File.separator + "Application Support"
-//				+ File.separator + "Phon";
-//		} else if(OSInfo.isWindows()) {
-//			retVal = System.getenv("APPDATA") + File.separator + "Phon";
-//		} else if(OSInfo.isNix()) {
-//			retVal += File.separator + ".phon";
-//		} else {
-//			// should not get here
-//			LOGGER.info("Unsupported os: " + System.getProperty("os.name"));
-//		}
-		final File userDocs = new File(userHomePath, "Documents");
-		final File phonPrefs = new File(userDocs, "Phon");
+		String retVal = "";
+		if(OSInfo.isMacOs()) {
+			retVal = 
+				userHomePath + File.separator + "Library" + File.separator + "Application Support"
+				+ File.separator + "Phon";
+		} else if(OSInfo.isWindows()) {
+			retVal = System.getenv("APPDATA") + File.separator + "Phon";
+		} else {
+			retVal = userHomePath + File.separator + ".phon";
+		}
 		
-		return phonPrefs.getAbsolutePath();
+		return retVal;
 	}
 	
 	/**
 	 * Application prefs root node
 	 */
 	public final static String PREF_ROOT = "/ca/phon/util";
+	
+	public static String getUserDocumentsFolder() {
+		final File userHome = new File(System.getProperty("user.home"));
+		final File userDocs = new File(userHome, "Documents");
+		return userDocs.getAbsolutePath();
+	}
+	
+	/**
+	 * The location of the user 'Documents' folder with 'Phon' appended.
+	 * 
+	 */
+	public static String getUserDocumentsPhonFolder() {
+		final File phonDocs = new File(getUserDocumentsFolder(), "Phon");
+		return phonDocs.getAbsolutePath();
+	}
 	
 	/**
 	 * Returns the root user preferences node.

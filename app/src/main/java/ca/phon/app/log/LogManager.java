@@ -21,10 +21,13 @@ package ca.phon.app.log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
+import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -47,7 +50,7 @@ public class LogManager {
 	
 	public final static String PREV_LOG_FILE =
 			PrefHelper.getUserDataFolder() + File.separator + "phon1.log";
-	
+		
 	public static LogManager getInstance() {
 		return _instance;
 	}
@@ -60,13 +63,53 @@ public class LogManager {
 				PrefHelper.get(PROPERTIES_FILE_LOCATION, DEFAULT_PROPERTIES_FILE));
 	}
 	
+	private String getLogFilenamePattern() {
+		String userHomePath = System.getProperty("user.home");
+		
+		String retVal = "";
+		if(OSInfo.isMacOs()) {
+			retVal = 
+				"%h" + File.separator + "Library" + File.separator + "Application Support" + File.separator + "Phon";
+		} else if(OSInfo.isWindows()) {
+			retVal = System.getenv("APPDATA") + File.separator + "Phon";
+			if(retVal.startsWith(userHomePath)) {
+				retVal = "%h/" + retVal.substring(userHomePath.length()+1);
+			}
+			retVal = retVal.replace("\\", "/");
+		} else {
+			retVal = "%h" + File.separator + ".phon";
+		}	
+	
+		String pattern = retVal + "/phon%g.log";
+		return pattern;
+	}
+	
 	public void setupLogging() {
 		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
+		
+		// create temporary properties configuration file
+		// with updated pattern for FileHandler log location
 		try {
-			manager.readConfiguration(getLogProps());
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			final File tempFile = File.createTempFile("phon", "logprops");
+			
+			final PrintWriter fout = new PrintWriter(new FileOutputStream(tempFile));
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(getLogProps()));
+			
+			String line = null;
+			while((line = reader.readLine()) != null) {
+				fout.write(line);
+				fout.write("\n");
+			}
+			
+			fout.write("java.util.logging.FileHandler.pattern=" + getLogFilenamePattern() + "\n");
+			fout.flush();
+			
+			fout.close();
+			reader.close();
+			
+			manager.readConfiguration(new FileInputStream(tempFile));
+			tempFile.deleteOnExit();
+		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 		}
 	}

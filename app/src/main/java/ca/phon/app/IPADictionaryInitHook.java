@@ -19,9 +19,13 @@
 package ca.phon.app;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
+
 import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -45,7 +49,7 @@ public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionP
 
 	@Override
 	public IPluginExtensionFactory<PhonStartupHook> getFactory() {
-		return factory;
+		return (args) -> this;
 	}
 
 	@Override
@@ -53,16 +57,24 @@ public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionP
 		LOGGER.info("Initializing IPA Dictionaries");
 		System.setProperty(DERBY_LOG_PROP,
 				PrefHelper.get(DERBY_LOG_PROP, DERBY_LOG_LOCATION));
+		
+		// check for old version and copy it to the
+		// new application data
+		// folder
+		final File oldDbFolder = new File(PrefHelper.getUserDocumentsPhonFolder(), "ipadb");
+		final File dbFolder = new File(PrefHelper.getUserDataFolder(), "ipadb");
+		
+		if(!dbFolder.exists() && oldDbFolder.exists()) {
+			// copy folder
+			try {
+				LogUtil.info("Copying ipa dictionary from:" + oldDbFolder.getAbsolutePath() + " to: " + dbFolder.getAbsolutePath());
+				FileUtils.copyDirectory(oldDbFolder, dbFolder);
+			} catch (IOException e) {
+				LogUtil.severe(e);
+			}
+		}
+		
 		IPADatabaseManager.getInstance();
 	}
 	
-	private final IPluginExtensionFactory<PhonStartupHook> factory = new IPluginExtensionFactory<PhonStartupHook>() {
-		
-		@Override
-		public PhonStartupHook createObject(Object... args) {
-			return IPADictionaryInitHook.this;
-		}
-		
-	};
-
 }
