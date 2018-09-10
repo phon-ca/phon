@@ -1,6 +1,10 @@
 
 /* Overrides */
 
+.permalink {
+    display: none;
+}
+
 .wh_publication_title {
     display: inline;
     margin-left: 10px;
