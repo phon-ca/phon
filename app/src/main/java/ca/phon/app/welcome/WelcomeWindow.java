@@ -248,7 +248,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		final ImageIcon newIcn = new ImageIcon(newIcnImg);
 
 		String s1 = "Create Project";
-		String s2 = "Create a new project...";
+		String s2 = "Create a new project";
 
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
@@ -285,7 +285,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 				IconManager.getInstance().getSystemStockIcon(stockIcon, defaultFolderIconName, IconSize.MEDIUM);
 
 		String s1 = "Browse for Project";
-		String s2 = "Browse for project folder on disk...";
+		String s2 = "Browse for project folder on disk";
 
 		retVal.getTopLabel().setText(WorkspaceTextStyler.toHeaderText(s1));
 		retVal.getTopLabel().setIcon(browseIcnL);
