@@ -38,7 +38,9 @@ public class CheckTranscriptionsAction extends ProjectWindowAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		final CheckWizard cw = new CheckWizard(getWindow().getProject());
 		cw.pack();
-		cw.setLocationRelativeTo(getWindow());
+		
+		cw.setSize(1024, 720);
+		cw.centerWindow();
 		cw.setVisible(true);
 	}
 

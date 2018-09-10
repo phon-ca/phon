@@ -36,6 +36,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -49,6 +50,7 @@ import ca.phon.session.SessionPath;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
@@ -69,8 +71,6 @@ public class CheckWizardStep1 extends WizardStep {
 		RESET_SYLLABIFICATION,
 		RESET_ALIGNMENT;
 	}
-	
-	private DialogHeader header;
 	
 	private SessionSelector sessionSelector;
 	
@@ -96,10 +96,6 @@ public class CheckWizardStep1 extends WizardStep {
 	
 	private void init() {
 		setLayout(new BorderLayout());
-		
-		header = new DialogHeader("Check Transcriptions", 
-				"Select sessions and operations to perform.");
-		add(header, BorderLayout.NORTH);
 		
 		JPanel topPanel = new JPanel();
 		FormLayout topLayout = new FormLayout(
@@ -156,20 +152,20 @@ public class CheckWizardStep1 extends WizardStep {
 		topPanel.add(resetAlignmentBox, cc.xy(2,4));
 		topPanel.add(resetAlignmentButton, cc.xyw(1,5,3));
 		
-		topPanel.setBorder(BorderFactory.createTitledBorder("Operation"));
+		final TitledPanel opTitledPanel = new TitledPanel("Operation", topPanel);
 		
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		sessionSelector = new SessionSelector(project);
 		sessionSelector.setVisibleRowCount(20);
 		centerPanel.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
 		
-		centerPanel.setBorder(BorderFactory.createTitledBorder("Select sessions"));
+		final TitledPanel sessionsTitledPanel = new TitledPanel("Select sessions", centerPanel);
 		
-		JPanel innerPanel = new JPanel(new BorderLayout());
-		innerPanel.add(topPanel, BorderLayout.NORTH);
-		innerPanel.add(centerPanel, BorderLayout.CENTER);
+		final JSplitPane splitPane = new JSplitPane();
+		splitPane.setLeftComponent(sessionsTitledPanel);
+		splitPane.setRightComponent(opTitledPanel);
 		
-		super.add(innerPanel, BorderLayout.CENTER);
+		super.add(splitPane, BorderLayout.CENTER);
 	}
 
 	public Operation getOperation() {

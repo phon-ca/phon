@@ -19,6 +19,10 @@
 package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -26,11 +30,18 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+
+import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogBuffer;
+import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.opgraph.wizard.NodeWizardBreadcrumbButton;
 import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
@@ -43,6 +54,8 @@ import ca.phon.session.SessionPath;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
@@ -56,7 +69,9 @@ public class CheckWizard extends WizardFrame {
 	
 	private final static Logger LOGGER = Logger.getLogger(CheckWizard.class.getName());
 	
-	private BufferPanel bufferPanel;
+	private JXBusyLabel busyLabel;
+	
+	private MultiBufferPanel multiBufferPanel;
 	
 	private CheckWizardStep1 step1;
 	
@@ -77,31 +92,85 @@ public class CheckWizard extends WizardFrame {
 	}
 	
 	private void init() {
+		super.btnBack.setVisible(false);
+		super.btnCancel.setVisible(false);
 		super.btnFinish.setVisible(false);
+		super.btnNext.setVisible(false);
 		
 		step1 = new CheckWizardStep1(getProject());
+		step1.setTitle("Select Sessions");
 		addWizardStep(step1);
 		
 		opStep = createOpStep();
+		addWizardStep(opStep);
 		
 		step1.setNextStep(1);
 		opStep.setPrevStep(0);
+		
+		breadCrumbViewer.setVisible(true);
+		
+		btnNext = new NodeWizardBreadcrumbButton();
+		btnNext.setFont(FontPreferences.getTitleFont());
+		btnNext.setText("Next");
+		btnNext.addActionListener( (e) -> next() );
+		
+		final Runnable updateBreadcrumbButtons = () -> {
+			if(breadCrumbViewer.getBreadcrumb().getCurrentState() == opStep) {
+				breadCrumbViewer.remove(btnNext);
+			} else {
+				breadCrumbViewer.add(btnNext);
+				setBounds(btnNext);
+				getRootPane().setDefaultButton(btnNext);
+				breadCrumbViewer.scrollRectToVisible(btnNext.getBounds());
+			}
+
+			breadCrumbViewer.revalidate();
+			breadCrumbViewer.repaint();
+		};
+		
+		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
+		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
+		breadCrumbViewer.setBackground(Color.white);
+		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (evt) -> {
+			SwingUtilities.invokeLater(updateBreadcrumbButtons);
+		});
+		SwingUtilities.invokeLater(() -> updateBreadcrumbButtons.run());
+
+		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
+		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
+		breadcrumbScroller.getViewport().setBackground(breadCrumbViewer.getBackground());
+		breadcrumbScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		breadcrumbScroller.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+		breadcrumbScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		add(breadcrumbScroller, BorderLayout.NORTH);
+	}
+	
+	private void setBounds(JButton endBtn) {
+		final Rectangle bounds =
+				new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1,
+						0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
+		endBtn.setBounds(bounds);
 	}
 	
 	private WizardStep createOpStep() {
 		JPanel checkPanel = new JPanel(new BorderLayout());
+
+		multiBufferPanel = new MultiBufferPanel();
+		checkPanel.add(multiBufferPanel, BorderLayout.CENTER);
 		
-		DialogHeader importHeader = new DialogHeader("Check Transcriptions", "Performing selected operation");
-		checkPanel.add(importHeader, BorderLayout.NORTH);
+		WizardStep retVal = new WizardStep();
+		retVal.setLayout(new BorderLayout());
 		
-		JPanel consolePanel = new JPanel(new BorderLayout());
+		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		
-		bufferPanel = new BufferPanel("Check Transcripts");
-		consolePanel.add(bufferPanel, BorderLayout.CENTER);
+		final TitledPanel titledPanel = new TitledPanel("Check Transcriptions", checkPanel);
+		titledPanel.setLeftDecoration(busyLabel);
 		
-		checkPanel.add(consolePanel, BorderLayout.CENTER);
+		retVal.add(titledPanel, BorderLayout.CENTER);
 		
-		return super.addWizardStep(checkPanel);
+		retVal.setTitle("Check Transcriptions");
+		
+		return retVal;
 	}
 	
 	private Project getProject() {
@@ -114,16 +183,21 @@ public class CheckWizard extends WizardFrame {
 	private class CheckIPA extends PhonTask {
 		private String corpusName;
 		private String sessionName;
+		private BufferPanel bufferPanel;
 		
-		public CheckIPA(String c, String s) {
+		public CheckIPA(String c, String s, BufferPanel bufferPanel) {
 			corpusName = c;
 			sessionName = s;
+			this.bufferPanel = bufferPanel;
 		}
 		
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
+			SwingUtilities.invokeLater( () -> busyLabel.setBusy(true) );
 			try {
+				setupTableHeader(bufferPanel);
+				
 				final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
 				Session session = null;
 				try {
@@ -147,7 +221,8 @@ public class CheckWizard extends WizardFrame {
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
-			
+			SwingUtilities.invokeLater( () -> busyLabel.setBusy(false) );
+			bufferPanel.showTable();
 			super.setStatus(TaskStatus.FINISHED);
 		}
 		
@@ -179,13 +254,15 @@ public class CheckWizard extends WizardFrame {
 		private String sessionName;
 		private Syllabifier syllabifier;
 		private boolean isResetAlignment = false;
+		private BufferPanel bufferPanel;
 		
 		public ResetSyllabification(String c, String s, Syllabifier syllabifier,
-				boolean resetAlignment) {
+				boolean resetAlignment, BufferPanel bufferPanel) {
 			corpusName = c;
 			sessionName = s;
 			this.syllabifier = syllabifier;
 			this.isResetAlignment = resetAlignment;
+			this.bufferPanel = bufferPanel;
 		}
 		
 		@Override
@@ -279,10 +356,12 @@ public class CheckWizard extends WizardFrame {
 
 		private String corpusName;
 		private String sessionName;
+		private BufferPanel bufferPanel;
 		
-		public ResetAlignment(String c, String s) {
+		public ResetAlignment(String c, String s, BufferPanel bufferPanel) {
 			corpusName = c;
 			sessionName = s;
+			this.bufferPanel = bufferPanel;
 		}
 		
 		@Override
@@ -357,6 +436,19 @@ public class CheckWizard extends WizardFrame {
 		
 	}
 
+	private void setupTableHeader(BufferPanel bufferPanel) throws IOException {
+		final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
+		final StringBuilder sb = new StringBuilder();
+		sb.append('\"').append("Session").append('\"').append(',');
+		sb.append('\"').append("Record #").append('\"').append(',');
+		sb.append('\"').append("Tier").append('\"').append(',');
+		sb.append('\"').append("Group").append('\"').append(',');
+		sb.append('\"').append("Value").append('\"').append(',');
+		sb.append('\"').append("Error").append('\"').append('\n');
+		out.write(sb.toString());
+		out.flush();
+	}
+		
 	private PhonWorker worker = null;
 	@Override
 	protected void next() {
@@ -367,84 +459,12 @@ public class CheckWizard extends WizardFrame {
 			worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 			worker.setName("Check transcriptions");
-			
-			if(!bufferPanel.isShowingBuffer()) {
-				bufferPanel.clear();
+
+			for(SessionPath sessionLocation:step1.getSelectedSessions()) {
+				PhonTask t = createTask(sessionLocation);
+				worker.invokeLater(t);
 			}
-			try {
-				final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
-				final StringBuilder sb = new StringBuilder();
-				sb.append('\"').append("Session").append('\"').append(',');
-				sb.append('\"').append("Record #").append('\"').append(',');
-				sb.append('\"').append("Tier").append('\"').append(',');
-				sb.append('\"').append("Group").append('\"').append(',');
-				sb.append('\"').append("Value").append('\"').append(',');
-				sb.append('\"').append("Error").append('\"').append('\n');
-				out.write(sb.toString());
-				out.flush();
-				
-				Runnable toRun = new Runnable() {
-					@Override
-					public void run() {
-						Runnable turnOffBack = new Runnable() {
-							@Override
-							public void run() {
-								btnBack.setEnabled(false);
-							}
-						};
-						SwingUtilities.invokeLater(turnOffBack);
-						try {
-						out.flush();
-						out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
-						out.flush();
-						} catch (IOException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						}
-						
-					}
-				};
-				worker.invokeLater(toRun);
-				
-				for(SessionPath sessionLocation:step1.getSelectedSessions()) {
-					PhonTask t = createTask(sessionLocation);
-					worker.invokeLater(t);
-				}
-				
-				Runnable atEnd = new Runnable() {
-					@Override
-					public void run() {
-						Runnable turnOffBack = new Runnable() {
-							@Override
-							public void run() {
-								btnBack.setEnabled(true);
-								btnCancel.setEnabled(true);
-								
-								worker = null;
-							}
-						};
-						SwingUtilities.invokeLater(turnOffBack);
-						try {
-							out.flush();
-							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
-							out.flush();
-							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
-							out.flush();
-							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
-							out.flush();
-						} catch(IOException e) {
-							LOGGER.log(Level.SEVERE,
-									e.getLocalizedMessage(), e);
-						}
-					}
-				};
-				
-				worker.setFinalTask(atEnd);
-				
-				worker.start();
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			}
+			worker.start();
 		}
 	}
 	
@@ -453,12 +473,12 @@ public class CheckWizard extends WizardFrame {
 		
 		Operation op = step1.getOperation();
 		if(op == Operation.CHECK_IPA) {
-			return new CheckIPA(location.getCorpus(), location.getSession());
+			return new CheckIPA(location.getCorpus(), location.getSession(), multiBufferPanel.createBuffer("Check Transcriptions"));
 		} else if(op == Operation.RESET_SYLLABIFICATION) {
 			return new ResetSyllabification(location.getCorpus(), location.getSession(),
-					step1.getSyllabifier(), step1.isResetAlignment());
+					step1.getSyllabifier(), step1.isResetAlignment(), multiBufferPanel.createBuffer("Reset Syllabification"));
 		} else if(op == Operation.RESET_ALIGNMENT) {
-			return new ResetAlignment(location.getCorpus(), location.getSession());
+			return new ResetAlignment(location.getCorpus(), location.getSession(), multiBufferPanel.createBuffer("Reset Alignment"));
 		}
 		
 		return retVal;
