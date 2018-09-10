@@ -1,10 +1,10 @@
-# Report: Inventory by Session (non-IPA results)
+# Report: Inventory by Session
 
-Display an inventory of non-IPA results for each sampled session. A separate table is displayed for each session. Items in the table are sorted alphabetically.
+Display an inventory of results for each sampled session. A separate table is displayed for each session.
 
 ## Example
 
-| Result | Catootje.1_11_09 |
+| Orthography | Catootje.1_11_09 |
 | --- | --- |
 | aap | 1 |
 | aardbei | 1 |
