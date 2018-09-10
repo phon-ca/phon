@@ -5,6 +5,10 @@
     display: none;
 }
 
+.wh_search_button {
+    background-color: #8c8c8c;
+}
+
 .wh_publication_title {
     display: inline;
     margin-left: 10px;
