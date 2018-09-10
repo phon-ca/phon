@@ -163,7 +163,7 @@ public class CheckWizard extends WizardFrame {
 		
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		
-		final TitledPanel titledPanel = new TitledPanel("Check Transcriptions", checkPanel);
+		final TitledPanel titledPanel = new TitledPanel("Errors", checkPanel);
 		titledPanel.setLeftDecoration(busyLabel);
 		
 		retVal.add(titledPanel, BorderLayout.CENTER);
@@ -194,10 +194,7 @@ public class CheckWizard extends WizardFrame {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			SwingUtilities.invokeLater( () -> busyLabel.setBusy(true) );
 			try {
-				setupTableHeader(bufferPanel);
-				
 				final OutputStreamWriter out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
 				Session session = null;
 				try {
@@ -221,8 +218,6 @@ public class CheckWizard extends WizardFrame {
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			}
-			SwingUtilities.invokeLater( () -> busyLabel.setBusy(false) );
-			bufferPanel.showTable();
 			super.setStatus(TaskStatus.FINISHED);
 		}
 		
@@ -448,37 +443,69 @@ public class CheckWizard extends WizardFrame {
 		out.write(sb.toString());
 		out.flush();
 	}
+	
+	private String getOperationName() {
+		String retVal = "";
+		Operation op = step1.getOperation();
+		if(op == Operation.CHECK_IPA) {
+			retVal = "Check Transcriptions";
+		} else if(op == Operation.RESET_SYLLABIFICATION) {
+			retVal = "Reset Syllabification";
+		} else if(op == Operation.RESET_ALIGNMENT) {
+			retVal = "Reset Alignment";
+		}
+		return retVal;
+	}
 		
 	private PhonWorker worker = null;
 	@Override
 	protected void next() {
-
+		if(getCurrentStep() == step1) {
+			opStep.setTitle(getOperationName());
+		}
 		super.next();
 		if(super.getCurrentStep() == opStep) {
 			// build task list and start worker
 			worker = PhonWorker.createWorker();
 			worker.setFinishWhenQueueEmpty(true);
 			worker.setName("Check transcriptions");
-
+			
+			final BufferPanel bufferPanel = multiBufferPanel.createBuffer(getOperationName());
+			try {
+				setupTableHeader(bufferPanel);
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			}
+			
+			busyLabel.setBusy(true);
 			for(SessionPath sessionLocation:step1.getSelectedSessions()) {
-				PhonTask t = createTask(sessionLocation);
+				PhonTask t = createTask(sessionLocation, bufferPanel);
 				worker.invokeLater(t);
 			}
+			worker.setFinalTask( () -> {
+				SwingUtilities.invokeLater( () -> {
+					busyLabel.setBusy(false);
+					bufferPanel.showTable();
+					
+					showMessageDialog(bufferPanel.getName(), "Operation complete", new String[] {"Ok"} );
+				});
+			});
+			
 			worker.start();
 		}
 	}
 	
-	private PhonTask createTask(SessionPath location) {
+	private PhonTask createTask(SessionPath location, BufferPanel bufferPanel) {
 		PhonTask retVal = null;
 		
 		Operation op = step1.getOperation();
 		if(op == Operation.CHECK_IPA) {
-			return new CheckIPA(location.getCorpus(), location.getSession(), multiBufferPanel.createBuffer("Check Transcriptions"));
+			return new CheckIPA(location.getCorpus(), location.getSession(), bufferPanel);
 		} else if(op == Operation.RESET_SYLLABIFICATION) {
 			return new ResetSyllabification(location.getCorpus(), location.getSession(),
-					step1.getSyllabifier(), step1.isResetAlignment(), multiBufferPanel.createBuffer("Reset Syllabification"));
+					step1.getSyllabifier(), step1.isResetAlignment(), bufferPanel);
 		} else if(op == Operation.RESET_ALIGNMENT) {
-			return new ResetAlignment(location.getCorpus(), location.getSession(), multiBufferPanel.createBuffer("Reset Alignment"));
+			return new ResetAlignment(location.getCorpus(), location.getSession(), bufferPanel);
 		}
 		
 		return retVal;

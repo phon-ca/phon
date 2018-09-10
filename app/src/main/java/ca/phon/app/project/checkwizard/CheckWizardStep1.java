@@ -20,6 +20,7 @@ package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,12 +46,15 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.phonex.PhonexCompiler.negatable_identifier_return;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
@@ -111,6 +115,7 @@ public class CheckWizardStep1 extends WizardStep {
 		Collections.sort(orderedSyllabifiers, new SyllabifierComparator());
 	    
 	    syllabifierList = new JComboBox(orderedSyllabifiers.toArray(new Syllabifier[0]));
+	    syllabifierList.setSelectedItem(SyllabifierLibrary.getInstance().defaultSyllabifier());
 	    syllabifierList.setEnabled(false);
 	    syllabifierList.setRenderer(new SyllabifierCellRenderer());
 	   
@@ -157,6 +162,7 @@ public class CheckWizardStep1 extends WizardStep {
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		sessionSelector = new SessionSelector(project);
 		sessionSelector.setVisibleRowCount(20);
+		sessionSelector.setPreferredSize(new Dimension(350, 0));
 		centerPanel.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
 		
 		final TitledPanel sessionsTitledPanel = new TitledPanel("Select sessions", centerPanel);
@@ -199,8 +205,10 @@ public class CheckWizardStep1 extends WizardStep {
 		boolean retVal = true;
 		
 		if(getSelectedSessions().size() == 0) {
-			final Toast toast = ToastFactory.makeToast("Please select at least one session");
-			toast.start(sessionSelector);
+			final CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+			if(cmf != null) {
+				cmf.showMessageDialog("Check Transcriptions", "Please select at least one session", new String[] {"Ok"});
+			}
 			retVal = false;
 		}
 		
