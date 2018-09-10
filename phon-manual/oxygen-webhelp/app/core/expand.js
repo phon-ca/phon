@@ -36,7 +36,16 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
                 var visibleSiblings = matchedNodes.siblings(':not(:hidden)');
                 if (visibleSiblings.length > 0) {
                     // Add the element with expand/collapse capabilities
-                    matchedNodes.prepend("<span class=\"wh_expand_btn expanded\"/>");
+                    matchedNodes.prepend(
+                        $("<span>", {
+                            "class": "wh_expand_btn expanded",
+                            "role": "button",
+                            "aria-expanded" : "true",
+                            "tabindex" : 0,
+                            "aria-label" : i18n.getLocalization("collapse")
+
+                        })
+                    );
                     markHiddenSiblingsAsNotExpandable(matchedNodes);
                 }
             }
@@ -85,7 +94,6 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
         /* Expand / collapse subtopic sections */
         function toggleSubtopics(state) {
             var siblings = $(this).parent().siblings(':not(.wh_not_expandable)');
-            var tagName = $(this).prop("tagName");
 
             if (state !== undefined) {
                 // Will expand-collapse the siblings of the parent node, excepting the ones that were marked otherwise
@@ -93,17 +101,31 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
                     siblings.slideUp(0);
                     $('.webhelp_expand_collapse_sections').attr('data-next-state', 'expanded').attr('title', i18n.getLocalization('expandSections'));
                     $(this).removeClass('expanded');
+                    $(this).attr('aria-expanded', false);
+                    $(this).attr('aria-label', i18n.getLocalization('expand'));
                 } else {
                     siblings.slideDown(0);
-                     $('.webhelp_expand_collapse_sections').attr('data-next-state', 'collapsed').attr('title', i18n.getLocalization('collapseSections'));
-                     $(this).addClass('expanded');
-                 }
+                    $('.webhelp_expand_collapse_sections').attr('data-next-state', 'collapsed').attr('title', i18n.getLocalization('collapseSections'));
+                    $(this).addClass('expanded');
+                    $(this).attr('aria-expanded', true);
+                    $(this).attr('aria-label', i18n.getLocalization("collapse"));
+                }
             } else {
                 // Change the button state
                 $(this).toggleClass("expanded");
-                // Will expand-collapse the siblings of the parent node, excepting the ones that were marked otherwise
+                var isExpanded = $(this).hasClass("expanded");
+                $(this).attr('aria-expanded', isExpanded);
 
-                if (tagName == "CAPTION") {
+                if (isExpanded) {
+                    $(this).attr('aria-label', i18n.getLocalization("collapse"));
+                } else {
+                    $(this).attr('aria-label', i18n.getLocalization('expand'));
+                }
+
+                var parent = $(this).parent();
+                var tagName = parent.prop("tagName");
+                // Will expand-collapse the siblings of the parent node, excepting the ones that were marked otherwise
+                if (tagName == "CAPTION" || parent.hasClass('wh_first_letter')) {
                     // The table does not have display:block, so it will not slide.
                     // In this case we'll just hide it
                     siblings.toggle();
@@ -112,8 +134,8 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
                 }
             }
         }
-        
-        
+
+
         /*
          * WH-235
          * Sets the initial state of collapsible elements
@@ -135,7 +157,7 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
 
             return false;
         });
-        
+
 
         /*
          * WH-1750 - Handle topic TOC expand/collapse actions
@@ -146,20 +168,31 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
             if(contentNode.length){
                 $.each(contentNode.parents(), function () {
                     if ($(this).children(".title").length) {
-                         toggleSubtopics.call($(this).children('.title').find('.wh_expand_btn'),'expanded');
+                        toggleSubtopics.call($(this).children('.title').find('.wh_expand_btn'),'expanded');
                     }
                 });
                 toggleSubtopics.call(contentNode.children('.title').find('.wh_expand_btn'),'expanded');
             }
         });
-        
+
 
         /* Expand / collapse support for the marked content */
-        $(document).find('.wh_expand_btn').click(function (event) {
+        var expandWidgets = $(document).find('.wh_expand_btn');
+        expandWidgets.click(function (event) {
             toggleSubtopics.call(this);
 
             return false;
         });
+
+        /* Toggle expand/collapse on enter and space */
+        expandWidgets.keypress(function( event ) {
+            // Enter & Spacebar events
+            if ( event.which === 13 || event.which === 32) {
+                event.preventDefault();
+                toggleSubtopics.call(this);
+            }
+        });
+
     });
 
     /**

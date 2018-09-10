@@ -11,7 +11,24 @@
  * Fonts.
  *  
  */
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,700,300");
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    src: url(resources/fonts/Roboto-Thin.ttf);
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url(resources/fonts/Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    src: url(resources/fonts/Roboto-Bold.ttf);
+}
 
 html, body {
     min-width:100%;
@@ -145,7 +162,7 @@ a:hover{
 
 .webhelp_expand_collapse_sections,
 .wh_hide_highlight,
-.wh_print_link a,
+.wh_print_link button,
 .wh_navigation_links a,
 .wh_navigation_links a:hover,
 .wh_navigation_links a:active,

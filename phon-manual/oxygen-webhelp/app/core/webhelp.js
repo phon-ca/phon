@@ -4,7 +4,6 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
 
     $(document).ready(function () {
         var scrollPosition = $(window).scrollTop();
-        setContentWidth();
         handleSideTocPosition(scrollPosition);
         handlePageTocPosition(scrollPosition);
 
@@ -21,7 +20,7 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
         // Show/hide the button which expands/collapse the subtopics
         // if there are at least two subtopics in a topic
         var countSubtopics = $('.topic.nested1').length;
-        var countSections = $('section.section').length;
+        var countSections = $('section.section .title').length;
         if(countSubtopics > 1 || countSections >1){
             $('.webhelp_expand_collapse_sections').show();
         }
@@ -39,7 +38,12 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
         });
 
         // Get the image and insert it inside the modal - use its "alt" text as a caption
-        $('img.image:not([usemap])').click(function(){
+        $.each( $('img.image:not([usemap])'), function (e) {
+             if(this.naturalWidth > this.width){
+                 $(this).addClass('zoom');
+             }
+         });
+        $('.zoom').click(function(){
             $('#modal_img_large').css("display","block");
             $("#modal-img").attr('src',$(this).attr('src') );
             $("#caption").html( $(this).attr('alt') );
@@ -49,11 +53,16 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
         $(".modal .close").click(function(){
             $(".modal").css("display","none");
         });
+        $(document).keyup(function(e) {
+            if (e.keyCode == 27 && $('#modal_img_large').is(":visible")) { // escape key maps to keycode `27`
+               $(".modal").css("display","none");
+           }
+       });
 
         // Navigational links and print
         $('#topic_navigation_links .navprev>a').addClass("glyphicon glyphicon-arrow-left");
         $('#topic_navigation_links .navnext>a').addClass("glyphicon glyphicon-arrow-right");
-        $('.wh_print_link a').addClass('glyphicon glyphicon-print');
+        $('.wh_print_link button').addClass('glyphicon glyphicon-print');
 
         // Hide sideTOC when it is empty
         var sideToc = $('#wh_publication_toc');
@@ -87,15 +96,40 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
             tooltip.remove();
         }
 
-        $(".wh_main_page_toc .wh_main_page_toc_accordion_header").click(function(event) {
+        var $allAccordionHeaders = $(".wh_main_page_toc .wh_main_page_toc_accordion_header");
+        var $allAccordionButtons = $(".wh_main_page_toc .wh_main_page_toc_accordion_header .header-button");
+
+        $allAccordionHeaders.click(function(event) {
+            $headerButton = $(this).find('.header-button');
             if ($(this).hasClass('expanded')) {
                 $(this).removeClass("expanded");
+                $headerButton.attr('aria-expanded', 'false');
             } else {
-                $(".wh_main_page_toc .wh_main_page_toc_accordion_header").removeClass("expanded");
+                $allAccordionHeaders.removeClass("expanded");
                 $(this).addClass("expanded");
+                $allAccordionButtons.attr('aria-expanded', 'false');
+                $headerButton.attr('aria-expanded', 'true');
             }
-
             event.stopImmediatePropagation();
+            return false;
+
+        });
+        /* Toggle expand/collapse on enter and space */
+        $allAccordionButtons.keypress(function( event ) {
+            // Enter & Spacebar events
+            if ( event.which === 13 || event.which === 32) {
+                event.preventDefault();
+                var $parentHeader = $(this).closest('.wh_main_page_toc_accordion_header');
+                if ($parentHeader.hasClass('expanded')) {
+                    $parentHeader.removeClass("expanded");
+                    $(this).attr('aria-expanded', 'false');
+                } else {
+                    $allAccordionHeaders.removeClass("expanded");
+                    $parentHeader.addClass("expanded");
+                    $allAccordionButtons.attr('aria-expanded', 'false');
+                    $(this).attr('aria-expanded', 'true');
+                }
+            }
             return false;
         });
 
@@ -104,8 +138,6 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
         });
 
         highlightSearchTerm();
-
-        $("div.wh_content_area").css("visibility", "visible");
 
         /*
          * Codeblock copy to clipboard action
@@ -235,8 +267,8 @@ function handleSideTocPosition(scrollPosition) {
         if (tocHeight  <=   visibleAreaHeight) {
             var cHeight = parseInt($('.wh_content_area').height());
             if (parseInt(minVisibleOffset - topOffset) <=  $(window).scrollTop()) {
-                $('.wh_content_area').css('height', cHeight+'px');
-                $sideToc.css("top", topOffset + "px").css("width", tocWidth + "px").css("position", "fixed");
+                $('.wh_content_area').css('min-height', cHeight+'px');
+                $sideToc.css("top", topOffset + "px").css("width", tocWidth + "px").css("position", "fixed").css("z-index", "999");
             } else {
                 $sideToc.removeAttr('style');
             }
@@ -246,7 +278,7 @@ function handleSideTocPosition(scrollPosition) {
         scrollPosition = $(window).scrollTop();
     }
 
-		return $(window).scrollTop();
+	return $(window).scrollTop();
 }
 
 /**
@@ -254,36 +286,18 @@ function handleSideTocPosition(scrollPosition) {
  */
 function pageTocHighlightNode(scrollPosition) {
     var scrollPosition = scrollPosition !== undefined ? scrollPosition : 0;
-    var topOffset = 100;
+    var topOffset = 150;
 
     $.each( $('.wh_topic_content .title'), function () {
         var currentId = $(this).parent().attr('id');
 
         if( ($(this).offset().top - topOffset) <  $(window).scrollTop() && ( $(this).offset().top >  $(window).scrollTop()) ){
-            $('#wh_topic_toc li a').removeClass('current_node');
-            $('#wh_topic_toc li a[data-tocid = "'+ $(this).parent().attr('id') + '"]').addClass('current_node');
+            $('#wh_topic_toc a').removeClass('current_node');
+            $('#wh_topic_toc a[data-tocid = "'+ currentId + '"]').addClass('current_node');
         }
     });
     return $(window).scrollTop();
 }
-
-/**
- * @description  Check if Page TOC & Side TOC columns exists in order to set the size of the content column 
- */
-function setContentWidth(){
-    var $pageTOC = $(".wh_topic_toc");
-    var $sideTOC = $(".wh_publication_toc");
-    var $contentSection = $('#wh_topic_body');
-
-    if(!$pageTOC.find('li').length > 0 && !$sideTOC.find('li').length > 0 ){
-        $($contentSection).removeAttr('class').attr('class','col-lg-12 col-md-12 col-sm-12 col-xs-12');
-    }  else if($pageTOC.find('li').length > 0 && !$sideTOC.find('li').length > 0) {
-        $($contentSection).removeAttr('class').attr('class','col-lg-10 col-md-10 col-sm-10 col-xs-12');
-    }  else if(! $pageTOC.find('li').length > 0 && $sideTOC.find('li').length > 0) {
-        $($contentSection).removeAttr('class').attr('class','col-lg-9 col-md-9 col-sm-9 col-xs-12');
-    } 
-}
-
 
 /**
  * @description Handle the vertical position of the page toc
@@ -401,29 +415,36 @@ return $(window).scrollTop();
         $('.wh_hide_highlight').show();
     }
 
+    var isTouchEnabled = false;
+    try {
+        if (document.createEvent("TouchEvent")) {
+            isTouchEnabled = true;
+        }
+    } catch (e) {
+        util.debug(e);
+    }
+
     /**
      * Open the link from top_menu when the current group is expanded.
      *
      * Apply the events also on the dynamically generated elements.
      */
+
     $(document).on('click', ".wh_top_menu li", function (event) {
         $(".wh_top_menu li").removeClass('active');
         $(this).addClass('active');
         $(this).parents('li').addClass('active');
+
         event.stopImmediatePropagation();
     });
 
-
     $(document).on('click', '.wh_top_menu a', function (event) {
-        var isTouchEnabled = false;
-        try {
-            if (document.createEvent("TouchEvent")) {
-                isTouchEnabled = true;
-            }
-        } catch (e) {
-            util.debug(e);
+        var pointerType;
+        if (typeof event.pointerType !== "undefined") {
+            pointerType = event.pointerType;
         }
-        if ($(window).width() < 767 || isTouchEnabled) {
+
+        if ($(window).width() < 767 || isTouchEnabled || pointerType == "touch") {
             var areaExpanded = $(this).closest('li');
             var isActive = areaExpanded.hasClass('active');
             var hasChildren = areaExpanded.hasClass('has-children');

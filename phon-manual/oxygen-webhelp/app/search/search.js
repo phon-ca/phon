@@ -202,8 +202,8 @@ define(['util', 'options', 'nwSearchFnt', 'searchHistoryItems', 'localization', 
                 page: pageToShow,            // default page
                 maxVisible: 10,     // visible pagination
                 leaps: true,         // next/prev leaps through maxVisible
-                next: 'Next',
-                prev: 'Previous'
+                next: i18n.getLocalization("next.page"),
+                prev: i18n.getLocalization("prev.page")
             }).on("page", function(event, num){
                 util.debug("Display page with number: ", num);
 
@@ -301,7 +301,18 @@ define(['util', 'options', 'nwSearchFnt', 'searchHistoryItems', 'localization', 
 
         if (searchResult.documents !== undefined && searchResult.documents.length > 0) {
             var allPages = searchResult.documents;
-
+            
+            // WH-1943 - sort by scoring, title and short description
+            allPages.sort(function (first, second) {
+                var cRes = second.scoring -first.scoring;
+                if (cRes == 0) {
+                    cRes = second.title.localeCompare(first.title);
+                    if (cRes == 0) {
+                        cRes = second.shortDescription.localeCompare(first.shortDescription);
+                    }
+                }
+                return cRes;
+            });
             // The score for fist item
             var ttScore_first = 1;
             if (allPages.length > 0) {

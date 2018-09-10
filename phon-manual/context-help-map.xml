@@ -156,13 +156,13 @@
    <appContext helpID="concept_ipa_listing" path="generated/ipa.html"/>
    <appContext helpID="concept_feature_listing" path="generated/features.html"/>
    <appContext helpID="introduction" path="phonex/phonex_introduction.html"/>
-   <appContext helpID="concept_tpv_vc3_gg" path="phonex/constructs.html"/>
-   <appContext helpID="comments" path="phonex/comments.html"/>
    <appContext helpID="concept_pjp_4nm_gg" path="phonex/phone-matchers.html"/>
    <appContext helpID="concept_2cb_tlm_gg" path="phonex/groups.html"/>
    <appContext helpID="concept_qb1_dhn_gg" path="phonex/boundaries.html"/>
    <appContext helpID="concept_ddz_ttt_gg" path="phonex/quantifiers.html"/>
    <appContext helpID="concept_n15_2qc_sv" path="phonex/lookahead-behind.html"/>
+   <appContext helpID="comments" path="phonex/comments.html"/>
+   <appContext helpID="concept_tpv_vc3_gg" path="phonex/constructs.html"/>
    <appContext helpID="concept_zkq_nnm_gg" path="phonex/plug-ins.html"/>
    <appContext helpID="concept_5w3_qnm_gg" path="phonex/stress.html"/>
    <appContext helpID="concept_33z_pnm_gg" path="phonex/sctype.html"/>
@@ -175,27 +175,16 @@
    <appContext helpID="singleton_consonants" path="phonex/examples/singleton_consonants.html"/>
    <appContext helpID="consonant_clusters" path="phonex/examples/consonant_clusters.html"/>
    <appContext helpID="syllables" path="phonex/examples/syllables.html"/>
-   <appContext helpID="query_data_tiers" path="query/query-data_tiers.html"/>
-   <appContext helpID="query_phones" path="query/query_phones.html"/>
-   <appContext helpID="query_segmental_relations" path="query/query_segmental_relations.html"/>
-   <appContext helpID="taskId" path="query/tasks/GroupFilter.html"/>
-   <appContext helpID="taskId" path="query/tasks/AlignedGroupFilter.html"/>
-   <appContext helpID="taskId" path="query/tasks/WordFilter.html"/>
-   <appContext helpID="taskId" path="query/tasks/AlignedWordFilter.html"/>
-   <appContext helpID="taskId" path="query/tasks/SyllableFilter.html"/>
-   <appContext helpID="taskId" path="query/tasks/ParticipantFilter.html"/>
+   <appContext helpID="query_and_report_wizard" path="query/query_wizard.html"/>
+   <appContext helpID="step_1_query" path="query/query_wizard_query.html"/>
    <appContext helpID="taskId" path="query/tasks/ViewResultSet.html"/>
    <appContext helpID="taskId" path="query/tasks/SaveTableAsCSV.html"/>
    <appContext helpID="taskId" path="query/tasks/EditTableColumns.html"/>
    <appContext helpID="taskId" path="query/tasks/FilterResults.html"/>
    <appContext helpID="conceptId" path="editor/concepts/AboutTableQuickSearch.html"/>
-   <appContext helpID="about_query_reports" path="report/AboutQueryReports.html"/>
-   <appContext helpID="report_aggregate_ipa_results" path="report/report-aggregate_IPA.html"/>
-   <appContext helpID="report_aggregate_non_ipa_results"
-               path="report/report-aggregate_non-IPA.html"/>
-   <appContext helpID="report_inventory_by_session_ipa_results"
-               path="report/report-inventory_by_session_IPA.html"/>
-   <appContext helpID="report_inventory_by_session_non_ipa_results"
+   <appContext helpID="step_2_report_composer" path="query/query_wizard_report_composer.html"/>
+   <appContext helpID="report_aggregate" path="report/report-aggregate_non-IPA.html"/>
+   <appContext helpID="report_inventory_by_session"
                path="report/report-inventory_by_session_non-IPA.html"/>
    <appContext helpID="report_listing" path="report/report-listing.html"/>
    <appContext helpID="report_listing_by_session" path="report/report-listing_by_session.html"/>
@@ -210,8 +199,16 @@
    <appContext helpID="report_formants" path="report/report-formants.html"/>
    <appContext helpID="report_spectral_moments" path="report/report-spectral_moments.html"/>
    <appContext helpID="report_voice_onset_time_vot" path="report/report-vot.html"/>
-   <appContext helpID="custom_reports_using_composer_simple"
-               path="report/report_composer.html"/>
+   <appContext helpID="step_3_report" path="query/query_wizard_report.html"/>
+   <appContext helpID="query_data_tiers" path="query/query-data_tiers.html"/>
+   <appContext helpID="query_phones" path="query/query_phones.html"/>
+   <appContext helpID="query_segmental_relations" path="query/query_segmental_relations.html"/>
+   <appContext helpID="taskId" path="query/tasks/GroupFilter.html"/>
+   <appContext helpID="taskId" path="query/tasks/AlignedGroupFilter.html"/>
+   <appContext helpID="taskId" path="query/tasks/WordFilter.html"/>
+   <appContext helpID="taskId" path="query/tasks/AlignedWordFilter.html"/>
+   <appContext helpID="taskId" path="query/tasks/SyllableFilter.html"/>
+   <appContext helpID="taskId" path="query/tasks/ParticipantFilter.html"/>
    <appContext helpID="analysis_ppc" path="analysis/PPC.html"/>
    <appContext helpID="analysis_phone_inventory" path="analysis/Phone%20Inventory.html"/>
    <appContext helpID="analyses_phonological_processes"

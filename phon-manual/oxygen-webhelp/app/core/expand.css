@@ -18,16 +18,7 @@
 
 .wh_expand_btn {
     cursor: pointer;
-    opacity: .4;
-    transition: opacity .3s;
     width: 1em;
-    position: absolute;
-    left: -5px;
-}
-
-.wh_expand_btn:hover{
-    opacity: 1;
-    transition: opacity .3s;
 }
 
 /* WH-1613 */
@@ -53,5 +44,5 @@
 
     .wh_expand_btn{
         left: 3px;
-    } 
+    }
 }

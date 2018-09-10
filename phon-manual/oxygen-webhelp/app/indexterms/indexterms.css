@@ -80,7 +80,7 @@ a.wh_term_target{
     -o-column-break-inside:avoid;
     -ms-column-break-inside:avoid;
     column-break-inside:avoid;
-     page-break-inside; /* Firefox */
+     page-break-inside:avoid; /* Firefox */
 }
 .wh_term > ul > .wh_term:first-child {
     break-before: avoid-column;

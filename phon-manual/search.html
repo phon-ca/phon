@@ -1,22 +1,22 @@
 
 <!DOCTYPE html
   PUBLIC "" "about:legacy-compat">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components">
-    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="wh-path2root" content="" />
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" lang="en" dir="ltr">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="wh-path2root" content="" /><title>Search Results - Phon</title>
         
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Search Results</title>
-        <script type="text/javascript" src="oxygen-webhelp/lib/jquery/jquery-3.1.1.min.js"><!----></script>
+        
+        
+        <script type="text/javascript" src="./oxygen-webhelp/lib/jquery/jquery-3.1.1.min.js"><!----></script>
 
-        <link rel="stylesheet" href="oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" />
+        <link rel="stylesheet" href="./oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" />
 
         <!-- Latest compiled and minified Bootstrap CSS -->
-        <link rel="stylesheet" href="oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="./oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" />
         
         <!-- Bootstrap Optional theme -->
-        <link rel="stylesheet" href="oxygen-webhelp/lib/bootstrap/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="./oxygen-webhelp/lib/bootstrap/css/bootstrap-theme.min.css" />
 
-        <link rel="stylesheet" type="text/css" href="oxygen-webhelp/app/search-page.css?buildId=2018032809" />
+        <link rel="stylesheet" type="text/css" href="./oxygen-webhelp/app/search-page.css?buildId=2018080803" />
         
         <style>
             .wh_search_results {
@@ -24,10 +24,10 @@
             }
         </style>
 
-        <script data-main="oxygen-webhelp/app/search-page.js" src="oxygen-webhelp/lib/requirejs/require.js"></script>
+        <script data-main="./oxygen-webhelp/app/search-page.js" src="./oxygen-webhelp/lib/requirejs/require.js"></script>
         
         <!-- Skin resources -->
-        <link rel="stylesheet" type="text/css" href="oxygen-webhelp/template/oxygen.css?buildId=2018032809" />
+        <link rel="stylesheet" type="text/css" href="oxygen-webhelp/template/oxygen.css?buildId=2018080803" />
         <!-- EXM-36950 - Expand the args.hdf parameter here -->
         
         <script type="text/javascript">
@@ -50,13 +50,14 @@ $(document).ready( function () {
 	headEle.appendChild(scriptEle);
 });
 </script>
-    <title>Phon</title><link rel="stylesheet" type="text/css" href="webhelp.css" data-css-role="args.css"><!----></link></head>
+    <link rel="stylesheet" type="text/css" href="webhelp.css" data-css-role="args.css"><!----></link></head>
     <body class="wh_search_page">
+        <a href="#results" class="sr-only sr-only-focusable">Jump to search results</a>
         <!-- EXM-36950 - Expand the args.hdr parameter here -->
         
         
         
-<nav class="navbar navbar-default wh_header">
+        <header class="navbar navbar-default wh_header">
     <div class="container-fluid">
         <div class="wh_header_flex_container">
             <div class="wh_logo_and_publication_title_container">
@@ -73,24 +74,24 @@ $(document).ready( function () {
                 </div>
                 
                 <!-- The menu button for mobile devices is copied in the output only when the 'webhelp.show.top.menu' parameter is set to 'yes' -->
-                <button type="button" data-target=".wh_top_menu_and_indexterms_link" id="wh_menu_mobile_button" data-toggle="collapse" class="navbar-toggle collapsed wh_toggle_button">
+                <button type="button" data-target="#wh_top_menu_and_indexterms_link" id="wh_menu_mobile_button" data-toggle="collapse" class="navbar-toggle collapsed wh_toggle_button" aria-expanded="false" aria-label="Toggle menu">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
             </div>
 
-            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse">
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
                 
-                <div class=" wh_top_menu "><ul>
-   <li class="has-children"><span data-tocid="getting_started-d46e17" data-state="not-ready" class=" topicref "><span class="title"><a href="misc/Welcome.html" data-id="getting_started">Getting Started</a></span></span></li>
-   <li class="has-children"><span data-tocid="tocId-d46e34" data-state="not-ready" class=" topicref "><span class="title"><a href="welcome/welcome_window.html">User Interface</a></span></span></li>
-   <li class="has-children"><span data-tocid="tocId-d46e1611" data-state="not-ready" class=" topicref "><span class="title"><a href="ipa/concepts/phone.html">IPA Transcription</a></span></span></li>
-   <li class="has-children"><span data-tocid="tocId-d46e1720" data-state="not-ready" class=" topicref "><span class="title"><a href="phonex/phonex_introduction.html">Phonex</a></span></span></li>
-   <li class="has-children"><span data-tocid="tocId-d46e1946" data-state="not-ready" class=" topicref "><span class="title"><a href="query/query-data_tiers.html">Queries</a></span></span></li>
-   <li class="has-children"><span data-tocid="tocId-d46e2246" data-state="not-ready" class=" topicref "><span class="title"><a href="analysis/PPC.html">Analyses</a></span></span></li>
-   <li class="has-children"><span data-tocid="tocId-d46e2329" data-state="not-ready" class=" topicref "><span class="title"><a href="chat/phontalk.html">CHAT Support</a></span></span></li>
-</ul></div>
+                <nav class=" wh_top_menu "><ul>
+   <li class="has-children"><span data-tocid="getting_started-d66e17" data-state="not-ready" class=" topicref " data-id="getting_started"><span class="title"><a href="misc/Welcome.html">Getting Started</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d66e34" data-state="not-ready" class=" topicref "><span class="title"><a href="welcome/welcome_window.html">User Interface</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d66e1611" data-state="not-ready" class=" topicref "><span class="title"><a href="ipa/concepts/phone.html">IPA Transcription</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d66e1720" data-state="not-ready" class=" topicref "><span class="title"><a href="phonex/phonex_introduction.html">Phonex</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d66e1946" data-state="not-ready" class=" topicref "><span class="title"><a href="query/query_wizard.html">Queries</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d66e2244" data-state="not-ready" class=" topicref "><span class="title"><a href="analysis/PPC.html">Analyses</a></span></span></li>
+   <li class="has-children"><span data-tocid="tocId-d66e2327" data-state="not-ready" class=" topicref "><span class="title"><a href="chat/phontalk.html">CHAT Support</a></span></span></li>
+</ul></nav>
                 
                 <div id="wh_download_links">
     <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
@@ -101,10 +102,10 @@ $(document).ready( function () {
             </div>
         </div>
     </div>
-</nav>
+</header>
         
         <!-- Search form -->
-        <div class=" wh_search_input navbar-form search " role="form"><form id="searchForm" method="get" action="search.html"><div><input type="search" placeholder="Search " class="wh_search_textfield" id="textToSearch" name="searchQuery" /><button type="submit" class="wh_search_button"><span>Search</span></button></div><script><!--
+        <div class=" wh_search_input navbar-form search " role="form"><form id="searchForm" method="get" role="search" action="search.html"><div><input type="search" placeholder="Search " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="Search query" /><button type="submit" class="wh_search_button" aria-label="Search"><span>Search</span></button></div><script><!--
                                     $(document).ready(function () {
                                         $('#searchForm').submit(function (e) {
                                             if ($('.wh_search_textfield').val().length < 1) {
@@ -113,20 +114,25 @@ $(document).ready( function () {
                                         });
                                     });
                                 --></script></form></div>
-        <div class="container-fluid wh_content_area">
+        <div class="container-fluid wh_content_area" id="results">
             <div class="row">
-                <div class=" wh_search_results col-xs-12 col-sm-12 col-md-12 col-lg-12 " id="searchResults"></div>
+                <div class=" wh_search_results col-xs-12 col-sm-12 col-md-12 col-lg-12 " id="searchResults"><div class="searchPreload"><ul><li><div class="fakeResult"><div class="fakeTitle"></div><div class="fakeText"></div><div class="fakeText"></div><div class="fakeText"></div></div></li><li><div class="fakeResult"><div class="fakeTitle"></div><div class="fakeText"></div><div class="fakeText"></div><div class="fakeText"></div></div></li><li><div class="fakeResult"><div class="fakeTitle"></div><div class="fakeText"></div><div class="fakeText"></div><div class="fakeText"></div></div></li></ul></div></div>
                 <div id="wh-search-pagination" class="wh-search-pagination col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
             </div>
         </div>
-        <nav class="navbar navbar-default wh_footer">
+        
+        <footer class="navbar navbar-default wh_footer">
   <div class=" footer-container text-center ">
-    Generated by <a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank"> &lt;oXygen/&gt; XML WebHelp </a>
+    
+            Generated by <a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank">
+            &lt;oXygen/&gt; XML WebHelp
+            </a>
+        
   </div>
-</nav>
-
+</footer>
+        
         <!-- Latest compiled and minified JavaScript -->
-        <script src="oxygen-webhelp/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="./oxygen-webhelp/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         
     </body>
      

@@ -16,6 +16,12 @@ define(["options", "jquery"], function (options, $) {
         leaf : "leaf"
     };
 
+    var BUTTON_ACTION_ID = {
+        expand : "button-expand-action",
+        collapse : "button-collapse-action",
+        pending : "button-pending-action"
+    }
+
     var jsonBaseDir = "nav-links/json";
 
     /**
@@ -28,6 +34,9 @@ define(["options", "jquery"], function (options, $) {
         // Register the click handler for the TOC
         var topicRefExpandBtn = $(".wh_publication_toc .wh-expand-btn");
         topicRefExpandBtn.click(toggleTocExpand);
+
+        /* Toggle expand/collapse on enter and space */
+        topicRefExpandBtn.keypress(handleKeyEvent);
 
         // Register the hover handler for the Menu
         var menuTopicRefSpan = $(".wh_top_menu li");
@@ -49,10 +58,24 @@ define(["options", "jquery"], function (options, $) {
         return path2root;
     };
 
+    /* 
+     * Toggles expand/collapse on enter and space 
+     */
+    function handleKeyEvent(event) {
+        // Enter & Spacebar events
+        if ( event.which === 13 || event.which === 32) {
+            event.preventDefault();
+            toggleTocExpand.call(this);
+        }
+    }
+
     function toggleTocExpand() {
 
         var topicRef = $(this).closest(".topicref");
         var state = topicRef.attr(ATTRS.state);
+        var parentLi = $(this).closest('li');
+        var titleLink = $(this).siblings(".title").children("a");
+        var titleLinkID = titleLink.attr("id");
 
         if (state == null) {
             // Do nothing
@@ -60,11 +83,17 @@ define(["options", "jquery"], function (options, $) {
             // Do nothing
         } else if (state == STATE.notReady) {
             topicRef.attr(ATTRS.state, STATE.pending);
+            parentLi.attr('aria-expanded', 'true');
+            $(this).attr("aria-labelledby", BUTTON_ACTION_ID.pending + " " + titleLinkID);
             retrieveChildNodes(topicRef, true);
         } else if (state == STATE.expanded) {
             topicRef.attr(ATTRS.state, STATE.collapsed);
+            $(this).attr("aria-labelledby", BUTTON_ACTION_ID.expand + " " + titleLinkID);
+            parentLi.attr('aria-expanded', 'false');
         } else if (state == STATE.collapsed) {
             topicRef.attr(ATTRS.state, STATE.expanded);
+            $(this).attr("aria-labelledby", BUTTON_ACTION_ID.collapse + " " + titleLinkID);
+            parentLi.attr('aria-expanded', 'true');
         }
     };
 
@@ -98,11 +127,17 @@ define(["options", "jquery"], function (options, $) {
                                 loadingDotsUl.append(topic);
                             });
                         } else {
-                            var topicsUlParent = $('<ul/>');
+                            var topicsUlParent = $('<ul role="group"/>');
                             topicsUl.forEach(function(topic){
                                 topicsUlParent.append(topic);
                             });
                             topicLi.append(topicsUlParent);
+
+                            var titleLink = topicRefSpan.find(".title > a");
+                            var titleLinkID = titleLink.attr("id");
+
+                            var expandBtn = topicRefSpan.children('.wh-expand-btn');
+                            expandBtn.attr("aria-labelledby", BUTTON_ACTION_ID.collapse + " " + titleLinkID);
                         }
 
                         topicRefSpan.attr(ATTRS.state, STATE.expanded);
@@ -145,7 +180,12 @@ define(["options", "jquery"], function (options, $) {
      */
     function createTopicLi(topic, forToc) {
         var li = $("<li>");
-        if (!forToc) {
+        if (forToc) {
+            li.attr('role', 'treeitem');
+            if (hasChildren(topic, forToc)) {
+                li.attr('aria-expanded', 'false');
+            }
+        } else {
             if (topic.menu.hasChildren) {
                 li.addClass("has-children");
             }
@@ -216,24 +256,20 @@ define(["options", "jquery"], function (options, $) {
             topicRefSpan.addClass(topic.outputclass);
         }
 
-        topicRefSpan.attr(ATTRS.id, topic.id);
-        topicRefSpan.attr(ATTRS.tocID, topic.tocID);
-
-        // If the "topics" property is not specified then it means that children should be loaded from the
-        // module referenced in the "next" property
-        var children = topic.topics;
-
-        var hasChildren;
-        if (children != null && children.length == 0) {
-            hasChildren = false;
-        } else if (!forToc && topic.menu != null) {
-            hasChildren = topic.menu.hasChildren;
-        } else {
-            hasChildren = true;
+        // WH-1820 Copy the Ditaval "pass through" attributes.
+        var dataAttributes = topic.attributes;
+        if (typeof dataAttributes !== 'undefined') {
+            var attrsNames = Object.keys(dataAttributes);
+            attrsNames.forEach(function(attr) {
+                topicRefSpan.attr(attr, dataAttributes[attr]);
+            });
         }
 
+        topicRefSpan.attr(ATTRS.tocID, topic.tocID);
+
         // Current node state
-        if (hasChildren) {
+        var containsChildren = hasChildren(topic, forToc);
+        if (containsChildren) {
             // This state means that the child topics should be retrieved later.
             topicRefSpan.attr(ATTRS.state, STATE.notReady);
         } else {
@@ -242,9 +278,17 @@ define(["options", "jquery"], function (options, $) {
 
         if (forToc) {
             var expandBtn = $("<span>", {
-                class: "wh-expand-btn"
+                class: "wh-expand-btn",
+                role: "button"
             });
+
+            if(containsChildren) {
+                expandBtn.attr("aria-labelledby", BUTTON_ACTION_ID.expand + " " + getTopicLinkID(topic));
+                expandBtn.attr("tabindex", "0");
+            }
+
             expandBtn.click(toggleTocExpand);
+            expandBtn.keypress(handleKeyEvent);
             topicRefSpan.append(expandBtn);
         }
 
@@ -260,6 +304,11 @@ define(["options", "jquery"], function (options, $) {
             href: linkHref,
             html: topic.title
         });
+
+        if (forToc) {
+            link.attr("id", getTopicLinkID(topic));
+        }
+
         if (isExternalReference) {
             link.attr("target", "_blank");
         }
@@ -271,15 +320,13 @@ define(["options", "jquery"], function (options, $) {
 
         // Topic ref short description
         if (forToc && topic.shortdesc != null) {
-
             var tooltipSpan = $("<span>", {
                 class: "wh-tooltip",
                 html: topic.shortdesc
             });
-			
+
 			/* WH-1518: Check if the tooltip has content. */
             if (tooltipSpan.find('.shortdesc:empty').length == 0) {
-
                 // Update the relative links
                 var pathToRoot = getPathToRoot();
                 var links = tooltipSpan.find("a[href]");
@@ -289,10 +336,8 @@ define(["options", "jquery"], function (options, $) {
                         $(this).attr("href", pathToRoot + href);
                     }
                 });
-
                 titleSpan.append(tooltipSpan);
             }
-
         }
 
         topicRefSpan.append(titleSpan);
@@ -300,6 +345,24 @@ define(["options", "jquery"], function (options, $) {
         return topicRefSpan;
     }
 
+    function getTopicLinkID(topic) {
+        return topic.tocID + "-link";
+    }
+
+    function hasChildren(topic, forToc) {
+        // If the "topics" property is not specified then it means that children should be loaded from the
+        // module referenced in the "next" property
+        var children = topic.topics;
+        var hasChildren;
+        if (children != null && children.length == 0) {
+            hasChildren = false;
+        } else if (!forToc && topic.menu != null) {
+            hasChildren = topic.menu.hasChildren;
+        } else {
+            hasChildren = true;
+        }
+        return hasChildren;
+    }
 
     function menuItemHovered() {
         var topicRefSpan = $(this).children('.topicref');

@@ -40,6 +40,11 @@ define(function() {
         // image maps
         "image-map" : "image-map/image-map",
 
+        // Publishing template JS module loader
+        "template-module-loader" : "template/template-module-loader",
+        // Publishing Template base directory
+        "template-base-dir" : "../template",
+
         // jquery-private
         "jquery-private" : "jquery-private/jquery-private",
         "jquery.highlight.amd" : "jquery-private/jquery.highlight.amd",
@@ -60,7 +65,7 @@ define(function() {
         // JQuery Responsive image maps
         "jquery.rwdImageMaps" : "../lib/rwdImageMaps/jquery.rwdImageMaps.min",
         // JQuery Bootpag
-        "jquery.bootpag" : "../lib/jquery-bootpag/jquery.bootpag.min",
+        "jquery.bootpag" : "../lib/jquery-bootpag/jquery.bootpag.min"
     };
 
     var shimConfig = {

@@ -5,77 +5,62 @@ Copyright (c) 1998-2018 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 /* Use the admonitions from the oXygen WebHelp resources. */
-.warningtitle,
-div[class="warning"]>h3{
-    background-image:url("../img/warning.svg") !important;
+
+div.note>span.note__title{
     background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
-}
-
-.warningtitle {
-    font-weight:bold;
-}
-
-.notetitle,
-div[class="note"]>h3{
     background-image:url("../img/note.svg") !important;
-    background-repeat:no-repeat;
+    font-weight: bold;
+}
+
+span.note__title,
+*[dir] *[dir='ltr'] span.note__title,
+*[dir] *[dir] *[dir='ltr'] span.note__title,
+*[dir] *[dir] *[dir] *[dir='ltr'] span.note__title,
+*[dir] *[dir] *[dir] *[dir] *[dir='ltr'] span.note__title{
     padding:4px 4px 4px 23px;
+    background-position:left;
+}
+
+span.note__title[dir='rtl'],
+*[dir] *[dir='rtl'] span.note__title,
+*[dir] *[dir] *[dir='rtl'] span.note__title,
+*[dir] *[dir] *[dir] *[dir='rtl'] span.note__title,
+*[dir] *[dir] *[dir] *[dir] *[dir='rtl'] span.note__title{
+    padding:4px 23px 4px 4px;
+    background-position:right;
 }
 
 
-.cautiontitle,
-div[class="caution"]>h3 {
+div.warning>span.note__title{
+    background-image:url("../img/warning.svg") !important;
+}
+div.caution>span.note__title{
     background-image:url("../img/caution.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
-
-.troubletitle,
-div[class="trouble"]>h3 {
+div.trouble>span.note__title{
     background-image:url("../img/troubleshooting.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
 
-
-.importanttitle,
-div[class="important"]>h3,
-.attentiontitle,
-div[class="attention"]>h3,
-.noticetitle,
-div[class="notice"]>h3{
+div.important>span.note__title,
+div.attention>span.note__title,
+div.notice>span.note__title{
     background-image:url("../img/important.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
 
-.remembertitle,
-div[class="remember"]>h3{
+div.remember>span.note__title{
     background-image:url("../img/remember.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
 
-.restrictiontitle,
-div[class="restriction"]>h3{
+div.restriction>span.note__title{
     background-image:url("../img/restriction.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
 
-.dangertitle,
-div[class="danger"]>h3{
+div.danger>span.note__title{
     background-image:url("../img/danger.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
 
-.tiptitle,
-div[class="tip"]>h3{
+div.tip>span.note__title{
     background-image:url("../img/tip.svg") !important;
-    background-repeat:no-repeat;
-    padding:4px 4px 4px 23px;
 }
 
 /*
@@ -147,8 +132,16 @@ div.fignone img {
     color: #000000;
 }
 
-.booklibrary, .booktitlealt {
-    display:none;
+@media screen{
+    .booklibrary, .booktitlealt {
+        display:none;
+    }
+}
+
+@media print {
+    .booklibrary, .booktitlealt {
+        font-size: smaller;
+    }
 }
 
 
@@ -184,3 +177,8 @@ a#star5 { width:100px; z-index:2; }
 div#rate_comment {clear:both; margin:14px 0 0 0;}
 div.rate_response {margin:-14px 0 0 0; }
 
+/* Conforms to the DITA spec. The HTML uses middle instead of top. */
+.simpletable td,
+.table td {
+	vertical-align: top;
+}
