@@ -6,7 +6,9 @@ Download required fronts from https://www.phon.ca/downloads/ipafonts.zip.
 
 ## Windows
 
-Download the newest .exe installer file from the [releases](https://github.com/phon-ca/phon/releases) page.
+Download the newest Phon_windows-x64_<version>.exe installer file from the [releases](https://github.com/phon-ca/phon/releases) page.
+
+For manual installation, download the Phon_windows-x64_<version>.zip package from the [releases](https://github.com/phon-ca/phon/releases) page.
 
 > Note: Phon 3.0+ only supports 64-bit operating systems.
 
