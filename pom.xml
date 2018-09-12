@@ -518,11 +518,6 @@
 					<argLine>--add-modules java.xml.bind</argLine>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${org.apache.maven.plugins.maven-javadoc-plugin.version}</version>
-			</plugin>
 
 			<plugin>
 				<!-- We use this plugin to ensure that our usage of the maven-jaxb2-plugin
