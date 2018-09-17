@@ -262,7 +262,7 @@
             <topicref href="query/query_wizard_report.md" format="markdown"/>
         </topicref>
         <topicref href="query/query-data_tiers.dita" format="dita"/>
-        <topicref href="query/query_phones.dita" format="dita"/>
+        <topicref href="query/query_phones.md" format="markdown"/>
         <topicref href="query/query_segmental_relations.md" format="markdown"/>
         <topichead navtitle="Common Query Options">
             <topicref href="query/tasks/GroupFilter.xml"/>
