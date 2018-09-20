@@ -41,7 +41,6 @@ import org.jdesktop.swingx.JXBusyLabel;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogBuffer;
 import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.opgraph.wizard.NodeWizardBreadcrumbButton;
 import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
@@ -56,6 +55,7 @@ import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
@@ -109,7 +109,7 @@ public class CheckWizard extends WizardFrame {
 		
 		breadCrumbViewer.setVisible(true);
 		
-		btnNext = new NodeWizardBreadcrumbButton();
+		btnNext = new BreadcrumbButton();
 		btnNext.setFont(FontPreferences.getTitleFont());
 		btnNext.setText("Next");
 		btnNext.addActionListener( (e) -> next() );

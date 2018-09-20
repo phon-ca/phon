@@ -128,6 +128,7 @@ import ca.phon.session.SessionPath;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -216,7 +217,7 @@ public class NodeWizard extends WizardFrame {
 
 	private volatile boolean running = false;
 
-	private NodeWizardBreadcrumbButton btnRunAgain;
+	private BreadcrumbButton btnRunAgain;
 
 	private final WebViewInterface webViewInterface = new WebViewInterface();
 
@@ -469,19 +470,19 @@ public class NodeWizard extends WizardFrame {
 
 		bufferPanel = new WizardMultiBufferPanel(this);
 
-		btnNext = new NodeWizardBreadcrumbButton();
+		btnNext = new BreadcrumbButton();
 		btnNext.setFont(FontPreferences.getTitleFont());
 		btnNext.setText("Next");
 		btnNext.addActionListener( (e) -> next() );
 
-		btnCancel = new NodeWizardBreadcrumbButton();
+		btnCancel = new BreadcrumbButton();
 		btnCancel.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		btnCancel.setText("Stop");
 		btnCancel.setBackground(Color.red);
 		btnCancel.setForeground(Color.white);
 		btnCancel.addActionListener( (e) -> cancel() );
 
-		btnRunAgain = new NodeWizardBreadcrumbButton();
+		btnRunAgain = new BreadcrumbButton();
 		btnRunAgain.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		btnRunAgain.setText("Run again");
 		btnRunAgain.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );

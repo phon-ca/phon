@@ -30,8 +30,13 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 
 import ca.phon.ui.GUIHelper;
+import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
 import ca.phon.ui.jbreadcrumb.BreadcrumbStateBorder;
 
+/**
+ * @deprecated Use {@link BreadcrumbButton}
+ */
+@Deprecated
 public class NodeWizardBreadcrumbButton extends JButton {
 
 	private static final long serialVersionUID = -8963234070761177007L;

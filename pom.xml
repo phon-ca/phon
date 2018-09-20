@@ -122,7 +122,7 @@
 		<ca.hedlund.desktopicons.version>3-SNAPSHOT</ca.hedlund.desktopicons.version>
 		<ca.phon.opgraph.version>1.0-SNAPSHOT</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>11</ca.phon.native-dialogs.version>
-		<ca.phon.jbreadcrumb.version>2-SNAPSHOT</ca.phon.jbreadcrumb.version>
+		<ca.phon.jbreadcrumb.version>3-SNAPSHOT</ca.phon.jbreadcrumb.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
 		<com.fifesoft.rsyntaxtextarea.version>2.6.1</com.fifesoft.rsyntaxtextarea.version>
 		<com.fifesoft.autocomplete.version>2.6.1</com.fifesoft.autocomplete.version>
