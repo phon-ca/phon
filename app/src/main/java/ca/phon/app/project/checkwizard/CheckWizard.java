@@ -56,6 +56,7 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
+import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
@@ -65,7 +66,7 @@ import ca.phon.worker.PhonWorker;
  * A wizard for checking/repairing IPA transcriptions
  * in a set of selected sessions.
  */
-public class CheckWizard extends WizardFrame {
+public class CheckWizard extends BreadcrumbWizardFrame {
 	
 	private final static Logger LOGGER = Logger.getLogger(CheckWizard.class.getName());
 	
@@ -92,11 +93,6 @@ public class CheckWizard extends WizardFrame {
 	}
 	
 	private void init() {
-		super.btnBack.setVisible(false);
-		super.btnCancel.setVisible(false);
-		super.btnFinish.setVisible(false);
-		super.btnNext.setVisible(false);
-		
 		step1 = new CheckWizardStep1(getProject());
 		step1.setTitle("Select Sessions");
 		addWizardStep(step1);
@@ -108,48 +104,6 @@ public class CheckWizard extends WizardFrame {
 		opStep.setPrevStep(0);
 		
 		breadCrumbViewer.setVisible(true);
-		
-		btnNext = new BreadcrumbButton();
-		btnNext.setFont(FontPreferences.getTitleFont());
-		btnNext.setText("Next");
-		btnNext.addActionListener( (e) -> next() );
-		
-		final Runnable updateBreadcrumbButtons = () -> {
-			if(breadCrumbViewer.getBreadcrumb().getCurrentState() == opStep) {
-				breadCrumbViewer.remove(btnNext);
-			} else {
-				breadCrumbViewer.add(btnNext);
-				setBounds(btnNext);
-				getRootPane().setDefaultButton(btnNext);
-				breadCrumbViewer.scrollRectToVisible(btnNext.getBounds());
-			}
-
-			breadCrumbViewer.revalidate();
-			breadCrumbViewer.repaint();
-		};
-		
-		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
-		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
-		breadCrumbViewer.setBackground(Color.white);
-		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (evt) -> {
-			SwingUtilities.invokeLater(updateBreadcrumbButtons);
-		});
-		SwingUtilities.invokeLater(() -> updateBreadcrumbButtons.run());
-
-		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
-		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
-		breadcrumbScroller.getViewport().setBackground(breadCrumbViewer.getBackground());
-		breadcrumbScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		breadcrumbScroller.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
-		breadcrumbScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		add(breadcrumbScroller, BorderLayout.NORTH);
-	}
-	
-	private void setBounds(JButton endBtn) {
-		final Rectangle bounds =
-				new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1,
-						0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-		endBtn.setBounds(bounds);
 	}
 	
 	private WizardStep createOpStep() {

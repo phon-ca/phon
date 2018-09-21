@@ -132,6 +132,7 @@ import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.MsFormatter;
@@ -177,7 +178,7 @@ import netscape.javascript.JSObject;
  * </ul>
  *
  */
-public class NodeWizard extends WizardFrame {
+public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private static final long serialVersionUID = -652423592288338133L;
 
@@ -217,13 +218,13 @@ public class NodeWizard extends WizardFrame {
 
 	private volatile boolean running = false;
 
+	private BreadcrumbButton btnStop;
 	private BreadcrumbButton btnRunAgain;
 
 	private final WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
-		setBreadcrumbVisible(true);
 		setWindowName(title);
 
 		this.processor = processor;
@@ -452,35 +453,17 @@ public class NodeWizard extends WizardFrame {
 		return bufferPanel.getBufferNames().contains("Report");
 	}
 	
-	private void setBounds(JButton endBtn) {
-		final Rectangle bounds =
-				new Rectangle(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-endBtn.getInsets().left/2-1,
-						0, endBtn.getPreferredSize().width, breadCrumbViewer.getHeight());
-		endBtn.setBounds(bounds);
-	}
-
 	private void init() {
 		globalOptionsPanel = new GlobalParameterPanel();
 		
-		// turn off parent navigation controls
-		super.btnBack.setVisible(false);
-		super.btnCancel.setVisible(false);
-		super.btnFinish.setVisible(false);
-		super.btnNext.setVisible(false);
-
 		bufferPanel = new WizardMultiBufferPanel(this);
 
-		btnNext = new BreadcrumbButton();
-		btnNext.setFont(FontPreferences.getTitleFont());
-		btnNext.setText("Next");
-		btnNext.addActionListener( (e) -> next() );
-
-		btnCancel = new BreadcrumbButton();
-		btnCancel.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
-		btnCancel.setText("Stop");
-		btnCancel.setBackground(Color.red);
-		btnCancel.setForeground(Color.white);
-		btnCancel.addActionListener( (e) -> cancel() );
+		btnStop = new BreadcrumbButton();
+		btnStop.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
+		btnStop.setText("Stop");
+		btnStop.setBackground(Color.red);
+		btnStop.setForeground(Color.white);
+		btnStop.addActionListener( (e) -> cancel() );
 
 		btnRunAgain = new BreadcrumbButton();
 		btnRunAgain.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
@@ -488,48 +471,10 @@ public class NodeWizard extends WizardFrame {
 		btnRunAgain.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
 		btnRunAgain.setVisible(false);
 
-		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
-
-		final Runnable updateBreadcrumbButtons = () -> {
-			JButton endBtn = btnNext;
-			if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
-				breadCrumbViewer.remove(btnNext);
-
-				breadCrumbViewer.add(btnRunAgain);
-				setBounds(btnRunAgain);
-
-				breadCrumbViewer.add(btnCancel);
-				setBounds(btnCancel);
-
-				endBtn = btnCancel;
-			} else {
-				breadCrumbViewer.remove(btnRunAgain);
-				breadCrumbViewer.remove(btnCancel);
-
-				breadCrumbViewer.add(btnNext);
-				setBounds(btnNext);
-			}
-
-			getRootPane().setDefaultButton(endBtn);
-
-			breadCrumbViewer.revalidate();
-			breadCrumbViewer.scrollRectToVisible(endBtn.getBounds());
-		};
-
 		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		breadCrumbViewer.setBackground(Color.white);
-		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (evt) -> {
-			SwingUtilities.invokeLater(updateBreadcrumbButtons);
-		});
-		updateBreadcrumbButtons.run();
-
-		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
-		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
-		breadcrumbScroller.getViewport().setBackground(breadCrumbViewer.getBackground());
-		breadcrumbScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		breadcrumbScroller.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
-		breadcrumbScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		add(breadcrumbScroller, BorderLayout.NORTH);
+		breadCrumbViewer.setStateBackground(btnNext.getBackground().darker());
+		updateBreadcrumbButtons();
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		busyLabel.getBusyPainter().setHighlightColor(Color.white);
@@ -585,6 +530,33 @@ public class NodeWizard extends WizardFrame {
 		// setup card layout
 		add(stepPanel, BorderLayout.CENTER);
 
+	}
+	
+	@Override
+	public void updateBreadcrumbButtons() {
+		JButton endBtn = nextButton;
+		if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
+			breadCrumbViewer.remove(nextButton);
+
+			breadCrumbViewer.add(btnRunAgain);
+			setBounds(btnRunAgain);
+
+			breadCrumbViewer.add(btnStop);
+			setBounds(btnStop);
+
+			endBtn = btnStop;
+		} else {
+			breadCrumbViewer.remove(btnRunAgain);
+			breadCrumbViewer.remove(btnCancel);
+
+			breadCrumbViewer.add(nextButton);
+			setBounds(nextButton);
+		}
+
+		getRootPane().setDefaultButton(endBtn);
+
+		breadCrumbViewer.revalidate();
+		breadCrumbViewer.scrollRectToVisible(endBtn.getBounds());
 	}
 
 	/**

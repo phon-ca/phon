@@ -86,27 +86,13 @@ public class WizardFrame extends CommonModuleFrame {
 	
 	protected JPanel stepPanel;
 	
-	/** The breadCrumb */
-	private Breadcrumb<WizardStep, String> breadCrumb;
-	protected JBreadcrumb<WizardStep, String> breadCrumbViewer;
-	
 	private List<WizardListener> listeners = 
 			Collections.synchronizedList(new ArrayList<>());
 	
 	public WizardFrame(String title) {
 		super(title);
 		
-		breadCrumb = new Breadcrumb<WizardStep, String>() {
-
-			@Override
-			public void gotoState(WizardStep state) {
-				if(getCurrentStep() != state) {
-					WizardFrame.this.gotoStep(getStepIndex(state));
-					super.gotoState(getCurrentStep());
-				}
-			}
-			
-		};
+		
 		
 		init();
 	}
@@ -120,10 +106,6 @@ public class WizardFrame extends CommonModuleFrame {
 		stepLayout = new CardLayout();
 		stepPanel = new JPanel(stepLayout);
 		add(stepPanel, BorderLayout.CENTER);
-		
-		breadCrumbViewer = new JBreadcrumb<>(breadCrumb);
-		breadCrumbViewer.setFont(FontPreferences.getTitleFont());
-		breadCrumbViewer.setVisible(false);
 		
 		// button bar
 		ImageIcon icnBack = IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL);
@@ -206,14 +188,6 @@ public class WizardFrame extends CommonModuleFrame {
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
 	
-	public boolean isBreadcrumbVisible() {
-		return breadCrumbViewer.isVisible();
-	}
-	
-	public void setBreadcrumbVisible(boolean breadcrumbVisible) {
-		breadCrumbViewer.setVisible(breadcrumbVisible);
-	}
-	
 	public WizardStep getWizardStep(int idx) {
 		return (new ArrayList<>(steps.keySet())).get(idx);
 	}
@@ -287,22 +261,11 @@ public class WizardFrame extends CommonModuleFrame {
 	public void removeWizardStep(WizardStep ws) {
 		steps.remove(ws);
 		stepPanel.remove(ws);
-		
-		if(breadCrumb.containsState(ws)) {
-			while(breadCrumb.size() > 0) {
-				breadCrumb.popState();
-				if(breadCrumb.getCurrentState() == ws) {
-					break;
-				}
-			}
-		}
 	}
 	
 	public void removeAllSteps() {
 		steps.clear();
 		stepPanel.removeAll();
-		
-		breadCrumb.clear();
 	}
 	
 	public int numberOfSteps() {
@@ -321,17 +284,6 @@ public class WizardFrame extends CommonModuleFrame {
 		stepLayout.show(stepPanel, steps.get(ws).toString());
 		
 		setupButtons();
-		
-		if(breadCrumb.containsState(ws)) {
-			breadCrumb.gotoState(ws);
-		} else {
-			breadCrumb.clear();
-			for(int i = 0; i < numberOfSteps() && i <= getCurrentStepIndex(); i++) {
-				WizardStep step = getWizardStep(i);
-				breadCrumb.addState(step, step.getTitle());
-				if(step == ws) break;
-			}
-		}
 		
 		fireWizardEvent(WizardEvent.createGotoStepEvent(this, stepIndex));
 	}
