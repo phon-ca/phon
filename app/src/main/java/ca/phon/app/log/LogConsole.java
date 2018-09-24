@@ -20,7 +20,6 @@ package ca.phon.app.log;
 
 import java.awt.Font;
 import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 

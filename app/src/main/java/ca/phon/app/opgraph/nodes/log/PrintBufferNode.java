@@ -27,8 +27,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;

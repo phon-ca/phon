@@ -20,8 +20,6 @@ package ca.phon.ui;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 

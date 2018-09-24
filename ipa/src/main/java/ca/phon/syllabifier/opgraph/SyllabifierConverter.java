@@ -18,9 +18,6 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;

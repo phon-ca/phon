@@ -19,27 +19,18 @@
 package ca.phon.app.project.checkwizard;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogBuffer;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
 import ca.phon.extensions.UnvalidatedValue;
@@ -52,12 +43,8 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
 import ca.phon.ui.wizard.BreadcrumbWizardFrame;
-import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;

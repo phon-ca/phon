@@ -68,7 +68,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JButton;

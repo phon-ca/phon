@@ -19,7 +19,6 @@
 package ca.phon.app.project;
 
 import java.awt.BorderLayout;
-import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;

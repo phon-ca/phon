@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.editor.SimpleEditor;

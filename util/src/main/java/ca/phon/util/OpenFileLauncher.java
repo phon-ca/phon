@@ -20,7 +20,6 @@ package ca.phon.util;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.logging.Logger;
 
 public class OpenFileLauncher {
 	

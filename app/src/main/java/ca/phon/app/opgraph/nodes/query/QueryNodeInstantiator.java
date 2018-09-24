@@ -18,9 +18,6 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;

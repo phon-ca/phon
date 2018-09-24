@@ -25,8 +25,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;

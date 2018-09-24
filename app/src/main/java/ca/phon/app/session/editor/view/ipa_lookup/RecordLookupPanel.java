@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;

@@ -27,7 +27,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
@@ -46,17 +45,12 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.SessionSelector;
-import ca.phon.phonex.PhonexCompiler.negatable_identifier_return;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PrefHelper;
 

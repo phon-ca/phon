@@ -18,8 +18,6 @@
  */
 package ca.phon.app;
 
-import java.util.logging.Logger;
-
 import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;

@@ -35,7 +35,6 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.opgraph.editor.library.LibraryView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;

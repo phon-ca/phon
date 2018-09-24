@@ -34,8 +34,6 @@ import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.GrayFilter;
 import javax.swing.Icon;

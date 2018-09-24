@@ -19,8 +19,6 @@
 package ca.phon.cvseq.fsa;
 
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.logging.log4j.LogManager;
 

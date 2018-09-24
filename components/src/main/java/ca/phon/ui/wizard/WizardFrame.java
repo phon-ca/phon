@@ -48,9 +48,6 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.jbreadcrumb.Breadcrumb;
-import ca.phon.ui.jbreadcrumb.JBreadcrumb;
 import ca.phon.ui.wizard.WizardEvent.WizardEventType;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

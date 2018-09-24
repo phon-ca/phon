@@ -29,8 +29,6 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;

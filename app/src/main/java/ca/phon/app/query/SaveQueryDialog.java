@@ -27,7 +27,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 
-import ca.phon.app.opgraph.nodes.query.QueryHistoryNode;
 import ca.phon.project.Project;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;

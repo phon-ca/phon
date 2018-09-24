@@ -18,9 +18,6 @@
  */
 package ca.phon.script.debug;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.debug.DebugFrame;

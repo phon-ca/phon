@@ -7,7 +7,6 @@ import java.time.Period;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import ca.phon.session.SessionPath;
 

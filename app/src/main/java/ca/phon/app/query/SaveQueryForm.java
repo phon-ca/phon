@@ -5,7 +5,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;

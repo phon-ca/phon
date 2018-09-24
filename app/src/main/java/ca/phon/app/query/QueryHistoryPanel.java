@@ -1,11 +1,9 @@
 package ca.phon.app.query;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -13,22 +11,16 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 
 import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXComboBox;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
@@ -38,15 +30,9 @@ import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
-import ca.phon.script.params.history.ParamHistoryManager;
-import ca.phon.script.params.history.ParamHistoryType;
 import ca.phon.script.params.history.ParamSetType;
 import ca.phon.script.params.history.ParamType;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.text.DefaultTextCompleterModel;
-import ca.phon.ui.text.PromptedTextField;
-import ca.phon.ui.text.TextCompleter;
-import ca.phon.ui.text.TextCompleterModel;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

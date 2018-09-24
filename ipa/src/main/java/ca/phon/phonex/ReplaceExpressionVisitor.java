@@ -18,8 +18,6 @@
  */
 package ca.phon.phonex;
 
-import java.util.logging.Logger;
-
 import org.apache.logging.log4j.LogManager;
 
 import ca.phon.ipa.IPAElement;

@@ -23,8 +23,6 @@ import java.awt.KeyboardFocusManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.text.JTextComponent;
 

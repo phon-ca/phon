@@ -26,8 +26,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.event.DocumentEvent;

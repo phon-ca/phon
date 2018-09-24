@@ -21,8 +21,6 @@ package ca.phon.query.script;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.extensions.Extension;
 import ca.phon.query.db.ScriptLibrary;

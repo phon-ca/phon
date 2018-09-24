@@ -3,7 +3,6 @@ package ca.phon.app.query;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Map;
-import java.util.logging.Level;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;

@@ -18,8 +18,6 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import java.util.logging.Logger;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;

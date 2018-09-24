@@ -18,8 +18,6 @@
  */
 package ca.phon.app;
 
-import java.util.logging.Logger;
-
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.PhonStartupHook;

@@ -19,8 +19,6 @@
 package ca.phon.app;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.app.log.LogManager;

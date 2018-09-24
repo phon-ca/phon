@@ -18,7 +18,6 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 

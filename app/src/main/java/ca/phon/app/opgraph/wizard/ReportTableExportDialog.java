@@ -31,7 +31,6 @@ import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.util.OpenFileLauncher;

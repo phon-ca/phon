@@ -19,8 +19,6 @@
 package ca.phon.query.script;
 
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.mozilla.javascript.Scriptable;
 

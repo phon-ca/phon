@@ -27,8 +27,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.query.db.Script;
 import ca.phon.query.db.ScriptLibrary;

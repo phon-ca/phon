@@ -23,8 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.OpgraphIO;

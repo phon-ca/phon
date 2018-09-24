@@ -28,8 +28,6 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;

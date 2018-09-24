@@ -29,8 +29,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.plugin.IPluginExtensionFactory;

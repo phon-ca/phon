@@ -21,8 +21,6 @@ package ca.phon.app.project.actions;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;

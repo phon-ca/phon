@@ -18,8 +18,6 @@
  */
 package ca.phon.app.query;
 
-import java.util.logging.Logger;
-
 import ca.phon.query.script.QueryTask;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.worker.PhonTask;

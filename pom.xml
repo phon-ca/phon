@@ -115,8 +115,8 @@
 	<!-- Dependency Versions -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.sourceVersion>9</project.build.sourceVersion>
-		<project.build.targetVersion>9</project.build.targetVersion>
+		<project.build.sourceVersion>10</project.build.sourceVersion>
+		<project.build.targetVersion>10</project.build.targetVersion>
 
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3-SNAPSHOT</ca.hedlund.desktopicons.version>

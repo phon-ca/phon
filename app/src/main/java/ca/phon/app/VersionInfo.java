@@ -21,7 +21,6 @@ package ca.phon.app;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * Methods for determining the version number of the application.

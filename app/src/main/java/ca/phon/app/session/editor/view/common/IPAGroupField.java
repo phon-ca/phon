@@ -20,7 +20,6 @@ package ca.phon.app.session.editor.view.common;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.logging.Logger;
 
 import javax.swing.JToolTip;
 

@@ -19,8 +19,6 @@
 package ca.phon.worker;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.event.EventListenerList;
 

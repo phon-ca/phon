@@ -18,8 +18,6 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.Toolkit;
-
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.opgraph.wizard.NodeWizard;

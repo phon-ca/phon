@@ -19,8 +19,6 @@
 package ca.phon.app.session.editor.view.find_and_replace;
 
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -18,9 +18,6 @@
  */
 package ca.phon.phonex.plugins;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;

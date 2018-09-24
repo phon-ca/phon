@@ -24,11 +24,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ca.phon.app.hooks.ActionHook;
-import ca.phon.app.log.LogManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * <p>Class which provides extension support for objects

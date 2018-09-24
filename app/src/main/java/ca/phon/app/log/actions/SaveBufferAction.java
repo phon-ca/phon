@@ -22,7 +22,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import org.apache.logging.log4j.LogManager;
 

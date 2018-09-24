@@ -20,8 +20,6 @@ package ca.phon.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

@@ -25,8 +25,6 @@ import java.awt.event.ItemListener;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;

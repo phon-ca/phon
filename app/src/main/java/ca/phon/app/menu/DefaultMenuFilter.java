@@ -19,7 +19,6 @@
 package ca.phon.app.menu;
 
 import java.awt.Window;
-import java.util.logging.Logger;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;

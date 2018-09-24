@@ -22,7 +22,6 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 

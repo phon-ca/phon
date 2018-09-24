@@ -20,8 +20,6 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.tree.TreePath;
 

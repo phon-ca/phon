@@ -13,7 +13,6 @@ import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.syllable.SyllableStress;
-import ca.phon.util.Tuple;
 
 /**
  * Implementation of {@link IndelAligner} for {@link IPATranscript}s.

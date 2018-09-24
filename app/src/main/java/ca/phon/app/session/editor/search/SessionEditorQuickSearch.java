@@ -30,8 +30,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
