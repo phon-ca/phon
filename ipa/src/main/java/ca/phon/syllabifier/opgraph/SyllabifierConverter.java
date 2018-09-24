@@ -49,7 +49,7 @@ import ca.phon.util.Language;
  */
 public class SyllabifierConverter {
 	
-	private final static Logger LOGGER = Logger.getLogger(SyllabifierConverter.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SyllabifierConverter.class.getName());
 	
 	public OpGraph syllabifierToGraph(BasicSyllabifier syllabifier) {
 		final OpGraph graph = new OpGraph();

@@ -48,7 +48,7 @@ import ca.phon.util.resources.ResourceLoader;
  * An XML-based implementation of {@link Script}.
  */
 public class XMLScript implements Script, JAXBWrapper<ScriptType> {
-	private final static Logger LOGGER = Logger.getLogger(XMLScript.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLScript.class.getName());
 	
 	/** JAXB object */
 	ScriptType script;

@@ -28,7 +28,7 @@ import org.mozilla.javascript.debug.DebuggableScript;
 
 public class PhonScriptDebugFrame implements DebugFrame {
 	
-	private final static Logger LOGGER = Logger.getLogger(PhonScriptDebugFrame.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonScriptDebugFrame.class.getName());
 	
 	private DebuggableScript fnOrScript;
 	

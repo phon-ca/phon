@@ -49,7 +49,7 @@ import ca.phon.ui.fonts.FontPreferences;
  */
 public class LogBuffer extends RSyntaxTextArea {
 	
-	private static final Logger LOGGER = Logger.getLogger(LogBuffer.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LogBuffer.class
 			.getName());
 	
 	public static final String ESCAPE_CODE_PREFIX = "\u0000\u0000";

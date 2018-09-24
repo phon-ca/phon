@@ -44,7 +44,7 @@ import ca.phon.util.PrefHelper;
 public class ThemeHook implements PhonStartupHook,
 		IPluginExtensionPoint<PhonStartupHook> {
 
-	private final static Logger LOGGER = Logger.getLogger(ThemeHook.class
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ThemeHook.class
 			.getName());
 
 	@Override

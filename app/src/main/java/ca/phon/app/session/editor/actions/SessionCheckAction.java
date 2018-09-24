@@ -50,7 +50,7 @@ import ca.phon.worker.PhonWorker;
 
 public class SessionCheckAction extends SessionEditorAction {
 	
-	private static final Logger LOGGER = Logger.getLogger(SessionCheckAction.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionCheckAction.class.getName());
 
 	private static final long serialVersionUID = -6586378603389699163L;
 	

@@ -33,7 +33,7 @@ import ca.phon.util.CollatorFactory;
 
 public class RenameCorpusAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(RenameCorpusAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RenameCorpusAction.class.getName());
 
 	private static final long serialVersionUID = 1699053938382896780L;
 

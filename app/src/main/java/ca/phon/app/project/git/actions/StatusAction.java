@@ -33,7 +33,7 @@ import ca.phon.ui.CommonModuleFrame;
 
 public class StatusAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(StatusAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(StatusAction.class.getName());
 
 	private static final long serialVersionUID = 7618297564321509656L;
 

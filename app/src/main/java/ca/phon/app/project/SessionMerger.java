@@ -47,7 +47,7 @@ import ca.phon.worker.PhonTask;
  */
 public class SessionMerger extends PhonTask {
 
-	private final static Logger LOGGER = Logger.getLogger(SessionMerger.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionMerger.class.getName());
 
 	private final Project project;
 

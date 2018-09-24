@@ -35,7 +35,7 @@ import ca.phon.plugin.PhonPlugin;
 @PhonPlugin(name="default")
 public class CutEP implements IPluginEntryPoint {
 
-	private final static Logger LOGGER = Logger.getLogger(CutEP.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CutEP.class.getName());
 	
 	private final static String EP_NAME = "Cut";
 	@Override

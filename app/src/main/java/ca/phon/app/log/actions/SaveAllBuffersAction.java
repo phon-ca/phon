@@ -48,7 +48,7 @@ import ca.phon.worker.PhonWorker;
 
 public class SaveAllBuffersAction extends HookableAction {
 
-	private final static Logger LOGGER = Logger.getLogger(SaveAllBuffersAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAllBuffersAction.class.getName());
 
 	private final static String TXT = "Save all buffers to folder...";
 

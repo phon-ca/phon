@@ -68,7 +68,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 	private static final long serialVersionUID = 2112769368100535156L;
 
-	private static final Logger LOGGER = Logger.getLogger(CommonModuleFrame.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CommonModuleFrame.class.getName());
 
 	/**
 	 * Property to enable fullscreen on macos

@@ -43,7 +43,7 @@ import ca.phon.util.CollatorFactory;
  */
 public class DuplicateSessionAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(DuplicateSessionAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DuplicateSessionAction.class.getName());
 
 	private static final long serialVersionUID = 140755322409598286L;
 

@@ -73,7 +73,7 @@ public class ReportLibrary implements OpGraphLibrary {
 
 	private final static String REPORT_FOLDER = "reports";
 
-	private final static Logger LOGGER = Logger.getLogger(ReportLibrary.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportLibrary.class.getName());
 
 	/**
 	 * Report loader

@@ -31,7 +31,7 @@ import ca.phon.session.SessionPath;
 
 public class OpenSessionAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(OpenSessionAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenSessionAction.class.getName());
 
 	private static final long serialVersionUID = 9111187064505853422L;
 

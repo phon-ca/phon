@@ -81,7 +81,7 @@ import ca.phon.xml.annotation.XMLSerial;
 )
 public class XMLSessionWriter_v12 implements SessionWriter {
 
-	private final static Logger LOGGER = Logger.getLogger(XMLSessionWriter_v12.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLSessionWriter_v12.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session

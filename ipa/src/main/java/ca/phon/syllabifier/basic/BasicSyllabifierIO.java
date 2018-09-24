@@ -39,7 +39,7 @@ import ca.phon.syllabifier.basic.io.SyllabifierDef;
  */
 public class BasicSyllabifierIO {
 	
-	private final static Logger LOGGER = Logger.getLogger(BasicSyllabifierIO.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BasicSyllabifierIO.class.getName());
 
 	public BasicSyllabifier readFromFile(File file) 
 		throws IOException {

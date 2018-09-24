@@ -40,7 +40,7 @@ import ca.phon.worker.PhonTask;
  */
 public class ProjectArchiveTask extends PhonTask {
 	
-	private final static Logger LOGGER = Logger.getLogger(ProjectArchiveTask.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectArchiveTask.class.getName());
 
 	private Project project;
 	

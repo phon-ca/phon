@@ -64,7 +64,7 @@ public class ReportWizard extends WizardFrame {
 	
 	private static final long serialVersionUID = -334722251289455999L;
 
-	private final static Logger LOGGER = Logger.getLogger(ReportWizard.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportWizard.class.getName());
 	
 	private final static String AUTOSAVE_FILENAME = "lastreport.xml";
 	

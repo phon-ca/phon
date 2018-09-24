@@ -46,7 +46,7 @@ import ca.phon.util.resources.ResourceLoader;
 
 public class MacroLibrary {
 	
-	private final static Logger LOGGER = Logger.getLogger(MacroLibrary.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MacroLibrary.class.getName());
 	
 	private final static String MACRO_FOLDER = "macro";
 	

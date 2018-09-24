@@ -63,7 +63,7 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	private ParticipantsPanel participantSelector;
 
-	private final static Logger LOGGER = Logger.getLogger(AnalysisOpGraphEditorModel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AnalysisOpGraphEditorModel.class.getName());
 
 	public AnalysisOpGraphEditorModel() {
 		this(new OpGraph());

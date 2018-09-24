@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  */
 public class PluginManager extends URLClassLoader {
 	
-	private final static Logger LOGGER = Logger.getLogger(PluginManager.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PluginManager.class.getName());
 	
 	/**
 	 * Plugin folder

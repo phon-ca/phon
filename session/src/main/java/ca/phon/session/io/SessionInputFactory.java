@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  */
 public class SessionInputFactory {
 	
-	private final static Logger LOGGER = Logger.getLogger(SessionInputFactory.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionInputFactory.class.getName());
 	
 	/**
 	 * Service loader

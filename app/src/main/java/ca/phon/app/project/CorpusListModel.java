@@ -38,7 +38,7 @@ import ca.phon.util.CollatorFactory;
  */
 public class CorpusListModel implements ListModel<String> {
 	
-	private final static Logger LOGGER = Logger.getLogger(CorpusListModel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CorpusListModel.class.getName());
 	
 	/** The project */
 	private Project project;

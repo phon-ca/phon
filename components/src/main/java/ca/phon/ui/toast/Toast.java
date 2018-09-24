@@ -59,7 +59,7 @@ import ca.phon.util.PrefHelper;
  */
 public final class Toast {
 	
-	private final Logger LOGGER = Logger.getLogger(Toast.class.getName());
+	private final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Toast.class.getName());
 	
 	private String messageTxt;
 	

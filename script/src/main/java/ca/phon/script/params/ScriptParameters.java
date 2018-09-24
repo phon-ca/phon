@@ -47,7 +47,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 
 	private static final long serialVersionUID = -7240889391306198318L;
 
-	private final static Logger LOGGER = Logger.getLogger(ScriptParameters.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ScriptParameters.class.getName());
 
 	/**
 	 * Regular expression used to detect parameters comment in script

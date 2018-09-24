@@ -67,7 +67,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class WizardSettingsPanel extends JPanel {
 	
-	private final static Logger LOGGER = Logger.getLogger(WizardSettingsPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WizardSettingsPanel.class.getName());
 	
 	private static final long serialVersionUID = 865535897566978589L;
 

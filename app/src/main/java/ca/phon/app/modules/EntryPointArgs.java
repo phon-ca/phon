@@ -48,7 +48,7 @@ import ca.phon.session.Session;
  */
 public class EntryPointArgs extends HashMap<String, Object> {
 	
-	private final static Logger LOGGER = Logger.getLogger(EntryPointArgs.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(EntryPointArgs.class.getName());
 
 	private static final long serialVersionUID = -3794413262334673920L;
 

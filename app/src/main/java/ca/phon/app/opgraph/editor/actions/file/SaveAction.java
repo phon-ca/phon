@@ -37,7 +37,7 @@ import ca.phon.util.icons.IconSize;
 
 public class SaveAction extends OpgraphEditorAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(SaveAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAction.class.getName());
 
 	private static final long serialVersionUID = -3563703815236430754L;
 	

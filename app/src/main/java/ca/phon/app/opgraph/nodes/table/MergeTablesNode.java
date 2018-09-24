@@ -59,7 +59,7 @@ import ca.phon.ui.text.PromptedTextField;
 )
 public class MergeTablesNode extends TableOpNode implements NodeSettings {
 
-	private final static Logger LOGGER = Logger.getLogger(MergeTablesNode.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MergeTablesNode.class.getName());
 
 	private InputField table1Input = new InputField("table1", "Table 1", false, true, TableDataSource.class);
 

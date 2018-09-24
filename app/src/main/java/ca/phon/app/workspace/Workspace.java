@@ -33,7 +33,7 @@ import ca.phon.util.PrefHelper;
 
 public class Workspace {
 	
-	private static final Logger LOGGER = Logger.getLogger(Workspace.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Workspace.class
 			.getName());
 	
 	/**

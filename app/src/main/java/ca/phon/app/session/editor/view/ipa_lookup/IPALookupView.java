@@ -63,7 +63,7 @@ import ca.phon.util.icons.IconSize;
 
 public class IPALookupView extends EditorView {
 	
-	private final static Logger LOGGER = Logger.getLogger(IPALookupView.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPALookupView.class.getName());
 
 	private final static long serialVersionUID = 2932635326993882782L;
 

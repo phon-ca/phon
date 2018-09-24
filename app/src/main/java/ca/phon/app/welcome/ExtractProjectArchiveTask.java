@@ -53,7 +53,7 @@ public class ExtractProjectArchiveTask extends PhonTask {
 	
 	private File archiveFile;
 	
-	private final static Logger LOGGER = Logger.getLogger(ExtractProjectArchiveTask.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ExtractProjectArchiveTask.class.getName());
 	
 	private enum ZippedProjectType {
 		NOT_A_PROJECT,	// used when not project.xml is found

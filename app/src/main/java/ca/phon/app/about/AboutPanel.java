@@ -50,7 +50,7 @@ public class AboutPanel extends JPanel implements IExtendable {
 
 	private final static String DEFAULT_SPLASH_IMAGE = "data/phonboot.png";
 
-	private final static Logger LOGGER = Logger.getLogger(AboutPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AboutPanel.class.getName());
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(AboutPanel.class, this);
 

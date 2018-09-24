@@ -34,7 +34,7 @@ import ca.phon.session.SessionPath;
 
 public interface RecordContainer {
 	
-	static Logger LOGGER = Logger.getLogger(RecordContainer.class.getName());
+	static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RecordContainer.class.getName());
 	
 	public static List<RecordContainer> toRecordContainers(Project project, Object obj) {
 		List<RecordContainer> retVal = new ArrayList<>();

@@ -37,7 +37,7 @@ import ca.phon.worker.PhonWorker;
 
 public class ReportAction extends HookableAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(ReportAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportAction.class.getName());
 	
 	private static final long serialVersionUID = -5178033211126700430L;
 	

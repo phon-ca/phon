@@ -70,7 +70,7 @@ import ca.phon.session.SessionPath;
 	category="Table")
 public class ResultsToTableNode extends OpNode implements NodeSettings {
 
-	private final static Logger LOGGER = Logger.getLogger(ResultsToTableNode.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultsToTableNode.class.getName());
 
 	private final InputField projectInput = new InputField("project", "Project", false, true, Project.class);
 

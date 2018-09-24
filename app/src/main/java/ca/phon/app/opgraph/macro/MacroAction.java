@@ -40,7 +40,7 @@ public class MacroAction extends HookableAction {
 
 	private static final long serialVersionUID = 7095649504101466591L;
 
-	private final static Logger LOGGER = Logger.getLogger(ReportAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportAction.class.getName());
 	
 	private Project project;
 	

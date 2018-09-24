@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class VersionInfo {
 	
-	private final static Logger LOGGER = Logger.getLogger(VersionInfo.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VersionInfo.class.getName());
 	
 	/**
 	 * Properties file 

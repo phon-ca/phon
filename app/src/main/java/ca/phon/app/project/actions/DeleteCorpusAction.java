@@ -41,7 +41,7 @@ import ca.phon.util.OSInfo;
  */
 public class DeleteCorpusAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(DeleteCorpusAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DeleteCorpusAction.class.getName());
 	
 	private static final long serialVersionUID = -6953043638785028830L;
 

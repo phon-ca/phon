@@ -35,7 +35,7 @@ import ca.phon.query.db.Script;
  */
 public class XMLLazyQuery extends XMLQuery {
 	
-	private final static Logger LOGGER = Logger.getLogger(XMLLazyQuery.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLLazyQuery.class.getName());
 	
 	/** The file where data is located */
 	private File queryFile;

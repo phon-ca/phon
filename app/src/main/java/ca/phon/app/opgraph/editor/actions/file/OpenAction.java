@@ -43,7 +43,7 @@ import ca.phon.util.RecentFiles;
 
 public class OpenAction extends OpgraphEditorAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(OpenAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenAction.class.getName());
 
 	private static final long serialVersionUID = 1416397464535529114L;
 	

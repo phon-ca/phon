@@ -28,7 +28,7 @@ import ca.phon.ipa.IPAElement;
 
 public class IPAElementComparator implements Comparator<IPAElement> {
 	
-	private final static Logger LOGGER = Logger.getLogger(IPAElementComparator.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPAElementComparator.class.getName());
 
 	@Override
 	public int compare(IPAElement o1, IPAElement o2) {

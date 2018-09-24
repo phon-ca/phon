@@ -46,7 +46,7 @@ import ca.phon.util.OSInfo;
 @PhonPlugin(name="default", minPhonVersion="1.6.2")
 public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHook {
 
-	private final Logger LOGGER = Logger.getLogger(BootHook.class.getName());
+	private final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BootHook.class.getName());
 
 	/*
 	 * Resource files

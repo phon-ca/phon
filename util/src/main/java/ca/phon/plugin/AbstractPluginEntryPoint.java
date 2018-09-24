@@ -26,7 +26,7 @@ import ca.phon.worker.PhonTask;
 
 public abstract class AbstractPluginEntryPoint extends PhonTask implements IPluginEntryPoint {
 	
-	private final static Logger LOGGER = Logger.getLogger(AbstractPluginEntryPoint.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AbstractPluginEntryPoint.class.getName());
 	
 	/**
 	 * The performTask method calls pluginStart. This property

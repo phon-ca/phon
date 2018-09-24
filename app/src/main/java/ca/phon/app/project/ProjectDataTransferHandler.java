@@ -43,7 +43,7 @@ import ca.phon.ui.nativedialogs.FileFilter;
 
 public class ProjectDataTransferHandler extends FileTransferHandler {
 	
-	private final static Logger LOGGER = Logger.getLogger(ProjectDataTransferHandler.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectDataTransferHandler.class.getName());
 
 	private static final long serialVersionUID = -4261706466908550605L;
 	

@@ -28,7 +28,7 @@ import javafx.application.Platform;
 
 public class JavaFXShutdownHook implements PhonShutdownHook, IPluginExtensionPoint<PhonShutdownHook> {
 
-	private final static Logger LOGGER = Logger.getLogger(JavaFXShutdownHook.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(JavaFXShutdownHook.class.getName());
 	
 	@Override
 	public Class<?> getExtensionType() {

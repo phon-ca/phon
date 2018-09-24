@@ -48,7 +48,7 @@ import ca.phon.opgraph.extensions.NodeMetadata;
 
 public class DuplicateAction extends OpgraphEditorAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(DuplicateAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DuplicateAction.class.getName());
 
 	private static final long serialVersionUID = -2540261955364824184L;
 	

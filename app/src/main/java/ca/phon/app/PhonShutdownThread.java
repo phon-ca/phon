@@ -32,7 +32,7 @@ import ca.phon.worker.PhonWorker;
 
 public class PhonShutdownThread extends PhonWorker {
 	
-	private final static Logger LOGGER = Logger.getLogger(PhonShutdownThread.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonShutdownThread.class.getName());
 	
 	private static PhonShutdownThread _instance = null;
 	

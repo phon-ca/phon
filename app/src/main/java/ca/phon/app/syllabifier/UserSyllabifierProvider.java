@@ -37,7 +37,7 @@ import ca.phon.util.PrefHelper;
 
 public class UserSyllabifierProvider implements SyllabifierProvider {
 	
-	private final static Logger LOGGER = Logger.getLogger(UserSyllabifierProvider.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(UserSyllabifierProvider.class.getName());
 	
 	public final static String SYLLABIFIER_FOLDER_PROP = UserSyllabifierProvider.class.getName() + ".folder";
 	

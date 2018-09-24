@@ -63,7 +63,7 @@ import ca.phon.util.CollatorFactory;
  */
 public class MergeSessionStep2 extends WizardStep {
 	
-	final private static Logger LOGGER = Logger.getLogger(MergeSessionStep2.class.getName());
+	final private static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MergeSessionStep2.class.getName());
 	
 	/**
 	 * Project

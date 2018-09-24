@@ -34,7 +34,7 @@ import ca.phon.query.db.ScriptLibrary;
 @Extension(QueryScript.class)
 public class QueryName {
 	
-	private static final Logger LOGGER = Logger.getLogger(QueryName.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryName.class
 			.getName());
 
 	private String name;

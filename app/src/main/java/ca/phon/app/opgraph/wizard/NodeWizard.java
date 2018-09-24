@@ -184,7 +184,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
 
-	private final static Logger LOGGER = Logger.getLogger(NodeWizard.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NodeWizard.class.getName());
 
 	private Processor processor;
 

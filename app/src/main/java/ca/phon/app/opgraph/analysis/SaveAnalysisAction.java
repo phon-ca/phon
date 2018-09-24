@@ -38,7 +38,7 @@ import ca.phon.util.PrefHelper;
 
 public class SaveAnalysisAction extends HookableAction {
 
-	private final static Logger LOGGER = Logger.getLogger(SaveAnalysisAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAnalysisAction.class.getName());
 	
 	private final static String DEFAULT_FOLDER = 
 			PrefHelper.getUserDataFolder() + File.separator + "analysis";

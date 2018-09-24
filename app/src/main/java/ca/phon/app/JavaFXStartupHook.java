@@ -31,7 +31,7 @@ import javafx.embed.swing.JFXPanel;
 
 public class JavaFXStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
-	private final static Logger LOGGER = Logger.getLogger(JavaFXStartupHook.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(JavaFXStartupHook.class.getName());
 
 	@Override
 	public void startup() throws PluginException {

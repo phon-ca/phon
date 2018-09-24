@@ -122,7 +122,7 @@ import ca.phon.worker.PhonWorker;
 
 public class SimpleEditorPanel extends JPanel implements IExtendable {
 
-	private final static Logger LOGGER = Logger.getLogger(SimpleEditorPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SimpleEditorPanel.class.getName());
 
 	private final static int Y_START = 50;
 	private final static int X_START = 400;

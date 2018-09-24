@@ -65,7 +65,7 @@ import ca.phon.ui.HidablePanel;
 )
 public class PrintBufferNode extends OpNode implements NodeSettings {
 
-	private final static Logger LOGGER = Logger.getLogger(PrintBufferNode.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PrintBufferNode.class.getName());
 
 	private InputField dataField =
 			new InputField("data", "Data to print", true, false, Object.class);

@@ -34,7 +34,7 @@ import ca.phon.plugin.PhonPlugin;
 @PhonPlugin(name="default")
 public class CopyEP implements IPluginEntryPoint {
 	
-	private final static Logger LOGGER = Logger.getLogger(CopyEP.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CopyEP.class.getName());
 
 	private final static String EP_NAME = "Copy";
 	@Override

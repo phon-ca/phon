@@ -40,7 +40,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class IpaMapApp {
 	
-	private static final Logger LOGGER = Logger.getLogger(IpaMapApp.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IpaMapApp.class
 			.getName());
 	
 	/**

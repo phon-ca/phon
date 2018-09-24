@@ -40,7 +40,7 @@ import ca.phon.ui.CommonModuleFrame;
  */
 public class AutosaveManager {
 	
-	private final static Logger LOGGER = Logger.getLogger(AutosaveManager.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AutosaveManager.class.getName());
 
 	/**
 	 * Autosave property

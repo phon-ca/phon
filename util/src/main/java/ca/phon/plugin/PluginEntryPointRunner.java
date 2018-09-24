@@ -33,7 +33,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class PluginEntryPointRunner {
 	
-	private final static Logger LOGGER = Logger.getLogger(PluginEntryPointRunner.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PluginEntryPointRunner.class.getName());
 	
 	/**
 	 * Entry point

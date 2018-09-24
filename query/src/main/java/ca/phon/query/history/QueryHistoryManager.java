@@ -45,7 +45,7 @@ import ca.phon.util.PrefHelper;
  */
 public class QueryHistoryManager extends ParamHistoryManager {
 	
-	private final static Logger LOGGER = Logger.getLogger(QueryHistoryManager.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryHistoryManager.class.getName());
 
 	public final static String QUERY_HISTORY_FOLDER = QueryHistoryManager.class.getName() + ".queryHistoryFolder";
 	public final static String DEFAULT_HISTORY_FOLDER = PrefHelper.getUserDataFolder() + File.separator + "query_history";

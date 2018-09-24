@@ -52,7 +52,7 @@ import ca.phon.util.StackTraceInfo;
  */
 public class IconManager {
 	
-	private final static Logger LOGGER = Logger.getLogger(IconManager.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IconManager.class.getName());
 	
 	/** The static instance */
 	private static IconManager _instance;

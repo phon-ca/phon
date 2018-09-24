@@ -39,7 +39,7 @@ import javax.xml.stream.XMLStreamException;
 public class ClasspathXMLEntityResolver implements XMLResolver {
 	
 	/** Logger */
-	private final static Logger LOGGER = Logger.getLogger(ClasspathXMLEntityResolver.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ClasspathXMLEntityResolver.class.getName());
 	
 	private ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 	

@@ -98,7 +98,7 @@ public class QueryRunnerPanel extends JPanel {
 
 	private static final long serialVersionUID = 1427147887370979071L;
 
-	private final static Logger LOGGER = Logger.getLogger(QueryRunnerPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryRunnerPanel.class.getName());
 
 	private JXBusyLabel busyLabel;
 	

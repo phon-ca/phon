@@ -75,7 +75,7 @@ import ca.phon.util.resources.ResourceLoader;
 @OpNodeInfo(category="Table", description="Custom script for table input", name="Table Script", showInLibrary=true)
 public class TableScriptNode extends TableOpNode implements NodeSettings {
 
-	private final static Logger LOGGER = Logger.getLogger(TableScriptNode.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TableScriptNode.class.getName());
 
 	private final static String TABLE_SCRIPT_RESOURCE_FILE = "ca/phon/app/opgraph/nodes/table/table_scripts";
 

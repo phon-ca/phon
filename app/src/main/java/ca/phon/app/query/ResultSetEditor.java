@@ -120,7 +120,7 @@ public class ResultSetEditor extends ProjectFrame {
 	
 	private static final long serialVersionUID = -4309831950609525140L;
 
-	private final static Logger LOGGER = Logger.getLogger(ResultSetEditor.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultSetEditor.class.getName());
 	
 	/* 
 	 * Actions buttons

@@ -57,7 +57,7 @@ import ca.phon.worker.PhonTaskListener;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 
-	private final static Logger LOGGER = Logger.getLogger(SessionEditorStatusBar.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionEditorStatusBar.class.getName());
 
 	private static final long serialVersionUID = 286465072395883742L;
 

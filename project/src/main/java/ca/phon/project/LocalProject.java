@@ -98,7 +98,7 @@ import ca.phon.util.VersionInfo;
  */
 public class LocalProject implements Project, ProjectRefresh {
 
-	private final static Logger LOGGER = Logger.getLogger(LocalProject.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LocalProject.class.getName());
 
 	/**
 	 * Project folder

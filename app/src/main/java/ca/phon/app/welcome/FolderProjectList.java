@@ -90,7 +90,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class FolderProjectList extends JPanel {
 	
-	private final static Logger LOGGER = Logger.getLogger(FolderProjectList.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(FolderProjectList.class.getName());
 	
 	private enum SortBy {
 		NAME,

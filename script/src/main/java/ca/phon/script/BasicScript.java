@@ -42,7 +42,7 @@ import ca.phon.script.params.ScriptParameters;
  */
 public class BasicScript implements PhonScript, Cloneable {
 	
-	private final static Logger LOGGER = Logger.getLogger(BasicScript.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BasicScript.class.getName());
 	
 	/*
 	 * Script stored in a buffer.  Sub-classes have

@@ -40,7 +40,7 @@ import ca.phon.script.params.ScriptParameters;
  */
 public class ParamHistoryManager {
 		
-	private final static Logger LOGGER = Logger.getLogger(ParamHistoryManager.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ParamHistoryManager.class.getName());
 	
 	public static ParamHistoryType loadParamHistoryFromFile(File paramHistoryFile) throws IOException {
 		return loadParamHistoryFromStream(new FileInputStream(paramHistoryFile));

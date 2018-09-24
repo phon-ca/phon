@@ -153,7 +153,7 @@ import ca.phon.worker.PhonWorker;
 public class ProjectWindow extends CommonModuleFrame
 	implements WindowListener {
 
-	private static final Logger LOGGER = Logger.getLogger(ProjectWindow.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectWindow.class.getName());
 
 	private static final long serialVersionUID = -4771564010497815447L;
 

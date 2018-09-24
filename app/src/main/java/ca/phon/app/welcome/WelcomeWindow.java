@@ -88,7 +88,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
-	private final static Logger LOGGER = Logger.getLogger(WelcomeWindow.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WelcomeWindow.class.getName());
 
 	private static final long serialVersionUID = -8877301049044343272L;
 

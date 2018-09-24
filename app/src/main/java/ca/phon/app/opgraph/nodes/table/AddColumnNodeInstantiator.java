@@ -30,7 +30,7 @@ import ca.phon.script.params.ScriptParameters;
 
 public class AddColumnNodeInstantiator implements Instantiator<AddColumnNode> {
 
-	private final static Logger LOGGER = Logger.getLogger(AddColumnNodeInstantiator.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AddColumnNodeInstantiator.class.getName());
 
 	@Override
 	public AddColumnNode newInstance(Object... params) throws InstantiationException {

@@ -56,7 +56,7 @@ public class VLCHelper {
 	
 	private final static String VLC_PLUGIN_PATH_MAC = "/Applications/VLC.app/Contents/MacOS/plugins";
 	
-	private final static Logger LOGGER = Logger.getLogger(VLCHelper.class
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VLCHelper.class
 			.getName());
 	
 	private static volatile boolean isLoaded = false;

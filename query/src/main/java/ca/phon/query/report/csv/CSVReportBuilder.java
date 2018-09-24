@@ -61,7 +61,7 @@ import ca.phon.util.OSInfo;
  */
 public class CSVReportBuilder extends ReportBuilder {
 	
-	private final static Logger LOGGER = Logger.getLogger(CSVReportBuilder.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CSVReportBuilder.class.getName());
 	
 	/**
 	 * Property for indenting content at sections (default:false)

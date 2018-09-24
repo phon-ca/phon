@@ -88,7 +88,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class RecordFilterPanel extends JPanel {
 	
-	private final static Logger LOGGER = Logger.getLogger(RangeRecordFilter.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RangeRecordFilter.class.getName());
 
 	/** The transcript */
 	private Session t;

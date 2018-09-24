@@ -85,38 +85,38 @@ public class LogManager {
 	}
 	
 	public void setupLogging() {
-		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
+		//final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
 		
 		// create temporary properties configuration file
 		// with updated pattern for FileHandler log location
-		try {
-			final File tempFile = File.createTempFile("phon", "logprops");
-			
-			final PrintWriter fout = new PrintWriter(new FileOutputStream(tempFile));
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(getLogProps()));
-			
-			String line = null;
-			while((line = reader.readLine()) != null) {
-				fout.write(line);
-				fout.write("\n");
-			}
-			
-			fout.write("java.util.logging.FileHandler.pattern=" + getLogFilenamePattern() + "\n");
-			fout.flush();
-			
-			fout.close();
-			reader.close();
-			
-			manager.readConfiguration(new FileInputStream(tempFile));
-			tempFile.deleteOnExit();
-		} catch (IOException | SecurityException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			final File tempFile = File.createTempFile("phon", "logprops");
+//			
+//			final PrintWriter fout = new PrintWriter(new FileOutputStream(tempFile));
+//			final BufferedReader reader = new BufferedReader(new InputStreamReader(getLogProps()));
+//			
+//			String line = null;
+//			while((line = reader.readLine()) != null) {
+//				fout.write(line);
+//				fout.write("\n");
+//			}
+//			
+//			fout.write("java.util.logging.FileHandler.pattern=" + getLogFilenamePattern() + "\n");
+//			fout.flush();
+//			
+//			fout.close();
+//			reader.close();
+//			
+//			manager.readConfiguration(new FileInputStream(tempFile));
+//			tempFile.deleteOnExit();
+//		} catch (IOException | SecurityException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public void shutdownLogging() {
-		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
-		manager.reset();
+//		final java.util.logging.LogManager manager = java.util.logging.LogManager.getLogManager();
+//		manager.reset();
 	}
 	
 	public String readLogFile() throws IOException {

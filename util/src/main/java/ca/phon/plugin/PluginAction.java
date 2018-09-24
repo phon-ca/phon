@@ -34,7 +34,7 @@ public class PluginAction extends AbstractAction {
 	
 	private static final long serialVersionUID = 7414527209391736686L;
 
-	private final static Logger LOGGER = Logger.getLogger(PluginAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PluginAction.class.getName());
 	
 	/**
 	 * entry point id

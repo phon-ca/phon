@@ -32,7 +32,7 @@ import ca.phon.util.OSInfo;
 
 public class IpaMapRobot implements IpaMapListener {
 	
-	private static final Logger LOGGER = Logger.getLogger(IpaMapRobot.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IpaMapRobot.class
 			.getName());
 	
 	private Robot robot;

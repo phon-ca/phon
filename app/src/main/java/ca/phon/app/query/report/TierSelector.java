@@ -47,7 +47,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class TierSelector extends JComponent {
 	
-	private final static Logger LOGGER = Logger.getLogger(TierSelector.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TierSelector.class.getName());
 	
 	public final static String SELECTION_PROP = "_TIER_SELECTION_";
 	public final static String LOADING_FINISHED = "_TIERS_LOADED_";

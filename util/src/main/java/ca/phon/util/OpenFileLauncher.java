@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 public class OpenFileLauncher {
 	
-	private final static Logger LOGGER = Logger.getLogger(OpenFileLauncher.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenFileLauncher.class.getName());
 
 	public static boolean openURL(URL url) {
 		if(OSInfo.isMacOs()) {

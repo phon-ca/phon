@@ -44,7 +44,7 @@ import ca.phon.app.VersionInfo;
  */
 public class NodeWizardReportGenerator {
 
-	private final static Logger LOGGER = Logger.getLogger(NodeWizardReportGenerator.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NodeWizardReportGenerator.class.getName());
 
 	private final NodeWizard wizard;
 

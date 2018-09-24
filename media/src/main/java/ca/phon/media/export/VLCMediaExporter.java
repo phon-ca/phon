@@ -45,7 +45,7 @@ import uk.co.caprica.vlcj.player.headless.HeadlessMediaPlayer;
  */
 public class VLCMediaExporter extends PhonTask {
 	
-	private final static Logger LOGGER = Logger.getLogger(VLCMediaExporter.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VLCMediaExporter.class.getName());
 	
 	public static enum Preset {
 		H264_HIGH("h.264 + mp3 (high)", ".mp4",

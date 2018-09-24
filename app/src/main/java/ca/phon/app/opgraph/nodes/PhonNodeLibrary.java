@@ -70,7 +70,7 @@ public class PhonNodeLibrary {
 		nodeLib.setupNodeStyles();
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(PhonNodeLibrary.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonNodeLibrary.class.getName());
 
 	private final NodeLibrary nodeLibrary;
 

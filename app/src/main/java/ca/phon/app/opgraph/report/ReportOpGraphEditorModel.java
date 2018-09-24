@@ -58,7 +58,7 @@ import ca.phon.util.Tuple;
 
 public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 
-	private final static Logger LOGGER = Logger.getLogger(ReportOpGraphEditorModel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportOpGraphEditorModel.class.getName());
 
 	private JPanel debugSettings;
 

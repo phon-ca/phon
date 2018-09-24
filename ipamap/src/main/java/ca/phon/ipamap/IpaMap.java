@@ -150,7 +150,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	
 	private static final long serialVersionUID = 1758355523938039972L;
 
-	private static final Logger LOGGER = Logger.getLogger(IpaMap.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IpaMap.class
 			.getName());
 	
 	/**

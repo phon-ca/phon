@@ -37,7 +37,7 @@ import ca.phon.session.TierListener;
 
 public class TierImpl<T> implements Tier<T> {
 	
-	private final static Logger LOGGER = Logger.getLogger(TierImpl.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TierImpl.class.getName());
 	
 	/**
 	 * Declared type

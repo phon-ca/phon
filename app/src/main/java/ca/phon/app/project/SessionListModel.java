@@ -38,7 +38,7 @@ import ca.phon.util.CollatorFactory;
  */
 public class SessionListModel implements ListModel<String> {
 	
-	private final static Logger LOGGER = Logger.getLogger(SessionListModel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionListModel.class.getName());
 
 	/** Data listeners */
 	private ArrayList<ListDataListener> dataListeners;

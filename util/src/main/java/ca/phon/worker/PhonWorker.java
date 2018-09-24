@@ -36,7 +36,7 @@ import ca.phon.worker.PhonTask.TaskStatus;
  */
 public class PhonWorker extends Thread {
 	
-	private final static Logger LOGGER = Logger.getLogger(PhonWorker.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonWorker.class.getName());
 
 	/** The worker thread name */
 	private static final String STATIC_THREAD_NAME = "PhonWorker-";

@@ -39,7 +39,7 @@ import ca.phon.script.params.ScriptParameters;
  */
 public class LazyQueryScript extends BasicScript {
 
-	private final static Logger LOGGER = Logger.getLogger(LazyQueryScript.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LazyQueryScript.class.getName());
 	
 	private boolean loaded = false;
 	

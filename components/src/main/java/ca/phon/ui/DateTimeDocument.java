@@ -31,7 +31,7 @@ public class DateTimeDocument extends PlainDocument {
 	
 	private static final long serialVersionUID = -3209553456147504916L;
 
-	private final static Logger LOGGER = Logger.getLogger(DateTimeDocument.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DateTimeDocument.class.getName());
 	
 	String testRegex = 
 		"([0-9]{4})-([0-9]{2})-([0-9]{2})";

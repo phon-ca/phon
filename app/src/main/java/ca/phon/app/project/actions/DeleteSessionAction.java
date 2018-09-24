@@ -37,7 +37,7 @@ import ca.phon.util.OSInfo;
 
 public class DeleteSessionAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(DeleteSessionAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DeleteSessionAction.class.getName());
 
 	private static final long serialVersionUID = -1541549069772255530L;
 

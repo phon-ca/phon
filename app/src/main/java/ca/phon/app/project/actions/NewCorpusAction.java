@@ -28,7 +28,7 @@ import ca.phon.app.project.ProjectWindow;
 
 public class NewCorpusAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(NewCorpusAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewCorpusAction.class.getName());
 
 	private static final long serialVersionUID = -4385987381468266104L;
 	

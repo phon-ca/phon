@@ -36,7 +36,7 @@ import ca.phon.visitor.annotation.Visits;
  */
 public abstract class VisitorAdapter<T> implements Visitor<T> {
 	
-	private final static Logger LOGGER = Logger.getLogger(VisitorAdapter.class
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VisitorAdapter.class
 			.getName());
 
 	@Override

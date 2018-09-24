@@ -40,7 +40,7 @@ import ca.phon.ui.nativedialogs.NativeDialogs;
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {
 	
-	private final static Logger LOGGER = Logger.getLogger(OpenProjectEP.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenProjectEP.class.getName());
 	
 	public static final String EP_NAME = "OpenProject";
 	

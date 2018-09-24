@@ -19,7 +19,7 @@ import ca.phon.session.SessionPath;
  */
 public class ParticipantHistory {
 	
-	private final static Logger LOGGER = Logger.getLogger(ParticipantHistory.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ParticipantHistory.class.getName());
 	
 	// age ageHistory for participant
 	private Map<SessionPath, Period> ageHistory;

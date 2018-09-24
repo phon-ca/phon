@@ -39,7 +39,7 @@ import ca.phon.util.resources.FolderHandler;
 
 public class BasicSyllabifierFolderHandler extends FolderHandler<Syllabifier> {
 	
-	private final Logger LOGGER = Logger.getLogger(BasicSyllabifierFolderHandler.class.getName());
+	private final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BasicSyllabifierFolderHandler.class.getName());
 
 	public BasicSyllabifierFolderHandler(File folder) {
 		super(folder);

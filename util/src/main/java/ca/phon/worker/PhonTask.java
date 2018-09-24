@@ -29,7 +29,7 @@ import javax.swing.event.EventListenerList;
  */
 public abstract class PhonTask implements Runnable {
 	
-	private final static Logger LOGGER = Logger.getLogger(PhonTask.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonTask.class.getName());
 
 	/*
 	 * Common properties

@@ -31,7 +31,7 @@ import ca.phon.script.params.ScriptParameters;
 
 public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode> {
 
-	private final static Logger LOGGER = Logger.getLogger(TableScriptNodeInstantiator.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TableScriptNodeInstantiator.class.getName());
 
 	@Override
 	public TableScriptNode newInstance(Object... params) throws InstantiationException {

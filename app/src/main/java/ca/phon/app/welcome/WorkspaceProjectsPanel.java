@@ -62,7 +62,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class WorkspaceProjectsPanel extends JPanel {
 
-	private final static Logger LOGGER = Logger.getLogger(WorkspaceProjectsPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WorkspaceProjectsPanel.class.getName());
 
 	/* UI */
 	private MultiActionButton workspaceBtn;

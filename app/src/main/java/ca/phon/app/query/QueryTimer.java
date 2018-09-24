@@ -28,7 +28,7 @@ import ca.phon.worker.PhonTaskListener;
 
 public class QueryTimer implements PhonTaskListener {
 	
-	private final static Logger LOGGER = Logger.getLogger(QueryTimer.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryTimer.class.getName());
 
 	QueryTask tasks[];
 	private long startTimeMS;

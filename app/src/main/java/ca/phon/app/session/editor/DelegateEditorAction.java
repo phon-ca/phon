@@ -39,7 +39,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class DelegateEditorAction implements EditorAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(DelegateEditorAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DelegateEditorAction.class.getName());
 
 	/** The delegate class (static method) */
 	private Class<?> clazz;

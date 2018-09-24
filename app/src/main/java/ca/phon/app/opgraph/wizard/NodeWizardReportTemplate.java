@@ -32,7 +32,7 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 public class NodeWizardReportTemplate {
 
-	private final static Logger LOGGER = Logger.getLogger(NodeWizardReportTemplate.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NodeWizardReportTemplate.class.getName());
 
 	private String name;
 

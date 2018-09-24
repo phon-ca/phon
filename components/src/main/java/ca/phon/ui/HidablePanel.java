@@ -50,7 +50,7 @@ public class HidablePanel extends MultiActionButton {
 	
 	private static final long serialVersionUID = 360940577329250637L;
 
-	private final static Logger LOGGER = Logger.getLogger(HidablePanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(HidablePanel.class.getName());
 	
 	/**
 	 * Location of hidable panel properties

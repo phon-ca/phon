@@ -34,7 +34,7 @@ import ca.phon.util.CompoundComparator;
  */
 public class CompoundIPAElementComparator extends CompoundComparator<IPAElement> {
 	
-	private final static Logger LOGGER = Logger.getLogger(CompoundIPAElementComparator.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CompoundIPAElementComparator.class.getName());
 
 	public CompoundIPAElementComparator() {
 		super();

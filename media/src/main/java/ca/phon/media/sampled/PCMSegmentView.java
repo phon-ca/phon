@@ -58,7 +58,7 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
  */
 public class PCMSegmentView extends JComponent {
 	
-	private final static Logger LOGGER = Logger.getLogger(PCMSegmentView.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PCMSegmentView.class.getName());
 	
 	private static final long serialVersionUID = -1882617273398866548L;
 	

@@ -53,7 +53,7 @@ private final static String TXT = "New project...";
 
 	private static final long serialVersionUID = -1288974377105467180L;
 
-	private final static Logger LOGGER = Logger.getLogger(NewProjectCommand.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewProjectCommand.class.getName());
 
 	public NewProjectCommand() {
 		super();

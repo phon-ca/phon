@@ -84,7 +84,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class ReportEditor extends JPanel implements SectionListener {
 	
-	private final static Logger LOGGER = Logger.getLogger(ReportEditor.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportEditor.class.getName());
 
 	private final QName _SECTION_QNAME = new QName("http://phon.ling.mun.ca/ns/report", "report-section");
 	

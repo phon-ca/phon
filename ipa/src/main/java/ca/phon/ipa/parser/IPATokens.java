@@ -43,7 +43,7 @@ import ca.phon.ipa.xml.IpaType;
  */
 public final class IPATokens {
 	
-	private final static Logger LOGGER = Logger.getLogger(IPATokens.class
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPATokens.class
 			.getName());
 	
 	/**

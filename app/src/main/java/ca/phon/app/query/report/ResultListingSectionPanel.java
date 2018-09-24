@@ -106,7 +106,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 	
-	private final static Logger LOGGER = Logger.getLogger(ResultListingSectionPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultListingSectionPanel.class.getName());
 	
 	/**
 	 * Help text

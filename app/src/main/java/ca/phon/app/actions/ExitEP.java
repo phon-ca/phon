@@ -45,7 +45,7 @@ import ca.phon.ui.nativedialogs.NativeDialogListener;
 public class ExitEP implements IPluginEntryPoint
 {
 	
-	private final static Logger LOGGER = Logger.getLogger(ExitEP.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ExitEP.class.getName());
 	
 	private final static String EP_NAME = "Exit";
 	@Override

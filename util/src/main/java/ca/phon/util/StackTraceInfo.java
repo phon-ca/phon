@@ -25,7 +25,7 @@ package ca.phon.util;
  * E.g.,
  * 
  * <code>
- * java.util.logging.Logger LOGGER = Logger.getLogger(getClass().getName());
+ * java.util.logging.org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(getClass().getName());
  * LOGGER.log(Level.INFO, "Hello world", new StackTraceInfo());
  * </code>
  */

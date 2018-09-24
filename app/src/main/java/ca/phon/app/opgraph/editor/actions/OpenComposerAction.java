@@ -36,7 +36,7 @@ import ca.phon.opgraph.OpGraph;
 
 public class OpenComposerAction extends HookableAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(OpenComposerAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenComposerAction.class.getName());
 
 	private final String TXT = "Composer (advanced)...";
 	

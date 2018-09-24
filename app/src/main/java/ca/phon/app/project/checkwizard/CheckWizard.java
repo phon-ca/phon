@@ -68,7 +68,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class CheckWizard extends BreadcrumbWizardFrame {
 	
-	private final static Logger LOGGER = Logger.getLogger(CheckWizard.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CheckWizard.class.getName());
 	
 	private JXBusyLabel busyLabel;
 	

@@ -67,7 +67,7 @@ import ca.phon.visitor.Visitor;
 public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable, Comparable<IPATranscript> {
 
 	/** Static logger */
-	private final static Logger LOGGER = Logger.getLogger(IPATranscript.class
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPATranscript.class
 			.getName());
 
 	private static final long serialVersionUID = 8942864962427274326L;

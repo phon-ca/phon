@@ -55,7 +55,7 @@ public class PhonUIAction extends AbstractAction {
 
 	private static final long serialVersionUID = -3566788828631450043L;
 
-	private final static Logger LOGGER = Logger.getLogger(PhonUIAction.class
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonUIAction.class
 			.getName());
 
 	/** The delegate class (static method) */

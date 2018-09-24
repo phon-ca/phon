@@ -51,7 +51,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class MediaSelectionField extends FileSelectionField {
 
-	private final static Logger LOGGER = Logger.getLogger(MediaSelectionField.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MediaSelectionField.class.getName());
 
 	private static final long serialVersionUID = 5171333221664140205L;
 

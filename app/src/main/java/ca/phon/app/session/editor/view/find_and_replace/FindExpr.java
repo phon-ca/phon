@@ -37,7 +37,7 @@ import ca.phon.util.Range;
 
 public class FindExpr {
 	
-	private static final Logger LOGGER = Logger.getLogger(FindExpr.class
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(FindExpr.class
 			.getName());
 	
 	private SearchType type;

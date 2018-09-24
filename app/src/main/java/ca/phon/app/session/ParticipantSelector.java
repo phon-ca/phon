@@ -44,7 +44,7 @@ public class ParticipantSelector extends TristateCheckBoxTree {
 
 	private static final long serialVersionUID = -2636193549260758476L;
 
-	private final static Logger LOGGER = Logger.getLogger(ParticipantSelector.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ParticipantSelector.class.getName());
 	
 	
 	public static TristateCheckBoxTreeModel createModel(Collection<Participant> participants) {

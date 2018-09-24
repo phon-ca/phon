@@ -48,7 +48,7 @@ import ca.phon.ui.nativedialogs.OSInfo;
 
 public class BootWindow extends Window {
 	
-	private final static Logger LOGGER = Logger.getLogger(BootWindow.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BootWindow.class.getName());
 	
 	private Image bootImage;
 	

@@ -24,7 +24,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 	
 	private static final long serialVersionUID = 3781206121705628643L;
 
-	private final static Logger LOGGER = Logger.getLogger(OpenSimpleAnalysisComposerAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenSimpleAnalysisComposerAction.class.getName());
 	
 	private final static String TXT = "Analysis Composer...";
 	

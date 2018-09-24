@@ -34,7 +34,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class PCMSampled implements Sampled {
 	
-	private final static Logger LOGGER = Logger.getLogger(PCMSampled.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PCMSampled.class.getName());
 	
 	/**
 	 * Audio format

@@ -51,7 +51,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class Main {
 	
-	private final static Logger LOGGER = Logger.getLogger(Main.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Main.class.getName());
 	
 	private final static String START_ACTION_PROP = Main.class.getName() + ".startAction";
 	

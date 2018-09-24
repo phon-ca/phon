@@ -50,7 +50,7 @@ import ca.phon.util.PrefHelper;
 
 public class ReportDesignNodeXMLSerializer implements XMLSerializer {
 	
-	private final static Logger LOGGER = Logger.getLogger(ReportDesignNodeXMLSerializer.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportDesignNodeXMLSerializer.class.getName());
 	
 	static final String NAMESPACE = "https://phon.ca/ns/opgraph_query";
 	static final String PREFIX = "opqry";

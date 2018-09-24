@@ -43,7 +43,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class SaveAsAction extends SessionEditorAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(SaveAsAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAsAction.class.getName());
 
 	private static final long serialVersionUID = -168218633218148720L;
 

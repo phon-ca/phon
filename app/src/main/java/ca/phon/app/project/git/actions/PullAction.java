@@ -39,7 +39,7 @@ import ca.phon.worker.PhonWorker;
 
 public class PullAction extends ProjectWindowAction {
 	
-	private final static Logger LOGGER = Logger.getLogger(PullAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PullAction.class.getName());
 
 	private static final long serialVersionUID = 8107666582684068017L;
 	

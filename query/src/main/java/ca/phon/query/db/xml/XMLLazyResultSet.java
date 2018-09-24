@@ -34,7 +34,7 @@ import ca.phon.query.db.xml.io.resultset.ResultSetType;
  */
 public class XMLLazyResultSet extends XMLResultSet {
 	
-	private final static Logger LOGGER = Logger.getLogger(XMLLazyResultSet.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLLazyResultSet.class.getName());
 	
 	/** The file where data is located */
 	private File resultSetFile;
