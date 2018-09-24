@@ -477,7 +477,7 @@ public class RecordDataEditorView extends EditorView {
 							hl.addHighlight(r.getFirst(), r.getLast(),
 									new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
 						} catch (BadLocationException e) {
-							LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+							LOGGER.trace( e.getLocalizedMessage(), e);
 						}
 					}
 				}
@@ -498,7 +498,7 @@ public class RecordDataEditorView extends EditorView {
 				try {
 					hl.addHighlight(hilight.getStartOffset(), hilight.getEndOffset(), hilight.getPainter());
 				} catch (BadLocationException e) {
-					LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+					LOGGER.trace( e.getLocalizedMessage(), e);
 				}
 		}
 		for(SessionEditorSelection selection:selections) {
@@ -507,7 +507,7 @@ public class RecordDataEditorView extends EditorView {
 				hl.addHighlight(r.getFirst(), r.getLast(),
 						new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
 			} catch (BadLocationException e) {
-				LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+				LOGGER.trace( e.getLocalizedMessage(), e);
 			}
 		}
 	}

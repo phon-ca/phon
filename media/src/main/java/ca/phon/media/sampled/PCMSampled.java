@@ -224,7 +224,7 @@ public class PCMSampled implements Sampled {
 			raf.seek(byteOffset);
 			raf.read(retVal, 0, len);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;
@@ -400,7 +400,7 @@ public class PCMSampled implements Sampled {
 			raf.seek(offset);
 			raf.read(buffer, 0, byteLength);
 		} catch(IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		return buffer;

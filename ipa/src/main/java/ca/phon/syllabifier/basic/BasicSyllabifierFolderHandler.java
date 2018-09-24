@@ -64,7 +64,7 @@ public class BasicSyllabifierFolderHandler extends FolderHandler<Syllabifier> {
 					unmarshaller.unmarshal(new StreamSource(is), SyllabifierDef.class);
 			return new BasicSyllabifier(jaxbEle.getValue());
 		} catch (JAXBException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 		
 		return null;

@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -45,8 +46,7 @@ import ca.phon.session.Session;
 @RunWith(Parameterized.class)
 public class TestPhonesQuery extends TestQuery {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(TestPhonesQuery.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TestPhonesQuery.class.getName());
 
 	public TestPhonesQuery(Project project, Session session, String scriptPath,
 			Map<String, Object> params, int expectedResults) {
@@ -111,9 +111,9 @@ public class TestPhonesQuery extends TestQuery {
 
 			// TODO metadata tests?
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (ProjectConfigurationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;

@@ -56,7 +56,7 @@ public class StatusAction extends ProjectWindowAction {
 		try(Git git = gitController.open()) {
 			gitController.printStatus(buffer.getPrinter());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

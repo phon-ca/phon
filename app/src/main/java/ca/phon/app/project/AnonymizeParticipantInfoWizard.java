@@ -29,6 +29,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
@@ -52,8 +54,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class AnonymizeParticipantInfoWizard extends WizardFrame {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(AnonymizeParticipantInfoWizard.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(AnonymizeParticipantInfoWizard.class.getName());
 	
 	private static final long serialVersionUID = -1433616585660247292L;
 	
@@ -201,8 +202,7 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 					project.saveSession(session, writeLock);
 					project.releaseSessionWriteLock(session, writeLock);
 				} catch (IOException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 			}
 			

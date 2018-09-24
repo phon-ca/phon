@@ -245,7 +245,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							try {
 								resultVal = formatter.parse(buffer.toString());
 							} catch (ParseException e) {
-								LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+								LOGGER.trace( e.getLocalizedMessage(), e);
 							}
 						}
 						rowData.add(resultVal);

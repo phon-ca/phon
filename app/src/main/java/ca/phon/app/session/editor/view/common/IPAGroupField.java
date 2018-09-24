@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JToolTip;
 
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.extensions.UnvalidatedValue;
@@ -38,8 +39,7 @@ import ca.phon.syllabifier.Syllabifier;
  */
 public class IPAGroupField extends GroupField<IPATranscript> {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(IPAGroupField.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPAGroupField.class.getName());
 
 	private static final long serialVersionUID = 3938081453789426396L;
 	

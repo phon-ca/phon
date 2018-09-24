@@ -30,6 +30,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
@@ -47,8 +49,7 @@ import ca.phon.util.Language;
  */
 public class IPALookupContext {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(IPALookupContext.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPALookupContext.class.getName());
 
 	private enum Commands {
 		ADD,
@@ -293,7 +294,7 @@ public class IPALookupContext {
 		try {
 			addEntry.addEntry(ortho, ipa);
 		} catch (IPADictionaryExecption e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			fireError(e.getLocalizedMessage());
 		}
 	}
@@ -311,7 +312,7 @@ public class IPALookupContext {
 		try {
 			removeEntry.removeEntry(ortho, ipa);
 		} catch (IPADictionaryExecption e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			fireError(e.getLocalizedMessage());
 		}
 	}
@@ -325,7 +326,7 @@ public class IPALookupContext {
 			try {
 				ce.clear();
 			} catch (IPADictionaryExecption e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				fireError("Unable to remove user-defined entries: " + e.getLocalizedMessage());
 			}
 			fireMessage("Cleared user-defined entries from dictionary " + dictionary.getLanguage().toString());

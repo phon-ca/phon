@@ -27,6 +27,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.apache.logging.log4j.LogManager;
 
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexCompiler;
@@ -40,8 +41,7 @@ import ca.phon.phonex.PhonexParser;
  */
 public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(DiacriticPhoneMatcher.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DiacriticPhoneMatcher.class.getName());
 	
 	private PhoneMatcher matcher;
 	
@@ -62,7 +62,7 @@ public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
 				PhonexCompiler compiler = new PhonexCompiler(noes);
 				matcher = compiler.class_matcher();
 			} catch (RecognitionException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else {	
 			try {
@@ -72,7 +72,7 @@ public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
 				PhonexCompiler compiler = new PhonexCompiler(noes);
 				matcher = compiler.single_phone_matcher();
 			} catch (RecognitionException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

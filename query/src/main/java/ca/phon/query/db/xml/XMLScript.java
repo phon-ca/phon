@@ -88,7 +88,7 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 				try {
 					cachedSource = readFromUrl(script.getUrl());
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 			retVal = cachedSource;

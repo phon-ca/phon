@@ -116,9 +116,9 @@ public class TierImpl<T> implements Tier<T> {
 					final T val = getDeclaredType().newInstance();
 					tierData.add(val);
 				} catch (InstantiationException e) {
-					LOGGER.log(Level.WARNING, e.getMessage(), e);
+					LOGGER.warn( e.getMessage(), e);
 				} catch (IllegalAccessException e) {
-					LOGGER.log(Level.WARNING, e.getMessage(), e);
+					LOGGER.warn( e.getMessage(), e);
 				}
 			}
 			retVal = tierData.get(idx);
@@ -153,9 +153,9 @@ public class TierImpl<T> implements Tier<T> {
 			final T obj = type.newInstance();
 			addGroup(obj);
 		} catch (InstantiationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IllegalAccessException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -166,9 +166,9 @@ public class TierImpl<T> implements Tier<T> {
 			final T obj = type.newInstance();
 			addGroup(idx, obj);
 		} catch (InstantiationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IllegalAccessException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

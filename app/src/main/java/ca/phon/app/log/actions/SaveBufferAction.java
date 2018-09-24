@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
@@ -40,8 +42,7 @@ import ca.phon.worker.PhonWorker;
 
 public class SaveBufferAction extends HookableAction {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(SaveLogBufferAction.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SaveLogBufferAction.class.getName());
 
 	private static final long serialVersionUID = -2827879669257916438L;
 

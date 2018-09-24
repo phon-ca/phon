@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
@@ -80,8 +81,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		}
 	}
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(TransliterationDictionary.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TransliterationDictionary.class.getName());
 	
 	// token <-> phone mappings
 	private Map<String, String> tokenMap;
@@ -149,7 +149,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			try {
 				readMetadataFromStream(mapFile.openStream());
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		return name;
@@ -161,7 +161,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			try {
 				readMetadataFromStream(mapFile.openStream());
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		return language;
@@ -193,7 +193,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 				}
 			}
 		} catch (TokenizerException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		String builderStr = builder.toString();
@@ -211,7 +211,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			try { 
 				readTokenMap(mapFile.openStream());
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		return tokenMap;

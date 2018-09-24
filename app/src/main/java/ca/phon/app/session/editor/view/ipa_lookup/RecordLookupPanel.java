@@ -34,6 +34,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.undo.CompoundEdit;
 
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -77,8 +78,7 @@ import ca.phon.ui.fonts.FontPreferences;
  */
 public class RecordLookupPanel extends JPanel {
 
-	final static Logger LOGGER = Logger
-			.getLogger(RecordLookupPanel.class.getName());
+	final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordLookupPanel.class.getName());
 
 	private static final long serialVersionUID = 1358496790602657797L;
 

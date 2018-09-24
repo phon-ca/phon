@@ -108,7 +108,7 @@ public class EditorEventManager {
 		try {
 			eventQueue.put(ee);
 		} catch (InterruptedException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		// start thread if necessary
 		if(!dispatchThread.isAlive()) {
@@ -182,7 +182,7 @@ public class EditorEventManager {
 				} catch (InterruptedException e) {
 					if(!isShutdown()) {
 						// an error only if we are not shutdown
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 				

@@ -95,14 +95,14 @@ public class OpenComposerAction extends HookableAction {
 			try {
 				editorModel = factory.fromGraph(getGraph());
 			} catch (ClassNotFoundException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else if(getDocumentURL() != null) {
 			try {
 				OpgraphIO.read(getDocumentURL().openStream());
 				editorModel = factory.fromGraph(graph);
 			} catch (IOException | ClassNotFoundException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -111,7 +111,7 @@ public class OpenComposerAction extends HookableAction {
 			if(getDocumentURL() != null)
 				editor.setCurrentFile(new File(documentURL.toURI()));
 		} catch (URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		editor.pack();
 		editor.setSize(1064, 768);

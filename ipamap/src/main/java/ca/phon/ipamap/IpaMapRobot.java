@@ -44,7 +44,7 @@ public class IpaMapRobot implements IpaMapListener {
 		try {
 			robot = new Robot();
 		} catch (AWTException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 

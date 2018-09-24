@@ -121,7 +121,7 @@ public class PluginEntryPointRunner {
 		try {
 			ep.pluginStart(pluginArgs);
 		} catch (Exception e) {
-//			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//			LOGGER.error( e.getMessage(), e);
 			throw new PluginException(e);
 		}
 	}
@@ -289,12 +289,12 @@ public class PluginEntryPointRunner {
 					setStatus(TaskStatus.FINISHED);
 				} catch (Exception e) {
 					final PluginException pe = new PluginException(e);
-					LOGGER.log(Level.SEVERE, e.getMessage(), pe);
+					LOGGER.error( e.getMessage(), pe);
 					super.err = pe;
 					setStatus(TaskStatus.ERROR);
 				}
 			} else {
-				LOGGER.log(Level.SEVERE, "Cannot find entry point", new StackTraceInfo());
+				LOGGER.error( "Cannot find entry point", new StackTraceInfo());
 				super.err = new PluginException("No entry point");
 				super.setStatus(TaskStatus.ERROR);
 			}

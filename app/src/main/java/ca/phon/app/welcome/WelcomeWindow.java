@@ -448,7 +448,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 				try {
 					PluginEntryPointRunner.executePlugin("Exit");
 				} catch (PluginException e1) {
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 					System.exit(1);
 				}
 			}

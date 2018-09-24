@@ -84,7 +84,7 @@ public class SessionListModel implements ListModel<String> {
 			Collections.sort(transcripts, collator);
 			return transcripts.get(index);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			LOGGER.warning("Array index out of bounds: " + index);
+			LOGGER.warn("Array index out of bounds: " + index);
 		}
 		
 		return null;

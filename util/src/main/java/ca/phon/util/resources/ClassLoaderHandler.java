@@ -39,8 +39,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 	
-	private static final Logger LOGGER = 
-			Logger.getLogger(ClassLoaderHandler.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = 
+			org.apache.logging.log4j.LogManager.getLogger(ClassLoaderHandler.class.getName());
 	
 	/**
 	 * Class loader
@@ -100,7 +100,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 				in.close();
 			}
 		} catch (IOException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 	
@@ -126,7 +126,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 				
 			} catch (IOException e) {
 				e.printStackTrace();
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 			}
 			
 		}

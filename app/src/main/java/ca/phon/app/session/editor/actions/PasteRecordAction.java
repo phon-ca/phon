@@ -29,6 +29,8 @@ import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.RecordTransferable;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
@@ -39,8 +41,7 @@ import ca.phon.session.Record;
  */
 public class PasteRecordAction extends SessionEditorAction {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(PasteRecordAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(PasteRecordAction.class.getName());
 
 	private static final long serialVersionUID = 4581031841588720169L;
 
@@ -71,9 +72,9 @@ public class PasteRecordAction extends SessionEditorAction {
 		try {
 			obj = clipboardContents.getTransferData(RecordTransferable.FLAVOR);
 		} catch (UnsupportedFlavorException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		final RecordTransferable recTrans = (obj != null ? (RecordTransferable)obj : null);
 		if(recTrans != null) {

@@ -95,7 +95,7 @@ public class SaveAnalysisAction extends HookableAction {
 					OpgraphIO.write(graph, new File(saveAs));
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 					final MessageDialogProperties msgProps = new MessageDialogProperties();
 					msgProps.setOptions(MessageDialogProperties.okOptions);
 					msgProps.setTitle("Unable to save analysis");

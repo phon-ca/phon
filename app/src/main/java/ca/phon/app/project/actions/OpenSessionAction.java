@@ -68,7 +68,7 @@ public class OpenSessionAction extends ProjectWindowAction {
 		try {
 			PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
 		} catch (PluginException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			showMessage("Open Session", e.getLocalizedMessage());
 			Toolkit.getDefaultToolkit().beep();
 		}

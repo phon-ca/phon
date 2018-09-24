@@ -57,20 +57,20 @@ public class PasteEP implements IPluginEntryPoint {
 			try {
 				pasteMethod = keyboardComp.getClass().getMethod("paste", new Class[0]);
 			} catch (SecurityException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				LOGGER.error( ex.getMessage(), ex);
 			} catch (NoSuchMethodException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				LOGGER.error( ex.getMessage(), ex);
 			}
 			
 			if(pasteMethod != null) {
 				try {
 					pasteMethod.invoke(keyboardComp, new Object[0]);
 				} catch (IllegalArgumentException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				} catch (IllegalAccessException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				} catch (InvocationTargetException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				}
 			}
 		}

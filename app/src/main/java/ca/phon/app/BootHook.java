@@ -65,7 +65,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		try {
 			retVal = ClassLoader.getSystemClassLoader().getResources(respath);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 		return retVal;
 	}
@@ -82,9 +82,9 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 			final FileInputStream fin = new FileInputStream(file);
 			loadFromInputStream(cmd, fin);
 		} catch (FileNotFoundException e) {
-			LOGGER.log(Level.INFO, e.getLocalizedMessage(), e);
+			LOGGER.trace(e.getLocalizedMessage(), e);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 				final InputStream is = url.openStream();
 				loadFromInputStream(cmd, is);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -143,7 +143,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 				}
 				isr.close();
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 		}
 

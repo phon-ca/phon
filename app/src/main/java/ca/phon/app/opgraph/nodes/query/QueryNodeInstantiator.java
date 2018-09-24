@@ -59,7 +59,7 @@ public class QueryNodeInstantiator implements Instantiator<QueryNode> {
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		QueryNode retVal = new QueryNode(queryScript);

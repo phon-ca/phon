@@ -43,6 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
+import org.apache.logging.log4j.LogManager;
 
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.util.Language;
@@ -55,8 +56,7 @@ import ca.phon.worker.PhonWorker;
  */
 public class IPADatabaseManager {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(IPADatabaseManager.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPADatabaseManager.class.getName());
 
 	/** The database name */
 	private final static String _dbName = "ipadb";
@@ -73,7 +73,7 @@ public class IPADatabaseManager {
 			LOGGER.info("[IPADatabaseManager]: Loading JDBC driver - " + _driverName);
 			Class.forName(_driverName);
 		} catch (ClassNotFoundException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		PhonWorker.getShutdownThread().invokeLater(new Runnable() {
@@ -166,7 +166,7 @@ public class IPADatabaseManager {
 			try {
 				retVal = connPool.getConnection();
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			connections.put(currentThread, retVal);
 		}
@@ -182,14 +182,13 @@ public class IPADatabaseManager {
 		
 		for(Thread th:connections.keySet()) {
 			if(!th.isAlive()) {
-				LOGGER.fine("[QueryDBManager]: Cleaning up connection for thread - " + 
+				LOGGER.trace("[QueryDBManager]: Cleaning up connection for thread - " + 
 						th.getName());
 				Connection conn = connections.get(th);
 				try {
 					conn.close();
 				} catch (SQLException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 				toRemove.add(th);
 			}
@@ -213,8 +212,7 @@ public class IPADatabaseManager {
 				try {
 					pst.close();
 				} catch (SQLException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 			}
 			statements.clear();
@@ -226,7 +224,7 @@ public class IPADatabaseManager {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -237,7 +235,7 @@ public class IPADatabaseManager {
 			// A known derby issue is to get XJ015 when 
 			// shutting down the database
 			if ( e.getSQLState().equals("XJ015") ) {
-				LOGGER.warning(e.toString());
+				LOGGER.warn(e.toString());
 			} else {
 				LOGGER.info("[IPADatabaseManager]: Database shutdown normally");
 			}
@@ -373,13 +371,13 @@ public class IPADatabaseManager {
 						
 						pSt.execute();
 					} catch (SQLException e) {
-						LOGGER.log(Level.SEVERE,
+						LOGGER.error(
 								e.getLocalizedMessage(), e);
 					}
 				}
 			}
 		} else {
-			LOGGER.severe( 
+			LOGGER.error( 
 					"[IPADatabaseManager]: Could not create tables");
 		}
 		
@@ -404,7 +402,7 @@ public class IPADatabaseManager {
 				retVal &= st2.execute();
 				
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -446,7 +444,7 @@ public class IPADatabaseManager {
 				pSt.execute();
 				return true;
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return false;
 			}
 		}
@@ -465,7 +463,7 @@ public class IPADatabaseManager {
 				pSt.execute();
 				return true;
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return false;
 			}
 		}
@@ -494,13 +492,13 @@ public class IPADatabaseManager {
 							final Language lang = Language.parseLanguage(langId);
 							retVal.add(lang);
 						} catch (IllegalArgumentException e) {
-							LOGGER.log(Level.SEVERE,
+							LOGGER.error(
 									e.getLocalizedMessage(), e);
 						}
 					}
 				}
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -534,7 +532,7 @@ public class IPADatabaseManager {
 			writer.flush();
 			writer.close();
 		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -566,11 +564,11 @@ public class IPADatabaseManager {
 			
 			int r = pSt.executeUpdate();
 			if(r == 0) {
-				LOGGER.warning(
+				LOGGER.warn(
 						"Could not add language \"" + langId + "\" with name \"" + langName + "\"");
 			}
 		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	
 		BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -591,12 +589,11 @@ public class IPADatabaseManager {
 					
 					int r = pSt.executeUpdate();
 					if(r == 0) {
-						LOGGER.warning(
+						LOGGER.warn(
 								"Could not add transcript \"" + ipa + "\" for orthography \"" + ortho + "\"");
 					}
 				} catch (SQLException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -618,8 +615,7 @@ public class IPADatabaseManager {
 				retVal = false;
 			}
 		} catch (SQLException e) {
-			LOGGER
-				.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error(e.getLocalizedMessage(), e);
 			retVal = false;
 		}
 		return retVal;

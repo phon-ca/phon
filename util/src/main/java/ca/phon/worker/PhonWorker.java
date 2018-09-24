@@ -104,15 +104,15 @@ public class PhonWorker extends Thread {
 
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
-				Logger.getLogger(getClass().getName()).severe("Error in thread '" + getName() + "'");
-				Logger.getLogger(getClass().getName()).severe(e.toString());
+				org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error("Error in thread '" + getName() + "'");
+				org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
 				e.printStackTrace();
 				
 				if(finalTask != null) {
 					try {
 						finalTask.run();
 					} catch (Exception ex) {
-						Logger.getLogger(getClass().getName()).warning(ex.toString());
+						org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).warn(ex.toString());
 					}
 				}
 			}
@@ -132,7 +132,7 @@ public class PhonWorker extends Thread {
 	@Override
 	public void run() {
 		shutdown = false;
-		LOGGER.fine("Starting worker thread: " + getName());
+		LOGGER.trace("Starting worker thread: " + getName());
 		while(!shutdown) {
 			if(queue.peek() != null) {
 				// run the next task in the queue
@@ -150,7 +150,7 @@ public class PhonWorker extends Thread {
 						}
 					}
 				} catch (Exception e) {
-					LOGGER.log(Level.SEVERE, e.getMessage(), e);
+					LOGGER.error( e.getMessage(), e);
 					if(!haltOnError)
 						continue;
 					else
@@ -161,7 +161,7 @@ public class PhonWorker extends Thread {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
-						LOGGER.log(Level.SEVERE, e.getMessage(), e);
+						LOGGER.error( e.getMessage(), e);
 						shutdown = true;
 						continue;
 					}
@@ -175,11 +175,11 @@ public class PhonWorker extends Thread {
 			try {
 				finalTask.run();
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 		}
 		
-		LOGGER.fine("Worker thread finished: " + getName());
+		LOGGER.trace("Worker thread finished: " + getName());
 	}
 	
 	public static PhonWorker getShutdownThread() {
@@ -196,7 +196,7 @@ public class PhonWorker extends Thread {
 	 */
 	public void shutdown() {
 		shutdown = true;
-		LOGGER.fine("Shutdown worker thread: " + getName());
+		LOGGER.trace("Shutdown worker thread: " + getName());
 	}
 	
 	/**

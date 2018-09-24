@@ -42,8 +42,7 @@ public class InitAction extends ProjectWindowAction {
 
 	private static final long serialVersionUID = 7839341789844508097L;
 
-	private final static Logger LOGGER =
-			Logger.getLogger(InitAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(InitAction.class.getName());
 
 	public InitAction(ProjectWindow projectWindow) {
 		super(projectWindow);
@@ -80,7 +79,7 @@ public class InitAction extends ProjectWindowAction {
 					props.setMessage("Initialized new git repository at "
 							+ git.getRepository().getDirectory().getAbsolutePath());
 				} catch (IOException | GitAPIException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 					props.setMessage(e.getLocalizedMessage());
 				}
 			} else {

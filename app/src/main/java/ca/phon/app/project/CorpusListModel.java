@@ -89,7 +89,7 @@ public class CorpusListModel implements ListModel<String> {
 			Collections.sort(corpora, collator);
 			return corpora.get(index);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			LOGGER.warning("Array index out of bounds: " + index);
+			LOGGER.warn("Array index out of bounds: " + index);
 		}
 		return null;
 	}

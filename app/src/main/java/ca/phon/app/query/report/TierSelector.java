@@ -144,7 +144,7 @@ public class TierSelector extends JComponent {
 									}
 									
 								} catch (IOException e) {
-									LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+									LOGGER.warn( e.getLocalizedMessage(), e);
 								}
 							}
 						}

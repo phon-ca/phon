@@ -82,7 +82,7 @@ public class LazyQueryScript extends BasicScript {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -111,7 +111,7 @@ public class LazyQueryScript extends BasicScript {
 		try {
 			params = getContext().getScriptParameters(getContext().getEvaluatedScope());
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		for(ScriptParam sp:params) {
 			for(String id:sp.getParamIds()) {

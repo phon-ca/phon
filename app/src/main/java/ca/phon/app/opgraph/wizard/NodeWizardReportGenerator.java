@@ -114,7 +114,7 @@ public class NodeWizardReportGenerator {
 				sb.append(line).append(nl);
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		sb.append("</style>").append(nl);
 
@@ -126,7 +126,7 @@ public class NodeWizardReportGenerator {
 				sb.append(line).append(nl);
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		sb.append("\n</script>");
 

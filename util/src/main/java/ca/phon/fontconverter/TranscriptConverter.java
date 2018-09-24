@@ -110,7 +110,7 @@ public class TranscriptConverter {
 			final StandardTokenizer tokenizer = new StandardTokenizer(props);
 			return new TranscriptConverter(convTbl.getFontName(), tokenizer);
 		} catch (JAXBException jaxbEx) {
-			Logger.getLogger(TranscriptConverter.class.getName()).warning(jaxbEx.getMessage());
+			org.apache.logging.log4j.LogManager.getLogger(TranscriptConverter.class.getName()).warn(jaxbEx.getMessage());
 			throw new IOException(jaxbEx);
 		}
 	}
@@ -159,7 +159,7 @@ public class TranscriptConverter {
 					retVal += token.getImage();
 			}
 		} catch (TokenizerException e) {
-			Logger.getLogger(getClass().getName()).warning(e.getMessage());
+			org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).warn(e.getMessage());
 		}
 		
 		return retVal;

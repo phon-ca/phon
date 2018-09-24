@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -32,8 +33,7 @@ import junit.framework.Assert;
 @RunWith(JUnit4.class)
 public class TestFeatureMatrix {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(TestFeatureMatrix.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TestFeatureMatrix.class.getName());
 	
 	/**
 	 * Ensures that all phones defined in the {@link FeatureMatrix}

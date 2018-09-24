@@ -602,7 +602,7 @@ public class RecordFilterPanel extends JPanel {
 			try {
 				retVal = new RangeRecordFilter(t, rangeField.getText());
 			} catch (ParseException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else if(speakerBtn.isSelected()) {
 			retVal = new ParticipantRecordFilter(selectedParticipants);

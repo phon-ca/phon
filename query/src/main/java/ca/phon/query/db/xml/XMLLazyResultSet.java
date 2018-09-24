@@ -69,7 +69,7 @@ public class XMLLazyResultSet extends XMLResultSet {
 					isLoaded = true;
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

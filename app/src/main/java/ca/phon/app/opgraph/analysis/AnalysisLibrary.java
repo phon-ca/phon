@@ -157,7 +157,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 				builder.addItem(menuPath, act);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -181,7 +181,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				act.setShowWizard(selectedSessions.size() == 0);
 				userMenuBuilder.addItem(menuPath, new JMenuItem(act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		if(userMenu.getMenuComponentCount() > 0) {
@@ -194,7 +194,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				try {
 					OpenFileLauncher.openURL( userLibFolder.toURI().toURL() );
 				} catch (MalformedURLException e1) {
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 				}
 			});
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
@@ -220,7 +220,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				act.setShowWizard(selectedSessions.size() == 0);
 				projectMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		if(projectMenu.getMenuComponentCount() > 0) {
@@ -232,7 +232,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				try {
 					OpenFileLauncher.openURL( projectFolder.toURI().toURL() );
 				} catch (MalformedURLException e1) {
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 				}
 			});
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
@@ -279,7 +279,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 					PhonWorker.getInstance().invokeLater(runner);
 				} catch (IOException ex) {
 					Toolkit.getDefaultToolkit().beep();
-					LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+					LOGGER.error( ex.getLocalizedMessage(), ex);
 					
 					final MessageDialogProperties mprops = new MessageDialogProperties();
 					mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
@@ -310,7 +310,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				retVal.put(key, value);
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;

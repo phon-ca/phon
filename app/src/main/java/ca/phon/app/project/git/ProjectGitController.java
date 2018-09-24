@@ -61,8 +61,7 @@ import ca.phon.project.Project;
  */
 public class ProjectGitController {
 	
-	private final static Logger LOGGER =
-			Logger.getLogger(ProjectGitController.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectGitController.class.getName());
 	
 	private final static String GIT_FOLDER = ".git";
 	

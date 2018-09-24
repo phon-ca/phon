@@ -135,8 +135,7 @@ public class Workspace {
 					final Project p = pf.openProject(workspaceFile);
 					retVal.add(p);
 				} catch (IOException e) {} catch (ProjectConfigurationException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}

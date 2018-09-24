@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ClassLoaderHandler;
 import ca.phon.util.resources.FolderHandler;
@@ -42,8 +44,7 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class RecordEditorPerspective {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(RecordEditorPerspective.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordEditorPerspective.class.getName());
 
 	public final static String DEFAULT_PERSPECTIVE_NAME = "Default";
 
@@ -115,7 +116,7 @@ public class RecordEditorPerspective {
 			final File file = new File(perspective.location.toURI());
 			if(file.canWrite()) {
 				if(!file.delete()) {
-					LOGGER.warning("Could not remove file: " + file.getAbsolutePath());
+					LOGGER.warn("Could not remove file: " + file.getAbsolutePath());
 				}
 			}
 		} catch (URISyntaxException e) {

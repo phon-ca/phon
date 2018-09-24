@@ -127,8 +127,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public final static String STOP_BUSY = "STOP_BUSY";
 
-	private static final Logger LOGGER = Logger
-			.getLogger(BufferPanel.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BufferPanel.class.getName());
 
 	private static final long serialVersionUID = -153000974506461908L;
 
@@ -312,7 +311,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 			fxpanel.setScene(new Scene(webView));
 
 			webView.getEngine().setOnError( (evt) -> {
-				LOGGER.log(Level.WARNING, evt.toString());
+				LOGGER.warn( evt.toString());
 			});
 
 
@@ -649,7 +648,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		try {
 			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
 		} catch (PluginException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			return;
 		}
 

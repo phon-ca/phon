@@ -189,7 +189,7 @@ public class WorkspaceProjectsPanel extends JPanel {
 		try {
 			OpenFileLauncher.openURL(Workspace.userWorkspaceFolder().toURI().toURL());
 		} catch (MalformedURLException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

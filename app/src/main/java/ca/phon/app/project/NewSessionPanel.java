@@ -211,7 +211,7 @@ public class NewSessionPanel extends JPanel {
 			try {
 				PluginEntryPointRunner.executePlugin("NewCorpus", initInfo);
 			} catch (PluginException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 
 			updateCorporaList();

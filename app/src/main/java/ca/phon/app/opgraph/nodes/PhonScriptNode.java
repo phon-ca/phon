@@ -143,7 +143,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				scriptContext.callFunction(scope, "init", inputFields, outputFields);
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+			LOGGER.error( getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
 		}
 
 		// check inputs
@@ -280,7 +280,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				ctx.callFunction(scope, "run", context);
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			throw new ProcessingException(null, e.getLocalizedMessage(), e);
 		}
 
@@ -322,7 +322,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				}
 			}
 		} catch (PhonScriptException | RhinoException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -350,11 +350,11 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 					final URI uri = url.toURI();
 					script.addRequirePath(uri);
 				} catch (URISyntaxException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		} catch (IOException e1) {
-			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			LOGGER.error( e1.getLocalizedMessage(), e1);
 		}
 	}
 
@@ -378,7 +378,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

@@ -22,6 +22,8 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.fsa.FSATransition;
 import ca.phon.fsa.SimpleFSA;
 import ca.phon.stresspattern.StressMatcherType;
@@ -42,8 +44,7 @@ import de.susebox.jtopas.TokenizerSource;
  */
 public class StressPatternCompiler {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(StressPatternCompiler.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(StressPatternCompiler.class.getName());
 	
 	private enum Quantifier {
 		ZeroOrOne,
@@ -108,7 +109,7 @@ public class StressPatternCompiler {
 		try {
 			token = tokenizer.nextToken();
 		} catch (TokenizerException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		if(token != null
 				&& !token.getImage().equals("#"))

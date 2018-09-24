@@ -75,7 +75,7 @@ public class NodeWizardReportTemplate {
 		try {
 			p.load(getClass().getResourceAsStream("velocity.properties"));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		final VelocityEngine ve = new VelocityEngine();

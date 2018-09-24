@@ -269,8 +269,7 @@ public class CSVReportBuilder extends ReportBuilder {
 				try {
 					writer.flush();
 				} catch (IOException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -338,7 +337,7 @@ public class CSVReportBuilder extends ReportBuilder {
 				writer.writeNext(new String[0]);
 				writer.flush();
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

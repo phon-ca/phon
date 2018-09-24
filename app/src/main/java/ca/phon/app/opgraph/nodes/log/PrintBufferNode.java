@@ -201,7 +201,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 					out.flush();
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 
 		};

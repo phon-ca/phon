@@ -33,8 +33,8 @@ import java.util.logging.Logger;
  */
 public abstract class FileHandler<T> implements ResourceHandler<T> {
 	
-	private final static Logger LOGGER = 
-			Logger.getLogger(FileHandler.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = 
+			org.apache.logging.log4j.LogManager.getLogger(FileHandler.class.getName());
 	
 	/**
 	 * List of files to include in the handler
@@ -123,7 +123,7 @@ public abstract class FileHandler<T> implements ResourceHandler<T> {
 			try {
 				obj = loadFromFile(f);
 			} catch (IOException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			}
 			return obj;

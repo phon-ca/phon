@@ -122,7 +122,7 @@ public class GitCommitWizard extends WizardFrame {
 		try(Git git = gitController.open()) {
 			status = gitController.status();
 		} catch (IOException | GitAPIException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		unindexedModel = new CommitTableModel(status, false);
 		unindexedTable = new JXTable(unindexedModel);
@@ -217,7 +217,7 @@ public class GitCommitWizard extends WizardFrame {
 			git.add().addFilepattern(".").setUpdate(true).call();
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(addAllButton);
 		}
@@ -242,7 +242,7 @@ public class GitCommitWizard extends WizardFrame {
 			}
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(addToIndexButton);
 		}
@@ -255,7 +255,7 @@ public class GitCommitWizard extends WizardFrame {
 			git.reset().setRef("HEAD").call();
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(removeFromIndexButton);
 		}
@@ -274,7 +274,7 @@ public class GitCommitWizard extends WizardFrame {
 			}
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(removeFromIndexButton);
 		}

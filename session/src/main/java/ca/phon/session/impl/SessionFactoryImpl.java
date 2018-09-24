@@ -20,6 +20,8 @@ package ca.phon.session.impl;
 
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.session.Comment;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
@@ -37,8 +39,7 @@ import ca.phon.session.Transcriber;
  */
 public class SessionFactoryImpl extends SessionFactory {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(SessionFactoryImpl.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionFactoryImpl.class.getName());
 
 	@Override
 	public Session createSession() {

@@ -101,13 +101,13 @@ public class FeatureMatrix {
 			try {
 				buildFromXML(fmFile);
 			} catch (IOException e) {
-				Logger.getLogger(getClass().getName()).severe(e.toString());
+				org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
 			}
 		} else if(fmFile.endsWith(".csv")) {
 			try {
 				buildFromCSV(fmFile);
 			} catch (IOException e) {
-				Logger.getLogger(getClass().getName()).severe(e.toString());
+				org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
 			}
 		} else {
 			throw new IllegalArgumentException("Feature matrix must be in XML or CSV format.");
@@ -118,7 +118,7 @@ public class FeatureMatrix {
 		try {
 			buildFromXML(stream);
 		} catch (IOException e) {
-			Logger.getLogger(getClass().getName()).severe(e.toString());
+			org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
 			e.printStackTrace();
 		}
 	}

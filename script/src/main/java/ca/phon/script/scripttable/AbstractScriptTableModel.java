@@ -39,6 +39,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.logging.log4j.LogManager;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -60,8 +61,7 @@ import ca.phon.script.scripttable.io.ScriptTableColumn;
  */
 public abstract class AbstractScriptTableModel extends AbstractTableModel implements ScriptTableModel {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(AbstractScriptTableModel.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(AbstractScriptTableModel.class.getName());
 	
 	private static final long serialVersionUID = -4117009557145424149L;
 	
@@ -97,7 +97,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -134,7 +134,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -262,7 +262,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} finally {
 				cScript.exit();
 			}
@@ -306,7 +306,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		try {
 			ctx.installParams(retVal);
 		} catch(PhonScriptException pse) {
-			LOGGER.log(Level.WARNING, pse.getLocalizedMessage(), pse);
+			LOGGER.warn( pse.getLocalizedMessage(), pse);
 		}
 		
 		final Map<String, Object> mappings = getMappingsAt(row, col);
@@ -386,7 +386,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 				try {
 					setColumnScript(column.getIndex(), new BasicScript(column.getScript()));
 				} catch (PhonScriptException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		} catch (JAXBException e) {

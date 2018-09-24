@@ -123,7 +123,7 @@ public class LogBuffer extends RSyntaxTextArea {
 		try {
 			stdOutStream.flush();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		final StringBuffer buffer = new StringBuffer();
@@ -132,9 +132,9 @@ public class LogBuffer extends RSyntaxTextArea {
 		try {
 			stdOutStream.write(buffer.toString().getBytes(encoding));
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 	}
@@ -169,7 +169,7 @@ public class LogBuffer extends RSyntaxTextArea {
 					try {
 						getDocument().insertString(getDocument().getLength(), data, style);
 					} catch (BadLocationException e) {
-						LOGGER.log(Level.SEVERE,
+						LOGGER.error(
 								e.getLocalizedMessage(), e);
 					}
 				}

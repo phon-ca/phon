@@ -75,7 +75,7 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 				FileUtils.copyFile(oldSessionFile, dupSessionFile);
 				dupSessionNames.add(dupSessionName);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				Toolkit.getDefaultToolkit().beep();
 				showMessage("Duplicate Session", e.getLocalizedMessage());
 			}

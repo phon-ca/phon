@@ -83,7 +83,7 @@ public class PluginAction extends AbstractAction {
 			try {
 				PluginEntryPointRunner.executePlugin(epId, args);
 			} catch (PluginException pe) {
-				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
+				LOGGER.error( pe.getMessage(), pe);
 			}
 		}
 	}

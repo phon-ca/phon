@@ -23,14 +23,15 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.ui.action.PhonActionEvent;
 
 public class GoToAction extends MediaPlayerAction {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(GoToAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(GoToAction.class.getName());
 
 	private static final long serialVersionUID = -2265485841201934953L;
 	
@@ -50,7 +51,7 @@ public class GoToAction extends MediaPlayerAction {
 		try {
 			getMediaPlayerView().onMenuSelectGoto(new PhonActionEvent(e));
 		} catch (ParseException e1) {
-			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			LOGGER.error( e1.getLocalizedMessage(), e1);
 		}
 	}
 

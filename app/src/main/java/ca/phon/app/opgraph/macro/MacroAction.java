@@ -96,7 +96,7 @@ public class MacroAction extends HookableAction {
 						new MacroRunner(get(), project, showWizard);
 				PhonWorker.getInstance().invokeLater(analysisRunner);
 			} catch (ExecutionException | InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

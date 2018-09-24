@@ -49,7 +49,7 @@ public abstract class AbstractPluginEntryPoint extends PhonTask implements IPlug
 			pluginStart(args);
 			super.setStatus(TaskStatus.FINISHED);
 		} catch (Exception e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 			e.printStackTrace();
 			super.err = e;
 			super.setStatus(TaskStatus.ERROR);

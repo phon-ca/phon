@@ -58,6 +58,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -116,8 +117,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private static final long serialVersionUID = -1680881691504590317L;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(SpeechAnalysisEditorView.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SpeechAnalysisEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Speech Analysis";
 
@@ -201,7 +201,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				// try to catch exceptions which the plug-in lets through
 				pluginTiers.add(extraTier.getFactory().createObject(this));
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -508,7 +508,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 									wavDisplay.setSampled(sampled);
 									(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
 								} catch (IOException e) {
-									LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+									LOGGER.error( e.getLocalizedMessage(), e);
 									ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
 								}
 							}
@@ -597,7 +597,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 //					msgLabel.setVisible(false);
 				} catch (IOException e) {
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			} else {
 //				msgLabel.setVisible(true);

@@ -61,7 +61,7 @@ public class BasicSyllabifierIO {
 			
 			return new BasicSyllabifier(jaxbEle.getValue());
 		} catch (JAXBException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 			throw new IOException(e);
 		}
 	}

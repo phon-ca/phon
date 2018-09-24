@@ -123,7 +123,7 @@ public class QueryTask extends PhonTask {
 			setResultSet(rs);
 			super.setStatus(TaskStatus.FINISHED);
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			super.err = e;
 			super.setStatus(TaskStatus.ERROR);
 		}

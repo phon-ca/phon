@@ -164,7 +164,7 @@ public class IconManager {
 			final Image img = DesktopIcons.getIconForPath(path, size.getWidth(), size.getHeight());
 			retVal = new ImageIcon(img);
 		} catch (DesktopIconException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 			
 			if(backupIcon != null && backupIcon.length() > 0) {
 				retVal = getIcon(backupIcon, size);
@@ -204,7 +204,7 @@ public class IconManager {
 			final Image img = DesktopIcons.getIconForFileType(filetype, size.getWidth(), size.getHeight());
 			retVal = new ImageIcon(img);
 		} catch (DesktopIconException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 			
 			if(backupIcon != null && backupIcon.length() > 0) {
 				retVal = getIcon(backupIcon, size);
@@ -244,7 +244,7 @@ public class IconManager {
 			final Image img = DesktopIcons.getStockIcon(stockIcon, size.getWidth(), size.getHeight());
 			retVal = new ImageIcon(img);
 		} catch (DesktopIconException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 			
 			if(backupIcon != null && backupIcon.length() > 0) {
 				retVal = getIcon(backupIcon, size);
@@ -411,7 +411,7 @@ public class IconManager {
 				
 				loadedIcons.put(tuple, iconImage);
 			} else {
-				LOGGER.log(Level.WARNING, "Icon not found: " + iconName, new StackTraceInfo());
+				LOGGER.warn( "Icon not found: " + iconName, new StackTraceInfo());
 			}
 		}
 		

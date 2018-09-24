@@ -154,7 +154,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				try {
 					session = getProject().openSession(corpusName, sessionName);
 				} catch (IOException e1) {
-					LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+					LOGGER.error( e1.getMessage(), e1);
 					return;
 				}
 				
@@ -170,7 +170,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 					checkTier(i, record.getIPAActual(), out);
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			super.setStatus(TaskStatus.FINISHED);
 		}
@@ -224,7 +224,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			try {
 				session = getProject().openSession(corpusName, sessionName);
 			} catch (IOException e1) {
-				LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+				LOGGER.error( e1.getMessage(), e1);
 				out.println(e1.getLocalizedMessage());
 				return;
 			}
@@ -282,7 +282,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 				
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
@@ -325,7 +325,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			try {
 				session = project.openSession(corpusName, sessionName);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 				return;
 			}
 			
@@ -377,7 +377,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
 			}
@@ -428,7 +428,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			try {
 				setupTableHeader(bufferPanel);
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+				LOGGER.warn( e.getLocalizedMessage(), e);
 			}
 			
 			busyLabel.setBusy(true);

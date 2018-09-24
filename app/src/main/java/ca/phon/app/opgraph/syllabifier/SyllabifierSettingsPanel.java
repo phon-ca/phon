@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -38,8 +40,7 @@ public class SyllabifierSettingsPanel extends JPanel {
 
 	private static final long serialVersionUID = 8257931751924360390L;
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(SyllabifierSettingsPanel.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SyllabifierSettingsPanel.class.getName());
 
 	/*
 	 * UI

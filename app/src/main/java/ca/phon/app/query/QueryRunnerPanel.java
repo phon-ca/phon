@@ -171,7 +171,7 @@ public class QueryRunnerPanel extends JPanel {
 			}
 			tempProject.setRecourceLocation(project.getResourceLocation());
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		init();
@@ -321,7 +321,7 @@ public class QueryRunnerPanel extends JPanel {
 			try {
 				scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			
 			final Script qScript = query.getScript();
@@ -347,7 +347,7 @@ public class QueryRunnerPanel extends JPanel {
 				rsManager.saveQuery(tempProject, query);
 			} catch (IOException e1) {
 				e1.printStackTrace();
-				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				LOGGER.error( e1.getLocalizedMessage(), e1);
 			}
 			
 			busyLabel.setBusy(true);
@@ -374,10 +374,10 @@ public class QueryRunnerPanel extends JPanel {
 					try {
 						SwingUtilities.invokeAndWait(onEdt);
 					} catch (InterruptedException e1) {
-						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(),
+						LOGGER.error( e1.getLocalizedMessage(),
 								e1);
 					} catch (InvocationTargetException e1) {
-						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(),
+						LOGGER.error( e1.getLocalizedMessage(),
 								e1);
 					}
 					
@@ -434,7 +434,7 @@ public class QueryRunnerPanel extends JPanel {
 					
 					rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 			
@@ -479,7 +479,7 @@ public class QueryRunnerPanel extends JPanel {
 						final ResultSet rs = rsManager.loadResultSet((loadFromTemp ? tempProject : project), query, sessionName);
 						initInfo.put("resultset", rs);
 					} catch (IOException e1) {
-						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+						LOGGER.error( e1.getLocalizedMessage(), e1);
 					}
 					initInfo.put("project", project);
 					
@@ -493,7 +493,7 @@ public class QueryRunnerPanel extends JPanel {
 					try {
 						PluginEntryPointRunner.executePlugin("ResultSetViewer", initInfo);
 					} catch (PluginException ex) {
-						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+						LOGGER.error( ex.getLocalizedMessage(), ex);
 					}
 				}
 			}

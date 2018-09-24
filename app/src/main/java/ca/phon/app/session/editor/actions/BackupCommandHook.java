@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ca.phon.app.hooks.ActionHook;
+import ca.phon.app.log.LogManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -41,8 +42,7 @@ import net.lingala.zip4j.util.Zip4jConstants;
 
 public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPluginExtensionPoint<ActionHook<SaveSessionAction>> {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(BackupCommandHook.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BackupCommandHook.class.getName());
 	
 	@Override
 	public Class<? extends SaveSessionAction> getActionType() {
@@ -90,8 +90,7 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 				fin = new FileInputStream(sessionFile);
 				zipFile.addStream(fin, parameters);
 			} catch (IOException e) {
-				LOGGER
-						.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error(e.getLocalizedMessage(), e);
 				
 			} finally {
 				if(fin != null) fin.close();
@@ -105,9 +104,9 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 			try {
 				backupSession(action.getEditor().getProject(), action.getEditor().getSession());
 			} catch (ZipException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		return false;

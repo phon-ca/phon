@@ -57,20 +57,20 @@ public class CopyEP implements IPluginEntryPoint {
 			try {
 				copyMethod = keyboardComp.getClass().getMethod("copy", new Class[0]);
 			} catch (SecurityException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				LOGGER.error( ex.getMessage(), ex);
 			} catch (NoSuchMethodException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				LOGGER.error( ex.getMessage(), ex);
 			}
 			
 			if(copyMethod != null) {
 				try {
 					copyMethod.invoke(keyboardComp, new Object[0]);
 				} catch (IllegalArgumentException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				} catch (IllegalAccessException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				} catch (InvocationTargetException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				}
 			}
 		}

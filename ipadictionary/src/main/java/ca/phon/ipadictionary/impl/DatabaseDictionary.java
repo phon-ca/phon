@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
@@ -46,8 +47,7 @@ import ca.phon.util.Language;
 public class DatabaseDictionary implements IPADictionarySPI,
 	LanguageInfo, AddEntry, RemoveEntry, ClearEntries {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(DatabaseDictionary.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DatabaseDictionary.class.getName());
 	
 	/**
 	 * Language
@@ -97,7 +97,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 				pSt.execute();
 				pSt.close();
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -119,7 +119,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 				pSt.execute();
 				pSt.close();
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -149,7 +149,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 				rs.close();
 				pSt.close();
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -175,7 +175,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 				
 				pSt.executeUpdate();
 			} catch (SQLException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

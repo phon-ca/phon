@@ -879,10 +879,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						webView.getEngine().load(reportURL);
 					});
 				} catch (InterruptedException | InvocationTargetException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 
 				final BufferPanel errPanel = getLogBuffer();
 				errPanel.getLogBuffer().setForeground(Color.red);
@@ -943,10 +943,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					buffer.append(line).append("\n");
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else {
-			LOGGER.log(Level.WARNING, "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
+			LOGGER.warn( "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
 		}
 		return buffer.toString();
 	}
@@ -1090,7 +1090,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				styleSheet.loadRules(
 						new InputStreamReader(cssURL.openStream(), "UTF-8"), cssURL);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 

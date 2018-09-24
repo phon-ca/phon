@@ -188,7 +188,7 @@ public class IPALookupView extends EditorView {
 				try {
 					doc.insertString(doc.getLength(), "S " + err, null);
 				} catch (BadLocationException e) {
-					LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+					LOGGER.warn( e.getLocalizedMessage(), e);
 				}
 			}
 			

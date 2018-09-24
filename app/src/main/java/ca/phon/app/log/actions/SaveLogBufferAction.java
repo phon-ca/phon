@@ -85,7 +85,7 @@ public class SaveLogBufferAction extends HookableAction {
 			writer.flush();
 			writer.close();
 		} catch (IOException ex) {
-			LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			LogUtil.severe(ex.getLocalizedMessage(), ex);
 			ToastFactory.makeToast(ex.getLocalizedMessage()).start(logBuffer);
 		}
 	}

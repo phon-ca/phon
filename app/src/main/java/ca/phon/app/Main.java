@@ -145,7 +145,7 @@ public class Main {
 			try {
 				hook.startup();
 			} catch (PluginException pe) {
-				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
+				LOGGER.error( pe.getMessage(), pe);
 			}
 		}
 	}
@@ -169,7 +169,7 @@ public class Main {
 					SwingUtilities.invokeLater(onEDT);
 				}
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else {
 			LOGGER.info("Starting " + initialEntryPoint);
@@ -181,7 +181,7 @@ public class Main {
 				entryPtRunner.setArgs(entryPointArgs);
 				entryPtRunner.executePlugin();
 			} catch (PluginException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 		}
 	}

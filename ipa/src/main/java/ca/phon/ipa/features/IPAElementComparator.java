@@ -38,7 +38,7 @@ public class IPAElementComparator implements Comparator<IPAElement> {
 			retVal = collator.compare(o1.toString(), o2.toString());
 			retVal = (retVal > 0 ? 1 : (retVal < 0 ? -1 : 0));
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}

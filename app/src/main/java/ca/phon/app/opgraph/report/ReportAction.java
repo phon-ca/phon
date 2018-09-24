@@ -87,7 +87,7 @@ public class ReportAction extends HookableAction {
 				final ReportRunner reportRunner = new ReportRunner(get(), project, queryId);
 				PhonWorker.getInstance().invokeLater(reportRunner);
 			} catch (ExecutionException | InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

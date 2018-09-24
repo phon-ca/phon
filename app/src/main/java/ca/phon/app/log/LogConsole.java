@@ -38,8 +38,7 @@ public class LogConsole extends JTextArea {
 	
 	private static final long serialVersionUID = -7916501175515060956L;
 
-	private final static Logger LOGGER = Logger
-			.getLogger(LogConsole.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LogConsole.class.getName());
 
 	private final LogFormatter formatter = new LogFormatter();
 	
@@ -103,7 +102,7 @@ public class LogConsole extends JTextArea {
 			try {
 				getDocument().insertString(getDocument().getLength(), txt, null);
 			} catch (BadLocationException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			setStatus(TaskStatus.FINISHED);
 		}

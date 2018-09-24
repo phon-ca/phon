@@ -38,6 +38,8 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -68,8 +70,7 @@ import ca.phon.util.Range;
 @PhonPlugin(name="Session Info")
 public class SessionEditorEP implements IPluginEntryPoint {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(SessionEditorEP.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionEditorEP.class.getName());
 
 	public final static String RECORD_INDEX_PROPERY = "recordIndex";
 
@@ -111,7 +112,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			sessionRef.set(epArgs.getSession());
 		} catch (IOException e1) {
 			Toolkit.getDefaultToolkit().beep();
-			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			LOGGER.error( e1.getLocalizedMessage(), e1);
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			props.setRunAsync(false);
@@ -131,7 +132,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 					final Session autosaveSession = autosaves.openAutosave(corpusName, sessionName);
 					sessionRef.set(autosaveSession);
 				} catch (IOException e2) {
-					LOGGER.log(Level.SEVERE, e2.getLocalizedMessage(), e2);
+					LOGGER.error( e2.getLocalizedMessage(), e2);
 				}
 			} else {
 				props.setMessage(e1.getLocalizedMessage());
@@ -184,9 +185,9 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			try {
 				SwingUtilities.invokeAndWait(onEdt);
 			} catch (InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (InvocationTargetException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 	}
 

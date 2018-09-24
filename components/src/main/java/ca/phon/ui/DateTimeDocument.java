@@ -70,7 +70,7 @@ public class DateTimeDocument extends PlainDocument {
 			try {
 				dateFormatter.parse(testString);
 			} catch (Exception e) {
-//				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+//				LOGGER.error( e.getLocalizedMessage(), e);
 				return;
 			}
 			
@@ -97,13 +97,13 @@ public class DateTimeDocument extends PlainDocument {
 		try {
 			dateText = getText(0, getLength());
 		} catch (BadLocationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		try {
 			retVal = LocalDate.parse(dateText, dateFormatter);
 		} catch (Exception e) {
-			LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+			LOGGER.trace( e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;
@@ -115,7 +115,7 @@ public class DateTimeDocument extends PlainDocument {
 			final String dateText = dateFormatter.format(date);
 			super.insertString(0, dateText, null);
 		} catch (BadLocationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 }

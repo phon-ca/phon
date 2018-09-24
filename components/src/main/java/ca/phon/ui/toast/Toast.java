@@ -313,7 +313,7 @@ public final class Toast {
 			try {
 				rt.exec(cmd);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else {
 			/*
@@ -326,7 +326,7 @@ public final class Toast {
 				try {
 					appleScriptEngine.eval(src.toString());
 				} catch (ScriptException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		}

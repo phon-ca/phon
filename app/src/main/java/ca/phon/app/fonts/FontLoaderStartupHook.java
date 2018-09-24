@@ -34,6 +34,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -44,8 +46,7 @@ import ca.phon.util.OpenFileLauncher;
 
 public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(FontLoaderStartupHook.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontLoaderStartupHook.class.getName());
 	
 	private final static String FONT_LIST = "data/fonts/fonts.list";
 	
@@ -90,7 +91,7 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 					try {
 						OpenFileLauncher.openURL(new URL(FONT_INFO_PAGE));
 					} catch (MalformedURLException ex) {
-						LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+						LOGGER.error( ex.getLocalizedMessage(), ex);
 					}
 				}
 			});
@@ -116,11 +117,11 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 							}
 							fontInputStream.close();
 						} catch (FontFormatException e) {
-							LOGGER.log(Level.SEVERE,
+							LOGGER.error(
 									e.getLocalizedMessage(), e);
 						}
 					} else {
-						LOGGER.warning("Font not found: " + line);
+						LOGGER.warn("Font not found: " + line);
 					}
 				}
 				fontListStream.close();

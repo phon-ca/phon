@@ -20,6 +20,8 @@ package ca.phon.phonex;
 
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -29,8 +31,7 @@ import ca.phon.visitor.annotation.Visits;
 
 public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(ReplaceExpressionVisitor.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(ReplaceExpressionVisitor.class.getName());
 
 	private final PhonexMatcher matcher;
 	
@@ -57,7 +58,7 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 		if(groupIndex < 0) {
 			final String groupName = pmr.getGroupName();
 			if(groupName == null) {
-				LOGGER.severe("Unknown phonex matcher reference " + pmr.getText());
+				LOGGER.error("Unknown phonex matcher reference " + pmr.getText());
 				return;
 			}
 			groupIndex = matcher.pattern().groupIndex(groupName);

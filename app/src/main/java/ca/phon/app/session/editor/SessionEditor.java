@@ -40,6 +40,7 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEditSupport;
 
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.JXStatusBar;
 
 import ca.phon.app.project.ProjectFrame;
@@ -98,8 +99,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			SessionEditor.class.getName() + ".backupWhenSaving";
 	private boolean backupWhenSaving = PrefHelper.getBoolean(BACKUP_WHEN_SAVING, Boolean.TRUE);
 
-	private final static Logger LOGGER = Logger
-			.getLogger(SessionEditor.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionEditor.class.getName());
 
 	private final static String WINDOW_NAME = "Session Editor";
 

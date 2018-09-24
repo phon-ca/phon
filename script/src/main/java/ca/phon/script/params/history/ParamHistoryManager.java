@@ -223,7 +223,7 @@ public class ParamHistoryManager {
 			XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);	
 			paramSet.setDate(xcal);
 		} catch (DatatypeConfigurationException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 		}
 		for(ScriptParam param:params) {
 			if(param.hasChanged()) {

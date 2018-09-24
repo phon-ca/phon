@@ -165,13 +165,13 @@ public final class IPATokens {
 							}
 							tokenChars.add(c);
 						} catch (NumberFormatException nfe) {
-							LOGGER.warning(nfe.getMessage());
+							LOGGER.warn(nfe.getMessage());
 							nfe.printStackTrace();
 						}
 					}
 				}
 			} catch (JAXBException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -207,7 +207,7 @@ public final class IPATokens {
 				}
 				antlrTokenProps.load(in);
 			} catch (IOException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			}
 			

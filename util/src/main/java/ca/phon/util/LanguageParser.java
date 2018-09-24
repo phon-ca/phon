@@ -74,7 +74,7 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 				entries.add(currentEntry);
 			}
 		} catch(Exception e) {
-			Logger.getLogger(getClass().getName()).severe(e.getMessage());
+			org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.getMessage());
 		} finally {
 			br.close();
 		}
@@ -176,7 +176,7 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 			try {
 				singleton = new LanguageParser();
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		return singleton;

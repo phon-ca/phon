@@ -329,7 +329,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				generateMissingGrids(grids);
 			} catch (JAXBException e) {
 				e.printStackTrace();
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				grids = factory.createIpaGrids();
 			}
 		}
@@ -575,7 +575,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				favGrid = (IpaGrids)unmarshaller.unmarshal(new ByteArrayInputStream(favXML.getBytes()));
 			} catch (JAXBException e) {
 				e.printStackTrace();
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 			}
 		}
 		
@@ -1506,7 +1506,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			saveFavData();
 		} catch (IOException e) {
 			e.printStackTrace();
-			LOGGER.warning(e.getMessage());
+			LOGGER.warn(e.getMessage());
 		}
 		
 		updateFavoritesPanel();
@@ -1588,7 +1588,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				saveFavData();
 			} catch (IOException e) {
 				e.printStackTrace();
-				LOGGER.warning(e.toString());
+				LOGGER.warn(e.toString());
 			}
 		
 			updateFavoritesPanel();

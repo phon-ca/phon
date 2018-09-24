@@ -52,6 +52,8 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.sun.jna.Memory;
 
 import ca.phon.ui.action.PhonActionEvent;
@@ -75,8 +77,7 @@ public class PhonMediaPlayer extends JPanel {
 	
 	private static final long serialVersionUID = -5365398623998749265L;
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(PhonMediaPlayer.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(PhonMediaPlayer.class.getName());
 
 	private final static int VOL_MAX = 200;
 
@@ -783,7 +784,7 @@ public class PhonMediaPlayer extends JPanel {
 			if(PrefHelper.getBoolean("phon.debug", false)) {
 				final String logMsg = String.format("Buffering %s: %.2f%% complete", 
 						mediaPlayer.mrl(), newCache);
-				LOGGER.fine(logMsg);
+				LOGGER.trace(logMsg);
 			}
 		}
 

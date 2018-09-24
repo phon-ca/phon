@@ -456,7 +456,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 				ReportIO.writeDesign(report, saveFile);
 				hasSaved = true;
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -491,7 +491,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 			} catch (IOException e) {
 				ToastFactory.makeToast(e.getLocalizedMessage()).start(openButton);
 				
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

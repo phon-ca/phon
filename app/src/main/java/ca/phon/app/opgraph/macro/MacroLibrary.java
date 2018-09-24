@@ -115,7 +115,7 @@ public class MacroLibrary {
 				
 				builder.addItem(menuPath, act);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -138,7 +138,7 @@ public class MacroLibrary {
 				final MacroAction act = new MacroAction(project, reportURL);
 				userMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		if(userMenu.getMenuComponentCount() > 0) {
@@ -151,7 +151,7 @@ public class MacroLibrary {
 				try {
 					OpenFileLauncher.openURL( userLibFolder.toURI().toURL() );
 				} catch (MalformedURLException e1) {
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 				}
 			});
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
@@ -176,7 +176,7 @@ public class MacroLibrary {
 				final MacroAction act = new MacroAction(project, reportURL);
 				projectMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		if(projectMenu.getMenuComponentCount() > 0) {
@@ -188,7 +188,7 @@ public class MacroLibrary {
 				try {
 					OpenFileLauncher.openURL( projectFolder.toURI().toURL() );
 				} catch (MalformedURLException e1) {
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 				}
 			});
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());

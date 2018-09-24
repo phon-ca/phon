@@ -44,6 +44,8 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
@@ -70,8 +72,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 	private static final long serialVersionUID = 5303962410367183323L;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(SegmentTierComponent.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SegmentTierComponent.class.getName());
 
 	private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 

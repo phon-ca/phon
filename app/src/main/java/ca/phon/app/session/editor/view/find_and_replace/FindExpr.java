@@ -291,7 +291,7 @@ public class FindExpr {
 					try {
 						return replacePhonex((IPATranscript)retVal, IPATranscript.parseIPATranscript(expr));
 					} catch (ParseException e) {
-						LOGGER.log(Level.SEVERE,
+						LOGGER.error(
 								e.getLocalizedMessage(), e);
 					}
 				}
@@ -326,9 +326,9 @@ public class FindExpr {
 				retVal = obj.getClass().newInstance();
 				((IExtendable)retVal).putExtension(UnvalidatedValue.class, new UnvalidatedValue(newTxt));
 			} catch (InstantiationException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (IllegalAccessException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -354,9 +354,9 @@ public class FindExpr {
 				retVal = obj.getClass().newInstance();
 				((IExtendable)retVal).putExtension(UnvalidatedValue.class, new UnvalidatedValue(newTxt));
 			} catch (InstantiationException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (IllegalAccessException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

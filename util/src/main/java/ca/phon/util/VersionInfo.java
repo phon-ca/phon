@@ -86,7 +86,7 @@ public class VersionInfo {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				Logger.getLogger(VersionInfo.class.getName()).severe(e.getMessage());
+				org.apache.logging.log4j.LogManager.getLogger(VersionInfo.class.getName()).error(e.getMessage());
 			}
 		}
 		return _instance;

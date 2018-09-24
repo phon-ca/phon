@@ -106,7 +106,7 @@ public class AnalysisAction extends HookableAction {
 						new AnalysisRunner(get(), project, selectedSessions, showWizard);
 				PhonWorker.getInstance().invokeLater(analysisRunner);
 			} catch (ExecutionException | InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 

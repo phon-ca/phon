@@ -463,7 +463,7 @@ public class WizardSettingsPanel extends JPanel {
 			constructor = extClass.getConstructor(OpGraph.class);
 			retVal = constructor.newInstance(getGraph());
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			return getWizardExtension();
 		}
 		

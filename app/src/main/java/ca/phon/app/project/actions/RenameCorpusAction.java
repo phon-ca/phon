@@ -89,7 +89,7 @@ public class RenameCorpusAction extends ProjectWindowAction {
 				showMessage("Rename Corpus", 
 						"Failed to rename corpus " + corpusName + ". Reason: " + e.getMessage());
 				Toolkit.getDefaultToolkit().beep();
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 		}
 	}

@@ -38,6 +38,8 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaSegmentFormatter;
 
@@ -50,8 +52,7 @@ public class SegmentField extends JFormattedTextField {
 	 */
 	private static final long serialVersionUID = -5405525676580970609L;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(SegmentField.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SegmentField.class.getName());
 
 	public SegmentField() {
 		super();
@@ -92,8 +93,7 @@ public class SegmentField extends JFormattedTextField {
 				try {
 					errHighlighter.addHighlight(0, getText().length(), errPainter);
 				} catch (BadLocationException e) {
-					LOGGER
-							.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error(e.getLocalizedMessage(), e);
 				}
 			} else {
 				((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
@@ -134,7 +134,7 @@ public class SegmentField extends JFormattedTextField {
 				retVal = new MaskFormatter("###:##.###-###:##.###");
 				((MaskFormatter)retVal).setPlaceholderCharacter('0');
 			} catch (ParseException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			return retVal;
 		}

@@ -138,7 +138,7 @@ public class PluginManager extends URLClassLoader {
 							addFile(f.getAbsolutePath());
 							
 						} catch (MalformedURLException e) {
-							LOGGER.severe("Could not add archive to dynamic class loader: " + f.getAbsolutePath());
+							LOGGER.error("Could not add archive to dynamic class loader: " + f.getAbsolutePath());
 						}
 					}
 				}
@@ -221,7 +221,7 @@ public class PluginManager extends URLClassLoader {
 					
 					epIds.add(epId);
 				} catch (PluginException e) {
-					LOGGER.warning(e.getMessage());
+					LOGGER.warn(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -259,7 +259,7 @@ public class PluginManager extends URLClassLoader {
 						break;
 					}
 				} catch (PluginException e) {
-					LOGGER.warning(e.getMessage());
+					LOGGER.warn(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -330,7 +330,7 @@ public class PluginManager extends URLClassLoader {
 						retVal.add((IPluginExtensionPoint<T>)extPt);
 					}
 				} catch (PluginException e) {
-					LOGGER.warning(e.getMessage());
+					LOGGER.warn(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -380,21 +380,21 @@ public class PluginManager extends URLClassLoader {
 										retVal.add((IPluginExtensionPoint<T>)extPt);
 									}
 								} catch (InstantiationException e) {
-									LOGGER.log(Level.SEVERE,
+									LOGGER.error(
 											e.getLocalizedMessage(), e);
 								} catch (IllegalAccessException e) {
-									LOGGER.log(Level.SEVERE,
+									LOGGER.error(
 											e.getLocalizedMessage(), e);
 								}
 							}
 						} catch (ClassNotFoundException e) {
-							LOGGER.log(Level.SEVERE,
+							LOGGER.error(
 									e.getLocalizedMessage(), e);
 						}
 					}
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

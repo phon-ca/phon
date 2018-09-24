@@ -105,7 +105,7 @@ public class VLCHelper {
 				LOGGER.info("Using vlcj " + Info.getInstance().version());
 				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " at " + getLibraryPath(lib));
 			} catch (UnsatisfiedLinkError e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				if(showError)
 					ToastFactory.makeToast(e.getLocalizedMessage()).start();
 			}

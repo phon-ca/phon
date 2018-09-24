@@ -56,7 +56,7 @@ public class QueryName {
 		try {
 			this.name = urlDecoder.decode(this.name, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 		}
 		
 		final int lastDot = this.name.lastIndexOf('.');

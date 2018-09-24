@@ -77,7 +77,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 						(List<ProjectPath>)transferable.getTransferData(ProjectPathTransferable.projectPathListFlavor);
 				imported = importProjectPathList(support, projectPathList);
 			} catch (IOException | UnsupportedFlavorException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
 			imported = importFileList(support, transferable);
@@ -122,7 +122,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 				getWindow().refreshProject();
 				return true;
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return false;
 			}
 		} else if(projectPath.isSessionPath()) {
@@ -156,7 +156,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 					dstProjectPath.getProject().addCorpus(dstCorpus, 
 							projectPath.getProject().getCorpusDescription(projectPath.getCorpus()));
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 					return false;
 				}
 			}
@@ -166,7 +166,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 				window.refreshProject();
 				return true;
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return false;
 			}
 		}
@@ -184,7 +184,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			}
 			return retVal;
 		} catch (IOException | UnsupportedFlavorException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return false;
 	}

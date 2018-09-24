@@ -39,7 +39,7 @@ public class QueryAndReportWizardEP implements IPluginEntryPoint {
 					try {
 						retVal = new QueryScript(scriptFile.toURI().toURL());
 					} catch (MalformedURLException e) {
-						LogUtil.log(Level.SEVERE, e.getLocalizedMessage(),
+						LogUtil.severe(e.getLocalizedMessage(),
 								e);
 					}
 				}

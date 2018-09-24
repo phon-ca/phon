@@ -135,7 +135,7 @@ private final static String TXT = "New project...";
 				}
 			}
 		} catch (IOException ex) {
-			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			LOGGER.error( ex.getLocalizedMessage(), ex);
 			final MessageDialogProperties p2 = new MessageDialogProperties();
 			p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			p2.setHeader("Create Project Failed");

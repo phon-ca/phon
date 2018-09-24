@@ -176,7 +176,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 				scriptContext.callFunction(scope, "init", inputFields, outputFields);
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+			LOGGER.error( getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
 		}
 
 		// check inputs
@@ -275,7 +275,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 
@@ -298,7 +298,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 								URLDecoder.decode(url.getFile(), "UTF-8"));
 						return name.equals(scriptName);
 					} catch (UnsupportedEncodingException e1) {
-						LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+						LOGGER.error( e1.getLocalizedMessage(), e1);
 					}
 					return false;
 				} )
@@ -315,10 +315,10 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 					
 					this.script.putExtension(TableScriptName.class, new TableScriptName(scriptName));
 				} catch (IOException e) {
-					LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+					LOGGER.warn( e.getLocalizedMessage(), e);
 				}
 			} else {
-				LOGGER.warning("Unable to locate table script: " + scriptName);
+				LOGGER.warn("Unable to locate table script: " + scriptName);
 			}
 		}
 		QueryScript.setupScriptRequirements(getScript());
@@ -335,7 +335,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

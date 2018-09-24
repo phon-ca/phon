@@ -76,7 +76,7 @@ public class NewCorpusAction extends ProjectWindowAction {
 			getWindow().refreshProject();
 		} catch (IOException e) {
 			showMessage("New Corpus", e.getLocalizedMessage());
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	

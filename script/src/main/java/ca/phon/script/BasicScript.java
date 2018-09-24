@@ -196,7 +196,7 @@ public class BasicScript implements PhonScript, Cloneable {
 			
 			ScriptParameters.copyParams(myParams, clonedParams);
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	
 		retVal.pkgImports.clear();

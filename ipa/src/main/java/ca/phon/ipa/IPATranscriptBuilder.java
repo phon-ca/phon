@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.extensions.UnvalidatedValue;
 
 /**
@@ -33,8 +35,7 @@ import ca.phon.extensions.UnvalidatedValue;
  */
 public class IPATranscriptBuilder {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(IPATranscriptBuilder.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPATranscriptBuilder.class.getName());
 	
 	private final IPAElementFactory factory = new IPAElementFactory();
 
@@ -151,7 +152,7 @@ public class IPATranscriptBuilder {
 			final IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
 			append(transcript);
 		} catch (ParseException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 			
 			// keep as an unvalidated value
 			final IPATranscript transcript = toIPATranscript();

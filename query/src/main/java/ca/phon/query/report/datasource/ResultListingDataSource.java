@@ -110,7 +110,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		try {
 			session = project.openSession(s.getCorpus(), s.getSession());
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		setupColumns();
 	}
@@ -186,7 +186,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 									paramVal = savedParam.getContent();
 								}
 							} catch (Exception e) {
-								LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+								LOGGER.warn( e.getLocalizedMessage(), e);
 							}
 						} else {
 							paramVal = param.getDefaultValue(paramId);
@@ -199,7 +199,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 					setColumnMappings(colIdx, bindings);
 				colIdx++;
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

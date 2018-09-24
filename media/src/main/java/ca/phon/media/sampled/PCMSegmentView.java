@@ -548,7 +548,7 @@ public class PCMSegmentView extends JComponent {
 				audioClip.start();
 			
 		} catch (IOException | LineUnavailableException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} finally {
 			try {
 				ais.close();
@@ -651,7 +651,7 @@ public class PCMSegmentView extends JComponent {
 					try {
 						saveToFile(new File(filename), startTime, length);
 					} catch (IOException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 			}

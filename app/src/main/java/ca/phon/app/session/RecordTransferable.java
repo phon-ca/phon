@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
@@ -44,8 +46,7 @@ import ca.phon.session.TierString;
  */
 public class RecordTransferable implements Transferable {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(RecordTransferable.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordTransferable.class.getName());
 	
 	public final static DataFlavor FLAVOR = new DataFlavor(RecordTransferable.class, "RecordTransferable");
 	
@@ -136,9 +137,9 @@ public class RecordTransferable implements Transferable {
 			writer.flush();
 			writer.close();
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return new String(bout.toByteArray(), Charset.forName("UTF-8"));
 	}

@@ -100,7 +100,7 @@ public class SessionCheckAction extends SessionEditorAction {
 			out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
 			out.flush();
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 		}
 		
 		final String[] row = new String[cols.length];
@@ -119,7 +119,7 @@ public class SessionCheckAction extends SessionEditorAction {
 			try {
 				csvWriter.flush();
 			} catch (Exception e1) {
-				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		});
 		
@@ -143,13 +143,13 @@ public class SessionCheckAction extends SessionEditorAction {
 					out.flush();
 					
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				} finally {
 					try {
 						csvWriter.close(); 
 						out.close();
 					} catch (IOException e) {
-						LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+						LOGGER.warn( e.getLocalizedMessage(), e);
 					}
 				}
 				SwingUtilities.invokeLater( () -> {

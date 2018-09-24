@@ -24,14 +24,15 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+
 import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.query.report.datasource.ResultListingDataSource;
 import ca.phon.query.report.io.ResultListingFormatType;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(CSVResultListingDataSourceWriter.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(CSVResultListingDataSourceWriter.class.getName());
 	
 	public CSVResultListingDataSourceWriter(CSVReportBuilder builder, ResultListingDataSource ds) {
 		super(builder, ds);

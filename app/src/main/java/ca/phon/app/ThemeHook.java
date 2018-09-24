@@ -78,13 +78,13 @@ public class ThemeHook implements PhonStartupHook,
 							UIManager.setLookAndFeel(uiClassName);
 						}
 					} catch (UnsupportedLookAndFeelException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					} catch (ClassNotFoundException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					} catch (InstantiationException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					} catch (IllegalAccessException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 
 					for (String key : uiMap.keySet()) {
@@ -93,9 +93,9 @@ public class ThemeHook implements PhonStartupHook,
 				}
 			});
 		} catch (InterruptedException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 	}

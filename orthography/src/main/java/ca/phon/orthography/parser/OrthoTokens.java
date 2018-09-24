@@ -67,7 +67,7 @@ public class OrthoTokens {
 			in.close();
 			
 		} catch (IOException e) {
-			LOGGER.warning(e.toString());
+			LOGGER.warn(e.toString());
 		}
 	}
 	

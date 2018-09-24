@@ -838,7 +838,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -875,7 +875,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -987,7 +987,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							new DefaultMutableTreeNode(documentURL, true);
 					parentNode.add(treeNode);
 				} catch (UnsupportedEncodingException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 			root.add(stockNode);
@@ -1031,7 +1031,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							new DefaultMutableTreeNode(documentURL, true);
 					parentNode.add(treeNode);
 				} catch (UnsupportedEncodingException | URISyntaxException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 
 			}
@@ -1076,7 +1076,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 								new DefaultMutableTreeNode(documentURL, true);
 						parentNode.add(treeNode);
 					} catch (UnsupportedEncodingException | URISyntaxException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 
@@ -1187,10 +1187,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						}
 					} catch (IOException e) {
 						fireDocumentError(documentURL, e);
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					} catch (URISyntaxException | InstantiationException e) {
 						fireDocumentError(documentURL, new IOException(e));
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				} else if(document instanceof OpGraph) {
 					try {
@@ -1199,7 +1199,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						super.publish(node);
 					} catch (InstantiationException e) {
 						fireDocumentError(document, new IOException(e));
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				} else if(document instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)document;
@@ -1312,7 +1312,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					addDocuments(fileList, dropLocation.getRow());
 					retVal = true;
 				} catch (IOException | UnsupportedFlavorException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			} else if(support.isDataFlavorSupported(nodeTreeDataFlavor)) {
 				addSelectedDocuments(documentTree, dropLocation.getRow());
@@ -1341,7 +1341,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	                retVal = true;
 	            } catch (IOException | UnsupportedFlavorException e) {
-	            	LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	            	LOGGER.error( e.getLocalizedMessage(), e);
 	            }
 			}
 			if(!retVal) {
@@ -1484,7 +1484,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						final String analysisName = FilenameUtils.getBaseName(analysisFile);
 						retVal.setText(analysisName);
 					} catch (UnsupportedEncodingException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				} else if(node.getUserObject() instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)node.getUserObject();

@@ -116,7 +116,7 @@ public class ExitEP implements IPluginEntryPoint
 							throw new IOException("Could not save data for window " + editor.getTitle());
 						}
 					} catch (IOException e) {
-						LOGGER.log(Level.SEVERE, e.getMessage(), e);
+						LOGGER.error( e.getMessage(), e);
 						// critical - don't exit without saving!!
 						throw new RuntimeException("Exit canceled, save data failed.");
 					}
@@ -133,7 +133,7 @@ public class ExitEP implements IPluginEntryPoint
 			try {
 				hook.shutdown();
 			} catch (PluginException pe) {
-				LOGGER.log(Level.SEVERE, pe.getMessage(), pe);
+				LOGGER.error( pe.getMessage(), pe);
 			}
 		}
 		

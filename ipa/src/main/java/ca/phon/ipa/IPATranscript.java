@@ -594,7 +594,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = sp.matches(stTypes);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}
@@ -616,7 +616,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = sp.findWithin(stTypes);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}
@@ -644,7 +644,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 				retVal.add(subT);
 			}
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -666,7 +666,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = cvPattern.matches(cvTypes);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -682,7 +682,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = cvPattern.findWithin(cvTypes);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -704,7 +704,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 				retVal.add(subT);
 			}
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;

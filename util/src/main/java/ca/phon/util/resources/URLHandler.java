@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 /**
  * Load resources from URLs.
  * 
@@ -33,8 +35,7 @@ import java.util.logging.Logger;
 public abstract class URLHandler<T> implements ResourceHandler<T> {
 	
 	/* static logger for class */
-	private static final Logger LOGGER = Logger
-			.getLogger(URLHandler.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(URLHandler.class.getName());
 	
 	/**
 	 * URLs to load
@@ -125,7 +126,7 @@ public abstract class URLHandler<T> implements ResourceHandler<T> {
 					retVal = loadFromURL(url);
 				} catch (IOException e) {
 					e.printStackTrace();
-					LOGGER.severe(e.getMessage());
+					LOGGER.error(e.getMessage());
 				}
 			}
 			return retVal;

@@ -164,7 +164,7 @@ public class VLCMediaExporter extends PhonTask {
 			doExport();
 			setStatus(TaskStatus.FINISHED);
 		} catch (PhonMediaException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			super.err = e;
 			setStatus(TaskStatus.ERROR);
 		}

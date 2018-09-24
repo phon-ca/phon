@@ -110,7 +110,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 			headerData.setDate(cal);
 		} catch (DatatypeConfigurationException e) {
-			LOGGER.log(Level.WARNING, e.getMessage(), e);
+			LOGGER.warn( e.getMessage(), e);
 		}
 		final String lang = session.getLanguage();
 		if(lang != null && lang.length() > 0) {
@@ -196,7 +196,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				transcript.getUOrComment().add(rt);
 			} catch (Exception e) {
 				// catch all record-specific errors and recover
-				LOGGER.log(Level.SEVERE, "Record #" + (i+1) + " " + e.getLocalizedMessage(), e);
+				LOGGER.error( "Record #" + (i+1) + " " + e.getLocalizedMessage(), e);
 				SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
 				if(warnings == null) {
 					warnings = new SerializationWarnings();
@@ -231,7 +231,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 				retVal.setBirthday(cal);
 			} catch (DatatypeConfigurationException e) {
-				LOGGER.log(Level.WARNING, e.toString(), e);
+				LOGGER.warn( e.toString(), e);
 			}
 		}
 
@@ -242,7 +242,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 				final Duration ageDuration = df.newDuration(true, age.getYears(), age.getMonths(), age.getDays(), 0, 0, 0);
 				retVal.setAge(ageDuration);
 			} catch (DatatypeConfigurationException e) {
-				LOGGER.log(Level.WARNING, e.toString(), e);
+				LOGGER.warn( e.toString(), e);
 			}
 		}
 
@@ -606,7 +606,7 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 
 			marshaller.marshal(ele, out);
 		} catch(JAXBException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 	}
 

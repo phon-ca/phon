@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.ipadictionary.exceptions.CapabilityNotImplemented;
@@ -56,8 +58,7 @@ import ca.phon.util.LanguageEntry;
  */
 public final class IPADictionary implements IExtendable {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(IPADictionary.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPADictionary.class.getName());
 
 	/** 
 	 * Implementing dictionary
@@ -94,7 +95,7 @@ public final class IPADictionary implements IExtendable {
 		try {
 			retVal = impl.lookup(orthography);
 		} catch (IPADictionaryExecption e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		// generate suggestions and add them to the end 

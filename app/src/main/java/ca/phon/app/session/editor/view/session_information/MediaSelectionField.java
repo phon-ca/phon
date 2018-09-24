@@ -105,7 +105,7 @@ public class MediaSelectionField extends FileSelectionField {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

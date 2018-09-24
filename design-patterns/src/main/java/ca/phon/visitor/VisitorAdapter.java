@@ -51,11 +51,11 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 			try {
 				visitMethod.invoke(this, obj);
 			} catch (IllegalArgumentException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (IllegalAccessException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (InvocationTargetException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else {
 			fallbackVisit(obj);

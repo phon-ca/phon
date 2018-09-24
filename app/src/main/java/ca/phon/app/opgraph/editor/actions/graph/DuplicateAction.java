@@ -114,11 +114,11 @@ public class DuplicateAction extends OpgraphEditorAction {
 								final OpLink newLink = new OpLink(srcNode, srcField, dstNode, dstField);
 								cmpEdit.addEdit(new AddLinkEdit(graph, newLink));
 							} catch(VertexNotFoundException exc) {
-								LOGGER.severe(exc.getMessage());
+								LOGGER.error(exc.getMessage());
 							} catch(CycleDetectedException exc) {
-								LOGGER.severe(exc.getMessage());
+								LOGGER.error(exc.getMessage());
 							} catch(ItemMissingException exc) {
-								LOGGER.severe(exc.getMessage());
+								LOGGER.error(exc.getMessage());
 							}
 						}
 					}

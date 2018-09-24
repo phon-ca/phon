@@ -238,7 +238,7 @@ public class SaveQueryForm extends JPanel {
 				nameEntryInQueryHistory();
 			} catch (IOException ex) {
 				Toolkit.getDefaultToolkit().beep();
-				LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+				LogUtil.severe(ex.getLocalizedMessage(), ex);
 				
 				final MessageDialogProperties props = new MessageDialogProperties();
 				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
@@ -264,7 +264,7 @@ public class SaveQueryForm extends JPanel {
 				queryScript.putExtension(QueryName.class, queryName);
 			} catch (IOException ex) {
 				Toolkit.getDefaultToolkit().beep();
-				LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+				LogUtil.severe(ex.getLocalizedMessage(), ex);
 				
 				final MessageDialogProperties props = new MessageDialogProperties();
 				props.setParentWindow(CommonModuleFrame.getCurrentFrame());

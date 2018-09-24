@@ -84,7 +84,7 @@ public class FeatureSet implements Iterable<Feature> {
 					if(fObj != null) {
 						fs.add(feature);
 					} else {
-						Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + feature);
+						org.apache.logging.log4j.LogManager.getLogger(FeatureSet.class.getName()).warn("Unknown feature: " + feature);
 					}
 				}
 				
@@ -92,7 +92,7 @@ public class FeatureSet implements Iterable<Feature> {
 				if(FeatureMatrix.getInstance().getFeature(f.toLowerCase()) != null) {
 					fs.add(f);
 				} else {
-					Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + f);
+					org.apache.logging.log4j.LogManager.getLogger(FeatureSet.class.getName()).warn("Unknown feature: " + f);
 				}
 			}
 		}

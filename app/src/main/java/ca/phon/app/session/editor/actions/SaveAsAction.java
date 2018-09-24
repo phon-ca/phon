@@ -98,7 +98,7 @@ public class SaveAsAction extends SessionEditorAction {
 		try {
 			writer.writeSession(getEditor().getSession(), new FileOutputStream(filename));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			getEditor().showErrorMessage("Save session failed: " + e.getLocalizedMessage());
 		}
 	}

@@ -90,7 +90,7 @@ public class VersionInfo {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 			}
 		}
 		return _instance;

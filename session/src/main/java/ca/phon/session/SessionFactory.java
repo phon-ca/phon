@@ -29,6 +29,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
@@ -41,8 +43,7 @@ import ca.phon.session.io.SessionWriter;
  */
 public abstract class SessionFactory {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(SessionFactory.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionFactory.class.getName());
 	
 	/**
 	 * Create a new session factory.
@@ -315,7 +316,7 @@ public abstract class SessionFactory {
 			retVal.setUuid(UUID.randomUUID());
 			return retVal;
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		return null;

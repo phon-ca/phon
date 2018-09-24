@@ -165,7 +165,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 					try {
 						OpenFileLauncher.openURL(corpusFolder.toURI().toURL());
 					} catch (MalformedURLException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 			}

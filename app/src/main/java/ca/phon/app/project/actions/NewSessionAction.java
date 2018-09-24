@@ -90,7 +90,7 @@ public class NewSessionAction extends ProjectWindowAction {
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			showMessage("New Session", e.getLocalizedMessage());
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	

@@ -34,7 +34,7 @@ public class OpenFileLauncher {
 				        url.toString()
 				     });
 			} catch (IOException e) {
-				LOGGER.warning(e.getMessage());
+				LOGGER.warn(e.getMessage());
 				return false;
 			}
 		} else if(OSInfo.isWindows()) {
@@ -43,7 +43,7 @@ public class OpenFileLauncher {
 						"rundll32 url.dll,FileProtocolHandler " +
 						url.toString());
 			} catch (IOException e) {
-				LOGGER.warning(e.getMessage());
+				LOGGER.warn(e.getMessage());
 				return false;
 			}
 		} else if(OSInfo.isNix()) {
@@ -52,11 +52,11 @@ public class OpenFileLauncher {
 						"xdg-open", url.toString() } );
 				
 			} catch(IOException e) {
-				LOGGER.warning(e.getMessage());
+				LOGGER.warn(e.getMessage());
 				return false;
 			}
 		} else {
-			LOGGER.severe("Unsupported OS");
+			LOGGER.error("Unsupported OS");
 			return false;
 		}
 		return true;

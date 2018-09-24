@@ -21,6 +21,8 @@ package ca.phon.app.session.editor.view.common;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 /**
  * Enumeration of available tier data layout types.
  *
@@ -29,8 +31,7 @@ public enum TierDataLayoutType {
 	ALIGN_GROUPS(AlignGroupsLayoutProvider.class),
 	WRAP_GROUPS(WrapGroupsLayoutProvider.class);
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(TierDataLayoutType.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TierDataLayoutType.class.getName());
 	
 	private Class<? extends TierDataLayoutProvider> providerClass;
 	
@@ -43,9 +44,9 @@ public enum TierDataLayoutType {
 		try {
 			retVal = providerClass.newInstance();
 		} catch (InstantiationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IllegalAccessException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}

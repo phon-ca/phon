@@ -123,7 +123,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 						new OpLink(parentProjectNode, "obj", reportNode, "project");
 				parentGraph.add(projectLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		}
 
@@ -133,7 +133,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 						new OpLink(parentQueryIDNode, "obj", reportNode, "queryId");
 				parentGraph.add(queryIdLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		}
 		
@@ -143,7 +143,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 						new OpLink(parentSelectedResultsNode, "obj", reportNode, "selectedResults");
 				parentGraph.add(resultsLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
-				LOGGER.log(Level.WARNING, e1.getLocalizedMessage(), e1);
+				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		}
 

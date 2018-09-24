@@ -500,9 +500,9 @@ public class FolderProjectList extends JPanel {
 //			LoadModule lm = new LoadModule(mi, initInfo);
 //			lm.start();
 		} catch (IOException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 		} catch (ProjectConfigurationException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 	

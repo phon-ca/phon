@@ -58,20 +58,20 @@ public class CutEP implements IPluginEntryPoint {
 			try {
 				cutMethod = keyboardComp.getClass().getMethod("cut", new Class[0]);
 			} catch (SecurityException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				LOGGER.error( ex.getMessage(), ex);
 			} catch (NoSuchMethodException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+				LOGGER.error( ex.getMessage(), ex);
 			}
 			
 			if(cutMethod != null) {
 				try {
 					cutMethod.invoke(keyboardComp, new Object[0]);
 				} catch (IllegalArgumentException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				} catch (IllegalAccessException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				} catch (InvocationTargetException ex) {
-					LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+					LOGGER.error( ex.getMessage(), ex);
 				}
 			}
 		}

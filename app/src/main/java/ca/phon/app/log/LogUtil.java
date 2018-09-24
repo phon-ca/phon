@@ -1,6 +1,7 @@
 package ca.phon.app.log;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * Utility functions for logging.
@@ -8,7 +9,7 @@ import java.util.logging.Level;
  */
 public final class LogUtil {
 	
-	/* Info */
+	/* Info/trace */
 	public static void info(String message) {
 		log(Level.INFO, message);
 	}
@@ -26,12 +27,12 @@ public final class LogUtil {
 	}
 	
 	public static void info(Class<?> clazz, String message, Throwable e) {
-		log(clazz, Level.INFO, message, e);
+		log(clazz, Level.TRACE, message, e);
 	}
 
 	/* Warning */
 	public static void warning(String message) {
-		log(Level.WARNING, message);
+		log(Level.WARN, message);
 	}
 	
 	public static void warning(Throwable e) {
@@ -47,12 +48,12 @@ public final class LogUtil {
 	}
 	
 	public static void warning(Class<?> clazz, String message, Throwable e) {
-		log(clazz, Level.WARNING, message, e);
+		log(clazz, Level.WARN, message, e);
 	}
 	
 	/* Severe */
 	public static void severe(String message) {
-		log(Level.SEVERE, message);
+		log(Level.ERROR, message);
 	}
 	
 	public static void severe(Throwable e) {
@@ -68,7 +69,7 @@ public final class LogUtil {
 	}
 	
 	public static void severe(Class<?> clazz, String message, Throwable e) {
-		log(clazz, Level.SEVERE, message, e);
+		log(clazz, Level.ERROR, message, e);
 	}
 	
 	/* General */
@@ -77,8 +78,7 @@ public final class LogUtil {
 	}
 	
 	public static void log(Class<?> clazz, Level level, String message, Throwable e) {
-		final java.util.logging.Logger logger =
-				(clazz == null ? java.util.logging.Logger.getLogger("ca.phon") : java.util.logging.Logger.getLogger(clazz.getName()));
+		org.apache.logging.log4j.Logger logger = LogManager.getLogger((clazz == null ? "ca.phon" : clazz.getName()));
 		logger.log(level, message, e);
 	}
 	
@@ -87,8 +87,7 @@ public final class LogUtil {
 	}
 	
 	public static void log(Class<?> clazz, Level level, String message) {
-		final java.util.logging.Logger logger =
-				(clazz == null ? java.util.logging.Logger.getLogger("ca.phon") : java.util.logging.Logger.getLogger(clazz.getName()));
+		org.apache.logging.log4j.Logger logger = LogManager.getLogger((clazz == null ? "ca.phon" : clazz.getName()));
 		logger.log(level, message);
 	}
 }

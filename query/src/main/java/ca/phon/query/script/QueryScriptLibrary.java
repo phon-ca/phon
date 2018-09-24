@@ -32,6 +32,8 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -53,8 +55,7 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class QueryScriptLibrary implements IExtendable {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(QueryScriptLibrary.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(QueryScriptLibrary.class.getName());
 
 	/**
 	 * User script folder
@@ -209,7 +210,7 @@ public class QueryScriptLibrary implements IExtendable {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			s.setParameters(paramMap);
 			q.setScript(s);

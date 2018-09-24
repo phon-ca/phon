@@ -258,7 +258,7 @@ public class QueryHistoryPanel extends JPanel {
 					retVal = stockSet.getName();
 				}
 			} catch (PhonScriptException e) {
-				LogUtil.log(Level.WARNING, e.getLocalizedMessage(), e);
+				LogUtil.warning(e.getLocalizedMessage(), e);
 			}
 		}
 		return retVal;

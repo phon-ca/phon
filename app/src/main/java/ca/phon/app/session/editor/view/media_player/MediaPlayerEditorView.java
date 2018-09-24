@@ -43,6 +43,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorAction;
@@ -83,8 +85,7 @@ import ca.phon.util.icons.IconSize;
  */
 public class MediaPlayerEditorView extends EditorView {
 
-	private final static Logger LOGGER = Logger
-			.getLogger(MediaPlayerEditorView.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MediaPlayerEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Media Player";
 
@@ -323,7 +324,7 @@ public class MediaPlayerEditorView extends EditorView {
 						timeSelectionPopup = null;
 					}
 				} catch (ParseException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 

@@ -172,7 +172,7 @@ public class ExtractProjectArchiveTask extends PhonTask {
 							backupFile.getParentFile().getAbsolutePath());
 			}
 		} catch (IOException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 			super.err = e;
 			super.setStatus(TaskStatus.ERROR);
 			return;
@@ -213,7 +213,7 @@ public class ExtractProjectArchiveTask extends PhonTask {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.warning(e.getMessage());
+			LOGGER.warn(e.getMessage());
 		}
 		
 		return new Tuple<ZippedProjectType, String>(projType, projRoot);
@@ -278,7 +278,7 @@ public class ExtractProjectArchiveTask extends PhonTask {
 					byte data[] = new byte[ZIP_BUFFER];
 	
 					if(outFile.exists()) {
-						LOGGER.warning("Overwriting file '" + outFile.getAbsolutePath() + "'");
+						LOGGER.warn("Overwriting file '" + outFile.getAbsolutePath() + "'");
 					}
 	
 					File parentFile = outFile.getParentFile();
@@ -297,7 +297,7 @@ public class ExtractProjectArchiveTask extends PhonTask {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			throw e;
 		}
 		

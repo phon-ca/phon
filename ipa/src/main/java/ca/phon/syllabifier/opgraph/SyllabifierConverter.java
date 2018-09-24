@@ -89,7 +89,7 @@ public class SyllabifierConverter {
 					sonorityNode, sonorityNode.getInputFieldWithKey("ipa"));
 			graph.add(link);
 		} catch (ItemMissingException | CycleDetectedException | VertexNotFoundException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		// convert stages
@@ -121,7 +121,7 @@ public class SyllabifierConverter {
 								phonexNode, phonexNode.getInputFieldWithKey("ipa"));
 						stageGraph.add(link);
 					} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 				
@@ -139,7 +139,7 @@ public class SyllabifierConverter {
 				lastNode = stageNode;
 				lastOutput = stageNode.getOutputFieldWithKey("ipa");
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

@@ -69,7 +69,7 @@ public class HidablePanel extends MultiActionButton {
 			getPanelPrefs().clear();
 			return true;
 		} catch (BackingStoreException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 		return false;
 	}

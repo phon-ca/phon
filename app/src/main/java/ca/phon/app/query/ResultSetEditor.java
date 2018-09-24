@@ -180,7 +180,7 @@ public class ResultSetEditor extends ProjectFrame {
 			this.session = project.openSession(rs.getCorpus(), rs.getSession());
 			putExtension(Session.class, this.session);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		// setup title
@@ -348,7 +348,7 @@ public class ResultSetEditor extends ProjectFrame {
 			try {
 				writer.writeTableToFile(resultTable, new File(saveAs));
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				
 				final Toast toast = ToastFactory.makeToast("Unable to save table: " + e.getLocalizedMessage());
 				toast.start(saveTableButton);
@@ -432,7 +432,7 @@ public class ResultSetEditor extends ProjectFrame {
 					manager.saveResultListing(getProject(), query, resultSet, listing);
 				} catch (IOException e) {
 					// not critical, but should report the 'why'
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		});

@@ -225,7 +225,7 @@ public class SessionMerger extends PhonTask {
 		} catch (IOException e) {
 			super.err = e;
 			setStatus(TaskStatus.ERROR);
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

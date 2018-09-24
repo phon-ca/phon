@@ -554,13 +554,13 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 															colType.getConstructor( String.class );
 													table1Val = numberCtr.newInstance( "0" );
 												} catch (NoSuchMethodException | InvocationTargetException e) {
-													LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+													LOGGER.warn( e.getLocalizedMessage(), e);
 												}
 											} else {
 												table1Val = colType.newInstance();
 											}
 										} catch (InstantiationException | IllegalAccessException e) {
-											LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+											LOGGER.warn( e.getLocalizedMessage(), e);
 										}
 									}
 								}
@@ -583,13 +583,13 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 															colType.getConstructor( String.class );
 													table2Val = numberCtr.newInstance( "0" );
 												} catch (NoSuchMethodException | InvocationTargetException e) {
-													LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+													LOGGER.warn( e.getLocalizedMessage(), e);
 												}
 											} else {
 												table2Val = colType.newInstance();
 											}
 										} catch (InstantiationException | IllegalAccessException e) {
-											LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+											LOGGER.warn( e.getLocalizedMessage(), e);
 										}
 									}
 								}

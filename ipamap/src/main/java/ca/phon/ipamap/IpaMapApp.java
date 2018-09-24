@@ -164,12 +164,12 @@ public class IpaMapApp {
 			try {
 				systemTray.add(trayIcon);
 			} catch (AWTException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				app.quit();
 			}
 			
 		} else {
-			LOGGER.severe("System tray not supported.");
+			LOGGER.error("System tray not supported.");
 			System.exit(1);
 		}
 		

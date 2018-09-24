@@ -121,7 +121,7 @@ public abstract class PhonTask implements Runnable {
 		try {
 			performTask();
 		} catch(Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 			err = e;
 			setStatus(TaskStatus.ERROR);
 		}

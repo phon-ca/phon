@@ -467,7 +467,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 			try {
 				params = ctx.getScriptParameters(ctx.getEvaluatedScope());
 			} catch (PhonScriptException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			// setup script parameters
 			for(ScriptParam param:params) {
@@ -503,7 +503,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 							}
 							param.setValue(paramId, paramVal);
 						} catch (Exception e) {
-							LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+							LOGGER.warn( e.getLocalizedMessage(), e);
 						}
 					}
 				}

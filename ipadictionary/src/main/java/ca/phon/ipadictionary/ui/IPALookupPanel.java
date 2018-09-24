@@ -44,6 +44,7 @@ import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 
 import ca.phon.ipadictionary.cmd.IPADictLexer;
 import ca.phon.ipadictionary.cmd.IPADictParser;
@@ -61,8 +62,7 @@ public class IPALookupPanel extends JPanel {
 
 	private static final long serialVersionUID = 2278689330995573469L;
 
-	private final static Logger LOGGER = Logger
-			.getLogger(IPALookupPanel.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPALookupPanel.class.getName());
 
 	/** The output console */
 	private JTextPane console;
@@ -110,19 +110,19 @@ public class IPALookupPanel extends JPanel {
 				walker.expr();
 				
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);
 				return;
 			} catch (RecognitionException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);
 				return;
 			} catch (IPADictionaryExecption e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);

@@ -131,7 +131,7 @@ public class SessionInputFactory {
 						break;
 					}
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		}

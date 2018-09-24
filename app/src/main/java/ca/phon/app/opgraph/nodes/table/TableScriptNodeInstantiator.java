@@ -63,7 +63,7 @@ public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		TableScriptNode retVal = new TableScriptNode(script);

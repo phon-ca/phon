@@ -204,7 +204,7 @@ public class MergeSessionStep2 extends WizardStep {
 					RecordFilterPanel panel = new RecordFilterPanel(project, t);
 					panels.put(loc, panel);
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		}

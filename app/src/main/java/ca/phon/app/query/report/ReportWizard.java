@@ -220,7 +220,7 @@ public class ReportWizard extends WizardFrame {
 			try {
 				retVal = ReportIO.readDesign(lastDesignFile);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -232,7 +232,7 @@ public class ReportWizard extends WizardFrame {
 		try {
 			ReportIO.writeDesign(reportEditor.getReportDesign(), designFile);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -251,7 +251,7 @@ public class ReportWizard extends WizardFrame {
 			try {
 				generateReport();
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -320,7 +320,7 @@ public class ReportWizard extends WizardFrame {
 							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
 							out.flush();
 						} catch (IOException e) {
-							LOGGER.log(Level.SEVERE,
+							LOGGER.error(
 									e.getLocalizedMessage(), e);
 						}
 						console.setFirstRowIsHeader(false);
@@ -366,7 +366,7 @@ public class ReportWizard extends WizardFrame {
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (ReportBuilderException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Report Build Failed", "Error: " + e.getMessage());
 				super.setStatus(TaskStatus.ERROR);
 				super.err = e;

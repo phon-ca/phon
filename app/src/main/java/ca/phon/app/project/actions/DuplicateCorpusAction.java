@@ -79,7 +79,7 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				}
 
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				Toolkit.getDefaultToolkit().beep();
 				showMessage("Duplicate Corpus", e.getLocalizedMessage());
 			}

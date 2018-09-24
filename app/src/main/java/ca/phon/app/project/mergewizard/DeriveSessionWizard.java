@@ -178,24 +178,24 @@ public class DeriveSessionWizard extends WizardFrame {
 	 */
 	private void doMerge() throws IOException {
 		final PrintWriter out = new PrintWriter(new OutputStreamWriter(console.getLogBuffer().getStdOutStream(), "UTF-8"));
-		Logger.getLogger("ca.phon").addHandler( new Handler() {
-
-			@Override
-			public void publish(LogRecord record) {
-				out.println(record.getMessage());
-				out.flush();
-			}
-
-			@Override
-			public void flush() {
-			}
-
-			@Override
-			public void close() throws SecurityException {
-
-			}
-
-		});
+//		org.apache.logging.log4j.LogManager.getLogger("ca.phon").addHandler( new Handler() {
+//
+//			@Override
+//			public void publish(LogRecord record) {
+//				out.println(record.getMessage());
+//				out.flush();
+//			}
+//
+//			@Override
+//			public void flush() {
+//			}
+//
+//			@Override
+//			public void close() throws SecurityException {
+//
+//			}
+//
+//		});
 
 		String corpus = step1.getMergedCorpusName();
 		String session = step1.getMergedSessionName();
@@ -211,7 +211,7 @@ public class DeriveSessionWizard extends WizardFrame {
 			try {
 				project.addCorpus(corpus, "");
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return;
 			}
 
@@ -219,7 +219,7 @@ public class DeriveSessionWizard extends WizardFrame {
 
 		// check session name
 		if(project.getCorpusSessions(corpus).contains(session)) {
-			LOGGER.severe("A session with name '" + corpus + "." + session + "' already exists.");
+			LOGGER.error("A session with name '" + corpus + "." + session + "' already exists.");
 			return;
 		}
 
@@ -257,7 +257,7 @@ public class DeriveSessionWizard extends WizardFrame {
 						mergedDate = tDate;
 					} else {
 						if(!mergedDate.equals(tDate)) {
-							LOGGER.warning("Session dates do not match, setting merged session date to today.");
+							LOGGER.warn("Session dates do not match, setting merged session date to today.");
 							mergedDate = pdf.format(LocalDate.now());
 							checkDate = false;
 						}
@@ -269,7 +269,7 @@ public class DeriveSessionWizard extends WizardFrame {
 						mergedMedia = t.getMediaLocation();
 					} else {
 						if(!mergedMedia.equals(t.getMediaLocation())) {
-							LOGGER.warning("Session media locations do not match, leaving media field blank.");
+							LOGGER.warn("Session media locations do not match, leaving media field blank.");
 							mergedMedia = "";
 							checkMedia = false;
 						}
@@ -300,7 +300,7 @@ public class DeriveSessionWizard extends WizardFrame {
 
 			LOGGER.info("Finished. New session has " + mergedSession.getRecordCount() + " records.");
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			throw e;
 		} finally {
 			out.close();

@@ -20,6 +20,8 @@ package ca.phon.app;
 
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.media.VLCHelper;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -30,8 +32,7 @@ import ca.phon.plugin.PluginException;
 @PhonPlugin
 public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(VLCInitHook.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(VLCInitHook.class.getName());
 
 	@Override
 	public void startup() throws PluginException {

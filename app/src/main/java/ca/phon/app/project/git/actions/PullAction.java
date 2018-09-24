@@ -129,7 +129,7 @@ public class PullAction extends ProjectWindowAction {
 		} catch (IOException | GitAPIException e) {
 			printer.println(e.getLocalizedMessage());
 			printer.flush();
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

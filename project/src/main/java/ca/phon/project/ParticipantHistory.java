@@ -58,7 +58,7 @@ public class ParticipantHistory {
 //					history.setNumberOfRecordsForSession(sessionPath, count);
 //				}
 //			} catch (IOException e) {
-//				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+//				LOGGER.warn( e.getLocalizedMessage(), e);
 //			}
 //		}
 //		

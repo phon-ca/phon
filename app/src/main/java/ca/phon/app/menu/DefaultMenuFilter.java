@@ -27,6 +27,8 @@ import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.menu.analysis.AnalysisMenuListener;
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
@@ -57,8 +59,7 @@ import ca.phon.util.PrefHelper;
  */
 public class DefaultMenuFilter implements IPluginMenuFilter {
 
-	private final static Logger LOGGER = Logger
-			.getLogger(DefaultMenuFilter.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DefaultMenuFilter.class.getName());
 
 	@Override
 	public void filterWindowMenu(Window owner, JMenuBar menu) {

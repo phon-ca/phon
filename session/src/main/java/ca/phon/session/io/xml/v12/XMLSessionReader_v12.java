@@ -48,6 +48,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -106,8 +107,7 @@ import ca.phon.xml.annotation.XMLSerial;
 )
 public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session> {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(XMLSessionReader_v12.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLSessionReader_v12.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -229,7 +229,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						record = new LazyRecord(factory, retVal, rt);
 					} catch (Exception e) {
 						LOGGER.info(rt.getId());
-						LOGGER.log(Level.SEVERE,
+						LOGGER.error(
 								e.getLocalizedMessage(), e);
 
 					}
@@ -441,7 +441,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						}
 						at.put(name, blindTranscript);
 					} catch (ParseException e) {
-						LOGGER.log(Level.FINE,
+						LOGGER.trace(
 								e.getLocalizedMessage(), e);
 					}
 				}
@@ -619,7 +619,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						}
 						retVal.addGroup(transcript);
 					} catch (ParseException pe) {
-						LOGGER.log(Level.FINE, pe.getLocalizedMessage(), pe);
+						LOGGER.trace( pe.getLocalizedMessage(), pe);
 
 						final IPATranscript ipa = new IPATranscript();
 						ipa.putExtension(UnvalidatedValue.class, new UnvalidatedValue(groupBuffer.toString(), pe));

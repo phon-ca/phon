@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
@@ -34,8 +35,7 @@ import ca.phon.util.PrefHelper;
 
 public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(IPADictionaryInitHook.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPADictionaryInitHook.class.getName());
 	
 	private static final String DERBY_LOG_PROP = "derby.stream.error.file";
 	

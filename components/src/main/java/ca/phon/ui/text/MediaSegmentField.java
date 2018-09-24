@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;
 
+import org.apache.logging.log4j.LogManager;
+
 /**
  * Text field for editing media segment times.  Times are displayed
  * as 'HHH:MM.SSS'
@@ -34,8 +36,7 @@ public class MediaSegmentField extends JFormattedTextField {
 	
 	private static final long serialVersionUID = 3170635774945499727L;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(MediaSegmentField.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MediaSegmentField.class.getName());
 
 	private static final String MASK = "###:##.###-###:##.###";
 	
@@ -55,7 +56,7 @@ public class MediaSegmentField extends JFormattedTextField {
 				retVal = new MaskFormatter(MASK);
 				((MaskFormatter)retVal).setPlaceholderCharacter('0');
 			} catch (ParseException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 			return retVal;
 		}

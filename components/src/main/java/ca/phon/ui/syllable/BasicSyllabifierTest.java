@@ -43,6 +43,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.basic.BasicSyllabifier;
@@ -54,8 +56,7 @@ import ca.phon.util.resources.ResourceLoader;
 
 public class BasicSyllabifierTest extends JFrame {
 
-	private final static Logger LOGGER = Logger
-			.getLogger(BasicSyllabifierTest.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(BasicSyllabifierTest.class.getName());
 	
 	private JComboBox syllabifierBox;
  	
@@ -95,7 +96,7 @@ public class BasicSyllabifierTest extends JFrame {
 				try {
 					syllabify();
 				} catch (ParseException e1) {
-					LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+					LOGGER.error( e1.getLocalizedMessage(), e1);
 //					final Toast t = ToastFactory.makeToast(e1.getLocalizedMessage());
 //					t.start(ipaField);
 				}

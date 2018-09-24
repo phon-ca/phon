@@ -108,11 +108,11 @@ public class DelegateEditorAction implements EditorAction {
 				}
 			}
 		} catch (NoSuchMethodException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (InterruptedException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 			
 	}
@@ -161,7 +161,7 @@ public class DelegateEditorAction implements EditorAction {
 					method.invoke(object, ee);
 				}
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		

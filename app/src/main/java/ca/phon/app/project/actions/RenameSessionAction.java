@@ -87,7 +87,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 				session = project.openSession(corpusName, sessionName);
 				session.setName(newSessionName);
 			} catch(Exception e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 				return;
 			}
@@ -97,14 +97,14 @@ public class RenameSessionAction extends ProjectWindowAction {
 				writeLock = project.getSessionWriteLock(corpusName, newSessionName);
 				project.saveSession(corpusName, newSessionName, session, writeLock);
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 			} finally {
 				if(writeLock != null) {
 					try {
 						project.releaseSessionWriteLock(corpusName, newSessionName, writeLock);
 					} catch (IOException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 					writeLock = null;
 				}
@@ -114,14 +114,14 @@ public class RenameSessionAction extends ProjectWindowAction {
 				writeLock = project.getSessionWriteLock(corpusName, sessionName);
 				project.removeSession(corpusName, sessionName, writeLock);
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 			} finally {
 				if(writeLock != null) {
 					try {
 						project.releaseSessionWriteLock(corpusName, sessionName, writeLock);
 					} catch (IOException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 			}

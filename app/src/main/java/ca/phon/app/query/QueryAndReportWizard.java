@@ -796,7 +796,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		try {
 			rsManager.deleteQuery(runnerPanel.getProject(), q);
 		} catch (IOException e) {
-			LogUtil.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LogUtil.severe(e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -814,7 +814,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		try {
 			PluginEntryPointRunner.executePlugin("ResultSetViewer", initInfo);
 		} catch (PluginException ex) {
-			LogUtil.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+			LogUtil.severe(ex.getLocalizedMessage(), ex);
 		}
 	}
 	

@@ -151,9 +151,9 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			try {
 				retVal = factory.openProject(projectFile);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (ProjectConfigurationException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -231,7 +231,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 				put(opt.getLongOpt(), opt.getValue());
 			}
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 }

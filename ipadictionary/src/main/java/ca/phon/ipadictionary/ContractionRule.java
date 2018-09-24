@@ -372,7 +372,7 @@ public final class ContractionRule implements Serializable {
 				} else if(vclause.type == ValueClause.LITERAL) {
 					retVal += vclause.value;
 				} else {
-					Logger.getLogger(getClass().getName()).warning("Unknown clause type");
+					org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).warn("Unknown clause type");
 				}
 			}
 		}

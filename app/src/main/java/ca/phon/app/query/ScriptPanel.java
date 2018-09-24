@@ -43,6 +43,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
+import org.apache.logging.log4j.LogManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
@@ -74,8 +75,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 
 	private static final long serialVersionUID = 3335240056447554685L;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(ScriptPanel.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(ScriptPanel.class.getName());
 
 	/**
 	 * Property for the script text.  This is sent when the editor is no longer displayed.
@@ -182,7 +182,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 		try {
 			updateParamPanel();
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		scriptEditor.getDocument().removeDocumentListener(scriptDocListener);
 		scriptEditor.setText(script.getScript());
@@ -226,7 +226,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 		try {
 			updateParamPanel();
 		} catch (PhonScriptException e1) {
-			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			LOGGER.error( e1.getLocalizedMessage(), e1);
 		}
 		cardPanel.add(paramPanel, paramPanelId);
 
@@ -284,7 +284,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 		try {
 			params = getScript().getContext().getScriptParameters(getScript().getContext().getEvaluatedScope());
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			return false;
 		}
 		for(ScriptParam sp:params) {
@@ -312,7 +312,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 				firePropertyChange(SCRIPT_PROP, oldScript, getScript().getScript());
 			} catch (PhonScriptException e) {
 				Toolkit.getDefaultToolkit().beep();
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return;
 			}
 		}

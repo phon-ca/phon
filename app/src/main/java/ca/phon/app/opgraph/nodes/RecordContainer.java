@@ -44,7 +44,7 @@ public interface RecordContainer {
 				Session session = project.openSession(sessionLoc.getCorpus(), sessionLoc.getSession());
 				retVal.add(new SessionRecordContainer(session));
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else if(obj instanceof SessionPath[]) {
 			SessionPath[] paths = (SessionPath[])obj;
@@ -60,7 +60,7 @@ public interface RecordContainer {
 				Session session = project.openSession(rs.getCorpus(), rs.getSession());
 				retVal.add(new ResultSetRecordContainer(session, rs));
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else if(obj instanceof ResultSet[]) {
 			ResultSet[] resultSets = (ResultSet[])obj;

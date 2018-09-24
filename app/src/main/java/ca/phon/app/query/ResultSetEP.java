@@ -149,7 +149,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 		try {
 			PluginEntryPointRunner.executePlugin("SessionEditor", epArgs);
 		} catch (PluginException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

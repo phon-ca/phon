@@ -54,7 +54,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 						try {
 							return AnalysisLibrary.analysisFromQuery(qs);
 						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException | InstantiationException | URISyntaxException e) {
-							LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+							LOGGER.error( e.getLocalizedMessage(), e);
 							final MessageDialogProperties props = new MessageDialogProperties();
 							props.setTitle("Composer (simple)");
 							props.setHeader("Unable to create analysis from query");

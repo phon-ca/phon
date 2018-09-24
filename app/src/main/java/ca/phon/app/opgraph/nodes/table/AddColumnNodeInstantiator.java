@@ -57,7 +57,7 @@ public class AddColumnNodeInstantiator implements Instantiator<AddColumnNode> {
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		AddColumnNode retVal = new AddColumnNode(script);

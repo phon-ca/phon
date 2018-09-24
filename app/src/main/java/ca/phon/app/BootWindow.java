@@ -65,7 +65,7 @@ public class BootWindow extends Window {
 		try {
 			mt.waitForAll();
 		} catch (InterruptedException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 		
 		init();
@@ -110,7 +110,7 @@ public class BootWindow extends Window {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 		}
 	
@@ -119,17 +119,17 @@ public class BootWindow extends Window {
 				.getMethod("main", new Class[] { String[].class })
 				.invoke(null, new Object[] { args } );
 		} catch (IllegalArgumentException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		} catch (SecurityException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		} catch (IllegalAccessException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		} catch (InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		} catch (NoSuchMethodException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		} catch (ClassNotFoundException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 		
 	}
@@ -154,7 +154,7 @@ public class BootWindow extends Window {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				LOGGER.error( e.getMessage(), e);
 			}
 		}
 		
@@ -163,7 +163,7 @@ public class BootWindow extends Window {
 		try {
 			bootHooks = PluginManager.getInstance().getExtensions(PhonBootHook.class);
 		} catch (PluginException e1) {
-			LOGGER.log(Level.WARNING, e1.getMessage(), e1);
+			LOGGER.warn( e1.getMessage(), e1);
 		}
 		
 		final String javaHome = System.getProperty("java.home");
@@ -205,7 +205,7 @@ public class BootWindow extends Window {
 		try {
 			final Process p = pb.start();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		} 
 	}
 	

@@ -22,6 +22,8 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
@@ -35,8 +37,7 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 	
 	private static final long serialVersionUID = 4846772248441893228L;
 
-	private final static Logger LOGGER = Logger
-			.getLogger(SyllabifyEdit.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SyllabifyEdit.class.getName());
 
 	private final Tier<IPATranscript> tier;
 	
@@ -69,7 +70,7 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 			final EditorEvent ee = new EditorEvent(SyllabificationAlignmentEditorView.SC_EDIT, getEditor().getUndoSupport(), grp);
 			getEditor().getEventManager().queueEvent(ee);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

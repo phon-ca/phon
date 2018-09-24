@@ -129,7 +129,7 @@ public class PhonNodeLibrary {
 						URLDecoder.decode(tableScriptURL.getFile(), "UTF-8"));
 				addTableScriptToLibrary(name, "", script);
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+				LOGGER.warn( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -151,7 +151,7 @@ public class PhonNodeLibrary {
 						URLDecoder.decode(addColumnScriptURL.getFile(), "UTF-8"));
 				addAddColumnScriptToLibrary("Add column: " + name, "", script);
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+				LOGGER.warn( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -188,7 +188,7 @@ public class PhonNodeLibrary {
 					comment, "Table", instantiator);
 			getNodeLibrary().put(nodeData);
 		} catch (URISyntaxException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -201,7 +201,7 @@ public class PhonNodeLibrary {
 					comment, "Table", instantiator);
 			getNodeLibrary().put(nodeData);
 		} catch (URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -219,7 +219,7 @@ public class PhonNodeLibrary {
 					name, description, "Query", instantiator);
 			getNodeLibrary().put(nodeData);
 		} catch (URISyntaxException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -235,7 +235,7 @@ public class PhonNodeLibrary {
 					new LinkedMacroNodeData(uri, name, "", "Macro", url.toURI(), new LinkedMacroNodeInstantiator());
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -249,7 +249,7 @@ public class PhonNodeLibrary {
 			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new AnalysisNodeInstantiator());
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -263,7 +263,7 @@ public class PhonNodeLibrary {
 			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new ReportNodeInstantiator());
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

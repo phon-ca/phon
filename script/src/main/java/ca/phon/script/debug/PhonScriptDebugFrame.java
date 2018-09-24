@@ -48,7 +48,7 @@ public class PhonScriptDebugFrame implements DebugFrame {
 
 	@Override
 	public void onExceptionThrown(Context arg0, Throwable arg1) {
-		LOGGER.log(Level.SEVERE, arg1.getLocalizedMessage(), arg1);
+		LOGGER.error( arg1.getLocalizedMessage(), arg1);
 	}
 
 	@Override

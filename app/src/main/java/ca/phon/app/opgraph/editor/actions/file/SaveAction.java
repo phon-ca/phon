@@ -71,7 +71,7 @@ public class SaveAction extends OpgraphEditorAction {
 				recentFiles.addToHistory(getEditor().getCurrentFile());
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(getEditor());
 			Toolkit.getDefaultToolkit().beep();
 		}

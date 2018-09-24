@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 
 import javax.swing.KeyStroke;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Session;
 import ca.phon.util.icons.IconManager;
@@ -39,8 +41,7 @@ public class SaveSessionAction extends SessionEditorAction {
 	
 	private static final long serialVersionUID = 1815240897720486382L;
 
-	private final static Logger LOGGER = Logger
-			.getLogger(SaveSessionAction.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SaveSessionAction.class.getName());
 	
 	private final static String CMD_NAME = "Save";
 	
@@ -65,7 +66,7 @@ public class SaveSessionAction extends SessionEditorAction {
 		try {
 			getEditor().saveData();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

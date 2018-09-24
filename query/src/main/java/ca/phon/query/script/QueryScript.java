@@ -29,6 +29,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.plugin.PluginManager;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
@@ -64,11 +66,11 @@ public class QueryScript extends LazyQueryScript {
 						final URI uri = url.toURI();
 						script.addRequirePath(uri);
 					} catch (URISyntaxException e) {
-						LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
 			} catch (IOException e1) {
-				LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+				LOGGER.error( e1.getLocalizedMessage(), e1);
 			}
 			
 			script.addPackageImport("Packages.ca.phon.orthography");
@@ -135,8 +137,7 @@ public class QueryScript extends LazyQueryScript {
 		
 		setupLibraryFolders();
 	}
-	private static final Logger LOGGER = Logger
-			.getLogger(QueryScript.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(QueryScript.class.getName());
 	/**
 	 * Setup library folders for 'require'
 	 */
@@ -151,11 +152,11 @@ public class QueryScript extends LazyQueryScript {
 					final URI uri = url.toURI();
 					super.addRequirePath(uri);
 				} catch (URISyntaxException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 		} catch (IOException e1) {
-			LOGGER.log(Level.SEVERE, e1.getLocalizedMessage(), e1);
+			LOGGER.error( e1.getLocalizedMessage(), e1);
 		}
 		
 		super.addPackageImport("Packages.ca.phon.orthography");
@@ -218,7 +219,7 @@ public class QueryScript extends LazyQueryScript {
 			
 			ScriptParameters.copyParams(myParams, clonedParams);
 		} catch (PhonScriptException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		final QueryName myName = getExtension(QueryName.class);

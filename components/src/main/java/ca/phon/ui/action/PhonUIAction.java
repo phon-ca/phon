@@ -212,14 +212,14 @@ public class PhonUIAction extends AbstractAction {
 				m.invoke(objectRef.get(), params);
 
 		} catch (InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.toString(), e);
+			LOGGER.error( e.toString(), e);
 
 			if(evt.getActionEvent().getSource() instanceof JComponent) {
 				JComponent comp = (JComponent)evt.getActionEvent().getSource();
 //				PhonUtilities.showComponentMessage(comp, e.getCause().getMessage());
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.toString(), e);
+			LOGGER.error( e.toString(), e);
 
 			if(evt.getActionEvent().getSource() instanceof JComponent) {
 				JComponent comp = (JComponent)evt.getActionEvent().getSource();
@@ -295,7 +295,7 @@ public class PhonUIAction extends AbstractAction {
 						try {
 							retVal = clazz.getMethod(methodId, new Class[]{dataType});
 						} catch (NoSuchMethodException ex3) {
-							LOGGER.log(Level.SEVERE, ex3.getLocalizedMessage(), ex);
+							LOGGER.error( ex3.getLocalizedMessage(), ex);
 						}
 					}
 				} else {
@@ -304,7 +304,7 @@ public class PhonUIAction extends AbstractAction {
 						retVal =
 								clazz.getMethod(methodId, new Class[0]);
 					} catch (NoSuchMethodException ex2) {
-						LOGGER.log(Level.SEVERE, ex2.getLocalizedMessage(), ex);
+						LOGGER.error( ex2.getLocalizedMessage(), ex);
 					}
 				}
 		}

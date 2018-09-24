@@ -141,7 +141,7 @@ public class ReportDesignNodeXMLSerializer implements XMLSerializer {
 						unmarshaller.unmarshal(reader, ReportDesign.class);
 				reportDesign = reportDesignTypeEle.getValue();
 			} catch (JAXBException | XMLStreamException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else {
 			NodeList children = elem.getElementsByTagNameNS(REPORT_NAMESPACE, "report-design");

@@ -147,7 +147,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
     		return true;
 		} catch (Exception e) {
 			// catch anything and report
-			LOGGER.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 			e.printStackTrace();
 			props.setMessage(e.getLocalizedMessage());
 			NativeDialogs.showMessageDialog(props);

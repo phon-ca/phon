@@ -55,6 +55,8 @@ import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
@@ -70,8 +72,7 @@ import ca.phon.ui.action.PhonUIAction;
  */
 public class GroupField<T> extends JTextArea implements TierEditor {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(GroupField.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(GroupField.class.getName());
 
 	private static final long serialVersionUID = -5541784214656593497L;
 
@@ -287,7 +288,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		try {
 			cmf.saveData();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -358,7 +359,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		try {
 			retVal = errHighlighter.addHighlight(p0, p1, errPainter);
 		} catch (BadLocationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -376,7 +377,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		try {
 			errHighlighter.changeHighlight(tag, p0, p1);
 		} catch (BadLocationException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

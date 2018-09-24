@@ -56,8 +56,8 @@ import java.util.prefs.Preferences;
  */
 public class PrefHelper {
 	
-	private final static Logger LOGGER = 
-			Logger.getLogger(PrefHelper.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = 
+			org.apache.logging.log4j.LogManager.getLogger(PrefHelper.class.getName());
 	
 	/**
 	 * Returns the location of the application data folder for
@@ -113,7 +113,7 @@ public class PrefHelper {
 		try {
 			retVal.sync();
 		} catch (BackingStoreException e) {
-			LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+			LOGGER.warn( e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}
@@ -343,7 +343,7 @@ public class PrefHelper {
 			try {
 				retVal = Color.decode(colorTxt);
 			} catch (NumberFormatException nfe) {
-				LOGGER.severe(nfe.toString());
+				LOGGER.error(nfe.toString());
 				nfe.printStackTrace();
 			}
 		}
@@ -383,10 +383,10 @@ public class PrefHelper {
 					retVal = Font.createFont(Font.TRUETYPE_FONT, in);
 				} catch (FontFormatException e) {
 					e.printStackTrace();
-					LOGGER.severe(e.getMessage());
+					LOGGER.error(e.getMessage());
 				} catch (IOException e) {
 					e.printStackTrace();
-					LOGGER.severe(e.getMessage());
+					LOGGER.error(e.getMessage());
 				}
 			}
 		}
@@ -412,13 +412,13 @@ public class PrefHelper {
 				retVal =  type.cast(ois.readObject());
 				ois.close();
 			} catch (IOException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			} catch (ClassCastException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -432,7 +432,7 @@ public class PrefHelper {
 			try {
 				retVal = format.parseObject(objText);
 			} catch (ParseException e) {
-				LOGGER.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				e.printStackTrace();
 			}
 		}

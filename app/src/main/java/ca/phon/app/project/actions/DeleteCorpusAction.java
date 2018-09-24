@@ -78,7 +78,7 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 				try {
 					project.removeCorpus(corpus);
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 					Toolkit.getDefaultToolkit().beep();
 					showMessage("Delete Corpus", e.getLocalizedMessage());
 				}

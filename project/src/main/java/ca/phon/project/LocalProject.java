@@ -183,7 +183,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			try {
 				props.load(new FileInputStream(propsFile));
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, "Could not load project properties. " + e.getLocalizedMessage(), e);
+				LOGGER.warn( "Could not load project properties. " + e.getLocalizedMessage(), e);
 			}
 			putExtension(Properties.class, props);
 		}
@@ -510,7 +510,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		try {
 			saveProjectData();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
@@ -538,7 +538,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		try {
 			saveProperties();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		ProjectEvent pe = ProjectEvent.newProjectMediaFolderChangedEVent(old, mediaFolder);
@@ -567,7 +567,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		try {
 			saveProperties();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
 		ProjectEvent pe = ProjectEvent.newCorpusMediaFolderChangedEvent(corpus, old, mediaFolder);
@@ -698,7 +698,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			return retVal;
 		} catch (Exception e) {
 			// catch all exceptions
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 			throw new IOException(e);
 		}
 	}
@@ -1117,7 +1117,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 				}
 			} catch (IOException e) {
-				LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
+				LOGGER.warn( e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -1239,7 +1239,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		try {
 			saveProjectData();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 

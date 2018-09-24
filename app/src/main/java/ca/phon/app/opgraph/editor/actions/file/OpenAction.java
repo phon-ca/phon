@@ -130,7 +130,7 @@ public class OpenAction extends OpgraphEditorAction {
 			openFile(openFile, useCurrentWindow);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	

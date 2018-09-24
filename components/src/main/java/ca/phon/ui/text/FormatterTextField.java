@@ -30,13 +30,14 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 
 public class FormatterTextField<T> extends PromptedTextField {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(FormatterTextField.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FormatterTextField.class.getName());
 
 	private static final long serialVersionUID = 4203616792431039321L;
 	
@@ -88,7 +89,7 @@ public class FormatterTextField<T> extends PromptedTextField {
 			setToolTipText(null);
 		} catch (Exception e) {
 			setToolTipText(e.getMessage());
-			LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+			LOGGER.trace( e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;
@@ -103,7 +104,7 @@ public class FormatterTextField<T> extends PromptedTextField {
 				final String s = formatter.format(val);
 				setText(s);
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

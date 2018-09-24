@@ -69,7 +69,7 @@ public class AboutPanel extends JPanel implements IExtendable {
 		try {
 			mt.waitForAll();
 		} catch (InterruptedException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.error( e.getMessage(), e);
 		}
 
 		setPreferredSize(new Dimension(bootImage.getWidth(this), bootImage.getHeight(this)));

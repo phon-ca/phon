@@ -22,10 +22,11 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 public class FormatterUtil {
 	
-	private final static Logger LOGGER = Logger
-			.getLogger(FormatterUtil.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FormatterUtil.class.getName());
 
 	public static Object parse(Class<?> typ, String txt) {
 		@SuppressWarnings("unchecked")
@@ -35,7 +36,7 @@ public class FormatterUtil {
 			try {
 				return formatter.parse(txt);
 			} catch (ParseException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 				return null;
 			}
 		} else {

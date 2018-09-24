@@ -255,7 +255,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 //						}
 //					} catch (IOException ex) {
 //						Toolkit.getDefaultToolkit().beep();
-//						LOGGER.severe(ex.getMessage());
+//						LOGGER.error(ex.getMessage());
 //
 //						showMessageDialog("Save Failed", ex.getLocalizedMessage(), MessageDialogProperties.okOptions);
 //					}
@@ -609,7 +609,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			}
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
 	

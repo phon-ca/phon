@@ -21,13 +21,14 @@ package ca.phon.ui.fonts;
 import java.awt.Font;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import ca.phon.ui.FontFormatter;
 import ca.phon.util.PrefHelper;
 
 public class FontPreferences {
 	
-	private static final Logger LOGGER = Logger
-			.getLogger(FontPreferences.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
 	
 	/**
 	 * Tier font

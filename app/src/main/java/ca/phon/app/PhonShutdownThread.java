@@ -64,7 +64,7 @@ public class PhonShutdownThread extends PhonWorker {
 				try {
 					hook.shutdown();
 				} catch (PluginException e) {
-					LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+					LOGGER.error( e.getLocalizedMessage(), e);
 				}
 			}
 			

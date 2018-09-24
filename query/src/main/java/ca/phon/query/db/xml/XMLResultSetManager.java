@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.logging.log4j.LogManager;
 import org.xml.sax.SAXException;
 
 import ca.phon.project.Project;
@@ -51,8 +52,7 @@ import ca.phon.query.db.xml.io.resultset.ResultSetType;
  */
 public class XMLResultSetManager implements ResultSetManager {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(XMLResultSetManager.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLResultSetManager.class.getName());
 
 	/**
 	 * Folder inside of <code>&lt;project&gt;/__res</code> where
@@ -95,7 +95,7 @@ public class XMLResultSetManager implements ResultSetManager {
 						Query query = loadQuery(project, queryDir.getName());
 						queries.add(query);
 					} catch(IOException exc) {
-						LOGGER.log(Level.SEVERE, exc.getLocalizedMessage(), exc);
+						LOGGER.error( exc.getLocalizedMessage(), exc);
 					}
 				}
 			}
@@ -119,7 +119,7 @@ public class XMLResultSetManager implements ResultSetManager {
 					ResultSet resultSet = loadResultSet(project, query, fname.substring(0, fname.length() - 4));
 					resultSets.add(resultSet);
 				} catch(IOException exc) {
-					LOGGER.log(Level.SEVERE, exc.getLocalizedMessage(), exc);
+					LOGGER.error( exc.getLocalizedMessage(), exc);
 				}
 			}
 		}
@@ -168,7 +168,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			schema = sf.newSchema(new StreamSource(getClass().getClassLoader().getResourceAsStream("xml/xsd/query.xsd")) );
 		} catch(SAXException exc) {
-			LOGGER.log(Level.WARNING,  exc.getLocalizedMessage(), exc);
+			LOGGER.warn(  exc.getLocalizedMessage(), exc);
 		}
 
 		QueryType query = null;
@@ -235,7 +235,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			schema = sf.newSchema(new StreamSource(getClass().getClassLoader().getResourceAsStream("xml/xsd/resultset.xsd")));
 		} catch(SAXException exc) {
-			LOGGER.log(Level.WARNING, exc.getLocalizedMessage(), exc);
+			LOGGER.warn( exc.getLocalizedMessage(), exc);
 		}
 
 		ResultSetType resultSet = null;

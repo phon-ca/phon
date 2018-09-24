@@ -152,7 +152,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 						new JAXBElement<ReportDesign>(reportDesignQName, ReportDesign.class, reportDesign);
 				marshaller.marshal(reportDesignEle, new File(PrefHelper.getUserDataFolder(), AUTOSAVE_FILENAME));
 			} catch (JAXBException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}
 	}

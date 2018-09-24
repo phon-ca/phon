@@ -94,9 +94,9 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 			final ScriptParam[] params = parser.getScriptParams();
 			retVal.addAll(Arrays.asList(params));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (RecognitionException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}
@@ -257,7 +257,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 			}
 			return buffer.toString();
 		} catch (NoSuchAlgorithmException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
 		// shouldn't get here!
