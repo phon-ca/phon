@@ -783,7 +783,7 @@ public class PhonMediaPlayer extends JPanel {
 			if(PrefHelper.getBoolean("phon.debug", false)) {
 				final String logMsg = String.format("Buffering %s: %.2f%% complete", 
 						mediaPlayer.mrl(), newCache);
-				LOGGER.trace(logMsg);
+				LOGGER.info(logMsg);
 			}
 		}
 

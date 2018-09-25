@@ -101,7 +101,7 @@ public class DateTimeDocument extends PlainDocument {
 		try {
 			retVal = LocalDate.parse(dateText, dateFormatter);
 		} catch (Exception e) {
-			LOGGER.trace( e.getLocalizedMessage(), e);
+			LOGGER.info( e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;

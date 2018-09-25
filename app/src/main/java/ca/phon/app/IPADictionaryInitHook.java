@@ -25,8 +25,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 
 import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.app.log.LogUtil;
 import ca.phon.ipadictionary.impl.IPADatabaseManager;
+import ca.phon.logging.LogUtil;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;

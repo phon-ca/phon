@@ -25,9 +25,9 @@ import javax.swing.tree.TreePath;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.logging.LogUtil;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

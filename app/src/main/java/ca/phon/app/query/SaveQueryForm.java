@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import ca.phon.app.log.LogUtil;
+import ca.phon.logging.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryName;

@@ -32,6 +32,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import ca.phon.logging.LogManager;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

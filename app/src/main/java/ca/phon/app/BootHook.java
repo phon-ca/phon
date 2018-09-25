@@ -80,7 +80,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 			final FileInputStream fin = new FileInputStream(file);
 			loadFromInputStream(cmd, fin);
 		} catch (FileNotFoundException e) {
-			LOGGER.trace(e.getLocalizedMessage(), e);
+			LOGGER.info(e.getLocalizedMessage(), e);
 		} catch (IOException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}

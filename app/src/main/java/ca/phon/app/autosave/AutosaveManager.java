@@ -140,7 +140,7 @@ public class AutosaveManager {
 			int totalMemory = (int)(runtime.totalMemory() / 1024);
 			int usedMemory = (totalMemory - freeMemory);
 			
-			LOGGER.trace("Java heap: " + usedMemory + "Kb / "
+			LOGGER.info("Java heap: " + usedMemory + "Kb / "
 					+ totalMemory + "Kb, " + (usedMemory * 100 / totalMemory)
 					+ "%");
 			

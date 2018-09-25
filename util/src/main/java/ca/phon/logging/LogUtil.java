@@ -1,4 +1,4 @@
-package ca.phon.app.log;
+package ca.phon.logging;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

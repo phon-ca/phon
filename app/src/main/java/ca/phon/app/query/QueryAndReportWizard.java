@@ -45,7 +45,6 @@ import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.SimpleEditorExtension;
@@ -60,6 +59,7 @@ import ca.phon.app.query.actions.DeleteAllUnnamedEntriesAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryEntryAction;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.logging.LogUtil;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.nodes.general.MacroNode;

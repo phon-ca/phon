@@ -26,7 +26,7 @@ import java.io.OutputStreamWriter;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogBuffer;
-import ca.phon.app.log.LogUtil;
+import ca.phon.logging.LogUtil;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;

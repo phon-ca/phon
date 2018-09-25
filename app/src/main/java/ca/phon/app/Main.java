@@ -33,9 +33,11 @@ import java.util.Properties;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 
+import org.apache.logging.log4j.Level;
+
 import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.logging.LogManager;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;

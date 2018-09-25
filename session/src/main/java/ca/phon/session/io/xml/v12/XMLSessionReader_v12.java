@@ -439,7 +439,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						}
 						at.put(name, blindTranscript);
 					} catch (ParseException e) {
-						LOGGER.trace(
+						LOGGER.info(
 								e.getLocalizedMessage(), e);
 					}
 				}
@@ -617,7 +617,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 						}
 						retVal.addGroup(transcript);
 					} catch (ParseException pe) {
-						LOGGER.trace( pe.getLocalizedMessage(), pe);
+						LOGGER.info( pe.getLocalizedMessage(), pe);
 
 						final IPATranscript ipa = new IPATranscript();
 						ipa.putExtension(UnvalidatedValue.class, new UnvalidatedValue(groupBuffer.toString(), pe));

@@ -20,9 +20,9 @@ import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.logging.LogUtil;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;

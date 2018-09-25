@@ -180,7 +180,7 @@ public class IPADatabaseManager {
 		
 		for(Thread th:connections.keySet()) {
 			if(!th.isAlive()) {
-				LOGGER.trace("[QueryDBManager]: Cleaning up connection for thread - " + 
+				LOGGER.info("[QueryDBManager]: Cleaning up connection for thread - " + 
 						th.getName());
 				Connection conn = connections.get(th);
 				try {
