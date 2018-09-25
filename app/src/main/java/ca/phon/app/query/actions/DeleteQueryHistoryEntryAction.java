@@ -7,9 +7,9 @@ import java.io.IOException;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.QueryAndReportWizard;
 import ca.phon.app.query.QueryHistoryPanel;
-import ca.phon.logging.LogUtil;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.params.history.ParamSetType;

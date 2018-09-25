@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import ca.phon.logging.LogUtil;
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;

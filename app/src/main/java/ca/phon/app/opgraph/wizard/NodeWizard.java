@@ -77,6 +77,7 @@ import org.apache.velocity.tools.generic.MathTool;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.modules.EntryPointArgs;
@@ -98,7 +99,6 @@ import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.logging.LogUtil;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;

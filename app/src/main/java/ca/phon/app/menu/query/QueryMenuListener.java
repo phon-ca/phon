@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import ca.phon.logging.LogUtil;
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;

@@ -74,6 +74,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.nodes.MacroNodeData;
@@ -83,7 +84,6 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.logging.LogUtil;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.edits.graph.AddNodeEdit;

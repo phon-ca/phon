@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.phon.logging;
+package ca.phon.app.log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +24,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.RollingFileAppender;
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy;
+import org.apache.logging.log4j.core.appender.rolling.RolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
+
+import com.jcraft.jsch.Logger;
 
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
@@ -37,17 +51,12 @@ public class LogManager {
 	 * Log manager shared instance
 	 */
 	private final static LogManager _instance = new LogManager();
-	
-	public final static String PROPERTIES_FILE_LOCATION = LogManager.class.getName() + ".logProps";
-	
-	private final static String DEFAULT_PROPERTIES_FILE = 
-			"ca/phon/app/log/phonlog.xml";
-	
+		
 	public final static String LOG_FILE = 
-			PrefHelper.getUserDataFolder() + File.separator + "phon.log";
+			PrefHelper.getUserDataFolder() + File.separator + "logs" + File.separator + "phon.current.log";
 	
 	public final static String LOG_FILEPATTERN = 
-			PrefHelper.getUserDataFolder() + "File.separator" + "logs" + File.separator + "phon-%d{MM-dd-yyyy}-%i.log.gz";
+			PrefHelper.getUserDataFolder() + File.separator + "logs" + File.separator + "phon-%d{MM-dd-yyyy}-%i.log.gz";
 	
 	public static LogManager getInstance() {
 		return _instance;
@@ -56,13 +65,20 @@ public class LogManager {
 	private LogManager() {
 	}
 	
-	private InputStream getLogProps() {
-		return getClass().getClassLoader().getResourceAsStream(
-				PrefHelper.get(PROPERTIES_FILE_LOCATION, DEFAULT_PROPERTIES_FILE));
-	}
-	
 	public void setupLogging() {
-		// read configuration from classpath
+		// setup rolling file appender add add to root logger
+		final RollingFileAppender ap = RollingFileAppender.newBuilder()
+			.withName("PhonRollingFileAppender")
+			.withFileName(LOG_FILE)
+			.withFilePattern(LOG_FILEPATTERN)
+			.withPolicy(OnStartupTriggeringPolicy.createPolicy(0L))
+			.withStrategy(DefaultRolloverStrategy.newBuilder().withMax("10").build())
+			.build();
+
+		final LoggerContext ctx = (LoggerContext) org.apache.logging.log4j.LogManager.getContext(false);
+        final Configuration config = ctx.getConfiguration();
+        config.getRootLogger().addAppender(ap, Level.DEBUG, null);
+        ctx.updateLoggers();
 	}
 	
 	public void shutdownLogging() {

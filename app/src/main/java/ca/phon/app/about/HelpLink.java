@@ -10,7 +10,7 @@ import javax.swing.JButton;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
-import ca.phon.logging.LogUtil;
+import ca.phon.app.log.LogUtil;
 import ca.phon.util.OSInfo;
 import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;

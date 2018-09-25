@@ -70,7 +70,6 @@ import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.app.session.editor.SessionEditorSelection;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.logging.LogUtil;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;

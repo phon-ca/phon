@@ -27,8 +27,8 @@ import org.apache.logging.log4j.LogManager;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.logging.LogUtil;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;

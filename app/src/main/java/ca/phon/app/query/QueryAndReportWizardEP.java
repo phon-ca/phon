@@ -4,8 +4,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Map;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.logging.LogUtil;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;

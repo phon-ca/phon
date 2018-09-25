@@ -8,7 +8,7 @@ import java.io.IOException;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferPanelContainer;
-import ca.phon.logging.LogUtil;
+import ca.phon.app.log.LogUtil;
 import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;

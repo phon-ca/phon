@@ -21,7 +21,7 @@ package ca.phon.app;
 import java.util.List;
 
 import ca.phon.app.hooks.PhonShutdownHook;
-import ca.phon.logging.LogManager;
+import ca.phon.app.log.LogManager;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
 import ca.phon.plugin.PluginManager;

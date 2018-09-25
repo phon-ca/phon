@@ -7,6 +7,7 @@ import java.util.List;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.WorkbookUtils;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
@@ -14,7 +15,6 @@ import ca.phon.app.opgraph.report.tree.ReportTreePath;
 import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.ReportTableExportDialog;
-import ca.phon.logging.LogUtil;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;

@@ -22,8 +22,8 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.HorizontalLayout;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SegmentedButtonBuilder;
-import ca.phon.logging.LogUtil;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;

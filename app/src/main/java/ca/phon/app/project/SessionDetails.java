@@ -28,8 +28,8 @@ import javax.swing.table.AbstractTableModel;
 import org.jdesktop.swingx.JXTable;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
-import ca.phon.logging.LogUtil;
 import ca.phon.project.ParticipantHistory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectEvent;
