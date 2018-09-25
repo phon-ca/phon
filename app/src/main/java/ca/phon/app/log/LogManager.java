@@ -24,6 +24,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -66,6 +68,38 @@ public class LogManager {
 	}
 	
 	public void setupLogging() {
+		// turn off java.util.logging and re-direct all messages to log4j
+		java.util.logging.LogManager.getLogManager().reset();
+		
+		var handler = new Handler() {
+			@Override
+			public void publish(LogRecord record) {
+				Level level = Level.INFO;
+				if(record.getLevel() == java.util.logging.Level.SEVERE) {
+					level = Level.ERROR;
+				} else if(record.getLevel() == java.util.logging.Level.WARNING) {
+					level = Level.WARN;
+				} else if(record.getLevel() == java.util.logging.Level.FINE) {
+					level = Level.TRACE;
+				}
+				LogUtil.log(level, record.getMessage(), record.getThrown());
+			}
+			
+			@Override
+			public void flush() {
+				
+			}
+			
+			@Override
+			public void close() throws SecurityException {
+				
+			}
+			
+		};
+		
+		var caPhonLogger = java.util.logging.Logger.getLogger("ca.phon");
+		caPhonLogger.addHandler(handler);			
+		
 		// setup rolling file appender add add to root logger
 		final RollingFileAppender ap = RollingFileAppender.newBuilder()
 			.withName("PhonRollingFileAppender")

@@ -53,8 +53,6 @@ public class LogViewer extends CommonModuleFrame {
 	
 	private BufferPanel logBufferPanel;
 	
-	private BufferPanel prevLogBufferPanel;
-	
 	public LogViewer() {
 		super();
 		super.setWindowName("Logs");
@@ -81,16 +79,11 @@ public class LogViewer extends CommonModuleFrame {
 		logBufferPanel = new BufferPanel("Current Log");
 		tabbedPane.addTab("Current Log", logBufferPanel);
 		
-		prevLogBufferPanel = new BufferPanel("Previous Log");
-		tabbedPane.addTab("Previous Log", prevLogBufferPanel);
-		
 		add(tabbedPane, BorderLayout.CENTER);
 		
 		tabbedPane.addChangeListener( (e) -> {
 			if(tabbedPane.getSelectedComponent() == logBufferPanel) {
 				updateLogBufferPanel();
-			} else if(tabbedPane.getSelectedComponent() == prevLogBufferPanel) {
-				updatePreviousLogBufferPanel();
 			} else {
 				updateRecentMessages();
 			}
@@ -125,16 +118,5 @@ public class LogViewer extends CommonModuleFrame {
 			// do nothing
 		}
 	}
-	
-	private void updatePreviousLogBufferPanel() {
-		prevLogBufferPanel.clear();
 		
-		try {
-			String logData = LogManager.getInstance().readPreviousLogFile();
-			prevLogBufferPanel.getLogBuffer().setText(logData);
-		} catch (IOException e) {
-			// do nothing
-		}
-	}
-	
 }
