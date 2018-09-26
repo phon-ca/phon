@@ -20,10 +20,13 @@ package ca.phon.app.log;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -37,6 +40,7 @@ import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
 import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.HtmlLayout;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import com.jcraft.jsch.Logger;
@@ -53,18 +57,33 @@ public class LogManager {
 	 * Log manager shared instance
 	 */
 	private final static LogManager _instance = new LogManager();
-		
+	
+	public final static String LOG_FOLDER =
+			PrefHelper.getUserDataFolder() + File.separator + "logs";
+	
 	public final static String LOG_FILE = 
-			PrefHelper.getUserDataFolder() + File.separator + "logs" + File.separator + "phon.current.log";
+			LOG_FOLDER + File.separator + "phon.log.html";
 	
 	public final static String LOG_FILEPATTERN = 
-			PrefHelper.getUserDataFolder() + File.separator + "logs" + File.separator + "phon-%d{MM-dd-yyyy}-%i.log.gz";
+			LOG_FOLDER + File.separator + "phon-%d{MM-dd-yyyy}-%i.log.html.gz";
+	
+	private final static String LOG_FILEREGEX = "phon-.+\\.log\\.html\\.gz";
 	
 	public static LogManager getInstance() {
 		return _instance;
 	}
 	
 	private LogManager() {
+	}
+	
+	public File[] getPreviousLogs() {
+		var logFolder = new File(LOG_FOLDER);
+		if(logFolder.exists()) {
+			var logFiles = logFolder.listFiles( (path) -> path.getName().matches(LOG_FILEREGEX) );
+			return logFiles;
+		} else {
+			return new File[0];
+		}
 	}
 	
 	public void setupLogging() {
@@ -107,6 +126,7 @@ public class LogManager {
 			.withFilePattern(LOG_FILEPATTERN)
 			.withPolicy(OnStartupTriggeringPolicy.createPolicy(0L))
 			.withStrategy(DefaultRolloverStrategy.newBuilder().withMax("10").build())
+			.withLayout(HtmlLayout.newBuilder().withTitle("Phon Log").withLocationInfo(true).build())
 			.build();
 
 		final LoggerContext ctx = (LoggerContext) org.apache.logging.log4j.LogManager.getContext(false);

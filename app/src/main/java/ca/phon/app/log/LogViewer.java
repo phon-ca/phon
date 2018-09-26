@@ -19,104 +19,145 @@
 package ca.phon.app.log;
 
 import java.awt.BorderLayout;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.LogRecord;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.zip.GZIPInputStream;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.menu.MenuBuilder;
+import javafx.application.Platform;
 
 /**
- * Panel with list for viewing {@link LogRecord}s as well as
- * filtering options.
+ * Application log viewer.
  */
 public class LogViewer extends CommonModuleFrame {
-
-	private static final long serialVersionUID = -777740161353215841L;
-
-	private JTabbedPane tabbedPane;
 	
-	private JList<LogRecord> logRecordList;
-	
-	private LogHandler logHandler;
-	
-	private BufferPanel logBufferPanel;
+	private MultiBufferPanel bufferPanel;
 	
 	public LogViewer() {
-		super();
-		super.setWindowName("Logs");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setShowInWindowMenu(false);
+		super("Logs");
+		setWindowName("Phon : Application Logs");
 		
 		init();
 	}
 	
 	private void init() {
 		setLayout(new BorderLayout());
+				
+		bufferPanel = new MultiBufferPanel();
+		SwingUtilities.invokeLater( () -> loadLog(new File(LogManager.LOG_FILE)) );
 		
-		final DialogHeader header = new DialogHeader("Log Viewer", "View logs for current and previous execution of Phon");
-		add(header, BorderLayout.NORTH);
+		add(bufferPanel, BorderLayout.CENTER);
+	}
+	
+	@Override
+	public void setJMenuBar(JMenuBar menuBar) {
+		super.setJMenuBar(menuBar);
 		
-		logRecordList = new JList<>();
-		logRecordList.setCellRenderer(new LogRecordListCellRenderer());
-		tabbedPane = new JTabbedPane();
-		updateRecentMessages();
-
-		final JScrollPane logScroller = new JScrollPane(logRecordList);
-		tabbedPane.addTab("Recent Messages", logScroller);
+		final MenuBuilder builder = new MenuBuilder(menuBar);
+		final JMenu logMenu = builder.addMenu(".@Query", "Logs");
 		
-		logBufferPanel = new BufferPanel("Current Log");
-		tabbedPane.addTab("Current Log", logBufferPanel);
-		
-		add(tabbedPane, BorderLayout.CENTER);
-		
-		tabbedPane.addChangeListener( (e) -> {
-			if(tabbedPane.getSelectedComponent() == logBufferPanel) {
-				updateLogBufferPanel();
-			} else {
-				updateRecentMessages();
+		logMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				logMenu.removeAll();
+				
+				final File currentLogFile = new File(LogManager.LOG_FILE);
+				final PhonUIAction loadCurrentLogAct = new PhonUIAction(LogViewer.this, "loadLog", new File(LogManager.LOG_FILE));
+				loadCurrentLogAct.putValue(PhonUIAction.NAME, "Current log");
+				loadCurrentLogAct.putValue(PhonUIAction.SHORT_DESCRIPTION, LogManager.LOG_FILE);
+				loadCurrentLogAct.putValue(PhonUIAction.SELECTED_KEY,
+						bufferPanel.getCurrentBuffer() != null && bufferPanel.getCurrentBuffer().getName().equals(currentLogFile.getName()));
+				final JCheckBoxMenuItem currentLogItem = new JCheckBoxMenuItem(loadCurrentLogAct);
+				logMenu.add(currentLogItem);
+				
+				for(File previousLogFile:LogManager.getInstance().getPreviousLogs()) {
+					final PhonUIAction loadLogAct = new PhonUIAction(LogViewer.this, "loadLog", previousLogFile);
+					var logName = previousLogFile.getName();
+					loadLogAct.putValue(PhonUIAction.NAME, logName);
+					loadLogAct.putValue(PhonUIAction.SHORT_DESCRIPTION, previousLogFile.getAbsolutePath());
+					loadLogAct.putValue(PhonUIAction.SELECTED_KEY, 
+							bufferPanel.getCurrentBuffer() != null && bufferPanel.getCurrentBuffer().getName().equals(logName));
+					final JCheckBoxMenuItem prevLogItem = new JCheckBoxMenuItem(loadLogAct);
+					logMenu.add(prevLogItem);
+				}
 			}
 			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
 		});
 		
-		final PhonUIAction closeAct = new PhonUIAction(this, "close");
-		closeAct.putValue(PhonUIAction.NAME, "Close");
-		final JButton closeBtn = new JButton(closeAct);
-		
-		final JComponent btnPanel = ButtonBarBuilder.buildOkBar(closeBtn);
-		add(btnPanel, BorderLayout.SOUTH);
+		final JMenu bufferMenu = builder.addMenu(".@Logs", "Buffers");
+		bufferMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				bufferPanel.setupMenu(bufferMenu);
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		});
 	}
-	
-	private void updateRecentMessages() {
-		logHandler = LogHandler.getInstance();
-		@SuppressWarnings("unchecked")
-		List<LogRecord> records = new ArrayList<>(logHandler.getLogBuffer());
-	
-		final DefaultListModel<LogRecord> recordModel = new DefaultListModel<>();
-		records.forEach( (r) -> { recordModel.add(0, r);} );
-		logRecordList.setModel(recordModel);
-	}
-	
-	private void updateLogBufferPanel() {
-		logBufferPanel.clear();
-		
-		try {
-			String logData = LogManager.getInstance().readLogFile();
-			logBufferPanel.getLogBuffer().setText(logData);
-		} catch (IOException e) {
-			// do nothing
+
+	public void loadLog(File logFile) {
+		final String bufferName = logFile.getName();
+		if(bufferPanel.getBuffer(bufferName) != null) {
+			bufferPanel.selectBuffer(bufferName);
+			return;
+		}
+
+		if(!logFile.exists()) return;
+		final BufferPanel buffer = bufferPanel.createBuffer(bufferName, true);
+		if(bufferName.endsWith(".html")) {
+			final var webView = buffer.getWebView();
+			buffer.showHtml(false);
+			Platform.runLater( () -> {
+				webView.getEngine().load(logFile.toURI().toString());
+			});
+		} else if(bufferName.endsWith(".html.gz")) {
+			try (
+				final BufferedReader reader = new BufferedReader(
+						new InputStreamReader(new GZIPInputStream(new FileInputStream(logFile)), "UTF-8")) ) {
+				
+				final PrintWriter writer = new PrintWriter(buffer.getLogBuffer().getStdOutStream());
+				
+				String line = "";
+				while((line = reader.readLine()) != null) {
+					writer.write(line);
+					writer.write("\n");
+					writer.flush();
+				}
+				writer.close();
+				
+				buffer.showHtml();
+			} catch (IOException e) {
+				LogUtil.severe(e.getLocalizedMessage(), e);
+			}
 		}
 	}
-		
+	
 }
