@@ -540,7 +540,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			endBtn = btnStop;
 		} else {
 			breadCrumbViewer.remove(btnRunAgain);
-			breadCrumbViewer.remove(btnCancel);
+			breadCrumbViewer.remove(btnStop);
 
 			breadCrumbViewer.add(nextButton);
 			setBounds(nextButton);
