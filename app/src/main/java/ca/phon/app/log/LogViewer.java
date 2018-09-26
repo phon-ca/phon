@@ -25,11 +25,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -37,6 +41,7 @@ import javax.swing.event.MenuListener;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.OpenFileLauncher;
 import javafx.application.Platform;
 
 /**
@@ -84,7 +89,10 @@ public class LogViewer extends CommonModuleFrame {
 				final JCheckBoxMenuItem currentLogItem = new JCheckBoxMenuItem(loadCurrentLogAct);
 				logMenu.add(currentLogItem);
 				
-				for(File previousLogFile:LogManager.getInstance().getPreviousLogs()) {
+				List<File> sortedFiles = new ArrayList<>(List.of(LogManager.getInstance().getPreviousLogs()));
+				sortedFiles.sort( (f1, f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()) );
+				
+				for(File previousLogFile:sortedFiles) {
 					final PhonUIAction loadLogAct = new PhonUIAction(LogViewer.this, "loadLog", previousLogFile);
 					var logName = previousLogFile.getName();
 					loadLogAct.putValue(PhonUIAction.NAME, logName);
@@ -93,6 +101,20 @@ public class LogViewer extends CommonModuleFrame {
 							bufferPanel.getCurrentBuffer() != null && bufferPanel.getCurrentBuffer().getName().equals(logName));
 					final JCheckBoxMenuItem prevLogItem = new JCheckBoxMenuItem(loadLogAct);
 					logMenu.add(prevLogItem);
+				}
+				
+				logMenu.addSeparator();
+				
+				final File logFolder = new File(LogManager.LOG_FOLDER);
+				try {
+					final PhonUIAction showLogFolderAct = new PhonUIAction(OpenFileLauncher.class, "openURL",
+							logFolder.toURI().toURL() );
+					showLogFolderAct.putValue(PhonUIAction.NAME, "Show log folder");
+					showLogFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, logFolder.getAbsolutePath());
+					final JMenuItem showLogFolderItem = new JMenuItem(showLogFolderAct);
+					logMenu.add(showLogFolderItem);
+				} catch (MalformedURLException e1) {
+					LogUtil.severe(e1.getLocalizedMessage(), e1);
 				}
 			}
 			
@@ -121,6 +143,8 @@ public class LogViewer extends CommonModuleFrame {
 			public void menuCanceled(MenuEvent e) {
 			}
 		});
+		
+		
 	}
 
 	public void loadLog(File logFile) {
