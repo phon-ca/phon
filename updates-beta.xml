@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0.dmg" newVersion="3.0.0" newMediaFileId="macos" fileSize="211358638" md5Sum="86c4f99708f86b8a91d412a70179c5b3" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.1.8
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.1b1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1b1.dmg" newVersion="3.0.1b1" newMediaFileId="macos" fileSize="213137526" md5Sum="62b79b14bf5dba47293e840d7bd79eab" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -189,8 +198,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0.dmg" newVersion="3.0.0" newMediaFileId="macos" fileSize="211358638" md5Sum="86c4f99708f86b8a91d412a70179c5b3" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1b1.dmg" newVersion="3.0.1b1" newMediaFileId="macos" fileSize="213137526" md5Sum="62b79b14bf5dba47293e840d7bd79eab" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -378,8 +396,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.exe" newVersion="3.0.0" newMediaFileId="win64" fileSize="223836160" md5Sum="dd1d4985154a96a6b98d8e3b356edd8a" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="6c421973649b8d518eaef2985fd3d362" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -567,8 +594,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.exe" newVersion="3.0.0" newMediaFileId="win64" fileSize="223836160" md5Sum="dd1d4985154a96a6b98d8e3b356edd8a" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="6c421973649b8d518eaef2985fd3d362" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -756,8 +792,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.exe" newVersion="3.0.0" newMediaFileId="win64" fileSize="223836160" md5Sum="dd1d4985154a96a6b98d8e3b356edd8a" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="6c421973649b8d518eaef2985fd3d362" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -945,8 +990,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.zip" newVersion="3.0.0" newMediaFileId="win64zip" fileSize="222816945" md5Sum="b01ce3f9c60ca41bc1045bd91fdefe09" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.zip" newVersion="3.0.1b1" newMediaFileId="win64zip" fileSize="224598719" md5Sum="b70397cf454c296a9476529ade82e48e" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -1134,8 +1188,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0.deb" newVersion="3.0.0" newMediaFileId="linux64deb" fileSize="113549872" md5Sum="7cd23cd38943b190c4977d6e8d040c36" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_1b1.deb" newVersion="3.0.1b1" newMediaFileId="linux64deb" fileSize="115353160" md5Sum="9edfe18ae2435a5740fe341dc4ee8eeb" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -1323,8 +1386,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0.sh" newVersion="3.0.0" newMediaFileId="linux64" fileSize="113402326" md5Sum="e6a1d50ac6d834fc2c5a5659e38a706e" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_1b1.sh" newVersion="3.0.1b1" newMediaFileId="linux64" fileSize="115174337" md5Sum="d7a1439db03cd11935fc9b920cd77a73" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
