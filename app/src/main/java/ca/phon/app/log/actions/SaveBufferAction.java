@@ -86,7 +86,7 @@ public class SaveBufferAction extends HookableAction {
 		if(panel.isShowingBuffer() == true) {
 			filter = new FileFilter("Text file", "txt");
 		} else if(panel.isShowingHtml() == true) {
-			filter = FileFilter.htmlFilter;
+			filter = new FileFilter("HTML Files (*.html;*.htm)", "html;htm");
 		} else if(panel.isShowingTable()) {
 			filter = FileFilter.csvFilter;
 		}
@@ -95,6 +95,9 @@ public class SaveBufferAction extends HookableAction {
 		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
 		String initialFilename = panel.getBufferName();
 		initialFilename = initialFilename.trim().replaceAll(illegalCharRegex, "_");
+		if(initialFilename.endsWith("." + filter.getDefaultExtension())) {
+			initialFilename = initialFilename.substring(0, initialFilename.length()-(filter.getDefaultExtension().length()+1));
+		}
 		
 		props.setInitialFile(initialFilename + "." + filter.getDefaultExtension());
 		props.setRunAsync(true);
