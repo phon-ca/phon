@@ -85,7 +85,7 @@ public class LogViewer extends CommonModuleFrame {
 				loadCurrentLogAct.putValue(PhonUIAction.NAME, "Current log");
 				loadCurrentLogAct.putValue(PhonUIAction.SHORT_DESCRIPTION, LogManager.LOG_FILE);
 				loadCurrentLogAct.putValue(PhonUIAction.SELECTED_KEY,
-						bufferPanel.getCurrentBuffer() != null && bufferPanel.getCurrentBuffer().getName().equals(currentLogFile.getName()));
+						bufferPanel.getCurrentBuffer() != null && (bufferPanel.getCurrentBuffer().getName() + ".html").equals(currentLogFile.getName()));
 				final JCheckBoxMenuItem currentLogItem = new JCheckBoxMenuItem(loadCurrentLogAct);
 				logMenu.add(currentLogItem);
 				
@@ -98,7 +98,7 @@ public class LogViewer extends CommonModuleFrame {
 					loadLogAct.putValue(PhonUIAction.NAME, logName);
 					loadLogAct.putValue(PhonUIAction.SHORT_DESCRIPTION, previousLogFile.getAbsolutePath());
 					loadLogAct.putValue(PhonUIAction.SELECTED_KEY, 
-							bufferPanel.getCurrentBuffer() != null && bufferPanel.getCurrentBuffer().getName().equals(logName));
+							bufferPanel.getCurrentBuffer() != null && (bufferPanel.getCurrentBuffer().getName()+".html.gz").equals(logName));
 					final JCheckBoxMenuItem prevLogItem = new JCheckBoxMenuItem(loadLogAct);
 					logMenu.add(prevLogItem);
 				}
