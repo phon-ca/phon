@@ -150,7 +150,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		tierViewPanel.setBorder(BorderFactory.createTitledBorder("Tiers"));
 		
 		includeSyllabificationBox = new JCheckBox("Include syllabification");
-		includeSyllabificationBox.setSelected(false);
+		includeSyllabificationBox.setSelected(true);
 		
 		final IPATranscript ipaT = (new IPATranscriptBuilder()).append("ˈb:Oʌ:Nɹ:Cθ:Cˌd:Oe͜ɪ:N").toIPATranscript();
 		final IPATranscript ipaA = (new IPATranscriptBuilder()).append("ˈb:Oʌː:Nˌt:Oe͜ɪ:N").toIPATranscript();
@@ -162,7 +162,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		syllabificationDisplay.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		
 		includeAlignmentBox = new JCheckBox("Include alignment");
-		includeAlignmentBox.setSelected(false);
+		includeAlignmentBox.setSelected(true);
 		
 		alignmentDisplay = new PhoneMapDisplay();
 		alignmentDisplay.setPhoneMapForGroup(0, alignment);
