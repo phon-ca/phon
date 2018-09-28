@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.1b1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1b1.dmg" newVersion="3.0.1b1" newMediaFileId="macos" fileSize="213137526" md5Sum="62b79b14bf5dba47293e840d7bd79eab" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1b1.dmg" newVersion="3.0.1b1" newMediaFileId="macos" fileSize="213137653" md5Sum="5fb703c94606f062557d22c996295ca8" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -198,7 +198,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1b1.dmg" newVersion="3.0.1b1" newMediaFileId="macos" fileSize="213137526" md5Sum="62b79b14bf5dba47293e840d7bd79eab" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1b1.dmg" newVersion="3.0.1b1" newMediaFileId="macos" fileSize="213137653" md5Sum="5fb703c94606f062557d22c996295ca8" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -396,7 +396,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="6c421973649b8d518eaef2985fd3d362" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="9e1748428b28619f29b46df259d40a52" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -594,7 +594,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="6c421973649b8d518eaef2985fd3d362" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="9e1748428b28619f29b46df259d40a52" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -792,7 +792,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="6c421973649b8d518eaef2985fd3d362" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.exe" newVersion="3.0.1b1" newMediaFileId="win64" fileSize="225609216" md5Sum="9e1748428b28619f29b46df259d40a52" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -990,7 +990,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.zip" newVersion="3.0.1b1" newMediaFileId="win64zip" fileSize="224598719" md5Sum="b70397cf454c296a9476529ade82e48e" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1b1.zip" newVersion="3.0.1b1" newMediaFileId="win64zip" fileSize="224598892" md5Sum="a6e3aeb7e0de5e056e6523cd91c57977" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -1188,7 +1188,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_1b1.deb" newVersion="3.0.1b1" newMediaFileId="linux64deb" fileSize="115353160" md5Sum="9edfe18ae2435a5740fe341dc4ee8eeb" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_1b1.deb" newVersion="3.0.1b1" newMediaFileId="linux64deb" fileSize="115353934" md5Sum="0dae0e0f9a5478ee88bbbd7cb7923f8b" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
@@ -1386,7 +1386,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_1b1.sh" newVersion="3.0.1b1" newMediaFileId="linux64" fileSize="115174337" md5Sum="d7a1439db03cd11935fc9b920cd77a73" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_1b1.sh" newVersion="3.0.1b1" newMediaFileId="linux64" fileSize="115174431" md5Sum="187bb16ee391674967af1ef207bd0ec5" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
