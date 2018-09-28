@@ -34,6 +34,7 @@ import ca.phon.app.menu.file.ExitCommand;
 import ca.phon.app.menu.file.NewProjectCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
 import ca.phon.app.menu.file.RecentProjectsMenuListener;
+import ca.phon.app.menu.file.ShowApplicationDataFolderCommand;
 import ca.phon.app.menu.help.HelpCommand;
 import ca.phon.app.menu.help.LogCommand;
 import ca.phon.app.menu.macro.MacroMenuListener;
@@ -85,6 +86,10 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		final JMenu recentProjectsMenu = new JMenu("Recent Projects");
 		recentProjectsMenu.addMenuListener(new RecentProjectsMenuListener());
 		fileMenu.add(recentProjectsMenu);
+		
+		fileMenu.addSeparator();
+		
+		fileMenu.add(new ShowApplicationDataFolderCommand());
 
 		fileMenu.addSeparator();
 

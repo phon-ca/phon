@@ -148,7 +148,13 @@ public class LogViewer extends CommonModuleFrame {
 	}
 
 	public void loadLog(File logFile) {
-		final String bufferName = logFile.getName();
+		String bufferName = logFile.getName();
+		
+		if(bufferName.endsWith(".html")) {
+			bufferName = bufferName.substring(0, bufferName.length()-5);
+		} else if(bufferName.endsWith(".html.gz")) {
+			bufferName = bufferName.substring(0, bufferName.length()-8);
+		}
 		if(bufferPanel.getBuffer(bufferName) != null) {
 			bufferPanel.selectBuffer(bufferName);
 			return;
@@ -156,13 +162,13 @@ public class LogViewer extends CommonModuleFrame {
 
 		if(!logFile.exists()) return;
 		final BufferPanel buffer = bufferPanel.createBuffer(bufferName, true);
-		if(bufferName.endsWith(".html")) {
+		if(logFile.getName().endsWith(".html")) {
 			final var webView = buffer.getWebView();
 			buffer.showHtml(false);
 			Platform.runLater( () -> {
 				webView.getEngine().load(logFile.toURI().toString());
 			});
-		} else if(bufferName.endsWith(".html.gz")) {
+		} else if(logFile.getName().endsWith(".html.gz")) {
 			try (
 				final BufferedReader reader = new BufferedReader(
 						new InputStreamReader(new GZIPInputStream(new FileInputStream(logFile)), "UTF-8")) ) {

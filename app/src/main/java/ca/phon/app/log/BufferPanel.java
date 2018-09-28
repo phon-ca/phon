@@ -226,6 +226,13 @@ public class BufferPanel extends JPanel implements IExtendable {
 			logBuffer = createLogBuffer();
 		}
 
+		if(logBuffer.getText().length() == 0 && htmlView != null) {
+			final String docLocation = getWebView().getEngine().getDocument().getDocumentURI();
+			if(docLocation != null) {
+				logBuffer.setText(getHTML());
+			}
+		}
+
 		cardLayout.show(contentPanel, BUFFER_VIEW_ID);
 		currentView = logBuffer;
 
@@ -492,30 +499,35 @@ public class BufferPanel extends JPanel implements IExtendable {
 		final StringBuffer buffer = new StringBuffer();
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		Platform.runLater( () -> {
-			String docLocation = getWebView().getEngine().getDocument().getDocumentURI();
-			
-			final URI uri = URI.create(docLocation);
-			try {
-				final URL url = uri.toURL();
+		final String docLocation = getWebView().getEngine().getDocument().getDocumentURI();
+		if(docLocation != null) {
+			Platform.runLater( () -> {
 				
-				final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-				String line = null;
-				while((line = in.readLine()) != null) {
-					buffer.append(line).append("\n");
+				final URI uri = URI.create(docLocation);
+				try {
+					final URL url = uri.toURL();
+					
+					final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+					String line = null;
+					while((line = in.readLine()) != null) {
+						buffer.append(line).append("\n");
+					}
+					in.close();
+				} catch (IOException e) {
+					LogUtil.severe(e);
+				} finally {
+					latch.countDown();
 				}
-				in.close();
-			} catch (IOException e) {
+			} );
+			
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
 				LogUtil.severe(e);
-			} finally {
-				latch.countDown();
 			}
-		} );
-		
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			LogUtil.severe(e);
+		} else {
+			// use text in log buffer
+			buffer.append(getLogBuffer().getText());
 		}
 		
 		return buffer.toString();
