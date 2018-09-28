@@ -65,7 +65,7 @@ public class LogManager {
 			LOG_FOLDER + File.separator + "phon.log.html";
 	
 	public final static String LOG_FILEPATTERN = 
-			LOG_FOLDER + File.separator + "phon-%d{MM-dd-yyyy}-%i.log.html.gz";
+			LOG_FOLDER + File.separator + "phon-%i.log.html.gz";
 	
 	private final static String LOG_FILEREGEX = "phon-.+\\.log\\.html\\.gz";
 	

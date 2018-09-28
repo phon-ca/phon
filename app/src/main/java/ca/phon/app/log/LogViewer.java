@@ -127,7 +127,7 @@ public class LogViewer extends CommonModuleFrame {
 			}
 		});
 		
-		final JMenu bufferMenu = builder.addMenu(".@Logs", "Buffers");
+		final JMenu bufferMenu = builder.addMenu(".@Logs", "Buffer");
 		bufferMenu.addMenuListener(new MenuListener() {
 			
 			@Override

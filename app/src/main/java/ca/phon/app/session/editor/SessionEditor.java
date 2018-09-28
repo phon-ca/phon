@@ -47,6 +47,7 @@ import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
+import ca.phon.app.session.editor.actions.ExportAsHTMLAction;
 import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.MoveRecordBackwardAction;
@@ -368,6 +369,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 		fileMenu.add(saveAsMenu, 1);
 		fileMenu.add(new JSeparator(), 2);
+		
+		fileMenu.add(new JMenuItem(new ExportAsHTMLAction(this)), 3);
 
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");

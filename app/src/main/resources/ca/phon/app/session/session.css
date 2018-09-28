@@ -1,0 +1,50 @@
+
+.body {
+	font-family: "Charis SIL Compact", arial,"noto sans", sans-serif;	
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	background-color: #e6e6e6;
+}
+
+.header_text {
+	font-size: 36;
+	font-weight: bold;
+	margin-left: 5;
+}
+			
+.record {
+	margin-bottom: 1em;
+}
+
+.record_table {
+	
+}
+
+.tier_row {
+	background-color: white;
+}
+
+.tier_alt_row {
+	background-color: #F0F8FF;
+}
+
+.tier_name {
+	padding-right: 20;
+	background-color: #F0F8FF;
+}
+
+.tier_value {
+	padding-right: 5;
+}
+
+.record_list {
+}
+
+@media print {
+	.record {
+		page-break-inside: avoid !important;
+	}
+}

@@ -61,7 +61,7 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 		super.setJMenuBar(menuBar);
 		
 		final MenuBuilder builder = new MenuBuilder(menuBar);
-		final JMenu bufferMenu = builder.addMenu(".@Edit", "Buffer");
+		final JMenu bufferMenu = builder.addMenu(".@Query", "Buffer");
 		bufferMenu.addMenuListener(new MenuListener() {
 			
 			@Override
