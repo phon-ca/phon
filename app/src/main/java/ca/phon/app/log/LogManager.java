@@ -126,7 +126,7 @@ public class LogManager {
 			.withFilePattern(LOG_FILEPATTERN)
 			.withPolicy(OnStartupTriggeringPolicy.createPolicy(0L))
 			.withStrategy(DefaultRolloverStrategy.newBuilder().withMax("10").build())
-			.withLayout(HtmlLayout.newBuilder().withTitle("Phon Log").withLocationInfo(true).build())
+			.withLayout(new LogLayout())
 			.build();
 
 		final LoggerContext ctx = (LoggerContext) org.apache.logging.log4j.LogManager.getContext(false);
