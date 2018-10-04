@@ -43,6 +43,9 @@
         <node id="1e818ead" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
+                    <oga:property key="filters.targetResultFilter.filter">
+                        <![CDATA[{stop}{liq}]]>
+                    </oga:property>
                     <oga:property key="__script">
                         <![CDATA[/*
 params =
@@ -620,7 +623,7 @@ function setup_params(params) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="fd2da9e" name="Query : Phones (Singleton Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:08:10.255-02:30" name="Phones" uuid="28973e72-fe94-4f23-9200-1908b7befff5">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:16:52.668-02:30" name="Phones" uuid="51d019cd-5820-4244-9907-a3e5b1183ba4">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -636,6 +639,7 @@ function setup_params(params) {
                                     <param id="filters.speaker.participantRole">(select role)</param>
                                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                                     <param id="filters.syllable.syllableType">Any syllable</param>
+                                    <param id="filters.targetResultFilter.filter">{stop}{liq}</param>
                                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                                     <param id="filters.wordPattern.filterType">Plain text</param>
                                     <param id="searchTier">IPA Target</param>
@@ -748,7 +752,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="7febea1731aa4205" name="Query : Phones (Singleton Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:08:10.265-02:30" name="Phones" uuid="59576bf7-ad91-4352-b7a1-ca2601df50bd">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:16:52.678-02:30" name="Phones" uuid="b43bacfb-ca0a-4203-9df0-5f941406f0ba">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -764,6 +768,7 @@ function getRowValue(table, row) {
                                     <param id="filters.speaker.participantRole">(select role)</param>
                                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                                     <param id="filters.syllable.syllableType">Any syllable</param>
+                                    <param id="filters.targetResultFilter.filter">{stop}{liq}</param>
                                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                                     <param id="filters.wordPattern.filterType">Plain text</param>
                                     <param id="searchTier">IPA Target</param>
@@ -876,7 +881,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="3c92e493c5c048e1" name="Query : Phones (Singleton OEHS)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:08:10.275-02:30" name="Phones" uuid="3a15aed2-d1e6-4be5-bb87-86965bbc697d">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:16:52.688-02:30" name="Phones" uuid="695de107-9755-455f-a1ec-fff86d57ec8c">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -892,6 +897,7 @@ function getRowValue(table, row) {
                                     <param id="filters.speaker.participantRole">(select role)</param>
                                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                                     <param id="filters.syllable.syllableType">Any syllable</param>
+                                    <param id="filters.targetResultFilter.filter">{stop}{liq}</param>
                                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                                     <param id="filters.wordPattern.filterType">Plain text</param>
                                     <param id="searchTier">IPA Target</param>
@@ -1004,7 +1010,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="e74f408073a54f0f" name="Query : Phones (Tautosyllabic Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:08:10.283-02:30" name="Phones" uuid="4d6f5032-7ba9-4897-b0bc-9e5d3b10bdbf">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:16:52.697-02:30" name="Phones" uuid="2d9a48b1-e4e1-41de-a569-07b1cf3c6c74">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1020,6 +1026,7 @@ function getRowValue(table, row) {
                                     <param id="filters.speaker.participantRole">(select role)</param>
                                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                                     <param id="filters.syllable.syllableType">Any syllable</param>
+                                    <param id="filters.targetResultFilter.filter">{stop}{liq}</param>
                                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                                     <param id="filters.wordPattern.filterType">Plain text</param>
                                     <param id="searchTier">IPA Target</param>
@@ -1132,7 +1139,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="b68612eae61c4a46" name="Query : Phones (Tautosyllabic Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:08:10.292-02:30" name="Phones" uuid="940b855f-6740-4ed3-b987-59280574f3f8">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:16:52.707-02:30" name="Phones" uuid="62132fc5-c1fb-4a80-b239-2db7089d580b">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1148,6 +1155,7 @@ function getRowValue(table, row) {
                                     <param id="filters.speaker.participantRole">(select role)</param>
                                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                                     <param id="filters.syllable.syllableType">Any syllable</param>
+                                    <param id="filters.targetResultFilter.filter">{stop}{liq}</param>
                                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                                     <param id="filters.wordPattern.filterType">Plain text</param>
                                     <param id="searchTier">IPA Target</param>
@@ -1260,7 +1268,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="3f2f079556514067" name="Query : Phones (Heterosyllabic)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:08:10.300-02:30" name="Phones" uuid="a1346728-ff4b-46df-adb5-3c307ec836de">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-03T09:16:52.725-02:30" name="Phones" uuid="fd552221-81fc-4709-b31a-a9c2a7019a3d">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1276,6 +1284,7 @@ function getRowValue(table, row) {
                                     <param id="filters.speaker.participantRole">(select role)</param>
                                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                                     <param id="filters.syllable.syllableType">Any syllable</param>
+                                    <param id="filters.targetResultFilter.filter">{stop}{liq}</param>
                                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                                     <param id="filters.wordPattern.filterType">Plain text</param>
                                     <param id="searchTier">IPA Target</param>
@@ -2794,7 +2803,7 @@ Result]]>
                         <oga:meta x="990" y="1676"/>
                     </extensions>
                 </node>
-                <node id="7f60d71f" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                <node id="7f60d71f" name="Sort Results" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
                             <opqry:sortBy column="Session" order="ascending" type="plain"/>
@@ -2845,7 +2854,7 @@ Result]]>
                         </oga:meta>
                     </extensions>
                 </node>
-                <node id="28c51b5f" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                <node id="28c51b5f" name="Sort Inventory" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                             <opqry:sortBy column="" order="ascending" type="plain"/>

@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -65,11 +66,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.BufferWindow;
 import ca.phon.app.log.LogBuffer;
+import ca.phon.app.project.ShadowProject;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.DefaultProjectFactory;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
+import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
@@ -154,21 +157,9 @@ public class QueryRunnerPanel extends JPanel {
 		this.includeExcluded = includeExcluded;
 		resultsTableSorter = new TableRowSorter<QueryRunnerPanel.RunnerTableModel>(tableModel);
 		
-		final UUID uuid = UUID.randomUUID();
 		try {
-			final String tmpFolder = System.getProperty("java.io.tmpdir");
-			final String tmpProjectFolder =
-					tmpFolder + File.separator + "phon-" + Long.toHexString(uuid.getLeastSignificantBits());
-			final ProjectFactory factory = new DefaultProjectFactory();
-			tempProject = factory.createProject(new File(tmpProjectFolder));
-			tempProject.setName(project.getName());
-			
-			for(String corpusName:project.getCorpora()) {
-				tempProject.addCorpus(corpusName, "");
-				tempProject.setCorpusPath(corpusName, project.getCorpusPath(corpusName));
-			}
-			tempProject.setRecourceLocation(project.getResourceLocation());
-		} catch (IOException e) {
+			tempProject = ShadowProject.of(project);
+		} catch (ProjectConfigurationException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
