@@ -331,6 +331,17 @@ public class PluginManager extends URLClassLoader {
 			}
 		}
 		
+		// sort extensions
+		Collections.sort(retVal, (c1, c2) -> {
+			Rank c1Rank = c1.getClass().getAnnotation(Rank.class);
+			Rank c2Rank = c2.getClass().getAnnotation(Rank.class);
+			
+			int c1Val = (c1Rank != null ? c1Rank.value() : 1);
+			int c2Val = (c2Rank != null ? c2Rank.value() : 1);
+			
+			return Integer.valueOf(c1Val).compareTo(c2Val);
+		});
+		
 		return retVal;
 	}
 	

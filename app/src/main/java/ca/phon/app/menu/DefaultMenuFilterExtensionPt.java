@@ -19,6 +19,7 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.Rank;
 
 
 /**
@@ -31,6 +32,7 @@ import ca.phon.plugin.PhonPlugin;
 		version="1.0",
 		comments="Default menu filter for application windows."
 )
+@Rank(0)
 public class DefaultMenuFilterExtensionPt implements IPluginExtensionPoint<IPluginMenuFilter> {
 
 	@Override
