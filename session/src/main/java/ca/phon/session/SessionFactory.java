@@ -26,6 +26,8 @@ import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
@@ -48,11 +50,12 @@ public abstract class SessionFactory {
 	 *  implementation found.
 	 */
 	public static SessionFactory newFactory() {
-		final ServiceLoader<SessionFactory> sessionFactory = 
-				ServiceLoader.load(SessionFactory.class);
-		final Iterator<SessionFactory> itr = sessionFactory.iterator();
-		if(itr.hasNext()) {
-			return itr.next();
+		final PluginManager manager = PluginManager.getInstance();
+		final List<IPluginExtensionPoint<SessionFactory>> sessionFactoryExtPts = 
+				manager.getExtensionPoints(SessionFactory.class);
+		
+		if(sessionFactoryExtPts.size() > 0) {
+			return sessionFactoryExtPts.get(0).getFactory().createObject(new Object[0]);
 		} else {
 			return null;
 		}

@@ -17,6 +17,9 @@ package ca.phon.session.impl;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.Rank;
 import ca.phon.session.Comment;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
@@ -32,7 +35,8 @@ import ca.phon.session.Transcriber;
 /**
  * Default implementation of a session factory.
  */
-public class SessionFactoryImpl extends SessionFactory {
+@Rank(0)
+public class SessionFactoryImpl extends SessionFactory implements IPluginExtensionPoint<SessionFactory> {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionFactoryImpl.class.getName());
 
@@ -114,6 +118,16 @@ public class SessionFactoryImpl extends SessionFactory {
 	@Override
 	public SessionMetadata createSessionMetadata() {
 		return new SessionMetadataImpl();
+	}
+
+	@Override
+	public Class<?> getExtensionType() {
+		return SessionFactory.class;
+	}
+
+	@Override
+	public IPluginExtensionFactory<SessionFactory> getFactory() {
+		return (args) -> this;
 	}
 
 }

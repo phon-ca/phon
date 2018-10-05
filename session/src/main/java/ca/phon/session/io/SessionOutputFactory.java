@@ -20,36 +20,30 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+
 /**
  * Factory for creating {@link SessionWriter}s
  *
  */
 public class SessionOutputFactory {
 
-	/**
-	 * Service loader
-	 */
-	private final ServiceLoader<SessionWriter> writerLoader;
+	private List<IPluginExtensionPoint<SessionWriter>> writerExtPts;
 	
 	/**
 	 * Constructor
 	 */
 	public SessionOutputFactory() {
 		super();
-		writerLoader = ServiceLoader.load(SessionWriter.class);
+		writerExtPts = PluginManager.getInstance().getExtensionPoints(SessionWriter.class);
 	}
-	
-	public SessionOutputFactory(ClassLoader cl) {
-		super();
-		writerLoader = ServiceLoader.load(SessionWriter.class, cl);
-	}
-	
+		
 	public List<SessionIO> availableSessionIOs() {
 		final List<SessionIO> retVal = new ArrayList<>();
 		
-		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
-		while(writerItr.hasNext()) {
-			final SessionWriter writer = writerItr.next();
+		for(IPluginExtensionPoint<SessionWriter> extPt:writerExtPts) {
+			final SessionWriter writer = extPt.getFactory().createObject(new Object[0]);
 			final SessionIO sessionIO = writer.getClass().getAnnotation(SessionIO.class);
 			if(sessionIO != null) {
 				retVal.add(sessionIO);
@@ -68,9 +62,8 @@ public class SessionOutputFactory {
 	public SessionWriter createWriter() {
 		SessionWriter retVal = null;
 		
-		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
-		if(writerItr.hasNext()) {
-			retVal = writerItr.next();
+		if(writerExtPts.size() > 0) {
+			retVal = writerExtPts.get(0).getFactory().createObject(new Object[0]);
 		}
 		
 		return retVal;
@@ -86,9 +79,8 @@ public class SessionOutputFactory {
 	public SessionWriter createWriter(String id, String version) {
 		SessionWriter retVal = null;
 		
-		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
-		while(writerItr.hasNext()) {
-			final SessionWriter writer = writerItr.next();
+		for(IPluginExtensionPoint<SessionWriter> extPt:writerExtPts) {
+			final SessionWriter writer = extPt.getFactory().createObject(new Object[0]);
 			final SessionIO sessionIO = writer.getClass().getAnnotation(SessionIO.class);
 			if(sessionIO != null && sessionIO.id().equals(id) && sessionIO.version().equals(version)) {
 				retVal = writer;
@@ -107,9 +99,8 @@ public class SessionOutputFactory {
 	 */
 	public SessionWriter createWriter(SessionIO sessionIO) {
 		SessionWriter retVal = null;
-		final Iterator<SessionWriter> writerItr = writerLoader.iterator();
-		while(writerItr.hasNext()) {
-			final SessionWriter writer = writerItr.next();
+		for(IPluginExtensionPoint<SessionWriter> extPt:writerExtPts) {
+			final SessionWriter writer = extPt.getFactory().createObject(new Object[0]);
 			final SessionIO sIO = writer.getClass().getAnnotation(SessionIO.class);
 			if(sessionIO != null && sessionIO.id().equals(sIO.id()) && sessionIO.version().equals(sIO.version())) {
 				retVal = writer;

@@ -41,6 +41,9 @@ import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.Rank;
 import ca.phon.session.Comment;
 import ca.phon.session.CommentEnum;
 import ca.phon.session.MediaSegment;
@@ -74,7 +77,8 @@ import ca.phon.xml.annotation.XMLSerial;
 		extension="xml",
 		name="Phon 1.4-2.2"
 )
-public class XMLSessionWriter_v12 implements SessionWriter {
+@Rank(0)
+public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLSessionWriter_v12.class.getName());
 
@@ -603,6 +607,16 @@ public class XMLSessionWriter_v12 implements SessionWriter {
 		} catch(JAXBException e) {
 			LOGGER.error( e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public Class<?> getExtensionType() {
+		return SessionWriter.class;
+	}
+
+	@Override
+	public IPluginExtensionFactory<SessionWriter> getFactory() {
+		return (args) -> { return new XMLSessionWriter_v12(); };
 	}
 
 }

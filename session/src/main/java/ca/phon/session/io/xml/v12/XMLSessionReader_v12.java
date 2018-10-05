@@ -56,7 +56,10 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.Rank;
 import ca.phon.session.Comment;
 import ca.phon.session.CommentEnum;
 import ca.phon.session.MediaSegment;
@@ -100,7 +103,8 @@ import ca.phon.xml.annotation.XMLSerial;
 		extension="xml",
 		name="Phon 1.4-2.2"
 )
-public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session> {
+@Rank(0)
+public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLSessionReader_v12.class.getName());
 
@@ -792,6 +796,16 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			return retVal;
 		}
 
+	}
+
+	@Override
+	public Class<?> getExtensionType() {
+		return SessionReader.class;
+	}
+
+	@Override
+	public IPluginExtensionFactory<SessionReader> getFactory() {
+		return (args) -> { return new XMLSessionReader_v12(); };
 	}
 
 }

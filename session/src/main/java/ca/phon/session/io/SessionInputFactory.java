@@ -22,6 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+
 /**
  * Used to create instances of session readers.
  *
@@ -30,22 +33,14 @@ public class SessionInputFactory {
 	
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionInputFactory.class.getName());
 	
-	/**
-	 * Service loader
-	 */
-	private final ServiceLoader<SessionReader> readerLoader;
-	
+	private List<IPluginExtensionPoint<SessionReader>> readerExtPts;
+		
 	/**
 	 * Constructor
 	 */
 	public SessionInputFactory() {
 		super();
-		readerLoader = ServiceLoader.load(SessionReader.class);
-	}
-	
-	public SessionInputFactory(ClassLoader cl) {
-		super();
-		readerLoader = ServiceLoader.load(SessionReader.class, cl);
+		readerExtPts = PluginManager.getInstance().getExtensionPoints(SessionReader.class);
 	}
 	
 	/**
@@ -67,15 +62,13 @@ public class SessionInputFactory {
 	public List<SessionIO> availableReaders() {
 		final List<SessionIO> retVal = new ArrayList<SessionIO>();
 		
-		final Iterator<SessionReader> readerItr = readerLoader.iterator();
-		while(readerItr.hasNext()) {
-			// look for the SessionIO annotation
-			final SessionReader reader = readerItr.next();
+		for(IPluginExtensionPoint<SessionReader> extPt:readerExtPts) {
+			final SessionReader reader = extPt.getFactory().createObject(new Object[0]);
 			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
 			
 			if(sessionIO != null)
 				retVal.add(sessionIO);
-		}		
+		}
 		
 		return retVal;
 	}
@@ -90,10 +83,8 @@ public class SessionInputFactory {
 	public SessionReader createReader(String id, String version) {
 		SessionReader retVal = null;
 		
-		final Iterator<SessionReader> readerItr = readerLoader.iterator();
-		while(readerItr.hasNext()) {
-			// look for the SessionIO annotation
-			final SessionReader reader = readerItr.next();
+		for(IPluginExtensionPoint<SessionReader> extPt:readerExtPts) {
+			final SessionReader reader = extPt.getFactory().createObject(new Object[0]);
 			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
 			if(sessionIO != null && sessionIO.version().equals(version) && sessionIO.id().equals(id)) {
 				retVal = reader;
@@ -115,9 +106,8 @@ public class SessionInputFactory {
 	public SessionReader createReaderForFile(File file) {
 		SessionReader retVal = null;
 		
-		final Iterator<SessionReader> readerItr = readerLoader.iterator();
-		while(readerItr.hasNext()) {
-			final SessionReader reader = readerItr.next();
+		for(IPluginExtensionPoint<SessionReader> extPt:readerExtPts) {
+			final SessionReader reader = extPt.getFactory().createObject(new Object[0]);
 			final SessionIO sessionIO = reader.getClass().getAnnotation(SessionIO.class);
 			if(sessionIO != null && file.getName().endsWith(sessionIO.extension())) {
 				try {
