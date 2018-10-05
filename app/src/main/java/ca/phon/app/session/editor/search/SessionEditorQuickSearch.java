@@ -72,6 +72,7 @@ import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 /**
  */
@@ -290,7 +291,7 @@ public class SessionEditorQuickSearch {
 	
 	public void saveAsCSV(PhonActionEvent pae) {
 		final SaveDialogProperties props = new SaveDialogProperties();
-		props.setParentWindow(getEditor());
+		props.setParentWindow(null);
 		props.setFileFilter(FileFilter.csvFilter);
 		props.setCanCreateDirectories(true);
 		props.setInitialFile("record_list.csv");
@@ -299,19 +300,25 @@ public class SessionEditorQuickSearch {
 		props.setListener( (e) -> {
 			if(e.getDialogData() == null) return;
 			final String saveAs = e.getDialogData().toString();
-			// create a new CSVTableWriter
-			final CSVTableDataWriter writer = new CSVTableDataWriter();
-			try {
-				writer.writeTableToFile(table, new File(saveAs));
-			} catch (IOException ex) {
-				LOGGER.error( ex.getLocalizedMessage(), ex);
-				
-				final Toast toast = ToastFactory.makeToast("Unable to save table: " + ex.getLocalizedMessage());
-				toast.start(table);
-			}
+			PhonWorker.getInstance().invokeLater( () -> {
+				saveAsCSV(saveAs);
+			});
 		});
 		
 		NativeDialogs.showSaveDialog(props);
+	}
+	
+	private void saveAsCSV(String saveAs) {
+		// create a new CSVTableWriter
+		final CSVTableDataWriter writer = new CSVTableDataWriter();
+		try {
+			writer.writeTableToFile(table, new File(saveAs));
+		} catch (IOException ex) {
+			LOGGER.error( ex.getLocalizedMessage(), ex);
+			
+			final Toast toast = ToastFactory.makeToast("Unable to save table: " + ex.getLocalizedMessage());
+			toast.start(table);
+		}
 	}
 	
 	public void moveSelectionUp() {
