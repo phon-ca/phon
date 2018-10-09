@@ -1217,9 +1217,9 @@
     <!--˩ (0x2e9)-->
     <feature_set char="˩">diacritic toneextralow</feature_set>
     <!--᷄ (0x1dc4)-->
-    <feature_set char="᷄">diacritic tonerising tonehigh</feature_set>
+    <feature_set char="᷄">diacritic tonerising tonemid</feature_set>
     <!--᷅ (0x1dc5)-->
-    <feature_set char="᷅">diacritic tonelowrising</feature_set>
+    <feature_set char="᷅">diacritic tonefalling tonemid</feature_set>
     <!--᷆ (0x1dc6)-->
     <feature_set char="᷆">diacritic</feature_set>
     <!--᷇ (0x1dc7)-->
