@@ -14,7 +14,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited()
 public @interface Rank {
+	
+	public final static int DEFAULT_RANK = 10;
 
-	public int value() default 10;
+	public int value() default DEFAULT_RANK;
 	
 }
