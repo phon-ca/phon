@@ -46,6 +46,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -168,6 +170,16 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			public void windowClosed(WindowEvent arg0) {
 				removeWindowFromActiveList();
 				CommonModuleFrame.this.removeWindowListener(this);
+		
+				if(CommonModuleFrame.getOpenWindows().size() == 0) {
+					// exit application
+					try {
+						PluginEntryPointRunner.executePlugin("Exit");
+					} catch (PluginException e) {
+						LOGGER.error(e);
+						System.exit(1);
+					}
+				}
 			}
 
 			@Override

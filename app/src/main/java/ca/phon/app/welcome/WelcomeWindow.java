@@ -117,7 +117,6 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		super();
 
 		setWindowName("Welcome");
-		addWindowListener(windowListener);
 		init();
 		
 		extSupport.initExtensions();
@@ -423,52 +422,6 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		}
 
 	}
-
-	private final WindowListener windowListener = new WindowListener() {
-		@Override
-		public void windowOpened(WindowEvent e) {
-
-		}
-
-		@Override
-		public void windowClosing(WindowEvent e) {
-
-		}
-
-		@Override
-		public void windowClosed(WindowEvent e) {
-			// if we are the only window open exit the application
-			if(CommonModuleFrame.getOpenWindows().size() == 0)
-			{
-				try {
-					PluginEntryPointRunner.executePlugin("Exit");
-				} catch (PluginException e1) {
-					LOGGER.error( e1.getLocalizedMessage(), e1);
-					System.exit(1);
-				}
-			}
-		}
-
-		@Override
-		public void windowIconified(WindowEvent e) {
-
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent e) {
-
-		}
-
-		@Override
-		public void windowActivated(WindowEvent e) {
-
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent e) {
-
-		}
-	};
 
 	public void refreshWorkspaceProjects() {
 		workspaceProjectsPanel.refresh();

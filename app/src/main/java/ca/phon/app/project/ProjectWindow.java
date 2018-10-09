@@ -145,8 +145,7 @@ import ca.phon.worker.PhonWorker;
  * The project window.
  *
  */
-public class ProjectWindow extends CommonModuleFrame
-	implements WindowListener {
+public class ProjectWindow extends CommonModuleFrame {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectWindow.class.getName());
 
@@ -209,7 +208,6 @@ public class ProjectWindow extends CommonModuleFrame
 
 		this.projectLoadPath = projectPath;
 
-		this.addWindowListener(this);
 		this.setTitle("Phon : " + project.getName() + " : Project Manager");
 
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -1046,56 +1044,6 @@ public class ProjectWindow extends CommonModuleFrame
 		contextMenu.add(new SelectCorpusMediaFolder(this));
 
 		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
-	}
-
-	public void windowActivated(WindowEvent e) {
-
-	}
-
-	public void windowClosed(WindowEvent e) {
-		getProject().removeProjectListener(myProjectListener);
-
-		// are there any other project windows open?
-		boolean otherProjectsOpen = false;
-
-		// close all other project windows
-		for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-
-			if(f instanceof ProjectWindow && f != this)
-				otherProjectsOpen = true;
-			else if(f instanceof WelcomeWindow)
-				otherProjectsOpen = true; // also don't close if workspace window is still open
-		}
-
-		// open the open-project window on Windows if no other project window
-		// is open
-		if(!otherProjectsOpen) {
-			try {
-				PluginEntryPointRunner.executePlugin("Exit");
-			} catch (PluginException e1) {
-				LOGGER.error( e1.getLocalizedMessage(), e1);
-				System.exit(1);
-			}
-		}
-	}
-
-	public void windowClosing(WindowEvent e) {
-	}
-
-	public void windowDeactivated(WindowEvent e) {
-
-	}
-
-	public void windowDeiconified(WindowEvent e) {
-
-	}
-
-	public void windowIconified(WindowEvent e) {
-
-	}
-
-	public void windowOpened(WindowEvent e) {
-
 	}
 
 	@Override
