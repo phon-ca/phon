@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,12 +31,17 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.Metadata;
 import ca.phon.ipadictionary.spi.NameInfo;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.util.Language;
 import de.susebox.jtopas.Flags;
 import de.susebox.jtopas.StandardTokenizer;
@@ -62,6 +68,8 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		PREPROCESSREPLACE("prereplace"),
 		POSTPROCESSEXPR("postfind"),
 		POSTPROCESSREPLACE("postreplace"),
+		PHONEXFIND("phonexfind"),
+		PHONEXREPLACE("phonexreplace"),
 		OTHER("other");
 		
 		private String value;
@@ -132,6 +140,10 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	 * Replace expression used for each instance of postFindPattern found
 	 */
 	private String postReplaceExpr;
+	
+	private PhonexPattern phonexPattern;
+	
+	private IPATranscript phonexReplaceExpr;
 
 	public TransliterationDictionary(URL mapFile) {
 		super();
@@ -196,6 +208,22 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		if(postFindPattern != null && postReplaceExpr != null) {
 			final Matcher m = postFindPattern.matcher(builderStr);
 			builderStr = m.replaceAll(postReplaceExpr);
+		}
+		
+		if(phonexPattern != null && phonexReplaceExpr != null) {
+			try {
+				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
+				final PhonexMatcher matcher = phonexPattern.matcher(ipa);
+				
+				final IPATranscriptBuilder ipaBuilder = new IPATranscriptBuilder();
+				while(matcher.find()) {
+					matcher.appendReplacement(ipaBuilder, phonexReplaceExpr);
+				}
+				matcher.appendTail(ipaBuilder);
+				builderStr = ipaBuilder.toIPATranscript().toString();
+			} catch (ParseException e) {
+				throw new IPADictionaryExecption(e);
+			}
 		}
 		
 		return new String[] { builderStr };
@@ -339,6 +367,18 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			postFindPattern = Pattern.compile(value);
 		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSREPLACE.toString())) {
 			postReplaceExpr = value;
+		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXFIND.toString())) { 
+			try {
+				phonexPattern = PhonexPattern.compile(value);
+			} catch (PhonexPatternException e) {
+				LOGGER.error(e);
+			}
+		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXREPLACE.toString())) {
+			try {
+				phonexReplaceExpr = IPATranscript.parseIPATranscript(value);
+			} catch (ParseException e) {
+				LOGGER.error(e);
+			}
 		} else {
 			metadata.put(token, value);
 		}
