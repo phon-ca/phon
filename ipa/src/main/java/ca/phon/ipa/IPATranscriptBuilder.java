@@ -144,7 +144,8 @@ public class IPATranscriptBuilder {
 			return this;
 		}
 		try {
-			final IPATranscript transcript = IPATranscript.parseIPATranscript(ipa);
+			final IPATranscript transcript = IPATranscript.parseIPATranscript(toIPATranscript().toString() + ipa);
+			buffer.clear();
 			append(transcript);
 		} catch (ParseException e) {
 			LOGGER.warn( e.getLocalizedMessage(), e);

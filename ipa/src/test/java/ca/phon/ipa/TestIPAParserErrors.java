@@ -65,7 +65,7 @@ public class TestIPAParserErrors {
 	@Test
 	public void testStrayInitialSuffixDiacritic() throws ParseException {
 		final String txt = "ʷɔ\u02d0";
-		testError(txt, 1, StrayDiacriticException.class);
+		testError(txt, 1, IPAParserException.class);
 	}
 	
 	@Test
@@ -122,7 +122,7 @@ public class TestIPAParserErrors {
 		testError(txt, 2, InvalidTokenException.class);
 		
 		txt = "ʰ͡|ˑeːː͡ɪ̃n";
-		testError(txt, 2, InvalidTokenException.class);
+		testError(txt, 2, IPAParserException.class);
 	}
 	
 	@Test

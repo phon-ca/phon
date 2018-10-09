@@ -17,6 +17,7 @@ package ca.phon.phonex;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -58,7 +59,10 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 			}
 			groupIndex = matcher.pattern().groupIndex(groupName);
 		}
+		builder.append(pmr.getPrefix());
 		builder.append(matcher.group(groupIndex));
+		builder.append(pmr.getCombining());
+		builder.append(pmr.getSuffix());
 	}
 	
 }

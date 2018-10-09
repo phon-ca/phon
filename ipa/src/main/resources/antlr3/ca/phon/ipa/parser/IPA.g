@@ -1,19 +1,17 @@
 /*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2011-2016 The Phon Project, Memorial University <http://phon.ling.mun.ca>
+ * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
  
  /**
@@ -298,16 +296,65 @@ word_net_marker returns [IPAElement wordnetMarker]
 	}
 	;
 	
+	
 phonex_matcher_ref returns [IPAElement phonexMatcherRef]
-	:	DOLLAR_SIGN DIGIT
+scope {
+	List<Diacritic> cmbDias;
+}
+@init {
+	$phonex_matcher_ref::cmbDias = new ArrayList<Diacritic>();
+}
+	:	ps=prefix_section? DOLLAR_SIGN DIGIT (cd=COMBINING_DIACRITIC {$phonex_matcher_ref::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})* ss=suffix_section? 
 	{
-		$phonexMatcherRef = factory.createPhonexMatcherReference(Integer.parseInt($DIGIT.text));
+		Diacritic[] prefixDiacritics = new Diacritic[0];
+		if(ps != null) {
+			prefixDiacritics = $ps.diacritics.toArray(prefixDiacritics);
+		}
+		
+		Diacritic[] suffixDiacritics = new Diacritic[0];
+		if(ss != null) {
+			suffixDiacritics = $ss.diacritics.toArray(suffixDiacritics);
+		}
+		
+		Diacritic[] combiningDiacritics = new Diacritic[$phonex_matcher_ref::cmbDias.size()];
+		for(int i = 0; i < combiningDiacritics.length; i++) {
+			combiningDiacritics[i] = $phonex_matcher_ref::cmbDias.get(i);
+		}
+		
+		PhonexMatcherReference ref = factory.createPhonexMatcherReference(Integer.parseInt($DIGIT.text));
+		ref.setPrefixDiacritics(prefixDiacritics);
+		ref.setSuffixDiacritics(suffixDiacritics);
+		ref.setCombiningDiacritics(combiningDiacritics);
+		$phonexMatcherRef = ref;
 	}
-	|	DOLLAR_SIGN OPEN_BRACE GROUP_NAME CLOSE_BRACE
+	|	ps=prefix_section? DOLLAR_SIGN OPEN_BRACE GROUP_NAME CLOSE_BRACE (cd=COMBINING_DIACRITIC {$phonex_matcher_ref::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})* ss=suffix_section? 
 	{
-		$phonexMatcherRef = factory.createPhonexMatcherReference($GROUP_NAME.text);
+		Diacritic[] prefixDiacritics = new Diacritic[0];
+		if(ps != null) {
+			prefixDiacritics = $ps.diacritics.toArray(prefixDiacritics);
+		}
+		Diacritic[] suffixDiacritics = new Diacritic[0];
+		if(ss != null) {
+			suffixDiacritics = $ss.diacritics.toArray(suffixDiacritics);
+		}
+		
+		Diacritic[] combiningDiacritics = new Diacritic[$phonex_matcher_ref::cmbDias.size()];
+		for(int i = 0; i < combiningDiacritics.length; i++) {
+			combiningDiacritics[i] = $phonex_matcher_ref::cmbDias.get(i);
+		}
+		
+		PhonexMatcherReference ref = factory.createPhonexMatcherReference($GROUP_NAME.text);
+		ref.setPrefixDiacritics(prefixDiacritics);
+		ref.setSuffixDiacritics(suffixDiacritics);
+		ref.setCombiningDiacritics(combiningDiacritics);
+		$phonexMatcherRef = ref;
 	}
 	;
+	catch [NoViableAltException e] {
+		IPAParserException ipae = new IPAParserException(e);
+		ipae.setPositionInLine(e.charPositionInLine);
+		throw ipae;
+	}
 	
 word_boundary returns [IPAElement wordBoundary]
 	:	SPACE
@@ -394,7 +441,7 @@ single_phone returns [Phone phone]
 options {
 	backtrack=true;
 }
-	:	ps=prefix_section? p1=base_phone ( id=(LONG|HALF_LONG|SUFFIX_DIACRITIC)? lig=LIGATURE p2=base_phone)?  ss=suffix_section?
+	:	ps=prefix_section? p1=base_phone (lig=LIGATURE p2=base_phone)?  ss=suffix_section?
 	{
 		Diacritic[] prefixDiacritics = new Diacritic[0];
 		if(ps != null) {

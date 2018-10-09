@@ -34,7 +34,7 @@ import ca.phon.ipa.parser.IPATokens;
  * <li>A (optional) suffix diacritic</li>
  * </ul>
  */
-public class Phone extends IPAElement {
+public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacritics, CombiningDiacritics {
 	
 	private Diacritic[] prefixDiacritics = new Diacritic[0];
 	
