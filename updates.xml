@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0.dmg" newVersion="3.0.0" newMediaFileId="macos" fileSize="211358638" md5Sum="86c4f99708f86b8a91d412a70179c5b3" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.1.8
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1.dmg" newVersion="3.0.1" newMediaFileId="macos" fileSize="213858106" md5Sum="7aa2eddcf742fac77e479a0e51513e17" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -189,8 +209,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_0.dmg" newVersion="3.0.0" newMediaFileId="macos" fileSize="211358638" md5Sum="86c4f99708f86b8a91d412a70179c5b3" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1.dmg" newVersion="3.0.1" newMediaFileId="macos" fileSize="213858106" md5Sum="7aa2eddcf742fac77e479a0e51513e17" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -378,8 +418,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.exe" newVersion="3.0.0" newMediaFileId="win64" fileSize="223836160" md5Sum="dd1d4985154a96a6b98d8e3b356edd8a" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.exe" newVersion="3.0.1" newMediaFileId="win64" fileSize="226316288" md5Sum="d4270ff2d43362ce219c3af68deed058" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -567,8 +627,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.exe" newVersion="3.0.0" newMediaFileId="win64" fileSize="223836160" md5Sum="dd1d4985154a96a6b98d8e3b356edd8a" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.exe" newVersion="3.0.1" newMediaFileId="win64" fileSize="226316288" md5Sum="d4270ff2d43362ce219c3af68deed058" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -756,8 +836,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.exe" newVersion="3.0.0" newMediaFileId="win64" fileSize="223836160" md5Sum="dd1d4985154a96a6b98d8e3b356edd8a" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.exe" newVersion="3.0.1" newMediaFileId="win64" fileSize="226316288" md5Sum="d4270ff2d43362ce219c3af68deed058" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -945,8 +1045,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_0.zip" newVersion="3.0.0" newMediaFileId="win64zip" fileSize="222816945" md5Sum="b01ce3f9c60ca41bc1045bd91fdefe09" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.zip" newVersion="3.0.1" newMediaFileId="win64zip" fileSize="225311522" md5Sum="c0f0389718c87d91854e3d637b880d8f" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -1134,8 +1254,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_0.deb" newVersion="3.0.0" newMediaFileId="linux64deb" fileSize="113549872" md5Sum="7cd23cd38943b190c4977d6e8d040c36" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_1.deb" newVersion="3.0.1" newMediaFileId="linux64deb" fileSize="116078876" md5Sum="1dbf79dfcf813bf4ce85f87246d0e180" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
@@ -1323,8 +1463,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_0.sh" newVersion="3.0.0" newMediaFileId="linux64" fileSize="113402326" md5Sum="e6a1d50ac6d834fc2c5a5659e38a706e" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from Phon 2.1.8
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_1.sh" newVersion="3.0.1" newMediaFileId="linux64" fileSize="115897042" md5Sum="521bee1beb30dbfeaef5faedcdce635d" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
 
 Version 3.0.0 is a significant update to Phon and is recommended for all users.
 
