@@ -17,19 +17,19 @@ All of these functions are accessible through a user-friendly graphical interfac
 
 ## Download Phon
 
-### Phon 3.0.0 (Stable)
+### Phon 3.0.1 (Stable)
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.0/Phon_macos_3_0_0.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0/Phon_windows-x64_3_0_0.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.0/Phon_windows-x64_3_0_0.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.0/Phon_linux_3_0_0.deb)
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0/Phon_unix_3_0_0.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_macos_3_0_1.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_windows-x64_3_0_1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_windows-x64_3_0_1.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_linux_3_0_1.deb)
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_unix_3_0_1.sh)
   
-### Phon 3.0.0b5 (Current beta)
+### Phon 3.0.1b1 (Current beta)
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.0b5/Phon_macos_3_0_0b5.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0b5/Phon_windows-x64_3_0_0b5.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.0b5/Phon_windows-x64_3_0_0b5.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.0b5/Phon_linux_3_0_0b5.deb) 
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.0b5/Phon_unix_3_0_0b5.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.1b1/Phon_macos_3_0_1b1.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.1b1/Phon_windows-x64_3_0_1b1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.1b1/Phon_windows-x64_3_0_1b1.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.1b1/Phon_linux_3_0_1b1.deb) 
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.1b1/Phon_unix_3_0_1b1.sh)
  
 Previous releases can be found at https://github.com/phon-ca/phon/releases.
 
@@ -41,7 +41,7 @@ Previous releases can be found at https://github.com/phon-ca/phon/releases.
 
 ## Citing Phon
 
-Hedlund, Gregory & Yvan Rose. 2018. Phon 3.0.0 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
+Hedlund, Gregory & Yvan Rose. 2018. Phon 3.0.1 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
 
 Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, Philip O’Brien & Todd Wareham. 2006. Introducing Phon: A Software Solution for the Study of Phonological Acquisition. In David Bamman, Tatiana Magnitskaia & Colleen Zaller (eds.), 
 *Proceedings of the 30th Annual Boston University Conference on Language Development*. Somerville, MA: Cascadilla Press. 489-500.

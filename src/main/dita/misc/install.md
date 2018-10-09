@@ -7,12 +7,12 @@ Download required fronts from https://www.phon.ca/downloads/ipafonts.zip.
 
 ## Windows
 
- * Installer - Download the newest Phon_windows-x64_<version>.exe installer from the [releases](https://github.com/phon-ca/phon/releases) page.
- * Manual Installation - Download the Phon_windows-x64_<version>.zip package from the [releases](https://github.com/phon-ca/phon/releases) page.
+ * Installer - Download and execution the newest ```Phon_windows-x64_<version>.exe``` installer from the [releases](https://github.com/phon-ca/phon/releases) page.
+ * Manual Installation - Download the ```Phon_windows-x64_<version>.zip``` package from the [releases](https://github.com/phon-ca/phon/releases) page.
 
 ##  macOS
 
- * Download the newest .dmg file from the [releases](https://github.com/phon-ca/phon/releases) page.  After opening the disk image, drag Phon into your Applications folder.
+ * Download the newest ```Phon_macos_<version>.dmg``` file from the [releases](https://github.com/phon-ca/phon/releases) page.  After opening the disk image, drag Phon into your Applications folder.
 
 ## Ubuntu (16.04/18.04)
 
