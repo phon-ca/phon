@@ -27,6 +27,9 @@ import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.welcome.WelcomeWindow;
+import ca.phon.app.welcome.WelcomeWindowEP;
+import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
@@ -56,6 +59,8 @@ public class OpenWindowsMenuListener implements MenuListener {
 		JMenu menu = (JMenu)arg0.getSource();
 		menu.removeAll();
 		
+		WelcomeWindow welcomeWindow = null;
+		
 		final Map<Project, List<CommonModuleFrame>> projectWindows = 
 				new LinkedHashMap<>();
 		final List<CommonModuleFrame> strayWindows = new ArrayList<>();
@@ -70,6 +75,10 @@ public class OpenWindowsMenuListener implements MenuListener {
 					projectWindows.put(project, windows);
 				}
 				windows.add(cmf);
+			}
+			
+			if(cmf instanceof WelcomeWindow) {
+				welcomeWindow = (WelcomeWindow)cmf;
 			}
 		}
 		
@@ -91,6 +100,13 @@ public class OpenWindowsMenuListener implements MenuListener {
 			showWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Bring window to front");
 			final JMenuItem projectWindowItem = new JMenuItem(showWindowAct);
 			menu.add(projectWindowItem);
+		}
+		
+		// if no welcome window found, add item to show it
+		if(welcomeWindow == null) {
+			final PluginAction welcomeWindowAct = new PluginAction(WelcomeWindowEP.EP_NAME);
+			welcomeWindowAct.putValue(PhonUIAction.NAME, "Show Welcome window");
+			menu.add(new JMenuItem(welcomeWindowAct));
 		}
 		
 		// generic close item

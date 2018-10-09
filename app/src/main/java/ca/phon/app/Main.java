@@ -33,6 +33,7 @@ import javax.swing.SwingUtilities;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.welcome.WelcomeWindowEP;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -57,7 +58,7 @@ public class Main {
 			Main.class.getName() + ".initialEntryPoint";
 	
 	private final static String initialEntryPoint = 
-			PrefHelper.get(INITIAL_EP_PROP, "WelcomeWindow");
+			PrefHelper.get(INITIAL_EP_PROP, WelcomeWindowEP.EP_NAME);
 	
 	public static void main(String[] args) {
 		createDataFolder();

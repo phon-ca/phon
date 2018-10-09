@@ -21,23 +21,37 @@ import javax.swing.SwingUtilities;
 
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
+import ca.phon.ui.CommonModuleFrame;
 
 @PhonPlugin(author="Greg Hedlund", minPhonVersion="Phon 2.2", version="1")
 public class WelcomeWindowEP implements IPluginEntryPoint {
 
+	public final static String EP_NAME = "WelcomeWindow";
+	
 	@Override
 	public String getName() {
-		return "WelcomeWindow";
+		return EP_NAME;
 	}
 
 	@Override
 	public void pluginStart(Map<String, Object> args) {
 		final Runnable onEDT =  () -> {
-			final WelcomeWindow window = new WelcomeWindow();
-			window.pack();
-			window.setSize(900, 710);
-			window.centerWindow();
-			window.setVisible(true);
+			WelcomeWindow window = null;
+			for(var cmf:CommonModuleFrame.getOpenWindows()) {
+				if(cmf instanceof WelcomeWindow)
+					window = (WelcomeWindow)cmf;
+			}
+			
+			if(window == null) {
+				window = new WelcomeWindow();
+				window.pack();
+				window.setSize(900, 710);
+				window.centerWindow();
+				window.setVisible(true);
+			} else {
+				window.setVisible(true);
+				window.toFront();
+			}
 		};
 		if(SwingUtilities.isEventDispatchThread())
 			onEDT.run();
