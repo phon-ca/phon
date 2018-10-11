@@ -45,7 +45,7 @@ import ca.phon.worker.PhonWorker;
  * Main entry point for the application.
  *
  */
-public class Main {
+public final class Main {
 	
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Main.class.getName());
 	
