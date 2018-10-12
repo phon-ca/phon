@@ -19,6 +19,7 @@ package ca.phon.query.db.xml;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import ca.phon.query.db.ReportHelper;
 import ca.phon.query.db.Result;
@@ -216,5 +217,16 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 			result.getResultValue().remove(idx);
 		}
 		
+	}
+
+	@Override
+	public Optional<ResultValue> getResultValue(String name) {
+		for(int i = 0; i < getNumberOfResultValues(); i++) {
+			var rv = getResultValue(i);
+			if(rv.getName().equals(name)) {
+				return Optional.of(rv);
+			}
+		}
+		return Optional.empty();
 	}
 }

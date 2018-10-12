@@ -17,6 +17,7 @@
 package ca.phon.query.db;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Interface for the result of a Phon query. 
@@ -78,6 +79,14 @@ public interface Result extends Iterable<ResultValue> {
 	 * @return number of result values
 	 */
 	public abstract int getNumberOfResultValues();
+	
+	/**
+	 * Get the result value by name
+	 * 
+	 * @param name
+	 * @return result value optional
+	 */
+	public abstract Optional<ResultValue> getResultValue(String name);
 	
 	/**
 	 * Get the specified result value

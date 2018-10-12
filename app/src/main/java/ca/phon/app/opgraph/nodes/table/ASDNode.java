@@ -15,9 +15,11 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -25,6 +27,8 @@ import ca.phon.ipa.tree.IpaTernaryTree;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 /**
@@ -32,6 +36,8 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
  * 
  * Create a table with the aforementioned columns calculated
  * from the IPA Target, IPA Actual, and Alignment columns of the input table.
+ * While optional, syllabifaction info can be provided for the IPA Target and IPA Actual
+ * values using the Target Syllabification and Acutal Syllabification columns respectively.
  * A position column is also included the value of which will be a
  * combination of the constituent type along with the index position
  * of the phone within the search result. Epenthesized phones are given a position
@@ -77,6 +83,10 @@ public final class ASDNode extends TableOpNode {
 		final int ipaActualCol = inputTable.getColumnIndex("IPA Actual");
 		final int alignmentCol = inputTable.getColumnIndex("Alignment");
 		
+		final int resultCol = inputTable.getColumnIndex("Result");
+		final int targetSyllCol = inputTable.getColumnIndex("Target Syllabification (Group)");
+		final int actualSyllCol = inputTable.getColumnIndex("Actual Syllabification (Group)");
+		
 		if(ipaTargetCol < 0) 
 			throw new ProcessingException(null, "Input table missing required IPA Target column");
 		if(ipaActualCol < 0)
@@ -100,9 +110,49 @@ public final class ASDNode extends TableOpNode {
 		for(int row = 0; row < inputTable.getRowCount(); row++) {
 			var rowData = inputTable.getRow(row);
 			
-			final IPATranscript ipaTarget = (IPATranscript)rowData[ipaTargetCol];
-			final IPATranscript ipaActual = (IPATranscript)rowData[ipaActualCol];
+			IPATranscript ipaTarget = (IPATranscript)rowData[ipaTargetCol];
+			IPATranscript ipaActual = (IPATranscript)rowData[ipaActualCol];
+			
 			final String alignmentTxt = (String)rowData[alignmentCol];
+			if(alignmentTxt.length() == 0)
+				continue;
+			
+			// get syllabified versions of transcripts if available
+			Result result = null;
+			if(resultCol >= 0)
+				result = (Result)rowData[resultCol];
+			if(result != null && targetSyllCol >= 0) {
+				var rv = result.getResultValue("IPA Target");
+				if(rv.isPresent()) {
+					try {
+						var ipaT = IPATranscript.parseIPATranscript((String)rowData[targetSyllCol]);
+						var testIPA = getResultPhones(ipaT, rv.get());
+						
+						if(ipaTarget.toString().equals(testIPA.toString())) {
+							ipaTarget = testIPA;
+						}
+					} catch (ParseException e) {
+						LogUtil.severe(e);
+					}
+				}
+			}
+			
+			if(result != null && actualSyllCol >= 0) {
+				var rv = result.getResultValue("IPA Actual");
+				if(rv.isPresent()) {
+					try {
+						var ipaA = IPATranscript.parseIPATranscript((String)rowData[actualSyllCol]);
+						var testIPA = getResultPhones(ipaA, rv.get());
+						
+						if(ipaActual.toString().equals(testIPA.toString())) {
+							ipaActual = testIPA;
+						}
+					} catch (ParseException e) {
+						LogUtil.severe(e);
+					}
+				}
+			}
+			
 			final PhoneMap alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
 			
 			var transcriptInfo = asdInfo.get(ipaTarget);
@@ -169,6 +219,12 @@ public final class ASDNode extends TableOpNode {
 		}
 		
 		context.put(super.tableOutput, outputTable);
+	}
+	
+	private IPATranscript getResultPhones(IPATranscript ipa, ResultValue rv) {
+		var ipaRange = rv.getRange();
+		var retVal = ipa.subsection(ipaRange.getFirst(), ipaRange.getLast());
+		return retVal;
 	}
 	
 	private class Counts {
