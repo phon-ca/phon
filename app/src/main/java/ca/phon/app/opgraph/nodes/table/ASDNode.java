@@ -82,7 +82,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
 @OpNodeInfo(category="Table", description="", name="Accurate, Substitutions, Deletions", showInLibrary=true)
 public final class ASDNode extends TableOpNode implements NodeSettings {
 	
-	private boolean ignoreDiacritics = false;
+	private boolean _ignoreDiacritics = false;
 	
 	private JPanel settingsPanel;
 	private JCheckBox ignoreDiacriticsBox;
@@ -202,7 +202,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 				Counts currentCount = new Counts();
 				++currentCount.count;
 				if(ipaTEle != null && ipaAEle != null) {
-					if(compareElements(ipaTEle, ipaAEle)) {
+					if(compareElements(ipaTEle, ipaAEle, ignoreDiacritics)) {
 						++currentCount.accurate;
 					} else {
 						++currentCount.substitions;
@@ -248,7 +248,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 		context.put(super.tableOutput, outputTable);
 	}
 	
-	private boolean compareElements(IPAElement ele1, IPAElement ele2) {
+	private boolean compareElements(IPAElement ele1, IPAElement ele2, boolean ignoreDiacritics) {
 		if(ignoreDiacritics) {
 			final IPATranscript testIPA1 = 
 					(new IPATranscriptBuilder()).append(ele1).toIPATranscript().stripDiacritics();
@@ -283,11 +283,11 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 	}
 	
 	public boolean isIgnoreDiacritics() {
-		return (this.ignoreDiacriticsBox != null ? this.ignoreDiacriticsBox.isSelected() : this.ignoreDiacritics);
+		return (this.ignoreDiacriticsBox != null ? this.ignoreDiacriticsBox.isSelected() : this._ignoreDiacritics);
 	}
 	
 	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
-		this.ignoreDiacritics = ignoreDiacritics;
+		this._ignoreDiacritics = ignoreDiacritics;
 		if(this.ignoreDiacriticsBox != null)
 			this.ignoreDiacriticsBox.setSelected(ignoreDiacritics);
 	}
@@ -297,7 +297,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 		if(settingsPanel == null) {
 			settingsPanel = new JPanel(new VerticalLayout());
 			ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
-			ignoreDiacriticsBox.setSelected(ignoreDiacritics);
+			ignoreDiacriticsBox.setSelected(_ignoreDiacritics);
 			settingsPanel.add(ignoreDiacriticsBox);
 		}
 		return settingsPanel;
@@ -312,7 +312,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 
 	@Override
 	public void loadSettings(Properties properties) {
-		setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("ignoreDiacritics", "false")));
+		setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("_ignoreDiacritics", "false")));
 	}
 	
 }
