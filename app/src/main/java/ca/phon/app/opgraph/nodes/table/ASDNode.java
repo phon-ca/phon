@@ -15,17 +15,30 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import java.awt.Component;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+
+import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.tree.IpaTernaryTree;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
@@ -67,16 +80,28 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
  * 
  */
 @OpNodeInfo(category="Table", description="", name="Accurate, Substitutions, Deletions", showInLibrary=true)
-public final class ASDNode extends TableOpNode {
+public final class ASDNode extends TableOpNode implements NodeSettings {
+	
+	private boolean ignoreDiacritics = false;
+	
+	private JPanel settingsPanel;
+	private JCheckBox ignoreDiacriticsBox;
 	
 	public ASDNode() {
 		super();
+		
+		putExtension(NodeSettings.class, this);
 	}
 	
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final DefaultTableDataSource inputTable = (DefaultTableDataSource)context.get(super.tableInput);
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
+		
+		boolean ignoreDiacritics = isIgnoreDiacritics();
+		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
+			ignoreDiacritics = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
+		}
 	
 		// find required input columns
 		final int ipaTargetCol = inputTable.getColumnIndex("IPA Target");
@@ -112,10 +137,6 @@ public final class ASDNode extends TableOpNode {
 			
 			IPATranscript ipaTarget = (IPATranscript)rowData[ipaTargetCol];
 			IPATranscript ipaActual = (IPATranscript)rowData[ipaActualCol];
-			
-			final String alignmentTxt = (String)rowData[alignmentCol];
-			if(alignmentTxt.length() == 0)
-				continue;
 			
 			// get syllabified versions of transcripts if available
 			Result result = null;
@@ -153,6 +174,11 @@ public final class ASDNode extends TableOpNode {
 				}
 			}
 			
+			// reconstruct alignment
+			final String alignmentTxt = (String)rowData[alignmentCol];
+			if(alignmentTxt.length() == 0)
+				continue;
+			
 			final PhoneMap alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
 			
 			var transcriptInfo = asdInfo.get(ipaTarget);
@@ -176,11 +202,12 @@ public final class ASDNode extends TableOpNode {
 				Counts currentCount = new Counts();
 				++currentCount.count;
 				if(ipaTEle != null && ipaAEle != null) {
-					if(ipaTEle.toString().equals(ipaAEle.toString())) {
+					if(compareElements(ipaTEle, ipaAEle)) {
 						++currentCount.accurate;
 					} else {
 						++currentCount.substitions;
 					}
+					
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
 				} else if(ipaTEle == null && ipaAEle != null) {
@@ -221,6 +248,18 @@ public final class ASDNode extends TableOpNode {
 		context.put(super.tableOutput, outputTable);
 	}
 	
+	private boolean compareElements(IPAElement ele1, IPAElement ele2) {
+		if(ignoreDiacritics) {
+			final IPATranscript testIPA1 = 
+					(new IPATranscriptBuilder()).append(ele1).toIPATranscript().stripDiacritics();
+			final IPATranscript testIPA2 = 
+					(new IPATranscriptBuilder()).append(ele2).toIPATranscript().stripDiacritics();
+			return testIPA1.toString().matches(testIPA2.toString());
+		} else {
+			return ele1.toString().equals(ele2.toString());
+		}
+	}
+	
 	private IPATranscript getResultPhones(IPATranscript ipa, ResultValue rv) {
 		var ipaRange = rv.getRange();
 		var retVal = ipa.subsection(ipaRange.getFirst(), ipaRange.getLast());
@@ -241,6 +280,39 @@ public final class ASDNode extends TableOpNode {
 			retVal.deletions = deletions + c.deletions;
 			return retVal;
 		}
+	}
+	
+	public boolean isIgnoreDiacritics() {
+		return (this.ignoreDiacriticsBox != null ? this.ignoreDiacriticsBox.isSelected() : this.ignoreDiacritics);
+	}
+	
+	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
+		this.ignoreDiacritics = ignoreDiacritics;
+		if(this.ignoreDiacriticsBox != null)
+			this.ignoreDiacriticsBox.setSelected(ignoreDiacritics);
+	}
+
+	@Override
+	public Component getComponent(GraphDocument document) {
+		if(settingsPanel == null) {
+			settingsPanel = new JPanel(new VerticalLayout());
+			ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
+			ignoreDiacriticsBox.setSelected(ignoreDiacritics);
+			settingsPanel.add(ignoreDiacriticsBox);
+		}
+		return settingsPanel;
+	}
+
+	@Override
+	public Properties getSettings() {
+		Properties props = new Properties();
+		props.setProperty("ignoreDiacritics", Boolean.toString(isIgnoreDiacritics()));
+		return props;
+	}
+
+	@Override
+	public void loadSettings(Properties properties) {
+		setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("ignoreDiacritics", "false")));
 	}
 	
 }
