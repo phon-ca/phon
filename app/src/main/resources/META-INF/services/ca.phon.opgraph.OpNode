@@ -25,4 +25,4 @@ ca.phon.app.opgraph.nodes.table.MergeTablesNode
 ca.phon.app.opgraph.nodes.table.AppendTableNode
 ca.phon.app.opgraph.nodes.table.PhoneAccuracy
 ca.phon.app.opgraph.nodes.table.PhoneSimilarity
-ca.phon.app.opgraph.nodes.table.ASDNode
+ca.phon.app.opgraph.nodes.table.PhoneAccuracyNode

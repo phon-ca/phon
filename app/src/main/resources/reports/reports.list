@@ -3,5 +3,6 @@ reports/Listing.xml
 reports/Listing by Session.xml
 reports/Aggregate.xml
 reports/Inventory by Session.xml
-reports/Phone Similarity.xml
-reports/Transcript Variability.xml
+reports/Phones/Phone Accuracy.xml
+reports/Phones/Phone Similarity.xml
+reports/Phones/Transcript Variability.xml

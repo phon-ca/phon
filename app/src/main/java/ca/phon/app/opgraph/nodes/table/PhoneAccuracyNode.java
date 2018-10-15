@@ -18,8 +18,10 @@ package ca.phon.app.opgraph.nodes.table;
 import java.awt.Component;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -35,6 +37,7 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.tree.IpaTernaryTree;
+import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.app.GraphDocument;
@@ -43,9 +46,10 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.util.Range;
 
 /**
- * Accurate, Substitutions, Deletions Node (ASDNode)
+ * Accurate, Substitutions, Deletions Node (PhoneAccuracyNode)
  * 
  * Create a table with the aforementioned columns calculated
  * from the IPA Target, IPA Actual, and Alignment columns of the input table.
@@ -54,7 +58,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
  * A position column is also included the value of which will be a
  * combination of the constituent type along with the index position
  * of the phone within the search result. Epenthesized phones are given a position
- * starting with '+' where the index is the position of the last target phone position.
+ * endwing with '+' where the index is the position of the last target phone position.
  * 
  * For example:
  * 
@@ -70,24 +74,27 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
  * 
  * The table rows produced would be:
  * 
- * | IPA Target | Phone | Position | Count | Accurate | Substitutions | Deletions |
- * |------------|-------|----------|-------|----------|---------------|-----------|
- * | br         | b     | O1       | 5     | 2        | 2             | 1         |
- * | br         | r     | O2       | 5     | 5        | 0             | 0         |
- * | br         | s     | +O0      | 1     | 0        | 0             | 1         |
- * | br         | l     | +O1      | 1     | 0        | 0             | 1         |
- * | br         | t     | +O2      | 1     | 0        | 0             | 1         |
+ * | IPA Target | Phone | Position | Count | Accurate | Substitutions | Deletions | Epenthesis |
+ * |------------|-------|----------|-------|----------|---------------|-----------|------------|
+ * | br         | b     | O1       | 5     | 2        | 2             | 1         | 0          |
+ * | br         | r     | O2       | 5     | 5        | 0             | 0         | 0          |
+ * | br         | s     | +O0      | 1     | 0        | 0             | 1         | 1          |
+ * | br         | l     | +O1      | 1     | 0        | 0             | 1         | 1          |
+ * | br         | t     | +O2      | 1     | 0        | 0             | 1         | 1          |
  * 
  */
-@OpNodeInfo(category="Table", description="", name="Accurate, Substitutions, Deletions", showInLibrary=true)
-public final class ASDNode extends TableOpNode implements NodeSettings {
+@OpNodeInfo(category="Table", description="", name="Phone Accuracy", showInLibrary=true)
+public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings {
 	
 	private boolean _ignoreDiacritics = false;
 	
+	private boolean includeEpenthesis = false;
+	
 	private JPanel settingsPanel;
 	private JCheckBox ignoreDiacriticsBox;
+	private JCheckBox includeEpenthesisBox;
 	
-	public ASDNode() {
+	public PhoneAccuracyNode() {
 		super();
 		
 		putExtension(NodeSettings.class, this);
@@ -99,15 +106,18 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
 		
 		boolean ignoreDiacritics = isIgnoreDiacritics();
+		// global settings have hightest priority
 		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
-			ignoreDiacritics = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
+			ignoreDiacritics = (Boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
 		}
+		boolean includeEpenthesis = isIncludeEpenthesis();
 	
 		// find required input columns
 		final int ipaTargetCol = inputTable.getColumnIndex("IPA Target");
 		final int ipaActualCol = inputTable.getColumnIndex("IPA Actual");
 		final int alignmentCol = inputTable.getColumnIndex("Alignment");
 		
+		// optional columns (required for accurate positional information)
 		final int resultCol = inputTable.getColumnIndex("Result");
 		final int targetSyllCol = inputTable.getColumnIndex("Target Syllabification (Group)");
 		final int actualSyllCol = inputTable.getColumnIndex("Actual Syllabification (Group)");
@@ -128,6 +138,8 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 		outputTable.setColumnTitle(col++, "Accurate");
 		outputTable.setColumnTitle(col++, "Substitutions");
 		outputTable.setColumnTitle(col++, "Deletions");
+		if(includeEpenthesis)
+			outputTable.setColumnTitle(col++, "Epenthesis");
 		
 		// perform counts, store information in 3-level map
 		final IpaTernaryTree<Map<String, Map<String, Counts>>> asdInfo = new IpaTernaryTree<>();
@@ -165,9 +177,13 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 						var ipaA = IPATranscript.parseIPATranscript((String)rowData[actualSyllCol]);
 						var testIPA = getResultPhones(ipaA, rv.get());
 						
+					try {	
 						if(ipaActual.toString().equals(testIPA.toString())) {
 							ipaActual = testIPA;
 						}
+					} catch (NullPointerException e) {
+						System.out.println(e);
+					}
 					} catch (ParseException e) {
 						LogUtil.severe(e);
 					}
@@ -183,7 +199,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 			
 			var transcriptInfo = asdInfo.get(ipaTarget);
 			if(transcriptInfo == null) {
-				transcriptInfo = new HashMap<>();
+				transcriptInfo = new LinkedHashMap<>();
 				asdInfo.put(ipaTarget, transcriptInfo);
 			}
 			
@@ -211,7 +227,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
 				} else if(ipaTEle == null && ipaAEle != null) {
-					++currentCount.deletions;
+					++currentCount.epenthesis;
 					position = ipaEle.getScType().getIdChar() + ("" + i) + "+";
 				}
 				
@@ -240,6 +256,8 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 					rowData[col++] = Integer.valueOf(counts.accurate);
 					rowData[col++] = Integer.valueOf(counts.substitions);
 					rowData[col++] = Integer.valueOf(counts.deletions);
+					if(includeEpenthesis)
+						rowData[col++] = Integer.valueOf(counts.epenthesis);
 					outputTable.addRow(rowData);
 				}
 			}
@@ -261,9 +279,26 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 	}
 	
 	private IPATranscript getResultPhones(IPATranscript ipa, ResultValue rv) {
-		var ipaRange = rv.getRange();
-		var retVal = ipa.subsection(ipaRange.getFirst(), ipaRange.getLast());
-		return retVal;
+		// nothing to extract
+		if(ipa.length() == 0)
+			return new IPATranscript();
+		
+		// empty range
+		var stringRange = rv.getRange();
+		if(stringRange.getStart() == stringRange.getEnd())
+			return new IPATranscript();
+		
+		var ipaRange = new Range(ipa.ipaIndexOf(stringRange.getStart()), 
+				ipa.ipaIndexOf(stringRange.getEnd()),
+				stringRange.isExcludesEnd());
+		
+		try {
+			var retVal = ipa.subsection(ipaRange.getFirst(), ipaRange.getLast());
+			return retVal;
+		} catch (Exception e) {
+			LogUtil.warning(e);
+			return new IPATranscript();
+		}
 	}
 	
 	private class Counts {
@@ -271,6 +306,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 		int accurate = 0;
 		int substitions = 0;
 		int deletions = 0;
+		int epenthesis = 0;
 		
 		public Counts plus(Counts c) {
 			Counts retVal = new Counts();
@@ -278,6 +314,7 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 			retVal.accurate = accurate + c.accurate;
 			retVal.substitions = substitions + c.substitions;
 			retVal.deletions = deletions + c.deletions;
+			retVal.epenthesis = epenthesis + c.epenthesis;
 			return retVal;
 		}
 	}
@@ -292,27 +329,45 @@ public final class ASDNode extends TableOpNode implements NodeSettings {
 			this.ignoreDiacriticsBox.setSelected(ignoreDiacritics);
 	}
 
+	public boolean isIncludeEpenthesis() {
+		return (this.includeEpenthesisBox != null ? this.includeEpenthesisBox.isSelected() : this.includeEpenthesis);
+	}
+	
+	public void setIncludeEpenthesis(boolean includeEpenthesis) {
+		this.includeEpenthesis = includeEpenthesis;
+		if(this.includeEpenthesisBox != null)
+			this.includeEpenthesisBox.setSelected(includeEpenthesis);
+	}
+	
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
 			settingsPanel = new JPanel(new VerticalLayout());
+			
 			ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
 			ignoreDiacriticsBox.setSelected(_ignoreDiacritics);
+			
+			includeEpenthesisBox = new JCheckBox("Include epenthesis");
+			includeEpenthesisBox.setSelected(includeEpenthesis);
+			
 			settingsPanel.add(ignoreDiacriticsBox);
+			settingsPanel.add(includeEpenthesisBox);
 		}
 		return settingsPanel;
 	}
-
+	
 	@Override
 	public Properties getSettings() {
 		Properties props = new Properties();
 		props.setProperty("ignoreDiacritics", Boolean.toString(isIgnoreDiacritics()));
+		props.setProperty("includEpenthesis", Boolean.toString(isIncludeEpenthesis()));
 		return props;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("_ignoreDiacritics", "false")));
+		setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("ignoreDiacritics", "false")));
+		setIncludeEpenthesis(Boolean.parseBoolean(properties.getProperty("includeEpenthesis", "false")));
 	}
 	
 }
