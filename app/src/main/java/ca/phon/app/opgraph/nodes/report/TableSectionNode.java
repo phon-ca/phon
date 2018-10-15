@@ -94,11 +94,11 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 	}
 
 	public List<String> getColumns() {
-		return this.columns;
+		return (this.columnsArea != null ? parseColumns(columnsArea.getText()) : this.columns);
 	}
 
 	public void setColumns(String columnTxt) {
-		updateColumns(columnTxt);
+		this.columns = parseColumns(columnTxt);
 		if(this.columnsArea != null) {
 			this.columnsArea.setText(columnTxt);
 		}
@@ -112,9 +112,8 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 		}
 	}
 
-	private void updateColumns(String txt) {
-		columns.clear();
-
+	private List<String> parseColumns(String txt) {
+		List<String> columns = new ArrayList<>();
 		try ( BufferedReader reader = new BufferedReader(new StringReader(txt)) ) {
 			String line = null;
 			while((line = reader.readLine()) != null) {
@@ -125,6 +124,7 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 		} catch (IOException e) {
 			LogUtil.warning(e);
 		}
+		return columns;
 	}
 
 	@Override
@@ -140,27 +140,11 @@ public class TableSectionNode extends ReportSectionNode implements NodeSettings 
 			bg.add(includeColumnsButton);
 			bg.add(excludeColumnsButton);
 
+			String columnsTxt = getColumns().stream().collect(Collectors.joining("\n"));
 			columnsArea = new JTextArea();
-			columnsArea.setText(getColumns().stream().collect(Collectors.joining("\n")));
+			columnsArea.setText(columnsTxt);
 			final JScrollPane scroller = new JScrollPane(columnsArea);
-			columnsArea.getDocument().addDocumentListener(new DocumentListener() {
-
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					updateColumns(columnsArea.getText());
-				}
-
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					updateColumns(columnsArea.getText());
-				}
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-				}
-
-			});
-
+			
 			final JPanel topPanel = new JPanel(new VerticalLayout());
 			topPanel.add(includeColumnsButton);
 			topPanel.add(excludeColumnsButton);

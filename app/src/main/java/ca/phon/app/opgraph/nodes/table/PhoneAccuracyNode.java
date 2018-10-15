@@ -227,8 +227,13 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
 				} else if(ipaTEle == null && ipaAEle != null) {
-					++currentCount.epenthesis;
-					position = ipaEle.getScType().getIdChar() + ("" + i) + "+";
+					if(isIncludeEpenthesis()) {
+						++currentCount.epenthesis;
+						position = ipaEle.getScType().getIdChar() + ("" + i) + "+";
+					} else {
+						// ignore
+						continue;
+					}
 				}
 				
 				var posInfo = eleInfo.get(position);
@@ -360,7 +365,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 	public Properties getSettings() {
 		Properties props = new Properties();
 		props.setProperty("ignoreDiacritics", Boolean.toString(isIgnoreDiacritics()));
-		props.setProperty("includEpenthesis", Boolean.toString(isIncludeEpenthesis()));
+		props.setProperty("includeEpenthesis", Boolean.toString(isIncludeEpenthesis()));
 		return props;
 	}
 
