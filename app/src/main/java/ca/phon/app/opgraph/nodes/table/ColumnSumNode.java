@@ -30,7 +30,7 @@ public class ColumnSumNode extends TableOpNode implements NodeSettings {
 	private JPanel settingsPanel;
 	private JTextArea columnsArea;
 	
-	private List<String> columns;
+	private List<String> columns = new ArrayList<>();
 	
 	public ColumnSumNode() {
 		super();
@@ -43,12 +43,28 @@ public class ColumnSumNode extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource inputTable = (DefaultTableDataSource)context.get(tableInput);
 
 		final List<String> columns = getColumns();
+		final Map<String, Double> columnSum = sumColumns(inputTable, columns);
+		
+		var totalsRow = new Object[inputTable.getColumnCount()];
+		for(int i = 0; i < totalsRow.length; i++) totalsRow[i] = "";
+		for(String colName:columns) {
+			int colIdx = inputTable.getColumnIndex(colName);
+			if(colIdx >= 0) {
+				totalsRow[colIdx] = columnSum.get(colName);
+			}
+		}
+		inputTable.addRow(totalsRow);
+		
+		context.put(tableOutput, inputTable);
+	}
+	
+	public Map<String, Double> sumColumns(DefaultTableDataSource table, List<String> columns) {
 		final Map<String, Double> columnSum = new HashMap<>();
 		final Map<String, Integer> columnIndices = new HashMap<>();
 		columns.forEach( (colName) -> columnSum.put(colName, 0.0) );
-		columns.forEach( (colName) -> columnIndices.put(colName, inputTable.getColumnIndex(colName)) );
-		for(int row = 0; row < inputTable.getRowCount(); row++) {
-			var rowData = inputTable.getRow(row);
+		columns.forEach( (colName) -> columnIndices.put(colName, table.getColumnIndex(colName)) );
+		for(int row = 0; row < table.getRowCount(); row++) {
+			var rowData = table.getRow(row);
 			for(String colName:columns) {
 				var sum = columnSum.get(colName);
 				int colIdx = columnIndices.get(colName);
@@ -62,18 +78,7 @@ public class ColumnSumNode extends TableOpNode implements NodeSettings {
 				}
 			}
 		}
-		
-		var totalsRow = new Object[inputTable.getColumnCount()];
-		for(int i = 0; i < totalsRow.length; i++) totalsRow[i] = "";
-		for(String colName:columns) {
-			int colIdx = columnIndices.get(colName);
-			if(colIdx >= 0) {
-				totalsRow[colIdx] = columnSum.get(colName);
-			}
-		}
-		inputTable.addRow(totalsRow);
-		
-		context.put(tableOutput, inputTable);
+		return columnSum;
 	}
 	
 	public List<String> getColumns() {
