@@ -53,22 +53,6 @@
 var reportTitleParam;
 var reportTitle = reportTitleParamInfo.def;
 
-var ignoreDiacriticsParamInfo = {
-	"id": "ignoreDiacritics",
-	"title": "Ignore diacritics",
-	"def": false
-};
-var ignoreDiacriticsParam;
-var ignoreDiacritics = ignoreDiacriticsParamInfo.def;
-
-var includeEpenthesisParamInfo = {
-	"id": "includeEpenthesis",
-	"title": "Include epenthesis",
-	"def": true
-};
-var includeEpenthesisParam;
-var includeEpenthesis = includeEpenthesisParamInfo.def;
-
 function setup_params(params) {
 	reportTitleParam = new StringScriptParam(
 			reportTitleParamInfo.id,
@@ -77,22 +61,6 @@ function setup_params(params) {
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
 
-	var sep = new SeparatorScriptParam("Options", false);
-	params.add(sep);
-
-	ignoreDiacriticsParam = new BooleanScriptParam(
-		ignoreDiacriticsParamInfo.id,
-		ignoreDiacriticsParamInfo.title,
-		"",
-		ignoreDiacriticsParamInfo.def);
-	params.add(ignoreDiacriticsParam);
-
-	includeEpenthesisParam = new BooleanScriptParam(
-		includeEpenthesisParamInfo.id,
-		includeEpenthesisParamInfo.title,
-		"",
-		includeEpenthesisParamInfo.def);
-	params.add(includeEpenthesisParam);
 }
 ]]>
                     </oga:property>
@@ -105,112 +73,8 @@ function setup_params(params) {
                 <oga:meta x="352" y="15"/>
             </extensions>
         </node>
-        <ogcn:macro id="b40aad1400604847" name="Get Parameter: ignoreDiacritics" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="31793240">
-                <node id="eaa3a699bf9d4efb" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
-                                <![CDATA[<init>(java.lang.String)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.declaredClass">
-                                <![CDATA[java.lang.String]]>
-                            </oga:property>
-                        </oga:settings>
-                        <oga:meta x="15" y="15">
-                            <oga:default for="arg1" type="java.lang.String"/>
-                        </oga:meta>
-                    </extensions>
-                </node>
-                <node id="2a7e219f5184690" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
-                        </oga:settings>
-                        <oga:meta x="215" y="15"/>
-                    </extensions>
-                </node>
-                <node id="7ba4fd019ad541bf" name="To Boolean" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
-                                <![CDATA[java.lang.Boolean]]>
-                            </oga:property>
-                        </oga:settings>
-                        <oga:meta x="410" y="18"/>
-                    </extensions>
-                </node>
-                <link dest="2a7e219f5184690" destField="arg1" source="eaa3a699bf9d4efb" sourceField="value"/>
-                <link dest="7ba4fd019ad541bf" destField="obj" source="2a7e219f5184690" sourceField="value"/>
-            </graph>
-            <ogcn:published_input field="obj" name="parameters" ref="2a7e219f5184690"/>
-            <ogcn:published_input field="arg1" name="param" ref="eaa3a699bf9d4efb"/>
-            <ogcn:published_output field="obj" name="bool" ref="7ba4fd019ad541bf"/>
-            <extensions>
-                <oga:meta x="333" y="295">
-                    <oga:default for="param" type="java.lang.String">ignoreDiacritics</oga:default>
-                </oga:meta>
-            </extensions>
-        </ogcn:macro>
-        <ogcn:macro id="8a472748e2a4479b" name="Get Parameter: includeEpenthesis" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="db4fd24">
-                <node id="cb22760597174a10" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
-                                <![CDATA[<init>(java.lang.String)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.declaredClass">
-                                <![CDATA[java.lang.String]]>
-                            </oga:property>
-                        </oga:settings>
-                        <oga:meta x="15" y="15">
-                            <oga:default for="arg1" type="java.lang.String"/>
-                        </oga:meta>
-                    </extensions>
-                </node>
-                <node id="62404ce556aa4e95" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
-                        </oga:settings>
-                        <oga:meta x="215" y="15"/>
-                    </extensions>
-                </node>
-                <node id="b9b9927f7e8d40f2" name="To Boolean" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
-                                <![CDATA[java.lang.Boolean]]>
-                            </oga:property>
-                        </oga:settings>
-                        <oga:meta x="410" y="18"/>
-                    </extensions>
-                </node>
-                <link dest="62404ce556aa4e95" destField="arg1" source="cb22760597174a10" sourceField="value"/>
-                <link dest="b9b9927f7e8d40f2" destField="obj" source="62404ce556aa4e95" sourceField="value"/>
-            </graph>
-            <ogcn:published_input field="obj" name="parameters" ref="62404ce556aa4e95"/>
-            <ogcn:published_input field="arg1" name="param" ref="cb22760597174a10"/>
-            <ogcn:published_output field="obj" name="bool" ref="b9b9927f7e8d40f2"/>
-            <extensions>
-                <oga:meta x="334" y="403">
-                    <oga:default for="param" type="java.lang.String">includeEpenthesis</oga:default>
-                </oga:meta>
-            </extensions>
-        </ogcn:macro>
         <ogcn:macro id="bde3c530bcfb47c2" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4b562461">
+            <graph id="b68239d">
                 <node id="fe1c1ed943544ca" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -258,7 +122,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="b4f322ca62254632"/>
             <ogcn:published_output field="value" name="value" ref="1d5e7ac5357e4f22"/>
             <extensions>
-                <oga:meta x="682" y="475"/>
+                <oga:meta x="407" y="524"/>
             </extensions>
         </ogcn:macro>
         <node id="1de2ba82" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -283,14 +147,47 @@ function setup_params(params) {
         <node id="121219a4" type="class:ca.phon.app.opgraph.nodes.table.PhoneAccuracyNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="includEpenthesis">
-                        <![CDATA[false]]>
-                    </oga:property>
                     <oga:property key="ignoreDiacritics">
                         <![CDATA[false]]>
                     </oga:property>
+                    <oga:property key="includeEpenthesis">
+                        <![CDATA[false]]>
+                    </oga:property>
                 </oga:settings>
-                <oga:meta x="634" y="309"/>
+                <oga:meta x="288" y="374"/>
+            </extensions>
+        </node>
+        <node id="22f18ad" type="class:ca.phon.app.opgraph.nodes.table.ColumnSumNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="columns">
+                        <![CDATA[Count
+Accurate
+Substitutions
+Deletions
+Epenthesis]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="495" y="371"/>
+            </extensions>
+        </node>
+        <node id="39e782ff" type="class:ca.phon.app.opgraph.nodes.table.ColumnPercentageNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="dividendColumns">
+                        <![CDATA[Accurate
+Substitutions
+Deletions
+Epenthesis]]>
+                    </oga:property>
+                    <oga:property key="sumColumns">
+                        <![CDATA[false]]>
+                    </oga:property>
+                    <oga:property key="divisorColumn">
+                        <![CDATA[Count]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="691" y="370"/>
             </extensions>
         </node>
         <node id="7f5edc6e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -316,12 +213,12 @@ function setup_params(params) {
         <link dest="1de2ba82" destField="project" source="134c871f" sourceField="obj"/>
         <link dest="1de2ba82" destField="results" source="4ee848d6" sourceField="result sets"/>
         <link dest="121219a4" destField="table" source="1de2ba82" sourceField="table"/>
-        <link dest="7f5edc6e" destField="table" source="121219a4" sourceField="table"/>
         <link dest="bde3c530bcfb47c2" destField="parameters" source="88c433aa06ab4c1f" sourceField="parameters"/>
         <link dest="7f5edc6e" destField="sectionName" source="bde3c530bcfb47c2" sourceField="value"/>
         <link dest="7ee68231" destField="root" source="7f5edc6e" sourceField="section"/>
-        <link dest="8a472748e2a4479b" destField="parameters" source="88c433aa06ab4c1f" sourceField="parameters"/>
-        <link dest="b40aad1400604847" destField="parameters" source="88c433aa06ab4c1f" sourceField="parameters"/>
+        <link dest="22f18ad" destField="table" source="121219a4" sourceField="table"/>
+        <link dest="39e782ff" destField="table" source="22f18ad" sourceField="table"/>
+        <link dest="7f5edc6e" destField="table" source="39e782ff" sourceField="table"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="Phone Accuracy">
