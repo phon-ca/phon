@@ -209,7 +209,7 @@ function query_record(recordIndex, record) {
 					? (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : obj.getIPATargetWordLocation())
 					: (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : 0)));
 			var endIndex = startIndex + ipaT.toString().length();
-			rvt.range = new Range(startIndex, endIndex, false);
+			rvt.range = new Range(startIndex, endIndex, true);
 			rvt.data = ipaT;
 			result.addResultValue(rvt);
 
@@ -221,7 +221,7 @@ function query_record(recordIndex, record) {
 					? (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : obj.getIPAActualWordLocation())
 					: (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : 0)) );
 			endIndex = startIndex + ipaA.toString().length();
-			rva.range = new Range(startIndex, endIndex, false);
+			rva.range = new Range(startIndex, endIndex, true);
 			rva.data = ipaA;
 			result.addResultValue(rva);
 

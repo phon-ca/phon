@@ -105,7 +105,7 @@ exports.TierList = function(id) {
 					startIndex += wordOffset;
 				}
 
-				tierResultValue.range = new Range(startIndex, startIndex + length, false);
+				tierResultValue.range = new Range(startIndex, startIndex + length, true);
 				resultValues.push(tierResultValue);
 			} else {
 				if(tierName == "Phone Alignment") {

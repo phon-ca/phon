@@ -183,7 +183,6 @@ function query_record(recordIndex, record) {
 						var endIdx = wordOffset + v.end;
 
 						if (v.value instanceof IPATranscript) {
-							// we need to convert phone to string range
 							startIdx = wordOffset + word.getTier(searchTier).stringIndexOf(v.value);
 							endIdx = startIdx + v.value.toString().length();
 						}
@@ -191,7 +190,7 @@ function query_record(recordIndex, record) {
 						var rv = factory.createResultValue();
 						rv.tierName = searchTier;
 						rv.groupIndex = group.groupIndex;
-						rv.range = new Range(startIdx, endIdx, false);
+						rv.range = new Range(startIdx, endIdx, true);
 						rv.data = v.value;
 						result.addResultValue(rv);
 
@@ -241,7 +240,7 @@ function query_record(recordIndex, record) {
 				var rv = factory.createResultValue();
 				rv.tierName = searchTier;
 				rv.groupIndex = group.groupIndex;
-				rv.range = new Range(startIdx, endIdx, false);
+				rv.range = new Range(startIdx, endIdx, true);
 				rv.data = v.value;
 				result.addResultValue(rv);
 

@@ -171,7 +171,7 @@ function query_record(recordIndex, record)
 	    	rvt.groupIndex = gIdx;
 	    	var startIndex = word.getIPATargetWordLocation();
 	    	var endIndex = startIndex + ipaT.toString().length();
-	    	rvt.range = new Range(startIndex, endIndex, false);
+	    	rvt.range = new Range(startIndex, endIndex, true);
 	    	rvt.data = ipaT;
 	    	result.addResultValue(rvt);
 
@@ -180,7 +180,7 @@ function query_record(recordIndex, record)
 	    	rva.groupIndex = gIdx;
 	    	startIndex = word.getIPAActualWordLocation();
 	    	endIndex = startIndex + ipaA.toString().length();
-	    	rva.range = new Range(startIndex, endIndex, false);
+	    	rva.range = new Range(startIndex, endIndex, true);
 	    	rva.data = ipaA;
 	        result.addResultValue(rva);
 

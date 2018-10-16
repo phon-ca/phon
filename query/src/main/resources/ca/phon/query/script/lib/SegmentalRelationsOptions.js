@@ -316,7 +316,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		var ipa = (isTarget == true ? phoneMap.targetRep : phoneMap.actualRep);
 		stringIdx = (ipaE == null ? -1: ipa.stringIndexOfElement(ipaE));
 		rv.range =
-		    (stringIdx < 0 ? new Range(0, 0, true) : new Range(stringIdx, stringIdx+(ipaE.toString().length()), false));
+		    (stringIdx < 0 ? new Range(0, 0, true) : new Range(stringIdx, stringIdx+(ipaE.toString().length()), true));
 		rv.data = (ipaE == null ? "\u2205": ipaE.text);
 
 		return rv;

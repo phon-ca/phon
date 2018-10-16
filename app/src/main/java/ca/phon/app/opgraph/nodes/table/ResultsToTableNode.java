@@ -223,10 +223,8 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 									(formatter != null ? formatter.format(tierValue) : tierValue.toString());
 
 							String resultTxt =
-									(rv.getRange().getFirst() >= 0 && rv.getRange().getLast() >= rv.getRange().getFirst() ?
-									tierTxt.substring(
-											Math.max(0, rv.getRange().getFirst()),
-											Math.max(0, Math.min(rv.getRange().getLast(), tierTxt.length()))) : "");
+									(rv.getRange().getStart() >= 0 && rv.getRange().getEnd() >= rv.getRange().getFirst() ?
+									tierTxt.substring( rv.getRange().getStart(), rv.getRange().getEnd() ) : "");
 
 							if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
 								resultTxt = "\u2205";

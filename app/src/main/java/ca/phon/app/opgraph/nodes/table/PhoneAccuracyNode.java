@@ -294,11 +294,11 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 			return new IPATranscript();
 		
 		var ipaRange = new Range(ipa.ipaIndexOf(stringRange.getStart()), 
-				ipa.ipaIndexOf(stringRange.getEnd()),
-				stringRange.isExcludesEnd());
+				ipa.ipaIndexOf(stringRange.getLast()),
+				false);
 		
 		try {
-			var retVal = ipa.subsection(ipaRange.getFirst(), ipaRange.getLast());
+			var retVal = ipa.subsection(ipaRange.getFirst(), ipaRange.getLast()+1);
 			return retVal;
 		} catch (Exception e) {
 			LogUtil.warning(e);

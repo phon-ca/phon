@@ -273,7 +273,7 @@ function query_record(recordIndex, record) {
 				var rv = factory.createResultValue();
 				rv.tierName = searchTier;
 				rv.groupIndex = group.groupIndex;
-				rv.range = new Range(startIndex, startIndex + length, false);
+				rv.range = new Range(startIndex, startIndex + length, true);
 				rv.data = (match.value != null ? new IPATranscript(match.value): new IPATranscript());
 				result.addResultValue(rv);
 
@@ -308,7 +308,7 @@ function query_record(recordIndex, record) {
 						var alignedStart = alignedGroup.stringIndexOf(alignedIpa);
 						var alignedLength = alignedIpa.toString().length();
 
-						alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, false);
+						alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, true);
 						alignedRv.data = alignedIpa;
 					} else {
 						alignedRv.range = new Range(0, 0, true);
