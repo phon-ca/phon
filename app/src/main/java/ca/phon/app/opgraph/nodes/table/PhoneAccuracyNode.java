@@ -110,7 +110,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		boolean ignoreDiacritics = isIgnoreDiacritics();
 		// global settings have hightest priority
 		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
-			ignoreDiacritics = (Boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
+			ignoreDiacritics = (Boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
 		}
 		boolean includeEpenthesis = isIncludeEpenthesis();
 	
