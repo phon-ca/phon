@@ -65,7 +65,7 @@ function setupTable(inputTable) {
 function tableOp(context, table) {
 	var tableMap = new java.util.LinkedHashMap();
 	context.put("tableMap", tableMap);
-	context.put("keySet", new java.util.HashSet());
+	context.put("keySet", new java.util.LinkedHashSet());
 	
 	if(table == null) return;
 	

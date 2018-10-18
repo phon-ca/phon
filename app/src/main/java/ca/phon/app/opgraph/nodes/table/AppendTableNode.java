@@ -75,7 +75,7 @@ public class AppendTableNode extends TableOpNode {
 		} else if(table2 == null && table1 != null) {
 			context.put(tableOutput, table1);
 		} else {
-			context.put(tableOutput, null);
+			context.put(tableOutput, new DefaultTableDataSource());
 		}
 	}
 

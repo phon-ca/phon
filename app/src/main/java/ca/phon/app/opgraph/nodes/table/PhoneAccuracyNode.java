@@ -35,6 +35,7 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.Phone;
+import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.tree.IpaTernaryTree;
 import ca.phon.opgraph.InputField;
@@ -46,6 +47,7 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Range;
 
 /**
@@ -192,10 +194,12 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 			
 			// reconstruct alignment
 			final String alignmentTxt = (String)rowData[alignmentCol];
-			if(alignmentTxt.length() == 0)
-				continue;
-			
-			final PhoneMap alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
+			PhoneMap alignment = null;
+			if(alignmentTxt.length() == 0) {
+				alignment = (new PhoneAligner()).calculatePhoneAlignment(ipaTarget, ipaActual);
+			} else {
+				alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
+			}
 			
 			var transcriptInfo = asdInfo.get(ipaTarget);
 			if(transcriptInfo == null) {
@@ -203,6 +207,9 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 				asdInfo.put(ipaTarget, transcriptInfo);
 			}
 			
+			Map<SyllableConstituentType, Integer> scTypeCounts = new HashMap<>();
+			for(SyllableConstituentType scType:SyllableConstituentType.values()) scTypeCounts.put(scType, 0);
+			int lastIdx = 0;
 			for(int i = 0; i < alignment.getAlignmentLength(); i++) {
 				final IPAElement ipaTEle = alignment.getTopAlignmentElements().get(i);
 				final IPAElement ipaAEle = alignment.getBottomAlignmentElements().get(i);
@@ -214,7 +221,9 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 					transcriptInfo.put(ipaEle.toString(), eleInfo);
 				}
 				
-				String position = ipaEle.getScType().getIdChar() + ("" + (i+1));
+				int typeIdx = scTypeCounts.get(ipaEle.getScType()) + 1;
+				String position = ipaEle.getScType().getIdChar() + ("" + typeIdx);
+				
 				Counts currentCount = new Counts();
 				++currentCount.count;
 				if(ipaTEle != null && ipaAEle != null) {
@@ -223,18 +232,20 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 					} else {
 						++currentCount.substitions;
 					}
-					
+					scTypeCounts.put(ipaEle.getScType(), typeIdx);
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
+					scTypeCounts.put(ipaEle.getScType(), typeIdx);
 				} else if(ipaTEle == null && ipaAEle != null) {
 					if(isIncludeEpenthesis()) {
 						++currentCount.epenthesis;
-						position = ipaEle.getScType().getIdChar() + ("" + i) + "+";
+						position = ipaEle.getScType().getIdChar() + ("" + lastIdx) + "+";
 					} else {
 						// ignore
 						continue;
 					}
 				}
+				lastIdx = typeIdx;
 				
 				var posInfo = eleInfo.get(position);
 				if(posInfo == null) {

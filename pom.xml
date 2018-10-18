@@ -120,7 +120,7 @@
 
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3-SNAPSHOT</ca.hedlund.desktopicons.version>
-		<ca.phon.opgraph.version>1.0-SNAPSHOT</ca.phon.opgraph.version>
+		<ca.phon.opgraph.version>1.1-SNAPSHOT</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>11</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>3-SNAPSHOT</ca.phon.jbreadcrumb.version>
 		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>

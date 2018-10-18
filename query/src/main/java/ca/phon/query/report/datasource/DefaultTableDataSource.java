@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import ca.phon.query.TableUtils;
 
@@ -104,6 +105,31 @@ public class DefaultTableDataSource implements TableDataSource {
 			}
 		}
 		return colIdx;
+	}
+	
+	/**
+	 * Get all rows which match the given key values
+	 * for the given key columns.
+	 * 
+	 * @param keycols
+	 * @param keyvals
+	 * @return list of rows which match
+	 */
+	public List<Object[]> findRows(int keyCols[], String[] rowKey) {
+		return findRows(keyCols, rowKey, false, true);
+	}
+	
+	public List<Object[]> findRows(int keyCols[], String[] rowKey, boolean ignoreDiacritics, boolean caseSensitive) {
+		return rowData.parallelStream()
+			.filter( r -> {
+				boolean equals = true;
+				for(int i = 0; i < keyCols.length && equals; i++) {
+					String testVal = TableUtils.objToString(r[keyCols[i]], ignoreDiacritics);
+					equals &=
+							(caseSensitive ? rowKey[i].equals(testVal) : rowKey[i].equalsIgnoreCase(testVal));
+				}
+				return equals;
+			} ).collect(Collectors.toList());
 	}
 
 	public Object getValueAt(int row, String columnName) {

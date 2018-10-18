@@ -32,6 +32,7 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.opgraph.editor.library.LibraryView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
@@ -124,9 +125,11 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 				@Override
 				protected Component getNodeSettingsComponent(NodeSettings settings) {
 					Component comp = settings.getComponent(getDocument());
-					final JScrollPane scroller = new JScrollPane(comp);
-					scroller.getVerticalScrollBar().setUnitIncrement(10);
-					comp = scroller;
+					if(!(comp instanceof ScriptPanel)) {
+						final JScrollPane scroller = new JScrollPane(comp);
+						scroller.getVerticalScrollBar().setUnitIncrement(10);
+						comp = scroller;
+					}
 					return comp;
 				}
 			};
@@ -185,6 +188,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 	@Override
 	public GraphCanvas getCanvas() {
 		final GraphCanvas retVal = super.getCanvas();
+//		retVal.setZoomLevel(0.7f);
 		retVal.setPreferredSize(new Dimension(4096, 4096));
 		return retVal;
 	}
