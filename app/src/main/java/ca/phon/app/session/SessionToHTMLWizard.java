@@ -34,6 +34,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
@@ -44,10 +45,13 @@ import org.jdesktop.swingx.VerticalLayout;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.query.OpenResultSetSelector;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.project.Project;
+import ca.phon.query.db.ResultSet;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
@@ -66,6 +70,8 @@ import javafx.scene.web.WebView;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 
+	private Project project;
+	
 	private Session session;
 	
 	private WizardStep optionsStep;
@@ -79,14 +85,19 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 	private JCheckBox includeAlignmentBox;
 	private PhoneMapDisplay alignmentDisplay;
 	
+	private JCheckBox includeQueryResults;
+	private JCheckBox filterUsingQueryResults;
+	private OpenResultSetSelector resultSetSelector;
+	
 	private WizardStep reportStep;
 	private MultiBufferPanel bufferPanel;
 	private JXBusyLabel busyLabel;
 	
-	public SessionToHTMLWizard(String title, Session session) {
+	public SessionToHTMLWizard(String title, Project project, Session session) {
 		super(title);
 		setWindowName("Session to HTML : " + session.getCorpus() + "." + session.getName());
 		
+		this.project = project;
 		this.session = session;
 		
 		init();
@@ -185,13 +196,29 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		alignmentDisplay.setFont(FontPreferences.getUIIpaFont());
 		alignmentDisplay.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		
-		JPanel optionsPanel = new JPanel(new VerticalLayout());
+		includeQueryResults = new JCheckBox("Include query results");
+		includeQueryResults.setSelected(false);
+		
+		filterUsingQueryResults = new JCheckBox("Filter records using query results");
+		filterUsingQueryResults.setSelected(false);
+		
+		resultSetSelector = new OpenResultSetSelector(session);
+		resultSetSelector.getResultSetTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		JPanel resultSetPanel = new JPanel(new VerticalLayout());
+		resultSetPanel.setBorder(BorderFactory.createTitledBorder("Query Results"));
+		resultSetPanel.add(includeQueryResults);
+		resultSetPanel.add(filterUsingQueryResults);
+		resultSetPanel.add(resultSetSelector);
+		
+		JPanel optionsPanel = new JPanel(new VerticalLayout(5));
 		optionsPanel.add(includeParticipantInfoBox);
 		optionsPanel.add(tierViewPanel);
 		optionsPanel.add(includeSyllabificationBox);
 		optionsPanel.add(syllabificationDisplay);
 		optionsPanel.add(includeAlignmentBox);
 		optionsPanel.add(alignmentDisplay);
+		optionsPanel.add(resultSetPanel);
 		
 		final TitledPanel optionsTitledPanel = new TitledPanel("Options", optionsPanel);
 		WizardStep step = new WizardStep();
@@ -226,6 +253,13 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 			converter.setIncludeSyllabification(includeSyllabificationBox.isSelected());
 			converter.setIncludeParticipantInfo(includeParticipantInfoBox.isSelected());
 			converter.setTierView(((TierViewTableModel)tierViewTable.getModel()).tierView);
+			
+			List<ResultSet> selectedResults = resultSetSelector.getSelectedResultSets();
+			if(selectedResults.size() > 0) {
+				converter.setIncludeQueryResults(includeQueryResults.isSelected());
+				converter.setFilterRecordsUsingQueryResults(filterUsingQueryResults.isSelected());
+				converter.setResultSet(selectedResults.get(0));
+			}
 			
 			ExportWorker worker = new ExportWorker(converter);
 			worker.execute();

@@ -188,7 +188,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 	@Override
 	public GraphCanvas getCanvas() {
 		final GraphCanvas retVal = super.getCanvas();
-//		retVal.setZoomLevel(0.7f);
+//		retVal.setZoomLevel(1.7f);
 		retVal.setPreferredSize(new Dimension(4096, 4096));
 		return retVal;
 	}

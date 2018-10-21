@@ -22,8 +22,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.imageio.ImageIO;
 import javax.swing.CellRendererPane;
@@ -38,6 +41,10 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultValue;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.fonts.FontPreferences;
@@ -52,6 +59,8 @@ public class SessionToHTML {
 
 	private boolean includeParticipantInfo;
 	
+	private boolean includeTierData = true;
+	
 	private boolean includeSyllabification;
 	private SyllabificationDisplay syllabificationDisplay;
 	private JPanel syllabificationRenderPane;
@@ -61,6 +70,12 @@ public class SessionToHTML {
 	private JPanel alignmentRenderPane;
 	
 	private List<TierViewItem> tierView;
+	
+	private boolean includeQueryResults = false;
+	
+	private boolean filterRecordsUsingQueryResults = false;
+	
+	private ResultSet resultSet;
 	
 	public SessionToHTML() {
 		this(true, true, true, null);
@@ -107,6 +122,14 @@ public class SessionToHTML {
 		this.includeAlignment = includeAlignment;
 	}
 
+	public boolean isIncludeTierData() {
+		return this.includeTierData;
+	}
+	
+	public void setIncludeTierData(boolean includeTierData) {
+		this.includeTierData = includeTierData;
+	}
+	
 	public List<TierViewItem> getTierView() {
 		return tierView;
 	}
@@ -115,6 +138,30 @@ public class SessionToHTML {
 		this.tierView = tierView;
 	}
 	
+	public boolean isIncludeQueryResults() {
+		return this.includeQueryResults;
+	}
+	
+	public void setIncludeQueryResults(boolean includeQueryResults) {
+		this.includeQueryResults = includeQueryResults;
+	}
+	
+	public boolean isFilterRecordsUsingQueryResults() {
+		return this.filterRecordsUsingQueryResults;
+	}
+	
+	public void setFilterRecordsUsingQueryResults(boolean filterRecords) {
+		this.filterRecordsUsingQueryResults = filterRecords;
+	}
+	
+	public ResultSet getResultSet() {
+		return this.resultSet;
+	}
+	
+	public void setResultSet(ResultSet rs) {
+		this.resultSet = rs;
+	}
+		
 	public SyllabificationDisplay getSyllabificationDisplay() {
 		if(syllabificationDisplay == null) {
 			try {
@@ -237,79 +284,140 @@ public class SessionToHTML {
 	private void appendRecord(Session session, int recordIndex, StringBuffer buffer) {
 		var record = session.getRecord(recordIndex);
 		var nl = "\n";
-				
+		
+		List<Result> resultsForRecord = new ArrayList<>();
+		if(isIncludeQueryResults() && getResultSet() != null) {
+			resultsForRecord = StreamSupport.stream(getResultSet().spliterator(), false)
+				.filter( (result) -> result.getRecordIndex() == recordIndex )
+				.collect( Collectors.toList() );
+		}
+		
 		buffer.append("<div class='record' id='record").append(recordIndex).append("'>").append(nl);
 		
 		var recordNum = recordIndex + 1;
-		buffer.append("<b>").append(recordNum).append(". ").append(record.getSpeaker()).append("</b>").append(nl);
+		buffer.append("<b>").append(recordNum).append(". ").append(record.getSpeaker()).append("</b>");
+		if(isIncludeQueryResults() && resultsForRecord.size() > 0) {
+			buffer.append(" (").append(resultsForRecord.size()).append(" result").append(
+					(resultsForRecord.size() > 1 ? "s)" : ")"));
+		}
+		buffer.append(nl);
+		
+		if(isIncludeTierData()) {
+			// setup table
+			buffer.append("<table class='record_table' id='table").append(recordIndex).append("'>").append(nl);
+			
+			
+			var tierView = (getTierView() != null ? getTierView() : session.getTierView());
+			var groupCount = record.numberOfGroups();
+			
+			for(var tierIdx = 0; tierIdx < tierView.size(); tierIdx++) {
+				var tvi = tierView.get(tierIdx);
+				if(!tvi.isVisible()) continue;
 				
-		// setup table
-		buffer.append("<table class='record_table' id='table").append(recordIndex).append("'>").append(nl);
-		
-		
-		var tierView = (getTierView() != null ? getTierView() : session.getTierView());
-		var groupCount = record.numberOfGroups();
-		
-		for(var tierIdx = 0; tierIdx < tierView.size(); tierIdx++) {
-			var tvi = tierView.get(tierIdx);
-			if(!tvi.isVisible()) continue;
-			
-			var tierClass = (tierIdx % 2 == 0 ? "tier_row" : "tier_alt_row" );
-			
-			buffer.append("<tr class='").append(tierClass).append("'>").append(nl);
-			
-			var tier = record.getTier(tvi.getTierName());
-			if(tier == null) {
-				buffer.append("<td class='tier_value' colspan='").append(groupCount).append("'>&nbsp;</td>").append(nl);
-			} else {
-				buffer.append("<td class='tier_name'><em>").append(tier.getName()).append("</em></td>").append(nl);
-				if(tier.isGrouped()) {
-					for(var i = 0; i < record.numberOfGroups(); i++) {
-						buffer.append("<td class='tier_value'>").append(tier.getGroup(i)).append("</td>").append(nl);
-					}
-				} else {
-					buffer.append("<td class='tier_value' colspan='").append(groupCount).append("'>").append(tier.getGroup(0)).append("</td>").append(nl);
-				}
-			}
-			
-			buffer.append("</tr>").append(nl);
-			
-			if(includeSyllabification && (tvi.getTierName().equals("IPA Target") || tvi.getTierName().equals("IPA Actual"))) {
+				var tierClass = (tierIdx % 2 == 0 ? "tier_row" : "tier_alt_row" );
+				
 				buffer.append("<tr class='").append(tierClass).append("'>").append(nl);
 				
-				buffer.append("<td class='tier_name'>&nbsp;</td>").append(nl);
+				var tier = record.getTier(tvi.getTierName());
+				if(tier == null) {
+					buffer.append("<td class='tier_value' colspan='").append(groupCount).append("'>&nbsp;</td>").append(nl);
+				} else {
+					buffer.append("<td class='tier_name'><em>").append(tier.getName()).append("</em></td>").append(nl);
+					if(tier.isGrouped()) {
+						for(var i = 0; i < record.numberOfGroups(); i++) {
+							buffer.append("<td class='tier_value'>").append(tier.getGroup(i)).append("</td>").append(nl);
+						}
+					} else {
+						buffer.append("<td class='tier_value' colspan='").append(groupCount).append("'>").append(tier.getGroup(0)).append("</td>").append(nl);
+					}
+				}
+				
+				buffer.append("</tr>").append(nl);
+				
+				if(includeSyllabification && (tvi.getTierName().equals("IPA Target") || tvi.getTierName().equals("IPA Actual"))) {
+					buffer.append("<tr class='").append(tierClass).append("'>").append(nl);
+					
+					buffer.append("<td class='tier_name'>&nbsp;</td>").append(nl);
+					for(var i = 0; i < record.numberOfGroups(); i++) {
+						IPATranscript ipa = (IPATranscript)tier.getGroup(i);
+						String imgData = createSyllabificationImageData(ipa);
+						if(imgData.length() > 0) {
+							buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
+						} else {
+							buffer.append("<td>&nbsp</td>").append(nl);
+						}
+					}
+					
+					buffer.append("</tr>").append(nl);
+				}
+				
+			}
+			
+			if(includeAlignment) {
+				// alignment
+				var alignmentTier = record.getTier("Alignment");
+				buffer.append("<tr class='tier_row'>").append(nl);
+				buffer.append("<td class='tier_name'><em>Alignment</em></td>").append(nl);
 				for(var i = 0; i < record.numberOfGroups(); i++) {
-					IPATranscript ipa = (IPATranscript)tier.getGroup(i);
-					String imgData = createSyllabificationImageData(ipa);
+					final PhoneMap alignment = (PhoneMap)alignmentTier.getGroup(i);
+					String imgData = createAlignmentImageData(alignment);
 					if(imgData.length() > 0) {
 						buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
 					} else {
 						buffer.append("<td>&nbsp</td>").append(nl);
 					}
 				}
-				
 				buffer.append("</tr>").append(nl);
 			}
-			
+					
+			buffer.append("</table>").append(nl);
 		}
 		
-		if(includeAlignment) {
-			// alignment
-			var alignmentTier = record.getTier("Alignment");
-			buffer.append("<tr class='tier_row'>").append(nl);
-			buffer.append("<td class='tier_name'><em>Alignment</em></td>").append(nl);
-			for(var i = 0; i < record.numberOfGroups(); i++) {
-				final PhoneMap alignment = (PhoneMap)alignmentTier.getGroup(i);
-				String imgData = createAlignmentImageData(alignment);
-				if(imgData.length() > 0) {
-					buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
-				} else {
-					buffer.append("<td>&nbsp</td>").append(nl);
-				}
+		if(isIncludeQueryResults() && getResultSet() != null) {
+			buffer.append("<div class='results'>").append(nl);
+			buffer.append("<ol>").append(nl);
+			int rIdx = 0;
+			for(var result:resultsForRecord) {
+				buffer.append("<li>").append(nl);
+				appendQueryResult(rIdx++, result, buffer);
+				buffer.append("</li>").append(nl);
 			}
+			buffer.append("</ol>").append(nl);
+			buffer.append("</div>").append(nl);
+		}
+		buffer.append("</div>").append(nl);
+	}
+	
+	private void appendQueryResult(int resultIdx, Result result, StringBuffer buffer) {
+		var nl = "\n";
+				
+		buffer.append("<div class='result' id='result_").append(resultIdx).append("'>").append(nl);
+		
+		// setup table
+		buffer.append("<table class='result_table' id='result_table_").append(resultIdx).append("'>").append(nl);
+		int rowIdx = 0;
+		for(int i = 0; i < result.getNumberOfResultValues(); i++) {
+			final ResultValue rv = result.getResultValue(i);
+			var trClass = (rowIdx++ % 2 == 0 ? "tier_row" : "tier_alt_row" );
+			buffer.append("<tr class='").append(trClass).append("'>").append(nl);
+			
+			buffer.append("<td class='tier_name'><em>").append(rv.getName()).append("</em></td>").append(nl);
+			buffer.append("<td class='tier_value'>").append(rv.getData()).append("</td>").append(nl);
+			
 			buffer.append("</tr>").append(nl);
 		}
-				
+		
+		for(String metadataKey:result.getMetadata().keySet()) {
+			final String metadataValue = result.getMetadata().get(metadataKey);
+			var trClass = (rowIdx++ % 2 == 0 ? "tier_row" : "tier_alt_row" );
+			buffer.append("<tr class='").append(trClass).append("'>").append(nl);
+			
+			buffer.append("<td class='tier_name'><em>").append(metadataKey).append("</em></td>").append(nl);
+			buffer.append("<td class='tier_value'>").append(metadataValue).append("</td>").append(nl);
+			
+			buffer.append("</tr>").append(nl);
+		}
+		
 		buffer.append("</table>").append(nl);
 		
 		buffer.append("</div>").append(nl);

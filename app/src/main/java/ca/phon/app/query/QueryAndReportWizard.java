@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -93,6 +95,7 @@ import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.script.params.history.ParamHistoryType;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
@@ -676,6 +679,15 @@ public class QueryAndReportWizard extends NodeWizard {
 		return this.queryScript;
 	}
 	
+	/**
+	 * Return the map of executed queries.
+	 * 
+	 * @return
+	 */
+	public Map<String, QueryRunnerPanel> getQueryRunners() {
+		return Collections.unmodifiableMap(queryRunners);
+	}
+	
 	private QueryRunnerPanel getCurrentQueryRunner() {
 		if(queryRunnerBox == null || queryRunnerComboBoxModel.getSize() == 0) return null;
 		return queryRunners.get(queryRunnerBox.getSelectedItem());
@@ -886,6 +898,8 @@ public class QueryAndReportWizard extends NodeWizard {
 	public void next() {
 		if(getCurrentStep() == queryStep) {
 			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
+			
+			// TODO execute query if parameters or selected sessions has changed
 			
 			if(runnerPanel == null) {
 				executeQuery();

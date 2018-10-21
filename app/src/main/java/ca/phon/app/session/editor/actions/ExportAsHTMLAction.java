@@ -31,7 +31,7 @@ public class ExportAsHTMLAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final SessionToHTMLWizard wizard = new SessionToHTMLWizard("Export as HTML", getEditor().getSession());
+		final SessionToHTMLWizard wizard = new SessionToHTMLWizard("Export as HTML", getEditor().getProject(), getEditor().getSession());
 		wizard.pack();
 		wizard.setSize(1024, 768);
 		wizard.centerWindow();
