@@ -112,53 +112,60 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<!-- Dependency Versions -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.sourceVersion>10</project.build.sourceVersion>
-		<project.build.targetVersion>10</project.build.targetVersion>
+		<project.build.sourceVersion>11</project.build.sourceVersion>
+		<project.build.targetVersion>11</project.build.targetVersion>
 
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3-SNAPSHOT</ca.hedlund.desktopicons.version>
 		<ca.phon.opgraph.version>1.1-SNAPSHOT</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>11</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>3-SNAPSHOT</ca.phon.jbreadcrumb.version>
-		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
-		<com.fifesoft.rsyntaxtextarea.version>2.6.1</com.fifesoft.rsyntaxtextarea.version>
+		
+		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
 		<com.fifesoft.autocomplete.version>2.6.1</com.fifesoft.autocomplete.version>
+		<com.fifesoft.rsyntaxtextarea.version>2.6.1</com.fifesoft.rsyntaxtextarea.version>
+		<com.github.insubstantial.substance.version>7.2.1</com.github.insubstantial.substance.version>
 		<com.jgoodies.jgoodies-common.version>1.8.1</com.jgoodies.jgoodies-common.version>
 		<com.jgoodies.jgoodies-forms.version>1.9.0</com.jgoodies.jgoodies-forms.version>
 		<com.jgoodies.jgoodies-looks.version>2.7.0</com.jgoodies.jgoodies-looks.version>
+		<commons-cli.commons-cli.version>1.2</commons-cli.commons-cli.version>
 		<de.susebox.jtopas.version>0.8</de.susebox.jtopas.version>
 		<junit.junit.version>4.8.2</junit.junit.version>
+		<net.lingala.zip4j.version>1.3.2</net.lingala.zip4j.version>
 		<net.sf.opencsv.opencsv.version>2.3</net.sf.opencsv.opencsv.version>
+		<net.sourceforge.jexcelapi.version>2.6.12</net.sourceforge.jexcelapi.version>
 		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
-		<org.apache.cxf.cxf-xjc-plugin.version>3.2.2</org.apache.cxf.cxf-xjc-plugin.version>
 		<org.apache.commons.commons-lang3.version>3.1</org.apache.commons.commons-lang3.version>
 		<org.apache.commons.commons-io.version>1.3.2</org.apache.commons.commons-io.version>
 		<org.apache.commons.commons-collections4.version>4.0</org.apache.commons.commons-collections4.version>
 		<org.apache.derby.derby.version>10.10.2.0</org.apache.derby.derby.version>
-		<net.lingala.zip4j.version>1.3.2</net.lingala.zip4j.version>
-		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
-
-		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
-		<net.sourceforge.jexcelapi.version>2.6.12</net.sourceforge.jexcelapi.version>
-
+		<org.apache.logging.log4j.version>2.11.1</org.apache.logging.log4j.version>
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
 		<org.codehaus.groovy.groovy-all.version>2.4.15</org.codehaus.groovy.groovy-all.version>
 		<org.dockingframes.docking-frames-common.version>1.1.2-phon</org.dockingframes.docking-frames-common.version>
 		<org.dockingframes.docking-frames-core.version>1.1.2-phon</org.dockingframes.docking-frames-core.version>
+		<org.jsoup.jsoup.version>1.11.2</org.jsoup.jsoup.version>
+		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.14.0</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
+		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
+		<org.openjfx.javafx.version>11-ea+25</org.openjfx.javafx.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
-		<com.github.insubstantial.substance.version>7.2.1</com.github.insubstantial.substance.version>
-
+		
+		<!-- java.xml.bind -->
+		<jaxb.version>2.2.11</jaxb.version>
+		<javax.activation.activation.version>1.1.1</javax.activation.activation.version>
+		
+		<!-- Maven plugins -->
 		<org.antlr.antlr3-maven-plugin.version>3.5.2</org.antlr.antlr3-maven-plugin.version>
-		<org.apache.maven.plugins.maven-compiler-plugin.version>3.7.0</org.apache.maven.plugins.maven-compiler-plugin.version>
+		<org.apache.maven.plugins.maven-compiler-plugin.version>3.8.0</org.apache.maven.plugins.maven-compiler-plugin.version>
 		<org.apache.maven.plugins.maven-javadoc-plugin.version>2.8.1</org.apache.maven.plugins.maven-javadoc-plugin.version>
 		<org.apache.maven.plugins.maven-shade-plugin.version>2.2</org.apache.maven.plugins.maven-shade-plugin.version>
 		<org.apache.maven.plugins.maven-surefire-plugin.version>2.16</org.apache.maven.plugins.maven-surefire-plugin.version>
 		<org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
+		<org.codehaus.mojo.jaxb2-maven-plugin.version>2.4</org.codehaus.mojo.jaxb2-maven-plugin.version>
 	</properties>
 
 	<modules>
@@ -390,6 +397,24 @@
 				<artifactId>jgoodies-looks</artifactId>
 				<version>${com.jgoodies.jgoodies-looks.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>${org.openjfx.javafx.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-web</artifactId>
+				<version>${org.openjfx.javafx.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-swing</artifactId>
+				<version>${org.openjfx.javafx.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>net.lingala.zip4j</groupId>
@@ -402,17 +427,17 @@
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-core</artifactId>
-				<version>2.11.1</version>
+				<version>${org.apache.logging.log4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-slf4j-impl</artifactId>
-				<version>2.11.1</version>
+				<version>${org.apache.logging.log4j.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-1.2-api</artifactId>
-				<version>2.11.1</version>
+				<version>${org.apache.logging.log4j.version}</version>
 			</dependency>
 
 			<!-- Markdown support -->
@@ -437,7 +462,29 @@
 			<dependency>
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
-				<version>1.11.2</version>
+				<version>${org.jsoup.jsoup.version}</version>
+			</dependency>
+			
+			<!-- java.xml.bind -->
+			<dependency>
+			    <groupId>javax.xml.bind</groupId>
+			    <artifactId>jaxb-api</artifactId>
+			    <version>${jaxb.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.sun.xml.bind</groupId>
+			    <artifactId>jaxb-core</artifactId>
+			    <version>${jaxb.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.sun.xml.bind</groupId>
+			    <artifactId>jaxb-impl</artifactId>
+			    <version>${jaxb.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>javax.activation</groupId>
+			    <artifactId>activation</artifactId>
+			    <version>${javax.activation.activation.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -457,11 +504,11 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${org.apache.maven.plugins.maven-surefire-plugin.version}</version>
 				</plugin>
-
+				
 				<plugin>
-					<groupId>org.apache.cxf</groupId>
-					<artifactId>cxf-xjc-plugin</artifactId>
-					<version>${org.apache.cxf.cxf-xjc-plugin.version}</version>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<version>${org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version}</version>
 				</plugin>
 					
 				<plugin>
@@ -522,10 +569,7 @@
 					<source>${project.build.sourceVersion}</source>
 					<target>${project.build.targetVersion}</target>
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-					<compilerArgs>
-						<arg>--add-modules</arg>
-						<arg>java.xml.bind</arg>
-					</compilerArgs>
+					<release>${project.build.targetVersion}</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -534,35 +578,9 @@
 				<configuration>
 					<reuseForks>false</reuseForks>
 					<forkCount>1</forkCount>
-					<argLine>--add-modules java.xml.bind</argLine>
+					<argLine>--illegal-access=warn</argLine>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<!-- We use this plugin to ensure that our usage of the maven-jaxb2-plugin
-					is JDK 8 compatible in absence of a fix for https://java.net/jira/browse/MAVEN_JAXB2_PLUGIN-80. -->
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
-				<executions>
-					<execution>
-						<id>set-additional-system-properties</id>
-						<goals>
-							<goal>set-system-properties</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<properties>
-						<property>
-							<name>javax.xml.accessExternalSchema</name>
-							<value>file,http</value>
-						</property>
-					</properties>
-				</configuration>
-			</plugin>
-
-
 		</plugins>
 
 	</build>
