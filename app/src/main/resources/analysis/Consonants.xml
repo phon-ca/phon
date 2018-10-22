@@ -601,7 +601,7 @@ function setup_params(params) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="1cea7c1e0c634d86" name="Query : Phones (Singleton Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:24:35.106-02:30" name="Phones" uuid="c107ec74-84b3-4181-90b6-8696c27cb63a">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:40:54.482-02:30" name="Phones" uuid="e95fdc93-8fe4-4396-b1ef-fddd08cd5eff">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -731,7 +731,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="ce71664020bc4a93" name="Query : Phones (Singleton Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:24:35.114-02:30" name="Phones" uuid="54206f54-fc02-49b4-828b-c48f5b90e6f4">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:40:54.488-02:30" name="Phones" uuid="1cb972ae-0b23-4e14-8788-d947e94e3bf1">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -858,7 +858,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="b511ae4a557e48e7" name="Query : Phones (Singleton OEHS)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:24:35.122-02:30" name="Phones" uuid="66c3ed08-aa27-488f-be06-addfe6602538">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:40:54.493-02:30" name="Phones" uuid="a1cc22b4-fef3-4c8a-bea9-92b3c176fdf7">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -987,7 +987,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="37f8400f2dff4e13" name="Query : Phones (Tautosyllabic Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:24:35.130-02:30" name="Phones" uuid="ca4996ba-b260-4e1b-acac-c4f8908f0afc">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:40:54.499-02:30" name="Phones" uuid="9e50a688-e564-4231-9ab7-210b87ec09d6">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1111,7 +1111,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="16c5b91e73c94ed3" name="Query : Phones (Tautosyllabic Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:24:35.139-02:30" name="Phones" uuid="c4c572ba-a163-43e2-b3d0-8b7083efbada">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:40:54.505-02:30" name="Phones" uuid="a157359a-5b82-4736-8e42-c3fd0bb1e2fb">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -1235,7 +1235,7 @@ function getRowValue(table, row) {
                             </extensions>
                         </node>
                         <opqry:queryNode id="bf290b6a57a54a78" name="Query : Phones (Heterosyllabic)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:24:35.146-02:30" name="Phones" uuid="43a09c48-7772-40aa-884c-bc62393a687c">
+                            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-10-22T09:40:54.511-02:30" name="Phones" uuid="bf264fcf-5822-43ff-912a-6ec284021cfe">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
                                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -2221,7 +2221,7 @@ function run(context) {
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="filters.column.filter">
-                                        <![CDATA[^[OEL][0-9]+]]>
+                                        <![CDATA[^[OL][0-9]+]]>
                                     </oga:property>
                                     <oga:property key="filters.column.filterType">
                                         <![CDATA[Regular expression]]>
@@ -2376,7 +2376,7 @@ Epenthesis]]>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="1302" y="640">
-                                    <oga:default for="sectionName" type="java.lang.String">Accuracy (Onsets)</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable-initial Accuracy</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -2389,7 +2389,7 @@ Epenthesis]]>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="1307" y="814">
-                                    <oga:default for="sectionName" type="java.lang.String">Accuracy (Codas)</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable-final Accuracy</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -2751,7 +2751,7 @@ Epenthesis]]>
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="filters.column.filter">
-                                        <![CDATA[^[OEL][0-9]+]]>
+                                        <![CDATA[^[OL][0-9]+]]>
                                     </oga:property>
                                     <oga:property key="filters.column.filterType">
                                         <![CDATA[Regular expression]]>
@@ -2809,7 +2809,7 @@ Epenthesis]]>
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="filters.column.filter">
-                                        <![CDATA[^[CR][0-9]+]]>
+                                        <![CDATA[^[CRE][0-9]+]]>
                                     </oga:property>
                                     <oga:property key="filters.column.filterType">
                                         <![CDATA[Regular expression]]>
@@ -2952,7 +2952,7 @@ Epenthesis]]>
                                     </oga:property>
                                 </oga:settings>
                                 <oga:meta x="1255" y="596">
-                                    <oga:default for="sectionName" type="java.lang.String">Accuracy (Onsets)</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable-initial Accuracy</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -2967,7 +2967,7 @@ Epenthesis]]>
                                     </oga:property>
                                 </oga:settings>
                                 <oga:meta x="1260" y="770">
-                                    <oga:default for="sectionName" type="java.lang.String">Accuracy (Codas)</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable-final Accuracy</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -3436,7 +3436,7 @@ function run(context) {
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="filters.column.filter">
-                                        <![CDATA[^[OEL][0-9]+]]>
+                                        <![CDATA[^[OL][0-9]+]]>
                                     </oga:property>
                                     <oga:property key="filters.column.filterType">
                                         <![CDATA[Regular expression]]>
@@ -3568,7 +3568,7 @@ Epenthesis]]>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="1083" y="703">
-                                    <oga:default for="sectionName" type="java.lang.String">Accuracy (Codas)</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable-final Accuracy</oga:default>
                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                                 </oga:meta>
                             </extensions>
@@ -3582,7 +3582,7 @@ Epenthesis]]>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="1078" y="529">
-                                    <oga:default for="sectionName" type="java.lang.String">Accuracy (Onsets)</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable-initial Accuracy</oga:default>
                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                                 </oga:meta>
                             </extensions>
