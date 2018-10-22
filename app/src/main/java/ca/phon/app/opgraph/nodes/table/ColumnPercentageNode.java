@@ -56,6 +56,7 @@ public class ColumnPercentageNode extends TableOpNode implements NodeSettings {
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final DefaultTableDataSource inputTable = (DefaultTableDataSource)context.get(tableInput);
+		context.put(tableOutput, inputTable);
 		
 		List<String> allColumns = new ArrayList<>();
 		allColumns.add(getDivisorColumn());
@@ -83,8 +84,7 @@ public class ColumnPercentageNode extends TableOpNode implements NodeSettings {
 		var rowData = new Object[inputTable.getColumnCount()];
 		for(var col = 0; col< inputTable.getColumnCount(); col++) rowData[col] = "";
 		double divisor = columnSums.get(getDivisorColumn());
-		if(divisor == 0.0)
-			throw new ProcessingException(null, "Division by zero");
+		if(divisor == 0.0) return;
 		
 		for(String dividendCol:getDividendColumns()) {
 			int colIdx = inputTable.getColumnIndex(dividendCol);
@@ -95,7 +95,6 @@ public class ColumnPercentageNode extends TableOpNode implements NodeSettings {
 		}
 		inputTable.addRow(rowData);
 		
-		context.put(tableOutput, inputTable);
 	}
 	
 	public String getDivisorColumn() {
