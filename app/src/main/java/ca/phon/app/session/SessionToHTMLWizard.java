@@ -25,8 +25,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListSelectionModel;
@@ -51,6 +54,7 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.project.Project;
+import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
@@ -88,6 +92,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 	private JCheckBox includeQueryResults;
 	private JCheckBox filterUsingQueryResults;
 	private OpenResultSetSelector resultSetSelector;
+	private JXTable resultSetValuesTable;
 	
 	private WizardStep reportStep;
 	private MultiBufferPanel bufferPanel;
@@ -204,12 +209,36 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		
 		resultSetSelector = new OpenResultSetSelector(session);
 		resultSetSelector.getResultSetTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		resultSetSelector.getResultSetTable().getSelectionModel().addListSelectionListener( (e) -> {
+			var selectedResultSets = resultSetSelector.getSelectedResultSets();
+			if(selectedResultSets.size() > 0) {
+				var rs = selectedResultSets.get(0);
+				if(rs.numberOfResults(true) > 0) {
+					var result = rs.getResult(0);
+					
+					var rvList = new ArrayList<String>();
+					for(var rv:result) {
+						rvList.add(rv.getName());
+					}
+					rvList.addAll(result.getMetadata().keySet());
+					
+					var tableModel = new ResultSetValuesTableModel(rvList);
+					resultSetValuesTable.setModel(tableModel);
+				}
+			}
+		});
+		
+		var resultSetTableModel = new ResultSetValuesTableModel(new ArrayList<>());
+		resultSetValuesTable = new JXTable(resultSetTableModel);
+		resultSetValuesTable.setVisibleRowCount(5);
+		var resultSetTableScroller = new JScrollPane(resultSetValuesTable);
 		
 		JPanel resultSetPanel = new JPanel(new VerticalLayout());
 		resultSetPanel.setBorder(BorderFactory.createTitledBorder("Query Results"));
 		resultSetPanel.add(includeQueryResults);
 		resultSetPanel.add(filterUsingQueryResults);
 		resultSetPanel.add(resultSetSelector);
+		resultSetPanel.add(resultSetTableScroller);
 		
 		JPanel optionsPanel = new JPanel(new VerticalLayout(5));
 		optionsPanel.add(includeParticipantInfoBox);
@@ -259,6 +288,14 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 				converter.setIncludeQueryResults(includeQueryResults.isSelected());
 				converter.setFilterRecordsUsingQueryResults(filterUsingQueryResults.isSelected());
 				converter.setResultSet(selectedResults.get(0));
+				
+				ResultSetValuesTableModel tableModel = (ResultSetValuesTableModel)resultSetValuesTable.getModel();
+				var rvList = 
+						tableModel.resultValueList.stream()
+							.filter( (rvName) -> tableModel.resultValueVisible.get(rvName) )
+							.collect(Collectors.toList());
+				converter.setResultValues(rvList);
+				converter.setExcludeResultValues(false);
 			}
 			
 			ExportWorker worker = new ExportWorker(converter);
@@ -306,6 +343,87 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 				LogUtil.severe(e.getLocalizedMessage(), e);
 			}
 			busyLabel.setBusy(false);
+		}
+		
+	}
+	
+	private class ResultSetValuesTableModel extends AbstractTableModel {
+		
+		private List<String> resultValueList;
+		
+		private Map<String, Boolean> resultValueVisible;
+		
+		public ResultSetValuesTableModel(List<String> rvList) {
+			super();
+			
+			resultValueList = rvList;
+			resultValueVisible = new HashMap<>();
+			for(String rvName:rvList) resultValueVisible.put(rvName, true);
+		}
+
+		@Override
+		public int getRowCount() {
+			return resultValueList.size();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 2;
+		}
+		
+		@Override
+		public String getColumnName(int column) {
+			switch(column) {
+			case 0:
+				return "Visible";
+			
+			case 1:
+				return "Tier";
+				
+			default:
+				return "";
+			}
+		}
+		
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			switch(columnIndex) {
+			case 0:
+				return Boolean.class;
+				
+			case 1:
+				return String.class;
+				
+			default:
+				return String.class;
+			}
+		}
+
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			return columnIndex == 0;
+		}
+
+		@Override
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+			var rvName = resultValueList.get(rowIndex);
+			resultValueVisible.put(rvName, (Boolean)aValue);
+			fireTableCellUpdated(rowIndex, columnIndex);
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			String rvName = resultValueList.get(rowIndex);
+			switch(columnIndex) {
+			case 0:
+				return resultValueVisible.get(rvName);
+				
+			case 1:
+				return rvName;
+				
+			default:
+				return "";
+			}
 		}
 		
 	}

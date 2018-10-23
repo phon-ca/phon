@@ -43,8 +43,10 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
+import ca.phon.query.db.ResultSetRecordFilter;
 import ca.phon.query.db.ResultValue;
 import ca.phon.session.Record;
+import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.fonts.FontPreferences;
@@ -76,6 +78,9 @@ public class SessionToHTML {
 	private boolean filterRecordsUsingQueryResults = false;
 	
 	private ResultSet resultSet;
+	
+	private boolean excludeResultValues;
+	private List<String> resultValueList = new ArrayList<>();
 	
 	public SessionToHTML() {
 		this(true, true, true, null);
@@ -161,7 +166,23 @@ public class SessionToHTML {
 	public void setResultSet(ResultSet rs) {
 		this.resultSet = rs;
 	}
-		
+	
+	public boolean isExcludeResultValues() {
+		return this.excludeResultValues;
+	}
+	
+	public void setExcludeResultValues(boolean excludeResultValues) {
+		this.excludeResultValues = excludeResultValues;
+	}
+	
+	public List<String> getResultValues() {
+		return this.resultValueList;
+	}
+	
+	public void setResultValues(List<String> resultValues) {
+		this.resultValueList = resultValues;
+	}
+	
 	public SyllabificationDisplay getSyllabificationDisplay() {
 		if(syllabificationDisplay == null) {
 			try {
@@ -398,6 +419,13 @@ public class SessionToHTML {
 		int rowIdx = 0;
 		for(int i = 0; i < result.getNumberOfResultValues(); i++) {
 			final ResultValue rv = result.getResultValue(i);
+			
+			if(getResultValues().size() > 0) {
+				boolean inList = getResultValues().contains(rv.getName());
+				if(inList && isExcludeResultValues()) continue;
+				else if(!inList && !isExcludeResultValues()) continue;
+			}
+			
 			var trClass = (rowIdx++ % 2 == 0 ? "tier_row" : "tier_alt_row" );
 			buffer.append("<tr class='").append(trClass).append("'>").append(nl);
 			
@@ -408,6 +436,12 @@ public class SessionToHTML {
 		}
 		
 		for(String metadataKey:result.getMetadata().keySet()) {
+			if(getResultValues().size() > 0) {
+				boolean inList = getResultValues().contains(metadataKey);
+				if(inList && isExcludeResultValues()) continue;
+				else if(!inList && !isExcludeResultValues()) continue;
+			}
+			
 			final String metadataValue = result.getMetadata().get(metadataKey);
 			var trClass = (rowIdx++ % 2 == 0 ? "tier_row" : "tier_alt_row" );
 			buffer.append("<tr class='").append(trClass).append("'>").append(nl);
@@ -456,7 +490,14 @@ public class SessionToHTML {
 			appendParticipantInformation(session, buffer);
 		}
 		
+		RecordFilter filter = null;
+		if(isFilterRecordsUsingQueryResults() && getResultSet() != null) {
+			filter = new ResultSetRecordFilter(session, getResultSet());
+		}
+		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
+			var utt = session.getRecord(rIdx);
+			if(filter != null && !filter.checkRecord(utt)) continue;
 			appendRecord(session, rIdx, buffer);
 		}
 		
