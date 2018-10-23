@@ -63,6 +63,9 @@ public class SessionToHTML {
 	
 	private boolean includeTierData = true;
 	
+	private boolean excludeTiers = false;
+	private List<String> tierList = new ArrayList<>();
+	
 	private boolean includeSyllabification;
 	private SyllabificationDisplay syllabificationDisplay;
 	private JPanel syllabificationRenderPane;
@@ -133,6 +136,22 @@ public class SessionToHTML {
 	
 	public void setIncludeTierData(boolean includeTierData) {
 		this.includeTierData = includeTierData;
+	}
+	
+	public boolean isExcludeTiers() {
+		return this.excludeTiers;
+	}
+	
+	public void setExcludeTiers(boolean excludeTiers) {
+		this.excludeTiers = excludeTiers;
+	}
+	
+	public List<String> getTierList() {
+		return this.tierList;
+	}
+	
+	public void setTierList(List<String> tierList) {
+		this.tierList = tierList;
 	}
 	
 	public List<TierViewItem> getTierView() {
@@ -329,10 +348,16 @@ public class SessionToHTML {
 			
 			
 			var tierView = (getTierView() != null ? getTierView() : session.getTierView());
-			var groupCount = record.numberOfGroups();
 			
+			var groupCount = record.numberOfGroups();
 			for(var tierIdx = 0; tierIdx < tierView.size(); tierIdx++) {
 				var tvi = tierView.get(tierIdx);
+				
+				if(getTierList().size() > 0) {
+					boolean inList = getTierList().contains(tvi.getTierName());
+					if(!inList && !isExcludeResultValues()) continue;
+					else if(inList && isExcludeResultValues()) continue;
+				}
 				if(!tvi.isVisible()) continue;
 				
 				var tierClass = (tierIdx % 2 == 0 ? "tier_row" : "tier_alt_row" );
