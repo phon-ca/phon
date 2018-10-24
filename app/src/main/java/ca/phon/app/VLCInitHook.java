@@ -15,24 +15,40 @@
  */
 package ca.phon.app;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+
 import org.apache.logging.log4j.LogManager;
 
 import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.media.VLCHelper;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginException;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 
 @PhonPlugin
 public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(VLCInitHook.class.getName());
-
+	
 	@Override
 	public void startup() throws PluginException {
 		LOGGER.info("Initializing VLC library");
-		VLCHelper.checkNativeLibrary(false);
+		
+		if(!VLCHelper.checkNativeLibrary(false)) {
+			final MessageDialogProperties props = new MessageDialogProperties();
+			props.setTitle("VLC Not Found");
+			props.setHeader("VLC Not Found");
+			props.setMessage("VLC was not found, media playback will be disabled.");
+			props.setOptions(MessageDialogProperties.okOptions);
+			props.setRunAsync(true);
+			NativeDialogs.showDialog(props);
+		}
 	}
 
 	@Override

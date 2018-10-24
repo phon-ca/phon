@@ -18,6 +18,7 @@ package ca.phon.app.opgraph.wizard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -39,6 +40,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -451,14 +453,22 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 	
 	public void onPrintReport() {
-		if(reportBufferAvailable()) {
-			Platform.runLater( () -> {
-				final PrinterJob pj = PrinterJob.createPrinterJob();
-				if(pj != null && pj.showPrintDialog(null)) {
-					bufferPanel.getBuffer("Report").getWebView().getEngine().print(pj);
-					pj.endJob();
-				}
-			});
+		if(reportBufferAvailable() && Desktop.isDesktopSupported()) {
+			String fileLocation = bufferPanel.getBuffer("Report").getWebView().getEngine().getLocation();
+			try {
+				Desktop.getDesktop().print(new File(URI.create(fileLocation).getPath()));
+			} catch (IOException e) {
+				LogUtil.warning(e);
+				Toolkit.getDefaultToolkit().beep();
+			}
+			
+//			Platform.runLater( () -> {
+//				final PrinterJob pj = PrinterJob.createPrinterJob();
+//				if(pj != null && pj.showPrintDialog(null)) {
+//					bufferPanel.getBuffer("Report").getWebView().getEngine().print(pj);
+//					pj.endJob();
+//				}
+//			});
 		}
 	}
 	
@@ -547,13 +557,17 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
 			breadCrumbViewer.remove(nextButton);
 
-			breadCrumbViewer.add(btnRunAgain);
-			setBounds(btnRunAgain);
+			if(btnRunAgain != null) {
+				breadCrumbViewer.add(btnRunAgain);
+				setBounds(btnRunAgain);
+			}
 
-			breadCrumbViewer.add(btnStop);
-			setBounds(btnStop);
-
-			endBtn = btnStop;
+			if(btnStop != null) {
+				breadCrumbViewer.add(btnStop);
+				setBounds(btnStop);
+	
+				endBtn = btnStop;
+			}
 		} else {
 			breadCrumbViewer.remove(btnRunAgain);
 			breadCrumbViewer.remove(btnStop);

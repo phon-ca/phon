@@ -153,6 +153,7 @@
 		<org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
 		<org.openjfx.javafx.version>11-ea+25</org.openjfx.javafx.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
+		<uk.co.caprica.vlcj.version>3.10.1</uk.co.caprica.vlcj.version>
 		
 		<!-- java.xml.bind -->
 		<jaxb.version>2.2.11</jaxb.version>
@@ -486,6 +487,12 @@
 			    <artifactId>activation</artifactId>
 			    <version>${javax.activation.activation.version}</version>
 			</dependency>
+			
+			<dependency>
+		      <groupId>uk.co.caprica</groupId> 
+		      <artifactId>vlcj</artifactId> 
+		      <version>${uk.co.caprica.vlcj.version}</version>
+		    </dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -527,36 +534,7 @@
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${org.apache.maven.plugins.maven-dependency-plugin.version}</version>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>
-											properties-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0-alpha-2,)
-										</versionRange>
-										<goals>
-											<goal>set-system-properties</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
+				
 			</plugins>
 
 		</pluginManagement>
@@ -578,7 +556,6 @@
 				<configuration>
 					<reuseForks>false</reuseForks>
 					<forkCount>1</forkCount>
-					<argLine>--illegal-access=warn</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

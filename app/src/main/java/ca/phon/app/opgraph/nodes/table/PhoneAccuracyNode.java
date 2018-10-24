@@ -201,24 +201,29 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 				alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
 			}
 			
-			var transcriptInfo = asdInfo.get(ipaTarget);
+			var targetKey = (ignoreDiacritics ? ipaTarget.stripDiacritics() : ipaTarget);
+			var transcriptInfo = asdInfo.get(targetKey);
 			if(transcriptInfo == null) {
 				transcriptInfo = new LinkedHashMap<>();
-				asdInfo.put(ipaTarget, transcriptInfo);
+				asdInfo.put(targetKey, transcriptInfo);
 			}
 			
 			Map<SyllableConstituentType, Integer> scTypeCounts = new HashMap<>();
 			for(SyllableConstituentType scType:SyllableConstituentType.values()) scTypeCounts.put(scType, 0);
 			int lastIdx = 0;
+			SyllableConstituentType lastTargetType = (alignment.getTopElements().length > 0 ? alignment.getTopElements()[0].getScType() : null);
 			for(int i = 0; i < alignment.getAlignmentLength(); i++) {
 				final IPAElement ipaTEle = alignment.getTopAlignmentElements().get(i);
 				final IPAElement ipaAEle = alignment.getBottomAlignmentElements().get(i);
 				
 				final IPAElement ipaEle = (ipaTEle != null ? ipaTEle : ipaAEle);
-				var eleInfo = transcriptInfo.get(ipaEle.toString());
+				var eleKey = (ignoreDiacritics 
+						? (new IPATranscriptBuilder()).append(ipaEle).toIPATranscript().stripDiacritics().toString() 
+						: ipaEle.toString());
+				var eleInfo = transcriptInfo.get(eleKey);
 				if(eleInfo == null) {
 					eleInfo = new HashMap<>();
-					transcriptInfo.put(ipaEle.toString(), eleInfo);
+					transcriptInfo.put(eleKey, eleInfo);
 				}
 				
 				int typeIdx = scTypeCounts.get(ipaEle.getScType()) + 1;
@@ -233,13 +238,15 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 						++currentCount.substitions;
 					}
 					scTypeCounts.put(ipaEle.getScType(), typeIdx);
+					lastTargetType = ipaTEle.getScType();
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
 					scTypeCounts.put(ipaEle.getScType(), typeIdx);
+					lastTargetType = ipaTEle.getScType();
 				} else if(ipaTEle == null && ipaAEle != null) {
 					if(isIncludeEpenthesis()) {
 						++currentCount.epenthesis;
-						position = ipaEle.getScType().getIdChar() + ("" + lastIdx) + "+";
+						position = (lastTargetType != null ? lastTargetType.getIdChar() : ipaEle.getScType().getIdChar()) + ("" + lastIdx) + "+";
 					} else {
 						// ignore
 						continue;

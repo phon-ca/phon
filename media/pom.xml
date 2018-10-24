@@ -41,7 +41,6 @@
     <dependency>
       <groupId>uk.co.caprica</groupId> 
       <artifactId>vlcj</artifactId> 
-      <version>3.9.0</version> 
     </dependency>
     
     <dependency>

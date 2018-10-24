@@ -1,20 +1,17 @@
 /*
- * Phon - An open source tool for research in phonology.
- * Copyright (C) 2005 - 2017, Gregory Hedlund <ghedlund@mun.ca> and Yvan Rose <yrose@mun.ca>
- * Dept of Linguistics, Memorial University <https://phon.ca>
+ * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
  
  /**
@@ -33,14 +30,31 @@ var columnParamInfo = {
 	"def": "",
 	"prompt": "Enter column name"
 }
+var columnParam;
+
+var splitOptionsParamInfo = {
+	"ids": ["ignoreDiacritics", "caseSensitive"],
+	"title": ["Ignore diacritics", "Case sensitive"],
+	"def": [false, true],
+	"cols": 0
+}
+var splitOptionsParam;
 
 function setup_params(params) {
-	var columnParam = new StringScriptParam(
+	columnParam = new StringScriptParam(
 		columnParamInfo.id,
 		columnParamInfo.title,
 		columnParamInfo.def);
 	columnParam.setPrompt(columnParamInfo.prompt);
 	params.add(columnParam);
+	
+	splitOptionsParam = new MultiboolScriptParam(
+		splitOptionsParamInfo.ids,
+		splitOptionsParamInfo.def,
+		splitOptionsParamInfo.title,
+		"",
+		splitOptionsParamInfo.cols);
+	params.add(splitOptionsParam);
 }
 
 // add custom inputs/outputs here
@@ -77,9 +91,16 @@ function tableOp(context, table) {
 	
 	
 	for(row = 0; row < table.rowCount; row++) {
-	    // use string value as row key
-		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(table.getValueAt(row, col));
+		var rowVal = table.getValueAt(row, col);
+		if(ignoreDiacritics == true && rowVal instanceof IPATranscript) {
+			rowVal = rowVal.stripDiacritics();
+		}
 		
+	    // use string value as row key
+		var rowKey = Packages.ca.phon.formatter.FormatterUtil.format(rowVal);
+		if(caseSensitive == false) {
+			rowKey = rowKey.toLowerCase();
+		}
 		var keyTable = tableMap.get(rowKey);
 		if(keyTable == null) {
 		    keyTable = setupTable(table);
