@@ -18,8 +18,10 @@ package ca.phon.app.welcome;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -53,6 +55,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.workspace.Workspace;
@@ -71,7 +74,6 @@ import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -570,11 +572,13 @@ public class FolderProjectList extends JPanel {
 
 	public void onShowProject(PhonActionEvent pae) {
 		LocalProjectButton btn = (LocalProjectButton)pae.getData();
-		try {
-			OpenFileLauncher.openURL(
-					btn.getProjectFile().toURI().toURL());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+		if(Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().open(btn.getProjectFile());
+			} catch (IOException e) {
+				LogUtil.warning(e);
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 

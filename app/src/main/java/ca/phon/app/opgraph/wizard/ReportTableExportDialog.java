@@ -16,9 +16,11 @@
 package ca.phon.app.opgraph.wizard;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,7 +50,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -209,12 +210,12 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 				LogUtil.severe(e1);
 			}
 			busyLabel.setBusy(false);
-			if(openAfterExport) {
+			if(openAfterExport && Desktop.isDesktopSupported()) {
 				try {
-					URL url = (new File(exportLocation)).toURI().toURL();
-					OpenFileLauncher.openURL(url);
-				} catch (MalformedURLException e) {
+					Desktop.getDesktop().open(new File(exportLocation));
+				} catch (IOException e) {
 					LogUtil.severe(e);
+					Toolkit.getDefaultToolkit().beep();
 				}
 			}
 			

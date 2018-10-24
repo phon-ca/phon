@@ -293,7 +293,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 				var rvList = 
 						tableModel.resultValueList.stream()
 							.filter( (rvName) -> tableModel.resultValueVisible.get(rvName) )
-							.collect(Collectors.toList());
+							.collect( Collectors.toList() );
 				converter.setResultValues(rvList);
 				converter.setExcludeResultValues(false);
 			}

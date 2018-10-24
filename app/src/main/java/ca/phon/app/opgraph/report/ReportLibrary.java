@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.report;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
@@ -34,6 +35,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
@@ -48,7 +50,6 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
 import ca.phon.worker.PhonWorker;
@@ -170,10 +171,13 @@ public class ReportLibrary implements OpGraphLibrary {
 			final File userLibFolder = new File(UserReportHandler.DEFAULT_USER_REPORT_FOLDER);
 			userLibItem.setToolTipText("Show folder " + userLibFolder.getAbsolutePath());
 			userLibItem.addActionListener( (e) -> {
-				try {
-					OpenFileLauncher.openURL( userLibFolder.toURI().toURL() );
-				} catch (MalformedURLException e1) {
-					LOGGER.error( e1.getLocalizedMessage(), e1);
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(userLibFolder);
+					} catch (IOException e1) {
+						LogUtil.warning(e1);
+						Toolkit.getDefaultToolkit().beep();
+					}
 				}
 			});
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
@@ -207,10 +211,13 @@ public class ReportLibrary implements OpGraphLibrary {
 			projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
 			final File projectFolder = getProjectReportFolder(project);
 			projectSepItem.addActionListener( (e) -> {
-				try {
-					OpenFileLauncher.openURL( projectFolder.toURI().toURL() );
-				} catch (MalformedURLException e1) {
-					LOGGER.error( e1.getLocalizedMessage(), e1);
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(projectFolder);
+					} catch (IOException e1) {
+						LogUtil.warning(e1);
+						Toolkit.getDefaultToolkit().beep();
+					}
 				}
 			});
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());

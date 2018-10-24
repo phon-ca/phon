@@ -1,3 +1,5 @@
+# Desktop
+ca.phon.app.PhonDesktopStartupHook
 # StartupHook
 ca.phon.app.autosave.AutosaveStartupHook
 # Theme

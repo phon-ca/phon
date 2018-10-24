@@ -15,8 +15,10 @@
  */
 package ca.phon.app.menu.query;
 
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,7 +45,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -93,12 +94,15 @@ public class QueryMenuListener implements MenuListener {
 			
 			final JMenuItem lbl = new JMenuItem("-- User Library --");
 			
-			lbl.addActionListener( (evt) -> { 
+			lbl.addActionListener( (evt) -> {
+				if(Desktop.isDesktopSupported()) {
 					try {
-						OpenFileLauncher.openURL((new File(QueryScriptLibrary.USER_SCRIPT_FOLDER)).toURI().toURL());
-					} catch (MalformedURLException e1) {
-						LogUtil.severe(e1);
+						Desktop.getDesktop().open(new File(QueryScriptLibrary.USER_SCRIPT_FOLDER));
+					} catch (IOException e1) {
+						LogUtil.warning(e1);
+						Toolkit.getDefaultToolkit().beep();
 					}
+				}
 			} );
 			queryMenu.add(lbl);
 		}
@@ -115,11 +119,14 @@ public class QueryMenuListener implements MenuListener {
 		if(projectScriptIterator.hasNext()) {
 			queryMenu.addSeparator();
 			final JMenuItem lbl = new JMenuItem("-- Project Library --");
-			lbl.addActionListener( (evt) -> { 
-				try {
-					OpenFileLauncher.openURL((new File(QueryScriptLibrary.projectScriptFolder(project))).toURI().toURL());
-				} catch (MalformedURLException e1) {
-					LogUtil.severe(e1);
+			lbl.addActionListener( (evt) -> {
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(new File(QueryScriptLibrary.projectScriptFolder(project)));
+					} catch (IOException e1) {
+						LogUtil.warning(e1);
+						Toolkit.getDefaultToolkit().beep();
+					}
 				}
 			} );
 			queryMenu.add(lbl);

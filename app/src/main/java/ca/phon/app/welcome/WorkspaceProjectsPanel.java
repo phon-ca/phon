@@ -18,10 +18,13 @@ package ca.phon.app.welcome;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.prefs.Preferences;
 
@@ -37,6 +40,7 @@ import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.app.workspace.Workspace;
 import ca.phon.app.workspace.WorkspaceHistory;
@@ -46,7 +50,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OSInfo;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -181,10 +184,13 @@ public class WorkspaceProjectsPanel extends JPanel {
 	}
 
 	public void onShowWorkspace() {
-		try {
-			OpenFileLauncher.openURL(Workspace.userWorkspaceFolder().toURI().toURL());
-		} catch (MalformedURLException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		if(Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().open(Workspace.userWorkspaceFolder());
+			} catch (IOException e) {
+				LogUtil.warning(e);
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 

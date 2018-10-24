@@ -16,9 +16,12 @@
 package ca.phon.app.about;
 
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.JButton;
@@ -27,7 +30,6 @@ import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.util.OSInfo;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -79,11 +81,13 @@ public class HelpLink extends JButton {
 	}
 	
 	public void openLink(ActionEvent e) {
-		try {
-			OpenFileLauncher.openURL(new URL(getHelpLocation()));
-		} catch (MalformedURLException ex) {
-			Toolkit.getDefaultToolkit().beep();
-			LogUtil.severe(ex);
+		if(Desktop.isDesktopSupported()) {
+			try {
+				URL url = new URL(getHelpLocation());
+				Desktop.getDesktop().browse(url.toURI());
+			} catch (IOException | URISyntaxException e1) {
+				LogUtil.severe(e1);
+			}
 		}
 	}
 	

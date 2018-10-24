@@ -17,6 +17,8 @@ package ca.phon.app.session.editor;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -38,12 +40,12 @@ import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.ByteSize;
 import ca.phon.util.OSInfo;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -154,13 +156,14 @@ public class SessionEditorStatusBar extends JXStatusBar {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() == 1) {
-					// XXX open session folder in file explorer
-					final File corpusFolder =
-							new File(getEditor().getProject().getCorpusPath(getEditor().getSession().getCorpus()));
-					try {
-						OpenFileLauncher.openURL(corpusFolder.toURI().toURL());
-					} catch (MalformedURLException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+					final String sessionPath = getEditor().getProject().getSessionPath(getEditor().getSession());
+					if(Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().browseFileDirectory(new File(sessionPath));
+						} catch (Exception e) {
+							LogUtil.warning(e);
+							Toolkit.getDefaultToolkit().beep();
+						}
 					}
 				}
 			}

@@ -19,6 +19,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -134,7 +135,6 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OSInfo;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -146,8 +146,6 @@ import ca.phon.worker.PhonWorker;
  *
  */
 public class ProjectWindow extends CommonModuleFrame {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectWindow.class.getName());
 
 	private static final long serialVersionUID = -4771564010497815447L;
 
@@ -630,11 +628,13 @@ public class ProjectWindow extends CommonModuleFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent me) {
-				try {
-					final URL projectURL = new File(projectLoadPath).toURI().toURL();
-					OpenFileLauncher.openURL(projectURL);
-				} catch (MalformedURLException e) {
-					LogUtil.warning(e);
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(new File(projectLoadPath));
+					} catch (IOException e) {
+						LogUtil.warning(e);
+						Toolkit.getDefaultToolkit().beep();
+					}
 				}
 			}
 

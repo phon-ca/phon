@@ -737,7 +737,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			showMessageDialog("Query Parameters", "Check query parameters.", MessageDialogProperties.okOptions);
 			return;
 		}
-		
+				
 		final QueryRunnerPanel runnerPanel = 
 				new QueryRunnerPanel(project, queryScript, sessionSelector.getSelectedSessions(), isIncludeExcluded());
 		

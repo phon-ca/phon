@@ -15,6 +15,7 @@
  */
 package ca.phon.app.log.actions;
 
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -31,15 +32,12 @@ import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 
 public class SaveAllBuffersAction extends HookableAction {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAllBuffersAction.class.getName());
 
 	private final static String TXT = "Save all buffers to folder...";
 
@@ -89,11 +87,18 @@ public class SaveAllBuffersAction extends HookableAction {
 		}
 		
 		if( ((MultiBufferPanel)buffers).isOpenAfterSaving() ) {
-			try {
-				OpenFileLauncher.openURL((new File(saveFolder)).toURI().toURL());
-			} catch (MalformedURLException e) {
-				LOGGER.warn( e.getLocalizedMessage(), e);
+			if(Desktop.isDesktopSupported()) {
+				try {
+					Desktop.getDesktop().open(new File(saveFolder));
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
 			}
+//			try {
+//				OpenFileLauncher.openURL((new File(saveFolder)).toURI().toURL());
+//			} catch (MalformedURLException e) {
+//				LOGGER.warn( e.getLocalizedMessage(), e);
+//			}
 		}
 	}
 	

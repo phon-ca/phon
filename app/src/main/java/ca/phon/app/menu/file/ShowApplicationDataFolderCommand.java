@@ -15,13 +15,14 @@
  */
 package ca.phon.app.menu.file;
 
+import java.awt.Desktop;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 
 public class ShowApplicationDataFolderCommand extends HookableAction {
@@ -36,10 +37,13 @@ public class ShowApplicationDataFolderCommand extends HookableAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final File userDataFolder = new File(PrefHelper.getUserDataFolder());
-		try {
-			OpenFileLauncher.openURL(userDataFolder.toURI().toURL());
-		} catch (MalformedURLException e) {
-			LogUtil.severe(e.getLocalizedMessage(), e);
+		if(Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().open(userDataFolder);
+			} catch (IOException e) {
+				LogUtil.severe(e);
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 

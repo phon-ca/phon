@@ -18,7 +18,9 @@ package ca.phon.app.session.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -96,6 +98,7 @@ import bibliothek.util.Filter;
 import bibliothek.util.xml.XAttribute;
 import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -107,7 +110,6 @@ import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.OSInfo;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -976,10 +978,13 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 
 	public void onShowLayoutFolder() {
-		try {
-			OpenFileLauncher.openURL(RecordEditorPerspective.PERSPECTIVES_FOLDER.toURI().toURL());
-		} catch (MalformedURLException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		if(Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().open(RecordEditorPerspective.PERSPECTIVES_FOLDER);
+			} catch (IOException e) {
+				LogUtil.warning(e);
+				Toolkit.getDefaultToolkit().beep();
+			}
 		}
 	}
 

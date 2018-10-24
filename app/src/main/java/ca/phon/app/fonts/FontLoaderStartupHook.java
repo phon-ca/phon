@@ -15,6 +15,7 @@
  */
 package ca.phon.app.fonts;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -23,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,12 +33,12 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 
 import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.OpenFileLauncher;
 
 public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
@@ -83,10 +84,13 @@ public class FontLoaderStartupHook implements PhonStartupHook, IPluginExtensionP
 				int retVal = e.getDialogResult();
 				if(retVal == 0) {
 					// show information page
-					try {
-						OpenFileLauncher.openURL(new URL(FONT_INFO_PAGE));
-					} catch (MalformedURLException ex) {
-						LOGGER.error( ex.getLocalizedMessage(), ex);
+					if(Desktop.isDesktopSupported()) {
+						try {
+							URL url = new URL(FONT_INFO_PAGE);
+							Desktop.getDesktop().browse(url.toURI());
+						} catch (IOException | URISyntaxException e1) {
+							LogUtil.severe(e1);
+						}
 					}
 				}
 			});

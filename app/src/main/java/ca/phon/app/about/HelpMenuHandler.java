@@ -15,9 +15,12 @@
  */
 package ca.phon.app.about;
 
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.JMenu;
@@ -30,7 +33,6 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.IPluginMenuFilter;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.PrefHelper;
 
 @PhonPlugin(author="Greg J. Hedlund", comments="Add manual items to Help menu", minPhonVersion="2.2.0", name="HelpMenuHandler", version="1")
@@ -63,11 +65,13 @@ public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint
 	}
 
 	public static void showOnlineManual(String path) {
-		try {
-			OpenFileLauncher.openURL(new URL(path));
-		} catch (MalformedURLException e) {
-			Toolkit.getDefaultToolkit().beep();
-			LogUtil.severe(e);
+		if(Desktop.isDesktopSupported()) {
+			try {
+				URL url = new URL(path);
+				Desktop.getDesktop().browse(url.toURI());
+			} catch (IOException | URISyntaxException e1) {
+				LogUtil.severe(e1);
+			}
 		}
 	}
 

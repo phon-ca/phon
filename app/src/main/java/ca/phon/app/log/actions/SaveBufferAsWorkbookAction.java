@@ -15,6 +15,7 @@
  */
 package ca.phon.app.log.actions;
 
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -36,7 +37,6 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
@@ -144,8 +144,8 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 			workbook.write();
 			workbook.close();
 
-			if(this.container.isOpenAfterSaving()) {
-				OpenFileLauncher.openURL((new File(saveAs)).toURI().toURL());
+			if(this.container.isOpenAfterSaving() && Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(saveAs));
 			}
 		} catch (IOException | WriteException ex) {
 			Toolkit.getDefaultToolkit().beep();

@@ -16,6 +16,7 @@
 package ca.phon.app.log;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +39,6 @@ import javax.swing.event.MenuListener;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.OpenFileLauncher;
 import javafx.application.Platform;
 
 /**
@@ -103,16 +103,12 @@ public class LogViewer extends CommonModuleFrame {
 				logMenu.addSeparator();
 				
 				final File logFolder = new File(LogManager.LOG_FOLDER);
-				try {
-					final PhonUIAction showLogFolderAct = new PhonUIAction(OpenFileLauncher.class, "openURL",
-							logFolder.toURI().toURL() );
-					showLogFolderAct.putValue(PhonUIAction.NAME, "Show log folder");
-					showLogFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, logFolder.getAbsolutePath());
-					final JMenuItem showLogFolderItem = new JMenuItem(showLogFolderAct);
-					logMenu.add(showLogFolderItem);
-				} catch (MalformedURLException e1) {
-					LogUtil.severe(e1.getLocalizedMessage(), e1);
-				}
+				final PhonUIAction showLogFolderAct = new PhonUIAction(Desktop.getDesktop(), "open",
+						logFolder );
+				showLogFolderAct.putValue(PhonUIAction.NAME, "Show log folder");
+				showLogFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, logFolder.getAbsolutePath());
+				final JMenuItem showLogFolderItem = new JMenuItem(showLogFolderAct);
+				logMenu.add(showLogFolderItem);
 			}
 			
 			@Override

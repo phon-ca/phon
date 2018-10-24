@@ -18,9 +18,11 @@ package ca.phon.app.project;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -40,7 +42,6 @@ import javax.swing.JTextArea;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -86,15 +87,14 @@ public class CorpusDetails extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent me) {
-				if(corpus != null) {
+				if(corpus != null && Desktop.isDesktopSupported()) {
 					final String corpusPath = project.getCorpusPath(corpus);
 					try {
-						final URL url = new File(corpusPath).toURI().toURL();
-						OpenFileLauncher.openURL(url);
-					} catch (MalformedURLException e) {
-						LogUtil.warning(e);
+						Desktop.getDesktop().open(new File(corpusPath));
+					} catch (IOException e) {
+						LogUtil.severe(e);
+						Toolkit.getDefaultToolkit().beep();
 					}
-
 				}
 			}
 
@@ -107,17 +107,17 @@ public class CorpusDetails extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent me) {
-				if(corpus != null) {
+				if(corpus != null && Desktop.isDesktopSupported()) {
 					String corpusPath = project.getCorpusMediaFolder(corpus);
 					File corpusFile = new File(corpusPath);
 					if(!corpusFile.isAbsolute()) {
 						corpusPath = project.getLocation() + File.separator + corpusPath;
 					}
 					try {
-						final URL url = new File(corpusPath).toURI().toURL();
-						OpenFileLauncher.openURL(url);
-					} catch (MalformedURLException e) {
-						LogUtil.warning(e);
+						Desktop.getDesktop().open(new File(corpusPath));
+					} catch (IOException e) {
+						LogUtil.severe(e);
+						Toolkit.getDefaultToolkit().beep();
 					}
 				}
 			}

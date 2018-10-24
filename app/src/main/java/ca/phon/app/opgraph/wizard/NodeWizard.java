@@ -133,9 +133,11 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonWorker;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
+import javafx.print.PrinterJob;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -383,9 +385,14 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		
+		final PhonUIAction printReportAct = new PhonUIAction(this, "onPrintReport");
+		printReportAct.putValue(PhonUIAction.NAME, "Print report");
+		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
+//		builder.addItem(".", printReportAct);
 		builder.addItem(".", saveAct).setEnabled(hasReport);
 		builder.addSeparator(".", "_save");
 		builder.addItem(".", saveTablesToWorkbookAct).setEnabled(hasReport);
@@ -441,6 +448,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	
 	public boolean reportBufferAvailable() {
 		return bufferPanel.getBufferNames().contains("Report");
+	}
+	
+	public void onPrintReport() {
+		if(reportBufferAvailable()) {
+			Platform.runLater( () -> {
+				final PrinterJob pj = PrinterJob.createPrinterJob();
+				if(pj != null && pj.showPrintDialog(null)) {
+					bufferPanel.getBuffer("Report").getWebView().getEngine().print(pj);
+					pj.endJob();
+				}
+			});
+		}
 	}
 	
 	private void init() {

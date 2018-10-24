@@ -15,8 +15,11 @@
  */
 package ca.phon.app.opgraph.macro;
 
+import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -31,12 +34,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.OpenFileLauncher;
 import ca.phon.util.resources.ResourceLoader;
 
 public class MacroLibrary {
@@ -143,10 +146,13 @@ public class MacroLibrary {
 			final File userLibFolder = new File(UserMacroHandler.DEFAULT_USER_MACRO_FOLDER);
 			userLibItem.setToolTipText("Show folder " + userLibFolder.getAbsolutePath());
 			userLibItem.addActionListener( (e) -> {
-				try {
-					OpenFileLauncher.openURL( userLibFolder.toURI().toURL() );
-				} catch (MalformedURLException e1) {
-					LOGGER.error( e1.getLocalizedMessage(), e1);
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(userLibFolder);
+					} catch (IOException e1) {
+						LogUtil.warning(e1);
+						Toolkit.getDefaultToolkit().beep();
+					}
 				}
 			});
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
@@ -180,10 +186,13 @@ public class MacroLibrary {
 			projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
 			final File projectFolder = getProjectAnalysisFolder(project);
 			projectSepItem.addActionListener( (e) -> {
-				try {
-					OpenFileLauncher.openURL( projectFolder.toURI().toURL() );
-				} catch (MalformedURLException e1) {
-					LOGGER.error( e1.getLocalizedMessage(), e1);
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(projectFolder);
+					} catch (IOException e1) {
+						LogUtil.warning(e1);
+						Toolkit.getDefaultToolkit().beep();
+					}
 				}
 			});
 			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());

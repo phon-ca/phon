@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,7 +23,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.sun.jna.platform.FileUtils;
+import org.apache.commons.io.FileUtils;
 
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.project.LocalProject;
@@ -145,13 +146,16 @@ public class DesktopProject extends LocalProject {
 	}
 
 	private void moveToTrash(File[] files) throws IOException {
-		FileUtils fileUtils = FileUtils.getInstance();
-		if(fileUtils.hasTrash()) {
-			fileUtils.moveToTrash(files);
+		if(Desktop.isDesktopSupported()) {
+			for(File file:files) {
+				if(!Desktop.getDesktop().moveToTrash(file)) {
+					throw new IOException("Unable to move file to trash: " + file.getAbsolutePath());
+				}
+			}
 		} else {
 			// delete
 			for(File file:files) {
-				org.apache.commons.io.FileUtils.forceDelete(file);
+				FileUtils.forceDelete(file);
 			}
 		}
 	}
