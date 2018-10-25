@@ -59,29 +59,46 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
  */
 public class SessionToHTML {
 
+	// primary record filter
+	private RecordFilter recordFilter;
+
+	// participant information
 	private boolean includeParticipantInfo;
+	private boolean includeAge = true;
+	private boolean includeBirthday = false;
+	private boolean includeRole = true;
+	private boolean includeSex = false;
+	private boolean includeLanguage = false;
+	private boolean includeGroup = false;
+	private boolean includeEducation = false;
+	private boolean includeSES = false;
 	
+	// tier data
 	private boolean includeTierData = true;
-	
+		
+	// options to include/exclude tiers by name
 	private boolean excludeTiers = false;
 	private List<String> tierList = new ArrayList<>();
 	
+	// add syllabification display data to IPA Target/Actual tiers
 	private boolean includeSyllabification;
 	private SyllabificationDisplay syllabificationDisplay;
 	private JPanel syllabificationRenderPane;
 	
+	// add alignment display to end of tier information
 	private boolean includeAlignment;
 	private PhoneMapDisplay alignmentDisplay;
 	private JPanel alignmentRenderPane;
 	
+	// tier view - order, visibility and fonts
 	private List<TierViewItem> tierView;
 	
+	// query result options
 	private boolean includeQueryResults = false;
-	
 	private boolean filterRecordsUsingQueryResults = false;
-	
 	private ResultSet resultSet;
 	
+	// options to include/exclude result values/metadata by name
 	private boolean excludeResultValues;
 	private List<String> resultValueList = new ArrayList<>();
 	
@@ -112,6 +129,70 @@ public class SessionToHTML {
 
 	public void setIncludeParticipantInfo(boolean includeParticipantInfo) {
 		this.includeParticipantInfo = includeParticipantInfo;
+	}
+	
+	public boolean isIncludeAge() {
+		return includeAge;
+	}
+
+	public void setIncludeAge(boolean includeAge) {
+		this.includeAge = includeAge;
+	}
+
+	public boolean isIncludeBirthday() {
+		return includeBirthday;
+	}
+
+	public void setIncludeBirthday(boolean includeBirthday) {
+		this.includeBirthday = includeBirthday;
+	}
+
+	public boolean isIncludeRole() {
+		return includeRole;
+	}
+
+	public void setIncludeRole(boolean includeRole) {
+		this.includeRole = includeRole;
+	}
+
+	public boolean isIncludeSex() {
+		return includeSex;
+	}
+
+	public void setIncludeSex(boolean includeSex) {
+		this.includeSex = includeSex;
+	}
+
+	public boolean isIncludeLanguage() {
+		return includeLanguage;
+	}
+
+	public void setIncludeLanguage(boolean includeLanguage) {
+		this.includeLanguage = includeLanguage;
+	}
+
+	public boolean isIncludeGroup() {
+		return includeGroup;
+	}
+
+	public void setIncludeGroup(boolean includeGroup) {
+		this.includeGroup = includeGroup;
+	}
+
+	public boolean isIncludeEducation() {
+		return includeEducation;
+	}
+
+	public void setIncludeEducation(boolean includeEducation) {
+		this.includeEducation = includeEducation;
+	}
+
+	public boolean isIncludeSES() {
+		return includeSES;
+	}
+
+	public void setIncludeSES(boolean includeSES) {
+		this.includeSES = includeSES;
 	}
 
 	public boolean isIncludeSyllabification() {
@@ -200,6 +281,14 @@ public class SessionToHTML {
 	
 	public void setResultValues(List<String> resultValues) {
 		this.resultValueList = resultValues;
+	}
+	
+	public RecordFilter getRecordFilter() {
+		return this.recordFilter;
+	}
+	
+	public void setRecordFilter(RecordFilter recordFilter) {
+		this.recordFilter = recordFilter;
 	}
 	
 	public SyllabificationDisplay getSyllabificationDisplay() {
@@ -304,15 +393,97 @@ public class SessionToHTML {
 		buffer.append("<div class='participants'>").append(nl);
 		
 		buffer.append("<table id='participant_table'>").append(nl);
-		buffer.append("<tr><th>Participant</th><th>Age</th><th>Role</th></tr>").append(nl);
-				
+		buffer.append("<tr>").append(nl);
+		buffer.append("<th>Participant</th>").append(nl);
+		if(includeAge) {
+			buffer.append("<th>").append("Age").append("</th>").append(nl);
+		}
+		if(includeBirthday) {
+			buffer.append("<th>").append("Birthday").append("</th>").append(nl);
+		}
+		if(includeRole) {
+			buffer.append("<th>").append("Role").append("</th>").append(nl);
+		}
+		if(includeSex) {
+			buffer.append("<th>").append("Sex").append("</th>").append(nl);
+		}
+		if(includeLanguage) {
+			buffer.append("<th>").append("Language").append("</th>").append(nl);
+		}
+		if(includeGroup) {
+			buffer.append("<th>").append("Group").append("</th>").append(nl);
+		}
+		if(includeEducation) {
+			buffer.append("<th>").append("Education").append("</th>").append(nl);
+		}
+		if(includeSES) {
+			buffer.append("<th>").append("SES").append("</th>").append(nl);
+		}
+		buffer.append("</tr>").append(nl);
+		
 		for(var i = 0; i < session.getParticipantCount(); i++) {
 			var participant = session.getParticipant(i);
 			buffer.append("<tr>").append(nl);
 			buffer.append("<td>").append(participant).append("</td>").append(nl);
-			buffer.append("<td>").append(
-					FormatterUtil.format(participant.getAge(session.getDate())) ).append("</td>").append(nl);
-			buffer.append("<td>").append(participant.getRole()).append("</td>").append(nl);
+			
+			if(includeAge) {
+				if(participant.getBirthDate() != null) {
+					buffer.append("<td>").append(
+							FormatterUtil.format(participant.getAge(session.getDate())) ).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeBirthday) {
+				if(participant.getBirthDate() != null) {
+					buffer.append("<td>").append(
+							FormatterUtil.format(participant.getBirthDate()) ).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeRole) {
+				if(participant.getRole() != null) {
+					buffer.append("<td>").append(participant.getRole()).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeSex) {
+				if(participant.getSex() != null) {
+					buffer.append("<td>").append(participant.getSex()).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeLanguage) {
+				if(participant.getLanguage() != null) {
+					buffer.append("<td>").append(participant.getLanguage()).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeGroup) {
+				if(participant.getGroup() != null) {
+					buffer.append("<td>").append(participant.getGroup()).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeEducation) {
+				if(participant.getEducation() != null) {
+					buffer.append("<td>").append(participant.getEducation()).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
+			if(includeSES) {
+				if(participant.getSES() != null) {
+					buffer.append("<td>").append(participant.getSES()).append("</td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp;</td>").append(nl);
+				}
+			}
 			buffer.append("</tr>").append(nl);
 		}
 		
@@ -515,14 +686,16 @@ public class SessionToHTML {
 			appendParticipantInformation(session, buffer);
 		}
 		
-		RecordFilter filter = null;
+		RecordFilter queryFilter = null;
 		if(isFilterRecordsUsingQueryResults() && getResultSet() != null) {
-			filter = new ResultSetRecordFilter(session, getResultSet());
+			queryFilter = new ResultSetRecordFilter(session, getResultSet());
 		}
 		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			var utt = session.getRecord(rIdx);
-			if(filter != null && !filter.checkRecord(utt)) continue;
+			// check filters
+			if(recordFilter != null && !recordFilter.checkRecord(utt)) continue;
+			if(queryFilter != null && !queryFilter.checkRecord(utt)) continue;
 			appendRecord(session, rIdx, buffer);
 		}
 		

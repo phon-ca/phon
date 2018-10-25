@@ -38,18 +38,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SortOrder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.VerticalLayout;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
+import ca.phon.app.query.OpenResultSetSelector;
 import ca.phon.app.query.ResultSetEditor;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
@@ -58,9 +55,11 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
 import ca.phon.query.db.ResultSetRecordFilter;
 import ca.phon.session.AbstractRecordFilter;
+import ca.phon.session.AgeFormatter;
 import ca.phon.session.DateFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRecordFilter;
+import ca.phon.session.ParticipantRole;
 import ca.phon.session.RangeRecordFilter;
 import ca.phon.session.Record;
 import ca.phon.session.RecordFilter;
@@ -78,8 +77,6 @@ import ca.phon.util.icons.IconSize;
 /**
  * Displays options for identify records by range, 
  * speaker, or search results.
- * 
- * 
  */
 public class RecordFilterPanel extends JPanel {
 	
@@ -93,17 +90,16 @@ public class RecordFilterPanel extends JPanel {
 	private JRadioButton allBtn;
 	private JRadioButton rangeBtn;
 	private JRadioButton speakerBtn;
-	private JRadioButton searchBtn;
+	
+	private JPanel queryOptsPanel;
+	private JRadioButton queryBtn;
+	private OpenResultSetSelector resultSetSelector;
 	
 	private JTextField rangeField;
 	private JXTable speakerTbl;
-	private JXTable searchTbl;
-	
 
 	private List<Participant> selectedParticipants =
 		new ArrayList<Participant>();
-	
-	private ResultSet selectedSearch;
 	
 	private Project project;
 	
@@ -126,12 +122,6 @@ public class RecordFilterPanel extends JPanel {
 	}
 	
 	private void init() {
-		FormLayout layout = new FormLayout(
-				"0px, fill:pref:grow",
-				"pref, 1dlu, pref, pref, 1dlu, pref, pref, 1dlu, pref, pref");
-		CellConstraints cc = new CellConstraints();
-		setLayout(layout);
-		
 		radioGrp = new ButtonGroup();
 		
 		ButtonAction bAct = new ButtonAction();
@@ -141,49 +131,50 @@ public class RecordFilterPanel extends JPanel {
 		allBtn.addActionListener(bAct);
 		radioGrp.add(allBtn);
 		
-		rangeBtn = new JRadioButton("Specific records");
+		JPanel rangePanel = new JPanel(new HorizontalLayout(5));
+		rangeBtn = new JRadioButton("Record range");
 		rangeBtn.addActionListener(bAct);
 		radioGrp.add(rangeBtn);
-		
-		speakerBtn = new JRadioButton("Records for participant(s)");
-		speakerBtn.addActionListener(bAct);
-		radioGrp.add(speakerBtn);
-		
-		searchBtn = new JRadioButton("Records from search results");
-		searchBtn.addActionListener(bAct);
-		radioGrp.add(searchBtn);
 		
 		rangeField = new JTextField();
 		rangeField.setText("1.." + t.getRecordCount());
 		rangeField.setInputVerifier(new RangeVerifier());
+		rangeField.setColumns(10);
 		rangeField.setEnabled(false);
 		
+		rangePanel.add(rangeBtn);
+		rangePanel.add(rangeField);
+		
+		JPanel speakerPanel = new JPanel(new VerticalLayout());
+		speakerBtn = new JRadioButton("Records for participant(s)");
+		speakerBtn.addActionListener(bAct);
+		radioGrp.add(speakerBtn);
+		
 		speakerTbl = new JXTable(new ParticipantsTableModel());
-		speakerTbl.setVisibleRowCount(2);
+		speakerTbl.setVisibleRowCount(3);
 		speakerTbl.setEnabled(false);
 		
-		searchTbl = new JXTable(new SearchTableModel());
-		searchTbl.setVisibleRowCount(4);
-		searchTbl.setEnabled(false);
-		searchTbl.getColumn(0).setCellRenderer(new QueryNameCellRenderer());
-		searchTbl.getColumn(1).setCellRenderer(new DateCellRenderer());
-		searchTbl.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		searchTbl.getSelectionModel().addListSelectionListener(new SearchListener());
-		if(searchTbl.getModel().getRowCount() > 0) {
-			searchTbl.getSelectionModel().setSelectionInterval(0, 0);
-		}
-		searchTbl.setSortOrder(1, SortOrder.DESCENDING);
+		speakerPanel.add(speakerBtn);
+		speakerPanel.add(new JScrollPane(speakerTbl));
+
+		queryBtn = new JRadioButton("Records from query results");
+		queryBtn.addActionListener(bAct);
+		radioGrp.add(queryBtn);
 		
-		// add components
-		add(allBtn, cc.xyw(1, 1, 2));
-		add(rangeBtn, cc.xyw(1, 3, 2));
-		add(rangeField, cc.xy(2, 4));
-		add(speakerBtn, cc.xyw(1, 6, 2));
-		add(new JScrollPane(speakerTbl), cc.xy(2, 7));
-		add(searchBtn, cc.xyw(1, 9, 2));
-		add(new JScrollPane(searchTbl), cc.xy(2, 10));
+		resultSetSelector = new OpenResultSetSelector(getSession());
+		resultSetSelector.getResultSetTable().setVisibleRowCount(3);
+		resultSetSelector.getResultSetTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		queryOptsPanel = new JPanel(new VerticalLayout());
+		queryOptsPanel.add(queryBtn);
+		queryOptsPanel.add(resultSetSelector);
+		
+		setLayout(new VerticalLayout(5));
+		add(allBtn);
+		add(rangePanel);
+		add(speakerPanel);
+		add(queryOptsPanel);
 	}
-	
 	
 	/**
 	 * Table model for speakers
@@ -193,11 +184,14 @@ public class RecordFilterPanel extends JPanel {
 		public ParticipantsTableModel() {
 			super();
 			
+			for(int i = 0; i < t.getParticipantCount(); i++) {
+				selectedParticipants.add(t.getParticipant(i));
+			}
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 3;
+			return 4;
 		}
 
 		@Override
@@ -211,7 +205,8 @@ public class RecordFilterPanel extends JPanel {
 			
 			if(col == 0) retVal = " ";
 			else if(col == 1) retVal = "Name";
-			else if(col == 2) retVal = "Birthday";
+			else if(col == 2) retVal = "Role";
+			else if(col == 3) retVal = "Age";
 			
 			return retVal;
 		}
@@ -230,11 +225,12 @@ public class RecordFilterPanel extends JPanel {
 				if(p.getName() == null) return p.getId();
 				retVal = p.getName();
 			} else if(columnIndex == 2) {
+				retVal = p.getRole();
+			} else if(columnIndex == 3) {
 				if(p.getBirthDate() != null) {
-					final LocalDate bDay = p.getBirthDate();
-					retVal = DateFormatter.dateTimeToString(bDay);
+					retVal = AgeFormatter.ageToString(p.getAge(getSession().getDate()));
 				}
-			} 
+			}
 			return retVal;
 		}
 
@@ -244,7 +240,8 @@ public class RecordFilterPanel extends JPanel {
 			
 			if(col == 0) retVal = Boolean.class;
 			else if(col == 1) retVal = String.class;
-			else if(col == 2) retVal = String.class;
+			else if(col == 2) retVal = ParticipantRole.class;
+			else if(col == 3) retVal = String.class;
 			
 			return retVal;
 		}
@@ -272,6 +269,10 @@ public class RecordFilterPanel extends JPanel {
 		}
 		
 		
+	}
+	
+	public JPanel getQueryOptionsPanel() {
+		return this.queryOptsPanel;
 	}
 
 	/**
@@ -391,19 +392,19 @@ public class RecordFilterPanel extends JPanel {
 			if(allBtn.isSelected()) {
 				rangeField.setEnabled(false);
 				speakerTbl.setEnabled(false);
-				searchTbl.setEnabled(false);
+				resultSetSelector.getResultSetTable().setEnabled(false);
 			} else if (rangeBtn.isSelected()) {
 				rangeField.setEnabled(true);
 				speakerTbl.setEnabled(false);
-				searchTbl.setEnabled(false);
+				resultSetSelector.getResultSetTable().setEnabled(false);
 			} else if(speakerBtn.isSelected()) {
 				rangeField.setEnabled(false);
 				speakerTbl.setEnabled(true);
-				searchTbl.setEnabled(false);
-			} else if(searchBtn.isSelected()) {
+				resultSetSelector.getResultSetTable().setEnabled(false);
+			} else if(queryBtn.isSelected()) {
 				rangeField.setEnabled(false);
 				speakerTbl.setEnabled(false);
-				searchTbl.setEnabled(true);
+				resultSetSelector.getResultSetTable().setEnabled(true);
 			}
 		}
 		
@@ -563,22 +564,6 @@ public class RecordFilterPanel extends JPanel {
 	}
 	
 	/**
-	 * Search table listener
-	 */
-	private class SearchListener implements ListSelectionListener {
-
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			int rowIdx = searchTbl.getSelectedRow();
-			if(rowIdx >= 0) {
-				rowIdx = searchTbl.convertRowIndexToModel(rowIdx);
-				selectedSearch = ((SearchTableModel)searchTbl.getModel()).searches.get(rowIdx).getResultSet();
-			}
-		}
-		
-	}
-	
-	/**
 	 * Get the defined filter
 	 */
 	public RecordFilter getRecordFilter() {
@@ -601,8 +586,8 @@ public class RecordFilterPanel extends JPanel {
 			}
 		} else if(speakerBtn.isSelected()) {
 			retVal = new ParticipantRecordFilter(selectedParticipants);
-		} else if(searchBtn.isSelected()) {
-			retVal = new ResultSetRecordFilter(t, selectedSearch);
+		} else if(queryBtn.isSelected() && resultSetSelector.getSelectedResultSets().size() > 0) {
+			retVal = new ResultSetRecordFilter(t, resultSetSelector.getSelectedResultSets().get(0));
 		}
 		
 		return retVal;
@@ -631,11 +616,12 @@ public class RecordFilterPanel extends JPanel {
 		} else if(rangeBtn.isSelected()) {
 			// validate range field
 			retVal = rangeField.getInputVerifier().verify(rangeField);
-		} else if(searchBtn.isSelected()) {
+		} else if(queryBtn.isSelected()) {
 			// make sure selected search has data
-			if(selectedSearch.numberOfResults(true) == 0) {
-				final Toast toast = ToastFactory.makeToast("Selected search has no data.");
-				toast.start(searchBtn);
+			if(resultSetSelector.getSelectedResultSets().size() == 0 || 
+					resultSetSelector.getSelectedResultSets().get(0).numberOfResults(true) == 0) {
+				final Toast toast = ToastFactory.makeToast("No results selected.");
+				toast.start(queryBtn);
 			} else {
 				retVal = true;
 			}
