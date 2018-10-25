@@ -39,6 +39,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.GraphEditorModel;
 import ca.phon.opgraph.app.components.NodeSettingsPanel;
 import ca.phon.opgraph.app.components.canvas.GraphCanvas;
+import ca.phon.opgraph.app.components.canvas.GraphCanvasScroller;
 import ca.phon.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.extensions.CompositeNode;
@@ -106,7 +107,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap = new TreeMap<>();
 			final JPanel canvasPanel = new JPanel(new BorderLayout());
 			canvasPanel.add(new JBreadcrumbScrollPane<>(getBreadcrumb()), BorderLayout.NORTH);
-			canvasPanel.add(new JScrollPane(getCanvas()), BorderLayout.CENTER);
+			canvasPanel.add(new GraphCanvasScroller(getCanvas()), BorderLayout.CENTER);
 			viewMap.put("Canvas", canvasPanel);
 			viewMap.put("Console", new JScrollPane(getConsolePanel()));
 			viewMap.put("Debug", new JScrollPane(getDebugInfoPanel()));
@@ -188,7 +189,6 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 	@Override
 	public GraphCanvas getCanvas() {
 		final GraphCanvas retVal = super.getCanvas();
-//		retVal.setZoomLevel(0.1f);
 		retVal.setPreferredSize(new Dimension(4096, 4096));
 		return retVal;
 	}
