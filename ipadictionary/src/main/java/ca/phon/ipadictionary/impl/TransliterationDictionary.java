@@ -21,8 +21,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -43,6 +45,7 @@ import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
 import ca.phon.util.Language;
+import ca.phon.util.Tuple;
 import de.susebox.jtopas.Flags;
 import de.susebox.jtopas.StandardTokenizer;
 import de.susebox.jtopas.StandardTokenizerProperties;
@@ -130,20 +133,9 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	 */
 	private String preReplaceExpr;
 	
-	/**
-	 * Regex pattern for post-processing text
-	 * 
-	 */
-	private Pattern postFindPattern;
+	private List<Tuple<Pattern,String>> postFindList = new ArrayList<>();
 	
-	/**
-	 * Replace expression used for each instance of postFindPattern found
-	 */
-	private String postReplaceExpr;
-	
-	private PhonexPattern phonexPattern;
-	
-	private IPATranscript phonexReplaceExpr;
+	private List<Tuple<PhonexPattern, IPATranscript>> postPhonexFindList = new ArrayList<>();
 
 	public TransliterationDictionary(URL mapFile) {
 		super();
@@ -205,24 +197,27 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		
 		String builderStr = builder.toString();
 		
-		if(postFindPattern != null && postReplaceExpr != null) {
-			final Matcher m = postFindPattern.matcher(builderStr);
-			builderStr = m.replaceAll(postReplaceExpr);
+		for(var postFind:postFindList) {
+			var pattern = postFind.getObj1();
+			var m = pattern.matcher(builderStr);
+			builderStr = m.replaceAll(postFind.getObj2());
 		}
 		
-		if(phonexPattern != null && phonexReplaceExpr != null) {
+		for(var postPhonexFind:postPhonexFindList) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
-				final PhonexMatcher matcher = phonexPattern.matcher(ipa);
+				
+				var pattern = postPhonexFind.getObj1();
+				var matcher = pattern.matcher(ipa);
 				
 				final IPATranscriptBuilder ipaBuilder = new IPATranscriptBuilder();
 				while(matcher.find()) {
-					matcher.appendReplacement(ipaBuilder, phonexReplaceExpr);
+					matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 				}
 				matcher.appendTail(ipaBuilder);
 				builderStr = ipaBuilder.toIPATranscript().toString();
 			} catch (ParseException e) {
-				throw new IPADictionaryExecption(e);
+				LOGGER.warn(e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -241,7 +236,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	}
 	
 	/**
-	 * (RegEx) Pattern used to read dicationary entries from file
+	 * (RegEx) Pattern used to read dictionary entries from file
 	 */
 	private Pattern getPattern() {
 		String regex = "(.*)"
@@ -345,6 +340,8 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		reader.close();
 	}
 	
+	private Tuple<Pattern, String> currentPostFindTuple = new Tuple<>();
+	private Tuple<PhonexPattern, IPATranscript> currentPhonexFindTuple = new Tuple<>();
 	/**
 	 * Process metadata value
 	 * 
@@ -364,18 +361,39 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSREPLACE.toString())) {
 			preReplaceExpr = value;
 		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSEXPR.toString())) {
-			postFindPattern = Pattern.compile(value);
+			Pattern p = Pattern.compile(value);
+			currentPostFindTuple.setObj1(p);
+			if(currentPostFindTuple.getObj1() != null && currentPostFindTuple.getObj2() != null) {
+				postFindList.add(currentPostFindTuple);
+				currentPostFindTuple = new Tuple<>();
+			}
 		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSREPLACE.toString())) {
-			postReplaceExpr = value;
+			currentPostFindTuple.setObj2(value);
+			if(currentPostFindTuple.getObj1() != null && currentPostFindTuple.getObj2() != null) {
+				postFindList.add(currentPostFindTuple);
+				currentPostFindTuple = new Tuple<>();
+			}
 		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXFIND.toString())) { 
 			try {
-				phonexPattern = PhonexPattern.compile(value);
+				var p = PhonexPattern.compile(value);
+				currentPhonexFindTuple.setObj1(p);
+				
+				if(currentPhonexFindTuple.getObj1() != null && currentPhonexFindTuple.getObj2() != null) {
+					postPhonexFindList.add(currentPhonexFindTuple);
+					currentPhonexFindTuple = new Tuple<>();
+				}
 			} catch (PhonexPatternException e) {
 				LOGGER.error(e);
 			}
 		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXREPLACE.toString())) {
 			try {
-				phonexReplaceExpr = IPATranscript.parseIPATranscript(value);
+				var r = IPATranscript.parseIPATranscript(value);
+				currentPhonexFindTuple.setObj2(r);
+				
+				if(currentPhonexFindTuple.getObj1() != null && currentPhonexFindTuple.getObj2() != null) {
+					postPhonexFindList.add(currentPhonexFindTuple);
+					currentPhonexFindTuple = new Tuple<>();
+				}
 			} catch (ParseException e) {
 				LOGGER.error(e);
 			}
