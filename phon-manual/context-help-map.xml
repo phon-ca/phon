@@ -209,6 +209,7 @@
    <appContext helpID="taskId" path="query/tasks/AlignedWordFilter.html"/>
    <appContext helpID="taskId" path="query/tasks/SyllableFilter.html"/>
    <appContext helpID="taskId" path="query/tasks/ParticipantFilter.html"/>
+   <appContext helpID="analysis_consonants" path="analysis/consonants.html"/>
    <appContext helpID="analysis_ppc" path="analysis/PPC.html"/>
    <appContext helpID="analysis_phone_inventory" path="analysis/Phone%20Inventory.html"/>
    <appContext helpID="analyses_phonological_processes"

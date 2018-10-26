@@ -2361,7 +2361,15 @@
    </topic>
    <topic href="javascript:void(0)" wh-toc-id="tocId-d66e2244">
       <title>Analyses</title>
-      <topic href="analysis/PPC.html" format="dita" data-id="analysis_ppc" wh-toc-id="analysis_ppc-d66e2245">
+      <topic href="analysis/consonants.html" format="dita" data-id="analysis_consonants" wh-toc-id="analysis_consonants-d66e2245">
+         <title>Analysis: Consonants</title>
+         <topicmeta>
+            <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_consonants"></resourceid>
+            <navtitle class="- topic/navtitle ">Analysis: Consonants</navtitle><?ditaot gentext?>
+            <linktext class="- map/linktext ">Analysis: Consonants</linktext>
+         </topicmeta>
+      </topic>
+      <topic href="analysis/PPC.html" format="dita" data-id="analysis_ppc" wh-toc-id="analysis_ppc-d66e2253">
          <title>Analysis: PPC</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_ppc"></resourceid>
@@ -2369,7 +2377,7 @@
             <linktext class="- map/linktext ">Analysis: PPC</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Phone%20Inventory.html" format="dita" data-id="analysis_phone_inventory" wh-toc-id="analysis_phone_inventory-d66e2253">
+      <topic href="analysis/Phone%20Inventory.html" format="dita" data-id="analysis_phone_inventory" wh-toc-id="analysis_phone_inventory-d66e2261">
          <title>Analysis: Phone Inventory</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_phone_inventory"></resourceid>
@@ -2377,7 +2385,7 @@
             <linktext class="- map/linktext ">Analysis: Phone Inventory</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Phonological%20Processes.html" format="dita" data-id="analyses_phonological_processes" wh-toc-id="analyses_phonological_processes-d66e2261">
+      <topic href="analysis/Phonological%20Processes.html" format="dita" data-id="analyses_phonological_processes" wh-toc-id="analyses_phonological_processes-d66e2269">
          <title>Analyses: Phonological Processes</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analyses_phonological_processes"></resourceid>
@@ -2385,7 +2393,7 @@
             <linktext class="- map/linktext ">Analyses: Phonological Processes</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/PMLU.html" format="dita" data-id="analysis_phonological_mean_length_of_utterance_pmlu" wh-toc-id="analysis_phonological_mean_length_of_utterance_pmlu-d66e2269">
+      <topic href="analysis/PMLU.html" format="dita" data-id="analysis_phonological_mean_length_of_utterance_pmlu" wh-toc-id="analysis_phonological_mean_length_of_utterance_pmlu-d66e2277">
          <title>Analysis: Phonological Mean Length of Utterance (PMLU)</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_phonological_mean_length_of_utterance_pmlu"></resourceid>
@@ -2393,7 +2401,7 @@
             <linktext class="- map/linktext ">Analysis: Phonological Mean Length of Utterance (PMLU)</linktext>
          </topicmeta>
       </topic>
-      <topic href="analysis/Word%20List.html" format="dita" data-id="analysis_word_list" wh-toc-id="analysis_word_list-d66e2277">
+      <topic href="analysis/Word%20List.html" format="dita" data-id="analysis_word_list" wh-toc-id="analysis_word_list-d66e2285">
          <title>Analysis: Word List</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_list"></resourceid>
@@ -2401,9 +2409,9 @@
             <linktext class="- map/linktext ">Analysis: Word List</linktext>
          </topicmeta>
       </topic>
-      <topic href="javascript:void(0)" wh-toc-id="tocId-d66e2285">
+      <topic href="javascript:void(0)" wh-toc-id="tocId-d66e2293">
          <title>Specialized</title>
-         <topic href="analysis/Word%20Match.html" format="dita" data-id="analysis_word_match" wh-toc-id="analysis_word_match-d66e2286">
+         <topic href="analysis/Word%20Match.html" format="dita" data-id="analysis_word_match" wh-toc-id="analysis_word_match-d66e2294">
             <title>Analysis: Word Match</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_match"></resourceid>
@@ -2411,7 +2419,7 @@
                <linktext class="- map/linktext ">Analysis: Word Match</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/Multisyllabic%20Noninear%20Analysis.html" format="dita" data-id="analysis_multisyllabic_nonlinear_analysis" wh-toc-id="analysis_multisyllabic_nonlinear_analysis-d66e2294">
+         <topic href="analysis/Multisyllabic%20Noninear%20Analysis.html" format="dita" data-id="analysis_multisyllabic_nonlinear_analysis" wh-toc-id="analysis_multisyllabic_nonlinear_analysis-d66e2302">
             <title>Analysis: Multisyllabic Nonlinear Analysis</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_multisyllabic_nonlinear_analysis"></resourceid>
@@ -2419,7 +2427,7 @@
                <linktext class="- map/linktext ">Analysis: Multisyllabic Nonlinear Analysis</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/Vocalization.html" format="dita" data-id="analysis_vocalization" wh-toc-id="analysis_vocalization-d66e2302">
+         <topic href="analysis/Vocalization.html" format="dita" data-id="analysis_vocalization" wh-toc-id="analysis_vocalization-d66e2310">
             <title>Analysis: Vocalization</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_vocalization"></resourceid>
@@ -2427,7 +2435,7 @@
                <linktext class="- map/linktext ">Analysis: Vocalization</linktext>
             </topicmeta>
          </topic>
-         <topic href="analysis/WAP.html" format="dita" data-id="analysis_word_level_analysis_of_polysyllables_wap" wh-toc-id="analysis_word_level_analysis_of_polysyllables_wap-d66e2310">
+         <topic href="analysis/WAP.html" format="dita" data-id="analysis_word_level_analysis_of_polysyllables_wap" wh-toc-id="analysis_word_level_analysis_of_polysyllables_wap-d66e2318">
             <title>Analysis: Word-level Analysis of Polysyllables (WAP)</title>
             <topicmeta>
                <resourceid class="- topic/resourceid " oxy-source="topic" appid="analysis_word_level_analysis_of_polysyllables_wap"></resourceid>
@@ -2436,7 +2444,7 @@
             </topicmeta>
          </topic>
       </topic>
-      <topic href="analysis/analysis_composer.html" format="dita" data-id="custom_analysis_using_composer_simple" wh-toc-id="custom_analysis_using_composer_simple-d66e2318">
+      <topic href="analysis/analysis_composer.html" format="dita" data-id="custom_analysis_using_composer_simple" wh-toc-id="custom_analysis_using_composer_simple-d66e2326">
          <title>Custom Analysis using Composer (simple)</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="custom_analysis_using_composer_simple"></resourceid>
@@ -2445,9 +2453,9 @@
          </topicmeta>
       </topic>
    </topic>
-   <topic href="javascript:void(0)" wh-toc-id="tocId-d66e2327">
+   <topic href="javascript:void(0)" wh-toc-id="tocId-d66e2335">
       <title>CHAT Support</title>
-      <topic href="chat/phontalk.html" format="dita" data-id="phontalk" wh-toc-id="phontalk-d66e2328">
+      <topic href="chat/phontalk.html" format="dita" data-id="phontalk" wh-toc-id="phontalk-d66e2336">
          <title>PhonTalk</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="phontalk"></resourceid>
@@ -2455,7 +2463,7 @@
             <linktext class="- map/linktext ">PhonTalk</linktext>
          </topicmeta>
       </topic>
-      <topic href="chat/main_line.html" format="dita" data-id="chat_main_line" wh-toc-id="chat_main_line-d66e2336">
+      <topic href="chat/main_line.html" format="dita" data-id="chat_main_line" wh-toc-id="chat_main_line-d66e2344">
          <title>CHAT Main Line</title>
          <topicmeta>
             <resourceid class="- topic/resourceid " oxy-source="topic" appid="chat_main_line"></resourceid>
