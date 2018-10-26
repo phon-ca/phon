@@ -26,6 +26,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.BlindTierEdit;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -128,7 +129,8 @@ public class AutoTranscriber {
 	}
 
 	private boolean isUnset(IPATranscript t) {
-		return (t == null || t.length() == 0 || t.matches("\\*+"));
+		return (t == null || t.length() == 0 || t.matches("\\*+")) &&
+				(t.getExtension(UnvalidatedValue.class) == null || t.getExtension(UnvalidatedValue.class).getValue().trim().length() == 0);
 	}
 	
 	public SessionEditor getEditor() {

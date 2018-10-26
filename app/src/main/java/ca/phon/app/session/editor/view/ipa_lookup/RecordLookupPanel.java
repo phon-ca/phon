@@ -319,7 +319,10 @@ public class RecordLookupPanel extends JPanel {
 				final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
 				if(alts != null) {
 					final IPATranscript oldIpa = alts.get(transcriber.getUsername());
-					set = (overwriteBox.isSelected() || oldIpa == null || oldIpa.length() == 0);
+					boolean hasData = 
+							(oldIpa != null && oldIpa.length() > 0) 
+							|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
+					set = (overwriteBox.isSelected() || !hasData);
 				}
 				if(set) {
 					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaTarget, i, transcriber, ipa, targetIpa);
@@ -328,7 +331,11 @@ public class RecordLookupPanel extends JPanel {
 
 				}
 			} else {
-				if(overwriteBox.isSelected() || ipaTarget.getGroup(i).length() == 0) {
+				IPATranscript oldIpa = ipaTarget.getGroup(i);
+				boolean hasData = 
+						(oldIpa != null && oldIpa.length() > 0) 
+						|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
+				if(overwriteBox.isSelected() || !hasData) {
 					final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipa.putExtension(AlternativeTranscript.class, alts);
 
@@ -347,7 +354,10 @@ public class RecordLookupPanel extends JPanel {
 				final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
 				if(alts != null) {
 					final IPATranscript oldIpa = alts.get(transcriber.getUsername());
-					set = (overwriteBox.isSelected() || oldIpa == null || oldIpa.length() == 0);
+					boolean hasData = 
+							(oldIpa != null && oldIpa.length() > 0) 
+							|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
+					set = (overwriteBox.isSelected() || !hasData);
 				}
 				if(set) {
 					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaActual, i, transcriber, ipa, actualIpa);
@@ -355,7 +365,11 @@ public class RecordLookupPanel extends JPanel {
 					edit.addEdit(blindEdit);
 				}
 			} else {
-				if(overwriteBox.isSelected() || ipaActual.getGroup(i).length() == 0) {
+				IPATranscript oldIpa = ipaActual.getGroup(i);
+				boolean hasData = 
+						(oldIpa != null && oldIpa.length() > 0) 
+						|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
+				if(overwriteBox.isSelected() || !hasData) {
 					final AlternativeTranscript alts = actualIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipaA.putExtension(AlternativeTranscript.class, alts);
 
@@ -369,7 +383,7 @@ public class RecordLookupPanel extends JPanel {
 
 		if(transcriber == null) {
 			final PhoneAligner aligner = new PhoneAligner();
-			final PhoneMap pm = aligner.calculatePhoneMap(targetIpa, actualIpa);
+			final PhoneMap pm = aligner.calculatePhoneAlignment(targetIpa, actualIpa);
 
 			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
 			pmEdit.doIt();
