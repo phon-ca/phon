@@ -22,7 +22,7 @@ public class PhonDesktopStartupHook implements PhonStartupHook, IPluginExtension
 	public void startup() throws PluginException {
 		Desktop desktop = Desktop.getDesktop();
 		
-		if(OSInfo.isMacOs()) {
+		if(Desktop.isDesktopSupported() && OSInfo.isMacOs()) {
 			desktop.setQuitHandler( 			
 				(e, r) -> {
 					try {
