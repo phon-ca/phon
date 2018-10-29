@@ -79,12 +79,14 @@ public class FormatterTextField<T> extends PromptedTextField {
 	public T getValue() {
 		T retVal = null;
 		
-		try {
-			retVal = formatter.parse(getText());
-			setToolTipText(null);
-		} catch (Exception e) {
-			setToolTipText(e.getMessage());
-			LOGGER.info( e.getLocalizedMessage(), e);
+		if(getText().length() > 0 && getState() == FieldState.INPUT) {
+			try {
+				retVal = formatter.parse(getText());
+				setToolTipText(null);
+			} catch (Exception e) {
+				setToolTipText(e.getMessage());
+				LOGGER.info( e.getLocalizedMessage(), e);
+			}
 		}
 		
 		return retVal;
