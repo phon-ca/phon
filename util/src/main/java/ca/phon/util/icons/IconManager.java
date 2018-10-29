@@ -39,6 +39,7 @@ import javax.swing.ImageIcon;
 import ca.hedlund.desktopicons.DesktopIconException;
 import ca.hedlund.desktopicons.DesktopIcons;
 import ca.hedlund.desktopicons.StockIcon;
+import ca.phon.plugin.PluginManager;
 import ca.phon.util.StackTraceInfo;
 
 /**
@@ -58,7 +59,7 @@ public class IconManager {
 	 */
 	public static IconManager getInstance() {
 		if(_instance == null)
-			_instance = new IconManager();
+			_instance = new IconManager(PluginManager.getInstance());
 		return _instance;
 	}
 	
@@ -69,9 +70,13 @@ public class IconManager {
 	/** Only load icons once */
 	private HashMap<IconTuple, ImageIcon> loadedIcons;
 	
+	private final ClassLoader classLoader;
+	
 	/** Constructor */
-	protected IconManager() {
+	protected IconManager(ClassLoader cl) {
 		super();
+		
+		this.classLoader = cl;
 		
 		this.loadedIcons = new HashMap<IconTuple, ImageIcon>();
 	}
@@ -325,11 +330,11 @@ public class IconManager {
 			
 			String icnURL = 
 				iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".png";
-			iconURL = ClassLoader.getSystemResource(icnURL);
+			iconURL = classLoader.getResource(iconURI);
 			if(iconURL == null) {
 				icnURL = 
 					iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".gif";
-				iconURL = ClassLoader.getSystemResource(icnURL);
+				iconURL = classLoader.getResource(icnURL);
 				
 				if(iconURL != null) {
 					found = true;
