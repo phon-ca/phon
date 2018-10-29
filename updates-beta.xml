@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b1.dmg" newVersion="3.0.2b1" newMediaFileId="macos" fileSize="216355183" md5Sum="e949d72069302b54749ebf130139f041" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b2.dmg" newVersion="3.0.2b2" newMediaFileId="macos" fileSize="216297824" md5Sum="aa55ddc66f84fb0449fa51fab315f8fc" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -11,6 +11,7 @@
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -220,7 +221,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b1.dmg" newVersion="3.0.2b1" newMediaFileId="macos" fileSize="216355183" md5Sum="e949d72069302b54749ebf130139f041" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b2.dmg" newVersion="3.0.2b2" newMediaFileId="macos" fileSize="216297824" md5Sum="aa55ddc66f84fb0449fa51fab315f8fc" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -231,6 +232,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -440,7 +442,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b1.exe" newVersion="3.0.2b1" newMediaFileId="win64" fileSize="230875136" md5Sum="c38dabc3ab5afa569b40f9f01440c41f" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b2.exe" newVersion="3.0.2b2" newMediaFileId="win64" fileSize="230552064" md5Sum="4a9e3c0c756c82fe3ff4cc8861b9049c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -451,6 +453,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -660,7 +663,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b1.exe" newVersion="3.0.2b1" newMediaFileId="win64" fileSize="230875136" md5Sum="c38dabc3ab5afa569b40f9f01440c41f" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b2.exe" newVersion="3.0.2b2" newMediaFileId="win64" fileSize="230552064" md5Sum="4a9e3c0c756c82fe3ff4cc8861b9049c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -671,6 +674,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -880,7 +884,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b1.exe" newVersion="3.0.2b1" newMediaFileId="win64" fileSize="230875136" md5Sum="c38dabc3ab5afa569b40f9f01440c41f" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b2.exe" newVersion="3.0.2b2" newMediaFileId="win64" fileSize="230552064" md5Sum="4a9e3c0c756c82fe3ff4cc8861b9049c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -891,6 +895,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -1100,7 +1105,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b1.zip" newVersion="3.0.2b1" newMediaFileId="win64zip" fileSize="229926764" md5Sum="60802f2daf14f24aedbebaf19bd44baa" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b2.zip" newVersion="3.0.2b2" newMediaFileId="win64zip" fileSize="229596188" md5Sum="8743ef0543f092309168c2fc67fc8052" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1111,6 +1116,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -1320,7 +1326,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b1.deb" newVersion="3.0.2b1" newMediaFileId="linux64deb" fileSize="150278412" md5Sum="d9951938793dc10a47e45fbf9ee4da64" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b2.deb" newVersion="3.0.2b2" newMediaFileId="linux64deb" fileSize="150674180" md5Sum="c79cab4aabcd2d90f5437924015d286b" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1331,6 +1337,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
@@ -1540,7 +1547,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b1.sh" newVersion="3.0.2b1" newMediaFileId="linux64" fileSize="150019336" md5Sum="ad2ff50f28deb154a9deb6969639fa5c" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b2.sh" newVersion="3.0.2b2" newMediaFileId="linux64" fileSize="153779230" md5Sum="aa339f4286fa23adeb3707dc63c115f1" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1551,6 +1558,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Reconfigured application package directory structure
 
 ## Changes from 3.0.0
 
