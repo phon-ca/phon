@@ -59,7 +59,7 @@ public class IconManager {
 	 */
 	public static IconManager getInstance() {
 		if(_instance == null)
-			_instance = new IconManager(PluginManager.getInstance());
+			_instance = new IconManager();
 		return _instance;
 	}
 	
@@ -70,13 +70,9 @@ public class IconManager {
 	/** Only load icons once */
 	private HashMap<IconTuple, ImageIcon> loadedIcons;
 	
-	private final ClassLoader classLoader;
-	
 	/** Constructor */
-	protected IconManager(ClassLoader cl) {
+	protected IconManager() {
 		super();
-		
-		this.classLoader = cl;
 		
 		this.loadedIcons = new HashMap<IconTuple, ImageIcon>();
 	}
@@ -330,11 +326,11 @@ public class IconManager {
 			
 			String icnURL = 
 				iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".png";
-			iconURL = classLoader.getResource(iconURI);
+			iconURL = PluginManager.getInstance().getResource(icnURL);
 			if(iconURL == null) {
 				icnURL = 
 					iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".gif";
-				iconURL = classLoader.getResource(icnURL);
+				iconURL = PluginManager.getInstance().getResource(icnURL);
 				
 				if(iconURL != null) {
 					found = true;
