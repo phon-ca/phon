@@ -78,6 +78,7 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 					transcriber.setRecordFilter(autoTranscribeDialog.getForm().getRecordFilter());
 					transcriber.setSyllabifier(autoTranscribeDialog.getForm().getSyllabifier());
 					transcriber.setTranscriber(getLookupView().getEditor().getDataModel().getTranscriber());
+					
 					final UndoableEdit edit = transcriber.transcribeSession(sessionEditor.getSession());
 					sessionEditor.getUndoSupport().postEdit(edit);
 					
@@ -87,8 +88,12 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 					setStatus(TaskStatus.FINISHED);
 				}
 			};
-			getLookupView().getEditor().getStatusBar().watchTask(task);
-			PhonWorker.getInstance().invokeLater(task);
+			getLookupView().getEditor().getStatusBar().watchTask(task); 
+			
+			PhonWorker worker = PhonWorker.createWorker();
+			worker.invokeLater(task);
+			worker.setFinishWhenQueueEmpty(true);
+			worker.start();
 		}
 	}
 	

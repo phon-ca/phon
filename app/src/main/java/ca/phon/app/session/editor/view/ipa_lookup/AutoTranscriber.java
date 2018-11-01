@@ -129,8 +129,8 @@ public class AutoTranscriber {
 	}
 
 	private boolean isUnset(IPATranscript t) {
-		return (t == null || t.length() == 0 || t.matches("\\*+")) &&
-				(t.getExtension(UnvalidatedValue.class) == null || t.getExtension(UnvalidatedValue.class).getValue().trim().length() == 0);
+		boolean isEmpty = (t == null || t.length() == 0 || t.matches("\\*+"));
+		return isEmpty;
 	}
 	
 	public SessionEditor getEditor() {
@@ -146,8 +146,19 @@ public class AutoTranscriber {
 	 *  IPA Target and IPA Actual respectively
 	 */
 	private Tuple<IPATranscript, IPATranscript> transcribeGroup(Group group) {
+		System.out.println("Here");
 		final IPATranscriptBuilder ipaTBuilder = new IPATranscriptBuilder();
 		final IPATranscriptBuilder ipaABuilder = new IPATranscriptBuilder();
+		
+		boolean ipaTUnset = isUnset(group.getIPATarget());
+		boolean ipaTUnvalidated = 
+				(group.getIPATarget().getExtension(UnvalidatedValue.class) != null
+					&& group.getIPATarget().getExtension(UnvalidatedValue.class).getValue().length() > 0);
+		
+		boolean ipaAUnset = isUnset(group.getIPAActual());
+		boolean ipaAUnvalidated = 
+				(group.getIPAActual().getExtension(UnvalidatedValue.class) != null
+					&& group.getIPAActual().getExtension(UnvalidatedValue.class).getValue().length() > 0);
 		
 		for(int i = 0; i < group.getWordCount(SystemTierType.Orthography.getName()); i++) {
 			final Word word = group.getAlignedWord(i);
@@ -164,31 +175,15 @@ public class AutoTranscriber {
 					(ipaExt.getSelectedOption() >= 0 && ipaExt.getSelectedOption() < ipaOpts.size() ? 
 							ipaExt.getSelectedOption() : 0);
 			
-			final IPATranscript ipaT = word.getIPATarget();
-			final IPATranscript ipaA = word.getIPAActual();
-			
 			if(ipaOpts != null && ipaOpts.size() > 0) {
 				if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
 				if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
 
-				if(isUnset(ipaT) || isOverwrite()) {
-					ipaTBuilder.append(ipaOpts.get(selectedOption));
-				} else {
-					ipaTBuilder.append(ipaT);
-				}
-				
-				if(isUnset(ipaA) || isOverwrite()) {
-					ipaABuilder.append(ipaOpts.get(selectedOption));
-				} else {
-					ipaABuilder.append(ipaA);
-				}
+				ipaTBuilder.append(ipaOpts.get(selectedOption));
+				ipaABuilder.append(ipaOpts.get(selectedOption));
 			} else {
-				if(isUnset(ipaT) || isOverwrite()) {
-					ipaTBuilder.append("*");
-				}
-				if(isUnset(ipaA) || isOverwrite()) {
-					ipaABuilder.append("*");
-				}
+				ipaTBuilder.append("*");
+				ipaABuilder.append("*");
 			}
 		}
 		
@@ -200,7 +195,9 @@ public class AutoTranscriber {
 			
 		}
 		
-		return new Tuple<IPATranscript, IPATranscript>(ipaT, ipaA);
+		return new Tuple<IPATranscript, IPATranscript>(
+				(ipaTUnset && !ipaTUnvalidated) || isOverwrite() ? ipaT : null, 
+				(ipaAUnset && !ipaAUnvalidated) || isOverwrite() ? ipaA : null);
 	}
 	
 	/**
@@ -218,7 +215,7 @@ public class AutoTranscriber {
 			final Tuple<IPATranscript, IPATranscript> autoTranscription = 
 					transcribeGroup(g);
 			
-			if(isSetIPATarget()) {
+			if(isSetIPATarget() && autoTranscription.getObj1() != null) {
 				SessionEditorUndoableEdit targetEdit = null;
 				if(getTranscriber() != null) {
 					IPATranscript grpVal = (g.getIPATarget() != null ? g.getIPATarget() : new IPATranscript());
@@ -243,7 +240,7 @@ public class AutoTranscriber {
 				retVal.addEdit(targetEdit);
 			}
 			
-			if(isSetIPAActual()) {
+			if(isSetIPAActual() && autoTranscription.getObj2() != null) {
 				SessionEditorUndoableEdit actualEdit = null;
 				if(getTranscriber() != null) {
 					IPATranscript grpVal = (g.getIPAActual() != null ? g.getIPAActual() : new IPATranscript());
@@ -270,7 +267,7 @@ public class AutoTranscriber {
 			
 			if(getTranscriber() == null) {
 				final PhoneAligner aligner = new PhoneAligner();
-				final PhoneMap pm = aligner.calculatePhoneMap(autoTranscription.getObj1(), autoTranscription.getObj2());
+				final PhoneMap pm = aligner.calculatePhoneAlignment(g.getIPATarget(), g.getIPAActual());
 				final TierEdit<PhoneMap> alignmentEdit = 
 						new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), i, pm);
 				alignmentEdit.setFireHardChangeOnUndo(true);
