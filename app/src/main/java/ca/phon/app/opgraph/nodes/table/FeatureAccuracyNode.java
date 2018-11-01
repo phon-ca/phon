@@ -46,12 +46,12 @@ import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.ui.text.PromptedTextField;
 
 @OpNodeInfo(
-		name="Phone Accuracy",
+		name="Feature Accuracy",
 		category="IPA Table Analysis",
 		description="Inventory of IPA Target values with num accurate, substituted, and deleted columns.",
 		showInLibrary = true
 )
-public class PhoneAccuracy extends TableOpNode implements NodeSettings {
+public class FeatureAccuracyNode extends TableOpNode implements NodeSettings {
 
 	private JPanel settingsPanel;
 
@@ -84,7 +84,7 @@ public class PhoneAccuracy extends TableOpNode implements NodeSettings {
 	protected final OutputField deletedOutputTableField =
 			new OutputField("deleted", "Table of deletions", true, TableDataSource.class);
 
-	public PhoneAccuracy() {
+	public FeatureAccuracyNode() {
 		super();
 
 		putField(accurateOutputTableField);

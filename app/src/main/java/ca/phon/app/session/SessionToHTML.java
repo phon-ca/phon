@@ -61,6 +61,8 @@ public class SessionToHTML {
 
 	// primary record filter
 	private RecordFilter recordFilter;
+	
+	private boolean includeHeader = true;
 
 	// participant information
 	private boolean includeParticipantInfo;
@@ -96,7 +98,6 @@ public class SessionToHTML {
 	// query result options
 	private boolean includeQueryResults = false;
 	private boolean filterRecordsUsingQueryResults = false;
-	private ResultSet resultSet;
 	
 	// options to include/exclude result values/metadata by name
 	private boolean excludeResultValues;
@@ -121,6 +122,14 @@ public class SessionToHTML {
 		this.includeSyllabification = includeSyllabification;
 		this.includeAlignment = includeAlignment;
 		this.tierView = tierView;
+	}
+	
+	public boolean isIncludeHeader() {
+		return this.includeHeader;
+	}
+	
+	public void setIncludeHeader(boolean includeHeader) {
+		this.includeHeader = includeHeader;
 	}
 
 	public boolean isIncludeParticipantInfo() {
@@ -257,14 +266,6 @@ public class SessionToHTML {
 	
 	public void setFilterRecordsUsingQueryResults(boolean filterRecords) {
 		this.filterRecordsUsingQueryResults = filterRecords;
-	}
-	
-	public ResultSet getResultSet() {
-		return this.resultSet;
-	}
-	
-	public void setResultSet(ResultSet rs) {
-		this.resultSet = rs;
 	}
 	
 	public boolean isExcludeResultValues() {
@@ -492,13 +493,13 @@ public class SessionToHTML {
 		buffer.append("</div>").append(nl);
 	}
 
-	private void appendRecord(Session session, int recordIndex, StringBuffer buffer) {
+	private void appendRecord(Session session, int recordIndex, ResultSet resultSet, StringBuffer buffer) {
 		var record = session.getRecord(recordIndex);
 		var nl = "\n";
 		
 		List<Result> resultsForRecord = new ArrayList<>();
-		if(isIncludeQueryResults() && getResultSet() != null) {
-			resultsForRecord = StreamSupport.stream(getResultSet().spliterator(), false)
+		if(isIncludeQueryResults() && resultSet != null) {
+			resultsForRecord = StreamSupport.stream(resultSet.spliterator(), false)
 				.filter( (result) -> result.getRecordIndex() == recordIndex )
 				.collect( Collectors.toList() );
 		}
@@ -590,7 +591,7 @@ public class SessionToHTML {
 			buffer.append("</table>").append(nl);
 		}
 		
-		if(isIncludeQueryResults() && getResultSet() != null) {
+		if(isIncludeQueryResults() && resultSet != null) {
 			buffer.append("<div class='results'>").append(nl);
 			buffer.append("<ol>").append(nl);
 			int rIdx = 0;
@@ -654,41 +655,47 @@ public class SessionToHTML {
 	}
 	
 	public String toHTML(Session session) {
+		return toHTML(session, null);
+	}
+	
+	public String toHTML(Session session, ResultSet resultSet) {
 		final StringBuffer buffer = new StringBuffer();
-		
 		var nl = "\n";
-		buffer.append("<html lang='en'>").append(nl);
-
-		// header
-		buffer.append("<head>").append(nl);
-		buffer.append("<title>Phon - ").append(session.getCorpus())
-			.append(".").append(session.getName()).append("</title>").append(nl);
 		
-		var version = VersionInfo.getInstance().getVersion();
-		buffer.append("<meta name='author' content='").append(version).append("'/>").append(nl);
-		
-		buffer.append("<meta charset='UTF-8'/>").append(nl);
-		
-		buffer.append("<style>").append(CSS).append("</style>").append(nl);
-		// buffer.append("<script>").append(JS).append("</script>").append(nl);
-		
-		buffer.append("</head>").append(nl);
-		
-		// body
-		buffer.append("<body>").append(nl);
-		
-		buffer.append("<div class='header'>").append(nl);
-		buffer.append("<img width='36' height='36' src='").append(icon).append("'>&nbsp;</img>").append(nl);
-		buffer.append("<div class='header_text'>").append(session.getCorpus()).append(".").append(session.getName()).append("</div>");
-		buffer.append("</div>").append(nl);
+		if(isIncludeHeader()) {
+			buffer.append("<html lang='en'>").append(nl);
+	
+			// header
+			buffer.append("<head>").append(nl);
+			buffer.append("<title>Phon - ").append(session.getCorpus())
+				.append(".").append(session.getName()).append("</title>").append(nl);
+			
+			var version = VersionInfo.getInstance().getVersion();
+			buffer.append("<meta name='author' content='").append(version).append("'/>").append(nl);
+			
+			buffer.append("<meta charset='UTF-8'/>").append(nl);
+			
+			buffer.append("<style>").append(CSS).append("</style>").append(nl);
+			// buffer.append("<script>").append(JS).append("</script>").append(nl);
+			
+			buffer.append("</head>").append(nl);
+			
+			// body
+			buffer.append("<body>").append(nl);
+			
+			buffer.append("<div class='header'>").append(nl);
+			buffer.append("<img width='36' height='36' src='").append(icon).append("'>&nbsp;</img>").append(nl);
+			buffer.append("<div class='header_text'>").append(session.getCorpus()).append(".").append(session.getName()).append("</div>");
+			buffer.append("</div>").append(nl);
+		}
 		
 		if(isIncludeParticipantInfo()) {
 			appendParticipantInformation(session, buffer);
 		}
 		
 		RecordFilter queryFilter = null;
-		if(isFilterRecordsUsingQueryResults() && getResultSet() != null) {
-			queryFilter = new ResultSetRecordFilter(session, getResultSet());
+		if(isFilterRecordsUsingQueryResults() && resultSet != null) {
+			queryFilter = new ResultSetRecordFilter(session, resultSet);
 		}
 		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
@@ -696,12 +703,13 @@ public class SessionToHTML {
 			// check filters
 			if(recordFilter != null && !recordFilter.checkRecord(utt)) continue;
 			if(queryFilter != null && !queryFilter.checkRecord(utt)) continue;
-			appendRecord(session, rIdx, buffer);
+			appendRecord(session, rIdx, resultSet, buffer);
 		}
 		
-		buffer.append("</body>").append(nl);
-		
-		buffer.append("</html>").append(nl);
+		if(isIncludeHeader()) {
+			buffer.append("</body>").append(nl);
+			buffer.append("</html>").append(nl);
+		}
 		
 		return buffer.toString();
 	}

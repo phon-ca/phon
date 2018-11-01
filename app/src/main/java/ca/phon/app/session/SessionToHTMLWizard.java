@@ -492,10 +492,12 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 			converter.setIncludeAlignment(includeAlignmentBox.isSelected());
 
 			List<ResultSet> selectedResults = resultSetSelector.getSelectedResultSets();
+			ResultSet rs = null;
 			if(selectedResults.size() > 0) {
 				converter.setIncludeQueryResults(includeQueryResults.isSelected());
 				converter.setFilterRecordsUsingQueryResults(filterUsingQueryResults.isSelected());
-				converter.setResultSet(selectedResults.get(0));
+				
+				rs = selectedResults.get(0);
 				
 				ResultSetValuesTableModel tableModel = (ResultSetValuesTableModel)resultSetValuesTable.getModel();
 				var rvList = 
@@ -506,7 +508,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 				converter.setExcludeResultValues(false);
 			}
 			
-			ExportWorker worker = new ExportWorker(converter);
+			ExportWorker worker = new ExportWorker(converter, rs);
 			worker.execute();
 		}
 		super.next();
@@ -516,13 +518,16 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		
 		private SessionToHTML converter;
 		
-		public ExportWorker(SessionToHTML converter) {
+		private ResultSet resultSet;
+		
+		public ExportWorker(SessionToHTML converter, ResultSet rs) {
 			this.converter = converter;
+			this.resultSet = rs;
 		}
 
 		@Override
 		protected File doInBackground() throws Exception {
-			final String html = converter.toHTML(session);
+			final String html = converter.toHTML(session, resultSet);
 
 			final File tempFile = File.createTempFile("phon", ".html");
 			try (final PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(tempFile)))) {

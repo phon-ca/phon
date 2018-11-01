@@ -85,7 +85,7 @@ import ca.phon.util.Range;
  * | br         | t     | +O2      | 1     | 0        | 0             | 1         | 1          |
  * 
  */
-@OpNodeInfo(category="Table", description="", name="Phone Accuracy", showInLibrary=true)
+@OpNodeInfo(category="IPA Table Analysis", description="", name="Phone Accuracy", showInLibrary=true)
 public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings {
 	
 	private boolean _ignoreDiacritics = false;

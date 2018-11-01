@@ -25,6 +25,7 @@ ca.phon.app.opgraph.nodes.table.MergeTablesNode
 ca.phon.app.opgraph.nodes.table.AppendTableNode
 ca.phon.app.opgraph.nodes.table.ColumnPercentageNode
 ca.phon.app.opgraph.nodes.table.ColumnSumNode
-ca.phon.app.opgraph.nodes.table.PhoneAccuracy
+ca.phon.app.opgraph.nodes.table.FeatureAccuracyNode
 ca.phon.app.opgraph.nodes.table.PhoneSimilarity
 ca.phon.app.opgraph.nodes.table.PhoneAccuracyNode
+ca.phon.app.opgraph.nodes.query.ResultsToHTMLNode
