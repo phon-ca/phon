@@ -249,13 +249,13 @@ function addCopyTableButtons(documentRef) {
 
 function page_init(documentRef) {
     var documentRef = documentRef || document;
-    htmlTableOfContents(documentRef);
-    addCopyTableButtons(documentRef);
+  //  htmlTableOfContents(documentRef);
+  //  addCopyTableButtons(documentRef);
 
-    origDisplay = document.getElementById("bannercontent").style.display;
+  //  origDisplay = document.getElementById("bannercontent").style.display;
 
-    var menuicon = document.getElementById('menuicon');
-    menuicon.setAttribute('src', closeIcn);
+ //   var menuicon = document.getElementById('menuicon');
+ //   menuicon.setAttribute('src', closeIcn);
 }
 
 /*

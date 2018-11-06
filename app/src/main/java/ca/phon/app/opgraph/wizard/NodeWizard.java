@@ -840,7 +840,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
 					final NodeWizardReportGenerator reportGenerator =
-							new NodeWizardReportGenerator(this, reportTree.getReportTemplate(), fout);
+							new NodeWizardReportGenerator(this, reportTree, reportTree.getReportTemplate(), fout);
 
 					try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
 						out.print("Generating report...");
@@ -893,7 +893,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 									window.setMember("app", webViewInterface);
 
 									// call functions to display app-specific UI elements
-									webView.getEngine().executeScript("addMenuButtons()");
+								//	webView.getEngine().executeScript("addMenuButtons()");
 								}
 							}
 

@@ -302,31 +302,31 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 	public Properties getSettings() {
 		Properties retVal = new Properties();
 		
-		retVal.put("includeTierData", Boolean.toString(isIncludeTierData()));
-		retVal.put("includeAlignment", Boolean.toString(isIncludeAlignment()));
-		retVal.put("includeSyllabification", Boolean.toString(isIncludeSyllabification()));
 		retVal.put("includeParticipantInfo", Boolean.toString(isIncludeParticipantInfo()));
-		
 		for(int i = 0; i < participantInfoLabels.length; i++) {
 			String id = participantInfoParamIds[i];
 			retVal.put(id, Boolean.toString(isIncludeParticipantInfo(id)));
 		}
+
+		retVal.put("includeTierData", Boolean.toString(isIncludeTierData()));
+		retVal.put("includeAlignment", Boolean.toString(isIncludeAlignment()));
+		retVal.put("includeSyllabification", Boolean.toString(isIncludeSyllabification()));
 		
 		return retVal;
 	}
 
 	@Override
 	public void loadSettings(Properties properties) {
-		setIncludeTierData(Boolean.parseBoolean(properties.getProperty("includeTierData", "false")));
-		setIncludeSyllabification(Boolean.parseBoolean(properties.getProperty("includeSyllabification", "false")));
-		setIncludeAlignment(Boolean.parseBoolean(properties.getProperty("includeAlignment", "true")));
 		setIncludeParticipantInfo(Boolean.parseBoolean(properties.getProperty("includeParticipantInfo", "false")));
-		
 		for(int i = 0; i < participantInfoParamIds.length; i++) {
 			setIncludeParticipantInfo(participantInfoParamIds[i], 
 					Boolean.parseBoolean(
 							properties.getProperty(participantInfoParamIds[i], Boolean.toString(participantInfoDefaults[i]))));
 		}
+
+		setIncludeTierData(Boolean.parseBoolean(properties.getProperty("includeTierData", "false")));
+		setIncludeSyllabification(Boolean.parseBoolean(properties.getProperty("includeSyllabification", "false")));
+		setIncludeAlignment(Boolean.parseBoolean(properties.getProperty("includeAlignment", "true")));
 	}
 
 }

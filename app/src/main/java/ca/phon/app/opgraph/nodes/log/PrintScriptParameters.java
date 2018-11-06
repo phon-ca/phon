@@ -107,7 +107,9 @@ public class PrintScriptParameters extends OpNode implements NodeSettings {
 			throw new ProcessingException(null, e.getLocalizedMessage());
 		}
 
-		context.put(stringOutputField, visitor.buffer.toString());
+		StringBuffer buffer = visitor.buffer;
+		buffer.append("\n");
+		context.put(stringOutputField, buffer.toString());
 	}
 
 	public boolean isPrintOnlyChanged() {

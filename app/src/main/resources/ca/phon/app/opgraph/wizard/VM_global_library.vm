@@ -1,9 +1,9 @@
 ## Velocity global templates for opgraph wizard reports
 
-#macro( h1 $title ) #set($H = '#')$H $title#end
-#macro( h2 $title ) #set($H = '##')$H $title#end
-#macro( h3 $title ) #set($H = '###')$H $title#end
-#macro( h4 $title ) #set($H = '####')$H $title#end
+#macro( h1 $title $id ) <h1 id='$id'>$title</h1>#end
+#macro( h2 $title $id ) <h2 id='$id'>$title</h2>#end
+#macro( h3 $title $id ) <h3 id='$id'>$title</h3>#end
+#macro( h4 $title $id ) <h4 id='$id'>$title</h4>#end
 
 #macro( printHeader $table $columnNames )
 	#set($maxCol = $table.columnCount - 1)

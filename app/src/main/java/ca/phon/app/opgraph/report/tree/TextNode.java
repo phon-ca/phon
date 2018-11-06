@@ -36,7 +36,7 @@ public class TextNode extends ReportTreeNode {
 	public String getReportTemplateBlock() {
 		final StringBuffer buffer = new StringBuffer();
 		
-		buffer.append("#h").append(getLevel()).append("(\"").append(getTitle()).append("\")\n\n");
+		buffer.append(String.format("#h%d(\"%s\" \"%s\")\n", getLevel(), getTitle(), getPath().toString())).append("\n");
 		buffer.append(getText());
 		
 		return buffer.toString();

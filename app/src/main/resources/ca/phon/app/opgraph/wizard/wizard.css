@@ -4,6 +4,10 @@ body {
     margin-top: 0px;
 }
 
+table {
+    table-layout: fixed;
+}
+
 h1:first-of-type {
     margin-top: 0px;
 }
@@ -207,6 +211,30 @@ img {
 	cursor: pointer;
 }
 
+#toc {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    overflow-y: scroll;
+    border: 1px solid #cccccc;
+    background-color: #fff;
+    width: 32px;
+    height: 32px;
+}
+
+#toc #full {
+    display: none;
+}
+
+#toc:hover #full {
+    display: block;
+}
+
+#toc:hover {
+    width: 350px;
+    height: 15em;
+}
+
 #toc .toc_section {
     transition: 0.5s;
 }
@@ -296,6 +324,14 @@ img {
     padding-left: 8px;
 }
 
+#toc .toc_l5 {
+    padding-left: 8px;
+}
+
+#toc .toc_l6 {
+    padding-left: 8px;
+}
+
 #toc a {
     color: rgb(50, 50, 50);
     padding-left: 12px;
@@ -306,7 +342,6 @@ img {
 }
 
 #main {
-    margin-left: 300px;
     padding: 0px;
     transition: 0.5s;
 }
