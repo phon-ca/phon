@@ -15,11 +15,17 @@
  */
 package ca.phon.app.opgraph.nodes;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 /**
  * Node {@link Instantiator} for analysis documents.  The {@link Instantiator}
@@ -56,6 +62,36 @@ public class AnalysisNodeInstantiator extends MacroNodeInstantiator {
 		node.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
 		node.publish("selectedSessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
 		node.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
+		
+		// set 'name' to Parameters node 'reportname' if available
+		// find the 'Parameters' settings node
+		final WizardExtension wizardExtension = graph.getExtension(WizardExtension.class);
+		OpNode parametersNode = null;
+		for(OpNode n:graph.getVertices()) {
+			if(n.getName().equals("Parameters") && n instanceof PhonScriptNode
+					&& graph.getNodePath(n.getId()).size() == 1) {
+				parametersNode = n;
+				break;
+			}
+		}
+		String nodeName = "";
+		if(parametersNode != null) {
+			final PhonScriptNode scriptNode = (PhonScriptNode)parametersNode;
+			final PhonScript script = scriptNode.getScript();
+
+			try {
+				final ScriptParameters scriptParams = script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
+				for(ScriptParam sp:scriptParams) {
+					if(sp.getParamIds().contains("reportTitle")) {
+						nodeName = sp.getValue("reportTitle").toString();
+						break;
+					}
+				}
+			} catch (PhonScriptException e) {
+				LogUtil.severe( e.getLocalizedMessage(), e);
+			}
+		}
+		node.setName(nodeName);
 		
 		return node;
 	}

@@ -15,10 +15,16 @@
  */
 package ca.phon.app.opgraph.nodes;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.script.PhonScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
 
 /**
  * Add Query Reports as {@link MacroNode}s in the graph.  Fields for project
@@ -49,6 +55,36 @@ public class ReportNodeInstantiator extends MacroNodeInstantiator {
 		node.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
 		node.publish("queryId", queryIdNode, queryIdNode.getInputFieldWithKey("obj"));
 		node.publish("selectedResults", selectedResultsNode, selectedResultsNode.getInputFieldWithKey("obj"));
+		
+		// set 'name' to Parameters node 'reportname' if available
+		// find the 'Parameters' settings node
+		final WizardExtension wizardExtension = graph.getExtension(WizardExtension.class);
+		OpNode parametersNode = null;
+		for(OpNode n:graph.getVertices()) {
+			if(n.getName().equals("Parameters") && n instanceof PhonScriptNode
+					&& graph.getNodePath(n.getId()).size() == 1) {
+				parametersNode = n;
+				break;
+			}
+		}
+		String nodeName = "";
+		if(parametersNode != null) {
+			final PhonScriptNode scriptNode = (PhonScriptNode)parametersNode;
+			final PhonScript script = scriptNode.getScript();
+
+			try {
+				final ScriptParameters scriptParams = script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
+				for(ScriptParam sp:scriptParams) {
+					if(sp.getParamIds().contains("reportTitle")) {
+						nodeName = sp.getValue("reportTitle").toString();
+						break;
+					}
+				}
+			} catch (PhonScriptException e) {
+				LogUtil.severe( e.getLocalizedMessage(), e);
+			}
+		}
+		node.setName(nodeName);
 		
 		return node;
 	}

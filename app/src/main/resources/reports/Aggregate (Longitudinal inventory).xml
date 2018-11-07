@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5849f0f1">
+            <graph id="18200efb">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -175,7 +175,7 @@ function setup_params(params) {
                     </oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
-                <oga:meta x="599" y="531">
+                <oga:meta x="599" y="525">
                     <oga:default for="sectionName" type="java.lang.String">Aggregate</oga:default>
                 </oga:meta>
             </extensions>
@@ -183,7 +183,7 @@ function setup_params(params) {
         <node id="dea1829" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="845" y="533"/>
+                <oga:meta x="845" y="525"/>
             </extensions>
         </node>
         <link dest="1271664e64514bf6" destField="table" source="c41947665b034a0e" sourceField="table"/>
@@ -199,7 +199,7 @@ function setup_params(params) {
         <link dest="2e06273e" destField="sectionName" source="8f217ce063e147ac" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate">
+                <opqry:info format="html" title="Aggregate (Inventory over time)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c41947665b034a0e" showAsStep="true">

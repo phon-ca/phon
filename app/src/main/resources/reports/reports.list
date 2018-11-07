@@ -1,7 +1,8 @@
 reports/Query Information.xml
-reports/Listing.xml
-reports/Listing by Session.xml
-reports/Aggregate.xml
+reports/All Results (Single table).xml
+reports/Tables by Session (One table per session).xml
+reports/Results by Session (with optional tier data).xml
+reports/Aggregate (Longitudinal inventory).xml
 reports/Inventory by Session.xml
 reports/Phones/Phone Accuracy.xml
 reports/Phones/Phone Similarity.xml

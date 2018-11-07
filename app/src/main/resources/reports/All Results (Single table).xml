@@ -43,6 +43,9 @@
         <node id="a70fbe38d034432f" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
+                    <oga:property key="reportTitle">
+                        <![CDATA[All Results]]>
+                    </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var reportTitleParamInfo = {
 	"id": "reportTitle",
@@ -73,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="e427d9aa23ab4b01" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="7b1987fe">
+            <graph id="b39b550">
                 <node id="7f11a30608e64fee" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -180,7 +183,7 @@ Result]]>
         <extensions>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Listing">
+                <opqry:info format="html" title="All Results (Single table)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="4026874c">

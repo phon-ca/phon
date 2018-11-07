@@ -854,7 +854,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			}
 		}
 	}
-
+	
 	/**
 	 * After modifying analysis settings, there may be a change to the report title.
 	 * Update the node name to match.
@@ -1190,7 +1190,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							
 							super.publish(editorExt.getMacroNodes().toArray(new MacroNode[0]));
 						} else {
-							analysisNode.setName(documentName);
+							if(analysisNode.getName().length() == 0)
+								analysisNode.setName(documentName);
 							final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + macroNodes.size() * Y_SEP);
 							analysisNode.putExtension(NodeMetadata.class, nodeMeta);
 							
