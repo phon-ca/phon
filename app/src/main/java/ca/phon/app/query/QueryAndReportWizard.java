@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import javax.swing.DefaultComboBoxModel;
@@ -69,17 +70,24 @@ import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
+import ca.phon.app.opgraph.nodes.report.NewReportNode;
 import ca.phon.app.opgraph.report.ReportEditorModelInstantiator;
 import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.app.opgraph.report.ReportRunner;
+import ca.phon.app.opgraph.report.tree.ReportTree;
+import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.actions.DeleteAllUnnamedEntriesAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryEntryAction;
 import ca.phon.app.session.SessionSelector;
+import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
+import ca.phon.opgraph.ProcessorEvent;
+import ca.phon.opgraph.ProcessorListener;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
@@ -779,6 +787,34 @@ public class QueryAndReportWizard extends NodeWizard {
 		discardResultsButton.setEnabled(true);
 	}
 	
+	private AtomicReference<ReportTree> masterTreeRef = new AtomicReference<>();
+	@Override
+	public void executeGraph() throws ProcessingException {
+		getProcessor().addProcessorListener( (e) -> {
+			if(e.getType() == ProcessorEvent.Type.COMPLETE) {
+				getProcessor().getContext().put(NewReportNode.REPORT_TREE_KEY, masterTreeRef.get());
+			}
+		});
+		super.executeGraph();
+	}
+
+	@Override
+	protected void setupContext(OpContext ctx) {
+		super.setupContext(ctx);
+		
+		String queryName = getTitle();
+		final QueryName qn = queryScript.getExtension(QueryName.class);
+		if(qn != null)
+			queryName = qn.getName();
+		
+		final ReportTree masterTree = (ReportTree)ctx.get(NewReportNode.REPORT_TREE_KEY);
+		final ReportTree queryTree = new ReportTree(new SectionHeaderNode(queryName));
+		masterTree.getRoot().add(queryTree.getRoot());
+		masterTreeRef.set(masterTree);
+		
+		ctx.put(NewReportNode.REPORT_TREE_KEY, queryTree);
+	}
+
 	private void addNodesToSessionSelector(String queryName, QueryRunnerPanel runnerPanel) {
 		final QueryManager qm = QueryManager.getSharedInstance();
 		final ResultSetManager rsManager = qm.createResultSetManager();
@@ -905,7 +941,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
 			if(runnerPanel != null) {
 				if(runnerPanel.getTaskStatus() != TaskStatus.FINISHED) {
-					int retVal = showMessageDialog("Query", "Query did not complete, continue anyway?", MessageDialogProperties.yesNoOptions);
+					int retVal = showMessageDialog(getTitle(), "Query did not complete, continue anyway?", MessageDialogProperties.yesNoOptions);
 					if(retVal == 1) {
 						return;
 					}
@@ -918,7 +954,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			if(previousExeuction != null) {
 				if(!previousExeuction.equals(currentSettings)) {
 					// ask to execute query again...
-					int retVal = showMessageDialog("Query", "Query parameters or session data has changed, run query again?", 
+					int retVal = showMessageDialog(getTitle(), "Query parameters or session data has changed, run query again?", 
 							MessageDialogProperties.yesNoCancelOptions);
 					shouldRun = (retVal == 0);
 					if(retVal == 2) {
