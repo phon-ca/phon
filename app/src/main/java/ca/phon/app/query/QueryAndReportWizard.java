@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -158,6 +159,8 @@ public class QueryAndReportWizard extends NodeWizard {
 
 	private QueryHistoryManager queryHistoryManager;
 	private QueryHistoryPanel queryHistoryPanel;
+	
+	private QueryExecutionHistory previousExeuction;
 	
 	public QueryAndReportWizard(Project project, QueryScript queryScript) {
 		// init with 'dummy' processor and graph as these will be created 0during the wizard
@@ -770,6 +773,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		closeAction.putValue(PhonUIAction.SMALL_ICON, closeIcon);
 		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results and close tab");
 		
+		previousExeuction = currentSettings();
 		showResults();
 		runnerPanel.startQuery();
 		discardResultsButton.setEnabled(true);
@@ -897,20 +901,34 @@ public class QueryAndReportWizard extends NodeWizard {
 	@Override
 	public void next() {
 		if(getCurrentStep() == queryStep) {
+			// execute one query at a time
 			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
-			
-			// TODO execute query if parameters or selected sessions has changed
-			
-			if(runnerPanel == null) {
-				executeQuery();
-				return;
-			} else {
+			if(runnerPanel != null) {
 				if(runnerPanel.getTaskStatus() != TaskStatus.FINISHED) {
-					int retVal = showMessageDialog("Results", "Query did not complete, continue anyway?", MessageDialogProperties.yesNoOptions);
+					int retVal = showMessageDialog("Query", "Query did not complete, continue anyway?", MessageDialogProperties.yesNoOptions);
 					if(retVal == 1) {
 						return;
 					}
 				}
+			}
+			
+			// run if no query has executed
+			QueryExecutionHistory currentSettings = currentSettings();
+			boolean shouldRun = (runnerPanel == null);
+			if(previousExeuction != null) {
+				if(!previousExeuction.equals(currentSettings)) {
+					// ask to execute query again...
+					int retVal = showMessageDialog("Query", "Query parameters or session data has changed, run query again?", 
+							MessageDialogProperties.yesNoCancelOptions);
+					shouldRun = (retVal == 0);
+					if(retVal == 2) {
+						return;
+					}
+				}
+			}
+			if(shouldRun) {
+				executeQuery();
+				return;
 			}
 		} else if(getCurrentStep() == reportEditorStep) {
 			savePreviousQueryReport();
@@ -963,6 +981,67 @@ public class QueryAndReportWizard extends NodeWizard {
 			return queryName + " - " + ((ResultSet)getUserObject()).size() + " results";
 		}
 		
+	}
+	
+	private QueryExecutionHistory currentSettings() {
+		String paramHash = "";
+		try {
+			ScriptParameters scriptParams = 
+					getQueryScript().getContext().getScriptParameters(getQueryScript().getContext().getEvaluatedScope());
+			paramHash = scriptParams.getHashString();
+		} catch (PhonScriptException e) {
+			LogUtil.severe(e);
+		}
+			
+		List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
+		Map<SessionPath, ZonedDateTime> sessionModTimes = new HashMap<>();
+		for(SessionPath sp:selectedSessions) {
+			ZonedDateTime modTime = project.getSessionModificationTime(sp.getCorpus(), sp.getSession());
+			sessionModTimes.put(sp, modTime);
+		}
+			
+		return new QueryExecutionHistory(paramHash, selectedSessions, sessionModTimes);
+	}
+	
+	private class QueryExecutionHistory {
+		private String paramHash;
+		private List<SessionPath> selectedSessions;
+		private Map<SessionPath, ZonedDateTime> sessionModTimes;
+		
+		public QueryExecutionHistory(String paramHash, List<SessionPath> selectedSessions,
+				Map<SessionPath, ZonedDateTime> sessionModTimes) {
+			super();
+			this.paramHash = paramHash;
+			this.selectedSessions = selectedSessions;
+			this.sessionModTimes = sessionModTimes;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if(!(o instanceof QueryExecutionHistory)) return false;
+			
+			QueryExecutionHistory h = (QueryExecutionHistory)o;
+			
+			boolean retVal = true;
+			
+			retVal = paramHash.equals(h.paramHash);
+			if(retVal) {
+				retVal = (selectedSessions.size() == h.selectedSessions.size() 
+						&& selectedSessions.containsAll(h.selectedSessions));
+				
+				if(retVal) {
+					// check all modifiation times
+					for(SessionPath sp:selectedSessions) {
+						ZonedDateTime myTime = sessionModTimes.get(sp);
+						ZonedDateTime theirTime = h.sessionModTimes.get(sp);
+						
+						retVal &= myTime.isEqual(theirTime);
+					}
+				}
+			}
+			
+			return retVal;
+		}
 	}
 	
 }
