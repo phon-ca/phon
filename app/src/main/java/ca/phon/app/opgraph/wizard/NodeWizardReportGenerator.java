@@ -61,9 +61,18 @@ public class NodeWizardReportGenerator {
 	private final static String tocClosedIcn = 
 			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAASFBMVEUAAAAAAP8AWowAWowAV4oAYIAAWowAWYwAYokAWowAW40AgIAAWo0AWYwAWowAXogAWowAW4wAZoAAWowAW4sAWowAWowAAADct4obAAAAFnRSTlMAAcyvIwj5iQ3oYgLNPKge9oEK41qztuL3PwAAAAFiS0dEAIgFHUgAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfhBxkMORydYo4TAAAAR0lEQVQY04XPNxKAQAwEwcNzeHPM/59KiiZBYVdJ2k1V3bTpOx30wxgB8jRHgGUVwLYLOM4rAtxFAM8PaMVH9VbBFD2Wc/0XAhULJxWg6xUAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDctMjVUMTI6NTc6MjgrMDI6MDBO4MWCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTA3LTI1VDEyOjU3OjI4KzAyOjAwP719PgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=";
 
-	private final static String menuIcn = 
-			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQMDDsrN46U4wAAADtJREFUSMdjYKAxYBSJ6vlPSwuYaO2DUQtGARXyAQMDAwOt8sKbZSWMoxlt4C2geSSP5qPRCmfUAjoAAObLDgf9SOjwAAAAAElFTkSuQmCC";
-
+	private final static String[] cssFiles = {
+		"jquery-ui.min.css",
+		"jquery-ui.structure.min.css",
+		"jquery-ui.theme.min.css",
+		"wizard.css"	
+	};
+	
+	private final static String[] jsFiles = {
+		"jquery-3.3.1.min.js",
+		"jquery-ui.min.js",
+		"wizard.js"	
+	};
 	
 	public NodeWizardReportGenerator(NodeWizard wizard, ReportTree reportTree, String reportTemplate, String outputPath)
 		throws IOException {
@@ -117,99 +126,80 @@ public class NodeWizardReportGenerator {
 		  .append("\"/>").append(nl);
 		sb.append("<meta charset=\"UTF-8\"/>").append(nl);
 
-		sb.append("<style>").append(nl);
-		try(BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("wizard.css")))) {
-			String line = null;
-			while((line = in.readLine()) != null) {
-				sb.append(line).append(nl);
-			}
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		for(String cssFile:cssFiles) {
+			sb.append("<style>").append(nl);
+			appendCPFile(sb, cssFile);
+			sb.append("</style>").append(nl);
 		}
-		sb.append("</style>").append(nl);
-
-		sb.append("<script>\n");
-		// read in wizard javascript file
-		try(BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("wizard.js")))) {
-			String line = null;
-			while((line = in.readLine()) != null) {
-				sb.append(line).append(nl);
-			}
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		
+		for(String jsFile:jsFiles) {
+			sb.append("<script>\n");
+			appendCPFile(sb, jsFile);
+			sb.append("\n</script>");
 		}
-		sb.append("\n</script>");
 
 		sb.append("</head>").append(nl);
 		sb.append("<body onload='page_init()'>").append(nl);
 		
 		appendToC(sb);
 
-//		sb.append("<div id='sidenav' class='sidenav'>").append(nl);
-//		sb.append("<div id='banner' class='banner'>").append(nl);
-//		sb.append("<div id='bannercontent' class='title' style='margin: 5px;'>").append(nl);
-//		sb.append("<div class='icon'><img id='bannericon' width='36' height='36' src='").append(phonIcnBase64).append("')/></div>").append(nl);
-////		String documentTitle =
-////				(ext.getWizardTitle() != null && ext.getWizardTitle().trim().length() > 0)
-////				? ext.getWizardTitle()
-////				: "Phon Report";
-//		sb.append("<span class='title' style='margin-left: 10px'>").append("Report").append("</span>").append(nl);
-//		sb.append("</div>").append(nl);
-////		sb.append("<div id='bannercontent' class='title'>").append(documentTitle).append("</div>").append(nl);
-//		sb.append("<div class='menubtn' onClick='toggleNav()'><img id='menuicon' width='16' height='16'></img></div>");
-//		sb.append("</div>").append(nl);
-//		sb.append(nl).append("<div id='toc'></div>").append(nl);
-//		sb.append("</div>").append(nl);
-
 		sb.append("<div id='main'>").append(nl);
 
 		return sb.toString();
+	}
+	
+	private void appendCPFile(StringBuilder sb, String path) {
+		try(BufferedReader in = new BufferedReader(
+				new InputStreamReader(getClass().getResourceAsStream(path)))) {
+			String line = null;
+			while((line = in.readLine()) != null) {
+				sb.append(line).append(nl);
+			}
+		} catch (IOException e) {
+			LOGGER.error( e.getLocalizedMessage(), e);
+		}
 	}
 	
 	private int tocSectionIdx = 1;
 	private void appendToC(StringBuilder sb) {
 		sb.append("<div id='toc'>").append(nl);
 		
-		sb.append("<img src='").append(menuIcn).append("'/>").append(nl);
-		
 		tocSectionIdx = 1;
-		sb.append("<div id='full'>").append(nl);
+		sb.append("<ul id='menu'>").append(nl);
 		for(ReportTreeNode node:reportTree.getRoot()) {
-			sb.append("<div class='toc_l1' id='toc_section_").append(tocSectionIdx++).append("'>").append(nl);
 			appendToC(sb, node, 1);
-			sb.append("</div>").append(nl);
 		}
-		sb.append("</div>").append(nl);
+		sb.append("</ul>").append(nl);
 		
 		sb.append("</div>");
 	}
 	
 	private void appendToC(StringBuilder sb, ReportTreeNode node, int headerLevel) {
 		final String linkText = node.getTitle();
-		sb.append("<div class='h").append(headerLevel).append("'>").append(nl);
-		if(node.getChildren().size() > 0) {
-			String tocIcn = (headerLevel > 3 ? tocClosedIcn : tocExpandedIcn);
-			sb.append("<div class='toc_toggle_btn' onclick=\"toggleTocSection(this, 'toc_section_")
-			  .append(tocSectionIdx).append("')\">");
-			sb.append("<img src='").append(tocIcn).append("'/>").append(nl);
-			sb.append("</div>").append(nl);
-		}
+		sb.append("<li");
+		sb.append( (headerLevel == 1 ? " class='ui-widget-header'>" : ">")).append(nl);
+		sb.append("<div>").append(nl);
+//		if(node.getChildren().size() > 0) {
+//			String tocIcn = (headerLevel > 3 ? tocClosedIcn : tocExpandedIcn);
+//			sb.append("<div class='toc_toggle_btn' onclick=\"toggleTocSection(this, 'toc_section_")
+//			  .append(tocSectionIdx).append("')\">");
+//			sb.append("<img src='").append(tocIcn).append("'/>").append(nl);
+//			sb.append("</div>").append(nl);
+//		}
 		sb.append("<a onclick=\"document.getElementById('").append(node.getPath().toString())
 		  .append("').scrollIntoView(true)\">").append(linkText).append("</a>").append(nl);
 		sb.append("</div>").append(nl);
 		
 		if(node.getChildren().size() > 0) {
-			sb.append("<div class='toc_l").append((headerLevel+1))
-			  .append("'");
-			if(headerLevel > 3) {
-				sb.append(" style='display: none;'");
-			}
-			sb.append(" id='toc_section_").append(tocSectionIdx++).append("'>").append(nl);
+			if(headerLevel > 1) 
+				sb.append("<ul>");
 			for(ReportTreeNode cNode:node) {
 				appendToC(sb, cNode, headerLevel+1);
 			}
-			sb.append("</div>").append(nl);
+			if(headerLevel > 1)
+				sb.append("</ul>").append(nl);
 		}
+		sb.append("</li>").append(nl);
 	}
 
 	private String htmlSuffix() {
