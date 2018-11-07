@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -168,6 +169,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private QueryHistoryManager queryHistoryManager;
 	private QueryHistoryPanel queryHistoryPanel;
 	
+	private CountDownLatch queryLatch;
 	private QueryExecutionHistory previousExeuction;
 	
 	public QueryAndReportWizard(Project project, QueryScript queryScript) {
@@ -729,6 +731,11 @@ public class QueryAndReportWizard extends NodeWizard {
 		if(getCurrentStep() != queryStep)
 			gotoStep(getStepIndex(queryStep));
 		
+		if(queryLatch != null && queryLatch.getCount() > 0) {
+			// already executing a query!! bail
+			return;
+		}
+		
 		final QueryRunnerPanel currentRunner = getCurrentQueryRunner();
 		if(currentRunner != null && currentRunner.isRunning()) {
 			final String[] options = { "Ok", "Stop current query" };
@@ -767,6 +774,8 @@ public class QueryAndReportWizard extends NodeWizard {
 					LogUtil.severe(e1);
 					Toolkit.getDefaultToolkit().beep();
 				}
+				
+				queryLatch.countDown();
 			}
 			
 			if(e.getNewValue() == TaskStatus.RUNNING) {
@@ -781,6 +790,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		closeAction.putValue(PhonUIAction.SMALL_ICON, closeIcon);
 		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results and close tab");
 		
+		queryLatch = new CountDownLatch(1);
 		previousExeuction = currentSettings();
 		showResults();
 		runnerPanel.startQuery();
@@ -937,34 +947,26 @@ public class QueryAndReportWizard extends NodeWizard {
 	@Override
 	public void next() {
 		if(getCurrentStep() == queryStep) {
-			// execute one query at a time
-			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
-			if(runnerPanel != null) {
-				if(runnerPanel.getTaskStatus() != TaskStatus.FINISHED) {
-					int retVal = showMessageDialog(getTitle(), "Query did not complete, continue anyway?", MessageDialogProperties.yesNoOptions);
-					if(retVal == 1) {
-						return;
+			if(queryLatch == null || queryLatch.getCount() == 0) {
+				// run if no query has executed
+				QueryExecutionHistory currentSettings = currentSettings();
+				boolean shouldRun = true;
+				if(previousExeuction != null) {
+					shouldRun = false;
+					if(!previousExeuction.equals(currentSettings)) {
+						// ask to execute query again...
+						int retVal = showMessageDialog(getTitle(), "Query parameters or session data has changed, run query again?", 
+								MessageDialogProperties.yesNoCancelOptions);
+						shouldRun = (retVal == 0);
+						if(retVal == 2) {
+							return;
+						}
 					}
 				}
-			}
-			
-			// run if no query has executed
-			QueryExecutionHistory currentSettings = currentSettings();
-			boolean shouldRun = (runnerPanel == null);
-			if(previousExeuction != null) {
-				if(!previousExeuction.equals(currentSettings)) {
-					// ask to execute query again...
-					int retVal = showMessageDialog(getTitle(), "Query parameters or session data has changed, run query again?", 
-							MessageDialogProperties.yesNoCancelOptions);
-					shouldRun = (retVal == 0);
-					if(retVal == 2) {
-						return;
-					}
+				if(shouldRun) {
+					executeQuery();
+					return;
 				}
-			}
-			if(shouldRun) {
-				executeQuery();
-				return;
 			}
 		} else if(getCurrentStep() == reportEditorStep) {
 			savePreviousQueryReport();
@@ -979,9 +981,8 @@ public class QueryAndReportWizard extends NodeWizard {
 			executeQuery();
 			return;
 		} else if(getCurrentStep() == queryStep && !inInit && queryRunnerBox != null && queryRunnerComboBoxModel.getSize() > 0) {
-			QueryRunnerPanel queryRunner = getCurrentQueryRunner();
-			if(queryRunner != null && queryRunner.isRunning()) {
-				showMessageDialog("Results", "Please wait for query to complete", MessageDialogProperties.okOptions);
+			if(queryLatch != null && queryLatch.getCount() > 0) {
+				showMessageDialog(getTitle(), "Please wait for query to complete", MessageDialogProperties.okOptions);
 				return;
 			}
 		} else if(!inInit && stepIdx == super.getStepIndex(reportDataStep)) {
