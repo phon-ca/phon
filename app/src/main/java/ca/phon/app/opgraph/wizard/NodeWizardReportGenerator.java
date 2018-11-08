@@ -162,7 +162,7 @@ public class NodeWizardReportGenerator {
 	
 	private int tocSectionIdx = 1;
 	private void appendToC(StringBuilder sb) {
-		sb.append("<div id='toc'>").append(nl);
+		sb.append("<nav id='toc'>").append(nl);
 		
 		tocSectionIdx = 1;
 		sb.append("<ul id='menu'>").append(nl);
@@ -171,7 +171,7 @@ public class NodeWizardReportGenerator {
 		}
 		sb.append("</ul>").append(nl);
 		
-		sb.append("</div>");
+		sb.append("</nav>");
 	}
 	
 	private void appendToC(StringBuilder sb, ReportTreeNode node, int headerLevel) {
