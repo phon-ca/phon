@@ -887,13 +887,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 									window.setMember("project", getExtension(Project.class));
 									window.setMember("buffers", bufferPanel);
 									window.setMember("reportTree", reportTree);
-									
 									window.setMember("tableMap", tableMap);
-									
 									window.setMember("app", webViewInterface);
-
-									// call functions to display app-specific UI elements
-								//	webView.getEngine().executeScript("addMenuButtons()");
+									
+									// add menu buttons to tables
+									int idx = 0;
+									for(String tableId:tableMap.keySet()) {
+										webView.getEngine().executeScript(
+												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx++));
+									}
 								}
 							}
 

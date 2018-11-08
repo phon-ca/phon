@@ -155,45 +155,6 @@ img {
     font-family:"noto monospace", monospace;
 }
 
-.banner {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-	background-color: silver;
-}
-
-.banner .title {
-	display: flex;
-	color: rgb(0, 90, 140);
-	font-size: xx-large;
-	font-weight: bold;
-}
-
-.sidenav {
-    height: 100%;
-    width: 300px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: gainsboro;
-    overflow-x: hidden;
-    transition: 0.5s;
-}
-
-.sidenav a {
-    text-decoration: none;
-    display: block;
-}
-
-.sidenav .menubtn {
-    float: right;
-    z-index: 999;
-    padding: 5px;
-    color: white;
-    cursor: pointer;
-}
-
 .sessionLink {
 	color: inherit
 }
@@ -238,129 +199,26 @@ img {
     position: relative;
 }
 
-.sticky {
+nav {
     position: fixed;
-    top:  0px;
+    top:20px;
+    right: 20px;
 }
 
-nav {
-    position: relative;
-    margin-right: 20px;
+#menuToggle {
+    float: right;
+}
+
+#toc {
+    padding-top: 20px;
 }
 
 #toc .ui-menu {
     width: 300px;
 }
 
-#toc .toc_section {
-    transition: 0.5s;
-}
-
-#toc .toc_toggle_btn {
-    cursor: pointer;
-    width: 8px;
-    height: 8px;
-}
-
-.toc_toggle_btn img {
-    width: 8px;
-    height: 8px;
-}
-
-#toc .h1 {
-    font-weight: bold;
-    font-size: inherit;
-    color: rgb(50, 50, 50);
-
-    padding-bottom: 4px;
-
-    display: flex;
-    align-items: center;
-}
-
-#toc .h2 {
-    font-size: small;
-    color: rgb(50, 50, 50);
-
-    padding-bottom: 4px;
-
-    display: flex;
-    align-items: center;
-}
-
-#toc .h3 {
-    font-size: small;
-    color: rgb(50, 50, 50);
-
-    padding-bottom: 4px;
-
-    display: flex;
-    align-items: center;
-}
-
-#toc .h4 {
-    font-size: small;
-    color: rgb(50, 50, 50);
-
-    padding-bottom: 4px;
-
-    display: flex;
-    align-items: center;
-}
-
-#toc .h5 {
-    font-size: small;
-    color: rgb(50, 50, 50);
-
-    padding-bottom: 4px;
-
-    display: flex;
-    align-items: center;
-}
-
-#toc .h6 {
-    font-size: small;
-    color: rgb(50, 50, 50);
-
-    padding-bottom: 4px;
-}
-
-#toc .toc_l1 {
-    padding-left: 4px;
-}
-
-#toc .toc_l2 {
-    padding-left: 8px;
-}
-
-#toc .toc_l3 {
-    padding-left: 8px;
-}
-
-#toc .toc_l4 {
-    padding-left: 8px;
-}
-
-#toc .toc_l5 {
-    padding-left: 8px;
-}
-
-#toc .toc_l6 {
-    padding-left: 8px;
-}
-
-#toc a {
-    color: rgb(50, 50, 50);
-    padding-left: 12px;
-}
-
-#toc a:hover {
-    color: steelblue;
-}
-
 #main {
     padding: 0px;
-    transition: 0.5s;
 }
 
 @media print {

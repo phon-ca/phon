@@ -24,7 +24,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -35,6 +38,8 @@ import org.commonmark.parser.Parser;
 import ca.phon.app.VersionInfo;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 /**
  * Create a html report using data from generated buffers in wizard.
@@ -65,7 +70,8 @@ public class NodeWizardReportGenerator {
 		"jquery-ui.min.css",
 		"jquery-ui.structure.min.css",
 		"jquery-ui.theme.min.css",
-		"wizard.css"	
+		"wizard.css",
+		"burger-icon.css"
 	};
 	
 	private final static String[] jsFiles = {
@@ -137,6 +143,20 @@ public class NodeWizardReportGenerator {
 			appendCPFile(sb, jsFile);
 			sb.append("\n</script>");
 		}
+		
+		// provide a list of report tree ids
+		Map<String, DefaultTableDataSource> tableMap = new LinkedHashMap<>();
+		searchForTables(reportTree.getRoot(), tableMap);
+		
+		sb.append("<script>").append(nl);
+		sb.append("var tableIds = [");
+		int i = 0;
+		for(String tableId:tableMap.keySet()) {
+			if(i++ > 0) sb.append(",");
+			sb.append("\"").append(tableId).append("\"");
+		}
+		sb.append("];").append(nl);
+		sb.append("</script>");
 
 		sb.append("</head>").append(nl);
 		sb.append("<body onload='page_init()'>").append(nl);
@@ -146,6 +166,17 @@ public class NodeWizardReportGenerator {
 		sb.append("<div id='main'>").append(nl);
 
 		return sb.toString();
+	}
+	
+	public void searchForTables(ReportTreeNode node, Map<String, DefaultTableDataSource> tableMap) {
+		if(node instanceof TableNode) {
+			final TableNode tableNode = (TableNode)node;
+			tableMap.put(tableNode.getPath().toString(), (DefaultTableDataSource)tableNode.getTable());
+		}
+		
+		for(ReportTreeNode child:node.getChildren()) {
+			searchForTables(child, tableMap);
+		}
 	}
 	
 	private void appendCPFile(StringBuilder sb, String path) {
@@ -162,14 +193,20 @@ public class NodeWizardReportGenerator {
 	
 	private int tocSectionIdx = 1;
 	private void appendToC(StringBuilder sb) {
-		sb.append("<nav id='toc'>").append(nl);
+		sb.append("<nav>").append(nl);
 		
+		sb.append("<div id='menuToggle' style='color: #ccc;'>").append(nl);
+		sb.append("<input onclick='$(\"#toc\").toggle()' class=\"burger-check\" id=\"burger-check\" type=\"checkbox\" checked><label for=\"burger-check\" class=\"burger\"></label>");
+		sb.append("</div>").append(nl);
+		
+		sb.append("<div id='toc'>").append(nl);
 		tocSectionIdx = 1;
 		sb.append("<ul id='menu'>").append(nl);
 		for(ReportTreeNode node:reportTree.getRoot()) {
 			appendToC(sb, node, 1);
 		}
 		sb.append("</ul>").append(nl);
+		sb.append("</div>").append(nl);
 		
 		sb.append("</nav>");
 	}
