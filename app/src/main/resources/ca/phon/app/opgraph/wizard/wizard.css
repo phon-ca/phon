@@ -5,10 +5,6 @@ body {
     display: inline-flex;
 }
 
-table {
-    table-layout: fixed;
-}
-
 h1:first-of-type {
     margin-top: 0px;
 }
@@ -193,6 +189,32 @@ nav {
 
 #main {
     padding: 0px;
+}
+
+/* Session to HTML styles */
+.participants {
+    margin-bottom: 1em;
+}
+
+.participants table {
+    text-align: left;
+    empty-cells: show;
+}
+
+.record {
+    margin-bottom: 1em;
+}
+
+.tier_name {
+    padding-right: 20px;
+}
+
+.record table tr td:first-child {
+    border-right: 1px solid lightgrey;
+}
+
+.tier_value {
+    padding-right: 5px;
 }
 
 @media print {

@@ -44,7 +44,7 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="reportTitle">
-                        <![CDATA[Results by Session]]>
+                        <![CDATA[Listing by Session]]>
                     </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var reportTitleParamInfo = {
@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="ca7b0861e06b4ba8" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="31357ad1">
+            <graph id="106fe91f">
                 <node id="979ae4b083f840f8" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -179,7 +179,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="1d3c68d27c44dc" name="For each SessionPath" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="26d6d250">
+            <graph id="7b00a249">
                 <node id="2361616a6cb14de8" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -204,7 +204,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="d158423836494b23" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="1c7be495">
+                    <graph id="56dfbd79">
                         <node id="45845fe19bae44ba" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -309,7 +309,7 @@ function setup_params(params) {
         <link dest="8eb99f02f394311" destField="reportName" source="ca7b0861e06b4ba8" sourceField="value"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Results by Session (with optional tier data)">
+                <opqry:info format="html" title="Listing by Session (with optional tier data)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c520598a74a24628" showAsStep="true">

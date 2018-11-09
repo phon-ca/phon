@@ -255,15 +255,16 @@ public class NodeWizardReportGenerator {
 		} catch (IOException e) {
 			
 		}
-				
+		
 		List<Extension> extensions = Arrays.asList(TablesExtension.create());
 
 		final Parser parser = Parser.builder().extensions(extensions).build();
 		final Node doc = parser.parse(buffer.toString());
 		final HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
 		
+		// remove unnecessary <p> elements surrounding headers
 		String html = renderer.render(doc);
-		//html = html.replaceAll("<p></p>", "");
+		html = html.replaceAll("<p>(<h[0-9].+</h[0-9]>)</p>", "$1");
 		return html;
 	}
 
