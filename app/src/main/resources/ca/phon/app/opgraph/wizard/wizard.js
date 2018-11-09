@@ -104,7 +104,12 @@ function showTable(tableId) {
 }
 
 function showTableMenu(tablePopupId) {
-	document.getElementById(tablePopupId).classList.toggle("show");
+    if(currentPopupMenu != null) {
+        currentPopupMenu.classList.remove("show");
+        currentPopupMenu = null;
+    }
+	currentPopupMenu = document.getElementById(tablePopupId);
+	currentPopupMenu.classList.toggle("show");
 }
 
 function saveTableAsCSV(tableId) {
@@ -173,20 +178,20 @@ function createMenuLink(title, onclick) {
     return menuItem;
 }
 
+var currentPopupMenu = null;
 function page_init(documentRef) {
     $("#menu").menu();
     
     // add copy table buttons
     for(i = 0; i < tableIds.length; i++) {
         addCopyTableButton(document.getElementById(tableIds[i]), i);
-        $("#table_menu_" + (i+1)).menu();
     }
     
     $(".tableButton").button();
     
     $(document).on("click", function(event){
         if(currentPopupMenu != null && !event.target.closest(".tableButton")) {
-            currentPopupMenu.classList.toggle("show");
+            currentPopupMenu.classList.remove("show");
             currentPopupMenu = null;
         }
     });

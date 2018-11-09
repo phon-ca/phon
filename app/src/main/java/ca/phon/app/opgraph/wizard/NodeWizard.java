@@ -894,7 +894,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 									int idx = 0;
 									for(String tableId:tableMap.keySet()) {
 										webView.getEngine().executeScript(
-												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx++));
+												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
+										webView.getEngine().executeScript(
+												String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
+										++idx;
 									}
 								}
 							}

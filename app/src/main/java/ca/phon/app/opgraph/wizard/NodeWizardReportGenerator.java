@@ -111,7 +111,7 @@ public class NodeWizardReportGenerator {
 		sb.append(htmlPrefix(wizardSettings));
 		sb.append(reportAsHTML);
 		sb.append(htmlSuffix());
-
+		
 		try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(stream, "UTF-8"))) {
 			out.write(sb.toString());
 			out.flush();
@@ -261,7 +261,10 @@ public class NodeWizardReportGenerator {
 		final Parser parser = Parser.builder().extensions(extensions).build();
 		final Node doc = parser.parse(buffer.toString());
 		final HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
-		return renderer.render(doc);
+		
+		String html = renderer.render(doc);
+		//html = html.replaceAll("<p></p>", "");
+		return html;
 	}
 
 }

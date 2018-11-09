@@ -101,12 +101,10 @@ img {
 	background-color: white;
 	color: rgb(50, 50, 50);
 
-	border-top: 1px;
-	border-left: 1px;
-	border-right: 1px;
-	border-bottom: 0px;
-	border-style: solid;
-	border-color: lightgrey;
+	border-top: 1px solid lightgrey;
+	border-left: 1px solid lightgrey;
+	border-right: 1px solid lightgrey;
+	border-bottom: 1px solid transparent;
 	border-radius: 2px 2px 0px 0px;
 }
 
