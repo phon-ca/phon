@@ -2,40 +2,59 @@
 
 ## Outline
 
-The report will be composed of four types of tables: 
+ * <Participant>
+   * Aggregate
+   * Singletons
+      * Aggregate
+      * /b/
+          * Listing
+          * Accuracy
+          * Accuracy over time
+      * /f/
+          * … 
+      * … 
+   * Clusters
+      * Aggregate
+      * /br/
+      * …
 
- 1. Singletons Summary
- 1. Clusters Summary
- 1. Singletons Listing
- 1. Clusters Listing
- 
-An example table of contents is displayed below. Bold level elements are section headers while italic items are one of the tables listed
-above. Other headings are standard Phon report elements or text blocks.
+The Aggregate table will include an Aggregate summary of results for a participant and will include the following columns:
 
- * **Consonants**
-    * Parameters
-    * **Summary**
-        * *Singletons Summary* (All Participants)
-        * *Cluster Summary* (All Participants)
-    * **Singletons**
- 
-   ## TODO ##       
-        
-## Data Preparation
+| IPA Target | Type  | Phone    | Position | Count | Accurate | Substitution | Deletion |
+|------------|-------|----------|----------|-------|----------|--------------|----------|
 
-Proper syllabification and phone alignment is required for accurate results. All participants should have unique names and a speaker should be
-assigned to all records.
+## Singletons
 
-## Singletons Summary
 
-The *Singletons Summary* table classifies singleton consonants in different syllable and word positions as being Correct, Substituted, Distorted, or Deleted.
-Syllable positions are onset, coda, ambisyllabic, and oehs. (LAs and RAs should in theory never appear in syllable outside of clusters.)
+## Clusters
 
-Example:
+/br/
 
-## Clusters Summary
+Listing:
 
-## Singletons Listing
+| Session | Record # | IPA Target | IPA Actual | … (standard result listing) |
+|---------|----------|------------|------------|-----------------------------|
+| | | | | |
 
-## Clusters Listing
+Summary:
 
+Overall accuracy: (Total of Accurate)/(Total of Count - including epenthesis)  ???
+% Accurate : (Total of Accurate) / (Total of Count - excluding epenthesis) ???
+% Substitions: (Total of Substitions) / (Total of Count - excluding epenthesis)
+% Deltions: (Total of Deletions) / (Total of Count - excluding epenthesis)
+
+
+Accuracy:
+
+| IPA Target | Phone | Position | Count | Accurate | Substitutions | Deletions |
+|------------|-------|----------|-------|----------|---------------|-----------|
+| br         | b     | O1       | 5     | 2        | 2             | 1         |
+| br         | r     | O2       | 5     | 5        | 0             | 0         |
+
+Epenthesis:
+
+| Phone | Position | Count |
+|-------|----------|-------|
+| s     | O0+      | 1     | 
+| l     | O1+      | 1     |
+| t     | O2+      | 1     |

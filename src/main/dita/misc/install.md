@@ -16,11 +16,11 @@ Download required fronts from https://www.phon.ca/downloads/ipafonts.zip.
 
 ## Ubuntu (16.04/18.04)
 
- * Install Java 10
+ * Install Java 11
 ```
 sudo add-apt-repository ppa:linuxuprising/java
 sudo apt update
-sudo apt install oracle-java10-installer
+sudo apt install oracle-java11-installer
 ```
  * Install VLC
 ```

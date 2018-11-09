@@ -274,6 +274,7 @@
         </topichead>
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
+        <topicref href="analysis/consonants.md" format="markdown"/>
         <topicref href="analysis/PPC.md" format="markdown"/>
         <topicref href="analysis/Phone%20Inventory.md" format="markdown"/>
         <topicref href="analysis/Phonological%20Processes.md" format="markdown"/>
