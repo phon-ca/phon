@@ -293,5 +293,9 @@ nav {
     a {
         font-style: normal;
     }
+    
+    .record {
+        page-break-inside: avoid !important;
+    }
 
 }

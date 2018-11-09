@@ -538,6 +538,7 @@ public class SessionToHTML {
 				
 				var tier = record.getTier(tvi.getTierName());
 				if(tier == null) {
+					buffer.append("<td class='tier_name'><em>").append(tvi.getTierName()).append("</em></td>").append(nl);
 					buffer.append("<td class='tier_value' colspan='").append(groupCount).append("'>&nbsp;</td>").append(nl);
 				} else {
 					buffer.append("<td class='tier_name'><em>").append(tier.getName()).append("</em></td>").append(nl);
@@ -736,15 +737,17 @@ public class SessionToHTML {
 		"	margin-left: 5;\n" + 
 		"}\n" + 
 		"			\n" + 
+		"table {\n" + 
+		"    border: thin solid darkgrey;\n" + 
+		"    empty-cells: show;\n" + 
+		"    table-layout:fixed;\n" + 
+		"    text-align: left;\n" + 
+		"}" + "\n" + 
 		".participants {\n" +
 		"	margin-bottom: 1em;\n" +
 		"}\n" +
 		"\n" +
 		".participants table {\n" + 
-		"    border: thin solid darkgrey;\n" + 
-		"    empty-cells: show;\n" + 
-		"    table-layout:fixed;\n" + 
-		"    text-align: left;\n" + 
 		"}\n" +
 		".participants table tr th {\n" + 
 		"    overflow:hidden;\n" + 
@@ -761,18 +764,18 @@ public class SessionToHTML {
 		".record_table {\n" + 
 		"	\n" + 
 		"}\n" + 
+		".record table tr td:first-child {\n" + 
+		"    border-right: 1px solid lightgrey;\n" + 
+		"}\n" +
 		"\n" + 
 		".tier_row {\n" + 
-		"	background-color: white;\n" + 
 		"}\n" + 
 		"\n" + 
 		".tier_alt_row {\n" + 
-		"	background-color: #F0F8FF;\n" + 
 		"}\n" + 
 		"\n" + 
 		".tier_name {\n" + 
 		"	padding-right: 20;\n" + 
-		"	background-color: #F0F8FF;\n" + 
 		"}\n" + 
 		"\n" + 
 		".tier_value {\n" + 
