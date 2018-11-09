@@ -41,7 +41,7 @@ For more information, see https://www.phon.ca
 
 ## Compiling Phon
 
-To compile, use must first install Java 8 (or later) and maven.
+To compile, use must first install Java 11 (or later) and maven.
 
 ## Disclaimers
 
