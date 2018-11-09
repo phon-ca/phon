@@ -215,7 +215,8 @@ public class NodeWizardReportGenerator {
 		final String linkText = node.getTitle();
 		sb.append("<li");
 		sb.append( (headerLevel == 1 ? " class='ui-widget-header'>" : ">")).append(nl);
-		sb.append("<div>").append(nl);
+		sb.append("<div onclick=\"document.getElementById('").append(node.getPath().toString())
+		  .append("').scrollIntoView(true)\">").append(nl);
 //		if(node.getChildren().size() > 0) {
 //			String tocIcn = (headerLevel > 3 ? tocClosedIcn : tocExpandedIcn);
 //			sb.append("<div class='toc_toggle_btn' onclick=\"toggleTocSection(this, 'toc_section_")
@@ -223,8 +224,7 @@ public class NodeWizardReportGenerator {
 //			sb.append("<img src='").append(tocIcn).append("'/>").append(nl);
 //			sb.append("</div>").append(nl);
 //		}
-		sb.append("<a onclick=\"document.getElementById('").append(node.getPath().toString())
-		  .append("').scrollIntoView(true)\">").append(linkText).append("</a>").append(nl);
+		sb.append("<a>").append(linkText).append("</a>").append(nl);
 		sb.append("</div>").append(nl);
 		
 		if(node.getChildren().size() > 0) {

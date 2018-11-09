@@ -890,12 +890,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 									window.setMember("tableMap", tableMap);
 									window.setMember("app", webViewInterface);
 									
-									// add menu buttons to tables
-									int idx = 0;
-									for(String tableId:tableMap.keySet()) {
-										webView.getEngine().executeScript(
-												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx++));
-									}
+//									// add menu buttons to tables
+//									int idx = 0;
+//									for(String tableId:tableMap.keySet()) {
+//										webView.getEngine().executeScript(
+//												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx++));
+//									}
 								}
 							}
 

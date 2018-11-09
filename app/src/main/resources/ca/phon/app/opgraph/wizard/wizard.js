@@ -1,5 +1,3 @@
-var showIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfhBgUTAScLI/4WAAAAS0lEQVQoz2NgoBQwGvP/FcQtzfye5d8GJgfcCv4dYFRh5+HEreDLd4rdyMBonPVfD4/0JSbK7SDoBkLeZOHdweiAWwHvAYJBTbkjAbcvEQj70zelAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTA2LTA1VDE5OjAxOjM5KzAyOjAwvGO9kQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wNi0wNVQxOTowMTozOSswMjowMM0+BS0AAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC";
-var copyIcn = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfhBgEVNQ8OU07+AAAAZUlEQVQoz52QyQ3AIAwEB+SK3EI6oCFcYQpJE+QZbC4p+0IwYsdOAGpUutzpOwuoUfpLbT2c1SjtYhmhQnp2gGsENV8inh99cnyOPv6HiU+o8D4AmUOOgMTNbTOiYcxfDn7NE5sXVLwX2PBwtxgAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDYtMDFUMjE6NTM6MTUrMDI6MDC+FxbWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTA2LTAxVDIxOjUzOjE1KzAyOjAwz0quagAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=";
 
 function toggleToC() {
     var toc = $("#toc");
@@ -84,16 +82,15 @@ function addCopyTableButton(table, index) {
     div.setAttribute("id", buttonRowId);
 
     var tableCaption = table.querySelector("caption");
-    var button = documentRef.createElement("div");
-    button.setAttribute("class", "tableButton");
+    var button = documentRef.createElement("button");
+    button.setAttribute("class", "tableButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
     button.setAttribute("id", buttonId);
+    button.setAttribute("title", "Copy table to clipboard as CSV");
     button.setAttribute("onclick", "onCopyTableData(this, '" + tableId + "')");
 
-    var copyImg = documentRef.createElement("img");
-    copyImg.setAttribute("src", copyIcn);
-    copyImg.setAttribute("style", "padding-right: 2px;");
-    button.appendChild(copyImg);
-    button.append("Copy to clipboard");
+    var copyIcon = documentRef.createElement("span");
+    copyIcon.setAttribute("class", "ui-icon ui-icon-clipboard");
+    button.appendChild(copyIcon);
 
     div.appendChild(button);
     tableCaption.appendChild(div);
@@ -132,42 +129,48 @@ function addMenuButtons(table, index) {
     
     var tablePopupId = table.getAttribute("id") + "_popup";
     
-    var button = documentRef.createElement("div");
-    button.setAttribute("class", "tableButton");
+    var button = documentRef.createElement("button");
+    button.setAttribute("class", "tableButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
     button.setAttribute("onclick", "showTableMenu('" + tablePopupId + "')");
+    button.setAttribute("title", "Show menu");
     
-    var menuImg = documentRef.createElement("img");
-    menuImg.setAttribute("src", showIcn);
-    menuImg.setAttribute("style", "padding-right: 2px;");
-    menuImg.setAttribute("class", "tableMenuButton");
+    var menuImg = documentRef.createElement("span");
+    menuImg.setAttribute("class", "ui-icon ui-icon-triangle-1-s");
     button.appendChild(menuImg);
     
     var tableMenu = documentRef.createElement("div");
-    tableMenu.setAttribute("class", "tablePopupMenu");
-    tableMenu.setAttribute("id", tablePopupId);
+	tableMenu.setAttribute("class", "tablePopupMenu");
+	tableMenu.setAttribute("id", tablePopupId);
+
+    var menuList = documentRef.createElement("ul");
+    menuList.setAttribute("id", "table_menu_" + (index+1));
     
-    // add actions
-    var saveAsCSVItem = document.createElement("div");
-    saveAsCSVItem.setAttribute("onclick", "saveTableAsCSV('" + table.getAttribute("id") + "')");
-    saveAsCSVItem.setAttribute("class", "tableMenuItem");
-    saveAsCSVItem.append("Save table as CSV...");
-    tableMenu.appendChild(saveAsCSVItem);
-    
-    var saveAsExcelItem = document.createElement("div");
-    saveAsExcelItem.setAttribute("onclick", "saveTableAsExcel('" + table.getAttribute("id") + "')");
-    saveAsExcelItem.setAttribute("class", "tableMenuItem");
-    saveAsExcelItem.append("Save table as Excel\u2122 Workbook...");
-    tableMenu.appendChild(saveAsExcelItem);
-    
-    var showBufferItem = document.createElement("div");
-    showBufferItem.setAttribute("onclick", "showTable('" + table.getAttribute("id") + "')");
-    showBufferItem.setAttribute("class", "tableMenuItem");
-    showBufferItem.append("Show table");
-    tableMenu.appendChild(showBufferItem);
-    
-    button.appendChild(tableMenu);
+	// add actions
+	var saveAsCSVItem = createMenuLink("Save table as CSV...", "saveTableAsCSV('" + table.getAttribute("id") + "')");
+	menuList.appendChild(saveAsCSVItem);
+	
+	var saveAsExcelItem = createMenuLink("Save table as Excel\u2122 Workbook...", "saveTableAsExcel('" + table.getAttribute("id") + "')");
+	menuList.appendChild(saveAsExcelItem);
+	
+	var showBufferItem = createMenuLink("Show table", "showTable('" + table.getAttribute("id") + "')");
+	menuList.appendChild(showBufferItem);
+	
+	tableMenu.appendChild(menuList);
     
     div.insertBefore(button, div.firstChild);
+    tableCaption.appendChild(tableMenu);
+}
+
+function createMenuLink(title, onclick) {
+    var menuItem = document.createElement("li");
+    var menuItemWrapper = document.createElement("div");
+    menuItemWrapper.setAttribute("onclick", onclick);
+	var link = document.createElement("a");
+	link.append(title);
+	menuItemWrapper.appendChild(link);
+	menuItem.appendChild(menuItemWrapper);
+
+    return menuItem;
 }
 
 function page_init(documentRef) {
@@ -176,19 +179,17 @@ function page_init(documentRef) {
     // add copy table buttons
     for(i = 0; i < tableIds.length; i++) {
         addCopyTableButton(document.getElementById(tableIds[i]), i);
+        addMenuButtons(document.getElementById(tableIds[i]), i);
+        $("#table_menu_" + (i+1)).menu();
     }
+    
+    $(".tableButton").button();
+    
+    $(document).on("click", function(event){
+        if(currentPopupMenu != null && !event.target.closest(".tableButton")) {
+            currentPopupMenu.classList.toggle("show");
+            currentPopupMenu = null;
+        }
+    });
 }
 
-window.onclick = function(event) {
-  if (!event.target.matches('.tableMenuButton')) {
-
-    var dropdowns = document.getElementsByClassName("tablePopupMenu");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
