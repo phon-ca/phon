@@ -179,7 +179,6 @@ function page_init(documentRef) {
     // add copy table buttons
     for(i = 0; i < tableIds.length; i++) {
         addCopyTableButton(document.getElementById(tableIds[i]), i);
-        addMenuButtons(document.getElementById(tableIds[i]), i);
         $("#table_menu_" + (i+1)).menu();
     }
     
