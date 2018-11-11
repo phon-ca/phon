@@ -57,7 +57,7 @@ public class BackReferenceTransition extends PhonexTransition {
 				IPAElement groupPhone = groupVal[i];
 				
 				// make sure there is enough input left on the tape
-				if(pIdx+1 >= currentState.getTape().length) {
+				if(pIdx+i >= currentState.getTape().length) {
 					retVal = false;
 					break;
 				}

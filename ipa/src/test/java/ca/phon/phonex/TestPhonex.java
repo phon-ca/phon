@@ -659,4 +659,18 @@ public class TestPhonex extends PhonexTest {
 		testGroups(ipa, phonex, answers);
 	}
 	
+	@Test
+	public void testGeminates() throws ParseException {
+		final String text = "hhelloll";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "((\\c)\\1)";
+		final IPATranscript[][] answers = new IPATranscript[][] {
+			{ ipa.subsection(0, 2), ipa.subsection(0, 1) },
+			{ ipa.subsection(3, 5), ipa.subsection(3, 4) },
+			{ ipa.subsection(6, 8), ipa.subsection(6, 7) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
+	
 }
