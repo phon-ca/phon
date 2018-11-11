@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b3.dmg" newVersion="3.0.2b3" newMediaFileId="macos" fileSize="229876591" md5Sum="d04a8417298d371f2a35d4f2024414a4" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b4.dmg" newVersion="3.0.2b4" newMediaFileId="macos" fileSize="229864427" md5Sum="f844c10d375307bb043caef8a2a10c0d" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -11,6 +11,8 @@
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -227,7 +229,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b3.dmg" newVersion="3.0.2b3" newMediaFileId="macos" fileSize="229876591" md5Sum="d04a8417298d371f2a35d4f2024414a4" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b4.dmg" newVersion="3.0.2b4" newMediaFileId="macos" fileSize="229864427" md5Sum="f844c10d375307bb043caef8a2a10c0d" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -238,6 +240,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -454,7 +458,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b3.exe" newVersion="3.0.2b3" newMediaFileId="win64" fileSize="244166656" md5Sum="0c9b4f3000cc73155124c2f8f3144ef2" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.exe" newVersion="3.0.2b4" newMediaFileId="win64" fileSize="244165120" md5Sum="4c0bbddbfed3b20bb8f12471a99968e5" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -465,6 +469,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -681,7 +687,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b3.exe" newVersion="3.0.2b3" newMediaFileId="win64" fileSize="244166656" md5Sum="0c9b4f3000cc73155124c2f8f3144ef2" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.exe" newVersion="3.0.2b4" newMediaFileId="win64" fileSize="244165120" md5Sum="4c0bbddbfed3b20bb8f12471a99968e5" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -692,6 +698,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -908,7 +916,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b3.exe" newVersion="3.0.2b3" newMediaFileId="win64" fileSize="244166656" md5Sum="0c9b4f3000cc73155124c2f8f3144ef2" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.exe" newVersion="3.0.2b4" newMediaFileId="win64" fileSize="244165120" md5Sum="4c0bbddbfed3b20bb8f12471a99968e5" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -919,6 +927,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -1135,7 +1145,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b3.zip" newVersion="3.0.2b3" newMediaFileId="win64zip" fileSize="243206533" md5Sum="4c79a0e3afb01b69cc231d1da9dc77fe" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.zip" newVersion="3.0.2b4" newMediaFileId="win64zip" fileSize="243204858" md5Sum="7c55f7d489f9f73c0ad867dde04fd18c" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1146,6 +1156,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -1362,7 +1374,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b3.deb" newVersion="3.0.2b3" newMediaFileId="linux64deb" fileSize="164230754" md5Sum="ad6aaa55dd174f46a27c2ec4f646b6be" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b4.deb" newVersion="3.0.2b4" newMediaFileId="linux64deb" fileSize="164230568" md5Sum="f0622147eb80d17b883905fefc72ebfc" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1373,6 +1385,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
@@ -1589,7 +1603,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b3.sh" newVersion="3.0.2b3" newMediaFileId="linux64" fileSize="167389255" md5Sum="6dd8fd8d13d3bb423b2a7c80765634c1" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b4.sh" newVersion="3.0.2b4" newMediaFileId="linux64" fileSize="167387581" md5Sum="a0bf90bdabfd48a2cb05615aaebac325" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1600,6 +1614,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added Turkish (tur) transliteration dictionary
  * Added 'zoom' control to Composer (advanced)
  * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
  * Reconfigured application package directory structure
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
