@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,18 +39,21 @@ public class BufferWindow extends CommonModuleFrame implements BufferPanelContai
 	
 	private MultiBufferPanel bufferPanel;
 	
-	public static BufferWindow getInstance() {
-		if(_instance == null) {
-			_instance = new BufferWindow();
-			_instance.setShowInWindowMenu(false);
+	public static BufferWindow getBufferWindow() {
+		// returns the currently open BufferWindow or
+		// a new instance
+		Optional<CommonModuleFrame> windowRef = 
+				CommonModuleFrame.getOpenWindows().stream().filter( (w) -> w instanceof BufferWindow ).findAny();
+		if(windowRef.isPresent()) {
+			return (BufferWindow)windowRef.get();
+		} else {
+			return new BufferWindow();
 		}
-		return _instance;
 	}
 	
 	private BufferWindow() {
 		super();
 		setWindowName("Buffers");
-		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		init();
 	}
 	

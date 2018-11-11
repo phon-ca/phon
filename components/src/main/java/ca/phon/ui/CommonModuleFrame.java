@@ -30,7 +30,10 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -75,27 +78,19 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	public static final boolean DEFAULT_MACOS_ENABLE_FULLSCREEN = true;
 
 	/** The list of open module frames */
-	private static ArrayList<CommonModuleFrame> openFrames =
-		new ArrayList<CommonModuleFrame>();
+	private static List<CommonModuleFrame> openFrames = Collections.synchronizedList(new ArrayList<>());
 
 	private static void newWindowCreated(CommonModuleFrame f) {
 		openFrames.add(f);
 	}
 
-	public static ArrayList<CommonModuleFrame> getOpenWindows() {
+	public static List<CommonModuleFrame> getOpenWindows() {
 		return openFrames;
 	}
 
 	private static void removeWindow(CommonModuleFrame f) {
 		if(openFrames.contains(f))
 			openFrames.remove(f);
-
-		/**if(openFrames.size() == 0 && !PhonUtilities.isMacOs()) {
-			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction(
-				"ca.phon.modules.core.OpenProjectController");
-			LoadModule lm = new LoadModule(mi, new HashMap<String, Object>());
-			lm.start();
-		}*/
 	}
 
 	public static CommonModuleFrame getCurrentFrame() {
@@ -170,7 +165,10 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			public void windowClosed(WindowEvent arg0) {
 				removeWindowFromActiveList();
 				CommonModuleFrame.this.removeWindowListener(this);
-		
+				
+				System.out.println(getTitle() + " " + CommonModuleFrame.getOpenWindows().stream()
+						.map( (w) -> w.getTitle() ).collect(Collectors.joining(",")));
+				
 				if(CommonModuleFrame.getOpenWindows().size() == 0) {
 					// exit application
 					try {
@@ -202,6 +200,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 			@Override
 			public void windowOpened(WindowEvent arg0) {
+				newWindowCreated(CommonModuleFrame.this);
 			}
 
 		});
@@ -224,7 +223,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 					PrefHelper.getBoolean(MACOS_ENABLE_FULLSCREEN, DEFAULT_MACOS_ENABLE_FULLSCREEN));
 		}
 
-		newWindowCreated(this);
 	}
 
 	public String getUnsavedChangesTitle() {

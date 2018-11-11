@@ -143,7 +143,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 
 		Runnable onEDT = () -> {
 			if(bufferPanelContainerRef.get() == null) {
-				final BufferWindow bufferWindow = BufferWindow.getInstance();
+				final BufferWindow bufferWindow = BufferWindow.getBufferWindow();
 				if(!bufferWindow.isVisible()) {
 					bufferWindow.setSize(968, 600);
 					bufferWindow.centerWindow();
