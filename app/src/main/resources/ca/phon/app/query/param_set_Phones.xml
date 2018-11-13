@@ -135,26 +135,26 @@
 // Heterosyllabic Clusters
 (\c+[\s\.]\c+)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="11a6eb64240b9ca1b8839275711209d71a3e11a4" name="Tautosyllabic Onsets">
+    <param_set date="2018-11-13T05:09:32.903-03:30" hash="6e83d932141742e1af4a90fe2dc81d028d777cfb" name="Tautosyllabic Onsets">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Tautosyllabic Onsets
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
-(\c:L:O:E&lt;2,&gt;)</param>
+^(\c:L:O:E&lt;2,&gt;) ||
+(?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="63e4a0600eb77b7aa31684da649a89336cc5f669" name="Tautosyllabic Codas">
+    <param_set date="2018-11-13T05:22:28.370-03:30" hash="84b0a6481bbe1e2b000344d1a2894b25771a239c" name="Tautosyllabic Codas">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Tautosyllabic Codas
 // Includes right appendices ':R' and codas ':C'
-(\c:C:R&lt;2,&gt;)</param>
+(\c:C:R&lt;2,&gt;)$ ||
+(\c:C:R&lt;2,&gt;)(?&gt;\s?\c:O)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="4d75c22148a97a335c6eb9c6df4857726df86592" name="Tautosyllabic Consonant Clusters">
+    <param_set date="2018-11-13T05:24:35.035-03:30" hash="e77a974d6c6adab2e6b2610fafbd9317a257ce47" name="Tautosyllabic Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
-        <param id="filters.primary.filter">// Tautosyllabic Consonant Clusters
-// The double pipe operator will combine results of independent expressions
-// Tautosyllabic Onsets
-(\c:L:O:E&lt;2,&gt;) ||
-// Tautosyllabic Codas
-(\c:C:R&lt;2,&gt;)</param>
+        <param id="filters.primary.filter">^(\c:L:O:E&lt;2,&gt;) ||
+(?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;) ||
+(\c:C:R&lt;2,&gt;)$ ||
+(\c:C:R&lt;2,&gt;)(?&gt;\s?\c:O)</param>
     </param_set>
     <param_set date="2018-07-25T10:54:08.672-02:30" hash="3d9f564edbb03075d039c25428a966e421246aff" name="Syllables (short)">
         <param id="filters.searchBy.searchBy">Word</param>
