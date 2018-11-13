@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -118,30 +120,36 @@ public class ParamHistoryManager {
 	}
 	
 	public int size() {
-		return paramHistory.getParamSet().size();
+		synchronized (paramHistory) {
+			return paramHistory.getParamSet().size();
+		}
 	}
 	
 	public int indexOf(String hash) {
-		int retVal = -1;
-		for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
-			if(paramHistory.getParamSet().get(i).getHash().equals(hash)) {
-				retVal = i;
-				break;
+		synchronized(paramHistory) {
+			int retVal = -1;
+			for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
+				if(paramHistory.getParamSet().get(i).getHash().equals(hash)) {
+					retVal = i;
+					break;
+				}
 			}
+			return retVal;
 		}
-		return retVal;
 	}
 	
 	public int indexOfName(String name) {
-		int retVal = -1;
-		for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
-			if(paramHistory.getParamSet().get(i).getName() != null
-					&& paramHistory.getParamSet().get(i).getName().equals(name)) {
-				retVal = i;
-				break;
+		synchronized(paramHistory) {
+			int retVal = -1;
+			for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
+				if(paramHistory.getParamSet().get(i).getName() != null
+						&& paramHistory.getParamSet().get(i).getName().equals(name)) {
+					retVal = i;
+					break;
+				}
 			}
+			return retVal;
 		}
-		return retVal;
 	}
 	
 	public ParamSetType getParamSetByName(String name) {
@@ -166,7 +174,9 @@ public class ParamHistoryManager {
 	}
 	
 	public ParamSetType getParamSet(int idx) {
-		return paramHistory.getParamSet().get(idx);
+		synchronized(paramHistory) {
+			return paramHistory.getParamSet().get(idx);
+		}
 	}
 	
 	public ParamSetType removeParamSet(String hash) {
@@ -178,13 +188,20 @@ public class ParamHistoryManager {
 	}
 	
 	public ParamSetType removeParamSet(int idx) {
-		return paramHistory.getParamSet().remove(idx);
+		ParamSetType retVal = null;
+		synchronized(paramHistory) {
+			retVal = paramHistory.getParamSet().remove(idx);
+		}
+		fireParamSetRemoved(retVal);
+		return retVal;
 	}
 	
 	public List<ParamSetType> getNamedParamSets() {
-		return paramHistory.getParamSet().stream()
-				.filter( (ps) -> ps.getName() != null && ps.getName().trim().length() > 0 )
-				.collect( Collectors.toList() );
+		synchronized(paramHistory) {
+			return paramHistory.getParamSet().stream()
+					.filter( (ps) -> ps.getName() != null && ps.getName().trim().length() > 0 )
+					.collect( Collectors.toList() );
+		}
 	}
 	
 	public ParamSetType nameParamSet(String name, PhonScript script) throws PhonScriptException {
@@ -198,6 +215,8 @@ public class ParamHistoryManager {
 			paramSet = addParamSet(params);
 		}
 		paramSet.setName(name);
+		
+		fireParamSetRenamed(paramSet);
 		
 		return paramSet;
 	}
@@ -214,6 +233,9 @@ public class ParamHistoryManager {
 		if(paramSet == null) return null;
 		
 		paramSet.setName(name);
+		
+		fireParamSetRenamed(paramSet);
+		
 		return paramSet;
 	}
 	
@@ -265,27 +287,31 @@ public class ParamHistoryManager {
 	public ParamSetType addParamSet(ParamSetType paramSet) {
 		final String hash = paramSet.getHash();
 		
-		int idx = -1;
-		for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
-			final ParamSetType ps = paramHistory.getParamSet().get(i);
-			if(ps.getHash().equals(hash)) {
-				idx = i;
-				break;
+		ParamSetType retVal = null;
+		synchronized(paramHistory) {
+			int idx = -1;
+			for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
+				final ParamSetType ps = paramHistory.getParamSet().get(i);
+				if(ps.getHash().equals(hash)) {
+					idx = i;
+					break;
+				}
 			}
+			retVal = (idx >= 0 ? paramHistory.getParamSet().remove(idx) : paramSet);
+			if(idx >= 0) {
+				// update date and parameters
+				// there could be changes which are not included in hash (i.e., separator collapsed state)
+				retVal.setDate(paramSet.getDate());
+				retVal.getParam().clear();
+				for(ParamType param:paramSet.getParam())
+					retVal.getParam().add(param);
+			}
+			
+			paramHistory.getParamSet().add(retVal);
 		}
-		ParamSetType ps = (idx >= 0 ? paramHistory.getParamSet().remove(idx) : paramSet);
-		if(idx >= 0) {
-			// update date and parameters
-			// there could be changes which are not included in hash (i.e., separator collapsed state)
-			ps.setDate(paramSet.getDate());
-			ps.getParam().clear();
-			for(ParamType param:paramSet.getParam())
-				ps.getParam().add(param);
-		}
-		
-		paramHistory.getParamSet().add(ps);
-		
-		return ps;
+		if(retVal != null)
+			fireParamSetAdded(retVal);
+		return retVal;
 	}
 	
 	public void save(File paramHistoryFile) throws IOException {
@@ -293,17 +319,30 @@ public class ParamHistoryManager {
 	}
 	
 	public void removeAll() {
-		getParamHistory().getParamSet().clear();
+		List<ParamSetType> paramSets = new ArrayList<>();
+		synchronized(paramHistory) {
+			paramSets = new ArrayList<>(paramHistory.getParamSet());
+			paramHistory.getParamSet().clear();
+		}
+		if(paramSets.size() > 0) {
+			fireParamHistoryEvent(new ParamHistoryEvent(EventType.PARAM_SET_REMOVED, paramSets));
+		}
 	}
 	
 	public List<ParamSetType> removeAllUnnamedParamSets() {
-		final List<ParamSetType> retVal = 
-			getParamHistory().getParamSet().stream()
-				.filter( (ps) -> ps.name == null || ps.name.trim().length() == 0 )
-				.collect( Collectors.toList() );
-		
-		getParamHistory().getParamSet().removeAll(retVal);
-		
+		List<ParamSetType> retVal = new ArrayList<>();
+		synchronized(paramHistory) {
+			retVal = 
+				getParamHistory().getParamSet().stream()
+					.filter( (ps) -> ps.name == null || ps.name.trim().length() == 0 )
+					.collect( Collectors.toList() );
+			
+			getParamHistory().getParamSet().removeAll(retVal);
+			
+		}
+		if(retVal.size() > 0) {
+			fireParamHistoryEvent(new ParamHistoryEvent(EventType.PARAM_SET_REMOVED, retVal));
+		}
 		return retVal;
 	}
 	
@@ -314,24 +353,109 @@ public class ParamHistoryManager {
 	 * @param script
 	 */
 	public void fixHashes(PhonScript script) throws PhonScriptException {
-		for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
-			final ParamSetType ps = paramHistory.getParamSet().get(i);
-			
-			script.resetContext();
-			
-			final ScriptParameters scriptParams = 
-					script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
-			final Map<String, Object> paramMap = new HashMap<>();
-			for(int j = 0; j < ps.getParam().size(); j++) {
-				final ParamType param = ps.getParam().get(j);
-				paramMap.put(param.getId(), param.getValue());
+		synchronized(paramHistory) {
+			for(int i = 0; i < paramHistory.getParamSet().size(); i++) {
+				final ParamSetType ps = paramHistory.getParamSet().get(i);
+				
+				script.resetContext();
+				
+				final ScriptParameters scriptParams = 
+						script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
+				final Map<String, Object> paramMap = new HashMap<>();
+				for(int j = 0; j < ps.getParam().size(); j++) {
+					final ParamType param = ps.getParam().get(j);
+					paramMap.put(param.getId(), param.getValue());
+				}
+				
+				scriptParams.loadFromMap(paramMap);
+				
+				// update hash
+				ps.setHash(scriptParams.getHashString());
 			}
-			
-			scriptParams.loadFromMap(paramMap);
-			
-			// update hash
-			ps.setHash(scriptParams.getHashString());
 		}
+	}
+	
+	/* Listeners */
+	private final List<ParamHistoryListener> listeners = new ArrayList<>();
+	
+	public void fireParamSetAdded(ParamSetType paramSet) {
+		fireParamHistoryEvent(new ParamHistoryEvent(EventType.PARAM_SET_ADDED, paramSet));
+	}
+	
+	public void fireParamSetRemoved(ParamSetType paramSet) {
+		fireParamHistoryEvent(new ParamHistoryEvent(EventType.PARAM_SET_REMOVED, paramSet));
+	}
+	
+	public void fireParamSetRenamed(ParamSetType paramSet) {
+		fireParamHistoryEvent(new ParamHistoryEvent(EventType.PARAM_SET_RENAMED, paramSet));
+	}
+	
+	public void fireParamHistoryEvent(ParamHistoryEvent event) {
+		synchronized(listeners) {
+			for(ParamHistoryListener listener:listeners) {
+				listener.paramHistoryEvent(event);
+			}
+		}
+	}
+	
+	public void addParamHistoryListener(ParamHistoryListener listener) {
+		synchronized(listeners) {
+			listeners.add(listener);
+		}
+	}
+	
+	public void removeParamHistoryListener(ParamHistoryListener listener) {
+		synchronized (listeners) {
+			listeners.remove(listener);
+		}
+	}
+	
+	/**
+	 * Event types
+	 */
+	public static enum EventType {
+		PARAM_SET_ADDED,
+		PARAM_SET_REMOVED,
+		PARAM_SET_RENAMED;
+	}
+	
+	public static class ParamHistoryEvent {
+		
+		private EventType eventType;
+		
+		private List<ParamSetType> paramSets;
+		
+		public ParamHistoryEvent(EventType eventType, ParamSetType paramSet) {
+			this(eventType, Collections.singletonList(paramSet));
+		}
+		
+		public ParamHistoryEvent(EventType eventType, List<ParamSetType> paramSets) {
+			this.eventType = eventType;
+			this.paramSets = paramSets;
+		}
+
+		public EventType getEventType() {
+			return eventType;
+		}
+
+		public void setEventType(EventType eventType) {
+			this.eventType = eventType;
+		}
+
+		public List<ParamSetType> getParamSets() {
+			return paramSets;
+		}
+
+		public void setParamSets(List<ParamSetType> paramSets) {
+			this.paramSets = paramSets;
+		}
+		
+	}
+	
+	public static interface ParamHistoryListener {
+		
+		public void paramHistoryEvent(ParamHistoryEvent event);
+		
 	}
 	
 }

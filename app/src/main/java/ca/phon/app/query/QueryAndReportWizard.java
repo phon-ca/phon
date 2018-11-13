@@ -172,6 +172,8 @@ public class QueryAndReportWizard extends NodeWizard {
 	private CountDownLatch queryLatch;
 	private QueryExecutionHistory previousExeuction;
 	
+	private int windowIdx = 0;
+	
 	public QueryAndReportWizard(Project project, QueryScript queryScript) {
 		// init with 'dummy' processor and graph as these will be created 0during the wizard
 		super("Query : " + queryScript.getExtension(QueryName.class).getName(), new Processor(new OpGraph()), new OpGraph());
@@ -199,6 +201,23 @@ public class QueryAndReportWizard extends NodeWizard {
 		gotoStep(0);
 	}
 	
+	private QueryAndReportWizard(int idx, Project project, QueryScript queryScript, QueryHistoryManager queryHistoryManager) {
+		// init with 'dummy' processor and graph as these will be created 0during the wizard
+		super("(" + idx + ") " + "Query : " + queryScript.getExtension(QueryName.class).getName() + " (" + idx + ")", new Processor(new OpGraph()), new OpGraph());
+		
+		this.windowIdx = idx;
+		this.project = project;
+		putExtension(Project.class, project);
+		
+		this.queryScript = queryScript;
+		this.queryHistoryManager = queryHistoryManager;
+		
+		// setup UI
+		init();
+		
+		gotoStep(0);
+	}
+	
 	private void init() {
 		
 		queryStep = createQueryStep();
@@ -214,7 +233,8 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		reportDataStep.setPrevStep(1);
 		
-		setWindowName("Query : " + queryScript.getExtension(QueryName.class).getName() + " (No results)");
+		setWindowName( (windowIdx > 0 ? "(" + windowIdx + ") " : "") +
+				"Query : " + queryScript.getExtension(QueryName.class).getName() + " (No results)");
 	}
 	
 	@Override
@@ -261,6 +281,9 @@ public class QueryAndReportWizard extends NodeWizard {
 						saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
 						final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 						saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
+						
+						final PhonUIAction duplicateAct = new PhonUIAction(QueryAndReportWizard.this, "onDuplicateQueryWizard");
+						duplicateAct.putValue(PhonUIAction.NAME, "New query window");
 						
 						final PhonUIAction discardResultsAct = new PhonUIAction(QueryAndReportWizard.this, "discardResults");
 						discardResultsAct.putValue(PhonUIAction.NAME, "Discard results");
@@ -326,6 +349,8 @@ public class QueryAndReportWizard extends NodeWizard {
 						final DeleteAllUnnamedEntriesAction deleteUnnamedEntriesAct = new DeleteAllUnnamedEntriesAction(QueryAndReportWizard.this);
 						final DeleteQueryHistoryAction deleteAllEntriesAct = new DeleteQueryHistoryAction(QueryAndReportWizard.this);
 						
+						menu.add(new JMenuItem(duplicateAct), idx++);
+						menu.insertSeparator(idx++);
 						menu.add(new JMenuItem(saveSettingsAct), idx++);
 						menu.add(new JMenuItem(resetQueryAct), idx++);
 						menu.add(new JMenuItem(runAct), idx++);
@@ -436,7 +461,8 @@ public class QueryAndReportWizard extends NodeWizard {
 				final Object selected = queryRunnerBox.getSelectedItem();
 				if(selected != null) {
 					queryResultsLayout.show(queryResultsPanel.getContentContainer(), selected.toString());
-					setWindowName("Query : " + queryScript.getExtension(QueryName.class).getName() + " (" + selected.toString() + ")");
+					setWindowName( (windowIdx > 0 ? "(" + windowIdx + ") " : "") +
+							"Query : " + queryScript.getExtension(QueryName.class).getName() + " (" + selected.toString() + ")");
 					
 					discardResultsButton.setEnabled(true);
 					final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
@@ -661,6 +687,28 @@ public class QueryAndReportWizard extends NodeWizard {
 		// wait for dialog to finish...
 		
 		queryHistoryPanel.updateLabelFromCurrentHash();
+	}
+	
+	public void onDuplicateQueryWizard() {
+		int wizardIdx = this.windowIdx;
+		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+			if(cmf instanceof QueryAndReportWizard && cmf != this) {
+				QueryAndReportWizard qw = (QueryAndReportWizard)cmf;
+				if(qw.getQueryScript().getExtension(QueryName.class) == getQueryScript().getExtension(QueryName.class)) {
+					wizardIdx = Math.max(wizardIdx, qw.windowIdx);
+				}
+			}
+		}
+
+		// create a new instance of the query script
+		final QueryScript qs = new QueryScript(getQueryScript().getScript());
+		qs.putExtension(QueryName.class, getQueryScript().getExtension(QueryName.class));
+		
+		QueryAndReportWizard wizard = new QueryAndReportWizard(wizardIdx+1, project, qs, queryHistoryManager);
+		wizard.pack();
+		wizard.setSize(getSize());
+		wizard.cascadeWindow(this);
+		wizard.setVisible(true);
 	}
 	
 	private WizardStep createReportConfigStep() {

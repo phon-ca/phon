@@ -88,8 +88,11 @@ public class QueryHistoryPanel extends JPanel {
 		this.queryHistoryManager = queryHistoryManager;
 		this.scriptPanelRef = new WeakReference<ScriptPanel>(scriptPanel);
 		
+		
 		loadStockQueries();
 		init();
+		
+		this.queryHistoryManager.addParamHistoryListener( (e) -> updateLabelFromCurrentHash() );
 	}
 	
 	private void loadStockQueries() {
