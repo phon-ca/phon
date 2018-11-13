@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="18200efb">
+            <graph id="2ae2e653">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -167,6 +167,67 @@ function setup_params(params) {
                 <oga:meta x="1007" y="16"/>
             </extensions>
         </node>
+        <node id="4e852bf3" name="Add Missing Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <input name="table" optional="false"/>
+            <input name="selectedSessions" optional="false"/>
+            <output name="outputTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script">
+                        <![CDATA[function init(inputs, outputs) {
+	inputs.add("table", "");
+	inputs.add("selectedSessions", "");
+
+	outputs.add("outputTable", "", false, DefaultTableDataSource);
+}
+
+function run(context) {
+	var table = context.get("table");
+	var selectedSessions = context.get("selectedSessions");
+
+	var outputTable = new DefaultTableDataSource();
+	var colIdx = 0;
+	while( colIdx < table.getColumnCount() && !(table.getColumnTitle(colIdx).equals(selectedSessions.get(0).toString())) ) {
+		outputTable.setColumnTitle(colIdx, table.getColumnTitle(colIdx));
+		++colIdx;
+	}
+	var colOffset = colIdx;
+
+	if(table.getColumnCount() - colOffset == selectedSessions.size()) {
+		outputTable = table;
+	} else {
+		for(var i = 0; i < selectedSessions.size(); i++) {
+			var sp = selectedSessions.get(i);
+			outputTable.setColumnTitle(colIdx++, sp.toString());
+		}
+	
+		for(var i = 0; i < table.getRowCount(); i++) {
+			var tableRowData = table.getRow(i);
+			var rowData = new Array();
+			for(var j = 0; j < colOffset; j++) {
+				rowData[j] = tableRowData[j];
+			}
+	
+			for(var k = 0; k < selectedSessions.size(); k++) {
+				var sp = selectedSessions.get(k);
+				var sessionVal = table.getValueAt(i, sp.toString());
+				if(sessionVal == null) {
+					sessionVal = 0;
+				}
+				rowData[colOffset+k] = sessionVal;
+			}
+	
+			outputTable.addRow(rowData);
+		}
+	}
+	context.put("outputTable", outputTable);
+}
+]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="603" y="217"/>
+            </extensions>
+        </node>
         <node id="2e06273e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
@@ -192,14 +253,16 @@ function setup_params(params) {
         <link dest="c41947665b034a0e" destField="table" source="c2c36aa400ff4f50" sourceField="table"/>
         <link dest="87e30b6166544cc8" destField="project" source="5354ffb7" sourceField="obj"/>
         <link dest="87e30b6166544cc8" destField="queryId" source="61300356" sourceField="obj"/>
-        <link dest="2e06273e" destField="table" source="1271664e64514bf6" sourceField="table"/>
         <link dest="8f217ce063e147ac" destField="parameters" source="3e35caf8" sourceField="parameters"/>
         <link dest="87e30b6166544cc8" destField="selectedResults" source="eb703f69b3c4634" sourceField="obj"/>
         <link dest="dea1829" destField="root" source="2e06273e" sourceField="section"/>
         <link dest="2e06273e" destField="sectionName" source="8f217ce063e147ac" sourceField="value"/>
+        <link dest="2e06273e" destField="table" source="4e852bf3" sourceField="outputTable"/>
+        <link dest="4e852bf3" destField="selectedSessions" source="eb703f69b3c4634" sourceField="obj"/>
+        <link dest="4e852bf3" destField="table" source="1271664e64514bf6" sourceField="table"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate (Inventory over time)">
+                <opqry:info format="html" title="Aggregate (longitudinal inventory)">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c41947665b034a0e" showAsStep="true">
