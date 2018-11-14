@@ -152,6 +152,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private JButton showSessionsButton;
 	private JButton saveQuerySettingsButton;
 	private JButton resetQueryButton;
+	private JButton duplicateQueryButton;
 	private JButton runQueryButton;
 	
 	private JComboBox<String> queryRunnerBox;
@@ -283,7 +284,8 @@ public class QueryAndReportWizard extends NodeWizard {
 						saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 						
 						final PhonUIAction duplicateAct = new PhonUIAction(QueryAndReportWizard.this, "onDuplicateQueryWizard");
-						duplicateAct.putValue(PhonUIAction.NAME, "New query window");
+						duplicateAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
+						duplicateAct.putValue(PhonUIAction.NAME, "New window");
 						
 						final PhonUIAction discardResultsAct = new PhonUIAction(QueryAndReportWizard.this, "discardResults");
 						discardResultsAct.putValue(PhonUIAction.NAME, "Discard results");
@@ -531,6 +533,13 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryPanel.getContentContainer().setLayout(new BorderLayout());
 		queryPanel.getContentContainer().add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
 		
+		final PhonUIAction duplicateQueryAct = new PhonUIAction(this, "onDuplicateQueryWizard");
+		duplicateQueryAct.putValue(PhonUIAction.NAME, "New window");
+		duplicateQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open a new query wizard");
+		duplicateQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
+		duplicateQueryButton = new JButton(duplicateQueryAct);
+		duplicateQueryButton.setOpaque(false);
+		
 		final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters", queryPanel);
 		resetQueryAct.putValue(PhonUIAction.NAME, "Clear query");
 		resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/parameters-black", IconSize.SMALL));
@@ -552,6 +561,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryPanel.getContentContainer().add(queryHistoryPanel, BorderLayout.NORTH);
 		
 		final JComponent buttonBar = new JPanel(new HorizontalLayout());
+		buttonBar.add(duplicateQueryButton);
 		buttonBar.add(resetQueryButton);
 		buttonBar.add(saveQuerySettingsButton);
 		buttonBar.add(runQueryButton);
