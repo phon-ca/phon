@@ -134,6 +134,12 @@ public class QueryAndReportWizard extends NodeWizard {
 	private String prevQueryReportFolder = 
 			PrefHelper.get(PREVIOUS_REPORT_FOLDER, DEFAULT_REPORT_FOLDER);
 	
+	public final static String STOCK_REPORT_HASH_FILE = QueryAndReportWizard.class.getName() + ".stockReportHashFile";
+	public final static String DEFAULT_STOCK_REPORT_HASH_FILE = 
+			PrefHelper.getUserDataFolder() + File.separator + "reporthash.properties";
+	private String stockReportHashFile = 
+			PrefHelper.get(STOCK_REPORT_HASH_FILE, DEFAULT_STOCK_REPORT_HASH_FILE);
+	
 	private WizardStep queryStep;
 	private JSplitPane splitPane;
 	

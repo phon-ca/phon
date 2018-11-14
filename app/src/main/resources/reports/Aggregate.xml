@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="2ae2e653">
+            <graph id="1837ffb">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -167,14 +167,71 @@ function setup_params(params) {
                 <oga:meta x="1007" y="16"/>
             </extensions>
         </node>
-        <node id="4e852bf3" name="Add Missing Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-            <input name="table" optional="false"/>
-            <input name="selectedSessions" optional="false"/>
-            <output name="outputTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+        <node id="5bd4e982" name="Is Group by Session?" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <input name="inventorySettings" optional="false"/>
+            <output name="isGroupBySession" type="java.lang.Boolean"/>
             <extensions>
                 <oga:settings>
                     <oga:property key="__script">
                         <![CDATA[function init(inputs, outputs) {
+	inputs.add("inventorySettings", "");
+
+	outputs.add("isGroupBySession", "", false, java.lang.Boolean);
+}
+
+function run(context) {
+	var inventorySettings = context.get("inventorySettings");
+	
+	var isGroupBySession = 
+		inventorySettings.getGroupBy().getName().equals("Session");
+	context.put("isGroupBySession", isGroupBySession);
+}
+]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="673" y="244"/>
+            </extensions>
+        </node>
+        <ogcn:macro id="188591ef" name="Add Missing Columns and Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="6d0b7ce0">
+                <node id="1f8d4516" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[java.lang.String]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="35dad2ef" name="selectedSessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[java.util.ArrayList]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="176"/>
+                    </extensions>
+                </node>
+                <node id="5385017f" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.TableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="317"/>
+                    </extensions>
+                </node>
+                <node id="4e852bf3" name="Add Missing Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                    <input name="table" optional="false"/>
+                    <input name="selectedSessions" optional="false"/>
+                    <output name="outputTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="__script">
+                                <![CDATA[function init(inputs, outputs) {
 	inputs.add("table", "");
 	inputs.add("selectedSessions", "");
 
@@ -223,30 +280,99 @@ function run(context) {
 	context.put("outputTable", outputTable);
 }
 ]]>
-                    </oga:property>
-                </oga:settings>
-                <oga:meta x="603" y="217"/>
-            </extensions>
-        </node>
-        <node id="2e06273e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="212" y="176"/>
+                    </extensions>
+                </node>
+                <node id="2e06273e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
+                                <![CDATA[true]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                        </oga:settings>
+                        <oga:meta x="212" y="15">
+                            <oga:default for="sectionName" type="java.lang.String">Aggregate</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <node id="dea1829" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="461" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="2e06273e" destField="table" source="4e852bf3" sourceField="outputTable"/>
+                <link dest="2e06273e" destField="sectionName" source="1f8d4516" sourceField="obj"/>
+                <link dest="dea1829" destField="root" source="2e06273e" sourceField="section"/>
+                <link dest="4e852bf3" destField="selectedSessions" source="35dad2ef" sourceField="obj"/>
+                <link dest="4e852bf3" destField="table" source="5385017f" sourceField="obj"/>
+            </graph>
+            <ogcn:published_input field="obj" name="sectionName" ref="1f8d4516"/>
+            <ogcn:published_input field="obj" name="selectedSessions" ref="35dad2ef"/>
+            <ogcn:published_input field="obj" name="table" ref="5385017f"/>
             <extensions>
-                <oga:settings>
-                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                </oga:settings>
-                <oga:meta x="599" y="525">
-                    <oga:default for="sectionName" type="java.lang.String">Aggregate</oga:default>
-                </oga:meta>
+                <oga:meta x="1022" y="250"/>
             </extensions>
-        </node>
-        <node id="dea1829" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+        </ogcn:macro>
+        <node id="12841e12" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
             <extensions>
-                <oga:settings/>
-                <oga:meta x="845" y="525"/>
+                <oga:meta x="779" y="426"/>
             </extensions>
         </node>
+        <ogcn:macro id="ab5736d740c447c4" name="Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="59897988">
+                <node id="ef178149f4714517" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[java.lang.String]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15"/>
+                    </extensions>
+                </node>
+                <node id="3977446dae2d42b8" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[ca.phon.query.report.datasource.TableDataSource]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="22" y="191"/>
+                    </extensions>
+                </node>
+                <node id="1268ec10316d45df" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
+                                <![CDATA[true]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                        </oga:settings>
+                        <oga:meta x="212" y="15">
+                            <oga:default for="sectionName" type="java.lang.String">Aggregate</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <node id="c5321b25c2064024" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+                    <extensions>
+                        <oga:settings/>
+                        <oga:meta x="461" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="1268ec10316d45df" destField="sectionName" source="ef178149f4714517" sourceField="obj"/>
+                <link dest="c5321b25c2064024" destField="root" source="1268ec10316d45df" sourceField="section"/>
+                <link dest="1268ec10316d45df" destField="table" source="3977446dae2d42b8" sourceField="obj"/>
+            </graph>
+            <ogcn:published_input field="obj" name="sectionName" ref="ef178149f4714517"/>
+            <ogcn:published_input field="obj" name="table" ref="3977446dae2d42b8"/>
+            <extensions>
+                <oga:meta x="1016" y="414"/>
+            </extensions>
+        </ogcn:macro>
         <link dest="1271664e64514bf6" destField="table" source="c41947665b034a0e" sourceField="table"/>
         <link dest="c2c36aa400ff4f50" destField="project" source="87e30b6166544cc8" sourceField="project"/>
         <link dest="c2c36aa400ff4f50" destField="results" source="87e30b6166544cc8" sourceField="result sets"/>
@@ -255,14 +381,18 @@ function run(context) {
         <link dest="87e30b6166544cc8" destField="queryId" source="61300356" sourceField="obj"/>
         <link dest="8f217ce063e147ac" destField="parameters" source="3e35caf8" sourceField="parameters"/>
         <link dest="87e30b6166544cc8" destField="selectedResults" source="eb703f69b3c4634" sourceField="obj"/>
-        <link dest="dea1829" destField="root" source="2e06273e" sourceField="section"/>
-        <link dest="2e06273e" destField="sectionName" source="8f217ce063e147ac" sourceField="value"/>
-        <link dest="2e06273e" destField="table" source="4e852bf3" sourceField="outputTable"/>
-        <link dest="4e852bf3" destField="selectedSessions" source="eb703f69b3c4634" sourceField="obj"/>
-        <link dest="4e852bf3" destField="table" source="1271664e64514bf6" sourceField="table"/>
+        <link dest="188591ef" destField="selectedSessions" source="eb703f69b3c4634" sourceField="obj"/>
+        <link dest="188591ef" destField="sectionName" source="8f217ce063e147ac" sourceField="value"/>
+        <link dest="188591ef" destField="table" source="1271664e64514bf6" sourceField="table"/>
+        <link dest="188591ef" destField="enabled" source="5bd4e982" sourceField="isGroupBySession"/>
+        <link dest="12841e12" destField="x" source="5bd4e982" sourceField="isGroupBySession"/>
+        <link dest="ab5736d740c447c4" destField="enabled" source="12841e12" sourceField="result"/>
+        <link dest="ab5736d740c447c4" destField="table" source="1271664e64514bf6" sourceField="table"/>
+        <link dest="ab5736d740c447c4" destField="sectionName" source="8f217ce063e147ac" sourceField="value"/>
+        <link dest="5bd4e982" destField="inventorySettings" source="c41947665b034a0e" sourceField="settings"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Aggregate (longitudinal inventory)">
+                <opqry:info format="html" title="Aggregate">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="c41947665b034a0e" showAsStep="true">

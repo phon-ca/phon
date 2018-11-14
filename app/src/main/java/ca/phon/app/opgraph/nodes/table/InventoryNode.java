@@ -29,6 +29,7 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
+import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
@@ -46,10 +47,14 @@ import ca.phon.query.report.datasource.TableDataSource;
 public class InventoryNode extends TableOpNode implements NodeSettings {
 
 	private InventorySettingsPanel settingsPanel = null;
+	
+	private OutputField settingsOutput = new OutputField("settings", "Inventory settings", true, InventorySettings.class);
 
 	public InventoryNode() {
 		super();
 
+		putField(settingsOutput);
+		
 		final InventorySettings settings = new InventorySettings();
 		putExtension(InventorySettings.class, settings);
 		putExtension(NodeSettings.class, this);
@@ -151,6 +156,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				automaticConfiguration(settings, context, r);
 			}
 		}
+		context.put(settingsOutput, settings);
 		
 		
 		// setup options based on global inputs
