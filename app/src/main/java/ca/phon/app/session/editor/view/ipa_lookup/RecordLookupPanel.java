@@ -148,7 +148,7 @@ public class RecordLookupPanel extends JPanel {
 
 		ipaTargetBox = new JCheckBox(SystemTierType.IPATarget.getName());
 		ipaTargetBox.setOpaque(false);
-		ipaTargetBox.setSelected(false);
+		ipaTargetBox.setSelected(true);
 
 		ipaActualBox = new JCheckBox(SystemTierType.IPAActual.getName());
 		ipaActualBox.setOpaque(false);
