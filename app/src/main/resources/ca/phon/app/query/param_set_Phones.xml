@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<param_history xmlns="https://www.phon.ca/param_history" script="Phones" hash="b1f9038d9995179d95a8cd80e1efa17eb48b4580">
+<param_history xmlns="https://www.phon.ca/param_history" script="Phones" hash="a29c5d856c2661882ea3c62d458fe0950f00f20a">
     <param_set date="2018-07-19T16:03:04.265-02:30" hash="fde8cc01a95d2ee3e9465808943e8b603f310879" name="Any Vowel">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\v</param>
@@ -135,14 +135,14 @@
 // Heterosyllabic Clusters
 (\c+[\s\.]\c+)</param>
     </param_set>
-    <param_set date="2018-11-13T05:09:32.903-03:30" hash="6e83d932141742e1af4a90fe2dc81d028d777cfb" name="Syllable-initial Clusters">
+    <param_set date="2018-11-13T05:09:32.903-03:30" hash="cf7f8e8717b694bba0f7e819ee41bda3554fa4a6" name="Syllable-initial Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllable-initial Clusters
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
 ^(\c:L:O:E&lt;2,&gt;) ||
 (?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;)</param>
     </param_set>
-    <param_set date="2018-11-13T05:22:28.370-03:30" hash="84b0a6481bbe1e2b000344d1a2894b25771a239c" name="Syllable-final Clusters">
+    <param_set date="2018-11-13T05:22:28.370-03:30" hash="a8d9c56917398e0e71b343cdb422e41c76e4d1e5" name="Syllable-final Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllable-final Clusters
 // Includes right appendices ':R' and codas ':C'
