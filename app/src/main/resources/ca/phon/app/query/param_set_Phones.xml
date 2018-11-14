@@ -135,16 +135,16 @@
 // Heterosyllabic Clusters
 (\c+[\s\.]\c+)</param>
     </param_set>
-    <param_set date="2018-11-13T05:09:32.903-03:30" hash="6e83d932141742e1af4a90fe2dc81d028d777cfb" name="Tautosyllabic Onsets">
+    <param_set date="2018-11-13T05:09:32.903-03:30" hash="6e83d932141742e1af4a90fe2dc81d028d777cfb" name="Syllable-initial Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
-        <param id="filters.primary.filter">// Tautosyllabic Onsets
+        <param id="filters.primary.filter">// Syllable-initial Clusters
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
 ^(\c:L:O:E&lt;2,&gt;) ||
 (?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;)</param>
     </param_set>
-    <param_set date="2018-11-13T05:22:28.370-03:30" hash="84b0a6481bbe1e2b000344d1a2894b25771a239c" name="Tautosyllabic Codas">
+    <param_set date="2018-11-13T05:22:28.370-03:30" hash="84b0a6481bbe1e2b000344d1a2894b25771a239c" name="Syllable-final Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
-        <param id="filters.primary.filter">// Tautosyllabic Codas
+        <param id="filters.primary.filter">// Syllable-final Clusters
 // Includes right appendices ':R' and codas ':C'
 (\c:C:R&lt;2,&gt;)$ ||
 (\c:C:R&lt;2,&gt;)(?&gt;\s?\c:O)</param>

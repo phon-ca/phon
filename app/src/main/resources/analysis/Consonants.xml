@@ -75,8 +75,8 @@ var clusterTypeParamInfo = {
 	"labels": [ "Singleton Onsets",
 			 "Singleton Codas",
 			 "Singleton OEHS",
-			 "Tautosyllabic Onsets (including appendices)",
-			 "Tautosyllabic Codas (including appendices)",
+			 "Syllable-initial Clusters (including appendices)",
+			 "Syllable-final Clusters (including appendices)",
 			 "Heterosyllabic clusters" ], 
 	"desc": "Cluster types",
 	"defs": [ true, true, true, true, true, true ],
@@ -954,7 +954,7 @@ function getRowValue(table, row) {
                         <oga:meta x="822" y="350"/>
                     </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="857480a7288e4fbc" name="Tautosyllabic Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
+                <ogcn:macro id="857480a7288e4fbc" name="Syllable-initial Clusters" type="ca.phon.opgraph.nodes.general.MacroNode">
                     <graph id="3e04337e">
                         <node id="f40a5231945a4e9a" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
@@ -986,7 +986,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="497"/>
                             </extensions>
                         </node>
-                        <opqry:queryNode id="37f8400f2dff4e13" name="Query : Phones (Tautosyllabic Onsets)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                        <opqry:queryNode id="37f8400f2dff4e13" name="Query : Phones (Syllable-initial Clusters)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
                             <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-11-13T06:41:58.274-03:30" name="Phones" uuid="dea176f5-027a-4f11-965f-86707b934d5a">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
@@ -995,7 +995,7 @@ function getRowValue(table, row) {
                                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                                     <param id="filters.groupPattern.filterType">Plain text</param>
                                     <param id="filters.groupTiers.tiers">Target Syllabification, Actual Syllabification</param>
-                                    <param id="filters.primary.filter">// Tautosyllabic Onsets
+                                    <param id="filters.primary.filter">// Syllable-initial Clusters
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
 ^(\c:L:O:E&lt;2,&gt;) ||
 (?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;)</param>
@@ -1044,7 +1044,7 @@ params = {label, "Add a new column to the input table using javascript.", "<html
 */
 
 function getRowValue(table, row) {
-	return new String("Tautosyllabic Onsets");
+	return new String("Syllable-initial Clusters");
 }
 ]]>
                                     </oga:property>
@@ -1078,7 +1078,7 @@ function getRowValue(table, row) {
                         <oga:meta x="823" y="591"/>
                     </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="b5c3865a4de442d5" name="Tautosyllabic Codas" type="ca.phon.opgraph.nodes.general.MacroNode">
+                <ogcn:macro id="b5c3865a4de442d5" name="Syllable-final Clusters" type="ca.phon.opgraph.nodes.general.MacroNode">
                     <graph id="60f7e07b">
                         <node id="18af455ca4624ec8" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
@@ -1110,7 +1110,7 @@ function getRowValue(table, row) {
                                 <oga:meta x="15" y="497"/>
                             </extensions>
                         </node>
-                        <opqry:queryNode id="16c5b91e73c94ed3" name="Query : Phones (Tautosyllabic Codas)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+                        <opqry:queryNode id="16c5b91e73c94ed3" name="Query : Phones (Syllable-final Clusters)" type="ca.phon.app.opgraph.nodes.query.QueryNode">
                             <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-11-13T06:41:58.288-03:30" name="Phones" uuid="44f0efba-24d2-4e69-80da-7ee9109d26d1">
                                 <script>
                                     <url ref="Phones" rel="stock"/>
@@ -1119,7 +1119,7 @@ function getRowValue(table, row) {
                                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                                     <param id="filters.groupPattern.filterType">Plain text</param>
                                     <param id="filters.groupTiers.tiers">Target Syllabification, Actual Syllabification</param>
-                                    <param id="filters.primary.filter">// Tautosyllabic Codas
+                                    <param id="filters.primary.filter">// Syllable-final Clusters
 // Includes right appendices ':R' and codas ':C'
 (\c:C:R&lt;2,&gt;)$ ||
 (\c:C:R&lt;2,&gt;)(?&gt;\s?\c:O)</param>
@@ -1168,7 +1168,7 @@ params = {label, "Add a new column to the input table using javascript.", "<html
 */
 
 function getRowValue(table, row) {
-	return new String("Tautosyllabic Codas");
+	return new String("Syllable-final Clusters");
 }
 ]]>
                                     </oga:property>
@@ -1546,7 +1546,7 @@ function getRowValue(table, row) {
                         <oga:meta x="69" y="586"/>
                     </extensions>
                 </node>
-                <node id="fbe1c1d254134d52" name="Tautosyllabic Onsets Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="fbe1c1d254134d52" name="Syllable-initial Clusters Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1556,7 +1556,7 @@ function getRowValue(table, row) {
                         <oga:meta x="69" y="687"/>
                     </extensions>
                 </node>
-                <node id="2032eb06ac4c47ef" name="Tautosyllabic Codas Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="2032eb06ac4c47ef" name="Syllable-final Clusters Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
