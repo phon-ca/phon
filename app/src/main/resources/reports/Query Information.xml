@@ -73,7 +73,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="3940ba9741044933" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3fc4dd76">
+            <graph id="5bfe092a">
                 <node id="64b8397ffe9049cf" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -125,7 +125,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="a71911e6a705459c" name="Load Query Script" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="233d06c8">
+            <graph id="6fc76212">
                 <node id="50dc926ad1674114" name="Query" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -263,7 +263,7 @@ function setup_params(params) {
             <extensions>
                 <oga:settings>
                     <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text">
-                        <![CDATA[**Query Name:** %s
+                        <![CDATA[<b>Query Name:</b> %s
 
 %s
 ]]>
