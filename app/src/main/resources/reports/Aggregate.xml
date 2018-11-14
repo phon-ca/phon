@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1837ffb">
+            <graph id="155c68b2">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -124,7 +124,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="4e27bffc6a634d9e"/>
             <ogcn:published_output field="value" name="value" ref="a2e71a7ce914ac5"/>
             <extensions>
-                <oga:meta x="381" y="525"/>
+                <oga:meta x="362" y="522"/>
             </extensions>
         </ogcn:macro>
         <node id="c2c36aa400ff4f50" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -193,7 +193,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="188591ef" name="Add Missing Columns and Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6d0b7ce0">
+            <graph id="ad32545">
                 <node id="1f8d4516" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -314,16 +314,16 @@ function run(context) {
             <ogcn:published_input field="obj" name="selectedSessions" ref="35dad2ef"/>
             <ogcn:published_input field="obj" name="table" ref="5385017f"/>
             <extensions>
-                <oga:meta x="1022" y="250"/>
+                <oga:meta x="1016" y="244"/>
             </extensions>
         </ogcn:macro>
         <node id="12841e12" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
             <extensions>
-                <oga:meta x="779" y="426"/>
+                <oga:meta x="794" y="414"/>
             </extensions>
         </node>
         <ogcn:macro id="ab5736d740c447c4" name="Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="59897988">
+            <graph id="133205ab">
                 <node id="ef178149f4714517" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>

@@ -26,17 +26,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
@@ -139,6 +144,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			PrefHelper.getUserDataFolder() + File.separator + "reporthash.properties";
 	private String stockReportHashFile = 
 			PrefHelper.get(STOCK_REPORT_HASH_FILE, DEFAULT_STOCK_REPORT_HASH_FILE);
+	private final static String INTERNAL_REPORT_HASH = "reports/reports.hash";
 	
 	private WizardStep queryStep;
 	private JSplitPane splitPane;
@@ -644,7 +650,12 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		final URL defaultReportURL = getClass().getResource("default_report.xml");
 		
-		if(prevReportFile.exists()) {
+		boolean reportHashesUnchanged = checkStockQueryReportHash();
+		if(prevReportFile.exists() && !reportHashesUnchanged) {
+			prevReportFile.delete();
+		}
+		
+		if(prevReportFile.exists() && reportHashesUnchanged) {
 			try {
 				final Consumer<SimpleEditorPanel.DocumentError> errHandler = (err) -> {
 					try {
@@ -659,10 +670,66 @@ public class QueryAndReportWizard extends NodeWizard {
 				reportEditor.addDocument(defaultReportURL);
 			}
 		} else {
+			LogUtil.info("Loading default query report");
 			reportEditor.addDocument(defaultReportURL);
 		}
 		
 		reportEditor.getModel().getDocument().markAsUnmodified();
+	}
+	
+	private void createStockQueryReportHash() {
+		try {
+			Properties props = loadInternalQueryReportHash();
+			props.store(new FileOutputStream(new File(stockReportHashFile)), "");
+		} catch (IOException e) {
+			LogUtil.severe(e);
+		}
+	}
+	
+	private Properties loadInternalQueryReportHash() {
+		Properties props = new Properties();
+		try {
+			Enumeration<URL> hashEnum = 
+					getClass().getClassLoader().getResources("reports/reports.hash");
+			while(hashEnum.hasMoreElements()) {
+				URL reportHashURL = hashEnum.nextElement();
+				
+				props.load(reportHashURL.openStream());
+			}
+		} catch (IOException e) {
+			LogUtil.severe(e);
+		}
+		return props;
+	}
+	
+	
+	private boolean checkStockQueryReportHash() {
+		boolean retVal = false;
+		
+		Properties internalHashes = loadInternalQueryReportHash();
+		Properties existingHashes = new Properties();
+		File hashFile = new File(stockReportHashFile);
+		if(hashFile.exists()) {
+			try {
+				existingHashes.load(new FileInputStream(stockReportHashFile));
+				
+				if(existingHashes.keySet().containsAll(internalHashes.keySet())) {
+					retVal = true;
+					for(Object key:internalHashes.keySet()) {
+						retVal &= existingHashes.get(key).equals(internalHashes.get(key));
+					}
+				}
+			} catch (IOException e) {
+				LogUtil.severe(e);
+			}
+		}
+		
+		if(!retVal) {
+			LogUtil.info("Creating stock query report hash");
+			createStockQueryReportHash();
+		}
+		
+		return retVal;
 	}
 	
 	private void savePreviousQueryReport() {
