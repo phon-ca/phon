@@ -1,0 +1,10 @@
+app/src/main/resources/reports/Aggregate.xml=f839e56a711402cb27e2bc3c4398eb53558541e5
+app/src/main/resources/reports/Inventory by Session.xml=c2a7e0a6d306dda861c587e98bd80437d5fcd475
+app/src/main/resources/reports/Legacy Report Design.xml=2ad99a7c5c58473907d80ebd905ceae6975776cd
+app/src/main/resources/reports/Listing by Session (with optional tier data).xml=74ee16e978c58cca4e361739d6132ca27823d89e
+app/src/main/resources/reports/Phones/Phone Accuracy.xml=9c56662b7cdb5929bd4be51db384baec5dea3e1d
+app/src/main/resources/reports/Phones/Phone Similarity.xml=11baf0d8c05ca7b954e1ccc019a7de554dd2127a
+app/src/main/resources/reports/Phones/Transcript Variability.xml=ceaf506f70c485b138010f385a503cc71f541493
+app/src/main/resources/reports/Query Information.xml=ddd82d3024a3c4bed80b4757f76eb559bc2ddc58
+app/src/main/resources/reports/Table (all results in one table).xml=563e787db8fe6d0441b605b801fff2fd238a8d5a
+app/src/main/resources/reports/Table by Session.xml=97124d1c0b48e613fc743be637706dd8f75c72f9

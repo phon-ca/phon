@@ -44,7 +44,7 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="reportTitle">
-                        <![CDATA[Tables by Session]]>
+                        <![CDATA[Table by Session]]>
                     </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var reportTitleParamInfo = {
@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="1b5e9c85caf14436" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1129cc45">
+            <graph id="58e23fe2">
                 <node id="febe595b2811496c" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -256,7 +256,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="25d9b53bbd6c4f5b" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="12581310">
+            <graph id="20583faf">
                 <node id="b4b4a2d86ece4175" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -291,7 +291,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="cdc1b795ab804c5d" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="17c97933">
+                    <graph id="7194e1b6">
                         <node id="bc3d78aeec9d40de" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -316,6 +316,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <node id="a25643c90fea4bd2" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                            <input name="table" optional="false"/>
                             <output name="exists" type="java.lang.Boolean">does table exist</output>
                             <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource">table if exists, undefined otherwise</output>
                             <extensions>
@@ -353,7 +354,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="35ad0608ffea4b10" name="If Has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="55f0085f">
+                    <graph id="5643b7ac">
                         <node id="bd79875b979f480c" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -462,7 +463,7 @@ Result]]>
         <link dest="67de31b1" destField="selectedResults" source="49e0c2a94f84d81" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
-                <opqry:info format="html" title="Tables by Session (One table per session)">
+                <opqry:info format="html" title="Table by Session">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="d76c26740c704d40">
