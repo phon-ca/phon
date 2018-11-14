@@ -17,7 +17,7 @@ h1 {
     color: rgb(0, 90, 140);
 }
 
-h2, h3 {
+h2 {
     font-weight: bold;
     font-size: medium;
     margin-top: 0.5em;
@@ -25,16 +25,12 @@ h2, h3 {
     color: rgb(0, 90, 140);
 }
 
-h4, h5  {
+h3, h4, h5, h6  {
     font-weight: bold;
     font-size: small;
     margin-top: 0.5em;
     margin-bottom: 0.25em;
     color: rgb(0, 90, 140);
-}
-
-h6 {
-	font-size: smaller;
 }
 
 table {
