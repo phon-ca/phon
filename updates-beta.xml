@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b4.dmg" newVersion="3.0.2b4" newMediaFileId="macos" fileSize="229864427" md5Sum="f844c10d375307bb043caef8a2a10c0d" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b5.dmg" newVersion="3.0.2b5" newMediaFileId="macos" fileSize="229869840" md5Sum="2aca94083642d47f127448bc0aed8e9c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -17,9 +17,9 @@
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -229,7 +229,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b4.dmg" newVersion="3.0.2b4" newMediaFileId="macos" fileSize="229864427" md5Sum="f844c10d375307bb043caef8a2a10c0d" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b5.dmg" newVersion="3.0.2b5" newMediaFileId="macos" fileSize="229869840" md5Sum="2aca94083642d47f127448bc0aed8e9c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -246,9 +246,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -458,7 +458,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.exe" newVersion="3.0.2b4" newMediaFileId="win64" fileSize="244165120" md5Sum="4c0bbddbfed3b20bb8f12471a99968e5" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.exe" newVersion="3.0.2b5" newMediaFileId="win64" fileSize="244173824" md5Sum="4f0250bdabf2ce668643622fb10ec294" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -475,9 +475,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -687,7 +687,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.exe" newVersion="3.0.2b4" newMediaFileId="win64" fileSize="244165120" md5Sum="4c0bbddbfed3b20bb8f12471a99968e5" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.exe" newVersion="3.0.2b5" newMediaFileId="win64" fileSize="244173824" md5Sum="4f0250bdabf2ce668643622fb10ec294" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -704,9 +704,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -916,7 +916,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.exe" newVersion="3.0.2b4" newMediaFileId="win64" fileSize="244165120" md5Sum="4c0bbddbfed3b20bb8f12471a99968e5" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.exe" newVersion="3.0.2b5" newMediaFileId="win64" fileSize="244173824" md5Sum="4f0250bdabf2ce668643622fb10ec294" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -933,9 +933,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -1145,7 +1145,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b4.zip" newVersion="3.0.2b4" newMediaFileId="win64zip" fileSize="243204858" md5Sum="7c55f7d489f9f73c0ad867dde04fd18c" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.zip" newVersion="3.0.2b5" newMediaFileId="win64zip" fileSize="243213600" md5Sum="e9e290024f36531b28b9c2b8da405619" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1162,9 +1162,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -1374,7 +1374,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b4.deb" newVersion="3.0.2b4" newMediaFileId="linux64deb" fileSize="164230568" md5Sum="f0622147eb80d17b883905fefc72ebfc" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b5.deb" newVersion="3.0.2b5" newMediaFileId="linux64deb" fileSize="164239318" md5Sum="8370c674fd63a369f644bee0d6e7844a" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1391,9 +1391,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
@@ -1603,7 +1603,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b4.sh" newVersion="3.0.2b4" newMediaFileId="linux64" fileSize="167387581" md5Sum="a0bf90bdabfd48a2cb05615aaebac325" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b5.sh" newVersion="3.0.2b5" newMediaFileId="linux64" fileSize="167396318" md5Sum="efaa4bc3289701dc30470af2bc564553" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
 
  * Updated to Java 11
@@ -1620,9 +1620,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Greatly improved page load time of reports
  * Improved table of contents (ToC) menu
  * Moved ToC to right hand side of report
- * Renamed query report 'Listing' as 'All Results'
- * Renamed query report 'Listing by Session' as 'Tables by Session'
+ * Renamed query reports
  * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
 
 ## Changes from 3.0.0
 
