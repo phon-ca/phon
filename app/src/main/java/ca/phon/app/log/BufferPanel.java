@@ -33,14 +33,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
@@ -58,6 +55,13 @@ import javax.swing.table.TableModel;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
+
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
+import com.teamdev.jxbrowser.chromium.events.ConsoleEvent.Level;
+import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.modules.EntryPointArgs;
@@ -80,20 +84,11 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Range;
-import ca.phon.util.Tuple;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebView;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
-import netscape.javascript.JSObject;
 
 /**
  * A panel showing a single {@link LogBuffer} with options
@@ -138,9 +133,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 	/* Views */
 	private JXTable dataTable;
 
-	private JFXPanel fxPanel;
-
-	private WebView htmlView;
+	private Browser browser;
+	private BrowserView htmlView;
 
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 
@@ -199,7 +193,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		});
 		return retVal;
 	}
-
+	
 	public String getName() {
 		return this.name;
 	}
@@ -224,8 +218,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 		}
 
 		if(logBuffer.getText().length() == 0 && htmlView != null) {
-			final String docLocation = getWebView().getEngine().getDocument().getDocumentURI();
-			if(docLocation != null) {
+			final String docLocation = browser.getURL();
+			if(docLocation != null && docLocation.trim().length() > 0) {
 				logBuffer.setText(getHTML());
 			}
 		}
@@ -234,8 +228,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 		currentView = logBuffer;
 
 		logBuffer.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
-
-//		firstRowAsHeaderBox.setVisible(false);
 
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
@@ -302,35 +294,35 @@ public class BufferPanel extends JPanel implements IExtendable {
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 
-	@SuppressWarnings("restriction")
-	private Tuple<JFXPanel, WebView> createHtmlPane() {
-		final JFXPanel fxpanel = new JFXPanel();
-		final AtomicReference<JFXPanel> panelRef = new AtomicReference<JFXPanel>(fxpanel);
-		final AtomicReference<WebView> viewRef = new AtomicReference<WebView>();
-		java.util.concurrent.CountDownLatch countDownLatch = new java.util.concurrent.CountDownLatch(1);
-		Platform.runLater( () -> {
-			final WebView webView = new WebView();
-			fxpanel.setScene(new Scene(webView));
-
-			webView.getEngine().setOnError( (evt) -> {
-				LOGGER.warn( evt.toString());
-			});
-
-
-			panelRef.set(fxpanel);
-			viewRef.set(webView);
-
-			countDownLatch.countDown();
-		});
-		try {
-			boolean released = countDownLatch.await(10, java.util.concurrent.TimeUnit.SECONDS);
-			if(released) {
-				contentPanel.add(panelRef.get(), HTML_VIEW_ID);
-			}
-		} catch (InterruptedException e) {
-		}
-		return new Tuple<>(panelRef.get(), viewRef.get());
-	}
+//	@SuppressWarnings("restriction")
+//	private Tuple<JFXPanel, WebView> createHtmlPane() {
+//		final JFXPanel fxpanel = new JFXPanel();
+//		final AtomicReference<JFXPanel> panelRef = new AtomicReference<JFXPanel>(fxpanel);
+//		final AtomicReference<WebView> viewRef = new AtomicReference<WebView>();
+//		java.util.concurrent.CountDownLatch countDownLatch = new java.util.concurrent.CountDownLatch(1);
+//		Platform.runLater( () -> {
+//			final WebView webView = new WebView();
+//			fxpanel.setScene(new Scene(webView));
+//
+//			webView.getEngine().setOnError( (evt) -> {
+//				LOGGER.warn( evt.toString());
+//			});
+//
+//
+//			panelRef.set(fxpanel);
+//			viewRef.set(webView);
+//
+//			countDownLatch.countDown();
+//		});
+//		try {
+//			boolean released = countDownLatch.await(10, java.util.concurrent.TimeUnit.SECONDS);
+//			if(released) {
+//				contentPanel.add(panelRef.get(), HTML_VIEW_ID);
+//			}
+//		} catch (InterruptedException e) {
+//		}
+//		return new Tuple<>(panelRef.get(), viewRef.get());
+//	}
 
 	public void copyTextToClipboard(String text) {
 		final StringSelection stringSelection = new StringSelection(text);
@@ -339,7 +331,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 
 	public boolean isShowingHtml() {
-		return currentView != null && currentView == fxPanel;
+		return currentView != null && currentView == htmlView;
 	}
 
 	public void showHtml() {
@@ -348,55 +340,23 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public void showHtml(boolean loadTextContent) {
 		JComponent oldComp = currentView;
-
-		final WebView htmlView = getWebView();
-		Platform.runLater( () -> {
-			htmlView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-
-				@Override
-				public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-					if(newValue == State.SUCCEEDED) {
-						JSObject window = (JSObject) htmlView.getEngine().executeScript("window");
-						window.setMember("buffer", BufferPanel.this);
-					}
-				}
-
-			});
-
-			if(loadTextContent)
-				htmlView.getEngine().loadContent(logBuffer.getText());
-
-			SwingUtilities.invokeLater(() -> {
-				currentView = fxPanel;
-				cardLayout.show(contentPanel, HTML_VIEW_ID);
-				firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
-			});
-		});
+		
+		if(htmlView == null) {
+			BrowserView view = getWebView();
+			contentPanel.add(view, HTML_VIEW_ID);
+		}
+		
+		if(loadTextContent) {
+			browser.loadHTML(logBuffer.getText());
+		}
+		
+		currentView = htmlView;
+		cardLayout.show(contentPanel, HTML_VIEW_ID);
+		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 
 	private void init() {
 		setLayout(new BorderLayout());
-
-//		final FormLayout topLayout = new FormLayout(
-//				"pref, pref,3dlu, pref, fill:pref:grow, pref, 3dlu, right:pref", "pref");
-//		final CellConstraints cc = new CellConstraints();
-//		final JPanel topPanel = new JPanel(topLayout);
-//
-//		final PhonUIAction firstRowAsHeaderAct = new PhonUIAction(this, "onToggleFirstRowAsHeader");
-//		firstRowAsHeaderAct.putValue(PhonUIAction.NAME, "Use first row as column header");
-//		firstRowAsHeaderAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
-//		firstRowAsHeaderBox = new JCheckBox(firstRowAsHeaderAct);
-//		firstRowAsHeaderBox.setVisible(false);
-//
-//		busyLabel.setVisible(false);
-//
-//		buttons = new BufferPanelButtons(this);
-//
-//		topPanel.add(firstRowAsHeaderBox, cc.xy(4, 1));
-//		topPanel.add(busyLabel, cc.xy(6, 1));
-//		topPanel.add(buttons, cc.xy(8, 1));
-//
-//		add(topPanel, BorderLayout.NORTH);
 
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
@@ -408,22 +368,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 		currentView = logBuffer;
 		add(contentPanel, BorderLayout.CENTER);
 	}
-	
-//	public void updateSaveButtonText() {
-//		final StringBuffer buffer = new StringBuffer();
-//		buffer.append("Save ").append(getBufferName());
-//		buffer.append(" as");
-//		
-//		if(buttons.tableButton.isSelected()) {
-//			buffer.append(" CSV");
-//		} else if(buttons.textButton.isSelected()) {
-//			buffer.append(" Text");
-//		} else if(buttons.htmlButton.isSelected()) {
-//			buffer.append(" HTML");
-//		}
-//		
-//		saveButton.setText(buffer.toString());
-//	}
 
 	public String getBufferName() {
 		return logBuffer.getBufferName();
@@ -433,11 +377,30 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return logBuffer;
 	}
 
-	public WebView getWebView() {
-		if(fxPanel == null) {
-			final Tuple<JFXPanel, WebView> webTuple = createHtmlPane();
-			fxPanel = webTuple.getObj1();
-			htmlView = webTuple.getObj2();
+	public Browser getBrowser() {
+		if(browser == null) {
+			browser = new Browser();
+			
+			JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
+			windowObj.asObject().setProperty("buffer", this);
+			
+			browser.addConsoleListener( (e) -> {
+				if(e.getLevel() == Level.DEBUG) {
+					LogUtil.info(e.getMessage());
+				} else if(e.getLevel() == Level.WARNING) {
+					LogUtil.warning(e.getMessage());
+				} else if(e.getLevel() == Level.ERROR) {
+					LogUtil.severe(e.getMessage());
+				}
+			});
+		}
+		return browser;
+	}
+	
+	public BrowserView getWebView() {
+		if(htmlView == null) {
+			browser = getBrowser();
+			htmlView = new BrowserView(browser);
 		}
 		return this.htmlView;
 	}
@@ -445,10 +408,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 	public JXTable getDataTable() {
 		return dataTable;
 	}
-
-//	public boolean isOpenAfterSave() {
-//		return openFileAfterSaving;
-//	}
 
 	public void setBusy(boolean busy) {
 //		busyLabel.setBusy(busy);
@@ -459,7 +418,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 		final CSVTableModel model = (CSVTableModel)getDataTable().getModel();
 		model.setUseFirstRowAsHeader(firstRowIsColumnHeader);
 		model.fireTableStructureChanged();
-//		firstRowAsHeaderBox.setSelected(firstRowIsColumnHeader);
 	}
 
 	public void onToggleFirstRowAsHeader() {
@@ -494,37 +452,22 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public String getHTML() {
 		final StringBuffer buffer = new StringBuffer();
-		final CountDownLatch latch = new CountDownLatch(1);
 		
-		final String docLocation = getWebView().getEngine().getDocument().getDocumentURI();
-		if(docLocation != null) {
-			Platform.runLater( () -> {
-				
-				final URI uri = URI.create(docLocation);
-				try {
-					final URL url = uri.toURL();
-					
-					final BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-					String line = null;
-					while((line = in.readLine()) != null) {
-						buffer.append(line).append("\n");
-					}
-					in.close();
-				} catch (IOException e) {
-					LogUtil.severe(e);
-				} finally {
-					latch.countDown();
-				}
-			} );
-			
+		final String docLocation = browser.getURL();
+		if(docLocation != null && docLocation.trim().length() > 0) {
 			try {
-				latch.await();
-			} catch (InterruptedException e) {
-				LogUtil.severe(e);
+				final URL docURL = new URL(docLocation);
+				final BufferedReader in = new BufferedReader(new InputStreamReader(docURL.openStream(), "UTF-8"));
+				String line = null;
+				while((line = in.readLine()) != null) {
+					buffer.append(line).append("\n");
+				}
+				in.close();
+			} catch (IOException e) {
+				LogUtil.warning(e);
 			}
 		} else {
-			// use text in log buffer
-			buffer.append(getLogBuffer().getText());
+			buffer.append(logBuffer.getText());
 		}
 		
 		return buffer.toString();
