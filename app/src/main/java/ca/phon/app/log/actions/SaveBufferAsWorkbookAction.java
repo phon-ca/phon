@@ -26,6 +26,10 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.ImageIcon;
 
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSObject;
+import com.teamdev.jxbrowser.chromium.JSValue;
+
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.HTMLToWorkbookWriter;
@@ -40,8 +44,6 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
-import javafx.application.Platform;
-import javafx.scene.web.WebView;
 import jxl.Workbook;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -82,12 +84,20 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 			Toolkit.getDefaultToolkit().beep();
 			return;
 		}
+		
+		FileFilter filter = FileFilter.excelFilter;
+		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
+		String initialFilename = panel.getBufferName();
+		initialFilename = initialFilename.trim().replaceAll(illegalCharRegex, "_");
+		if(initialFilename.endsWith("." + filter.getDefaultExtension())) {
+			initialFilename = initialFilename.substring(0, initialFilename.length()-(filter.getDefaultExtension().length()+1));
+		}
 
 		final SaveDialogProperties props = new SaveDialogProperties();
+		props.setInitialFile(initialFilename + "." + filter.getDefaultExtension());
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setCanCreateDirectories(true);
 		props.setFileFilter(FileFilter.excelFilter);
-		props.setInitialFile(panel.getBufferName() + "." + FileFilter.excelFilter.getDefaultExtension());
 		props.setRunAsync(true);
 		props.setListener( (e) -> {
 			if(e.getDialogResult() == NativeDialogEvent.OK_OPTION && e.getDialogData() != null) {
@@ -115,26 +125,18 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 			} else if(panel.isShowingHtml()) {
 				String html = panel.getHTML();
 				
-				final WebView webView = panel.getWebView();
-				final CountDownLatch latch = new CountDownLatch(1);
-				
 				final Map<String, DefaultTableDataSource> tableMap = new HashMap<>();
-				Platform.runLater( () -> {
-					final Object obj = webView.getEngine().executeScript("window.tableMap");
-					if(obj != null && obj instanceof Map) {
-						final Map<?, ?> objMap = (Map<?, ?>)obj;
-						for(Object key:objMap.keySet()) {
-							Object val = objMap.get(key);
-							if(val != null && val instanceof DefaultTableDataSource) {
-								tableMap.put(key.toString(), (DefaultTableDataSource)val);
-							}
+				final Browser browser = panel.getBrowser();
+				JSValue windowObj = browser.executeJavaScriptAndReturnValue("window.tableMap");
+				if(windowObj != null) {
+					final Map<?,?> objMap = (Map<?,?>)windowObj.asJavaObject();
+					for(Object key:objMap.keySet()) {
+						Object val = objMap.get(key);
+						if(val != null && val instanceof DefaultTableDataSource) {
+							tableMap.put(key.toString(), (DefaultTableDataSource)val);
 						}
 					}
-					latch.countDown();
-				} );
-				try {
-					latch.await();
-				} catch (InterruptedException e) {}
+				}
 				
 				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter(tableMap);
 				writer.writeToWorkbook(workbook, html);
