@@ -36,31 +36,9 @@ To uninstall Phon:
 sudo dpkg --remove phon
 ```
 
-## Fedora (23+)
+## Other linux distributions
 
- * Download java 10 from the [Oracle download site](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
-```
-wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/10.0.2+13/19aef61b38124481863b1413dce1855f/jdk-10.0.2_linux-x64_bin.tar.gz
-```
- * Extract contents of Java 10 download to installation folder
-```
-sudo tar zxf jdk-10.0.2_linux-x64_bin.tar.gz -C /usr/local
-sudo ln -s /usr/local/jdk-10.0.2 /usr/local/jdk-10
-```
- * Configure system to use Java 10
-```
-sudo alternatives --install /usr/bin/java java /usr/local/jdk-10/bin/java 2
-sudo alternatives --set java /usr/local/jdk-10/bin/java
-sudo alternatives --install /usr/bin/jar jar /usr/local/jdk-10/bin/jar 2
-sudo alternatives --set jar /usr/local/jdk-10/bin/jar
-sudo alternatives --install /usr/bin/javac javac /usr/local/jdk-10/bin/javac 2
-sudo alternatives --set javac /usr/local/jdk-10/bin/javac
-```
- * Install VLC
-```
-sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-sudo dnf install vlc
-```
+ * Downloand and install java 11 and VLC
  * Install Phon.
 Download the Phon_unix_<version>.sh installer from the [releases](https://github.com/phon-ca/phon/releases) page.
 ```

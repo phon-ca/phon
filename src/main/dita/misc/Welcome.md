@@ -17,12 +17,12 @@ All of these functions are accessible through a user-friendly graphical interfac
 
 ## Download Phon
 
-### Phon 3.0.1 (Stable)
+### Phon 3.0.2 (Stable)
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_macos_3_0_1.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_windows-x64_3_0_1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_windows-x64_3_0_1.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_linux_3_0_1.deb)
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.1/Phon_unix_3_0_1.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_macos_3_0_2.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_windows-x64_3_0_2.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_windows-x64_3_0_2.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_linux_3_0_2.deb)
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_unix_3_0_2.sh)
   
 ### Phon 3.0.2b5 (Current beta)
 
@@ -41,7 +41,7 @@ Previous releases can be found at https://github.com/phon-ca/phon/releases.
 
 ## Citing Phon
 
-Hedlund, Gregory & Yvan Rose. 2018. Phon 3.0.1 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
+Hedlund, Gregory & Yvan Rose. 2018. Phon 3.0.2 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
 
 Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, Philip O’Brien & Todd Wareham. 2006. Introducing Phon: A Software Solution for the Study of Phonological Acquisition. In David Bamman, Tatiana Magnitskaia & Colleen Zaller (eds.), 
 *Proceedings of the 30th Annual Boston University Conference on Language Development*. Somerville, MA: Cascadilla Press. 489-500.
