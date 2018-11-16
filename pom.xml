@@ -151,7 +151,6 @@
 		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.14.0</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
-		<org.openjfx.javafx.version>11-ea+25</org.openjfx.javafx.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
 		<uk.co.caprica.vlcj.version>3.9.0</uk.co.caprica.vlcj.version>
 		
@@ -167,6 +166,10 @@
 		<org.apache.maven.plugins.maven-surefire-plugin.version>2.16</org.apache.maven.plugins.maven-surefire-plugin.version>
 		<org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
 		<org.codehaus.mojo.jaxb2-maven-plugin.version>2.4</org.codehaus.mojo.jaxb2-maven-plugin.version>
+		
+		<!-- jxbrowser -->
+		<com.teamdev.jxbrowser.version>6.22</com.teamdev.jxbrowser.version>
+		<com.teamdev.jxbrowser.license.version>6.X</com.teamdev.jxbrowser.license.version>
 	</properties>
 
 	<modules>
@@ -401,24 +404,6 @@
 			</dependency>
 			
 			<dependency>
-				<groupId>org.openjfx</groupId>
-				<artifactId>javafx-controls</artifactId>
-				<version>${org.openjfx.javafx.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.openjfx</groupId>
-				<artifactId>javafx-web</artifactId>
-				<version>${org.openjfx.javafx.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.openjfx</groupId>
-				<artifactId>javafx-swing</artifactId>
-				<version>${org.openjfx.javafx.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>net.lingala.zip4j</groupId>
 				<artifactId>zip4j</artifactId>
 				<version>${net.lingala.zip4j.version}</version>
@@ -494,7 +479,41 @@
 		      <artifactId>vlcj</artifactId> 
 		      <version>${uk.co.caprica.vlcj.version}</version>
 		    </dependency>
-
+		    
+		    <!-- jxbrowesr -->
+		    <dependency>
+		    	<groupId>com.teamdev</groupId>
+		    	<artifactId>jxbrowser</artifactId>
+		    	<version>6.22</version>
+		    </dependency>
+		    
+		    <dependency>
+		    	<groupId>com.teamdev</groupId>
+		    	<artifactId>jxbrowser</artifactId>
+		    	<version>${com.teamdev.jxbrowser.version}</version>
+		    	<classifier>mac</classifier>
+		    </dependency>
+		    
+		    <dependency>
+		    	<groupId>com.teamdev</groupId>
+		    	<artifactId>jxbrowser</artifactId>
+		    	<version>${com.teamdev.jxbrowser.version}</version>
+		    	<classifier>win64</classifier>
+		    </dependency>
+		    
+		    <dependency>
+		    	<groupId>com.teamdev</groupId>
+		    	<artifactId>jxbrowser</artifactId>
+		    	<version>${com.teamdev.jxbrowser.version}</version>
+		    	<classifier>linux-x64</classifier>
+		    </dependency>
+		    
+		    <dependency>
+		    	<groupId>com.teamdev</groupId>
+		    	<artifactId>jxbrowser</artifactId>
+		    	<version>${com.teamdev.jxbrowser.license.version}</version>
+		    	<classifier>license-phon</classifier>
+		    </dependency>
 		</dependencies>
 	</dependencyManagement>
 

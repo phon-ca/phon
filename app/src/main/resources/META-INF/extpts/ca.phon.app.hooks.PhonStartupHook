@@ -10,7 +10,5 @@ ca.phon.app.fonts.FontLoaderStartupHook
 ca.phon.app.VLCInitHook
 # IPA Dictionaries
 ca.phon.app.IPADictionaryInitHook
-# JavaFX
-ca.phon.app.JavaFXStartupHook
 # Load common objects
 ca.phon.app.ObjectLoaderHook

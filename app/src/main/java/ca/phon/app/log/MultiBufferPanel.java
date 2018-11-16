@@ -47,6 +47,7 @@ import javax.swing.event.EventListenerList;
 
 import ca.phon.app.log.actions.CloseAllBuffersAction;
 import ca.phon.app.log.actions.CloseCurrentBufferAction;
+import ca.phon.app.log.actions.PrintHTMLBufferAction;
 import ca.phon.app.log.actions.SaveAllBuffersAction;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.log.actions.SaveBufferAsWorkbookAction;
@@ -123,6 +124,12 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		builder.addItem(".", saveAllAct).setEnabled(hasBuffers);
 		
 		builder.addSeparator(".", "_saveActions");
+		
+		if(getCurrentBuffer().isShowingHtml()) {
+			final PrintHTMLBufferAction printAct = new PrintHTMLBufferAction(getCurrentBuffer());
+			builder.addItem(".", printAct);
+			builder.addSeparator(".", "_printActions");
+		}
 		
 		// close actions
 		final CloseCurrentBufferAction closeAct = new CloseCurrentBufferAction(this);

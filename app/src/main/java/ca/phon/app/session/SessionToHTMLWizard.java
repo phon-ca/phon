@@ -24,12 +24,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,25 +61,20 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.project.Project;
-import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionPath;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import javafx.application.Platform;
-import javafx.scene.web.WebView;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 
@@ -547,12 +542,9 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 				
 				final String bufferName = session.getCorpus() + "." + session.getName();
 				final BufferPanel buffer = bufferPanel.createBuffer(bufferName);
-				final WebView webView = buffer.getWebView();
-				Platform.runLater( () -> {
-					webView.getEngine().load(htmlFile.toURI().toString());
-				});
 				buffer.showHtml(false);
-			} catch (InterruptedException | ExecutionException e) {
+				buffer.getBrowser().loadURL(htmlFile.toURI().toURL().toString());
+			} catch (InterruptedException | ExecutionException | MalformedURLException e) {
 				LogUtil.severe(e.getLocalizedMessage(), e);
 			}
 			busyLabel.setBusy(false);

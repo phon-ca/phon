@@ -75,6 +75,18 @@ import javax.swing.tree.TreePath;
 import org.apache.velocity.tools.generic.MathTool;
 import org.jdesktop.swingx.JXBusyLabel;
 
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSObject;
+import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.FrameLoadEvent;
+import com.teamdev.jxbrowser.chromium.events.LoadEvent;
+import com.teamdev.jxbrowser.chromium.events.LoadListener;
+import com.teamdev.jxbrowser.chromium.events.ProvisionalLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.StartLoadingEvent;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
@@ -135,13 +147,6 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonWorker;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
-import javafx.print.PrinterJob;
-import javafx.scene.web.WebView;
-import netscape.javascript.JSObject;
 
 /**
  * The Node wizard servers as the UI layer for opgraph
@@ -452,16 +457,16 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		return bufferPanel.getBufferNames().contains("Report");
 	}
 	
-	public void onPrintReport() {
-		if(reportBufferAvailable() && Desktop.isDesktopSupported()) {
-			String fileLocation = bufferPanel.getBuffer("Report").getWebView().getEngine().getLocation();
-			try {
-				Desktop.getDesktop().print(new File(URI.create(fileLocation).getPath()));
-			} catch (IOException e) {
-				LogUtil.warning(e);
-				Toolkit.getDefaultToolkit().beep();
-			}
-			
+//	public void onPrintReport() {
+//		if(reportBufferAvailable() && Desktop.isDesktopSupported()) {
+//			String fileLocation = bufferPanel.getBuffer("Report").getWebView().getEngine().getLocation();
+//			try {
+//				Desktop.getDesktop().print(new File(URI.create(fileLocation).getPath()));
+//			} catch (IOException e) {
+//				LogUtil.warning(e);
+//				Toolkit.getDefaultToolkit().beep();
+//			}
+//			
 //			Platform.runLater( () -> {
 //				final PrinterJob pj = PrinterJob.createPrinterJob();
 //				if(pj != null && pj.showPrintDialog(null)) {
@@ -469,8 +474,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 //					pj.endJob();
 //				}
 //			});
-		}
-	}
+//		}
+//	}
 	
 	private void init() {
 		globalOptionsPanel = new GlobalParameterPanel();
@@ -872,40 +877,59 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						bufferPanelRef.get().showHtml(false);
 					});
 					final BufferPanel reportBufferPanel = bufferPanelRef.get();
-					final WebView webView = reportBufferPanel.getWebView();
 					final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
 					searchForTables(reportTree.getRoot(), tableMap);
 					reportBufferPanel.setUserObject(reportTree);
-					javafx.application.Platform.runLater(() -> {
+					
+					final Browser browser = reportBufferPanel.getBrowser();
+					browser.addLoadListener(new LoadListener() {
 						
-						webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-
-							@Override
-							public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
-								if(newValue == State.SUCCEEDED) {
-									final JSObject window = (JSObject) webView.getEngine().executeScript("window");
-									window.setMember("project", getExtension(Project.class));
-									window.setMember("buffers", bufferPanel);
-									window.setMember("reportTree", reportTree);
-									window.setMember("tableMap", tableMap);
-									window.setMember("app", webViewInterface);
-									
-									// add menu buttons to tables
-									int idx = 0;
-									for(String tableId:tableMap.keySet()) {
-										webView.getEngine().executeScript(
-												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
-										webView.getEngine().executeScript(
-												String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
-										++idx;
-									}
-								}
+						@Override
+						public void onStartLoadingFrame(StartLoadingEvent arg0) {
+							
+						}
+						
+						@Override
+						public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
+							
+						}
+						
+						@Override
+						public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
+							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
+							windowObj.asObject().setProperty("project", getExtension(Project.class));
+							windowObj.asObject().setProperty("buffers", bufferPanel);
+							windowObj.asObject().setProperty("reportTree", reportTree);
+							windowObj.asObject().setProperty("tableMap", tableMap);
+							windowObj.asObject().setProperty("app", webViewInterface);
+							int idx = 0;
+							for(String tableId:tableMap.keySet()) {
+								browser.executeJavaScript(
+										String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
+								browser.executeJavaScript(
+										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
+								++idx;
 							}
-
-						});
-
-						webView.getEngine().load(reportURL);
+							browser.removeLoadListener(this);
+						}
+						
+						@Override
+						public void onFailLoadingFrame(FailLoadingEvent arg0) {
+							
+						}
+						
+						@Override
+						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
+							
+						}
+						
+						@Override
+						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
+							
+						}
 					});
+
+					reportBufferPanel.getBrowser().loadURL(reportURL);
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}
@@ -1337,6 +1361,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 		}
 		
+		public void showTable(String tableId, JSObject tableObj) {
+			showTable(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
+		}
+		
 		public void showTable(String tableId, DefaultTableDataSource table) {
 			SwingUtilities.invokeLater( () -> {
 				if(!bufferPanel.getBufferNames().contains(tableId)) {
@@ -1344,6 +1372,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				}
 				bufferPanel.selectBuffer(tableId);
 			});
+		}
+		
+		public void saveTableAsCSV(String tableId, JSObject tableObj) {
+			saveTableAsCSV(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
 		}
 		
 		public void saveTableAsCSV(String tableId, DefaultTableDataSource table) {
@@ -1355,6 +1387,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			});
 		}
 		
+		public void saveTableAsWorkbook(String tableId, JSObject tableObj) {
+			saveTableAsWorkbook(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
+		}
+		
 		public void saveTableAsWorkbook(String tableId, DefaultTableDataSource table) {
 			SwingUtilities.invokeLater( () -> {
 				if(!bufferPanel.getBufferNames().contains(tableId)) {
@@ -1362,6 +1398,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				}
 				bufferPanel.saveAsWorkbook(tableId);
 			});
+		}
+		
+		public void onHighlightResultValue(JSObject tableModelObj, int row, String columnName) {
+			onHighlightResultValue((DefaultTableDataSource)tableModelObj.asJavaObject(), row, columnName);
 		}
 
 		public void onHighlightResultValue(DefaultTableDataSource tableModel, int row, String columnName) {

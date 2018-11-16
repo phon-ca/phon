@@ -39,7 +39,6 @@ import javax.swing.event.MenuListener;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import javafx.application.Platform;
 
 /**
  * Application log viewer.
@@ -156,11 +155,8 @@ public class LogViewer extends CommonModuleFrame {
 		if(!logFile.exists()) return;
 		final BufferPanel buffer = bufferPanel.createBuffer(bufferName, true);
 		if(logFile.getName().endsWith(".html")) {
-			final var webView = buffer.getWebView();
 			buffer.showHtml(false);
-			Platform.runLater( () -> {
-				webView.getEngine().load(logFile.toURI().toString());
-			});
+			buffer.getBrowser().loadURL(logFile.toURI().toString());
 		} else if(logFile.getName().endsWith(".html.gz")) {
 			try (
 				final BufferedReader reader = new BufferedReader(
