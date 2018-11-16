@@ -57,6 +57,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.BrowserType;
 import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent.Level;
@@ -83,6 +84,7 @@ import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.OSInfo;
 import ca.phon.util.Range;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
@@ -379,7 +381,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public Browser getBrowser() {
 		if(browser == null) {
-			browser = new Browser();
+			BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
+			browser = new Browser(browserType);
 			
 			JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
 			windowObj.asObject().setProperty("buffer", this);
