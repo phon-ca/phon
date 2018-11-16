@@ -26,6 +26,8 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.ImageIcon;
 
+import com.teamdev.jxbrowser.chromium.JSValue;
+
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.HTMLToWorkbookWriter;
@@ -40,8 +42,6 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
-import javafx.application.Platform;
-import javafx.scene.web.WebView;
 import jxl.Workbook;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -123,26 +123,18 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 			} else if(panel.isShowingHtml()) {
 				String html = panel.getHTML();
 				
-				final WebView webView = panel.getWebView();
-				final CountDownLatch latch = new CountDownLatch(1);
 				
 				final Map<String, DefaultTableDataSource> tableMap = new HashMap<>();
-				Platform.runLater( () -> {
-					final Object obj = webView.getEngine().executeScript("window.tableMap");
-					if(obj != null && obj instanceof Map) {
-						final Map<?, ?> objMap = (Map<?, ?>)obj;
-						for(Object key:objMap.keySet()) {
-							Object val = objMap.get(key);
-							if(val != null && val instanceof DefaultTableDataSource) {
-								tableMap.put(key.toString(), (DefaultTableDataSource)val);
-							}
+				final JSValue tableMapObj = panel.getBrowser().executeJavaScriptAndReturnValue("window.tableMap");
+				if(tableMapObj != null) {
+					final Map<?, ?> objMap = (Map<?, ?>)tableMapObj.asJavaObject();
+					for(Object key:objMap.keySet()) {
+						Object val = objMap.get(key);
+						if(val != null && val instanceof DefaultTableDataSource) {
+							tableMap.put(key.toString(), (DefaultTableDataSource)val);
 						}
 					}
-					latch.countDown();
-				} );
-				try {
-					latch.await();
-				} catch (InterruptedException e) {}
+				}
 				
 				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter(tableMap);
 				writer.writeToWorkbook(workbook, html);
