@@ -24,12 +24,12 @@ All of these functions are accessible through a user-friendly graphical interfac
  * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_linux_3_0_2.deb)
  * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.2/Phon_unix_3_0_2.sh)
   
-### Phon 3.0.2b5 (Current beta)
+### Phon 3.0.3b1 (Current beta)
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.2b5/Phon_macos_3_0_2b5.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.2b5/Phon_windows-x64_3_0_2b5.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.2b5/Phon_windows-x64_3_0_2b5.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.2b5/Phon_linux_3_0_2b5.deb) 
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.2b5/Phon_unix_3_0_2b5.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.3b1/Phon_macos_3_0_3b1.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.3b1/Phon_windows-x64_3_0_3b1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.3b1/Phon_windows-x64_3_0_3b1.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.3b1/Phon_linux_3_0_3b1.deb) 
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.3b1/Phon_unix_3_0_3b1.sh)
  
 Previous releases can be found at https://github.com/phon-ca/phon/releases.
 
