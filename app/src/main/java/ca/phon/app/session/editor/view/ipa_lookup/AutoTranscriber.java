@@ -146,7 +146,6 @@ public class AutoTranscriber {
 	 *  IPA Target and IPA Actual respectively
 	 */
 	private Tuple<IPATranscript, IPATranscript> transcribeGroup(Group group) {
-		System.out.println("Here");
 		final IPATranscriptBuilder ipaTBuilder = new IPATranscriptBuilder();
 		final IPATranscriptBuilder ipaABuilder = new IPATranscriptBuilder();
 		
