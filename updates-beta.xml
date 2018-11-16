@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2b5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b5.dmg" newVersion="3.0.2b5" newMediaFileId="macos" fileSize="229869840" md5Sum="2aca94083642d47f127448bc0aed8e9c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b1.dmg" newVersion="3.0.3b1" newMediaFileId="macos" fileSize="256493425" md5Sum="1b94cad929f2ea38853408389370b42e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -229,8 +234,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2b5.dmg" newVersion="3.0.2b5" newMediaFileId="macos" fileSize="229869840" md5Sum="2aca94083642d47f127448bc0aed8e9c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b1.dmg" newVersion="3.0.3b1" newMediaFileId="macos" fileSize="256493425" md5Sum="1b94cad929f2ea38853408389370b42e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -458,8 +468,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.exe" newVersion="3.0.2b5" newMediaFileId="win64" fileSize="244173824" md5Sum="4f0250bdabf2ce668643622fb10ec294" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b1.exe" newVersion="3.0.3b1" newMediaFileId="win64" fileSize="257745408" md5Sum="e1adeab96288cbcdd2de73c942d2e4ba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -687,8 +702,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.exe" newVersion="3.0.2b5" newMediaFileId="win64" fileSize="244173824" md5Sum="4f0250bdabf2ce668643622fb10ec294" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b1.exe" newVersion="3.0.3b1" newMediaFileId="win64" fileSize="257745408" md5Sum="e1adeab96288cbcdd2de73c942d2e4ba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -916,8 +936,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.exe" newVersion="3.0.2b5" newMediaFileId="win64" fileSize="244173824" md5Sum="4f0250bdabf2ce668643622fb10ec294" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b1.exe" newVersion="3.0.3b1" newMediaFileId="win64" fileSize="257745408" md5Sum="e1adeab96288cbcdd2de73c942d2e4ba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -1145,8 +1170,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2b5.zip" newVersion="3.0.2b5" newMediaFileId="win64zip" fileSize="243213600" md5Sum="e9e290024f36531b28b9c2b8da405619" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b1.zip" newVersion="3.0.3b1" newMediaFileId="win64zip" fileSize="256795011" md5Sum="c9e55dceeb43483dde0e6d915a9adc9c" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -1374,8 +1404,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2b5.deb" newVersion="3.0.2b5" newMediaFileId="linux64deb" fileSize="164239318" md5Sum="8370c674fd63a369f644bee0d6e7844a" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b1.deb" newVersion="3.0.3b1" newMediaFileId="linux64deb" fileSize="187201394" md5Sum="43527bdba6d68f5992152055b2687dab" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -1603,8 +1638,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2b5.sh" newVersion="3.0.2b5" newMediaFileId="linux64" fileSize="167396318" md5Sum="efaa4bc3289701dc30470af2bc564553" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b1.sh" newVersion="3.0.3b1" newMediaFileId="linux64" fileSize="186727922" md5Sum="8beff7c2943330c0f76f73a6aec73692" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.1
+ 
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
