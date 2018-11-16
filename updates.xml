@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1.dmg" newVersion="3.0.1" newMediaFileId="macos" fileSize="213858106" md5Sum="7aa2eddcf742fac77e479a0e51513e17" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.0
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2.dmg" newVersion="3.0.2" newMediaFileId="macos" fileSize="229882195" md5Sum="47b4c4f2fd85693f482d8dbe45050423" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -209,8 +229,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_1.dmg" newVersion="3.0.1" newMediaFileId="macos" fileSize="213858106" md5Sum="7aa2eddcf742fac77e479a0e51513e17" bundledJre="macosx-amd64-10.0.2" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2.dmg" newVersion="3.0.2" newMediaFileId="macos" fileSize="229882195" md5Sum="47b4c4f2fd85693f482d8dbe45050423" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -418,8 +458,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.exe" newVersion="3.0.1" newMediaFileId="win64" fileSize="226316288" md5Sum="d4270ff2d43362ce219c3af68deed058" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.exe" newVersion="3.0.2" newMediaFileId="win64" fileSize="244165632" md5Sum="587556fda82b2a14af763ab5170676fd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -627,8 +687,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.exe" newVersion="3.0.1" newMediaFileId="win64" fileSize="226316288" md5Sum="d4270ff2d43362ce219c3af68deed058" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.exe" newVersion="3.0.2" newMediaFileId="win64" fileSize="244165632" md5Sum="587556fda82b2a14af763ab5170676fd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -836,8 +916,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.exe" newVersion="3.0.1" newMediaFileId="win64" fileSize="226316288" md5Sum="d4270ff2d43362ce219c3af68deed058" bundledJre="windows-amd64-10.0.2" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.exe" newVersion="3.0.2" newMediaFileId="win64" fileSize="244165632" md5Sum="587556fda82b2a14af763ab5170676fd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -1045,8 +1145,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_1.zip" newVersion="3.0.1" newMediaFileId="win64zip" fileSize="225311522" md5Sum="c0f0389718c87d91854e3d637b880d8f" bundledJre="windows-amd64-10.0.2" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.zip" newVersion="3.0.2" newMediaFileId="win64zip" fileSize="243196327" md5Sum="0b5cd5434b10bc6856f084fff5a6fcb1" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -1254,8 +1374,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_1.deb" newVersion="3.0.1" newMediaFileId="linux64deb" fileSize="116078876" md5Sum="1dbf79dfcf813bf4ce85f87246d0e180" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2.deb" newVersion="3.0.2" newMediaFileId="linux64deb" fileSize="164244992" md5Sum="6b6391908f77f1d613a97b1bbcd06a34" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
@@ -1463,8 +1603,28 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_1.sh" newVersion="3.0.1" newMediaFileId="linux64" fileSize="115897042" md5Sum="521bee1beb30dbfeaef5faedcdce635d" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.0
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2.sh" newVersion="3.0.2" newMediaFileId="linux64" fileSize="167389178" md5Sum="5b2c35b66db82d59c24835b7be32516b" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
 
  * Beta versions of the application now have '-beta' added to the name
  * Switched logging system to log4j2
