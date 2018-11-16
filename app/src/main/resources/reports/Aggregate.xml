@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="8f217ce063e147ac" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="155c68b2">
+            <graph id="2d5a002c">
                 <node id="a712384b6dd14765" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -193,7 +193,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="188591ef" name="Add Missing Columns and Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="ad32545">
+            <graph id="4f9f226d">
                 <node id="1f8d4516" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -238,13 +238,22 @@ function run(context) {
 	outputs.add("outputTable", "", false, DefaultTableDataSource);
 }
 
+function containsSession(selectedSessions, columnName) {
+	for(var i = 0; i < selectedSessions.size(); i++) {
+		var sp = selectedSessions.get(i);
+		if(sp.toString().equals(columnName))
+			return true;
+	}
+	return false;
+}
+
 function run(context) {
 	var table = context.get("table");
 	var selectedSessions = context.get("selectedSessions");
 
 	var outputTable = new DefaultTableDataSource();
 	var colIdx = 0;
-	while( colIdx < table.getColumnCount() && !(table.getColumnTitle(colIdx).equals(selectedSessions.get(0).toString())) ) {
+	while( colIdx < table.getColumnCount() && !containsSession(selectedSessions, table.getColumnTitle(colIdx)) ) {
 		outputTable.setColumnTitle(colIdx, table.getColumnTitle(colIdx));
 		++colIdx;
 	}
@@ -309,6 +318,9 @@ function run(context) {
                 <link dest="dea1829" destField="root" source="2e06273e" sourceField="section"/>
                 <link dest="4e852bf3" destField="selectedSessions" source="35dad2ef" sourceField="obj"/>
                 <link dest="4e852bf3" destField="table" source="5385017f" sourceField="obj"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                </extensions>
             </graph>
             <ogcn:published_input field="obj" name="sectionName" ref="1f8d4516"/>
             <ogcn:published_input field="obj" name="selectedSessions" ref="35dad2ef"/>
@@ -323,7 +335,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="ab5736d740c447c4" name="Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="133205ab">
+            <graph id="7bda30d0">
                 <node id="ef178149f4714517" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>

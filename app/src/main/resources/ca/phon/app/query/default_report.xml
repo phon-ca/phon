@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
-        <node id="2242bea8" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="432dcb99" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -14,7 +14,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <node id="64640d5b" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="227a9498" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -27,7 +27,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <node id="75dda5c3" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="42546d7" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -40,9 +40,9 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <ogcn:macro id="21f4f2c2" name="Query Information" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="7821a1c5">
-                <node id="1daebae4a3c432e" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <ogcn:macro id="76d381fe731d43a3" name="Query Information" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="2813064f">
+                <node id="c6005dc92f18485a" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -55,7 +55,7 @@
                         <oga:meta x="15" y="15"/>
                     </extensions>
                 </node>
-                <node id="ff88efe8c6e44cdc" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="570d1cc64c814f58" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -68,7 +68,7 @@
                         <oga:meta x="20" y="303"/>
                     </extensions>
                 </node>
-                <node id="42aedcd34a3d49c9" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="f20a9d23a4d461e" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -81,7 +81,7 @@
                         <oga:meta x="15" y="417"/>
                     </extensions>
                 </node>
-                <node id="3fdd76d7a281473b" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                <node id="5320beeaa85b474b" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="__script">
@@ -108,14 +108,14 @@ function setup_params(params) {
                         <oga:meta x="18" y="527"/>
                     </extensions>
                 </node>
-                <node id="8112482bd3b54444" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+                <node id="a3fc0da2c63d44cd" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
                     <extensions>
                         <oga:meta x="352" y="15"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="602b3f9cec054e5f" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="31134de6">
-                        <node id="cd3fab85e5034e14" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
+                <ogcn:macro id="c45e58a3a9984b60" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <graph id="79030249">
+                        <node id="2c02d0647e4b4e18" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
@@ -130,7 +130,7 @@ function setup_params(params) {
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="9bd10473d229400b" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="5c053148d522416b" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -143,7 +143,7 @@ function setup_params(params) {
                                 <oga:meta x="236" y="91"/>
                             </extensions>
                         </node>
-                        <node id="6b8382c051f74741" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="c94bbb7e4afc4896" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -156,18 +156,18 @@ function setup_params(params) {
                                 <oga:meta x="393" y="100"/>
                             </extensions>
                         </node>
-                        <link dest="9bd10473d229400b" destField="arg1" source="cd3fab85e5034e14" sourceField="value"/>
-                        <link dest="6b8382c051f74741" destField="obj" source="9bd10473d229400b" sourceField="value"/>
+                        <link dest="5c053148d522416b" destField="arg1" source="2c02d0647e4b4e18" sourceField="value"/>
+                        <link dest="c94bbb7e4afc4896" destField="obj" source="5c053148d522416b" sourceField="value"/>
                     </graph>
-                    <ogcn:published_input field="obj" name="parameters" ref="9bd10473d229400b"/>
-                    <ogcn:published_output field="value" name="value" ref="6b8382c051f74741"/>
+                    <ogcn:published_input field="obj" name="parameters" ref="5c053148d522416b"/>
+                    <ogcn:published_output field="value" name="value" ref="c94bbb7e4afc4896"/>
                     <extensions>
                         <oga:meta x="299" y="547"/>
                     </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="8ac49b5dc86499b" name="Load Query Script" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="71c7fa84">
-                        <node id="53e910e38e2d4776" name="Query" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <ogcn:macro id="b81b90c886db4039" name="Load Query Script" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <graph id="5b59a05c">
+                        <node id="1d535021e2114153" name="Query" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -177,7 +177,7 @@ function setup_params(params) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </node>
-                        <node id="2ea020096a9f4ddb" name="Script" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="769d86de3c0246e4" name="Script" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -187,7 +187,7 @@ function setup_params(params) {
                                 <oga:meta x="244" y="15"/>
                             </extensions>
                         </node>
-                        <node id="ff0a713f71404ade" name="String" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="33adce58462b4f86" name="String" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -197,7 +197,7 @@ function setup_params(params) {
                                 <oga:meta x="1073" y="429"/>
                             </extensions>
                         </node>
-                        <node id="63a6dc5b6e624709" name="QueryScript#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
+                        <node id="208b481460194a5b" name="QueryScript#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
@@ -210,7 +210,7 @@ function setup_params(params) {
                                 <oga:meta x="481" y="15"/>
                             </extensions>
                         </node>
-                        <node id="3280516312454cc3" name="QueryScript" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="61dba7bcf749fb" name="QueryScript" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -220,7 +220,7 @@ function setup_params(params) {
                                 <oga:meta x="722" y="15"/>
                             </extensions>
                         </node>
-                        <node id="5f1b8f3e4fc44466" name="PhonScriptContext" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="11641cf155d54b07" name="PhonScriptContext" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -230,7 +230,7 @@ function setup_params(params) {
                                 <oga:meta x="969" y="15"/>
                             </extensions>
                         </node>
-                        <node id="1df9c8e72ab24376" name="PhonScriptContext#getScriptParameters(Scriptable)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="eed939df12054de7" name="PhonScriptContext#getScriptParameters(Scriptable)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -243,7 +243,7 @@ function setup_params(params) {
                                 <oga:meta x="1212" y="15"/>
                             </extensions>
                         </node>
-                        <node id="361c39accbe245f2" name="ScriptParameters#loadFromMap(Map)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="faa2e99117f04acb" name="ScriptParameters#loadFromMap(Map)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -256,27 +256,27 @@ function setup_params(params) {
                                 <oga:meta x="1296" y="158"/>
                             </extensions>
                         </node>
-                        <link dest="63a6dc5b6e624709" destField="arg1" source="2ea020096a9f4ddb" sourceField="source"/>
-                        <link dest="3280516312454cc3" destField="obj" source="63a6dc5b6e624709" sourceField="value"/>
-                        <link dest="1df9c8e72ab24376" destField="arg1" source="5f1b8f3e4fc44466" sourceField="evaluatedScope"/>
-                        <link dest="2ea020096a9f4ddb" destField="obj" source="53e910e38e2d4776" sourceField="script"/>
-                        <link dest="1df9c8e72ab24376" destField="obj" source="5f1b8f3e4fc44466" sourceField="obj"/>
-                        <link dest="5f1b8f3e4fc44466" destField="obj" source="3280516312454cc3" sourceField="context"/>
-                        <link dest="361c39accbe245f2" destField="obj" source="1df9c8e72ab24376" sourceField="value"/>
-                        <link dest="361c39accbe245f2" destField="arg1" source="2ea020096a9f4ddb" sourceField="parameters"/>
-                        <link dest="ff0a713f71404ade" destField="obj" source="53e910e38e2d4776" sourceField="name"/>
+                        <link dest="208b481460194a5b" destField="arg1" source="769d86de3c0246e4" sourceField="source"/>
+                        <link dest="61dba7bcf749fb" destField="obj" source="208b481460194a5b" sourceField="value"/>
+                        <link dest="eed939df12054de7" destField="arg1" source="11641cf155d54b07" sourceField="evaluatedScope"/>
+                        <link dest="769d86de3c0246e4" destField="obj" source="1d535021e2114153" sourceField="script"/>
+                        <link dest="eed939df12054de7" destField="obj" source="11641cf155d54b07" sourceField="obj"/>
+                        <link dest="11641cf155d54b07" destField="obj" source="61dba7bcf749fb" sourceField="context"/>
+                        <link dest="faa2e99117f04acb" destField="obj" source="eed939df12054de7" sourceField="value"/>
+                        <link dest="faa2e99117f04acb" destField="arg1" source="769d86de3c0246e4" sourceField="parameters"/>
+                        <link dest="33adce58462b4f86" destField="obj" source="1d535021e2114153" sourceField="name"/>
                         <extensions>
                             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
                         </extensions>
                     </graph>
-                    <ogcn:published_input field="obj" name="query" ref="53e910e38e2d4776"/>
-                    <ogcn:published_output field="obj" name="script" ref="3280516312454cc3"/>
-                    <ogcn:published_output field="obj" name="obj" ref="ff0a713f71404ade"/>
+                    <ogcn:published_input field="obj" name="query" ref="1d535021e2114153"/>
+                    <ogcn:published_output field="obj" name="script" ref="61dba7bcf749fb"/>
+                    <ogcn:published_output field="obj" name="obj" ref="33adce58462b4f86"/>
                     <extensions>
                         <oga:meta x="613" y="15"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="f2b65447500b46a8" type="class:ca.phon.app.opgraph.nodes.log.PrintScriptParameters">
+                <node id="c6500e9dacbc4f67" type="class:ca.phon.app.opgraph.nodes.log.PrintScriptParameters">
                     <extensions>
                         <oga:settings>
                             <oga:property key="excludes"/>
@@ -288,7 +288,7 @@ function setup_params(params) {
                         <oga:meta x="808" y="29"/>
                     </extensions>
                 </node>
-                <node id="7a226b4e8aaa4430" type="class:ca.phon.opgraph.nodes.general.ArrayNode">
+                <node id="a19a1a1b46ac4f9b" type="class:ca.phon.opgraph.nodes.general.ArrayNode">
                     <input name="object1" optional="false">object in array</input>
                     <input name="object2" optional="false">object in array</input>
                     <extensions>
@@ -300,7 +300,7 @@ function setup_params(params) {
                         <oga:meta x="371" y="192"/>
                     </extensions>
                 </node>
-                <node id="24dc1343c11e451a" type="class:ca.phon.opgraph.nodes.general.TextNode">
+                <node id="cf1f49e4e63746c5" type="class:ca.phon.opgraph.nodes.general.TextNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text">
@@ -313,7 +313,7 @@ function setup_params(params) {
                         <oga:meta x="564" y="196"/>
                     </extensions>
                 </node>
-                <node id="3a6a304ea3534c0c" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
+                <node id="42ded29c5bb34273" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"/>
@@ -321,30 +321,30 @@ function setup_params(params) {
                         <oga:meta x="513" y="547"/>
                     </extensions>
                 </node>
-                <node id="295f172d3b6d42d9" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+                <node id="9d280c8357994337" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
                     <extensions>
                         <oga:settings/>
                         <oga:meta x="765" y="548"/>
                     </extensions>
                 </node>
-                <link dest="8112482bd3b54444" destField="project" source="1daebae4a3c432e" sourceField="obj"/>
-                <link dest="8112482bd3b54444" destField="queryId" source="ff88efe8c6e44cdc" sourceField="obj"/>
-                <link dest="8ac49b5dc86499b" destField="query" source="8112482bd3b54444" sourceField="query"/>
-                <link dest="f2b65447500b46a8" destField="script" source="8ac49b5dc86499b" sourceField="script"/>
-                <link dest="24dc1343c11e451a" destField="objects" source="7a226b4e8aaa4430" sourceField="array"/>
-                <link dest="7a226b4e8aaa4430" destField="object2" source="f2b65447500b46a8" sourceField="text"/>
-                <link dest="3a6a304ea3534c0c" destField="text" source="24dc1343c11e451a" sourceField="value"/>
-                <link dest="602b3f9cec054e5f" destField="parameters" source="3fdd76d7a281473b" sourceField="parameters"/>
-                <link dest="295f172d3b6d42d9" destField="root" source="3a6a304ea3534c0c" sourceField="section"/>
-                <link dest="3a6a304ea3534c0c" destField="sectionName" source="602b3f9cec054e5f" sourceField="value"/>
-                <link dest="7a226b4e8aaa4430" destField="object1" source="8ac49b5dc86499b" sourceField="obj"/>
-                <link dest="8112482bd3b54444" destField="selectedResults" source="42aedcd34a3d49c9" sourceField="obj"/>
+                <link dest="a3fc0da2c63d44cd" destField="project" source="c6005dc92f18485a" sourceField="obj"/>
+                <link dest="a3fc0da2c63d44cd" destField="queryId" source="570d1cc64c814f58" sourceField="obj"/>
+                <link dest="b81b90c886db4039" destField="query" source="a3fc0da2c63d44cd" sourceField="query"/>
+                <link dest="c6500e9dacbc4f67" destField="script" source="b81b90c886db4039" sourceField="script"/>
+                <link dest="cf1f49e4e63746c5" destField="objects" source="a19a1a1b46ac4f9b" sourceField="array"/>
+                <link dest="a19a1a1b46ac4f9b" destField="object2" source="c6500e9dacbc4f67" sourceField="text"/>
+                <link dest="42ded29c5bb34273" destField="text" source="cf1f49e4e63746c5" sourceField="value"/>
+                <link dest="c45e58a3a9984b60" destField="parameters" source="5320beeaa85b474b" sourceField="parameters"/>
+                <link dest="9d280c8357994337" destField="root" source="42ded29c5bb34273" sourceField="section"/>
+                <link dest="42ded29c5bb34273" destField="sectionName" source="c45e58a3a9984b60" sourceField="value"/>
+                <link dest="a19a1a1b46ac4f9b" destField="object1" source="b81b90c886db4039" sourceField="obj"/>
+                <link dest="a3fc0da2c63d44cd" destField="selectedResults" source="f20a9d23a4d461e" sourceField="obj"/>
                 <extensions>
                     <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                         <opqry:info format="html" title="Query Information">
                             <opqry:message/>
                         </opqry:info>
-                        <opqry:node ref="f2b65447500b46a8">
+                        <opqry:node ref="c6500e9dacbc4f67">
                             <opqry:info format="html" title="Format Script Parameters">
                                 <opqry:message/>
                             </opqry:info>
@@ -355,16 +355,16 @@ function setup_params(params) {
                     <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
                 </extensions>
             </graph>
-            <ogcn:published_input field="obj" name="project" ref="1daebae4a3c432e"/>
-            <ogcn:published_input field="obj" name="queryId" ref="ff88efe8c6e44cdc"/>
-            <ogcn:published_input field="obj" name="selectedResults" ref="42aedcd34a3d49c9"/>
+            <ogcn:published_input field="obj" name="project" ref="c6005dc92f18485a"/>
+            <ogcn:published_input field="obj" name="queryId" ref="570d1cc64c814f58"/>
+            <ogcn:published_input field="obj" name="selectedResults" ref="f20a9d23a4d461e"/>
             <extensions>
                 <oga:meta x="400" y="50"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="ffba3769e0774ec9" name="Aggregate" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1d296fc2">
-                <node id="ec89408d681e4575" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <ogcn:macro id="4488576f" name="Aggregate" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="7225974">
+                <node id="600b864dae544adc" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -377,7 +377,7 @@ function setup_params(params) {
                         <oga:meta x="15" y="15"/>
                     </extensions>
                 </node>
-                <node id="d6a1d0ffc4a14786" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="7cb53e7714234440" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -390,7 +390,7 @@ function setup_params(params) {
                         <oga:meta x="15" y="296"/>
                     </extensions>
                 </node>
-                <node id="3edec4bd568f4a3f" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="409f7c2d6634b89" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -403,7 +403,7 @@ function setup_params(params) {
                         <oga:meta x="15" y="417"/>
                     </extensions>
                 </node>
-                <node id="7a7df845bab44323" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                <node id="8e351c63d2724d47" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="reportTitle">
@@ -433,14 +433,14 @@ function setup_params(params) {
                         <oga:meta x="19" y="521"/>
                     </extensions>
                 </node>
-                <node id="4d7b4bcce0ff4af8" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+                <node id="ce4deba070e247eb" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
                     <extensions>
                         <oga:meta x="352" y="15"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="c99dae5db94946f9" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="530887d7">
-                        <node id="33f2d4aa47dc4762" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
+                <ogcn:macro id="fd6fa390136a488d" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <graph id="6609597f">
+                        <node id="173bc894709b4a01" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
@@ -455,7 +455,7 @@ function setup_params(params) {
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="23535614656446b" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="8cfa2b9d9cfb49fd" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -468,7 +468,7 @@ function setup_params(params) {
                                 <oga:meta x="236" y="91"/>
                             </extensions>
                         </node>
-                        <node id="a3d4cf150f7e4bea" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="20591be2024c4591" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -481,16 +481,16 @@ function setup_params(params) {
                                 <oga:meta x="393" y="100"/>
                             </extensions>
                         </node>
-                        <link dest="23535614656446b" destField="arg1" source="33f2d4aa47dc4762" sourceField="value"/>
-                        <link dest="a3d4cf150f7e4bea" destField="obj" source="23535614656446b" sourceField="value"/>
+                        <link dest="8cfa2b9d9cfb49fd" destField="arg1" source="173bc894709b4a01" sourceField="value"/>
+                        <link dest="20591be2024c4591" destField="obj" source="8cfa2b9d9cfb49fd" sourceField="value"/>
                     </graph>
-                    <ogcn:published_input field="obj" name="parameters" ref="23535614656446b"/>
-                    <ogcn:published_output field="value" name="value" ref="a3d4cf150f7e4bea"/>
+                    <ogcn:published_input field="obj" name="parameters" ref="8cfa2b9d9cfb49fd"/>
+                    <ogcn:published_output field="value" name="value" ref="20591be2024c4591"/>
                     <extensions>
-                        <oga:meta x="381" y="525"/>
+                        <oga:meta x="362" y="522"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="ae16ca27eddf4a8e" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+                <node id="8e943d5b6af4072" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeSessionInfo">
@@ -509,7 +509,7 @@ function setup_params(params) {
                         <oga:meta x="613" y="15"/>
                     </extensions>
                 </node>
-                <node id="21f5071810f4a32" name="Inventory Options" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                <node id="14af1d4606c246ee" name="Inventory Options" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                     <extensions>
                         <opqry:inventoryoptions>
                             <opqry:automaticConfiguration configureAutomatically="true">
@@ -521,7 +521,7 @@ function setup_params(params) {
                         <oga:meta x="810" y="15"/>
                     </extensions>
                 </node>
-                <node id="82f12fa1906d4453" name="Sort Settings" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                <node id="4d3e87c819984c94" name="Sort Settings" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                     <extensions>
                         <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                             <opqry:sortBy column="" order="ascending" type="plain"/>
@@ -530,7 +530,7 @@ function setup_params(params) {
                         <oga:meta x="1007" y="16"/>
                     </extensions>
                 </node>
-                <node id="cbeda6b5f9274c40" name="Is Group by Session?" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                <node id="66f03d3a1ba94e5f" name="Is Group by Session?" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                     <input name="inventorySettings" optional="false"/>
                     <output name="isGroupBySession" type="java.lang.Boolean"/>
                     <extensions>
@@ -555,9 +555,9 @@ function run(context) {
                         <oga:meta x="673" y="244"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="aca26acc2b52442a" name="Add Missing Columns and Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="12645a29">
-                        <node id="2fbbd33465b54aae" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <ogcn:macro id="609985d176b24009" name="Add Missing Columns and Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <graph id="68348aef">
+                        <node id="5e266e475a1e44a5" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -567,7 +567,7 @@ function run(context) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </node>
-                        <node id="c81df184014542bc" name="selectedSessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="325f001061bf46ce" name="selectedSessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -577,7 +577,7 @@ function run(context) {
                                 <oga:meta x="15" y="176"/>
                             </extensions>
                         </node>
-                        <node id="f89d86997a9641fa" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="f391335a883c4c98" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -587,7 +587,7 @@ function run(context) {
                                 <oga:meta x="15" y="317"/>
                             </extensions>
                         </node>
-                        <node id="62d273a7ff524207" name="Add Missing Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                        <node id="b87e4fa11ae7492b" name="Add Missing Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                             <input name="table" optional="false"/>
                             <input name="selectedSessions" optional="false"/>
                             <output name="outputTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
@@ -601,13 +601,22 @@ function run(context) {
 	outputs.add("outputTable", "", false, DefaultTableDataSource);
 }
 
+function containsSession(selectedSessions, columnName) {
+	for(var i = 0; i < selectedSessions.size(); i++) {
+		var sp = selectedSessions.get(i);
+		if(sp.toString().equals(columnName))
+			return true;
+	}
+	return false;
+}
+
 function run(context) {
 	var table = context.get("table");
 	var selectedSessions = context.get("selectedSessions");
 
 	var outputTable = new DefaultTableDataSource();
 	var colIdx = 0;
-	while( colIdx < table.getColumnCount() && !(table.getColumnTitle(colIdx).equals(selectedSessions.get(0).toString())) ) {
+	while( colIdx < table.getColumnCount() && !containsSession(selectedSessions, table.getColumnTitle(colIdx)) ) {
 		outputTable.setColumnTitle(colIdx, table.getColumnTitle(colIdx));
 		++colIdx;
 	}
@@ -648,7 +657,7 @@ function run(context) {
                                 <oga:meta x="212" y="176"/>
                             </extensions>
                         </node>
-                        <node id="9e408bcae39a4e1d" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="32a94ba2fe0a49c4" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
@@ -661,33 +670,36 @@ function run(context) {
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="c892c6cf479e427f" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+                        <node id="aeab5c959ec9401b" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
                             <extensions>
                                 <oga:settings/>
                                 <oga:meta x="461" y="15"/>
                             </extensions>
                         </node>
-                        <link dest="9e408bcae39a4e1d" destField="table" source="62d273a7ff524207" sourceField="outputTable"/>
-                        <link dest="9e408bcae39a4e1d" destField="sectionName" source="2fbbd33465b54aae" sourceField="obj"/>
-                        <link dest="c892c6cf479e427f" destField="root" source="9e408bcae39a4e1d" sourceField="section"/>
-                        <link dest="62d273a7ff524207" destField="selectedSessions" source="c81df184014542bc" sourceField="obj"/>
-                        <link dest="62d273a7ff524207" destField="table" source="f89d86997a9641fa" sourceField="obj"/>
+                        <link dest="32a94ba2fe0a49c4" destField="table" source="b87e4fa11ae7492b" sourceField="outputTable"/>
+                        <link dest="32a94ba2fe0a49c4" destField="sectionName" source="5e266e475a1e44a5" sourceField="obj"/>
+                        <link dest="aeab5c959ec9401b" destField="root" source="32a94ba2fe0a49c4" sourceField="section"/>
+                        <link dest="b87e4fa11ae7492b" destField="selectedSessions" source="325f001061bf46ce" sourceField="obj"/>
+                        <link dest="b87e4fa11ae7492b" destField="table" source="f391335a883c4c98" sourceField="obj"/>
+                        <extensions>
+                            <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
+                        </extensions>
                     </graph>
-                    <ogcn:published_input field="obj" name="sectionName" ref="2fbbd33465b54aae"/>
-                    <ogcn:published_input field="obj" name="selectedSessions" ref="c81df184014542bc"/>
-                    <ogcn:published_input field="obj" name="table" ref="f89d86997a9641fa"/>
+                    <ogcn:published_input field="obj" name="sectionName" ref="5e266e475a1e44a5"/>
+                    <ogcn:published_input field="obj" name="selectedSessions" ref="325f001061bf46ce"/>
+                    <ogcn:published_input field="obj" name="table" ref="f391335a883c4c98"/>
                     <extensions>
-                        <oga:meta x="1022" y="250"/>
+                        <oga:meta x="1016" y="244"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="3155710b60344774" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
+                <node id="3350716e000242c6" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
                     <extensions>
-                        <oga:meta x="779" y="426"/>
+                        <oga:meta x="794" y="414"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="65416fb072624510" name="Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="61f3f744">
-                        <node id="efdb28631f9b4b50" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <ogcn:macro id="38f87ab2d24243ec" name="Add to Report" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <graph id="2eda7bf1">
+                        <node id="58efe3c404543ba" name="sectionName" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -697,7 +709,7 @@ function run(context) {
                                 <oga:meta x="15" y="15"/>
                             </extensions>
                         </node>
-                        <node id="2039af81b7624d29" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="f7a6d53906634b98" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -707,7 +719,7 @@ function run(context) {
                                 <oga:meta x="22" y="191"/>
                             </extensions>
                         </node>
-                        <node id="f7227de264e2426b" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="a19e97f874934342" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
@@ -720,50 +732,50 @@ function run(context) {
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="e7c5f20df4d64d14" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+                        <node id="e056f4abc4394938" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
                             <extensions>
                                 <oga:settings/>
                                 <oga:meta x="461" y="15"/>
                             </extensions>
                         </node>
-                        <link dest="f7227de264e2426b" destField="sectionName" source="efdb28631f9b4b50" sourceField="obj"/>
-                        <link dest="e7c5f20df4d64d14" destField="root" source="f7227de264e2426b" sourceField="section"/>
-                        <link dest="f7227de264e2426b" destField="table" source="2039af81b7624d29" sourceField="obj"/>
+                        <link dest="a19e97f874934342" destField="sectionName" source="58efe3c404543ba" sourceField="obj"/>
+                        <link dest="e056f4abc4394938" destField="root" source="a19e97f874934342" sourceField="section"/>
+                        <link dest="a19e97f874934342" destField="table" source="f7a6d53906634b98" sourceField="obj"/>
                     </graph>
-                    <ogcn:published_input field="obj" name="sectionName" ref="efdb28631f9b4b50"/>
-                    <ogcn:published_input field="obj" name="table" ref="2039af81b7624d29"/>
+                    <ogcn:published_input field="obj" name="sectionName" ref="58efe3c404543ba"/>
+                    <ogcn:published_input field="obj" name="table" ref="f7a6d53906634b98"/>
                     <extensions>
                         <oga:meta x="1016" y="414"/>
                     </extensions>
                 </ogcn:macro>
-                <link dest="82f12fa1906d4453" destField="table" source="21f5071810f4a32" sourceField="table"/>
-                <link dest="ae16ca27eddf4a8e" destField="project" source="4d7b4bcce0ff4af8" sourceField="project"/>
-                <link dest="ae16ca27eddf4a8e" destField="results" source="4d7b4bcce0ff4af8" sourceField="result sets"/>
-                <link dest="21f5071810f4a32" destField="table" source="ae16ca27eddf4a8e" sourceField="table"/>
-                <link dest="4d7b4bcce0ff4af8" destField="project" source="ec89408d681e4575" sourceField="obj"/>
-                <link dest="4d7b4bcce0ff4af8" destField="queryId" source="d6a1d0ffc4a14786" sourceField="obj"/>
-                <link dest="c99dae5db94946f9" destField="parameters" source="7a7df845bab44323" sourceField="parameters"/>
-                <link dest="4d7b4bcce0ff4af8" destField="selectedResults" source="3edec4bd568f4a3f" sourceField="obj"/>
-                <link dest="aca26acc2b52442a" destField="selectedSessions" source="3edec4bd568f4a3f" sourceField="obj"/>
-                <link dest="aca26acc2b52442a" destField="sectionName" source="c99dae5db94946f9" sourceField="value"/>
-                <link dest="aca26acc2b52442a" destField="table" source="82f12fa1906d4453" sourceField="table"/>
-                <link dest="aca26acc2b52442a" destField="enabled" source="cbeda6b5f9274c40" sourceField="isGroupBySession"/>
-                <link dest="3155710b60344774" destField="x" source="cbeda6b5f9274c40" sourceField="isGroupBySession"/>
-                <link dest="65416fb072624510" destField="enabled" source="3155710b60344774" sourceField="result"/>
-                <link dest="65416fb072624510" destField="table" source="82f12fa1906d4453" sourceField="table"/>
-                <link dest="65416fb072624510" destField="sectionName" source="c99dae5db94946f9" sourceField="value"/>
-                <link dest="cbeda6b5f9274c40" destField="inventorySettings" source="21f5071810f4a32" sourceField="settings"/>
+                <link dest="4d3e87c819984c94" destField="table" source="14af1d4606c246ee" sourceField="table"/>
+                <link dest="8e943d5b6af4072" destField="project" source="ce4deba070e247eb" sourceField="project"/>
+                <link dest="8e943d5b6af4072" destField="results" source="ce4deba070e247eb" sourceField="result sets"/>
+                <link dest="14af1d4606c246ee" destField="table" source="8e943d5b6af4072" sourceField="table"/>
+                <link dest="ce4deba070e247eb" destField="project" source="600b864dae544adc" sourceField="obj"/>
+                <link dest="ce4deba070e247eb" destField="queryId" source="7cb53e7714234440" sourceField="obj"/>
+                <link dest="fd6fa390136a488d" destField="parameters" source="8e351c63d2724d47" sourceField="parameters"/>
+                <link dest="ce4deba070e247eb" destField="selectedResults" source="409f7c2d6634b89" sourceField="obj"/>
+                <link dest="609985d176b24009" destField="selectedSessions" source="409f7c2d6634b89" sourceField="obj"/>
+                <link dest="609985d176b24009" destField="sectionName" source="fd6fa390136a488d" sourceField="value"/>
+                <link dest="609985d176b24009" destField="table" source="4d3e87c819984c94" sourceField="table"/>
+                <link dest="609985d176b24009" destField="enabled" source="66f03d3a1ba94e5f" sourceField="isGroupBySession"/>
+                <link dest="3350716e000242c6" destField="x" source="66f03d3a1ba94e5f" sourceField="isGroupBySession"/>
+                <link dest="38f87ab2d24243ec" destField="enabled" source="3350716e000242c6" sourceField="result"/>
+                <link dest="38f87ab2d24243ec" destField="table" source="4d3e87c819984c94" sourceField="table"/>
+                <link dest="38f87ab2d24243ec" destField="sectionName" source="fd6fa390136a488d" sourceField="value"/>
+                <link dest="66f03d3a1ba94e5f" destField="inventorySettings" source="14af1d4606c246ee" sourceField="settings"/>
                 <extensions>
                     <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                         <opqry:info format="html" title="Aggregate">
                             <opqry:message/>
                         </opqry:info>
-                        <opqry:node ref="21f5071810f4a32" showAsStep="true">
+                        <opqry:node ref="14af1d4606c246ee" showAsStep="true">
                             <opqry:info format="html" title="Inventory Options">
                                 <opqry:message/>
                             </opqry:info>
                         </opqry:node>
-                        <opqry:node ref="82f12fa1906d4453" showAsStep="true">
+                        <opqry:node ref="4d3e87c819984c94" showAsStep="true">
                             <opqry:info format="html" title="Sort Settings">
                                 <opqry:message/>
                             </opqry:info>
@@ -805,16 +817,16 @@ $buffers[$bufferName]
                     <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
                 </extensions>
             </graph>
-            <ogcn:published_input field="obj" name="project" ref="ec89408d681e4575"/>
-            <ogcn:published_input field="obj" name="queryId" ref="d6a1d0ffc4a14786"/>
-            <ogcn:published_input field="obj" name="selectedResults" ref="3edec4bd568f4a3f"/>
+            <ogcn:published_input field="obj" name="project" ref="600b864dae544adc"/>
+            <ogcn:published_input field="obj" name="queryId" ref="7cb53e7714234440"/>
+            <ogcn:published_input field="obj" name="selectedResults" ref="409f7c2d6634b89"/>
             <extensions>
                 <oga:meta x="400" y="200"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="2ca6a07842de48fd" name="Table by Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5b800661">
-                <node id="9d8c26fc2a7b406a" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <ogcn:macro id="72c4bf78" name="Table by Session" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="67b8983b">
+                <node id="73693cb71c0e461f" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -827,7 +839,7 @@ $buffers[$bufferName]
                         <oga:meta x="15" y="15"/>
                     </extensions>
                 </node>
-                <node id="fc853e9e7b584acf" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="e849e0779b7c47dc" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -840,7 +852,7 @@ $buffers[$bufferName]
                         <oga:meta x="15" y="296"/>
                     </extensions>
                 </node>
-                <node id="2d69639f84ea43fe" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                <node id="dedf1787ff0f4406" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="contextKey">
@@ -853,7 +865,7 @@ $buffers[$bufferName]
                         <oga:meta x="20" y="417"/>
                     </extensions>
                 </node>
-                <node id="cd49b6939f294e94" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                <node id="22d730cc3c7c4cc1" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="reportTitle">
@@ -883,14 +895,14 @@ function setup_params(params) {
                         <oga:meta x="17" y="522"/>
                     </extensions>
                 </node>
-                <node id="a8949fbecabc4fbf" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+                <node id="3904868db69340ca" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
                     <extensions>
                         <oga:meta x="352" y="15"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="734dbb512224151" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2bb289a0">
-                        <node id="885a2e4d767c47f7" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
+                <ogcn:macro id="5b011d1f976c49cc" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <graph id="57a1f35d">
+                        <node id="7de4902f3abb4f85" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
@@ -905,7 +917,7 @@ function setup_params(params) {
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="1b5aa77a35b942bf" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="13ab9ad38d1b4259" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -918,7 +930,7 @@ function setup_params(params) {
                                 <oga:meta x="236" y="91"/>
                             </extensions>
                         </node>
-                        <node id="35010e0c3cd94572" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                        <node id="e0d34b5104a84df9" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -931,16 +943,16 @@ function setup_params(params) {
                                 <oga:meta x="393" y="100"/>
                             </extensions>
                         </node>
-                        <link dest="1b5aa77a35b942bf" destField="arg1" source="885a2e4d767c47f7" sourceField="value"/>
-                        <link dest="35010e0c3cd94572" destField="obj" source="1b5aa77a35b942bf" sourceField="value"/>
+                        <link dest="13ab9ad38d1b4259" destField="arg1" source="7de4902f3abb4f85" sourceField="value"/>
+                        <link dest="e0d34b5104a84df9" destField="obj" source="13ab9ad38d1b4259" sourceField="value"/>
                     </graph>
-                    <ogcn:published_input field="obj" name="parameters" ref="1b5aa77a35b942bf"/>
-                    <ogcn:published_output field="value" name="value" ref="35010e0c3cd94572"/>
+                    <ogcn:published_input field="obj" name="parameters" ref="13ab9ad38d1b4259"/>
+                    <ogcn:published_output field="value" name="value" ref="e0d34b5104a84df9"/>
                     <extensions>
                         <oga:meta x="349" y="530"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="ac202b1c727948e8" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+                <node id="28e8d3911850421f" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="includeSessionInfo">
@@ -959,13 +971,13 @@ function setup_params(params) {
                         <oga:meta x="613" y="15"/>
                     </extensions>
                 </node>
-                <node id="6ca0f78f904c4f73" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+                <node id="4d947300d7aa4924" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
                     <extensions>
                         <oga:settings/>
                         <oga:meta x="567" y="530"/>
                     </extensions>
                 </node>
-                <node id="30f802dd32d647f5" name="Split Table by Session" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                <node id="2f054efae9e34ca0" name="Split Table by Session" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
                     <output name="keySet" type="java.util.Set">Unique values from given column name</output>
                     <output name="tableMap" type="java.util.Map">Map of key -&gt; table values</output>
                     <extensions>
@@ -1068,9 +1080,9 @@ function tableOp(context, table) {
                         <oga:meta x="810" y="15"/>
                     </extensions>
                 </node>
-                <ogcn:macro id="90c1ddf38b2c4775" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="1fa590bf">
-                        <node id="62aca7ad75d6482f" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
+                <ogcn:macro id="e82e617575e948bc" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
+                    <graph id="5d8747bd">
+                        <node id="d30b7b3966684c7d" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
@@ -1083,7 +1095,7 @@ function tableOp(context, table) {
                                 <oga:meta x="84" y="51"/>
                             </extensions>
                         </node>
-                        <node id="21eac3ff0b294ff7" name="Table Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="33b10ee9a36a4127" name="Table Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1093,7 +1105,7 @@ function tableOp(context, table) {
                                 <oga:meta x="85" y="176"/>
                             </extensions>
                         </node>
-                        <node id="bd4fd14884194e9d" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <node id="c0cc956d1144dee" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1103,9 +1115,9 @@ function tableOp(context, table) {
                                 <oga:meta x="89" y="290"/>
                             </extensions>
                         </node>
-                        <ogcn:macro id="38cff14532fe4dea" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="661e43dd">
-                                <node id="8c693e2ba1014d17" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <ogcn:macro id="d10d26004a894af6" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
+                            <graph id="6c62d74b">
+                                <node id="3a9a3d8556b24854" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1115,7 +1127,7 @@ function tableOp(context, table) {
                                         <oga:meta x="244" y="68"/>
                                     </extensions>
                                 </node>
-                                <node id="c843bec8ccd34ec0" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                                <node id="7d4cd78b0cc342d5" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -1128,7 +1140,7 @@ function tableOp(context, table) {
                                         <oga:meta x="401" y="69"/>
                                     </extensions>
                                 </node>
-                                <node id="212c8dcf3f9849ca" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                <node id="bfe137ca8b4e41c2" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                     <input name="table" optional="false"/>
                                     <output name="exists" type="java.lang.Boolean">does table exist</output>
                                     <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource">table if exists, undefined otherwise</output>
@@ -1155,20 +1167,20 @@ function run(context) {
                                         <oga:meta x="555" y="73"/>
                                     </extensions>
                                 </node>
-                                <link dest="c843bec8ccd34ec0" destField="obj" source="8c693e2ba1014d17" sourceField="obj"/>
-                                <link dest="212c8dcf3f9849ca" destField="table" source="c843bec8ccd34ec0" sourceField="value"/>
+                                <link dest="7d4cd78b0cc342d5" destField="obj" source="3a9a3d8556b24854" sourceField="obj"/>
+                                <link dest="bfe137ca8b4e41c2" destField="table" source="7d4cd78b0cc342d5" sourceField="value"/>
                             </graph>
-                            <ogcn:published_input field="arg1" name="sessionName" ref="c843bec8ccd34ec0"/>
-                            <ogcn:published_input field="obj" name="tableMap" ref="8c693e2ba1014d17"/>
-                            <ogcn:published_output field="exists" name="exists" ref="212c8dcf3f9849ca"/>
-                            <ogcn:published_output field="table" name="table" ref="212c8dcf3f9849ca"/>
+                            <ogcn:published_input field="arg1" name="sessionName" ref="7d4cd78b0cc342d5"/>
+                            <ogcn:published_input field="obj" name="tableMap" ref="3a9a3d8556b24854"/>
+                            <ogcn:published_output field="exists" name="exists" ref="bfe137ca8b4e41c2"/>
+                            <ogcn:published_output field="table" name="table" ref="bfe137ca8b4e41c2"/>
                             <extensions>
                                 <oga:meta x="340" y="102"/>
                             </extensions>
                         </ogcn:macro>
-                        <ogcn:macro id="6f20c3b532254d51" name="If Has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="7694d219">
-                                <node id="92f7ba867fbe4ab1" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                        <ogcn:macro id="cf85550de3484501" name="If Has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
+                            <graph id="368766dd">
+                                <node id="8e0329639f904381" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1178,7 +1190,7 @@ function run(context) {
                                         <oga:meta x="15" y="15"/>
                                     </extensions>
                                 </node>
-                                <node id="686bdb0307f84590" name="session name" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                                <node id="d6b91a81f85141cb" name="session name" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1188,7 +1200,7 @@ function run(context) {
                                         <oga:meta x="33" y="225"/>
                                     </extensions>
                                 </node>
-                                <node id="26c9b37f16654dd4" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                                <node id="f9e1df64d5da4252" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
@@ -1198,7 +1210,7 @@ function run(context) {
                                         <oga:meta x="35" y="343"/>
                                     </extensions>
                                 </node>
-                                <node id="a254ad54d0bf4075" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                                <node id="9c4f0ffa6bb14a29" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -1211,7 +1223,7 @@ function run(context) {
                                         <oga:meta x="231" y="225"/>
                                     </extensions>
                                 </node>
-                                <node id="ddff1d3049864a9e" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                <node id="4de29da4941241b1" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
@@ -1230,30 +1242,30 @@ Result]]>
                                         </oga:meta>
                                     </extensions>
                                 </node>
-                                <link dest="a254ad54d0bf4075" destField="obj" source="686bdb0307f84590" sourceField="obj"/>
-                                <link dest="ddff1d3049864a9e" destField="table" source="92f7ba867fbe4ab1" sourceField="obj"/>
-                                <link dest="ddff1d3049864a9e" destField="sectionName" source="a254ad54d0bf4075" sourceField="value"/>
-                                <link dest="ddff1d3049864a9e" destField="parent" source="26c9b37f16654dd4" sourceField="obj"/>
+                                <link dest="9c4f0ffa6bb14a29" destField="obj" source="d6b91a81f85141cb" sourceField="obj"/>
+                                <link dest="4de29da4941241b1" destField="table" source="8e0329639f904381" sourceField="obj"/>
+                                <link dest="4de29da4941241b1" destField="sectionName" source="9c4f0ffa6bb14a29" sourceField="value"/>
+                                <link dest="4de29da4941241b1" destField="parent" source="f9e1df64d5da4252" sourceField="obj"/>
                                 <extensions>
                                     <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
                                 </extensions>
                             </graph>
-                            <ogcn:published_input field="obj" name="table" ref="92f7ba867fbe4ab1"/>
-                            <ogcn:published_input field="obj" name="session Name" ref="686bdb0307f84590"/>
-                            <ogcn:published_input field="obj" name="reportNode" ref="26c9b37f16654dd4"/>
+                            <ogcn:published_input field="obj" name="table" ref="8e0329639f904381"/>
+                            <ogcn:published_input field="obj" name="session Name" ref="d6b91a81f85141cb"/>
+                            <ogcn:published_input field="obj" name="reportNode" ref="f9e1df64d5da4252"/>
                             <extensions>
                                 <oga:meta x="590" y="103"/>
                             </extensions>
                         </ogcn:macro>
-                        <link dest="38cff14532fe4dea" destField="sessionName" source="62aca7ad75d6482f" sourceField="obj"/>
-                        <link dest="38cff14532fe4dea" destField="tableMap" source="21eac3ff0b294ff7" sourceField="obj"/>
-                        <link dest="6f20c3b532254d51" destField="session Name" source="62aca7ad75d6482f" sourceField="obj"/>
-                        <link dest="6f20c3b532254d51" destField="table" source="38cff14532fe4dea" sourceField="table"/>
-                        <link dest="6f20c3b532254d51" destField="enabled" source="38cff14532fe4dea" sourceField="exists"/>
-                        <link dest="6f20c3b532254d51" destField="reportNode" source="bd4fd14884194e9d" sourceField="obj"/>
+                        <link dest="d10d26004a894af6" destField="sessionName" source="d30b7b3966684c7d" sourceField="obj"/>
+                        <link dest="d10d26004a894af6" destField="tableMap" source="33b10ee9a36a4127" sourceField="obj"/>
+                        <link dest="cf85550de3484501" destField="session Name" source="d30b7b3966684c7d" sourceField="obj"/>
+                        <link dest="cf85550de3484501" destField="table" source="d10d26004a894af6" sourceField="table"/>
+                        <link dest="cf85550de3484501" destField="enabled" source="d10d26004a894af6" sourceField="exists"/>
+                        <link dest="cf85550de3484501" destField="reportNode" source="c0cc956d1144dee" sourceField="obj"/>
                     </graph>
-                    <ogcn:published_input field="obj" name="tableMap" ref="21eac3ff0b294ff7"/>
-                    <ogcn:published_input field="obj" name="reportNode" ref="bd4fd14884194e9d"/>
+                    <ogcn:published_input field="obj" name="tableMap" ref="33b10ee9a36a4127"/>
+                    <ogcn:published_input field="obj" name="reportNode" ref="c0cc956d1144dee"/>
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className">
@@ -1263,23 +1275,23 @@ Result]]>
                         <oga:meta x="1047" y="15"/>
                     </extensions>
                 </ogcn:macro>
-                <link dest="a8949fbecabc4fbf" destField="project" source="9d8c26fc2a7b406a" sourceField="obj"/>
-                <link dest="a8949fbecabc4fbf" destField="queryId" source="fc853e9e7b584acf" sourceField="obj"/>
-                <link dest="30f802dd32d647f5" destField="table" source="ac202b1c727948e8" sourceField="table"/>
-                <link dest="90c1ddf38b2c4775" destField="collection" source="30f802dd32d647f5" sourceField="keySet"/>
-                <link dest="90c1ddf38b2c4775" destField="tableMap" source="30f802dd32d647f5" sourceField="tableMap"/>
-                <link dest="ac202b1c727948e8" destField="project" source="a8949fbecabc4fbf" sourceField="project"/>
-                <link dest="ac202b1c727948e8" destField="results" source="a8949fbecabc4fbf" sourceField="result sets"/>
-                <link dest="6ca0f78f904c4f73" destField="reportName" source="734dbb512224151" sourceField="value"/>
-                <link dest="734dbb512224151" destField="parameters" source="cd49b6939f294e94" sourceField="parameters"/>
-                <link dest="90c1ddf38b2c4775" destField="reportNode" source="6ca0f78f904c4f73" sourceField="root"/>
-                <link dest="a8949fbecabc4fbf" destField="selectedResults" source="2d69639f84ea43fe" sourceField="obj"/>
+                <link dest="3904868db69340ca" destField="project" source="73693cb71c0e461f" sourceField="obj"/>
+                <link dest="3904868db69340ca" destField="queryId" source="e849e0779b7c47dc" sourceField="obj"/>
+                <link dest="2f054efae9e34ca0" destField="table" source="28e8d3911850421f" sourceField="table"/>
+                <link dest="e82e617575e948bc" destField="collection" source="2f054efae9e34ca0" sourceField="keySet"/>
+                <link dest="e82e617575e948bc" destField="tableMap" source="2f054efae9e34ca0" sourceField="tableMap"/>
+                <link dest="28e8d3911850421f" destField="project" source="3904868db69340ca" sourceField="project"/>
+                <link dest="28e8d3911850421f" destField="results" source="3904868db69340ca" sourceField="result sets"/>
+                <link dest="4d947300d7aa4924" destField="reportName" source="5b011d1f976c49cc" sourceField="value"/>
+                <link dest="5b011d1f976c49cc" destField="parameters" source="22d730cc3c7c4cc1" sourceField="parameters"/>
+                <link dest="e82e617575e948bc" destField="reportNode" source="4d947300d7aa4924" sourceField="root"/>
+                <link dest="3904868db69340ca" destField="selectedResults" source="dedf1787ff0f4406" sourceField="obj"/>
                 <extensions>
                     <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                         <opqry:info format="html" title="Table by Session">
                             <opqry:message/>
                         </opqry:info>
-                        <opqry:node ref="ddff1d3049864a9e">
+                        <opqry:node ref="4de29da4941241b1">
                             <opqry:info format="html" title="Table Options">
                                 <opqry:message/>
                             </opqry:info>
@@ -1290,38 +1302,39 @@ Result]]>
                     <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
                 </extensions>
             </graph>
-            <ogcn:published_input field="obj" name="project" ref="9d8c26fc2a7b406a"/>
-            <ogcn:published_input field="obj" name="queryId" ref="fc853e9e7b584acf"/>
-            <ogcn:published_input field="obj" name="selectedResults" ref="2d69639f84ea43fe"/>
+            <ogcn:published_input field="obj" name="project" ref="73693cb71c0e461f"/>
+            <ogcn:published_input field="obj" name="queryId" ref="e849e0779b7c47dc"/>
+            <ogcn:published_input field="obj" name="selectedResults" ref="dedf1787ff0f4406"/>
             <extensions>
                 <oga:meta x="400" y="350"/>
             </extensions>
         </ogcn:macro>
-        <node id="4b12cfb7" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+        <node id="aa61a25" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <link dest="4b12cfb7" destField="project" source="2242bea8" sourceField="obj"/>
-        <link dest="4b12cfb7" destField="queryId" source="64640d5b" sourceField="obj"/>
-        <link dest="4b12cfb7" destField="selectedResults" source="75dda5c3" sourceField="obj"/>
+        <link dest="aa61a25" destField="project" source="432dcb99" sourceField="obj"/>
+        <link dest="aa61a25" destField="queryId" source="227a9498" sourceField="obj"/>
+        <link dest="aa61a25" destField="selectedResults" source="42546d7" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="default_report">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:optionalNode enabled="true" ref="c406589c639042a2"/>
-                <opqry:optionalNode enabled="true" ref="ffba3769e0774ec9"/>
-                <opqry:optionalNode enabled="true" ref="2ca6a07842de48fd"/>
-                <opqry:optionalNode enabled="true" ref="21f4f2c2"/>
+                <opqry:optionalNode enabled="true" ref="76d381fe731d43a3"/>
+                <opqry:optionalNode enabled="true" ref="85bac7a86dc5491c"/>
+                <opqry:optionalNode enabled="true" ref="2bf010bae27d4692"/>
+                <opqry:optionalNode enabled="true" ref="4488576f"/>
+                <opqry:optionalNode enabled="true" ref="72c4bf78"/>
                 <opqry:report-template name="Report Prefix"/>
                 <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
             <opqry:simplecomposer>
-                <opqry:node ref="21f4f2c2"/>
-                <opqry:node ref="ffba3769e0774ec9"/>
-                <opqry:node ref="2ca6a07842de48fd"/>
+                <opqry:node ref="76d381fe731d43a3"/>
+                <opqry:node ref="4488576f"/>
+                <opqry:node ref="72c4bf78"/>
             </opqry:simplecomposer>
         </extensions>
     </graph>
