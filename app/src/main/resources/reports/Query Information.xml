@@ -73,7 +73,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="3940ba9741044933" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5bfe092a">
+            <graph id="4d0e1b97">
                 <node id="64b8397ffe9049cf" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -121,11 +121,11 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="d7bc00981c5b4f33"/>
             <ogcn:published_output field="value" name="value" ref="aa1bf544f98a46cb"/>
             <extensions>
-                <oga:meta x="299" y="547"/>
+                <oga:meta x="299" y="527"/>
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="a71911e6a705459c" name="Load Query Script" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6fc76212">
+            <graph id="174d7bee">
                 <node id="50dc926ad1674114" name="Query" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -277,13 +277,13 @@ function setup_params(params) {
                 <oga:settings>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"/>
                 </oga:settings>
-                <oga:meta x="513" y="547"/>
+                <oga:meta x="513" y="527"/>
             </extensions>
         </node>
         <node id="70ae2526" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="765" y="548"/>
+                <oga:meta x="765" y="527"/>
             </extensions>
         </node>
         <link dest="1052be62" destField="project" source="7971e251" sourceField="obj"/>
