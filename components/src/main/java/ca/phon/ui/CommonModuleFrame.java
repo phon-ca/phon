@@ -166,9 +166,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 				removeWindowFromActiveList();
 				CommonModuleFrame.this.removeWindowListener(this);
 				
-				System.out.println(getTitle() + " " + CommonModuleFrame.getOpenWindows().stream()
-						.map( (w) -> w.getTitle() ).collect(Collectors.joining(",")));
-				
 				if(CommonModuleFrame.getOpenWindows().size() == 0) {
 					// exit application
 					try {
