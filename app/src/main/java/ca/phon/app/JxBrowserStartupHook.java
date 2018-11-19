@@ -1,7 +1,24 @@
+/*
+ * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.phon.app;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.ProductInfo;
@@ -14,11 +31,19 @@ import ca.phon.plugin.PluginException;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
+/**
+ * Startup hook for JxBrowser library
+ *
+ */
 public class JxBrowserStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
+	
+	public static final String ACCELERATED_LIGHTWEIGHT_RENDERING = "jxbrowser.acceleratedLightweightRendering";
+	public static final boolean DEFAULT_ACCELERATED_LIGHTWEIGHT_RENDERING = false;
 	
 	private final static int REMOTE_DEBUGGING_PORT = 9222;
 	
-	private final static String CHROMIUM_FOLDER = PrefHelper.getUserDataFolder() + File.separator + "chromium";
+	public static final String CHROMIUM_FOLDER = "jxbrowser.chromiumFolder";
+	public final static String DEFAULT_CHROMIUM_FOLDER = PrefHelper.getUserDataFolder() + File.separator + "chromium";
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -36,16 +61,15 @@ public class JxBrowserStartupHook implements PhonStartupHook, IPluginExtensionPo
 		
 		// setup chromium folder
 		LogUtil.info(String.format("Chromium folder: %s",CHROMIUM_FOLDER));
-		BrowserPreferences.setChromiumDir(CHROMIUM_FOLDER);
+		BrowserPreferences.setChromiumDir(PrefHelper.get(CHROMIUM_FOLDER, DEFAULT_CHROMIUM_FOLDER));
 		
 		// setup chromium switches before any browsers are started
-		var switches = new ArrayList<>();
-		if(!OSInfo.isMacOs()) {
+		List<String> switches = new ArrayList<>();
+		if(!OSInfo.isMacOs() && PrefHelper.getBoolean(ACCELERATED_LIGHTWEIGHT_RENDERING, DEFAULT_ACCELERATED_LIGHTWEIGHT_RENDERING)) {
 			/*
 			 * accelerated lightweight rendering
 			 * https://jxbrowser.support.teamdev.com/support/solutions/articles/9000104965-accelerated-lightweight-rendering
 			 */
-			LogUtil.info("Chormium accelerated lightweight rendering");
 			switches.add("--disable-gpu");
 			switches.add("--disable-gpu-compositing");
 			switches.add("--enable-begin-frame-scheduling");
@@ -53,10 +77,10 @@ public class JxBrowserStartupHook implements PhonStartupHook, IPluginExtensionPo
 		}
 		if(PrefHelper.getBoolean("phon.debug", false)) {
 			// setup remote debugging port
-			LogUtil.info(String.format("Chromium remote debugging port: %d",REMOTE_DEBUGGING_PORT));
 			switches.add(String.format("--remote-debugging-port=%d",REMOTE_DEBUGGING_PORT));
 		}
 		if(switches.size() > 0) {
+			LogUtil.info(String.format("Chromium switches: %s", switches.stream().collect(Collectors.joining(" "))));
 			BrowserPreferences.setChromiumSwitches(switches.toArray(new String[0]));
 		}
 	}
