@@ -8,6 +8,8 @@ ca.phon.app.ThemeHook
 ca.phon.app.fonts.FontLoaderStartupHook
 # VLC
 ca.phon.app.VLCInitHook
+# JxBrowser
+ca.phon.app.JxBrowserStartupHook
 # IPA Dictionaries
 ca.phon.app.IPADictionaryInitHook
 # Load common objects
