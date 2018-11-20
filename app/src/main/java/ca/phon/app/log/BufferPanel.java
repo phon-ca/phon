@@ -53,6 +53,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
@@ -146,10 +147,11 @@ public class BufferPanel extends JPanel implements IExtendable {
 	private JXTable dataTable;
 
 	private Browser browser;
-	private BrowserView htmlView;
-
 	private Browser debugBrowser;
-	private BrowserView htmlDebugView;
+	private BrowserView htmlView;
+	
+	private JPanel htmlPanel;
+	private JSplitPane htmlSplitPane;
 	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 
@@ -346,7 +348,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 
 	public boolean isShowingHtml() {
-		return currentView != null && currentView == htmlView;
+		return currentView != null && currentView == htmlPanel;
 	}
 
 	public void showHtml() {
@@ -358,33 +360,58 @@ public class BufferPanel extends JPanel implements IExtendable {
 		
 		if(htmlView == null) {
 			BrowserView view = getWebView();
-			contentPanel.add(view, HTML_VIEW_ID);
+			htmlPanel = new JPanel(new BorderLayout());
+			htmlPanel.add(view, BorderLayout.CENTER);
+			contentPanel.add(htmlPanel, HTML_VIEW_ID);
 		}
 		
 		if(loadTextContent) {
 			browser.loadHTML(logBuffer.getText());
 		}
 		
-		currentView = htmlView;
+		currentView = htmlPanel;
 		cardLayout.show(contentPanel, HTML_VIEW_ID);
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
 	
+	public boolean isShowingHtmlDebug() {
+		return isShowingHtml() && htmlSplitPane != null && htmlPanel.getComponent(0) == htmlSplitPane;
+	}
+	
+	public void hideHtmlDebug() {
+		if(!isShowingHtmlDebug()) return;
+		if(debugBrowser != null) {
+			debugBrowser.dispose();
+			debugBrowser = null;
+		}
+		
+		htmlPanel.removeAll();
+		htmlPanel.add(getWebView(), BorderLayout.CENTER);
+		htmlPanel.revalidate();
+	}
+	
 	public void showHtmlDebug() {
 		if(browser != null) {
+			if(debugBrowser != null) {
+				debugBrowser.dispose();
+				debugBrowser = null;
+			}
 			final String debugURL = browser.getRemoteDebuggingURL();
-			final Browser debugBrowser = createBrowser();
+			debugBrowser = createBrowser();
 			final BrowserView debugBrowserView = new BrowserView(debugBrowser);
-			debugBrowser.loadURL(debugURL);
 			
-			final CommonModuleFrame cmf = new CommonModuleFrame(getBufferName() + " Debug");
-			cmf.setWindowName(getBufferName() + " Debug");
-			cmf.getContentPane().setLayout(new BorderLayout());
-			cmf.getContentPane().add(debugBrowserView, BorderLayout.CENTER);
-			cmf.pack();
-			cmf.setPreferredSize(new Dimension(400, CommonModuleFrame.getCurrentFrame().getHeight()));
-			cmf.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, CommonModuleFrame.getCurrentFrame());
-			cmf.setVisible(true);
+			htmlSplitPane = new JSplitPane();
+			htmlSplitPane.setLeftComponent(getWebView());
+			htmlSplitPane.setRightComponent(debugBrowserView);
+			htmlSplitPane.setResizeWeight(1.0);
+			
+			htmlPanel.removeAll();
+			htmlPanel.add(htmlSplitPane, BorderLayout.CENTER);
+			htmlPanel.revalidate();
+			
+			SwingUtilities.invokeLater( () -> htmlSplitPane.setDividerLocation(0.6) );
+			
+			debugBrowser.loadURL(debugURL);
 		}
 	}
 

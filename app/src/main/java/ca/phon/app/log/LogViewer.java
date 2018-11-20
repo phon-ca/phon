@@ -39,6 +39,7 @@ import javax.swing.event.MenuListener;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.PrefHelper;
 
 /**
  * Application log viewer.
@@ -119,23 +120,24 @@ public class LogViewer extends CommonModuleFrame {
 			}
 		});
 		
-		final JMenu bufferMenu = builder.addMenu(".@Logs", "Buffer");
-		bufferMenu.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent e) {
-				bufferPanel.setupMenu(bufferMenu);
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-		});
-		
+		if(PrefHelper.getBoolean("phon.debug", false)) {
+			final JMenu bufferMenu = builder.addMenu(".@Logs", "Buffer");
+			bufferMenu.addMenuListener(new MenuListener() {
+				
+				@Override
+				public void menuSelected(MenuEvent e) {
+					bufferPanel.setupMenu(bufferMenu);
+				}
+				
+				@Override
+				public void menuDeselected(MenuEvent e) {
+				}
+				
+				@Override
+				public void menuCanceled(MenuEvent e) {
+				}
+			});
+		}
 		
 	}
 

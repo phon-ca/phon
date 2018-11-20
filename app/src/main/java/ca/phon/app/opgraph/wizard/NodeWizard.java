@@ -51,6 +51,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.swing.Action;
+import javax.swing.FocusManager;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JEditorPane;
@@ -264,24 +265,26 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		});
 		
 		
-		final JMenu bufferMenu = builder.addMenu(".@Report", "Buffer");
-		bufferMenu.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent e) {
-				bufferPanel.setupMenu(bufferMenu);
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent e) {
+		if(PrefHelper.getBoolean("phon.debug", false)) {
+			final JMenu bufferMenu = builder.addMenu(".@Report", "Buffer");
+			bufferMenu.addMenuListener(new MenuListener() {
 				
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent e) {
+				@Override
+				public void menuSelected(MenuEvent e) {
+					bufferPanel.setupMenu(bufferMenu);
+				}
 				
-			}
-		});
+				@Override
+				public void menuDeselected(MenuEvent e) {
+					
+				}
+				
+				@Override
+				public void menuCanceled(MenuEvent e) {
+					
+				}
+			});
+		}
 	}
 	
 	public void setupReportMenu(MenuBuilder builder) {
@@ -289,10 +292,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		
 		if(hasReport) {
 			if(PrefHelper.getBoolean("phon.debug", false)) {
-				final PhonUIAction debugAct = new PhonUIAction(bufferPanel.getBuffer("Report"), "showHtmlDebug");
+				final BufferPanel reportBuffer = bufferPanel.getBuffer("Report");
+				final PhonUIAction debugAct = new PhonUIAction(reportBuffer, 
+						(reportBuffer.isShowingHtmlDebug() ? "hideHtmlDebug" : "showHtmlDebug"));
 				debugAct.putValue(PhonUIAction.NAME, "Debug");
 				debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
-				builder.addItem(".", debugAct);
+				debugAct.putValue(PhonUIAction.SELECTED_KEY, reportBuffer.isShowingHtmlDebug());
+				builder.addItem(".", new JCheckBoxMenuItem(debugAct));
+				
+				final PhonUIAction reloadAct = new PhonUIAction(reportBuffer.getBrowser(), "reload");
+				reloadAct.putValue(PhonUIAction.NAME, "Reload");
+				reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reload report");
+				builder.addItem(".", reloadAct);
 				builder.addSeparator(".", "debug_sep");
 			}
 			
@@ -652,7 +663,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			setBounds(nextButton);
 		}
 
-		getRootPane().setDefaultButton(endBtn);
+		if(getCurrentStep() != reportDataStep)
+			getRootPane().setDefaultButton(endBtn);
+		else
+			getRootPane().setDefaultButton(null);
 
 		breadCrumbViewer.revalidate();
 		breadCrumbViewer.scrollRectToVisible(endBtn.getBounds());
@@ -822,8 +836,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		btnCancel.setVisible(false);
 
 		btnRunAgain.setVisible(true);
-		getRootPane().setDefaultButton(btnRunAgain);
-
+		
 		btnBack.setEnabled(true);
 	}
 
@@ -1017,6 +1030,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					});
 
 					reportBufferPanel.getBrowser().loadURL(reportURL);
+					reportBufferPanel.requestFocusInWindow();
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}
@@ -1286,7 +1300,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		super.gotoStep(step);
 
 		if(!inInit && getCurrentStep() == reportDataStep) {
-			if(bufferPanel.getBufferNames().size() > 0) {
+			if(reportBufferAvailable()) {
 				final MessageDialogProperties props = new MessageDialogProperties();
 				props.setTitle("Re-run " + getNoun().getObj1());
 				props.setHeader("Re-run " + getNoun().getObj1());
@@ -1310,6 +1324,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			} else {
 				PhonWorker.getInstance().invokeLater( () -> executeGraph() );
 			}
+		} else {
+			getRootPane().setDefaultButton(nextButton);
 		}
 	}
 
