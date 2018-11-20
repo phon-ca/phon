@@ -1,13 +1,12 @@
 #!/bin/sh
 
+PHON_VERSION=$("mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec")
 PHON_OPTS="-Dphon.debug=true"
 
-JAVA_HOME=`/usr/libexec/java_home -v11` \
-java -Xms250m -Xmx1024m \
---add-modules java.xml.bind \
+java -Xms250m -Xmx2048m \
 -Xdock:name=Phon \
 -Xdock:icon=app/src/main/resources/data/icons/Phon.icns \
--cp "app/target/phon-app-3.0.3-SNAPSHOT.jar:app/target/deps/*" \
+-cp "app/target/phon-app-$PHON_VERSION.jar:app/target/deps/*" \
 -Dswing.aatext=true \
 -Dcom.apple.mrj.application.apple.menu.about.name=Phon \
 -Dcom.apple.macos.smallTabs=true \
