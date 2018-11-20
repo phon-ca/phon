@@ -46,6 +46,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,8 @@ import org.apache.velocity.tools.generic.MathTool;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.ContextMenuHandler;
+import com.teamdev.jxbrowser.chromium.ContextMenuParams;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
@@ -84,6 +87,8 @@ import com.teamdev.jxbrowser.chromium.events.FrameLoadEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadListener;
 import com.teamdev.jxbrowser.chromium.events.ProvisionalLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.ScriptContextEvent;
+import com.teamdev.jxbrowser.chromium.events.ScriptContextListener;
 import com.teamdev.jxbrowser.chromium.events.StartLoadingEvent;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -130,6 +135,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
@@ -243,7 +249,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			
 			@Override
 			public void menuSelected(MenuEvent e) {
-				setupReportMenu(reportMenu);
+				reportMenu.removeAll();
+				setupReportMenu(new MenuBuilder(reportMenu));
 			}
 			
 			@Override
@@ -276,9 +283,41 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		});
 	}
 	
-	public void setupReportMenu(JMenu menu) {
-		menu.removeAll();
-		final MenuBuilder builder = new MenuBuilder(menu);
+	public void setupReportMenu(MenuBuilder builder) {
+		final boolean hasReport = reportBufferAvailable();
+		
+		if(hasReport) {
+			if(PrefHelper.getBoolean("phon.debug", false)) {
+				final PhonUIAction debugAct = new PhonUIAction(bufferPanel.getBuffer("Report"), "showHtmlDebug");
+				debugAct.putValue(PhonUIAction.NAME, "Debug");
+				debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
+				builder.addItem(".", debugAct);
+				builder.addSeparator(".", "debug_sep");
+			}
+			
+			final Optional<ReportTree> reportTree = getCurrentReportTree();
+			if(reportTree.isPresent()) {
+				JMenu reportTreeMenu = builder.addMenu(".", "Go to");
+				reportTreeMenu.addMenuListener(new MenuListener() {
+					
+					@Override
+					public void menuSelected(MenuEvent e) {
+						reportTreeMenu.removeAll();
+						setupReportTreeMenu(new MenuBuilder(reportTreeMenu), reportTree.get());
+					}
+					
+					@Override
+					public void menuDeselected(MenuEvent e) {
+					}
+					
+					@Override
+					public void menuCanceled(MenuEvent e) {
+					}
+					
+				});
+				builder.addSeparator(".", "report_tree");
+			}
+		}
 		
 		// add global options
 		if(globalOptionsPanel != null) {
@@ -365,7 +404,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			builder.addSeparator(".", "_globalOptions");
 		}
 				
-		final boolean hasReport = reportBufferAvailable();
 		final JMenuItem runAgainItem = new JMenuItem("Run again");
 		runAgainItem.setToolTipText("Clear results and run report again");
 		runAgainItem.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
@@ -394,19 +432,55 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
 		
 		final PhonUIAction printReportAct = new PhonUIAction(this, "onPrintReport");
-		printReportAct.putValue(PhonUIAction.NAME, "Print report");
+		printReportAct.putValue(PhonUIAction.NAME, "Print");
 		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
-//		builder.addItem(".", printReportAct);
+		builder.addItem(".", printReportAct);
 		builder.addItem(".", saveAct).setEnabled(hasReport);
 		builder.addSeparator(".", "_save");
 		builder.addItem(".", saveTablesToWorkbookAct).setEnabled(hasReport);
 		builder.addItem(".", saveTablesExcelAct).setEnabled(hasReport);
 		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
+		
 	}
-
+	
+	private void setupReportTreeMenu(MenuBuilder builder, ReportTree reportTree) {
+		int idx = 0;
+		for(ReportTreeNode node:reportTree.getRoot()) {
+			if(idx++ > 0) builder.addSeparator(".", node.getTitle() + "_separator");
+			appendReportTreeNode(builder, node, 1);
+		}
+	}
+	
+	private void appendReportTreeNode(MenuBuilder builder, ReportTreeNode node, int headerLevel) {
+		if(headerLevel == 1 || node.getChildren().size() == 0) {
+			final PhonUIAction act = new PhonUIAction(this, "gotoReportSection", node.getPath().toString());
+			act.putValue(PhonUIAction.NAME, node.getTitle());
+			act.putValue(PhonUIAction.SHORT_DESCRIPTION, String.format("Goto section %s", node.getTitle()));
+			JMenuItem itm = new JMenuItem(act);
+			if(headerLevel == 1)
+				itm.setFont(itm.getFont().deriveFont(Font.BOLD));
+			builder.addItem(".", itm);
+		} else {
+			JMenu subMenu = builder.addMenu(".", node.getTitle());
+			MenuBuilder subMenuBuilder = new MenuBuilder(subMenu);
+			
+			builder = subMenuBuilder;
+		}
+		for(ReportTreeNode cnode:node) {
+			appendReportTreeNode(builder, cnode, headerLevel+1);
+		}
+	}
+	
+	public void gotoReportSection(String htmlId) {
+		if(reportBufferAvailable()) {
+			final Browser browser = bufferPanel.getBuffer("Report").getBrowser();
+			browser.executeJavaScript(String.format("document.getElementById('%s').scrollIntoView(true)", htmlId));
+		}
+	}
+ 
 	@Override
 	public void close() {
 		if(running) {
@@ -457,25 +531,21 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		return bufferPanel.getBufferNames().contains("Report");
 	}
 	
-//	public void onPrintReport() {
-//		if(reportBufferAvailable() && Desktop.isDesktopSupported()) {
-//			String fileLocation = bufferPanel.getBuffer("Report").getWebView().getEngine().getLocation();
-//			try {
-//				Desktop.getDesktop().print(new File(URI.create(fileLocation).getPath()));
-//			} catch (IOException e) {
-//				LogUtil.warning(e);
-//				Toolkit.getDefaultToolkit().beep();
-//			}
-//			
-//			Platform.runLater( () -> {
-//				final PrinterJob pj = PrinterJob.createPrinterJob();
-//				if(pj != null && pj.showPrintDialog(null)) {
-//					bufferPanel.getBuffer("Report").getWebView().getEngine().print(pj);
-//					pj.endJob();
-//				}
-//			});
-//		}
-//	}
+	public Optional<ReportTree> getCurrentReportTree() {
+		if(reportBufferAvailable()) {
+			final Object userObj = bufferPanel.getBuffer("Report").getUserObject();
+			if(userObj != null && userObj instanceof ReportTree) {
+				return Optional.of((ReportTree)userObj);
+			}
+		}
+		return Optional.empty();
+	}
+	
+	public void onPrintReport() {
+		if(reportBufferAvailable()) {
+			bufferPanel.getBuffer("Report").getBrowser().print();
+		}
+	}
 	
 	private void init() {
 		globalOptionsPanel = new GlobalParameterPanel();
@@ -882,11 +952,30 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					reportBufferPanel.setUserObject(reportTree);
 					
 					final Browser browser = reportBufferPanel.getBrowser();
+					browser.addScriptContextListener(new ScriptContextListener() {
+						
+						@Override
+						public void onScriptContextDestroyed(ScriptContextEvent arg0) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onScriptContextCreated(ScriptContextEvent arg0) {
+							LogUtil.info("JS Context created");
+							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
+							windowObj.asObject().setProperty("project", getExtension(Project.class));
+							windowObj.asObject().setProperty("buffers", bufferPanel);
+							windowObj.asObject().setProperty("reportTree", reportTree);
+							windowObj.asObject().setProperty("tableMap", tableMap);
+							windowObj.asObject().setProperty("app", webViewInterface);
+						}
+					});
 					browser.addLoadListener(new LoadListener() {
 						
 						@Override
 						public void onStartLoadingFrame(StartLoadingEvent arg0) {
-							
+							LogUtil.info("Started loading frame");
 						}
 						
 						@Override
@@ -896,12 +985,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						
 						@Override
 						public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
-							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
-							windowObj.asObject().setProperty("project", getExtension(Project.class));
-							windowObj.asObject().setProperty("buffers", bufferPanel);
-							windowObj.asObject().setProperty("reportTree", reportTree);
-							windowObj.asObject().setProperty("tableMap", tableMap);
-							windowObj.asObject().setProperty("app", webViewInterface);
+							LogUtil.info("Finished loading frame");
 							int idx = 0;
 							for(String tableId:tableMap.keySet()) {
 								browser.executeJavaScript(
@@ -910,7 +994,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
 								++idx;
 							}
-							browser.removeLoadListener(this);
+//							browser.removeLoadListener(this);
+							
+							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree));
 						}
 						
 						@Override
@@ -920,7 +1006,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						
 						@Override
 						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
-							
+							LogUtil.info("Doc loaded in frame");
 						}
 						
 						@Override
@@ -1311,6 +1397,31 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private void _cancel() {
 		super.cancel();
+	}
+	
+	private class WebViewContextHandler implements ContextMenuHandler {
+
+		private BrowserView browserView;
+		
+		private ReportTree reportTree;
+		
+		public WebViewContextHandler(BrowserView browserView, ReportTree reportTree) {
+			this.browserView = browserView;
+			this.reportTree = reportTree;
+		}
+		
+		@Override
+		public void showContextMenu(ContextMenuParams params) {
+			// add report save and export items
+			JPopupMenu menu = new JPopupMenu();
+			final MenuBuilder builder = new MenuBuilder(menu);
+			
+			setupReportMenu(builder);
+			
+			menu.show(browserView, params.getLocation().x, params.getLocation().y);
+		}
+		
+		
 	}
 
 	public class WebViewInterface {

@@ -17,6 +17,7 @@ package ca.phon.app.log;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -49,6 +50,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableModel;
@@ -138,6 +140,9 @@ public class BufferPanel extends JPanel implements IExtendable {
 	private Browser browser;
 	private BrowserView htmlView;
 
+	private Browser debugBrowser;
+	private BrowserView htmlDebugView;
+	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 
 	private JComponent currentView;
@@ -356,6 +361,24 @@ public class BufferPanel extends JPanel implements IExtendable {
 		cardLayout.show(contentPanel, HTML_VIEW_ID);
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
+	
+	public void showHtmlDebug() {
+		if(browser != null) {
+			final String debugURL = browser.getRemoteDebuggingURL();
+			final Browser debugBrowser = createBrowser();
+			final BrowserView debugBrowserView = new BrowserView(debugBrowser);
+			debugBrowser.loadURL(debugURL);
+			
+			final CommonModuleFrame cmf = new CommonModuleFrame(getBufferName() + " Debug");
+			cmf.setWindowName(getBufferName() + " Debug");
+			cmf.getContentPane().setLayout(new BorderLayout());
+			cmf.getContentPane().add(debugBrowserView, BorderLayout.CENTER);
+			cmf.pack();
+			cmf.setPreferredSize(new Dimension(400, CommonModuleFrame.getCurrentFrame().getHeight()));
+			cmf.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, CommonModuleFrame.getCurrentFrame());
+			cmf.setVisible(true);
+		}
+	}
 
 	private void init() {
 		setLayout(new BorderLayout());
@@ -381,22 +404,27 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public Browser getBrowser() {
 		if(browser == null) {
-			BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
-			browser = new Browser(browserType);
-			
-			JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
-			windowObj.asObject().setProperty("buffer", this);
-			
-			browser.addConsoleListener( (e) -> {
-				if(e.getLevel() == Level.DEBUG) {
-					LogUtil.info(e.getMessage());
-				} else if(e.getLevel() == Level.WARNING) {
-					LogUtil.warning(e.getMessage());
-				} else if(e.getLevel() == Level.ERROR) {
-					LogUtil.severe(e.getMessage());
-				}
-			});
+			browser = createBrowser();
 		}
+		return browser;
+	}
+	
+	private Browser createBrowser() {
+		BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
+		browser = new Browser(browserType);
+		
+		JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
+		windowObj.asObject().setProperty("buffer", this);
+		
+		browser.addConsoleListener( (e) -> {
+			if(e.getLevel() == Level.DEBUG) {
+				LogUtil.info(e.getMessage());
+			} else if(e.getLevel() == Level.WARNING) {
+				LogUtil.warning(e.getMessage());
+			} else if(e.getLevel() == Level.ERROR) {
+				LogUtil.severe(e.getMessage());
+			}
+		});
 		return browser;
 	}
 	
