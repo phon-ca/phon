@@ -1,36 +1,44 @@
 body {
     background: white;
     font-family: "Charis SIL Compact", arial,"noto sans", sans-serif;
+    font-size: 10pt;
     margin-top: 0px;
     display: inline-flex;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+    color: rgb(0, 90, 140);
+}
+
+h1 {
+    font-size: 150%;
 }
 
 h1:first-of-type {
     margin-top: 0px;
 }
 
-h1 {
-    font-weight: bold;
-    font-size: large;
-    margin-top: 0.5em;
-    margin-bottom: 0.25em;
-    color: rgb(0, 90, 140);
-}
-
 h2 {
-    font-weight: bold;
-    font-size: medium;
-    margin-top: 0.5em;
-    margin-bottom: 0.25em;
-    color: rgb(0, 90, 140);
+    font-size: 140%;
 }
 
-h3, h4, h5, h6  {
-    font-weight: bold;
-    font-size: small;
-    margin-top: 0.5em;
-    margin-bottom: 0.25em;
-    color: rgb(0, 90, 140);
+h3 {
+    font-size: 130%;
+}
+
+h4 {
+    font-size: 120%;
+}
+
+h5 {
+    font-size: 110%;
+}
+
+h6 {
+    font-size: 100%;
 }
 
 table {
