@@ -79,6 +79,7 @@ import org.jdesktop.swingx.JXBusyLabel;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.ContextMenuHandler;
 import com.teamdev.jxbrowser.chromium.ContextMenuParams;
+import com.teamdev.jxbrowser.chromium.EditorCommand;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
@@ -1416,11 +1417,19 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			JPopupMenu menu = new JPopupMenu();
 			final MenuBuilder builder = new MenuBuilder(menu);
 			
+			// element selection commands
+			
+			// editor commands
+			final PhonUIAction copyAct = new PhonUIAction(params.getBrowser(), "executeCommand", EditorCommand.COPY);
+			copyAct.putValue(PhonUIAction.NAME, "Copy");
+			copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selection to clipboard");
+			builder.addItem(".", copyAct);
+			builder.addSeparator(".", "editor_commands");
+			
 			setupReportMenu(builder);
 			
 			menu.show(browserView, params.getLocation().x, params.getLocation().y);
 		}
-		
 		
 	}
 

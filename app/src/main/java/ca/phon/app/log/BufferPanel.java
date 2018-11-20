@@ -23,8 +23,12 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,12 +50,15 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableModel;
 
@@ -87,6 +94,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.OSInfo;
+import ca.phon.util.PhonCleaner;
 import ca.phon.util.Range;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
@@ -405,13 +413,61 @@ public class BufferPanel extends JPanel implements IExtendable {
 	public Browser getBrowser() {
 		if(browser == null) {
 			browser = createBrowser();
+			
+			// HACK is there a better way to detect when to dispose the JxBrowser instances?
+			final JFrame parentFrame = (JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, this);
+			if(parentFrame != null) {
+				parentFrame.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						LogUtil.info("Disposing browser");
+						if(browser != null) {
+							browser.dispose();
+						}
+						if(debugBrowser != null) {
+							debugBrowser.dispose();
+						}
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						
+					}
+					
+				});
+			}
 		}
 		return browser;
 	}
 	
 	private Browser createBrowser() {
 		BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
-		browser = new Browser(browserType);
+		Browser browser = new Browser(browserType);
 		
 		JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
 		windowObj.asObject().setProperty("buffer", this);
