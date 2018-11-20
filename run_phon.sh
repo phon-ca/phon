@@ -7,7 +7,7 @@ java -Xms250m -Xmx1024m \
 --add-modules java.xml.bind \
 -Xdock:name=Phon \
 -Xdock:icon=app/src/main/resources/data/icons/Phon.icns \
--cp "app/target/phon-app-3.0.2-SNAPSHOT.jar:app/target/deps/*" \
+-cp "app/target/phon-app-3.0.3-SNAPSHOT.jar:app/target/deps/*" \
 -Dswing.aatext=true \
 -Dcom.apple.mrj.application.apple.menu.about.name=Phon \
 -Dcom.apple.macos.smallTabs=true \
