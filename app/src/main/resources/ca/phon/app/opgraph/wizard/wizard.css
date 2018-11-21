@@ -276,6 +276,7 @@ nav {
     }
 
     table {
+        page-break-inside:avoid !important;
         table-layout:auto;
     }
 
@@ -294,7 +295,7 @@ nav {
         page-break-inside:avoid !important;
         page-break-after:auto;
     }
-
+    
     img {
         page-break-inside:avoid !important;
     }
