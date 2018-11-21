@@ -14,7 +14,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h1 {
-    font-size: 150%;
+    font-size: 140%;
 }
 
 h1:first-of-type {
@@ -22,19 +22,19 @@ h1:first-of-type {
 }
 
 h2 {
-    font-size: 140%;
-}
-
-h3 {
     font-size: 130%;
 }
 
-h4 {
+h3 {
     font-size: 120%;
 }
 
-h5 {
+h4 {
     font-size: 110%;
+}
+
+h5 {
+    font-size: 100%;
 }
 
 h6 {
@@ -267,27 +267,16 @@ nav {
     section {
     }
 
-    h1, h2, h3 {
-        page-break-after: avoid !important;
-    }
-
-    ul, ol {
-        page-break-inside:avoid;
-    }
-
     table {
-        page-break-inside:avoid !important;
+        page-break-inside:avoid;
         table-layout:auto;
     }
 
     thead {
-        page-break-before: avoid !important;
-        page-break-after:avoid !important;
         display:table-header-group;
     }
 
     tfoot {
-        page-break-before:avoid;
         display:table-footer-group;
     }
 
@@ -305,7 +294,7 @@ nav {
     }
     
     .record {
-        page-break-inside: avoid !important;
+        page-break-inside: avoid;
     }
 
 }

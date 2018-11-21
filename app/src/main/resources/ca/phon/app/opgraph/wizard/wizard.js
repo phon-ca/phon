@@ -154,10 +154,10 @@ function addMenuButtons(table, index) {
 	var saveAsCSVItem = createMenuLink("Save table as CSV...", "saveTableAsCSV('" + table.getAttribute("id") + "')");
 	menuList.appendChild(saveAsCSVItem);
 	
-	var saveAsExcelItem = createMenuLink("Save table as Excel\u2122 Workbook...", "saveTableAsExcel('" + table.getAttribute("id") + "')");
+	var saveAsExcelItem = createMenuLink("Save table as Excel (XLS)...", "saveTableAsExcel('" + table.getAttribute("id") + "')");
 	menuList.appendChild(saveAsExcelItem);
 	
-	var showBufferItem = createMenuLink("Show table", "showTable('" + table.getAttribute("id") + "')");
+	var showBufferItem = createMenuLink("Open table in new buffer", "showTable('" + table.getAttribute("id") + "')");
 	menuList.appendChild(showBufferItem);
 	
 	tableMenu.appendChild(menuList);

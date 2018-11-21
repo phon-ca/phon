@@ -83,6 +83,10 @@ import com.teamdev.jxbrowser.chromium.ContextMenuParams;
 import com.teamdev.jxbrowser.chromium.EditorCommand;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.dom.By;
+import com.teamdev.jxbrowser.chromium.dom.DOMElement;
+import com.teamdev.jxbrowser.chromium.dom.DOMNode;
+import com.teamdev.jxbrowser.chromium.dom.DOMNodeAtPoint;
 import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.FrameLoadEvent;
@@ -1434,6 +1438,68 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			final MenuBuilder builder = new MenuBuilder(menu);
 			
 			// element selection commands
+			DOMNodeAtPoint nodeAtPoint = params.getBrowser().getNodeAtPoint(
+					params.getLocation().x, params.getLocation().y);
+			if(nodeAtPoint != null) {
+				// look for a parent table
+				DOMNode node = nodeAtPoint.getNode();
+				while(node.getParent() != null && !node.getNodeName().equalsIgnoreCase("table")) {
+					node = node.getParent();
+				}
+				
+				if(node.getNodeName().equalsIgnoreCase("table")) {
+					// check for a div with an 'onclick'
+					DOMElement linkEle = null;
+					DOMNode n = nodeAtPoint.getNode();
+					while(n.getParent() != null 
+							&& !n.getParent().getXPath().equals(node.getXPath())
+							&& !n.getNodeName().equalsIgnoreCase("div")) {
+						n = n.getParent();
+					}
+					if(n.getNodeName().equalsIgnoreCase("div")) {
+						DOMElement divEle = params.getBrowser().getDocument().findElement(By.xpath(n.getXPath()));
+						String onclick = divEle.getAttribute("onclick");
+						if(onclick != null) {
+							linkEle = divEle;
+						}
+					}
+					if(linkEle != null) {
+						final PhonUIAction clickAct = new PhonUIAction(linkEle, "click");
+						clickAct.putValue(PhonUIAction.NAME, "Open session");
+						builder.addItem(".", clickAct);
+						builder.addSeparator(".", "link_sep");
+					}
+					
+					DOMElement tableEle = params.getBrowser().getDocument().findElement(By.xpath(node.getXPath()));
+					String tableId = tableEle.getAttribute("id");
+					
+					if(tableId != null) {
+						// add table menu items
+						final PhonUIAction saveTableAsCSV = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+								String.format("saveTableAsCSV('%s')", tableId));
+						saveTableAsCSV.putValue(PhonUIAction.NAME, "Save table as CSV...");
+						builder.addItem(".", saveTableAsCSV);
+						
+						final PhonUIAction saveTableAsExcelAct = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+								String.format("saveTableAsExcel('%s')", tableId));
+						saveTableAsExcelAct.putValue(PhonUIAction.NAME, "Save table as Excel (XLS)...");
+						builder.addItem(".", saveTableAsExcelAct);
+						
+						final PhonUIAction showTableAct = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+								String.format("showTable('%s')", tableId));
+						showTableAct.putValue(PhonUIAction.NAME, "Open table in new buffer");
+						builder.addItem(".", showTableAct);
+						
+						builder.addSeparator(".", "table_actions_sep");
+
+						final PhonUIAction copyTableAct = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+								String.format("onCopyTableData(document.getElementById('%s'), '%s')", tableId, tableId));
+						copyTableAct.putValue(PhonUIAction.NAME, "Copy table");
+						copyTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy table to clipboard as CSV");
+						builder.addItem(".", copyTableAct);
+					}
+				}
+			}
 			
 			// editor commands
 			final PhonUIAction copyAct = new PhonUIAction(params.getBrowser(), "executeCommand", EditorCommand.COPY);
