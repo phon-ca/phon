@@ -84,6 +84,7 @@ import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.query.QueryAndReportWizardSettings.ReportLoadStrategy;
 import ca.phon.app.query.actions.DeleteAllUnnamedEntriesAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryEntryAction;
@@ -184,6 +185,8 @@ public class QueryAndReportWizard extends NodeWizard {
 	
 	private CountDownLatch queryLatch;
 	private QueryExecutionHistory previousExeuction;
+	
+	private final QueryAndReportWizardSettings settings = new QueryAndReportWizardSettings();
 	
 	private int windowIdx = 0;
 	
@@ -412,6 +415,18 @@ public class QueryAndReportWizard extends NodeWizard {
 				if(retVal == 1) return;
 			}
 		}
+		
+		if(settings.isCleanHistoryOnClose()) {
+			queryHistoryManager.removeAllUnnamedParamSets();
+			
+			try {
+				QueryHistoryManager.save(queryHistoryPanel.getQueryHistoryManager(), (QueryScript)queryHistoryPanel.getScriptPanel().getScript());
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.severe(e);
+			}
+		}
+		
 		super.close();
 	}
 	
@@ -567,7 +582,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		runQueryButton.setOpaque(false);
 		
 		queryHistoryPanel = new QueryHistoryPanel(queryHistoryManager, scriptPanel);
-		if(queryHistoryManager.size() > 0)
+		if(settings.isLoadPreviousExecutionOnStartup() && queryHistoryManager.size() > 0)
 			queryHistoryPanel.gotoLast();
 		queryHistoryPanel.setOpaque(false);
 		queryPanel.getContentContainer().add(queryHistoryPanel, BorderLayout.NORTH);
@@ -655,7 +670,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			prevReportFile.delete();
 		}
 		
-		if(prevReportFile.exists() && reportHashesUnchanged) {
+		if(settings.getReportLoadStrategy() == ReportLoadStrategy.LoadPreviousReport && prevReportFile.exists() && reportHashesUnchanged) {
 			try {
 				final Consumer<SimpleEditorPanel.DocumentError> errHandler = (err) -> {
 					try {

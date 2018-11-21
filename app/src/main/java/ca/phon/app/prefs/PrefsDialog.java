@@ -49,6 +49,7 @@ public class PrefsDialog extends JDialog {
 	private GeneralPrefsPanel generalPrefs;
 	private EditorPrefsPanel editorPrefs;
 	private MediaPrefsPanel mediaPrefs;
+	private QueryPrefsPanel queryPrefs;
 	
 	private DialogHeader header;
 	
@@ -77,11 +78,13 @@ public class PrefsDialog extends JDialog {
 		generalPrefs = new GeneralPrefsPanel();
 		editorPrefs = new EditorPrefsPanel();
 		mediaPrefs = new MediaPrefsPanel();
+		queryPrefs = new QueryPrefsPanel();
 		
 		tabbedPane = new JTabbedPane();
 		tabbedPane.addTab(generalPrefs.getTitle(), generalPrefs);
 		tabbedPane.addTab(editorPrefs.getTitle(), editorPrefs);
 		tabbedPane.addTab(mediaPrefs.getTitle(), mediaPrefs);
+		tabbedPane.addTab(queryPrefs.getTitle(), queryPrefs);
 		
 		List<IPluginExtensionPoint<PrefsPanel>> prefExtPts = 
 			PluginManager.getInstance().getExtensionPoints(PrefsPanel.class);
