@@ -30,7 +30,7 @@ import ca.phon.ui.CommonModuleFrame;
 @PhonPlugin(name="default")
 public class PreferencesEP implements IPluginEntryPoint {
 	
-	private final static String EP_NAME = "Preferences";
+	public final static String EP_NAME = "Preferences";
 	@Override
 	public String getName() {
 		return EP_NAME;

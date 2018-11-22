@@ -35,6 +35,8 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.prefs.PreferencesEP;
+import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
@@ -167,16 +169,21 @@ public class QueryMenuListener implements MenuListener {
 			}
 		}
 		
+		final PluginAction prefsAct = new PluginAction(PreferencesEP.EP_NAME);
+		prefsAct.putArg("prefpanel", "Query");
+		prefsAct.putValue(PhonUIAction.NAME, "Preferences...");
+		prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open query preferences");
+		final JMenuItem prefsItem = new JMenuItem(prefsAct);
+		
 		final PhonUIAction browseAct = new PhonUIAction(QueryMenuListener.class, "onBrowseForQuery", project);
 		browseAct.putValue(PhonUIAction.NAME, "Browse...");
 		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query...");
 		final JMenuItem browseItem = new JMenuItem(browseAct);
 		
-//		final JMenuItem historyItem = new JMenuItem(new QueryHistoryCommand(project));
-		
 		queryMenu.addSeparator();
 		queryMenu.add(browseItem);
-//		queryMenu.add(historyItem);
+		queryMenu.addSeparator();
+		queryMenu.add(prefsItem);
 	}
 
 	public static void onBrowseForQuery(PhonActionEvent pae) {
