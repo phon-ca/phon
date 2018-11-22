@@ -37,7 +37,7 @@ public class PlaySpeechTurnAction extends MediaPlayerAction {
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_L,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 
 	public PlaySpeechTurnAction(SessionEditor editor, MediaPlayerEditorView view) {
 		super(editor, view);

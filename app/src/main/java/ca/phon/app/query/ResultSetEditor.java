@@ -302,7 +302,7 @@ public class ResultSetEditor extends ProjectFrame {
 			saveAction = new PhonUIAction(this, "saveData");
 			saveAction.putValue(PhonUIAction.NAME, "Save");
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, 
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 			saveAction.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
 			saveAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save result set");
 			saveAction.putValue(PhonUIAction.SMALL_ICON, icon);
@@ -322,7 +322,7 @@ public class ResultSetEditor extends ProjectFrame {
 			saveTableAction.putValue(PhonUIAction.NAME, "Save table as CSV...");
 			saveTableAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save result table as CSV.");
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S,
-					KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+					KeyEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 			saveTableAction.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
 			saveTableAction.putValue(PhonUIAction.SMALL_ICON, icon);
 		}

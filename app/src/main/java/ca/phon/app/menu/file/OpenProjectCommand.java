@@ -40,7 +40,7 @@ public class OpenProjectCommand extends HookableAction {
 	private final static String DESC = "Browse for project...";
 	
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_O,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 
 	public OpenProjectCommand() {
 		super();

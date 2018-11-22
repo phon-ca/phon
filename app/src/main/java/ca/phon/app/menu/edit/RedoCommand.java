@@ -38,7 +38,7 @@ public class RedoCommand extends AbstractAction {
 		
 		putValue(NAME, manager.getRedoPresentationName());
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Y,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	
 	@Override

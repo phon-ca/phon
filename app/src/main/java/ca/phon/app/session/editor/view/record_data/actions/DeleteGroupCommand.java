@@ -43,7 +43,7 @@ public class DeleteGroupCommand extends RecordDataEditorViewAction {
 		putValue(NAME, CMD_NAME);
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_G, 
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK | KeyEvent.ALT_MASK));
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK | KeyEvent.ALT_MASK));
 	}
 
 	@Override

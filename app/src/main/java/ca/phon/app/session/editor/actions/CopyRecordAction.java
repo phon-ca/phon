@@ -41,7 +41,7 @@ public class CopyRecordAction extends SessionEditorAction {
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_C,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 
 	public CopyRecordAction(SessionEditor editor) {
 		super(editor);

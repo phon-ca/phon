@@ -37,7 +37,7 @@ public class PasteCommand extends PluginAction {
 		putValue(Action.NAME, "Paste");
 		putValue(Action.SHORT_DESCRIPTION, "Edit: paste");
 		putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	
 }

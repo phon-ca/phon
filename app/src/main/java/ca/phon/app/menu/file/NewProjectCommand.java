@@ -44,7 +44,7 @@ private final static String TXT = "New project...";
 	private final static String DESC = "Create project...";
 
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_N,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 
 	private static final long serialVersionUID = -1288974377105467180L;
 

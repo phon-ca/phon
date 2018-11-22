@@ -47,7 +47,7 @@ public class OpenAction extends OpgraphEditorAction {
 	public final static String DESC = "Open graph";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_O,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 
 	private File openFile;
 	

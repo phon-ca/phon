@@ -45,7 +45,7 @@ public class MergeNodesAction extends OpgraphEditorAction {
 	private final static String DESC = "Merge selected nodes into new macro node";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+			KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 	
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/format-join-node", IconSize.SMALL);

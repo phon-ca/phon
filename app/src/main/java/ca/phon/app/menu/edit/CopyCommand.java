@@ -37,7 +37,7 @@ public class CopyCommand extends PluginAction {
 		putValue(Action.NAME, "Copy");
 		putValue(Action.SHORT_DESCRIPTION, "Edit: copy");
 		putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 
 }

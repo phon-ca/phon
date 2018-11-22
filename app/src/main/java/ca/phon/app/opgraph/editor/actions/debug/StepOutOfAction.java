@@ -38,7 +38,7 @@ public class StepOutOfAction extends OpgraphEditorAction {
 	public static final String DESC = "Step out of subgraph";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_UP,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/debug-step-out", IconSize.SMALL);

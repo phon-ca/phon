@@ -39,7 +39,7 @@ public class PlaySegmentAction extends MediaPlayerAction {
 	private final static String ICON = "";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public PlaySegmentAction(SessionEditor editor, MediaPlayerEditorView view) {
 		super(editor, view);

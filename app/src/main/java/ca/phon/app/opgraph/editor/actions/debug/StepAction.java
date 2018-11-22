@@ -40,7 +40,7 @@ public class StepAction extends OpgraphEditorAction {
 	public static final String DESC = "Step to next node";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/debug-step-over", IconSize.SMALL);

@@ -39,7 +39,7 @@ public class DuplicateRecordAction extends SessionEditorAction {
 	private final static String ICON = "misc/record-duplicate";
 	
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(
-			KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 
 	public DuplicateRecordAction(SessionEditor editor) {
 		super(editor);

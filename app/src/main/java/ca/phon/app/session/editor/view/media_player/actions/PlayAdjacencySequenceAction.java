@@ -36,7 +36,7 @@ public class PlayAdjacencySequenceAction extends MediaPlayerAction {
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_R, 
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 	
 	public PlayAdjacencySequenceAction(SessionEditor editor, MediaPlayerEditorView view) {
 		super(editor, view);

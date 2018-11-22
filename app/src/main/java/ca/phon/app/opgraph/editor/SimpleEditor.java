@@ -103,7 +103,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		saveAct.putValue(PhonUIAction.NAME, "Save");
 		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save " + getModel().getNoun().getObj1());
 		saveAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
-		final KeyStroke saveKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final KeyStroke saveKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, saveKs);
 		final JMenuItem saveItem = new JMenuItem(saveAct);
 
@@ -131,7 +131,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		settingsAct.putValue(PhonUIAction.NAME, "Settings...");
 		settingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show settings for selected " + getModel().getNoun().getObj1());
 		settingsAct.putValue(PhonUIAction.SMALL_ICON, settingsIcn);
-		final KeyStroke settingsKs = KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final KeyStroke settingsKs = KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		settingsAct.putValue(PhonUIAction.ACCELERATOR_KEY, settingsKs);
 		final JMenuItem settingsItem = new JMenuItem(settingsAct);
 
@@ -149,7 +149,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		upAct.putValue(PhonUIAction.NAME, "Move up");
 		upAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " up");
 		upAct.putValue(PhonUIAction.SMALL_ICON, upIcn);
-		final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		upAct.putValue(PhonUIAction.ACCELERATOR_KEY, upKs);
 		final JMenuItem upItem = new JMenuItem(upAct);
 
@@ -159,7 +159,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		downAct.putValue(PhonUIAction.NAME, "Move down");
 		downAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " down");
 		downAct.putValue(PhonUIAction.SMALL_ICON, downIcn);
-		final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		downAct.putValue(PhonUIAction.ACCELERATOR_KEY, downKs);
 		final JMenuItem downItem = new JMenuItem(downAct);
 

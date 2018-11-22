@@ -39,7 +39,7 @@ public class PreviousRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-previous";
 	
 	private final static KeyStroke KS =
-			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public PreviousRecordAction(SessionEditor editor) {
 		super(editor);

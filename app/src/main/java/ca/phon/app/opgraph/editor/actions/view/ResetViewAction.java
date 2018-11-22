@@ -33,7 +33,7 @@ public class ResetViewAction extends OpgraphEditorAction {
 	public final static String DESC = "Rest view layout to default";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_R,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_MASK);
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.ALT_MASK);
 	
 	public ResetViewAction(OpgraphEditor editor) {
 		super(editor);

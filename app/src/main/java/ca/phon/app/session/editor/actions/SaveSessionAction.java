@@ -45,7 +45,7 @@ public class SaveSessionAction extends SessionEditorAction {
 	private final static String ICON = "actions/filesave";
 
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_S,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 
 	public SaveSessionAction(SessionEditor editor) {
 		super(editor);

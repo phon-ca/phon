@@ -43,7 +43,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 	private final static String ICON = "misc/record-delete";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public static final String CONFIRM_DELETE_RECORD_PROP =
 			DeleteRecordAction.class.getName() + ".confirm";

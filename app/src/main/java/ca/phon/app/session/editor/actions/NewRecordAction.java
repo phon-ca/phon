@@ -41,7 +41,7 @@ public class NewRecordAction extends SessionEditorAction {
 	private final static String ICON = "misc/record-add";
 	
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(
-			KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public NewRecordAction(SessionEditor editor) {
 		super(editor);

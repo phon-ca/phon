@@ -41,7 +41,7 @@ public class ExpandMacroAction extends OpgraphEditorAction {
 	private final static String DESC = "Replace selected macro node with subgraph contents";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+			KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 	
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/format-break-node", IconSize.SMALL);

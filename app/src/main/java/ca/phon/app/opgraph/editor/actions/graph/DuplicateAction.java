@@ -53,7 +53,7 @@ public class DuplicateAction extends OpgraphEditorAction {
 	public final static String DESC = "Duplicate selected nodes";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_D, 
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 
 	public DuplicateAction(OpgraphEditor editor) {
 		super(editor);

@@ -36,7 +36,7 @@ public class CutRecordAction extends CopyRecordAction {
 	
 	private static final KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_X,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 
 	public CutRecordAction(SessionEditor editor) {
 		super(editor);

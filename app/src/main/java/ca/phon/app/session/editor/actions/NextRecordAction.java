@@ -39,7 +39,7 @@ public class NextRecordAction extends SessionEditorAction {
 	private final static String ICON = "actions/go-next";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 					
 	public NextRecordAction(SessionEditor editor) {
 		super(editor);

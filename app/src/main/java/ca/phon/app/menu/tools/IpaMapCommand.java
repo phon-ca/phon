@@ -38,7 +38,7 @@ public class IpaMapCommand extends PluginAction {
 		putValue(Action.NAME, "IPA Map");
 		putValue(Action.SHORT_DESCRIPTION, "IPA Map");
 		putValue(Action.ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	
 }

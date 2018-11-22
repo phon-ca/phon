@@ -39,7 +39,7 @@ public class AutoLayoutAction extends OpgraphEditorAction {
 	public final static String DESC = "Automatically layout nodes in graph";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_L, 
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/distribute-horizontal-margin", IconSize.SMALL);

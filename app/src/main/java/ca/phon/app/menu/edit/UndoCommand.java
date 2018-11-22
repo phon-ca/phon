@@ -38,7 +38,7 @@ public class UndoCommand extends AbstractAction {
 		this.undoManager = manager;
 		putValue(NAME, manager.getUndoPresentationName());
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	
 	@Override

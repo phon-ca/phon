@@ -300,7 +300,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final PhonUIAction upAct = new PhonUIAction(this, "onMoveUp");
 		upAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " up");
 		upAct.putValue(PhonUIAction.SMALL_ICON, upIcn);
-		final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		moveUpButton = new JButton(upAct);
 
 		final ImageIcon downIcn =
@@ -308,7 +308,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final PhonUIAction downAct = new PhonUIAction(this, "onMoveDown");
 		downAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " down");
 		downAct.putValue(PhonUIAction.SMALL_ICON, downIcn);
-		final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		moveDownButton = new JButton(downAct);
 
 		final ImageIcon runIcn =

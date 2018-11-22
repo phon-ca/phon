@@ -38,7 +38,7 @@ public class WorkspaceCommand extends PluginAction {
 		putValue(Action.SHORT_DESCRIPTION, "Open the workspace dialog.");
 		putValue(Action.ACCELERATOR_KEY, 
 				KeyStroke.getKeyStroke(KeyEvent.VK_W, 
-						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK));
+						Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK));
 	}
 	
 }

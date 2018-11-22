@@ -37,7 +37,7 @@ public class CutCommand extends PluginAction {
 		putValue(Action.NAME, "Cut");
 		putValue(Action.SHORT_DESCRIPTION, "Edit: cut");
 		putValue(Action.ACCELERATOR_KEY, 
-				KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 
 }

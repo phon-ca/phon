@@ -41,7 +41,7 @@ public class SaveAction extends OpgraphEditorAction {
 	public final static String DESC = "Save graph";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_S,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);

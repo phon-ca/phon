@@ -435,7 +435,7 @@ public class SegmentationEditorView extends EditorView {
 		
 		final KeyStroke noPartKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_0, 
-						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+						Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		final NewSegmentAction noSpeakerAct = new NewSegmentAction(getEditor(), this, null);
 		noSpeakerAct.putValue(NewSegmentAction.NAME, "New record with unspecified speaker");
 		noSpeakerAct.putValue(NewSegmentAction.ACCELERATOR_KEY, noPartKs);
@@ -447,7 +447,7 @@ public class SegmentationEditorView extends EditorView {
 		for(Participant p:session.getParticipants()) {
 			final KeyStroke partKs = 
 					KeyStroke.getKeyStroke(KeyEvent.VK_0 + (pIdx++),
-							Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+							Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 			final NewSegmentAction speakerAct = new NewSegmentAction(getEditor(), this, p);
 			speakerAct.putValue(NewSegmentAction.NAME, "New record for " + p.toString());
 			speakerAct.putValue(NewSegmentAction.ACCELERATOR_KEY, partKs);

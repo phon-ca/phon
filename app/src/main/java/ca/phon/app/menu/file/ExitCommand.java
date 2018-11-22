@@ -39,7 +39,7 @@ public class ExitCommand extends PluginAction {
 		putValue(Action.SHORT_DESCRIPTION, "Exit the application.");
 		if(!OSInfo.isMacOs())
 			putValue(Action.ACCELERATOR_KEY, 
-					KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+					KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 
 }

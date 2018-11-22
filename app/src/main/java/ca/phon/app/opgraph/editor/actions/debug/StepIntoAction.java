@@ -38,7 +38,7 @@ public class StepIntoAction extends OpgraphEditorAction {
 	public final static String DESC = "Step into subgraph";
 	
 	public final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,
-			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/debug-step-into", IconSize.SMALL);

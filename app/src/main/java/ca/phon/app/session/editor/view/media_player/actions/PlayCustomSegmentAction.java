@@ -37,7 +37,7 @@ public class PlayCustomSegmentAction extends MediaPlayerAction {
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_R,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_MASK);
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.ALT_MASK);
 
 	public PlayCustomSegmentAction(SessionEditor editor, MediaPlayerEditorView view) {
 		super(editor, view);

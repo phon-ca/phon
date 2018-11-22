@@ -179,21 +179,21 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 
 		// override undo/redo for editor window
 		final KeyStroke undoKs =
-				KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		final PhonUIAction undoAct = new PhonUIAction(this, "onUndo");
 		final String undoKey = "_custom_undo_";
 		am.put(undoKey, undoAct);
 		im.put(undoKs, undoKey);
 
 		final KeyStroke redoKs =
-				KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		final PhonUIAction redoAct = new PhonUIAction(this, "onRedo");
 		final String redoKey = "_custom_redo_";
 		am.put(redoKey, redoAct);
 		im.put(redoKs, redoKey);
 
 		final KeyStroke saveKs =
-				KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		final PhonUIAction saveAct = new PhonUIAction(this, "onSave");
 		final String saveKey = "_custom_save_";
 		am.put(saveKey, saveAct);

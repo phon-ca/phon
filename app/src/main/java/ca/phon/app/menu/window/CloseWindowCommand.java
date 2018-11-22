@@ -39,7 +39,7 @@ public class CloseWindowCommand extends AbstractAction {
 		this.window = window;
 		putValue(NAME, "Close");
 		putValue(AbstractAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_W, 
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	
 	@Override

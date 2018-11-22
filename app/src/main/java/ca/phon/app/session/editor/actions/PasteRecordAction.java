@@ -48,7 +48,7 @@ public class PasteRecordAction extends SessionEditorAction {
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_V,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_MASK);
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
 	
 	public PasteRecordAction(SessionEditor editor) {
 		super(editor);
