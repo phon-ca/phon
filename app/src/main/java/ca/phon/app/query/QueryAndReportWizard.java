@@ -110,6 +110,7 @@ import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.script.params.history.ParamHistoryType;
+import ca.phon.script.params.history.ParamSetType;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
@@ -346,6 +347,60 @@ public class QueryAndReportWizard extends NodeWizard {
 							}
 						});
 						
+						final boolean hasStockQueries = queryHistoryPanel.getStockQueries().getNamedParamSets().size() > 0;
+						final JMenu stockQueryMenu = new JMenu("Stock queries");
+						stockQueryMenu.addMenuListener(new MenuListener() {
+							
+							@Override
+							public void menuSelected(MenuEvent e) {
+								stockQueryMenu.removeAll();
+								List<ParamSetType> namedParamSets = queryHistoryPanel.getStockQueries().getNamedParamSets();
+								for(ParamSetType paramSet:namedParamSets) {
+									final PhonUIAction psAct = new PhonUIAction(QueryAndReportWizard.this, "loadNamedQuery", paramSet);
+									psAct.putValue(PhonUIAction.NAME, paramSet.getName());
+									stockQueryMenu.add(new JMenuItem(psAct));
+								}
+							}
+							
+							@Override
+							public void menuDeselected(MenuEvent e) {
+								
+							}
+							
+							@Override
+							public void menuCanceled(MenuEvent e) {
+								
+							}
+							
+						});
+						
+						final boolean hasUserQueries = queryHistoryManager.getNamedParamSets().size() > 0;
+						JMenu userQueryMenu = new JMenu("User queries");
+						userQueryMenu.addMenuListener(new MenuListener() {
+							
+							@Override
+							public void menuSelected(MenuEvent e) {
+								userQueryMenu.removeAll();
+								List<ParamSetType> namedParamSets = queryHistoryManager.getNamedParamSets();
+								for(ParamSetType paramSet:namedParamSets) {
+									final PhonUIAction psAct = new PhonUIAction(QueryAndReportWizard.this, "loadNamedQuery", paramSet);
+									psAct.putValue(PhonUIAction.NAME, paramSet.getName());
+									userQueryMenu.add(new JMenuItem(psAct));
+								}
+							}
+							
+							@Override
+							public void menuDeselected(MenuEvent e) {
+								
+							}
+							
+							@Override
+							public void menuCanceled(MenuEvent e) {
+								
+							}
+							
+						});
+						
 						final PhonUIAction historyPrevAct = new PhonUIAction(queryHistoryPanel, "goPrevious");
 						historyPrevAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
 						historyPrevAct.putValue(PhonUIAction.NAME, "View previous entry in query history");
@@ -376,6 +431,18 @@ public class QueryAndReportWizard extends NodeWizard {
 						menu.add(discardResultsItem, idx++);
 						menu.add(queryResultsMenu, idx++);
 						menu.insertSeparator(idx++);
+						if(hasStockQueries || hasUserQueries) {
+							final JMenuItem sepItem = new JMenuItem("-- Named Queries --");
+							sepItem.setEnabled(false);
+							menu.add(sepItem, idx++);
+							if(hasStockQueries) {
+								menu.add(stockQueryMenu, idx++);
+							}
+							if(hasUserQueries) {
+								menu.add(userQueryMenu, idx++);
+							}
+							menu.insertSeparator(idx++);
+						}
 						menu.add(new JMenuItem(goFirstAct), idx++);
 						menu.add(new JMenuItem(historyPrevAct), idx++);
 						menu.add(new JMenuItem(historyNextAct), idx++);
@@ -404,6 +471,11 @@ public class QueryAndReportWizard extends NodeWizard {
 								
 			}
 		}
+	}
+	
+	public void loadNamedQuery(ParamSetType paramSet) {
+		queryHistoryPanel.loadFromParamSet(paramSet);
+		queryHistoryPanel.updateLabelFromCurrentHash();
 	}
 	
 	@Override
