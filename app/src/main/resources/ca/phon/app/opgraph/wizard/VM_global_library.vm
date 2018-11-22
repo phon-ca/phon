@@ -31,21 +31,31 @@
 		#set($type = "number_value")
 	#else #set($type = "text_value")#end
 	#if($clazz == $ipa && $v.length() == 0) #set($txt = "\u2205") #end
-<td class='$type'>$txt</td>
+<td class='$type'><span>$txt</span></td>
 	#end
 #end
 
 #macro( printSessionLink $sessionPath )
-<td class='sessionLink'><div onclick="app.openSession('$sessionPath')">$sessionPath</div></td>
+<td class='sessionLink'><span onclick="app.openSession('$sessionPath')">$sessionPath</span></td>
 #end
 
 #macro( printRecordLink $sessionPath $recordNum )
-<td class='sessionLink'><div onclick="app.openSessionAtRecord('$sessionPath', ($recordNum - 1))">$recordNum</div></td>
+<td class='sessionLink'><span onclick="app.openSessionAtRecord('$sessionPath', ($recordNum - 1))">$recordNum</span></td>
 #end
 
 #macro( printResultValue $tableId $row $columnName $v )
-#set($txt = $FormatterUtil.format($v))
-<td class='sessionLink'><div onclick="highlightResultValue('$tableId', $row, '$columnName')">$txt</div></td>
+	#if( (! $v) && ("$!v" == "") ) <td/>
+	#else
+	#set($clazz = $v.class)
+	#set($txt = $FormatterUtil.format($v))
+	#set($number = $Class.forName("java.lang.Number"))
+	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
+	#if($clazz == $ipa) #set($type = "ipa_value")
+	#elseif($number.isAssignableFrom($clazz))
+		#set($type = "number_value")
+	#else #set($type = "text_value")#end
+<td class='$type sessionLink'><span onclick="highlightResultValue('$tableId', $row, '$columnName')">$txt</span></td>
+	#end
 #end
 
 #macro( printBody $table $id $columnNames )

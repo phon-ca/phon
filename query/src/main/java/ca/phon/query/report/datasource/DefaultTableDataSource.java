@@ -137,7 +137,7 @@ public class DefaultTableDataSource implements TableDataSource {
 
 		if(row < rowData.size()) {
 			int colIdx = getColumnIndex(columnName);
-			if(colIdx > 0 && colIdx < getColumnCount()) {
+			if(colIdx >= 0 && colIdx < getColumnCount()) {
 				retVal = getValueAt(row, colIdx);
 			}
 		}

@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.Action;
@@ -130,6 +132,7 @@ import ca.phon.opgraph.ProcessorListener;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.plugin.PluginAction;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.ParticipantHistory;
 import ca.phon.project.Project;
@@ -453,13 +456,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
-		builder.addItem(".", printReportAct);
 		builder.addItem(".", saveAct).setEnabled(hasReport);
 		builder.addSeparator(".", "_save");
 		builder.addItem(".", saveTablesToWorkbookAct).setEnabled(hasReport);
 		builder.addItem(".", saveTablesExcelAct).setEnabled(hasReport);
 		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
-		
+		builder.addSeparator(".", "_export");
+		builder.addItem(".", printReportAct);
 	}
 	
 	private void setupReportTreeMenu(MenuBuilder builder, ReportTree reportTree) {
@@ -1014,7 +1017,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							}
 //							browser.removeLoadListener(this);
 							
-							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree));
+							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
 						}
 						
 						@Override
@@ -1426,9 +1429,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		
 		private ReportTree reportTree;
 		
-		public WebViewContextHandler(BrowserView browserView, ReportTree reportTree) {
+		private Map<String, DefaultTableDataSource> tableMap;
+		
+		public WebViewContextHandler(BrowserView browserView, ReportTree reportTree, Map<String, DefaultTableDataSource> tableMap) {
 			this.browserView = browserView;
 			this.reportTree = reportTree;
+			this.tableMap = tableMap;
 		}
 		
 		@Override
@@ -1448,32 +1454,68 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				}
 				
 				if(node.getNodeName().equalsIgnoreCase("table")) {
-					// check for a div with an 'onclick'
+					// add 'Open link' if table cell has an 'onclick' value
+					// check for a span with an 'onclick'
 					DOMElement linkEle = null;
 					DOMNode n = nodeAtPoint.getNode();
 					while(n.getParent() != null 
 							&& !n.getParent().getXPath().equals(node.getXPath())
-							&& !n.getNodeName().equalsIgnoreCase("div")) {
+							&& !n.getNodeName().equalsIgnoreCase("span")) {
 						n = n.getParent();
 					}
-					if(n.getNodeName().equalsIgnoreCase("div")) {
+					if(n.getNodeName().equalsIgnoreCase("span") && n.getParent().getNodeName().equalsIgnoreCase("td")) {
 						DOMElement divEle = params.getBrowser().getDocument().findElement(By.xpath(n.getXPath()));
 						String onclick = divEle.getAttribute("onclick");
-						if(onclick != null) {
+						if(onclick != null && onclick.length() > 0) {
 							linkEle = divEle;
 						}
 					}
 					if(linkEle != null) {
 						final PhonUIAction clickAct = new PhonUIAction(linkEle, "click");
-						clickAct.putValue(PhonUIAction.NAME, "Open session");
+						clickAct.putValue(PhonUIAction.NAME, "Open link");
 						builder.addItem(".", clickAct);
-						builder.addSeparator(".", "link_sep");
 					}
 					
 					DOMElement tableEle = params.getBrowser().getDocument().findElement(By.xpath(node.getXPath()));
 					String tableId = tableEle.getAttribute("id");
 					
-					if(tableId != null) {
+					if(tableId != null && tableMap.containsKey(tableId)) {
+						// look for the tr element
+						n = nodeAtPoint.getNode();
+						while(n.getParent() != null && !n.getNodeName().equalsIgnoreCase("tr")) {
+							n = n.getParent();
+						}
+						if(n.getNodeName().equalsIgnoreCase("tr")) {
+							String trXpath = n.getXPath();
+							int trIdx = -1;
+							Pattern p = Pattern.compile("\\[([0-9]+)\\]");
+							Matcher m = p.matcher(trXpath);
+							while(m.find()) {
+								trIdx = Integer.parseInt(m.group(1))-2;
+							}
+							
+							if(trIdx >= 0) {
+								DefaultTableDataSource table = tableMap.get(tableId);
+								Result r = (Result)table.getValueAt(trIdx, "Result");
+								if(r != null) {
+									final PluginAction openResultAct = new PluginAction(SessionEditorEP.EP_NAME);
+									EntryPointArgs args = new EntryPointArgs();
+									args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+									args.put(EntryPointArgs.SESSION_NAME, table.getValueAt(trIdx, "Session").toString());
+									args.put(SessionEditorEP.RECORD_INDEX_PROPERY, r.getRecordIndex());
+									args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] {r});
+									openResultAct.putArgs(args);
+									openResultAct.putValue(PhonUIAction.NAME, "Open session and highlight result");
+									openResultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session and highlight result");
+									builder.addItem(".@Open Link", openResultAct);
+								}
+							}
+						}
+
+						if(menu.getComponentCount() > 0) {
+							builder.addSeparator(".", "link_sep");
+						}
+						
 						// add table menu items
 						final PhonUIAction saveTableAsCSV = new PhonUIAction(params.getBrowser(), "executeJavaScript",
 								String.format("saveTableAsCSV('%s')", tableId));
