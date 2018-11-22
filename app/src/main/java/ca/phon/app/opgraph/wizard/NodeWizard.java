@@ -295,11 +295,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 	
 	public void setupReportMenu(MenuBuilder builder) {
-		final boolean hasReport = reportBufferAvailable();
+		final boolean hasReport = reportBufferAvailable();		
+		final BufferPanel reportBuffer = bufferPanel.getBuffer("Report");
 		
 		if(hasReport) {
 			if(PrefHelper.getBoolean("phon.debug", false)) {
-				final BufferPanel reportBuffer = bufferPanel.getBuffer("Report");
 				final PhonUIAction debugAct = new PhonUIAction(reportBuffer, 
 						(reportBuffer.isShowingHtmlDebug() ? "hideHtmlDebug" : "showHtmlDebug"));
 				debugAct.putValue(PhonUIAction.NAME, "Debug");
@@ -446,14 +446,25 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		
 		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
 		saveAct.putValue(SaveBufferAction.NAME, "Save Report (HTML)...");
-		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		saveAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		
 		
 		final PhonUIAction printReportAct = new PhonUIAction(this, "onPrintReport");
 		printReportAct.putValue(PhonUIAction.NAME, "Print");
 		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
+		if(Desktop.isDesktopSupported() && hasReport) {
+			String reportTmpURL = reportBuffer.getBrowser().getURL();
+			URI uri = URI.create(reportTmpURL);
+			
+			final PhonUIAction openInBrowserAct = new PhonUIAction(Desktop.getDesktop(), "browse", uri);
+			openInBrowserAct.putValue(PhonUIAction.NAME, "Open report in browser");
+			openInBrowserAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open report in system web browser");
+			builder.addItem(".", openInBrowserAct);
+			builder.addSeparator(".", "open_sep");
+		}
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
 		builder.addItem(".", saveAct).setEnabled(hasReport);
