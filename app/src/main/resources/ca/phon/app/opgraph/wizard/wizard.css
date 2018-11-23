@@ -45,6 +45,7 @@ table {
     empty-cells: show;
     table-layout:fixed;
     text-align: left;
+    margin-bottom: 1em;
 }
 
 th {
@@ -65,6 +66,10 @@ td {
 
 td:hover {
     overflow:visible;
+}
+
+pre {
+    margin-left: 3em;
 }
 
 code {
