@@ -47,6 +47,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -456,8 +458,25 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
 		if(Desktop.isDesktopSupported() && hasReport) {
-			String reportTmpURL = reportBuffer.getBrowser().getURL();
-			URI uri = URI.create(reportTmpURL);
+			// bug on macos using Browser.getURL() for some reason when opening window menu
+			// use javascript interface to get URL instead
+			final AtomicReference<String> reportTmpURLRef = new AtomicReference<>();
+			if(SwingUtilities.isEventDispatchThread()) {
+				CountDownLatch latch = new CountDownLatch(1);
+				PhonWorker.getInstance().invokeLater( () -> {
+					JSValue urlVal = reportBuffer.getBrowser().executeJavaScriptAndReturnValue("window.location.href");
+					reportTmpURLRef.set(urlVal.getStringValue());
+					latch.countDown();
+				});
+				try {
+					latch.await(2, TimeUnit.SECONDS);
+				} catch (InterruptedException e1) {
+					LogUtil.severe(e1);
+				}
+			} else {
+				reportTmpURLRef.set(reportBuffer.getBrowser().getURL());
+			}
+			URI uri = URI.create(reportTmpURLRef.get());
 			
 			final PhonUIAction openInBrowserAct = new PhonUIAction(Desktop.getDesktop(), "browse", uri);
 			openInBrowserAct.putValue(PhonUIAction.NAME, "Open report in browser");
