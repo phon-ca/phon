@@ -316,6 +316,34 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				builder.addSeparator(".", "debug_sep");
 			}
 			
+			if(Desktop.isDesktopSupported() && hasReport) {
+				// bug on macos using Browser.getURL() for some reason when opening window menu
+				// use javascript interface to get URL instead
+				final AtomicReference<String> reportTmpURLRef = new AtomicReference<>();
+				if(SwingUtilities.isEventDispatchThread()) {
+					CountDownLatch latch = new CountDownLatch(1);
+					PhonWorker.getInstance().invokeLater( () -> {
+						JSValue urlVal = reportBuffer.getBrowser().executeJavaScriptAndReturnValue("window.location.href");
+						reportTmpURLRef.set(urlVal.getStringValue());
+						latch.countDown();
+					});
+					try {
+						latch.await(2, TimeUnit.SECONDS);
+					} catch (InterruptedException e1) {
+						LogUtil.severe(e1);
+					}
+				} else {
+					reportTmpURLRef.set(reportBuffer.getBrowser().getURL());
+				}
+				URI uri = URI.create(reportTmpURLRef.get());
+				
+				final PhonUIAction openInBrowserAct = new PhonUIAction(Desktop.getDesktop(), "browse", uri);
+				openInBrowserAct.putValue(PhonUIAction.NAME, "Open report in browser");
+				openInBrowserAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open report in system web browser");
+				builder.addItem(".", openInBrowserAct);
+				builder.addSeparator(".", "open_sep");
+			}
+			
 			final Optional<ReportTree> reportTree = getCurrentReportTree();
 			if(reportTree.isPresent()) {
 				JMenu reportTreeMenu = builder.addMenu(".", "Go to");
@@ -457,33 +485,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		printReportAct.putValue(PhonUIAction.NAME, "Print");
 		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
-		if(Desktop.isDesktopSupported() && hasReport) {
-			// bug on macos using Browser.getURL() for some reason when opening window menu
-			// use javascript interface to get URL instead
-			final AtomicReference<String> reportTmpURLRef = new AtomicReference<>();
-			if(SwingUtilities.isEventDispatchThread()) {
-				CountDownLatch latch = new CountDownLatch(1);
-				PhonWorker.getInstance().invokeLater( () -> {
-					JSValue urlVal = reportBuffer.getBrowser().executeJavaScriptAndReturnValue("window.location.href");
-					reportTmpURLRef.set(urlVal.getStringValue());
-					latch.countDown();
-				});
-				try {
-					latch.await(2, TimeUnit.SECONDS);
-				} catch (InterruptedException e1) {
-					LogUtil.severe(e1);
-				}
-			} else {
-				reportTmpURLRef.set(reportBuffer.getBrowser().getURL());
-			}
-			URI uri = URI.create(reportTmpURLRef.get());
-			
-			final PhonUIAction openInBrowserAct = new PhonUIAction(Desktop.getDesktop(), "browse", uri);
-			openInBrowserAct.putValue(PhonUIAction.NAME, "Open report in browser");
-			openInBrowserAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open report in system web browser");
-			builder.addItem(".", openInBrowserAct);
-			builder.addSeparator(".", "open_sep");
-		}
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
 		builder.addItem(".", saveAct).setEnabled(hasReport);
