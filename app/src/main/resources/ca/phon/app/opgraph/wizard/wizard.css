@@ -196,6 +196,7 @@ nav {
 
 #toc {
     padding-top: 20px;
+    display: none;
 }
 
 #toc .ui-menu {

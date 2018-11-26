@@ -196,7 +196,7 @@ public class NodeWizardReportGenerator {
 		sb.append("<nav>").append(nl);
 		
 		sb.append("<div id='menuToggle' style='color: #ccc;'>").append(nl);
-		sb.append("<input onclick='$(\"#toc\").toggle()' class=\"burger-check\" id=\"burger-check\" type=\"checkbox\" checked><label for=\"burger-check\" class=\"burger\"></label>");
+		sb.append("<input onclick='$(\"#toc\").toggle()' class=\"burger-check\" id=\"burger-check\" type=\"checkbox\"><label for=\"burger-check\" class=\"burger\"></label>");
 		sb.append("</div>").append(nl);
 		
 		sb.append("<div id='toc'>").append(nl);
