@@ -355,6 +355,7 @@ public class QueryAndReportWizard extends NodeWizard {
 							public void menuSelected(MenuEvent e) {
 								stockQueryMenu.removeAll();
 								List<ParamSetType> namedParamSets = queryHistoryPanel.getStockQueries().getNamedParamSets();
+								namedParamSets.sort( (ps1, ps2) -> ps1.getName().compareTo(ps2.getName()) );
 								for(ParamSetType paramSet:namedParamSets) {
 									final PhonUIAction psAct = new PhonUIAction(QueryAndReportWizard.this, "loadNamedQuery", paramSet);
 									psAct.putValue(PhonUIAction.NAME, paramSet.getName());
@@ -382,6 +383,7 @@ public class QueryAndReportWizard extends NodeWizard {
 							public void menuSelected(MenuEvent e) {
 								userQueryMenu.removeAll();
 								List<ParamSetType> namedParamSets = queryHistoryManager.getNamedParamSets();
+								namedParamSets.sort( (ps1, ps2) -> ps1.getName().compareTo(ps2.getName()) );
 								for(ParamSetType paramSet:namedParamSets) {
 									final PhonUIAction psAct = new PhonUIAction(QueryAndReportWizard.this, "loadNamedQuery", paramSet);
 									psAct.putValue(PhonUIAction.NAME, paramSet.getName());
