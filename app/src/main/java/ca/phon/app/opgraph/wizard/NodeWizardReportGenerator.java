@@ -152,6 +152,8 @@ public class NodeWizardReportGenerator {
 		sb.append("var tableIds = [");
 		int i = 0;
 		for(String tableId:tableMap.keySet()) {
+			DefaultTableDataSource table = tableMap.get(tableId);
+			if(table.getRowCount() == 0) continue;
 			if(i++ > 0) sb.append(",");
 			sb.append("\"").append(tableId).append("\"");
 		}

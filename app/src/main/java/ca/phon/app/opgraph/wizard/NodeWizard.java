@@ -1040,6 +1040,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							LogUtil.info("Finished loading frame");
 							int idx = 0;
 							for(String tableId:tableMap.keySet()) {
+								if(tableMap.get(tableId).getRowCount() == 0) continue;
 								browser.executeJavaScript(
 										String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
 								browser.executeJavaScript(
