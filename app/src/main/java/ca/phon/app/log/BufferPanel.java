@@ -614,7 +614,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 	
 	public void createSheetInExcelWorkbook(WritableWorkbook workbook) throws RowsExceededException, WriteException {
-		final WritableSheet sheet = workbook.createSheet(getName(), workbook.getNumberOfSheets());
+		final WritableSheet sheet = workbook.createSheet(WorkbookUtils.sanitizeTabName(getName()), workbook.getNumberOfSheets());
 		
 		if(getUserObject() != null && getUserObject() instanceof DefaultTableDataSource) {
 			final DefaultTableDataSource table = (DefaultTableDataSource)getUserObject();
