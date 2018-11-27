@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b2.dmg" newVersion="3.0.3b2" newMediaFileId="macos" fileSize="256508557" md5Sum="bd6e9aa8b55352a7f01a745a306511d1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.1
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b3.dmg" newVersion="3.0.3b3" newMediaFileId="macos" fileSize="256515163" md5Sum="0f2a656238e73d0a06c8a5ad59c816cb" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -10,6 +10,9 @@
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -239,8 +242,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b2.dmg" newVersion="3.0.3b2" newMediaFileId="macos" fileSize="256508557" md5Sum="bd6e9aa8b55352a7f01a745a306511d1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b3.dmg" newVersion="3.0.3b3" newMediaFileId="macos" fileSize="256515163" md5Sum="0f2a656238e73d0a06c8a5ad59c816cb" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -249,6 +252,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -478,8 +484,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b2.exe" newVersion="3.0.3b2" newMediaFileId="win64" fileSize="257765376" md5Sum="c64ecfea1cb13bc7c0f0a6c77c3618f4" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.exe" newVersion="3.0.3b3" newMediaFileId="win64" fileSize="257772032" md5Sum="2676dc9fc9e6a83c73741a2e53fa9f7c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -488,6 +494,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -717,8 +726,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b2.exe" newVersion="3.0.3b2" newMediaFileId="win64" fileSize="257765376" md5Sum="c64ecfea1cb13bc7c0f0a6c77c3618f4" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.exe" newVersion="3.0.3b3" newMediaFileId="win64" fileSize="257772032" md5Sum="2676dc9fc9e6a83c73741a2e53fa9f7c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -727,6 +736,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -956,8 +968,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b2.exe" newVersion="3.0.3b2" newMediaFileId="win64" fileSize="257765376" md5Sum="c64ecfea1cb13bc7c0f0a6c77c3618f4" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.exe" newVersion="3.0.3b3" newMediaFileId="win64" fileSize="257772032" md5Sum="2676dc9fc9e6a83c73741a2e53fa9f7c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -966,6 +978,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -1195,8 +1210,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b2.zip" newVersion="3.0.3b2" newMediaFileId="win64zip" fileSize="256815046" md5Sum="f8bb235968fbcb7a8c1adab86ea3ac0e" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.zip" newVersion="3.0.3b3" newMediaFileId="win64zip" fileSize="256821743" md5Sum="4697820696f7524b5dbac57caf28957b" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -1205,6 +1220,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -1434,8 +1452,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b2.deb" newVersion="3.0.3b2" newMediaFileId="linux64deb" fileSize="187221404" md5Sum="dd5323d5f4fdd45c9da29115dd664ac9" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b3.deb" newVersion="3.0.3b3" newMediaFileId="linux64deb" fileSize="187231368" md5Sum="f37a17b3b6c83565833c8bde3f13a918" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -1444,6 +1462,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
@@ -1673,8 +1694,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b2.sh" newVersion="3.0.3b2" newMediaFileId="linux64" fileSize="186747942" md5Sum="48866f3a3a5a7dfef21da3ee50557fba" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b3.sh" newVersion="3.0.3b3" newMediaFileId="linux64" fileSize="186754647" md5Sum="0ffb0c28fe1de5f3017b7d13f8ee2b40" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
  
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
@@ -1683,6 +1704,9 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
  * Added 'Open report in browser' menu item
  * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
 
 ## Changes from 3.0.1
 
