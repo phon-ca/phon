@@ -517,6 +517,14 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			JMenu subMenu = builder.addMenu(".", node.getTitle());
 			MenuBuilder subMenuBuilder = new MenuBuilder(subMenu);
 			
+			subMenu.addMouseListener(new MouseInputAdapter() {
+				
+				public void mouseClicked(MouseEvent me) {
+					gotoReportSection(node.getPath().toString());
+				}
+				
+			});
+			
 			builder = subMenuBuilder;
 		}
 		for(ReportTreeNode cnode:node) {
