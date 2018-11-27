@@ -88,6 +88,9 @@ public class QueryAndReportWizardEP implements IPluginEntryPoint {
 				final QueryAndReportWizard openWizard = (QueryAndReportWizard)cmf;
 				if(openWizard.getQueryScript().getHashString().equals(script.getHashString())) {
 					openWizard.toFront();
+					if(project != openWizard.getExtension(Project.class)) {
+						openWizard.newWindow(project);
+					}
 					return;
 				}
 			}

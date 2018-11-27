@@ -861,7 +861,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryHistoryPanel.updateLabelFromCurrentHash();
 	}
 	
-	public void onDuplicateQueryWizard() {
+	public void newWindow(Project project) {
 		int wizardIdx = this.windowIdx;
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof QueryAndReportWizard && cmf != this) {
@@ -881,6 +881,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		wizard.setSize(getSize());
 		wizard.cascadeWindow(this);
 		wizard.setVisible(true);
+	}
+	
+	public void newWindow() {
+		newWindow(project);
+	}
+	
+	public void onDuplicateQueryWizard() {
+		newWindow();
 	}
 	
 	private WizardStep createReportConfigStep() {
