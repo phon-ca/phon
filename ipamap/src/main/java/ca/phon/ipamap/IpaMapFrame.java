@@ -23,6 +23,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -128,11 +130,45 @@ public class IpaMapFrame extends CommonModuleFrame {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(mapContents, BorderLayout.CENTER);
 		
-		WindowMoveListener l = new WindowMoveListener();
-		super.addMouseListener(l);
-		super.addMouseMotionListener(l);
-		
 		mapContents.addListener(new ButtonListener());
+		
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				setSavedWindowLocation(getLocation());
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+			}
+			
+		});
 	}
 	
 	public void showWindow() {
@@ -161,6 +197,14 @@ public class IpaMapFrame extends CommonModuleFrame {
 			setLocation(p);
 		
 		setVisible(true);
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		if(!visible) {
+			setSavedWindowLocation(getLocationOnScreen());
+		}
+		super.setVisible(visible);
 	}
 	
 	/**
@@ -196,44 +240,4 @@ public class IpaMapFrame extends CommonModuleFrame {
 		
 	}
 	
-	/**
-	 * Window movement listener
-	 */
-	private class WindowMoveListener extends MouseInputAdapter {
-		
-		boolean moving = false;
-		
-		Point windowPoint = new Point(0,0);
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			if(moving) {
-				Point newPoint = e.getLocationOnScreen();
-				newPoint.x -= windowPoint.x;
-				newPoint.y -= windowPoint.y;
-				
-				// keep below menu bar on mac
-				if(OSInfo.isMacOs()) {
-					if(newPoint.y < 22) {
-						newPoint.y = 22;
-					}
-				}
-				
-				IpaMapFrame.this.setLocation(newPoint.x, newPoint.y);
-				setSavedWindowLocation(newPoint);
-			}
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			moving = true;
-			windowPoint = e.getPoint();
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			moving = false;
-		}
-		
-	}
 }
