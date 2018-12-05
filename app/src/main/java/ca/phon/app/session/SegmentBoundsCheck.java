@@ -16,11 +16,14 @@
 package ca.phon.app.session;
 
 import java.util.Map;
+import java.util.Properties;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.Rank;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -29,16 +32,19 @@ import ca.phon.session.Tier;
 import ca.phon.session.check.SessionCheck;
 import ca.phon.session.check.SessionValidator;
 
-public class SegmentTimeCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
+@PhonPlugin(name="Check Segment Bounds", comments="Ensure media segments are within bounds")
+@Rank(4)
+public class SegmentBoundsCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
 
 	@Override
-	public void checkSession(SessionValidator validator, Session session, Map<String, Object> options) {
+	public boolean checkSession(SessionValidator validator, Session session) {
+		boolean modified = false;
 		final SessionEditor editor = validator.getExtension(SessionEditor.class);
-		if(editor == null) return;
+		if(editor == null) return modified;
 		
 		final SpeechAnalysisEditorView speechAnalysisView = 
 				(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
-		if(speechAnalysisView == null || speechAnalysisView.getWavDisplay().getSampled() == null) return;
+		if(speechAnalysisView == null || speechAnalysisView.getWavDisplay().getSampled() == null) return modified;
 		
 		float maxTimeMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
 		
@@ -54,6 +60,7 @@ public class SegmentTimeCheck implements SessionCheck, IPluginExtensionPoint<Ses
 				}
 			}
 		}
+		return false;
 	}
 
 	@Override
@@ -63,9 +70,16 @@ public class SegmentTimeCheck implements SessionCheck, IPluginExtensionPoint<Ses
 
 	@Override
 	public IPluginExtensionFactory<SessionCheck> getFactory() {
-		return (Object ... args) -> {
-			return SegmentTimeCheck.this;
-		};
+		return (Object ... args) -> this;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return new Properties();
+	}
+
+	@Override
+	public void loadProperties(Properties props) {
 	}
 
 }

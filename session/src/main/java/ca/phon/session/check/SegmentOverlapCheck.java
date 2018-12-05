@@ -17,23 +17,27 @@ package ca.phon.session.check;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.Rank;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.util.PrefHelper;
 
-@PhonPlugin(name="check", version="1", minPhonVersion="2.1.0")
-public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
+@PhonPlugin(name="Check Segment Overlap", comments="Check for overlapping media segments")
+@Rank(3)
+public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
 
 	/** Overlap tolerance in ms */
 	public final static String OVERLAP_TOLERANCE_PROPERTY =
-			OverlappingSegmentsCheck.class.getName() + ".overlapTolerance";
+			SegmentOverlapCheck.class.getName() + ".overlapTolerance";
 	public final static int DEFAULT_OVERLAP_TOLERANCE = 200;
 	private int overlapTolerance =
 			PrefHelper.getInt(OVERLAP_TOLERANCE_PROPERTY, DEFAULT_OVERLAP_TOLERANCE);
@@ -57,7 +61,8 @@ public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionP
 	}
 
 	@Override
-	public void checkSession(SessionValidator validator, Session session, Map<String, Object> options) {
+	public boolean checkSession(SessionValidator validator, Session session) {
+		boolean modified = false;
 		final Map<Participant, Float> endTimes = new HashMap<>();
 		final Map<Participant, Integer> lastRecords = new HashMap<>();
 		endTimes.put(Participant.UNKNOWN, 0.0f);
@@ -94,6 +99,17 @@ public class OverlappingSegmentsCheck implements SessionCheck, IPluginExtensionP
 				lastRecords.put(r.getSpeaker(), rIdx);
 			}
 		}
+		return modified;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return new Properties();
+	}
+
+	@Override
+	public void loadProperties(Properties props) {
+		
 	}
 
 }

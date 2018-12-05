@@ -18,57 +18,88 @@ package ca.phon.session.check;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.util.PrefHelper;
 
 /**
  * Check IPA transcriptions for a session. 
  *
  */
-@PhonPlugin(name="check", version="1", minPhonVersion="2.1.0")
+@PhonPlugin(name="Check IPA Transcriptions", comments="Check IPA transcriptions and optionally reset syllabification")
+@Rank(1)
 public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
+	
+	public final static String RESET_SYLLABIFICATION = CheckTranscripts.class.getName() + ".resetSyllabification";
+	public final static boolean DEFAULT_RESET_SYLLABIFICATION = false;
+	private boolean resetSyllabification = 
+			PrefHelper.getBoolean(RESET_SYLLABIFICATION, DEFAULT_RESET_SYLLABIFICATION);
+	
+	public final static String SYLLABIFIER_LANG = CheckTranscripts.class.getName() + ".syllabifierLang";
+	public final static String DEFAULT_SYLLABIFIER_LANG = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage().toString();
+	private String syllabifierLang = PrefHelper.get(SYLLABIFIER_LANG, DEFAULT_SYLLABIFIER_LANG);
+	
+	public CheckTranscripts() {
+		super();
+	}
+	
+	public boolean isResetSyllabification() {
+		return resetSyllabification;
+	}
+
+	public void setResetSyllabification(boolean resetSyllabification) {
+		this.resetSyllabification = resetSyllabification;
+	}
+
+	public String getSyllabifierLang() {
+		return syllabifierLang;
+	}
+
+	public void setSyllabifierLang(String syllabifierLang) {
+		this.syllabifierLang = syllabifierLang;
+	}
 
 	@Override
-	public void checkSession(SessionValidator validator, 
-			Session session, Map<String, Object> options) {
+	public boolean checkSession(SessionValidator validator, Session session) {
+		boolean modified = false;
+		Syllabifier syllabifier = null;
+		if(isResetSyllabification()) {
+			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(getSyllabifierLang());
+		}
 		
 		for(int i = 0; i < session.getRecordCount(); i++) {
 			final Record r = session.getRecord(i);
-			
-			List<String> ipaTiers = new ArrayList<>();
-			ipaTiers.add(SystemTierType.IPATarget.getName());
-			ipaTiers.add(SystemTierType.IPAActual.getName());
-			for(String depTier:r.getExtraTierNames()) {
-				if(r.getTierType(depTier) == IPATranscript.class) {
-					ipaTiers.add(depTier);
-				}
-			}
-			
-			for(String ipaTier:ipaTiers) {
-				final Tier<IPATranscript> tier = r.getTier(ipaTier, IPATranscript.class);
+			for(Tier<IPATranscript> tier:r.getTiersOfType(IPATranscript.class)) {
 				for(int gIdx = 0; gIdx < tier.numberOfGroups(); gIdx++) {
 					final IPATranscript ipa = tier.getGroup(gIdx);
-					
 					final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
 					if(uv != null) {
 						// error in this transcription
-						final ValidationEvent ve = new ValidationEvent(session, i, ipaTier, gIdx,
+						final ValidationEvent ve = new ValidationEvent(session, i, tier.getName(), gIdx,
 								uv.getParseError().getMessage());
 						validator.fireValidationEvent(ve);
+					} else {
+						if(isResetSyllabification() && syllabifier != null) {
+							syllabifier.syllabify(ipa.toList());
+							modified = true;
+						}
 					}
-					
 				}
 			}
 		}
-		
+		return modified;
 	}
 
 	@Override
@@ -78,10 +109,24 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 	@Override
 	public IPluginExtensionFactory<SessionCheck> getFactory() {
-		final IPluginExtensionFactory<SessionCheck> factory = (Object ... args) -> {
-			return CheckTranscripts.this;
-		};
-		return factory;
+		return (Object ... args) -> this;
+	}
+
+	@Override
+	public Properties getProperties() {
+		Properties props = new Properties();
+		
+		props.put(RESET_SYLLABIFICATION, Boolean.toString(isResetSyllabification()));
+		props.put(SYLLABIFIER_LANG, getSyllabifierLang());
+		
+		return props;
+	}
+
+	@Override
+	public void loadProperties(Properties props) {
+		if(props.containsKey(RESET_SYLLABIFICATION))
+			setResetSyllabification(Boolean.parseBoolean(props.getProperty(RESET_SYLLABIFICATION)));
+		setSyllabifierLang(props.getProperty(SYLLABIFIER_LANG, DEFAULT_SYLLABIFIER_LANG));
 	}
 
 }

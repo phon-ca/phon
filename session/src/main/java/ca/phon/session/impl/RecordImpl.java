@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.GroupLayout.Alignment;
+
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
@@ -623,5 +625,33 @@ public class RecordImpl implements Record {
 		}
 
 		return newGroup;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
+		List<Tier<T>> retVal = new ArrayList<>();
+		
+		if(type == Orthography.class) {
+			retVal.add((Tier<T>)getOrthography());
+		} else if(type == IPATranscript.class) {
+			retVal.add((Tier<T>)getIPATarget());
+			retVal.add((Tier<T>)getIPAActual());
+		} else if(type == MediaSegment.class) {
+			retVal.add((Tier<T>)getSegment());
+		} else if(type == TierString.class) {
+			retVal.add((Tier<T>)getNotes());
+		} else if(type == Alignment.class) {
+			retVal.add((Tier<T>)getPhoneAlignment());
+		}
+		
+		for(String tierName:userDefined.keySet()) {
+			Tier<?> userTier = userDefined.get(tierName);
+			if(userTier.getDeclaredType() == type) {
+				retVal.add((Tier<T>)userTier);
+			}
+		}
+		
+		return retVal;
 	}
 }

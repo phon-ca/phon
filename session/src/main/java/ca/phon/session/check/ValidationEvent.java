@@ -120,6 +120,11 @@ public class ValidationEvent implements IExtendable {
 	public List<SessionQuickFix> getQuickFixes() {
 		return new ArrayList<>();
 	}
+	
+	@Override
+	public String toString() {
+		return getMessage();
+	}
 
 	@Override
 	public Set<Class<?>> getExtensions() {

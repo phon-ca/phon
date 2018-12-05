@@ -18,6 +18,7 @@ package ca.phon.app.opgraph.macro;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelInfo;
 import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.util.Tuple;
 
@@ -30,6 +31,12 @@ public class MacroOpgraphEditorModel extends OpgraphEditorModel {
 
 	public MacroOpgraphEditorModel(OpGraph opgraph) {
 		super(opgraph);
+		
+		WizardExtension ext = opgraph.getExtension(WizardExtension.class);
+		if(ext == null) {
+			ext = new WizardExtension(opgraph);
+			opgraph.putExtension(WizardExtension.class, ext);
+		}
 
 		PhonNodeLibrary.install(getNodeLibrary().getLibrary());
 	}

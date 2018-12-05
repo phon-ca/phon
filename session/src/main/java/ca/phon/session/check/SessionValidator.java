@@ -74,7 +74,7 @@ public class SessionValidator implements IExtendable {
 	}
 	
 	public void validate(Session session) {
-		sessionChecks.forEach( (check) -> check.checkSession(this, session, new HashMap<>()) );
+		sessionChecks.forEach( (check) -> check.checkSession(this, session) );
 	}
 	
 	public void addValidationListener(ValidationListener listener) {

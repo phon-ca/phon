@@ -477,7 +477,7 @@ public class QueryRunnerPanel extends JPanel {
 					
 					// open editor first....
 					try {
-						PluginEntryPointRunner.executePlugin("ResultSetViewer", initInfo);
+						PluginEntryPointRunner.executePlugin(ResultSetEP.EP_NAME, initInfo);
 					} catch (PluginException ex) {
 						LOGGER.error( ex.getLocalizedMessage(), ex);
 					}

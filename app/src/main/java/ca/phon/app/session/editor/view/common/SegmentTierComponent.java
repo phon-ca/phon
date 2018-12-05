@@ -53,7 +53,7 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
-import ca.phon.session.check.OverlappingSegmentsCheck;
+import ca.phon.session.check.SegmentOverlapCheck;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
@@ -245,7 +245,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		}
 
 		// check if segment overlaps with previous record
-		final int tolerance = PrefHelper.getInt(OverlappingSegmentsCheck.OVERLAP_TOLERANCE_PROPERTY, OverlappingSegmentsCheck.DEFAULT_OVERLAP_TOLERANCE);
+		final int tolerance = PrefHelper.getInt(SegmentOverlapCheck.OVERLAP_TOLERANCE_PROPERTY, SegmentOverlapCheck.DEFAULT_OVERLAP_TOLERANCE);
 		MediaSegment validated = getValidatedObject();
 		if(getEditor().getCurrentRecordIndex() > 0) {
 			int idx = getEditor().getCurrentRecordIndex()-1;

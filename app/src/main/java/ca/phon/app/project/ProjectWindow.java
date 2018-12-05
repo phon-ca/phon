@@ -95,6 +95,7 @@ import ca.hedlund.desktopicons.NativeUtilities;
 import ca.hedlund.desktopicons.StockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.actions.AnonymizeAction;
 import ca.phon.app.project.actions.CheckTranscriptionsAction;
 import ca.phon.app.project.actions.DeleteCorpusAction;
@@ -116,8 +117,10 @@ import ca.phon.app.project.git.actions.CommitAction;
 import ca.phon.app.project.git.actions.InitAction;
 import ca.phon.app.project.git.actions.PullAction;
 import ca.phon.app.project.git.actions.PushAction;
+import ca.phon.app.session.SessionCheckEP;
 import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.app.welcome.WorkspaceTextStyler;
+import ca.phon.plugin.PluginAction;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
@@ -318,9 +321,14 @@ public class ProjectWindow extends CommonModuleFrame {
 		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
 		projectMenu.add(anonymizeParticipantInfoItem);
 
-		final CheckTranscriptionsAction repairItem = new CheckTranscriptionsAction(this);
-		projectMenu.add(repairItem);
-
+//		final CheckTranscriptionsAction repairItem = new CheckTranscriptionsAction(this);
+//		projectMenu.add(repairItem);
+		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
+		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
+		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions");
+		checkSessionsAct.putValue(PluginAction.SHORT_DESCRIPTION, "Check sessions for warnings");
+		projectMenu.add(checkSessionsAct);
+		
 		// merge/split sessions
 		final DeriveSessionAction deriveItem = new DeriveSessionAction(this);
 		projectMenu.add(deriveItem);

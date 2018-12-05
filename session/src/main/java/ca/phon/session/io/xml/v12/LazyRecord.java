@@ -15,6 +15,7 @@
  */
 package ca.phon.session.io.xml.v12;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -279,6 +280,12 @@ public class LazyRecord implements Record {
 		if(internalRecord != null) return;
 		final XMLSessionReader_v12 reader = new XMLSessionReader_v12();
 		internalRecord = reader.copyRecord(factory, session, recordElement);
+	}
+
+	@Override
+	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
+		loadRecord();
+		return internalRecord.getTiersOfType(type);
 	}
 
 }

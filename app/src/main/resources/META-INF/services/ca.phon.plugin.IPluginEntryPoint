@@ -21,6 +21,8 @@ ca.phon.app.project.ProjectArchiveEP
 ca.phon.app.query.ResultSetEP
 # Session Editor
 ca.phon.app.session.editor.SessionEditorEP
+# Session Check
+ca.phon.app.session.SessionCheckEP
 # Query Editor
 ca.phon.app.query.QueryAndReportWizardEP
 # Session template

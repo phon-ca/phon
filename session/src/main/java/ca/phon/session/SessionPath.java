@@ -15,13 +15,19 @@
  */
 package ca.phon.session;
 
+import java.util.Set;
+
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.util.Tuple;
 
 /**
  * Helper class for holding location for sessions
  * in a project.
  */
-public class SessionPath extends Tuple<String, String> {
+public class SessionPath extends Tuple<String, String> implements IExtendable {
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(SessionPath.class, this);
 
 	/**
 	 * Constructor
@@ -36,10 +42,14 @@ public class SessionPath extends Tuple<String, String> {
 		if(dotIdx < 0) throw new IllegalArgumentException(path);
 		setObj1(path.substring(0, dotIdx));
 		setObj2(path.substring(dotIdx+1));
+		
+		extSupport.initExtensions();
 	}
 
 	public SessionPath(String corpus, String session) {
 		super(corpus, session);
+		
+		extSupport.initExtensions();
 	}
 
 	/**
@@ -82,4 +92,22 @@ public class SessionPath extends Tuple<String, String> {
 		return getCorpus() + "." + getSession();
 	}
 
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
+
+	
+	
 }

@@ -15,12 +15,14 @@
  */
 package ca.phon.app.session;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -28,8 +30,11 @@ import javax.swing.tree.TreePath;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
+import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
@@ -69,7 +74,21 @@ public class SessionSelector extends TristateCheckBoxTree {
 			if(sessions.size() == 0 && hideEmptyCorpora) continue;
 			Collections.sort(sessions, collator);
 			for(String session:sessions) {
-				SessionTreeNode sessionNode = new SessionTreeNode(session);
+				SessionPath sp = new SessionPath(corpus, session);
+				
+				// check for an open session editor
+				for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+					if(cmf instanceof SessionEditor) {
+						SessionEditor editor = (SessionEditor)cmf;
+						Session editedSession = editor.getSession();
+						
+						if(sp.equals(new SessionPath(editedSession.getCorpus(), editedSession.getName()))) {
+							sp.putExtension(SessionEditor.class, editor);
+						}
+					}
+				}
+				
+				SessionTreeNode sessionNode = new SessionTreeNode(sp);
 				sessionNode.setEnablePartialCheck(false);
 				corpusNode.add(sessionNode);
 			}
@@ -143,7 +162,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 			if(corpusNode.getUserObject().equals(sessionPath.getCorpus())) {
 				for(int j = 0; j < corpusNode.getChildCount(); j++) {
 					final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)corpusNode.getChildAt(j);
-					if(sessionNode.getUserObject().equals(sessionPath.getSession())) {
+					if(sessionNode.getUserObject().equals(sessionPath)) {
 						final TreePath checkPath = new TreePath(
 								new Object[]{ root, corpusNode, sessionNode });
 						return checkPath;
@@ -160,14 +179,11 @@ public class SessionSelector extends TristateCheckBoxTree {
 
 		List<TreePath> checkPaths = super.getCheckedPaths();
 
-
 		for(TreePath checkPath:checkPaths) {
 			if(checkPath.getPath().length != 3)
 				continue;
-			String corpus = checkPath.getPath()[1].toString();
-			String session = checkPath.getPath()[2].toString();
-
-			SessionPath loc = new SessionPath(corpus, session);
+			
+			SessionPath loc = (SessionPath)((SessionTreeNode)checkPath.getPath()[2]).getUserObject();
 			retVal.add(loc);
 		}
 
@@ -208,8 +224,8 @@ public class SessionSelector extends TristateCheckBoxTree {
 	
 	public static class SessionTreeNode extends TristateCheckBoxTreeNode {
 		
-		public SessionTreeNode(String sessionName) {
-			super(sessionName);
+		public SessionTreeNode(SessionPath sessionPath) {
+			super(sessionPath);
 		}
 		
 	}
@@ -233,6 +249,17 @@ public class SessionSelector extends TristateCheckBoxTree {
 						(TristateCheckBoxTreeCellRenderer.TristateCheckBoxTreeNodePanel)retVal;
 				
 				if(node instanceof SessionTreeNode) {
+					SessionPath sp = (SessionPath)node.getUserObject();
+					SessionEditor editor = (SessionEditor)sp.getExtension(SessionEditor.class);
+					panel.getLabel().setText(sp.getSession());
+					if(editor != null) {
+						StringBuffer lblTxt = new StringBuffer();
+						lblTxt.append("(O) ").append(sp.getSession());
+						if(editor.hasUnsavedChanges()) {
+							lblTxt.append("*");
+						}
+						panel.getLabel().setText(lblTxt.toString());
+					}
 					panel.getLabel().setIcon(sessionIcon);
 				} else if(node instanceof ProjectTreeNode || node instanceof CorpusTreeNode) {
 					panel.getLabel().setIcon(folderIcon);

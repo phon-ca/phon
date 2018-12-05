@@ -1,0 +1,96 @@
+package ca.phon.app.session;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import org.jdesktop.swingx.JXBusyLabel;
+
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.opgraph.OpgraphIO;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.Processor;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.PluginManager;
+import ca.phon.project.Project;
+import ca.phon.session.SessionPath;
+import ca.phon.session.check.SessionCheck;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.wizard.BreadcrumbWizardFrame;
+import ca.phon.ui.wizard.WizardStep;
+
+/**
+ * Check sessions for errors.
+ */
+public class SessionCheckWizard extends NodeWizard {
+
+	private static final long serialVersionUID = 6650736926995551274L;
+	
+	private final static String SESSION_CHECK_GRAPH = "session_check.xml";
+
+	private SessionSelector sessionSelector;
+		
+	public static SessionCheckWizard newWizard(Project project) {
+		final InputStream in = SessionCheckWizard.class.getResourceAsStream(SESSION_CHECK_GRAPH);
+		if(in == null) throw new IllegalStateException(SESSION_CHECK_GRAPH + " not found");
+		
+		try {
+			OpGraph graph = OpgraphIO.read(in);
+			
+			return new SessionCheckWizard(project, new Processor(graph), graph);
+		} catch (IOException e) {
+			LogUtil.severe(e);
+			throw new IllegalStateException(e);
+		}
+	}
+	
+	private SessionCheckWizard(Project project, Processor processor, OpGraph graph) {
+		super("Session Check", processor, graph);
+		
+		putExtension(Project.class, project);
+		
+		globalOptionsPanel.setVisible(false);
+		
+		init();
+	}
+		
+	public Project getProject() {
+		return getExtension(Project.class);
+	}
+	
+	private void init() {
+		WizardStep step1 = getWizardStep(0);
+		
+		TitledPanel tp = new TitledPanel("Select Sessions");
+		sessionSelector = new SessionSelector(getProject());
+		sessionSelector.setPreferredSize(new Dimension(350, 0));
+		tp.setLayout(new BorderLayout());
+		tp.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
+		step1.add(tp, BorderLayout.WEST);
+	}
+	
+	@Override
+	public void next() {
+		if(getCurrentStepIndex() == 0) {
+			// TODO ensure sessions selected
+			List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
+			if(selectedSessions.size() == 0) {
+				return;
+			}
+			
+			getProcessor().getContext().put("_project", getProject());
+			getProcessor().getContext().put("_selectedSessions", selectedSessions);
+		}
+		super.next();
+	}
+		
+}

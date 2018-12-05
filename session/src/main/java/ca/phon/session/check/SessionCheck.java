@@ -15,13 +15,16 @@
  */
 package ca.phon.session.check;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Session;
+import ca.phon.util.Tuple;
 
 public interface SessionCheck {
 
@@ -48,8 +51,13 @@ public interface SessionCheck {
 	 * 
 	 * @param validator
 	 * @param session
-	 * @param options
+	 * 
+	 * @return true if session was modified, false otherwise
 	 */
-	public void checkSession(SessionValidator validator, Session session, Map<String, Object> options);
+	public boolean checkSession(SessionValidator validator, Session session);
+	
+	public Properties getProperties();
+	
+	public void loadProperties(Properties props);
 	
 }

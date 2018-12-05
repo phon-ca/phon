@@ -16,6 +16,7 @@
 
 package ca.phon.session;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -261,6 +262,15 @@ public interface Record extends IExtendable {
 	 *  present in this record
 	 */
 	public Set<String> getExtraTierNames();
+	
+	/**
+	 * Return a list of all present tiers which have the given
+	 * type.
+	 * 
+	 * @param type
+	 * @return list of tiers 
+	 */
+	public <T> List<Tier<T>> getTiersOfType(Class<T> type);
 	
 	/**
 	 * @param tier name

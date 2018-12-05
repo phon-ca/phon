@@ -43,7 +43,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 	
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultSetEP.class.getName());
 	
-	private final static String EP_NAME = "ResultSetViewer";
+	public final static String EP_NAME = "ResultSetViewer";
 
 	@Override
 	public String getName() {

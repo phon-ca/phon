@@ -1,2 +1,3 @@
+ca.phon.session.check.CheckAlignment
 ca.phon.session.check.CheckTranscripts
-ca.phon.session.check.OverlappingSegmentsCheck
+ca.phon.session.check.SegmentOverlapCheck
