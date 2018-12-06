@@ -92,8 +92,19 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 						validator.fireValidationEvent(ve);
 					} else {
 						if(isResetSyllabification() && syllabifier != null) {
+							String prev = ipa.toString(true);
+							ipa.resetSyllabification();
 							syllabifier.syllabify(ipa.toList());
-							modified = true;
+							
+							boolean changed = !prev.equals(ipa.toString(true));
+							
+							if(changed) {
+								ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
+										String.format("Reset syllabification (%s)", syllabifier.getName()));
+								validator.fireValidationEvent(evt);
+							}
+							
+							modified |= changed;
 						}
 					}
 				}

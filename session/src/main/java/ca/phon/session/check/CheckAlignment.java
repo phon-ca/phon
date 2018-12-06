@@ -67,7 +67,16 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 						PhoneMap oldAlignment = tier.getGroup(gIdx);
 						PhoneMap newAlignment = aligner.calculatePhoneAlignment(oldAlignment.getTargetRep(), oldAlignment.getActualRep());
 						tier.setGroup(gIdx, newAlignment);
-						modified = true;
+						
+						boolean changed = !oldAlignment.toString().equals(newAlignment.toString());
+						
+						if(changed) {
+							ValidationEvent evt = new ValidationEvent(session, rIdx, SystemTierType.SyllableAlignment.getName(), gIdx,
+									"Reset alignment");
+							validator.fireValidationEvent(evt);
+						}
+						
+						modified |= changed;
 					}
 				}
 			}

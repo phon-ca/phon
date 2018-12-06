@@ -73,8 +73,12 @@ public class SessionValidator implements IExtendable {
 		listeners.forEach( (l) -> { l.validationInfo(evt); } );
 	}
 	
-	public void validate(Session session) {
-		sessionChecks.forEach( (check) -> check.checkSession(this, session) );
+	public boolean validate(Session session) {
+		boolean modified = false;
+		for(SessionCheck check:sessionChecks) {
+			modified |= check.checkSession(this, session);
+		}
+		return modified;
 	}
 	
 	public void addValidationListener(ValidationListener listener) {

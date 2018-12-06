@@ -641,7 +641,7 @@ public class RecordImpl implements Record {
 			retVal.add((Tier<T>)getSegment());
 		} else if(type == TierString.class) {
 			retVal.add((Tier<T>)getNotes());
-		} else if(type == Alignment.class) {
+		} else if(type == PhoneMap.class) {
 			retVal.add((Tier<T>)getPhoneAlignment());
 		}
 		

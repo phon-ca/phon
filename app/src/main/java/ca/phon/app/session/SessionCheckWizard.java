@@ -18,6 +18,7 @@ import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
+import ca.phon.opgraph.ProcessorEvent;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
@@ -25,6 +26,7 @@ import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.session.check.SessionCheck;
 import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 
@@ -62,7 +64,7 @@ public class SessionCheckWizard extends NodeWizard {
 		
 		init();
 	}
-		
+	
 	public Project getProject() {
 		return getExtension(Project.class);
 	}
@@ -81,9 +83,9 @@ public class SessionCheckWizard extends NodeWizard {
 	@Override
 	public void next() {
 		if(getCurrentStepIndex() == 0) {
-			// TODO ensure sessions selected
 			List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
 			if(selectedSessions.size() == 0) {
+				showMessageDialog("Select Sessions", "Please select at least one session", MessageDialogProperties.okOptions);
 				return;
 			}
 			
@@ -92,5 +94,5 @@ public class SessionCheckWizard extends NodeWizard {
 		}
 		super.next();
 	}
-		
+	
 }

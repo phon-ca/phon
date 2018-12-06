@@ -4,23 +4,30 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.check.SessionCheckUI;
 import ca.phon.app.session.check.SessionCheckUIFactory;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
@@ -49,6 +56,8 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 	
 	private InputField sessionInput = new InputField("session", "Session", Session.class, SessionPath.class);
 	
+	private OutputField sessionModifiedOutput = new OutputField("sessionModified", "true if session was modified", true, Boolean.class);
+	
 	private OutputField hasWarningsOutput = new OutputField("hasWarnings", "true if warnings table is not empty", true, Boolean.class);
 	
 	private OutputField warningsOutput = new OutputField("warnings", "Table of warnings", true, DefaultTableDataSource.class);
@@ -64,6 +73,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		
 		putField(projectInput);
 		putField(sessionInput);
+		putField(sessionModifiedOutput);
 		putField(hasWarningsOutput);
 		putField(warningsOutput);
 		
@@ -102,15 +112,16 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		Project project = (Project)context.get(projectInput);
 		if(project == null) throw new ProcessingException(null, new NullPointerException("project"));
 		
+		AtomicReference<SessionPath> spRef = new AtomicReference<SessionPath>();
 		Session session = null;
 		var sessionObj = context.get(sessionInput);
 		if(sessionObj instanceof SessionPath) {
-			SessionPath sp = (SessionPath)sessionObj;
-			if(sp.getExtension(SessionEditor.class) != null) {
-				session = sp.getExtension(SessionEditor.class).getSession();
+			spRef.set((SessionPath)sessionObj);
+			if(spRef.get().getExtension(SessionEditor.class) != null) {
+				session = spRef.get().getExtension(SessionEditor.class).getSession();
 			} else {
 				try {
-					session = project.openSession(sp.getCorpus(), sp.getSession());
+					session = project.openSession(spRef.get().getCorpus(), spRef.get().getSession());
 				} catch (IOException e) {
 					throw new ProcessingException(null, e);
 				}
@@ -118,7 +129,8 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		} else if(sessionObj instanceof Session) {
 			session = (Session)sessionObj;
 		}
-		SessionPath sp = new SessionPath(session.getCorpus(), session.getName());
+		if(spRef.get() == null)
+			spRef.set(new SessionPath(session.getCorpus(), session.getName()));
 		
 		DefaultTableDataSource warningsTable = new DefaultTableDataSource();
 		int col = 0;
@@ -136,7 +148,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		validator.addValidationListener( (ve) -> {
 			Object row[] = new Object[warningsTable.getColumnCount()];
 			int c = 0;
-			row[c++] = sp;
+			row[c++] = spRef.get();
 			row[c++] = ve.getRecord() + 1;
 			row[c++] = ve.getTierName();
 			row[c++] = ve.getGroup() + 1;
@@ -151,8 +163,29 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 			row[c++] = ve;
 			warningsTable.addRow(row);
 		});
-		validator.validate(session);
+		boolean modified = validator.validate(session);
+		
+		if(modified) {
+			if(spRef.get().getExtension(SessionEditor.class) != null) {
+				// tell editor a modification has occured and refresh
+				EditorEvent evt = new EditorEvent(EditorEventType.MODIFICATION_EVENT + "CHECK_SESSION");
+				spRef.get().getExtension(SessionEditor.class).getEventManager().queueEvent(evt);
+				SwingUtilities.invokeLater( () -> spRef.get().getExtension(SessionEditor.class).setModified(true) );
+				
+				evt = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+				spRef.get().getExtension(SessionEditor.class).getEventManager().queueEvent(evt);
+			} else {
+				try {
+					UUID writeLock = project.getSessionWriteLock(session);
+					project.saveSession(session, writeLock);
+					project.releaseSessionWriteLock(session, writeLock);
+				} catch (IOException e) {
+					LogUtil.severe(e);
+				}
+			}
+		}
 
+		context.put(sessionModifiedOutput, Boolean.valueOf(modified));
 		context.put(hasWarningsOutput, Boolean.valueOf(warningsTable.getRowCount() > 0));
 		context.put(warningsOutput, warningsTable);
 	}
