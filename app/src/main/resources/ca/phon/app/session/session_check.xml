@@ -36,7 +36,7 @@
             </extensions>
         </node>
         <ogcn:macro id="781d00f6" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="38cf0868">
+            <graph id="664d4154">
                 <node id="1acbd5d2" name="Current Item" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -66,6 +66,7 @@
                 <node id="e711997673a44294" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
+                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
                             </oga:property>
@@ -102,8 +103,11 @@
                             <oga:property key="ca.phon.session.check.CheckTranscripts.syllabifierLang">
                                 <![CDATA[eng]]>
                             </oga:property>
-                            <oga:property key="ca.phon.session.check.SegmentOverlapCheck.includeCheck">
+                            <oga:property key="ca.phon.session.check.CheckAlignment.resetAlignment">
                                 <![CDATA[false]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.session.check.SegmentOverlapCheck.includeCheck">
+                                <![CDATA[true]]>
                             </oga:property>
                             <oga:property key="ca.phon.session.check.CheckTranscripts.includeCheck">
                                 <![CDATA[true]]>
@@ -111,11 +115,14 @@
                             <oga:property key="ca.phon.app.session.SegmentBoundsCheck.includeCheck">
                                 <![CDATA[true]]>
                             </oga:property>
+                            <oga:property key="ca.phon.session.check.CheckAlignment.includeCheck">
+                                <![CDATA[true]]>
+                            </oga:property>
                             <oga:property key="ca.phon.session.check.CheckTranscripts.resetSyllabification">
                                 <![CDATA[false]]>
                             </oga:property>
                         </oga:settings>
-                        <oga:meta x="612" y="190"/>
+                        <oga:meta x="449" y="218"/>
                     </extensions>
                 </node>
                 <node id="3a126c6c" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -126,7 +133,22 @@
                             </oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="816" y="195"/>
+                        <oga:meta x="867" y="200"/>
+                    </extensions>
+                </node>
+                <node id="250a46a5" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
+                    <extensions>
+                        <oga:meta x="662" y="443"/>
+                    </extensions>
+                </node>
+                <node id="12fec70f" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"/>
+                        </oga:settings>
+                        <oga:meta x="886" y="437">
+                            <oga:default for="text" type="java.lang.String">No warnings</oga:default>
+                        </oga:meta>
                     </extensions>
                 </node>
                 <link dest="167e751d" destField="obj" source="1acbd5d2" sourceField="obj"/>
@@ -136,6 +158,11 @@
                 <link dest="3a126c6c" destField="parent" source="e711997673a44294" sourceField="obj"/>
                 <link dest="67b97256" destField="obj" source="167e751d" sourceField="obj"/>
                 <link dest="3a126c6c" destField="sectionName" source="67b97256" sourceField="value"/>
+                <link dest="3a126c6c" destField="enabled" source="49f58668" sourceField="hasWarnings"/>
+                <link dest="250a46a5" destField="x" source="49f58668" sourceField="hasWarnings"/>
+                <link dest="12fec70f" destField="enabled" source="250a46a5" sourceField="result"/>
+                <link dest="12fec70f" destField="sectionName" source="67b97256" sourceField="value"/>
+                <link dest="12fec70f" destField="parent" source="e711997673a44294" sourceField="obj"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.macro.MacroOpgraphEditorModel"/>
                 </extensions>

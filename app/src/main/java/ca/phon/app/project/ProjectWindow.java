@@ -321,8 +321,6 @@ public class ProjectWindow extends CommonModuleFrame {
 		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
 		projectMenu.add(anonymizeParticipantInfoItem);
 
-//		final CheckTranscriptionsAction repairItem = new CheckTranscriptionsAction(this);
-//		projectMenu.add(repairItem);
 		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
 		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
 		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions...");
