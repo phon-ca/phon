@@ -16,6 +16,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.ProcessorEvent;
@@ -25,6 +26,7 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.session.check.SessionCheck;
+import ca.phon.ui.CommonModuleFrameCreatedListener;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.wizard.BreadcrumbWizardFrame;
@@ -40,6 +42,7 @@ public class SessionCheckWizard extends NodeWizard {
 	private final static String SESSION_CHECK_GRAPH = "session_check.xml";
 
 	private SessionSelector sessionSelector;
+	private SessionSelectorActiveEditorSupport editorSupport;
 		
 	public static SessionCheckWizard newWizard(Project project) {
 		final InputStream in = SessionCheckWizard.class.getResourceAsStream(SESSION_CHECK_GRAPH);
@@ -74,12 +77,14 @@ public class SessionCheckWizard extends NodeWizard {
 		
 		TitledPanel tp = new TitledPanel("Select Sessions");
 		sessionSelector = new SessionSelector(getProject());
+		editorSupport = new SessionSelectorActiveEditorSupport();
+		editorSupport.install(sessionSelector);
 		sessionSelector.setPreferredSize(new Dimension(350, 0));
 		tp.setLayout(new BorderLayout());
 		tp.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
 		step1.add(tp, BorderLayout.WEST);
 	}
-	
+		
 	@Override
 	public void next() {
 		if(getCurrentStepIndex() == 0) {

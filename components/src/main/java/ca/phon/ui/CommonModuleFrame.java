@@ -28,11 +28,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
@@ -79,9 +81,30 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 	/** The list of open module frames */
 	private static List<CommonModuleFrame> openFrames = Collections.synchronizedList(new ArrayList<>());
+	
+	private static final WeakHashMap<Object, CommonModuleFrameCreatedListener> newWindowListeners = new WeakHashMap<>();
 
+	/**
+	 * Add a new window create listener to the list of static listeners.
+	 * The weak key is used to determine when the listener should be removed from the
+	 * listener queue.
+	 * 
+	 * @param weakKey
+	 * @param listener
+	 */
+	public static void addNewWindowListener(Object weakKey, CommonModuleFrameCreatedListener listener) {
+		synchronized(newWindowListeners) {
+			newWindowListeners.put(weakKey, listener);
+		}
+	}
 	private static void newWindowCreated(CommonModuleFrame f) {
 		openFrames.add(f);
+		synchronized (newWindowListeners) {
+			for(var weakKey:newWindowListeners.keySet()) {
+				var listener = newWindowListeners.get(weakKey);
+				listener.newWindow(f);
+			}
+		}
 	}
 
 	public static List<CommonModuleFrame> getOpenWindows() {
@@ -748,4 +771,5 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	public <T> T removeExtension(Class<T> cap) {
 		return extSupport.removeExtension(cap);
 	}
+	
 }

@@ -17,6 +17,8 @@ package ca.phon.app.session;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +37,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.CommonModuleFrameCreatedListener;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
@@ -75,18 +78,6 @@ public class SessionSelector extends TristateCheckBoxTree {
 			Collections.sort(sessions, collator);
 			for(String session:sessions) {
 				SessionPath sp = new SessionPath(corpus, session);
-				
-				// check for an open session editor
-				for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-					if(cmf instanceof SessionEditor) {
-						SessionEditor editor = (SessionEditor)cmf;
-						Session editedSession = editor.getSession();
-						
-						if(sp.equals(new SessionPath(editedSession.getCorpus(), editedSession.getName()))) {
-							sp.putExtension(SessionEditor.class, editor);
-						}
-					}
-				}
 				
 				SessionTreeNode sessionNode = new SessionTreeNode(sp);
 				sessionNode.setEnablePartialCheck(false);
@@ -143,7 +134,6 @@ public class SessionSelector extends TristateCheckBoxTree {
 	}
 
 	private void init() {
-		
 		final SessionSelectorCellRenderer renderer = new SessionSelectorCellRenderer();
 
 		final SessionSelectorCellRenderer editorRenderer = new SessionSelectorCellRenderer();

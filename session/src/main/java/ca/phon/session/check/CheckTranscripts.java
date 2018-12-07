@@ -18,10 +18,13 @@ package ca.phon.session.check;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.Phone;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -32,6 +35,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -82,7 +86,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		for(int i = 0; i < session.getRecordCount(); i++) {
 			final Record r = session.getRecord(i);
 			for(Tier<IPATranscript> tier:r.getTiersOfType(IPATranscript.class)) {
-				for(int gIdx = 0; gIdx < tier.numberOfGroups(); gIdx++) {
+				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
 					final IPATranscript ipa = tier.getGroup(gIdx);
 					final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
 					if(uv != null) {
@@ -105,6 +109,16 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 							}
 							
 							modified |= changed;
+						}
+						
+						// check syllabification, see if any elements are unassigned
+						Optional<IPAElement> unknownEle = ipa.toList().stream()
+							.filter( (ele) -> (new IPATranscript(ele)).matches("\\w") && ele.getScType() == SyllableConstituentType.UNKNOWN )
+							.findFirst();
+						if(unknownEle.isPresent()) {
+							ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
+									String.format("Incomplete syllabification: %s", ipa.toString(true)));
+							validator.fireValidationEvent(evt);
 						}
 					}
 				}
