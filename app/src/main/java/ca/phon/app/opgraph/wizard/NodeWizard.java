@@ -369,7 +369,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 		
 		// add global options
-		if(globalOptionsPanel != null) {
+		if(globalOptionsPanel != null && globalOptionsPanel.isVisible()) {
 			builder.addItem(".", "-- Global Options --").setEnabled(false);
 			
 			final String caseSensitiveValue = (globalOptionsPanel.isUseGlobalCaseSensitive()
