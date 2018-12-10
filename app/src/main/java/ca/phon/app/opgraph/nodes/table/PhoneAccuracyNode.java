@@ -198,7 +198,15 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 			if(alignmentTxt.length() == 0) {
 				alignment = (new PhoneAligner()).calculatePhoneAlignment(ipaTarget, ipaActual);
 			} else {
-				alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
+				try {
+					alignment = PhoneMap.fromString(ipaTarget, ipaActual, alignmentTxt);
+				} catch (IllegalArgumentException ex) {
+					// likely due to a mis-match between ipaTarge/ipaActual and elements
+					// contained in the alignment (i.e., cross-word alignments)
+					
+					// this method may be less accurate then the one used above
+					alignment = PhoneMap.fromString(alignmentTxt);
+				}
 			}
 			
 			var targetKey = (ignoreDiacritics ? ipaTarget.stripDiacritics() : ipaTarget);

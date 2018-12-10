@@ -318,7 +318,7 @@ function query_record(recordIndex, record) {
                     result.addResultValue(alignedRv);
 					result.schema = "ALIGNED";
 
-                    result.metadata.put("Alignment", alignment.toString());
+                    result.metadata.put("Alignment", alignment.toString(true));
 				}
 
 				for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {

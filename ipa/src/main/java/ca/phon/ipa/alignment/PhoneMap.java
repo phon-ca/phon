@@ -163,8 +163,8 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		final String[] alignments = align.split(",");
 		int alignLen = alignments.length;
 
-		IPATranscript targetPhones = target.stripDiacritics().removePunctuation();
-		IPATranscript actualPhones = actual.stripDiacritics().removePunctuation();
+		IPATranscript targetPhones = target.audiblePhones();
+		IPATranscript actualPhones = actual.audiblePhones();
 
 		int topPhoneIdx = 0;
 		int btmPhoneIdx = 0;
@@ -174,8 +174,8 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 					(new IPATranscriptBuilder()).append(alignments[i]).toIPATranscript();
 			final PhonexMatcher matcher = pattern.matcher(alignedPhones);
 			if(matcher.matches()) {
-				final IPAElement g1 = new IPATranscript(matcher.group(1)).stripDiacritics().removePunctuation().elementAt(0);
-				final IPAElement g2 = new IPATranscript(matcher.group(2)).stripDiacritics().removePunctuation().elementAt(0);
+				final IPAElement g1 = new IPATranscript(matcher.group(1)).elementAt(0);
+				final IPAElement g2 = new IPATranscript(matcher.group(2)).elementAt(0);
 
 				final IPAElement tele = (topPhoneIdx < targetPhones.length() ? targetPhones.elementAt(topPhoneIdx) : null);
 				final IPAElement aele = (btmPhoneIdx < actualPhones.length() ? actualPhones.elementAt(btmPhoneIdx) : null);
@@ -205,6 +205,65 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		}
 
 		PhoneMap retVal = new PhoneMap(target, actual);
+		retVal.setTopAlignment(alignment[0]);
+		retVal.setBottomAlignment(alignment[1]);
+		return retVal;
+	}
+	
+	/**
+	 * Construct alignment given the input string.
+	 * This method constructs the IPATranscript references
+	 * from the given input.
+	 * 
+	 * @param align
+	 * @return alignment
+	 * 
+	 * @throws IllegalArgumentException if align is not a valid string
+	 */
+	public static PhoneMap fromString(String align) {
+		final String phonex = "(.+)\\u2194(.+)";
+		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+
+		final String[] alignments = align.split(",");
+		int alignLen = alignments.length;
+		
+		final IPATranscriptBuilder tBuilder = new IPATranscriptBuilder();
+		final IPATranscriptBuilder aBuilder = new IPATranscriptBuilder();
+
+		int topPhoneIdx = 0;
+		int btmPhoneIdx = 0;
+		Integer alignment[][] = new Integer[2][alignLen];
+		for(int i = 0; i < alignLen; i++) {
+			final IPATranscript alignedPhones =
+					(new IPATranscriptBuilder()).append(alignments[i]).toIPATranscript();
+			final PhonexMatcher matcher = pattern.matcher(alignedPhones);
+			if(matcher.matches()) {
+				final IPAElement g1 = new IPATranscript(matcher.group(1)).elementAt(0);
+				final IPAElement g2 = new IPATranscript(matcher.group(2)).elementAt(0);
+
+				tBuilder.append(g1);
+				aBuilder.append(g2);
+
+				Integer alignCol[] = new Integer[2];
+				if(g1.getFeatureSet().hasFeature("null")) {
+					alignCol[0] = -1;
+				} else {
+					alignCol[0] = topPhoneIdx++;
+				}
+
+				if(g2.getFeatureSet().hasFeature("null")) {
+					alignCol[1] = -1;
+				} else {
+					alignCol[1] = btmPhoneIdx++;
+				}
+				alignment[0][i] = alignCol[0];
+				alignment[1][i] = alignCol[1];
+			} else {
+				throw new IllegalArgumentException("Invalid syntax: " + align);
+			}
+		}
+
+		PhoneMap retVal = new PhoneMap(tBuilder.toIPATranscript(), aBuilder.toIPATranscript());
 		retVal.setTopAlignment(alignment[0]);
 		retVal.setBottomAlignment(alignment[1]);
 		return retVal;
