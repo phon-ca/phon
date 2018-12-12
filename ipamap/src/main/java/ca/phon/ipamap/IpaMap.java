@@ -1439,7 +1439,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		Cell cell = (Cell)pae.getData();
 		String btnData = cell.getText();
 		btnData = btnData.replaceAll("\\u25cc", "");
-		
+				
 		lastUsed.add(cell.getText());
 		setUsageList(lastUsed);
 		IpaMap.this.repaint();

@@ -1640,6 +1640,10 @@
         <name>Falling Rising Tone</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
+	<char value="&#x200d;">
+		<name>Zero-width joiner</name>
+		<token>COMBINING_DIACRITIC</token>
+	</char>
     <char value="&#x2c71;">
         <name>Latin Letter Small V with Right Hook</name>
         <token>CONSONANT</token>

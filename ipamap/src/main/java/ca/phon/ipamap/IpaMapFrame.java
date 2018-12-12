@@ -233,8 +233,9 @@ public class IpaMapFrame extends CommonModuleFrame {
 	    	if(focusedComp != null && focusedComp instanceof JTextComponent) {
 	    		JTextComponent tc = (JTextComponent)focusedComp;
 	    		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(txt), mapContents);
-	    		if(tc.isEnabled() && tc.isEditable())
+	    		if(tc.isEnabled() && tc.isEditable()) {
 	    			tc.paste();
+	    		}
 			}
 		}
 		
