@@ -117,7 +117,7 @@ import ca.phon.app.project.git.actions.CommitAction;
 import ca.phon.app.project.git.actions.InitAction;
 import ca.phon.app.project.git.actions.PullAction;
 import ca.phon.app.project.git.actions.PushAction;
-import ca.phon.app.session.SessionCheckEP;
+import ca.phon.app.session.check.SessionCheckEP;
 import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.app.welcome.WorkspaceTextStyler;
 import ca.phon.plugin.PluginAction;

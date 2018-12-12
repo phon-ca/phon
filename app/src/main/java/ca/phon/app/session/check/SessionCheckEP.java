@@ -1,4 +1,4 @@
-package ca.phon.app.session;
+package ca.phon.app.session.check;
 
 import java.awt.Dimension;
 import java.util.Map;

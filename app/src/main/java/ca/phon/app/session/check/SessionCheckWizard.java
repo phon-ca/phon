@@ -1,4 +1,4 @@
-package ca.phon.app.session;
+package ca.phon.app.session.check;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,6 +16,8 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.app.session.SessionSelectorActiveEditorSupport;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;

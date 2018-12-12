@@ -112,7 +112,7 @@
                             <oga:property key="ca.phon.session.check.CheckTranscripts.includeCheck">
                                 <![CDATA[true]]>
                             </oga:property>
-                            <oga:property key="ca.phon.app.session.SegmentBoundsCheck.includeCheck">
+                            <oga:property key="ca.phon.app.session.check.SegmentBoundsCheck.includeCheck">
                                 <![CDATA[true]]>
                             </oga:property>
                             <oga:property key="ca.phon.session.check.CheckAlignment.includeCheck">

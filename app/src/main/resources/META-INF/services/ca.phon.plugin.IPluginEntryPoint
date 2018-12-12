@@ -22,7 +22,7 @@ ca.phon.app.query.ResultSetEP
 # Session Editor
 ca.phon.app.session.editor.SessionEditorEP
 # Session Check
-ca.phon.app.session.SessionCheckEP
+ca.phon.app.session.check.SessionCheckEP
 # Query Editor
 ca.phon.app.query.QueryAndReportWizardEP
 # Session template
