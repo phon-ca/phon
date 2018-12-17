@@ -1015,14 +1015,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					browser.addScriptContextListener(new ScriptContextListener() {
 						
 						@Override
-						public void onScriptContextDestroyed(ScriptContextEvent arg0) {
-							// TODO Auto-generated method stub
-							
-						}
+						public void onScriptContextDestroyed(ScriptContextEvent arg0) {}
 						
 						@Override
 						public void onScriptContextCreated(ScriptContextEvent arg0) {
-							LogUtil.info("JS Context created");
 							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
 							windowObj.asObject().setProperty("project", getExtension(Project.class));
 							windowObj.asObject().setProperty("buffers", bufferPanel);
@@ -1030,22 +1026,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							windowObj.asObject().setProperty("tableMap", tableMap);
 							windowObj.asObject().setProperty("app", webViewInterface);
 						}
+						
 					});
 					browser.addLoadListener(new LoadListener() {
 						
 						@Override
-						public void onStartLoadingFrame(StartLoadingEvent arg0) {
-							LogUtil.info("Started loading frame");
-						}
+						public void onStartLoadingFrame(StartLoadingEvent arg0) {}
 						
 						@Override
-						public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {
-							
-						}
+						public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {}
 						
 						@Override
 						public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
-							LogUtil.info("Finished loading frame");
 							int idx = 0;
 							for(String tableId:tableMap.keySet()) {
 								if(tableMap.get(tableId).getRowCount() == 0) continue;
@@ -1055,25 +1047,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
 								++idx;
 							}
-//							browser.removeLoadListener(this);
 							
 							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
 						}
 						
 						@Override
-						public void onFailLoadingFrame(FailLoadingEvent arg0) {
-							
-						}
+						public void onFailLoadingFrame(FailLoadingEvent arg0) {}
 						
 						@Override
-						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {
-							LogUtil.info("Doc loaded in frame");
-						}
+						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {}
 						
 						@Override
-						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {
-							
-						}
+						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {}
 					});
 
 					reportBufferPanel.getBrowser().loadURL(reportURL);

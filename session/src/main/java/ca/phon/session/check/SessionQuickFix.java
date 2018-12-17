@@ -21,18 +21,6 @@ package ca.phon.session.check;
  */
 public abstract class SessionQuickFix {
 	
-	private final ValidationEvent validationEvent;
-	
-	public SessionQuickFix(ValidationEvent validationEvent) {
-		super();
-		
-		this.validationEvent = validationEvent;
-	}
-	
-	public ValidationEvent getValidationEvent() {
-		return validationEvent;
-	}
-	
 	public String getDescription() {
 		return "Fix issue";
 	}
@@ -42,6 +30,6 @@ public abstract class SessionQuickFix {
 	 * 
 	 * @return <code>true</code> if the fix was successful
 	 */
-	public abstract boolean fix();
+	public abstract boolean fix(ValidationEvent evt);
 	
 }

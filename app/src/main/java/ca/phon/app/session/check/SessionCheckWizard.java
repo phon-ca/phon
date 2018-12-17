@@ -5,12 +5,21 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.JXBusyLabel;
+
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSArray;
+import com.teamdev.jxbrowser.chromium.JSObject;
+import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.dom.By;
+import com.teamdev.jxbrowser.chromium.dom.DOMDocument;
+import com.teamdev.jxbrowser.chromium.dom.DOMElement;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
@@ -26,6 +35,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.SessionPath;
 import ca.phon.session.check.SessionCheck;
 import ca.phon.ui.CommonModuleFrameCreatedListener;
@@ -86,7 +96,30 @@ public class SessionCheckWizard extends NodeWizard {
 		tp.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
 		step1.add(tp, BorderLayout.WEST);
 	}
+	
+	
 		
+	@SuppressWarnings("unchecked")
+	@Override
+	public void executionEnded(ProcessorEvent pe) {
+		super.executionEnded(pe);
+		if(super.reportBufferAvailable()) return;
+		
+		final Browser browser = getBufferPanel().getBuffer("Report").getBrowser();
+		JSValue tableMapVal = browser.executeJavaScriptAndReturnValue("tableMap");
+		JSValue tableIds = browser.executeJavaScriptAndReturnValue("tableIds");
+		if(tableMapVal == null || tableIds == null) return;
+		Map<String, DefaultTableDataSource> tableMap = (Map<String, DefaultTableDataSource>)tableMapVal.asJavaObject();
+		JSArray tableArray = tableIds.asArray();
+		for(int i = 0; i < tableArray.length(); i++) {
+			String tableId = tableArray.get(i).getStringValue();
+			DefaultTableDataSource table = tableMap.get(tableId);
+			if(table == null) continue;
+			
+			System.out.println(tableId);
+		}
+	}
+
 	@Override
 	public void next() {
 		if(getCurrentStepIndex() == 0) {

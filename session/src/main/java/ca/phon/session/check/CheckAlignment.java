@@ -72,7 +72,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 						
 						if(changed) {
 							ValidationEvent evt = new ValidationEvent(session, rIdx, SystemTierType.SyllableAlignment.getName(), gIdx,
-									"Reset alignment");
+									"Reset alignment", new ResetAlignmentQuickFix());
 							validator.fireValidationEvent(evt);
 						}
 						
@@ -107,7 +107,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 				if(!ipaTarget.audiblePhones().toString().equals(targetBuilder.toIPATranscript().toString())
 						|| !ipaActual.audiblePhones().toString().equals(actualBuilder.toIPATranscript().toString())) {
 					ValidationEvent evt = new ValidationEvent(session, rIdx, SystemTierType.SyllableAlignment.getName(), gIdx,
-							"Alignment out of sync - requires reset");
+							"Alignment out of sync - requires reset", new ResetAlignmentQuickFix());
 					validator.fireValidationEvent(evt);
 					continue;
 				}
@@ -125,7 +125,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 							
 							if(!ipaTargetMatches || !ipaActualMatches) {
 								ValidationEvent evt = new ValidationEvent(session, rIdx, SystemTierType.SyllableAlignment.getName(), gIdx, 
-									"Phone alignment crosses word boundary");
+									"Phone alignment crosses word boundary", new ResetAlignmentQuickFix());
 								validator.fireValidationEvent(evt);
 								break;
 							}
@@ -150,6 +150,32 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 	@Override
 	public void loadProperties(Properties props) {
 		setResetAlignment(Boolean.parseBoolean(props.getProperty(RESET_ALIGNMENT, Boolean.toString(DEFAULT_RESET_ALIGNMENT))));
+	}
+	
+	public class ResetAlignmentQuickFix extends SessionQuickFix {
+
+		public ResetAlignmentQuickFix() {
+			super();
+		}
+		
+		@Override
+		public String getDescription() {
+			return "Reset alignment";
+		}
+
+		@Override
+		public boolean fix(ValidationEvent evt) {
+			Record r = evt.getSession().getRecord(evt.getRecord());
+			Group g = r.getGroup(evt.getGroup());
+			
+			IPATranscript ipaT = g.getIPATarget();
+			IPATranscript ipaA = g.getIPAActual();
+			PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(ipaT, ipaA);
+			g.setPhoneAlignment(pm);
+			
+			return true;
+		}
+		
 	}
 
 }

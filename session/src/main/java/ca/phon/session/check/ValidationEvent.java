@@ -36,28 +36,46 @@ public class ValidationEvent implements IExtendable {
 	private int group;
 	
 	private String message;
+	
+	private List<SessionQuickFix> quickFixes;
 
 	public ValidationEvent(Session session, String message) {
+		this(session, message, new SessionQuickFix[0]);
+	}
+	
+	public ValidationEvent(Session session, String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.session = session;
 		this.message = message;
+		this.quickFixes = List.of(quickFixes);
 	}
 
 	public ValidationEvent(Session session, int record, String message) {
+		this(session, record, message, new SessionQuickFix[0]);
+	}
+	
+	public ValidationEvent(Session session, int record, String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.session = session;
 		this.record = record;
 		this.message = message;
+		this.quickFixes = List.of(quickFixes);
 	}
 
 	public ValidationEvent(Session session, int record, String tierName,
 			int group, String message) {
+		this(session, record, tierName, group, message, new SessionQuickFix[0]);
+	}
+	
+	public ValidationEvent(Session session, int record, String tierName,
+			int group, String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.session = session;
 		this.record = record;
 		this.tierName = tierName;
 		this.group = group;
 		this.message = message;
+		this.quickFixes = List.of(quickFixes);
 	}
 
 	public Session getSession() {
@@ -107,7 +125,7 @@ public class ValidationEvent implements IExtendable {
 	 * @return can the validation event be fixed
 	 */
 	public boolean canFix() {
-		return false;
+		return quickFixes.size() > 0;
 	}
 	
 	/**
@@ -118,7 +136,7 @@ public class ValidationEvent implements IExtendable {
 	 *  list if this problem does not have a quick fix
 	 */
 	public List<SessionQuickFix> getQuickFixes() {
-		return new ArrayList<>();
+		return quickFixes;
 	}
 	
 	@Override
