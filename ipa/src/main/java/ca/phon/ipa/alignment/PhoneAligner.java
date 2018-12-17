@@ -54,20 +54,20 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 
 		if( (ele1.getFeatureSet().hasFeature("Consonant")
 				&& ele2.getFeatureSet().hasFeature("Consonant")) ) {
-			++tally;
+			tally += 2;
 		} else if( (ele1.getFeatureSet().hasFeature("Vowel")
 				&& ele2.getFeatureSet().hasFeature("Vowel")) ) {
-			++tally;
+			tally += 2;
 		} else {
 			final IPAElement vowel = (ele1.getFeatureSet().hasFeature("Vowel") ? ele1 : ele2);
 			final IPAElement notvowel = (vowel == ele1 ? ele2 : ele1);
 
 			if(notvowel.getFeatureSet().hasFeature("syllabic")) {
-				return 1;
+				return 2;
 			} else {
 				// align if toString() matches
 				if(ele1.toString().equals(ele2.toString())) {
-					return 2;
+					return 4;
 				} else {
 					return -1;
 				}
@@ -77,16 +77,16 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		final SyllableConstituentType t1 = ele1.getScType();
 		final SyllableConstituentType t2 = ele2.getScType();
 		if(t1 == t2) {
-			++tally;
+			tally += 1;
 		} else {
-			--tally;
+			tally -= 1;
 		}
 
 		if(hasStressedSyllables) {
 			final SyllableStress s1 = stressForElement(ele1);
 			final SyllableStress s2 = stressForElement(ele2);
 			if(s1 == s2) {
-				++tally;
+				tally += 2;
 			}
 		}
 
@@ -108,7 +108,7 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		
 		// add extra point if both phones are the exact same string
 		if(ele1.toString().equals(ele2.toString()))
-			tally += 1;
+			tally += 3;
 
 		return tally;
 	}
@@ -116,8 +116,8 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 	private int checkDimension(PhoneticProfile p1, PhoneticProfile p2, PhoneDimension dimension) {
 		int retVal = 0;
 
-		final FeatureSet fs1 = FeatureSet.intersect(p1.get(dimension), dimension.getTerminalFeatures());
-		final FeatureSet fs2 = FeatureSet.intersect(p2.get(dimension), dimension.getTerminalFeatures());
+		final FeatureSet fs1 = FeatureSet.intersect(p1.get(dimension), dimension.getFeatures());
+		final FeatureSet fs2 = FeatureSet.intersect(p2.get(dimension), dimension.getFeatures());
 
 		final FeatureSet t = FeatureSet.intersect(fs1, fs2);
 
