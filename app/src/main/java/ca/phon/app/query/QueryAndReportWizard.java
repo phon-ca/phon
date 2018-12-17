@@ -283,7 +283,7 @@ public class QueryAndReportWizard extends NodeWizard {
 						
 						final PhonUIAction stopAct = new PhonUIAction(QueryAndReportWizard.this, "onStopQuery");
 						stopAct.putValue(PhonUIAction.NAME, "Stop query");
-						stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+						stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
 						final JMenuItem stopItem = new JMenuItem(stopAct);
 						boolean stopEnabled = (getCurrentQueryRunner() != null && getCurrentQueryRunner().isRunning());
 						stopItem.setEnabled(stopEnabled);
@@ -306,7 +306,7 @@ public class QueryAndReportWizard extends NodeWizard {
 						final PhonUIAction discardResultsAct = new PhonUIAction(QueryAndReportWizard.this, "discardResults");
 						discardResultsAct.putValue(PhonUIAction.NAME, "Discard results");
 						discardResultsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard current result set");
-						discardResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+						discardResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 						final JMenuItem discardResultsItem = new JMenuItem(discardResultsAct);
 						boolean discardEnabled = (getCurrentQueryRunner() != null && !getCurrentQueryRunner().isRunning());
 						discardResultsItem.setEnabled(discardEnabled);
@@ -333,7 +333,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								final PhonUIAction discardAllAction = new PhonUIAction(QueryAndReportWizard.this, "discardAllResults");
 								discardAllAction.putValue(PhonUIAction.NAME, "Discard all results");
 								discardAllAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard all query results");
-								discardAllAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+								discardAllAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 							
 								queryResultsMenu.add(new JMenuItem(discardAllAction));
 							}
@@ -571,9 +571,9 @@ public class QueryAndReportWizard extends NodeWizard {
 					final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
 					if(runnerPanel != null) {
 						if(runnerPanel.isRunning()) {
-							discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-						} else {
 							discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+						} else {
+							discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 						}
 						
 						if(runnerPanel.getTaskStatus() == TaskStatus.FINISHED || runnerPanel.getTaskStatus() == TaskStatus.TERMINATED
@@ -589,7 +589,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		});
 		
 		final PhonUIAction discardResultsAct = new PhonUIAction(this, "discardResults");
-		discardResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+		discardResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 		discardResultsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results");
 		discardResultsButton = new JButton(discardResultsAct);
 		discardResultsButton.setBorderPainted(false);
@@ -1007,13 +1007,13 @@ public class QueryAndReportWizard extends NodeWizard {
 			}
 			
 			if(e.getNewValue() == TaskStatus.RUNNING) {
-				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-			} else {
 				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+			} else {
+				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 			}
 		});
 		
-		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/process-stop", IconSize.XSMALL);
+		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/list-remove", IconSize.XSMALL);
 		final PhonUIAction closeAction = new PhonUIAction(this, "discardResults", queryName);
 		closeAction.putValue(PhonUIAction.SMALL_ICON, closeIcon);
 		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results and close tab");
