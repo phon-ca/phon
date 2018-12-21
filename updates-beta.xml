@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b9/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b9" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b9.dmg" newVersion="3.0.3b9" newMediaFileId="macos" fileSize="256577929" md5Sum="4ace8889687e249b286c3bcf5e2aab11" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -244,7 +244,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b9" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b9.dmg" newVersion="3.0.3b9" newMediaFileId="macos" fileSize="256577929" md5Sum="4ace8889687e249b286c3bcf5e2aab11" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -488,7 +488,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="f16c78ec891920931bb14567dcd7cfba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="d9c3a2953b6fcf09c7652f77eca05b99" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -732,7 +732,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="f16c78ec891920931bb14567dcd7cfba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="d9c3a2953b6fcf09c7652f77eca05b99" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -976,7 +976,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="f16c78ec891920931bb14567dcd7cfba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="d9c3a2953b6fcf09c7652f77eca05b99" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -1220,7 +1220,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.zip" newVersion="3.0.3b9" newMediaFileId="win64zip" fileSize="256857462" md5Sum="0fda1584542542c13aeb721795f0c24d" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.zip" newVersion="3.0.3b9" newMediaFileId="win64zip" fileSize="256857735" md5Sum="685484f1d00b497a6161834fd88053cc" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -1464,7 +1464,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b4.deb" newVersion="3.0.3b9" newMediaFileId="linux64deb" fileSize="187257444" md5Sum="b478f66747cdaf2e6081b7a979f6252d" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b9.deb" newVersion="3.0.3b9" newMediaFileId="linux64deb" fileSize="187259116" md5Sum="ac943dfee4adefff3b790aed239c5688" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -1708,7 +1708,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b4.sh" newVersion="3.0.3b9" newMediaFileId="linux64" fileSize="186790390" md5Sum="83f69802f085471454eeca59bb0a4664" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b9.sh" newVersion="3.0.3b9" newMediaFileId="linux64" fileSize="186790653" md5Sum="f3dbeeeeec6656fc5623b6a200acf5c6" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
