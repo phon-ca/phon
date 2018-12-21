@@ -31,7 +31,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.util.PrefHelper;
 
-@PhonPlugin(name="Check Segment Overlap", comments="Check for overlapping media segments")
+@PhonPlugin(name="Check Segment Overlaps", comments="Check for overlapping media segments")
 @Rank(3)
 public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
 

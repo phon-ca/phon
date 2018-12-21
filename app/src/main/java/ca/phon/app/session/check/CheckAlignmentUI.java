@@ -25,7 +25,7 @@ public class CheckAlignmentUI extends JPanel implements SessionCheckUI {
 	private void init() {
 		setLayout(new VerticalLayout());
 		
-		resetAlignmentBox = new JCheckBox("Reset alignment");
+		resetAlignmentBox = new JCheckBox("Reset alignments");
 		resetAlignmentBox.setSelected(check.isResetAlignment());
 		resetAlignmentBox.addActionListener( (e) -> {
 			check.setResetAlignment(resetAlignmentBox.isSelected());

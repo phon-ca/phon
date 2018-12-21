@@ -21,7 +21,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.Word;
 import ca.phon.util.PrefHelper;
 
-@PhonPlugin(name="Check Phone Alignment", comments="Check phone alignment")
+@PhonPlugin(name="Check Phone Alignments", comments="Check phone alignments")
 @Rank(2)
 public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
 	
