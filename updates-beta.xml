@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b4" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b5" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
@@ -244,7 +244,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b4" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b5" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
