@@ -5,13 +5,11 @@ Files processed in the application must be generated using the [chatter](http://
 
 ## Download
 
-### Version 2.7 (16 Oct 2017)
+### Version 2.8 (21 Dec 2018)
 
- * [Disk Image for macOS](https://github.com/phon-ca/phontalk/releases/download/2.7/PhonTalk_macos_2_7.dmg)
+ * [Disk Image for macOS](https://github.com/phon-ca/phontalk/releases/download/2.8/PhonTalk_macos_2_8.dmg)
 
- * [Windows 64-bit](https://github.com/phon-ca/phontalk/releases/download/2.7/PhonTalk_windows-x64_2_7.zip)
-
- * [Windows 32-bit](https://github.com/phon-ca/phontalk/releases/download/2.7/PhonTalk_windows_2_7.zip)
+ * [Windows 64-bit](https://github.com/phon-ca/phontalk/releases/download/2.8/PhonTalk_windows-x64_2_8.zip)
 
 Source code can be found at https://github.com/phon-ca/phontalk.
 
