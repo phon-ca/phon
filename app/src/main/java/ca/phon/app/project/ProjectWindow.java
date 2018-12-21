@@ -318,14 +318,14 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		projectMenu.addSeparator();
 
-		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
-		projectMenu.add(anonymizeParticipantInfoItem);
-
 		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
 		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
 		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions...");
 		checkSessionsAct.putValue(PluginAction.SHORT_DESCRIPTION, "Check sessions for warnings");
 		projectMenu.add(checkSessionsAct);
+
+		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
+		projectMenu.add(anonymizeParticipantInfoItem);
 		
 		// merge/split sessions
 		final DeriveSessionAction deriveItem = new DeriveSessionAction(this);
