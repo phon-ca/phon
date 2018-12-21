@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b3.dmg" newVersion="3.0.3b3" newMediaFileId="macos" fileSize="256515163" md5Sum="0f2a656238e73d0a06c8a5ad59c816cb" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b4" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -242,9 +244,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b3.dmg" newVersion="3.0.3b3" newMediaFileId="macos" fileSize="256515163" md5Sum="0f2a656238e73d0a06c8a5ad59c816cb" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b4.dmg" newVersion="3.0.3b4" newMediaFileId="macos" fileSize="256577655" md5Sum="041422eb032d4938c4f7a1418ca9d1e1" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -484,9 +488,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.exe" newVersion="3.0.3b3" newMediaFileId="win64" fileSize="257772032" md5Sum="2676dc9fc9e6a83c73741a2e53fa9f7c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.exe" newVersion="3.0.3b4" newMediaFileId="win64" fileSize="257807872" md5Sum="f16c78ec891920931bb14567dcd7cfba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -726,9 +732,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.exe" newVersion="3.0.3b3" newMediaFileId="win64" fileSize="257772032" md5Sum="2676dc9fc9e6a83c73741a2e53fa9f7c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.exe" newVersion="3.0.3b4" newMediaFileId="win64" fileSize="257807872" md5Sum="f16c78ec891920931bb14567dcd7cfba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -968,9 +976,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.exe" newVersion="3.0.3b3" newMediaFileId="win64" fileSize="257772032" md5Sum="2676dc9fc9e6a83c73741a2e53fa9f7c" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.exe" newVersion="3.0.3b4" newMediaFileId="win64" fileSize="257807872" md5Sum="f16c78ec891920931bb14567dcd7cfba" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -1210,9 +1220,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b3.zip" newVersion="3.0.3b3" newMediaFileId="win64zip" fileSize="256821743" md5Sum="4697820696f7524b5dbac57caf28957b" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b4.zip" newVersion="3.0.3b4" newMediaFileId="win64zip" fileSize="256857462" md5Sum="0fda1584542542c13aeb721795f0c24d" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -1452,9 +1464,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b3.deb" newVersion="3.0.3b3" newMediaFileId="linux64deb" fileSize="187231368" md5Sum="f37a17b3b6c83565833c8bde3f13a918" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b4.deb" newVersion="3.0.3b4" newMediaFileId="linux64deb" fileSize="187257444" md5Sum="b478f66747cdaf2e6081b7a979f6252d" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
@@ -1694,9 +1708,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b3.sh" newVersion="3.0.3b3" newMediaFileId="linux64" fileSize="186754647" md5Sum="0ffb0c28fe1de5f3017b7d13f8ee2b40" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b4.sh" newVersion="3.0.3b4" newMediaFileId="linux64" fileSize="186790390" md5Sum="83f69802f085471454eeca59bb0a4664" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.2
  
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
  * Removed JavaFX dependency
  * HTML reports are now displayed using JxBrowser
  * New preferences panel for Query and Report wizard
