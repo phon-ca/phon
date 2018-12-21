@@ -85,6 +85,7 @@ import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.ContextMenuHandler;
 import com.teamdev.jxbrowser.chromium.ContextMenuParams;
 import com.teamdev.jxbrowser.chromium.EditorCommand;
+import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.dom.By;
@@ -1049,6 +1050,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							}
 							
 							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
+							
+							for(String tableId:tableMap.keySet()) {
+								DefaultTableDataSource table = tableMap.get(tableId);
+								if(table == null) continue;
+								
+								var messageRoxIdx = table.getColumnIndex("Message");
+							}
 						}
 						
 						@Override

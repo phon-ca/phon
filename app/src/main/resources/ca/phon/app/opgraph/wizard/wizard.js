@@ -1,12 +1,9 @@
 
 function toggleToC() {
+	var nav = $($("nav")[0]);
     var toc = $("#toc");
-    if(toc.is(":visible")) {
-        toc.slideDown();
-    } else {
-        toc.slideUp();
-    }
     
+    toc.toggle();
 }
 
 function tableToCSV(table) {

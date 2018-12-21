@@ -103,21 +103,6 @@ public class SessionCheckWizard extends NodeWizard {
 	@Override
 	public void executionEnded(ProcessorEvent pe) {
 		super.executionEnded(pe);
-		if(super.reportBufferAvailable()) return;
-		
-		final Browser browser = getBufferPanel().getBuffer("Report").getBrowser();
-		JSValue tableMapVal = browser.executeJavaScriptAndReturnValue("tableMap");
-		JSValue tableIds = browser.executeJavaScriptAndReturnValue("tableIds");
-		if(tableMapVal == null || tableIds == null) return;
-		Map<String, DefaultTableDataSource> tableMap = (Map<String, DefaultTableDataSource>)tableMapVal.asJavaObject();
-		JSArray tableArray = tableIds.asArray();
-		for(int i = 0; i < tableArray.length(); i++) {
-			String tableId = tableArray.get(i).getStringValue();
-			DefaultTableDataSource table = tableMap.get(tableId);
-			if(table == null) continue;
-			
-			System.out.println(tableId);
-		}
 	}
 
 	@Override
