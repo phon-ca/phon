@@ -942,7 +942,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			final long currentTime = System.currentTimeMillis();
 			final long elapsedTime = currentTime - reportStartTime;
 
-			final String title = String.format("Report (%s)", MsFormatter.msToDisplayString(elapsedTime).substring(0, 6));
+			final String title = String.format("Generating Report (%s)", MsFormatter.msToDisplayString(elapsedTime).substring(1, 6));
 			reportTitledPanel.setTitle(title);
 		});
 		reportTimer.start();
@@ -1050,13 +1050,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							}
 							
 							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
-							
-							for(String tableId:tableMap.keySet()) {
-								DefaultTableDataSource table = tableMap.get(tableId);
-								if(table == null) continue;
-								
-								var messageRoxIdx = table.getColumnIndex("Message");
-							}
 						}
 						
 						@Override
@@ -1083,6 +1076,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				e.printStackTrace(writer);
 				writer.flush();
 				writer.close();
+				
+				final String title = String.format("Report Generation Failed (%s)", e.getLocalizedMessage());
+				reportTitledPanel.setTitle(title);
 			}
 
 			SwingUtilities.invokeLater( () -> {
@@ -1092,7 +1088,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				btnBack.setEnabled(true);
 
 				breadCrumbViewer.setEnabled(true);
+				
+				final long currentTime = System.currentTimeMillis();
+				final long elapsedTime = currentTime - reportStartTime;
 
+				final String title = String.format("Report Completed (%s)", MsFormatter.msToDisplayString(elapsedTime).substring(1, 6));
+				reportTitledPanel.setTitle(title);
 			});
 		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
@@ -1119,6 +1120,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 				reportTimer.stop();
 
+				final String title = String.format("Report Generation Failed (%s)", pe.getLocalizedMessage());
+				reportTitledPanel.setTitle(title);
+				
 				executionEnded(new ProcessorEvent());
 			});
 			throw pe;
