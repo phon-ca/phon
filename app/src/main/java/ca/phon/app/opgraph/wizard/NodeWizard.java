@@ -147,6 +147,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
@@ -231,9 +232,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	protected boolean inInit = true;
 
-	boolean reportSaved = false;
-
 	private volatile boolean running = false;
+	private boolean reportSaved = false;
 
 	private BreadcrumbButton btnStop;
 	private BreadcrumbButton btnRunAgain;
@@ -543,24 +543,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	@Override
 	public void close() {
 		if(running) {
-			// ask to cancel current analysis
-			final MessageDialogProperties props = new MessageDialogProperties();
-			props.setRunAsync(true);
-			props.setTitle("Close Window");
-			props.setHeader(props.getTitle());
-			props.setMessage("Cancel running process and close window?");
-			props.setOptions(MessageDialogProperties.yesNoOptions);
-			props.setParentWindow(this);
-			props.setListener( (e) -> {
-				if(e.getDialogResult() == 0) {
-					stopExecution();
-					SwingUtilities.invokeLater( () -> super.close() );
-				}
-			});
-			NativeDialogs.showMessageDialog(props);
+			cancel();
 		} else {
-			final boolean hasReport = getBufferPanel().getBufferNames().contains("Report");
-			if(hasReport && !reportSaved) {
+			if(reportBufferAvailable() && !reportSaved) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
 				final String[] options = MessageDialogProperties.okCancelOptions;
@@ -610,19 +595,20 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		globalOptionsPanel = new GlobalParameterPanel();
 		
 		bufferPanel = new WizardMultiBufferPanel(this);
+		
+		btnCancel.setVisible(false);
 
 		btnStop = new BreadcrumbButton();
 		btnStop.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		btnStop.setText("Stop");
 		btnStop.setBackground(Color.red);
 		btnStop.setForeground(Color.white);
-		btnStop.addActionListener( (e) -> cancel() );
+		btnStop.addActionListener( (e) -> close() );
 
 		btnRunAgain = new BreadcrumbButton();
 		btnRunAgain.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		btnRunAgain.setText("Run again");
 		btnRunAgain.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
-		btnRunAgain.setVisible(false);
 
 		breadCrumbViewer.setFont(FontPreferences.getTitleFont().deriveFont(Font.BOLD));
 		breadCrumbViewer.setBackground(Color.white);
@@ -685,29 +671,78 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	}
 	
+	/**
+	 * Button state diagram:
+	 * <pre>
++-----------------+  Yes   +-------------+  Yes   +----------------------+
+| Is report step? +------->+ Is running? +------->+ Button State         |
++-------+---------+        +------+------+        +----------------------+
+        |                         |               |                      |
+        |                         |               | btnStop: visible     |
+        |                         |               | btnNext: hidden      |
+        | No                      | No            | btnRunAgain: hidden  |
+        |                         |               |                      |
+        |                         |               +----------------------+
+        v                         v
++-------+--------------+   +------+-------+  Yes  +----------------------+
+| Button State         |   | Has report?  +------>+ Button State         |
++----------------------+   +------+-------+       +----------------------+
+|                      |          |               |                      |
+| btnStop: hidden      |          |               | btnStop: visible     |
+| btnNext: visible     |          |               | btnNext:  hidden     |
+| btnRunAgain: hidden  |          | No            | btnRunAgain: hidden  |
+|                      |          |               |                      |
++----------------------+          |               +----------------------+
+                                  |
+                                  v
+                           +------+---------------+
+                           | Button State         |
+                           +----------------------+
+                           |                      |
+                           | btnStop: hidden      |
+                           | btnNext: hidden      |
+                           | btnRunAgain: visible |
+                           |                      |
+                           +----------------------+
+</pre>
+	 */
 	@Override
 	public void updateBreadcrumbButtons() {
 		JButton endBtn = nextButton;
+		
+		// remove all buttons from breadcrumb
+		breadCrumbViewer.remove(nextButton);
+		breadCrumbViewer.remove(btnStop);
+		breadCrumbViewer.remove(btnRunAgain);
+	
 		if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
-			breadCrumbViewer.remove(nextButton);
-
-			if(btnRunAgain != null) {
-				breadCrumbViewer.add(btnRunAgain);
-				setBounds(btnRunAgain);
-			}
-
-			if(btnStop != null) {
+			if(running) {
+				btnStop.setText("Stop");
+				btnStop.setBackground(Color.red);
+				btnStop.setForeground(Color.white);
+				
 				breadCrumbViewer.add(btnStop);
 				setBounds(btnStop);
-	
 				endBtn = btnStop;
+			} else {
+				if(reportBufferAvailable()) {
+					btnStop.setText("Close window");
+					btnStop.setBackground(btnRunAgain.getBackground());
+					btnStop.setForeground(Color.black);
+					
+					breadCrumbViewer.add(btnStop);
+					setBounds(btnStop);
+					endBtn = btnStop;
+				} else if(processor != null && processor.getError() != null) {
+					breadCrumbViewer.add(btnRunAgain);
+					setBounds(btnRunAgain);
+					endBtn = btnRunAgain;
+				}
 			}
 		} else {
-			breadCrumbViewer.remove(btnRunAgain);
-			breadCrumbViewer.remove(btnStop);
-
 			breadCrumbViewer.add(nextButton);
 			setBounds(nextButton);
+			endBtn = nextButton;
 		}
 
 		if(getCurrentStep() != reportDataStep)
@@ -826,7 +861,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		@Override
 		public void processorEvent(ProcessorEvent pe) {
 			if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
-				if(!running) executionStarted(pe);
+				if(!running) executionStarted();
 				
 				final String nodeName = pe.getNode().getName();
 				if(pe.getNode() instanceof MacroNode) {
@@ -870,21 +905,26 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	/**
 	 * Called when the processors begins
 	 */
-	public void executionStarted(ProcessorEvent pe) {
+	protected void executionStarted() {
 		running = true;
+		SwingUtilities.invokeLater( this::updateBreadcrumbButtons );
 	}
 
 	/**
 	 * Called when the processor ends
 	 */
-	public void executionEnded(ProcessorEvent pe) {
+	protected void executionEnded() {
 		running = false;
 		breadCrumbViewer.setEnabled(true);
-		btnCancel.setVisible(false);
-
-		btnRunAgain.setVisible(true);
 		
-		btnBack.setEnabled(true);
+		busyLabel.setBusy(false);
+		reportTimer.stop();
+		
+		SwingUtilities.invokeLater( 
+				this::updateBreadcrumbButtons 
+		);
+
+		breadCrumbViewer.setEnabled(true);
 	}
 
 	public void stopExecution() {
@@ -931,11 +971,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
 		processor.addProcessorListener(processorListener);
-		processor.addProcessorListener( (pe) -> {
-			if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
-				executionEnded(pe);
-			}
-		});
 
 		reportStartTime = System.currentTimeMillis();
 		reportTimer = new Timer(500, (e) -> {
@@ -949,8 +984,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		try {
 			SwingUtilities.invokeLater( () -> {
-				btnCancel.setVisible(true);
-				btnRunAgain.setVisible(false);
 				breadCrumbViewer.setEnabled(false);
 			});
 
@@ -1082,12 +1115,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 
 			SwingUtilities.invokeLater( () -> {
-				busyLabel.setBusy(false);
-				reportTimer.stop();
-				statusLabel.setText("");
-				btnBack.setEnabled(true);
 
-				breadCrumbViewer.setEnabled(true);
+				statusLabel.setText("");
 				
 				final long currentTime = System.currentTimeMillis();
 				final long elapsedTime = currentTime - reportStartTime;
@@ -1097,8 +1126,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			});
 		} catch (ProcessingException pe) {
 			SwingUtilities.invokeLater( () -> {
-				busyLabel.setBusy(false);
-				reportTimer.stop();
 				statusLabel.setText(pe.getLocalizedMessage());
 
 				final BufferPanel errPanel = getLogBuffer();
@@ -1118,14 +1145,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				writer.flush();
 				writer.close();
 
-				reportTimer.stop();
-
-				final String title = String.format("Report Generation Failed (%s)", pe.getLocalizedMessage());
+				final long currentTime = System.currentTimeMillis();
+				final long elapsedTime = currentTime - reportStartTime;
+				final String title = String.format("Report Generation Failed (%s)", MsFormatter.msToDisplayString(elapsedTime).substring(1, 6));
 				reportTitledPanel.setTitle(title);
 				
-				executionEnded(new ProcessorEvent());
 			});
 			throw pe;
+		} finally {
+			SwingUtilities.invokeLater( this::executionEnded );
 		}
 	}
 
@@ -1446,7 +1474,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				stopExecution();
 
 				if(retVal == 2) {
-					SwingUtilities.invokeLater( () -> _cancel() );
+					SwingUtilities.invokeLater( () -> super.cancel() );
 				}
 			});
 
@@ -1454,10 +1482,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		} else {
 			super.cancel();
 		}
-	}
-
-	private void _cancel() {
-		super.cancel();
 	}
 	
 	private class WebViewContextHandler implements ContextMenuHandler {

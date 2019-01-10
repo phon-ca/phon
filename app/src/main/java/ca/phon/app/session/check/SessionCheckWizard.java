@@ -97,14 +97,6 @@ public class SessionCheckWizard extends NodeWizard {
 		step1.add(tp, BorderLayout.WEST);
 	}
 	
-	
-		
-	@SuppressWarnings("unchecked")
-	@Override
-	public void executionEnded(ProcessorEvent pe) {
-		super.executionEnded(pe);
-	}
-
 	@Override
 	public void next() {
 		if(getCurrentStepIndex() == 0) {
