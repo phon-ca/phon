@@ -59,6 +59,7 @@ public class MergeSessionStep1 extends WizardStep {
 		super();
 
 		this.project = project;
+		setTitle("Select Sessions");
 
 		init();
 	}
@@ -66,7 +67,7 @@ public class MergeSessionStep1 extends WizardStep {
 	private void init() {
 		setLayout(new BorderLayout());
 
-		header = new DialogHeader("Merge Sessions",
+		header = new DialogHeader("Derive Session",
 				"Specify merged session name, corpus, and sessions for merge.");
 		add(header, BorderLayout.NORTH);
 

@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.SessionMerger;
 import ca.phon.project.Project;
 import ca.phon.session.DateFormatter;
@@ -37,6 +38,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.worker.PhonWorker;
@@ -171,25 +173,6 @@ public class DeriveSessionWizard extends WizardFrame {
 	 */
 	private void doMerge() throws IOException {
 		final PrintWriter out = new PrintWriter(new OutputStreamWriter(console.getLogBuffer().getStdOutStream(), "UTF-8"));
-//		org.apache.logging.log4j.LogManager.getLogger("ca.phon").addHandler( new Handler() {
-//
-//			@Override
-//			public void publish(LogRecord record) {
-//				out.println(record.getMessage());
-//				out.flush();
-//			}
-//
-//			@Override
-//			public void flush() {
-//			}
-//
-//			@Override
-//			public void close() throws SecurityException {
-//
-//			}
-//
-//		});
-
 		String corpus = step1.getMergedCorpusName();
 		String session = step1.getMergedSessionName();
 
@@ -200,11 +183,14 @@ public class DeriveSessionWizard extends WizardFrame {
 		// first make sure we have a corpus
 		if(!project.getCorpora().contains(step1.getMergedCorpusName())) {
 
-			LOGGER.info("Creating corpus '" + corpus + "'");
+			out.println("Creating corpus '" + corpus + "'");
+			out.flush();
 			try {
 				project.addCorpus(corpus, "");
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				out.println(e.getLocalizedMessage());
+				out.flush();
+				LogUtil.severe( e.getLocalizedMessage(), e);
 				return;
 			}
 
@@ -212,12 +198,14 @@ public class DeriveSessionWizard extends WizardFrame {
 
 		// check session name
 		if(project.getCorpusSessions(corpus).contains(session)) {
-			LOGGER.error("A session with name '" + corpus + "." + session + "' already exists.");
+			out.println("A session with name '" + corpus + "." + session + "' already exists.");
+			out.flush();
 			return;
 		}
 
 		// create the new session
-		LOGGER.info("Creating session '" + corpus + "." + session + "'");
+		out.println("Creating session '" + corpus + "." + session + "'");
+		out.flush();
 		final SessionFactory factory = SessionFactory.newFactory();
 		try {
 			final SessionMerger merger = new SessionMerger(project);
@@ -243,14 +231,16 @@ public class DeriveSessionWizard extends WizardFrame {
 				final Session t = step2.getSessionAtLocation(loc);
 				final RecordFilter filter = step2.getFilterForLocation(loc);
 
-				LOGGER.info("Merging data from session '" + loc.getCorpus() + "." + loc.getSession() + "'");
+				out.println("Merging data from session '" + loc.getCorpus() + "." + loc.getSession() + "'");
+				out.flush();
 				if(checkDate) {
 					String tDate = pdf.format(t.getDate());
 					if(mergedDate == null) {
 						mergedDate = tDate;
 					} else {
 						if(!mergedDate.equals(tDate)) {
-							LOGGER.warn("Session dates do not match, setting merged session date to today.");
+							out.println("Session dates do not match, setting merged session date to today.");
+							out.flush();
 							mergedDate = pdf.format(LocalDate.now());
 							checkDate = false;
 						}
@@ -262,7 +252,8 @@ public class DeriveSessionWizard extends WizardFrame {
 						mergedMedia = t.getMediaLocation();
 					} else {
 						if(!mergedMedia.equals(t.getMediaLocation())) {
-							LOGGER.warn("Session media locations do not match, leaving media field blank.");
+							out.println("Session media locations do not match, leaving media field blank.");
+							out.flush();
 							mergedMedia = "";
 							checkMedia = false;
 						}
@@ -283,19 +274,23 @@ public class DeriveSessionWizard extends WizardFrame {
 			if(mergedMedia != null) {
 				mergedSession.setMediaLocation(mergedMedia);
 			}
-
-			LOGGER.info("Saving session...");
+			
+			out.println("Saving session...");
+			out.flush();
 
 			// save
 			final UUID writeLock = project.getSessionWriteLock(mergedSession);
 			project.saveSession(mergedSession, writeLock);
 			project.releaseSessionWriteLock(mergedSession, writeLock);
 
-			LOGGER.info("Finished. New session has " + mergedSession.getRecordCount() + " records.");
+			out.println("Finished. New session has " + mergedSession.getRecordCount() + " records.");
+			out.flush();
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			out.println(e.getLocalizedMessage());
+			LogUtil.severe(e);
 			throw e;
 		} finally {
+			out.flush();
 			out.close();
 		}
 

@@ -93,6 +93,7 @@ public class MergeSessionStep2 extends WizardStep {
 		super();
 		
 		this.project = project;
+		setTitle("Select Records");
 		
 		setupFilters(sessions);
 		init();
@@ -101,7 +102,7 @@ public class MergeSessionStep2 extends WizardStep {
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		header = new DialogHeader("Merge Sessions", "Select records for merge.");
+		header = new DialogHeader("Derive Session", "Select records for merge.");
 		add(header, BorderLayout.NORTH);
 		
 		JPanel centerPanel = new JPanel(new BorderLayout());
