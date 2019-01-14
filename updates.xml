@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2.dmg" newVersion="3.0.2" newMediaFileId="macos" fileSize="229882195" md5Sum="47b4c4f2fd85693f482d8dbe45050423" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.1
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3.dmg" newVersion="3.0.3" newMediaFileId="macos" fileSize="256577851" md5Sum="5f22de75139bf8ff4769e7a0ddbacafe" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -229,8 +245,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_2.dmg" newVersion="3.0.2" newMediaFileId="macos" fileSize="229882195" md5Sum="47b4c4f2fd85693f482d8dbe45050423" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3.dmg" newVersion="3.0.3" newMediaFileId="macos" fileSize="256577851" md5Sum="5f22de75139bf8ff4769e7a0ddbacafe" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -458,8 +490,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.exe" newVersion="3.0.2" newMediaFileId="win64" fileSize="244165632" md5Sum="587556fda82b2a14af763ab5170676fd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3.exe" newVersion="3.0.3" newMediaFileId="win64" fileSize="257806848" md5Sum="2ee453de30b7e26aa3964f182980cbb4" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -687,8 +735,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.exe" newVersion="3.0.2" newMediaFileId="win64" fileSize="244165632" md5Sum="587556fda82b2a14af763ab5170676fd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3.exe" newVersion="3.0.3" newMediaFileId="win64" fileSize="257806848" md5Sum="2ee453de30b7e26aa3964f182980cbb4" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -916,8 +980,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.exe" newVersion="3.0.2" newMediaFileId="win64" fileSize="244165632" md5Sum="587556fda82b2a14af763ab5170676fd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3.exe" newVersion="3.0.3" newMediaFileId="win64" fileSize="257806848" md5Sum="2ee453de30b7e26aa3964f182980cbb4" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -1145,8 +1225,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_2.zip" newVersion="3.0.2" newMediaFileId="win64zip" fileSize="243196327" md5Sum="0b5cd5434b10bc6856f084fff5a6fcb1" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3.zip" newVersion="3.0.3" newMediaFileId="win64zip" fileSize="256847652" md5Sum="03d52ed85b45d38abc379c91c6b3122b" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -1374,8 +1470,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_2.deb" newVersion="3.0.2" newMediaFileId="linux64deb" fileSize="164244992" md5Sum="6b6391908f77f1d613a97b1bbcd06a34" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3.deb" newVersion="3.0.3" newMediaFileId="linux64deb" fileSize="187258734" md5Sum="072befd63e8e7967069b226cdf8c4714" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
@@ -1603,8 +1715,24 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_2.sh" newVersion="3.0.2" newMediaFileId="linux64" fileSize="167389178" md5Sum="5b2c35b66db82d59c24835b7be32516b" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.1
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3.sh" newVersion="3.0.3" newMediaFileId="linux64" fileSize="186790064" md5Sum="9630d3b85547b0e97cdaf3d6117bd8c3" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
 
  * Updated to Java 11
  * Updated Consonants analysis
