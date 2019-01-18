@@ -207,10 +207,9 @@
         <topicref href="phonex/phonex_introduction.md" format="markdown"/>
         <topichead navtitle="Language Reference">
             <topicref href="phonex/phone-matchers.dita"/>
-            <topicref href="phonex/groups.dita"/>
             <topicref href="phonex/boundaries.dita"/>
             <topicref href="phonex/quantifiers.dita"/>
-            <topicref href="phonex/lookahead-behind.dita"/>
+            <topicref href="phonex/groups.md" format="markdown"/>
             <topicref href="phonex/comments.md" format="markdown"/>
             <topicref href="phonex/constructs.dita"/>
             <topichead navtitle="Supplementary Matchers">
@@ -226,9 +225,7 @@
         </topichead>
         <topichead navtitle="Examples">
             <topicref href="phonex/examples/example-consonants.md" format="markdown"/>
-            <topicref href="phonex/examples/singleton_consonants.md" format="markdown"/>
-            <topicref href="phonex/examples/consonant_clusters.md" format="markdown"/>
-            <topicref href="phonex/examples/syllables.md" format="markdown"/>
+            <topicref href="phonex/examples/phones.md" format="markdown"/>
         </topichead>
     </chapter>
     <chapter navtitle="Queries" audience="intermediate">
