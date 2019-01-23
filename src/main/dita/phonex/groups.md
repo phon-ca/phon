@@ -16,7 +16,7 @@ to create a new column in query result listings containing the data matched by t
 
 For example, say you were searching for any CV pattern (e.g., ```\c\v```) but you wanted the consonant and vowel
 in their own separate columns in a Phon query report.  You would place each phone matcher into a group using parenthesis.
-(It's also common to 'name' the group in this situation, see 'Group Names' below.)
+(It's also required to 'name' the group in this situation, see 'Group Names' below.)
 
 E.g.
 
@@ -57,7 +57,7 @@ Lookahead and lookbehind groups can be used together in the same pattern.
 
 ## Conditional Groups
 
-Conditional groups allow for choices within patterns. To specify choices subpatterns in a group
+Conditional groups allow for choices within patterns. To specify choices, subpatterns in a group
 are spearated by the logical-or (or pipe) ```|``` metacharacter. The following example will match
 the sequence ```bab``` as well as ```dib```.
 
@@ -69,7 +69,7 @@ Conditional groups may be quantified.
 
 ## Group Numbers
 
-Groups in a phonex pattern are numbered left-to-right.  Each open parenthesis will increment the group index by 1 unless
+Groups in a phonex pattern are numbered left to right.  Each open parenthesis ```(``` metacharacter will increment the group index by 1 unless
 the group is 'non-capturing' such as for lookbehind and lookahead groups. The following example pattern has two groups,
 the first group includes both the consonant ```\c``` and vowel ```\v``` matchers; the second group includes only the 
 vowel ```\v``` matcher:
@@ -85,8 +85,8 @@ The next example also has two groups as the lookbehind group is not included in 
 ```
 
 Phonex includes syntax to exclude a group from indexing (the group's content will not be stored.)  These groups are
-called non-capturing or orginiazational groups. To exclude a group from indexing the group content must start with ```?=```. 
-The following phonex pattern has two capturing groups: group 1 includes a syllable boundary ```\S``` consonant ```\c``` and 
+called non-capturing or organizational groups. To exclude a group from indexing the group content must start with ```?=```. 
+The following phonex pattern has two capturing groups: group 1 includes a syllable boundary ```\S```, consonant ```\c```, and 
 vowel ```\v``` matcher; group 2 includes just the vowel ```\v``` matcher. There is one non-capturing group
 containing the consonant ```\c``` matcher.
 
@@ -99,7 +99,7 @@ matched data.
 
 ## Group Names
 
-Capturing groups may also be named. To name a group the group content should start with the group name followed by an
+Capturing groups may also be named. To name a group the group content should start with the desired group name followed by an
 equals ```=``` metacharacter. The group name must start with a letter and consist of only letters, numbers, and 
 underscore ```_```.  The following expression has two named groups; the first group name is 'onset'
 and will match a consonant in the onset position ```\c:O```; the second group name is 'nucleus'
