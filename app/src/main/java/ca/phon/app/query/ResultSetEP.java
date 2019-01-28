@@ -24,6 +24,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginEntryPointRunner;
@@ -82,10 +84,11 @@ public class ResultSetEP implements IPluginEntryPoint {
 			openSessionRef.set(Boolean.parseBoolean(initInfo.get("opensession").toString()));
 		}
 		
-		// look for an existing window
+		// look for an existing windows
 		final AtomicReference<ResultSetEditor> windowRef = new AtomicReference<>();
+		final AtomicReference<SessionEditor> sessionEditorRef = new AtomicReference<>();
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof ResultSetEditor) {
+			if(windowRef.get() == null && cmf instanceof ResultSetEditor) {
 				final ResultSetEditor rsViewer = (ResultSetEditor)cmf;
 				final boolean sameProject = (rsViewer.getProject() == projectRef.get());
 				final boolean sameQuery = 
@@ -94,16 +97,18 @@ public class ResultSetEP implements IPluginEntryPoint {
 						sameQuery && (resultSetRef.get().getSessionPath().equals(rsViewer.getResultSet().getSessionPath()));
 				if(sameResultSet) {
 					windowRef.set(rsViewer);
-					break;
+				}
+			} else if(sessionEditorRef.get() == null && cmf instanceof SessionEditor) {
+				SessionEditor editor = (SessionEditor)cmf;
+				if(editor.getProject() == projectRef.get() &&
+						editor.getSession().getCorpus().equals(resultSetRef.get().getCorpus()) &&
+						editor.getSession().getName().equals(resultSetRef.get().getSession()) ) {
+					sessionEditorRef.set(editor);
 				}
 			}
 		}
 		
 		final Runnable onEDT = () -> {
-			if(openSessionRef.get()) {
-				openSession(projectRef.get(), resultSetRef.get());
-			}
-			
 			ResultSetEditor window = windowRef.get();
 			if(window != null) {
 				window.toFront();
@@ -128,10 +133,36 @@ public class ResultSetEP implements IPluginEntryPoint {
 				window.getTable().grabFocus();
 			}
 		};
-		if(SwingUtilities.isEventDispatchThread())
-			onEDT.run();
-		else
-			SwingUtilities.invokeLater(onEDT);
+		
+		if(openSessionRef.get()) {
+			Runnable openSessionRunnable = () -> { openSession(projectRef.get(), resultSetRef.get()); };
+			if(SwingUtilities.isEventDispatchThread())
+				openSessionRunnable.run();
+			else
+				SwingUtilities.invokeLater(openSessionRunnable);
+			
+			if(sessionEditorRef.get() == null) {
+				CommonModuleFrame.addNewWindowListener(this, (cmf) -> {
+					if(cmf instanceof SessionEditor) {
+						SessionEditor editor = (SessionEditor)cmf;
+						if(editor.getSession().getCorpus().equals(resultSetRef.get().getCorpus())
+								&& editor.getSession().getName().equals(resultSetRef.get().getSession())) {
+							onEDT.run();
+						}
+					}
+				});
+			} else {
+				if(SwingUtilities.isEventDispatchThread())
+					onEDT.run();
+				else
+					SwingUtilities.invokeLater(onEDT);
+			}
+		} else {
+			if(SwingUtilities.isEventDispatchThread())
+				onEDT.run();
+			else
+				SwingUtilities.invokeLater(onEDT);
+		}
 	}
 	
 	private void openSession(Project project, ResultSet rs) {
@@ -142,7 +173,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 		epArgs.put("grabFocus", Boolean.FALSE);
 		
 		try {
-			PluginEntryPointRunner.executePlugin("SessionEditor", epArgs);
+			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
 		} catch (PluginException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}

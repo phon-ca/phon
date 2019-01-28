@@ -207,7 +207,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
-				//removeWindowFromActiveList();
 			}
 
 			@Override
