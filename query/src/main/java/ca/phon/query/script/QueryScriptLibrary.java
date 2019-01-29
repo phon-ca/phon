@@ -56,7 +56,7 @@ public class QueryScriptLibrary implements IExtendable {
 	 * User script folder
 	 */
 	public final static String USER_SCRIPT_FOLDER =
-			PrefHelper.getUserDataFolder() + File.separator + "script";
+			PrefHelper.getUserDataFolder() + File.separator + "query";
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(QueryScriptLibrary.class, this);
 
@@ -67,7 +67,7 @@ public class QueryScriptLibrary implements IExtendable {
 	private final ResourceLoader<QueryScript> pluginScriptLoader = new ResourceLoader<QueryScript>();
 
 	public static String projectScriptFolder(Project project) {
-		return project.getResourceLocation() + File.separator + "script";
+		return project.getResourceLocation() + File.separator + "query";
 	}
 
 	/**
