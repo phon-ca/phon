@@ -18,9 +18,12 @@ package ca.phon.query.history;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.script.params.history.ParamHistoryManager;
 import ca.phon.script.params.history.ParamHistoryType;
 import ca.phon.util.PrefHelper;
@@ -37,6 +40,39 @@ public class QueryHistoryManager extends ParamHistoryManager {
 
 	public final static String QUERY_HISTORY_FOLDER = QueryHistoryManager.class.getName() + ".queryHistoryFolder";
 	public final static String DEFAULT_HISTORY_FOLDER = PrefHelper.getUserDataFolder() + File.separator + "query_history";
+	
+	private final static Map<String, QueryHistoryManager> queryHistoryCache = new HashMap<>();
+	
+	/**
+	 * Return the cached query history for the given script.  If no history
+	 * is found in the cache the history is loaded (or created) and stored.
+	 * 
+	 * @param script
+	 * @return
+	 */
+	public static QueryHistoryManager getCachedInstance(QueryScript script) {
+		String hash = script.getHashString();
+		String queryName = getQueryName(script);
+		QueryHistoryManager cachedHistory = queryHistoryCache.get(script.getHashString());
+		if(cachedHistory == null) {
+			try {
+				cachedHistory = QueryHistoryManager.newInstance(script);
+			} catch (IOException e) {
+				final ObjectFactory factory = new ObjectFactory();
+				final ParamHistoryType paramHistory = factory.createParamHistoryType();
+				cachedHistory = new QueryHistoryManager(paramHistory);
+			}
+			
+			cachedHistory.getParamHistory().setScript(queryName);
+			cachedHistory.getParamHistory().setHash(hash);
+			queryHistoryCache.put(hash, cachedHistory);
+		}
+		return cachedHistory;
+	}
+	
+	public static void clearHistoryCache() {
+		queryHistoryCache.clear();
+	}
 	
 	private static String getQueryName(QueryScript script) {
 		final QueryName qn = script.getExtension(QueryName.class);

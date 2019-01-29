@@ -46,7 +46,7 @@ public class DeleteAllUnnamedEntriesAction extends HookableAction {
 		this.queryWizard = wizard;
 		this.queryHistoryPanel = queryWizard.getQueryHistoryPanel();
 		
-		putValue(HookableAction.NAME, "Delete all unamed entries in query history");
+		putValue(HookableAction.NAME, "Delete all unnamed entries in query history");
 		putValue(HookableAction.SHORT_DESCRIPTION, "Delete all unnamed entries in query history (action cannot be undone)");
 	}
 	

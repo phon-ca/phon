@@ -199,18 +199,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		putExtension(Project.class, project);
 		
 		this.queryScript = queryScript;
-		
-		try {
-			queryHistoryManager = QueryHistoryManager.newInstance(queryScript);
-		} catch (IOException e) {
-			final ObjectFactory factory = new ObjectFactory();
-			final ParamHistoryType paramHistory = factory.createParamHistoryType();
-			queryHistoryManager = new QueryHistoryManager(paramHistory);
-			if(queryScript.getExtension(QueryName.class) != null)
-				queryHistoryManager.getParamHistory().setScript(queryScript.getExtension(QueryName.class).getName());
-		}
-		// update hash
-		queryHistoryManager.getParamHistory().setHash(queryScript.getHashString());
+		this.queryHistoryManager = QueryHistoryManager.getCachedInstance(queryScript);
 		
 		// setup UI
 		init();

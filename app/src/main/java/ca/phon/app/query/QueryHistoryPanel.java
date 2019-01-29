@@ -73,6 +73,7 @@ public class QueryHistoryPanel extends JPanel {
 	
 	private DefaultComboBoxModel<String> queryNameModel;
 	private JComboBox<String> queryNameBox;
+	private JButton queryNameButton;
 	
 	private int currentIndex = -1;
 	
@@ -184,7 +185,14 @@ public class QueryHistoryPanel extends JPanel {
 		leftPanel.add(buttonPanel);
 
 		JPanel namePanel = new JPanel(new BorderLayout());
+		namePanel.add(new JLabel("Name:"), BorderLayout.WEST);
 		namePanel.add(queryNameBox, BorderLayout.CENTER);
+		
+		final PhonUIAction renameQueryAct = new PhonUIAction(this, "onRenameQuery");
+		renameQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set name for current query parameters");
+		renameQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL));
+		queryNameButton = new JButton(renameQueryAct);
+		namePanel.add(queryNameButton, BorderLayout.EAST);
 		
 		setLayout(new BorderLayout());
 		add(leftPanel, BorderLayout.WEST);

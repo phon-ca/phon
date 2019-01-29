@@ -113,13 +113,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 		super();
 
 		this.queryScript = queryScript;
-		
-		try {
-			this.queryHistoryManager = QueryHistoryManager.newInstance(queryScript);
-		} catch (IOException e) {
-			final ObjectFactory factory = new ObjectFactory();
-			this.queryHistoryManager = new QueryHistoryManager(factory.createParamHistoryType());
-		}
+		this.queryHistoryManager = QueryHistoryManager.getCachedInstance(queryScript);
 		
 		super.putField(projectInputField);
 		super.putField(sessionsInputField);
@@ -136,8 +130,6 @@ public class QueryNode extends OpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 	
-	
-
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propSupport.addPropertyChangeListener(listener);
 	}
