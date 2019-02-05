@@ -21,13 +21,13 @@ public class DropDownIcon implements Icon {
 	
 	private final static String ARROW_LOCATION = "ca/phon/ui/arrow.png";
 	
-	private final static int DEFAULT_GAP = 5;
+	public final static int DEFAULT_GAP = 6;
 	
 	private Icon icn;
 	
 	private int gap;
 	
-	private ImageIcon arrowIcn;
+	private Icon arrowIcn;
 	
 	public final static int DEFAULT_ICON_POSITION = SwingConstants.CENTER;
 	/**
@@ -38,28 +38,44 @@ public class DropDownIcon implements Icon {
 	private boolean paintRollover;
 	
 	public DropDownIcon(Icon icn) {
-		this(icn, DEFAULT_GAP, DEFAULT_ICON_POSITION, false);
+		this(icn, loadArrow(), DEFAULT_GAP, DEFAULT_ICON_POSITION, false);
+	}
+	
+	public DropDownIcon(Icon icn, Icon arrowIcn) {
+		this(icn, arrowIcn, DEFAULT_GAP, DEFAULT_ICON_POSITION, false);
 	}
 	
 	public DropDownIcon(Icon icn, int gap) {
-		this(icn, gap, DEFAULT_ICON_POSITION, false);
+		this(icn, loadArrow(), gap, DEFAULT_ICON_POSITION, false);
+	}
+	
+	public DropDownIcon(Icon icn, Icon arrowIcn, int gap) {
+		this(icn, arrowIcn, gap, DEFAULT_ICON_POSITION, false);
 	}
 	
 	public DropDownIcon(Icon icn, int gap, int iconPosition) {
-		this(icn, gap, iconPosition, false);
+		this(icn, loadArrow(), gap, iconPosition, false);
 	}
-		
+	
+	public DropDownIcon(Icon icn, Icon arrowIcn, int gap, int iconPosition) {
+		this(icn, arrowIcn, gap, iconPosition, false);
+	}
+	
 	public DropDownIcon(Icon icn, int gap, int iconPosition, boolean paintRollover) {
+		this(icn, loadArrow(), gap, iconPosition, paintRollover);
+	}
+	
+	public DropDownIcon(Icon icn, Icon arrowIcn, int gap, int iconPosition, boolean paintRollover) {
 		if(icn == null) throw new NullPointerException("Icon may not be null");
 		this.icn = icn;
 		this.gap = gap;
 		this.iconPosition = iconPosition;
 		this.paintRollover = paintRollover;
-		this.arrowIcn = loadArrow();
+		this.arrowIcn = (arrowIcn != null ? arrowIcn : loadArrow());
 	}
 	
-	private ImageIcon loadArrow() {
-		URL arrowURL = getClass().getClassLoader().getResource(ARROW_LOCATION);
+	private static ImageIcon loadArrow() {
+		URL arrowURL = ClassLoader.getSystemResource(ARROW_LOCATION);
 		if(arrowURL != null) {
 			return new ImageIcon(arrowURL);
 		}

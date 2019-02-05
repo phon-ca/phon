@@ -88,6 +88,8 @@ import ca.phon.app.query.QueryAndReportWizardSettings.ReportLoadStrategy;
 import ca.phon.app.query.actions.DeleteAllUnnamedEntriesAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryAction;
 import ca.phon.app.query.actions.DeleteQueryHistoryEntryAction;
+import ca.phon.app.query.actions.ExportQueryAction;
+import ca.phon.app.query.actions.SaveQueryAction;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
@@ -106,6 +108,7 @@ import ca.phon.query.db.ResultSetManager;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
@@ -116,6 +119,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.ui.wizard.WizardStep;
@@ -164,7 +168,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private JCheckBox includeExcludedBox;
 	private JButton showResultsButton;
 	private JButton showSessionsButton;
-	private JButton saveQuerySettingsButton;
+//	private JButton saveQuerySettingsButton;
 	private JButton resetQueryButton;
 	private JButton duplicateQueryButton;
 	private JButton runQueryButton;
@@ -182,7 +186,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private QueryScript queryScript;
 
 	private QueryHistoryManager queryHistoryManager;
-	private QueryHistoryPanel queryHistoryPanel;
+	private QueryHistoryAndNameToolbar queryHistoryPanel;
 	
 	private CountDownLatch queryLatch;
 	private QueryExecutionHistory previousExeuction;
@@ -282,11 +286,35 @@ public class QueryAndReportWizard extends NodeWizard {
 						resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/parameters-black", IconSize.SMALL));
 						resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset query parameters to default");
 						
-						final PhonUIAction saveSettingsAct = new PhonUIAction(QueryAndReportWizard.this, "onSaveQuerySettings");
-						saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
-						saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
-						final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-						saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
+						final JMenu saveQueryMenu = new JMenu("Save Query");
+						saveQueryMenu.addMenuListener(new MenuListener() {
+							
+							@Override
+							public void menuSelected(MenuEvent e) {
+								saveQueryMenu.removeAll();
+								
+								if(queryHistoryPanel != null) {
+									// setup menu from query history and name panel
+									queryHistoryPanel.setupSaveMenu(new MenuBuilder(saveQueryMenu));
+								}
+							}
+							
+							@Override
+							public void menuDeselected(MenuEvent e) {
+								
+							}
+							
+							@Override
+							public void menuCanceled(MenuEvent e) {
+								
+							}
+						});
+						
+//						final PhonUIAction saveSettingsAct = new PhonUIAction(QueryAndReportWizard.this, "onSaveQuerySettings");
+//						saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
+//						saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
+//						final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
+//						saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
 						
 						final PhonUIAction duplicateAct = new PhonUIAction(QueryAndReportWizard.this, "onDuplicateQueryWizard");
 						duplicateAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
@@ -392,29 +420,29 @@ public class QueryAndReportWizard extends NodeWizard {
 							
 						});
 						
-						final PhonUIAction historyPrevAct = new PhonUIAction(queryHistoryPanel, "goPrevious");
-						historyPrevAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
-						historyPrevAct.putValue(PhonUIAction.NAME, "View previous entry in query history");
-						
-						final PhonUIAction historyNextAct = new PhonUIAction(queryHistoryPanel, "goNext");
-						historyNextAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL));
-						historyNextAct.putValue(PhonUIAction.NAME, "View next entry in query history");
-						
-						final PhonUIAction goFirstAct = new PhonUIAction(queryHistoryPanel, "gotoFirst");
-						goFirstAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
-						goFirstAct.putValue(PhonUIAction.NAME, "View oldest entry in query history");
-						
-						final PhonUIAction goLastAct = new PhonUIAction(queryHistoryPanel, "gotoLast");
-						goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
-						goLastAct.putValue(PhonUIAction.NAME, "View most recent entry in query history");
-						
-						final DeleteQueryHistoryEntryAction deleteCurrentEntryAct = new DeleteQueryHistoryEntryAction(QueryAndReportWizard.this);
+//						final PhonUIAction historyPrevAct = new PhonUIAction(queryHistoryPanel, "goPrevious");
+//						historyPrevAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
+//						historyPrevAct.putValue(PhonUIAction.NAME, "View previous entry in query history");
+//						
+//						final PhonUIAction historyNextAct = new PhonUIAction(queryHistoryPanel, "goNext");
+//						historyNextAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL));
+//						historyNextAct.putValue(PhonUIAction.NAME, "View next entry in query history");
+//						
+//						final PhonUIAction goFirstAct = new PhonUIAction(queryHistoryPanel, "gotoFirst");
+//						goFirstAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
+//						goFirstAct.putValue(PhonUIAction.NAME, "View oldest entry in query history");
+//						
+//						final PhonUIAction goLastAct = new PhonUIAction(queryHistoryPanel, "gotoLast");
+//						goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
+//						goLastAct.putValue(PhonUIAction.NAME, "View most recent entry in query history");
+//						
+//						final DeleteQueryHistoryEntryAction deleteCurrentEntryAct = new DeleteQueryHistoryEntryAction(QueryAndReportWizard.this);
 						final DeleteAllUnnamedEntriesAction deleteUnnamedEntriesAct = new DeleteAllUnnamedEntriesAction(QueryAndReportWizard.this);
-						final DeleteQueryHistoryAction deleteAllEntriesAct = new DeleteQueryHistoryAction(QueryAndReportWizard.this);
+//						final DeleteQueryHistoryAction deleteAllEntriesAct = new DeleteQueryHistoryAction(QueryAndReportWizard.this);
 						
 						menu.add(new JMenuItem(duplicateAct), idx++);
 						menu.insertSeparator(idx++);
-						menu.add(new JMenuItem(saveSettingsAct), idx++);
+						menu.add(saveQueryMenu, idx++);
 						menu.add(new JMenuItem(resetQueryAct), idx++);
 						menu.add(new JMenuItem(runAct), idx++);
 						menu.add(stopItem, idx++);
@@ -434,14 +462,14 @@ public class QueryAndReportWizard extends NodeWizard {
 							}
 							menu.insertSeparator(idx++);
 						}
-						menu.add(new JMenuItem(goFirstAct), idx++);
-						menu.add(new JMenuItem(historyPrevAct), idx++);
-						menu.add(new JMenuItem(historyNextAct), idx++);
-						menu.add(new JMenuItem(goLastAct), idx++);
-						menu.insertSeparator(idx++);
-						menu.add(new JMenuItem(deleteCurrentEntryAct), idx++);
+//						menu.add(new JMenuItem(goFirstAct), idx++);
+//						menu.add(new JMenuItem(historyPrevAct), idx++);
+//						menu.add(new JMenuItem(historyNextAct), idx++);
+//						menu.add(new JMenuItem(goLastAct), idx++);
+//						menu.insertSeparator(idx++);
+//						menu.add(new JMenuItem(deleteCurrentEntryAct), idx++);
 						menu.add(new JMenuItem(deleteUnnamedEntriesAct), idx++);
-						menu.add(new JMenuItem(deleteAllEntriesAct), idx++);
+//						menu.add(new JMenuItem(deleteAllEntriesAct), idx++);
 						menu.insertSeparator(idx++);
 					}
 					
@@ -611,13 +639,13 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryLeftPanelLayout.show(queryLeftPanel, "sessionSelector"); 
 				
 		scriptPanel = new ScriptPanel(queryScript);
-		final PhonUIAction saveSettingsAct = new PhonUIAction(this, "onSaveQuerySettings");
-		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
-		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
-		final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
-		saveQuerySettingsButton = new JButton(saveSettingsAct);
-		saveQuerySettingsButton.setOpaque(false);
+//		final PhonUIAction saveSettingsAct = new PhonUIAction(this, "onSaveQuerySettings");
+//		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
+//		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
+//		final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
+//		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
+//		saveQuerySettingsButton = new JButton(saveSettingsAct);
+//		saveQuerySettingsButton.setOpaque(false);
 		
 		queryPanel = new TitledPanel("Query");
 		queryPanel.getContentContainer().setLayout(new BorderLayout());
@@ -644,7 +672,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		runQueryButton = new JButton(runAct);
 		runQueryButton.setOpaque(false);
 		
-		queryHistoryPanel = new QueryHistoryPanel(queryHistoryManager, scriptPanel);
+		queryHistoryPanel = new QueryHistoryAndNameToolbar(queryHistoryManager, scriptPanel);
 		if(settings.isLoadPreviousExecutionOnStartup() && queryHistoryManager.size() > 0)
 			queryHistoryPanel.gotoLast();
 		queryHistoryPanel.setOpaque(false);
@@ -653,7 +681,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		final JComponent buttonBar = new JPanel(new HorizontalLayout());
 		buttonBar.add(duplicateQueryButton);
 		buttonBar.add(resetQueryButton);
-		buttonBar.add(saveQuerySettingsButton);
+//		buttonBar.add(saveQuerySettingsButton);
 		buttonBar.add(runQueryButton);
 		buttonBar.setOpaque(false);
 		queryPanel.setRightDecoration(buttonBar);
@@ -832,23 +860,23 @@ public class QueryAndReportWizard extends NodeWizard {
 		}
 	}
 	
-	public void onSaveQuerySettings() {
-		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript, queryHistoryPanel.getStockQueries(), queryHistoryManager);
-		dialog.setModal(true);
-	
-		String queryName = queryHistoryPanel.getQueryName();
-		if(queryName != null)
-			dialog.getForm().getNameField().setText(queryName);
-		
-		dialog.pack();
-		dialog.setLocationRelativeTo(this);
-		
-		dialog.setVisible(true);
-		
-		// wait for dialog to finish...
-		
-		queryHistoryPanel.updateLabelFromCurrentHash();
-	}
+//	public void onSaveQuerySettings() {
+//		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript, queryHistoryPanel.getStockQueries(), queryHistoryManager);
+//		dialog.setModal(true);
+//	
+//		String queryName = queryHistoryPanel.getQueryName();
+//		if(queryName != null)
+//			dialog.getForm().getNameField().setText(queryName);
+//		
+//		dialog.pack();
+//		dialog.setLocationRelativeTo(this);
+//		
+//		dialog.setVisible(true);
+//		
+//		// wait for dialog to finish...
+//		
+//		queryHistoryPanel.updateLabelFromCurrentHash();
+//	}
 	
 	public void newWindow(Project project) {
 		int wizardIdx = this.windowIdx;
@@ -901,7 +929,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		return retVal;
 	}
 	
-	public QueryHistoryPanel getQueryHistoryPanel() {
+	public QueryHistoryAndNameToolbar getQueryHistoryPanel() {
 		return this.queryHistoryPanel;
 	}
 	

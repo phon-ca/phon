@@ -288,6 +288,10 @@ public class IconManager {
 	 * @param icons
 	 */
 	public ImageIcon createIconStrip(ImageIcon[] icons) {
+		return createIconStrip(icons, 0);
+	}
+	
+	public ImageIcon createIconStrip(ImageIcon[] icons, int offset) {
 		// determine size
 		int width = 0;
 		int height = 0;
@@ -296,7 +300,7 @@ public class IconManager {
 			width += icon.getIconWidth();
 			height = Math.max(height, icon.getIconHeight());
 		}
-		
+		width += (icons.length - 1) * offset;
 		final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 		final Graphics2D g = (Graphics2D)img.createGraphics();
 		
@@ -304,7 +308,7 @@ public class IconManager {
 		int y = 0;
 		for(ImageIcon icon:icons) {
 			g.drawImage(icon.getImage(), x, y, null);
-			x += icon.getIconWidth();
+			x += icon.getIconWidth() + offset;
 		}
 		
 		return new ImageIcon(img);

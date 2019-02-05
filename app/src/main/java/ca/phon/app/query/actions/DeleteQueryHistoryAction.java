@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.QueryAndReportWizard;
-import ca.phon.app.query.QueryHistoryPanel;
+import ca.phon.app.query.QueryHistoryAndNameToolbar;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;
 import ca.phon.ui.CommonModuleFrame;
@@ -38,7 +38,7 @@ public class DeleteQueryHistoryAction extends HookableAction {
 
 	private final QueryAndReportWizard queryWizard;
 	
-	private final QueryHistoryPanel queryHistoryPanel;
+	private final QueryHistoryAndNameToolbar queryHistoryPanel;
 
 	public DeleteQueryHistoryAction(QueryAndReportWizard wizard) {
 		super();

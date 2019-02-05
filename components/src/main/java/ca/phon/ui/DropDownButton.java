@@ -2,33 +2,24 @@ package ca.phon.ui;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.DefaultButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
 import javax.swing.SwingConstants;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
-import ca.phon.util.icons.IconManager;
-
+/**
+ * {@link JButton} with a drop-down component.
+ */
 public class DropDownButton extends JButton {
 	
 	private static enum IconState {
@@ -58,6 +49,11 @@ public class DropDownButton extends JButton {
 	public static String ARROW_ICON_POSITION = "arrowIconPosition";
 	
 	/**
+	 * Property key for arrow icon gap.
+	 */
+	public static String ARROW_ICON_GAP = "arrowIconGap";
+	
+	/**
 	 * Property key for the button popup object.
 	 */
 	public static String BUTTON_POPUP = "buttonPopup";
@@ -65,9 +61,9 @@ public class DropDownButton extends JButton {
 	private Map<IconState, Icon> iconMap = new HashMap<>();
 	private Map<IconState, Icon> arrowIconMap = new HashMap<>();
 	
-	private DropDownButtonPopup buttonPopup;
+	private ButtonPopup buttonPopup;
 	private PropertyChangeListener buttonPopupListener = (e) -> {
-		if(!e.getPropertyName().equals(DropDownButtonPopup.POPUP_VISIBLE)) return;
+		if(!e.getPropertyName().equals(ButtonPopup.POPUP_VISIBLE)) return;
 		
 		if(!Boolean.parseBoolean(e.getNewValue().toString())) {
 			resetIcons();
@@ -75,20 +71,27 @@ public class DropDownButton extends JButton {
 				((DropDownButtonModel)getModel())._release();
 			}
 		}
+		popupVisible = Boolean.parseBoolean(e.getNewValue().toString());
 	};
 	
-	private boolean mouseInButton = false;
+	private int arrowIconPosition = DropDownIcon.DEFAULT_ICON_POSITION;
+	private int arrowIconGap = DropDownIcon.DEFAULT_GAP;
+	private Icon arrowIcon = null;
+	
+	private boolean popupVisible = false;
+	private boolean onlyPopup = false;
 	private boolean mouseInArrowArea = false;
 	
+	
 	public DropDownButton(Icon icon, JComponent popup) {
-		this(icon, new DropDownButtonPopup(popup));
+		this(icon, new ButtonPopup(popup));
 	}
 	
 	public DropDownButton(Icon icon, JPopupMenu popupMenu) {
-		this(icon, new DropDownButtonPopup(popupMenu));
+		this(icon, new ButtonPopup(popupMenu));
 	}
 
-	public DropDownButton(Icon icon, DropDownButtonPopup buttonPopup) {
+	public DropDownButton(Icon icon, ButtonPopup buttonPopup) {
 		super();
 		
 		setButtonPopup(buttonPopup);
@@ -110,18 +113,27 @@ public class DropDownButton extends JButton {
 //			throw new IllegalArgumentException("Action must not include the " + Action.NAME + " property");
 
 		Object popupObj = action.getValue(BUTTON_POPUP);
-		DropDownButtonPopup buttonPopup  =null;
+		ButtonPopup buttonPopup  =null;
 		if(popupObj == null)
 			throw new IllegalArgumentException("Action must include the " + BUTTON_POPUP + " property");
-		if(popupObj instanceof DropDownButtonPopup)
-			buttonPopup = (DropDownButtonPopup)popupObj;
+		if(popupObj instanceof ButtonPopup)
+			buttonPopup = (ButtonPopup)popupObj;
 		else if(popupObj instanceof JPopupMenu)
-			buttonPopup = new DropDownButtonPopup((JPopupMenu) popupObj);
+			buttonPopup = new ButtonPopup((JPopupMenu) popupObj);
 		else if(popupObj instanceof JComponent) 
-			buttonPopup = new DropDownButtonPopup((JComponent)popupObj);
+			buttonPopup = new ButtonPopup((JComponent)popupObj);
 		else
 			throw new IllegalArgumentException("Invalid popup type " + popupObj.getClass().getName());
 		setButtonPopup(buttonPopup);
+		
+		if(action.getValue(ARROW_ICON) != null)
+			this.arrowIcon = (Icon)action.getValue(ARROW_ICON);
+		
+		if(action.getValue(ARROW_ICON_GAP) != null)
+			this.arrowIconGap = (Integer)action.getValue(ARROW_ICON_GAP);
+		
+		if(action.getValue(ARROW_ICON_POSITION) != null)
+			this.arrowIconPosition = (Integer)action.getValue(ARROW_ICON_POSITION);
 		
 		setAction(action);
 		resetIcons();
@@ -140,7 +152,7 @@ public class DropDownButton extends JButton {
                 if ( buttonPopup != null && getModel() instanceof DropDownButtonModel ) {
                     DropDownButtonModel model = (DropDownButtonModel) getModel();
                     if ( !model._isPressed() ) {
-                        if( isInArrowArea( e.getPoint() ) ) {
+                        if( onlyPopup || isInArrowArea( e.getPoint() ) ) {
                             model._press();
                             buttonPopup.show(DropDownButton.this);
                             popupMenuOperation = true;
@@ -154,7 +166,7 @@ public class DropDownButton extends JButton {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (popupMenuOperation) {
+            	if (popupMenuOperation || onlyPopup) {
                     popupMenuOperation = false;
                     e.consume();
                 }
@@ -162,17 +174,19 @@ public class DropDownButton extends JButton {
 
             @Override
             public void mouseEntered( MouseEvent e ) {
-                mouseInButton = true;
-                mouseInArrowArea = isInArrowArea( e.getPoint() );
-                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
-                repaint();
+            	if(!onlyPopup) {
+	                mouseInArrowArea = isInArrowArea( e.getPoint() );
+	                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
+	                repaint();
+            	}
             }
 
             @Override
             public void mouseExited( MouseEvent e ) {
-                mouseInButton = false;
-                mouseInArrowArea = false;
-                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
+            	if(!onlyPopup) {
+	                mouseInArrowArea = false;
+	                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
+            	}
             }
 		});
 		
@@ -180,8 +194,10 @@ public class DropDownButton extends JButton {
 			
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				mouseInArrowArea = isInArrowArea( e.getPoint() );
-                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
+				if(!onlyPopup) {
+					mouseInArrowArea = isInArrowArea( e.getPoint() );
+	                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
+				}
 			}
 			
 			@Override
@@ -208,15 +224,27 @@ public class DropDownButton extends JButton {
 		}
 	}
 	
-	public DropDownButtonPopup getButtonPopup() {
+	public ButtonPopup getButtonPopup() {
 		return this.buttonPopup;
 	}
 	
-	public void setButtonPopup(DropDownButtonPopup popup) {
+	public void setButtonPopup(ButtonPopup popup) {
 		if(this.buttonPopup != null)
 			this.buttonPopup.removePropertyChangeListener(buttonPopupListener);
 		this.buttonPopup = popup;
-		this.buttonPopup.addPropertyChangeListener(DropDownButton.DropDownButtonPopup.POPUP_VISIBLE, buttonPopupListener);
+		this.buttonPopup.addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, buttonPopupListener);
+	}
+	
+	public boolean isPopupVisible() {
+		return this.popupVisible;
+	}
+	
+	public boolean isOnlyPopup() {
+		return this.onlyPopup;
+	}
+	
+	public void setOnlyPopup(boolean onlyPopup) {
+		this.onlyPopup = onlyPopup;
 	}
 	
 	@Override
@@ -238,7 +266,7 @@ public class DropDownButton extends JButton {
 			return null;
 		} else {
 			iconMap.put(state, icon);
-			Icon arrowIcon = new DropDownIcon(icon, 6, SwingConstants.CENTER, false);
+			Icon arrowIcon = new DropDownIcon(icon, this.arrowIcon, arrowIconGap, arrowIconPosition, false);
 			arrowIconMap.put(state, arrowIcon);
 			return arrowIcon;
 		}
@@ -327,7 +355,7 @@ public class DropDownButton extends JButton {
             Icon orig = iconMap.get(IconState.ROLLOVER);
             if(orig == null)
                 orig = iconMap.get(IconState.NORMAL);
-            icon = new DropDownIcon(orig, 6, SwingConstants.CENTER, mouseInArrowArea);
+            icon = new DropDownIcon(orig, arrowIcon, arrowIconGap, arrowIconPosition, mouseInArrowArea);
             arrowIconMap.put( mouseInArrowArea ? IconState.ROLLOVER_ARROW : IconState.ROLLOVER, icon );
         }
         return icon;
@@ -342,7 +370,7 @@ public class DropDownButton extends JButton {
                 orig = iconMap.get(IconState.ROLLOVER);
             if(orig == null)
                 orig = iconMap.get(IconState.NORMAL);
-            icon = new DropDownIcon(orig, 6, SwingConstants.CENTER, mouseInArrowArea);
+            icon = new DropDownIcon(orig, arrowIcon, arrowIconGap, arrowIconPosition, mouseInArrowArea);
             arrowIconMap.put( mouseInArrowArea ? IconState.ROLLOVER_ARROW_SELECTED : IconState.ROLLOVER_SELECTED, icon );
         }
         return icon;
@@ -353,7 +381,7 @@ public class DropDownButton extends JButton {
         
         @Override
         public void setPressed(boolean b) {
-            if( mouseInArrowArea || _pressed )
+            if( onlyPopup || mouseInArrowArea || _pressed )
                 return;
             super.setPressed( b );
         }
@@ -363,7 +391,8 @@ public class DropDownButton extends JButton {
                 return;
             }
 
-            stateMask |= PRESSED + ARMED;
+            super.setPressed(true);
+            super.setArmed(true);
 
             fireStateChanged();
             _pressed = true;
@@ -372,10 +401,11 @@ public class DropDownButton extends JButton {
         public void _release() {
             _pressed = false;
             mouseInArrowArea = false;
-            setArmed( false );
-            setPressed( false );
-            setRollover( false );
-            setSelected( false );
+            
+            super.setArmed( false );
+            super.setPressed( false );
+            super.setRollover( false );
+            super.setSelected( false );
         }
 
         public boolean _isPressed() {
@@ -416,108 +446,6 @@ public class DropDownButton extends JButton {
                 return;
             super.setRollover(b);
         }
-	}
-	
-	public static class DropDownButtonPopup {
-		
-		/**
-		 * Property key for popup visibility
-		 */
-		public final static String POPUP_VISIBLE = "popupVisible";
-		
-		private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
-		
-		private WeakReference<Object> popupRef;
-		
-		public DropDownButtonPopup(JComponent c) {
-			popupRef = new WeakReference<Object>(c);
-		}
-		
-		public DropDownButtonPopup(JPopupMenu popupMenu) {
-			popupRef = new WeakReference<Object>(popupMenu);
-		}
-		
-		public Object getPopupObj() {
-			return popupRef.get();
-		}
-		
-		public void show(JComponent c) {
-			Object popupObj = getPopupObj();
-			if(popupObj == null) return;
-
-			propSupport.firePropertyChange(POPUP_VISIBLE, false, true);
-			if(popupObj instanceof JPopupMenu) {
-				JPopupMenu menu = (JPopupMenu)popupObj;
-				menu.show(c, 0, c.getHeight());
-				
-				menu.addPopupMenuListener(new PopupMenuListener() {
-					
-					@Override
-					public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-					}
-					
-					@Override
-					public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-						propSupport.firePropertyChange(POPUP_VISIBLE, true, false);
-						menu.removePopupMenuListener(this);
-					}
-					
-					@Override
-					public void popupMenuCanceled(PopupMenuEvent e) {
-						
-					}
-					
-				});
-			} else {
-				JComponent comp = (JComponent)popupObj;
-				
-				Popup popup = PopupFactory.getSharedInstance().getPopup(c, comp, 
-						c.getLocationOnScreen().x, c.getLocationOnScreen().y + c.getHeight());
-				
-				comp.addFocusListener(new FocusListener() {
-					
-					@Override
-					public void focusLost(FocusEvent e) {
-						propSupport.firePropertyChange(BUTTON_POPUP, true, false);
-						comp.removeFocusListener(this);
-						popup.hide();
-					}
-					
-					@Override
-					public void focusGained(FocusEvent e) {
-						
-					}
-					
-				});
-				
-				popup.show();
-			}
-		}
-
-		public void addPropertyChangeListener(PropertyChangeListener listener) {
-			propSupport.addPropertyChangeListener(listener);
-		}
-
-		public void removePropertyChangeListener(PropertyChangeListener listener) {
-			propSupport.removePropertyChangeListener(listener);
-		}
-
-		public PropertyChangeListener[] getPropertyChangeListeners() {
-			return propSupport.getPropertyChangeListeners();
-		}
-
-		public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-			propSupport.addPropertyChangeListener(propertyName, listener);
-		}
-
-		public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-			propSupport.removePropertyChangeListener(propertyName, listener);
-		}
-
-		public boolean hasListeners(String propertyName) {
-			return propSupport.hasListeners(propertyName);
-		}
-		
 	}
 	
 }

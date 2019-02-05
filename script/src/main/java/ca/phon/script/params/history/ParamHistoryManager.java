@@ -196,6 +196,14 @@ public class ParamHistoryManager {
 		return retVal;
 	}
 	
+	public List<ParamSetType> getUnnamedParamSets() {
+		synchronized(paramHistory) {
+			return paramHistory.getParamSet().stream()
+					.filter( (ps) -> ps.getName() == null || ps.getName().trim().length() == 0 )
+					.collect( Collectors.toList() );
+		}
+	}
+	
 	public List<ParamSetType> getNamedParamSets() {
 		synchronized(paramHistory) {
 			return paramHistory.getParamSet().stream()
@@ -239,7 +247,7 @@ public class ParamHistoryManager {
 		return paramSet;
 	}
 	
-	private ScriptParameters getScriptParameters(PhonScript script) throws PhonScriptException {
+	public ScriptParameters getScriptParameters(PhonScript script) throws PhonScriptException {
 		return script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
 	}
 	

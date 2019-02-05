@@ -37,7 +37,7 @@ import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.RecordContainer;
 import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
 import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.query.QueryHistoryPanel;
+import ca.phon.app.query.QueryHistoryAndNameToolbar;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
@@ -316,7 +316,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 	
 	private QueryNodeSettingsPanel settingsPanel;
 	private ScriptPanel scriptPanel;
-	private QueryHistoryPanel queryHistoryPanel;
+	private QueryHistoryAndNameToolbar queryHistoryPanel;
 	@Override
 	public Component getComponent(GraphDocument arg0) {
 		if(settingsPanel == null) {
@@ -327,7 +327,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 				scriptPanel.setSwapButtonVisible(true);
 			}
 			
-			queryHistoryPanel = new QueryHistoryPanel(queryHistoryManager, scriptPanel);
+			queryHistoryPanel = new QueryHistoryAndNameToolbar(queryHistoryManager, scriptPanel);
 			
 			settingsPanel.add(queryHistoryPanel, BorderLayout.NORTH);
 			settingsPanel.add(new JScrollPane(scriptPanel), BorderLayout.CENTER);

@@ -15,10 +15,15 @@
  */
 package ca.phon.app.query;
 
-import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -28,26 +33,42 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.swing.ButtonGroup;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.jdesktop.swingx.HorizontalLayout;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.SegmentedButtonBuilder;
+import ca.phon.app.query.actions.ExportQueryAction;
+import ca.phon.app.query.actions.SaveQueryAction;
+import ca.phon.project.Project;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.script.params.history.ParamSetType;
 import ca.phon.script.params.history.ParamType;
+import ca.phon.ui.ButtonPopup;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -57,23 +78,26 @@ import ca.phon.util.icons.IconSize;
  * instance.
  * 
  */
-public class QueryHistoryPanel extends JPanel {
+public class QueryHistoryAndNameToolbar extends JToolBar {
 	
 	private final static String STOCK_QUERY_PREFIX = "param_set_";
 	
-	private JLabel label;
+//	private JLabel label;
 
-	private JButton firstButton;
+//	private JButton firstButton;
+//	
+//	private JButton lastButton;
+//	
+//	private JButton nextButton;
+//	
+//	private JButton prevButton;
 	
-	private JButton lastButton;
+	private DropDownButton historyButton;
 	
-	private JButton nextButton;
-	
-	private JButton prevButton;
+	private DropDownButton saveButton;
 	
 	private DefaultComboBoxModel<String> queryNameModel;
 	private JComboBox<String> queryNameBox;
-	private JButton queryNameButton;
 	
 	private int currentIndex = -1;
 	
@@ -83,7 +107,7 @@ public class QueryHistoryPanel extends JPanel {
 	
 	private final WeakReference<ScriptPanel> scriptPanelRef;
 	
-	public QueryHistoryPanel(QueryHistoryManager queryHistoryManager, ScriptPanel scriptPanel) {
+	public QueryHistoryAndNameToolbar(QueryHistoryManager queryHistoryManager, ScriptPanel scriptPanel) {
 		super();
 		
 		this.queryHistoryManager = queryHistoryManager;
@@ -92,6 +116,8 @@ public class QueryHistoryPanel extends JPanel {
 		
 		loadStockQueries();
 		init();
+		
+		setFloatable(false);
 		
 		this.queryHistoryManager.addParamHistoryListener( (e) -> updateLabelFromCurrentHash() );
 	}
@@ -132,76 +158,189 @@ public class QueryHistoryPanel extends JPanel {
 	}
 	
 	private void init() {
-		final PhonUIAction historyPrevAct = new PhonUIAction(this, "goPrevious");
-		historyPrevAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
-		historyPrevAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View previous entry in query history");
+		// query history menu
+		final Action showHistoryAct = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {}
+		};
+		ImageIcon historyIcn = IconManager.getInstance().getIcon("misc/history-clock-button-black", IconSize.SMALL);
+		showHistoryAct.putValue(PhonUIAction.SMALL_ICON, historyIcn);
+		showHistoryAct.putValue(PhonUIAction.NAME, "Query history");
+		showHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show query history");
+		showHistoryAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		showHistoryAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		
-		final PhonUIAction historyNextAct = new PhonUIAction(this, "goNext");
-		historyNextAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL));
-		historyNextAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View next entry in query history");
+		try {
+			ScriptParameters scriptParams =
+					getQueryHistoryManager().getScriptParameters(getScriptPanel().getScript());
+			
+			final QueryHistoryList paramHistoryView = new QueryHistoryList(scriptParams, stockQueryManager, queryHistoryManager);
+			paramHistoryView.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			paramHistoryView.addMouseListener(new MouseInputAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent me) {
+					if(me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 2) {
+						final ParamSetType paramSetType = paramHistoryView.getSelectedValue();
+						if(paramSetType != null) {
+							loadFromParamSet(paramSetType);
+							update();
+							paramHistoryView.clearSelection();
+							historyButton.getButtonPopup().hide();
+						}
+					}
+				}
+			});
+			
+			paramHistoryView.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+						final ParamSetType paramSetType = paramHistoryView.getSelectedValue();
+						if(paramSetType != null) {
+							loadFromParamSet(paramSetType);
+							update();
+							paramHistoryView.clearSelection();
+							historyButton.getButtonPopup().hide();
+						}
+					}
+				}
+				
+			});
+			
+			paramHistoryView.setVisibleRowCount(5);
+			showHistoryAct.putValue(DropDownButton.BUTTON_POPUP, new JScrollPane(paramHistoryView));
+		} catch (PhonScriptException e) {
+			LogUtil.severe(e);
+		}
+		historyButton = new DropDownButton(showHistoryAct);
+		historyButton.setOnlyPopup(true);
 		
-		final PhonUIAction goFirstAct = new PhonUIAction(this, "gotoFirst");
-		goFirstAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
-		goFirstAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View oldest entry in query history");
-		
-		final PhonUIAction goLastAct = new PhonUIAction(this, "gotoLast");
-		goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
-		goLastAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View most recent entry in query history");
-		
-		SegmentedButtonBuilder<JButton> segButtonBuilder = new SegmentedButtonBuilder<>(JButton::new);
-		ButtonGroup bg = new ButtonGroup();
-		List<JButton> buttons = segButtonBuilder.createSegmentedRoundRectButtons(4, bg);
-		
-		label = new JLabel();
-		label.setIcon(IconManager.getInstance().getIcon("misc/history-clock-button-black", IconSize.SMALL));
-		label.setToolTipText("Query History");
-		
+		// query name
 		queryNameModel = new DefaultComboBoxModel<>();
 		queryNameBox = new JComboBox<>(queryNameModel);
 		queryNameBox.setToolTipText("Select query by name");
-		queryNameBox.setVisible(queryHistoryManager.getNamedParamSets().size() > 0);
 		update();
 		
-		firstButton = buttons.get(0);
-		firstButton.setAction(goFirstAct);
+		// save menu
+		final JPopupMenu saveMenu = new JPopupMenu();
 		
-		prevButton = buttons.get(1);
-		prevButton.setAction(historyPrevAct);
-	
-		nextButton = buttons.get(2);
-		nextButton.setAction(historyNextAct);
+		Action saveAct = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {}
+		};
+		saveAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+		saveAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		saveAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		saveAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
 		
-		lastButton = buttons.get(3);
-		lastButton.setAction(goLastAct);
+		saveButton = new DropDownButton(saveAct);
+		saveButton.setOnlyPopup(true);
+		saveButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+			if(Boolean.parseBoolean(e.getNewValue().toString())) {
+				saveMenu.removeAll();
+				setupSaveMenu(new MenuBuilder(saveMenu));
+			}
+		});
 		
-		JPanel buttonPanel = new JPanel(new HorizontalLayout(0));
-		buttonPanel.add(firstButton);
-		buttonPanel.add(prevButton);
-		buttonPanel.add(nextButton);
-		buttonPanel.add(lastButton);
+		setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0.0;
+		gbc.weighty = 0.0;
 		
-		JPanel leftPanel = new JPanel(new HorizontalLayout(5));
-		leftPanel.add(label);
-		leftPanel.add(buttonPanel);
-
-		JPanel namePanel = new JPanel(new BorderLayout());
-		namePanel.add(new JLabel("Name:"), BorderLayout.WEST);
-		namePanel.add(queryNameBox, BorderLayout.CENTER);
+		super.add(historyButton, gbc);
+		gbc.gridx++;
+		super.add(new JSeparator(SwingConstants.VERTICAL), gbc);
+		gbc.gridx++;
 		
-		final PhonUIAction renameQueryAct = new PhonUIAction(this, "onRenameQuery");
-		renameQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set name for current query parameters");
-		renameQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL));
-		queryNameButton = new JButton(renameQueryAct);
-		namePanel.add(queryNameButton, BorderLayout.EAST);
-		
-		setLayout(new BorderLayout());
-		add(leftPanel, BorderLayout.WEST);
-		add(namePanel, BorderLayout.CENTER);
+		super.add(new JLabel("Query name:"), gbc);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		gbc.gridx++;
+		super.add(queryNameBox, gbc);
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0.0;
+		gbc.gridx++;
+		super.add(saveButton, gbc);
 	}
 	
 	public ParamSetType currentQuery() {
 		if(currentIndex < 0 || currentIndex >= queryHistoryManager.size()) return null;
 		return queryHistoryManager.getParamSet(currentIndex);
+	}
+	
+	public void onShowHistory(PhonActionEvent pae) {
+		try {
+			ScriptParameters scriptParams =
+					getQueryHistoryManager().getScriptParameters(getScriptPanel().getScript());
+			final QueryHistoryList paramHistoryView = new QueryHistoryList(scriptParams, stockQueryManager, queryHistoryManager);
+			paramHistoryView.setVisibleRowCount(5);
+			JComponent c = (JComponent)pae.getActionEvent().getSource();
+			
+			JPopupMenu popupMenu = new JPopupMenu();
+			popupMenu.add(new JScrollPane(paramHistoryView));
+			popupMenu.show(c, 0, c.getHeight());
+			
+			paramHistoryView.requestFocusInWindow();
+		} catch (PhonScriptException e1) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(e1);
+		}
+	}
+		
+	public void setupSaveMenu(MenuBuilder builder) {
+		// add save/rename item only if not in stock queries
+		QueryScript queryScript = (QueryScript)getScriptPanel().getScript();
+		try {
+			if(stockQueryManager.getParamSet(queryScript) == null) {
+				SaveQueryAction saveQueryAct = new SaveQueryAction(stockQueryManager, queryHistoryManager, (QueryScript)getScriptPanel().getScript());
+
+				ParamSetType historyParamSet = queryHistoryManager.getParamSet(queryScript);
+				if(historyParamSet != null && historyParamSet.getName() != null && historyParamSet.getName().length() > 0) {
+					saveQueryAct.putValue(SaveQueryAction.NAME, "Rename query...");
+				}
+				
+				builder.addItem(".", saveQueryAct);
+				builder.addSeparator(".", "save_query");
+			}
+		} catch (PhonScriptException e) {
+			LogUtil.warning(e);
+		}
+		
+		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+		if(cmf != null && cmf.getExtension(Project.class) != null) {
+			ExportQueryAction projectLibraryAct = new ExportQueryAction(queryScript, 
+					QueryScriptLibrary.projectScriptFolder(cmf.getExtension(Project.class)));
+			projectLibraryAct.putValue(PhonUIAction.NAME, "Export query to project library...");
+			builder.addItem(".", projectLibraryAct);
+		}
+		
+		ExportQueryAction userLibraryAct = new ExportQueryAction(queryScript, QueryScriptLibrary.USER_SCRIPT_FOLDER);
+		userLibraryAct.putValue(PhonUIAction.NAME, "Export query to user library...");
+		builder.addItem(".", userLibraryAct);
+		
+		ExportQueryAction otherLocationAct = new ExportQueryAction(queryScript, null);
+		otherLocationAct.putValue(PhonUIAction.NAME, "Export query to other location on disk...");
+		builder.addItem(".", otherLocationAct);
+	}
+	
+	public void onSave() {
+		// do nothing
 	}
 	
 	public void gotoFirst() {
@@ -290,16 +429,12 @@ public class QueryHistoryPanel extends JPanel {
 		Collections.sort(queryNames);
 		queryNameModel.removeAllElements();
 		queryNames.forEach( (qn) -> queryNameModel.addElement(qn) );
-		queryNameBox.setVisible(queryNames.size() > 0);
 		queryNameBox.setSelectedItem(getQueryName());
 		queryNameBox.addItemListener(itemListener);
 	}
 	
 	private void update() {
-		if(queryHistoryManager.size() > 0) {
-			label.setText(String.format("%2d/%2d", (currentIndex+1), queryHistoryManager.size()));
-		} else {
-			label.setText(String.format("%2d/%2d", 0, 0));
+		if(queryHistoryManager.size() == 0) {
 			queryNameBox.setSelectedItem(null);
 		}
 		updateComboBox();
@@ -347,6 +482,6 @@ public class QueryHistoryPanel extends JPanel {
 			}
 		}
 		
-	};	
+	};
 	
 }
