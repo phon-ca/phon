@@ -88,6 +88,8 @@ public class ScriptPanel extends JPanel implements Scrollable {
 	 * Script object
 	 */
 	private PhonScript script;
+	
+	private ScriptParameters scriptParams;
 
 	private JPanel cardPanel;
 	private CardLayout cardLayout;
@@ -193,14 +195,17 @@ public class ScriptPanel extends JPanel implements Scrollable {
 		paramPanel.removeAll();
 
 		final PhonScriptContext ctx = script.getContext();
-		ScriptParameters scriptParams = new ScriptParameters();
-			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
+		ScriptParameters scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
+		
+		if(scriptParams != this.scriptParams) {
+			scriptParams.forEach( (ScriptParam param) -> {
+				param.addPropertyChangeListener(paramListener);
+			});
+			this.scriptParams = scriptParams;
+		}
 
 		final ParamPanelFactory factory = new ParamPanelFactory();
 		scriptParams.accept(factory);
-		scriptParams.forEach( (ScriptParam param) -> {
-			param.addPropertyChangeListener(paramListener);
-		});
 
 		final JPanel form = factory.getForm();
 		paramPanel.add(form, BorderLayout.CENTER);
@@ -209,6 +214,10 @@ public class ScriptPanel extends JPanel implements Scrollable {
 		paramPanel.repaint();
 	}
 
+	public ScriptParameters getScriptParameters() {
+		return this.scriptParams;
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 

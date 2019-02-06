@@ -109,8 +109,6 @@ public class DropDownButton extends JButton {
 		// ensure proper configuration of provided action
 		if(action.getValue(Action.SMALL_ICON) == null)
 			throw new IllegalArgumentException("Action must include the " + Action.SMALL_ICON + " property");
-//		if(action.getValue(Action.NAME) != null)
-//			throw new IllegalArgumentException("Action must not include the " + Action.NAME + " property");
 
 		Object popupObj = action.getValue(BUTTON_POPUP);
 		ButtonPopup buttonPopup  =null;

@@ -17,6 +17,7 @@ package ca.phon.app.query;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -24,6 +25,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -57,7 +60,9 @@ import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
+import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.script.params.history.ParamSetType;
@@ -157,6 +162,24 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		return this.stockQueryManager;
 	}
 	
+	private final PropertyChangeListener paramListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			updateLabelFromCurrentHash();
+		}
+		
+	};
+	
+	private void addParamListeners() {
+		ScriptParameters scriptParams = getScriptPanel().getScriptParameters();
+		if(scriptParams == null) return;
+		
+		for(ScriptParam param:scriptParams) {
+			param.addPropertyChangeListener(paramListener);
+		}
+	}
+	
 	private void init() {
 		// query history menu
 		final Action showHistoryAct = new AbstractAction() {
@@ -170,61 +193,63 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		showHistoryAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		showHistoryAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		
-		try {
-			ScriptParameters scriptParams =
-					getQueryHistoryManager().getScriptParameters(getScriptPanel().getScript());
-			
-			final QueryHistoryList paramHistoryView = new QueryHistoryList(scriptParams, stockQueryManager, queryHistoryManager);
-			paramHistoryView.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			paramHistoryView.addMouseListener(new MouseInputAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent me) {
-					if(me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 2) {
-						final ParamSetType paramSetType = paramHistoryView.getSelectedValue();
-						if(paramSetType != null) {
-							loadFromParamSet(paramSetType);
-							update();
-							paramHistoryView.clearSelection();
-							historyButton.getButtonPopup().hide();
-						}
+		ScriptParameters scriptParams = getScriptPanel().getScriptParameters();
+		addParamListeners();
+		
+		final QueryHistoryList paramHistoryView = new QueryHistoryList(scriptParams, stockQueryManager, queryHistoryManager);
+		paramHistoryView.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paramHistoryView.addMouseListener(new MouseInputAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(me.getButton() == MouseEvent.BUTTON1 && me.getClickCount() == 2) {
+					final ParamSetType paramSetType = paramHistoryView.getSelectedValue();
+					if(paramSetType != null) {
+						loadFromParamSet(paramSetType);
+						updateLabelFromCurrentHash();
+						paramHistoryView.clearSelection();
+						historyButton.getButtonPopup().hide();
 					}
 				}
-			});
+			}
+		});
+		
+		paramHistoryView.addKeyListener(new KeyListener() {
 			
-			paramHistoryView.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
 				
-				@Override
-				public void keyTyped(KeyEvent e) {
-					
-				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
 				
-				@Override
-				public void keyReleased(KeyEvent e) {
-					
-				}
-				
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						final ParamSetType paramSetType = paramHistoryView.getSelectedValue();
-						if(paramSetType != null) {
-							loadFromParamSet(paramSetType);
-							update();
-							paramHistoryView.clearSelection();
-							historyButton.getButtonPopup().hide();
-						}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					final ParamSetType paramSetType = paramHistoryView.getSelectedValue();
+					if(paramSetType != null) {
+						loadFromParamSet(paramSetType);
+						updateLabelFromCurrentHash();
+						paramHistoryView.clearSelection();
+						historyButton.getButtonPopup().hide();
 					}
 				}
-				
-			});
+			}
 			
-			paramHistoryView.setVisibleRowCount(5);
-			showHistoryAct.putValue(DropDownButton.BUTTON_POPUP, new JScrollPane(paramHistoryView));
-		} catch (PhonScriptException e) {
-			LogUtil.severe(e);
-		}
+		});
+		
+		paramHistoryView.setVisibleRowCount(5);
+		showHistoryAct.putValue(DropDownButton.BUTTON_POPUP, new JScrollPane(paramHistoryView));
 		historyButton = new DropDownButton(showHistoryAct);
 		historyButton.setOnlyPopup(true);
+		
+		historyButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+			if(Boolean.parseBoolean(e.getNewValue().toString())) {
+				paramHistoryView.scrollRectToVisible(new Rectangle(0, 0, 0, 0));
+			}
+		});
 		
 		// query name
 		queryNameModel = new DefaultComboBoxModel<>();
@@ -284,25 +309,6 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		return queryHistoryManager.getParamSet(currentIndex);
 	}
 	
-	public void onShowHistory(PhonActionEvent pae) {
-		try {
-			ScriptParameters scriptParams =
-					getQueryHistoryManager().getScriptParameters(getScriptPanel().getScript());
-			final QueryHistoryList paramHistoryView = new QueryHistoryList(scriptParams, stockQueryManager, queryHistoryManager);
-			paramHistoryView.setVisibleRowCount(5);
-			JComponent c = (JComponent)pae.getActionEvent().getSource();
-			
-			JPopupMenu popupMenu = new JPopupMenu();
-			popupMenu.add(new JScrollPane(paramHistoryView));
-			popupMenu.show(c, 0, c.getHeight());
-			
-			paramHistoryView.requestFocusInWindow();
-		} catch (PhonScriptException e1) {
-			Toolkit.getDefaultToolkit().beep();
-			LogUtil.severe(e1);
-		}
-	}
-		
 	public void setupSaveMenu(MenuBuilder builder) {
 		// add save/rename item only if not in stock queries
 		QueryScript queryScript = (QueryScript)getScriptPanel().getScript();
@@ -374,13 +380,8 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 	}
 	
 	public void updateLabelFromCurrentHash() {
-		try {
-			final ScriptParameters scriptParams = 
-					getScriptPanel().getScript().getContext().getScriptParameters(getScriptPanel().getScript().getContext().getEvaluatedScope());
-			updateLabelFromHash(scriptParams.getHashString());
-		} catch (PhonScriptException e) {
-			LogUtil.severe(e);
-		}
+		final ScriptParameters scriptParams = getScriptPanel().getScriptParameters();
+		updateLabelFromHash(scriptParams.getHashString());
 	}
 	
 	public void updateLabelFromHash(String hash) {
@@ -400,16 +401,11 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 			retVal = paramSet.getName();
 		}
 		if(retVal == null) {
-			try {
-				final ScriptParameters scriptParams = 
-						getScriptPanel().getScript().getContext().getScriptParameters(getScriptPanel().getScript().getContext().getEvaluatedScope());
-				final String currentHash = scriptParams.getHashString();
-				final ParamSetType stockSet = stockQueryManager.getParamSet(currentHash);
-				if(stockSet != null) {
-					retVal = stockSet.getName();
-				}
-			} catch (PhonScriptException e) {
-				LogUtil.warning(e.getLocalizedMessage(), e);
+			final ScriptParameters scriptParams = getScriptPanel().getScriptParameters();
+			final String currentHash = scriptParams.getHashString();
+			final ParamSetType stockSet = stockQueryManager.getParamSet(currentHash);
+			if(stockSet != null) {
+				retVal = stockSet.getName();
 			}
 		}
 		return retVal;
@@ -459,6 +455,7 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		}
 		
 		getScriptPanel().setScript(queryScript);
+		addParamListeners();
 	}
 	
 	private final ItemListener itemListener = new ItemListener() {

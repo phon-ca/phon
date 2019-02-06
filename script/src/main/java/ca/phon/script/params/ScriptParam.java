@@ -77,6 +77,14 @@ public abstract class ScriptParam {
 			PropertyChangeListener listener) {
 		propSupport.removePropertyChangeListener(propertyName, listener);
 	}
+	
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return propSupport.getPropertyChangeListeners();
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+		return propSupport.getPropertyChangeListeners(propertyName);
+	}
 
 	/**
 	 * Constructor
@@ -134,6 +142,13 @@ public abstract class ScriptParam {
 	public void setValue(String paramId, Object val) {
 		Object oldval = getValue(paramId);
 		values.put(paramId, val);
+		
+		if(paramId.equals("searchTier")) {
+			for(var listener:propSupport.getPropertyChangeListeners()) {
+				System.out.println(this + ": " + listener);
+			}
+		}
+		
 		propSupport.firePropertyChange(paramId, oldval, val);
 	}
 
@@ -170,10 +185,10 @@ public abstract class ScriptParam {
 	 */
 	public abstract String getStringRepresentation();
 
-	@Override
-	public String toString() {
-		return getStringRepresentation();
-	}
+//	@Override
+//	public String toString() {
+//		return getStringRepresentation();
+//	}
 	
 	/**
 	 * Is this param enabled.  If a script param is not enabled
