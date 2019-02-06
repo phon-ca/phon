@@ -168,7 +168,6 @@ public class QueryAndReportWizard extends NodeWizard {
 	private JCheckBox includeExcludedBox;
 	private JButton showResultsButton;
 	private JButton showSessionsButton;
-//	private JButton saveQuerySettingsButton;
 	private JButton resetQueryButton;
 	private JButton duplicateQueryButton;
 	private JButton runQueryButton;
@@ -229,7 +228,6 @@ public class QueryAndReportWizard extends NodeWizard {
 	}
 	
 	private void init() {
-		
 		queryStep = createQueryStep();
 		addWizardStep(0, queryStep);
 		
@@ -242,6 +240,9 @@ public class QueryAndReportWizard extends NodeWizard {
 		reportEditorStep.setNextStep(2);
 		
 		reportDataStep.setPrevStep(1);
+		
+		nextButton.setText("Run query");
+		setBounds(nextButton);
 		
 		setWindowName( (windowIdx > 0 ? "(" + windowIdx + ") " : "") +
 				"Query : " + queryScript.getExtension(QueryName.class).getName() + " (No results)");
@@ -309,13 +310,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								
 							}
 						});
-						
-//						final PhonUIAction saveSettingsAct = new PhonUIAction(QueryAndReportWizard.this, "onSaveQuerySettings");
-//						saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
-//						saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
-//						final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-//						saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
-						
+
 						final PhonUIAction duplicateAct = new PhonUIAction(QueryAndReportWizard.this, "onDuplicateQueryWizard");
 						duplicateAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
 						duplicateAct.putValue(PhonUIAction.NAME, "New window");
@@ -420,26 +415,7 @@ public class QueryAndReportWizard extends NodeWizard {
 							
 						});
 						
-//						final PhonUIAction historyPrevAct = new PhonUIAction(queryHistoryPanel, "goPrevious");
-//						historyPrevAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-previous", IconSize.SMALL));
-//						historyPrevAct.putValue(PhonUIAction.NAME, "View previous entry in query history");
-//						
-//						final PhonUIAction historyNextAct = new PhonUIAction(queryHistoryPanel, "goNext");
-//						historyNextAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-next", IconSize.SMALL));
-//						historyNextAct.putValue(PhonUIAction.NAME, "View next entry in query history");
-//						
-//						final PhonUIAction goFirstAct = new PhonUIAction(queryHistoryPanel, "gotoFirst");
-//						goFirstAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-first", IconSize.SMALL));
-//						goFirstAct.putValue(PhonUIAction.NAME, "View oldest entry in query history");
-//						
-//						final PhonUIAction goLastAct = new PhonUIAction(queryHistoryPanel, "gotoLast");
-//						goLastAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-last", IconSize.SMALL));
-//						goLastAct.putValue(PhonUIAction.NAME, "View most recent entry in query history");
-//						
-//						final DeleteQueryHistoryEntryAction deleteCurrentEntryAct = new DeleteQueryHistoryEntryAction(QueryAndReportWizard.this);
 						final DeleteAllUnnamedEntriesAction deleteUnnamedEntriesAct = new DeleteAllUnnamedEntriesAction(QueryAndReportWizard.this);
-//						final DeleteQueryHistoryAction deleteAllEntriesAct = new DeleteQueryHistoryAction(QueryAndReportWizard.this);
-						
 						menu.add(new JMenuItem(duplicateAct), idx++);
 						menu.insertSeparator(idx++);
 						menu.add(saveQueryMenu, idx++);
@@ -462,14 +438,7 @@ public class QueryAndReportWizard extends NodeWizard {
 							}
 							menu.insertSeparator(idx++);
 						}
-//						menu.add(new JMenuItem(goFirstAct), idx++);
-//						menu.add(new JMenuItem(historyPrevAct), idx++);
-//						menu.add(new JMenuItem(historyNextAct), idx++);
-//						menu.add(new JMenuItem(goLastAct), idx++);
-//						menu.insertSeparator(idx++);
-//						menu.add(new JMenuItem(deleteCurrentEntryAct), idx++);
 						menu.add(new JMenuItem(deleteUnnamedEntriesAct), idx++);
-//						menu.add(new JMenuItem(deleteAllEntriesAct), idx++);
 						menu.insertSeparator(idx++);
 					}
 					
@@ -715,6 +684,19 @@ public class QueryAndReportWizard extends NodeWizard {
 		// don't update before init()
 		if(this.scriptPanel == null) return;
 		this.scriptPanel.setScript(this.queryScript);
+	}
+	
+	private void updateNextButton() {
+		if(getCurrentStepIndex() == getStepIndex(queryStep)) {
+			if(previousExeuction != null) {
+				nextButton.setText("Next: Report Composer");
+			} else {
+				nextButton.setText("Run query");
+			}
+		} else if(getCurrentStepIndex() == getStepIndex(reportEditorStep)) {
+			nextButton.setText("Next: Report");
+		}
+		setBounds(nextButton);
 	}
 	
 	private void loadParamsFromQuery(Query query) {
@@ -1012,7 +994,9 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		runnerPanel.addPropertyChangeListener("taskStatus", (e) -> {
 			if(e.getNewValue() == TaskStatus.FINISHED || e.getNewValue() == TaskStatus.TERMINATED) {
-				SwingUtilities.invokeLater( () -> addNodesToSessionSelector(queryName, runnerPanel) );
+				SwingUtilities.invokeLater( () -> { 
+					addNodesToSessionSelector(queryName, runnerPanel);
+				});
 				try {
 					addToQueryHistory();
 				} catch (IOException e1) {
@@ -1025,8 +1009,14 @@ public class QueryAndReportWizard extends NodeWizard {
 			
 			if(e.getNewValue() == TaskStatus.RUNNING) {
 				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+				nextButton.setVisible(false);
+				breadCrumbViewer.add(btnStop);
+				setBounds(btnStop);
 			} else {
 				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
+				nextButton.setVisible(true);
+				updateNextButton();
+				breadCrumbViewer.remove(btnStop);
 			}
 		});
 		
@@ -1231,7 +1221,6 @@ public class QueryAndReportWizard extends NodeWizard {
 				return;
 			}
 		} else if(!inInit && stepIdx == super.getStepIndex(reportDataStep)) {
-			
 			// install correct processor
 			final OpGraph graph = reportEditor.getGraph();
 			
@@ -1246,7 +1235,9 @@ public class QueryAndReportWizard extends NodeWizard {
 			
 			setProcessor(processor);
 		}
+		
 		super.gotoStep(stepIdx);
+		updateNextButton();
 	}
 	
 	public class ResultSetTreeNode extends DefaultMutableTreeNode {

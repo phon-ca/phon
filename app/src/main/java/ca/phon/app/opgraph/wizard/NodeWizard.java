@@ -235,8 +235,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private volatile boolean running = false;
 	private boolean reportSaved = false;
 
-	private BreadcrumbButton btnStop;
-	private BreadcrumbButton btnRunAgain;
+	protected BreadcrumbButton btnStop;
+	protected BreadcrumbButton btnRunAgain;
 
 	private final WebViewInterface webViewInterface = new WebViewInterface();
 
@@ -540,6 +540,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
  
+	public void onStop() {
+		if(getCurrentStep() == reportDataStep) {
+			// logic for stopping query and closing is in the close() method
+			close();
+		}
+	}
+	
 	@Override
 	public void close() {
 		if(running) {
