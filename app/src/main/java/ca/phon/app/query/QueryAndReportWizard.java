@@ -155,9 +155,8 @@ public class QueryAndReportWizard extends NodeWizard {
 	private WizardStep queryStep;
 	private JSplitPane splitPane;
 	
-	private JPanel queryLeftPanel;
+	private JSplitPane queryLeftPanel;
 	private TitledPanel sessionSelectorPanel;
-	private CardLayout queryLeftPanelLayout;
 	private SessionSelector sessionSelector;
 	
 	private TitledPanel queryResultsPanel;
@@ -166,8 +165,6 @@ public class QueryAndReportWizard extends NodeWizard {
 	private TitledPanel queryPanel;
 	private ScriptPanel scriptPanel;
 	private JCheckBox includeExcludedBox;
-	private JButton showResultsButton;
-	private JButton showSessionsButton;
 	private JButton resetQueryButton;
 	private JButton duplicateQueryButton;
 	private JButton runQueryButton;
@@ -523,24 +520,9 @@ public class QueryAndReportWizard extends NodeWizard {
 		sessionSelectorPanel.getContentContainer().setLayout(new BorderLayout());
 		sessionSelectorPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
 
-		final PhonUIAction showResultsAct = new PhonUIAction(this, "showResults");
-		showResultsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show query results");
-		showResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/right-arrow-white", IconSize.SMALL));
-		showResultsButton = new JButton(showResultsAct);
-		showResultsButton.setBorderPainted(false);
-		showResultsButton.setOpaque(false);
-		
-		final PhonUIAction showSessionSelectorAct = new PhonUIAction(this, "showSessionSelector");
-		showSessionSelectorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show session selector");
-		showSessionSelectorAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/left-arrow-white", IconSize.SMALL));
-		showSessionsButton = new JButton(showSessionSelectorAct);
-		showSessionsButton.setBorderPainted(false);
-		showSessionsButton.setOpaque(false);
-		
 		final JPanel sessionSelectorRightDecoration = new JPanel(new HorizontalLayout());
 		sessionSelectorRightDecoration.setOpaque(false);
 		sessionSelectorRightDecoration.add(includeExcludedBox);
-		sessionSelectorRightDecoration.add(showResultsButton);
 		sessionSelectorPanel.setRightDecoration(sessionSelectorRightDecoration);
 		
 		queryRunnerComboBoxModel = new DefaultComboBoxModel<>();
@@ -590,7 +572,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryResultsLayout = new CardLayout();
 		queryResultsPanel = new TitledPanel("Query Results");
 		queryResultsPanel.getContentContainer().setLayout(queryResultsLayout);
-		queryResultsPanel.setLeftDecoration(showSessionsButton);
 		queryResultsPanel.setRightDecoration(queryResultsRightDecoration);
 		
 		final JPanel noResultsPanel = new JPanel(new BorderLayout());
@@ -600,21 +581,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		noResultsLabel.setHorizontalAlignment(JLabel.CENTER);
 		noResultsPanel.add(noResultsLabel, BorderLayout.CENTER);
 		queryResultsPanel.getContentContainer().add(noResultsPanel, "noResults");
+		queryResultsPanel.setVisible(false);
 		
-		queryLeftPanelLayout = new CardLayout();
-		queryLeftPanel = new JPanel(queryLeftPanelLayout);
-		queryLeftPanel.add(sessionSelectorPanel, "sessionSelector");
-		queryLeftPanel.add(queryResultsPanel, "queryResults");
-		queryLeftPanelLayout.show(queryLeftPanel, "sessionSelector"); 
+		queryLeftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		
+		queryLeftPanel.setLeftComponent(sessionSelectorPanel);
+		queryLeftPanel.setRightComponent(queryResultsPanel);
 				
 		scriptPanel = new ScriptPanel(queryScript);
-//		final PhonUIAction saveSettingsAct = new PhonUIAction(this, "onSaveQuerySettings");
-//		saveSettingsAct.putValue(PhonUIAction.NAME, "Save query");
-//		saveSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current query");
-//		final ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-//		saveSettingsAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
-//		saveQuerySettingsButton = new JButton(saveSettingsAct);
-//		saveQuerySettingsButton.setOpaque(false);
 		
 		queryPanel = new TitledPanel("Query");
 		queryPanel.getContentContainer().setLayout(new BorderLayout());
@@ -650,7 +624,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		final JComponent buttonBar = new JPanel(new HorizontalLayout());
 		buttonBar.add(duplicateQueryButton);
 		buttonBar.add(resetQueryButton);
-//		buttonBar.add(saveQuerySettingsButton);
 		buttonBar.add(runQueryButton);
 		buttonBar.setOpaque(false);
 		queryPanel.setRightDecoration(buttonBar);
@@ -666,13 +639,11 @@ public class QueryAndReportWizard extends NodeWizard {
 	}
 	
 	public void showResults() {
-		queryLeftPanelLayout.show(queryLeftPanel, "queryResults");
+		queryResultsPanel.setVisible(true);
+		queryLeftPanel.setDividerLocation(0.4);
+		queryLeftPanel.revalidate();
 	}
-	
-	public void showSessionSelector() {
-		queryLeftPanelLayout.show(queryLeftPanel, "sessionSelector");
-	}
-	
+		
 	public void resetQueryParameters(PhonActionEvent pae) {
 		queryScript.resetContext();
 		
@@ -974,7 +945,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		}
 		
 		if(sessionSelector.getSelectedSessions().size() == 0) {
-			showSessionSelector();
 			showMessageDialog("Select Sessions", "Please select at least one session", MessageDialogProperties.okOptions);
 			return;
 		}
