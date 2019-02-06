@@ -2,6 +2,10 @@ package ca.phon.app.query;
 
 import java.awt.Dimension;
 
+import javax.swing.JComponent;
+
+import org.apache.commons.lang3.StringUtils;
+
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
@@ -15,9 +19,7 @@ public class QueryHistoryList extends ParamHistoryList {
 	private ScriptParameters scriptParameters;
 	
 	private ParamHistoryManager stockQueries;
-	
-	private ParamSetType prototypeCellValue;
-	
+		
 	public QueryHistoryList(ScriptParameters scriptParameters, ParamHistoryManager stockQueries, ParamHistoryManager history) {
 		super(history);
 		this.scriptParameters = scriptParameters;
@@ -33,10 +35,35 @@ public class QueryHistoryList extends ParamHistoryList {
 	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		Dimension retVal = super.getPreferredScrollableViewportSize();
-		retVal.setSize(retVal.width, Math.min(retVal.height, 500));
+		
+		ParamSetType prototype = getPrototypeParamSet();
+		JComponent prototypeCell = 
+				(JComponent)getCellRenderer().getListCellRendererComponent(this, prototype, -1, true, true);
+		int h = getVisibleRowCount() * prototypeCell.getPreferredSize().height;
+		int w = prototypeCell.getPreferredSize().width;
+		
+		retVal.setSize(w, h);
+		
 		return retVal;
 	}
 
+	private ParamSetType getPrototypeParamSet() {
+		ObjectFactory factory = new ObjectFactory();
+		ParamSetType retVal = factory.createParamSetType();
+		
+		retVal.setName("My Query");
+		ParamType p = factory.createParamType();
+		p.setId("my.param1.id");
+		p.setValue(StringUtils.repeat('w', 80));
+		retVal.getParam().add(p);
+		
+		p.setId("my.param2.id");
+		p.setValue(StringUtils.repeat('w', 80));
+		retVal.getParam().add(p);
+		
+		return retVal;
+	}
+	
 	private class QueryHistoryListCellRenderer extends ParamHistoryList.ParamSetListCellRenderer {
 
 		@Override

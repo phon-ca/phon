@@ -240,7 +240,7 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 			
 		});
 		
-		paramHistoryView.setVisibleRowCount(5);
+		paramHistoryView.setVisibleRowCount(6);
 		showHistoryAct.putValue(DropDownButton.BUTTON_POPUP, new JScrollPane(paramHistoryView));
 		historyButton = new DropDownButton(showHistoryAct);
 		historyButton.setOnlyPopup(true);
