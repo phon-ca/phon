@@ -23,6 +23,8 @@ import java.net.URL;
 
 import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryManager;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.db.xml.XMLQuery;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
@@ -97,6 +99,15 @@ public class LazyQueryScript extends BasicScript {
 		final InputStream in = getScriptURL().openStream();
 		final QueryManager qm = QueryManager.getInstance();
 		final Query q = qm.loadQuery(in);
+		
+		if(q instanceof XMLQuery) {
+			var scriptURL = ((XMLQuery)q).getXMLObject().getScript().getUrl();
+			if(scriptURL != null) {
+				QueryName qn = getExtension(QueryName.class);
+				qn.setScriptLibrary(ScriptLibrary.valueOf(scriptURL.getRel().name().toUpperCase()));
+				qn.setName(scriptURL.getRef());
+			}
+		}
 		
 		getBuffer().append(q.getScript().getSource());
 		loaded = true;

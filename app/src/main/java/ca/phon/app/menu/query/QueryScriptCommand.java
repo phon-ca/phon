@@ -19,6 +19,8 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.query.QueryAndReportWizardEP;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.db.xml.XMLScript;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 
@@ -40,6 +42,10 @@ public class QueryScriptCommand extends PluginAction {
 			qn = new QueryName("Query");
 		}
 		putValue(NAME, qn.getName() + "...");
+		
+		if(qn.getScriptLibrary() != ScriptLibrary.STOCK) {
+			putArg(QueryAndReportWizardEP.LOAD_PREVIOUS, Boolean.FALSE);
+		}
 	}
 	
 }

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,6 +69,7 @@ import javax.swing.event.MenuListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.log.LogUtil;
@@ -129,6 +131,10 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask.TaskStatus;
 
+/**
+ * Wizard for executing queries and producing HTML reports.
+ * 
+ */
 public class QueryAndReportWizard extends NodeWizard {
 	
 	private static final long serialVersionUID = -3028026575633555881L;
@@ -150,7 +156,6 @@ public class QueryAndReportWizard extends NodeWizard {
 			PrefHelper.getUserDataFolder() + File.separator + "reporthash.properties";
 	private String stockReportHashFile = 
 			PrefHelper.get(STOCK_REPORT_HASH_FILE, DEFAULT_STOCK_REPORT_HASH_FILE);
-	private final static String INTERNAL_REPORT_HASH = "reports/reports.hash";
 	
 	private WizardStep queryStep;
 	private JSplitPane splitPane;
@@ -187,14 +192,15 @@ public class QueryAndReportWizard extends NodeWizard {
 	private CountDownLatch queryLatch;
 	private QueryExecutionHistory previousExeuction;
 	
-	private final QueryAndReportWizardSettings settings = new QueryAndReportWizardSettings();
+	private final QueryAndReportWizardSettings settings;
 	
 	private int windowIdx = 0;
 	
-	public QueryAndReportWizard(Project project, QueryScript queryScript) {
+	public QueryAndReportWizard(Project project, QueryScript queryScript, QueryAndReportWizardSettings settings) {
 		// init with 'dummy' processor and graph as these will be created 0during the wizard
-		super("Query : " + queryScript.getExtension(QueryName.class).getName(), new Processor(new OpGraph()), new OpGraph());
+		super("Query", new Processor(new OpGraph()), new OpGraph());
 		
+		this.settings = settings;
 		this.project = project;
 		putExtension(Project.class, project);
 		
@@ -207,10 +213,11 @@ public class QueryAndReportWizard extends NodeWizard {
 		gotoStep(0);
 	}
 	
-	private QueryAndReportWizard(int idx, Project project, QueryScript queryScript, QueryHistoryManager queryHistoryManager) {
+	private QueryAndReportWizard(int idx, Project project, QueryScript queryScript, QueryHistoryManager queryHistoryManager, QueryAndReportWizardSettings settings) {
 		// init with 'dummy' processor and graph as these will be created 0during the wizard
-		super("(" + idx + ") " + "Query : " + queryScript.getExtension(QueryName.class).getName() + " (" + idx + ")", new Processor(new OpGraph()), new OpGraph());
+		super("(" + idx + ") " + "Query", new Processor(new OpGraph()), new OpGraph());
 		
+		this.settings = settings;
 		this.windowIdx = idx;
 		this.project = project;
 		putExtension(Project.class, project);
@@ -241,8 +248,38 @@ public class QueryAndReportWizard extends NodeWizard {
 		nextButton.setText("Run query");
 		setBounds(nextButton);
 		
-		setWindowName( (windowIdx > 0 ? "(" + windowIdx + ") " : "") +
-				"Query : " + queryScript.getExtension(QueryName.class).getName() + " (No results)");
+		updateWindowName();
+	}
+	
+	public void updateWindowName() {
+		QueryName qn = queryScript.getExtension(QueryName.class);
+		if(qn == null) {
+			qn = new QueryName("Untitled");
+		}
+
+		String queryName = (qn.getLocation() != null ? 
+				(new File(URLDecoder.decode(qn.getLocation().getPath()))).getName() : 
+				qn.getName());
+		
+		if(queryName.endsWith(".js") || queryName.endsWith(".xml")) {
+			// remove extension
+			queryName = queryName.substring(0, queryName.lastIndexOf('.'));
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		if(windowIdx > 0) {
+			builder.append("(").append(windowIdx).append(") ");
+		}
+		builder.append("Query : ").append(queryName);
+		
+		if(queryRunnerBox.getModel().getSize() > 0
+				&& queryRunnerBox.getSelectedIndex() >= 0) {
+			builder.append(" (").append(queryRunnerBox.getSelectedItem()).append(")");
+		} else {
+			builder.append(" (No results)");
+		}
+		
+		setWindowName(builder.toString());
 	}
 	
 	@Override
@@ -532,8 +569,7 @@ public class QueryAndReportWizard extends NodeWizard {
 				final Object selected = queryRunnerBox.getSelectedItem();
 				if(selected != null) {
 					queryResultsLayout.show(queryResultsPanel.getContentContainer(), selected.toString());
-					setWindowName( (windowIdx > 0 ? "(" + windowIdx + ") " : "") +
-							"Query : " + queryScript.getExtension(QueryName.class).getName() + " (" + selected.toString() + ")");
+					updateWindowName();
 					
 					discardResultsButton.setEnabled(true);
 					final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
@@ -812,25 +848,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			LogUtil.severe(e);
 		}
 	}
-	
-//	public void onSaveQuerySettings() {
-//		final SaveQueryDialog dialog = new SaveQueryDialog(this, queryScript, queryHistoryPanel.getStockQueries(), queryHistoryManager);
-//		dialog.setModal(true);
-//	
-//		String queryName = queryHistoryPanel.getQueryName();
-//		if(queryName != null)
-//			dialog.getForm().getNameField().setText(queryName);
-//		
-//		dialog.pack();
-//		dialog.setLocationRelativeTo(this);
-//		
-//		dialog.setVisible(true);
-//		
-//		// wait for dialog to finish...
-//		
-//		queryHistoryPanel.updateLabelFromCurrentHash();
-//	}
-	
+		
 	public void newWindow(Project project) {
 		int wizardIdx = this.windowIdx;
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
@@ -844,9 +862,22 @@ public class QueryAndReportWizard extends NodeWizard {
 
 		// create a new instance of the query script
 		final QueryScript qs = new QueryScript(getQueryScript().getScript());
+		
+		try {
+			ScriptParameters currentParams = getQueryScript().getContext().getScriptParameters(getQueryScript().getContext().getEvaluatedScope());
+			ScriptParameters newParams = qs.getContext().getScriptParameters(qs.getContext().getEvaluatedScope());
+			
+			ScriptParameters.copyParams(currentParams, newParams);
+		} catch (PhonScriptException e) {
+			LogUtil.warning(e);
+		}
+		
 		qs.putExtension(QueryName.class, getQueryScript().getExtension(QueryName.class));
 		
-		QueryAndReportWizard wizard = new QueryAndReportWizard(wizardIdx+1, project, qs, queryHistoryManager);
+		QueryAndReportWizardSettings settings = new QueryAndReportWizardSettings();
+		settings.setLoadPreviousExecutionOnStartup(false);
+		
+		QueryAndReportWizard wizard = new QueryAndReportWizard(wizardIdx+1, project, qs, queryHistoryManager, settings);
 		wizard.pack();
 		wizard.setSize(getSize());
 		wizard.cascadeWindow(this);
@@ -1133,7 +1164,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			
 			if(queryRunnerComboBoxModel.getSize() == 0) {
 				queryResultsLayout.show(queryResultsPanel.getContentContainer(), "noResults");
-				setWindowName("Query : " + queryScript.getExtension(QueryName.class).getName() + " (No results)");
+				updateWindowName();
 				
 				discardResultsButton.setEnabled(false);
 			}

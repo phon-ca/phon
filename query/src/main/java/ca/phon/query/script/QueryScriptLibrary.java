@@ -38,6 +38,8 @@ import ca.phon.query.db.Query;
 import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.Script;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.db.ScriptURL;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.util.PrefHelper;
@@ -84,7 +86,7 @@ public class QueryScriptLibrary implements IExtendable {
 		final SystemQueryScriptHandler systemScriptHandler = new SystemQueryScriptHandler();
 		systemScriptLoader.addHandler(systemScriptHandler);
 
-		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(USER_SCRIPT_FOLDER));
+		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(USER_SCRIPT_FOLDER), ScriptLibrary.USER);
 		userScriptLoader.addHandler(userFolderScriptHandler);
 
 		// plug-ins
@@ -143,7 +145,7 @@ public class QueryScriptLibrary implements IExtendable {
 	public ResourceLoader<QueryScript> projectScriptFiles(Project project) {
 		final ResourceLoader<QueryScript> retVal = new ResourceLoader<QueryScript>();
 
-		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(projectScriptFolder(project)));
+		final UserFolderScriptHandler userFolderScriptHandler = new UserFolderScriptHandler(new File(projectScriptFolder(project)), ScriptLibrary.PROJECT);
 		retVal.addHandler(userFolderScriptHandler);
 
 		return retVal;
@@ -185,12 +187,14 @@ public class QueryScriptLibrary implements IExtendable {
 			final QueryManager qm = QueryManager.getSharedInstance();
 			final QueryFactory qf = qm.createQueryFactory();
 			final Query q = qm.createQueryFactory().createQuery();
-
-			q.setName((new File(file)).getName());
+			q.setName(qn.getName());
+			
 			final Script s = qf.createScript();
-
-			// TODO save links to scripts instead of the script source
-			s.setSource(qs.getScript());
+			if(qn.getScriptLibrary() == ScriptLibrary.STOCK) {
+				s.setUrl(new ScriptURL(qn.getName(), qn.getScriptLibrary()));
+			} else {
+				s.setSource(qs.getScript());
+			}
 
 			final Map<String, String> paramMap = new TreeMap<String, String>();
 			try {

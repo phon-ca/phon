@@ -35,7 +35,6 @@ public class QueryAndReportWizardSettings {
 	
 	public void setLoadPreviousExecutionOnStartup(boolean load) {
 		this.loadPreviousExecutionOnStartup = load;
-		PrefHelper.getUserPreferences().putBoolean(LOAD_PREVIOUS_EXECUTION_ON_STARTUP, load);
 	}
 	
 	public boolean isCleanHistoryOnClose() {
@@ -44,7 +43,6 @@ public class QueryAndReportWizardSettings {
 	
 	public void setCleanHistoryOnClose(boolean cleanHistory) {
 		this.cleanHistoryOnClose = cleanHistory;
-		PrefHelper.getUserPreferences().putBoolean(CLEAN_HISTORY_ON_CLOSE, cleanHistory);
 	}
 
 	public ReportLoadStrategy getReportLoadStrategy() {
@@ -53,9 +51,12 @@ public class QueryAndReportWizardSettings {
 
 	public void setReportLoadStrategy(ReportLoadStrategy reportLoadStrategy) {
 		this.reportLoadStrategy = reportLoadStrategy;
-		PrefHelper.getUserPreferences().put(REPORT_LOAD_STRATEGY, reportLoadStrategy.toString());
 	}
 	
-	
+	public void savePreferences() {
+		PrefHelper.getUserPreferences().putBoolean(LOAD_PREVIOUS_EXECUTION_ON_STARTUP, isLoadPreviousExecutionOnStartup());
+		PrefHelper.getUserPreferences().putBoolean(CLEAN_HISTORY_ON_CLOSE, isCleanHistoryOnClose());
+		PrefHelper.getUserPreferences().put(REPORT_LOAD_STRATEGY, getReportLoadStrategy().toString());
+	}
 	
 }

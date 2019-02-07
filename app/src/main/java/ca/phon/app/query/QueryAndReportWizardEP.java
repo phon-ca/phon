@@ -31,8 +31,9 @@ public class QueryAndReportWizardEP implements IPluginEntryPoint {
 	
 	public final static String EP_NAME = "QueryAndReportWizard";
 	
-	public final static String SCRIPT_OBJECT = QueryAndReportWizard.class.getName() + "scriptObj";
-	public final static String SCRIPT_PATH = QueryAndReportWizard.class.getName() + "scriptPath";
+	public final static String SCRIPT_OBJECT = QueryAndReportWizard.class.getName() + ".scriptObj";
+	public final static String SCRIPT_PATH = QueryAndReportWizard.class.getName() + ".scriptPath";
+	public final static String LOAD_PREVIOUS = QueryAndReportWizard.class.getName() + ".loadPrevious";
 
 	@Override
 	public String getName() {
@@ -98,7 +99,13 @@ public class QueryAndReportWizardEP implements IPluginEntryPoint {
 			}
 		}
 		
-		final QueryAndReportWizard wizard = new QueryAndReportWizard(project, script);
+		QueryAndReportWizardSettings settings = new QueryAndReportWizardSettings();
+		if(args.containsKey(LOAD_PREVIOUS)) {
+			boolean loadPrevious = Boolean.parseBoolean(args.get(LOAD_PREVIOUS).toString());
+			settings.setLoadPreviousExecutionOnStartup(loadPrevious);
+		}
+		
+		final QueryAndReportWizard wizard = new QueryAndReportWizard(project, script, settings);
 		wizard.pack();
 		wizard.setSize(1024, 768);
 		wizard.centerWindow();

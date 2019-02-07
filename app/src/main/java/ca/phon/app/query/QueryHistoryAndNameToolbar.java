@@ -302,6 +302,8 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		gbc.weightx = 0.0;
 		gbc.gridx++;
 		super.add(saveButton, gbc);
+		
+		updateLabelFromCurrentHash();
 	}
 	
 	public ParamSetType currentQuery() {

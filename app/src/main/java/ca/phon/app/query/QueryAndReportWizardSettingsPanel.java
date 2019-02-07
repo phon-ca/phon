@@ -43,12 +43,14 @@ public class QueryAndReportWizardSettingsPanel extends JPanel {
 		loadPreviousParamsBox.setSelected(settings.isLoadPreviousExecutionOnStartup());
 		loadPreviousParamsBox.addActionListener( (e) -> {
 			settings.setLoadPreviousExecutionOnStartup(loadPreviousParamsBox.isSelected());
+			settings.savePreferences();
 		});
 		
 		cleanHistoryOnCloseBox = new JCheckBox("Clean history when closing window");
 		cleanHistoryOnCloseBox.setSelected(settings.isCleanHistoryOnClose());
 		cleanHistoryOnCloseBox.addActionListener( (e) -> {
 			settings.setCleanHistoryOnClose(cleanHistoryOnCloseBox.isSelected());
+			settings.savePreferences();
 		});
 		queryHistoryOptions.add(loadPreviousParamsBox);
 		queryHistoryOptions.add(cleanHistoryOnCloseBox);
@@ -72,6 +74,7 @@ public class QueryAndReportWizardSettingsPanel extends JPanel {
 			} else if(loadPreviousReportButton.isSelected()) {
 				settings.setReportLoadStrategy(ReportLoadStrategy.LoadPreviousReport);
 			}
+			settings.savePreferences();
 		};
 		loadDefaultReportButton.addActionListener(reportLoadListener);
 		loadPreviousReportButton.addActionListener(reportLoadListener);

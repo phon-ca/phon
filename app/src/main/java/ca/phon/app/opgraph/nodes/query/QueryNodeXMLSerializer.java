@@ -101,11 +101,10 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 		
 		final Script s = qf.createScript();
 		final ScriptLibrary scriptLibrary = qn.getScriptLibrary();
-		if(scriptLibrary == null) {
-			// embed script
-			s.setSource(queryScript.getScript());
-		} else {
+		if(scriptLibrary == ScriptLibrary.STOCK) {
 			s.setUrl(new ScriptURL(qn.getName(), scriptLibrary));
+		} else {
+			s.setSource(queryScript.getScript());
 		}
 
 		final Map<String, String> paramMap = new TreeMap<String, String>();

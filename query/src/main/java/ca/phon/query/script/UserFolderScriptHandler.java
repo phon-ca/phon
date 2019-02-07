@@ -24,8 +24,11 @@ import ca.phon.util.resources.FolderHandler;
 
 public class UserFolderScriptHandler extends FolderHandler<QueryScript> {
 
-	public UserFolderScriptHandler(File folder) {
+	private ScriptLibrary scriptLibrary = null;
+	
+	public UserFolderScriptHandler(File folder, ScriptLibrary library) {
 		super(folder);
+		this.scriptLibrary = library;
 		setFileFilter(scriptFilter);
 		setRecursive(true);
 	}
@@ -35,7 +38,7 @@ public class UserFolderScriptHandler extends FolderHandler<QueryScript> {
 		QueryScript retVal = new QueryScript(f.toURI().toURL());
 		
 		final QueryName qn = retVal.getExtension(QueryName.class);
-		qn.setScriptLibrary(ScriptLibrary.USER);
+		qn.setScriptLibrary(this.scriptLibrary);
 		
 		return retVal;
 	}
