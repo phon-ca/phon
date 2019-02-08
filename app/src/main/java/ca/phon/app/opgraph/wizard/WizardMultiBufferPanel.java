@@ -15,6 +15,9 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -22,11 +25,14 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
+import ca.phon.ui.ButtonPopup;
+import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -34,7 +40,7 @@ import ca.phon.util.icons.IconSize;
 
 public class WizardMultiBufferPanel extends MultiBufferPanel {
 
-	private JButton exportButton;
+	private DropDownButton exportButton;
 	
 	private NodeWizard wizard;
 	
@@ -53,9 +59,26 @@ public class WizardMultiBufferPanel extends MultiBufferPanel {
 			final PhonUIAction showExportMenuAct = new PhonUIAction(this, "showExportMenu");
 			showExportMenuAct.putValue(PhonUIAction.NAME, "Export tables...");
 			
+			final JPopupMenu menu = new JPopupMenu();
+			Action dropDownAct = new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				}
+			};
+			dropDownAct.putValue(Action.NAME, "Export tables");
+			dropDownAct.putValue(Action.SHORT_DESCRIPTION, "Export tables as excel or CSV");
+			dropDownAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+			dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+			dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+			dropDownAct.putValue(DropDownButton.BUTTON_POPUP, menu);
 			
-			showExportMenuAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-			exportButton = new JButton(showExportMenuAct);
+			exportButton = new DropDownButton(dropDownAct);
+			exportButton.setOnlyPopup(true);
+			exportButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+				if(Boolean.parseBoolean(e.getNewValue().toString())) {
+					setupExportMenu(menu);
+				}
+			});
 			
 			toolbar.removeAll();
 			
@@ -68,8 +91,8 @@ public class WizardMultiBufferPanel extends MultiBufferPanel {
 		}
 	}
 	
-	public void showExportMenu(PhonActionEvent pae) {
-		final JPopupMenu menu = new JPopupMenu();
+	public void setupExportMenu(JPopupMenu menu) {
+		menu.removeAll();
 		
 		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(wizard);
 		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
@@ -90,8 +113,8 @@ public class WizardMultiBufferPanel extends MultiBufferPanel {
 		menu.add(new JMenuItem(saveTablesExcelAct));
 		menu.add(new JMenuItem(saveTablesCSVAct));
 		
-		JComponent src = (JComponent)pae.getActionEvent().getSource();
-		menu.show(src, 0, src.getHeight());
+//		JComponent src = (JComponent)pae.getActionEvent().getSource();
+//		menu.show(src, 0, src.getHeight());
 		
 	}
 	
