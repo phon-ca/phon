@@ -79,8 +79,8 @@ public class SaveQueryAction extends HookableAction {
 		private void init() {
 			setLayout(new BorderLayout());
 			
-			DialogHeader header = new DialogHeader("Save Query", 
-					"<html>Save current query parameters. These settings will be available in the 'Named Queries' combox at the top of query forms.</html>");
+			DialogHeader header = new DialogHeader("Name Query", 
+					"<html>Save current query parameters. These settings will be available from the 'Query name' combo box at the top of query forms.</html>");
 			add(header, BorderLayout.NORTH);
 			
 			JPanel centerPanel = new JPanel(new GridBagLayout());

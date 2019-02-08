@@ -324,6 +324,8 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 				ParamSetType historyParamSet = queryHistoryManager.getParamSet(queryScript);
 				if(historyParamSet != null && historyParamSet.getName() != null && historyParamSet.getName().length() > 0) {
 					saveQueryAct.putValue(SaveQueryAction.NAME, "Rename query...");
+				} else {
+					saveQueryAct.putValue(SaveQueryAction.NAME, "Name query...");
 				}
 				
 				builder.addItem(".", saveQueryAct);
@@ -337,16 +339,16 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		if(cmf != null && cmf.getExtension(Project.class) != null) {
 			ExportQueryAction projectLibraryAct = new ExportQueryAction(queryScript, 
 					QueryScriptLibrary.projectScriptFolder(cmf.getExtension(Project.class)));
-			projectLibraryAct.putValue(PhonUIAction.NAME, "Store query in project library...");
+			projectLibraryAct.putValue(PhonUIAction.NAME, "Save in project library...");
 			builder.addItem(".", projectLibraryAct);
 		}
 		
 		ExportQueryAction userLibraryAct = new ExportQueryAction(queryScript, QueryScriptLibrary.USER_SCRIPT_FOLDER);
-		userLibraryAct.putValue(PhonUIAction.NAME, "Store query in user library...");
+		userLibraryAct.putValue(PhonUIAction.NAME, "Save in user library...");
 		builder.addItem(".", userLibraryAct);
 		
 		ExportQueryAction otherLocationAct = new ExportQueryAction(queryScript, null);
-		otherLocationAct.putValue(PhonUIAction.NAME, "Export query...");
+		otherLocationAct.putValue(PhonUIAction.NAME, "Save as...");
 		builder.addItem(".", otherLocationAct);
 	}
 	
