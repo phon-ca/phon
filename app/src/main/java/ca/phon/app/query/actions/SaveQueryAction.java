@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -14,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.teamdev.jxbrowser.chromium.internal.ipc.message.ShutdownMessage;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
@@ -25,7 +28,11 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.TextCompleter;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -58,7 +65,7 @@ public class SaveQueryAction extends HookableAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		QueryNameDialog dialog = new QueryNameDialog();
-		dialog.setModal(true);
+		dialog.setModal(false);
 		dialog.setPreferredSize(new Dimension(550, 200));
 		dialog.pack();
 		
@@ -93,14 +100,23 @@ public class SaveQueryAction extends HookableAction {
 			gbc.gridy = 1;
 			gbc.weightx = 0.0;
 			gbc.weighty = 0.0;
+			gbc.insets = new Insets(0, 10, 0, 0);
 			centerPanel.add(new JLabel("Query Name:"), gbc);
 						
 			gbc.gridx++;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gbc.weightx = 1.0;
+			gbc.insets = new Insets(0, 5, 0, 10);
 			queryNameField = new PromptedTextField("Enter query name (no extension)");
 			queryNameField.setColumns(30);
 			centerPanel.add(queryNameField, gbc);
+			
+			DefaultTextCompleterModel textCompleterModel = new DefaultTextCompleterModel();
+			stockQueries.getNamedParamSets().forEach( (ps) -> textCompleterModel.addCompletion(ps.getName(), ps.getName()) );
+			queryHistory.getNamedParamSets().forEach( (ps) -> textCompleterModel.addCompletion(ps.getName(), ps.getName()) );
+			TextCompleter tc = new TextCompleter(textCompleterModel);
+			tc.setUseDataForCompletion(true);
+			tc.install(queryNameField);
 			
 			gbc.gridy++;
 			JLabel lbl = new JLabel("(leave empty to unset query name)");
@@ -138,11 +154,25 @@ public class SaveQueryAction extends HookableAction {
 		public void onSave() {
 			String queryName = queryNameField.getText().trim();
 			if(queryName.length() > 0) {
-				if(stockQueries.getParamSetByName(queryName) != null
-						|| queryHistory.getParamSetByName(queryName) != null) {
+				if(stockQueries.getParamSetByName(queryName) != null) {
+					// can't rename stock query
 					Toolkit.getDefaultToolkit().beep();
-					ToastFactory.makeToast("A query with that name already exists").start(queryNameField);
+					ToastFactory.makeToast("A stock query with that name already exists").start(queryNameField);
 					return;
+				} else if(queryHistory.getParamSetByName(queryName) != null) {
+					MessageDialogProperties props = new MessageDialogProperties();
+					props.setParentWindow(this);
+					props.setRunAsync(false);
+					props.setTitle("Rename query");
+					props.setHeader("Rename query");
+					props.setMessage("A query with this name already exists? Rename query using these settings?");
+					props.setOptions(new String[] {"Rename query", "Cancel"});
+					
+					int retVal = NativeDialogs.showMessageDialog(props);
+					if(retVal == 1) return;
+					
+					// remove old query name
+					queryHistory.getParamSetByName(queryName).setName(null);
 				}
 				try {
 					queryHistory.nameParamSet(queryName, queryScript);
