@@ -340,7 +340,9 @@ public class QueryNode extends OpNode implements NodeSettings {
 			queryHistoryPanel = new QueryHistoryAndNameToolbar(queryHistoryManager, scriptPanel);
 			
 			settingsPanel.add(queryHistoryPanel, BorderLayout.NORTH);
-			settingsPanel.add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
+			JScrollPane scriptScroller = new JScrollPane(scriptPanel);
+			scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
+			settingsPanel.add(scriptScroller, BorderLayout.CENTER);
 			
 			if(shouldShowEditor()) {
 				final JComponent editor = ScriptEditorFactory.createEditorComponentForScript(scriptPanel.getScript());

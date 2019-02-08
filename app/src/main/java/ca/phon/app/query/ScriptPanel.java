@@ -118,7 +118,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 
 		final ParamPanelFactory factory = new ParamPanelFactory(() -> {
 			JPanel panel = new JPanel();
-			panel.setBackground(Color.WHITE);
+//			panel.setBackground(Color.WHITE);
 			return panel;
 		});
 		scriptParams.accept(factory);

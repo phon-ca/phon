@@ -631,7 +631,9 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		queryPanel = new TitledPanel("Query");
 		queryPanel.getContentContainer().setLayout(new BorderLayout());
-		queryPanel.getContentContainer().add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
+		JScrollPane scriptScroller = new JScrollPane(scriptPanel);
+		scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
+		queryPanel.getContentContainer().add(scriptScroller, BorderLayout.CENTER);
 		
 		final PhonUIAction duplicateQueryAct = new PhonUIAction(this, "onDuplicateQueryWizard");
 		duplicateQueryAct.putValue(PhonUIAction.NAME, "New window");

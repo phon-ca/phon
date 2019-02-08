@@ -46,7 +46,7 @@ public class DeleteAllUnnamedEntriesAction extends HookableAction {
 		this.queryWizard = wizard;
 		this.queryHistoryPanel = queryWizard.getQueryHistoryPanel();
 		
-		putValue(HookableAction.NAME, "Delete all unnamed entries in query history");
+		putValue(HookableAction.NAME, "Clear query history");
 		putValue(HookableAction.SHORT_DESCRIPTION, "Delete all unnamed entries in query history (action cannot be undone)");
 	}
 	
@@ -69,8 +69,8 @@ public class DeleteAllUnnamedEntriesAction extends HookableAction {
 		if(queryHistoryPanel.getCurrentIndex() >= 0) {
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-			props.setHeader("Delete Entries in Query History");
-			props.setTitle("Delete Unnamed Entries in Query History");
+			props.setHeader("Clear Query History");
+			props.setTitle("Clear Query History");
 			props.setMessage("Delete all unnamed entries in query history? This action cannot be undone.");
 			props.setOptions(MessageDialogProperties.okCancelOptions);
 			props.setRunAsync(true);

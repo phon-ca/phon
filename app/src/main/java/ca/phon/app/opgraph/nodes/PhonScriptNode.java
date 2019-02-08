@@ -282,7 +282,9 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		JPanel retVal = new JPanel();
 		
 		retVal.setLayout(new BorderLayout());
-		retVal.add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
+		JScrollPane scriptScroller = new JScrollPane(scriptPanel);
+		scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
+		retVal.add(scriptScroller, BorderLayout.CENTER);
 
 		if(shouldShowEditor()) {
 			final JComponent editor = ScriptEditorFactory.createEditorComponentForScript(getScript());
