@@ -494,7 +494,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		builder.addItem(".", saveTablesExcelAct).setEnabled(hasReport);
 		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
 		builder.addSeparator(".", "_export");
-		builder.addItem(".", printReportAct);
+		builder.addItem(".", printReportAct).setEnabled(hasReport);
 	}
 	
 	private void setupReportTreeMenu(MenuBuilder builder, ReportTree reportTree) {

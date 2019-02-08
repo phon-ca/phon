@@ -16,6 +16,7 @@
 package ca.phon.script.params.ui;
 
 import java.awt.BorderLayout;
+import java.util.function.Supplier;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -53,7 +54,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	/**
 	 * The panel to be returned
 	 */
-	private JPanel panel;
+	private JPanel rootPanel;
 	
 	/**
 	 * The current script param container
@@ -66,11 +67,22 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	 */
 	private ParamComponentFactory factory;
 	
-	public ParamPanelFactory(JPanel panel) {
+	private final Supplier<JPanel> panelSupplier;
+	
+	public ParamPanelFactory() {
+		this(JPanel::new);
+	}
+	
+	public ParamPanelFactory(Supplier<JPanel> supplier) {
+		this(supplier.get(), supplier);
+	}
+	
+	public ParamPanelFactory(JPanel rootPanel, Supplier<JPanel> panelSupplier) {
 		super();
-		this.panel = panel;
-		this.panel.setLayout(new VerticalLayout());
-		this.currentContainer = this.panel;
+		this.rootPanel = rootPanel;
+		this.rootPanel.setLayout(new VerticalLayout());
+		this.panelSupplier = panelSupplier;
+		this.currentContainer = this.rootPanel;
 		this.factory = new ParamComponentFactory();
 	}
 	
@@ -78,7 +90,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	 * Return the script param form
 	 */
 	public JPanel getForm() {
-		return this.panel;
+		return this.rootPanel;
 	}
 
 	@Override
@@ -89,39 +101,15 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		String cols = "20px, fill:pref:grow";
 		String rows = "pref, pref";
 		FormLayout layout = new FormLayout(cols, rows);
-		JPanel compPanel = new JPanel(layout);
+		JPanel compPanel = this.panelSupplier.get();
+		compPanel.setLayout(layout);
 		CellConstraints cc = new CellConstraints();
 		compPanel.add(label, cc.xyw(1,1,2));
 		compPanel.add(comp, cc.xy(2, 2));
 		
 		return compPanel;
 	}
-	
-	private JPanel createComponentPanel(JLabel label, JComponent leftSide, JComponent comp) {
-		String cols = "20px, fill:pref:grow";
-		String rows = "pref, pref";
-		FormLayout layout = new FormLayout(cols, rows);
-		JPanel compPanel = new JPanel(layout);
-		CellConstraints cc = new CellConstraints();
-		compPanel.add(label, cc.xyw(1,1,2));
-		compPanel.add(leftSide, cc.xy(1,2));
-		compPanel.add(comp, cc.xy(2, 2));
 		
-		return compPanel;
-	}
-	
-	private JPanel createComponentPanelNoSpace(JLabel label, JComponent comp) {
-		String cols = "fill:pref:grow";
-		String rows = "pref, pref";
-		FormLayout layout = new FormLayout(cols, rows);
-		JPanel compPanel = new JPanel(layout);
-		CellConstraints cc = new CellConstraints();
-		compPanel.add(label, cc.xy(1,1));
-		compPanel.add(comp, cc.xy(1, 2));
-		
-		return compPanel;
-	}
-	
 	@Visits
 	public void visitBooleanScriptParam(BooleanScriptParam param) {
 		final JLabel paramLabel = factory.createParamLabel(param);
@@ -158,8 +146,8 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	public void visitSeparatorScriptParam(SeparatorScriptParam param) {
 		final JXCollapsiblePane panel = factory.createSeparatorScriptParamComponent(param);
 		final JXButton button = factory.createToggleButton(param.getParamDesc(), panel, param);
-		this.panel.add(button);
-		this.panel.add(panel);
+		this.rootPanel.add(button);
+		this.rootPanel.add(panel);
 		this.currentContainer = panel;
 	}
 	
@@ -179,6 +167,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		final RTextScrollPane scroller = new RTextScrollPane(textArea);
 		scroller.setLineNumbersEnabled(true);
 		ErrorStrip strip = new ErrorStrip(textArea);
+		strip.setOpaque(false);
 		
 		final JComponent container = currentContainer;
 		param.addPropertyChangeListener( PatternScriptParam.VISIBLE_ROWS_PROP, (e) -> {
@@ -187,7 +176,8 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 			container.revalidate();
 		});
 		
-		final JPanel p = new JPanel(new BorderLayout());
+		final JPanel p = panelSupplier.get();
+		p.setLayout(new BorderLayout());
 		p.add(scroller, BorderLayout.CENTER);
 		p.add(strip, BorderLayout.LINE_END);
 		

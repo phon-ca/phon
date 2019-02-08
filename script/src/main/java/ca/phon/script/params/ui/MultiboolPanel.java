@@ -45,6 +45,8 @@ public class MultiboolPanel extends JPanel {
 	}
 
 	private void init() {
+		setOpaque(false);
+		
 		if(param.getCols() == 0) {
 			setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		} else {

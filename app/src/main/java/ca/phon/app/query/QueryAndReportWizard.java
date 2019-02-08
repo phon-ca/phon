@@ -1012,22 +1012,30 @@ public class QueryAndReportWizard extends NodeWizard {
 			}
 			
 			if(e.getNewValue() == TaskStatus.RUNNING) {
-				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
-				nextButton.setVisible(false);
-				breadCrumbViewer.add(btnStop);
-				setBounds(btnStop);
+				SwingUtilities.invokeLater( () -> {
+					discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
+					nextButton.setVisible(false);
+					
+					btnStop.setBackground(Color.RED);
+					btnStop.setForeground(Color.white);
+					btnStop.setText("Stop");
+					breadCrumbViewer.add(btnStop);
+					setBounds(btnStop);
+				});
 			} else {
-				discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
-				nextButton.setVisible(true);
-				updateNextButton();
-				breadCrumbViewer.remove(btnStop);
+				SwingUtilities.invokeLater( () -> {
+					discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
+					nextButton.setVisible(true);
+					updateNextButton();
+					breadCrumbViewer.remove(btnStop);
+				});
 			}
 		});
 		
 		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/list-remove", IconSize.XSMALL);
 		final PhonUIAction closeAction = new PhonUIAction(this, "discardResults", queryName);
 		closeAction.putValue(PhonUIAction.SMALL_ICON, closeIcon);
-		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results and close tab");
+		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results");
 		
 		queryLatch = new CountDownLatch(1);
 		previousExeuction = currentSettings();

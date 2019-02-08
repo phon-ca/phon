@@ -55,6 +55,8 @@ public class RadiobuttonEnumPanel extends JPanel {
 	}
 
 	private void init() {
+		setOpaque(false);
+		
 		param.addPropertyChangeListener(param.getParamId(), paramListener);
 
 		if(param.getColumns() == 0) {

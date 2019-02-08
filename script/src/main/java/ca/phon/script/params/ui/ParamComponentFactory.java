@@ -234,7 +234,7 @@ public class ParamComponentFactory {
 		retVal.setRows(numVisibleLines);
 		
 		retVal.setCaretPosition(0);
-		
+						
 		installParamListener(retVal, patternScriptParam);
 		installPatternParamListener(retVal, patternScriptParam);
 		
@@ -303,9 +303,10 @@ public class ParamComponentFactory {
 
 			@Override
 			public void paint(Graphics2D g, JXButton object, int width, int height) {
-				MattePainter mp = new MattePainter(Color.lightGray);
+				MattePainter mp = new MattePainter(Color.decode("#efefef"));
 				mp.paint(g, object, width, height);
 			}
+			
 		});
 
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

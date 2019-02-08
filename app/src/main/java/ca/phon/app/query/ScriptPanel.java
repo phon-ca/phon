@@ -16,6 +16,7 @@
 package ca.phon.app.query;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
@@ -115,9 +116,14 @@ public class ScriptPanel extends JPanel implements Scrollable {
 			this.scriptParams = scriptParams;
 		}
 
-		final ParamPanelFactory factory = new ParamPanelFactory(this);
+		final ParamPanelFactory factory = new ParamPanelFactory(() -> {
+			JPanel panel = new JPanel();
+			panel.setBackground(Color.WHITE);
+			return panel;
+		});
 		scriptParams.accept(factory);
-
+		add(factory.getForm(), BorderLayout.CENTER);
+		
 		super.firePropertyChange(SCRIPT_PARAMS, oldParams, scriptParams);
 	}
 
