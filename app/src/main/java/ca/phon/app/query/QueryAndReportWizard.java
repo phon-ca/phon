@@ -505,8 +505,11 @@ public class QueryAndReportWizard extends NodeWizard {
 		if(getCurrentStep() == queryStep) {
 			final QueryRunnerPanel runnerPanel = getCurrentQueryRunner();
 			if(runnerPanel != null && runnerPanel.isRunning()) {
-				int retVal = showMessageDialog("Cancel query?", "Stop query and close window?", MessageDialogProperties.okCancelOptions);
-				if(retVal == 1) return;
+				int retVal = showMessageDialog("Stop query?", "Stop current query execution?", MessageDialogProperties.okCancelOptions);
+				if(retVal == 0) {
+					onStopQuery();
+				}
+				return;
 			}
 		}
 		

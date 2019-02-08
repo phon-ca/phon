@@ -66,9 +66,10 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	 */
 	private ParamComponentFactory factory;
 	
-	public ParamPanelFactory() {
+	public ParamPanelFactory(JPanel panel) {
 		super();
-		this.panel = new JPanel(new VerticalLayout());
+		this.panel = panel;
+		this.panel.setLayout(new VerticalLayout());
 		this.currentContainer = this.panel;
 		this.factory = new ParamComponentFactory();
 	}

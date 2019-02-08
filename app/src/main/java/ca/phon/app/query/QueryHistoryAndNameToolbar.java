@@ -194,6 +194,9 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		showHistoryAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		
 		ScriptParameters scriptParams = getScriptPanel().getScriptParameters();
+		getScriptPanel().addPropertyChangeListener(ScriptPanel.SCRIPT_PARAMS, (e) -> {
+			addParamListeners();
+		});
 		addParamListeners();
 		
 		final QueryHistoryList paramHistoryView = new QueryHistoryList(scriptParams, stockQueryManager, queryHistoryManager);
@@ -457,7 +460,6 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		}
 		
 		getScriptPanel().setScript(queryScript);
-		addParamListeners();
 	}
 	
 	private final ItemListener itemListener = new ItemListener() {

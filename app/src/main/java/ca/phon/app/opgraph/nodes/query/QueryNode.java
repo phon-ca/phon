@@ -17,6 +17,8 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -30,14 +32,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.RecordContainer;
 import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.QueryHistoryAndNameToolbar;
+import ca.phon.app.query.ScriptEditorFactory;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
@@ -62,7 +70,13 @@ import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
 import ca.phon.script.params.history.ObjectFactory;
 import ca.phon.session.Session;
+import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
@@ -323,16 +337,47 @@ public class QueryNode extends OpNode implements NodeSettings {
 			scriptPanel = new ScriptPanel(getQueryScript());
 			settingsPanel = new QueryNodeSettingsPanel(scriptPanel);
 			
-			if(CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor) {
-				scriptPanel.setSwapButtonVisible(true);
-			}
-			
 			queryHistoryPanel = new QueryHistoryAndNameToolbar(queryHistoryManager, scriptPanel);
 			
 			settingsPanel.add(queryHistoryPanel, BorderLayout.NORTH);
 			settingsPanel.add(new JScrollPane(scriptPanel), BorderLayout.CENTER);
+			
+			if(shouldShowEditor()) {
+				final JComponent editor = ScriptEditorFactory.createEditorComponentForScript(scriptPanel.getScript());
+				final Action act = new AbstractAction() {
+					@Override
+					public void actionPerformed(ActionEvent e) {}
+				};
+				act.putValue(Action.NAME, "Edit script");
+				act.putValue(Action.SHORT_DESCRIPTION, "Show script editor");
+				act.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit", IconSize.SMALL));
+				act.putValue(DropDownButton.BUTTON_POPUP, editor);
+				act.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+				act.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+				
+				final DropDownButton showEditorBtn = new DropDownButton(act);
+				showEditorBtn.setOnlyPopup(true);
+				showEditorBtn.setToolTipText("Edit script");
+				showEditorBtn.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+					if(!(Boolean)e.getNewValue()) {
+						try {
+							scriptPanel.getScript().resetContext();
+							scriptPanel.updateParams();
+						} catch (PhonScriptException e1) {
+							Toolkit.getDefaultToolkit().beep();
+							LogUtil.severe(e1);
+						}
+					}
+				});
+				settingsPanel.add(ButtonBarBuilder.buildOkBar(showEditorBtn), BorderLayout.SOUTH);
+			}
 		}
 		return settingsPanel;
+	}
+	
+	private boolean shouldShowEditor() {
+		return (CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor
+				|| PrefHelper.getBoolean("phon.debug", Boolean.FALSE));
 	}
 
 	@Override
