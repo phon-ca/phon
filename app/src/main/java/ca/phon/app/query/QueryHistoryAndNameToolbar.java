@@ -349,16 +349,16 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
 		if(cmf != null && cmf.getExtension(Project.class) != null) {
 			ExportQueryAction projectLibraryAct = new ExportQueryAction(queryScript, 
-					QueryScriptLibrary.projectScriptFolder(cmf.getExtension(Project.class)));
+					QueryScriptLibrary.projectScriptFolder(cmf.getExtension(Project.class)), getQueryName());
 			projectLibraryAct.putValue(PhonUIAction.NAME, "Save in project library...");
 			builder.addItem(".", projectLibraryAct);
 		}
 		
-		ExportQueryAction userLibraryAct = new ExportQueryAction(queryScript, QueryScriptLibrary.USER_SCRIPT_FOLDER);
+		ExportQueryAction userLibraryAct = new ExportQueryAction(queryScript, QueryScriptLibrary.USER_SCRIPT_FOLDER, getQueryName());
 		userLibraryAct.putValue(PhonUIAction.NAME, "Save in user library...");
 		builder.addItem(".", userLibraryAct);
 		
-		ExportQueryAction otherLocationAct = new ExportQueryAction(queryScript, null);
+		ExportQueryAction otherLocationAct = new ExportQueryAction(queryScript, null, getQueryName());
 		otherLocationAct.putValue(PhonUIAction.NAME, "Save as...");
 		builder.addItem(".", otherLocationAct);
 	}

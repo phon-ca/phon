@@ -29,11 +29,14 @@ public class ExportQueryAction extends HookableAction {
 	
 	private String initialFolder;
 	
-	public ExportQueryAction(QueryScript queryScript, String initialFolder) {
+	private String queryName;
+	
+	public ExportQueryAction(QueryScript queryScript, String initialFolder, String queryName) {
 		super();
 		
 		this.queryScript = queryScript;
 		this.initialFolder = initialFolder;
+		this.queryName = queryName;
 	
 		final ImageIcon saveIcon = IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
 		putValue(SMALL_ICON, saveIcon);
@@ -59,9 +62,8 @@ public class ExportQueryAction extends HookableAction {
 		props.setFileFilter(FileFilter.xmlFilter);
 		props.setInitialFolder(initialFolder);
 		
-		final QueryName qn = queryScript.getExtension(QueryName.class);
-		if(qn != null) {
-			props.setInitialFile(qn.getName() + ".xml");
+		if(queryName != null) {
+			props.setInitialFile(queryName);
 		}
 		props.setNameFieldLabel("Query name");
 		props.setPrompt("Save Query");
