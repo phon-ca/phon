@@ -67,7 +67,7 @@ public class ReportLibrary implements OpGraphLibrary {
 
 	private final static String LEGACY_REPORT_DOCUMENT = "reports/Legacy Report Design.xml";
 
-	private final static String REPORT_FOLDER = "reports";
+	private final static String REPORT_FOLDER = "report";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportLibrary.class.getName());
 
