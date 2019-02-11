@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.3b9/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b9.dmg" newVersion="3.0.3b9" newMediaFileId="macos" fileSize="256577929" md5Sum="4ace8889687e249b286c3bcf5e2aab11" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.2
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4b1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b1.dmg" newVersion="3.0.4b1" newMediaFileId="macos" fileSize="256589383" md5Sum="f542257d79e254b28df29ab39a9a3aac" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -15,6 +34,7 @@
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -244,8 +264,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_3b9.dmg" newVersion="3.0.3b9" newMediaFileId="macos" fileSize="256577929" md5Sum="4ace8889687e249b286c3bcf5e2aab11" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b1.dmg" newVersion="3.0.4b1" newMediaFileId="macos" fileSize="256589383" md5Sum="f542257d79e254b28df29ab39a9a3aac" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -259,6 +298,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -488,8 +528,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="d9c3a2953b6fcf09c7652f77eca05b99" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.exe" newVersion="3.0.4b1" newMediaFileId="win64" fileSize="257847296" md5Sum="5a47ba8b0f80699aac24201abb71feaa" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -503,6 +562,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -732,8 +792,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="d9c3a2953b6fcf09c7652f77eca05b99" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.exe" newVersion="3.0.4b1" newMediaFileId="win64" fileSize="257847296" md5Sum="5a47ba8b0f80699aac24201abb71feaa" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -747,6 +826,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -976,8 +1056,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.exe" newVersion="3.0.3b9" newMediaFileId="win64" fileSize="257807872" md5Sum="d9c3a2953b6fcf09c7652f77eca05b99" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.exe" newVersion="3.0.4b1" newMediaFileId="win64" fileSize="257847296" md5Sum="5a47ba8b0f80699aac24201abb71feaa" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -991,6 +1090,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -1220,8 +1320,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_3b9.zip" newVersion="3.0.3b9" newMediaFileId="win64zip" fileSize="256857735" md5Sum="685484f1d00b497a6161834fd88053cc" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.zip" newVersion="3.0.4b1" newMediaFileId="win64zip" fileSize="256897034" md5Sum="d5e58dde3e4324d518cb04e423cb039e" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -1235,6 +1354,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -1464,8 +1584,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_3b9.deb" newVersion="3.0.3b9" newMediaFileId="linux64deb" fileSize="187259116" md5Sum="ac943dfee4adefff3b790aed239c5688" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4b1.deb" newVersion="3.0.4b1" newMediaFileId="linux64deb" fileSize="187295750" md5Sum="f486ac974e3e2d2607d25cc4e2246b24" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -1479,6 +1618,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
@@ -1708,8 +1848,27 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_3b9.sh" newVersion="3.0.3b9" newMediaFileId="linux64" fileSize="186790653" md5Sum="f3dbeeeeec6656fc5623b6a200acf5c6" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.2
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4b1.sh" newVersion="3.0.4b1" newMediaFileId="linux64" fileSize="186829938" md5Sum="43e5a3c367f9085cf3ac00e5b8778117" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+
+## Changes from 3.0.2
  
  * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
  * Improvments to phone alignment
@@ -1723,6 +1882,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Query wizards may now be opened for multiple projects
  * Fixed a regression bug with acoustic data reports
  * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
 
 ## Changes from 3.0.1
 
