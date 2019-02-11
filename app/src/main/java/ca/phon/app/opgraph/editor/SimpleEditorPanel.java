@@ -1585,7 +1585,21 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					final QueryScript queryScript = (QueryScript)node.getUserObject();
 					final QueryName queryName = queryScript.getExtension(QueryName.class);
 					if(queryName != null) {
-						retVal.setText(queryName.getName());
+						if(queryName.getLocation() != null) {
+							try {
+								String decodedPath = URLDecoder.decode(queryName.getLocation().getPath(), "UTF-8");
+								File file = new File(decodedPath);
+								String filename = 
+										(file.getName().indexOf('.') > 0 
+												? file.getName().substring(0, file.getName().lastIndexOf('.'))
+												: file.getName() );
+								retVal.setText(filename);
+							} catch (UnsupportedEncodingException e) {
+								LogUtil.warning(e);
+							}
+						} else {
+							retVal.setText(queryName.getName());
+						}
 					}
 				}
 			}

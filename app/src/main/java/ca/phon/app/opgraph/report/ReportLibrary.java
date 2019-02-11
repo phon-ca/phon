@@ -65,9 +65,9 @@ import ca.phon.worker.PhonWorker;
  */
 public class ReportLibrary implements OpGraphLibrary {
 
-	private final static String LEGACY_REPORT_DOCUMENT = "reports/Legacy Report Design.xml";
+	private final static String LEGACY_REPORT_DOCUMENT = "report/Legacy Report Design.xml";
 
-	private final static String REPORT_FOLDER = "report";
+	public final static String REPORT_FOLDER_NAME = "report";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportLibrary.class.getName());
 
@@ -109,12 +109,12 @@ public class ReportLibrary implements OpGraphLibrary {
 
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserReportHandler(new File(project.getResourceLocation(), REPORT_FOLDER)));
+		retVal.addHandler(new UserReportHandler(new File(project.getResourceLocation(), REPORT_FOLDER_NAME)));
 		return retVal;
 	}
 
 	public File getProjectReportFolder(Project project) {
-		return new File(project.getResourceLocation(), REPORT_FOLDER);
+		return new File(project.getResourceLocation(), REPORT_FOLDER_NAME);
 	}
 
 	public void setupMenu(Project project, String queryId, MenuElement menu) {
@@ -127,7 +127,7 @@ public class ReportLibrary implements OpGraphLibrary {
 			try {
 				final String fullPath = URLDecoder.decode(reportURL.getPath(), "UTF-8");
 				final String relativePath =
-						fullPath.substring(fullPath.indexOf("/" + REPORT_FOLDER + "/")+REPORT_FOLDER.length()+2);
+						fullPath.substring(fullPath.indexOf("/" + REPORT_FOLDER_NAME + "/")+REPORT_FOLDER_NAME.length()+2);
 
 				String menuPath = ".";
 				int lastFolderIndex = relativePath.lastIndexOf('/');
@@ -318,7 +318,7 @@ public class ReportLibrary implements OpGraphLibrary {
 
 	@Override
 	public String getFolderName() {
-		return REPORT_FOLDER;
+		return REPORT_FOLDER_NAME;
 	}
 
 	@Override

@@ -159,7 +159,6 @@ public class QueryAndReportWizard extends NodeWizard {
 	private TitledPanel queryPanel;
 	private ScriptPanel scriptPanel;
 	private JCheckBox includeExcludedBox;
-	private JButton resetQueryButton;
 	private JButton duplicateQueryButton;
 	private JButton runQueryButton;
 	
@@ -519,7 +518,7 @@ public class QueryAndReportWizard extends NodeWizard {
 	private WizardStep createQueryStep() {
 		WizardStep retVal = new WizardStep();
 		QueryName qn = queryScript.getExtension(QueryName.class);
-		retVal.setTitle("Query : " + qn.getName());
+		retVal.setTitle("Query: " + qn.getName());
 		
 		sessionSelector = new SessionSelector(this.project);
 		sessionSelector.addMouseListener(new MouseAdapter() {
@@ -631,13 +630,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		duplicateQueryButton = new JButton(duplicateQueryAct);
 		duplicateQueryButton.setOpaque(false);
 		
-		final PhonUIAction resetQueryAct = new PhonUIAction(this, "resetQueryParameters", queryPanel);
-		resetQueryAct.putValue(PhonUIAction.NAME, "Clear query");
-		resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/parameters-black", IconSize.SMALL));
-		resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset query parameters to default");
-		resetQueryButton = new JButton(resetQueryAct);
-		resetQueryButton.setOpaque(false);
-		
 		final PhonUIAction runAct = new PhonUIAction(QueryAndReportWizard.this, "executeQuery");
 		runAct.putValue(PhonUIAction.NAME, "Run query");
 		runAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
@@ -653,7 +645,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		final JComponent buttonBar = new JPanel(new HorizontalLayout());
 		buttonBar.add(duplicateQueryButton);
-		buttonBar.add(resetQueryButton);
 		buttonBar.add(runQueryButton);
 		buttonBar.setOpaque(false);
 		queryPanel.setRightDecoration(buttonBar);

@@ -97,6 +97,8 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 //	
 //	private JButton prevButton;
 	
+	private JButton clearButton;
+	
 	private DropDownButton historyButton;
 	
 	private DropDownButton saveButton;
@@ -181,6 +183,11 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 	}
 	
 	private void init() {
+		PhonUIAction clearAct = new PhonUIAction(this, "onClear");
+		clearAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear query settings (reset to default)");
+		clearAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/draw-eraser", IconSize.SMALL));
+		clearButton = new JButton(clearAct);
+		
 		// query history menu
 		final Action showHistoryAct = new AbstractAction() {
 			@Override
@@ -291,6 +298,10 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
 		
+		super.add(clearButton, gbc);
+		gbc.gridx++;
+		super.add(new JSeparator(SwingConstants.VERTICAL));
+		gbc.gridx++;
 		super.add(historyButton, gbc);
 		gbc.gridx++;
 		super.add(new JSeparator(SwingConstants.VERTICAL), gbc);
@@ -350,6 +361,16 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		ExportQueryAction otherLocationAct = new ExportQueryAction(queryScript, null);
 		otherLocationAct.putValue(PhonUIAction.NAME, "Save as...");
 		builder.addItem(".", otherLocationAct);
+	}
+	
+	public void onClear() {
+		getScriptPanel().getScript().resetContext();
+		try {
+			getScriptPanel().updateParams();
+		} catch (PhonScriptException e) {
+			LogUtil.warning(e);
+		}
+		updateLabelFromCurrentHash();
 	}
 	
 	public void onSave() {

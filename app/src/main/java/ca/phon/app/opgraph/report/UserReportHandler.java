@@ -30,7 +30,7 @@ import ca.phon.util.resources.FolderHandler;
 public class UserReportHandler extends FolderHandler<URL> {
 
 	public final static String DEFAULT_USER_REPORT_FOLDER = 
-			PrefHelper.getUserDataFolder() + File.separator + "reports";
+			PrefHelper.getUserDataFolder() + File.separator + ReportLibrary.REPORT_FOLDER_NAME;
 	
 	public UserReportHandler() {
 		this(new File(DEFAULT_USER_REPORT_FOLDER));

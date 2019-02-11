@@ -22,7 +22,7 @@ import ca.phon.util.resources.ClassLoaderHandler;
 
 public class StockReportHandler extends ClassLoaderHandler<URL> {
 
-	private final static String STOCK_REPORT_LIST = "reports/reports.list";
+	private final static String STOCK_REPORT_LIST = "report/reports.list";
 	
 	public StockReportHandler() {
 		super();
