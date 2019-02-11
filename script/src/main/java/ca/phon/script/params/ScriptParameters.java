@@ -258,7 +258,33 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 		// shouldn't get here!
 		return Integer.toHexString(buffer.hashCode());
 	}
-
+	
+	public String toHTMLString() {
+		return toHTMLString(false);
+	}
+	
+	public String toHTMLString(boolean modifiedOnly) {
+		return toHTMLString(modifiedOnly, List.of(), List.of());
+	}
+	
+	/**
+	 * Return an HTML formatted version of the script parameters.
+	 * 
+	 * @param modifiedOnly
+	 * @param includes
+	 * @param excludes
+	 * 
+	 * @return
+	 */
+	public String toHTMLString(boolean modifiedOnly, List<String> includes, List<String> excludes) {
+		final ScriptParametersToHTML toHTML = new ScriptParametersToHTML();
+		toHTML.setPrintOnlyChanged(modifiedOnly);
+		toHTML.setIncludes(includes);
+		toHTML.setExcludes(excludes);
+		accept(toHTML);
+		return toHTML.getHTML();
+	}
+	
 	@Override
 	public void accept(Visitor<ScriptParam> visitor) {
 		for(ScriptParam param:this)
