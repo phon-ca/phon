@@ -49,9 +49,10 @@ public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 				final TristateCheckBoxTreeNode childTreeNode = new TristateCheckBoxTreeNode(childNode);
 				childTreeNode.setCheckingState(TristateCheckBoxState.CHECKED);
 				childTreeNode.setEnablePartialCheck(false);
-				treeNode.add(childTreeNode);
 				
 				scanTree(childNode, childTreeNode);
+				if(childTreeNode.getChildCount() > 0)
+					treeNode.add(childTreeNode);
 			} else if(childNode instanceof TableNode) {
 				final TristateCheckBoxTreeNode childTreeNode = new TristateCheckBoxTreeNode(childNode);
 				childTreeNode.setCheckingState(TristateCheckBoxState.CHECKED);
