@@ -18,6 +18,7 @@ package ca.phon.app.opgraph.editor;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.function.BiFunction;
@@ -70,9 +71,10 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		this.editorPanel = new SimpleEditorPanel(project, library, 
 				modelInstantiator, nodeInstantiator, queryNodeInstantiator, runFactory);
-		getModel().getDocument().getUndoSupport().addUndoableEditListener( (e) -> updateTitle() );
-		editorPanel.addPropertyChangeListener("currentFile", (e) -> updateTitle() );
-
+		PropertyChangeListener titleListener = (e) -> updateTitle();
+		editorPanel.addPropertyChangeListener("currentFile", titleListener );
+		editorPanel.addPropertyChangeListener("modified", titleListener );
+		
 		putExtension(Project.class, project);
 
 		init();
@@ -202,7 +204,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 	@Override
 	public boolean hasUnsavedChanges() {
-		return getModel().getDocument().hasModifications();
+		return editorPanel.isModified();
 	}
 
 	public File getCurrentFile() {
@@ -237,10 +239,6 @@ public class SimpleEditor extends CommonModuleFrame {
 
 	public Project getProject() {
 		return getExtension(Project.class);
-	}
-
-	public boolean chooseFile() {
-		return editorPanel.chooseFile();
 	}
 
 	@Override

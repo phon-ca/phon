@@ -25,6 +25,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -49,6 +50,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -62,6 +65,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -69,6 +73,7 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.TransferHandler;
@@ -117,7 +122,10 @@ import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -156,11 +164,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private final BiFunction<OpGraph, Project, Runnable> runFactory;
 	
 	private JToolBar toolbar;
-	private JButton saveButton;
+	private DropDownButton saveButton;
 	private JButton browseButton;
 	private JButton addButton;
 	private JButton removeButton;
-	private JButton renameButton;
 	private JButton moveUpButton;
 	private JButton moveDownButton;
 	private JButton runButton;
@@ -191,6 +198,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SimpleEditorPanel.class, this);
 	
+	private boolean modified = false;
+	
 	/**
 	 * Constructor
 	 *
@@ -214,7 +223,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		this.runFactory = runFactory;
 
 		model = modelInstantiator.createModel(new OpGraph());
-
+		model.getDocument().getUndoSupport().addUndoableEditListener( (e) -> setModified(true) );
+		
 		init();
 		extSupport.initExtensions();
 	}
@@ -261,10 +271,33 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		// create components for popup window selection
 		final ImageIcon saveIcn =
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-		final PhonUIAction saveAct = new PhonUIAction(this, "saveData");
-		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save");
-		saveAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
-		saveButton = new JButton(saveAct);
+		JPopupMenu saveMenu = new JPopupMenu();
+		var saveAct = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(getCurrentFile() != null) {
+					try {
+						saveData();
+					} catch (IOException e1) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.severe(e1);
+					}
+				}
+			}
+		};
+		saveAct.putValue(Action.SHORT_DESCRIPTION, "Save");
+		saveAct.putValue(Action.SMALL_ICON, saveIcn);
+//		saveAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+//		saveAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		saveAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
+		
+		saveButton = new DropDownButton(saveAct);
+		saveButton.setOnlyPopup(true);
+		saveButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+			if(Boolean.parseBoolean(e.getNewValue().toString())) {
+				setupSaveMenu(saveMenu);
+			}
+		});
 		
 		final PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
 		final ImageIcon openIcn =
@@ -287,13 +320,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcn);
 		final KeyStroke removeKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 		removeButton = new JButton(removeAct);
-
-		final ImageIcon renameIcn =
-				IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
-		final PhonUIAction renameAct = new PhonUIAction(this, "onRename");
-		renameAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Rename selected " + getModel().getNoun().getObj1());
-		renameAct.putValue(PhonUIAction.SMALL_ICON, renameIcn);
-		renameButton = new JButton(renameAct);
 
 		final ImageIcon upIcn =
 				IconManager.getInstance().getIcon("actions/draw-arrow-up", IconSize.SMALL);
@@ -762,6 +788,16 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	public File getCurrentFile() {
 		return getModel().getDocument().getSource();
 	}
+	
+	public boolean isModified() {
+		return this.modified;
+	}
+	
+	public void setModified(boolean modified) {
+		boolean wasModified = this.modified;
+		this.modified = modified;
+		firePropertyChange("modified", wasModified, modified);
+	}
 
 	public void setCurrentFile(File source) {
 		File oldSource = getCurrentFile();
@@ -777,7 +813,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 	}
 
-	public boolean chooseFile() {
+	public boolean chooseFile(String initialFolder) {
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setCanCreateDirectories(true);
@@ -789,36 +825,82 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			final File parentFolder = getCurrentFile().getParentFile();
 			final String name = getCurrentFile().getName();
 
-			props.setInitialFolder(parentFolder.getAbsolutePath());
+			if(initialFolder == null)
+				props.setInitialFolder(parentFolder.getAbsolutePath());
 			props.setInitialFile(name);
 		} else {
-			props.setInitialFolder(getModel().getDefaultFolder());
+			props.setInitialFolder(initialFolder);
 			props.setInitialFile("Untitled.xml");
 		}
 
 		final String saveAs = NativeDialogs.showSaveDialog(props);
 		if(saveAs != null) {
 			setCurrentFile(new File(saveAs));
+			saveButton.setOnlyPopup(false);
 			return true;
 		} else {
 			return false;
 		}
 	}
+	
+	public void saveInFolder(PhonActionEvent pae) {
+		final String path = (String)pae.getData();
+		if(path != null) {
+			File folder = new File(path);
+			if(!folder.exists()) {
+				folder.mkdirs();
+			}
+		}
+		if(chooseFile(path)) {
+			try {
+				saveData();
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.severe(e);
+			}
+		}
+	}
 
+	protected void setupSaveMenu(JPopupMenu menu) {
+		menu.removeAll();
+		
+		final ImageIcon saveAsIcn = IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
+		
+		PhonUIAction saveUserAct = new PhonUIAction(this, "saveInFolder", library.getUserFolderPath());
+		saveUserAct.putValue(PhonUIAction.NAME, "Save in user library...");
+		saveUserAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
+		menu.add(saveUserAct);
+		
+		PhonUIAction saveProjectAct = new PhonUIAction(this, "saveInFolder", library.getProjectFolderPath(getProject()));
+		saveProjectAct.putValue(PhonUIAction.NAME, "Save in project library...");
+		saveProjectAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
+		menu.add(saveProjectAct);
+		
+		PhonUIAction saveAsAct = new PhonUIAction(this, "saveInFolder", library.getProjectFolderPath(getProject()));
+		saveAsAct.putValue(PhonUIAction.NAME, "Save as...");
+		saveAsAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
+		menu.add(saveAsAct);
+	}
+	
 	public boolean saveData() throws IOException {
 		if(!getModel().validate()) return false;
 		if(getCurrentFile() == null) {
-			if(!chooseFile()) return false;
+			if(!chooseFile(null)) return false;
 		}
 		
 		// add extension to document
 		getGraph().putExtension(SimpleEditorExtension.class, new SimpleEditorExtension(macroNodes));
 		
 		OpgraphIO.write(getModel().getDocument().getRootGraph(), getCurrentFile());
-		getModel().getDocument().markAsUnmodified();
+		
+		// XXX OpGraph deletes undo history here
+		//getModel().getDocument().markAsUnmodified();
+		
+		setModified(false);
+		
 		return true;
 	}
-		
+	
 	/**
 	 * If the given analysis/report node has a settings node 'Parameters' which
 	 * is a {@link PhonScriptNode} and has a parameter 'reportTitle' this

@@ -72,7 +72,7 @@ public class PhonUIAction extends AbstractAction {
 	private Object data = null;
 
 	/**
-	 * Constructors
+	 * Constructors - pre java 9
 	 */
 	public PhonUIAction(Object delegate, String methodId) {
 		this(delegate, methodId, null);
