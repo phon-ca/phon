@@ -1,0 +1,215 @@
+/*
+ * Copyright (C) 2012-2019 Gregory Hedlund & Yvan Rose
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/* 
+ * A common set of CSS rules used in HTML outputs.
+ */
+
+/* Default body and element styles */
+body {
+    background: white;
+    font-size: 10pt;
+    margin-top: 0px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+    color: rgb(0, 90, 140);
+}
+
+h1 {
+    font-size: 130%;
+}
+
+h1:first-of-type {
+    margin-top: 0px;
+}
+
+h2 {
+    font-size: 120%;
+}
+
+h3 {
+    font-size: 110%;
+}
+
+h4 {
+    font-size: 100%;
+}
+
+h5 {
+    font-size: 100%;
+}
+
+h6 {
+    font-size: 100%;
+}
+
+table {
+    border: thin solid darkgrey;
+    empty-cells: show;
+    table-layout:fixed;
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+th {
+    overflow:hidden;
+    font-weight: bold;
+    border-bottom: thin solid darkgrey;
+    padding-right: 20px;
+}
+
+th td {
+    overflow:auto;
+}
+
+td {
+    overflow:hidden;
+    padding-right: 20px;
+}
+
+td:hover {
+    overflow:visible;
+}
+
+pre {
+    margin-left: 3em;
+}
+
+code {
+    font-family:monospace;
+}
+
+caption {
+    display: table-caption;
+    text-align: left;
+}
+
+img {
+	vertical-align: text-top;
+}
+
+/* Common classes */
+.show { 
+    display: block; 
+}
+
+.text-value {
+	font-family: inherit;
+}
+
+.tier-value {
+    font-family:"Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
+}
+
+.number-value {
+    font-family:"noto monospace", monospace;
+}
+
+.participants {
+    margin-bottom: 1em;
+}
+
+.participants-table {
+    text-align: left;
+    empty-cells: show;
+}
+
+.record {
+    margin-bottom: 1em;
+}
+
+.record-table tr td:first-child {
+    border-right: 1px solid lightgrey;
+}
+
+.tier-name {
+    padding-right: 20px;
+}
+
+.tier-value {
+    padding-right: 5px;
+}
+
+.result-metadata {
+	padding-left: 1em;
+	color: gray;
+}
+
+@media print {
+
+    .pagebreak {
+        page-break-after:always !important;
+    }
+
+    .noprint {
+        display: none;
+    }
+
+    body {
+        font-family: arial, times, serif;
+        font-size: 12pt;
+    }
+
+    .tier-value {
+        font-family: "Charis SIL Compact", "noto serif", "Charis SIL", times, serif;
+        font-size: 12pt;
+    }
+
+    .sidenav {
+        display: none;
+    }
+
+    header, footer, nav {
+        display: none;
+    }
+
+    section {
+    }
+
+    table {
+        page-break-inside:avoid;
+        table-layout:auto;
+    }
+
+    thead {
+        display:table-header-group;
+    }
+
+    tfoot {
+        display:table-footer-group;
+    }
+
+    tr {
+        page-break-inside:avoid !important;
+        page-break-after:auto;
+    }
+    
+    img {
+        page-break-inside:avoid !important;
+    }
+
+    a {
+        font-style: normal;
+    }
+    
+    .record {
+        page-break-inside: avoid !important;
+    }
+
+}

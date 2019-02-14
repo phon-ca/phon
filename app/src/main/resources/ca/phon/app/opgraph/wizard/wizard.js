@@ -74,13 +74,13 @@ function addCopyTableButton(table, index) {
     var buttonId = "copyTable" + (index + 1);
 
     var div = document.createElement("div");
-    div.setAttribute("class", "tableButtonRow");
+    div.setAttribute("class", "table-button-row");
     var buttonRowId = "tableButtonRow" + (index + 1);
     div.setAttribute("id", buttonRowId);
 
     var tableCaption = table.querySelector("caption");
     var button = documentRef.createElement("button");
-    button.setAttribute("class", "tableButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+    button.setAttribute("class", "table-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
     button.setAttribute("id", buttonId);
     button.setAttribute("title", "Copy table to clipboard as CSV");
     button.setAttribute("onclick", "onCopyTableData(this, '" + tableId + "')");
@@ -102,11 +102,11 @@ function showTable(tableId) {
 
 function showTableMenu(tablePopupId) {
     if(currentPopupMenu != null) {
-        currentPopupMenu.classList.remove("show");
+        currentPopupMenu.classList = ["table-popup-menu--hidden"];
         currentPopupMenu = null;
     }
 	currentPopupMenu = document.getElementById(tablePopupId);
-	currentPopupMenu.classList.toggle("show");
+	currentPopupMenu.classList = ["table-popup-menu"];
 }
 
 function saveTableAsCSV(tableId) {
@@ -124,7 +124,7 @@ function highlightResultValue(tableId, row, column) {
 function addMenuButtons(table, index) {
     var documentRef = document;
 
-    var buttonRowId = "tableButtonRow" + (index + 1);
+    var buttonRowId = "table-button-row" + (index + 1);
     
     var tableCaption = table.querySelector("caption");
     var div = tableCaption.lastChild;
@@ -132,7 +132,7 @@ function addMenuButtons(table, index) {
     var tablePopupId = table.getAttribute("id") + "_popup";
     
     var button = documentRef.createElement("button");
-    button.setAttribute("class", "tableButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+    button.setAttribute("class", "table-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
     button.setAttribute("onclick", "showTableMenu('" + tablePopupId + "')");
     button.setAttribute("title", "Show menu");
     
@@ -141,7 +141,7 @@ function addMenuButtons(table, index) {
     button.appendChild(menuImg);
     
     var tableMenu = documentRef.createElement("div");
-	tableMenu.setAttribute("class", "tablePopupMenu");
+	tableMenu.setAttribute("class", "table-popup-menu--hidden");
 	tableMenu.setAttribute("id", tablePopupId);
 
     var menuList = documentRef.createElement("ul");
@@ -184,11 +184,11 @@ function page_init(documentRef) {
         addCopyTableButton(document.getElementById(tableIds[i]), i);
     }
     
-    $(".tableButton").button();
+    $(".table-button").button();
     
     $(document).on("click", function(event){
-        if(currentPopupMenu != null && !event.target.closest(".tableButton")) {
-            currentPopupMenu.classList.remove("show");
+        if(currentPopupMenu != null && !event.target.closest(".table-button")) {
+            currentPopupMenu.classList = ["table-popup-menu--hidden"];
             currentPopupMenu = null;
         }
     });

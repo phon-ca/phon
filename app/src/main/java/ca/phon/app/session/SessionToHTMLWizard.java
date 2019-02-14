@@ -386,9 +386,6 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 					var result = rs.getResult(0);
 					
 					var rvList = new ArrayList<String>();
-					for(var rv:result) {
-						rvList.add(rv.getName());
-					}
 					rvList.addAll(result.getMetadata().keySet());
 					
 					var tableModel = new ResultSetValuesTableModel(rvList);
@@ -563,7 +560,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 			
 			resultValueList = rvList;
 			resultValueVisible = new HashMap<>();
-			for(String rvName:rvList) resultValueVisible.put(rvName, true);
+			for(String rvName:rvList) resultValueVisible.put(rvName, false);
 		}
 
 		@Override

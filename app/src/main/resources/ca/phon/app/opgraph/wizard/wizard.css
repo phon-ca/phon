@@ -1,97 +1,10 @@
-body {
-    background: white;
-    font-size: 10pt;
-    margin-top: 0px;
-    display: inline-flex;
-}
-
-h1,h2,h3,h4,h5,h6 {
-    font-weight: bold;
-    margin-top: 0.5em;
-    margin-bottom: 0.25em;
-    color: rgb(0, 90, 140);
-}
-
-h1 {
-    font-size: 130%;
-}
-
-h1:first-of-type {
-    margin-top: 0px;
-}
-
-h2 {
-    font-size: 120%;
-}
-
-h3 {
-    font-size: 110%;
-}
-
-h4 {
-    font-size: 100%;
-}
-
-h5 {
-    font-size: 100%;
-}
-
-h6 {
-    font-size: 100%;
-}
-
-table {
-    border: thin solid darkgrey;
-    empty-cells: show;
-    table-layout:fixed;
-    text-align: left;
-    margin-bottom: 1em;
-}
-
-th {
-    overflow:hidden;
-    font-weight: bold;
-    border-bottom: thin solid darkgrey;
-    padding-right: 20px;
-}
-
-th td {
-    overflow:auto;
-}
-
-td {
-    overflow:hidden;
-    padding-right: 20px;
-}
-
-td:hover {
-    overflow:visible;
-}
-
-pre {
-    margin-left: 3em;
-}
-
-code {
-    font-family:monospace;
-}
-
-caption {
-    display: table-caption;
-    text-align: left;
-}
-
-img {
-	vertical-align: text-top;
-}
-
-.tableButtonRow {
+.table-button-row {
 	display: flex;
 	flex-direction: row;
 	margin-right: -5px;
 }
 
-.tableButton {
+.table-button {
 	font-size: small;
 	display: inline-block;
 
@@ -115,34 +28,50 @@ img {
 	border-radius: 2px 2px 0px 0px;
 }
 
-.tablePopupMenu {
-    display: none;
+.table-popup-menu {
+    display: block;
 	position: absolute;
 }
 
-.show { 
-    display: block; 
+.table-popup-menu--hidden {
+	display: none;
+	position: absolute;
 }
 
-.text_value {
-	font-family: "Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
-}
-
-.ipa_value {
-    font-family:"Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
-}
-
-.number_value {
-    font-family:"noto monospace", monospace;
-}
-
-.sessionLink {
+.session-link {
 	color: inherit
 }
 
-.sessionLink:hover {
+.session-link:hover {
 	color: rgb(0, 90, 140);
 	cursor: pointer;
+}
+
+.main {
+    position: relative;
+}
+
+nav {
+    position: fixed;
+    top:20px;
+    right: 20px;
+}
+
+#menuToggle {
+    float: right;
+}
+
+#toc {
+    padding-top: 20px;
+    display: none;
+}
+
+#toc .ui-menu {
+    width: 300px;
+}
+
+#main {
+    padding: 0px;
 }
 
 /* jquery-ui icons overrides */
@@ -180,126 +109,14 @@ img {
 }
 /* end jquery-ui icons overrides */
 
-.main {
-    position: relative;
-}
-
-nav {
-    position: fixed;
-    top:20px;
-    right: 20px;
-}
-
-#menuToggle {
-    float: right;
-}
-
-#toc {
-    padding-top: 20px;
-    display: none;
-}
-
-#toc .ui-menu {
-    width: 300px;
-}
-
-#main {
-    padding: 0px;
-}
-
-/* Session to HTML styles */
-.participants {
-    margin-bottom: 1em;
-}
-
-.participants table {
-    text-align: left;
-    empty-cells: show;
-}
-
-.record {
-    margin-bottom: 1em;
-}
-
-.tier_name {
-    padding-right: 20px;
-}
-
-.record table tr td:first-child {
-    border-right: 1px solid lightgrey;
-}
-
-.tier_value {
-    padding-right: 5px;
-}
-
 @media print {
 
-    .pagebreak {
-        page-break-after:always !important;
-    }
-
-    .noprint {
-        display: none;
-    }
-
-    body {
-        font-family: arial, times, serif;
-        font-size: 12pt;
-    }
-
-    #main {
+	#main {
         margin: inherit;
-    }
-
-    .ipa_value {
-        font-family: "Charis SIL Compact", "noto serif", "Charis SIL", times, serif;
-        font-size: 12pt;
-    }
-
-    .sidenav {
-        display: none;
     }
 
     .tableButtonRow {
     	display: none;
-    }
-
-    header, footer, nav {
-        display: none;
-    }
-
-    section {
-    }
-
-    table {
-        page-break-inside:avoid;
-        table-layout:auto;
-    }
-
-    thead {
-        display:table-header-group;
-    }
-
-    tfoot {
-        display:table-footer-group;
-    }
-
-    tr {
-        page-break-inside:avoid !important;
-        page-break-after:auto;
-    }
-    
-    img {
-        page-break-inside:avoid !important;
-    }
-
-    a {
-        font-style: normal;
-    }
-    
-    .record {
-        page-break-inside: avoid;
     }
 
 }

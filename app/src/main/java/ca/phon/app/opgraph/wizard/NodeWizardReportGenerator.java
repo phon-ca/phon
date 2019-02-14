@@ -36,6 +36,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ca.phon.app.VersionInfo;
+import ca.phon.app.html.HTMLConstants;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
@@ -67,17 +68,18 @@ public class NodeWizardReportGenerator {
 			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAASFBMVEUAAAAAAP8AWowAWowAV4oAYIAAWowAWYwAYokAWowAW40AgIAAWo0AWYwAWowAXogAWowAW4wAZoAAWowAW4sAWowAWowAAADct4obAAAAFnRSTlMAAcyvIwj5iQ3oYgLNPKge9oEK41qztuL3PwAAAAFiS0dEAIgFHUgAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfhBxkMORydYo4TAAAAR0lEQVQY04XPNxKAQAwEwcNzeHPM/59KiiZBYVdJ2k1V3bTpOx30wxgB8jRHgGUVwLYLOM4rAtxFAM8PaMVH9VbBFD2Wc/0XAhULJxWg6xUAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDctMjVUMTI6NTc6MjgrMDI6MDBO4MWCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTA3LTI1VDEyOjU3OjI4KzAyOjAwP719PgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=";
 
 	private final static String[] cssFiles = {
-		"jquery-ui.min.css",
-		"jquery-ui.structure.min.css",
-		"jquery-ui.theme.min.css",
-		"wizard.css",
-		"burger-icon.css"
+		HTMLConstants.JQUERY_UI_CSS,
+		HTMLConstants.JQUERY_UI_STRUCTURE_CSS,
+		HTMLConstants.JQUERY_UI_THEME_CSS,
+		HTMLConstants.CSS_COMMON,
+		"ca/phon/app/opgraph/wizard/wizard.css",
+		HTMLConstants.BURGER_ICON_CSS,
 	};
 	
 	private final static String[] jsFiles = {
-		"jquery-3.3.1.min.js",
-		"jquery-ui.min.js",
-		"wizard.js"	
+		HTMLConstants.JQUERY_JS,
+		HTMLConstants.JQUERY_UI_JS,
+		"ca/phon/app/opgraph/wizard/wizard.js"	
 	};
 	
 	public NodeWizardReportGenerator(NodeWizard wizard, ReportTree reportTree, String reportTemplate, String outputPath)
@@ -183,7 +185,7 @@ public class NodeWizardReportGenerator {
 	
 	private void appendCPFile(StringBuilder sb, String path) {
 		try(BufferedReader in = new BufferedReader(
-				new InputStreamReader(getClass().getResourceAsStream(path)))) {
+				new InputStreamReader(ClassLoader.getSystemResourceAsStream(path)))) {
 			String line = null;
 			while((line = in.readLine()) != null) {
 				sb.append(line).append(nl);
