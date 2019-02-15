@@ -467,27 +467,27 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 					includeAlignmentBox.isSelected());
 			
 			SessionToHTML converter = new SessionToHTML();
-			converter.setRecordFilter(recordFilterPanel.getRecordFilter());
+			converter.getSettings().setRecordFilter(recordFilterPanel.getRecordFilter());
 			
-			converter.setIncludeParticipantInfo(includeParticipantInfoBox.isSelected());
-			converter.setIncludeRole(includeRole.isSelected());
-			converter.setIncludeAge(includeAge.isSelected());
-			converter.setIncludeBirthday(includeBirthday.isSelected());
-			converter.setIncludeSex(includeSex.isSelected());
-			converter.setIncludeLanguage(includeLanguage.isSelected());
-			converter.setIncludeGroup(includeGroup.isSelected());
-			converter.setIncludeEducation(includeEducation.isSelected());
-			converter.setIncludeSES(includeSES.isSelected());
+			converter.getSettings().setIncludeParticipantInfo(includeParticipantInfoBox.isSelected());
+			converter.getSettings().setIncludeRole(includeRole.isSelected());
+			converter.getSettings().setIncludeAge(includeAge.isSelected());
+			converter.getSettings().setIncludeBirthday(includeBirthday.isSelected());
+			converter.getSettings().setIncludeSex(includeSex.isSelected());
+			converter.getSettings().setIncludeLanguage(includeLanguage.isSelected());
+			converter.getSettings().setIncludeGroup(includeGroup.isSelected());
+			converter.getSettings().setIncludeEducation(includeEducation.isSelected());
+			converter.getSettings().setIncludeSES(includeSES.isSelected());
 			
-			converter.setTierView(((TierViewTableModel)tierViewTable.getModel()).tierView);
-			converter.setIncludeSyllabification(includeSyllabificationBox.isSelected());
-			converter.setIncludeAlignment(includeAlignmentBox.isSelected());
+			converter.getSettings().setTierView(((TierViewTableModel)tierViewTable.getModel()).tierView);
+			converter.getSettings().setIncludeSyllabification(includeSyllabificationBox.isSelected());
+			converter.getSettings().setIncludeAlignment(includeAlignmentBox.isSelected());
 
 			List<ResultSet> selectedResults = resultSetSelector.getSelectedResultSets();
 			ResultSet rs = null;
 			if(selectedResults.size() > 0) {
-				converter.setIncludeQueryResults(includeQueryResults.isSelected());
-				converter.setFilterRecordsUsingQueryResults(filterUsingQueryResults.isSelected());
+				converter.getSettings().setIncludeQueryResults(includeQueryResults.isSelected());
+				converter.getSettings().setFilterRecordsUsingQueryResults(filterUsingQueryResults.isSelected());
 				
 				rs = selectedResults.get(0);
 				
@@ -496,8 +496,8 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 						tableModel.resultValueList.stream()
 							.filter( (rvName) -> tableModel.resultValueVisible.get(rvName) )
 							.collect( Collectors.toList() );
-				converter.setResultValues(rvList);
-				converter.setExcludeResultValues(false);
+				converter.getSettings().setResultValues(rvList);
+				converter.getSettings().setExcludeResultValues(false);
 			}
 			
 			ExportWorker worker = new ExportWorker(converter, rs);

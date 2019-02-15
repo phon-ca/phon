@@ -38,6 +38,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionToHTML;
+import ca.phon.app.session.SessionToHTML.SessionToHTMLSettings;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -137,31 +138,32 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		
 		SessionToHTML sessionToHTML = new SessionToHTML();
 		
-		sessionToHTML.setShowQueryResultsFirst(true);
+		SessionToHTMLSettings settings = (SessionToHTMLSettings)sessionToHTML.getSettings();
+		settings.setShowQueryResultsFirst(true);
 		
-		sessionToHTML.setIncludeParticipantInfo(isIncludeParticipantInfo());
-		sessionToHTML.setIncludeRole(isIncludeParticipantInfo("Role"));
-		sessionToHTML.setIncludeAge(isIncludeParticipantInfo("Age"));
-		sessionToHTML.setIncludeBirthday(isIncludeParticipantInfo("Birthday"));
-		sessionToHTML.setIncludeEducation(isIncludeParticipantInfo("Education"));
-		sessionToHTML.setIncludeGroup(isIncludeParticipantInfo("Group"));
-		sessionToHTML.setIncludeLanguage(isIncludeParticipantInfo("Language"));
-		sessionToHTML.setIncludeSex(isIncludeParticipantInfo("Sex"));
-		sessionToHTML.setIncludeSES(isIncludeParticipantInfo("SES"));
+		settings.setIncludeParticipantInfo(isIncludeParticipantInfo());
+		settings.setIncludeRole(isIncludeParticipantInfo("Role"));
+		settings.setIncludeAge(isIncludeParticipantInfo("Age"));
+		settings.setIncludeBirthday(isIncludeParticipantInfo("Birthday"));
+		settings.setIncludeEducation(isIncludeParticipantInfo("Education"));
+		settings.setIncludeGroup(isIncludeParticipantInfo("Group"));
+		settings.setIncludeLanguage(isIncludeParticipantInfo("Language"));
+		settings.setIncludeSex(isIncludeParticipantInfo("Sex"));
+		settings.setIncludeSES(isIncludeParticipantInfo("SES"));
 		
-		sessionToHTML.setIncludeHeader(false);
-		sessionToHTML.setIncludeTierData(isIncludeTierData());
-		sessionToHTML.setIncludeSyllabification(isIncludeSyllabification());
-		sessionToHTML.setIncludeAlignment(isIncludeAlignment());
-		sessionToHTML.setFilterRecordsUsingQueryResults(true);
-		sessionToHTML.setIncludeQueryResults(true);
+		settings.setIncludeHeader(false);
+		settings.setIncludeTierData(isIncludeTierData());
+		settings.setIncludeSyllabification(isIncludeSyllabification());
+		settings.setIncludeAlignment(isIncludeAlignment());
+		settings.setFilterRecordsUsingQueryResults(true);
+		settings.setIncludeQueryResults(true);
 		
 		for(ResultSet rs:resultSets) {
 			SessionPath sp = new SessionPath(rs.getCorpus(), rs.getSession());
 			
 			try {
 				Session session = project.openSession(sp.getCorpus(), sp.getSession());
-				sessionToHTML.setTierView(session.getTierView());
+				settings.setTierView(session.getTierView());
 				
 				String html = sessionToHTML.toHTML(session, rs);
 				htmlMap.put(sp, html);
