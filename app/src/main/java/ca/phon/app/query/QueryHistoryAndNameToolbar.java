@@ -320,6 +320,10 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 		updateLabelFromCurrentHash();
 	}
 	
+	public JComboBox<String> getQueryNameBox() {
+		return this.queryNameBox;
+	}
+	
 	public ParamSetType currentQuery() {
 		if(currentIndex < 0 || currentIndex >= queryHistoryManager.size()) return null;
 		return queryHistoryManager.getParamSet(currentIndex);
@@ -451,6 +455,7 @@ public class QueryHistoryAndNameToolbar extends JToolBar {
 					.collect( Collectors.toList() );
 		queryNames.addAll(stockQueryNames);
 		Collections.sort(queryNames);
+		
 		queryNameModel.removeAllElements();
 		queryNames.forEach( (qn) -> queryNameModel.addElement(qn) );
 		queryNameBox.setSelectedItem(getQueryName());

@@ -331,6 +331,11 @@ public class QueryNode extends OpNode implements NodeSettings {
 	private QueryNodeSettingsPanel settingsPanel;
 	private ScriptPanel scriptPanel;
 	private QueryHistoryAndNameToolbar queryHistoryPanel;
+	
+	public QueryHistoryAndNameToolbar getQueryHistoryAndNameToolbar() {
+		return queryHistoryPanel;
+	}
+	
 	@Override
 	public Component getComponent(GraphDocument arg0) {
 		if(settingsPanel == null) {

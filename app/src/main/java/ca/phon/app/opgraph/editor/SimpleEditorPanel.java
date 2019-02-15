@@ -579,7 +579,55 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	public void addQuery(QueryScript queryScript, int idx) {
 		final MacroNode node = queryNodeInstantiator.apply(queryScript);
+		setupQueryNameListener(node);
 		addNode(node, idx);
+	}
+	
+	private void setupQueryNameListener(MacroNode node) {
+		// listen for changes to the query name combo box
+		Optional<OpNode> opNode = 
+				node.getGraph().getVertices().stream().filter( (v) -> v instanceof QueryNode ).findFirst();
+		if(opNode.isPresent()) {
+			QueryNode queryNode = (QueryNode)opNode.get();
+			queryNode.getComponent(null);
+			final JComboBox<String> queryNameBox = queryNode.getQueryHistoryAndNameToolbar().getQueryNameBox();
+			queryNameBox.addItemListener( (e) -> {
+				Object selectedItem = queryNameBox.getSelectedItem();
+				if(selectedItem != null && node.getExtension(QueryName.class) == null) {
+					String queryName = selectedItem.toString();					
+					node.setName(queryName);
+				} else {
+					// default query name
+					QueryName qn = queryNode.getQueryScript().getExtension(QueryName.class);
+					String queryName = "Query";
+					
+					if(qn != null) {
+						queryName = qn.getName();
+						if(qn.getLocation() != null) {
+							try {
+								String path = URLDecoder.decode(qn.getLocation().getPath(), "UTF-8");
+								File file = new File(path);
+								String filename = file.getName();
+								if(filename.lastIndexOf('.') > 0) {
+									filename = filename.substring(0, filename.lastIndexOf('.'));
+								}
+								queryName = filename;
+							} catch (UnsupportedEncodingException e1) {
+								LogUtil.warning(e1);
+							}
+						}
+					}
+					
+					if(node.getExtension(QueryName.class) != null) {
+						node.setName(node.getExtension(QueryName.class).getName());
+					} else {
+						node.setName(queryName);
+					}
+				}
+				updateReportTitle(node);
+				nodeTable.repaint();
+			});
+		}
 	}
 	
 	public void addDocument(File file) throws IOException {
@@ -1245,8 +1293,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		@Override
 		protected void process(List<MacroNode> chunks) {
-			for(MacroNode macroNode:chunks) {
-				addNode(macroNode, (idx >= 0 ? idx++ : -1));
+			for(MacroNode node:chunks) {
+				if(node.getExtension(QueryScript.class) != null) {
+					setupQueryNameListener(node);
+					// remove temporary extension
+					node.putExtension(QueryScript.class, null);
+				}
+				
+				addNode(node, (idx >= 0 ? idx++ : -1));
 			}
 		}
 
@@ -1299,6 +1353,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				} else if(document instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)document;
 					final MacroNode node = queryNodeInstantiator.apply(queryScript);
+					node.putExtension(QueryScript.class, queryScript);
 					
 					retVal.add(node);
 					super.publish(node);
@@ -1528,6 +1583,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				if(aValue.toString().trim().length() == 0) return;
 	
 				node.setName(aValue.toString());
+				
+				node.putExtension(QueryName.class, new QueryName(node.getName()));
 	
 				updateReportTitle((MacroNode)node);
 			} else if (columnIndex == 1) {
