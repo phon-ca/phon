@@ -325,12 +325,8 @@ public class SessionToHTML extends SessionExporter<String> {
 		buffer.append("</td></tr>").append(nl);		
 	}
 	
-	public String toHTML(Session session) {
-		return toHTML(session, null);
-	}
-	
 	@SuppressWarnings("unchecked")
-	public String toHTML(Session session, ResultSet resultSet) {
+	public String toHTML(Session session) {
 		final StringBuffer buffer = new StringBuffer();
 		var nl = "\n";
 		
@@ -375,8 +371,8 @@ public class SessionToHTML extends SessionExporter<String> {
 		}
 		
 		RecordFilter queryFilter = null;
-		if(getSettings().isFilterRecordsUsingQueryResults() && resultSet != null) {
-			queryFilter = new ResultSetRecordFilter(session, resultSet);
+		if(getSettings().isFilterRecordsUsingQueryResults() && getSettings().getResultSet() != null) {
+			queryFilter = new ResultSetRecordFilter(session, getSettings().getResultSet());
 		}
 		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
@@ -384,7 +380,7 @@ public class SessionToHTML extends SessionExporter<String> {
 			// check filters
 			if(getSettings().getRecordFilter() != null && !getSettings().getRecordFilter().checkRecord(utt)) continue;
 			if(queryFilter != null && !queryFilter.checkRecord(utt)) continue;
-			appendRecord(session, rIdx, resultSet, buffer);
+			appendRecord(session, rIdx, getSettings().getResultSet(), buffer);
 		}
 		
 		if(((SessionToHTMLSettings)getSettings()).isIncludeHeader()) {

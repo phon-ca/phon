@@ -164,8 +164,9 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			try {
 				Session session = project.openSession(sp.getCorpus(), sp.getSession());
 				settings.setTierView(session.getTierView());
+				settings.setResultSet(rs);
 				
-				String html = sessionToHTML.toHTML(session, rs);
+				String html = sessionToHTML.toHTML(session);
 				htmlMap.put(sp, html);
 			} catch (IOException e) {
 				LogUtil.severe(e);
