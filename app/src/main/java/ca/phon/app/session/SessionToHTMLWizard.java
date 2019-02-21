@@ -17,11 +17,13 @@ package ca.phon.app.session;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -53,6 +55,7 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.query.OpenResultSetSelector;
@@ -75,6 +78,8 @@ import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 
@@ -151,7 +156,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 	
 	private class ExportWorker extends SwingWorker<File, Object> {
 		
-		private SessionToHTML converter;
+		private final SessionToHTML converter;
 		
 		public ExportWorker(SessionToHTML converter) {
 			this.converter = converter;
@@ -179,6 +184,10 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 				
 				final String bufferName = session.getCorpus() + "." + session.getName();
 				final BufferPanel buffer = bufferPanel.createBuffer(bufferName);
+				buffer.putExtension(ExcelExporter.class, (wb) -> {
+					SessionToExcel toExcel = new SessionToExcel(converter.getSettings());
+					toExcel.createSheetInWorkbook(wb, session);
+				});
 				buffer.showHtml(false);
 				buffer.getBrowser().loadURL(htmlFile.toURI().toURL().toString());
 			} catch (InterruptedException | ExecutionException | MalformedURLException e) {

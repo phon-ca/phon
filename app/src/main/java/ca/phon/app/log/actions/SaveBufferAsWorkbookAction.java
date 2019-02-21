@@ -30,6 +30,7 @@ import com.teamdev.jxbrowser.chromium.JSValue;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.HTMLToWorkbookWriter;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
@@ -120,26 +121,9 @@ public class SaveBufferAsWorkbookAction extends HookableAction {
 			final WritableWorkbook workbook = Workbook.createWorkbook(new File(saveAs));
 			if(panel.isShowingTable()) {
 				panel.createSheetInExcelWorkbook(workbook);
-			} else if(panel.isShowingHtml()) {
-				String html = panel.getHTML();
-				
-				
-				final Map<String, DefaultTableDataSource> tableMap = new HashMap<>();
-				final JSValue tableMapObj = panel.getBrowser().executeJavaScriptAndReturnValue("window.tableMap");
-				if(tableMapObj != null) {
-					final Map<?, ?> objMap = (Map<?, ?>)tableMapObj.asJavaObject();
-					for(Object key:objMap.keySet()) {
-						Object val = objMap.get(key);
-						if(val != null && val instanceof DefaultTableDataSource) {
-							tableMap.put(key.toString(), (DefaultTableDataSource)val);
-						}
-					}
-				}
-				
-				final HTMLToWorkbookWriter writer = new HTMLToWorkbookWriter(tableMap);
-				writer.writeToWorkbook(workbook, html);
-			} else if(panel.isShowingBuffer()) {
-				// TODO write text data to new sheet
+			} else if(panel.getExtension(ExcelExporter.class) != null) {
+				ExcelExporter exporter = panel.getExtension(ExcelExporter.class);
+				exporter.addToWorkbook(workbook);
 			}
 			workbook.write();
 			workbook.close();

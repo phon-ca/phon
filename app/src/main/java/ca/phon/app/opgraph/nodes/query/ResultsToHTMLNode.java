@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.io.IOException;
+import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +37,10 @@ import javax.swing.JTextArea;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.SessionExportSettings;
+import ca.phon.app.session.SessionToExcel;
 import ca.phon.app.session.SessionToHTML;
 import ca.phon.app.session.SessionToHTML.SessionToHTMLSettings;
 import ca.phon.ipa.IPATranscript;
@@ -58,6 +62,8 @@ import ca.phon.session.SessionPath;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
 @OpNodeInfo(name="Results to HTML", category="Query", description="Print results in HTML format optionally including tier data.", showInLibrary=true)
 public class ResultsToHTMLNode extends OpNode implements NodeSettings {
@@ -69,6 +75,8 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 	private final OutputField htmlMapOutput = new OutputField("htmlMap", "Map of session -> HTML values", true, Map.class);
 	
 	private final OutputField keySetOutput = new OutputField("keySet", "Session path keys for html map", true, Collection.class);
+	
+	private final OutputField exporterMapOutput = new OutputField("excelExporterMap", "Map of session -> exporter values", true, Map.class);
 	
 	private JPanel settingsPanel;
 	
@@ -124,6 +132,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		putField(projectInput);
 		putField(resultSetsInput);
 		putField(htmlMapOutput);
+		putField(exporterMapOutput);
 		putField(keySetOutput);
 		
 		putExtension(NodeSettings.class, this);
@@ -135,6 +144,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		final ResultSet[] resultSets = (ResultSet[])context.get(resultSetsInput);
 		
 		final Map<SessionPath, String> htmlMap = new LinkedHashMap<>();
+		final Map<SessionPath, ExcelExporter> exporterMap = new LinkedHashMap<>();
 		
 		SessionToHTML sessionToHTML = new SessionToHTML();
 		
@@ -168,12 +178,18 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 				
 				String html = sessionToHTML.toHTML(session);
 				htmlMap.put(sp, html);
+				
+				SessionExportSettings cpy = new SessionExportSettings();
+				cpy.copySettings(settings);
+				
+				exporterMap.put(sp, new SessionToExcelExporter(project, sp, cpy));
 			} catch (IOException e) {
 				LogUtil.severe(e);
 			}
 		}
 		
 		context.put(htmlMapOutput, htmlMap);
+		context.put(exporterMapOutput, exporterMap);
 		context.put(keySetOutput, htmlMap.keySet());
 	}
 	
@@ -347,6 +363,36 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		setIncludeTierData(Boolean.parseBoolean(properties.getProperty("includeTierData", "false")));
 		setIncludeSyllabification(Boolean.parseBoolean(properties.getProperty("includeSyllabification", "false")));
 		setIncludeAlignment(Boolean.parseBoolean(properties.getProperty("includeAlignment", "true")));
+	}
+	
+	private class SessionToExcelExporter implements ExcelExporter {
+
+		private Project project;
+		
+		private SessionPath sessionPath;
+		
+		private SessionExportSettings settings;
+		
+		public SessionToExcelExporter(Project project, SessionPath sessionPath, SessionExportSettings settings) {
+			super();
+			
+			this.project = project;
+			this.sessionPath = sessionPath;
+			this.settings = settings;
+		}
+		
+		@Override
+		public void addToWorkbook(WritableWorkbook wb) throws WriteException {
+			try {
+				Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
+				
+				SessionToExcel converter = new SessionToExcel(settings);
+				converter.createSheetInWorkbook(wb, session);
+			} catch (IOException e) {
+				LogUtil.severe(e);
+			}
+		}
+		
 	}
 
 }

@@ -13,7 +13,7 @@ import ca.phon.util.PrefHelper;
  * Common options use when exporting sessions.
  *
  */
-public class SessionExportSettings {
+public class SessionExportSettings implements Cloneable {
 
 	// primary record filter
 	private RecordFilter recordFilter;
@@ -297,6 +297,44 @@ public class SessionExportSettings {
 		prefs.putBoolean(INCLUDE_TIER_DATA, isIncludeTierData());
 		prefs.putBoolean(INCLUDE_ALIGNMENT, isIncludeAlignment());
 		prefs.putBoolean(INCLUDE_SYLLABIFICATION, isIncludeSyllabification());
+	}
+	
+	public void copySettings(SessionExportSettings settings) {
+		setIncludeParticipantInfo(settings.isIncludeParticipantInfo());
+		setIncludeAge(settings.isIncludeAge());
+		setIncludeBirthday(settings.isIncludeBirthday());
+		setIncludeRole(settings.isIncludeRole());
+		setIncludeSex(settings.isIncludeSex());
+		setIncludeLanguage(settings.isIncludeLanguage());
+		setIncludeGroup(settings.isIncludeGroup());
+		setIncludeEducation(settings.isIncludeEducation());
+		setIncludeSES(settings.isIncludeSES());
+		
+		setRecordFilter(settings.getRecordFilter());
+		
+		setIncludeTierData(settings.isIncludeTierData());
+		setTierView(settings.getTierView());
+		setExcludeTiers(settings.isExcludeTiers());
+		setTierList(settings.getTierList());
+		setIncludeSyllabification(settings.isIncludeSyllabification());
+		setIncludeAlignment(settings.isIncludeAlignment());
+		
+		setIncludeQueryResults(settings.isIncludeQueryResults());
+		setFilterRecordsUsingQueryResults(settings.isFilterRecordsUsingQueryResults());
+		setResultSet(settings.getResultSet());
+		setExcludeResultValues(settings.isExcludeResultValues());
+		setResultValues(settings.getResultValues());
+		
+		setShowQueryResultsFirst(settings.isShowQueryResultsFirst());
+	}
+	
+	@Override
+	public Object clone() {
+		SessionExportSettings retVal = new SessionExportSettings();
+		
+		retVal.copySettings(this);
+		
+		return retVal;
 	}
 	
 }

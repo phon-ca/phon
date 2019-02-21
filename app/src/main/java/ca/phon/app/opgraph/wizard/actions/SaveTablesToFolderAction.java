@@ -27,10 +27,10 @@ import javax.swing.JCheckBox;
 import org.jdesktop.swingx.VerticalLayout;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.WorkbookUtils;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.ReportTreePath;
@@ -151,7 +151,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 			};
 			exportWithFoldersBox.addActionListener(l);
 			
-			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportTable, this::done);
+			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportTable, this::done, getType() == ExportType.EXCEL ? true : false);
 			exportDialog.setParentFrame(wizard);
 			
 			exportDialog.getCustomOptionsPanel().setLayout(new VerticalLayout());

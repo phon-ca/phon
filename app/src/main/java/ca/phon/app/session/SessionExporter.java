@@ -23,7 +23,7 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
-public abstract class SessionExporter<T> {
+public abstract class SessionExporter {
 	
 	private SessionExportSettings settings;
 	

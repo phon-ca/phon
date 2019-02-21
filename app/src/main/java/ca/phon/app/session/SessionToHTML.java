@@ -44,7 +44,7 @@ import ca.phon.session.TierViewItem;
  * Class for constructing an HTML page from a Phon session.
  *
  */
-public class SessionToHTML extends SessionExporter<String> {
+public class SessionToHTML extends SessionExporter {
 
 	public SessionToHTML() {
 		this(new SessionToHTMLSettings());
@@ -186,25 +186,21 @@ public class SessionToHTML extends SessionExporter<String> {
 		}
 		buffer.append(nl);
 		
-		if(getSettings().isIncludeTierData()) {
-			// setup table
-			buffer.append("<table class='record-table' id='table").append(recordIndex).append("'>").append(nl);
-			
-			
-			var tierView = (getSettings().getTierView() != null ? getSettings().getTierView() : session.getTierView());
-			
-			var groupCount = record.numberOfGroups();
-			
-			if(getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
-				int rIdx = 0;
-				for(var result:resultsForRecord) {
-					appendQueryResult(rIdx++, record, result, buffer);
-				}
-				
-				if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
-					buffer.append("<tr><td colspan='").append(groupCount+1).append("'>&nbsp;</td></tr>").append(nl);
-				}
+		// setup table
+		var groupCount = record.numberOfGroups();
+		buffer.append("<table class='record-table' id='table").append(recordIndex).append("'>").append(nl);
+		if(getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
+			int rIdx = 0;
+			for(var result:resultsForRecord) {
+				appendQueryResult(rIdx++, record, result, buffer);
 			}
+			
+			if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
+				buffer.append("<tr><td colspan='").append(groupCount+1).append("'>&nbsp;</td></tr>").append(nl);
+			}
+		}
+		if(getSettings().isIncludeTierData()) {
+			var tierView = (getSettings().getTierView() != null ? getSettings().getTierView() : session.getTierView());
 			
 			for(var tierIdx = 0; tierIdx < tierView.size(); tierIdx++) {
 				var tvi = tierView.get(tierIdx);
@@ -272,20 +268,18 @@ public class SessionToHTML extends SessionExporter<String> {
 				}
 				buffer.append("</tr>").append(nl);
 			}
-					
-			if(!getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
-				if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
-					buffer.append("<tr><td colspan='").append(groupCount+1).append("'>&nbsp;</td></tr>").append(nl);
-				}
-				
-				int rIdx = 0;
-				for(var result:resultsForRecord) {
-					appendQueryResult(rIdx++, record, result, buffer);
-				}
+		}
+		if(!getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
+			if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
+				buffer.append("<tr><td colspan='").append(groupCount+1).append("'>&nbsp;</td></tr>").append(nl);
 			}
 			
-			buffer.append("</table>").append(nl);
+			int rIdx = 0;
+			for(var result:resultsForRecord) {
+				appendQueryResult(rIdx++, record, result, buffer);
+			}
 		}
+		buffer.append("</table>").append(nl);
 		
 	}
 	

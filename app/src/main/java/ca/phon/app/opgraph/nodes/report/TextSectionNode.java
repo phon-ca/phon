@@ -34,7 +34,7 @@ import ca.phon.opgraph.app.extensions.NodeSettings;
 @OpNodeInfo(name="Text Section", description="Add Text to Report template", category="Report", showInLibrary=true)
 public class TextSectionNode extends ReportSectionNode implements NodeSettings {
 
-	private final InputField textInput =
+	protected final InputField textInput =
 			new InputField("text", "Text input (overrides settings)", true, true, String.class);
 
 	private JPanel settingsPanel;

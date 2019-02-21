@@ -80,8 +80,10 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	private BiFunction<String, ReportTreeNode, Boolean> exportFunction;
 	private Consumer<List<ReportTreeNode>> finishFunction;
 	
+	private boolean includeExcelExportable = false;
+	
 	public ReportTableExportDialog(ReportTree reportTree, Supplier<String> locationFunction,
-			BiFunction<String, ReportTreeNode, Boolean> exportFunction, Consumer<List<ReportTreeNode>> finishFunction) {
+			BiFunction<String, ReportTreeNode, Boolean> exportFunction, Consumer<List<ReportTreeNode>> finishFunction, boolean includeExcelExportable) {
 		super();
 		setTitle("Export Report Tables");
 		
@@ -89,6 +91,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		this.locationFunction = locationFunction;
 		this.exportFunction = exportFunction;
 		this.finishFunction = finishFunction;
+		this.includeExcelExportable = includeExcelExportable;
 		
 		init();
 	}
@@ -99,7 +102,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		header = new DialogHeader("Export Tables", "Use checkboxes to select tables for export");
 		add(header, BorderLayout.NORTH);
 		
-		reportTableCheckboxTree = new ReportTableCheckboxTree(reportTree);
+		reportTableCheckboxTree = new ReportTableCheckboxTree(reportTree, includeExcelExportable);
 		reportTableCheckboxTree.expandAll();
 		
 		final JScrollPane scroller = new JScrollPane(reportTableCheckboxTree);

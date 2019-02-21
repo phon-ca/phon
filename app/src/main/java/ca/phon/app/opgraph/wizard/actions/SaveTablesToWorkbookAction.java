@@ -20,10 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.WorkbookUtils;
+import ca.phon.app.opgraph.report.tree.ExcelExportableNode;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.ReportTreePath;
@@ -50,6 +52,38 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 		super();
 		
 		this.wizard = wizard;
+	}
+	
+	public boolean exportReportNode(String filename, ReportTreeNode node) {
+		if(node instanceof TableNode) {
+			return exportTable(filename, node);
+		} else if(node instanceof ExcelExportableNode) {
+			return exportExcelNode(filename, node);
+		} else 
+			return false;
+	}
+	
+	public boolean exportExcelNode(String filename, ReportTreeNode node) {
+		final ExcelExportableNode excelNode = (ExcelExportableNode)node;
+		
+		final ExcelExporter exporter = excelNode.getExporter();
+		final File workbookFile = new File(filename);
+		if(workbook == null) {
+			try {
+				workbook = Workbook.createWorkbook(workbookFile);
+			} catch (IOException e) {
+				LogUtil.severe(e);
+				return false;
+			}
+		}
+		try {
+			exporter.addToWorkbook(workbook);
+		} catch (WriteException e) {
+			LogUtil.severe(e);
+			return false;
+		}
+		
+		return true;
 	}
 
 	public boolean exportTable(String filename, ReportTreeNode node) {
@@ -120,7 +154,7 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 		if(reportBuffer != null) {
 			final ReportTree tree = (ReportTree)reportBuffer.getUserObject();
 			
-			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFilename, this::exportTable, this::done);
+			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFilename, this::exportReportNode, this::done, true);
 			exportDialog.setParentFrame(wizard);
 			
 			exportDialog.showDialog();

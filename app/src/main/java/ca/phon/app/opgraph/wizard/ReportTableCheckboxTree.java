@@ -19,6 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JTree;
 
+import ca.phon.app.opgraph.report.tree.ExcelExportableNode;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
@@ -34,26 +35,32 @@ import ca.phon.util.icons.IconSize;
 
 public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 	
-	public static TristateCheckBoxTreeModel createModel(ReportTree reportTree) {
+	public static TristateCheckBoxTreeModel createModel(ReportTree reportTree, boolean includeExcelExportable) {
 		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode(reportTree.getRoot());
 		root.setEnablePartialCheck(false);
 		
-		scanTree(reportTree.getRoot(), root);
+		scanTree(reportTree.getRoot(), root, includeExcelExportable);
 		
 		return new TristateCheckBoxTreeModel(root);
 	}
 	
-	private static void scanTree(ReportTreeNode reportTreeNode, TristateCheckBoxTreeNode treeNode) {
+	private static void scanTree(ReportTreeNode reportTreeNode, TristateCheckBoxTreeNode treeNode, boolean includeExcelExportable) {
 		for(ReportTreeNode childNode:reportTreeNode) {
 			if(childNode instanceof SectionHeaderNode) {
 				final TristateCheckBoxTreeNode childTreeNode = new TristateCheckBoxTreeNode(childNode);
 				childTreeNode.setCheckingState(TristateCheckBoxState.CHECKED);
 				childTreeNode.setEnablePartialCheck(false);
 				
-				scanTree(childNode, childTreeNode);
+				scanTree(childNode, childTreeNode, includeExcelExportable);
 				if(childTreeNode.getChildCount() > 0)
 					treeNode.add(childTreeNode);
 			} else if(childNode instanceof TableNode) {
+				final TristateCheckBoxTreeNode childTreeNode = new TristateCheckBoxTreeNode(childNode);
+				childTreeNode.setCheckingState(TristateCheckBoxState.CHECKED);
+				childTreeNode.setEnablePartialCheck(false);
+				
+				treeNode.add(childTreeNode);
+			} else if(includeExcelExportable && childNode instanceof ExcelExportableNode) {
 				final TristateCheckBoxTreeNode childTreeNode = new TristateCheckBoxTreeNode(childNode);
 				childTreeNode.setCheckingState(TristateCheckBoxState.CHECKED);
 				childTreeNode.setEnablePartialCheck(false);
@@ -63,8 +70,8 @@ public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 		}
 	}
 	
-	public ReportTableCheckboxTree(ReportTree reportTree) {
-		super(createModel(reportTree));
+	public ReportTableCheckboxTree(ReportTree reportTree, boolean includeExcelExportable) {
+		super(createModel(reportTree, includeExcelExportable));
 		
 		init();
 	}

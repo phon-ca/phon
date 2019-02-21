@@ -308,7 +308,11 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		if(exportAsWorkbookButton == null) {
 			exportAsWorkbookButton = new JButton(exportAsWorkbookAct);
 		}
-		exportAsWorkbookButton.setEnabled( currentBufferPanel != null && currentBufferPanel.isShowingTable() );
+		boolean canExport = 
+				( currentBufferPanel != null && currentBufferPanel.isShowingTable() )
+				|| ( currentBufferPanel != null && currentBufferPanel.getExtension(ExcelExporter.class) != null );
+		
+		exportAsWorkbookButton.setEnabled( canExport );
 		toolbar.add(exportAsWorkbookButton);
 		
 		if(openFileAfterSavingBox == null) {

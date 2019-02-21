@@ -75,6 +75,7 @@ import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import au.com.bytecode.opencsv.CSVReader;
+import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.EditorSelectionModel;
 import ca.phon.app.session.editor.SessionEditor;

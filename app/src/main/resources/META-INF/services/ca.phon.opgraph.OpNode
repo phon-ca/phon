@@ -2,6 +2,7 @@ ca.phon.app.opgraph.nodes.PhonScriptNode
 ca.phon.app.opgraph.nodes.SessionCheckNode
 ca.phon.app.opgraph.nodes.project.SessionSelectorNode
 ca.phon.app.opgraph.nodes.report.AddReportSectionNode
+ca.phon.app.opgraph.nodes.report.ExcelExportableSectionNode
 ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode
 ca.phon.app.opgraph.nodes.report.TableSectionNode
 ca.phon.app.opgraph.nodes.report.TextSectionNode

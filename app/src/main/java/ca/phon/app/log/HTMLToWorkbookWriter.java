@@ -26,6 +26,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
