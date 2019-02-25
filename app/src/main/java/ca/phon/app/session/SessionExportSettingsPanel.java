@@ -33,6 +33,7 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.project.Project;
+import ca.phon.query.db.ReportHelper;
 import ca.phon.query.db.ResultSet;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
@@ -290,8 +291,12 @@ public class SessionExportSettingsPanel extends JPanel {
 				var rs = selectedResultSets.get(0);
 				if(rs.numberOfResults(true) > 0) {
 					var result = rs.getResult(0);
-					
 					var rvList = new ArrayList<String>();
+					
+					for(var rv:ReportHelper.getExtraResultValues(result)) {
+						rvList.add(rv.getName());
+					}
+					
 					rvList.addAll(result.getMetadata().keySet());
 					
 					var tableModel = new ResultSetValuesTableModel(rvList);
@@ -377,10 +382,10 @@ public class SessionExportSettingsPanel extends JPanel {
 			ResultSetValuesTableModel tableModel = (ResultSetValuesTableModel)resultSetValuesTable.getModel();
 			var rvList = 
 					tableModel.resultValueList.stream()
-						.filter( (rvName) -> tableModel.resultValueVisible.get(rvName) )
+						.filter( (rvName) -> !tableModel.resultValueVisible.get(rvName) )
 						.collect( Collectors.toList() );
 			settings.setResultValues(rvList);
-			settings.setExcludeResultValues(false);
+			settings.setExcludeResultValues(true);
 		}
 		
 		return settings;
@@ -397,7 +402,8 @@ public class SessionExportSettingsPanel extends JPanel {
 			
 			resultValueList = rvList;
 			resultValueVisible = new HashMap<>();
-			for(String rvName:rvList) resultValueVisible.put(rvName, false);
+			// exclude the 'Alignment' metadata field by default
+			for(String rvName:rvList) resultValueVisible.put(rvName, !rvName.equals("Alignment"));
 		}
 
 		@Override

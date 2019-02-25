@@ -771,7 +771,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		Properties props = new Properties();
 		try {
 			Enumeration<URL> hashEnum = 
-					getClass().getClassLoader().getResources("reports/reports.hash");
+					getClass().getClassLoader().getResources("report/reports.hash");
 			while(hashEnum.hasMoreElements()) {
 				URL reportHashURL = hashEnum.nextElement();
 				

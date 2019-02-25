@@ -18,7 +18,9 @@ package ca.phon.app.opgraph.nodes.query;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +29,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -126,6 +131,12 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 	private JCheckBox[] participantInfoBoxes;
 	private boolean[] participantInfoChoices = Arrays.copyOf(participantInfoDefaults, participantInfoDefaults.length);
 	
+	private JRadioButton includeResultValuesBtn;
+	private JRadioButton excludeResultValuesBtn;
+	private boolean excludeResultValues = true;
+	private JTextArea resultValuesArea;
+	private List<String> resultValues = new ArrayList<>();
+	
 	public ResultsToHTMLNode() {
 		super();
 		
@@ -167,6 +178,8 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		settings.setIncludeAlignment(isIncludeAlignment());
 		settings.setFilterRecordsUsingQueryResults(true);
 		settings.setIncludeQueryResults(true);
+		settings.setExcludeResultValues(isExcludeResultValues());
+		settings.setResultValues(getResultValues());
 		
 		for(ResultSet rs:resultSets) {
 			SessionPath sp = new SessionPath(rs.getCorpus(), rs.getSession());
@@ -237,12 +250,6 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		return (includeTierDataBox != null ? includeTierDataBox.isSelected() : this.includeTierData);
 	}
 
-	public void setIncludeTierData(boolean includeTierData) {
-		this.includeTierData = includeTierData;
-		if(includeTierDataBox != null)
-			includeTierDataBox.setSelected(includeTierData);
-	}
-	
 	public boolean isIncludeAlignment() {
 		return (includeAlignmentBox != null ? includeAlignmentBox.isSelected() : this.includeAlignment);
 	}
@@ -261,6 +268,43 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		this.includeSyllabifiation = includeSyllabification;
 		if(includeSyllabificationBox != null) 
 			includeSyllabificationBox.setSelected(includeSyllabification);
+	}
+	
+	public boolean isExcludeResultValues() {
+		return (excludeResultValuesBtn != null ? excludeResultValuesBtn.isSelected() : this.excludeResultValues);
+	}
+	
+	public void setExcludeResultValues(boolean excludeResultValues) {
+		this.excludeResultValues = excludeResultValues;
+		if(includeResultValuesBtn != null)
+			includeResultValuesBtn.setSelected(!excludeResultValues);
+		if(excludeResultValuesBtn != null)
+			excludeResultValuesBtn.setSelected(excludeResultValues);
+	}
+	
+	public List<String> getResultValues() {
+		if(this.resultValuesArea != null) {
+			List<String> resultValues = new ArrayList<>();
+			try(BufferedReader reader = new BufferedReader(new StringReader(resultValuesArea.getText()))) {
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					resultValues.add(line.trim());
+				}
+			} catch (IOException e) {
+				LogUtil.warning(e);
+			}
+			return resultValues;
+		} else {
+			return this.resultValues;
+		}
+	}
+	
+	public void setResultValues(List<String> resultValues) {
+		this.resultValues = resultValues;
+		if(this.resultValuesArea != null) {
+			String rvTxt = resultValues.stream().collect(Collectors.joining("\n"));
+			resultValuesArea.setText(rvTxt);
+		}
 	}
 
 	@Override
@@ -328,8 +372,28 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			tierDataPanel.add(alignmentDisplay);
 			tierDataPanel.setBorder(BorderFactory.createTitledBorder("Tier Data Options"));
 			
+			JPanel resultValuesPanel = new JPanel(new VerticalLayout());
+			ButtonGroup btnGrp = new ButtonGroup();
+			includeResultValuesBtn = new JRadioButton("Include result values");
+			includeResultValuesBtn.setSelected(!excludeResultValues);
+			excludeResultValuesBtn = new JRadioButton("Exclude result values");
+			excludeResultValuesBtn.setSelected(excludeResultValues);
+			
+			btnGrp.add(includeResultValuesBtn);
+			btnGrp.add(excludeResultValuesBtn);
+			resultValuesArea = new JTextArea();
+			resultValuesArea.setRows(5);
+			resultValuesPanel.setBorder(BorderFactory.createTitledBorder("Result values"));
+			String rvTxt = resultValues.stream().collect(Collectors.joining("\n"));
+			resultValuesArea.setText(rvTxt);
+			
+			resultValuesPanel.add(includeResultValuesBtn);
+			resultValuesPanel.add(excludeResultValuesBtn);
+			resultValuesPanel.add(new JScrollPane(resultValuesArea));
+			
 			settingsPanel.add(participantPanel);
 			settingsPanel.add(tierDataPanel);
+			settingsPanel.add(resultValuesPanel);
 		}
 		return settingsPanel;
 	}
@@ -348,7 +412,17 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		retVal.put("includeAlignment", Boolean.toString(isIncludeAlignment()));
 		retVal.put("includeSyllabification", Boolean.toString(isIncludeSyllabification()));
 		
+		retVal.put("excludeResultValues", Boolean.toString(isExcludeResultValues()));
+		String rvTxt = getResultValues().stream().collect(Collectors.joining(","));
+		retVal.put("resultValues", rvTxt);
+		
 		return retVal;
+	}
+
+	public void setIncludeTierData(boolean includeTierData) {
+		this.includeTierData = includeTierData;
+		if(includeTierDataBox != null)
+			includeTierDataBox.setSelected(includeTierData);
 	}
 
 	@Override
@@ -363,6 +437,11 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		setIncludeTierData(Boolean.parseBoolean(properties.getProperty("includeTierData", "false")));
 		setIncludeSyllabification(Boolean.parseBoolean(properties.getProperty("includeSyllabification", "false")));
 		setIncludeAlignment(Boolean.parseBoolean(properties.getProperty("includeAlignment", "true")));
+		
+		setExcludeResultValues(Boolean.parseBoolean(properties.getProperty("excludeResultValues", "true")));
+		String rvTxt = properties.getProperty("resultValues", "");
+		String rvs[] = rvTxt.split(",");
+		setResultValues(Arrays.asList(rvs));
 	}
 	
 	private class SessionToExcelExporter implements ExcelExporter {

@@ -206,7 +206,7 @@ public class SessionToExcel extends SessionExporter {
 	
 	private Tuple<Integer, Integer> appendQueryResult(WritableWorkbook wb, WritableSheet sheet, int rowIdx,
 			Record record, Result result, int resultIdx) throws WriteException {
-		var resultStr = ReportHelper.createResultString(result);
+		var resultStr = ReportHelper.createPrimaryResultString(result);
 		
 		jxl.write.NumberFormat indexNumberFormat = new NumberFormat("#");
 		WritableCellFormat indexFormat = new WritableCellFormat(indexNumberFormat);
@@ -237,6 +237,24 @@ public class SessionToExcel extends SessionExporter {
 		
 		Label resultLbl = new Label(colIdx++, rowIdx, resultStr, tierValueFormat);
 		sheet.addCell(resultLbl);
+		
+		// add 'other' tiers
+		var rvList = ReportHelper.getExtraResultValues(result);
+		for(var rv:rvList) {
+			if(getSettings().getResultValues().size() > 0) {
+				boolean inList = getSettings().getResultValues().contains(rv.getName());
+				if(inList && getSettings().isExcludeResultValues()) continue;
+				else if(!inList && !getSettings().isExcludeResultValues()) continue;
+			}
+			
+			if(resultIdx == 0) {
+				Label colLbl = new Label(colIdx, rowIdx-1, rv.getName(), columnHeaderFormat);
+				sheet.addCell(colLbl);
+			}
+			
+			Label rvLbl = new Label(colIdx++, rowIdx, rv.getData(), tierValueFormat);
+			sheet.addCell(rvLbl);
+		}
 		
 		for(String metadataKey:result.getMetadata().keySet()) {
 			if(getSettings().getResultValues().size() > 0) {

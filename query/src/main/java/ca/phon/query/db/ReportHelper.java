@@ -15,6 +15,11 @@
  */
 package ca.phon.query.db;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import ca.phon.util.PhonConstants;
 
 /**
@@ -27,17 +32,19 @@ import ca.phon.util.PhonConstants;
  * using a 'null' character.</li>
  * <li>'DETECTOR' - pair of aligned results, separated by '\u2026'.  Empty values will be displayed
  * using a 'null' character.</li>
- * <li>A custom string which will be formatted using the velocity framework.  Context variables
- *  will be:<ul>
- *    <li><code>result</code> of type {@link Result}</li>
- *    <li><code>values</code> of type Array<{@link ResultValue}></li>
- *  </ul>
- * </li>
  * </ul>
  * 
  */
 public class ReportHelper {
 	
+	/**
+	 * Map result to a String.  This function will include
+	 * all results values (including tiers added using the 'add aligned groups/word'
+	 * query options.
+	 * 
+	 * @param r
+	 * @return
+	 */
 	public static String createResultString(Result r) 
 	{
 		final int numVals = r.getNumberOfResultValues();
@@ -50,6 +57,12 @@ public class ReportHelper {
 		return createReportString(rvals, r.getSchema());
 	}
 	
+	/**
+	 * Produces the schema for the given result (including all result values)
+	 * 
+	 * @param r
+	 * @return
+	 */
 	public static String createResultSchemaString(Result r) 
 	{
 		final int numVals = r.getNumberOfResultValues();
@@ -58,6 +71,62 @@ public class ReportHelper {
 			rvals[i] = r.getResultValue(i).getTierName();
 		}
 		return createReportString(rvals, r.getSchema());
+	}
+	
+	/**
+	 * Map the result to a string including only the primary
+	 * result values.
+	 * 
+	 * @param result
+	 * @return s
+	 */
+	public static String createPrimaryResultString(Result r) {
+		int numResultValues = 0;
+		
+		if(r.getSchema().equals("LINEAR")) {
+			numResultValues = 1;
+		} else if(r.getSchema().equals("ALIGNED")) {
+			numResultValues = 2;
+		} else if(r.getSchema().equals("DETECTOR")) {
+			numResultValues = 4;
+		} else {
+			// TODO support custom schema
+		}
+		
+		String[] rvals = new String[numResultValues];
+		for(int i = 0; i < numResultValues; i++) {
+			rvals[i] = r.getResultValue(i).getData();
+			if(rvals[i] == null || rvals[i].length() == 0)
+				rvals[i] = PhonConstants.nullChar + "";
+		}
+		return createReportString(rvals, r.getSchema());
+	}
+	
+	/**
+	 * Return a map of extra result values for the given result.
+	 * 
+	 * @param result
+	 * @return map of non-primary result values contained in the result
+	 */
+	public static List<ResultValue> getExtraResultValues(Result r) {
+		int rvIdx = 0;
+		
+		if(r.getSchema().equals("LINEAR")) {
+			rvIdx = 1;
+		} else if(r.getSchema().equals("ALIGNED")) {
+			rvIdx = 2;
+		} else if(r.getSchema().equals("DETECTOR")) {
+			rvIdx = 4;
+		} else {
+			// TODO support custom schema
+		}
+		
+		List<ResultValue> rvList = new ArrayList<>();
+		for(; rvIdx < r.getNumberOfResultValues(); rvIdx++) {
+			var rv = r.getResultValue(rvIdx);
+			rvList.add(rv);
+		}
+		return rvList;
 	}
 	
 	private static final char sepChar = ',';
@@ -83,7 +152,7 @@ public class ReportHelper {
 		} else if(resultType.equalsIgnoreCase("DETECTOR")) {
 			retVal = createDetectorReportString(values);
 		} else {
-			// TODO add support for custom schema types
+			// TODO add support for custom schema
 		}
 		
 		return retVal;

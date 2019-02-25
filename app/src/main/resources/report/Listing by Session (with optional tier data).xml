@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="ca7b0861e06b4ba8" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6f94ce27">
+            <graph id="5ad65081">
                 <node id="979ae4b083f840f8" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -145,11 +145,17 @@ function setup_params(params) {
                     <oga:property key="includeSyllabification">
                         <![CDATA[false]]>
                     </oga:property>
+                    <oga:property key="resultValues">
+                        <![CDATA[Alignment]]>
+                    </oga:property>
                     <oga:property key="includeParticipantInfo">
                         <![CDATA[true]]>
                     </oga:property>
                     <oga:property key="includeSES">
                         <![CDATA[false]]>
+                    </oga:property>
+                    <oga:property key="excludeResultValues">
+                        <![CDATA[true]]>
                     </oga:property>
                     <oga:property key="includeLanguage">
                         <![CDATA[false]]>
@@ -179,11 +185,10 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="1d3c68d27c44dc" name="For each SessionPath" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="647fde6c">
+            <graph id="1e09ed0a">
                 <node id="2361616a6cb14de8" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
                                 <![CDATA[java.lang.Object]]>
                             </oga:property>
@@ -197,7 +202,6 @@ function setup_params(params) {
                 <node id="ac75147c63c44f54" name="HTML Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[java.util.Map]]>
                             </oga:property>
@@ -208,7 +212,6 @@ function setup_params(params) {
                 <node id="563e1f5677dc48dd" name="Exporter Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[java.util.Map]]>
                             </oga:property>
@@ -217,7 +220,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="d158423836494b23" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="76ed6eb1">
+                    <graph id="6d3665a">
                         <node id="45845fe19bae44ba" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -241,7 +244,7 @@ function setup_params(params) {
                         <oga:meta x="78" y="408"/>
                     </extensions>
                 </ogcn:macro>
-                <node id="4c3fa9bf0e9e4fe2" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                <node id="4c3fa9bf0e9e4fe2" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
@@ -280,7 +283,7 @@ function setup_params(params) {
                         <oga:meta x="523" y="286"/>
                     </extensions>
                 </node>
-                <node id="df16e46d7ed74aad" name="HTML" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                <node id="df16e46d7ed74aad" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">

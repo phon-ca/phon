@@ -188,18 +188,17 @@ public class SessionToHTML extends SessionExporter {
 		
 		// setup table
 		var groupCount = record.numberOfGroups();
-		buffer.append("<table class='record-table' id='table").append(recordIndex).append("'>").append(nl);
 		if(getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
 			int rIdx = 0;
+			buffer.append("<table class='result-table'>").append(nl);
+			appendQueryResultTableHeader(record, resultsForRecord.get(0), buffer);
 			for(var result:resultsForRecord) {
 				appendQueryResult(rIdx++, record, result, buffer);
 			}
-			
-			if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
-				buffer.append("<tr><td colspan='").append(groupCount+1).append("'>&nbsp;</td></tr>").append(nl);
-			}
+			buffer.append("</table>").append(nl);
 		}
 		if(getSettings().isIncludeTierData()) {
+			buffer.append("<table class='record-table' id='table").append(recordIndex).append("'>").append(nl);
 			var tierView = (getSettings().getTierView() != null ? getSettings().getTierView() : session.getTierView());
 			
 			for(var tierIdx = 0; tierIdx < tierView.size(); tierIdx++) {
@@ -268,29 +267,37 @@ public class SessionToHTML extends SessionExporter {
 				}
 				buffer.append("</tr>").append(nl);
 			}
+			buffer.append("</table>").append(nl);
 		}
 		if(!getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
-			if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
-				buffer.append("<tr><td colspan='").append(groupCount+1).append("'>&nbsp;</td></tr>").append(nl);
-			}
-			
 			int rIdx = 0;
+			buffer.append("<table class='result-table'>").append(nl);
+			appendQueryResultTableHeader(record, resultsForRecord.get(0), buffer);
 			for(var result:resultsForRecord) {
 				appendQueryResult(rIdx++, record, result, buffer);
 			}
+			buffer.append("</table>").append(nl);
 		}
-		buffer.append("</table>").append(nl);
-		
+		buffer.append("</div>").append(nl);
 	}
 	
-	private void appendQueryResult(int resultIdx, Record record, Result result, StringBuffer buffer) {
-		var nl = "\n";
+	private void appendQueryResultTableHeader(Record record, Result result, StringBuffer buffer) {
+		buffer.append("<tr>");
+		buffer.append("<th>Index</th>");
+		buffer.append("<th>Result</th>");
 		
-		StringBuffer cellBuffer = new StringBuffer();
-		cellBuffer.append(ReportHelper.createResultString(result));
+		// add extra result values
+		var rvList = ReportHelper.getExtraResultValues(result);
+		for(var rv:rvList) {
+			if(getSettings().getResultValues().size() > 0) {
+				boolean inList = getSettings().getResultValues().contains(rv.getName());
+				if(inList && getSettings().isExcludeResultValues()) continue;
+				else if(!inList && !getSettings().isExcludeResultValues()) continue;
+			}
+			
+			buffer.append("<th>").append(rv.getName()).append("</th>");
+		}
 	
-		StringBuffer metadataBuffer = new StringBuffer();
-		int metadataIdx = 0;
 		for(String metadataKey:result.getMetadata().keySet()) {
 			if(getSettings().getResultValues().size() > 0) {
 				boolean inList = getSettings().getResultValues().contains(metadataKey);
@@ -298,25 +305,39 @@ public class SessionToHTML extends SessionExporter {
 				else if(!inList && !getSettings().isExcludeResultValues()) continue;
 			}
 			
-			if(metadataBuffer.length() == 0) {
-				metadataBuffer.append("&nbsp;<br/><span class='result-metadata'>");
+			buffer.append("<th>").append(metadataKey).append("</th>");
+		}
+		buffer.append("</tr>");
+	}
+	
+	private void appendQueryResult(int resultIdx, Record record, Result result, StringBuffer buffer) {
+		buffer.append("<tr>");
+		buffer.append("<td>").append((resultIdx+1)).append(".").append("</td>");
+		buffer.append("<td>").append(ReportHelper.createPrimaryResultString(result)).append("</td>");
+		
+		// add extra result values
+		var rvList = ReportHelper.getExtraResultValues(result);
+		for(var rv:rvList) {
+			if(getSettings().getResultValues().size() > 0) {
+				boolean inList = getSettings().getResultValues().contains(rv.getName());
+				if(inList && getSettings().isExcludeResultValues()) continue;
+				else if(!inList && !getSettings().isExcludeResultValues()) continue;
+			}
+			
+			buffer.append("<td>").append(rv.getData()).append("</td>");
+		}
+	
+		for(String metadataKey:result.getMetadata().keySet()) {
+			if(getSettings().getResultValues().size() > 0) {
+				boolean inList = getSettings().getResultValues().contains(metadataKey);
+				if(inList && getSettings().isExcludeResultValues()) continue;
+				else if(!inList && !getSettings().isExcludeResultValues()) continue;
 			}
 			
 			final String metadataValue = result.getMetadata().get(metadataKey);
-			if(metadataIdx++ > 0)
-				metadataBuffer.append("; ");
-			metadataBuffer.append(metadataKey).append("=").append(metadataValue);
+			buffer.append("<td>").append(metadataValue).append("</td>");
 		}
-		if(metadataBuffer.length() > 0) {
-			metadataBuffer.append("</span>").append(nl);
-			cellBuffer.append(metadataBuffer);
-		}
-		
-		buffer.append("<tr>");
-		buffer.append("<td>").append((resultIdx+1)).append(".").append("</td>");
-		buffer.append("<td class='tier-value' colspan='").append(record.numberOfGroups()).append("'>");
-		buffer.append(cellBuffer.toString());
-		buffer.append("</td></tr>").append(nl);		
+		buffer.append("</tr>");
 	}
 	
 	@SuppressWarnings("unchecked")
