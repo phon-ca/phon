@@ -22,6 +22,7 @@ import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.Tuple;
 import jxl.format.CellFormat;
 import jxl.write.DateTime;
 import jxl.write.Label;
@@ -83,7 +84,7 @@ public class SessionToExcel extends SessionExporter {
 		return tierNameFormat;
 	}
 	
-	private int appendParticipantTable(WritableWorkbook wb, WritableSheet sheet, int rowIdx, Session session) 
+	private Tuple<Integer, Integer> appendParticipantTable(WritableWorkbook wb, WritableSheet sheet, int rowIdx, Session session) 
 		throws WriteException {
 		// setup header
 		WritableCellFormat columnHeaderFormat = getColumnHeaderFormat();
@@ -200,10 +201,10 @@ public class SessionToExcel extends SessionExporter {
 			}
 		}
 		
-        return rowIdx;
+        return new Tuple<>(colIdx-1, rowIdx);
 	}
 	
-	private int appendQueryResult(WritableWorkbook wb, WritableSheet sheet, int rowIdx,
+	private Tuple<Integer, Integer> appendQueryResult(WritableWorkbook wb, WritableSheet sheet, int rowIdx,
 			Record record, Result result, int resultIdx) throws WriteException {
 		var resultStr = ReportHelper.createResultString(result);
 		
@@ -258,10 +259,10 @@ public class SessionToExcel extends SessionExporter {
 			maxCol = Math.max(maxCol, colIdx-1);
 		}
 				
-		return rowIdx;
+		return new Tuple<>(maxCol, rowIdx);
 	}
 	
-	private int appendRecord(WritableWorkbook wb, WritableSheet sheet, int rowIdx, 
+	private Tuple<Integer, Integer> appendRecord(WritableWorkbook wb, WritableSheet sheet, int rowIdx, 
 			Session session, int recordIndex, ResultSet resultSet) throws WriteException {
 		WritableCellFormat columnHeaderFormat = getColumnHeaderFormat();
         WritableCellFormat tierNameFormat = getTierNameFormat();
@@ -274,6 +275,7 @@ public class SessionToExcel extends SessionExporter {
 				.collect( Collectors.toList() );
 		}
 		
+		int maxCol = 0;
 		int colIdx = 0;
 		int recordNum = recordIndex + 1;
 		var groupCount = record.numberOfGroups();
@@ -287,13 +289,15 @@ public class SessionToExcel extends SessionExporter {
 		sheet.addCell(titleLabel);
 		
 		if(getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
+			++rowIdx;
 			for(int rIdx = 0; rIdx < resultsForRecord.size(); rIdx++) {
-				rowIdx = appendQueryResult(wb, sheet, rowIdx, record, resultsForRecord.get(rIdx), rIdx);
-				++rowIdx;
+				var lastPos = appendQueryResult(wb, sheet, rowIdx, record, resultsForRecord.get(rIdx), rIdx);
+				rowIdx = lastPos.getObj2()+1;
+				maxCol = Math.max(maxCol, lastPos.getObj1());
 			}
 			
 			if(resultsForRecord.size() > 0 && getSettings().isIncludeTierData()) {
-				rowIdx += 2;
+				++rowIdx;
 			}
 		}
 		
@@ -350,13 +354,16 @@ public class SessionToExcel extends SessionExporter {
 			}
 			
 			for(int rIdx = 0; rIdx < resultsForRecord.size(); rIdx++) {
-				rowIdx = appendQueryResult(wb, sheet, rowIdx, record, resultsForRecord.get(rIdx), rIdx);
-				++rowIdx;
+				var lastPos = appendQueryResult(wb, sheet, rowIdx, record, resultsForRecord.get(rIdx), rIdx);
+				rowIdx = lastPos.getObj2() + 1;
+				maxCol = Math.max(maxCol, lastPos.getObj1());
 			}
-			--rowIdx;
 		}
+		--rowIdx;
 		
-		return rowIdx;
+		maxCol = Math.max(maxCol, colIdx-1);
+		
+		return new Tuple<>(maxCol, rowIdx);
 	}
 	
 	/**
@@ -370,9 +377,12 @@ public class SessionToExcel extends SessionExporter {
 				WorkbookUtils.sanitizeTabName(session.getCorpus() + "." + session.getName());
 		WritableSheet sheet = wb.createSheet(sheetName, wb.getNumberOfSheets());
 		
+		int maxCol = 0;
 		int rowIdx = 0;
 		if(getSettings().isIncludeParticipantInfo()) {
-			rowIdx = appendParticipantTable(wb, sheet, rowIdx, session);
+			var lastPos = appendParticipantTable(wb, sheet, rowIdx, session);
+			rowIdx = lastPos.getObj2() + 1;
+			maxCol = Math.max(maxCol, lastPos.getObj1());
 		}
 		
 		RecordFilter queryFilter = null;
@@ -386,8 +396,17 @@ public class SessionToExcel extends SessionExporter {
 			// check filters
 			if(getSettings().getRecordFilter() != null && !getSettings().getRecordFilter().checkRecord(utt)) continue;
 			if(queryFilter != null && !queryFilter.checkRecord(utt)) continue;
-			rowIdx = appendRecord(wb, sheet, rowIdx, session, rIdx, getSettings().getResultSet());
-			rowIdx += 2;
+			var lastPos = appendRecord(wb, sheet, rowIdx, session, rIdx, getSettings().getResultSet());
+			rowIdx = lastPos.getObj2() + 2;
+			maxCol = Math.max(maxCol, lastPos.getObj1());
+		}
+	
+		// try to autosize everything
+		for(int i = 0; i < rowIdx; i++) {
+			sheet.getRowView(i).setAutosize(true);
+		}
+		for(int i = 0; i < maxCol; i++) {
+			sheet.getColumnView(i).setAutosize(true);
 		}
 		
 		return sheet;
