@@ -783,7 +783,6 @@ public class QueryAndReportWizard extends NodeWizard {
 		return props;
 	}
 	
-	
 	private boolean checkStockQueryReportHash() {
 		boolean retVal = false;
 		

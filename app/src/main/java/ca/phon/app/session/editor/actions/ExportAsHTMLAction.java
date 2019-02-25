@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 
 import ca.phon.app.session.SessionToHTMLWizard;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.Project;
 
 public class ExportAsHTMLAction extends SessionEditorAction {
 
@@ -32,6 +33,8 @@ public class ExportAsHTMLAction extends SessionEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		final SessionToHTMLWizard wizard = new SessionToHTMLWizard("Export as HTML", getEditor().getProject(), getEditor().getSession());
+		wizard.putExtension(Project.class, getEditor().getProject());
+		wizard.setParentFrame(getEditor());
 		wizard.pack();
 		wizard.setSize(1024, 768);
 		wizard.centerWindow();
