@@ -103,6 +103,7 @@ import com.teamdev.jxbrowser.chromium.events.ScriptContextListener;
 import com.teamdev.jxbrowser.chromium.events.StartLoadingEvent;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
+import ca.phon.app.html.JavaScriptBridge;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
@@ -1065,6 +1066,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							windowObj.asObject().setProperty("buffers", bufferPanel);
 							windowObj.asObject().setProperty("reportTree", reportTree);
 							windowObj.asObject().setProperty("tableMap", tableMap);
+							
+							// phon general bridge
+							windowObj.asObject().setProperty("jsbridge", new JavaScriptBridge(getExtension(Project.class)));
+							// wizard-specific bridge
 							windowObj.asObject().setProperty("app", webViewInterface);
 						}
 						

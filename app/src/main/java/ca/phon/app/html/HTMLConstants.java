@@ -4,6 +4,9 @@ public class HTMLConstants {
 	
 	public final static String CSS_COMMON = "ca/phon/app/html/common.css";
 
+	/* Common application methods */
+	public final static String JS_COMMON = "ca/phon/app/html/common.js";
+
 	/* JQuery */
 	public final static String JQUERY_VERSION = "3.3.1";
 	

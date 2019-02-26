@@ -45,7 +45,7 @@ import ca.phon.session.TierViewItem;
  *
  */
 public class SessionToHTML extends SessionExporter {
-
+	
 	public SessionToHTML() {
 		this(new SessionToHTMLSettings());
 	}
@@ -169,6 +169,8 @@ public class SessionToHTML extends SessionExporter {
 		var record = session.getRecord(recordIndex);
 		var nl = "\n";
 		
+		SessionToHTMLSettings settings = (SessionToHTMLSettings)getSettings();
+		
 		List<Result> resultsForRecord = new ArrayList<>();
 		if(getSettings().isIncludeQueryResults() && resultSet != null) {
 			resultsForRecord = StreamSupport.stream(resultSet.spliterator(), false)
@@ -179,12 +181,22 @@ public class SessionToHTML extends SessionExporter {
 		buffer.append("<div class='record' id='record").append(recordIndex).append("'>").append(nl);
 		
 		var recordNum = recordIndex + 1;
-		buffer.append("<b>").append(recordNum).append(". ").append(record.getSpeaker()).append("</b>");
+		buffer.append("<span style=\"font-weight: bold;\"");
+		buffer.append(" class='session-link'");
+		if(settings.isIncludeLinks()) {
+			buffer.append(" onclick=\"jsbridge.openSessionAtRecord(");
+			buffer.append(String.format("'%s'", session.getCorpus()));
+			buffer.append(String.format(",'%s'", session.getName()));
+			buffer.append(String.format(",%d", recordIndex));
+			buffer.append(")\"");
+		}
+		buffer.append(">");
+		buffer.append(recordNum).append(". ").append(record.getSpeaker());
 		if(getSettings().isIncludeQueryResults() && resultsForRecord.size() > 0) {
 			buffer.append(" (").append(resultsForRecord.size()).append(" result").append(
 					(resultsForRecord.size() > 1 ? "s)" : ")"));
 		}
-		buffer.append(nl);
+		buffer.append("</span>").append(nl);
 		
 		// setup table
 		var groupCount = record.numberOfGroups();
@@ -193,7 +205,7 @@ public class SessionToHTML extends SessionExporter {
 			buffer.append("<table class='result-table'>").append(nl);
 			appendQueryResultTableHeader(record, resultsForRecord.get(0), buffer);
 			for(var result:resultsForRecord) {
-				appendQueryResult(rIdx++, record, result, buffer);
+				appendQueryResult(session, recordIndex, record, rIdx, result, buffer);
 			}
 			buffer.append("</table>").append(nl);
 		}
@@ -274,7 +286,7 @@ public class SessionToHTML extends SessionExporter {
 			buffer.append("<table class='result-table'>").append(nl);
 			appendQueryResultTableHeader(record, resultsForRecord.get(0), buffer);
 			for(var result:resultsForRecord) {
-				appendQueryResult(rIdx++, record, result, buffer);
+				appendQueryResult(session, recordIndex, record, rIdx, result, buffer);
 			}
 			buffer.append("</table>").append(nl);
 		}
@@ -310,10 +322,37 @@ public class SessionToHTML extends SessionExporter {
 		buffer.append("</tr>");
 	}
 	
-	private void appendQueryResult(int resultIdx, Record record, Result result, StringBuffer buffer) {
+	private void appendQueryResult(Session session, int recordIndex, Record record, int resultIdx, Result result, StringBuffer buffer) {
 		buffer.append("<tr>");
 		buffer.append("<td>").append((resultIdx+1)).append(".").append("</td>");
-		buffer.append("<td>").append(ReportHelper.createPrimaryResultString(result)).append("</td>");
+		buffer.append("<td");
+		
+		SessionToHTMLSettings settings = (SessionToHTMLSettings)getSettings();
+		if(settings.isIncludeLinks()) {
+			buffer.append(" class='tier-value--link'");
+			buffer.append(" onclick=\"jsbridge.openSessionAtRecordWithResultValues(");
+			buffer.append(String.format("'%s'", session.getCorpus()));
+			buffer.append(String.format(",'%s'", session.getName()));
+			buffer.append(String.format(",%d", recordIndex));
+			
+			// create javascript array of result values
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
+				var rv = result.getResultValue(i);
+				if(i > 0)
+					sb.append(",");
+				sb.append(String.format("['%s', %d, '%s']", rv.getTierName(), rv.getGroupIndex(), rv.getRange().toString()));
+			}
+			sb.append("]");
+			
+			buffer.append(",").append(sb);
+			buffer.append(")\"");
+		} else {
+			buffer.append(" class='tier-value'");
+		}
+		buffer.append(">");
+		buffer.append(ReportHelper.createPrimaryResultString(result)).append("</td>");
 		
 		// add extra result values
 		var rvList = ReportHelper.getExtraResultValues(result);
@@ -324,7 +363,27 @@ public class SessionToHTML extends SessionExporter {
 				else if(!inList && !getSettings().isExcludeResultValues()) continue;
 			}
 			
-			buffer.append("<td>").append(rv.getData()).append("</td>");
+			buffer.append("<td");
+			if(settings.isIncludeLinks()) {
+				buffer.append(" class='tier-value--link'");
+				buffer.append(" onclick=\"jsbridge.openSessionAtRecordWithResultValues(");
+				buffer.append(String.format("'%s'", session.getCorpus()));
+				buffer.append(String.format(",'%s'", session.getName()));
+				buffer.append(String.format(",%d", recordIndex));
+				
+				// create javascript array of result values
+				StringBuilder sb = new StringBuilder();
+				sb.append("[");
+				sb.append(String.format("['%s', %d, '%s']", rv.getTierName(), rv.getGroupIndex(), rv.getRange().toString()));
+				sb.append("]");
+				
+				buffer.append(",").append(sb);
+				buffer.append(")\"");
+			} else {
+				buffer.append(" class='tier-value'");
+			}
+			buffer.append(">");
+			buffer.append(rv.getData()).append("</td>");
 		}
 	
 		for(String metadataKey:result.getMetadata().keySet()) {
@@ -409,11 +468,14 @@ public class SessionToHTML extends SessionExporter {
 	public static class SessionToHTMLSettings extends SessionExportSettings {
 		
 		private boolean includeHeader;
+		
+		private boolean includeLinks;
 
 		public SessionToHTMLSettings() {
 			super();
 			
 			includeHeader = true;
+			includeLinks = true;
 		}
 
 		public boolean isIncludeHeader() {
@@ -422,6 +484,14 @@ public class SessionToHTML extends SessionExporter {
 
 		public void setIncludeHeader(boolean includeHeader) {
 			this.includeHeader = includeHeader;
+		}
+
+		public boolean isIncludeLinks() {
+			return includeLinks;
+		}
+
+		public void setIncludeLinks(boolean includeLinks) {
+			this.includeLinks = includeLinks;
 		}
 		
 	}

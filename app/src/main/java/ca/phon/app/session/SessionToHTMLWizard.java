@@ -145,7 +145,9 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		if(getCurrentStep() == optionsStep) {
 			busyLabel.setBusy(true);
 						
-			SessionToHTML converter = new SessionToHTML((SessionToHTML.SessionToHTMLSettings)optionsPanel.getSettings());
+			SessionToHTML.SessionToHTMLSettings settings = new SessionToHTML.SessionToHTMLSettings();
+			settings.setIncludeLinks(false);
+			SessionToHTML converter = new SessionToHTML(settings);
 			converter.getSettings().saveAsDefaults();
 			
 			ExportWorker worker = new ExportWorker(converter);

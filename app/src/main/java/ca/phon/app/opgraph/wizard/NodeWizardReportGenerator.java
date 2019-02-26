@@ -79,7 +79,8 @@ public class NodeWizardReportGenerator {
 	private final static String[] jsFiles = {
 		HTMLConstants.JQUERY_JS,
 		HTMLConstants.JQUERY_UI_JS,
-		"ca/phon/app/opgraph/wizard/wizard.js"	
+		HTMLConstants.JS_COMMON,
+		"ca/phon/app/opgraph/wizard/wizard.js"
 	};
 	
 	public NodeWizardReportGenerator(NodeWizard wizard, ReportTree reportTree, String reportTemplate, String outputPath)

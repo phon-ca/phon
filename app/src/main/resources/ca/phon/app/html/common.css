@@ -117,6 +117,15 @@ img {
     font-family:"Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
 }
 
+.tier-value--link {
+	color: inherit
+}
+
+.tier-value--link:hover {
+	color: rgb(0, 90, 140);
+	cursor: pointer;
+}
+
 .number-value {
     font-family:"noto monospace", monospace;
 }
