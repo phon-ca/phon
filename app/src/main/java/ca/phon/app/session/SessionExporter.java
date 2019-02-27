@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -82,9 +83,14 @@ public abstract class SessionExporter {
 		return alignmentDisplay;
 	}
 	
-	protected String createSyllabificationImageData(IPATranscript ipa) {
-		final StringBuffer buffer = new StringBuffer();
+	protected String createSyllabificationImageBase64(IPATranscript ipa) {
+		final BufferedImage img = createSyllabificationImage(ipa);
+		return imgToBase64(img);
+	}
+	
+	protected BufferedImage createSyllabificationImage(IPATranscript ipa) {
 		final SyllabificationDisplay display = getSyllabificationDisplay();
+		final AtomicReference<BufferedImage> imgRef = new AtomicReference<>();
 		
 		try {
 			SwingUtilities.invokeAndWait( () -> {
@@ -98,26 +104,18 @@ public abstract class SessionExporter {
 				Graphics2D g = img.createGraphics();
 				SwingUtilities.paintComponent(g, display, syllabificationRenderPane, 0, 0, prefSize.width+5, prefSize.height);
 				
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				try {
-					ImageIO.write(img, "png", bos);
-				} catch (IOException e) {
-					LogUtil.warning(e.getLocalizedMessage(), e);
-				}
-				
-				var base64data = Base64.getEncoder().encodeToString(bos.toByteArray());
-				buffer.append(base64data);				
+				imgRef.set(img);;
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
 			LogUtil.severe(e.getLocalizedMessage(), e);
 		}
 		
-		return buffer.toString();
+		return imgRef.get();
 	}
 	
-	protected String createAlignmentImageData(PhoneMap alignment) {
-		final StringBuffer buffer = new StringBuffer();
+	protected BufferedImage createAlignmentImage(PhoneMap alignment) {
 		final PhoneMapDisplay display = getAlignmentDisplay();
+		final AtomicReference<BufferedImage> imgRef = new AtomicReference<>();
 		
 		try {
 			SwingUtilities.invokeAndWait( () -> {
@@ -131,21 +129,30 @@ public abstract class SessionExporter {
 				Graphics2D g = img.createGraphics();
 				SwingUtilities.paintComponent(g, display, alignmentRenderPane, 0, 0, prefSize.width, prefSize.height);
 				
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				try {
-					ImageIO.write(img, "png", bos);
-				} catch (IOException e) {
-					LogUtil.warning(e.getLocalizedMessage(), e);
-				}
-				
-				var base64data = Base64.getEncoder().encodeToString(bos.toByteArray());
-				buffer.append(base64data);
+				imgRef.set(img);
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
 			LogUtil.severe(e.getLocalizedMessage(), e);
 		}
 		
-		return buffer.toString();
+		return imgRef.get();
 	}
+	
+	protected String createAlignmentImageBase64(PhoneMap alignment) {
+		final BufferedImage img = createAlignmentImage(alignment);
+		return imgToBase64(img);
+	}
+	
+	private String imgToBase64(BufferedImage img) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(img, "png", bos);
+		} catch (IOException e) {
+			LogUtil.warning(e.getLocalizedMessage(), e);
+		}
 		
+		var base64data = Base64.getEncoder().encodeToString(bos.toByteArray());
+		return base64data;
+	}
+	
 }

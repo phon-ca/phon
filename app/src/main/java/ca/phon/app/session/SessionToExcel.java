@@ -1,6 +1,9 @@
 package ca.phon.app.session;
 
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,9 +13,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.imageio.ImageIO;
+
 import ca.phon.app.excel.WorkbookFormats;
 import ca.phon.app.excel.WorkbookUtils;
+import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.query.db.ReportHelper;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
@@ -29,6 +37,7 @@ import jxl.write.Label;
 import jxl.write.NumberFormat;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
+import jxl.write.WritableImage;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -346,7 +355,7 @@ public class SessionToExcel extends SessionExporter {
 				}
 				if(!tvi.isVisible()) continue;
 				
-				var tier = record.getTier(tvi.getTierName(), String.class);
+				var tier = record.getTier(tvi.getTierName());
 				
 				Label lbl = new Label(colIdx++, rowIdx, tvi.getTierName(), tierNameFormat);
 				sheet.addCell(lbl);
@@ -354,16 +363,48 @@ public class SessionToExcel extends SessionExporter {
 					if(tier.isGrouped()) {
 						for(var i = 0; i < record.numberOfGroups(); i++) {
 							var groupVal = tier.getGroup(i);
-							Label grpLbl = new Label(colIdx++, rowIdx, groupVal, tierFormat);
+							Label grpLbl = new Label(colIdx++, rowIdx, groupVal.toString(), tierFormat);
 							sheet.addCell(grpLbl);
 						}
 					} else {
-						Label grpLbl = new Label(colIdx, rowIdx, tier.getGroup(0), tierFormat);
+						Label grpLbl = new Label(colIdx, rowIdx, tier.getGroup(0).toString(), tierFormat);
 						sheet.addCell(grpLbl);
 						sheet.mergeCells(colIdx, rowIdx, groupCount, rowIdx);
 					}
 				}
 				++rowIdx;
+				
+				if(getSettings().isIncludeSyllabification() && (tvi.getTierName().equals("IPA Target") || tvi.getTierName().equals("IPA Actual"))) {
+					colIdx = 1;
+					for(var i = 0; i < record.numberOfGroups(); i++) {
+						IPATranscript ipa = (IPATranscript)tier.getGroup(i);
+						BufferedImage img = createSyllabificationImage(ipa);
+						byte[] imgData = imgToByteArray(img);
+						if(imgData.length > 0) {
+							WritableImage xlsImg = new WritableImage(colIdx++, rowIdx, 1, 1, imgData);
+							sheet.addImage(xlsImg);
+						}
+					}
+					rowIdx++;
+				}
+			}
+			if(getSettings().isIncludeAlignment()) {
+				// alignment
+				colIdx = 0;
+				Label alignLbl = new Label(colIdx++, rowIdx, "Alignment", tierNameFormat);
+				sheet.addCell(alignLbl);
+				
+				var alignmentTier = record.getTier("Alignment");
+				for(var i = 0; i < record.numberOfGroups(); i++) {
+					final PhoneMap alignment = (PhoneMap)alignmentTier.getGroup(i);
+					BufferedImage img = createAlignmentImage(alignment);
+					byte[] imgData = imgToByteArray(img);
+					if(imgData.length > 0) {
+						WritableImage xlsImg = new WritableImage(colIdx++, rowIdx, 1, 1, imgData);
+						sheet.addImage(xlsImg);
+					}
+				}
+				rowIdx++;
 			}
 		}
 		if(!getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
@@ -382,6 +423,16 @@ public class SessionToExcel extends SessionExporter {
 		maxCol = Math.max(maxCol, colIdx-1);
 		
 		return new Tuple<>(maxCol, rowIdx);
+	}
+	
+	private byte[] imgToByteArray(BufferedImage img) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(img, "png", bos);
+		} catch (IOException e) {
+			LogUtil.warning(e.getLocalizedMessage(), e);
+		}
+		return bos.toByteArray();
 	}
 	
 	/**

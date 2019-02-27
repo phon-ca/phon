@@ -250,7 +250,7 @@ public class SessionToHTML extends SessionExporter {
 					buffer.append("<td class='tier-name'>&nbsp;</td>").append(nl);
 					for(var i = 0; i < record.numberOfGroups(); i++) {
 						IPATranscript ipa = (IPATranscript)tier.getGroup(i);
-						String imgData = createSyllabificationImageData(ipa);
+						String imgData = createSyllabificationImageBase64(ipa);
 						if(imgData.length() > 0) {
 							buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
 						} else {
@@ -270,7 +270,7 @@ public class SessionToHTML extends SessionExporter {
 				buffer.append("<td class='tier-name'><em>Alignment</em></td>").append(nl);
 				for(var i = 0; i < record.numberOfGroups(); i++) {
 					final PhoneMap alignment = (PhoneMap)alignmentTier.getGroup(i);
-					String imgData = createAlignmentImageData(alignment);
+					String imgData = createAlignmentImageBase64(alignment);
 					if(imgData.length() > 0) {
 						buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
 					} else {

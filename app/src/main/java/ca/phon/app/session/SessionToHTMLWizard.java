@@ -59,6 +59,7 @@ import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.query.OpenResultSetSelector;
+import ca.phon.app.session.SessionToHTML.SessionToHTMLSettings;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
@@ -145,7 +146,7 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 		if(getCurrentStep() == optionsStep) {
 			busyLabel.setBusy(true);
 						
-			SessionToHTML.SessionToHTMLSettings settings = new SessionToHTML.SessionToHTMLSettings();
+			SessionToHTML.SessionToHTMLSettings settings = (SessionToHTML.SessionToHTMLSettings)optionsPanel.getSettings();
 			settings.setIncludeLinks(false);
 			SessionToHTML converter = new SessionToHTML(settings);
 			converter.getSettings().saveAsDefaults();
