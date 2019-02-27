@@ -201,9 +201,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		
 	}
 	
-	public class DuplicateSyllableBoundaryQuickFix extends SessionQuickFix {
-		
-		private Syllabifier syllabifier;
+	public static class DuplicateSyllableBoundaryQuickFix extends SessionQuickFix {
 		
 		public DuplicateSyllableBoundaryQuickFix() {
 			super();

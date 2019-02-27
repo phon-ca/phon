@@ -152,7 +152,7 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 		setResetAlignment(Boolean.parseBoolean(props.getProperty(RESET_ALIGNMENT, Boolean.toString(DEFAULT_RESET_ALIGNMENT))));
 	}
 	
-	public class ResetAlignmentQuickFix extends SessionQuickFix {
+	public static class ResetAlignmentQuickFix extends SessionQuickFix {
 
 		public ResetAlignmentQuickFix() {
 			super();

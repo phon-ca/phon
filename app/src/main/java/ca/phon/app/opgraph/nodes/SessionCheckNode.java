@@ -160,7 +160,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 				}
 			}
 			row[c++] = groupVal;
-			row[c++] = ve;
+			row[c++] = ve.toString();
 			warningsTable.addRow(row);
 		});
 		boolean modified = validator.validate(session);

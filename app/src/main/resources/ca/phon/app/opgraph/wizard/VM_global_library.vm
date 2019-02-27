@@ -26,21 +26,21 @@
 	#set($txt = $FormatterUtil.format($v))
 	#set($number = $Class.forName("java.lang.Number"))
 	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
-	#if($clazz == $ipa) #set($type = "ipa_value")
+	#if($clazz == $ipa) #set($type = "tier-value")
 	#elseif($number.isAssignableFrom($clazz))
-		#set($type = "number_value")
-	#else #set($type = "text_value")#end
+		#set($type = "number-value")
+	#else #set($type = "text-value")#end
 	#if($clazz == $ipa && $v.length() == 0) #set($txt = "\u2205") #end
 <td class='$type'><span>$txt</span></td>
 	#end
 #end
 
 #macro( printSessionLink $sessionPath )
-<td class='sessionLink'><span onclick="app.openSession('$sessionPath')">$sessionPath</span></td>
+<td class='session-link'><span onclick="app.openSession('$sessionPath')">$sessionPath</span></td>
 #end
 
 #macro( printRecordLink $sessionPath $recordNum )
-<td class='sessionLink'><span onclick="app.openSessionAtRecord('$sessionPath', ($recordNum - 1))">$recordNum</span></td>
+<td class='session-link'><span onclick="app.openSessionAtRecord('$sessionPath', ($recordNum - 1))">$recordNum</span></td>
 #end
 
 #macro( printResultValue $tableId $row $columnName $v )
@@ -50,11 +50,11 @@
 	#set($txt = $FormatterUtil.format($v))
 	#set($number = $Class.forName("java.lang.Number"))
 	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
-	#if($clazz == $ipa) #set($type = "ipa_value")
+	#if($clazz == $ipa) #set($type = "tier-value")
 	#elseif($number.isAssignableFrom($clazz))
-		#set($type = "number_value")
-	#else #set($type = "text_value")#end
-<td class='$type sessionLink'><span onclick="highlightResultValue('$tableId', $row, '$columnName')">$txt</span></td>
+		#set($type = "number-value")
+	#else #set($type = "text-value")#end
+<td class='$type session-link'><span onclick="highlightResultValue('$tableId', $row, '$columnName')">$txt</span></td>
 	#end
 #end
 
