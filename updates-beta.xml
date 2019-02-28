@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4b1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b1.dmg" newVersion="3.0.4b1" newMediaFileId="macos" fileSize="256589383" md5Sum="f542257d79e254b28df29ab39a9a3aac" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4b2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b2.dmg" newVersion="3.0.4b2" newMediaFileId="macos" fileSize="256612450" md5Sum="2541d6342aa8bbdd6f516bf763964cae" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -19,6 +19,11 @@
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -264,7 +269,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b1.dmg" newVersion="3.0.4b1" newMediaFileId="macos" fileSize="256589383" md5Sum="f542257d79e254b28df29ab39a9a3aac" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b2.dmg" newVersion="3.0.4b2" newMediaFileId="macos" fileSize="256612450" md5Sum="2541d6342aa8bbdd6f516bf763964cae" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -283,6 +288,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -528,7 +538,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.exe" newVersion="3.0.4b1" newMediaFileId="win64" fileSize="257847296" md5Sum="5a47ba8b0f80699aac24201abb71feaa" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.exe" newVersion="3.0.4b2" newMediaFileId="win64" fileSize="257895896" md5Sum="fc353720381e12d59a30d16b2f96dfc0" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -547,6 +557,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -792,7 +807,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.exe" newVersion="3.0.4b1" newMediaFileId="win64" fileSize="257847296" md5Sum="5a47ba8b0f80699aac24201abb71feaa" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.exe" newVersion="3.0.4b2" newMediaFileId="win64" fileSize="257895896" md5Sum="fc353720381e12d59a30d16b2f96dfc0" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -811,6 +826,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -1056,7 +1076,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.exe" newVersion="3.0.4b1" newMediaFileId="win64" fileSize="257847296" md5Sum="5a47ba8b0f80699aac24201abb71feaa" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.exe" newVersion="3.0.4b2" newMediaFileId="win64" fileSize="257895896" md5Sum="fc353720381e12d59a30d16b2f96dfc0" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1075,6 +1095,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -1320,7 +1345,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b1.zip" newVersion="3.0.4b1" newMediaFileId="win64zip" fileSize="256897034" md5Sum="d5e58dde3e4324d518cb04e423cb039e" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.zip" newVersion="3.0.4b2" newMediaFileId="win64zip" fileSize="256937324" md5Sum="842dc8922994686987f5bc9dc207c814" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1339,6 +1364,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -1584,7 +1614,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4b1.deb" newVersion="3.0.4b1" newMediaFileId="linux64deb" fileSize="187295750" md5Sum="f486ac974e3e2d2607d25cc4e2246b24" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4b2.deb" newVersion="3.0.4b2" newMediaFileId="linux64deb" fileSize="187317258" md5Sum="c148dfe3255f008afc15194727430d43" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1603,6 +1633,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
@@ -1848,7 +1883,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4b1.sh" newVersion="3.0.4b1" newMediaFileId="linux64" fileSize="186829938" md5Sum="43e5a3c367f9085cf3ac00e5b8778117" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4b2.sh" newVersion="3.0.4b2" newMediaFileId="linux64" fileSize="186856672" md5Sum="3206f5a9ded2051e565399b7b3fe268e" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1867,6 +1902,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Folder names for reports and queries have been changed:
    - Query folder name has been changed from 'script' to 'query'
    - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Fixed a memory leak in the Session Check wizard
+ * Session selector now displays scrollbars when needed in Session Check wizard
 
 ## Changes from 3.0.2
  
