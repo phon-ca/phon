@@ -8,7 +8,7 @@ function getOS() {
 	if (navigator.appVersion.indexOf("Win64") != -1) {
 		OSName = "windows-x64";
 	} else if (navigator.appVersion.indexOf("Win") != -1) {
-		OSName = "windows";
+		OSName = "windows-x64";
 	} else if (navigator.appVersion.indexOf("Mac") != -1) {
 		OSName = "macos";
 	}
