@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
 
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.NodeEditorSettings;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.InputField;
@@ -29,6 +28,7 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.OutputField;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.dag.CycleDetectedException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;

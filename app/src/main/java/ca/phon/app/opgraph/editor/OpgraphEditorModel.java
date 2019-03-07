@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.undo.UndoableEdit;
 
-import ca.phon.app.opgraph.editor.library.LibraryView;
+import ca.phon.app.opgraph.library.LibraryView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.OpContext;

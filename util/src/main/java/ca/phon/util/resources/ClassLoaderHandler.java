@@ -108,6 +108,10 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 	public void removeResource(String res) {
 		this.resourcePaths.remove(res);
 	}
+	
+	public List<String> getResourcePaths() {
+		return this.resourcePaths;
+	}
 
 	@Override
 	public Iterator<T> iterator() {

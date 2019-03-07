@@ -26,7 +26,7 @@
 		schemaLocation="https://raw.githubusercontent.com/phon-ca/phon/master/query/src/main/resources/xml/xsd/query.xsd"/>
 	<xs:import namespace="http://phon.ling.mun.ca/ns/report"
 		schemaLocation="https://raw.githubusercontent.com/phon-ca/phon/master/query/src/main/resources/xml/xsd/report.xsd"/>
-
+	
 	<xs:complexType name="QueryType" mixed="false">
 		<xs:annotation>
 			<xs:documentation>Extension of opgraph node type to include query xml</xs:documentation>
@@ -43,6 +43,7 @@
 
 	<xs:element name="queryNode" type="QueryType" substitutionGroup="og:abstract_node"/>
 
+	<!-- Legacy report design node (deprecated) -->
 	<xs:complexType name="ReportDesignType" mixed="false">
 		<xs:annotation>
 			<xs:documentation>Extension of opgraph node type to include report design
@@ -61,6 +62,24 @@
 
 	<xs:element name="reportDesignNode" type="ReportDesignType" substitutionGroup="og:abstract_node"/>
 
+	<!-- Query report node -->
+	<xs:complexType name="QueryReportNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation>Settings for QueryReportNode</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="og:AbstractNodeType">
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element ref="og:graph"/>
+					<xs:element ref="reportURL"/>
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="reportURL" type="xs:anyURI"/>
+	<xs:element name="queryReportNode" type="QueryReportNode" substitutionGroup="og:abstract_node"/>
+
 	<!-- SortNodeSettings -->
 	<xs:complexType name="SortNodeSettingsType" mixed="false">
 		<xs:annotation>
@@ -76,7 +95,6 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
 
 	<xs:complexType name="SortByType" mixed="false">
 		<xs:annotation>

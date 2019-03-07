@@ -21,6 +21,7 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;

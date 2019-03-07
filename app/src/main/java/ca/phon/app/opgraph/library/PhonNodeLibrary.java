@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.opgraph.nodes;
+package ca.phon.app.opgraph.library;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -24,12 +25,24 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tools.ant.util.ClasspathUtils;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
+import ca.phon.app.opgraph.analysis.StockAnalysisHandler;
 import ca.phon.app.opgraph.macro.MacroLibrary;
+import ca.phon.app.opgraph.macro.StockMacroHandler;
+import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
+import ca.phon.app.opgraph.nodes.PhonScriptNode;
+import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
@@ -42,15 +55,22 @@ import ca.phon.app.opgraph.nodes.table.TableScriptNodeInstantiator;
 import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.components.canvas.NodeStyle;
+import ca.phon.opgraph.library.NodeData;
 import ca.phon.opgraph.library.NodeLibrary;
+import ca.phon.opgraph.library.handlers.URIHandler;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.general.MacroNodeData;
+import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
+import ca.phon.plugin.PluginManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.util.resources.ClassLoaderHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 /**
@@ -72,6 +92,9 @@ public class PhonNodeLibrary {
 	public PhonNodeLibrary(NodeLibrary nodeLibrary) {
 		super();
 		this.nodeLibrary = nodeLibrary;
+		
+		this.nodeLibrary.addURIHandler(new MacroURIHandler());
+		this.nodeLibrary.addURIHandler(new ClasspathMacroURIHandler());
 	}
 
 	public void addAllNodes() {
@@ -85,14 +108,34 @@ public class PhonNodeLibrary {
 
 	public void addMacroNodes() {
 		final MacroLibrary library = new MacroLibrary();
-		library.getStockGraphs().forEach(this::addMacroNodeToLibrary);
-		library.getUserGraphs().forEach(this::addMacroNodeToLibrary);
+
+		StockMacroHandler stockHandler = new StockMacroHandler();
+		for(String macroRef:stockHandler.getResourcePaths()) {
+			addMacroNodeToLibrary(macroRef, "Macro");
+		}
+		library.getUserGraphs().forEach( (url) -> {
+			try {
+				addMacroNodeToLibrary(url, url.toURI(), "Macro (User Library)");
+			} catch (URISyntaxException e) {
+				LogUtil.warning(e);
+			}
+		} );
 	}
 
 	public void addAnalysisNodes() {
 		final AnalysisLibrary library = new AnalysisLibrary();
-		library.getStockGraphs().forEach( (url) -> addAnalysisNodeToLibrary(url, "Analysis") );
-		library.getUserGraphs().forEach( (url) -> addAnalysisNodeToLibrary(url, "Analysis (User Library)") );
+		
+		StockAnalysisHandler stockHandler = new StockAnalysisHandler();
+		for(String macroRef:stockHandler.getResourcePaths()) {
+			addAnalysisNodeToLibrary(macroRef, "Analysis");
+		}
+		library.getUserGraphs().forEach( (url) -> {
+			try {
+				addAnalysisNodeToLibrary(url, url.toURI(), "Analysis (User Library)");
+			} catch (URISyntaxException e) {
+				LogUtil.warning(e);
+			}
+		} );
 	}
 
 	public void addReportNodes() {
@@ -218,32 +261,51 @@ public class PhonNodeLibrary {
 		}
 	}
 
-	private void addMacroNodeToLibrary(URL url) {
+	private void addMacroNodeToLibrary(String cpLocation, String category) {
+		URL cpURL = ClassLoader.getSystemResource(cpLocation);
+		if(cpURL != null) {
+			try {
+				URI uri = new URI("classpath", cpLocation, null);
+				addMacroNodeToLibrary(cpURL, uri, category);
+			} catch (URISyntaxException e) {
+				LogUtil.warning(e);
+			}
+			
+		}
+	}
+	
+	private void addMacroNodeToLibrary(URL url, URI uri, String category) {
 		try {
-			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
+			String filename = URLDecoder.decode(url.getPath(), "UTF-8");
 			String name = FilenameUtils.getBaseName(filename);
-
-			final URI uri = new URI("class", MacroNode.class.getName(), name);
-
-//			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", "Macro", new MacroNodeInstantiator());
-			final LinkedMacroNodeData nodeData =
-					new LinkedMacroNodeData(uri, name, "", "Macro", url.toURI(), new LinkedMacroNodeInstantiator());
+			
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new MacroNodeInstantiator(), false);
 			getNodeLibrary().put(nodeData);
-		} catch (UnsupportedEncodingException | URISyntaxException e) {
+		} catch (UnsupportedEncodingException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
+	
+	private void addAnalysisNodeToLibrary(String cpLocation, String category) {
+		URL cpURL = ClassLoader.getSystemResource(cpLocation);
+		if(cpURL != null) {
+			try {
+				URI uri = new URI("classpath", cpLocation, null);
+				addAnalysisNodeToLibrary(cpURL, uri, category);
+			} catch (URISyntaxException e) {
+				LogUtil.warning(e);
+			}
+		}
+	}
 
-	private void addAnalysisNodeToLibrary(URL url, String category) {
+	private void addAnalysisNodeToLibrary(URL url, URI uri, String category) {
 		try {
 			String filename = URLDecoder.decode(url.getFile(), "UTF-8");
 			String name = FilenameUtils.getBaseName(filename);
 
-			final URI uri = new URI("class", MacroNode.class.getName(), name);
-
-			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new AnalysisNodeInstantiator());
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new AnalysisNodeInstantiator(), false);
 			getNodeLibrary().put(nodeData);
-		} catch (UnsupportedEncodingException | URISyntaxException e) {
+		} catch (UnsupportedEncodingException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
@@ -255,12 +317,11 @@ public class PhonNodeLibrary {
 
 			final URI uri = new URI("class", MacroNode.class.getName(), name);
 
-			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new ReportNodeInstantiator());
+			final MacroNodeData nodeData = new MacroNodeData(url, uri, name, "", category, new ReportNodeInstantiator(), false);
 			getNodeLibrary().put(nodeData);
 		} catch (UnsupportedEncodingException | URISyntaxException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 	}
-
-
+	
 }

@@ -50,8 +50,6 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	private final Map<OpNode, Boolean> optionalDefaults = new HashMap<>();
 	
-	private final List<NodeWizardReportTemplate> reportTemplates = new ArrayList<>();
-	
 	public final static String OPGRAPH_CTX_KEY = "graph";
 	
 	private final OpGraph graph;
@@ -62,14 +60,6 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	public WizardExtension(OpGraph graph) {
 		super();
 		this.graph = graph;
-		addDefaultReportTemplates();
-	}
-	
-	public void addDefaultReportTemplates() {
-		if(getReportTemplate("Report Prefix") == null)
-			putReportTemplate("Report Prefix", "");
-		if(getReportTemplate("Report Suffix") == null)
-			putReportTemplate("Report Suffix", "");
 	}
 	
 	public NodeWizard createWizard(Processor processor) {
@@ -271,63 +261,7 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	public WizardInfo getWizardInfo() {
 		return this.wizardInfo;
 	}
-	
-	public List<NodeWizardReportTemplate> getReportTemplates() {
-		return Collections.unmodifiableList(reportTemplates);
-	}
-	
-	public Set<String> getReportTemplateNames() {
-		return Collections.unmodifiableSet( reportTemplates.stream()
-				.map( (rt) -> rt.getName() )
-				.collect(Collectors.toSet()) );
-	}
-	
-	public NodeWizardReportTemplate getReportTemplate(String name) {
-		final Optional<NodeWizardReportTemplate> opt = reportTemplates.stream()
-				.filter( (rt) -> rt.getName().equals(name) )
-				.findAny();
-		return (opt.isPresent() ? opt.get() : null);
-	}
-	
-	/**
-	 * Set report template text for the given identifier.
-	 * 
-	 * @param name
-	 * @param template
-	 * 
-	 * @return the new or modified report template object
-	 */
-	public NodeWizardReportTemplate putReportTemplate(String name, String template) {
-		NodeWizardReportTemplate retVal = getReportTemplate(name);
-		if(retVal == null) {
-			retVal = new NodeWizardReportTemplate(name, template);
-			reportTemplates.add(retVal);
-			retVal.setTemplate(template);
-			
-			fireReportTemplateEvent(EventType.REPORT_TEMPLATE_ADDED, name, "", template);
-		} else {
-			final String oldContent = retVal.getTemplate();
-			retVal.setTemplate(template);
-			
-			fireReportTemplateEvent(EventType.REPORT_TEMPLATE_CHANGED, name, oldContent, template);
-		}
-		return retVal;
-	}
-	
-	public void removeReportTemplate(String name) {
-		final Iterator<NodeWizardReportTemplate> itr = reportTemplates.iterator();
-		while(itr.hasNext()) {
-			final NodeWizardReportTemplate template = itr.next();
-			if(template.getName().equals(name)) {
-				itr.remove();
-				
-				fireReportTemplateEvent(EventType.REPORT_TEMPLATE_REMOVED, name, template.getTemplate(), null);
-				
-				break;
-			}
-		}
-	}
-	
+
 	/**
 	 * Setup a map of object which will be added to the
 	 * report generator context.
@@ -355,10 +289,6 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		for(OpNode node:getOptionalNodes()) {
 			retVal.addOptionalNode(node);
 			retVal.setOptionalNodeDefault(node, getOptionalNodeDefault(node));
-		}
-		
-		for(NodeWizardReportTemplate report:getReportTemplates()) {
-			retVal.putReportTemplate(report.getName(), report.getTemplate());
 		}
 		
 		return retVal;
@@ -389,11 +319,6 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	
 	public void fireNodeEvent(EventType eventType, OpNode node) {
 		final WizardExtensionEvent event = new WizardExtensionEvent(EventType.NODE_ADDED_TO_SETTINGS, node);
-		getWizardExtensionListeners().forEach( (l) -> l.wizardExtensionChanged(event) );
-	}
-	
-	public void fireReportTemplateEvent(EventType eventType, String reportName, String oldContent, String reportContent) {
-		final WizardExtensionEvent event = new WizardExtensionEvent(eventType, reportName, oldContent, reportContent);
 		getWizardExtensionListeners().forEach( (l) -> l.wizardExtensionChanged(event) );
 	}
 	

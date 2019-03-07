@@ -15,13 +15,17 @@
  */
 package ca.phon.app.opgraph.nodes;
 
+import org.apache.commons.io.FilenameUtils;
+
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.library.instantiators.Instantiator;
+import ca.phon.opgraph.nodes.general.LinkedMacroNodeOverrides;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
@@ -41,7 +45,8 @@ public class AnalysisNodeInstantiator extends MacroNodeInstantiator {
 		OpGraph graph = null;
 		if(params.length == 1 && params[0] instanceof OpGraph) {
 			graph = (OpGraph)params[0];
-			GraphUtils.changeNodeIds(graph);
+//			if(node.isGraphEmbedded())
+//			GraphUtils.changeNodeIds(graph);
 			node = new MacroNode(graph);
 		} else {
 			node = super.newInstance(params);
@@ -74,6 +79,12 @@ public class AnalysisNodeInstantiator extends MacroNodeInstantiator {
 				break;
 			}
 		}
+		LinkedMacroNodeOverrides nodeOverrides = new LinkedMacroNodeOverrides();
+		for(OpNode settingsNode:wizardExtension) {
+			nodeOverrides.getNodeOverrides().add(settingsNode);
+		}
+		node.putExtension(LinkedMacroNodeOverrides.class, nodeOverrides);
+		
 		String nodeName = "";
 		if(parametersNode != null) {
 			final PhonScriptNode scriptNode = (PhonScriptNode)parametersNode;

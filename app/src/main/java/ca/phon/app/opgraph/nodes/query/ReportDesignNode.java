@@ -48,6 +48,10 @@ import ca.phon.query.report.ReportBuilderFactory;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
 
+/**
+ * 
+ */
+@Deprecated
 @OpNodeInfo(
 		name="Report",
 		category="Report",

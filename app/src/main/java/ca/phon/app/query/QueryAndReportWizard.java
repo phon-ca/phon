@@ -71,7 +71,6 @@ import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.query.QueryMenuListener;
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
@@ -90,6 +89,7 @@ import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.ProcessorEvent;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.plugin.PluginEntryPointRunner;

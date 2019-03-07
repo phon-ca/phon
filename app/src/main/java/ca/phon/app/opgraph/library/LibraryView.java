@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.opgraph.editor.library;
+package ca.phon.app.opgraph.library;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

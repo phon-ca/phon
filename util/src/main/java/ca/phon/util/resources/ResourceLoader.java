@@ -62,6 +62,9 @@ public final class ResourceLoader<T> implements Iterable<T> {
 			handlers.add(handler);
 	}
 	
+	public List<ResourceHandler<T>> getHandlers() {
+		return this.handlers;
+	}
 
 	private class LazyIterator implements Iterator<T> {
 		

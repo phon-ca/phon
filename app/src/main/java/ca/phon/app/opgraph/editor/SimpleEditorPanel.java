@@ -88,6 +88,7 @@ import javax.swing.tree.TreePath;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tools.ant.util.ClasspathUtils;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.VerticalLayout;
@@ -96,8 +97,6 @@ import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.opgraph.OpgraphIO;
-import ca.phon.app.opgraph.nodes.MacroNodeData;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
@@ -106,6 +105,7 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.edits.graph.AddNodeEdit;
 import ca.phon.opgraph.app.edits.graph.DeleteNodesEdit;
 import ca.phon.opgraph.app.edits.graph.MoveNodesEdit;
@@ -113,6 +113,7 @@ import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.extensions.NodeMetadata;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.general.MacroNodeData;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryName;
@@ -1126,7 +1127,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					}
 
 					final DefaultMutableTreeNode treeNode =
-							new DefaultMutableTreeNode(documentURL, true);
+							new DefaultMutableTreeNode(new StockItemTuple(library.getFolderName() + "/" + relativePath, documentURL), true);
 					parentNode.add(treeNode);
 				} catch (UnsupportedEncodingException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
@@ -1265,6 +1266,18 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 	}
 	
+	private class StockItemTuple extends Tuple<String, URL> {
+
+		public StockItemTuple() {
+			super();
+		}
+
+		public StockItemTuple(String obj1, URL obj2) {
+			super(obj1, obj2);
+		}
+		
+	}
+	
 	private class AddDocumentsWorker extends SwingWorker<List<MacroNode>, MacroNode> {
 
 		// either URL, OpGraph or QueryScript objects
@@ -1309,16 +1322,49 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			SwingUtilities.invokeLater(() -> busyLabel.setBusy(true));
 			List<MacroNode> retVal = new ArrayList<>();
 			for(Object document:documents) {
-				if(document instanceof URL) {
+				if(document instanceof StockItemTuple) {
+					StockItemTuple tuple = (StockItemTuple)document;
+					final URL documentURL = tuple.getObj2();
+					try(InputStream is = documentURL.openStream()) {
+						final String documentFile = URLDecoder.decode(documentURL.toString(), "UTF-8");
+						final String documentName = FilenameUtils.getBaseName(documentFile);
+
+						final URI uri = new URI("classpath", tuple.getObj1(), null);
+						final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator, false);
+
+						final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData, getGraph());
+						
+						final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
+						if(editorExt != null) {
+							retVal.addAll(editorExt.getMacroNodes());
+							
+							super.publish(editorExt.getMacroNodes().toArray(new MacroNode[0]));
+						} else {
+							if(analysisNode.getName().length() == 0)
+								analysisNode.setName(documentName);
+							final NodeMetadata nodeMeta = new NodeMetadata(X_START, Y_START + macroNodes.size() * Y_SEP);
+							analysisNode.putExtension(NodeMetadata.class, nodeMeta);
+							
+							retVal.add(analysisNode);
+							super.publish(analysisNode);
+						}
+					} catch (IOException e) {
+						fireDocumentError(documentURL, e);
+						LOGGER.error( e.getLocalizedMessage(), e);
+					} catch (URISyntaxException | InstantiationException e) {
+						fireDocumentError(documentURL, new IOException(e));
+						LOGGER.error( e.getLocalizedMessage(), e);
+					}
+				} else if(document instanceof URL) {
 					final URL documentURL = (URL)document;
 					try(InputStream is = documentURL.openStream()) {
 						final String documentFile = URLDecoder.decode(documentURL.toString(), "UTF-8");
 						final String documentName = FilenameUtils.getBaseName(documentFile);
 
-						final URI uri = new URI("class", MacroNode.class.getName(), documentName);
-						final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator);
+						final URI uri = documentURL.toURI();
+						final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator, false);
 
-						final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData);
+						final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData, getGraph());
 						
 						final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
 						if(editorExt != null) {
@@ -1629,7 +1675,17 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 			if(value instanceof DefaultMutableTreeNode) {
 				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
-				if(node.getUserObject() instanceof URL) {
+				if(node.getUserObject() instanceof StockItemTuple) {
+					StockItemTuple tuple = (StockItemTuple)node.getUserObject();
+					final URL analysisURL = tuple.getObj2();
+					try {
+						final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");
+						final String analysisName = FilenameUtils.getBaseName(analysisFile);
+						retVal.setText(analysisName);
+					} catch (UnsupportedEncodingException e) {
+						LOGGER.error( e.getLocalizedMessage(), e);
+					}
+				} else if(node.getUserObject() instanceof URL) {
 					final URL analysisURL = (URL)node.getUserObject();
 					try {
 						final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");

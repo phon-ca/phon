@@ -22,12 +22,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 
 public class OpenComposerAction extends HookableAction {
 	

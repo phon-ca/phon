@@ -29,10 +29,9 @@ import javax.swing.undo.UndoableEdit;
 
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.nodes.PhonNodeLibrary;
+import ca.phon.app.opgraph.library.PhonNodeLibrary;
 import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
 import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
-import ca.phon.app.opgraph.wizard.ReportTemplateView;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.app.workspace.Workspace;
@@ -51,8 +50,6 @@ import ca.phon.util.Tuple;
 public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	private JPanel debugSettings;
-
-	private ReportTemplateView reportTemplateView;
 
 	private JComboBox<Project> projectList;
 
@@ -136,25 +133,6 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 			graphExtension.addOptionalNode(optionalNode);
 			graphExtension.setOptionalNodeDefault(optionalNode, analysisExt.getOptionalNodeDefault(optionalNode));
 		}
-
-		// copy report template
-		final NodeWizardReportTemplate prefixTemplate = graphExtension.getReportTemplate("Report Prefix");
-		final NodeWizardReportTemplate suffixTemplate = graphExtension.getReportTemplate("Report Suffix");
-		final NodeWizardReportTemplate pt =
-				analysisExt.getReportTemplate("Report Prefix");
-		if(pt != null) {
-			if(!prefixTemplate.getTemplate().contains(pt.getTemplate())) {
-				prefixTemplate.setTemplate(prefixTemplate.getTemplate() + "\n" + pt.getTemplate());
-			}
-		}
-
-		final NodeWizardReportTemplate st =
-				analysisExt.getReportTemplate("Report Suffix");
-		if(st != null) {
-			if(!suffixTemplate.getTemplate().contains(st.getTemplate())) {
-				suffixTemplate.setTemplate(suffixTemplate.getTemplate() + "\n" + st.getTemplate());
-			}
-		}
 	}
 
 	private void init() {
@@ -193,16 +171,8 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 	@Override
 	protected Map<String, JComponent> getViewMap() {
 		final Map<String, JComponent> retVal = super.getViewMap();
-		retVal.put("Report Template", getReportTemplateView());
 		retVal.put("Debug Settings", getDebugSettings());
 		return retVal;
-	}
-
-	protected JComponent getReportTemplateView() {
-		if(reportTemplateView == null) {
-			reportTemplateView = new ReportTemplateView(getDocument());
-		}
-		return reportTemplateView;
 	}
 
 	protected JComponent getDebugSettings() {

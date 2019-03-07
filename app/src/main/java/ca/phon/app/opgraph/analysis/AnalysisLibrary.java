@@ -38,8 +38,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
+import org.apache.commons.io.FilenameUtils;
+
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
@@ -49,6 +50,7 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.dag.CycleDetectedException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
@@ -351,7 +353,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final QueryNodeInstantiator queryNodeInstantiator = new QueryNodeInstantiator();
 		final QueryNodeData nodeData = new QueryNodeData(queryScript, queryNodeClassURI,
 				reportTitle, "", "Query", queryNodeInstantiator);
-		
+
 		final QueryNode queryNode = queryNodeInstantiator.newInstance(nodeData);
 		graph.add(queryNode);
 		

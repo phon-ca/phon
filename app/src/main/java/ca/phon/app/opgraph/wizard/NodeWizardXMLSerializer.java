@@ -93,15 +93,6 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 			settingsEle.appendChild(nodeEle);
 		}
 		
-		for(NodeWizardReportTemplate report:nodeList.getReportTemplates()) {
-			final Element reportEle =
-					doc.createElementNS(NAMESPACE, PREFIX + ":report-template");
-			reportEle.setAttribute("name", report.getName());
-			reportEle.setTextContent(report.getTemplate());
-			
-			settingsEle.appendChild(reportEle);
-		}
-		
 		parentElem.appendChild(settingsEle);
 	}
 
@@ -192,10 +183,6 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 				}
 				if(node != null) 
 					ext.addOptionalNode(node);
-			} else if(child.getNodeName().equals(PREFIX + ":report-template")) {
-				final String reportName = child.getAttributes().getNamedItem("name").getNodeValue();
-				final String reportTemplate = child.getTextContent();
-				ext.putReportTemplate(reportName, reportTemplate);
 			}
 		}
 		

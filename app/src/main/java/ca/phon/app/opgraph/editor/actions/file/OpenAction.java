@@ -24,13 +24,13 @@ import java.util.List;
 
 import javax.swing.KeyStroke;
 
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
 import ca.phon.app.opgraph.editor.OpgraphFileFilter;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;

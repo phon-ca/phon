@@ -23,7 +23,6 @@ import com.teamdev.jxbrowser.chromium.dom.DOMElement;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.app.session.SessionSelectorActiveEditorSupport;
@@ -31,6 +30,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.ProcessorEvent;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;

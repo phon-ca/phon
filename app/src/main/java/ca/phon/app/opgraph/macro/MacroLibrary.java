@@ -40,6 +40,8 @@ import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.resources.ClassLoaderHandler;
+import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 public class MacroLibrary {
@@ -56,9 +58,9 @@ public class MacroLibrary {
 	public MacroLibrary() {
 		super();
 		loader.addHandler(new StockMacroHandler());
-		loader.addHandler(new StockMacroHandler());
+		loader.addHandler(new UserMacroHandler());
 	}
-	
+		
 	public List<URL> getAvailableMacros() {
 		List<URL> retVal = new ArrayList<URL>();
 		

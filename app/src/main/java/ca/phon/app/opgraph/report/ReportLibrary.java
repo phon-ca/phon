@@ -36,11 +36,11 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;

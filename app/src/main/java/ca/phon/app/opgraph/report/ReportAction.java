@@ -25,8 +25,8 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.worker.PhonWorker;
 

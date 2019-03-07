@@ -21,8 +21,8 @@ import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
 
-import ca.phon.app.opgraph.OpgraphIO;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierProvider;
 import ca.phon.syllabifier.basic.BasicSyllabifierIO;

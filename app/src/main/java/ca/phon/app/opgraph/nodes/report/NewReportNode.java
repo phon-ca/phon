@@ -36,7 +36,7 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 @OpNodeInfo(name="New Report", description="New report tree", category="Report", showInLibrary=true)
 public class NewReportNode extends OpNode implements NodeSettings {
 
-	public final static String REPORT_TREE_KEY = "__reportTree";
+	public final static String REPORT_TREE_KEY = "_reportTree";
 
 	private final InputField reportNameInput =
 			new InputField("reportName", "Report name", true, true, String.class);
