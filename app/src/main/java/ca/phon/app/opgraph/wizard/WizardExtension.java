@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 
 import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.OpGraphListener;
+import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.Processor;
 
@@ -57,9 +59,58 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 	private final List<WizardExtensionListener> listenerList = 
 			Collections.synchronizedList(new ArrayList<>());
 	
+	private final OpGraphListener graphListener = new OpGraphListener() {
+		
+		@Override
+		public void nodeSwapped(OpGraph graph, OpNode oldNode, OpNode newNode) {
+			if(wizardNodes.contains(oldNode)) {
+				int oldIdx = wizardNodes.indexOf(oldNode);
+				wizardNodes.remove(oldIdx);
+				wizardNodes.add(oldIdx, newNode);
+				
+				NodeInfo nodeInfo = nodeInfoMap.remove(oldNode);
+				nodeInfoMap.put(newNode, nodeInfo);
+			}
+			
+			if(optionalNodes.contains(oldNode)) {
+				int oldIdx = optionalNodes.indexOf(oldNode);
+				optionalNodes.remove(oldIdx);
+				optionalNodes.add(oldIdx, newNode);
+				
+				boolean optDefault = optionalDefaults.remove(oldNode);
+				optionalDefaults.put(newNode, optDefault);
+			}
+		}
+		
+		@Override
+		public void nodeRemoved(OpGraph graph, OpNode node) {
+			if(wizardNodes.contains(node)) {
+				wizardNodes.remove(node);
+				nodeInfoMap.remove(node);
+			}
+			if(optionalNodes.contains(node)) {
+				optionalNodes.remove(node);
+				optionalDefaults.remove(node);
+			}
+		}
+		
+		@Override
+		public void nodeAdded(OpGraph graph, OpNode node) {
+		}
+		
+		@Override
+		public void linkRemoved(OpGraph graph, OpLink link) {
+		}
+		
+		@Override
+		public void linkAdded(OpGraph graph, OpLink link) {
+		}
+	};
+	
 	public WizardExtension(OpGraph graph) {
 		super();
 		this.graph = graph;
+		this.graph.addGraphListener(graphListener);
 	}
 	
 	public NodeWizard createWizard(Processor processor) {
