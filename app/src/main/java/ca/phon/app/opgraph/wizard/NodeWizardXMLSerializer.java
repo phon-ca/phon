@@ -146,8 +146,11 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 				final OpNode node = graph.getNodeById(nodeId, true);
 				if(node != null) {
 					ext.addNode(node);
-					final boolean isForced = Boolean.parseBoolean(child.getAttributes().getNamedItem("showAsStep").getNodeValue());
-					ext.setNodeForced(node, isForced);
+					final boolean isForced = 
+							(child.getAttributes().getNamedItem("showAsStep") != null 
+								? Boolean.parseBoolean(child.getAttributes().getNamedItem("showAsStep").getNodeValue())
+								: false);
+							ext.setNodeForced(node, isForced);
 					
 					final NodeList subNodes = child.getChildNodes();
 					for(int j = 0; j < subNodes.getLength(); j++) {

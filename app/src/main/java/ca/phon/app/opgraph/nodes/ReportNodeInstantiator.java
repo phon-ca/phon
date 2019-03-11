@@ -20,6 +20,7 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.nodes.general.LinkedMacroNodeOverrides;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
 import ca.phon.script.PhonScript;
@@ -39,7 +40,8 @@ public class ReportNodeInstantiator extends MacroNodeInstantiator {
 		final MacroNode node = super.newInstance(params);
 		final OpGraph graph = node.getGraph();
 		// update graph ids to make them unique
-		GraphUtils.changeNodeIds(graph);
+		if(node.isGraphEmbedded())
+			GraphUtils.changeNodeIds(graph);
 		
 		final OpNode projectNode = graph.getNodesByName("Project").stream().findFirst().orElse(null);
 		if(projectNode == null)
@@ -68,6 +70,12 @@ public class ReportNodeInstantiator extends MacroNodeInstantiator {
 				break;
 			}
 		}
+		LinkedMacroNodeOverrides nodeOverrides = new LinkedMacroNodeOverrides();
+		for(OpNode settingsNode:wizardExtension) {
+			nodeOverrides.getNodeOverrides().add(settingsNode);
+		}
+		node.putExtension(LinkedMacroNodeOverrides.class, nodeOverrides);
+		
 		String nodeName = "";
 		if(parametersNode != null) {
 			final PhonScriptNode scriptNode = (PhonScriptNode)parametersNode;

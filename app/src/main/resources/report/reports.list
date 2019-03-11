@@ -1,6 +1,7 @@
 report/Query Information.xml
 report/Aggregate.xml
 report/Inventory by Session.xml
+report/Inventory and Results by Participant.xml
 report/Listing by Session (with optional tier data).xml
 report/Table (all results in one table).xml
 report/Table by Session.xml

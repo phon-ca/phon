@@ -69,15 +69,14 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="og:AbstractNodeType">
-				<xs:choice minOccurs="1" maxOccurs="1">
-					<xs:element ref="og:graph"/>
-					<xs:element ref="reportURL"/>
-				</xs:choice>
+				<xs:sequence>
+					<xs:element ref="og:graph" minOccurs="1" maxOccurs="1"/>
+					<xs:element ref="og:extensions" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="reportURL" type="xs:anyURI"/>
 	<xs:element name="queryReportNode" type="QueryReportNode" substitutionGroup="og:abstract_node"/>
 
 	<!-- SortNodeSettings -->

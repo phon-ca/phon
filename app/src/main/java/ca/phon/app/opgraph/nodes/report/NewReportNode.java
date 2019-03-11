@@ -70,6 +70,10 @@ public class NewReportNode extends OpNode implements NodeSettings {
 						( context.get(reportNameInput) != null ? new SectionHeaderNode(context.get(reportNameInput).toString()) : new SectionHeaderNode("root") ) );
 
 		final ReportTree reportTree = new ReportTree(root);
+		// may need to set name
+		if(context.get(reportNameInput) != null)
+			root.setTitle(context.get(reportNameInput).toString());
+		
 		context.put(reportOutput, reportTree);
 		context.put(reportRootOutput, root);
 		

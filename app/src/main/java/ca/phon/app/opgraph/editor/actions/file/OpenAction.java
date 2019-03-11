@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.KeyStroke;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
@@ -38,8 +39,6 @@ import ca.phon.util.RecentFiles;
 
 public class OpenAction extends OpgraphEditorAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenAction.class.getName());
-
 	private static final long serialVersionUID = 1416397464535529114L;
 	
 	public final static String TXT = "Open...";
@@ -124,8 +123,7 @@ public class OpenAction extends OpgraphEditorAction {
 		try {
 			openFile(openFile, useCurrentWindow);
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe(e);
 		}
 	}
 	

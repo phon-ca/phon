@@ -46,11 +46,13 @@ import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
+import ca.phon.app.opgraph.nodes.query.QueryReportNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.OpgraphIO;
+import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.dag.CycleDetectedException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
@@ -85,6 +87,8 @@ public class AnalysisLibrary implements OpGraphLibrary {
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AnalysisLibrary.class.getName());
 	
 	private final static String QUERY_REPORT_MAP = "analysis/QueryReportMap.txt";
+	
+	private final static String ANALYSIS_FROM_QUERY_TEMPLATE = "macro/AnalysisFromQueryTemplate.xml";
 	
 	private final static String PARAMETERS_TEMPLATE = "macro/Parameters Template.xml";
 
@@ -340,49 +344,35 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		if(queryName != null) {
 			reportTitle = queryName.getName();
 		}
-		
-		final AnalysisEditorModelInstantiator instantiator = new AnalysisEditorModelInstantiator();
-		final OpGraph graph = new OpGraph();
-		final AnalysisOpGraphEditorModel model = instantiator.createModel(graph);
-		final MacroNode retVal = new MacroNode(graph);
-		retVal.setName(reportTitle);
-		
-		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
-
 		final URI queryNodeClassURI = new URI("class", QueryNode.class.getName(), queryName.getName());
 		final QueryNodeInstantiator queryNodeInstantiator = new QueryNodeInstantiator();
 		final QueryNodeData nodeData = new QueryNodeData(queryScript, queryNodeClassURI,
 				reportTitle, "", "Query", queryNodeInstantiator);
 
+		final OpGraph graph = OpgraphIO.read(
+				AnalysisLibrary.class.getClassLoader().getResourceAsStream(ANALYSIS_FROM_QUERY_TEMPLATE));
+		GraphUtils.changeNodeIds(graph);
+		
+		final MacroNode retVal = new MacroNode(graph);
+		retVal.setName(reportTitle);
+		
 		final QueryNode queryNode = queryNodeInstantiator.newInstance(nodeData);
 		graph.add(queryNode);
 		
+		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 		wizardExt.addNode(queryNode);
 		wizardExt.setNodeForced(queryNode, true);
-
-		// add parameters template
-		final OpGraph parametersTemplate = OpgraphIO.read(
-				AnalysisLibrary.class.getClassLoader().getResourceAsStream(PARAMETERS_TEMPLATE));
-		for(OpNode node:parametersTemplate) {
-			graph.add(node);
-		}
-		for(OpNode node:parametersTemplate) {
-			for(OpLink link:parametersTemplate.getOutgoingEdges(node)) {
-				graph.add(link);
-			}
-		}
-		final OpNode reportTitleNode = parametersTemplate.getVertices().stream()
+		
+		final QueryReportNode queryReportNode = new QueryReportNode();
+		graph.add(queryReportNode);
+		
+		wizardExt.addNode(queryReportNode);
+		
+		final OpNode reportTitleNode = graph.getVertices().stream()
 				.filter( (n) -> n.getName().equals("Get Report Title") ).findFirst().orElse(null);
 		if(reportTitleNode == null) {
 			throw new IllegalArgumentException("Report title node not found");
 		}
-		
-		final String reportDocument = getQueryReport(queryScript);
-		final OpGraph reportGraph = OpgraphIO.read(
-				AnalysisLibrary.class.getClassLoader().getResourceAsStream(reportDocument));
-		final OpNode reportNode = reportGraph.getVertices().stream().filter( (n) -> n instanceof MacroNode ).findAny().orElse(null);
-		graph.add(reportNode);
-
 		// create links
 		final OpNode projectNode = graph.getVertices().stream()
 			.filter( (n) -> n.getName().equals("Project")  && n instanceof ObjectNode )
@@ -402,27 +392,36 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		if(participantsNode == null) {
 			throw new IllegalArgumentException("Graph has no Selected Participants node");
 		}
+		final OpNode reportTreeNode = graph.getVertices().stream()
+			.filter( (n) -> n.getName().equals("ReportTree") && n instanceof ObjectNode)
+			.findFirst().orElse(null);
+		if(reportTreeNode == null) {
+			throw new IllegalArgumentException("Graph has no ReportTree node");
+		}
 		
-		final OpLink projectLink = new OpLink(projectNode, "obj", queryNode, "project");
-		final OpLink sessionsLink = new OpLink(sessionsNode, "obj", queryNode, "sessions");
+		// project links
+		OpLink projectLink = new OpLink(projectNode, "obj", queryNode, "project");
 		graph.add(projectLink);
-		graph.add(sessionsLink);
-
-		final OpLink reportTitleLink = new OpLink(reportTitleNode, "reportTitle", reportNode, "reportTitle");
-		graph.add(reportTitleLink);
-		final OpLink projectLink2 = new OpLink(queryNode, "project", reportNode, "project");
-		graph.add(projectLink2);
-		final OpLink paramLink = new OpLink(queryNode, "parameters", reportNode, "parameters");
-		graph.add(paramLink);
-		final OpLink resultsLink = new OpLink(queryNode, "results", reportNode, "results");
+		
+		projectLink = new OpLink(queryNode, "project", queryReportNode, "project");
+		graph.add(projectLink);
+		
+		// session link
+		OpLink sessionLink = new OpLink(sessionsNode, "obj", queryNode, "sessions");
+		graph.add(sessionLink);
+		
+		// results link
+		OpLink resultsLink = new OpLink(queryNode, "results", queryReportNode, "results");
 		graph.add(resultsLink);
-		final OpLink scriptLink = new OpLink(queryNode, "script", reportNode, "script");
-		graph.add(scriptLink);
-		final OpLink sessionsLink2 = new OpLink(sessionsNode, "obj", reportNode, "selected sessions");
-		graph.add(sessionsLink2);
-		final OpLink participantsLink = new OpLink(participantsNode, "obj", reportNode, "selected participants");
-		graph.add(participantsLink);
-
+		
+		// query link
+		OpLink queryLink = new OpLink(queryNode, "query", queryReportNode, "query");
+		graph.add(queryLink);
+		
+		// report tree
+		OpLink reportTreeLink = new OpLink(queryReportNode, "report", reportTreeNode, "obj");
+		graph.add(reportTreeLink);
+		
 		retVal.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
 		retVal.publish("selectedSessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
 		retVal.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));

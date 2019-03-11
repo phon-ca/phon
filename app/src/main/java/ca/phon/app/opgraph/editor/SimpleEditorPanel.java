@@ -129,6 +129,8 @@ import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.jbreadcrumb.BreadcrumbEvent;
+import ca.phon.ui.jbreadcrumb.BreadcrumbListener;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -179,7 +181,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private TitledPanel listTitledPanel;
 	private JPanel listTopPanel;
 	private JXTable nodeTable;
-	private List<MacroNode> macroNodes;
+	private List<MacroNode> macroNodes = Collections.synchronizedList(new ArrayList<>());
 	
 	private TitledPanel settingsTitledPanel;
 	private CardLayout cardLayout;
@@ -206,12 +208,31 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	 *
 	 * @param project if <code>null</code> project graphs will not be displayed
 	 * @param library library display in add item dialog
+	 * @param graph
 	 * @param modelInstantiator the editor model instantiator
 	 * @param nodeInstantiator instantiator for nodes created by adding documents from the library
 	 * @param queryNodeInstantiator instantiator for nodes created by adding queries to the doucment
 	 * @param runFactory factory for runnables used to execute graphs
 	 */
-	public SimpleEditorPanel(Project project, OpGraphLibrary library,
+	public SimpleEditorPanel(Project project, OpGraphLibrary library, 
+			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
+			Function<QueryScript, MacroNode> queryNodeInstantiator,
+			BiFunction<OpGraph, Project, Runnable> runFactory) {
+		this(project, library, new OpGraph(), modelInstantiator, nodeInstantiator, queryNodeInstantiator, runFactory);
+	}
+	
+	/**
+	 * Constructor
+	 *
+	 * @param project if <code>null</code> project graphs will not be displayed
+	 * @param library library display in add item dialog
+	 * @param graph
+	 * @param modelInstantiator the editor model instantiator
+	 * @param nodeInstantiator instantiator for nodes created by adding documents from the library
+	 * @param queryNodeInstantiator instantiator for nodes created by adding queries to the doucment
+	 * @param runFactory factory for runnables used to execute graphs
+	 */
+	public SimpleEditorPanel(Project project, OpGraphLibrary library, OpGraph graph,
 			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
 			Function<QueryScript, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
@@ -223,11 +244,45 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		this.queryNodeInstantiator = queryNodeInstantiator;
 		this.runFactory = runFactory;
 
-		model = modelInstantiator.createModel(new OpGraph());
+		SimpleEditorExtension ext = graph.getExtension(SimpleEditorExtension.class);
+		if(ext == null) {
+			ext = new SimpleEditorExtension(macroNodes);
+			graph.putExtension(SimpleEditorExtension.class, ext);
+		}
+		
+		model = modelInstantiator.createModel(graph);
 		model.getDocument().getUndoSupport().addUndoableEditListener( (e) -> setModified(true) );
+		model.getDocument().getBreadcrumb().addBreadcrumbListener(new BreadcrumbListener<OpGraph, String>() {
+			
+			@Override
+			public void breadCrumbEvent(BreadcrumbEvent<OpGraph, String> evt) {
+				if(evt.getValue().equals("root")) {
+					// root graph has changed - reset and update
+					resetAndUpdate();
+				}
+			}
+			
+		});
+		resetAndUpdate();
 		
 		init();
 		extSupport.initExtensions();
+	}
+	
+	private void resetAndUpdate() {
+		// read macro nodes from graph extension
+		macroNodes.clear();
+		SimpleEditorExtension simpleEditorExt = getGraph().getExtension(SimpleEditorExtension.class);
+		if(simpleEditorExt != null)
+			macroNodes.addAll(simpleEditorExt.getMacroNodes());
+		else {
+			simpleEditorExt = new SimpleEditorExtension(macroNodes);
+			getGraph().putExtension(SimpleEditorExtension.class, simpleEditorExt);
+		}
+		if(nodeTable != null)
+			((NodeTableModel)nodeTable.getModel()).fireTableDataChanged();
+		
+		panelMap.clear();
 	}
 	
 	private void expandAllDocuments(TreePath path) {
@@ -346,7 +401,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		runAct.putValue(PhonUIAction.SMALL_ICON, runIcn);
 		runButton = new JButton(runAct);
 
-		macroNodes = Collections.synchronizedList(new ArrayList<>());
 		nodeTable = new JXTable(new NodeTableModel());
 		nodeTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		nodeTable.getSelectionModel().addListSelectionListener( (e) -> {
@@ -937,14 +991,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			if(!chooseFile(null)) return false;
 		}
 		
-		// add extension to document
-		getGraph().putExtension(SimpleEditorExtension.class, new SimpleEditorExtension(macroNodes));
-		
 		OpgraphIO.write(getModel().getDocument().getRootGraph(), getCurrentFile());
-		
-		// XXX OpGraph deletes undo history here
-		//getModel().getDocument().markAsUnmodified();
-		
 		setModified(false);
 		
 		return true;

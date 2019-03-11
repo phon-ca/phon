@@ -31,6 +31,7 @@ import ca.phon.opgraph.OpGraphListener;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.Processor;
+import ca.phon.opgraph.nodes.general.LinkedMacroNodeOverrides;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are

@@ -1,8 +1,11 @@
 package ca.phon.app.opgraph.nodes.query;
 
+import static ca.phon.opgraph.io.xml.XMLSerializerFactory.DEFAULT_NAMESPACE;
+
 import java.io.IOException;
 import java.net.URL;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -11,6 +14,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.extensions.Extendable;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 
@@ -20,6 +24,8 @@ public class QueryReportNodeXMLSerializer implements XMLSerializer {
 	static final String PREFIX = "opqry";
 	
 	static final QName REPORT_NODE_QNAME = new QName(NAMESPACE, "queryReportNode", PREFIX);
+	
+	static final QName GRAPH_QNAME = new QName(DEFAULT_NAMESPACE, "graph", XMLConstants.DEFAULT_NS_PREFIX);
 	
 	@Override
 	public boolean handles(Class<?> arg0) {
@@ -38,21 +44,32 @@ public class QueryReportNodeXMLSerializer implements XMLSerializer {
 			throw new IOException("Incorrect element");
 		
 		QueryReportNode retVal = new QueryReportNode();
+		
+		retVal.setId(ele.getAttribute("id"));
+		
 		final NodeList children = ele.getChildNodes();
 		// ele should have a single element: url or graph
 		for(int childIndex = 0; childIndex < children.getLength(); ++childIndex) {
 			final Node cnode = children.item(childIndex);
 			if(cnode instanceof Element) {
-				if(cnode.getNodeName().equals(PREFIX + ":url")) {
-					// load graph from url
-					URL url = new URL(cnode.getTextContent());
-					retVal.setReportGraphURL(url);
-				} else if(cnode.getNodeName().equals(PREFIX + ":graph")) {
+				final Element childElem = (Element)cnode;
+				final QName nodeName = XMLSerializerFactory.getQName(childElem);
+				if(GRAPH_QNAME.equals(nodeName)) {
 					final XMLSerializer graphSerializer = factory.getHandler(OpGraph.class);
 					if(graphSerializer == null)
 						throw new IOException("No handler for graph");
 					final Object objRead = graphSerializer.read(factory, graph, retVal, doc, (Element)cnode);
 					retVal.setReportGraph((OpGraph)objRead);
+				} else {
+					// Get a handler for the element
+					final XMLSerializer serializer = factory.getHandler(nodeName);
+					if(serializer == null)
+						throw new IOException("Could not get handler for element: " + nodeName);
+
+					// Published fields and extensions all take care of adding
+					// themselves to the passed in object
+					//
+					serializer.read(factory, graph, retVal, doc, childElem);
 				}
 			}
 		}
@@ -83,16 +100,18 @@ public class QueryReportNodeXMLSerializer implements XMLSerializer {
 			reportElem.appendChild(descriptionElem);
 		}
 		
-		if(queryReportNode.getReportGraphURL() != null) {
-			final Element urlEle = doc.createElementNS(NAMESPACE, PREFIX + ":url");
-			urlEle.setTextContent(queryReportNode.getReportGraphURL().toString());
-			reportElem.appendChild(urlEle);
-		} else if(queryReportNode.getReportGraph() != null) {
-			final XMLSerializer graphSerializer = factory.getHandler(OpGraph.class);
-			if(graphSerializer == null)
-				throw new IOException("No handler for graph");
+		final XMLSerializer graphSerializer = factory.getHandler(OpGraph.class);
+		if(graphSerializer == null)
+			throw new IOException("No handler for graph");
 
-			graphSerializer.write(factory, doc, reportElem, queryReportNode.getReportGraph());
+		graphSerializer.write(factory, doc, reportElem, queryReportNode.getReportGraph());
+		
+		if(queryReportNode.getExtensionClasses().size() > 0) {
+			final XMLSerializer serializer = factory.getHandler(Extendable.class);
+			if(serializer == null)
+				throw new IOException("No XML serializer for extensions");
+
+			serializer.write(factory, doc, reportElem, queryReportNode);
 		}
 		
 		ele.appendChild(reportElem);
