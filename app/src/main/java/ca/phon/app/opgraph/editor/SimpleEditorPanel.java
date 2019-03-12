@@ -20,6 +20,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -68,6 +69,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
@@ -83,6 +85,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FilenameUtils;
@@ -323,7 +326,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
 		final TreePath rootPath = new TreePath(rootNode);
 		expandAllDocuments(rootPath);
-				
+		
 		// create components for popup window selection
 		final ImageIcon saveIcn =
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
@@ -469,7 +472,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final String listTitle = StringUtils.capitalize(getModel().getNoun().getObj1()) + " List";
 		
 		listTopPanel = new JPanel(new VerticalLayout(0));
-		listTopPanel.add(toolbar);
 		
 		leftTitledPanel = new TitledPanel(StringUtils.capitalize(getModel().getNoun().getObj2()), documentScroller);
 		listTitledPanel = new TitledPanel(listTitle);
@@ -488,6 +490,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		splitPane.setRightComponent(rightSplit);
 		
 		setLayout(new BorderLayout());
+		add(toolbar, BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
 	}
 		
@@ -997,6 +1000,37 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		return true;
 	}
 	
+	private JPanel createDocumentsPanel(TreeModel treeModel) {
+		JPanel retVal = new JPanel(new VerticalLayout());
+		
+		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
+		for(int i = 0; i < rootNode.getChildCount(); i++) {
+			TreeNode cnode = rootNode.getChildAt(i);
+			setupDocumentsPanel(cnode, retVal);
+		}
+		
+		return retVal;
+	}
+	
+	private void setupDocumentsPanel(TreeNode treeNode, JPanel panel) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNode;
+
+		JPanel docPanel = new JPanel(new GridLayout(0, 3));
+		
+		for(int i = 0; i < node.getChildCount(); i++) {
+			TreeNode cnode = node.getChildAt(i);
+			
+			if(cnode.isLeaf()) {
+				DocumentLabel docLabel = new DocumentLabel(((DefaultMutableTreeNode)cnode).getUserObject());
+				docPanel.add(docLabel);
+			} else {
+				setupDocumentsPanel(cnode, panel);
+			}
+		}
+		
+		panel.add(docPanel);
+	}
+	
 	/**
 	 * If the given analysis/report node has a settings node 'Parameters' which
 	 * is a {@link PhonScriptNode} and has a parameter 'reportTitle' this
@@ -1291,6 +1325,149 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	public void fireDocumentError(Object document, IOException exception) {
 		final DocumentError err = new DocumentError(document, exception);
 		getDocumentErrorListeners().stream().forEach( (l) -> l.accept(err) );
+	}
+	
+	
+	private class DocumentLabel extends JLabel {
+		
+		private Object documentObj;
+		
+		public DocumentLabel(Object document) {
+			super();
+			
+			this.documentObj = document;
+			init();
+			update();
+			
+			setTransferHandler(new DocumentLabelTransferHandler(this));
+			
+			addMouseListener(new MouseInputAdapter() {
+				public void mousePressed(MouseEvent evt) {
+					TransferHandler th = DocumentLabel.this.getTransferHandler();
+			        th.exportAsDrag(DocumentLabel.this, evt, TransferHandler.MOVE);
+				}
+			});
+			
+			setSize(new Dimension(IconSize.LARGE.getWidth()+10, IconSize.LARGE.getHeight()+10));
+			setMaximumSize(new Dimension(IconSize.LARGE.getWidth()+10, IconSize.LARGE.getHeight()+10));
+		}
+		
+		private void init() {
+			setHorizontalTextPosition(SwingConstants.CENTER);
+			setVerticalTextPosition(SwingConstants.BOTTOM);
+		
+			final String type = (OSInfo.isNix() ? "text-xml" : "xml");
+			final ImageIcon xmlIcon =
+					IconManager.getInstance().getSystemIconForFileType(type, "mimetypes/text-xml", IconSize.LARGE);
+			setIcon(xmlIcon);
+		}
+		
+		public Object getDocumentObject() {
+			return this.documentObj;
+		}
+		
+		private void update() {
+			if(getDocumentObject() instanceof StockItemTuple) {
+				StockItemTuple tuple = (StockItemTuple)getDocumentObject();
+				final URL analysisURL = tuple.getObj2();
+				try {
+					final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");
+					final String analysisName = FilenameUtils.getBaseName(analysisFile);
+					setText(analysisName);
+				} catch (UnsupportedEncodingException e) {
+					LOGGER.error( e.getLocalizedMessage(), e);
+				}
+			} else if(getDocumentObject() instanceof URL) {
+				final URL analysisURL = (URL)getDocumentObject();
+				try {
+					final String analysisFile = URLDecoder.decode(analysisURL.toString(), "UTF-8");
+					final String analysisName = FilenameUtils.getBaseName(analysisFile);
+					setText(analysisName);
+				} catch (UnsupportedEncodingException e) {
+					LOGGER.error( e.getLocalizedMessage(), e);
+				}
+			} else if(getDocumentObject() instanceof QueryScript) {
+				final QueryScript queryScript = (QueryScript)getDocumentObject();
+				final QueryName queryName = queryScript.getExtension(QueryName.class);
+				if(queryName != null) {
+					if(queryName.getLocation() != null) {
+						try {
+							String decodedPath = URLDecoder.decode(queryName.getLocation().getPath(), "UTF-8");
+							File file = new File(decodedPath);
+							String filename = 
+									(file.getName().indexOf('.') > 0 
+											? file.getName().substring(0, file.getName().lastIndexOf('.'))
+											: file.getName() );
+							setText(filename);
+						} catch (UnsupportedEncodingException e) {
+							LogUtil.warning(e);
+						}
+					} else {
+						setText(queryName.getName());
+					}
+				}
+			}
+		}
+		
+	}
+	
+	private class DocumentLabelTransferHandler extends TransferHandler {
+		
+		private final DocumentLabel documentLabel;
+		
+		public DocumentLabelTransferHandler(DocumentLabel documentLabel) {
+			super();
+			
+			this.documentLabel = documentLabel;
+		}
+		
+		@Override
+		public int getSourceActions(JComponent c) {
+			return MOVE;
+		}
+	
+		@Override
+		public boolean canImport(TransferSupport support) {
+			return false;
+		}
+	
+		@Override
+		public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+			return false;
+		}
+	
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			return new DocumentLabelTransferrable(documentLabel);
+		}
+		
+	}
+	
+	private final DataFlavor documentLabelFlavor = new DataFlavor(DocumentLabel.class, "DocumentLabel");
+	
+	private class DocumentLabelTransferrable implements Transferable {
+		
+		public final DocumentLabel label;
+		
+		public DocumentLabelTransferrable(DocumentLabel label) {
+			this.label = label;
+		}
+	
+		@Override
+		public DataFlavor[] getTransferDataFlavors() {
+			return new DataFlavor[] {documentLabelFlavor};
+		}
+	
+		@Override
+		public boolean isDataFlavorSupported(DataFlavor flavor) {
+			return (flavor.equals(documentLabelFlavor));
+		}
+	
+		@Override
+		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+			return this.label;
+		}
+		
 	}
 	
 	public class DocumentError extends Tuple<Object, IOException> {
@@ -1773,9 +1950,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 		private final MacroNode analysisNode;
 	
-		private JComboBox<OpNode> settingsNodeBox;
-		private CardLayout settingsLayout;
-		private JPanel settingsPanel;
+		private JTabbedPane tabPanel;
 	
 		public DocumentSettingsPanel(MacroNode analysisNode) {
 			super();
@@ -1789,30 +1964,15 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		private void init() {
 			setLayout(new BorderLayout());
 	
-			this.settingsNodeBox = new JComboBox<>();
-			this.settingsNodeBox.setRenderer(new ListCellRenderer());
-			settingsNodeBox.addItemListener( (e) -> {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					final OpNode node = (OpNode)e.getItem();
-					settingsLayout.show(settingsPanel, node.getId());
-				}
-			});
-			this.settingsLayout = new CardLayout();
-			this.settingsPanel = new JPanel(settingsLayout);
-			
-			final JPanel topPanel = new JPanel(new BorderLayout());
-			topPanel.add(new JLabel("Step:"), BorderLayout.WEST);
-			topPanel.add(settingsNodeBox, BorderLayout.CENTER);
-	
-			add(topPanel, BorderLayout.NORTH);
-			add(settingsPanel, BorderLayout.CENTER);
+			tabPanel = new JTabbedPane();
+			add(tabPanel, BorderLayout.CENTER);
 		}
 	
 		private void update() {
 			final OpGraph analysisGraph = analysisNode.getGraph();
 			final WizardExtension analysisExt = analysisGraph.getExtension(WizardExtension.class);
 	
-			settingsPanel.removeAll();
+			tabPanel.removeAll();
 			final List<OpNode> settingsNodes = new ArrayList<>();
 			for(int i = 0; i < analysisExt.size(); i++) {
 				final OpNode node = analysisExt.getNode(i);
@@ -1841,22 +2001,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 								}
 								
 							}
-							settingsPanel.add(nodeSettingsPanel, node.getId());
+							tabPanel.add(node.getName(), nodeSettingsPanel);
 						} else {
 							final JScrollPane scroller = new JScrollPane(nodeSettingsPanel);
 							scroller.getVerticalScrollBar().setUnitIncrement(10);
-							settingsPanel.add(scroller, node.getId());
+							tabPanel.add(node.getName(), scroller);
 						}
 					}
 				}
-			}
-	
-			final DefaultComboBoxModel<OpNode> boxModel = new DefaultComboBoxModel<>(settingsNodes.toArray(new OpNode[0]));
-			settingsNodeBox.setModel(boxModel);
-	
-			if(settingsNodes.size() > 0) {
-				settingsNodeBox.setSelectedIndex(0);
-				settingsLayout.show(settingsPanel, settingsNodes.get(0).getId());
 			}
 		}
 	
