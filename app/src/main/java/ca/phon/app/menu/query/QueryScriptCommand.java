@@ -43,7 +43,10 @@ public class QueryScriptCommand extends PluginAction {
 		}
 		putValue(NAME, qn.getName() + "...");
 		
-		if(qn.getScriptLibrary() != ScriptLibrary.STOCK) {
+		// don't load previous settings if a stock library
+		// or if settings have been defined in an xml file
+		if(qn.getScriptLibrary() != ScriptLibrary.STOCK
+				|| qn.getLocation().getPath().endsWith(".xml")) {
 			putArg(QueryAndReportWizardEP.LOAD_PREVIOUS, Boolean.FALSE);
 		}
 	}
