@@ -43,11 +43,13 @@ import org.apache.commons.io.FilenameUtils;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;
 import ca.phon.app.opgraph.nodes.query.QueryNodeInstantiator;
 import ca.phon.app.opgraph.nodes.query.QueryReportNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.query.QueryAndReportWizard;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
@@ -362,6 +364,12 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
 		wizardExt.addNode(queryNode);
 		wizardExt.setNodeForced(queryNode, true);
+		
+		// if given an empty graph load default report
+		if(reportGraph.getVertices().size() == 0
+				&& reportGraph.getExtension(SimpleEditorExtension.class) == null) {
+			reportGraph = OpgraphIO.read(QueryAndReportWizard.class.getResourceAsStream("default_report.xml"));
+		}
 		
 		final QueryReportNode queryReportNode = new QueryReportNode(reportGraph);
 		graph.add(queryReportNode);
