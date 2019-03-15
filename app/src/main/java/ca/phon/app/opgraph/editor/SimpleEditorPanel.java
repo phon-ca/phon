@@ -165,7 +165,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	 */
 	private final Instantiator<MacroNode> nodeInstantiator;
 
-	private Function<QueryScript, MacroNode> queryNodeInstantiator;
+	private BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator;
 	
 	private final BiFunction<OpGraph, Project, Runnable> runFactory;
 	
@@ -219,7 +219,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	 */
 	public SimpleEditorPanel(Project project, OpGraphLibrary library, 
 			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
-			Function<QueryScript, MacroNode> queryNodeInstantiator,
+			BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
 		this(project, library, new OpGraph(), modelInstantiator, nodeInstantiator, queryNodeInstantiator, runFactory);
 	}
@@ -237,7 +237,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	 */
 	public SimpleEditorPanel(Project project, OpGraphLibrary library, OpGraph graph,
 			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
-			Function<QueryScript, MacroNode> queryNodeInstantiator,
+			BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
 		super();
 
@@ -605,10 +605,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		worker.execute();
 	}
 
-	public void addQuery(QueryScript queryScript) {
-		addQuery(queryScript, -1);
-	}
-	
 	public void addNode(MacroNode node, int idx) {
 		getModel().getDocument().getUndoSupport().beginUpdate();
 		
@@ -635,10 +631,21 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		((NodeTableModel)nodeTable.getModel()).fireTableRowsInserted(rowIdx, rowIdx);
 	}
 	
-	public void addQuery(QueryScript queryScript, int idx) {
-		final MacroNode node = queryNodeInstantiator.apply(queryScript);
+	public MacroNode addQuery(QueryScript queryScript) {
+		return addQuery(queryScript, new OpGraph());
+	}
+	
+	public MacroNode addQuery(QueryScript queryScript, OpGraph reportGraph) {
+		return addQuery(queryScript, reportGraph, -1);
+	}
+	
+	public MacroNode addQuery(QueryScript queryScript, OpGraph reportGraph, int idx) {
+		final MacroNode node = queryNodeInstantiator.apply(queryScript, reportGraph);
 		setupQueryNameListener(node);
-		addNode(node, idx);
+		final AddDocumentsWorker worker = new AddDocumentsWorker(List.of(node), idx);
+		worker.execute();
+		
+		return node;
 	}
 	
 	private void setupQueryNameListener(MacroNode node) {
@@ -1490,7 +1497,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 	}
 	
-	private class StockItemTuple extends Tuple<String, URL> {
+	public class StockItemTuple extends Tuple<String, URL> {
 
 		public StockItemTuple() {
 			super();
@@ -1622,11 +1629,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					}
 				} else if(document instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)document;
-					final MacroNode node = queryNodeInstantiator.apply(queryScript);
+					final MacroNode node = queryNodeInstantiator.apply(queryScript, new OpGraph());
 					node.putExtension(QueryScript.class, queryScript);
 					
 					retVal.add(node);
 					super.publish(node);
+				} else if(document instanceof MacroNode) {
+					retVal.add((MacroNode)document);
+					super.publish((MacroNode)document);
 				} else {
 					Toolkit.getDefaultToolkit().beep();
 					fireDocumentError(document, new IOException(new IllegalArgumentException()));

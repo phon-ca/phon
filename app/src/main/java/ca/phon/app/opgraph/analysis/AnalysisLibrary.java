@@ -337,7 +337,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		return retVal;
 	}
 
-	public static MacroNode analysisFromQuery(QueryScript queryScript)
+	public static MacroNode analysisFromQuery(QueryScript queryScript, OpGraph reportGraph)
 		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException, URISyntaxException, InstantiationException {
 		final QueryName queryName = queryScript.getExtension(QueryName.class);
 		String reportTitle = "Report";
@@ -363,7 +363,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		wizardExt.addNode(queryNode);
 		wizardExt.setNodeForced(queryNode, true);
 		
-		final QueryReportNode queryReportNode = new QueryReportNode();
+		final QueryReportNode queryReportNode = new QueryReportNode(reportGraph);
 		graph.add(queryReportNode);
 		
 		wizardExt.addNode(queryReportNode);

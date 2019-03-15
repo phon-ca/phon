@@ -33,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -71,6 +72,7 @@ import org.jdesktop.swingx.HorizontalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.query.QueryMenuListener;
+import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
@@ -84,6 +86,7 @@ import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryAndReportWizardSettings.ReportLoadStrategy;
 import ca.phon.app.query.actions.DeleteAllUnnamedEntriesAction;
+import ca.phon.app.query.actions.SendToAnalysisComposer;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
@@ -333,7 +336,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								
 							}
 						});
-
+						
 						final PhonUIAction duplicateAct = new PhonUIAction(QueryAndReportWizard.this, "onDuplicateQueryWizard");
 						duplicateAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
 						duplicateAct.putValue(PhonUIAction.NAME, "New window");
@@ -440,6 +443,29 @@ public class QueryAndReportWizard extends NodeWizard {
 						
 						final DeleteAllUnnamedEntriesAction deleteUnnamedEntriesAct = new DeleteAllUnnamedEntriesAction(QueryAndReportWizard.this);
 						menu.add(new JMenuItem(duplicateAct), idx++);
+						
+						final List<SimpleEditor> analysisComposers = new ArrayList<>();
+						for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+							if(cmf instanceof SimpleEditor && cmf.getTitle().startsWith("Analysis Composer")) {
+								SimpleEditor editor = (SimpleEditor)cmf;
+								analysisComposers.add(editor);
+							}
+						}
+						if(analysisComposers.size() == 0) {
+							menu.add(new JMenuItem(new SendToAnalysisComposer(QueryAndReportWizard.this)), idx++);
+						} else {
+							JMenu sendToMenu = new JMenu("Send to Analysis Composer");
+							
+							for(SimpleEditor editor:analysisComposers) {
+								sendToMenu.add(new SendToAnalysisComposer(QueryAndReportWizard.this, editor));
+							}
+							sendToMenu.addSeparator();
+							sendToMenu.add(new SendToAnalysisComposer(QueryAndReportWizard.this));
+							
+							sendToMenu.setIcon(IconManager.getInstance().getIcon("actions/share", IconSize.SMALL));
+							menu.add(sendToMenu, idx++);
+						}
+						
 						menu.insertSeparator(idx++);
 						menu.add(saveQueryMenu, idx++);
 						menu.add(new JMenuItem(resetQueryAct), idx++);
@@ -884,7 +910,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		reportEditor = new SimpleEditorPanel(
 				project,
 				new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
-				(qs) -> new MacroNode(),
+				(qs, reportGraph) -> new MacroNode(),
 				(graph, project) -> new ReportRunner(graph, getCurrentQueryProject(), getCurrentQueryId()) );
 		// toolbar customizations
 		reportEditor.getRunButton().setVisible(false);
@@ -904,6 +930,10 @@ public class QueryAndReportWizard extends NodeWizard {
 	
 	public QueryScript getQueryScript() {
 		return this.queryScript;
+	}
+	
+	public SimpleEditorPanel getReportComposer() {
+		return this.reportEditor;
 	}
 	
 	/**

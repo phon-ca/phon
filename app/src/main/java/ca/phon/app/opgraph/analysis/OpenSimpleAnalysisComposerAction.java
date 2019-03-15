@@ -45,6 +45,8 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 	
 	private final OpGraph analysisGraph;
 	
+	private SimpleEditor editor;
+	
 	public OpenSimpleAnalysisComposerAction(Project project) {
 		this(project, null);
 	}
@@ -58,14 +60,18 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 		this.analysisGraph = analysisGraph;
 	}
 	
+	public SimpleEditor getEditor() {
+		return this.editor;
+	}
+	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final SimpleEditor frame =
+		editor =
 			new SimpleEditor(project,
 					new AnalysisLibrary(), new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
-					(qs) ->  {
+					(qs, reportGraph) ->  {
 						try {
-							return AnalysisLibrary.analysisFromQuery(qs);
+							return AnalysisLibrary.analysisFromQuery(qs, reportGraph);
 						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException | InstantiationException | URISyntaxException e) {
 							LOGGER.error( e.getLocalizedMessage(), e);
 							final MessageDialogProperties props = new MessageDialogProperties();
@@ -80,16 +86,16 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 						return new MacroNode();
 					} ,
 					AnalysisRunner::new );
-		frame.getEditor().setIncludeQueries(true);
+		editor.getEditor().setIncludeQueries(true);
 
 		if(analysisGraph != null) {
-			frame.getEditor().addGraph(analysisGraph);
+			editor.getEditor().addGraph(analysisGraph);
 		}
 		
-		frame.pack();
-		frame.setSize(new Dimension(1024, 768));
-		frame.centerWindow();
-		frame.setVisible(true);
+		editor.pack();
+		editor.setSize(new Dimension(1024, 768));
+		editor.centerWindow();
+		editor.setVisible(true);
 	}
 
 }

@@ -29,6 +29,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.lang.StringUtils;
+
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -65,7 +67,7 @@ public class SimpleEditor extends CommonModuleFrame {
 	 */
 	public SimpleEditor(Project project, OpGraphLibrary library,
 			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
-			Function<QueryScript, MacroNode> queryNodeInstantiator,
+			BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
 		super();
 
@@ -218,7 +220,8 @@ public class SimpleEditor extends CommonModuleFrame {
 
 	protected void updateTitle() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("Composer (" + getModel().getNoun().getObj1() + "-simple)");
+//		sb.append("Composer (" + getModel().getNoun().getObj1() + "-simple)");
+		sb.append(StringUtils.capitalize(getModel().getNoun().getObj1())).append(" Composer");
 		sb.append(" : ");
 		if(getCurrentFile() != null)
 			sb.append(getCurrentFile().getAbsolutePath());
