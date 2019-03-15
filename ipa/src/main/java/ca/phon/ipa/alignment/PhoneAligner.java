@@ -23,6 +23,7 @@ import ca.phon.alignment.AlignmentMap;
 import ca.phon.alignment.IndelAligner;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.Phone;
 import ca.phon.ipa.PhoneDimension;
 import ca.phon.ipa.PhoneticProfile;
 import ca.phon.ipa.features.FeatureSet;
@@ -105,10 +106,17 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 		}
 		// if no features match, only subtract 1
 		tally += Math.max(-1, featureTally);
+
+		String ele1Base = ((Phone)ele1).getBase();
+		String ele2Base = ((Phone)ele2).getBase();
 		
-		// add extra point if both phones are the exact same string
-		if(ele1.toString().equals(ele2.toString()))
+		// strong lock if base of phones match
+		if(ele1Base.matches(ele2Base))
 			tally += 3;
+		
+		// add extra if one of the bases contains the other
+		else if(ele1Base.contains(ele2Base) || ele2Base.contains(ele1Base)) 
+			tally += 1;
 
 		return tally;
 	}

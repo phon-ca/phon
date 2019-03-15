@@ -78,6 +78,15 @@ public final class CompoundPhone extends Phone {
 	}
 	
 	/**
+	 * Get the base for the compound phone
+	 *
+	 * @return the base of the first phone plus the base of the second phone
+	 */
+	public String getBase() {
+		return getFirstPhone().getBase() + getSecondPhone().getBase();
+	}
+	
+	/**
 	 * Get second phone
 	 * 
 	 * @return the second phone
