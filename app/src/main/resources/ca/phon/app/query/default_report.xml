@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
-        <node id="16f79811" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="539677e9" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -14,7 +14,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <node id="7384fdca" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="38d99d7b" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -27,7 +27,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <node id="3ec77ce0" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="148812dd" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -40,30 +40,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <ogcn:macro id="747a043a" name="Query Information" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <ogcn:uri>classpath:report/Query%20Information.xml</ogcn:uri>
-            <ogcn:published_input field="obj" name="project" ref="7971e251"/>
-            <ogcn:published_input field="obj" name="queryId" ref="3e633423"/>
-            <ogcn:published_input field="obj" name="selectedResults" ref="63e4db2d6218464a"/>
-            <extensions>
-                <ogcn:overrides>
-                    <node id="64a20d4a" type="class:ca.phon.app.opgraph.nodes.log.PrintScriptParameters">
-                        <extensions>
-                            <oga:settings>
-                                <oga:property key="excludes"/>
-                                <oga:property key="printOnlyChanged">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includes"/>
-                            </oga:settings>
-                            <oga:meta x="808" y="29"/>
-                        </extensions>
-                    </node>
-                </ogcn:overrides>
-                <oga:meta x="400" y="50"/>
-            </extensions>
-        </ogcn:macro>
-        <ogcn:macro id="b272b6a" name="Aggregate" type="ca.phon.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="6ca1cced" name="Aggregate" type="ca.phon.opgraph.nodes.general.MacroNode">
             <ogcn:uri>classpath:report/Aggregate.xml</ogcn:uri>
             <ogcn:published_input field="obj" name="project" ref="5354ffb7"/>
             <ogcn:published_input field="obj" name="queryId" ref="61300356"/>
@@ -92,90 +69,70 @@
                         </extensions>
                     </node>
                 </ogcn:overrides>
+                <oga:meta x="400" y="50"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="7eab95f2" name="Inventory by Participant" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <ogcn:uri>classpath:report/Inventory%20by%20Participant.xml</ogcn:uri>
+            <ogcn:published_input field="obj" name="project" ref="4d6972a5"/>
+            <ogcn:published_input field="obj" name="queryId" ref="522511c7"/>
+            <ogcn:published_input field="obj" name="selectedResults" ref="548323d1"/>
+            <extensions>
+                <ogcn:overrides/>
                 <oga:meta x="400" y="200"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="7a7e8f1c" name="Listing by Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <ogcn:uri>classpath:report/Listing%20by%20Session%20(with%20optional%20tier%20data).xml</ogcn:uri>
-            <ogcn:published_input field="obj" name="project" ref="6c4d263f"/>
-            <ogcn:published_input field="obj" name="queryId" ref="eb1d4c7"/>
-            <ogcn:published_input field="obj" name="selectedResults" ref="7d9fc9cb"/>
+        <ogcn:macro id="2b23d33b" name="Table" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <ogcn:uri>classpath:report/Table%20(all%20results%20in%20one%20table).xml</ogcn:uri>
+            <ogcn:published_input field="obj" name="project" ref="5897d31c5e1642ec"/>
+            <ogcn:published_input field="obj" name="queryId" ref="27a0c0b98e1245d6"/>
+            <ogcn:published_input field="obj" name="selectedResults" ref="b569fd6fba9b4741"/>
             <extensions>
                 <ogcn:overrides>
-                    <node id="c520598a74a24628" name="Results by Session" type="class:ca.phon.app.opgraph.nodes.query.ResultsToHTMLNode">
+                    <node id="4026874c" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                         <extensions>
                             <oga:settings>
-                                <oga:property key="includeGroup">
+                                <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
                                     <![CDATA[false]]>
                                 </oga:property>
-                                <oga:property key="includeAlignment">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includeAge">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includeEducation">
-                                    <![CDATA[false]]>
-                                </oga:property>
-                                <oga:property key="includeSyllabification">
-                                    <![CDATA[false]]>
-                                </oga:property>
-                                <oga:property key="resultValues">
-                                    <![CDATA[Alignment]]>
-                                </oga:property>
-                                <oga:property key="includeParticipantInfo">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includeSES">
-                                    <![CDATA[false]]>
-                                </oga:property>
-                                <oga:property key="excludeResultValues">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includeLanguage">
-                                    <![CDATA[false]]>
-                                </oga:property>
-                                <oga:property key="includeSex">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includeBirthday">
-                                    <![CDATA[false]]>
-                                </oga:property>
-                                <oga:property key="includeRole">
-                                    <![CDATA[true]]>
-                                </oga:property>
-                                <oga:property key="includeTierData">
-                                    <![CDATA[false]]>
+                                <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns">
+                                    <![CDATA[Date
+Group #
+Tier
+Range
+Result]]>
                                 </oga:property>
                             </oga:settings>
-                            <oga:meta x="621" y="35"/>
+                            <oga:meta x="589" y="518">
+                                <oga:default for="sectionName" type="java.lang.String">All results</oga:default>
+                            </oga:meta>
                         </extensions>
                     </node>
                 </ogcn:overrides>
                 <oga:meta x="400" y="350"/>
             </extensions>
         </ogcn:macro>
-        <node id="1f2fcc66" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+        <node id="7122c66e" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <link dest="1f2fcc66" destField="project" source="16f79811" sourceField="obj"/>
-        <link dest="1f2fcc66" destField="queryId" source="7384fdca" sourceField="obj"/>
-        <link dest="1f2fcc66" destField="selectedResults" source="3ec77ce0" sourceField="obj"/>
+        <link dest="7122c66e" destField="project" source="539677e9" sourceField="obj"/>
+        <link dest="7122c66e" destField="queryId" source="38d99d7b" sourceField="obj"/>
+        <link dest="7122c66e" destField="selectedResults" source="148812dd" sourceField="obj"/>
         <extensions>
             <opqry:simplecomposer>
-                <opqry:node ref="747a043a"/>
-                <opqry:node ref="b272b6a"/>
-                <opqry:node ref="7a7e8f1c"/>
+                <opqry:node ref="6ca1cced"/>
+                <opqry:node ref="7eab95f2"/>
+                <opqry:node ref="2b23d33b"/>
             </opqry:simplecomposer>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="default_report">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:optionalNode enabled="true" ref="747a043a"/>
-                <opqry:optionalNode enabled="true" ref="b272b6a"/>
-                <opqry:optionalNode enabled="true" ref="7a7e8f1c"/>
+                <opqry:optionalNode enabled="true" ref="6ca1cced"/>
+                <opqry:optionalNode enabled="true" ref="7eab95f2"/>
+                <opqry:optionalNode enabled="true" ref="2b23d33b"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>
