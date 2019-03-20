@@ -278,7 +278,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 		String langs = "";
 		for(String lang:pt.getLanguage())
-			langs += (langs.length() > 0 ? ", " : "") + lang;
+			langs += (langs.length() > 0 ? " " : "") + lang;
 		retVal.setLanguage(langs);
 
 		if(pt.getSex() == SexType.MALE)
