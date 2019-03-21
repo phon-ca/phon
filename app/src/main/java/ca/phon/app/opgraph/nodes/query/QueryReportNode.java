@@ -176,11 +176,7 @@ public class QueryReportNode extends OpNode implements NodeSettings {
 			reportEditorPanel = new SimpleEditorPanel( (cmf != null ? cmf.getExtension(Project.class) : null),
 					new ReportLibrary(), this.reportGraph, new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
 					(qs, reportGraph) -> new MacroNode(),
-					(graph, project) -> new Runnable() {
-						@Override
-						public void run() {
-						}
-					} );
+					null );
 			settingsPanel.add(reportEditorPanel, BorderLayout.CENTER);
 		}
 		return settingsPanel;

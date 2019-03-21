@@ -461,9 +461,11 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		toolbar.add(moveUpButton);
 		toolbar.add(moveDownButton);
-		toolbar.addSeparator();
-
-		toolbar.add(runButton);
+		
+		if(this.runFactory != null) {
+			toolbar.addSeparator();
+			toolbar.add(runButton);
+		}
 
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		busyLabel.getBusyPainter().setHighlightColor(Color.white);
