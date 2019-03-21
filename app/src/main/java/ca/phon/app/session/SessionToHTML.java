@@ -205,7 +205,7 @@ public class SessionToHTML extends SessionExporter {
 			buffer.append("<table class='result-table'>").append(nl);
 			appendQueryResultTableHeader(record, resultsForRecord.get(0), buffer);
 			for(var result:resultsForRecord) {
-				appendQueryResult(session, recordIndex, record, rIdx, result, buffer);
+				appendQueryResult(session, recordIndex, record, rIdx++, result, buffer);
 			}
 			buffer.append("</table>").append(nl);
 		}
