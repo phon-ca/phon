@@ -30,7 +30,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.report.tree.ExcelExportableNode;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.ReportTreePath;
@@ -79,26 +81,50 @@ public class SaveTablesToFolderAction extends HookableAction {
 		return this.type;
 	}
 	
+	public boolean exportReportNode(String folder, ReportTreeNode node) {
+		if(node instanceof TableNode) {
+			return exportTable(folder, node);
+		} else if(node instanceof ExcelExportableNode) {
+			return exportExcelNode(folder, node);
+		} else 
+			return false;
+	}
+	
+	public boolean exportExcelNode(String folder, ReportTreeNode node) {
+		final ExcelExportableNode excelNode = (ExcelExportableNode)node;
+		
+		final ExcelExporter exporter = excelNode.getExporter();
+		
+		final File tableFile = getFileForNode(folder, node);
+		final File parentFolder = tableFile.getParentFile();
+		
+		if(!parentFolder.exists()) {
+			parentFolder.mkdirs();
+		}
+		if(!parentFolder.isDirectory()) {
+			return false;
+		}
+		
+		try {
+			WritableWorkbook workbook = Workbook.createWorkbook(tableFile);
+			exporter.addToWorkbook(workbook);
+			workbook.write();
+			workbook.close();
+		} catch (WriteException | IOException e) {
+			LogUtil.severe(e);
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public boolean exportTable(String folder, ReportTreeNode node) {
 		if(!(node instanceof TableNode)) return false;
 		final TableNode tableNode = (TableNode)node;
 		
 		final DefaultTableDataSource table = (DefaultTableDataSource)tableNode.getTable();
-		ReportTreePath treePath = tableNode.getPath();
-		// remove root from path and use path as filename
-		treePath = treePath.pathByRemovingRoot();
-		
-		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
-		String subPath = File.separator;
-		for(int i = 0; i < treePath.getPath().length; i++) {
-			ReportTreeNode ele = treePath.getPath()[i];
-			if(i > 0)
-				subPath += (exportWithFolders ? File.separator : "_");
-			subPath += ele.getTitle().trim().replaceAll(illegalCharRegex, "_");
-		}
-		final String tableFilePath = folder + subPath + (type == ExportType.CSV ? ".csv" : ".xls");
-		
-		final File tableFile = new File(tableFilePath);
+
+		final File tableFile = getFileForNode(folder, tableNode);
 		final File parentFolder = tableFile.getParentFile();
 		
 		if(!parentFolder.exists()) {
@@ -115,6 +141,26 @@ public class SaveTablesToFolderAction extends HookableAction {
 			LogUtil.severe(e);
 			return false;
 		}
+	}
+	
+	private File getFileForNode(String folder, ReportTreeNode tableNode) {
+		ReportTreePath treePath = tableNode.getPath();
+		// remove root from path and use path as filename
+		treePath = treePath.pathByRemovingRoot();
+		
+		final String illegalCharRegex = "[\\\\/\\[\\]*?:]";
+		String subPath = File.separator;
+		for(int i = 0; i < treePath.getPath().length; i++) {
+			ReportTreeNode ele = treePath.getPath()[i];
+			if(i > 0)
+				subPath += (exportWithFolders ? File.separator : "_");
+			subPath += ele.getTitle().trim().replaceAll(illegalCharRegex, "_");
+		}
+		final String tableFilePath = folder + subPath + (type == ExportType.CSV ? ".csv" : ".xls");
+		
+		final File tableFile = new File(tableFilePath);
+		
+		return tableFile;
 	}
 	
 	public void done(List<ReportTreeNode> processedNodes) {
@@ -151,7 +197,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 			};
 			exportWithFoldersBox.addActionListener(l);
 			
-			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportTable, this::done, getType() == ExportType.EXCEL ? true : false);
+			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportReportNode, this::done, getType() == ExportType.EXCEL ? true : false);
 			exportDialog.setParentFrame(wizard);
 			
 			exportDialog.getCustomOptionsPanel().setLayout(new VerticalLayout());
