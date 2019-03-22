@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4b2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b2.dmg" newVersion="3.0.4b2" newMediaFileId="macos" fileSize="256612450" md5Sum="2541d6342aa8bbdd6f516bf763964cae" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4b3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b3.dmg" newVersion="3.0.4b3" newMediaFileId="macos" fileSize="255942263" md5Sum="d4b28e51b174f8866866374ca3b63506" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -24,6 +24,8 @@
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -269,7 +271,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b2.dmg" newVersion="3.0.4b2" newMediaFileId="macos" fileSize="256612450" md5Sum="2541d6342aa8bbdd6f516bf763964cae" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b3.dmg" newVersion="3.0.4b3" newMediaFileId="macos" fileSize="255942263" md5Sum="d4b28e51b174f8866866374ca3b63506" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -293,6 +295,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -538,7 +542,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.exe" newVersion="3.0.4b2" newMediaFileId="win64" fileSize="257895896" md5Sum="fc353720381e12d59a30d16b2f96dfc0" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b3.exe" newVersion="3.0.4b3" newMediaFileId="win64" fileSize="257223448" md5Sum="b8fd0fb547f205eabf5fb13bb5f3d8c9" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -562,6 +566,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -807,7 +813,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.exe" newVersion="3.0.4b2" newMediaFileId="win64" fileSize="257895896" md5Sum="fc353720381e12d59a30d16b2f96dfc0" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b3.exe" newVersion="3.0.4b3" newMediaFileId="win64" fileSize="257223448" md5Sum="b8fd0fb547f205eabf5fb13bb5f3d8c9" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -831,6 +837,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -1076,7 +1084,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.exe" newVersion="3.0.4b2" newMediaFileId="win64" fileSize="257895896" md5Sum="fc353720381e12d59a30d16b2f96dfc0" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b3.exe" newVersion="3.0.4b3" newMediaFileId="win64" fileSize="257223448" md5Sum="b8fd0fb547f205eabf5fb13bb5f3d8c9" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1100,6 +1108,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -1345,7 +1355,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b2.zip" newVersion="3.0.4b2" newMediaFileId="win64zip" fileSize="256937324" md5Sum="842dc8922994686987f5bc9dc207c814" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b3.zip" newVersion="3.0.4b3" newMediaFileId="win64zip" fileSize="256260633" md5Sum="ad606e515add1efde27e0d07dcc03b3f" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1369,6 +1379,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -1614,7 +1626,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4b2.deb" newVersion="3.0.4b2" newMediaFileId="linux64deb" fileSize="187317258" md5Sum="c148dfe3255f008afc15194727430d43" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4b3.deb" newVersion="3.0.4b3" newMediaFileId="linux64deb" fileSize="186637382" md5Sum="9be6d6f8c9a2903d55f769297a913adf" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1638,6 +1650,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
@@ -1883,7 +1897,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4b2.sh" newVersion="3.0.4b2" newMediaFileId="linux64" fileSize="186856672" md5Sum="3206f5a9ded2051e565399b7b3fe268e" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4b3.sh" newVersion="3.0.4b3" newMediaFileId="linux64" fileSize="186173592" md5Sum="7ac0f32b3e3b89021f7964b00fdbcace" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1907,6 +1921,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record and result links now work in the Result Listing sections of query reports
  * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
 
 ## Changes from 3.0.2
  
