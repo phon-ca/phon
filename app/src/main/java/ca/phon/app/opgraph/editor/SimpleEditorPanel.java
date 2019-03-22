@@ -901,6 +901,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				
 				setCurrentFile(fileList.get(0));
 				getModel().getDocument().markAsUnmodified();
+				getModel().getDocument().getUndoManager().discardAllEdits();
+				setModified(false);
 			}
 			addDocuments(fileList);
 		}
