@@ -99,7 +99,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 	private JCheckBox includeSyllabificationBox;
 	private SyllabificationDisplay syllabificationDisplay;
 	
-	private boolean includeAlignment = true;
+	private boolean includeAlignment = false;
 	private JCheckBox includeAlignmentBox;
 	private PhoneMapDisplay alignmentDisplay;
 	
