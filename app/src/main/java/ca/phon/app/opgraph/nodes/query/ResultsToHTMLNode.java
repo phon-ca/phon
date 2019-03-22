@@ -15,13 +15,16 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,12 +37,14 @@ import java.util.stream.Collectors;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.ExcelExporter;
@@ -63,7 +68,9 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.query.db.ResultSet;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
+import ca.phon.session.TierViewItem;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
@@ -137,6 +144,12 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 	private JTextArea resultValuesArea;
 	private List<String> resultValues = new ArrayList<>();
 	
+	private JRadioButton includeTiersBtn;
+	private JRadioButton excludeTiersBtn;
+	private boolean excludeTiers = true;
+	private JTextArea tierArea;
+	private List<String> tierNames = new ArrayList<>();
+	
 	public ResultsToHTMLNode() {
 		super();
 		
@@ -186,7 +199,22 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			
 			try {
 				Session session = project.openSession(sp.getCorpus(), sp.getSession());
-				settings.setTierView(session.getTierView());
+				SessionFactory factory = SessionFactory.newFactory();
+				
+				List<TierViewItem> tierView = new ArrayList<>();
+				if(getTierNames().size() > 0) {
+					for(TierViewItem tvi:session.getTierView()) {
+						boolean tierNameInList = getTierNames().contains(tvi.getTierName());
+						if(isExcludeTiers()) {
+							tierView.add(factory.createTierViewItem(tvi.getTierName(), !tierNameInList, tvi.getTierFont()));
+						} else {
+							tierView.add(factory.createTierViewItem(tvi.getTierName(), tierNameInList, tvi.getTierFont()));
+						}
+					}
+				} else {
+					tierView.addAll(session.getTierView());
+				}
+				settings.setTierView(tierView);
 				settings.setResultSet(rs);
 				
 				String html = sessionToHTML.toHTML(session);
@@ -246,6 +274,12 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		}
 	}
 	
+	public void setIncludeTierData(boolean includeTierData) {
+		this.includeTierData = includeTierData;
+		if(includeTierDataBox != null)
+			includeTierDataBox.setSelected(includeTierData);
+	}
+
 	public boolean isIncludeTierData() {
 		return (includeTierDataBox != null ? includeTierDataBox.isSelected() : this.includeTierData);
 	}
@@ -306,6 +340,43 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			resultValuesArea.setText(rvTxt);
 		}
 	}
+	
+	public boolean isExcludeTiers() {
+		return (this.excludeTiersBtn != null ? this.excludeTiersBtn.isSelected() : this.excludeTiers);
+	}
+	
+	public void setExcludeTiers(boolean excludeTiers) {
+		this.excludeTiers = excludeTiers;
+		if(this.excludeTiersBtn != null)
+			this.excludeTiersBtn.setSelected(excludeTiers);
+		if(this.includeTiersBtn != null)
+			this.includeTiersBtn.setSelected(!excludeTiers);
+	}
+	
+	public void setTierNames(List<String> tierNames) {
+		this.tierNames = tierNames;
+		if(this.tierArea != null) {
+			String tierTxt = tierNames.stream().collect(Collectors.joining("\n"));
+			tierArea.setText(tierTxt);
+		}
+	}
+	
+	public List<String> getTierNames() {
+		if(this.tierArea != null && this.tierArea.getText().trim().length() > 0) {
+			List<String> tierNames = new ArrayList<>();
+			try(BufferedReader reader = new BufferedReader(new StringReader(tierArea.getText()))) {
+				String line = null;
+				while((line = reader.readLine()) != null) {
+					tierNames.add(line.trim());
+				}
+			} catch (IOException e) {
+				LogUtil.warning(e);
+			}
+			return tierNames;
+		} else {
+			return this.tierNames;
+		}
+	}
 
 	@Override
 	public Component getComponent(GraphDocument document) {
@@ -334,14 +405,33 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			}
 			participantPanel.add(participantInfoChoicesPanel);
 			
-			JPanel tierDataPanel = new JPanel(new VerticalLayout());
 			includeTierDataBox = new JCheckBox("Include tier data");
 			includeTierDataBox.setSelected(includeTierData);
 			includeTierDataBox.addActionListener( (e) -> {
+				includeTiersBtn.setEnabled(includeTierDataBox.isSelected());
+				excludeTiersBtn.setEnabled(includeTierDataBox.isSelected());
+				tierArea.setEnabled(includeTierDataBox.isSelected());
 				includeSyllabificationBox.setEnabled(includeTierDataBox.isSelected());
 				includeAlignmentBox.setEnabled(includeTierDataBox.isSelected());
 			});
+	
+			ButtonGroup bg = new ButtonGroup();
+			includeTiersBtn = new JRadioButton("Include tiers");
+			includeTiersBtn.setSelected(!this.excludeTiers);
+			includeTiersBtn.setEnabled(includeTierData);
+			bg.add(includeTiersBtn);
 			
+			excludeTiersBtn = new JRadioButton("Exclude tiers");
+			excludeTiersBtn.setSelected(this.excludeTiers);
+			excludeTiersBtn.setEnabled(includeTierData);
+			bg.add(excludeTiersBtn);
+			
+			tierArea = new JTextArea();
+			tierArea.setEnabled(includeTierData);
+			tierArea.setRows(5);
+			String tierTxt = tierNames.stream().collect(Collectors.joining("\n"));
+			tierArea.setText(tierTxt);
+						
 			includeSyllabificationBox = new JCheckBox("Include syllabification");
 			includeSyllabificationBox.setSelected(includeSyllabifiation);
 			includeSyllabificationBox.setEnabled(includeTierData);
@@ -365,11 +455,64 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			alignmentDisplay.setFont(FontPreferences.getUIIpaFont());
 			alignmentDisplay.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 5));
 			
-			tierDataPanel.add(includeTierDataBox);
-			tierDataPanel.add(includeSyllabificationBox);
-			tierDataPanel.add(syllabificationDisplay);
-			tierDataPanel.add(includeAlignmentBox);
-			tierDataPanel.add(alignmentDisplay);
+			JPanel tierDataLeftPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.weightx = 1.0;
+			gbc.weighty = 0.0;
+			gbc.anchor = GridBagConstraints.WEST;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.gridwidth = 1;
+			gbc.gridheight = 1;
+			tierDataLeftPanel.add(includeTiersBtn, gbc);
+						
+			gbc.gridy++;
+			tierDataLeftPanel.add(excludeTiersBtn, gbc);
+			
+			gbc.gridheight = 1;
+			gbc.gridwidth = 1;
+			gbc.gridy++;
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.weightx = 1.0;
+			gbc.weighty = 1.0;
+			tierDataLeftPanel.add(new JScrollPane(tierArea), gbc);
+			
+			String tierNameLblTxt = 
+					"<html><body style='font-size: small;'>One tier name per line. Leave empty to use session tier view.</body></html>";
+			JLabel tierNameLbl = new JLabel(tierNameLblTxt);
+			gbc.weightx = 1.0;
+			gbc.weighty = 0.0;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.gridy++;
+			tierDataLeftPanel.add(tierNameLbl, gbc);
+			
+			JPanel tierDataRightPanel = new JPanel(new VerticalLayout());
+			tierDataRightPanel.add(includeSyllabificationBox);
+			tierDataRightPanel.add(syllabificationDisplay);
+			tierDataRightPanel.add(includeAlignmentBox);
+			tierDataRightPanel.add(alignmentDisplay);
+			
+			JPanel tierDataPanel = new JPanel(new GridBagLayout());
+			
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.weightx = 1.0;
+			gbc.weighty = 0.0;
+			gbc.gridheight = 1;
+			gbc.gridwidth = 2;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			tierDataPanel.add(includeTierDataBox, gbc);
+			
+			gbc.weighty = 1.0;
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.gridy++;
+			gbc.gridwidth = 1;
+			tierDataPanel.add(tierDataLeftPanel, gbc);
+			
+			gbc.gridx++;
+			tierDataPanel.add(tierDataRightPanel, gbc);
+			
 			tierDataPanel.setBorder(BorderFactory.createTitledBorder("Tier Data Options"));
 			
 			JPanel resultValuesPanel = new JPanel(new VerticalLayout());
@@ -409,20 +552,18 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		}
 
 		retVal.put("includeTierData", Boolean.toString(isIncludeTierData()));
+		
+		retVal.put("excludeTiers", Boolean.toString(isExcludeTiers()));
+		String tierTxt = getTierNames().stream().collect(Collectors.joining(","));
+		retVal.put("tierNames", tierTxt);
 		retVal.put("includeAlignment", Boolean.toString(isIncludeAlignment()));
 		retVal.put("includeSyllabification", Boolean.toString(isIncludeSyllabification()));
 		
 		retVal.put("excludeResultValues", Boolean.toString(isExcludeResultValues()));
 		String rvTxt = getResultValues().stream().collect(Collectors.joining(","));
 		retVal.put("resultValues", rvTxt);
-		
-		return retVal;
-	}
 
-	public void setIncludeTierData(boolean includeTierData) {
-		this.includeTierData = includeTierData;
-		if(includeTierDataBox != null)
-			includeTierDataBox.setSelected(includeTierData);
+		return retVal;
 	}
 
 	@Override
@@ -435,8 +576,12 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		}
 
 		setIncludeTierData(Boolean.parseBoolean(properties.getProperty("includeTierData", "false")));
+		setExcludeTiers(Boolean.parseBoolean(properties.getProperty("excludeTiers", "true")));
+		String tierTxt = properties.getProperty("tierNames", "");
+		String tierNames[] = tierTxt.split(",");
+		setTierNames(Arrays.asList(tierNames));
 		setIncludeSyllabification(Boolean.parseBoolean(properties.getProperty("includeSyllabification", "false")));
-		setIncludeAlignment(Boolean.parseBoolean(properties.getProperty("includeAlignment", "true")));
+		setIncludeAlignment(Boolean.parseBoolean(properties.getProperty("includeAlignment", "false")));
 		
 		setExcludeResultValues(Boolean.parseBoolean(properties.getProperty("excludeResultValues", "true")));
 		String rvTxt = properties.getProperty("resultValues", "");
