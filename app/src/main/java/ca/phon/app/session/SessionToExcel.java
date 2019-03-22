@@ -50,9 +50,11 @@ public class SessionToExcel extends SessionExporter {
 	
 	private WritableCellFormat dateCellFormat;
 	
+	private WritableCellFormat tierDataFormat;
+	
 	private WritableCellFormat tierNameFormat;
 	
-	private Map<TierViewItem, WritableCellFormat> tierFormats = new HashMap<>();
+//	private Map<TierViewItem, WritableCellFormat> tierFormats = new HashMap<>();
 	
 	public SessionToExcel() {
 		super();
@@ -91,6 +93,17 @@ public class SessionToExcel extends SessionExporter {
 	        tierNameFormat.setFont(tierNameFont);
 		}
 		return tierNameFormat;
+	}
+	
+	public WritableCellFormat getTierDataFormat() throws WriteException {
+		if(tierDataFormat == null) {
+			Font javaFont =	FontPreferences.getTierFont();
+			WritableFont tierFont = new WritableFont(WritableFont.createFont(javaFont.getFontName()), 
+					WritableFont.DEFAULT_POINT_SIZE, WritableFont.NO_BOLD);
+			tierDataFormat = new WritableCellFormat();
+			tierDataFormat.setFont(tierFont);
+		}
+		return tierDataFormat;
 	}
 	
 	private Tuple<Integer, Integer> appendParticipantTable(WritableWorkbook wb, WritableSheet sheet, int rowIdx, Session session) 
@@ -335,18 +348,18 @@ public class SessionToExcel extends SessionExporter {
 				colIdx = 0;
 				var tvi = tierView.get(tierIdx);
 				
-				CellFormat tierFormat = tierFormats.get(tvi);
-				if(tierFormat == null) {
-					WritableCellFormat fmt = new WritableCellFormat();
-					Font javaFont =
-							(tvi.getTierFont().equals("default") ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
-					WritableFont tierFont = new WritableFont(WritableFont.createFont(javaFont.getFontName()), 
-							javaFont.getSize());
-					fmt.setFont(tierFont);
-					
-					tierFormats.put(tvi, fmt);
-					tierFormat = fmt;
-				}
+				CellFormat tierFormat = getTierDataFormat();
+//				if(tierFormat == null) {
+//					WritableCellFormat fmt = new WritableCellFormat();
+//					Font javaFont =
+//							(tvi.getTierFont().equals("default") ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
+//					WritableFont tierFont = new WritableFont(WritableFont.createFont(javaFont.getFontName()), 
+//							javaFont.getSize());
+//					fmt.setFont(tierFont);
+//					
+//					tierFormats.put(tvi, fmt);
+//					tierFormat = fmt;
+//				}
 				
 				if(getSettings().getTierList().size() > 0) {
 					boolean inList = getSettings().getTierList().contains(tvi.getTierName());
