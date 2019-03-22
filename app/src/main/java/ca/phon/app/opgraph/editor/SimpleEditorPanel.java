@@ -65,6 +65,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -172,7 +173,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JToolBar toolbar;
 	private DropDownButton saveButton;
 	private JButton browseButton;
-	private JButton addButton;
+	private DropDownButton addButton;
 	private JButton removeButton;
 	private JButton moveUpButton;
 	private JButton moveDownButton;
@@ -317,7 +318,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
 					final int clickedRow = documentTree.getRowForLocation(e.getX(), e.getY());
 					if(clickedRow >= 0 && clickedRow < documentTree.getRowCount()) {
-						addSelectedDocuments(documentTree);
+						TreePath clickedPath = documentTree.getPathForRow(clickedRow);
+						if(((DefaultMutableTreeNode)clickedPath.getLastPathComponent()).isLeaf())
+							addSelectedDocuments(documentTree);
 					}
 				}
 			}
@@ -362,15 +365,28 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final ImageIcon openIcn =
 				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
 		browseAct.putValue(PhonUIAction.SMALL_ICON, openIcn);
-		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for report file...");
+		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open " + getModel().getNoun().getObj1() + "file...");
 		browseButton = new JButton(browseAct);
 
 		final ImageIcon addIcn =
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
 		final PhonUIAction addAct = new PhonUIAction(this, "addSelectedDocuments", documentTree);
-		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add " + getModel().getNoun().getObj1());
+		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add selected items to " + getModel().getNoun().getObj1());
 		addAct.putValue(PhonUIAction.SMALL_ICON, addIcn);
-		addButton = new JButton(addAct);
+		final JPopupMenu addMenu = new JPopupMenu();
+		
+		final PhonUIAction addWithText = new PhonUIAction(this, "addSelectedDocuments", documentTree);
+		addWithText.putValue(PhonUIAction.NAME, addAct.getValue(PhonUIAction.SHORT_DESCRIPTION));
+		addWithText.putValue(PhonUIAction.SMALL_ICON, addAct.getValue(PhonUIAction.SMALL_ICON));
+		addMenu.add(new JMenuItem(addWithText));
+		
+		final PhonUIAction appendAct = new PhonUIAction(this, "onAppend");
+		appendAct.putValue(PhonUIAction.NAME, "Append " + getModel().getNoun().getObj1() + " from disk...");
+		appendAct.putValue(PhonUIAction.SMALL_ICON, browseAct.getValue(PhonUIAction.SMALL_ICON));
+		addMenu.add(new JMenuItem(appendAct));
+		
+		addAct.putValue(DropDownButton.BUTTON_POPUP, addMenu);
+		addButton = new DropDownButton(addAct);
 
 		final ImageIcon removeIcn =
 				IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
@@ -815,9 +831,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		epArgs.put(OpgraphEditorEP.OPGRAPH_MODEL_KEY, getModel());
 		PluginEntryPointRunner.executePluginInBackground(OpgraphEditorEP.EP_NAME, epArgs);
 	}
-
-	public void onBrowse() {
 	
+	public void onAppend() {
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setAllowMultipleSelection(true);
@@ -825,8 +840,28 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		props.setCanChooseFiles(true);
 		props.setFileFilter(FileFilter.xmlFilter);
 		props.setInitialFolder(getModel().getDefaultFolder());
-		props.setTitle("Add Analysis");
+		props.setTitle("Add documents");
 		props.setPrompt("Add");
+		props.setRunAsync(false);
+
+		List<String> selectedFiles = NativeDialogs.showOpenDialog(props);
+		final List<File> fileList =
+				(selectedFiles != null ? selectedFiles.stream().map( (s) -> new File(s) ).collect(Collectors.toList()) : new ArrayList<>());
+		if(fileList.size() > 0) {
+			addDocuments(fileList);
+		}
+	}
+
+	public void onBrowse() {
+		final OpenDialogProperties props = new OpenDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setAllowMultipleSelection(false);
+		props.setCanChooseDirectories(false);
+		props.setCanChooseFiles(true);
+		props.setFileFilter(FileFilter.xmlFilter);
+		props.setInitialFolder(getModel().getDefaultFolder());
+		props.setTitle("Open " + getModel().getNoun().getObj1());
+		props.setPrompt("Open");
 		props.setRunAsync(false);
 
 		List<String> selectedFiles = NativeDialogs.showOpenDialog(props);
@@ -860,8 +895,12 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				final DeleteNodesEdit edit = new DeleteNodesEdit(getGraph(), nodes);
 				getModel().getDocument().getUndoSupport().postEdit(edit);
 				
+				
 				macroNodes.clear();
 				((NodeTableModel)nodeTable.getModel()).fireTableRowsDeleted(0, nodes.size()-1);
+				
+				setCurrentFile(fileList.get(0));
+				getModel().getDocument().markAsUnmodified();
 			}
 			addDocuments(fileList);
 		}
