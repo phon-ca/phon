@@ -202,7 +202,8 @@ public class ParticipantsPanel extends JPanel {
 		protected void done() {
 			participantBusyLabel.setBusy(false);
 
-			final Set<Participant> participants = cache.getParticipants(processedPaths);
+			List<Participant> participants = new ArrayList<>(cache.getParticipants(processedPaths));
+			participants.sort( (p1, p2) -> p1.toString().compareTo(p2.toString()) );
 			final TristateCheckBoxTreeModel model = ParticipantSelector.createModel(participants);
 			participantSelector.setModel(model);
 			participantSelector.setCheckingStateForPath(new TreePath(participantSelector.getRoot()), TristateCheckBoxState.CHECKED);

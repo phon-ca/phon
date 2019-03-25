@@ -107,7 +107,9 @@ public class ParticipantSelector extends TristateCheckBoxTree {
 	}
 	
 	public void loadParticipants(Project project, List<SessionPath> sessionPaths) {
-		setModel(createModel(project.getParticipants(sessionPaths)));
+		List<Participant> participantList = new ArrayList<>(project.getParticipants(sessionPaths));
+		participantList.sort( (p1, p2) -> p1.toString().compareTo(p2.toString()) );
+		setModel(createModel(participantList));
 	}
 	
 	public List<Participant> getSelectedParticpants() {
@@ -126,4 +128,4 @@ public class ParticipantSelector extends TristateCheckBoxTree {
 		return retVal;
 	}
 	
-}
+}	
