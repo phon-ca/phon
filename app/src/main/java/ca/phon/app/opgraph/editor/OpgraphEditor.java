@@ -131,7 +131,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 
 	@Override
 	public boolean hasUnsavedChanges() {
-		return getModel().getDocument().hasModifications();
+		return getModel().getDocument().isModified();
 	}
 
 	public OpgraphEditorModel getModel() {
