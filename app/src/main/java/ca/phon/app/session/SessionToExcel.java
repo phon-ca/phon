@@ -237,10 +237,7 @@ public class SessionToExcel extends SessionExporter {
         WritableFont font = new WritableFont(WritableFont.ARIAL, WritableFont.DEFAULT_POINT_SIZE, WritableFont.BOLD);
         columnHeaderFormat.setFont(font);
 		
-		WritableCellFormat tierValueFormat = new WritableCellFormat();
-        WritableFont tierFont = new WritableFont(
-        		WritableFont.createFont(FontPreferences.getTierFont().getFontName()), FontPreferences.getTierFont().getSize(), WritableFont.NO_BOLD);
-        tierValueFormat.setFont(tierFont);
+		WritableCellFormat tierValueFormat = getTierDataFormat();
 		
 		int colIdx = 0;
 		int maxCol = 0;
