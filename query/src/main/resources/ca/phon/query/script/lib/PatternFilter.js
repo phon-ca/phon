@@ -63,16 +63,15 @@ exports.PatternFilter = function (id) {
 	};
 
 	var matchGroupParamInfo = {
-		"id":[id + ".caseSensitive", id + ".exactMatch", id + ".allowOverlap"],
+		"id":[id + ".caseSensitive", id + ".exactMatch"],
 		"title": "",
-		"desc":[ "Case sensitive", "Exact match", "Allow overlapping matches"],
-		"def":[ false, false, false],
+		"desc":[ "Case sensitive", "Exact match"],
+		"def":[ false, false ],
 		"numCols": 0
 	};
 	var matchGroupParam;
 	this.caseSensitive = matchGroupParamInfo.def[0];
 	this.exactMatch = matchGroupParamInfo.def[1];
-	this.allowOverlap = matchGroupParamInfo.def[2];
 
 	var helpLabelParamInfo = {
 		"title": "",
@@ -311,7 +310,7 @@ exports.PatternFilter = function (id) {
 		matchGroupParamInfo.title,
 		matchGroupParamInfo.numCols);
 		matchGroupParam.setEnabled(0, this.filterType.index < exports.PatternType.PHONEX);
-		matchGroupParam.setVisible(2, filterTypeParamInfo.def == exports.PatternType.PHONEX);
+		//matchGroupParam.setVisible(2, filterTypeParamInfo.def == exports.PatternType.PHONEX);
 
 		filterParam = new PatternScriptParam(
 		filterParamInfo.id,
@@ -340,12 +339,6 @@ exports.PatternFilter = function (id) {
 					matchGroupParam.setEnabled(0, false);
 				} else {
 					matchGroupParam.setEnabled(0, true);
-				}
-
-				if (idx == exports.PatternType.PHONEX) {
-					matchGroupParam.setVisible(2, true);
-				} else {
-					matchGroupParam.setVisible(2, false);
 				}
 
 				var mimetype = filterMimetype[idx];
@@ -398,10 +391,9 @@ exports.PatternFilter = function (id) {
 		}
 	};
 
-	var checkPhonex = function (obj, filter, exactMatch, allowOverlap) {
+	var checkPhonex = function (obj, filter, exactMatch) {
 		if (!(obj instanceof IPATranscript)) return false;
-		flags =
-		(allowOverlap == true ? PhonexFlag.ALLOW_OVERLAPPING_MATCHES.getBitmask(): 0);
+		flags = 0;
 
 		if (exactMatch == true) {
 			return obj.matches(filter, flags);
@@ -458,7 +450,7 @@ exports.PatternFilter = function (id) {
 			case 2:
 			var filters = splitFilter(this.filter);
 			for(i = 0; i < filters.length; i++) {
-				var b = checkPhonex(obj, filters[i].trim(), this.exactMatch, this.allowOverlap);
+				var b = checkPhonex(obj, filters[i].trim(), this.exactMatch);
 				retVal = (i == 0 ? b : retVal || b);
 			}
 			break;
@@ -556,13 +548,12 @@ exports.PatternFilter = function (id) {
 		return retVal;
 	};
 
-	var findPhonex = function (obj, filter, exactMatch, allowOverlap) {
+	var findPhonex = function (obj, filter, exactMatch) {
 		var retVal = new Array();
 
 		if (!(obj instanceof IPATranscript)) return retVal;
 
-		flags =
-		(allowOverlap == true ? PhonexFlag.ALLOW_OVERLAPPING_MATCHES.getBitmask(): 0);
+		flags = 0;
 
 		var phonexPattern = PhonexPattern.compile(filter, flags);
 		var phonexMatcher = phonexPattern.matcher(obj);
@@ -709,7 +700,7 @@ exports.PatternFilter = function (id) {
 			case 2:
 			filters = splitFilter(this.filter);
 			for(var i = 0; i < filters.length; i++) {
-				sublist = findPhonex(obj, filters[i].trim(), this.exactMatch, this.allowOverlap);
+				sublist = findPhonex(obj, filters[i].trim(), this.exactMatch);
 				for(var j = 0; j < sublist.length; j++) {
 					r = findResult(retVal, sublist[j].start, sublist[j].end);
 					if(r == null)
