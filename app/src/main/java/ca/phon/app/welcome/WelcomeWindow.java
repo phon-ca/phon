@@ -90,7 +90,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
 	private DialogHeader header;
 
-	private final static String HEADER_TITLE = "Welcome to Phon " + VersionInfo.getInstance().getShortVersion();
+	private final static String HEADER_TITLE = "Welcome to Phon " + VersionInfo.getInstance();
 	private final static String HEADER_MESSAGE = "";
 
 	// action panel

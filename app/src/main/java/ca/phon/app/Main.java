@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.WelcomeWindowEP;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -46,8 +48,6 @@ import ca.phon.worker.PhonWorker;
  *
  */
 public final class Main {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Main.class.getName());
 	
 	private final static String START_ACTION_PROP = Main.class.getName() + ".startAction";
 	
@@ -85,12 +85,17 @@ public final class Main {
 		if(!userDataFolder.exists()) {
 			userDataFolder.mkdirs();
 		}
+	}
+	
+	private static void updateVersionFile() {
+		if(VersionInfo.getInstance().isDevVersion()) return;
 		
-		// write application version to 'version'
+		final File userDataFolder = new File(PrefHelper.getUserDataFolder());
+		// write application version to 'version' file
 		final File versionFile = new File(userDataFolder, "version");
 		try (PrintWriter out = new PrintWriter(
 				new OutputStreamWriter(new FileOutputStream(versionFile)))) {
-			out.println(VersionInfo.getInstance().getLongVersion());
+			out.println(VersionInfo.getInstance().toString());
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -101,11 +106,11 @@ public final class Main {
 		LogManager.getInstance().setupLogging();
 		
 		// output some debug info in the log
-		LOGGER.info("Phon " + VersionInfo.getInstance().getLongVersion());
+		LogUtil.info("Phon " + VersionInfo.getInstance());
 		if(PhonSplasher.isForked()) {
-			LOGGER.info("Running Phon in forked process");
+			LogUtil.info("Running Phon in forked process");
 		}
-		LOGGER.info("Process " + ManagementFactory.getRuntimeMXBean().getName());
+		LogUtil.info("Process " + ManagementFactory.getRuntimeMXBean().getName());
 		printEnvInfo();
 		printVMInfo();
 	}
@@ -121,9 +126,9 @@ public final class Main {
 		for(Object key:props.keySet()) {
 			Object val = props.get(key);
 			
-			LOGGER.info("[VM Property] " + key + " = " + val);
+			LogUtil.info("[VM Property] " + key + " = " + val);
 		}
-		LOGGER.info("[Other] Locale = " + Locale.getDefault().toString());
+		LogUtil.info("[Other] Locale = " + Locale.getDefault().toString());
 	}
 
 	private static void startWorker() {
@@ -141,7 +146,7 @@ public final class Main {
 			try {
 				hook.startup();
 			} catch (PluginException pe) {
-				LOGGER.error( pe.getMessage(), pe);
+				LogUtil.severe( pe.getMessage(), pe);
 			}
 		}
 	}
@@ -156,7 +161,7 @@ public final class Main {
 			try {
 				Class<?> actionClazz = Class.forName(startAction, true, PluginManager.class.getClassLoader());
 				if(Action.class.isAssignableFrom(actionClazz)) {
-					final Action action = (Action)actionClazz.newInstance();
+					final Action action = (Action)actionClazz.getDeclaredConstructor().newInstance();
 					
 					final Runnable onEDT = () -> {
 						final ActionEvent ae = new ActionEvent(new Object(), 0, "startAction");
@@ -164,11 +169,11 @@ public final class Main {
 					};
 					SwingUtilities.invokeLater(onEDT);
 				}
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				LogUtil.severe( e.getLocalizedMessage(), e);
 			}
 		} else {
-			LOGGER.info("Starting " + initialEntryPoint);
+			LogUtil.info("Starting " + initialEntryPoint);
 			final PluginEntryPointRunner entryPtRunner =
 					new PluginEntryPointRunner(initialEntryPoint);
 			try {
@@ -177,7 +182,7 @@ public final class Main {
 				entryPtRunner.setArgs(entryPointArgs);
 				entryPtRunner.executePlugin();
 			} catch (PluginException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.severe( e.getMessage(), e);
 			}
 		}
 	}

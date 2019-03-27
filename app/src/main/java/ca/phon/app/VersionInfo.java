@@ -19,140 +19,126 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.github.zafarkhaja.semver.Version;
+
+import ca.phon.app.log.LogUtil;
+import ca.phon.util.PrefHelper;
+
 /**
  * Methods for determining the version number of the application.
  * 
- * Version information is read from the file: build.properties
+ * Version information is read from the file: phon.build.properties
  * which should be located in the root of the class loader.
  */
-public class VersionInfo {
+public class VersionInfo implements Comparable<VersionInfo> {
+
+	/* semantic version */
+	private Version semver;
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VersionInfo.class.getName());
+	public final static String PHON_VERSION_PROP = "phon.app.version";
 	
 	/**
 	 * Properties file 
 	 */
 	private final static String VERSION_PROP_FILE = "phon.build.properties";
+		
+	// dev version
+	private final static String DEV_VERSION = "0.0.0-dev";
 	
-	/**
-	 * Major version prop name
-	 */
-	private final static String MAJOR_VERSION = "build.major";
-	
-	/**
-	 * Minor version prop name
-	 */
-	private final static String BUILD_MINOR = "build.minor";
-	
-	/**
-	 * Revision
-	 */
-	private final static String BUILD_REVISION = "build.revision";
-	
-	/**
-	 * Source Control revision 
-	 */
-	private final static String BUILD_SCREVISION = "build.screvision";
-	
-	private final static String BUILD_CODENAME = "build.codename";
-	
-	/**
-	 * The shared instance
-	 */
-	private static VersionInfo _instance;
-	
-	/**
-	 * Loaded properties
-	 */
-	private Properties versionProps;
-
 	/**
 	 * Get the shared instance
 	 */
 	public static VersionInfo getInstance() {
-		if(_instance == null) {
-			_instance = new VersionInfo();
-			_instance.versionProps = new Properties();
-			
+		String versionStr = PrefHelper.get(PHON_VERSION_PROP, DEV_VERSION);
+		
+		InputStream is = VersionInfo.class.getClassLoader().getResourceAsStream(VERSION_PROP_FILE);
+		if(is != null) {
+			Properties props = new Properties();
 			try {
-				InputStream is = VersionInfo.class.getClassLoader().getResourceAsStream(VERSION_PROP_FILE);
-				if(is == null) {
-					_instance.versionProps.put(MAJOR_VERSION, "3");
-					_instance.versionProps.put(BUILD_MINOR, "0");
-					_instance.versionProps.put(BUILD_REVISION, ".1");
-					_instance.versionProps.put(BUILD_SCREVISION, "XXXXXXXXXXXX");
-				} else {
-					_instance.versionProps.load(is);
-				}
+				props.load(is);
 			} catch (IOException e) {
-				e.printStackTrace();
-				LOGGER.error(e.getMessage());
+				LogUtil.severe(e);
+			}
+			
+			if(props.containsKey(PHON_VERSION_PROP)) {
+				versionStr = props.getProperty(PHON_VERSION_PROP);
 			}
 		}
-		return _instance;
+		
+		return new VersionInfo(versionStr);
+	}
+		
+	
+	public VersionInfo(String version) {
+		this(Version.valueOf(version));
+	}
+	
+	private VersionInfo(Version version) {
+		super();
+		
+		this.semver = version;
+	}
+	
+	public boolean isDevVersion() {
+		return semver.getPreReleaseVersion().startsWith("dev");
 	}
 	
 	/**
-	 * Get major version 
-	 */
-	public String getMajorVersion() {
-		return versionProps.getProperty(MAJOR_VERSION);
-	}
-	
-	/**
-	 * Get minor version
-	 */
-	public String getMinorVersion() {
-		return versionProps.getProperty(BUILD_MINOR);
-	}
-	
-	/**
-	 * Revision
-	 */
-	public String getRevision() {
-		return versionProps.getProperty(BUILD_REVISION);
-	}
-	
-	/**
-	 * Source control number
-	 */
-	public String getScRevision() {
-		return versionProps.getProperty(BUILD_SCREVISION);
-	}
-	
-	/**
-	 * Return version as:
+	 * Check if this version matches the given
+	 * version test string.
 	 * 
-	 * <major>.<minor>.<build>
+	 * See {@link Version#satisfies(java.lang.String)}
+	 * 
+	 * @param vertest
+	 * @return <code>true</code> if this version matches given
+	 *  test string, <code>false</code> otherwise
+	 */
+	public boolean check(String vertest) {
+		return semver.satisfies(vertest);
+	}
+	
+	public int getMajorVersion() {
+		return semver.getMajorVersion();
+	}
+	
+	public int getMinorVersion() {
+		return semver.getMinorVersion();
+	}
+	
+	public int getPatchVersion() {
+		return semver.getPatchVersion();
+	}
+	
+	public String getPreRelease() {
+		return semver.getPreReleaseVersion();
+	}
+	
+	public String getBuild() {
+		return semver.getBuildMetadata();
+	}
+	
+	/**
+	 * Returns full version text including prerelease and
+	 * build values.
+	 * 
+	 * @return
 	 */
 	public String getVersion() {
-		String retVal = 
-			getMajorVersion() + "." +
-			getMinorVersion() + 
-			getRevision();
-		return retVal;
+		return this.semver.toString();
 	}
 	
-	public String getShortVersion() {
-		String retVal = 
-				getMajorVersion() + "." +
-				getMinorVersion();
-		return retVal;
+	@Override
+	public String toString() {
+		return getVersion();
+	}
+
+	@Override
+	public int compareTo(VersionInfo o) {
+		return semver.compareTo(o.semver);
 	}
 	
-	/**
-	 * Return long version
-	 * 
-	 * <major>.<minor>.<build> <revision>
-	 */
-	public String getLongVersion() {
-		String retVal = 
-			getVersion() + " (" + getScRevision() + ")";
-		return retVal;
-	}
-	
-	public String getCodename() {
-		return versionProps.getProperty(BUILD_CODENAME);
+	public int compareTo(String version) {
+		return compareTo(new VersionInfo(version));
 	}
 	
 }

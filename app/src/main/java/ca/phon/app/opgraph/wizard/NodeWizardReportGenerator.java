@@ -131,7 +131,7 @@ public class NodeWizardReportGenerator {
 		sb.append("<head>").append(nl);
 		sb.append("<title>").append("Phon - " + ext.getWizardTitle()).append("</title>").append(nl);
 		sb.append("<meta name=\"author\" content=\"Phon ")
-		  .append(VersionInfo.getInstance().getShortVersion())
+		  .append(VersionInfo.getInstance())
 		  .append("\"/>").append(nl);
 		sb.append("<meta charset=\"UTF-8\"/>").append(nl);
 

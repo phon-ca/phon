@@ -91,7 +91,7 @@ public class AboutPanel extends JPanel implements IExtendable {
 		Font versionFont = FontPreferences.getControlFont();
 		g.setFont(versionFont);
 
-		String vString = VersionInfo.getInstance().getVersion();
+		String vString = VersionInfo.getInstance().toString();
 		FontMetrics fm = g.getFontMetrics();
 		int vWidth = (int)fm.getStringBounds(vString, g).getWidth();
 		g.setColor(Color.black);

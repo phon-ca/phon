@@ -412,7 +412,7 @@ public class SessionToHTML extends SessionExporter {
 			buffer.append("<title>Phon - ").append(session.getCorpus())
 				.append(".").append(session.getName()).append("</title>").append(nl);
 			
-			var version = VersionInfo.getInstance().getVersion();
+			var version = VersionInfo.getInstance().toString();
 			buffer.append("<meta name='author' content='").append(version).append("'/>").append(nl);
 			
 			buffer.append("<meta charset='UTF-8'/>").append(nl);
