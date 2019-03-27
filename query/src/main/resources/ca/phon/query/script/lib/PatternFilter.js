@@ -312,7 +312,7 @@ exports.PatternFilter = function (id) {
 		matchGroupParamInfo.numCols);
 		matchGroupParam.setEnabled(0, this.filterType.index < exports.PatternType.PHONEX);
 		
-		// remvoe 'allow overlapping matches' from UI
+		// remove 'allow overlapping matches' from UI
 		matchGroupParam.setVisible(2, false);
 
 		filterParam = new PatternScriptParam(
