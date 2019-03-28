@@ -67,7 +67,7 @@ public final class Main {
 		startLogging();
 		startWorker();
 		initPlugins();
-		updateVersionFile();
+		updateVersion();
 		runStartupHooks();
 		setupShutdownHooks();
 		startApp(args);
@@ -90,7 +90,7 @@ public final class Main {
 		}
 	}
 	
-	private static void updateVersionFile() {
+	private static void updateVersion() {
 		if(VersionInfo.getInstance().isDevVersion()) return;
 		
 		String currentVersion = VersionInfo.getInstance().getVersion();
@@ -123,8 +123,13 @@ public final class Main {
 					PluginManager.getInstance().getExtensionPoints(VersionTrigger.class);
 			
 			for(var extPt:extPts) {
-				var trigger = extPt.getFactory().createObject();
-				trigger.versionChanged(oldVersion, currentVersion);
+				try {
+					var trigger = extPt.getFactory().createObject();
+					trigger.versionChanged(oldVersion, currentVersion);
+				} catch (Exception e) {
+					// catch unknown exceptions which may occur in services
+					LogUtil.severe(e);
+				}
 			}
 		}
 	}
