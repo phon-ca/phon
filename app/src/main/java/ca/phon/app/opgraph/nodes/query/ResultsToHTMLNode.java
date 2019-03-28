@@ -146,7 +146,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 	
 	private JRadioButton includeTiersBtn;
 	private JRadioButton excludeTiersBtn;
-	private boolean excludeTiers = true;
+	private boolean excludeTiers = false;
 	private JTextArea tierArea;
 	private List<String> tierNames = new ArrayList<>();
 	
@@ -585,7 +585,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		}
 
 		setIncludeTierData(Boolean.parseBoolean(properties.getProperty("includeTierData", "false")));
-		setExcludeTiers(Boolean.parseBoolean(properties.getProperty("excludeTiers", "true")));
+		setExcludeTiers(Boolean.parseBoolean(properties.getProperty("excludeTiers", "false")));
 		String tierTxt = properties.getProperty("tierNames", "");
 		String tierNames[] = tierTxt.split(",");
 		setTierNames(Arrays.asList(tierNames));

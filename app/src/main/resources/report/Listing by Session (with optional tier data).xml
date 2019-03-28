@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="ca7b0861e06b4ba8" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5ad65081">
+            <graph id="5c5f379b">
                 <node id="979ae4b083f840f8" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -134,12 +134,15 @@ function setup_params(params) {
                         <![CDATA[false]]>
                     </oga:property>
                     <oga:property key="includeAlignment">
-                        <![CDATA[true]]>
+                        <![CDATA[false]]>
                     </oga:property>
                     <oga:property key="includeAge">
                         <![CDATA[true]]>
                     </oga:property>
                     <oga:property key="includeEducation">
+                        <![CDATA[false]]>
+                    </oga:property>
+                    <oga:property key="excludeTiers">
                         <![CDATA[false]]>
                     </oga:property>
                     <oga:property key="includeSyllabification">
@@ -166,6 +169,7 @@ function setup_params(params) {
                     <oga:property key="includeBirthday">
                         <![CDATA[false]]>
                     </oga:property>
+                    <oga:property key="tierNames"/>
                     <oga:property key="includeRole">
                         <![CDATA[true]]>
                     </oga:property>
@@ -185,7 +189,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="1d3c68d27c44dc" name="For each SessionPath" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="1e09ed0a">
+            <graph id="24a0a06e">
                 <node id="2361616a6cb14de8" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -220,7 +224,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="d158423836494b23" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6d3665a">
+                    <graph id="2a1716e4">
                         <node id="45845fe19bae44ba" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -362,8 +366,6 @@ function setup_params(params) {
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:report-template name="Report Prefix"/>
-                <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>
