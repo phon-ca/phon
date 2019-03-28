@@ -311,9 +311,7 @@ exports.PatternFilter = function (id) {
 		matchGroupParamInfo.title,
 		matchGroupParamInfo.numCols);
 		matchGroupParam.setEnabled(0, this.filterType.index < exports.PatternType.PHONEX);
-		
-		// remove 'allow overlapping matches' from UI
-		matchGroupParam.setVisible(2, false);
+		matchGroupParam.setVisible(2, filterTypeParamInfo.def == exports.PatternType.PHONEX);
 
 		filterParam = new PatternScriptParam(
 		filterParamInfo.id,
@@ -342,6 +340,12 @@ exports.PatternFilter = function (id) {
 					matchGroupParam.setEnabled(0, false);
 				} else {
 					matchGroupParam.setEnabled(0, true);
+				}
+
+				if (idx == exports.PatternType.PHONEX) {
+					matchGroupParam.setVisible(2, true);
+				} else {
+					matchGroupParam.setVisible(2, false);
 				}
 
 				var mimetype = filterMimetype[idx];

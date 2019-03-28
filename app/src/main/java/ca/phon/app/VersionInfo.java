@@ -18,6 +18,8 @@ package ca.phon.app;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.github.zafarkhaja.semver.Version;
 
@@ -45,6 +47,11 @@ public class VersionInfo implements Comparable<VersionInfo> {
 	// dev version
 	private final static String DEV_VERSION = "0.0.0-dev";
 	
+	/*
+	 * regex pattern for syntax of previous versions
+	 */
+	private final static String PREV_VERSION_REGEX = "([0-9]+\\.[0-9]+\\.[0-9]+)(([ab])([0-9]+))?( \\(([a-zA-Z0-9.]+)\\))?";
+	
 	/**
 	 * Get the shared instance
 	 */
@@ -70,15 +77,38 @@ public class VersionInfo implements Comparable<VersionInfo> {
 		
 	
 	public VersionInfo(String version) {
-		this(Version.valueOf(version));
-	}
-	
-	private VersionInfo(Version version) {
 		super();
 		
-		this.semver = version;
+		// convert to semantic version format if necessary
+		version = convertIfNecessary(version);
+		
+		this.semver = Version.valueOf(version);
 	}
 	
+	private String convertIfNecessary(String version) {
+		final Pattern p = Pattern.compile(PREV_VERSION_REGEX);
+		final Matcher m = p.matcher(version);
+		if(m.matches()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(m.group(1));
+			
+			if(m.group(2) != null) {
+				sb.append('-')
+					.append(m.group(3))
+					.append('.')
+					.append(m.group(4));
+			}
+			
+			if(m.group(5) != null) {
+				sb.append('+')
+					.append(m.group(6));
+			}
+			return sb.toString();
+		} else {
+			return version;
+		}
+	}
+		
 	public boolean isDevVersion() {
 		return semver.getPreReleaseVersion().startsWith("dev");
 	}
@@ -125,6 +155,29 @@ public class VersionInfo implements Comparable<VersionInfo> {
 	 */
 	public String getVersion() {
 		return this.semver.toString();
+	}
+	
+	/**
+	 * Return the version w/o build
+	 * 
+	 * @return version string w/o build 
+	 */
+	public String getVersionNoBuild() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getNumericalVersion());
+		if(getPreRelease().length() > 0) {
+			sb.append('-').append(getPreRelease());
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Return the numerical version (major.minor.patch)
+	 * 
+	 * @return
+	 */
+	public String getNumericalVersion() {
+		return getMajorVersion() + "." + getMinorVersion() + "." + getPatchVersion();
 	}
 	
 	@Override

@@ -31,6 +31,8 @@ import java.util.Properties;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FileUtils;
+
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogManager;
 import ca.phon.app.log.LogUtil;
@@ -65,6 +67,7 @@ public final class Main {
 		startLogging();
 		startWorker();
 		initPlugins();
+		updateVersionFile();
 		runStartupHooks();
 		setupShutdownHooks();
 		startApp(args);
@@ -90,15 +93,39 @@ public final class Main {
 	private static void updateVersionFile() {
 		if(VersionInfo.getInstance().isDevVersion()) return;
 		
+		String currentVersion = VersionInfo.getInstance().getVersion();
 		final File userDataFolder = new File(PrefHelper.getUserDataFolder());
 		// write application version to 'version' file
 		final File versionFile = new File(userDataFolder, "version");
+		
+		// check value of current version file
+		String oldVersion = "0.0.0";
+		if(versionFile.exists() && versionFile.canRead()) {
+			try {
+				oldVersion = FileUtils.readFileToString(versionFile).trim();
+			} catch (IOException e1) {
+				LogUtil.severe(e1);
+			}
+		}
+		
+		// write new version to file
 		try (PrintWriter out = new PrintWriter(
 				new OutputStreamWriter(new FileOutputStream(versionFile)))) {
-			out.println(VersionInfo.getInstance().toString());
+			out.println(currentVersion);
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LogUtil.severe(e);
+		}
+		
+		// fire version triggers
+		if(!oldVersion.equals(currentVersion)) {
+			final List<IPluginExtensionPoint<VersionTrigger>> extPts = 
+					PluginManager.getInstance().getExtensionPoints(VersionTrigger.class);
+			
+			for(var extPt:extPts) {
+				var trigger = extPt.getFactory().createObject();
+				trigger.versionChanged(oldVersion, currentVersion);
+			}
 		}
 	}
 	
