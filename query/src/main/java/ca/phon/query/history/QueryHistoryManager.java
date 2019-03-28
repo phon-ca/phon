@@ -88,15 +88,23 @@ public class QueryHistoryManager extends ParamHistoryManager {
 		return newInstance(getQueryName(script));
 	}
 	
+	public static File queryHistoryFile(QueryScript script) {
+		return queryHistoryFile(getQueryName(script));
+	}
+	
+	public static File queryHistoryFile(String name) {
+		final File queryHistoryFile = 
+				new File(PrefHelper.get(QUERY_HISTORY_FOLDER, DEFAULT_HISTORY_FOLDER), name + ".xml");
+		return queryHistoryFile;
+	}
+	
 	public static void save(QueryHistoryManager manager, QueryScript script) throws IOException {
-		final File queryHistoryFile =
-				new File(PrefHelper.get(QUERY_HISTORY_FOLDER, DEFAULT_HISTORY_FOLDER), getQueryName(script) + ".xml");
+		final File queryHistoryFile = queryHistoryFile(getQueryName(script));
 		ParamHistoryManager.saveParamHistory(manager.getParamHistory(), queryHistoryFile);
 	}
 	
 	public static QueryHistoryManager newInstance(String scriptName) throws IOException {
-		final File queryHistoryFile = 
-				new File(PrefHelper.get(QUERY_HISTORY_FOLDER, DEFAULT_HISTORY_FOLDER), scriptName + ".xml");
+		final File queryHistoryFile = queryHistoryFile(scriptName);
 		return new QueryHistoryManager(queryHistoryFile);
 	}
 	
