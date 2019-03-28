@@ -201,15 +201,24 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 				Session session = project.openSession(sp.getCorpus(), sp.getSession());
 				SessionFactory factory = SessionFactory.newFactory();
 				
+				List<String> tierNames = getTierNames();
 				List<TierViewItem> tierView = new ArrayList<>();
-				if(getTierNames().size() > 0) {
+				if(tierNames.size() > 0) {
 					for(TierViewItem tvi:session.getTierView()) {
-						boolean tierNameInList = getTierNames().contains(tvi.getTierName());
+						boolean tierNameInList = tierNames.contains(tvi.getTierName());
 						if(isExcludeTiers()) {
 							tierView.add(factory.createTierViewItem(tvi.getTierName(), !tierNameInList, tvi.getTierFont()));
 						} else {
 							tierView.add(factory.createTierViewItem(tvi.getTierName(), tierNameInList, tvi.getTierFont()));
 						}
+					}
+					
+					if(!isExcludeTiers()) {
+						// use order defined by user
+						tierView.sort( (tvi1, tvi2) -> {
+							return Integer.valueOf(tierNames.indexOf(tvi1.getTierName())).compareTo(
+									tierNames.indexOf(tvi2.getTierName()));
+						});
 					}
 				} else {
 					tierView.addAll(session.getTierView());
