@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <param_history xmlns="https://www.phon.ca/param_history" script="Phones" hash="a29c5d856c2661882ea3c62d458fe0950f00f20a">
-    <param_set date="2018-07-19T16:03:04.265-02:30" hash="fde8cc01a95d2ee3e9465808943e8b603f310879" name="Any Vowel">
+    <param_set date="2018-07-19T16:03:04.265-02:30" hash="9a58223a60084744ca5dd8e8c55a29ecce97da60" name="Any Vowel">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\v</param>
     </param_set>
-    <param_set date="2018-07-19T16:03:09.344-02:30" hash="e1cdef92659ba0a1d5b3b81156b897e1219dc042" name="Any Consonant">
+    <param_set date="2018-07-19T16:03:09.344-02:30" hash="652a10abdbc24fb9b13d21c915ae41c769fea33c" name="Any Consonant">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\c</param>
     </param_set>
-    <param_set date="2018-07-19T16:03:11.888-02:30" hash="b4fa35c4b42c093ce8505e1285caf8b4ce419585" name="Any Phone">
+    <param_set date="2018-07-19T16:03:11.888-02:30" hash="fdf21e76b85012bc318d7c81bf950ac895bf2268" name="Any Phone">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">\w</param>
     </param_set>
-    <param_set date="2018-07-19T16:05:43.607-02:30" hash="681d5268de1cbeeda9b169595d26b0277ae0671f" name="Standalone Consonants">
+    <param_set date="2018-07-19T16:05:43.607-02:30" hash="e81a5ac6da13bf1c1f2d73f5fadfc6453f28378d" name="Standalone Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Standalone Consonants
 // Look-behind '(?&lt;' and match beginning of input '^'
@@ -21,7 +21,7 @@
 // Match a consonant '(\c)' followed by end of input '$'
 (\c)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:06:17.653-02:30" hash="6d72dd6dba1497f366edc4836e5f7e8e747afd27" name="Initial Singleton Consonants">
+    <param_set date="2018-07-19T16:06:17.653-02:30" hash="542df66637dd32d8ff4fa3fb3ed23d587bdfb3af" name="Initial Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Initial Singleton Consonants
 // Look-behind '(?&lt;' and match beginning of input '^'
@@ -32,7 +32,7 @@
 // Look-ahead '(?&gt;' and match a vowel
 (?&gt;\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:07:41.323-02:30" hash="14f5fe5b196f677f78d336a3dbb35396df683480" name="Medial Singleton Consonants">
+    <param_set date="2018-07-19T16:07:41.323-02:30" hash="72f1da2bed199e48383c2b6cd5ae26d9fc0354e3" name="Medial Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Medial Singleton Consonants
 // Look-behind '(?&lt;' and match a vowel '\v'
@@ -43,7 +43,7 @@
 // Look-ahead '(?&gt;' and match an optional stress maker and vowel
 (?&gt;\s?\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="c76f97bfae143f8e9085d9cb8dd9015e02b42e18" name="Final Singleton Consonants">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="7acb25bc2404b4a608df36321de13a172339f99c" name="Final Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Final Singleton Consonants
 // Look-behind '(?&lt;' and match a vowel '\v'
@@ -51,7 +51,7 @@
 // Match a consonant '(\c)' followed by end of input '$'
 (\c)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="de62674e801ff905ff90d35ce307a116b32fef3d" name="Singleton Consonants">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="c70c7fc7015e132540b01434dda9ed078d160a65" name="Singleton Consonants">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Singleton Consonants
 // The double pipe operator will combine results of independent expressions
@@ -64,7 +64,7 @@
 // Final Consonants
 (?&lt;\v)(\c)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="dacd306a8f43b6c5948575bc9b12ef9b4f941387" name="Singleton Onsets">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="e479dcf0bf5e4757c877cff00f9bc8ac23d341db" name="Singleton Onsets">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Singleton Onsets
 // The double pipe operator will combine results of independent expressions
@@ -73,7 +73,7 @@
 // All other Singleton Onsets
 (?&lt;\S)(\c:O)(?&gt;\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="939014bbf31d7ee613a3e34ecca5d952c77911e7" name="Singleton Codas">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="5dab96495da49969afe0e2d6383c9d6872341959" name="Singleton Codas">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Singleton Codas
 // The double pipe operator will combine results of independent expressions
@@ -82,7 +82,7 @@
 // Final Singleton Codas
 (?&lt;\v)(\c:C)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="3b32544563f0e2eab0f242af4ca8fe2431f111fb" name="Initial Consonant Clusters">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="14cdcda73ed3c622b9e67fe5d74be9b37379f570" name="Initial Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Initial Consonant Clusters
 // Look-behind '(?&lt;' and match beginning of input '^'
@@ -93,7 +93,7 @@
 // Look-ahead '(?&gt;' and match an optional stress marker '\s?' and vowel '\v'
 (?&gt;\s?\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="d841948793f112b774edad956cb29364f44eb49a" name="Medial Consonant Clusters">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="0ec9719ba9f39aef1e586606ca0e61b86c7af4c5" name="Medial Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Medial Consonant Clusters
 // Look-behind '(?&lt;' and match a vowel '\v'
@@ -104,7 +104,7 @@
 // Look-ahead '(?&gt;' and match an optional stress marker '\s?' and vowel '\v'
 (?&gt;\s?\v)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="6092a5ff13064d499c260338c703530fbad7b8a3" name="Final Consonant Clusters">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="a3c4017a23bdec6f2ea6d18da13e102585e11961" name="Final Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Final Consonant Clusters
 // Look-behind '(?&lt;' and match a vowel '\v'
@@ -114,7 +114,7 @@
 // followed by end of input '$'
 (\c&lt;2,&gt;)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="991d48d6b09ed83fc45d36de44a4e8a20a643ec5" name="Heterosyllabic Consonant Clusters">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="dae70b267b2b895e3b62cb14df956009cd0ddfe0" name="Heterosyllabic Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Heterosyllabic Consonant Clusters
 // match one or more consonants '\c+'
@@ -124,7 +124,7 @@
 // followed by one or more consonants '\c+'
 \c+</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="7716d14e4a6a60648d5b48f3b0ca503cdfe5f5d6" name="Consonant Clusters">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="343d5af8131f6b3053789069dee9f68e3f9cb894" name="Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Consonant Clusters
 // The double pipe operator will combine results of independent expressions
@@ -135,28 +135,28 @@
 // Heterosyllabic Clusters
 (\c+[\s\.]\c+)</param>
     </param_set>
-    <param_set date="2018-11-13T05:09:32.903-03:30" hash="cf7f8e8717b694bba0f7e819ee41bda3554fa4a6" name="Syllable-initial Clusters">
+    <param_set date="2018-11-13T05:09:32.903-03:30" hash="5b5a6d91d6413d7c7319b34f3fe9ac230964c46e" name="Syllable-initial Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllable-initial Clusters
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
 ^(\c:L:O:E&lt;2,&gt;) ||
 (?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;)</param>
     </param_set>
-    <param_set date="2018-11-13T05:22:28.370-03:30" hash="a8d9c56917398e0e71b343cdb422e41c76e4d1e5" name="Syllable-final Clusters">
+    <param_set date="2018-11-13T05:22:28.370-03:30" hash="59968c58bb9552a5cc6d5eb5557bb1986071227b" name="Syllable-final Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllable-final Clusters
 // Includes right appendices ':R' and codas ':C'
 (\c:C:R&lt;2,&gt;)$ ||
 (\c:C:R&lt;2,&gt;)(?&gt;\s?\c:O)</param>
     </param_set>
-    <param_set date="2018-11-13T05:24:35.035-03:30" hash="e77a974d6c6adab2e6b2610fafbd9317a257ce47" name="Tautosyllabic Consonant Clusters">
+    <param_set date="2018-11-13T05:24:35.035-03:30" hash="4f5257482b5b571eb1e06334d204a2714c4141a8" name="Tautosyllabic Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">^(\c:L:O:E&lt;2,&gt;) ||
 (?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;) ||
 (\c:C:R&lt;2,&gt;)$ ||
 (\c:C:R&lt;2,&gt;)(?&gt;\s?\c:O)</param>
     </param_set>
-    <param_set date="2018-07-25T10:54:08.672-02:30" hash="3d9f564edbb03075d039c25428a966e421246aff" name="Syllables (short)">
+    <param_set date="2018-07-25T10:54:08.672-02:30" hash="a7f2c01b2d79b5a2485690d10a46099a16501277" name="Syllables (short)">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllables (short)
 // Query all syllables, store each section in a named group
@@ -172,7 +172,7 @@
 	(C=\c:C:R&lt;,5&gt;)
 )</param>
     </param_set>
-    <param_set date="2018-07-25T11:03:13.584-02:30" hash="1a494337cba51170e0eb3ec82043be730a2d05f1" name="Syllables (expanded)">
+    <param_set date="2018-07-25T11:03:13.584-02:30" hash="4af1b0ac7f199eca0c76611792c015e4c291d030" name="Syllables (expanded)">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllables (expanded)
 // Query all syllables, store each constituent in a named group
