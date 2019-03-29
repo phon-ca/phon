@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
+    <graph id="root">
+        <node id="68c7c8a1" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_project]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[ca.phon.project.Project]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="20" y="60"/>
+            </extensions>
+        </node>
+        <node id="74049172" name="Selected Sessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_selectedSessions]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.util.ArrayList]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="20" y="341"/>
+            </extensions>
+        </node>
+        <node id="1c755edc" name="Selected Participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_selectedParticipants]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.util.ArrayList]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="20" y="442"/>
+            </extensions>
+        </node>
+        <node id="7a5a1c7797e1409f" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script">
+                        <![CDATA[var reportTitleParamInfo = {
+	"id": "reportTitle",
+	"title": "Report Title",
+	"def": "Report",
+	"prompt": "Enter report title"
+};
+var reportTitleParam;
+var reportTitle = reportTitleParamInfo.def;
+
+function setup_params(params) {
+	reportTitleParam = new StringScriptParam(
+			reportTitleParamInfo.id,
+			reportTitleParamInfo.title,
+			reportTitleParamInfo.def);
+     reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
+	params.add(reportTitleParam);
+}
+]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="21" y="624"/>
+            </extensions>
+        </node>
+        <opqry:queryNode id="2bc88f5f" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2019-03-29T07:58:54.241-02:30" name="Data Tiers" uuid="d8609a9c-fb59-474b-b110-fbdbc6befc6d">
+                <script>
+                    <url ref="Data Tiers" rel="stock"/>
+                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
+                    <param id="filters.primary.patternFilter.filter">.+</param>
+                    <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+                    <param id="filters.primary.tier">Orthography</param>
+                    <param id="filters.searchBy.searchBy">Group</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
+                </script>
+            </qry:query>
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="535" y="147"/>
+            </extensions>
+        </opqry:queryNode>
+        <ogcn:macro id="ca916b6fde734784" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="5c05a65a">
+                <node id="52b10f9f42db48cd" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
+                                <![CDATA[<init>(java.lang.String)]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.declaredClass">
+                                <![CDATA[java.lang.String]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15">
+                            <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <node id="81e1d65c7c364ab7" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
+                                <![CDATA[get(java.lang.Object)]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                <![CDATA[java.util.Map]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="215" y="15"/>
+                    </extensions>
+                </node>
+                <node id="e70805f26ba24d25" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
+                                <![CDATA[toString()]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                <![CDATA[java.lang.Object]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="392" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="81e1d65c7c364ab7" destField="arg1" source="52b10f9f42db48cd" sourceField="value"/>
+                <link dest="e70805f26ba24d25" destField="obj" source="81e1d65c7c364ab7" sourceField="value"/>
+            </graph>
+            <ogcn:published_input field="obj" name="parameters" ref="81e1d65c7c364ab7"/>
+            <ogcn:published_output field="value" name="reportTitle" ref="e70805f26ba24d25"/>
+            <extensions>
+                <oga:meta x="258" y="624"/>
+            </extensions>
+        </ogcn:macro>
+        <opqry:queryReportNode id="11167a97" name="Query Report" type="ca.phon.app.opgraph.nodes.query.QueryReportNode">
+            <graph id="root">
+                <node id="610858c6" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey">
+                                <![CDATA[_project]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[ca.phon.project.Project]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="0" y="0"/>
+                    </extensions>
+                </node>
+                <node id="38d42c60" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey">
+                                <![CDATA[_queryId]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[java.lang.String]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="0" y="0"/>
+                    </extensions>
+                </node>
+                <node id="49d24052" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey">
+                                <![CDATA[_selectedSessions]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                                <![CDATA[java.util.ArrayList]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="0" y="0"/>
+                    </extensions>
+                </node>
+                <ogcn:macro id="410af6a7" name="Table" type="ca.phon.opgraph.nodes.general.MacroNode">
+                    <ogcn:uri>classpath:report/Table%20(all%20results%20in%20one%20table).xml</ogcn:uri>
+                    <ogcn:published_input field="obj" name="project" ref="5897d31c5e1642ec"/>
+                    <ogcn:published_input field="obj" name="queryId" ref="27a0c0b98e1245d6"/>
+                    <ogcn:published_input field="obj" name="selectedResults" ref="b569fd6fba9b4741"/>
+                    <extensions>
+                        <ogcn:overrides>
+                            <node id="4026874c" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                                <extensions>
+                                    <oga:settings>
+                                        <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
+                                            <![CDATA[false]]>
+                                        </oga:property>
+                                        <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns">
+                                            <![CDATA[Date
+Group #
+Tier
+Range
+Result]]>
+                                        </oga:property>
+                                    </oga:settings>
+                                    <oga:meta x="589" y="518">
+                                        <oga:default for="sectionName" type="java.lang.String">All results</oga:default>
+                                    </oga:meta>
+                                </extensions>
+                            </node>
+                        </ogcn:overrides>
+                        <oga:meta x="400" y="50"/>
+                    </extensions>
+                </ogcn:macro>
+                <node id="511329e4" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+                    <extensions>
+                        <oga:meta x="0" y="0"/>
+                    </extensions>
+                </node>
+                <link dest="511329e4" destField="project" source="610858c6" sourceField="obj"/>
+                <link dest="511329e4" destField="queryId" source="38d42c60" sourceField="obj"/>
+                <link dest="511329e4" destField="selectedResults" source="49d24052" sourceField="obj"/>
+                <extensions>
+                    <opqry:simplecomposer>
+                        <opqry:node ref="410af6a7"/>
+                    </opqry:simplecomposer>
+                    <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
+                        <opqry:info format="html" title="">
+                            <opqry:message/>
+                        </opqry:info>
+                        <opqry:optionalNode enabled="true" ref="410af6a7"/>
+                    </opqry:nodewizard>
+                </extensions>
+            </graph>
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="833" y="147"/>
+            </extensions>
+        </opqry:queryReportNode>
+        <node id="54025820" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="491" y="624"/>
+            </extensions>
+        </node>
+        <node id="5c3efbb9" name="ReportTree" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[ca.phon.app.opgraph.report.tree.ReportTree]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="780" y="624"/>
+            </extensions>
+        </node>
+        <node id="c0936e9" name="ReportTreeNode#add(ReportTreeNode)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
+                        <![CDATA[add(ca.phon.app.opgraph.report.tree.ReportTreeNode)]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
+                        <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="1022" y="624"/>
+            </extensions>
+        </node>
+        <link dest="ca916b6fde734784" destField="parameters" source="7a5a1c7797e1409f" sourceField="parameters"/>
+        <link dest="54025820" destField="reportName" source="ca916b6fde734784" sourceField="reportTitle"/>
+        <link dest="11167a97" destField="project" source="2bc88f5f" sourceField="project"/>
+        <link dest="11167a97" destField="query" source="2bc88f5f" sourceField="query"/>
+        <link dest="11167a97" destField="results" source="2bc88f5f" sourceField="results"/>
+        <link dest="2bc88f5f" destField="project" source="68c7c8a1" sourceField="obj"/>
+        <link dest="2bc88f5f" destField="sessions" source="74049172" sourceField="obj"/>
+        <link dest="5c3efbb9" destField="obj" source="11167a97" sourceField="report"/>
+        <link dest="c0936e9" destField="obj" source="54025820" sourceField="root"/>
+        <link dest="c0936e9" destField="arg1" source="5c3efbb9" sourceField="root"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+                <opqry:info format="html" title="AnalysisTemplate">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="2bc88f5f" showAsStep="true">
+                    <opqry:info format="html" title="Query : Data Tiers">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+                <opqry:node ref="11167a97">
+                    <opqry:info format="html" title="Query Report">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+            </opqry:nodewizard>
+            <oga:notes>
+                <oga:note color="0xffff96" height="537" title="Analysis Inputs" width="379" x="10" y="10">These inputs are provided to all analyses.</oga:note>
+                <oga:note color="0xffc864" height="198" title="Start Report" width="734" x="10" y="560">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
+                <oga:note color="0x9696ff" height="537" title="Query" width="745" x="400" y="10">Execute query and generate a query report using the Report Composer.  The report output from the 'Query Report' node should be added to the report created by the 'New Report' node below. To 'chain' queries, add a new query node using the Library view. Connect the 'project' and 'results' outputs from one query node to the 'project' and 'sessions' inputs of the next query.</oga:note>
+                <oga:note color="0xffc864" height="200" title="Add to Report" width="586" x="759" y="561"/>
+            </oga:notes>
+            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>

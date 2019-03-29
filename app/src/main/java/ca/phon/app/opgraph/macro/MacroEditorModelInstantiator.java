@@ -15,6 +15,8 @@
  */
 package ca.phon.app.opgraph.macro;
 
+import java.io.IOException;
+
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.opgraph.OpGraph;
@@ -41,6 +43,11 @@ public class MacroEditorModelInstantiator implements EditorModelInstantiator, IP
 	@Override
 	public IPluginExtensionFactory<EditorModelInstantiator> getFactory() {
 		return (Object... args) -> this;
+	}
+
+	@Override
+	public OpGraph defaultTemplate() throws IOException {
+		return new OpGraph();
 	}
 
 }

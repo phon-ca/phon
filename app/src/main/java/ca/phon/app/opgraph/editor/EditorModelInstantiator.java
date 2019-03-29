@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.editor;
 
+import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -25,7 +26,6 @@ import ca.phon.opgraph.OpGraph;
  * Instantiator for {@link OpgraphEditor} editor models.
  * 
  */
-@FunctionalInterface
 public interface EditorModelInstantiator {
 
 	@Retention(RetentionPolicy.RUNTIME)
@@ -40,9 +40,17 @@ public interface EditorModelInstantiator {
 	}
 	
 	/**
-	 * Create model with the given arguments.
+	 * Create a new graph from the default template.
 	 * 
-	 * @param args
+	 * @return new graph from template
+	 * 
+	 * @throws IOException 
+	 */
+	public OpGraph defaultTemplate() throws IOException;
+	
+	/**
+	 * Create model with the given graph.
+	 * 
 	 * @return
 	 */
 	public OpgraphEditorModel createModel(OpGraph graph);

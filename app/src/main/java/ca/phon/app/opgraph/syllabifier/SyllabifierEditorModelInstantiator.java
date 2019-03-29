@@ -15,6 +15,8 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
+import java.io.IOException;
+
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.ipa.IPATranscript;
@@ -69,6 +71,13 @@ public class SyllabifierEditorModelInstantiator implements EditorModelInstantiat
 	@Override
 	public IPluginExtensionFactory<EditorModelInstantiator> getFactory() {
 		return (args) -> this;
+	}
+
+	@Override
+	public OpGraph defaultTemplate() throws IOException {
+		OpGraph graph = new OpGraph();
+		setupGraph(graph);
+		return graph;
 	}
  
 }

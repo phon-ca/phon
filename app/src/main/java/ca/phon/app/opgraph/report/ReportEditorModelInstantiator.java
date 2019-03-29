@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.report;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
@@ -87,6 +88,13 @@ public class ReportEditorModelInstantiator implements EditorModelInstantiator, I
 	@Override
 	public IPluginExtensionFactory<EditorModelInstantiator> getFactory() {
 		return (args) -> this;
+	}
+
+	@Override
+	public OpGraph defaultTemplate() throws IOException {
+		OpGraph graph = new OpGraph();
+		setupGraph(graph);
+		return graph;
 	}
 
 }

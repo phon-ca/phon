@@ -15,6 +15,8 @@
  */
 package ca.phon.app.opgraph.analysis;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -22,6 +24,7 @@ import javax.swing.JComponent;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator;
 import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
 import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.Note;
 import ca.phon.opgraph.app.extensions.Notes;
 import ca.phon.opgraph.extensions.NodeMetadata;
@@ -36,12 +39,25 @@ import ca.phon.project.Project;
 		modelType = AnalysisOpGraphEditorModel.class)
 public class AnalysisEditorModelInstantiator implements EditorModelInstantiator, IPluginExtensionPoint<EditorModelInstantiator> {
 
+	private final static String ANALYSIS_TEMPALTE = "AnalysisTemplate.xml";
+	
 	@Override
 	public AnalysisOpGraphEditorModel createModel(OpGraph graph) {
 		if(graph.getVertices().size() == 0) {
 			setupDefaultGraph(graph);
 		}
 		return new AnalysisOpGraphEditorModel(graph);
+	}
+	
+	public OpGraph defaultTemplate() throws IOException {
+		final InputStream is = getClass().getResourceAsStream(ANALYSIS_TEMPALTE);
+		if(is != null) {
+			return OpgraphIO.read(is);
+		} else {
+			OpGraph graph = new OpGraph();
+			setupDefaultGraph(graph);
+			return graph;
+		}
 	}
 	
 	private void setupDefaultGraph(OpGraph graph) {
