@@ -27,6 +27,7 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.Note;
 import ca.phon.opgraph.app.extensions.Notes;
+import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.extensions.NodeMetadata;
 import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -52,7 +53,9 @@ public class AnalysisEditorModelInstantiator implements EditorModelInstantiator,
 	public OpGraph defaultTemplate() throws IOException {
 		final InputStream is = getClass().getResourceAsStream(ANALYSIS_TEMPALTE);
 		if(is != null) {
-			return OpgraphIO.read(is);
+			OpGraph graph = OpgraphIO.read(is);
+			GraphUtils.changeNodeIds(graph);
+			return graph;
 		} else {
 			OpGraph graph = new OpGraph();
 			setupDefaultGraph(graph);
