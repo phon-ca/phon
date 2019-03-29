@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4b4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b4.dmg" newVersion="3.0.4b4" newMediaFileId="macos" fileSize="255940928" md5Sum="3fd67642031281c291faca6a7f8f193e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4-beta.5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4-beta_5.dmg" newVersion="3.0.4-beta.5" newMediaFileId="macos" fileSize="255980505" md5Sum="bf3976c93f389994ae0d7347ae3a0b92" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -15,6 +15,7 @@
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -29,6 +30,7 @@
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -274,7 +276,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4b4.dmg" newVersion="3.0.4b4" newMediaFileId="macos" fileSize="255940928" md5Sum="3fd67642031281c291faca6a7f8f193e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4-beta_5.dmg" newVersion="3.0.4-beta.5" newMediaFileId="macos" fileSize="255980505" md5Sum="bf3976c93f389994ae0d7347ae3a0b92" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -289,6 +291,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -303,6 +306,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -548,7 +552,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b4.exe" newVersion="3.0.4b4" newMediaFileId="win64" fileSize="257222424" md5Sum="cb5f3b0154d4e96c8582ca5a6a483aab" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.exe" newVersion="3.0.4-beta.5" newMediaFileId="win64" fileSize="257262360" md5Sum="7bdffa6a7b25ac8f111b7aba64c792f1" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -563,6 +567,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -577,6 +582,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -822,7 +828,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b4.exe" newVersion="3.0.4b4" newMediaFileId="win64" fileSize="257222424" md5Sum="cb5f3b0154d4e96c8582ca5a6a483aab" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.exe" newVersion="3.0.4-beta.5" newMediaFileId="win64" fileSize="257262360" md5Sum="7bdffa6a7b25ac8f111b7aba64c792f1" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -837,6 +843,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -851,6 +858,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -1096,7 +1104,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b4.exe" newVersion="3.0.4b4" newMediaFileId="win64" fileSize="257222424" md5Sum="cb5f3b0154d4e96c8582ca5a6a483aab" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.exe" newVersion="3.0.4-beta.5" newMediaFileId="win64" fileSize="257262360" md5Sum="7bdffa6a7b25ac8f111b7aba64c792f1" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1111,6 +1119,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -1125,6 +1134,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -1370,7 +1380,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4b4.zip" newVersion="3.0.4b4" newMediaFileId="win64zip" fileSize="256259475" md5Sum="8eb46733115ac7d49238653e4d9bbfb5" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.zip" newVersion="3.0.4-beta.5" newMediaFileId="win64zip" fileSize="256299320" md5Sum="32f14b4444ecf5259a32ee30cc6d761f" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1385,6 +1395,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -1399,6 +1410,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -1644,7 +1656,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4b4.deb" newVersion="3.0.4b4" newMediaFileId="linux64deb" fileSize="186636564" md5Sum="e70b37327d0abf705ce4f2106a0fda09" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4-beta_5.deb" newVersion="3.0.4-beta.5" newMediaFileId="linux64deb" fileSize="186675102" md5Sum="3dd75db10df24a5651de2628fb278a52" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1659,6 +1671,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -1673,6 +1686,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
@@ -1918,7 +1932,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4b4.sh" newVersion="3.0.4b4" newMediaFileId="linux64" fileSize="186172438" md5Sum="b2eba2a10b9afce34d955e981a94ea93" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4-beta_5.sh" newVersion="3.0.4-beta.5" newMediaFileId="linux64" fileSize="186212251" md5Sum="dc72ad0a85e2969fcd1089c7bf84ecd2" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1933,6 +1947,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - Text for the next button now clearly indicates the next action
    - Simplified and improved query window menu
    - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
  * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
  * Analysis composer now allows for setup of custom query reports
  * Fixed behaviour of scrollbars in query forms.
@@ -1947,6 +1962,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Changed format of phon version numbers
 
 ## Changes from 3.0.2
  
