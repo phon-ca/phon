@@ -112,7 +112,7 @@ public class NewAction extends OpgraphEditorAction {
 			editor.setSize(1064, 768);
 			editor.setLocationByPlatform(true);
 			editor.setVisible(true);
-			SwingUtilities.invokeLater(() -> (new AutoLayoutAction(editor)).actionPerformed(arg0));
+		//	SwingUtilities.invokeLater(() -> (new AutoLayoutAction(editor)).actionPerformed(arg0));
 		}
 	}
 
