@@ -513,6 +513,10 @@
     <feature name="transition">
         <primary_family>place</primary_family>
     </feature>
+	<feature name="spirant">
+		<synonym>spi</synonym>
+		<primary_family>diacritic</primary_family>
+	</feature>
     <named_feature_set name="primary">vowel glide labial bilabial rounded palatal dorsal velar uvular
         guttural pharyngeal laryngeal labiodental interdental coronal alveolar alveopalatal
         retroflex voiceless voiced lateral rhotic stop fricative affricate nasal oral low mid high
@@ -1385,7 +1389,7 @@
     <!--͒ (0x352)-->
     <feature_set char="͒">diacritic</feature_set>
     <!--͓ (0x353)-->
-    <feature_set char="͓">diacritic</feature_set>
+    <feature_set char="͓">diacritic spirant</feature_set>
     <!--͔ (0x354)-->
     <feature_set char="͔">diacritic fronted</feature_set>
     <!--͕ (0x355)-->
