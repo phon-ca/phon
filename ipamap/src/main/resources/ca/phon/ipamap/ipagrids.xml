@@ -1134,6 +1134,12 @@
             <property name="Description">Rhoticity</property>
             <property name="Unicode">0x32e</property>
         </cell>
+    	<cell y="2" x="26" h="2" w="2">
+    		<text>&#x25cc;&#x0353;</text>
+    		<property name="Name">Combining X Below</property>
+    		<property name="Description">Spirant</property>
+    		<property name="Unicode">0x353</property>
+    	</cell>
     </grid>
 
     <!--Tones-->
