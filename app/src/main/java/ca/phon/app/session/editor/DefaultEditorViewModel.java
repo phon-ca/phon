@@ -388,7 +388,30 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				contentArea = accWin.getArea();
 			}
 
-			final CDockable focusedDockable = dockControl.getFocusedCDockable();
+			// look for placement based on current focus (or historical focus)
+			var focusedDockable = dockControl.getFocusedCDockable();
+			if(focusedDockable == null || focusedDockable == dockable) {
+				focusedDockable = null;
+				var focusHistory = dockControl.getFocusHistory();
+				for(var d:focusHistory.getHistory()) {
+					if(d != dockable) {
+						focusedDockable = d;
+						break;
+					}
+				}
+			}
+			
+			// look for first item in the list that isn't our dockable
+			if(focusedDockable == null) {
+				for(var i = 0; i < dockControl.getCDockableCount(); i++) {
+					var d = dockControl.getCDockable(i);
+					if(d != dockable) {
+						focusedDockable = d;
+						break;
+					}
+				}
+			}
+			
 			if(focusedDockable != null) {
 				dockable.setLocationsAside(focusedDockable);
 			} else {
