@@ -40,7 +40,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.actions.SessionCheckAction;
+import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
@@ -298,7 +298,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		editor.setVisible(true);
 
 		SwingUtilities.invokeLater( () -> {
-			(new SessionCheckAction(editor, true)).actionPerformed(new ActionEvent(SessionEditorEP.this, -1, "check"));
+			// will update status bar with warnings on initialization
+			editor.getViewModel().getView(SessionCheckView.VIEW_NAME);
 		});
 
 		return editor;

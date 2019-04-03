@@ -57,7 +57,6 @@ import ca.phon.app.session.editor.actions.PasteRecordAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.app.session.editor.actions.SaveAsAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
-import ca.phon.app.session.editor.actions.SessionCheckAction;
 import ca.phon.app.session.editor.actions.SortRecordsAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
@@ -392,9 +391,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		sessionMenu.add(new PreviousRecordAction(this));
 		sessionMenu.add(new NextRecordAction(this));
 		sessionMenu.add(new LastRecordAction(this));
-
-		sessionMenu.addSeparator();
-		sessionMenu.add(new SessionCheckAction(this));
 
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is

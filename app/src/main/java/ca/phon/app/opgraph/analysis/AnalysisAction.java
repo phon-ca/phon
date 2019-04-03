@@ -105,7 +105,6 @@ public class AnalysisAction extends HookableAction {
 			}
 		}
 
-
 	}
 
 }

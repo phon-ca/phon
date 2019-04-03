@@ -91,7 +91,7 @@ public class SessionCheckWizard extends NodeWizard {
 		sessionSelector = new SessionSelector(getProject());
 		editorSupport = new SessionSelectorActiveEditorSupport();
 		editorSupport.install(sessionSelector);
-		sessionSelector.setPreferredSize(new Dimension(350, 0));
+		tp.setPreferredSize(new Dimension(350, 0));
 		tp.setLayout(new BorderLayout());
 		tp.add(new JScrollPane(sessionSelector), BorderLayout.CENTER);
 		step1.add(tp, BorderLayout.WEST);
