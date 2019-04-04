@@ -248,12 +248,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		this.queryNodeInstantiator = queryNodeInstantiator;
 		this.runFactory = runFactory;
 
-		SimpleEditorExtension ext = graph.getExtension(SimpleEditorExtension.class);
-		if(ext == null) {
-			ext = new SimpleEditorExtension(macroNodes);
-			graph.putExtension(SimpleEditorExtension.class, ext);
-		}
-		
 		model = modelInstantiator.createModel(graph);
 		model.getDocument().getUndoSupport().addUndoableEditListener( (e) -> setModified(true) );
 		model.getDocument().getBreadcrumb().addBreadcrumbListener(new BreadcrumbListener<OpGraph, String>() {
@@ -278,7 +272,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		macroNodes.clear();
 		SimpleEditorExtension simpleEditorExt = getGraph().getExtension(SimpleEditorExtension.class);
 		if(simpleEditorExt != null)
-			macroNodes.addAll(simpleEditorExt.getMacroNodes());
+			this.macroNodes = simpleEditorExt.getMacroNodes();
 		else {
 			simpleEditorExt = new SimpleEditorExtension(macroNodes);
 			getGraph().putExtension(SimpleEditorExtension.class, simpleEditorExt);

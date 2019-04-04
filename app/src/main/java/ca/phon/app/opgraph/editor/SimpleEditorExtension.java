@@ -58,7 +58,7 @@ public class SimpleEditorExtension implements XMLSerializer {
 	}
 	
 	public List<MacroNode> getMacroNodes() {
-		return Collections.unmodifiableList(macroNodes);
+		return macroNodes;
 	}
 
 	@Override
