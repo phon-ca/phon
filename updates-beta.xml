@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4-beta.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4-beta_5.dmg" newVersion="3.0.4-beta.5" newMediaFileId="macos" fileSize="255980505" md5Sum="bf3976c93f389994ae0d7347ae3a0b92" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4-beta.6/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4-beta_6.dmg" newVersion="3.0.4-beta.6" newMediaFileId="macos" fileSize="255994655" md5Sum="0f5d531c21eceb3fa7528ff875cb054c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -25,11 +25,11 @@
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -276,7 +276,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4-beta_5.dmg" newVersion="3.0.4-beta.5" newMediaFileId="macos" fileSize="255980505" md5Sum="bf3976c93f389994ae0d7347ae3a0b92" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4-beta_6.dmg" newVersion="3.0.4-beta.6" newMediaFileId="macos" fileSize="255994655" md5Sum="0f5d531c21eceb3fa7528ff875cb054c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -301,11 +301,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -552,7 +552,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.exe" newVersion="3.0.4-beta.5" newMediaFileId="win64" fileSize="257262360" md5Sum="7bdffa6a7b25ac8f111b7aba64c792f1" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_6.exe" newVersion="3.0.4-beta.6" newMediaFileId="win64" fileSize="257267480" md5Sum="e2bc1317a51739aef72b95e175b09b09" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -577,11 +577,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -828,7 +828,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.exe" newVersion="3.0.4-beta.5" newMediaFileId="win64" fileSize="257262360" md5Sum="7bdffa6a7b25ac8f111b7aba64c792f1" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_6.exe" newVersion="3.0.4-beta.6" newMediaFileId="win64" fileSize="257267480" md5Sum="e2bc1317a51739aef72b95e175b09b09" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -853,11 +853,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -1104,7 +1104,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.exe" newVersion="3.0.4-beta.5" newMediaFileId="win64" fileSize="257262360" md5Sum="7bdffa6a7b25ac8f111b7aba64c792f1" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_6.exe" newVersion="3.0.4-beta.6" newMediaFileId="win64" fileSize="257267480" md5Sum="e2bc1317a51739aef72b95e175b09b09" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1129,11 +1129,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -1380,7 +1380,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_5.zip" newVersion="3.0.4-beta.5" newMediaFileId="win64zip" fileSize="256299320" md5Sum="32f14b4444ecf5259a32ee30cc6d761f" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4-beta_6.zip" newVersion="3.0.4-beta.6" newMediaFileId="win64zip" fileSize="256304033" md5Sum="6f9951cfb32966b9122b1dae149f45c6" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1405,11 +1405,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -1656,7 +1656,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4-beta_5.deb" newVersion="3.0.4-beta.5" newMediaFileId="linux64deb" fileSize="186675102" md5Sum="3dd75db10df24a5651de2628fb278a52" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4-beta_6.deb" newVersion="3.0.4-beta.6" newMediaFileId="linux64deb" fileSize="186677400" md5Sum="a64a415137e02dc9c53e38e59b8f5a70" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1681,11 +1681,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
@@ -1932,7 +1932,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4-beta_5.sh" newVersion="3.0.4-beta.5" newMediaFileId="linux64" fileSize="186212251" md5Sum="dc72ad0a85e2969fcd1089c7bf84ecd2" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4-beta_6.sh" newVersion="3.0.4-beta.6" newMediaFileId="linux64" fileSize="186216989" md5Sum="ae2a2fcc31da1cda99339c6c9aba40d7" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.3
 
  * Query and Report Wizard
@@ -1957,11 +1957,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Enabled 'Export as Excel' button in Session to HTML wizard
  * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
  * Record and result links now work in the Result Listing sections of query reports
- * Fixed a memory leak in the Session Check wizard
  * Session selector now displays scrollbars when needed in Session Check wizard
  * Windows binaries are now signed
  * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
  * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
  * Changed format of phon version numbers
 
 ## Changes from 3.0.2
