@@ -43,6 +43,7 @@ import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.edits.graph.AddNodeEdit;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.extensions.CompositeNode;
@@ -106,7 +107,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 				final OpLink projectLink =
 						new OpLink(parentProjectNode, "obj", reportNode, "project");
 				parentGraph.add(projectLink);
-			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e1) {
 				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		}
@@ -116,7 +117,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 				final OpLink queryIdLink =
 						new OpLink(parentQueryIDNode, "obj", reportNode, "queryId");
 				parentGraph.add(queryIdLink);
-			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e1) {
 				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		}
@@ -126,7 +127,7 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 				final OpLink resultsLink = 
 						new OpLink(parentSelectedResultsNode, "obj", reportNode, "selectedResults");
 				parentGraph.add(resultsLink);
-			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e1) {
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e1) {
 				LOGGER.warn( e1.getLocalizedMessage(), e1);
 			}
 		}

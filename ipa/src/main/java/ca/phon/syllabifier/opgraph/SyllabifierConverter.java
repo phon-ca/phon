@@ -22,6 +22,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.AutoLayoutManager;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -82,7 +83,7 @@ public class SyllabifierConverter {
 			final OpLink link = new OpLink(sourceNode, sourceNode.getOutputFieldWithKey("obj"),
 					sonorityNode, sonorityNode.getInputFieldWithKey("ipa"));
 			graph.add(link);
-		} catch (ItemMissingException | CycleDetectedException | VertexNotFoundException e) {
+		} catch (ItemMissingException | CycleDetectedException | VertexNotFoundException | InvalidEdgeException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 		
@@ -114,7 +115,7 @@ public class SyllabifierConverter {
 						final OpLink link = new OpLink(lastStageNode, lastStageOutput, 
 								phonexNode, phonexNode.getInputFieldWithKey("ipa"));
 						stageGraph.add(link);
-					} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+					} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e) {
 						LOGGER.error( e.getLocalizedMessage(), e);
 					}
 				}
@@ -132,7 +133,7 @@ public class SyllabifierConverter {
 				graph.add(stageLink);
 				lastNode = stageNode;
 				lastOutput = stageNode.getOutputFieldWithKey("ipa");
-			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		}

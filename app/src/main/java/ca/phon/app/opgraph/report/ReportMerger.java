@@ -30,6 +30,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -113,7 +114,7 @@ public class ReportMerger {
 		return node;
 	}
 	
-	private MacroNode addReportCategoryMacroNode(OpGraph document, String title) throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
+	private MacroNode addReportCategoryMacroNode(OpGraph document, String title) throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException, InvalidEdgeException {
 		final MacroNode retVal = createReportCategoryMacroNode();
 		retVal.setName(title);
 		
@@ -132,7 +133,7 @@ public class ReportMerger {
 		return retVal;
 	}
 	
-	private void connectMacroNode(OpGraph parent, MacroNode macroNode) throws ItemMissingException, VertexNotFoundException, CycleDetectedException {
+	private void connectMacroNode(OpGraph parent, MacroNode macroNode) throws ItemMissingException, VertexNotFoundException, CycleDetectedException, InvalidEdgeException {
 		final OpGraph macroGraph = macroNode.getGraph();
 		
 		// find object nodes in reportA
@@ -171,7 +172,7 @@ public class ReportMerger {
 		parent.add(uuidLink);
 	}
 	
-	public OpGraph createAllReportsGraph() throws IOException, IllegalArgumentException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
+	public OpGraph createAllReportsGraph() throws IOException, IllegalArgumentException, ItemMissingException, VertexNotFoundException, CycleDetectedException, InvalidEdgeException {
 		final OpGraph retVal = loadTemplate();
 		
 		NodeEditorSettings nes = retVal.getExtension(NodeEditorSettings.class);
@@ -252,9 +253,10 @@ public class ReportMerger {
 	 * @throws ItemMissingException
 	 * @throws CycleDetectedException 
 	 * @throws VertexNotFoundException 
+	 * @throws InvalidEdgeException 
 	 */
 	private OpGraph addReport(OpGraph document, OpGraph macroGraph, OpGraph report)
-		throws IllegalArgumentException, ItemMissingException, VertexNotFoundException, CycleDetectedException {
+		throws IllegalArgumentException, ItemMissingException, VertexNotFoundException, CycleDetectedException, InvalidEdgeException {
 		final WizardExtension extA = document.getExtension(WizardExtension.class);
 		if(extA == null || !(extA instanceof ReportWizardExtension))
 			throw new IllegalArgumentException("Destination graph is not a report document");

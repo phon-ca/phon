@@ -25,6 +25,7 @@ import ca.phon.app.opgraph.editor.SimpleEditor;
 import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -72,7 +73,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 					(qs, reportGraph) ->  {
 						try {
 							return AnalysisLibrary.analysisFromQuery(qs, reportGraph);
-						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException | InstantiationException | URISyntaxException e) {
+						} catch (IOException | IllegalArgumentException | ItemMissingException | VertexNotFoundException | CycleDetectedException | InstantiationException | URISyntaxException | InvalidEdgeException e) {
 							LOGGER.error( e.getLocalizedMessage(), e);
 							final MessageDialogProperties props = new MessageDialogProperties();
 							props.setTitle("Composer (simple)");

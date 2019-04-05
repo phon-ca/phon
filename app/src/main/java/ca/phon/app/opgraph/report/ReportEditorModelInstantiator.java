@@ -24,6 +24,7 @@ import ca.phon.app.opgraph.nodes.query.QueryHistoryNode;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.reflect.ObjectNode;
@@ -76,7 +77,7 @@ public class ReportEditorModelInstantiator implements EditorModelInstantiator, I
 			final OpLink sessionLink = 
 					new OpLink(sessionListNode, sessionListNode.getOutputFieldWithKey("obj"), historyNode, historyNode.getInputFieldWithKey("selectedResults"));
 			graph.add(sessionLink);
-		} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException e) {
+		} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e) {
 		}
 	}
 

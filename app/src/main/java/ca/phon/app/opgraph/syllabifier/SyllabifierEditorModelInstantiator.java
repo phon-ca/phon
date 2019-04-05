@@ -23,6 +23,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.reflect.ObjectNode;
@@ -59,7 +60,7 @@ public class SyllabifierEditorModelInstantiator implements EditorModelInstantiat
 			final OpLink link = new OpLink(sourceNode, sourceNode.getOutputFieldWithKey("obj"),
 					sonorityNode, sonorityNode.getInputFieldWithKey("ipa"));
 			graph.add(link);
-		} catch (ItemMissingException | CycleDetectedException | VertexNotFoundException e) {
+		} catch (ItemMissingException | CycleDetectedException | VertexNotFoundException | InvalidEdgeException e) {
 		}
 	}
 

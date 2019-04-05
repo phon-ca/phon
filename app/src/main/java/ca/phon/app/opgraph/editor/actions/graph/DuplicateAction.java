@@ -38,6 +38,7 @@ import ca.phon.opgraph.app.edits.graph.AddLinkEdit;
 import ca.phon.opgraph.app.edits.graph.AddNodeEdit;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.extensions.NodeMetadata;
@@ -109,11 +110,7 @@ public class DuplicateAction extends OpgraphEditorAction {
 							try {
 								final OpLink newLink = new OpLink(srcNode, srcField, dstNode, dstField);
 								cmpEdit.addEdit(new AddLinkEdit(graph, newLink));
-							} catch(VertexNotFoundException exc) {
-								LOGGER.error(exc.getMessage());
-							} catch(CycleDetectedException exc) {
-								LOGGER.error(exc.getMessage());
-							} catch(ItemMissingException exc) {
+							} catch(VertexNotFoundException | CycleDetectedException | InvalidEdgeException | ItemMissingException exc) {
 								LOGGER.error(exc.getMessage());
 							}
 						}

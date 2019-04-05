@@ -56,6 +56,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.dag.CycleDetectedException;
+import ca.phon.opgraph.dag.InvalidEdgeException;
 import ca.phon.opgraph.dag.VertexNotFoundException;
 import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -340,7 +341,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 	}
 
 	public static MacroNode analysisFromQuery(QueryScript queryScript, OpGraph reportGraph)
-		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException, URISyntaxException, InstantiationException {
+		throws IOException, ItemMissingException, VertexNotFoundException, CycleDetectedException, URISyntaxException, InstantiationException, InvalidEdgeException {
 		final QueryName queryName = queryScript.getExtension(QueryName.class);
 		String reportTitle = "Report";
 		if(queryName != null) {
