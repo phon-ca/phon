@@ -52,7 +52,7 @@ public class SessionCheckView extends EditorView {
 	
 	public final static String VIEW_NAME = "Session Check";
 	
-	public final static String ICON_NAME = "actions/view-list-text";
+	public final static String ICON_NAME = "emblems/flag-red";
 	
 	private JButton refreshButton;
 	
@@ -134,7 +134,7 @@ public class SessionCheckView extends EditorView {
 		if(lbl == null) {
 			lbl = new JLabel();
 			lbl.setName(VIEW_NAME);
-			final ImageIcon icn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			final ImageIcon icn = IconManager.getInstance().getIcon(ICON_NAME, IconSize.XSMALL);
 			lbl.setIcon(icn);
 			if(events.size() > 0) {
 				lbl.setText("<html><u>" +

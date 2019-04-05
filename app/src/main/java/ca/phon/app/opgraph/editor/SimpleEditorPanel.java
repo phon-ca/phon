@@ -81,6 +81,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.TransferHandler;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -195,7 +197,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private JXBusyLabel busyLabel;
 	private JLabel statusLabel;
 	
-	private final OpgraphEditorModel model;
+	private EditorModelInstantiator modelInstantiator;
+	
+	private OpgraphEditorModel model;
 	
 	private final Project project;
 
@@ -248,28 +252,41 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		this.queryNodeInstantiator = queryNodeInstantiator;
 		this.runFactory = runFactory;
 
+		this.modelInstantiator = modelInstantiator;
+		
 		model = modelInstantiator.createModel(graph);
-		model.getDocument().getUndoSupport().addUndoableEditListener( (e) -> setModified(true) );
-		model.getDocument().getBreadcrumb().addBreadcrumbListener(new BreadcrumbListener<OpGraph, String>() {
-			
-			@Override
-			public void breadCrumbEvent(BreadcrumbEvent<OpGraph, String> evt) {
-				if(evt.getValue().equals("root")) {
-					// root graph has changed - reset and update
-					resetAndUpdate();
-				}
-			}
-			
-		});
 		resetAndUpdate();
 		
 		init();
 		extSupport.initExtensions();
 	}
 	
+	private UndoableEditListener editListener = new UndoableEditListener() {
+
+		@Override
+		public void undoableEditHappened(UndoableEditEvent e) {
+			setModified(true);
+		}
+		
+	};
+	
+	private BreadcrumbListener<OpGraph, String> breadcrumbListener = new BreadcrumbListener<OpGraph, String>() {
+		
+		@Override
+		public void breadCrumbEvent(BreadcrumbEvent<OpGraph, String> evt) {
+			if(evt.getValue().equals("root")) {
+				// root graph has changed - reset and update
+				resetAndUpdate();
+			}
+		}
+		
+	};
+	
 	private void resetAndUpdate() {
 		// read macro nodes from graph extension
 		macroNodes.clear();
+		model.getDocument().getUndoSupport().addUndoableEditListener( editListener );
+		
 		SimpleEditorExtension simpleEditorExt = getGraph().getExtension(SimpleEditorExtension.class);
 		if(simpleEditorExt != null)
 			this.macroNodes = simpleEditorExt.getMacroNodes();
@@ -847,6 +864,29 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	}
 
 	public void onBrowse() {
+		if(isModified() && getMacroNodes().size() > 0) {
+			final MessageDialogProperties msgProps = new MessageDialogProperties();
+			msgProps.setRunAsync(false);
+			msgProps.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			msgProps.setTitle("Composer");
+			msgProps.setHeader("Save Changes");
+			msgProps.setMessage("Save current changes before opening new document?");
+			msgProps.setOptions(MessageDialogProperties.yesNoCancelOptions);
+			
+			int retVal = NativeDialogs.showMessageDialog(msgProps);
+			if(retVal == 0) {
+				try {
+					saveData();
+				} catch (IOException e) {
+					Toolkit.getDefaultToolkit().beep();
+					LogUtil.severe(e);
+					return;
+				}
+			} else if(retVal == 2) {
+				return;
+			}
+		}
+		
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setAllowMultipleSelection(false);
@@ -862,43 +902,35 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final List<File> fileList =
 				(selectedFiles != null ? selectedFiles.stream().map( (s) -> new File(s) ).collect(Collectors.toList()) : new ArrayList<>());
 		if(fileList.size() > 0) {
-			if(getModel().getDocument().hasModifications() && getMacroNodes().size() > 0) {
-				final MessageDialogProperties msgProps = new MessageDialogProperties();
-				msgProps.setRunAsync(false);
-				msgProps.setParentWindow(CommonModuleFrame.getCurrentFrame());
-				msgProps.setTitle("Composer");
-				msgProps.setHeader("Save Changes");
-				msgProps.setMessage("Save current changes before opening new document?");
-				msgProps.setOptions(MessageDialogProperties.yesNoCancelOptions);
+			this.model.getDocument().getUndoSupport().removeUndoableEditListener(editListener);
+			
+			File selectedFile = fileList.get(0);
+			OpGraph graph;
+			try {
+				graph = OpgraphIO.read(selectedFile);
 				
-				int retVal = NativeDialogs.showMessageDialog(msgProps);
-				if(retVal == 0) {
-					try {
-						saveData();
-					} catch (IOException e) {
-						Toolkit.getDefaultToolkit().beep();
-						LogUtil.severe(e);
-						return;
-					}
-				} else if(retVal == 2) {
-					return;
+				// make sure the graph was created using the simple composer!
+				SimpleEditorExtension ext = graph.getExtension(SimpleEditorExtension.class);
+				if(ext == null) {
+					throw new IOException("Selected graph was not created using the simple composer, use Composer (advanced) instead");
 				}
 				
-				ArrayList<OpNode> nodes = new ArrayList<>();
-				nodes.addAll(macroNodes);
-				final DeleteNodesEdit edit = new DeleteNodesEdit(getGraph(), nodes);
-				getModel().getDocument().getUndoSupport().postEdit(edit);
-				
-				
-				macroNodes.clear();
-				((NodeTableModel)nodeTable.getModel()).fireTableRowsDeleted(0, nodes.size()-1);
+				this.model = modelInstantiator.createModel(graph);
+				resetAndUpdate();
 				
 				setCurrentFile(fileList.get(0));
 				getModel().getDocument().markAsUnmodified();
 				getModel().getDocument().getUndoManager().discardAllEdits();
 				setModified(false);
+			} catch (IOException e) {
+				LogUtil.warning(e);
+				Toolkit.getDefaultToolkit().beep();
+				
+				CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
+				if(cmf != null) {
+					cmf.showMessageDialog("Unable to open file", e.getLocalizedMessage(), new String[] {"Ok"});
+				}
 			}
-			addDocuments(fileList);
 		}
 	}
 	
