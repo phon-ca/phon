@@ -918,6 +918,12 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					throw new IOException("Selected graph was not created using the simple composer, use Composer (advanced) instead");
 				}
 				
+				// ensure that our wizard extension types match!
+				if(graph.getExtension(WizardExtension.class).getClass() != 
+						getGraph().getExtension(WizardExtension.class).getClass()) {
+					throw new IOException("Selected file is not a valid " + getModel().getNoun().getObj1() + " document");
+				}
+				
 				this.model = modelInstantiator.createModel(graph);
 				resetAndUpdate();
 				
