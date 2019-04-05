@@ -76,7 +76,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="cefeea9929f34628" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="b02eea2">
+            <graph id="2c212232">
                 <node id="cc47418ba9f4481d" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -258,7 +258,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="377dc934a03c4467" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="2960d301">
+            <graph id="3ade9a4a">
                 <node id="2b8ec9139ac44ac3" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -319,7 +319,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="b23fe102f72345c5" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="286544f">
+                    <graph id="17ef1dcb">
                         <node id="34d8fd40cddc4eb4" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -379,7 +379,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="acdfc9d81204886" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="389e80a3">
+                    <graph id="3e7af258">
                         <node id="5407785632ac4bc0" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -435,7 +435,7 @@ function run(context) {
                                 <oga:meta x="405" y="187"/>
                             </extensions>
                         </node>
-                        <node id="ac233b6fd60e4c91" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                        <node id="ac233b6fd60e4c91" name="Sort Settings" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                             <extensions>
                                 <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
                                     <opqry:sortBy column="" order="ascending" type="plain"/>
