@@ -371,6 +371,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				setupSaveMenu(saveMenu);
 			}
 		});
+		addPropertyChangeListener("currentFile", (e) -> {
+			saveButton.setOnlyPopup(e.getNewValue() == null);
+		});
 		
 		final PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
 		final ImageIcon openIcn =
@@ -1018,7 +1021,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final String saveAs = NativeDialogs.showSaveDialog(props);
 		if(saveAs != null) {
 			setCurrentFile(new File(saveAs));
-			saveButton.setOnlyPopup(false);
 			return true;
 		} else {
 			return false;
