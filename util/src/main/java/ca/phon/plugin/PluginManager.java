@@ -120,6 +120,10 @@ public class PluginManager extends URLClassLoader {
 		addURL( (new File(path)).toURI().toURL() );
 	}
 	
+	public void addURL (URL url) {
+		super.addURL(url);
+	}
+	
 	private void scanFolderForJars(File dir, boolean recursive) {
 		if(dir.isDirectory()) {
 			for(File f:dir.listFiles()) {
