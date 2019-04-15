@@ -253,7 +253,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 		@Override
 		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.toString().compareTo(o2.toString());
+			return o1.toString().toLowerCase().compareTo(o2.toString().toLowerCase());
 		}
 
 	}
