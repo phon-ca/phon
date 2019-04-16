@@ -25,6 +25,7 @@ import javax.swing.event.MenuListener;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.app.actions.OpenFileEP;
 import ca.phon.app.menu.analysis.AnalysisMenuListener;
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
@@ -81,6 +82,7 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		final JMenu fileMenu = builder.addMenu(".@^", "File");
 		
 		fileMenu.add(new NewProjectCommand());
+		fileMenu.add(new OpenFileEP());
 		fileMenu.add(new OpenProjectCommand());
 
 		final JMenu recentProjectsMenu = new JMenu("Recent Projects");
