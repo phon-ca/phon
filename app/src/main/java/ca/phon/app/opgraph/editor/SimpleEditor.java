@@ -54,24 +54,32 @@ public class SimpleEditor extends CommonModuleFrame {
 	private JMenuBar menuBar;
 	
 	private SimpleEditorPanel editorPanel;
+	
+	public SimpleEditor(Project project, OpGraphLibrary library,
+			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
+			BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator,
+			BiFunction<OpGraph, Project, Runnable> runFactory) {
+		this(project, library, new OpGraph(), modelInstantiator, nodeInstantiator, queryNodeInstantiator, runFactory);
+	}
 
 	/**
 	 * Constructor
 	 *
 	 * @param project if <code>null</code> project graphs will not be displayed
 	 * @param library library display in add item dialog
+	 * @param graph the graph to be used
 	 * @param modelInstantiator the editor model instantiator
 	 * @param nodeInstantiator instantiator for nodes created by adding documents from the library
 	 * @param queryNodeInstantiator instantiator for nodes created by adding queries to the doucment
 	 * @param runFactory factory for runnables used to execute graphs
 	 */
-	public SimpleEditor(Project project, OpGraphLibrary library,
+	public SimpleEditor(Project project, OpGraphLibrary library, OpGraph graph,
 			EditorModelInstantiator modelInstantiator, Instantiator<MacroNode> nodeInstantiator,
 			BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
 		super();
 
-		this.editorPanel = new SimpleEditorPanel(project, library, 
+		this.editorPanel = new SimpleEditorPanel(project, library, graph,
 				modelInstantiator, nodeInstantiator, queryNodeInstantiator, runFactory);
 		PropertyChangeListener titleListener = (e) -> updateTitle();
 		editorPanel.addPropertyChangeListener("currentFile", titleListener );

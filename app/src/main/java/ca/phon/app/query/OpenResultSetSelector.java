@@ -21,7 +21,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.Tuple;
 
 /**
- * Display a tree of available {@link ResultSet}s for a session.
+ * Display available {@link ResultSet}s for a session.
  * Open results are taken from all open {@link QueryAndReportWizard} windows.
  * 
  */

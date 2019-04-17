@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.editor;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.SwingUtilities;
@@ -24,6 +25,8 @@ import ca.phon.plugin.IPluginEntryPoint;
 
 public class OpgraphEditorEP implements IPluginEntryPoint {
 
+	public final static String OPGRAPH_FILE_KEY = "file";
+	
 	public final static String OPGRAPH_MODEL_KEY = "model";
 	
 	public final static String EP_NAME = "OpgraphEditor";
@@ -40,6 +43,11 @@ public class OpgraphEditorEP implements IPluginEntryPoint {
 					new MacroOpgraphEditorModel());
 		final Runnable onEDT = () -> {
 			final OpgraphEditor editor = new OpgraphEditor(model);
+			
+			if(args.containsKey(OPGRAPH_FILE_KEY)) {
+				editor.setCurrentFile((File)args.get(OPGRAPH_FILE_KEY));
+			}
+			
 			editor.pack();
 			editor.setSize(1064, 768);
 			editor.setLocationByPlatform(true);

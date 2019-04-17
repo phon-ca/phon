@@ -256,11 +256,6 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for analysis document.");
 		builder.addItem(".@browse", onBrowseAct);
 		builder.addItem(".", new OpenSimpleAnalysisComposerAction(project));
-
-//		final PhonUIAction showComposerAct = new PhonUIAction(AnalysisLibrary.class, "showComposer");
-//		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
-//		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new analysis using Composer...");
-//		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
 
 	public static void onBrowse(PhonActionEvent pae) {
@@ -436,23 +431,6 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		retVal.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
 
 		return retVal;
-	}
-
-	public static void showComposer() {
-		final AnalysisEditorModelInstantiator instantiator = new AnalysisEditorModelInstantiator();
-		final AnalysisOpGraphEditorModel editorModel = instantiator.createModel(new OpGraph());
-		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
-
-		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
-		if(project != null) {
-			editor.putExtension(Project.class, project);
-			((AnalysisOpGraphEditorModel)editor.getModel()).getParticipantSelector().getSessionSelector().setProject(project);
-		}
-
-		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
-		editor.pack();
-		editor.setSize(1024, 768);
-		editor.setVisible(true);
 	}
 
 	@Override

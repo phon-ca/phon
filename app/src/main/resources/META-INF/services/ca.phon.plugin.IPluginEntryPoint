@@ -33,3 +33,8 @@ ca.phon.app.about.AboutEP
 ca.phon.app.log.LogViewerEP
 # Node editor
 ca.phon.app.opgraph.editor.OpgraphEditorEP
+# Analysis Composer
+ca.phon.app.opgraph.analysis.AnalysisComposerEP
+# Report Composer
+ca.phon.app.opgraph.report.ReportComposerEP
+

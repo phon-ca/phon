@@ -15,14 +15,15 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 
 public class OpenSimpleReportComposerAction extends HookableAction {
@@ -53,21 +54,19 @@ public class OpenSimpleReportComposerAction extends HookableAction {
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final SimpleEditor frame =
-				new SimpleEditor(project,
-						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
-						(qs, reportGraph) -> new MacroNode(),
-						(graph, project) -> new ReportRunner(graph, project, queryId) );
-		frame.getEditor().setIncludeQueries(true);
-
-		if(reportGraph != null) {
-			frame.getEditor().addGraph(reportGraph);
-		}
+		final EntryPointArgs args = new EntryPointArgs();
+		args.put(EntryPointArgs.PROJECT_OBJECT, project);
+		if(reportGraph != null)
+			args.put(ReportComposerEP.REPORT_GRAPH, reportGraph);
+		if(queryId != null)
+			args.put(ReportComposerEP.QUERY_ID, queryId);
 		
-		frame.pack();
-		frame.setSize(new Dimension(700, 500));
-		frame.centerWindow();
-		frame.setVisible(true);
+		try {
+			PluginEntryPointRunner.executePlugin(ReportComposerEP.EP_NAME, args);
+		} catch (PluginException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(e);
+		}
 	}
 
 }

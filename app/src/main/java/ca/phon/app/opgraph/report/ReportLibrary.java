@@ -233,11 +233,6 @@ public class ReportLibrary implements OpGraphLibrary {
 		final OpenSimpleReportComposerAction showSimpleComposerAct = new OpenSimpleReportComposerAction(project, queryId);
 		showSimpleComposerAct.putValue(Action.NAME, "Composer (simple)...");
 		builder.addItem(".", showSimpleComposerAct);
-		
-//		final PhonUIAction showComposerAct = new PhonUIAction(ReportLibrary.class, "showComposer");
-//		showComposerAct.putValue(PhonUIAction.NAME, "Composer (advanced)...");
-//		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new report using Composer...");
-//		builder.addItem(".@Composer (simple)...", showComposerAct);
 	}
 
 	public static void onBrowse(PhonActionEvent pae) {
@@ -283,37 +278,6 @@ public class ReportLibrary implements OpGraphLibrary {
 				NativeDialogs.showMessageDialog(mprops);
 			}
 		}
-	}
-
-//	public static void showGenerator(PhonActionEvent pae) {
-//		@SuppressWarnings("unchecked")
-//		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
-//		final String queryId = data.getObj1();
-//		final SimpleEditor frame =
-//				new SimpleEditor(data.getObj2(),
-//						new ReportLibrary(), new ReportEditorModelInstantiator(), new ReportNodeInstantiator(),
-//						(qs) -> new MacroNode(),
-//						(graph, project) -> new ReportRunner(graph, project, queryId) );
-//		frame.pack();
-//		frame.setSize(new Dimension(700, 500));
-//		frame.centerWindow();
-//		frame.setVisible(true);
-//	}
-
-	public static void showComposer() {
-		final ReportEditorModelInstantiator instantiator = new ReportEditorModelInstantiator();
-		final ReportOpGraphEditorModel editorModel = instantiator.createModel(new OpGraph());
-		final OpgraphEditor editor =  new OpgraphEditor(editorModel);
-
-		final Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
-		if(project != null) {
-			editor.putExtension(Project.class, project);
-		}
-
-		editor.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
-		editor.pack();
-		editor.setSize(1024, 768);
-		editor.setVisible(true);
 	}
 
 	@Override

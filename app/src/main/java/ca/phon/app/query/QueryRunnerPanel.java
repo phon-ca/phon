@@ -218,7 +218,7 @@ public class QueryRunnerPanel extends JPanel {
 		add(new JScrollPane(resultsTable), BorderLayout.CENTER);
 		add(topPanel, BorderLayout.NORTH);
 	}
-	
+		
 	public void startQuery() {
 		final PhonWorker worker = PhonWorker.createWorker();
 		worker.setFinishWhenQueueEmpty(true);
