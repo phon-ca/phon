@@ -4,7 +4,7 @@
 
 	<groupId>ca.phon</groupId>
 	<artifactId>phon</artifactId>
-	<version>3.0.4</version>
+	<version>3.0.5</version>
 	<packaging>pom</packaging>
 
 	<name>Phon</name>
