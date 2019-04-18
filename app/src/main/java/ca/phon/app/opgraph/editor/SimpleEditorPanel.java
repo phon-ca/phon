@@ -1272,8 +1272,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 					DefaultMutableTreeNode parentNode = stockNode;
 					int splitIdx = -1;
-					while((splitIdx = relativePath.indexOf('/')) >= 0) {
-						final String nodeName = relativePath.substring(0, splitIdx);
+					String tempPath = relativePath;
+					while((splitIdx = tempPath.indexOf('/')) >= 0) {
+						final String nodeName = tempPath.substring(0, splitIdx);
 
 						DefaultMutableTreeNode node = null;
 						for(int i = 0; i < parentNode.getChildCount(); i++) {
@@ -1288,7 +1289,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							parentNode.add(node);
 						}
 						parentNode = node;
-						relativePath = relativePath.substring(splitIdx+1);
+						tempPath = tempPath.substring(splitIdx+1);
 					}
 
 					final DefaultMutableTreeNode treeNode =
