@@ -28,12 +28,12 @@ Finally, Phon 3 comes with multiple improvements in the areas of workspace/proje
  * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_linux_3_0_4.deb)
  * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_unix_3_0_4.sh)
   
-### Phon 3.0.4-beta.6
+### Phon 3.0.5-beta.1
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.4-beta.6/Phon_macos_3_0_4-beta_6.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.4-beta.6/Phon_windows-x64_3_0_4-beta_6.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.4-beta.6/Phon_windows-x64_3_0_4-beta_6.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.4-beta.6/Phon_linux_3_0_4-beta_6.deb) 
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.4-beta.6/Phon_unix_3_0_4-beta_6.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.5-beta.1/Phon_macos_3_0_5-beta_1.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.5-beta.1/Phon_windows-x64_3_0_5-beta_1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.5-beta.1/Phon_windows-x64_3_0_5-beta_1.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.5-beta.1/Phon_linux_3_0_5-beta_1.deb) 
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.5-beta.1/Phon_unix_3_0_5-beta_1.sh)
  
 Previous releases can be found at https://github.com/phon-ca/phon/releases.
 
