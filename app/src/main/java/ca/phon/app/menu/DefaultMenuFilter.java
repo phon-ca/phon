@@ -82,7 +82,8 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		final JMenu fileMenu = builder.addMenu(".@^", "File");
 		
 		fileMenu.add(new NewProjectCommand());
-		fileMenu.add(new OpenFileEP());
+		if(PrefHelper.getBoolean("phon.debug", false))
+			fileMenu.add(new OpenFileEP());
 		fileMenu.add(new OpenProjectCommand());
 
 		final JMenu recentProjectsMenu = new JMenu("Recent Projects");

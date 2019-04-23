@@ -2,6 +2,7 @@ package ca.phon.app.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.HookableAction;
@@ -35,6 +37,7 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 		
 		putValue(NAME, EP_NAME + "...");
 		putValue(SHORT_DESCRIPTION, DESC);
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	
 	@Override
