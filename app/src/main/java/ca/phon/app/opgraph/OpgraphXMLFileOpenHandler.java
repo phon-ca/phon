@@ -70,15 +70,19 @@ public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 
 	@Override
 	public void openXMLFile(File file) throws IOException {
-		final OpGraph graph = OpgraphIO.read(file);
-		
-		// check for simple editor extension
-		SimpleEditorExtension simpleEditorExt = graph.getExtension(SimpleEditorExtension.class);
-		
-		if(simpleEditorExt != null) {
-			openSimpleEditor(file, graph);
-		} else {
-			openEditor(file, graph);
+		try {
+			final OpGraph graph = OpgraphIO.read(file);
+			
+			// check for simple editor extension
+			SimpleEditorExtension simpleEditorExt = graph.getExtension(SimpleEditorExtension.class);
+			
+			if(simpleEditorExt != null) {
+				openSimpleEditor(file, graph);
+			} else {
+				openEditor(file, graph);
+			}
+		} catch (Exception e) {
+			throw new IOException(e);
 		}
 	}
 

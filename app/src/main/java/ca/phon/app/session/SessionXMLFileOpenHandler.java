@@ -92,12 +92,7 @@ public class SessionXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 		final EntryPointArgs args = new EntryPointArgs();
 		args.put(EntryPointArgs.PROJECT_OBJECT, project);
 		args.put(EntryPointArgs.SESSION_OBJECT, session);
-		
-		try {
-			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, args);
-		} catch (PluginException e) {
-			throw new IOException(e);
-		}
+		PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
 	}
 	
 	private Project createTempProjectForFile(File file) {

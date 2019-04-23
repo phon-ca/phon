@@ -43,6 +43,7 @@ import ca.phon.query.db.Script;
 import ca.phon.query.db.ScriptLibrary;
 import ca.phon.query.db.ScriptURL;
 import ca.phon.query.db.xml.XMLQuery;
+import ca.phon.query.db.xml.io.query.ObjectFactory;
 import ca.phon.query.db.xml.io.query.QueryType;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
@@ -169,7 +170,7 @@ public class QueryNodeXMLSerializer implements XMLSerializer {
 			if(queryNode.getNodeName().equals(QUERY_PREFIX + ":query")
 					&& queryNode.getNamespaceURI().equals(QUERY_NAMESPACE)) {
 				try {
-					JAXBContext ctx = JAXBContext.newInstance("ca.phon.query.db.xml.io.query");
+					JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class);
 					Unmarshaller unmarshaller = ctx.createUnmarshaller();
 					JAXBElement<QueryType> queryTypeEle = unmarshaller.unmarshal(queryNode, QueryType.class);
 
