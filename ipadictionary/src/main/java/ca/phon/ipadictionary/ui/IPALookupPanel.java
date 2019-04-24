@@ -64,10 +64,7 @@ public class IPALookupPanel extends JPanel {
 	
 	/** Our lookup context */
 	private IPALookupContext context;
-	
-//	/** The execution thread */
-//	private PhonWorker worker;
-	
+		
 	/** Input field */
 	private JTextField inputField;
 	
@@ -156,7 +153,6 @@ public class IPALookupPanel extends JPanel {
 				query = "lookup \"" + query + "\"";
 			}
 			QueryTask task = new QueryTask(query);
-//			worker.invokeLater(task);
 			task.run();
 		}
 		
@@ -264,10 +260,6 @@ public class IPALookupPanel extends JPanel {
 	
 	private void init() {
 		setLayout(new BorderLayout());
-		
-//		// start our worker thread
-//		worker = PhonWorker.createWorker();
-//		worker.start();
 		
 		console = new JTextPane();
 		console.setEditable(false);

@@ -394,8 +394,8 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 			}
 			
 			Set<String> transcriptions = new HashSet<String>();
-			
 			final List<Tuple<String, String>> ipaPairs = new ArrayList<Tuple<String,String>>();
+			
 			for(String lhsEntry:lhsEntries) {
 				if(rhsEntries.length == 0) {
 					final Tuple<String, String> ipaPair = new Tuple<String, String>(lhsEntry, new String());
@@ -405,6 +405,12 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 						final Tuple<String, String> ipaPair = new Tuple<String, String>(lhsEntry, rhsEntry);
 						ipaPairs.add(ipaPair);
 					}
+				}
+			}
+			if(lhsEntries.length == 0) {
+				for(String rhsEntry:rhsEntries) {
+					final Tuple<String, String> ipaPair = new Tuple<String, String>(new String(), rhsEntry);
+					ipaPairs.add(ipaPair);
 				}
 			}
 			
