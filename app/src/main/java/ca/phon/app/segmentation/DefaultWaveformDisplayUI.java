@@ -27,6 +27,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private WaveformDisplay display;
 	
+	private boolean needsRepaint = true;
+	
 	@Override
 	public void installUI(JComponent c) {
 		if(!(c instanceof WaveformDisplay))
@@ -93,6 +95,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		if(!(c instanceof WaveformDisplay))
 			throw new IllegalArgumentException("Wrong class");
 		
+		if(needsRepaint) {
+			needsRepaint = false;
+			(new SampledPaintWorker()).execute();
+		}
+		
 		Graphics2D g2 = (Graphics2D)g;
 		
 		WaveformDisplay display = (WaveformDisplay)c;
@@ -109,7 +116,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			g2.fill(bounds);
 		}
 
-		Sampled sampled = display.getSampled();
 		int currentY = 0;
 		int channelHeight = display.getChannelHeight();
 		int gap = display.getChannelGap();
@@ -117,10 +123,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		for(Channel ch:display.availableChannels()) {
 			if(display.isChannelVisible(ch)) {
 				SampledPainter painter = getChannelPainter(ch);
-				painter.setForegroundColor(display.getChannelColor(ch));
-				painter.setWindowStart(display.getStartTime());
-				painter.setWindowLength(display.getEndTime() - display.getStartTime());
-				painter.paint(sampled, g2, new Rectangle(0, currentY, display.getWidth(), channelHeight));
+				synchronized(painter) {
+					g2.drawImage(painter.getBufferdImage(), bounds.x, currentY, bounds.x+bounds.width, currentY+channelHeight, 
+							bounds.x, 0, bounds.x+bounds.width, channelHeight, display);
+				}
 				currentY += channelHeight + gap;
 			}
 		}
@@ -150,14 +156,16 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				float windowEnd = Math.min(currentStart+window, sampled.getLength());
 				for(Channel ch:display.availableChannels()) {
 					SampledPainter channelPainter = getChannelPainter(ch);
-					if(channelPainter.getBufferdImage() == null) {
-						BufferedImage img = new BufferedImage(display.getWidth(), display.getChannelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-						channelPainter.setBufferedImage(img);
+					synchronized(channelPainter) {
+						if(channelPainter.getBufferdImage() == null) {
+							BufferedImage img = new BufferedImage(display.getWidth(), display.getChannelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+							channelPainter.setBufferedImage(img);
+						}
+						
+						BufferedImage channelImg = channelPainter.getBufferdImage();
+						Graphics2D imgG2 = channelImg.createGraphics();
+						channelPainter.paintWindow(sampled, imgG2, windowStart, windowEnd);
 					}
-					
-					BufferedImage channelImg = channelPainter.getBufferdImage();
-					Graphics2D imgG2 = channelImg.createGraphics();
-					channelPainter.paintWindow(sampled, imgG2, windowStart, windowEnd);
 				}
 				publish(new Tuple<>(windowStart, windowEnd));
 				currentStart = windowEnd;

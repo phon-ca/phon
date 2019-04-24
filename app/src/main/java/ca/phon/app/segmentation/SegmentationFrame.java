@@ -16,7 +16,7 @@ public class SegmentationFrame extends CommonModuleFrame {
 	
 	public static void main(String[] args) throws Exception {
 		
-		PCMSampled sampled = new PCMSampled(new File("C:\\Users\\gregh\\Documents\\PhonWorkspace\\Demo\\__res\\media\\010605.wav"));
+		PCMSampled sampled = new PCMSampled(new File("/Users/ghedlund/Movies/The.Knick.S02E01.720p.HDTV.x264-KILLERS[eztv].wav"));
 		System.out.println(sampled.getLength());
 		WaveformDisplay display = new WaveformDisplay(sampled);
 		display.setOpaque(true);

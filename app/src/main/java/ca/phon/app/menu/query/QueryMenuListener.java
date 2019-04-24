@@ -108,12 +108,15 @@ public class QueryMenuListener implements MenuListener {
 			} );
 			queryMenu.add(lbl);
 		}
+		List<JMenuItem> userScriptItems = new ArrayList<>();
 		while(userScriptIterator.hasNext()) {
 			final QueryScript qs = userScriptIterator.next();
 			
 			final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
-			queryMenu.add(sItem);
+			userScriptItems.add(sItem);
 		}
+		userScriptItems.sort( (o1, o2) -> o1.getText().compareTo(o2.getText()) );
+		userScriptItems.forEach( (i) -> queryMenu.add(i) );
 		
 		// project scripts
 		final ResourceLoader<QueryScript> projectScriptLoader = queryScriptLibrary.projectScriptFiles(project);
@@ -133,12 +136,15 @@ public class QueryMenuListener implements MenuListener {
 			} );
 			queryMenu.add(lbl);
 		}
+		List<JMenuItem> projectScriptItems = new ArrayList<>();
 		while(projectScriptIterator.hasNext()) {
 			final QueryScript qs = projectScriptIterator.next();
 			
 			final JMenuItem sItem = new JMenuItem(new QueryScriptCommand(project, qs));
-			queryMenu.add(sItem);
+			projectScriptItems.add(sItem);
 		}
+		projectScriptItems.sort( (o1, o2) -> o1.getText().compareTo(o2.getText()) );
+		projectScriptItems.forEach( (i) -> queryMenu.add(i) );
 		
 		// plug-in script
 		final ResourceLoader<QueryScript> pluginScriptLoader = queryScriptLibrary.pluginScriptFiles(project);

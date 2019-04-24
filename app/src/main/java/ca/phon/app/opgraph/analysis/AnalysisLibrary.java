@@ -31,6 +31,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ import javax.swing.MenuElement;
 
 import org.apache.commons.io.FilenameUtils;
 
+import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
@@ -73,6 +75,7 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.util.Tuple;
 import ca.phon.util.resources.ResourceLoader;
 import ca.phon.worker.PhonWorker;
 
@@ -169,6 +172,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final JMenu userMenu = new JMenu("User Library");
 		final MenuBuilder userMenuBuilder = new MenuBuilder(userMenu.getPopupMenu());
 		final Iterator<URL> userGraphIterator = getUserGraphs().iterator();
+		final TernaryTree<Tuple<String, AnalysisAction>> userActionMap = new TernaryTree<>();
 		while(userGraphIterator.hasNext()) {
 			try {
 				final URL reportURL = userGraphIterator.next();
@@ -184,10 +188,16 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
 				act.setShowWizard(selectedSessions.size() == 0);
-				userMenuBuilder.addItem(menuPath, new JMenuItem(act));
+				String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
+				
+				userActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 			}
+		}
+		for(String path:userActionMap.keySet()) {
+			var tuple = userActionMap.get(path);
+			userMenuBuilder.addItem(tuple.getObj1(), tuple.getObj2());
 		}
 		if(userMenu.getMenuComponentCount() > 0) {
 			builder.addSeparator(".", "user_library");
@@ -211,6 +221,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		final JMenu projectMenu = new JMenu("Project Library");
 		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu.getPopupMenu());
 		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
+		final TernaryTree<Tuple<String, AnalysisAction>> analysisActionMap = new TernaryTree<>();
 		while(projectGraphIterator.hasNext()) {
 			try {
 				final URL reportURL = projectGraphIterator.next();
@@ -226,10 +237,15 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
 				act.setShowWizard(selectedSessions.size() == 0);
-				projectMenuBuilder.addItem(menuPath, act);
+				String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
+				analysisActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 			}
+		}
+		for(String path:analysisActionMap.keySet()) {
+			var tuple = analysisActionMap.get(path);
+			projectMenuBuilder.addItem(tuple.getObj1(), tuple.getObj2());
 		}
 		if(projectMenu.getMenuComponentCount() > 0) {
 			builder.addSeparator(".", "project_library");
