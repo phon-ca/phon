@@ -475,12 +475,7 @@ public class QueryRunnerPanel extends JPanel {
 					initInfo.put("query", query);
 //					initInfo.put("opensession", openEditorBox.isSelected());
 					
-					// open editor first....
-					try {
-						PluginEntryPointRunner.executePlugin(ResultSetEP.EP_NAME, initInfo);
-					} catch (PluginException ex) {
-						LOGGER.error( ex.getLocalizedMessage(), ex);
-					}
+					PluginEntryPointRunner.executePluginInBackground(ResultSetEP.EP_NAME, initInfo);
 				}
 			}
 		}
