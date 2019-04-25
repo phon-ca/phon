@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.5-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5-beta_2.dmg" newVersion="3.0.5-beta.2" newMediaFileId="macos" fileSize="256049567" md5Sum="ce12a258f6a74a43862139b7b29d6864" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.5-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5-beta_3.dmg" newVersion="3.0.5-beta.3" newMediaFileId="macos" fileSize="256050423" md5Sum="274356c32f440489049a69e1749e9528" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -282,7 +282,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5-beta_2.dmg" newVersion="3.0.5-beta.2" newMediaFileId="macos" fileSize="256049567" md5Sum="ce12a258f6a74a43862139b7b29d6864" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5-beta_3.dmg" newVersion="3.0.5-beta.3" newMediaFileId="macos" fileSize="256050423" md5Sum="274356c32f440489049a69e1749e9528" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -564,7 +564,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_2.exe" newVersion="3.0.5-beta.2" newMediaFileId="win64" fileSize="257299224" md5Sum="d7527b0635d9341f007a3de31fa56028" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.exe" newVersion="3.0.5-beta.3" newMediaFileId="win64" fileSize="257300760" md5Sum="09c219eb02cd50a1a7e47051d3742edc" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -846,7 +846,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_2.exe" newVersion="3.0.5-beta.2" newMediaFileId="win64" fileSize="257299224" md5Sum="d7527b0635d9341f007a3de31fa56028" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.exe" newVersion="3.0.5-beta.3" newMediaFileId="win64" fileSize="257300760" md5Sum="09c219eb02cd50a1a7e47051d3742edc" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -1128,7 +1128,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_2.exe" newVersion="3.0.5-beta.2" newMediaFileId="win64" fileSize="257299224" md5Sum="d7527b0635d9341f007a3de31fa56028" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.exe" newVersion="3.0.5-beta.3" newMediaFileId="win64" fileSize="257300760" md5Sum="09c219eb02cd50a1a7e47051d3742edc" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -1410,7 +1410,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_2.zip" newVersion="3.0.5-beta.2" newMediaFileId="win64zip" fileSize="256335914" md5Sum="a3454f53fb2be7106b2958959d43f012" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.zip" newVersion="3.0.5-beta.3" newMediaFileId="win64zip" fileSize="256337254" md5Sum="8f53e9fb595d34a42f668d8a384d905c" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -1692,7 +1692,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_5-beta_2.deb" newVersion="3.0.5-beta.2" newMediaFileId="linux64deb" fileSize="186715332" md5Sum="fd96f9e86249b2a88ae3b942e6f81639" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_5-beta_3.deb" newVersion="3.0.5-beta.3" newMediaFileId="linux64deb" fileSize="186716846" md5Sum="f17d5784f1cb3f69a474e21fdf300869" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
@@ -1974,7 +1974,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_5-beta_2.sh" newVersion="3.0.5-beta.2" newMediaFileId="linux64" fileSize="186248838" md5Sum="c7ece1a03d4772166398c44e5d1a39d2" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_5-beta_3.sh" newVersion="3.0.5-beta.3" newMediaFileId="linux64" fileSize="186250179" md5Sum="39a04ced428d022675c3b6a2813a0d0e" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
