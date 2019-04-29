@@ -1,8 +1,12 @@
 package ca.phon.app.segmentation;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
@@ -23,7 +27,7 @@ import ca.phon.util.Tuple;
  */
 public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
-	private Map<Channel, SampledPainter> channelPainters = new HashMap<>();
+	private Map<Channel, BufferedImage> channelImages = new HashMap<>();
 	
 	private WaveformDisplay display;
 	
@@ -57,15 +61,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		display.removePropertyChangeListener(propListener);
 	}
 	
-	private SampledPainter getChannelPainter(Channel ch) {
-		SampledPainter retVal = channelPainters.get(ch);
-		if(retVal == null) {
-			retVal = new SampledPainter(ch.channelNumber());
-			channelPainters.put(ch, retVal);
-		}
-		return retVal;
-	}
-	
 	public float timeAtX(int x) {
 		return x / display.getSecondsPerPixel();
 	}
@@ -97,6 +92,14 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		if(needsRepaint) {
 			needsRepaint = false;
+		
+			for(Channel ch:display.availableChannels()) {
+				if(display.isChannelVisible(ch)) {
+					BufferedImage channelImg = new BufferedImage(display.getWidth(), display.getChannelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+					channelImages.put(ch, channelImg);
+				}
+			}
+			
 			(new SampledPaintWorker()).execute();
 		}
 		
@@ -122,11 +125,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		for(Channel ch:display.availableChannels()) {
 			if(display.isChannelVisible(ch)) {
-				SampledPainter painter = getChannelPainter(ch);
-				synchronized(painter) {
-					g2.drawImage(painter.getBufferdImage(), bounds.x, currentY, bounds.x+bounds.width, currentY+channelHeight, 
-							bounds.x, 0, bounds.x+bounds.width, channelHeight, display);
-				}
+				BufferedImage channelImage = channelImages.get(ch);
+				g2.drawImage(channelImage, bounds.x, currentY, bounds.x+bounds.width, currentY+channelHeight,
+						bounds.x, 0, bounds.x+bounds.width, channelHeight, display);
 				currentY += channelHeight + gap;
 			}
 		}
@@ -134,57 +135,114 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private final PropertyChangeListener propListener = (e) -> {
 		if("sampled".equals(e.getPropertyName())) {
-			((WaveformDisplay)e.getSource()).repaint();
+			needsRepaint = true;
+			display.revalidate();
 		}
 	};
+	
+	private Graphics2D createGraphics(BufferedImage img) {
+		Graphics2D g2 = img.createGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, 
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
+				RenderingHints.VALUE_STROKE_PURE);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		return g2;
+	}
 
-	private class SampledPaintWorker extends SwingWorker<Tuple<Float, Float>, Tuple<Float, Float>> {
+	private class SampledPaintWorker extends SwingWorker<Tuple<Double, Double>, Tuple<Double, Double>> {
 		
 		@Override
-		protected Tuple<Float, Float> doInBackground() throws Exception {
-			Sampled sampled = display.getSampled();
+		protected Tuple<Double, Double> doInBackground() throws Exception {
+			final Sampled sampled = display.getSampled();
+			
+			final double width = display.getWidth();
+			final double height = display.getChannelHeight();
+			final double halfHeight = height / 2.0;
 			
 			float startTime = display.getStartTime();
 			float endTime = display.getEndTime();
+			float length = endTime - startTime;
+			final float secondsPerPixel = (float)(length / width);
 			
-			float currentStart = startTime;
-			// 50 pixel windows
-			float window = 50 / display.getSecondsPerPixel();
+			float barSize = 1.0f;
+			final Stroke stroke = new BasicStroke(barSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 			
-			while(currentStart < endTime) {
-				float windowStart = currentStart;
-				float windowEnd = Math.min(currentStart+window, sampled.getLength());
-				for(Channel ch:display.availableChannels()) {
-					SampledPainter channelPainter = getChannelPainter(ch);
-					synchronized(channelPainter) {
-						if(channelPainter.getBufferdImage() == null) {
-							BufferedImage img = new BufferedImage(display.getWidth(), display.getChannelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-							channelPainter.setBufferedImage(img);
-						}
+			double extrema[] = new double[2];
+			final Line2D line = new Line2D.Double();
 						
-						BufferedImage channelImg = channelPainter.getBufferdImage();
-						Graphics2D imgG2 = channelImg.createGraphics();
-						channelPainter.paintWindow(sampled, imgG2, windowStart, windowEnd);
-					}
-				}
-				publish(new Tuple<>(windowStart, windowEnd));
-				currentStart = windowEnd;
+			double maxValue = 0;
+			for(int ch = 0; ch < sampled.getNumberOfChannels(); ch++) {
+				sampled.getWindowExtrema(ch, startTime, endTime, extrema);
+				maxValue = Math.max(maxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
 			}
+			final double unitPerPixel = maxValue / halfHeight;
 			
-			return new Tuple<>(display.getStartTime(), display.getEndTime());
+			double ymindiff, ymaxdiff = 0.0;
+			float time = 0.0f;
+			double ymin, ymax = halfHeight;
+			
+			Map<Channel, Graphics2D> gMap = new HashMap<>();
+			double lastUpdateX = 0.0;
+			for(double x = 0.0; x < width; x += barSize) {
+				time = startTime + (float)(x * secondsPerPixel);
+				
+				for(Channel ch:display.availableChannels()) {
+					if(!display.isChannelVisible(ch)) continue;
+					
+					BufferedImage channelImage = channelImages.get(ch);
+					Graphics2D g2 = gMap.get(ch);
+					if(g2 == null) {
+						 g2 = createGraphics(channelImage);
+						 gMap.put(ch, g2);
+					}
+					g2.setStroke(stroke);
+					g2.setColor(display.getChannelColor(ch));
+					
+					sampled.getWindowExtrema(ch.channelNumber(), time, time + secondsPerPixel, extrema);
+					
+					ymindiff = Math.abs(extrema[0]) / unitPerPixel;
+					ymaxdiff = Math.abs(extrema[1]) / unitPerPixel;
+					
+					ymin = halfHeight;
+					if(extrema[0] < 0) {
+						ymin += ymindiff;
+					} else {
+						ymin -= ymindiff;
+					}
+					
+					ymax = halfHeight;
+					if(extrema[1] < 0) {
+						ymax += ymaxdiff;
+					} else {
+						ymax -= ymaxdiff;
+					}
+					
+					line.setLine(x, ymin, x, ymax);
+					g2.draw(line);
+				}
+				
+				if(x - lastUpdateX >= 10.0f) {
+					publish(new Tuple<>(lastUpdateX, x));
+					lastUpdateX = x;
+				}
+			}
+			publish(new Tuple<>(lastUpdateX, (double)display.getWidth()));
+			
+			return new Tuple<Double, Double>((double)0, (double)display.getWidth());
 		}
 
 		@Override
-		protected void process(List<Tuple<Float, Float>> chunks) {
+		protected void process(List<Tuple<Double, Double>> chunks) {
+			var startX = -1;
+			var endX = 0;
 			for(var tuple:chunks) {
-				var windowStart = tuple.getObj1();
-				var windowEnd = tuple.getObj2();
+				startX = (startX == -1 ? (int)Math.floor(tuple.getObj1()) : Math.min(startX, (int)Math.floor(tuple.getObj1())));
+				endX = Math.max(endX, (int)Math.ceil(tuple.getObj2()));
 				
-				var startX = xForTime(windowStart);
-				var endX = xForTime(windowEnd);
-				
-				display.repaint(startX, 0, (endX-startX), display.getHeight());
 			}
+			System.out.println(String.format("Repaint %d - %d", startX, endX));
+			display.repaint(startX, 0, endX, display.getHeight());
 		}
 		
 	}

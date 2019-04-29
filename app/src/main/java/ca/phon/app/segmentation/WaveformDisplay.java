@@ -39,12 +39,7 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	 * Height (in px) of channels
 	 */
 	private int channelHeight = 100;
-	
-	/**
-	 * Number of visible channels when inside a {@link JScrollPane}
-	 */
-	private int visibleChannelCount = 2;
-	
+		
 	/**
 	 * Number of seconds per pixel
 	 */
@@ -98,8 +93,11 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		
 		availableChannels.clear();
 		channelVisiblity.clear();
-		for(int i = 0; i < sampled.getNumberOfChannels() && i < Channel.values().length; i++) {
-			availableChannels.add(Channel.values()[i]);
+		if(sampled != null) {
+			for(int i = 0; i < sampled.getNumberOfChannels() && i < Channel.values().length; i++) {
+				availableChannels.add(Channel.values()[i]);
+				channelVisiblity.put(Channel.values()[i], true);
+			}
 		}
 		
 		firePropertyChange("sampled", oldValue, sampled);
@@ -171,13 +169,12 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	}
 	
 	public int getVisibleChannelCount() {
-		return visibleChannelCount;
-	}
-
-	public void setVisibleChannelCount(int visibleChannelCount) {
-		var oldValue = this.visibleChannelCount;
-		this.visibleChannelCount = visibleChannelCount;
-		firePropertyChange("visibleChannelCount", oldValue, visibleChannelCount);
+		int visibleChannels = 0;
+		for(Channel ch:availableChannels()) {
+			if(isChannelVisible(ch))
+				visibleChannels++;
+		}
+		return visibleChannels;
 	}
 
 	public float getSecondsPerPixel() {
@@ -190,8 +187,8 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 
 	@Override
 	public Dimension getPreferredSize() {
-		int prefWidth = 
-				(int)Math.round(getSampled().getLength() / getSecondsPerPixel());
+		int prefWidth = (getSampled() == null ? 0 :
+				(int)Math.round(getSampled().getLength() / getSecondsPerPixel()));
 		
 		int prefHeight = (getVisibleChannelCount() * getChannelHeight())
 				+ (getChannelGap() * Math.max(getVisibleChannelCount()-1, 0));
