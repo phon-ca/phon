@@ -21,12 +21,12 @@ Finally, Phon 3 comes with multiple improvements in the areas of workspace/proje
 
 ## Download Phon
 
-### Phon 3.0.4
+### Phon 3.0.5
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_macos_3_0_4.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_windows-x64_3_0_4.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_windows-x64_3_0_4.zip) 
- * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_linux_3_0_4.deb)
- * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.4/Phon_unix_3_0_4.sh)
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.0.5/Phon_macos_3_0_5.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.5/Phon_windows-x64_3_0_5.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.0.5/Phon_windows-x64_3_0_5.zip) 
+ * [Linux (64-bit) (deb)](https://github.com/phon-ca/phon/releases/download/3.0.5/Phon_linux_3_0_5.deb)
+ * [Unix (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.0.5/Phon_unix_3_0_5.sh)
   
 ### Phon 3.0.5-beta.3
 
