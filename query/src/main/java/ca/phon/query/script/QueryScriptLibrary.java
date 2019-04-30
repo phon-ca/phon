@@ -50,7 +50,7 @@ import ca.phon.util.resources.ResourceLoader;
  *
  *
  */
-public class QueryScriptLibrary implements IExtendable {
+public final class QueryScriptLibrary implements IExtendable {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(QueryScriptLibrary.class.getName());
 

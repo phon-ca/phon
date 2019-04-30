@@ -101,6 +101,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
@@ -1236,9 +1237,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final ResourceLoader<QueryScript> userScriptLoader = scriptLibrary.userScriptFiles();
 		if(userScriptLoader.iterator().hasNext()) {
 			final DefaultMutableTreeNode userScriptRoot = new DefaultMutableTreeNode("User Queries", true);
+			TernaryTree<DefaultMutableTreeNode> queryScripts = new TernaryTree<>();
 			for(QueryScript userScript:userScriptLoader) {
 				final DefaultMutableTreeNode userScriptNode = new DefaultMutableTreeNode(userScript, false);
-				userScriptRoot.add(userScriptNode);
+				final QueryName qn = userScript.getExtension(QueryName.class);
+				queryScripts.put(qn.getName().toLowerCase(), userScriptNode);
+			}
+			for(var userScriptName:queryScripts.keySet()) {
+				userScriptRoot.add(queryScripts.get(userScriptName));
 			}
 			root.add(userScriptRoot);
 		}
@@ -1247,9 +1253,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			final ResourceLoader<QueryScript> projectScriptLoader = scriptLibrary.projectScriptFiles(getProject());
 			if(projectScriptLoader.iterator().hasNext()) {
 				final DefaultMutableTreeNode projectScriptRoot = new DefaultMutableTreeNode("Project Queries");
+				TernaryTree<DefaultMutableTreeNode> queryScripts = new TernaryTree<>();
 				for(QueryScript projectScript:projectScriptLoader) {
 					final DefaultMutableTreeNode projectScriptNode = new DefaultMutableTreeNode(projectScript, false);
-					projectScriptRoot.add(projectScriptNode);
+					final QueryName qn = projectScript.getExtension(QueryName.class);
+					queryScripts.put(qn.getName().toLowerCase(), projectScriptNode);
+				}
+				for(var projectScriptName:queryScripts.keySet()) {
+					projectScriptRoot.add(queryScripts.get(projectScriptName));
 				}
 				root.add(projectScriptRoot);
 			}
@@ -1307,9 +1318,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		final Iterator<URL> userIterator = userLoader.iterator();
 		if(userIterator.hasNext()) {
 			final DefaultMutableTreeNode userNode = new DefaultMutableTreeNode("User " + getModel().getNoun().getObj2(), true);
+			List<URL> documentURLS = new ArrayList<>();
 			while(userIterator.hasNext()) {
 				final URL documentURL = userIterator.next();
+				documentURLS.add(documentURL);
+			}
+			documentURLS.sort( (url1, url2) -> url1.toString().toLowerCase().compareTo(url2.toString().toLowerCase()) );
 
+			for(URL documentURL:documentURLS) {
 				try {
 					final URI relativeURI = new File(library.getUserFolderPath()).toURI().relativize(documentURL.toURI());
 
@@ -1342,7 +1358,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				} catch (UnsupportedEncodingException | URISyntaxException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}
-
+				
 			}
 			root.add(userNode);
 		}
@@ -1352,9 +1368,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			final Iterator<URL> projectIterator = projectLoader.iterator();
 			if(projectIterator.hasNext()) {
 				final DefaultMutableTreeNode projectNode = new DefaultMutableTreeNode("Project " + getModel().getNoun().getObj2(), true);
+				List<URL> documentURLS = new ArrayList<>();
 				while(projectIterator.hasNext()) {
 					final URL documentURL = projectIterator.next();
-
+					documentURLS.add(documentURL);
+				}
+				documentURLS.sort( (url1, url2) -> url1.toString().toLowerCase().compareTo(url2.toString().toLowerCase()) );
+				
+				for(URL documentURL:documentURLS) {
 					try {
 						final URI relativeURI = new File(library.getProjectFolderPath(getProject())).toURI().relativize(documentURL.toURI());
 
