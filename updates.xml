@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4.dmg" newVersion="3.0.4" newMediaFileId="macos" fileSize="255994553" md5Sum="d915208f3321b1888d0d5b49834b7f1f" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5.dmg" newVersion="3.0.5" newMediaFileId="macos" fileSize="256039051" md5Sum="8294126cfef30712a3da0af9bc72661c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -276,8 +282,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_4.dmg" newVersion="3.0.4" newMediaFileId="macos" fileSize="255994553" md5Sum="d915208f3321b1888d0d5b49834b7f1f" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5.dmg" newVersion="3.0.5" newMediaFileId="macos" fileSize="256039051" md5Sum="8294126cfef30712a3da0af9bc72661c" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -552,8 +564,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4.exe" newVersion="3.0.4" newMediaFileId="win64" fileSize="257266456" md5Sum="05a7d2c3dd242c298213d148914bb400" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5.exe" newVersion="3.0.5" newMediaFileId="win64" fileSize="257300760" md5Sum="d2a218829373d4e70a248a00b7e0b53e" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -828,8 +846,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4.exe" newVersion="3.0.4" newMediaFileId="win64" fileSize="257266456" md5Sum="05a7d2c3dd242c298213d148914bb400" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5.exe" newVersion="3.0.5" newMediaFileId="win64" fileSize="257300760" md5Sum="d2a218829373d4e70a248a00b7e0b53e" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -1104,8 +1128,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4.exe" newVersion="3.0.4" newMediaFileId="win64" fileSize="257266456" md5Sum="05a7d2c3dd242c298213d148914bb400" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5.exe" newVersion="3.0.5" newMediaFileId="win64" fileSize="257300760" md5Sum="d2a218829373d4e70a248a00b7e0b53e" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -1380,8 +1410,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_4.zip" newVersion="3.0.4" newMediaFileId="win64zip" fileSize="256294427" md5Sum="ef96d34a9abdc898aba0ee6e3317cc5d" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5.zip" newVersion="3.0.5" newMediaFileId="win64zip" fileSize="256328740" md5Sum="1b03fdf36276e93c932d5e352f9904fa" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -1656,8 +1692,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_4.deb" newVersion="3.0.4" newMediaFileId="linux64deb" fileSize="186673354" md5Sum="fc957643a085daaedf04adedd492c82f" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_5.deb" newVersion="3.0.5" newMediaFileId="linux64deb" fileSize="186714358" md5Sum="69bbc81af0f560275039826619a57799" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
@@ -1932,8 +1974,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_4.sh" newVersion="3.0.4" newMediaFileId="linux64" fileSize="186216898" md5Sum="c3e47fe8b6f090f0db69fcdba10d6874" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.3
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_5.sh" newVersion="3.0.5" newMediaFileId="linux64" fileSize="186251227" md5Sum="df99028a855bfac7c2a1b46f989f45b9" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
 
  * Query and Report Wizard
    - Query history is now displayed as a drop-down list
