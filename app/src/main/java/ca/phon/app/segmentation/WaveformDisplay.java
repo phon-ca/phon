@@ -2,6 +2,7 @@ package ca.phon.app.segmentation;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,30 +29,28 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	private float startTime = 0.0f;
 	
 	private float endTime = 0.0f;
-	
-	/**
-	 * Gap between channels in px.
-	 * If -1, channels will be stacked on top of each other
-	 */
-	private int channelGap = 0;
-	
+		
 	/**
 	 * Height (in px) of channels
 	 */
-	private int channelHeight = 100;
+	private int preferredChannelHeight = 100;
 		
 	/**
-	 * Number of seconds per pixel
+	 * Number of pixels per second
 	 */
-	private float secondsPerPixel = 0.3f;
+	private float pixelsPerSecond = 50.0f;
 	
 	private List<Channel> availableChannels = new ArrayList<>();
 	
-	private Map<Channel, Color> channelColors = new HashMap<>();
-	
 	private Map<Channel, Boolean> channelVisiblity = new HashMap<>();
 	
+	private boolean trackViewportWidth = false;
+	
+	private boolean trackViewportHeight = false;
+	
 	private final static String uiClassId = "WaveformDisplayUI";
+	
+	private Insets channelInsets = new Insets(5, 10, 5, 10);
 	
 	public WaveformDisplay() {
 		this(null);
@@ -137,35 +136,29 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		channelVisiblity.put(ch, visible);
 		firePropertyChange("channelVisible_" + ch.getName(), oldValue, visible);
 	}
-	
-	public Color getChannelColor(Channel ch) {
-		return channelColors.containsKey(ch) ? channelColors.get(ch) : ch.getColor();
-	}
-	
-	public void setChannelColor(Channel ch, Color c) {
-		var oldValue = getChannelColor(ch);
-		channelColors.put(ch, c);
-		firePropertyChange("channelColor_" + ch.getName(), oldValue, c);
-	}
 
-	public int getChannelGap() {
-		return channelGap;
-	}
-
-	public void setChannelGap(int channelGap) {
-		var oldValue = this.channelGap;
-		this.channelGap = channelGap;
-		firePropertyChange("channelGap", oldValue, channelGap);
-	}
-	
 	public int getChannelHeight() {
-		return this.channelHeight;
+		int retVal = getPreferredChannelHeight();
+		
+		if(isTrackViewportHeight()) {
+			int visibleChannels = getVisibleChannelCount();
+			int height = getHeight() - (visibleChannels * (getChannelInsets().top+getChannelInsets().bottom));
+			if(visibleChannels > 0) {
+				retVal = height / visibleChannels;
+			}
+		}
+		
+		return retVal;
 	}
 	
-	public void setChannelHeight(int channelHeight) {
-		var oldValue = this.channelHeight;
-		this.channelHeight = channelHeight;
-		firePropertyChange("channelHeight", oldValue, channelHeight);
+	public int getPreferredChannelHeight() {
+		return this.preferredChannelHeight;
+	}
+	
+	public void setPreferredChannelHeight(int channelHeight) {
+		var oldValue = this.preferredChannelHeight;
+		this.preferredChannelHeight = channelHeight;
+		firePropertyChange("preferredChannelHeight", oldValue, channelHeight);
 	}
 	
 	public int getVisibleChannelCount() {
@@ -176,23 +169,45 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		}
 		return visibleChannels;
 	}
-
-	public float getSecondsPerPixel() {
-		return secondsPerPixel;
+	
+	public float getPixelsPerSecond() {
+		return pixelsPerSecond;
 	}
 
-	public void setSecondsPerPixel(float secondsPerPixel) {
-		this.secondsPerPixel = secondsPerPixel;
+	public void setPixelsPerSecond(float pixelsPerSecond) {
+		var oldVal = this.pixelsPerSecond;
+		this.pixelsPerSecond = pixelsPerSecond;
+		super.firePropertyChange("pixelsPerSecond", oldVal, pixelsPerSecond);
 	}
-
-	@Override
-	public Dimension getPreferredSize() {
-		int prefWidth = (getSampled() == null ? 0 :
-				(int)Math.round(getSampled().getLength() / getSecondsPerPixel()));
-		
-		int prefHeight = (getVisibleChannelCount() * getChannelHeight())
-				+ (getChannelGap() * Math.max(getVisibleChannelCount()-1, 0));
-		return new Dimension(prefWidth, prefHeight);
+	
+	public boolean isTrackViewportWidth() {
+		return this.trackViewportWidth;
+	}
+	
+	public void setTrackViewportWidth(boolean trackViewportWidth) {
+		var oldVal = this.trackViewportWidth;
+		this.trackViewportWidth = trackViewportWidth;
+		super.firePropertyChange("trackViewportWidth", oldVal, trackViewportWidth);
+	}
+	
+	public boolean isTrackViewportHeight() {
+		return this.trackViewportHeight;
+	}
+	
+	public void setTrackViewportHeight(boolean trackViewportHeight) {
+		var oldVal = this.trackViewportHeight;
+		this.trackViewportHeight = trackViewportHeight;
+		super.firePropertyChange("trackViewportHeight", oldVal, trackViewportHeight);
+	}
+	
+	public Insets getChannelInsets() {
+		return this.channelInsets;
+	}
+	
+	public void setChannelInsets(Insets channelInsets) {
+		var oldVal = this.channelInsets;
+		this.channelInsets = channelInsets;
+		super.firePropertyChange("channelInsets", oldVal, channelInsets);
 	}
 
 	@Override
@@ -200,30 +215,28 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		Dimension prefSize = getPreferredSize();
 		
 		int prefHeight = (getVisibleChannelCount() * getChannelHeight())
-				+ (getChannelGap() * Math.max(getVisibleChannelCount()-1, 0));
+				+ (getVisibleChannelCount() * (getChannelInsets().top + getChannelInsets().bottom));
 		return new Dimension(prefSize.width, prefHeight);
 	}
 
 	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 10;
 	}
 
 	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 100;
 	}
 
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
-		return false;
+		return isTrackViewportWidth();
 	}
 
 	@Override
 	public boolean getScrollableTracksViewportHeight() {
-		return false;
+		return isTrackViewportHeight();
 	}
 
 }
