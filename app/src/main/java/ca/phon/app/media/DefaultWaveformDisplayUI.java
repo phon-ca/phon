@@ -1,4 +1,4 @@
-package ca.phon.app.segmentation;
+package ca.phon.app.media;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

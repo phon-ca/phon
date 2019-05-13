@@ -13,9 +13,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 
+import ca.phon.app.media.WaveformDisplay;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.Sampled;
+import ca.phon.media.sampled.SampledLoader;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -41,6 +43,9 @@ public class SegmentationFrame extends CommonModuleFrame {
 		JButton btn = new JButton("Open");
 		toolbar.add(btn);
 		
+		final JLabel fileLbl = new JLabel("");
+		toolbar.add(fileLbl);
+		
 		btn.addActionListener( (e) -> {
 			OpenDialogProperties props = new OpenDialogProperties();
 			props.setParentWindow(f);
@@ -49,13 +54,15 @@ public class SegmentationFrame extends CommonModuleFrame {
 			props.setCanChooseFiles(true);
 			props.setCanChooseDirectories(false);
 			props.setCanCreateDirectories(false);
-			props.setFileFilter(FileFilter.wavFilter);
+//			props.setFileFilter(FileFilter.allFilesFilter);
 			
 			List<String> selectedFile = NativeDialogs.showOpenDialog(props);
 			
+			fileLbl.setText(selectedFile.get(0));
 			Sampled sampled;
 			try {
-				sampled = new PCMSampled(new File(selectedFile.get(0)));
+				SampledLoader loader = SampledLoader.newLoader();
+				sampled = loader.loadSampledFromFile(new File(selectedFile.get(0)));
 				display.setEndTime(sampled.getLength());
 //				for(int ch = 0; ch < sampled.getNumberOfChannels(); ch++) {
 //					display.setChannelVisible(Channel.values()[ch], true);
