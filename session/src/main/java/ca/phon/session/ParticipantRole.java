@@ -20,65 +20,98 @@ package ca.phon.session;
  *
  */
 public enum ParticipantRole {
-	ADULT("Adult", "ADU"),
-	ATTORNEY("Attorney", "ATT"),
-	AUNT("Aunt", "AUN"),
-	BABYSITTER("Babysitter", "SIT"),
-	BOY("Boy", "BOY"),
-	BROTHER("Brother", "BRO"),
-	CALLER("Caller", "CAL"),
-	CAMERA_OPERATOR("Camera Operator", "CAM"),
-	CARETAKER("Caretaker", "CAR"),
+	TARGET_CHILD("Target Child", "CHI"),
+	TARGET_ADULT("Target Adult", "ADU"),
 	CHILD("Child", "CHI"),
-	CLINICIAN("Clinician", "CLI"),
-	COUSIN("Cousin", "COU"),
-	DOCTOR("Doctor", "DOC"),
-	ENVIRONMENT("Environment", "ENV"),
-	FAMILY_FRIEND("Family Friend", "FAM"),
+	MOTHER("Mother", "MOT"),
 	FATHER("Father", "FAT"),
-	FEMALE("Female", "FEM"),
-	GIRL("Girl", "GIR"),
+	BROTHER("Brother", "BRO"),
+	SISTER("Sister", "SIS"),
+	SIBLING("Sibling", "SIB"),
 	GRANDFATHER("Grandfather", "GRF"),
 	GRANDMOTHER("Grandmother", "GRM"),
-	GROUP("Group", "GRO"),
-	HOUSEKEEPER("Housekeeper", "HOU"),
-	INFORMANT("Informant", "INF"),
-	INTERVIEWER("Interviewer", "INT"),
-	INVESTIGATOR("Investigator", "INV"),
-	JUDGE("Judge", "JUD"),
-	JUSTICE("Justice", "JUS"),
-	MALE("Male", "MAL"),
-	MEDIA("Media", "MED"),
-	MOTHER("Mother", "MOT"),
-	NARRATOR("Narrator", "NAR"),
-	NON_HUMAN("Non Human", "NOH"),
-	NURSE("Nurse", "NUR"),
-	OBSERVER("Observer", "OBS"),
-	OFFSCRIPT("Offscript", "OFF"),
-	OPERATOR("Operator", "OPR"),
+	RELATIVE("Relative", "REL"),
 	PARTICIPANT("Participant", "PAR"),
-	PARTNER("Partner", "NER"),
-	PATIENT("Patient", "PAT"),
-	PLAYMATE("Playmate", "PLA"),
-	PLAYROLE("PlayRole", "PLR"),
-	SHOWGUEST("ShowGuest", "SHG"),
-	SHOWHOST("ShowHost", "SHO"),
-	SIBLING("Sibling", "SIB"),
-	SISTER("Sister", "SIS"),
-	SPEAKER("Speaker", "SPE"),
-	STUDENT("Student", "STU"),
+	INFORMANT("Informant", "INF"),
 	SUBJECT("Subject", "SUB"),
-	TARGET_ADULT("Target Adult", "ADU"),
-	TARGET_CHILD("Target Child", "CHI"),
-	TEACHER("Teacher", "TEA"),
+	INVESTIGATOR("Investigator", "INV"),
+	PARTNER("Partner", "NER"),
+	BOY("Boy", "BOY"),
+	GIRL("Girl", "GIR"),
+	ADULT("Adult", "ADU"),
 	TEENAGER("Teenager", "TEE"),
-	TEXT("Text", "TXT"),
-	THERAPIST("Therapist", "THE"),
-	TOY("Toy", "TOY"),
-	UNCERTAIN("Uncertain", "UNC"),
-	UNCLE("Uncle", "UNC"),
+	MALE("Male", "MAL"),
+	FEMALE("Female", "FEM"),
+	VISITOR("Visitor", "VIS"),
+	FRIEND("Friend", "FRI"),
+	PLAYMATE("Playmate", "PLA"),
+	CARETAKER("Caretaker", "CAR"),
+	ENVIRONMENT("Environment", "ENV"),
+	GROUP("Group", "GRO"),
 	UNIDENTIFIED("Unidentified", "UNI"),
-	VISITOR("Visitor", "VIS")
+	UNCERTAIN("Uncertain", "UNC"),
+	OTHER("Other", "OTH"),
+	TEXT("Text", "TXT"),
+	MEDIA("Media", "MED"),
+	PLAYROLE("PlayRole", "PLR"),
+	LENA("LENA", "LNA"),
+	JUSTICE("Justice", "JUS"),
+	ATTORNEY("Attorney", "ATT"),
+	DOCTOR("Doctor", "DOC"),
+	NURSE("Nurse", "NUR"),
+	STUDENT("Student", "STU"),
+	TEACHER("Teacher", "TEA"),
+	HOST("Host", "HOS"),
+	GUEST("Guest", "GST"),
+	LEADER("Leader", "LDR"),
+	MEMBER("Member", "MBR"),
+	NARRATOR("Narrator", "NAR"),
+	SPEAKER("Speaker", "SPE"),
+	AUDIENCE("Audience", "AUD"),
+	
+	/*
+	 * Removed as of TalkBank 2.10.0
+	 */
+	@Deprecated
+	AUNT("Aunt", "AUN"),
+	@Deprecated
+	BABYSITTER("Babysitter", "SIT"),
+	@Deprecated
+	CALLER("Caller", "CAL"),
+	@Deprecated
+	CAMERA_OPERATOR("Camera Operator", "CAM"),
+	@Deprecated
+	CLINICIAN("Clinician", "CLI"),
+	@Deprecated
+	COUSIN("Cousin", "COU"),
+	@Deprecated
+	FAMILY_FRIEND("Family Friend", "FAM"),
+	@Deprecated
+	HOUSEKEEPER("Housekeeper", "HOU"),
+	@Deprecated
+	INTERVIEWER("Interviewer", "INT"),
+	@Deprecated
+	JUDGE("Judge", "JUD"),
+	@Deprecated
+	NON_HUMAN("Non Human", "NOH"),
+	@Deprecated
+	OBSERVER("Observer", "OBS"),
+	@Deprecated
+	OFFSCRIPT("Offscript", "OFF"),
+	@Deprecated
+	OPERATOR("Operator", "OPR"),
+	@Deprecated
+	PATIENT("Patient", "PAT"),
+	@Deprecated
+	SHOWGUEST("ShowGuest", "SHG"),
+	@Deprecated
+	SHOWHOST("ShowHost", "SHO"),
+	@Deprecated
+	THERAPIST("Therapist", "THE"),
+	@Deprecated
+	TOY("Toy", "TOY"),
+	@Deprecated
+	UNCLE("Uncle", "UNC")
 	;
 
 	private String title;
