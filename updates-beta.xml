@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.5-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5-beta_3.dmg" newVersion="3.0.5-beta.3" newMediaFileId="macos" fileSize="256050423" md5Sum="274356c32f440489049a69e1749e9528" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.4
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.6-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_1.dmg" newVersion="3.0.6-beta.1" newMediaFileId="macos" fileSize="258796112" md5Sum="733197a8f80454f0d282d6360a1e8648" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -282,8 +287,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_5-beta_3.dmg" newVersion="3.0.5-beta.3" newMediaFileId="macos" fileSize="256050423" md5Sum="274356c32f440489049a69e1749e9528" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_1.dmg" newVersion="3.0.6-beta.1" newMediaFileId="macos" fileSize="258796112" md5Sum="733197a8f80454f0d282d6360a1e8648" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -564,8 +574,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.exe" newVersion="3.0.5-beta.3" newMediaFileId="win64" fileSize="257300760" md5Sum="09c219eb02cd50a1a7e47051d3742edc" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_1.exe" newVersion="3.0.6-beta.1" newMediaFileId="win64" fileSize="261972760" md5Sum="4288627712e0001b45fef0dc787c0b60" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -846,8 +861,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.exe" newVersion="3.0.5-beta.3" newMediaFileId="win64" fileSize="257300760" md5Sum="09c219eb02cd50a1a7e47051d3742edc" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_1.exe" newVersion="3.0.6-beta.1" newMediaFileId="win64" fileSize="261972760" md5Sum="4288627712e0001b45fef0dc787c0b60" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -1128,8 +1148,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.exe" newVersion="3.0.5-beta.3" newMediaFileId="win64" fileSize="257300760" md5Sum="09c219eb02cd50a1a7e47051d3742edc" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_1.exe" newVersion="3.0.6-beta.1" newMediaFileId="win64" fileSize="261972760" md5Sum="4288627712e0001b45fef0dc787c0b60" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -1410,8 +1435,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_5-beta_3.zip" newVersion="3.0.5-beta.3" newMediaFileId="win64zip" fileSize="256337254" md5Sum="8f53e9fb595d34a42f668d8a384d905c" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_1.zip" newVersion="3.0.6-beta.1" newMediaFileId="win64zip" fileSize="261009566" md5Sum="d0bd88247b47c3c3fed7b315754598bf" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -1692,8 +1722,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_5-beta_3.deb" newVersion="3.0.5-beta.3" newMediaFileId="linux64deb" fileSize="186716846" md5Sum="f17d5784f1cb3f69a474e21fdf300869" bundledJre="" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_6-beta_1.deb" newVersion="3.0.6-beta.1" newMediaFileId="linux64deb" fileSize="193180436" md5Sum="e5060067846693e8a09cc331d7814139" bundledJre="" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
@@ -1974,8 +2009,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_5-beta_3.sh" newVersion="3.0.5-beta.3" newMediaFileId="linux64" fileSize="186250179" md5Sum="39a04ced428d022675c3b6a2813a0d0e" bundledJre="" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.4
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_6-beta_1.sh" newVersion="3.0.6-beta.1" newMediaFileId="linux64" fileSize="192678266" md5Sum="b51cd6e5d02c46ccd56b0d514452d708" bundledJre="" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.0.5
+
+ * Fix bugs with Specalized/Multisyllabic Nonlinear Analysis
+ * Update libjpraat to version 6.0.52
+
+## Changes from 3.0.4
 
  * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
  * Updated Italian (ita) dictionary
