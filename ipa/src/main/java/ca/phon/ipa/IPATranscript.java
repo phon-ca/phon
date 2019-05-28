@@ -50,6 +50,8 @@ import ca.phon.syllable.SyllableVisitor;
 import ca.phon.util.Range;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements
@@ -763,26 +765,27 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	public String toString(final boolean includeScType) {
-		final StringBuffer buffer = new StringBuffer();
-		final Visitor<IPAElement> visitor = new Visitor<IPAElement>() {
-
-			@Override
-			public void visit(IPAElement obj) {
-				buffer.append(obj.toString());
-				if(includeScType && obj.getScType() != SyllableConstituentType.WORDBOUNDARYMARKER
-						&& obj.getScType() != SyllableConstituentType.SYLLABLESTRESSMARKER
-						&& obj.getScType() != SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-					buffer.append(":");
-					final SyllabificationInfo sInfo = obj.getExtension(SyllabificationInfo.class);
-					if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())
-						buffer.append("D");
-					else
-						buffer.append(sInfo.getConstituentType().getIdChar());
-				}
-			}
-		};
+//		final StringBuffer buffer = new StringBuffer();
+//		final Visitor<IPAElement> visitor = new Visitor<IPAElement>() {
+//
+//			@Override
+//			public void visit(IPAElement obj) {
+//				buffer.append(obj.toString());
+//				if(includeScType && obj.getScType() != SyllableConstituentType.WORDBOUNDARYMARKER
+//						&& obj.getScType() != SyllableConstituentType.SYLLABLESTRESSMARKER
+//						&& obj.getScType() != SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
+//					buffer.append(":");
+//					final SyllabificationInfo sInfo = obj.getExtension(SyllabificationInfo.class);
+//					if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())
+//						buffer.append("D");
+//					else
+//						buffer.append(sInfo.getConstituentType().getIdChar());
+//				}
+//			}
+//		};
+		final ToStringVisitor visitor = new ToStringVisitor(includeScType);
 		accept(visitor);
-		return buffer.toString();
+		return visitor.buffer.toString();
 	}
 
 	@Override
@@ -833,6 +836,40 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		}
 
 		return retVal;
+	}
+	
+	public class ToStringVisitor extends VisitorAdapter<IPAElement> {
+
+		final StringBuilder buffer = new StringBuilder();
+		
+		boolean includeScType = false;
+		
+		public ToStringVisitor() {
+			this(false);
+		}
+		
+		public ToStringVisitor(boolean includeScType) {
+			this.includeScType = includeScType;
+		}
+		
+		@Override
+		public void fallbackVisit(IPAElement obj) {
+			buffer.append(obj.toString());
+		}
+		
+		@Visits
+		public void visitPhone(Phone p) {
+			buffer.append(p.toString());
+			if(includeScType) {
+				buffer.append(":");
+				final SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
+				if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())
+					buffer.append("D");
+				else
+					buffer.append(sInfo.getConstituentType().getIdChar());
+			}
+		}
+		
 	}
 
 }
