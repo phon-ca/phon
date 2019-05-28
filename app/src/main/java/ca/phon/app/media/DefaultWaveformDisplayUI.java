@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import ca.phon.media.LongSound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.Sampled;
 import ca.phon.util.Tuple;
@@ -55,8 +56,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		UIManager.getDefaults().put(WAV_COLOR1, DEFAULT_WAVCOLOR1);
 		UIManager.getDefaults().put(WAV_COLOR2, DEFAULT_WAVCOLOR2);
 	}
-		
-	private Map<Channel, BufferedImage> channelImages = new HashMap<>();
+	
+	private Map<Channel, double[][]> channelExtremaMap;
+	
+//	private Map<Channel, BufferedImage> channelImages = new HashMap<>();
 	
 	private WaveformDisplay display;
 	
@@ -137,11 +140,73 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		g2.fill(btmArea);
 	}
 	
+	private void paintChannelData(Graphics2D g2, Channel ch, double startX, double endX) {
+		final RoundRectangle2D channelRect = getChannelRect(ch);
+		final double halfHeight = channelRect.getHeight() / 2.0;
+		final float secondsPerPixel = (float)(display.getLongSound().length() / channelRect.getWidth());
+		
+		float barSize = 1.0f;
+		final Stroke stroke = new BasicStroke(barSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+		
+		double extrema[] = new double[2];
+		final Line2D line = new Line2D.Double();
+					
+		double maxValue = getMaxValue();
+		final double unitPerPixel = maxValue / halfHeight;
+		
+		double ymindiff, ymaxdiff = 0.0;
+		float time = 0.0f;
+		double ymin, ymax = halfHeight;
+		
+		Color topColor = UIManager.getColor(WAV_COLOR1);
+		Color btmColor = UIManager.getColor(WAV_COLOR2);
+		
+		double[][] channelExtrema = channelExtremaMap.get(ch);
+		
+		int y = 0;
+		for(double x = startX; x < endX; x += barSize) {
+			time = (float)(x * secondsPerPixel);
+			
+			g2.setStroke(stroke);
+					
+			int idx = (int)Math.round((x - channelRect.getX()));
+			extrema[0] = channelExtrema[0][idx];
+			extrema[1] = channelExtrema[1][idx];
+			
+//			sampled.getWindowExtrema(ch.channelNumber(), time, time + secondsPerPixel, extrema);
+			
+			ymindiff = Math.abs(extrema[0]) / unitPerPixel;
+			ymaxdiff = Math.abs(extrema[1]) / unitPerPixel;
+			
+			ymin = y + halfHeight;
+			if(extrema[0] < 0) {
+				ymin += ymindiff;
+			} else {
+				ymin -= ymindiff;
+			}
+			
+			ymax = y + halfHeight;
+			if(extrema[1] < 0) {
+				ymax += ymaxdiff;
+			} else {
+				ymax -= ymaxdiff;
+			}
+			
+			g2.setColor(topColor);
+			line.setLine(x, y+halfHeight, x, ymax);
+			g2.draw(line);
+			
+			g2.setColor(btmColor);
+			line.setLine(x, y+halfHeight, x, ymin);
+			g2.draw(line);
+		}
+	}
+	
 	@Override
 	public Dimension getPreferredSize(JComponent comp) {
-		int prefWidth = (display.getSampled() == null ? 0 :
+		int prefWidth = (display.getLongSound() == null ? 0 :
 			 (display.getChannelInsets().left+display.getChannelInsets().right) + 
-					((int)Math.round(display.getSampled().getLength() * display.getPixelsPerSecond()) ) );
+					((int)Math.round(display.getLongSound().length() * display.getPixelsPerSecond()) ) );
 	
 		int prefHeight = (display.getVisibleChannelCount() * display.getChannelHeight())
 				+ (display.getVisibleChannelCount() * (display.getChannelInsets().top + display.getChannelInsets().bottom));
@@ -154,13 +219,18 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		if(!(c instanceof WaveformDisplay))
 			throw new IllegalArgumentException("Wrong class");
 		
+		int cnt = (int)Math.ceil(display.getLongSound().length() * display.getPixelsPerSecond());
 		if(needsRepaint) {
 			needsRepaint = false;
 		
+			channelExtremaMap.clear();
 			for(Channel ch:display.availableChannels()) {
 				if(display.isChannelVisible(ch)) {
-					BufferedImage channelImg = new BufferedImage(display.getWidth(), display.getChannelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-					channelImages.put(ch, channelImg);
+					double[][] extrema = new double[2][];
+					extrema[0] = new double[cnt];
+					extrema[1] = new double[cnt];
+					
+					channelExtremaMap.put(ch, extrema);
 				}
 			}
 			
@@ -191,17 +261,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		for(Channel ch:display.availableChannels()) {
 			if(display.isChannelVisible(ch)) {
-				RoundRectangle2D channelRect = getChannelRect(ch);
-				
 				// paint channel border and background
 				paintChannelBackground(g2, ch);
 				paintChannelBorder(g2, ch);
 				
-				BufferedImage channelImage = channelImages.get(ch);
-				
-				
-				g2.drawImage(channelImage, bounds.x, (int)channelRect.getY(), bounds.x+bounds.width, (int)(channelRect.getY()+channelRect.getHeight()),
-						bounds.x, 0, bounds.x+bounds.width, (int)channelRect.getHeight(), display);
+				paintChannelData(g2, ch, bounds.x, bounds.x + bounds.width);
 			}
 		}
 	}
@@ -233,13 +297,13 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private double getMaxValue(float startTime, float endTime) {
 		double extrema[] = new double[2];
-		Sampled sampled = display.getSampled();
+		LongSound longSound = display.getLongSound();
 		
 		double maxValue = 0;
-		for(int ch = 0; ch < sampled.getNumberOfChannels(); ch++) {
-			sampled.getWindowExtrema(ch, startTime, endTime, extrema);
-			maxValue = Math.max(maxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
-		}
+//		for(int ch = 0; ch < longSound.numberOfChannels(); ch++) {
+//			longSound.getWindowExtrema(ch, startTime, endTime, extrema);
+//			maxValue = Math.max(maxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
+//		}
 		
 		return maxValue;
 	}
@@ -318,32 +382,32 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		@Override
 		protected Tuple<Float, Float> doInBackground() throws Exception {
-			final Sampled sampled = display.getSampled();
-			Map<Channel, Graphics2D> gMap = new HashMap<>();
-			
-			// load in 5s intervals
-			float incr = 5.0f;
-			float time = display.getStartTime();
-			while(time < display.getEndTime()) {
-				float endTime = Math.min(time+incr, display.getEndTime());
-				
-				for(Channel ch:display.availableChannels()) {
-					if(!display.isChannelVisible(ch)) continue;
-					
-					BufferedImage channelImage = channelImages.get(ch);
-					Graphics2D g2 = gMap.get(ch);
-					if(g2 == null) {
-						 g2 = createGraphics(channelImage);
-						 gMap.put(ch, g2);
-					}
-					
-					paintWaveformWindow(sampled, ch, g2, time, endTime);
-				}
-				publish(new Tuple<>(time, endTime));
-				time = endTime;
-			}
-			
-			// done() is not used
+//			final Sampled sampled = display.getSampled();
+//			Map<Channel, Graphics2D> gMap = new HashMap<>();
+//			
+//			// load in 5s intervals
+//			float incr = 5.0f;
+//			float time = display.getStartTime();
+//			while(time < display.getEndTime()) {
+//				float endTime = Math.min(time+incr, display.getEndTime());
+//				
+//				for(Channel ch:display.availableChannels()) {
+//					if(!display.isChannelVisible(ch)) continue;
+//					
+//					BufferedImage channelImage = channelImages.get(ch);
+//					Graphics2D g2 = gMap.get(ch);
+//					if(g2 == null) {
+//						 g2 = createGraphics(channelImage);
+//						 gMap.put(ch, g2);
+//					}
+//					
+//					paintWaveformWindow(sampled, ch, g2, time, endTime);
+//				}
+//				publish(new Tuple<>(time, endTime));
+//				time = endTime;
+//			}
+//			
+//			// done() is not used
 			return new Tuple<Float, Float>(0.0f, 0.0f);
 		}
 

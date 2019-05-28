@@ -60,18 +60,18 @@ public class SegmentationFrame extends CommonModuleFrame {
 			
 			fileLbl.setText(selectedFile.get(0));
 			Sampled sampled;
-			try {
-				SampledLoader loader = SampledLoader.newLoader();
-				sampled = loader.loadSampledFromFile(new File(selectedFile.get(0)));
-				display.setEndTime(sampled.getLength());
-//				for(int ch = 0; ch < sampled.getNumberOfChannels(); ch++) {
-//					display.setChannelVisible(Channel.values()[ch], true);
-//				}
-				display.setSampled(sampled);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				SampledLoader loader = SampledLoader.newLoader();
+//				sampled = loader.loadSampledFromFile(new File(selectedFile.get(0)));
+//				display.setEndTime(sampled.getLength());
+////				for(int ch = 0; ch < sampled.getNumberOfChannels(); ch++) {
+////					display.setChannelVisible(Channel.values()[ch], true);
+////				}
+//				display.setSampled(sampled);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		});
 		
 		f.setLayout(new BorderLayout());

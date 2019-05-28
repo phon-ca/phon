@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.plaf.ComponentUI;
 
+import ca.phon.media.LongSound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.Sampled;
 
@@ -24,7 +25,7 @@ import ca.phon.media.sampled.Sampled;
  */
 public class WaveformDisplay extends JComponent implements Scrollable {
 	
-	private Sampled sampled;
+	private LongSound longSound;
 	
 	private float startTime = 0.0f;
 	
@@ -56,11 +57,11 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		this(null);
 	}
 	
-	public WaveformDisplay(Sampled sampled) {
+	public WaveformDisplay(LongSound longSound) {
 		super();
 		updateUI();
 		
-		setSampled(sampled);
+		setLongSound(longSound);
 	}
 	
 	@Override
@@ -82,24 +83,24 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		return (DefaultWaveformDisplayUI)ui;
 	}
 
-	public Sampled getSampled() {
-		return sampled;
+	public LongSound getLongSound() {
+		return this.longSound;
 	}
 
-	public void setSampled(Sampled sampled) {
-		var oldValue = this.sampled;
-		this.sampled = sampled;
+	public void setLongSound(LongSound longSound) {
+		var oldValue = this.longSound;
+		this.longSound = longSound;
 		
 		availableChannels.clear();
 		channelVisiblity.clear();
-		if(sampled != null) {
-			for(int i = 0; i < sampled.getNumberOfChannels() && i < Channel.values().length; i++) {
+		if(longSound != null) {
+			for(int i = 0; i < longSound.numberOfChannels() && i < Channel.values().length; i++) {
 				availableChannels.add(Channel.values()[i]);
 				channelVisiblity.put(Channel.values()[i], true);
 			}
 		}
 		
-		firePropertyChange("sampled", oldValue, sampled);
+		firePropertyChange("longSound", oldValue, longSound);
 	}
 
 	public float getStartTime() {
