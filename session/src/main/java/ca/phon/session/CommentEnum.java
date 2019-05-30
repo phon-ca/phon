@@ -22,7 +22,6 @@ public enum CommentEnum {
 	Activities,
 	Bck,
 	Date,
-	Exceptions,
 	InteractionType,
 	Number,
 	RecordingQuality,
@@ -30,7 +29,6 @@ public enum CommentEnum {
 	Blank,
 	T,
 	Generic,
-	NewLanguage,
 	Location,
 	NewEpisode,
 	RoomLayout,
@@ -42,7 +40,11 @@ public enum CommentEnum {
 	Warning,
 	Page,
 	EndTurn,
-	
+
+	@Deprecated
+	Exceptions,
+	@Deprecated
+	NewLanguage,
 	@Deprecated
 	Coder,
 	@Deprecated
@@ -78,7 +80,6 @@ public enum CommentEnum {
 		"Activities",
 		"Bck",
 		"Date",
-		"Exceptions",
 		"Interaction Type",
 		"Number",
 		"Recording Quality",
@@ -86,7 +87,6 @@ public enum CommentEnum {
 		"Blank",
 		"T",
 		"Generic",
-		"New Language",
 		"Location",
 		"New Episode",
 		"Room Layout",
@@ -100,6 +100,8 @@ public enum CommentEnum {
 		"End Turn",
 		
 		// deprecated
+		"Exceptions",
+		"New Language",
 		"Coder",
 		"Coding",
 		"Education",
