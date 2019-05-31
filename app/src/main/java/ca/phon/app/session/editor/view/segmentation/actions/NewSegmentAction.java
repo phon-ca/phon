@@ -79,7 +79,7 @@ public class NewSegmentAction extends SegmentationViewAction {
 
 			// don't replace speaker if no speaker was defined
 			if(this.speaker != null) {
-				final ChangeSpeakerEdit speakerEdit = new ChangeSpeakerEdit(getEditor(), utt, speaker);
+				final ChangeSpeakerEdit speakerEdit = new ChangeSpeakerEdit(getEditor(), getEditor().currentRecord(), this.speaker);
 				speakerEdit.doIt();
 				edit.addEdit(speakerEdit);
 			}
