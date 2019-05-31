@@ -138,6 +138,31 @@ exports.ParticipantFilter = function (id) {
 		//	    textField.setState("INPUT");
 	};
 	
+	var setAgeFilterOk = function(ageParam) {
+		ageParam.setTooltipText(null);
+		ageParam.setValidate(true);
+	};
+	
+	var setAgeFilterInvalid = function(ageParam, message) {
+		ageParam.setTooltipText(message);
+		ageParam.setValidate(false);
+	};
+	
+	var validateAgeParam = function(id, ageParam) {
+		var txt = ageParam.getValue(id);
+		
+		if(txt.trim().length() == 0) {
+			return true;
+		}
+		
+		try {
+			AgeFormatter.stringToAge(txt);
+			setAgeFilterOk(ageParam);
+		} catch(e) {
+			setAgeFilterInvalid(ageParam, e.message);
+		}
+	};
+	
 	/**
 	 * Add params to form.
 	 */
@@ -175,12 +200,26 @@ exports.ParticipantFilter = function (id) {
 		age1Param.setPrompt(
 		age1ParamInfo.prompt);
 		
+		var age1ParamListener = new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				validateAgeParam(age1ParamInfo.id, age1Param);
+			}
+		};
+		age1Param.addPropertyChangeListener(age1ParamInfo.id, age1ParamListener);
+		
 		age2Param = new StringScriptParam(
 		age2ParamInfo.id,
 		age2ParamInfo.title,
 		age2ParamInfo.def);
 		age2Param.setPrompt(age2ParamInfo.prompt);
 		age2Param.setEnabled(false);
+		
+		var age2ParamListener = new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				validateAgeParam(age2ParamInfo.id, age2Param);
+			}
+		};
+		age2Param.addPropertyChangeListener(age2ParamInfo.id, age2ParamListener);
 		
 		age1ComparatorParam = new EnumScriptParam(
 		age1ComparatorParamInfo.id,
@@ -222,40 +261,55 @@ exports.ParticipantFilter = function (id) {
 		return ParticipantRole.fromString(this.participantRole.toString()) == participant.role;
 	}
 	
+	this.compareAges = function(age1, age2) {
+		var p1 = age1.normalized();
+		var p2 = age2.normalized();
+		var retVal = 
+			(new java.lang.Integer(p1.years)).compareTo(p2.years);
+		if(retVal == 0) {
+			retVal = (new java.lang.Integer(p1.months)).compareTo(p2.months);
+			if(retVal == 0) {
+				retVal = (new java.lang.Integer(p1.days)).compareTo(p2.days);
+			}
+		}
+		return retVal;
+	}
+	
 	this.checkSpeakerAge = function (speaker) {
 		if (speaker == null || speaker.ageTo == null)
 		return false;
 		
-		var age1Result = false;
-		var age2Result = false;
-		
 		var speakerPeriod = speaker.ageTo;
-		var speakerAge = AgeFormatter.ageToString(speakerPeriod);
+		
+		var p1 = AgeFormatter.stringToAge(this.age1String);
+		var cmp1 = this.compareAges(speakerPeriod, p1);
 		
 		// perform first expression
 		if (this.age1Comparator.index == 0) {
-			age1Result = speakerAge < this.age1String;
+			retVal = ( cmp1 < 0 );
 		} else if (this.age1Comparator.index == 1) {
-			age1Result = speakerAge == this.age1String;
+			retVal = ( cmp1 == 0 );
 		} else if (this.age1Comparator.index == 2) {
-			age1Result = speakerAge > this.age1String;
+			retVal = ( cmp1 > 0 );
 		}
-		
-		var retVal = age1Result;
-		
+				
 		if (this.isUseAge2Filter()) {
+			var age2Result = false;
+			var p2 = AgeFormatter.stringToAge(this.age2String);
+			var cmp2 = this.compareAges(speakerPeriod, p2);
+			
 			if (this.age2Comparator.index == 0) {
-				age2Result = speakerAge < this.age2String;
+				age2Result = ( cmp2 < 0 );
 			} else if (this.age2Comparator.index == 1) {
-				age2Result = speakerAge == this.age2String;
+				age2Result = ( cmp2 == 0 );
 			} else if (this.age2Comparator.index == 2) {
-				age2Result = speakerAge > this.age2String;
+				age2Result = ( cmp2 > 0 );
 			}
 			
 			if (this.ageOperator.index == 2) {
-				retVal = age1Result || age2Result;
+				retVal |= age2Result;
 			} else if (this.ageOperator.index == 1) {
-				retVal = age1Result && age2Result;
+				retVal &= age2Result;
 			}
 		}
 		

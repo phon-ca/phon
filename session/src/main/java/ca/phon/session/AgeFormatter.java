@@ -59,7 +59,8 @@ public class AgeFormatter implements Formatter<Period> {
 		final Pattern pattern = Pattern.compile(AGE_REGEX);
 		final Matcher matcher = pattern.matcher(text);
 		
-		if(!matcher.matches()) throw new IllegalArgumentException(text);
+		if(!matcher.matches()) throw new IllegalArgumentException(
+				String.format("Invalid age '%s', format is %s", text, AGE_FORMAT));
 		
 		final Integer years = Integer.parseInt(matcher.group(1));
 		final Integer months = Integer.parseInt(matcher.group(2));
