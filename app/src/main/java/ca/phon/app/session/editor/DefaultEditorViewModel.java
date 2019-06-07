@@ -160,6 +160,9 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	 * Editor view extension points
 	 */
 	private List<IPluginExtensionPoint<EditorView>> extPts;
+	
+	// flag for initial perspective loading
+	private volatile boolean perspectiveFinishedLoading = false;
 
 	public DefaultEditorViewModel(SessionEditor editor) {
 		super();
@@ -167,6 +170,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		editorRef = new WeakReference<SessionEditor>(editor);
 		editor.addWindowListener(windowChangeListener);
 		getDockControl();
+		
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, (e) -> perspectiveFinishedLoading = true);
 	}
 
 	private CControl getDockControl() {
@@ -533,7 +538,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				}
 			}
 		} catch (IOException e) {
-
+			LogUtil.severe(e);
 		}
 	}
 
@@ -618,11 +623,12 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		extendedStateAttr.setInt(frame.getExtendedState());
 		rootBoundsEle.addAttribute(extendedStateAttr);
 	}
-
+	
 	private void savePreviousPerspective() {
 		// XXX Only save previous perspective when running as
 		// a 'Session Editor' window
 		if(!getEditor().getTitle().startsWith("Session Editor")) return;
+		if(!perspectiveFinishedLoading) return;
 
 		final File prevPerspetiveFile = new File(RecordEditorPerspective.PERSPECTIVES_FOLDER,
 				RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME + ".xml");

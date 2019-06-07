@@ -263,44 +263,34 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		}
 
 		final SessionEditor editor = new SessionEditor(project, session, transcriber);
-
-		// load editor perspective
 		final RecordEditorPerspective prevPerspective =
 				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
 		final RecordEditorPerspective perspective =
 				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 		editor.getViewModel().setupWindows(perspective);
-
-		editor.addWindowListener(new WindowAdapter() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-				editor.getViewModel().applyPerspective(perspective);
-
-				if(grabFocus) {
-					// XXX this code causes issues with result set editor focus in macosx
-					if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
-						editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
-					} else {
-						for(String viewName:editor.getViewModel().getViewNames()) {
-							if(editor.getViewModel().isShowing(viewName)) {
-								editor.getViewModel().getView(viewName).requestFocus();
-								break;
-							}
-						}
-					}
-				}
-				e.getWindow().removeWindowListener(this);
-			}
-
-		});
-
-		// positioning is handled by applyPerspective
 		editor.setVisible(true);
 
 		SwingUtilities.invokeLater( () -> {
+			editor.getViewModel().applyPerspective(perspective);
+
+			if(grabFocus) {
+				// XXX this code causes issues with result set editor focus in macosx
+				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
+					editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
+				} else {
+					for(String viewName:editor.getViewModel().getViewNames()) {
+						if(editor.getViewModel().isShowing(viewName)) {
+							editor.getViewModel().getView(viewName).requestFocus();
+							break;
+						}
+					}
+				}
+			}
+
 			// will update status bar with warnings on initialization
 			editor.getViewModel().getView(SessionCheckView.VIEW_NAME);
+			
+			editor.getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_FINISHED_LOADING));
 		});
 
 		return editor;

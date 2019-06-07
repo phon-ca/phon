@@ -169,13 +169,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		this.dataModelRef =
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
 		getDataModel().setTranscriber(transcriber);
-		this.viewModelRef =
-				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 		this.eventManagerRef =
 				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
 		this.selectionModelRef =
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
-
+		this.viewModelRef =
+				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 
 		// check to ensure that the session has a tier view
 		if(session.getTierView() == null || session.getTierView().size() == 0) {
@@ -231,7 +230,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		setJMenuBar(null);
 		getEventManager().shutdown();
 		getViewModel().cleanup();
-
+		
+		undoManager.discardAllEdits();
 		undoSupport.removeUndoableEditListener(undoListener);
 
 		eventManagerRef.set(null);
