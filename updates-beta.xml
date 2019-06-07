@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.6-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_2.dmg" newVersion="3.0.6-beta.2" newMediaFileId="macos" fileSize="259386033" md5Sum="106f1f38c9bb52a497a4fedc5a2d8050" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.6-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_3.dmg" newVersion="3.0.6-beta.3" newMediaFileId="macos" fileSize="260121837" md5Sum="ced54c2be35d9d1188f0dc1e524c229e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -8,6 +8,7 @@
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -291,7 +292,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_2.dmg" newVersion="3.0.6-beta.2" newMediaFileId="macos" fileSize="259386033" md5Sum="106f1f38c9bb52a497a4fedc5a2d8050" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_3.dmg" newVersion="3.0.6-beta.3" newMediaFileId="macos" fileSize="260121837" md5Sum="ced54c2be35d9d1188f0dc1e524c229e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -299,6 +300,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -582,7 +584,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_2.exe" newVersion="3.0.6-beta.2" newMediaFileId="win64" fileSize="262572824" md5Sum="d8e1cdcdc771dc8892fdba7190fdd6dd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.exe" newVersion="3.0.6-beta.3" newMediaFileId="win64" fileSize="262564120" md5Sum="77c80c4bf90f958fe136cd25a8a6496a" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -590,6 +592,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -873,7 +876,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_2.exe" newVersion="3.0.6-beta.2" newMediaFileId="win64" fileSize="262572824" md5Sum="d8e1cdcdc771dc8892fdba7190fdd6dd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.exe" newVersion="3.0.6-beta.3" newMediaFileId="win64" fileSize="262564120" md5Sum="77c80c4bf90f958fe136cd25a8a6496a" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -881,6 +884,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -1164,7 +1168,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_2.exe" newVersion="3.0.6-beta.2" newMediaFileId="win64" fileSize="262572824" md5Sum="d8e1cdcdc771dc8892fdba7190fdd6dd" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.exe" newVersion="3.0.6-beta.3" newMediaFileId="win64" fileSize="262564120" md5Sum="77c80c4bf90f958fe136cd25a8a6496a" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -1172,6 +1176,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -1455,7 +1460,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_2.zip" newVersion="3.0.6-beta.2" newMediaFileId="win64zip" fileSize="261609382" md5Sum="c3381f1506dd2a837ec1caeabb373f8f" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.zip" newVersion="3.0.6-beta.3" newMediaFileId="win64zip" fileSize="261600874" md5Sum="e499fdb911f00c6ec828642ee25deaf5" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -1463,6 +1468,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -1746,7 +1752,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_6-beta_2.deb" newVersion="3.0.6-beta.2" newMediaFileId="linux64deb" fileSize="193811144" md5Sum="81123332d03c34c0a74aef9e11834ac4" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_6-beta_3.deb" newVersion="3.0.6-beta.3" newMediaFileId="linux64deb" fileSize="193807778" md5Sum="96ebae7b77fe3a14076af4438de9efd1" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -1754,6 +1760,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -2037,7 +2044,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_6-beta_2.sh" newVersion="3.0.6-beta.2" newMediaFileId="linux64" fileSize="193278095" md5Sum="ad878b3bcc10105476eeb9c69156cdbf" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_6-beta_3.sh" newVersion="3.0.6-beta.3" newMediaFileId="linux64" fileSize="193270081" md5Sum="16ecefae28755774a5c1207f8fb1a48e" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
@@ -2045,6 +2052,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
  * Added Cantonese (yue) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
