@@ -268,6 +268,9 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		final RecordEditorPerspective perspective =
 				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 		editor.getViewModel().setupWindows(perspective);
+		
+		editor.getStatusBar().getProgressBar().setIndeterminate(true);
+		
 		editor.setVisible(true);
 
 		SwingUtilities.invokeLater( () -> {
@@ -290,6 +293,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			// will update status bar with warnings on initialization
 			editor.getViewModel().getView(SessionCheckView.VIEW_NAME);
 			
+			editor.getStatusBar().getProgressBar().setIndeterminate(false);
 			editor.getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_FINISHED_LOADING));
 		});
 
