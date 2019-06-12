@@ -14,6 +14,7 @@ import javax.swing.JToolBar;
 import javax.swing.UIManager;
 
 import ca.phon.app.media.WaveformDisplay;
+import ca.phon.media.LongSound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.Sampled;
@@ -59,7 +60,18 @@ public class SegmentationFrame extends CommonModuleFrame {
 			List<String> selectedFile = NativeDialogs.showOpenDialog(props);
 			
 			fileLbl.setText(selectedFile.get(0));
-			Sampled sampled;
+			
+			try {
+				LongSound longSound = LongSound.fromFile(new File(selectedFile.get(0)));
+				display.setEndTime(longSound.length());
+				display.setLongSound(longSound);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+//			Sampled sampled;
 //			try {
 //				SampledLoader loader = SampledLoader.newLoader();
 //				sampled = loader.loadSampledFromFile(new File(selectedFile.get(0)));

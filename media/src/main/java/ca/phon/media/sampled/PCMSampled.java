@@ -43,15 +43,30 @@ public class PCMSampled implements Sampled {
 	
 	private int dataOffset = -1;
 	
-	private long length = 0L;
-	
 	private float startTime = 0.0f;
+	
+	private float endTime = 0.0f;
 	
 	public PCMSampled(File file) throws IOException {
 		super();
 		
 		try {
 			mapFile(file);
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
+	}
+	
+	public PCMSampled(File file, float startTime, float endTime) throws IOException {
+		super();
+		
+		try {
+			mapFile(file);
+			
+			if(endTime < startTime)
+				throw new IllegalArgumentException("End time must not be greater than start time");
+			this.startTime = Math.max(0.0f, startTime);
+			this.endTime = Math.min(endTime, this.endTime);
 		} catch (Exception e) {
 			throw new IOException(e);
 		}
@@ -74,7 +89,9 @@ public class PCMSampled implements Sampled {
 
 		raf = new RandomAccessFile(file, "r");
 		dataOffset = offset+4;
-		length = raf.length() - offset;
+		
+		startTime = 0.0f;
+		endTime = getAudioFileLength();
 	}
 	
 //	public PCMSampled(AudioFileFormat format, RandomAccessFile raf) {
@@ -138,6 +155,12 @@ public class PCMSampled implements Sampled {
 	public double valueForTime(int channel, float time) {
 		final long sampleIndex = sampleForTime(time);
 		return valueForSample(channel, sampleIndex);
+	}
+	
+	protected float getAudioFileLength() {
+		final AudioFileFormat fileFormat = getAudioFileFormat();
+		final float frameRate = fileFormat.getFormat().getFrameRate();
+		return (fileFormat.getFrameLength() / frameRate);
 	}
 	
 	protected int getSample(int byteOffset) {
@@ -320,11 +343,14 @@ public class PCMSampled implements Sampled {
 		return startTime;
 	}
 
+	public float getEndTime() {
+		return endTime;
+	}
+	
 	@Override
 	public float getLength() {
-		final AudioFileFormat fileFormat = getAudioFileFormat();
-		final float frameRate = fileFormat.getFormat().getFrameRate();
-		return (fileFormat.getFrameLength() / frameRate);
+		return endTime - startTime;
+		
 	}
 
 	@Override

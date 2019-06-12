@@ -86,6 +86,19 @@ public interface Sampled {
 	public float getStartTime();
 	
 	/**
+	 * End time in seconds
+	 * 
+	 * @return end time in seconds
+	 */
+	public float getEndTime();
+	
+	/**
+	 * Get end time
+	 * 
+	 * @return end time in seconds
+	 */
+	
+	/**
 	 * Get length in seconds
 	 * 
 	 * @return length in seconds

@@ -12,8 +12,11 @@ public class SampledLongSound extends LongSound implements IPluginExtensionPoint
 	
 	private PCMSampled sampled;
 	
+	private File file;
+	
 	public SampledLongSound(File file) throws IOException {
 		super(file);
+		this.file = file;
 		
 		this.sampled = new PCMSampled(file);
 	}
@@ -34,8 +37,7 @@ public class SampledLongSound extends LongSound implements IPluginExtensionPoint
 
 	@Override
 	public Sound extractPart(float startTime, float endTime) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SampledSound(startTime, endTime);
 	}
 
 	@Override
@@ -54,4 +56,42 @@ public class SampledLongSound extends LongSound implements IPluginExtensionPoint
 		};
 	}
 
+	private class SampledSound implements Sound {
+		
+		private float startTime;
+		
+		private float endTime;
+		
+		public SampledSound(float startTime, float endTime) {
+			this.startTime = startTime;
+			this.endTime = endTime;
+		}
+
+		@Override
+		public int numberOfChannels() {
+			return sampled.getNumberOfChannels();
+		}
+
+		@Override
+		public float startTime() {
+			return this.startTime;
+		}
+
+		@Override
+		public float endTime() {
+			return this.endTime;
+		}
+
+		@Override
+		public float length() {
+			return endTime - startTime;
+		}
+
+		@Override
+		public double[] getWindowExtrema(Channel channel, float startTime, float endTime) {
+			return sampled.getWindowExtrema(channel.channelNumber(), startTime, endTime);
+		}
+		
+	}
+	
 }

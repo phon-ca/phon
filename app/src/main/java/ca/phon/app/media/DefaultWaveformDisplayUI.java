@@ -23,6 +23,7 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
 import ca.phon.media.LongSound;
+import ca.phon.media.Sound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.Sampled;
 import ca.phon.util.Tuple;
@@ -57,7 +58,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		UIManager.getDefaults().put(WAV_COLOR2, DEFAULT_WAVCOLOR2);
 	}
 	
-	private Map<Channel, double[][]> channelExtremaMap;
+	private Map<Channel, double[][]> channelExtremaMap = new HashMap<>();
 	
 //	private Map<Channel, BufferedImage> channelImages = new HashMap<>();
 	
@@ -143,7 +144,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	private void paintChannelData(Graphics2D g2, Channel ch, double startX, double endX) {
 		final RoundRectangle2D channelRect = getChannelRect(ch);
 		final double halfHeight = channelRect.getHeight() / 2.0;
-		final float secondsPerPixel = (float)(display.getLongSound().length() / channelRect.getWidth());
 		
 		float barSize = 1.0f;
 		final Stroke stroke = new BasicStroke(barSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -155,7 +155,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		final double unitPerPixel = maxValue / halfHeight;
 		
 		double ymindiff, ymaxdiff = 0.0;
-		float time = 0.0f;
 		double ymin, ymax = halfHeight;
 		
 		Color topColor = UIManager.getColor(WAV_COLOR1);
@@ -163,17 +162,13 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		double[][] channelExtrema = channelExtremaMap.get(ch);
 		
-		int y = 0;
+		int y = (int)channelRect.getY();
 		for(double x = startX; x < endX; x += barSize) {
-			time = (float)(x * secondsPerPixel);
-			
 			g2.setStroke(stroke);
 					
 			int idx = (int)Math.round((x - channelRect.getX()));
 			extrema[0] = channelExtrema[0][idx];
 			extrema[1] = channelExtrema[1][idx];
-			
-//			sampled.getWindowExtrema(ch.channelNumber(), time, time + secondsPerPixel, extrema);
 			
 			ymindiff = Math.abs(extrema[0]) / unitPerPixel;
 			ymaxdiff = Math.abs(extrema[1]) / unitPerPixel;
@@ -251,8 +246,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		Rectangle bounds = 
 				(g.getClipBounds() != null ? g.getClipBounds() : new Rectangle(0, 0, w, h));
 		
-		System.out.println(bounds);
-		
 		// paint background
 		if(display.isOpaque()) {
 			g2.setColor(display.getBackground());
@@ -265,48 +258,38 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				paintChannelBackground(g2, ch);
 				paintChannelBorder(g2, ch);
 				
-				paintChannelData(g2, ch, bounds.x, bounds.x + bounds.width);
+				RoundRectangle2D channelRect = getChannelRect(ch);
+				int sx = (int) Math.max(channelRect.getX(), bounds.x);
+				int ex = (int) Math.min(channelRect.getX()+channelRect.getWidth(), bounds.x + bounds.width);
+				paintChannelData(g2, ch, sx, ex);
 			}
 		}
 	}
 	
 	private final PropertyChangeListener propListener = (e) -> {
-		if("sampled".equals(e.getPropertyName())) {
+		if("longSound".equals(e.getPropertyName())) {
 			needsRepaint = true;
 			display.revalidate();
 		}
 	};
 	
-	private Graphics2D createGraphics(BufferedImage img) {
-		Graphics2D g2 = img.createGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, 
-				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
-				RenderingHints.VALUE_STROKE_PURE);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		return g2;
-	}
-	
-	private double cachedMaxValue = -1;
+	private double cachedMaxValue = 0;
 	private double getMaxValue() {
-		if(cachedMaxValue < 0) {
-			cachedMaxValue = getMaxValue(display.getStartTime(), display.getEndTime());
-		}
 		return cachedMaxValue;
 	}
 	
-	private double getMaxValue(float startTime, float endTime) {
-		double extrema[] = new double[2];
-		LongSound longSound = display.getLongSound();
-		
-		double maxValue = 0;
+//	private double getMaxValue(float startTime, float endTime) {
+//		double extrema[] = new double[2];
+//		LongSound longSound = display.getLongSound();
+//		
+//		double maxValue = 0;
 //		for(int ch = 0; ch < longSound.numberOfChannels(); ch++) {
 //			longSound.getWindowExtrema(ch, startTime, endTime, extrema);
 //			maxValue = Math.max(maxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
 //		}
-		
-		return maxValue;
-	}
+//		
+//		return maxValue;
+//	}
 	
 	private int getChannelY(Channel ch) {
 		int y = display.getChannelInsets().top;
@@ -318,63 +301,28 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		return y;
 	}
 	
-	private void paintWaveformWindow(Sampled sampled, Channel ch, Graphics2D g2, float startTime, float endTime) {
+	private void loadWaveformData(Sound snd, Channel ch, float startTime, float endTime) {
 		final double width = display.getWidth();
-		final double height = display.getChannelHeight();
-		final double halfHeight = height / 2.0;
-		final float secondsPerPixel = (float)(sampled.getLength() / width);
+		final float secondsPerPixel = (float)(display.getLongSound().length() / width);
 		
 		float barSize = 1.0f;
-		final Stroke stroke = new BasicStroke(barSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 		
-		double extrema[] = new double[2];
-		final Line2D line = new Line2D.Double();
-					
-		double maxValue = getMaxValue();
-		final double unitPerPixel = maxValue / halfHeight;
-		
-		double ymindiff, ymaxdiff = 0.0;
 		float time = 0.0f;
-		double ymin, ymax = halfHeight;
 		
 		double startX = xForTime(startTime);
 		double endX = xForTime(endTime);
 		
-		Color topColor = UIManager.getColor(WAV_COLOR1);
-		Color btmColor = UIManager.getColor(WAV_COLOR2);
-		
-		int y = 0;
 		for(double x = startX; x < endX; x += barSize) {
 			time = (float)(x * secondsPerPixel);
 			
-			g2.setStroke(stroke);
+			double[][] chExtrema = channelExtremaMap.get(ch);
 			
-			sampled.getWindowExtrema(ch.channelNumber(), time, time + secondsPerPixel, extrema);
+			int idx = (int)(x - display.getChannelInsets().left);
+			double[] extrema = snd.getWindowExtrema(ch, time, time + secondsPerPixel);
+			chExtrema[0][idx] = extrema[0];
+			chExtrema[1][idx] = extrema[1];
 			
-			ymindiff = Math.abs(extrema[0]) / unitPerPixel;
-			ymaxdiff = Math.abs(extrema[1]) / unitPerPixel;
-			
-			ymin = y + halfHeight;
-			if(extrema[0] < 0) {
-				ymin += ymindiff;
-			} else {
-				ymin -= ymindiff;
-			}
-			
-			ymax = y + halfHeight;
-			if(extrema[1] < 0) {
-				ymax += ymaxdiff;
-			} else {
-				ymax -= ymaxdiff;
-			}
-			
-			g2.setColor(topColor);
-			line.setLine(x, y+halfHeight, x, ymax);
-			g2.draw(line);
-			
-			g2.setColor(btmColor);
-			line.setLine(x, y+halfHeight, x, ymin);
-			g2.draw(line);
+			cachedMaxValue = Math.max(cachedMaxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
 		}
 	}
 
@@ -382,30 +330,30 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		@Override
 		protected Tuple<Float, Float> doInBackground() throws Exception {
+			final LongSound sound = display.getLongSound();
+			
+			
 //			final Sampled sampled = display.getSampled();
 //			Map<Channel, Graphics2D> gMap = new HashMap<>();
 //			
-//			// load in 5s intervals
-//			float incr = 5.0f;
-//			float time = display.getStartTime();
-//			while(time < display.getEndTime()) {
-//				float endTime = Math.min(time+incr, display.getEndTime());
-//				
-//				for(Channel ch:display.availableChannels()) {
-//					if(!display.isChannelVisible(ch)) continue;
-//					
-//					BufferedImage channelImage = channelImages.get(ch);
-//					Graphics2D g2 = gMap.get(ch);
-//					if(g2 == null) {
-//						 g2 = createGraphics(channelImage);
-//						 gMap.put(ch, g2);
-//					}
-//					
+			// load in 5s intervals
+			float incr = 5.0f;
+			float time = display.getStartTime();
+			while(time < display.getEndTime()) {
+				float endTime = Math.min(time+incr, display.getEndTime());
+				
+				final Sound snd = sound.extractPart(time, endTime);
+				
+				for(Channel ch:display.availableChannels()) {
+					if(!display.isChannelVisible(ch)) continue;
+					
+					loadWaveformData(snd, ch, time, endTime);
+					
 //					paintWaveformWindow(sampled, ch, g2, time, endTime);
-//				}
-//				publish(new Tuple<>(time, endTime));
-//				time = endTime;
-//			}
+				}
+				publish(new Tuple<>(time, endTime));
+				time = endTime;
+			}
 //			
 //			// done() is not used
 			return new Tuple<Float, Float>(0.0f, 0.0f);
