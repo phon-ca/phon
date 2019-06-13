@@ -73,7 +73,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		super.installUI(c);
 		
 		display = (WaveformDisplay)c;
-		display.setBackground(UIManager.getColor("Label.background"));
 		
 		installListeners(display);
 	}

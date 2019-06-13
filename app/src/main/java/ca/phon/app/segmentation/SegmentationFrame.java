@@ -14,6 +14,7 @@ import javax.swing.JToolBar;
 import javax.swing.UIManager;
 
 import ca.phon.app.media.WaveformDisplay;
+import ca.phon.app.media.WaveformDisplayScrollPane;
 import ca.phon.media.LongSound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.PCMSampled;
@@ -32,11 +33,14 @@ public class SegmentationFrame extends CommonModuleFrame {
 	public static void main(String[] args) throws Exception {
 		WaveformDisplay display = new WaveformDisplay();
 		display.setOpaque(true);
-		display.setPreferredChannelHeight(100);
+		display.setBackground(Color.WHITE);
+		display.setPreferredChannelHeight(50);
 		display.setStartTime(0f);
-		display.setEndTime(60.0f);
+		display.setEndTime(100.0f);
 		display.setPixelsPerSecond(100.0f);
 		display.setTrackViewportHeight(true);
+		
+		WaveformDisplayScrollPane scroller = new WaveformDisplayScrollPane(display);
 		
 		SegmentationFrame f = new SegmentationFrame();
 		
@@ -88,7 +92,7 @@ public class SegmentationFrame extends CommonModuleFrame {
 		
 		f.setLayout(new BorderLayout());
 		f.add(toolbar, BorderLayout.NORTH);
-		f.add(new JScrollPane(display), BorderLayout.CENTER);
+		f.add(scroller, BorderLayout.CENTER);
 		f.pack();
 		f.setSize(500, 300);
 		f.centerWindow();
