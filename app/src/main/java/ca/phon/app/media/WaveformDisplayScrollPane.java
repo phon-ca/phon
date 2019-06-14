@@ -31,6 +31,7 @@ public class WaveformDisplayScrollPane extends JScrollPane {
 	
 	private void setupTimebar() {
 		timebar.setTimeInsets(new Insets(0, display.getChannelInsets().left, 0, display.getChannelInsets().right));
+		timebar.setPixelsPerSecond(display.getPixelsPerSecond());
 		
 		if(display.getLongSound() != null) {
 			timebar.setStartTime(display.getStartTime());

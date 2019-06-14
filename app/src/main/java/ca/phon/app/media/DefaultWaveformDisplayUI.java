@@ -277,19 +277,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		return cachedMaxValue;
 	}
 	
-//	private double getMaxValue(float startTime, float endTime) {
-//		double extrema[] = new double[2];
-//		LongSound longSound = display.getLongSound();
-//		
-//		double maxValue = 0;
-//		for(int ch = 0; ch < longSound.numberOfChannels(); ch++) {
-//			longSound.getWindowExtrema(ch, startTime, endTime, extrema);
-//			maxValue = Math.max(maxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
-//		}
-//		
-//		return maxValue;
-//	}
-	
 	private int getChannelY(Channel ch) {
 		int y = display.getChannelInsets().top;
 		

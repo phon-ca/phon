@@ -114,6 +114,6 @@ public class Timebar extends JComponent {
 	
 	public int xForTime(float time) {
 		return (int)Math.round( getPixelsPerSecond() * (time - getStartTime()) ) + getTimeInsets().left;
-	}	
+	}
 	
 }
