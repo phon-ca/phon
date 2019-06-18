@@ -204,6 +204,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 		int prefHeight = (display.getVisibleChannelCount() * display.getChannelHeight())
 				+ (display.getVisibleChannelCount() * (display.getChannelInsets().top + display.getChannelInsets().bottom));
+		
+		if(prefHeight == 0) {
+			prefHeight = display.getChannelHeight() + (display.getChannelInsets().top + display.getChannelInsets().bottom);
+		}
 	
 		return new Dimension(prefWidth, prefHeight);
 	}
@@ -266,7 +270,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	}
 	
 	private final PropertyChangeListener propListener = (e) -> {
-		if("longSound".equals(e.getPropertyName())) {
+		if("longSound".equals(e.getPropertyName())
+				|| "pixelsPerSecond".equals(e.getPropertyName())) {
 			needsRepaint = true;
 			display.revalidate();
 		}

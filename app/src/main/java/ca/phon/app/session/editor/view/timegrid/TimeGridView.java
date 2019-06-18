@@ -1,29 +1,40 @@
 package ca.phon.app.session.editor.view.timegrid;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.event.MouseInputAdapter;
+
+import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.media.WaveformDisplayScrollPane;
+import ca.phon.app.media.TimebarModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.timegrid.actions.ZoomInAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
-import ca.phon.session.Session;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class TimeGridView extends EditorView {
+public final class TimeGridView extends EditorView {
 
 	private static final long serialVersionUID = 8442995100291417078L;
 	
@@ -31,8 +42,12 @@ public class TimeGridView extends EditorView {
 	
 	private JToolBar toolbar;
 	
-	private TimegridWaveformDisplay wavDisplay;
-
+	private JPanel tierPanel;
+	
+	private TimebarModel timebarModel;
+	
+	private TimegridWaveformTier wavTier;
+	
 	public TimeGridView(SessionEditor editor) {
 		super(editor);
 		
@@ -44,41 +59,75 @@ public class TimeGridView extends EditorView {
 	private void init() {
 		toolbar = new JToolBar();
 		
-		wavDisplay = new TimegridWaveformDisplay();
-		wavDisplay.setStartTime(0.0f);
-		wavDisplay.setEndTime(0.0f);
-		wavDisplay.setPixelsPerSecond(100.0f);
-		wavDisplay.setTrackViewportHeight(true);
+		tierPanel = new JPanel(new VerticalLayout());
+		JScrollPane scroller = new JScrollPane(tierPanel);
 		
-		WaveformDisplayScrollPane scroller = new WaveformDisplayScrollPane(wavDisplay);
-
+		timebarModel = new TimebarModel();
+		timebarModel.addPropertyChangeListener((e) -> {
+			tierPanel.revalidate();
+			scroller.revalidate();
+		});
+		timebarModel.setPixelsPerSecond(100.0f);
+		timebarModel.setStartTime(0.0f);
+		timebarModel.setEndTime(0.0f);
+		
+		wavTier = new TimegridWaveformTier(this);
+		wavTier.getWaveformDisplay().setStartTime(0.0f);
+		wavTier.getWaveformDisplay().setEndTime(0.0f);
+		wavTier.getWaveformDisplay().setPixelsPerSecond(100.0f);
+		wavTier.getWaveformDisplay().setTrackViewportHeight(true);
+		
+		addTier(wavTier);
+		
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.NORTH);
+		
 		add(scroller, BorderLayout.CENTER);
-//		JPanel centerPanel = new JPanel(new BorderLayout());
-//		centerPanel.add(scroller, BorderLayout.NORTH);
-//		add(centerPanel, BorderLayout.CENTER);
+	}
+	
+	private void addTier(TimeGridTier tier) {
+		tierPanel.add(tier);
+		
+		var separator =  new JSeparator(SwingConstants.HORIZONTAL);
+		separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+		separator.addMouseMotionListener(new SeparatorMouseListener(tier));
+		
+		tierPanel.add(separator);
 	}
 	
 	private void update() {
-		loadSessionAudio();
+		final File audioFile = getAudioFile();
+		if(audioFile != null) {
+			loadSessionAudio(audioFile);
+		} else {
+			// determine time values based on record segements
+			float startTime = 0.0f;
+			float endTime = 0.0f;
+			
+			for(Record r:getEditor().getSession().getRecords()) {
+				MediaSegment segment = r.getSegment().getGroup(0);
+				if(segment != null) {
+					float segEnd = (float)(segment.getEndValue() / 1000.0f);
+					endTime = Math.max(segEnd, endTime);
+				}
+			}
+			
+			timebarModel.setEndTime(endTime);
+		}
 	}
 	
-	private void loadSessionAudio() {
-		final File audioFile = getAudioFile();
-		if(audioFile == null) return;
-		
+	private void loadSessionAudio(File audioFile) {
 		try {
 			LongSound ls = LongSound.fromFile(audioFile);
-			wavDisplay.setEndTime(ls.length());
-			wavDisplay.setLongSound(ls);
-			revalidate();
+			timebarModel.setEndTime(ls.length());
+			wavTier.getWaveformDisplay().setEndTime(ls.length());
+			wavTier.getWaveformDisplay().setLongSound(ls);
 		} catch (IOException e) {
 			LogUtil.severe(e);
 		}
 	}
 	
-	public File getAudioFile() {
+	private File getAudioFile() {
 		File selectedMedia =
 				MediaLocator.findMediaFile(getEditor().getProject(), getEditor().getSession());
 		if(selectedMedia == null) return null;
@@ -103,10 +152,14 @@ public class TimeGridView extends EditorView {
 		return audioFile;
 	}
 	
+	public TimebarModel getTimebarModel() {
+		return this.timebarModel;
+	}
+	
 	private final DelegateEditorAction onEditorClosingAct = new DelegateEditorAction(this, "onEditorClosing");
 	
 	private final DelegateEditorAction onMediaChangedAct = new DelegateEditorAction(this, "onMediaChanged");
-		
+	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 
@@ -141,7 +194,39 @@ public class TimeGridView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		return new JMenu();
+		JMenu menu = new JMenu();
+		
+		menu.add(new ZoomInAction(this));
+		
+		return menu;
 	}
 
+	private class SeparatorMouseListener extends MouseInputAdapter {
+		
+		private TimeGridTier tier;
+		
+		public SeparatorMouseListener(TimeGridTier tier) {
+			super();
+			
+			this.tier = tier;
+		}
+		
+		public TimeGridTier getTier() {
+			return this.tier;
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			Dimension currentSize = wavTier.getSize();
+			Dimension prefSize = wavTier.getPreferredSize();
+
+			prefSize.height = currentSize.height + e.getY();
+			if(prefSize.height < 0) prefSize.height = 0;
+			
+			tier.setPreferredSize(prefSize);
+			tierPanel.revalidate();
+		}
+		
+	}
+	
 }

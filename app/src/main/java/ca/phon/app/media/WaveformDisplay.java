@@ -141,7 +141,7 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	public int getChannelHeight() {
 		int retVal = getPreferredChannelHeight();
 		
-		if(isTrackViewportHeight()) {
+		if(isTrackViewportHeight() && getHeight() > 0) {
 			int visibleChannels = getVisibleChannelCount();
 			int height = getHeight() - (visibleChannels * (getChannelInsets().top+getChannelInsets().bottom));
 			if(visibleChannels > 0) {
@@ -217,6 +217,11 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		
 		int prefHeight = (getVisibleChannelCount() * getChannelHeight())
 				+ (getVisibleChannelCount() * (getChannelInsets().top + getChannelInsets().bottom));
+		
+		if(prefHeight == 0) {
+			prefHeight = getChannelHeight() + (getChannelInsets().top + getChannelInsets().bottom);
+		}
+		
 		return new Dimension(prefSize.width, prefHeight);
 	}
 

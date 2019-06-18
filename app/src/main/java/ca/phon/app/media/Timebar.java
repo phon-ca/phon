@@ -14,28 +14,24 @@ import javax.swing.plaf.ComponentUI;
 
 public class Timebar extends JComponent {
 
-	public final static int DEFAULT_SMALL_TICK_HEIGHT = 5;
-	public final static int DEFUALT_LARGE_TICK_HEIGHT = 8;
+	public final static int DEFAULT_MINOR_TICK_HEIGHT = 5;
+	public final static int DEFUALT_MAJOR_TICK_HEIGHT = 8;
 	
-	private int smallTickHeight = DEFAULT_SMALL_TICK_HEIGHT;
-	private int largeTickHeight = DEFUALT_LARGE_TICK_HEIGHT;
+	private int minorTickHeight = DEFAULT_MINOR_TICK_HEIGHT;
+	private int majorTickHeight = DEFUALT_MAJOR_TICK_HEIGHT;
 	
-	public final static float MIN_PIXELS_PER_SECOND = 10.0f;
-	public final static float MAX_PIXELS_PER_SECOND = 1000.0f;
-	public final static float DEFAULT_PIXELS_PER_SECOND = 100.0f;
-	
-	private float pixelsPerSecond = DEFAULT_PIXELS_PER_SECOND;
-	
-	private Insets timeInsets = new Insets(0, 0, 0, 0);
-	
-	private float startTime = 0.0f;
-	
-	private float endTime = 0.0f;
+	private TimebarModel model;
 	
 	private final static String uiClassId = "TimebarUI";
 	
 	public Timebar() {
+		this(new TimebarModel());
+	}
+	
+	public Timebar(TimebarModel model) {
 		super();
+		
+		this.model = model;
 		
 		updateUI();
 	}
@@ -58,62 +54,44 @@ public class Timebar extends JComponent {
 		return (DefaultTimebarUI)ui;
 	}
 	
-	public Insets getTimeInsets() {
-		return timeInsets;
+	public TimebarModel getModel() {
+		return this.model;
+	}
+	
+	public void setModel(TimebarModel model) {
+		var oldModel = this.model;
+		this.model = model;
+		super.firePropertyChange("model", oldModel, model);
+	}
+	
+	public int getMinorTickHeight() {
+		return minorTickHeight;
 	}
 
-	public void setTimeInsets(Insets timeInsets) {
-		this.timeInsets = timeInsets;
+	public void setMinorTickHeight(int minorTickHeight) {
+		var oldVal = this.minorTickHeight;
+		this.minorTickHeight = minorTickHeight;
+		super.firePropertyChange("minorTickHeight", oldVal, minorTickHeight);
 	}
 
-	public float getStartTime() {
-		return startTime;
+	public int getMajorTickHeight() {
+		return majorTickHeight;
 	}
 
-	public void setStartTime(float startTime) {
-		this.startTime = startTime;
+	public void setMajorTickHeight(int majorTickHeight) {
+		var oldVal = this.majorTickHeight;
+		this.majorTickHeight = majorTickHeight;
+		super.firePropertyChange("majorTickHeight", oldVal, majorTickHeight);
 	}
-
-	public float getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(float endTime) {
-		this.endTime = endTime;
-	}
-
-	public int getSmallTickHeight() {
-		return smallTickHeight;
-	}
-
-	public void setSmallTickHeight(int smallTickHeight) {
-		this.smallTickHeight = smallTickHeight;
-	}
-
-	public int getLargeTickHeight() {
-		return largeTickHeight;
-	}
-
-	public void setLargeTickHeight(int largeTickHeight) {
-		this.largeTickHeight = largeTickHeight;
-	}
-
-	public float getPixelsPerSecond() {
-		return pixelsPerSecond;
-	}
-
-	public void setPixelsPerSecond(float pixelsPerSecond) {
-		this.pixelsPerSecond = pixelsPerSecond;
-	}
-
+	
 	public float timeAtX(int x) {
-		if(x <= getTimeInsets().left) return getStartTime();
-		if(x >= (getWidth() - getTimeInsets().right)) return getEndTime();
-		return getStartTime() + ((x - getTimeInsets().left) / getPixelsPerSecond());
+		if(x <= getModel().getTimeInsets().left) return getModel().getStartTime();
+		if(x >= (getWidth() - getModel().getTimeInsets().right)) return getModel().getEndTime();
+		return getModel().getStartTime() + ((x - getModel().getTimeInsets().left) / getModel().getPixelsPerSecond());
 	}
 	
 	public int xForTime(float time) {
-		return (int)Math.round( getPixelsPerSecond() * (time - getStartTime()) ) + getTimeInsets().left;
+		return (int)Math.round( getModel().getPixelsPerSecond() * (time - getModel().getStartTime()) ) + getModel().getTimeInsets().left;
 	}
 	
 }

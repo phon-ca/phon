@@ -10,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -21,6 +23,26 @@ import ca.phon.util.MsFormatter;
 public class DefaultTimebarUI extends TimebarUI {
 	
 	private Timebar timebar;
+	
+	private final PropertyChangeListener propListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent e) {
+			if(e.getPropertyName().equals("startTime")
+					|| e.getPropertyName().equals("endTime")
+					|| e.getPropertyName().equals("pixelsPerSecond") 
+					|| e.getPropertyName().equals("timeInsets") 
+					|| e.getPropertyName().equals("minorTickHeight") 
+					|| e.getPropertyName().equals("majorTickHeight") ) {
+				timebar.revalidate();
+				timebar.repaint();
+			} else if(e.getPropertyName().equals("model")) {
+				((TimebarModel)e.getOldValue()).removePropertyChangeListener(this);
+				((TimebarModel)e.getNewValue()).addPropertyChangeListener(this);
+			}
+		}
+		
+	};
 	
 	@Override
 	public void installUI(JComponent c) {
@@ -38,23 +60,30 @@ public class DefaultTimebarUI extends TimebarUI {
 		if(!(c instanceof Timebar))
 			throw new IllegalArgumentException("Wrong class");
 		super.uninstallUI(c);
+		uninstallListeners((Timebar)c);
 	}
 	
 	private void installListeners(Timebar timebar) {
-		
+		timebar.addPropertyChangeListener(propListener);
+		timebar.getModel().addPropertyChangeListener(propListener);
 	}
 
+	private void uninstallListeners(Timebar timebar) {
+		timebar.removePropertyChangeListener(propListener);
+		timebar.getModel().removePropertyChangeListener(propListener);
+	}
+	
 	@Override
 	public Dimension getPreferredSize(JComponent comp) {
 		int prefWidth =
-			 (timebar.getTimeInsets().left+ timebar.getTimeInsets().right) + 
-					((int)Math.round( (timebar.getEndTime() - timebar.getStartTime()) * timebar.getPixelsPerSecond()) );
+			 (timebar.getModel().getTimeInsets().left+ timebar.getModel().getTimeInsets().right) + 
+					((int)Math.round( (timebar.getModel().getEndTime() - timebar.getModel().getStartTime()) * timebar.getModel().getPixelsPerSecond()) );
 		
 		Font font = timebar.getFont();
 		FontMetrics fm = timebar.getFontMetrics(font);
 		
-		int prefHeight = timebar.getTimeInsets().top + timebar.getTimeInsets().bottom + 
-				(Math.max(timebar.getLargeTickHeight(), fm.getHeight() + timebar.getSmallTickHeight()));
+		int prefHeight = timebar.getModel().getTimeInsets().top + timebar.getModel().getTimeInsets().bottom + 
+				(Math.max(timebar.getMajorTickHeight(), fm.getHeight() + timebar.getMinorTickHeight()));
 		return new Dimension(prefWidth, prefHeight);
 	}
 	
@@ -72,7 +101,7 @@ public class DefaultTimebarUI extends TimebarUI {
 	}
 	
 	private float majorTickLength() {
-		float pixelsPerSecond = timebar.getPixelsPerSecond();
+		float pixelsPerSecond = timebar.getModel().getPixelsPerSecond();
 		return (100.0f / pixelsPerSecond);
 	}
 	
@@ -101,19 +130,19 @@ public class DefaultTimebarUI extends TimebarUI {
 		
 		g2.setColor(Color.DARK_GRAY);
 		
-		for(float time = timebar.getStartTime(); time <= timebar.getEndTime(); time += majorTickLength()) {
+		for(float time = timebar.getModel().getStartTime(); time <= timebar.getModel().getEndTime(); time += majorTickLength()) {
 			time = (float)round(time, 3, RoundingMode.HALF_UP);
 			int x = timebar.xForTime(time);
 			g2.setStroke(majorTickStroke);
-			g2.drawLine(x, 0, x, timebar.getLargeTickHeight());
+			g2.drawLine(x, 0, x, timebar.getMajorTickHeight());
 			
 			for(float mt = time + minorTickLength(); mt <= time + (majorTickLength()-(minorTickLength()/2)); mt += minorTickLength()) {
 				mt = (float)round(mt, 3, RoundingMode.HALF_UP);
-				if(mt > timebar.getEndTime()) break;
+				if(mt > timebar.getModel().getEndTime()) break;
 				int x2 = timebar.xForTime(mt);
 				
 				g2.setStroke(minorTickStroke);
-				g2.drawLine(x2, 0, x2, timebar.getSmallTickHeight());
+				g2.drawLine(x2, 0, x2, timebar.getMinorTickHeight());
 			}
 		}
 	}
@@ -126,14 +155,14 @@ public class DefaultTimebarUI extends TimebarUI {
 		g2.setColor(Color.BLACK);
 		
 		Rectangle2D lastTimeRect = null;
-		for(float time = timebar.getStartTime(); time <= timebar.getEndTime(); time += (2.0 * majorTickLength()) ) {
+		for(float time = timebar.getModel().getStartTime(); time <= timebar.getModel().getEndTime(); time += (2.0 * majorTickLength()) ) {
 			time = (float)round(time, 3, RoundingMode.HALF_UP);
 			long timeMs = (long)(time * 1000.0f);
 			String timeStr = MsFormatter.msToDisplayString(timeMs);
 						
 			int x = timebar.xForTime(time);
 			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
-			timeRect.setRect(x, timebar.getSmallTickHeight(), timeRect.getWidth(), timeRect.getHeight());
+			timeRect.setRect(x, timebar.getMinorTickHeight(), timeRect.getWidth(), timeRect.getHeight());
 			
 			if(lastTimeRect == null || !lastTimeRect.intersects(timeRect)) {
 				g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + timeRect.getHeight()));

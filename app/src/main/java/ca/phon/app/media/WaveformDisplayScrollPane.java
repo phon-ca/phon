@@ -30,22 +30,24 @@ public class WaveformDisplayScrollPane extends JScrollPane {
 	}
 	
 	private void setupTimebar() {
-		timebar.setTimeInsets(new Insets(0, display.getChannelInsets().left, 0, display.getChannelInsets().right));
-		timebar.setPixelsPerSecond(display.getPixelsPerSecond());
+		timebar.getModel().setTimeInsets(new Insets(0, display.getChannelInsets().left, 0, display.getChannelInsets().right));
+		timebar.getModel().setPixelsPerSecond(display.getPixelsPerSecond());
 		
 		if(display.getLongSound() != null) {
-			timebar.setStartTime(display.getStartTime());
-			timebar.setEndTime(display.getEndTime());
+			timebar.getModel().setStartTime(display.getStartTime());
+			timebar.getModel().setEndTime(display.getEndTime());
 		} else {
-			timebar.setStartTime(0.0f);
-			timebar.setEndTime(0.0f);
+			timebar.getModel().setStartTime(0.0f);
+			timebar.getModel().setEndTime(0.0f);
 		}
 		timebar.revalidate();
 		timebar.repaint();
 	}
 	
 	private final PropertyChangeListener propListener = (e) -> {
-		if(e.getPropertyName().equals("longSound")) {
+		if(e.getPropertyName().equals("longSound")
+				|| e.getPropertyName().equals("startTime")
+				|| e.getPropertyName().equals("endTime")) {
 			setupTimebar();
 		}
 	};
