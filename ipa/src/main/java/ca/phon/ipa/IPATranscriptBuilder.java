@@ -100,19 +100,20 @@ public class IPATranscriptBuilder {
 		if(size() < 2) {
 			throw new IllegalStateException("No previous phone");
 		}
-		final IPAElement prevEle = buffer.get(buffer.size()-1);
-		if(!(prevEle instanceof Phone)) {
+		final IPAElement ele1 = buffer.get(buffer.size()-2);
+		if(!(ele1 instanceof Phone)) {
 			throw new IllegalStateException("Previous element not a phone");
 		}
-		final IPAElement phone = buffer.get(buffer.size()-2);
-		if(!(phone instanceof Phone)) {
+		final IPAElement ele2 = buffer.get(buffer.size()-1);
+		if(!(ele2 instanceof Phone)) {
 			throw new IllegalStateException("Element must be a phone.");
 		}
 		
-		final Phone prevPhone = (Phone)prevEle;
-		final CompoundPhone newPhone = factory.createCompoundPhone(prevPhone, (Phone)phone, lig);
-		buffer.remove(phone);
-		buffer.remove(prevPhone);
+		final Phone p1 = (Phone)ele1;
+		final Phone p2 = (Phone)ele2;
+		final CompoundPhone newPhone = factory.createCompoundPhone(p1, p2, lig);
+		buffer.remove(p1);
+		buffer.remove(p2);
 		buffer.add(newPhone);
 
 		return this;
