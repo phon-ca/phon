@@ -162,6 +162,11 @@ function query_record(recordIndex, record)
 		    var ipaT = (word.getIPATarget() != null ? word.getIPATarget() : new IPATranscript());
 		    var ipaA = (word.getIPAActual() != null ? word.getIPAActual() : new IPATranscript());
 
+		    // skip when '*' is aligned with '*'
+		    if(ipaT.toString().equals("*") && ipaA.toString().equals("*")) {
+		    	continue;
+		    }
+		    
 		    var result = factory.createResult();
 		    result.schema = "ALIGNED";
 		    result.recordIndex = recordIndex;
