@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.6-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_3.dmg" newVersion="3.0.6-beta.3" newMediaFileId="macos" fileSize="260121837" md5Sum="ced54c2be35d9d1188f0dc1e524c229e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.6-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_4.dmg" newVersion="3.0.6-beta.4" newMediaFileId="macos" fileSize="261341762" md5Sum="f07d96997fd694f89a64b4d4336825c9" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -292,15 +295,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_3.dmg" newVersion="3.0.6-beta.3" newMediaFileId="macos" fileSize="260121837" md5Sum="ced54c2be35d9d1188f0dc1e524c229e" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_4.dmg" newVersion="3.0.6-beta.4" newMediaFileId="macos" fileSize="261341762" md5Sum="f07d96997fd694f89a64b4d4336825c9" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -584,15 +590,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.exe" newVersion="3.0.6-beta.3" newMediaFileId="win64" fileSize="262564120" md5Sum="77c80c4bf90f958fe136cd25a8a6496a" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.exe" newVersion="3.0.6-beta.4" newMediaFileId="win64" fileSize="263799064" md5Sum="916c78b3cc6fb732524b634a9a254e5d" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -876,15 +885,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.exe" newVersion="3.0.6-beta.3" newMediaFileId="win64" fileSize="262564120" md5Sum="77c80c4bf90f958fe136cd25a8a6496a" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.exe" newVersion="3.0.6-beta.4" newMediaFileId="win64" fileSize="263799064" md5Sum="916c78b3cc6fb732524b634a9a254e5d" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -1168,15 +1180,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.exe" newVersion="3.0.6-beta.3" newMediaFileId="win64" fileSize="262564120" md5Sum="77c80c4bf90f958fe136cd25a8a6496a" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.exe" newVersion="3.0.6-beta.4" newMediaFileId="win64" fileSize="263799064" md5Sum="916c78b3cc6fb732524b634a9a254e5d" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -1460,15 +1475,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_3.zip" newVersion="3.0.6-beta.3" newMediaFileId="win64zip" fileSize="261600874" md5Sum="e499fdb911f00c6ec828642ee25deaf5" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.zip" newVersion="3.0.6-beta.4" newMediaFileId="win64zip" fileSize="262835892" md5Sum="e212d523aab522feb2130f14e3d23a04" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -1752,15 +1770,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_6-beta_3.deb" newVersion="3.0.6-beta.3" newMediaFileId="linux64deb" fileSize="193807778" md5Sum="96ebae7b77fe3a14076af4438de9efd1" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_6-beta_4.deb" newVersion="3.0.6-beta.4" newMediaFileId="linux64deb" fileSize="195047858" md5Sum="9d7f20bf20850f7409ffce27444b917c" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
@@ -2044,15 +2065,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_6-beta_3.sh" newVersion="3.0.6-beta.3" newMediaFileId="linux64" fileSize="193270081" md5Sum="16ecefae28755774a5c1207f8fb1a48e" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_6-beta_4.sh" newVersion="3.0.6-beta.4" newMediaFileId="linux64" fileSize="194505088" md5Sum="c527b40cb2ce386ef19640200fadc34c" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
  * Record speaker will now change as expected when using 'replace' mode with segmentation
  * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
  * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
  * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
 
 ## Changes from 3.0.4
