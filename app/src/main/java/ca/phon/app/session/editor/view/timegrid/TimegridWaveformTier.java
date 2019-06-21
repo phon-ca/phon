@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
 
-import ca.phon.app.media.TimebarModel;
+import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.media.WaveformDisplay;
 
 public class TimegridWaveformTier extends TimeGridTier  {
@@ -20,7 +20,7 @@ public class TimegridWaveformTier extends TimeGridTier  {
 	}
 	
 	private void init() {
-		final TimebarModel timebarModel = getParentView().getTimebarModel();
+		final TimeUIModel timebarModel = getParentView().getTimebarModel();
 		
 		wavDisplay = new WaveformDisplay();
 		Insets channelInsets = new Insets(wavDisplay.getChannelInsets().top, timebarModel.getTimeInsets().left,

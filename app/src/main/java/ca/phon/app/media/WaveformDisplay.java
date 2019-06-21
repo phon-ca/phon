@@ -27,19 +27,12 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	
 	private LongSound longSound;
 	
-	private float startTime = 0.0f;
-	
-	private float endTime = 0.0f;
+	private TimeUIModel timeModel;
 		
 	/**
 	 * Height (in px) of channels
 	 */
 	private int preferredChannelHeight = 100;
-		
-	/**
-	 * Number of pixels per second
-	 */
-	private float pixelsPerSecond = 50.0f;
 	
 	private List<Channel> availableChannels = new ArrayList<>();
 	
@@ -54,14 +47,19 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	private Insets channelInsets = new Insets(5, 10, 5, 10);
 	
 	public WaveformDisplay() {
-		this(null);
+		this(new TimeUIModel());
 	}
 	
-	public WaveformDisplay(LongSound longSound) {
+	public WaveformDisplay(TimeUIModel timeModel) {
+		this(null, timeModel);
+	}
+	
+	public WaveformDisplay(LongSound longSound, TimeUIModel timeModel) {
 		super();
-		updateUI();
-		
+		this.timeModel = timeModel;
 		setLongSound(longSound);
+		
+		updateUI();
 	}
 	
 	@Override
@@ -102,27 +100,41 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		
 		firePropertyChange("longSound", oldValue, longSound);
 	}
-
+	
+	public TimeUIModel getTimeModel() {
+		return this.timeModel;
+	}
+	
+	public void setTimeModel(TimeUIModel timeModel) {
+		var oldVal = this.timeModel;
+		this.timeModel = timeModel;
+		super.firePropertyChange("timeModel", oldVal, timeModel);
+	}
+	
 	public float getStartTime() {
-		return startTime;
+		return timeModel.getStartTime();
 	}
 
 	public void setStartTime(float startTime) {
-		var oldValue = this.startTime;
-		this.startTime = startTime;
-		firePropertyChange("startTime", oldValue, startTime);
+		timeModel.setStartTime(startTime);
 	}
 
 	public float getEndTime() {
-		return endTime;
+		return timeModel.getEndTime();
 	}
 
 	public void setEndTime(float endTime) {
-		var oldValue = this.endTime;
-		this.endTime = endTime;
-		firePropertyChange("endTime", oldValue, endTime);
+		timeModel.setEndTime(endTime);
 	}
-	
+
+	public float getPixelsPerSecond() {
+		return timeModel.getPixelsPerSecond();
+	}
+
+	public void setPixelsPerSecond(float pixelsPerSecond) {
+		timeModel.setPixelsPerSecond(pixelsPerSecond);
+	}
+
 	public List<Channel> availableChannels() {
 		return Collections.unmodifiableList(this.availableChannels);
 	}
@@ -170,17 +182,7 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		}
 		return visibleChannels;
 	}
-	
-	public float getPixelsPerSecond() {
-		return pixelsPerSecond;
-	}
-
-	public void setPixelsPerSecond(float pixelsPerSecond) {
-		var oldVal = this.pixelsPerSecond;
-		this.pixelsPerSecond = pixelsPerSecond;
-		super.firePropertyChange("pixelsPerSecond", oldVal, pixelsPerSecond);
-	}
-	
+		
 	public boolean isTrackViewportWidth() {
 		return this.trackViewportWidth;
 	}

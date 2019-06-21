@@ -88,10 +88,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private void installListeners(WaveformDisplay display) {
 		display.addPropertyChangeListener(propListener);
+		display.getTimeModel().addPropertyChangeListener(propListener);
 	}
 	
 	private void uninstallListeners(WaveformDisplay display) {
 		display.removePropertyChangeListener(propListener);
+		display.getTimeModel().removePropertyChangeListener(propListener);
 	}
 	
 	public float timeAtX(int x) {
@@ -107,7 +109,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		int y = getChannelY(ch);
 		int width = display.getWidth()- ( display.getChannelInsets().left + display.getChannelInsets().right );
 		int height = display.getChannelHeight();
-		int cornerRadius = 20;
+		int cornerRadius = 5;
 		
 		return new RoundRectangle2D.Double(x, y, width, height, cornerRadius, cornerRadius);
 	}
@@ -271,7 +273,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private final PropertyChangeListener propListener = (e) -> {
 		if("longSound".equals(e.getPropertyName())
-				|| "pixelsPerSecond".equals(e.getPropertyName())) {
+				|| "timeModel".equals(e.getPropertyName())
+				|| "startTime".equals(e.getPropertyName())
+				|| "endTime".equals(e.getPropertyName())
+				|| "pixelsPerSecond".equals(e.getPropertyName()) ) {
 			needsRepaint = true;
 			display.revalidate();
 		}

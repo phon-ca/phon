@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
@@ -19,7 +21,7 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.media.TimebarModel;
+import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
@@ -30,6 +32,7 @@ import ca.phon.app.session.editor.view.timegrid.actions.ZoomInAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -44,9 +47,11 @@ public final class TimeGridView extends EditorView {
 	
 	private JPanel tierPanel;
 	
-	private TimebarModel timebarModel;
+	private TimeUIModel timebarModel;
 	
 	private TimegridWaveformTier wavTier;
+	
+	private RecordGrid recordGrid;
 	
 	public TimeGridView(SessionEditor editor) {
 		super(editor);
@@ -62,7 +67,7 @@ public final class TimeGridView extends EditorView {
 		tierPanel = new JPanel(new VerticalLayout());
 		JScrollPane scroller = new JScrollPane(tierPanel);
 		
-		timebarModel = new TimebarModel();
+		timebarModel = new TimeUIModel();
 		timebarModel.addPropertyChangeListener((e) -> {
 			tierPanel.revalidate();
 			scroller.revalidate();
@@ -77,7 +82,19 @@ public final class TimeGridView extends EditorView {
 		wavTier.getWaveformDisplay().setPixelsPerSecond(100.0f);
 		wavTier.getWaveformDisplay().setTrackViewportHeight(true);
 		
+		recordGrid = new RecordGrid(this);
+		
 		addTier(wavTier);
+		addTier(recordGrid);
+		
+		
+		
+//		List<Participant> speakers = new ArrayList<>();
+//		speakers.add(Participant.UNKNOWN);
+//		getEditor().getSession().getParticipants().forEach( speakers::add );
+//		for(var speaker:speakers) {
+//			addTier(new SegmentTier(this, speaker, "Orthography"));
+//		}
 		
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.NORTH);
@@ -152,7 +169,7 @@ public final class TimeGridView extends EditorView {
 		return audioFile;
 	}
 	
-	public TimebarModel getTimebarModel() {
+	public TimeUIModel getTimebarModel() {
 		return this.timebarModel;
 	}
 	

@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -37,8 +38,8 @@ public class DefaultTimebarUI extends TimebarUI {
 				timebar.revalidate();
 				timebar.repaint();
 			} else if(e.getPropertyName().equals("model")) {
-				((TimebarModel)e.getOldValue()).removePropertyChangeListener(this);
-				((TimebarModel)e.getNewValue()).addPropertyChangeListener(this);
+				((TimeUIModel)e.getOldValue()).removePropertyChangeListener(this);
+				((TimeUIModel)e.getNewValue()).addPropertyChangeListener(this);
 			}
 		}
 		
@@ -109,40 +110,31 @@ public class DefaultTimebarUI extends TimebarUI {
 		return majorTickLength() / 10.0f;
 	}
 	
-	private double round(double x, int scale, RoundingMode roundingMethod) {
-		try {
-			final double rounded = (new BigDecimal(Double.toString(x))
-				.setScale(scale, roundingMethod))
-				.doubleValue();
-			return rounded == 0d ? 0d * x : rounded;
-		} catch (NumberFormatException ex) {
-			if (Double.isInfinite(x)) {
-				return x;
-			} else {
-				return Double.NaN;
-			}
-		}
-	}
-
 	protected void paintTicks(Graphics2D g2, Timebar timebar) {
 		Stroke minorTickStroke = new BasicStroke(1.0f);
 		Stroke majorTickStroke = new BasicStroke(1.2f);
 		
 		g2.setColor(Color.DARK_GRAY);
 		
+		Line2D.Double tickLine = new Line2D.Double();
+		
 		for(float time = timebar.getModel().getStartTime(); time <= timebar.getModel().getEndTime(); time += majorTickLength()) {
-			time = (float)round(time, 3, RoundingMode.HALF_UP);
-			int x = timebar.xForTime(time);
+			time = (float)TimeUIModel.roundTime(time);
+			var x = timebar.getModel().xForTime(time);
 			g2.setStroke(majorTickStroke);
-			g2.drawLine(x, 0, x, timebar.getMajorTickHeight());
+			
+			tickLine.setLine(x, 0, x, timebar.getMajorTickHeight());
+			g2.draw(tickLine);
 			
 			for(float mt = time + minorTickLength(); mt <= time + (majorTickLength()-(minorTickLength()/2)); mt += minorTickLength()) {
-				mt = (float)round(mt, 3, RoundingMode.HALF_UP);
+				mt = (float)TimeUIModel.roundTime(mt);
 				if(mt > timebar.getModel().getEndTime()) break;
-				int x2 = timebar.xForTime(mt);
+				var x2 = timebar.getModel().xForTime(mt);
 				
 				g2.setStroke(minorTickStroke);
-				g2.drawLine(x2, 0, x2, timebar.getMinorTickHeight());
+				
+				tickLine.setLine(x2, 0, x2, timebar.getMinorTickHeight());
+				g2.draw(tickLine);
 			}
 		}
 	}
@@ -156,11 +148,11 @@ public class DefaultTimebarUI extends TimebarUI {
 		
 		Rectangle2D lastTimeRect = null;
 		for(float time = timebar.getModel().getStartTime(); time <= timebar.getModel().getEndTime(); time += (2.0 * majorTickLength()) ) {
-			time = (float)round(time, 3, RoundingMode.HALF_UP);
+			time = (float)TimeUIModel.roundTime(time);
 			long timeMs = (long)(time * 1000.0f);
 			String timeStr = MsFormatter.msToDisplayString(timeMs);
 						
-			int x = timebar.xForTime(time);
+			var x = timebar.getModel().xForTime(time);
 			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
 			timeRect.setRect(x, timebar.getMinorTickHeight(), timeRect.getWidth(), timeRect.getHeight());
 			

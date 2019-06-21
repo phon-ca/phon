@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
@@ -20,15 +22,15 @@ public class Timebar extends JComponent {
 	private int minorTickHeight = DEFAULT_MINOR_TICK_HEIGHT;
 	private int majorTickHeight = DEFUALT_MAJOR_TICK_HEIGHT;
 	
-	private TimebarModel model;
+	private TimeUIModel model;
 	
 	private final static String uiClassId = "TimebarUI";
 	
 	public Timebar() {
-		this(new TimebarModel());
+		this(new TimeUIModel());
 	}
 	
-	public Timebar(TimebarModel model) {
+	public Timebar(TimeUIModel model) {
 		super();
 		
 		this.model = model;
@@ -54,11 +56,11 @@ public class Timebar extends JComponent {
 		return (DefaultTimebarUI)ui;
 	}
 	
-	public TimebarModel getModel() {
+	public TimeUIModel getModel() {
 		return this.model;
 	}
 	
-	public void setModel(TimebarModel model) {
+	public void setModel(TimeUIModel model) {
 		var oldModel = this.model;
 		this.model = model;
 		super.firePropertyChange("model", oldModel, model);
@@ -82,16 +84,6 @@ public class Timebar extends JComponent {
 		var oldVal = this.majorTickHeight;
 		this.majorTickHeight = majorTickHeight;
 		super.firePropertyChange("majorTickHeight", oldVal, majorTickHeight);
-	}
-	
-	public float timeAtX(int x) {
-		if(x <= getModel().getTimeInsets().left) return getModel().getStartTime();
-		if(x >= (getWidth() - getModel().getTimeInsets().right)) return getModel().getEndTime();
-		return getModel().getStartTime() + ((x - getModel().getTimeInsets().left) / getModel().getPixelsPerSecond());
-	}
-	
-	public int xForTime(float time) {
-		return (int)Math.round( getModel().getPixelsPerSecond() * (time - getModel().getStartTime()) ) + getModel().getTimeInsets().left;
 	}
 	
 }

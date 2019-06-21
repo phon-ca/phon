@@ -47,8 +47,30 @@ public abstract class TimeGridTier extends JComponent {
 		return this.contentPane;
 	}
 	
+	public void setContentPane(JPanel contentPane) {
+		var oldVal = this.contentPane;
+		remove(this.contentPane);
+		this.contentPane = contentPane;
+		if(contentPane != null)
+			add(contentPane, BorderLayout.CENTER);
+		revalidate();
+		super.firePropertyChange("contentPane", oldVal, contentPane);
+	}
+	
 	public TimeGridView getParentView() {
 		return this.parentViewRef.get();
+	}
+	
+	public int getTimeGridWidth() {
+		return timebar.getPreferredSize().width;
+	}
+	
+	public double xForTime(float time) {
+		return timebar.getModel().xForTime(time);
+	}
+	
+	public float timeAtX(double x) {
+		return timebar.getModel().timeAtX(x);
 	}
 	
 	@Override
