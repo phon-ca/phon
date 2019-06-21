@@ -1140,6 +1140,18 @@
     		<property name="Description">Spirant</property>
     		<property name="Unicode">0x353</property>
     	</cell>
+    	<cell y="2" x="28" h="2" w="2">
+    		<text>&#x25cc;&#x0321;</text>
+    		<property name="Name">Combining Palatalized Hook Below</property>
+    		<property name="Description">Palatal</property>
+    		<property name="Unicode">0x321</property>
+    	</cell>
+    	<cell y="2" x="30" h="2" w="2">
+    		<text>&#x25cc;&#x0322;</text>
+    		<property name="Name">Combining Retroflex Hook Below</property>
+    		<property name="Description">Retroflex</property>
+    		<property name="Unicode">0x322</property>
+    	</cell>
     </grid>
 
     <!--Tones-->

@@ -1326,6 +1326,10 @@
     <feature_set char="̟">diacritic advanced</feature_set>
     <!--̠ (0x320)-->
     <feature_set char="̠">diacritic retracted</feature_set>
+	<!-- (0x321)-->
+	<feature_set char="̡">diacritic palatal</feature_set>
+	<!-- (0x322)-->
+	<feature_set char="̢">diacritic retroflex</feature_set>
     <!--̐ (0x310)-->
     <feature_set char="̐">diacritic</feature_set>
     <!--̩ (0x329)-->
