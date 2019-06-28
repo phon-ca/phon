@@ -20,20 +20,18 @@ public class TimegridWaveformTier extends TimeGridTier  {
 	}
 	
 	private void init() {
-		final TimeUIModel timebarModel = getParentView().getTimebarModel();
+		final TimeUIModel timeModel = getParentView().getTimeModel();
 		
-		wavDisplay = new WaveformDisplay();
-		Insets channelInsets = new Insets(wavDisplay.getChannelInsets().top, timebarModel.getTimeInsets().left,
-				wavDisplay.getChannelInsets().bottom, timebarModel.getTimeInsets().right);
+		wavDisplay = new WaveformDisplay(timeModel);
+		Insets channelInsets = new Insets(wavDisplay.getChannelInsets().top, timeModel.getTimeInsets().left,
+				wavDisplay.getChannelInsets().bottom, timeModel.getTimeInsets().right);
 		wavDisplay.setChannelInsets(channelInsets);
+		wavDisplay.setTrackViewportHeight(true);
 		wavDisplay.setBackground(Color.WHITE);
 		wavDisplay.setOpaque(true);
 		
-		timebarModel.addPropertyChangeListener("pixelsPerSecond", (e) -> {
-			wavDisplay.setPixelsPerSecond((float)e.getNewValue());
-			revalidate();
-		});
-				
+		wavDisplay.getPreferredSize();
+		
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(wavDisplay, BorderLayout.CENTER);
 	}

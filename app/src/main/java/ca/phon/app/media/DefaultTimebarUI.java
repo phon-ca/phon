@@ -66,26 +66,26 @@ public class DefaultTimebarUI extends TimebarUI {
 	
 	private void installListeners(Timebar timebar) {
 		timebar.addPropertyChangeListener(propListener);
-		timebar.getModel().addPropertyChangeListener(propListener);
+//		timebar.getModel().addPropertyChangeListener(propListener);
 	}
 
 	private void uninstallListeners(Timebar timebar) {
 		timebar.removePropertyChangeListener(propListener);
-		timebar.getModel().removePropertyChangeListener(propListener);
+//		timebar.getModel().removePropertyChangeListener(propListener);
 	}
 	
 	@Override
 	public Dimension getPreferredSize(JComponent comp) {
-		int prefWidth =
-			 (timebar.getModel().getTimeInsets().left+ timebar.getModel().getTimeInsets().right) + 
-					((int)Math.round( (timebar.getModel().getEndTime() - timebar.getModel().getStartTime()) * timebar.getModel().getPixelsPerSecond()) );
+		Dimension retVal = super.getPreferredSize(comp);
 		
 		Font font = timebar.getFont();
 		FontMetrics fm = timebar.getFontMetrics(font);
 		
-		int prefHeight = timebar.getModel().getTimeInsets().top + timebar.getModel().getTimeInsets().bottom + 
+		int prefHeight = timebar.getTimeModel().getTimeInsets().top + timebar.getTimeModel().getTimeInsets().bottom + 
 				(Math.max(timebar.getMajorTickHeight(), fm.getHeight() + timebar.getMinorTickHeight()));
-		return new Dimension(prefWidth, prefHeight);
+		retVal.height = prefHeight;
+		
+		return retVal;
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ public class DefaultTimebarUI extends TimebarUI {
 	}
 	
 	private float majorTickLength() {
-		float pixelsPerSecond = timebar.getModel().getPixelsPerSecond();
+		float pixelsPerSecond = timebar.getTimeModel().getPixelsPerSecond();
 		return (100.0f / pixelsPerSecond);
 	}
 	
@@ -118,9 +118,9 @@ public class DefaultTimebarUI extends TimebarUI {
 		
 		Line2D.Double tickLine = new Line2D.Double();
 		
-		for(float time = timebar.getModel().getStartTime(); time <= timebar.getModel().getEndTime(); time += majorTickLength()) {
+		for(float time = timebar.getTimeModel().getStartTime(); time <= timebar.getTimeModel().getEndTime(); time += majorTickLength()) {
 			time = (float)TimeUIModel.roundTime(time);
-			var x = timebar.getModel().xForTime(time);
+			var x = timebar.getTimeModel().xForTime(time);
 			g2.setStroke(majorTickStroke);
 			
 			tickLine.setLine(x, 0, x, timebar.getMajorTickHeight());
@@ -128,8 +128,8 @@ public class DefaultTimebarUI extends TimebarUI {
 			
 			for(float mt = time + minorTickLength(); mt <= time + (majorTickLength()-(minorTickLength()/2)); mt += minorTickLength()) {
 				mt = (float)TimeUIModel.roundTime(mt);
-				if(mt > timebar.getModel().getEndTime()) break;
-				var x2 = timebar.getModel().xForTime(mt);
+				if(mt > timebar.getTimeModel().getEndTime()) break;
+				var x2 = timebar.getTimeModel().xForTime(mt);
 				
 				g2.setStroke(minorTickStroke);
 				
@@ -147,12 +147,12 @@ public class DefaultTimebarUI extends TimebarUI {
 		g2.setColor(Color.BLACK);
 		
 		Rectangle2D lastTimeRect = null;
-		for(float time = timebar.getModel().getStartTime(); time <= timebar.getModel().getEndTime(); time += (2.0 * majorTickLength()) ) {
+		for(float time = timebar.getTimeModel().getStartTime(); time <= timebar.getTimeModel().getEndTime(); time += (2.0 * majorTickLength()) ) {
 			time = (float)TimeUIModel.roundTime(time);
 			long timeMs = (long)(time * 1000.0f);
 			String timeStr = MsFormatter.msToDisplayString(timeMs);
 						
-			var x = timebar.getModel().xForTime(time);
+			var x = timebar.getTimeModel().xForTime(time);
 			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
 			timeRect.setRect(x, timebar.getMinorTickHeight(), timeRect.getWidth(), timeRect.getHeight());
 			

@@ -10,4 +10,4 @@ ca.phon.app.session.editor.view.ipa_validation.ValidationExtension
 ca.phon.app.session.editor.view.ipa_lookup.IPALookupViewExtension
 ca.phon.app.session.editor.view.find_and_replace.FindAndReplaceEditorViewExtension
 ca.phon.app.session.editor.view.check.SessionCheckViewExtension
-#ca.phon.app.session.editor.view.timegrid.TimeGridViewExtension
+ca.phon.app.session.editor.view.timegrid.TimeGridViewExtension

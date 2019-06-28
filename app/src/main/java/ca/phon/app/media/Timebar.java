@@ -1,28 +1,15 @@
 package ca.phon.app.media;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 
-public class Timebar extends JComponent {
+public class Timebar extends TimeComponent {
 
 	public final static int DEFAULT_MINOR_TICK_HEIGHT = 5;
 	public final static int DEFUALT_MAJOR_TICK_HEIGHT = 8;
 	
 	private int minorTickHeight = DEFAULT_MINOR_TICK_HEIGHT;
 	private int majorTickHeight = DEFUALT_MAJOR_TICK_HEIGHT;
-	
-	private TimeUIModel model;
 	
 	private final static String uiClassId = "TimebarUI";
 	
@@ -31,10 +18,9 @@ public class Timebar extends JComponent {
 	}
 	
 	public Timebar(TimeUIModel model) {
-		super();
+		super(model);
 		
-		this.model = model;
-		
+		setFont(UIManager.getFont("Label.font"));
 		updateUI();
 	}
 	
@@ -54,16 +40,6 @@ public class Timebar extends JComponent {
 
 	public DefaultTimebarUI getUI() {
 		return (DefaultTimebarUI)ui;
-	}
-	
-	public TimeUIModel getModel() {
-		return this.model;
-	}
-	
-	public void setModel(TimeUIModel model) {
-		var oldModel = this.model;
-		this.model = model;
-		super.firePropertyChange("model", oldModel, model);
 	}
 	
 	public int getMinorTickHeight() {

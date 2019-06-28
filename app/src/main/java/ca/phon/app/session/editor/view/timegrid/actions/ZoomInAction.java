@@ -18,8 +18,8 @@ public class ZoomInAction extends TimeGridAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		getView().getTimebarModel().setPixelsPerSecond(
-				getView().getTimebarModel().getPixelsPerSecond() + 10.0f);
+		getView().getTimeModel().setPixelsPerSecond(
+				getView().getTimeModel().getPixelsPerSecond() + 10.0f);
 	}
 
 }

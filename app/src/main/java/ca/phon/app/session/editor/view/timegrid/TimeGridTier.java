@@ -8,9 +8,10 @@ import java.lang.ref.WeakReference;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.Timebar;
 
-public abstract class TimeGridTier extends JComponent {
+public abstract class TimeGridTier extends TimeComponent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,14 +22,14 @@ public abstract class TimeGridTier extends JComponent {
 	private JPanel contentPane;
 	
 	public TimeGridTier(TimeGridView parent) {
-		super();
+		super(parent.getTimeModel());
 		
 		this.parentViewRef = new WeakReference<TimeGridView>(parent);
 		init();
 	}
 	
 	private void init() {
-		timebar = new Timebar(getParentView().getTimebarModel());
+		timebar = new Timebar(getTimeModel());
 		timebar.setBackground(Color.WHITE);
 		timebar.setOpaque(true);
 		
@@ -61,23 +62,8 @@ public abstract class TimeGridTier extends JComponent {
 		return this.parentViewRef.get();
 	}
 	
-	public int getTimeGridWidth() {
-		return timebar.getPreferredSize().width;
-	}
-	
-	public double xForTime(float time) {
-		return timebar.getModel().xForTime(time);
-	}
-	
-	public float timeAtX(double x) {
-		return timebar.getModel().timeAtX(x);
-	}
-	
-	@Override
-	public Dimension getPreferredSize() {
-		Dimension retVal = super.getPreferredSize();
-		Dimension timePref = timebar.getPreferredSize();
-		return new Dimension((int)timePref.getWidth(), (int)retVal.getHeight());
+	public boolean isResizeable() {
+		return true;
 	}
 	
 }

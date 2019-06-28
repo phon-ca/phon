@@ -47,11 +47,15 @@ public final class TimeGridView extends EditorView {
 	
 	private JPanel tierPanel;
 	
-	private TimeUIModel timebarModel;
+	/**
+	 * Default {@link TimeUIModel} which should be
+	 * used by most tier components
+	 */
+	private TimeUIModel timeModel;
 	
 	private TimegridWaveformTier wavTier;
 	
-	private RecordGrid recordGrid;
+	private RecordTier recordGrid;
 	
 	public TimeGridView(SessionEditor editor) {
 		super(editor);
@@ -67,22 +71,19 @@ public final class TimeGridView extends EditorView {
 		tierPanel = new JPanel(new VerticalLayout());
 		JScrollPane scroller = new JScrollPane(tierPanel);
 		
-		timebarModel = new TimeUIModel();
-		timebarModel.addPropertyChangeListener((e) -> {
+		timeModel = new TimeUIModel();
+		timeModel.addPropertyChangeListener((e) -> {
 			tierPanel.revalidate();
 			scroller.revalidate();
 		});
-		timebarModel.setPixelsPerSecond(100.0f);
-		timebarModel.setStartTime(0.0f);
-		timebarModel.setEndTime(0.0f);
+		timeModel.setPixelsPerSecond(100.0f);
+		timeModel.setStartTime(0.0f);
+		timeModel.setEndTime(0.0f);
 		
 		wavTier = new TimegridWaveformTier(this);
-		wavTier.getWaveformDisplay().setStartTime(0.0f);
-		wavTier.getWaveformDisplay().setEndTime(0.0f);
-		wavTier.getWaveformDisplay().setPixelsPerSecond(100.0f);
-		wavTier.getWaveformDisplay().setTrackViewportHeight(true);
+		wavTier.getPreferredSize();
 		
-		recordGrid = new RecordGrid(this);
+		recordGrid = new RecordTier(this);
 		
 		addTier(wavTier);
 		addTier(recordGrid);
@@ -105,11 +106,13 @@ public final class TimeGridView extends EditorView {
 	private void addTier(TimeGridTier tier) {
 		tierPanel.add(tier);
 		
-		var separator =  new JSeparator(SwingConstants.HORIZONTAL);
-		separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-		separator.addMouseMotionListener(new SeparatorMouseListener(tier));
-		
-		tierPanel.add(separator);
+		if(tier.isResizeable()) {
+			var separator =  new JSeparator(SwingConstants.HORIZONTAL);
+			separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+			separator.addMouseMotionListener(new SeparatorMouseListener(tier));
+			
+			tierPanel.add(separator);
+		}
 	}
 	
 	private void update() {
@@ -118,7 +121,6 @@ public final class TimeGridView extends EditorView {
 			loadSessionAudio(audioFile);
 		} else {
 			// determine time values based on record segements
-			float startTime = 0.0f;
 			float endTime = 0.0f;
 			
 			for(Record r:getEditor().getSession().getRecords()) {
@@ -129,14 +131,14 @@ public final class TimeGridView extends EditorView {
 				}
 			}
 			
-			timebarModel.setEndTime(endTime);
+			timeModel.setEndTime(endTime);
 		}
 	}
 	
 	private void loadSessionAudio(File audioFile) {
 		try {
 			LongSound ls = LongSound.fromFile(audioFile);
-			timebarModel.setEndTime(ls.length());
+			timeModel.setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setLongSound(ls);
 		} catch (IOException e) {
@@ -169,8 +171,8 @@ public final class TimeGridView extends EditorView {
 		return audioFile;
 	}
 	
-	public TimeUIModel getTimebarModel() {
-		return this.timebarModel;
+	public TimeUIModel getTimeModel() {
+		return this.timeModel;
 	}
 	
 	private final DelegateEditorAction onEditorClosingAct = new DelegateEditorAction(this, "onEditorClosing");

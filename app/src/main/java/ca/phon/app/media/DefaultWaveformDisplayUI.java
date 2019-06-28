@@ -88,12 +88,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private void installListeners(WaveformDisplay display) {
 		display.addPropertyChangeListener(propListener);
-		display.getTimeModel().addPropertyChangeListener(propListener);
+//		display.getTimeModel().addPropertyChangeListener(propListener);
 	}
 	
 	private void uninstallListeners(WaveformDisplay display) {
 		display.removePropertyChangeListener(propListener);
-		display.getTimeModel().removePropertyChangeListener(propListener);
+//		display.getTimeModel().removePropertyChangeListener(propListener);
 	}
 	
 	public float timeAtX(int x) {
@@ -277,6 +277,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				|| "startTime".equals(e.getPropertyName())
 				|| "endTime".equals(e.getPropertyName())
 				|| "pixelsPerSecond".equals(e.getPropertyName()) ) {
+			System.out.println(e);
 			needsRepaint = true;
 			display.revalidate();
 		}

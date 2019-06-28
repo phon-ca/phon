@@ -23,11 +23,9 @@ import ca.phon.media.sampled.Sampled;
  * Basic waveform display
  *
  */
-public class WaveformDisplay extends JComponent implements Scrollable {
+public class WaveformDisplay extends TimeComponent implements Scrollable {
 	
 	private LongSound longSound;
-	
-	private TimeUIModel timeModel;
 		
 	/**
 	 * Height (in px) of channels
@@ -55,8 +53,7 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 	}
 	
 	public WaveformDisplay(LongSound longSound, TimeUIModel timeModel) {
-		super();
-		this.timeModel = timeModel;
+		super(timeModel);
 		setLongSound(longSound);
 		
 		updateUI();
@@ -101,40 +98,6 @@ public class WaveformDisplay extends JComponent implements Scrollable {
 		firePropertyChange("longSound", oldValue, longSound);
 	}
 	
-	public TimeUIModel getTimeModel() {
-		return this.timeModel;
-	}
-	
-	public void setTimeModel(TimeUIModel timeModel) {
-		var oldVal = this.timeModel;
-		this.timeModel = timeModel;
-		super.firePropertyChange("timeModel", oldVal, timeModel);
-	}
-	
-	public float getStartTime() {
-		return timeModel.getStartTime();
-	}
-
-	public void setStartTime(float startTime) {
-		timeModel.setStartTime(startTime);
-	}
-
-	public float getEndTime() {
-		return timeModel.getEndTime();
-	}
-
-	public void setEndTime(float endTime) {
-		timeModel.setEndTime(endTime);
-	}
-
-	public float getPixelsPerSecond() {
-		return timeModel.getPixelsPerSecond();
-	}
-
-	public void setPixelsPerSecond(float pixelsPerSecond) {
-		timeModel.setPixelsPerSecond(pixelsPerSecond);
-	}
-
 	public List<Channel> availableChannels() {
 		return Collections.unmodifiableList(this.availableChannels);
 	}
