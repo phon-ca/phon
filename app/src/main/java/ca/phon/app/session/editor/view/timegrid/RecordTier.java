@@ -17,6 +17,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import ca.phon.app.media.Timebar;
+import ca.phon.app.session.editor.DelegateEditorAction;
+import ca.phon.app.session.editor.EditorAction;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
@@ -32,6 +37,7 @@ public class RecordTier extends TimeGridTier {
 		super(parent);
 	
 		init();
+		setupEditorEvents();
 	}
 
 	private void init() {
@@ -44,6 +50,36 @@ public class RecordTier extends TimeGridTier {
 		
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(recordGrid, BorderLayout.CENTER);
+	}
+	
+	private final DelegateEditorAction onRecordChange = 
+			new DelegateEditorAction(this, "onRecordChange");
+	
+	private final DelegateEditorAction onEditorClosing = 
+			new DelegateEditorAction(this, "onEditorClosing");
+	
+	private void setupEditorEvents() {
+		getParentView().getEditor().getEventManager()
+			.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+		getParentView().getEditor().getEventManager()
+			.registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
+	}
+	
+	private void deregisterEditorEvents() {
+		getParentView().getEditor().getEventManager()
+			.removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+		getParentView().getEditor().getEventManager()
+			.removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
+	}
+	
+	/* Editor events */
+	@RunOnEDT
+	public void onRecordChange(EditorEvent evt) {
+		recordGrid.repaint();
+	}
+	
+	public void onEditorClosing(EditorEvent evt) {
+		deregisterEditorEvents();
 	}
 	
 	private class SegmentPanel extends JPanel {
