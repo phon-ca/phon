@@ -452,6 +452,12 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		accept(filter);
 		return filter.getIPATranscript();
 	}
+	
+	public IPATranscript stripDiacritics(boolean keepLength, boolean keepTones) {
+		final DiacriticFilter filter = new DiacriticFilter(keepLength, keepTones);
+		accept(filter);
+		return filter.getIPATranscript();
+	}
 
 	/**
 	 * Create a list of phones which produce a sound.

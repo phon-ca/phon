@@ -39,6 +39,10 @@ public class IntonationGroup extends IPAElement {
 		
 		setScType(SyllableConstituentType.SYLLABLEBOUNDARYMARKER);
 	}
+	
+	public IntonationGroupType getType() {
+		return this.type;
+	}
 
 	@Override
 	protected FeatureSet _getFeatureSet() {

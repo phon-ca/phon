@@ -15,6 +15,9 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableConstituentType;
+
 /**
  * A factory for creating various types of {@link IPAElement}
  * objects.
@@ -89,12 +92,23 @@ public class IPAElementFactory {
 		return new Phone(prefix, basePhone, combining, suffix);
 	}
 	
+	public Phone clonePhone(Phone p) {
+		if(p instanceof CompoundPhone)
+			return cloneCompoundPhone((CompoundPhone)p);
+		else
+			return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics());
+	}
+	
 	public Diacritic createDiacritic(Character dia) {
 		return new Diacritic(dia);
 	}
 	
 	public Diacritic createDiacritic(Diacritic[] prefix, Character dia, Diacritic[] suffix) {
 		return new Diacritic(prefix, dia, suffix);
+	}
+	
+	public Diacritic copyDiacritic(Diacritic dia) {
+		return new Diacritic(dia.getPrefixDiacritics(), dia.getCharacter(), dia.getSuffixDiacritics());
 	}
 	
 	/**
@@ -115,6 +129,10 @@ public class IPAElementFactory {
 		return new CompoundPhone(phone1, phone2, ligature);
 	}
 	
+	public CompoundPhone cloneCompoundPhone(CompoundPhone cp) {
+		return new CompoundPhone(clonePhone(cp.getFirstPhone()), clonePhone(cp.getSecondPhone()), cp.getLigature());
+	}
+	
 	/**
 	 * Create a 'hard' syllable boundary. I.e., a '.'
 	 * 
@@ -133,6 +151,10 @@ public class IPAElementFactory {
 	 */
 	public StressMarker createStress(StressType type) {
 		return new StressMarker(type);
+	}
+	
+	public StressMarker cloneStress(StressMarker sm) {
+		return new StressMarker(sm.getType());
 	}
 	
 	/**
@@ -161,6 +183,10 @@ public class IPAElementFactory {
 	 */
 	public IntonationGroup createIntonationGroup(IntonationGroupType type) {
 		return new IntonationGroup(type);
+	}
+	
+	public IntonationGroup cloneIntonationGroup(IntonationGroup ig) {
+		return new IntonationGroup(ig.getType());
 	}
 	
 	/**
@@ -198,6 +224,10 @@ public class IPAElementFactory {
 	 */
 	public Pause createPause(PauseLength length) {
 		return new Pause(length);
+	}
+	
+	public Pause clonePause(Pause pause) {
+		return new Pause(pause.getLength());
 	}
 	
 	/**
@@ -251,6 +281,13 @@ public class IPAElementFactory {
 		}
 	}
 	
+	public Sandhi cloneSandhi(Sandhi s) {
+		if(s instanceof Contraction)
+			return createContraction();
+		else 
+			return createLinker();
+	}
+	
 	/**
 	 * Create a phonex matcher reference.
 	 * 
@@ -270,6 +307,13 @@ public class IPAElementFactory {
 		return new PhonexMatcherReference(groupName);
 	}
 	
+	public PhonexMatcherReference clonePhonexMatcherReference(PhonexMatcherReference ref) {
+		if(ref.getGroupIndex() >= 0)
+			return new PhonexMatcherReference(ref.getGroupIndex());
+		else
+			return new PhonexMatcherReference(ref.getGroupName());
+	}
+	
 	/**
 	 * Create a new alignment marker (left-right arrow 0x2194)
 	 * 
@@ -278,4 +322,70 @@ public class IPAElementFactory {
 	public AlignmentMarker createAlignmentMarker() {
 		return new AlignmentMarker();
 	}
+	
+	/**
+	 * Clone the given {@link IPAElement} the returned element will have the
+	 * exact content and same {@link SyllableConstituentType} as the
+	 * original element
+	 * 
+	 * @param ele
+	 * @return a copy of the given element
+	 * 
+	 * @throws NullPointerException if ele is <code>null</code>
+	 */
+	public IPAElement cloneElement(IPAElement ele) {
+		IPAElement retVal = null;
+		
+		if(ele == null)
+			throw new NullPointerException();
+		
+		if(ele instanceof Phone) {
+			// also takes care of CompundPhones
+			retVal = clonePhone((Phone)ele);
+		} else if(ele instanceof Diacritic) {
+			retVal = copyDiacritic((Diacritic)ele);
+		} else if(ele instanceof SyllableBoundary) {
+			retVal = createSyllableBoundary();
+		} else if(ele instanceof StressMarker) {
+			retVal = cloneStress((StressMarker)ele);
+		} else if(ele instanceof IntonationGroup) {
+			retVal = cloneIntonationGroup((IntonationGroup)ele);
+		} else if(ele instanceof WordBoundary) {
+			retVal = createWordBoundary();
+		} else if(ele instanceof Pause) {
+			retVal = clonePause((Pause)ele);
+		} else if(ele instanceof IntraWordPause) {
+			retVal = createIntraWordPause();
+		} else if(ele instanceof CompoundWordMarker) {
+			retVal = createCompoundWordMarker();
+		} else if(ele instanceof Sandhi) {
+			retVal = cloneSandhi((Sandhi)ele);
+		} else if(ele instanceof PhonexMatcherReference) {
+			retVal = clonePhonexMatcherReference((PhonexMatcherReference)ele);
+		} else if(ele instanceof AlignmentMarker) {
+			retVal = createAlignmentMarker();
+		}
+		
+		copySyllabification(ele, retVal);
+		
+		return retVal;
+	}
+	
+	/**
+	 * Copy syllabification information from ele1 to ele2
+	 * 
+	 * @param ele1
+	 * @param ele2
+	 */
+	public void copySyllabification(IPAElement ele1, IPAElement ele2) {
+		// copy syllabification info
+		SyllabificationInfo syllInfo = ele1.getExtension(SyllabificationInfo.class);
+		SyllabificationInfo retInfo = ele2.getExtension(SyllabificationInfo.class);
+		
+		retInfo.setConstituentType(syllInfo.getConstituentType());
+		retInfo.setDiphthongMember(syllInfo.isDiphthongMember());
+		retInfo.setStress(syllInfo.getStress());
+		retInfo.setToneFeatures(syllInfo.getToneFeatures());
+	}
+	
 }
