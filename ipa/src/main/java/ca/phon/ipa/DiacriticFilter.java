@@ -15,6 +15,13 @@
  */
 package ca.phon.ipa;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -29,34 +36,19 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
 	
 	final private IPAElementFactory factory = new IPAElementFactory();
 	
-	private boolean keepLength = false;
-	
-	private boolean keepTones = true;
+	final private Predicate<Diacritic> diacriticFilter;
 	
 	public DiacriticFilter() {
+		this( (d) -> false );
+	}
+	
+	public DiacriticFilter(Predicate<Diacritic> filter) {
 		super();
+		this.diacriticFilter = filter;
 	}
 	
-	public DiacriticFilter(boolean keepLength, boolean keepTones) {
-		super();
-		this.keepLength = keepLength;
-		this.keepTones = keepTones;
-	}
-	
-	public boolean isKeepLength() {
-		return this.keepLength;
-	}
-	
-	public void setKeepLength(boolean keepLength) {
-		this.keepLength = keepLength;
-	}
-	
-	public boolean isKeepTones() {
-		return this.keepTones;
-	}
-	
-	public void setKeepTones(boolean keepTones) {
-		this.keepTones = keepTones;
+	public Predicate<Diacritic> getDiacriticFilter() { 
+		return this.diacriticFilter;
 	}
 	
 	public IPATranscript getIPATranscript() {
@@ -68,13 +60,28 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
 		builder.append(factory.cloneElement(obj));
 	}
 	
+	private boolean keepDiacritic(Diacritic d) {
+		if(this.diacriticFilter != null)
+			return this.diacriticFilter.test(d);
+		return false;
+	}
+	
 	@Visits
 	public void visitPhone(Phone phone) {
 		// retain tone diacritics
 		Character base = phone.getBasePhone();
-		Diacritic[] prefix = new Diacritic[0];
-		Diacritic[] combining = ( isKeepLength() ? phone.getLengthDiacritics() : new Diacritic[0] );
-		Diacritic[] suffix = ( isKeepTones() ? phone.getToneDiacritics() : new Diacritic[0] );
+		Diacritic[] prefix = Arrays.stream(phone.getPrefixDiacritics())
+				.filter( this::keepDiacritic )
+				.collect(Collectors.toList())
+				.toArray(new Diacritic[0]);
+		Diacritic[] combining = Arrays.stream(phone.getCombiningDiacritics())
+				.filter( this::keepDiacritic )
+				.collect(Collectors.toList())
+				.toArray(new Diacritic[0]);
+		Diacritic[] suffix = Arrays.stream(phone.getSuffixDiacritics())
+				.filter(this::keepDiacritic)
+				.collect(Collectors.toList())
+				.toArray(new Diacritic[0]);
 		
 		Phone p = factory.createPhone(prefix,  base, combining, suffix);
 		factory.copySyllabification(phone, p);

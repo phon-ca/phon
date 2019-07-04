@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -443,7 +444,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	/**
-	 * Remove diacritics from phones and compound phones.
+	 * Remove all diacritics from phones and compound phones.
 	 *
 	 * @return transcript with filtered diacritics
 	 */
@@ -452,9 +453,15 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		accept(filter);
 		return filter.getIPATranscript();
 	}
-	
-	public IPATranscript stripDiacritics(boolean keepLength, boolean keepTones) {
-		final DiacriticFilter filter = new DiacriticFilter(keepLength, keepTones);
+		
+	/**
+	 * Strip diacritics from transcript using custom filter.
+	 * 
+	 * @param diacriticFilter
+	 * @return
+	 */
+	public IPATranscript stripDiacritics(Predicate<Diacritic> diacriticFilter) {
+		final DiacriticFilter filter = new DiacriticFilter(diacriticFilter);
 		accept(filter);
 		return filter.getIPATranscript();
 	}
