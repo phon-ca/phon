@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Box;
@@ -33,7 +34,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.timegrid.actions.ZoomInAction;
+import ca.phon.app.session.editor.view.timegrid.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.session.MediaSegment;
@@ -88,6 +89,11 @@ public final class TimeGridView extends EditorView {
 		
 		timeModel = new TimeUIModel();
 		timeModel.addPropertyChangeListener((e) -> {
+			if(e.getPropertyName().equals("pixelsPerSecond")) {
+				int zoomIdx = Arrays.binarySearch(zoomValues, (float)e.getNewValue());
+				if(zoomIdx >= 0)
+					zoomSlider.setValue(zoomIdx);
+			}
 			tierPanel.revalidate();
 		});
 		timeModel.setPixelsPerSecond(25.0f);
@@ -261,7 +267,8 @@ public final class TimeGridView extends EditorView {
 	public JMenu getMenu() {
 		JMenu menu = new JMenu();
 		
-		menu.add(new ZoomInAction(this));
+		menu.add(new ZoomAction(this, 1));
+		menu.add(new ZoomAction(this, -1));
 		
 		return menu;
 	}
