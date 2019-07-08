@@ -61,15 +61,15 @@ public class RecordTier extends TimeGridTier {
 	private void setupEditorEvents() {
 		getParentView().getEditor().getEventManager()
 			.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
-		getParentView().getEditor().getEventManager()
-			.registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
+//		getParentView().getEditor().getEventManager()
+//			.registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
 	}
 	
 	private void deregisterEditorEvents() {
 		getParentView().getEditor().getEventManager()
 			.removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
-		getParentView().getEditor().getEventManager()
-			.removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
+//		getParentView().getEditor().getEventManager()
+//			.removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
 	}
 	
 	/* Editor events */

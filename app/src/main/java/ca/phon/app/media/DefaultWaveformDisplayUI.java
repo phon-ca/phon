@@ -17,6 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
@@ -60,11 +61,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private Map<Channel, double[][]> channelExtremaMap = new HashMap<>();
 	
-//	private Map<Channel, BufferedImage> channelImages = new HashMap<>();
-	
 	private WaveformDisplay display;
 	
 	private boolean needsRepaint = true;
+	
+	private AtomicReference<SampledPaintWorker> workerRef = new AtomicReference<>();
 	
 	@Override
 	public void installUI(JComponent c) {
@@ -88,22 +89,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private void installListeners(WaveformDisplay display) {
 		display.addPropertyChangeListener(propListener);
-//		display.getTimeModel().addPropertyChangeListener(propListener);
 	}
 	
 	private void uninstallListeners(WaveformDisplay display) {
 		display.removePropertyChangeListener(propListener);
-//		display.getTimeModel().removePropertyChangeListener(propListener);
 	}
-	
-	public float timeAtX(int x) {
-		return (x - display.getChannelInsets().left) / display.getPixelsPerSecond();
-	}
-	
-	public int xForTime(float time) {
-		return (int)Math.round( display.getPixelsPerSecond() * time ) + display.getChannelInsets().left;
-	}
-		
+			
 	private RoundRectangle2D getChannelRect(Channel ch) {
 		int x = display.getChannelInsets().left;
 		int y = getChannelY(ch);
@@ -164,7 +155,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		double[][] channelExtrema = channelExtremaMap.get(ch);
 		
 		int y = (int)channelRect.getY();
-		for(double x = startX; x < endX; x += barSize) {
+		for(double x = startX; x < endX && x < channelExtrema[0].length; x += barSize) {
 			g2.setStroke(stroke);
 					
 			int idx = (int)Math.round((x - channelRect.getX()));
@@ -200,9 +191,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	@Override
 	public Dimension getPreferredSize(JComponent comp) {
-		int prefWidth = (display.getLongSound() == null ? 0 :
-			 (display.getChannelInsets().left+display.getChannelInsets().right) + 
-					((int)Math.round(display.getLongSound().length() * display.getPixelsPerSecond()) ) );
+		int prefWidth = super.getPreferredSize(comp).width;
 	
 		int prefHeight = (display.getVisibleChannelCount() * display.getChannelHeight())
 				+ (display.getVisibleChannelCount() * (display.getChannelInsets().top + display.getChannelInsets().bottom));
@@ -219,9 +208,19 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		if(!(c instanceof WaveformDisplay))
 			throw new IllegalArgumentException("Wrong class");
 		
-		int cnt = (int)Math.ceil(display.getLongSound().length() * display.getPixelsPerSecond());
+		float audioLength = 0.0f;
+		if(display.getLongSound() != null) {
+			audioLength = display.getLongSound().length();
+		}
+		
+		int cnt = (int)Math.floor(audioLength * display.getPixelsPerSecond());
 		if(needsRepaint) {
 			needsRepaint = false;
+			
+			SampledPaintWorker currentWorker = workerRef.get();
+			if(currentWorker != null && !currentWorker.isDone()) {
+				currentWorker.cancel(true);
+			}
 		
 			channelExtremaMap.clear();
 			for(Channel ch:display.availableChannels()) {
@@ -234,7 +233,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				}
 			}
 			
-			(new SampledPaintWorker()).execute();
+			SampledPaintWorker worker = new SampledPaintWorker();
+			workerRef = new AtomicReference<>(worker);
+			worker.execute();
 		}
 		
 		Graphics2D g2 = (Graphics2D)g;
@@ -269,6 +270,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				paintChannelData(g2, ch, sx, ex);
 			}
 		}
+		
+		// TODO paint markers and intervals
 	}
 	
 	private final PropertyChangeListener propListener = (e) -> {
@@ -277,9 +280,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				|| "startTime".equals(e.getPropertyName())
 				|| "endTime".equals(e.getPropertyName())
 				|| "pixelsPerSecond".equals(e.getPropertyName()) ) {
-			System.out.println(e);
+			
 			needsRepaint = true;
+			
 			display.revalidate();
+			display.repaint();
 		}
 	};
 	
@@ -306,8 +311,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		float time = 0.0f;
 		
-		double startX = xForTime(startTime);
-		double endX = xForTime(endTime);
+		double startX = display.xForTime(startTime);
+		double endX = display.xForTime(endTime);
 		
 		for(double x = startX; x < endX; x += barSize) {
 			time = (float)(x * secondsPerPixel);
@@ -328,15 +333,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		@Override
 		protected Tuple<Float, Float> doInBackground() throws Exception {
 			final LongSound sound = display.getLongSound();
-			
-			
-//			final Sampled sampled = display.getSampled();
-//			Map<Channel, Graphics2D> gMap = new HashMap<>();
-//			
+
 			// load in 5s intervals
 			float incr = 5.0f;
 			float time = display.getStartTime();
-			while(time < display.getEndTime()) {
+			while(time < display.getEndTime() && !isCancelled()) {
 				float endTime = Math.min(time+incr, display.getEndTime());
 				
 				final Sound snd = sound.extractPart(time, endTime);
@@ -345,14 +346,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 					if(!display.isChannelVisible(ch)) continue;
 					
 					loadWaveformData(snd, ch, time, endTime);
-					
-//					paintWaveformWindow(sampled, ch, g2, time, endTime);
 				}
 				publish(new Tuple<>(time, endTime));
 				time = endTime;
 			}
-//			
-//			// done() is not used
+
+			// done() is not used
 			return new Tuple<Float, Float>(0.0f, 0.0f);
 		}
 
@@ -364,8 +363,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				startTime = (startTime < 0.0f ? startTime = tuple.getObj1() : Math.min(tuple.getObj1(), startTime));
 				endTime = Math.max(endTime, tuple.getObj2());
 			}
-			var startX = xForTime(startTime);
-			var endX = xForTime(endTime);
+			var startX = display.xForTime(startTime);
+			var endX = display.xForTime(endTime);
 
 			display.repaint((int)startX, 0, (int)endX, display.getHeight());
 		}

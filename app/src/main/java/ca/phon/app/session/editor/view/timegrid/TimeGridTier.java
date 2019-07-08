@@ -62,6 +62,12 @@ public abstract class TimeGridTier extends TimeComponent {
 		return this.parentViewRef.get();
 	}
 	
+	public Dimension getPreferredSize() {
+		Dimension retVal = super.getPreferredSize();
+		retVal.width = timebar.getPreferredSize().width;
+		return retVal;
+	}
+	
 	public boolean isResizeable() {
 		return true;
 	}

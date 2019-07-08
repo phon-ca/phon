@@ -3,17 +3,22 @@ package ca.phon.app.session.editor.view.timegrid;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
@@ -36,6 +41,7 @@ import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import groovy.swing.factory.GlueFactory;
 
 public final class TimeGridView extends EditorView {
 
@@ -43,7 +49,16 @@ public final class TimeGridView extends EditorView {
 	
 	public static final String VIEW_TITLE = "Time Grid";
 	
+	/**
+	 * Values for the zoom bar
+	 */
+	public static final float zoomValues[] = { 25.0f, 50.0f, 75.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
+	
+	private static final int defaultZoomIdx = 3;
+	
 	private JToolBar toolbar;
+	
+	private JSlider zoomSlider;
 	
 	private JPanel tierPanel;
 	
@@ -66,17 +81,16 @@ public final class TimeGridView extends EditorView {
 	}
 	
 	private void init() {
-		toolbar = new JToolBar();
+		toolbar = setupToolbar();
 		
-		tierPanel = new JPanel(new VerticalLayout());
+		tierPanel = new JPanel(new GridBagLayout());
 		JScrollPane scroller = new JScrollPane(tierPanel);
 		
 		timeModel = new TimeUIModel();
 		timeModel.addPropertyChangeListener((e) -> {
 			tierPanel.revalidate();
-			scroller.revalidate();
 		});
-		timeModel.setPixelsPerSecond(100.0f);
+		timeModel.setPixelsPerSecond(25.0f);
 		timeModel.setStartTime(0.0f);
 		timeModel.setEndTime(0.0f);
 		
@@ -88,36 +102,68 @@ public final class TimeGridView extends EditorView {
 		addTier(wavTier);
 		addTier(recordGrid);
 		
-		
-		
-//		List<Participant> speakers = new ArrayList<>();
-//		speakers.add(Participant.UNKNOWN);
-//		getEditor().getSession().getParticipants().forEach( speakers::add );
-//		for(var speaker:speakers) {
-//			addTier(new SegmentTier(this, speaker, "Orthography"));
-//		}
-		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = tierIdx++;
+		tierPanel.add(Box.createVerticalGlue(), gbc);
+
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.NORTH);
 		
 		add(scroller, BorderLayout.CENTER);
 	}
 	
+	private JToolBar setupToolbar() {
+		JToolBar toolbar = new JToolBar();
+		
+		zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 0, zoomValues.length-1, defaultZoomIdx);
+		zoomSlider.setPaintLabels(false);
+		zoomSlider.setPaintTicks(true);
+		zoomSlider.setPaintTrack(true);
+		zoomSlider.setSnapToTicks(true);
+		zoomSlider.putClientProperty("JComponent.sizeVariant", "small");
+		
+		zoomSlider.addChangeListener( (e) -> {
+			getTimeModel().setPixelsPerSecond(zoomValues[zoomSlider.getValue()]);
+		});
+		toolbar.add(zoomSlider);
+		
+		return toolbar;
+	}
+	
+	private int tierIdx = 0;
 	private void addTier(TimeGridTier tier) {
-		tierPanel.add(tier);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.weightx = 1.0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = tierIdx++;
+		
+		tierPanel.add(tier, gbc);
 		
 		if(tier.isResizeable()) {
 			var separator =  new JSeparator(SwingConstants.HORIZONTAL);
 			separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 			separator.addMouseMotionListener(new SeparatorMouseListener(tier));
 			
-			tierPanel.add(separator);
+			gbc.gridy = tierIdx++;
+			
+			tierPanel.add(separator, gbc);
 		}
 	}
 	
 	private void update() {
 		final File audioFile = getAudioFile();
-		if(audioFile != null) {
+		if(audioFile != null && audioFile.exists() && audioFile.canRead()) {
 			loadSessionAudio(audioFile);
 		} else {
 			// determine time values based on record segements
@@ -175,20 +221,20 @@ public final class TimeGridView extends EditorView {
 		return this.timeModel;
 	}
 	
-	private final DelegateEditorAction onEditorClosingAct = new DelegateEditorAction(this, "onEditorClosing");
+//	private final DelegateEditorAction onEditorClosingAct = new DelegateEditorAction(this, "onEditorClosing");
 	
 	private final DelegateEditorAction onMediaChangedAct = new DelegateEditorAction(this, "onMediaChanged");
 	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosingAct);
+//		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosingAct);
 	}
 	
 	private void deregisterEditorEvents() {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 	
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosingAct);
+//		getEditor().getEventManager().removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosingAct);
 	}
 	
 	@RunOnEDT
