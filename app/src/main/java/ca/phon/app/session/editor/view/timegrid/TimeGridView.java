@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,8 @@ import ca.phon.media.util.MediaLocator;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import groovy.swing.factory.GlueFactory;
@@ -53,7 +56,7 @@ public final class TimeGridView extends EditorView {
 	/**
 	 * Values for the zoom bar
 	 */
-	public static final float zoomValues[] = { 25.0f, 50.0f, 75.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
+	public static final float zoomValues[] = { 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
 	
 	private static final int defaultZoomIdx = 3;
 	
@@ -96,7 +99,7 @@ public final class TimeGridView extends EditorView {
 			}
 			tierPanel.revalidate();
 		});
-		timeModel.setPixelsPerSecond(25.0f);
+		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
 		timeModel.setEndTime(0.0f);
 		
@@ -227,32 +230,50 @@ public final class TimeGridView extends EditorView {
 		return this.timeModel;
 	}
 	
-//	private final DelegateEditorAction onEditorClosingAct = new DelegateEditorAction(this, "onEditorClosing");
+	public void scrollToTime(float time) {
+		var x = getTimeModel().xForTime(time);
+		var rect = tierPanel.getVisibleRect();
+		rect.x = (int)x;
+		tierPanel.scrollRectToVisible(rect);
+	}
+	
+	/* Editor actions */
 	
 	private final DelegateEditorAction onMediaChangedAct = new DelegateEditorAction(this, "onMediaChanged");
 	
+	private final DelegateEditorAction onRecordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
+	
+	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
+	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
-
-//		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosingAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	private void deregisterEditorEvents() {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
-	
-//		getEditor().getEventManager().removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosingAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	@RunOnEDT
 	public void onMediaChanged(EditorEvent ee) {
-		
+		update();
 	}
 	
 	@RunOnEDT
-	public void onEditorClosing(EditorEvent ee) {
-		deregisterEditorEvents();
+	public void onRecordChanged(EditorEvent ee) {
+		recordGrid.repaint();
 	}
-
+	
+	@RunOnEDT
+	public void onTierChanged(EditorEvent ee) {
+		if(SystemTierType.Orthography.getName().equals(ee.getEventData().toString())) {
+			recordGrid.repaint();
+		}
+	}
+	
 	@Override
 	public String getName() {
 		return VIEW_TITLE;
@@ -271,6 +292,13 @@ public final class TimeGridView extends EditorView {
 		menu.add(new ZoomAction(this, -1));
 		
 		return menu;
+	}
+	
+	@Override
+	public void onClose() {
+		super.onClose();
+		
+		deregisterEditorEvents();
 	}
 
 	private class SeparatorMouseListener extends MouseInputAdapter {

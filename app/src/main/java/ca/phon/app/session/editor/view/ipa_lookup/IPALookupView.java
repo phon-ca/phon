@@ -120,7 +120,7 @@ public class IPALookupView extends EditorView {
 		final SessionEditor editor = getEditor();
 		
 		final DelegateEditorAction recordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
-		editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
+		editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangeAct);
 		
 		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierChanged");
 		editor.getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);

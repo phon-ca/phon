@@ -254,7 +254,7 @@ public class RecordDataEditorView extends EditorView {
 
 		final EditorAction onRecordChangeAct =
 				new DelegateEditorAction(this, "onRecordChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
 
 		final EditorAction onGroupListChangeAct =

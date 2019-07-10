@@ -2,15 +2,23 @@ package ca.phon.app.session.editor.view.timegrid;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+
+import com.teamdev.jxbrowser.chromium.swing.internal.SwingUtil;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -18,6 +26,8 @@ import ca.phon.session.Session;
 public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private final static int TOP_BOTTOM_MARGIN = 5;
+	
+	private final static int TEXT_MARGIN = 5;
 	
 	private RecordGrid recordGrid;
 	
@@ -67,21 +77,68 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		Session session = recordGrid.getSession();
 		for(Record r:session.getRecords()) {
-			Rectangle2D segmentRect = getSegmentRect(r);
-			RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
-					segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
-			
-			if(segmentRect.intersects(g.getClipBounds())) {
-//				g2.setColor(Color.lightGray);
-//				g2.fill(roundedRect);
-				g2.setColor(Color.DARK_GRAY);
-				g2.draw(roundedRect);
-			}
+			paintSegment(g2, r);
 		}
 	}
 	
 	protected void paintSegment(Graphics2D g2, Record r) {
+		Rectangle2D segmentRect = getSegmentRect(r);
+		RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
+				segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
 		
+		if(segmentRect.intersects(g2.getClipBounds())) {
+			paintSegmentLabel(g2, r);
+			
+			g2.setColor(Color.DARK_GRAY);
+			g2.draw(roundedRect);
+		}
+	}
+	
+	protected void paintSegmentLabel(Graphics2D g2, Record r) {
+		Rectangle2D segmentRect = getSegmentRect(r);
+		
+		final Font font = recordGrid.getFont();
+		final FontMetrics fm = g2.getFontMetrics(font);	
+		g2.setFont(font);
+		Rectangle2D ellipsisRect = fm.getStringBounds("\u2026", g2);
+		
+		JLabel renderer = new JLabel();
+		renderer.setOpaque(false);
+		renderer.setFont(font);
+		renderer.setDoubleBuffered(false);
+		
+//		StringBuffer buffer = new StringBuffer();
+//		buffer.append("<html>");
+//		for(Orthography ortho:r.getOrthography()) {
+//			buffer.append("<span color='#cccccc'>[</span>");
+//			buffer.append(ortho.toString());
+//			buffer.append("<span color='#cccccc'>]</span>");
+//		}
+//		buffer.append("</html>");
+//		String label = buffer.toString();
+		renderer.setText(r.getOrthography().toString());
+		
+		g2.setColor(recordGrid.getForeground());
+		
+		int labelX = (int)segmentRect.getX() + TEXT_MARGIN;
+		int labelY = (int)segmentRect.getY();
+		int labelWidth = (int)segmentRect.getWidth() - (2 * TEXT_MARGIN);
+		
+//		if(labelWidth < renderer.getPreferredSize().getWidth()) {
+//			labelWidth -= (int)ellipsisRect.getWidth();
+//		}
+		
+		int labelHeight = (int)segmentRect.getHeight();
+		
+		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
+				labelX, labelY, labelWidth, labelHeight);
+		
+//		// paint ellipsis if necessary
+//		if(labelWidth < renderer.getPreferredSize().getWidth()) {
+//			renderer.setText("\u2026");
+//			SwingUtilities.paintComponent(g2, renderer, recordGrid, 
+//					labelX + labelWidth, labelY, (int)renderer.getPreferredSize().getWidth(), labelHeight);
+//		}
 	}
 
 }

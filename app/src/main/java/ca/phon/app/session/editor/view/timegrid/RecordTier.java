@@ -28,6 +28,7 @@ import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SystemTierType;
+import ca.phon.ui.fonts.FontPreferences;
 
 public class RecordTier extends TimeGridTier {
 	
@@ -45,6 +46,7 @@ public class RecordTier extends TimeGridTier {
 		recordGrid = new RecordGrid(getTimeModel(), session);
 		
 		recordGrid.addSpeaker(Participant.UNKNOWN);
+		recordGrid.setFont(FontPreferences.getTierFont());
 		session.getParticipants().forEach( recordGrid::addSpeaker );
 		recordGrid.addTier(SystemTierType.Orthography.getName());
 		
@@ -60,14 +62,14 @@ public class RecordTier extends TimeGridTier {
 	
 	private void setupEditorEvents() {
 		getParentView().getEditor().getEventManager()
-			.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+			.registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChange);
 //		getParentView().getEditor().getEventManager()
 //			.registerActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
 	}
 	
 	private void deregisterEditorEvents() {
 		getParentView().getEditor().getEventManager()
-			.removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+			.removeActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChange);
 //		getParentView().getEditor().getEventManager()
 //			.removeActionForEvent(EditorEventType.EDITOR_CLOSING, onEditorClosing);
 	}

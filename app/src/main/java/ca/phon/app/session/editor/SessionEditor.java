@@ -494,7 +494,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
 		this.currentRecord = index;
-		final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_CHANGED_EVT, this, currentRecord());
+		final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, this, currentRecord());
 		getEventManager().queueEvent(ee);
 	}
 

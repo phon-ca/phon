@@ -180,7 +180,7 @@ public class MediaPlayerEditorView extends EditorView {
 
 		final EditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangedAct);
 
 		final EditorAction segmentPlaybackAct =
 				new DelegateEditorAction(this, "doSegmentPlayback");

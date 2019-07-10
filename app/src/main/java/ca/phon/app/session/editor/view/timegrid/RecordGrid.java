@@ -18,7 +18,7 @@ import ca.phon.session.Session;
 
 public class RecordGrid extends TimeComponent {
 
-	private final static int DEFAULT_TIER_HEIGHT = 50;
+	private final static int DEFAULT_TIER_HEIGHT = 30;
 	
 	private int tierHeight = DEFAULT_TIER_HEIGHT;
 	

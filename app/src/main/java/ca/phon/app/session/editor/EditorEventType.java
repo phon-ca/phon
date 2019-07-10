@@ -79,10 +79,10 @@ public class EditorEventType {
 	public final static String SESSION_CHANGED_EVT = "_SESSION_CHANGED_";
 
 	/**
-	 * Record change
+	 * Record speaker change
 	 * data: record handle - IUtterance
 	 */
-	public final static String RECORD_CHANGED_EVT = "_RECORD_CHANGED_";
+	public final static String RECORD_SPEAKER_CHANGED_EVT = "_RECORD_SPEAKER_CHANGED_";
 
 	/**
 	 * Highlighted search result change

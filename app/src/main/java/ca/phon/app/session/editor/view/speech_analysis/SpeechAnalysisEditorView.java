@@ -169,7 +169,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		final DelegateEditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangedAct);
 
 		final DelegateEditorAction recordRefershAct =
 				new DelegateEditorAction(this, "onRecordRefresh");
