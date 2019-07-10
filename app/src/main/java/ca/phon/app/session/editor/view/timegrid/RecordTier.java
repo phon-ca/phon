@@ -45,9 +45,9 @@ public class RecordTier extends TimeGridTier {
 		Session session = getParentView().getEditor().getSession();
 		recordGrid = new RecordGrid(getTimeModel(), session);
 		
-		recordGrid.addSpeaker(Participant.UNKNOWN);
 		recordGrid.setFont(FontPreferences.getTierFont());
 		session.getParticipants().forEach( recordGrid::addSpeaker );
+		recordGrid.addSpeaker(Participant.UNKNOWN);
 		recordGrid.addTier(SystemTierType.Orthography.getName());
 		
 		getContentPane().setLayout(new BorderLayout());

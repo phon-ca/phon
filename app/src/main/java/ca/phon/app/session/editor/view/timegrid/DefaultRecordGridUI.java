@@ -15,13 +15,13 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import com.teamdev.jxbrowser.chromium.swing.internal.SwingUtil;
-
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class DefaultRecordGridUI extends RecordGridUI {
 	
@@ -29,7 +29,19 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private final static int TEXT_MARGIN = 5;
 	
+	private final static int TIER_GAP = 5;
+	
 	private RecordGrid recordGrid;
+	
+	private JLabel renderer;
+	
+	public DefaultRecordGridUI() {
+		super();
+		
+		renderer = new JLabel();
+		renderer.setOpaque(false);
+		renderer.setDoubleBuffered(false);
+	}
 	
 	@Override
 	public void installUI(JComponent c) {
@@ -40,7 +52,36 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	@Override
 	public void uninstallUI(JComponent c) {
 	}
+	
+	private int getSpeakerLabelHeight() {
+		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
+		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+		renderer.setText("Testy McTester");
+		
+		return renderer.getPreferredSize().height;
+	}
+	
+	private int getSpeakerTierHeight() {
+		return getSpeakerLabelHeight() + (recordGrid.getTiers().size() * recordGrid.getTierHeight());
+	}
 
+	/*
+	 * Return the y location of the speaker tier
+	 */
+	private Rectangle getSpeakerLabelRect(Participant speaker) {
+		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
+		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+		renderer.setText(speaker.getName());
+		
+		int y = TOP_BOTTOM_MARGIN + 
+				( recordGrid.getSpeakers().indexOf(speaker) * (getSpeakerTierHeight() + TIER_GAP) );
+		int x = TEXT_MARGIN;
+		int w = renderer.getPreferredSize().width;
+		int h = renderer.getPreferredSize().height;
+		
+		return new Rectangle(x, y, w, h);
+	}
+	
 	@Override
 	public Rectangle2D getSegmentRect(Record record) {
 		final MediaSegment seg = record.getSegment().getGroup(0);
@@ -48,7 +89,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		double x1 = recordGrid.getTimeModel().xForTime(seg.getStartValue() / 1000.0f);
 		double x2 = recordGrid.getTimeModel().xForTime(seg.getEndValue() / 1000.0f);
 		
-		int y = TOP_BOTTOM_MARGIN + recordGrid.getSpeakers().indexOf(record.getSpeaker()) * recordGrid.getTierHeight();
+		int y = TOP_BOTTOM_MARGIN + getSpeakerLabelHeight() +
+				( recordGrid.getSpeakers().indexOf(record.getSpeaker()) * (getSpeakerTierHeight() + TIER_GAP));
 		
 		return new Rectangle2D.Double(x1, y, x2-x1, recordGrid.getTierHeight());
 	}
@@ -58,7 +100,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Dimension prefSize = super.getPreferredSize(comp);
 		
 		int prefHeight = TOP_BOTTOM_MARGIN * 2 + 
-				recordGrid.getSpeakers().size() * recordGrid.getTiers().size() * recordGrid.getTierHeight();
+				recordGrid.getSpeakers().size() * recordGrid.getTiers().size() * ( recordGrid.getTierHeight() + 25 );
 		
 		return new Dimension(prefSize.width, prefHeight);
 	}
@@ -75,10 +117,36 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			g2.fill(g.getClipBounds());
 		}
 		
+		paintStripes(g2);
+		recordGrid.getSpeakers().forEach( (s) -> paintSpeakerLabel(g2, s) );
+		
 		Session session = recordGrid.getSession();
 		for(Record r:session.getRecords()) {
 			paintSegment(g2, r);
 		}
+	}
+	
+	protected void paintStripes(Graphics2D g2) {
+		g2.setColor(PhonGuiConstants.PHON_UI_STRIP_COLOR);
+		int speakerTierHeight = getSpeakerTierHeight();
+		for(int i = 1; i < recordGrid.getSpeakers().size(); i += 2) {
+			int x = recordGrid.getVisibleRect().x;
+			int y = TOP_BOTTOM_MARGIN + ( i * (getSpeakerTierHeight() + TIER_GAP));
+			int w = recordGrid.getVisibleRect().width;
+			int h = speakerTierHeight + TIER_GAP;
+			
+			g2.fillRect(x, y, w, h);
+		}
+	}
+	
+	protected void paintSpeakerLabel(Graphics g2, Participant speaker) {		
+		Rectangle speakerLabelRect = getSpeakerLabelRect(speaker);
+		speakerLabelRect.x += recordGrid.getVisibleRect().x;
+		
+		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
+		renderer.setText(speaker.getName());
+		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
 	}
 	
 	protected void paintSegment(Graphics2D g2, Record r) {
@@ -98,24 +166,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Rectangle2D segmentRect = getSegmentRect(r);
 		
 		final Font font = recordGrid.getFont();
-		final FontMetrics fm = g2.getFontMetrics(font);	
 		g2.setFont(font);
-		Rectangle2D ellipsisRect = fm.getStringBounds("\u2026", g2);
 		
-		JLabel renderer = new JLabel();
-		renderer.setOpaque(false);
+		renderer.setIcon(null);
 		renderer.setFont(font);
-		renderer.setDoubleBuffered(false);
 		
-//		StringBuffer buffer = new StringBuffer();
-//		buffer.append("<html>");
-//		for(Orthography ortho:r.getOrthography()) {
-//			buffer.append("<span color='#cccccc'>[</span>");
-//			buffer.append(ortho.toString());
-//			buffer.append("<span color='#cccccc'>]</span>");
-//		}
-//		buffer.append("</html>");
-//		String label = buffer.toString();
 		renderer.setText(r.getOrthography().toString());
 		
 		g2.setColor(recordGrid.getForeground());
@@ -123,22 +178,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		int labelX = (int)segmentRect.getX() + TEXT_MARGIN;
 		int labelY = (int)segmentRect.getY();
 		int labelWidth = (int)segmentRect.getWidth() - (2 * TEXT_MARGIN);
-		
-//		if(labelWidth < renderer.getPreferredSize().getWidth()) {
-//			labelWidth -= (int)ellipsisRect.getWidth();
-//		}
-		
 		int labelHeight = (int)segmentRect.getHeight();
 		
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
 				labelX, labelY, labelWidth, labelHeight);
-		
-//		// paint ellipsis if necessary
-//		if(labelWidth < renderer.getPreferredSize().getWidth()) {
-//			renderer.setText("\u2026");
-//			SwingUtilities.paintComponent(g2, renderer, recordGrid, 
-//					labelX + labelWidth, labelY, (int)renderer.getPreferredSize().getWidth(), labelHeight);
-//		}
 	}
 
 }
