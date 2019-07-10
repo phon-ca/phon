@@ -245,15 +245,17 @@ public final class TimeGridView extends EditorView {
 	
 	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
 	
+	private final DelegateEditorAction onRecordRefreshAct = new DelegateEditorAction(this, "onRecordRefresh");
+	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	private void deregisterEditorEvents() {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
@@ -265,6 +267,12 @@ public final class TimeGridView extends EditorView {
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
 		recordGrid.repaint();
+		Record r = getEditor().currentRecord();
+		if(r != null) {
+			MediaSegment seg = r.getSegment().getGroup(0);
+			float time = seg.getStartValue() / 1000.0f;
+			scrollToTime(time);
+		}
 	}
 	
 	@RunOnEDT

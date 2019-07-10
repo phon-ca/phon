@@ -160,7 +160,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		final EditorAction updateAct =
 				new DelegateEditorAction(this, "onDataChanged");
-		eventManager.registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, updateAct);
+		eventManager.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, updateAct);
 		eventManager.registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, updateAct);
 		eventManager.registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, updateAct);
 

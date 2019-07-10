@@ -201,7 +201,7 @@ public class ResultSetEditor extends ProjectFrame {
 						
 						recordChangedAct = 
 								new DelegateEditorAction(this, "onRecordChange");
-						editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangedAct);
+						editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 						
 						break;
 					}
@@ -658,7 +658,7 @@ public class ResultSetEditor extends ProjectFrame {
 			if(getEditor().getSelectionModel() != null) 
 				getEditor().getSelectionModel().clear();
 			if(getEditor().getEventManager() != null)
-				getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangedAct);
+				getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 		}
 		super.close();
 	}

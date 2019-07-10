@@ -137,7 +137,7 @@ public class ValidationEditorView extends EditorView {
 	
 	private void setupEditorActions() {
 		final DelegateEditorAction recordChangeAct = new DelegateEditorAction(this, "onRecordChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
 	}
 	
 	private void update() {

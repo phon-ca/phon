@@ -53,14 +53,14 @@ public class ChangeSpeakerEdit extends SessionEditorUndoableEdit {
 		
 		record.setSpeaker(oldSpeaker);
 		
-		queueEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, getEditor().getUndoSupport(), record);
+		queueEvent(EditorEventType.RECORD_CHANGED_EVT, getEditor().getUndoSupport(), record);
 	}
 
 	@Override
 	public void doIt() {
 		record.setSpeaker(speaker);
 		
-		queueEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, getSource(), record);
+		queueEvent(EditorEventType.RECORD_CHANGED_EVT, getSource(), record);
 	}
 
 }

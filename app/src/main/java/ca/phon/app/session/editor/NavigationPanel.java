@@ -78,7 +78,7 @@ public class NavigationPanel extends JPanel {
 	private void setupEditorActions() {
 		DelegateEditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_SPEAKER_CHANGED_EVT, recordChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
 
 		DelegateEditorAction recordAddedAct =
 				new DelegateEditorAction(this, "onRecordAdded");
