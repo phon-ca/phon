@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.timegrid;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.swing.plaf.ComponentUI;
 import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.session.Participant;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
 
 public class RecordGrid extends TimeComponent {
@@ -27,6 +29,10 @@ public class RecordGrid extends TimeComponent {
 	private Set<Participant> speakerSet = new LinkedHashSet<>();
 	
 	private Set<String> tierSet = new LinkedHashSet<>();
+	
+	private Record currentRecord = null;
+	
+	private Collection<Record> highlightedRecords = new ArrayList<>();
 	
 	private final static String uiClassId = "RecordGridUI";
 	
@@ -53,6 +59,19 @@ public class RecordGrid extends TimeComponent {
 	public void removeSpeaker(Participant speaker) {
 		var currentSpeakerCount = speakerSet.size();
 		speakerSet.remove(speaker);
+		firePropertyChange("speakerCount", currentSpeakerCount, speakerSet.size());
+	}
+	
+	public void setSpeakers(Collection<Participant> speakers) {
+		var currentSpeakerCount = speakerSet.size();
+		speakerSet.clear();
+		speakerSet.addAll(speakers);
+		firePropertyChange("speakerCount", currentSpeakerCount, speakerSet.size());
+	}
+	
+	public void clearSpeakers() {
+		var currentSpeakerCount = speakerSet.size();
+		speakerSet.clear();
 		firePropertyChange("speakerCount", currentSpeakerCount, speakerSet.size());
 	}
 	
@@ -84,6 +103,16 @@ public class RecordGrid extends TimeComponent {
 	
 	public List<String> getTiers() {
 		return Collections.unmodifiableList(new ArrayList<>(tierSet));
+	}
+	
+	public Record getCurrentRecord() {
+		return this.currentRecord;
+	}
+	
+	public void setCurrentRecord(Record record) {
+		var oldVal = this.currentRecord;
+		this.currentRecord = record;
+		super.firePropertyChange("currentRecord", oldVal, record);
 	}
 
 	public String getUIClassID() {

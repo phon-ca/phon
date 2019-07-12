@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.Timebar;
+import ca.phon.app.session.editor.EditorView;
 
 public abstract class TimeGridTier extends TimeComponent {
 
@@ -70,6 +71,14 @@ public abstract class TimeGridTier extends TimeComponent {
 	
 	public boolean isResizeable() {
 		return true;
+	}
+	
+	/**
+	 * Called when the {@link EditorView} is closed
+	 * 
+	 */
+	public void onClose() {
+		
 	}
 	
 }

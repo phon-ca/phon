@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.Icon;
 
@@ -29,6 +30,9 @@ public class TimeUIModel {
 	
 	private float endTime = 0.0f;
 	
+	/* Curent playback position */
+	private float currentTime = 0.0f;
+	
 	private final Collection<Marker> pointMarkers = Collections.synchronizedList(new ArrayList<>());
 	
 	private final Collection<Interval> intervals = Collections.synchronizedList(new ArrayList<>());
@@ -36,7 +40,7 @@ public class TimeUIModel {
 	private PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 	
 	/**
-	 * Utility method to round time to nearest milisecond.
+	 * Utility method to round time to nearest millisecond.
 	 * 
 	 * @param time
 	 * @return roundedTime
@@ -85,6 +89,16 @@ public class TimeUIModel {
 		this.endTime = endTime;
 		propSupport.firePropertyChange("endTime", oldVal, endTime);
 	}
+	
+	public float getCurrentTime() {
+		return this.currentTime;
+	}
+	
+	public void setCurrentTime(float currentTime) {
+		var oldVal = this.currentTime;
+		this.currentTime = currentTime;
+		propSupport.firePropertyChange("currentTime", oldVal, currentTime);
+	}
 
 	public float getPixelsPerSecond() {
 		return pixelsPerSecond;
@@ -128,7 +142,7 @@ public class TimeUIModel {
 //		addMarker(time, icon, "");
 //	}
 	
-	public Marker addMaker(float time, Icon icon, String text) {
+	public Marker addMarker(float time, Icon icon, String text) {
 		Marker marker = new Marker();
 		marker.time = time;
 		marker.icon = icon;
@@ -145,7 +159,33 @@ public class TimeUIModel {
 		pointMarkers.remove(marker);
 	}
 	
-
+	public Interval addInterval(float startTime, float endTime) {
+		Interval interval = new Interval();
+		interval.startMarker = new Marker();
+		interval.startMarker.time = startTime;
+		
+		interval.endMarker = new Marker();
+		interval.endMarker.time = endTime;
+		addInterval(interval);
+		return interval;
+	}
+	
+	public void addInterval(Interval interval) {
+		var intervalCount = intervals.size();
+		intervals.add(interval);
+		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
+	}
+	
+	public Collection<Interval> getIntervals() {
+		return Collections.unmodifiableCollection(this.intervals);
+	}
+	
+	public void clearIntervals() {
+		var intervalCount = intervals.size();
+		intervals.clear();
+		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
+	}
+	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propSupport.addPropertyChangeListener(listener);
 	}

@@ -1,5 +1,6 @@
 package ca.phon.app.media;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -14,6 +15,9 @@ import javax.swing.plaf.ComponentUI;
 public abstract class TimeComponent extends JComponent {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private Color selectionColor = new Color(50, 125, 200, 50);
+	public static final String SELECTION_COLOR_PROP = "selectionColor";
 
 	private TimeUIModel timeModel;
 	
@@ -71,6 +75,10 @@ public abstract class TimeComponent extends JComponent {
 
 	public double xForTime(float time) {
 		return timeModel.xForTime(time);
+	}
+	
+	public Color getSelectionColor() {
+		return this.selectionColor;
 	}
 	
 	private final PropertyChangeListener modelPropListener = new PropertyChangeListener() {

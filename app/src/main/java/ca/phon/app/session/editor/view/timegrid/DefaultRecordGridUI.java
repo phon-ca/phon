@@ -8,13 +8,23 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
+
+import ca.phon.app.media.TimeUIModel;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -47,10 +57,59 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	public void installUI(JComponent c) {
 		if(!(c instanceof RecordGrid)) throw new IllegalArgumentException("Invalid class");
 		this.recordGrid = (RecordGrid)c;
+		this.recordGrid.setFocusable(true);
+		
+		this.recordGrid.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				recordGrid.repaint();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				recordGrid.repaint();
+			}
+		});
+		
+		this.recordGrid.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				recordGrid.requestFocus();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		c.addPropertyChangeListener(propListener);
 	}
 
 	@Override
 	public void uninstallUI(JComponent c) {
+		c.removePropertyChangeListener(propListener);
 	}
 	
 	private int getSpeakerLabelHeight() {
@@ -124,6 +183,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		for(Record r:session.getRecords()) {
 			paintSegment(g2, r);
 		}
+		
+		for(var interval:recordGrid.getTimeModel().getIntervals()) {
+			paintInterval(g2, interval);
+		}
 	}
 	
 	protected void paintStripes(Graphics2D g2) {
@@ -157,8 +220,21 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		if(segmentRect.intersects(g2.getClipBounds())) {
 			paintSegmentLabel(g2, r);
 			
-			g2.setColor(Color.DARK_GRAY);
-			g2.draw(roundedRect);
+			if(recordGrid.getCurrentRecord() == r) {
+				g2.setColor(Color.BLUE);
+				g2.draw(roundedRect);
+				
+				if(recordGrid.hasFocus()) {
+					InnerGlowPathEffect gpe = new InnerGlowPathEffect();
+					gpe.setBrushColor(Color.blue);
+					gpe.setEffectWidth(5);
+					gpe.apply(g2, roundedRect, 5, 5);
+				}
+				
+			} else {
+				g2.setColor(Color.LIGHT_GRAY);
+				g2.draw(roundedRect);
+			}
 		}
 	}
 	
@@ -184,4 +260,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				labelX, labelY, labelWidth, labelHeight);
 	}
 
+	private final PropertyChangeListener propListener = (e) -> {
+		if("speakerCount".equals(e.getPropertyName())) {
+			recordGrid.revalidate();
+		} else if("currentRecord".equals(e.getPropertyName())) {
+			recordGrid.repaint();
+		}
+	};
+	
 }

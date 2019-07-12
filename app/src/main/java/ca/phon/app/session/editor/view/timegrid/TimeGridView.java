@@ -18,12 +18,16 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -42,7 +46,10 @@ import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import groovy.swing.factory.GlueFactory;
@@ -63,6 +70,9 @@ public final class TimeGridView extends EditorView {
 	private JToolBar toolbar;
 	
 	private JSlider zoomSlider;
+	
+	private DropDownButton speakerVisibilityButton;
+	private JPopupMenu speakerVisibilityMenu;
 	
 	private JPanel tierPanel;
 	
@@ -130,6 +140,35 @@ public final class TimeGridView extends EditorView {
 	
 	private JToolBar setupToolbar() {
 		JToolBar toolbar = new JToolBar();
+		toolbar.setFloatable(false);
+		
+		speakerVisibilityMenu = new JPopupMenu();
+		speakerVisibilityMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				speakerVisibilityMenu.removeAll();
+				recordGrid.setupSpeakerMenu(new MenuBuilder(speakerVisibilityMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+		});
+		
+		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
+		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Speakers");
+		speakerVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show speaker visibility menu");
+		speakerVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+		speakerVisibilityAct.putValue(DropDownButton.BUTTON_POPUP, speakerVisibilityMenu);
+		speakerVisibilityAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingUtilities.BOTTOM);
+		speakerVisibilityAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		
+		speakerVisibilityButton = new DropDownButton(speakerVisibilityAct);
+		speakerVisibilityButton.setOnlyPopup(true);
 		
 		zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 0, zoomValues.length-1, defaultZoomIdx);
 		zoomSlider.setPaintLabels(false);
@@ -141,6 +180,8 @@ public final class TimeGridView extends EditorView {
 		zoomSlider.addChangeListener( (e) -> {
 			getTimeModel().setPixelsPerSecond(zoomValues[zoomSlider.getValue()]);
 		});
+		
+		toolbar.add(speakerVisibilityButton);
 		toolbar.add(zoomSlider);
 		
 		return toolbar;
@@ -243,20 +284,14 @@ public final class TimeGridView extends EditorView {
 	
 	private final DelegateEditorAction onRecordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
 	
-	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
-	
-	private final DelegateEditorAction onRecordRefreshAct = new DelegateEditorAction(this, "onRecordRefresh");
-	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	private void deregisterEditorEvents() {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	@RunOnEDT
@@ -266,19 +301,15 @@ public final class TimeGridView extends EditorView {
 	
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
-		recordGrid.repaint();
 		Record r = getEditor().currentRecord();
 		if(r != null) {
 			MediaSegment seg = r.getSegment().getGroup(0);
 			float time = seg.getStartValue() / 1000.0f;
-			scrollToTime(time);
-		}
-	}
-	
-	@RunOnEDT
-	public void onTierChanged(EditorEvent ee) {
-		if(SystemTierType.Orthography.getName().equals(ee.getEventData().toString())) {
-			recordGrid.repaint();
+			
+			var x = getTimeModel().xForTime(time);
+			if(!tierPanel.getVisibleRect().contains(x, 0)) {
+				scrollToTime(time);
+			}
 		}
 	}
 	
@@ -299,6 +330,11 @@ public final class TimeGridView extends EditorView {
 		menu.add(new ZoomAction(this, 1));
 		menu.add(new ZoomAction(this, -1));
 		
+		menu.addSeparator();
+		
+		MenuBuilder builder = new MenuBuilder(menu);
+		recordGrid.setupContextMenu(builder);
+		
 		return menu;
 	}
 	
@@ -307,6 +343,8 @@ public final class TimeGridView extends EditorView {
 		super.onClose();
 		
 		deregisterEditorEvents();
+		wavTier.onClose();
+		recordGrid.onClose();
 	}
 
 	private class SeparatorMouseListener extends MouseInputAdapter {
