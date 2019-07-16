@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,6 +75,9 @@ public final class TimeGridView extends EditorView {
 	private DropDownButton speakerVisibilityButton;
 	private JPopupMenu speakerVisibilityMenu;
 	
+	private DropDownButton tierVisiblityButton;
+	private JPopupMenu tierVisibilityMenu;
+	
 	private JPanel tierPanel;
 	
 	/**
@@ -106,6 +110,8 @@ public final class TimeGridView extends EditorView {
 				int zoomIdx = Arrays.binarySearch(zoomValues, (float)e.getNewValue());
 				if(zoomIdx >= 0)
 					zoomSlider.setValue(zoomIdx);
+			} else if(e.getPropertyName().equals("intervalCount")) {
+				updateIntervalListeners();
 			}
 			tierPanel.revalidate();
 		});
@@ -137,6 +143,45 @@ public final class TimeGridView extends EditorView {
 		
 		add(scroller, BorderLayout.CENTER);
 	}
+	
+	public TimegridWaveformTier getWaveformTier() {
+		return this.wavTier;
+	}
+	
+	public RecordTier getRecordTier() {
+		return this.recordGrid;
+	}
+	
+	private void updateIntervalListeners() {
+		for(var interval:getTimeModel().getIntervals()) {
+			if(!Arrays.asList(interval.getPropertyChangeListeners()).contains(intervalListener)) {
+				interval.addPropertyChangeListener(intervalListener);
+			}
+			
+		}
+	}
+	
+	private PropertyChangeListener intervalListener = (e) -> {
+		float oldTime = (float)e.getOldValue();
+		float newTime = (float)e.getNewValue();
+		
+		var oldX = (int)Math.round(getTimeModel().xForTime(oldTime));
+		var newX = (int)Math.round(getTimeModel().xForTime(newTime));
+		
+		Rectangle clipRect = new Rectangle(
+				(newTime < oldTime ? newX : oldX )-1,
+				0,
+				(newTime < oldTime ? oldX - newX : newX - oldX)+2,
+				wavTier.getHeight());
+		wavTier.repaint(clipRect);
+		
+		clipRect = new Rectangle(
+				(newTime < oldTime ? newX : oldX )-1,
+				0,
+				(newTime < oldTime ? oldX - newX : newX - oldX)+2,
+				recordGrid.getHeight());
+		recordGrid.repaint(clipRect);
+	};
 	
 	private JToolBar setupToolbar() {
 		JToolBar toolbar = new JToolBar();
@@ -170,6 +215,36 @@ public final class TimeGridView extends EditorView {
 		speakerVisibilityButton = new DropDownButton(speakerVisibilityAct);
 		speakerVisibilityButton.setOnlyPopup(true);
 		
+		tierVisibilityMenu = new JPopupMenu();
+		tierVisibilityMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				tierVisibilityMenu.removeAll();
+				recordGrid.setupTierMenu(new MenuBuilder(tierVisibilityMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
+		
+		final PhonUIAction tierVisibilityAct = new PhonUIAction(this, null);
+		tierVisibilityAct.putValue(PhonUIAction.NAME, "Tiers");
+		tierVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show tier visibility menu");
+		tierVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("blank", IconSize.SMALL));
+		tierVisibilityAct.putValue(DropDownButton.BUTTON_POPUP, tierVisibilityMenu);
+		tierVisibilityAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		tierVisibilityAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		
+		tierVisiblityButton = new DropDownButton(tierVisibilityAct);
+		tierVisiblityButton.setOnlyPopup(true);
+		
 		zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 0, zoomValues.length-1, defaultZoomIdx);
 		zoomSlider.setPaintLabels(false);
 		zoomSlider.setPaintTicks(true);
@@ -182,6 +257,7 @@ public final class TimeGridView extends EditorView {
 		});
 		
 		toolbar.add(speakerVisibilityButton);
+		toolbar.add(tierVisiblityButton);
 		toolbar.add(zoomSlider);
 		
 		return toolbar;

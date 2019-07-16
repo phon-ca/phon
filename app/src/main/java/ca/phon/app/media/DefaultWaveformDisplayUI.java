@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.media.LongSound;
 import ca.phon.media.Sound;
 import ca.phon.media.sampled.Channel;
@@ -155,7 +156,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		double[][] channelExtrema = channelExtremaMap.get(ch);
 		
 		int y = (int)channelRect.getY();
-		for(double x = startX; x < endX && x < channelExtrema[0].length; x += barSize) {
+		for(double x = startX; x <= endX && x < channelExtrema[0].length; x += barSize) {
 			g2.setStroke(stroke);
 					
 			int idx = (int)Math.round((x - channelRect.getX()));
@@ -271,7 +272,21 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			}
 		}
 		
-		// TODO paint markers and intervals
+		for(var interval:display.getTimeModel().getIntervals()) {
+			paintInterval(g2, interval);
+		}
+	}
+	
+	@Override
+	public void paintInterval(Graphics2D g2, Interval interval) {
+		var startX = display.xForTime(interval.getStartMarker().getTime());
+		var endX = display.xForTime(interval.getEndMarker().getTime());
+		
+		var rect = new Rectangle2D.Double(startX, 0, endX-startX, display.getHeight());
+		g2.setColor(new Color(255, 255, 255, 50));
+		g2.fill(rect);
+		
+		super.paintInterval(g2, interval);
 	}
 	
 	private final PropertyChangeListener propListener = (e) -> {

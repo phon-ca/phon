@@ -16,13 +16,21 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
+
+import com.infomatiq.jsi.rtree.RTree;
 
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.session.MediaSegment;
@@ -32,6 +40,7 @@ import ca.phon.session.Session;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import gnu.trove.TIntProcedure;
 
 public class DefaultRecordGridUI extends RecordGridUI {
 	
@@ -41,12 +50,17 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private final static int TIER_GAP = 5;
 	
+	private RTree recordTree;
+	
 	private RecordGrid recordGrid;
 	
 	private JLabel renderer;
 	
 	public DefaultRecordGridUI() {
 		super();
+		
+		recordTree = new RTree();
+		recordTree.init(null);
 		
 		renderer = new JLabel();
 		renderer.setOpaque(false);
@@ -55,6 +69,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	@Override
 	public void installUI(JComponent c) {
+		super.installUI(c);
 		if(!(c instanceof RecordGrid)) throw new IllegalArgumentException("Invalid class");
 		this.recordGrid = (RecordGrid)c;
 		this.recordGrid.setFocusable(true);
@@ -105,11 +120,25 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		});
 
 		c.addPropertyChangeListener(propListener);
+		c.addMouseListener(mouseListener);
+		c.addMouseMotionListener(mouseListener);
 	}
 
 	@Override
 	public void uninstallUI(JComponent c) {
+		super.uninstallUI(c);
+		
 		c.removePropertyChangeListener(propListener);
+		c.removeMouseListener(mouseListener);
+		c.removeMouseMotionListener(mouseListener);
+	}
+	
+	private boolean isRecordPressed(int recordIndex) {
+		return (recordIndex == mouseListener.pressedRecordIdx);
+	}
+	
+	private boolean isRecordHover(int recordIndex) {
+		return (recordIndex == mouseListener.enteredRecordIdx);
 	}
 	
 	private int getSpeakerLabelHeight() {
@@ -151,7 +180,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		int y = TOP_BOTTOM_MARGIN + getSpeakerLabelHeight() +
 				( recordGrid.getSpeakers().indexOf(record.getSpeaker()) * (getSpeakerTierHeight() + TIER_GAP));
 		
-		return new Rectangle2D.Double(x1, y, x2-x1, recordGrid.getTierHeight());
+		return new Rectangle2D.Double(x1, y, x2-x1, recordGrid.getTierHeight() * recordGrid.getTiers().size() );
 	}
 	
 	@Override
@@ -159,7 +188,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Dimension prefSize = super.getPreferredSize(comp);
 		
 		int prefHeight = TOP_BOTTOM_MARGIN * 2 + 
-				recordGrid.getSpeakers().size() * recordGrid.getTiers().size() * ( recordGrid.getTierHeight() + 25 );
+				recordGrid.getSpeakers().size() * (getSpeakerTierHeight() + TIER_GAP);
 		
 		return new Dimension(prefSize.width, prefHeight);
 	}
@@ -180,8 +209,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		recordGrid.getSpeakers().forEach( (s) -> paintSpeakerLabel(g2, s) );
 		
 		Session session = recordGrid.getSession();
-		for(Record r:session.getRecords()) {
-			paintSegment(g2, r);
+		recordTree.init(null);
+		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
+			Record r = session.getRecord(rIdx);
+			Rectangle2D segRect = paintSegment(g2, rIdx, r);
+			recordTree.add(new com.infomatiq.jsi.Rectangle(
+					(float)segRect.getX(), (float)segRect.getY(), 
+					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())), rIdx);
 		}
 		
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
@@ -212,14 +246,20 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
 	}
 	
-	protected void paintSegment(Graphics2D g2, Record r) {
+	protected Rectangle2D paintSegment(Graphics2D g2, int recordIndex, Record r) {
 		Rectangle2D segmentRect = getSegmentRect(r);
 		RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
 				segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
 		
 		if(segmentRect.intersects(g2.getClipBounds())) {
-			paintSegmentLabel(g2, r);
-			
+			Rectangle2D labelRect = new Rectangle2D.Double(
+					segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), recordGrid.getTierHeight());
+			for(String tier:recordGrid.getTiers()) {
+				paintSegmentLabel(g2, r, tier, labelRect);
+				labelRect.setRect(
+						labelRect.getX(), labelRect.getY() + labelRect.getHeight(), labelRect.getWidth(), labelRect.getHeight());
+			}
+				
 			if(recordGrid.getCurrentRecord() == r) {
 				g2.setColor(Color.BLUE);
 				g2.draw(roundedRect);
@@ -232,40 +272,128 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				}
 				
 			} else {
-				g2.setColor(Color.LIGHT_GRAY);
+				if(isRecordPressed(recordIndex)) {
+					g2.setColor(Color.GRAY);
+				} else {
+					g2.setColor(Color.LIGHT_GRAY);
+				}
 				g2.draw(roundedRect);
+				if(!isRecordPressed(recordIndex) && isRecordHover(recordIndex)) {
+					InnerGlowPathEffect gpe = new InnerGlowPathEffect();
+					gpe.setBrushColor(Color.GRAY);
+					gpe.setEffectWidth(5);
+					gpe.apply(g2, roundedRect, 5, 5);
+				}
 			}
+			
 		}
+		return segmentRect;
 	}
 	
-	protected void paintSegmentLabel(Graphics2D g2, Record r) {
-		Rectangle2D segmentRect = getSegmentRect(r);
-		
+	protected void paintSegmentLabel(Graphics2D g2, Record r, String tierName, Rectangle2D labelRect) {
 		final Font font = recordGrid.getFont();
 		g2.setFont(font);
 		
 		renderer.setIcon(null);
 		renderer.setFont(font);
 		
-		renderer.setText(r.getOrthography().toString());
+		String labelText = r.getTier(tierName).toString();
+		renderer.setText(labelText);
 		
 		g2.setColor(recordGrid.getForeground());
 		
-		int labelX = (int)segmentRect.getX() + TEXT_MARGIN;
-		int labelY = (int)segmentRect.getY();
-		int labelWidth = (int)segmentRect.getWidth() - (2 * TEXT_MARGIN);
-		int labelHeight = (int)segmentRect.getHeight();
+		int labelX = (int)labelRect.getX() + TEXT_MARGIN;
+		int labelY = (int)labelRect.getY();
+		int labelWidth = (int)labelRect.getWidth() - (2 * TEXT_MARGIN);
+		int labelHeight = (int)labelRect.getHeight();
 		
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
 				labelX, labelY, labelWidth, labelHeight);
 	}
 
 	private final PropertyChangeListener propListener = (e) -> {
-		if("speakerCount".equals(e.getPropertyName())) {
+		if("speakerCount".equals(e.getPropertyName())
+				|| "tierCount".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
 		} else if("currentRecord".equals(e.getPropertyName())) {
 			recordGrid.repaint();
 		}
+	};
+	
+	private final RecordGridMouseAdapter mouseListener = new RecordGridMouseAdapter();
+	
+	private class RecordGridMouseAdapter extends MouseInputAdapter {
+		
+		private int pressedRecordIdx = -1;
+		
+		private int enteredRecordIdx = -1;
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			recordTree.intersects(new com.infomatiq.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
+				
+				@Override
+				public boolean execute(int value) {
+					pressedRecordIdx = value;
+					recordGrid.fireRecordPressed(value, e);
+					recordGrid.repaint();
+					return true;
+				}
+				
+			});
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			recordTree.intersects(new com.infomatiq.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
+				
+				@Override
+				public boolean execute(int value) {
+					recordGrid.fireRecordClicked(value, e);
+					recordGrid.repaint();
+					return true;
+				}
+				
+			});
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(pressedRecordIdx >= 0) {
+				recordGrid.fireRecordReleased(pressedRecordIdx, e);
+				pressedRecordIdx = -1;
+				recordGrid.repaint();
+			}
+			pressedRecordIdx = -1;
+		}
+		
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			AtomicInteger intersectedRecord = new AtomicInteger(-1);
+			recordTree.intersects(new com.infomatiq.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
+				
+				@Override
+				public boolean execute(int value) {
+					intersectedRecord.set(value);
+					return true;
+				}
+				
+			});
+			
+			if(intersectedRecord.get() >= 0 && enteredRecordIdx != intersectedRecord.get()) {
+				if(enteredRecordIdx > 0) {
+					recordGrid.fireRecordExited(enteredRecordIdx, e);
+				}
+				enteredRecordIdx = intersectedRecord.get();
+				recordGrid.fireRecordEntered(enteredRecordIdx, e);
+				recordGrid.repaint();
+			} else if(intersectedRecord.get() < 0 && enteredRecordIdx >= 0) {
+				recordGrid.fireRecordExited(enteredRecordIdx, e);
+				enteredRecordIdx = -1;
+				recordGrid.repaint();
+			}
+		}
+
 	};
 	
 }

@@ -18,13 +18,22 @@ package ca.phon.app.opgraph;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
+import ca.phon.ipa.Diacritic;
+import ca.phon.ipamap.IpaMap;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Edit global options add provide a button for
@@ -40,12 +49,23 @@ public class GlobalParameterPanel extends JPanel {
 	private final static String IGNORE_DIACRITICS_PROP =
 			GlobalParameterPanel.class.getName() + ".ignoreDiacritics";
 	
+	private final static String RETAIN_DIACRITICS_PROP =
+			GlobalParameterPanel.class.getName() + ".retainDiacritics";
+
+	private final static String IGNORE_TONES_PROP =
+			GlobalParameterPanel.class.getName() + ".ignoreTones";
+	
 	private final static String INVENTORY_GROUPING_PROP = 
 			GlobalParameterPanel.class.getName() + ".inventoryGrouping";
 	
 	private JComboBox<String> caseSensitiveBox;
 	
 	private JComboBox<String> ignoreDiacriticsBox;
+	
+	private DropDownButton retainDiacriticsButton;
+	private IpaMap retainDiacriticsMap;
+	
+	private JComboBox<String> ignoreTonesBox;
 	
 	private JComboBox<String> inventoryGroupingBox;
 	
@@ -100,6 +120,21 @@ public class GlobalParameterPanel extends JPanel {
 		ignoreDiacriticsBox.setSelectedItem(PrefHelper.get(IGNORE_DIACRITICS_PROP, comboBoxItems[0]));
 		add(ignoreDiacriticsBox, gbc);
 		
+		final PhonUIAction dropDownAct = new PhonUIAction(this, "noOp");
+		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
+		dropDownAct.putValue(PhonUIAction.NAME, "Retain diacritics");
+		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select diacritics which will be retained when using the ignore diacritics setting");
+		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		
+		retainDiacriticsMap = new IpaMap();
+		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, retainDiacriticsMap);
+		
+		retainDiacriticsButton = new DropDownButton(dropDownAct);
+		retainDiacriticsButton.setOnlyPopup(true);
+		++gbc.gridx;
+		add(retainDiacriticsButton, gbc);
+		
 		++gbc.gridx;
 		JLabel grpingLbl = new JLabel("Inventory grouping:");
 		grpingLbl.putClientProperty("JComponent.sizeVariant", "small");
@@ -148,6 +183,30 @@ public class GlobalParameterPanel extends JPanel {
 	
 	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
 		this.ignoreDiacriticsBox.setSelectedIndex( ignoreDiacritics ? 1 : 2 );
+	}
+	
+	public Set<Diacritic> getGlobalRetainDiacritics() {
+		return new HashSet<>();
+	}
+	
+	public void setGlobalRetainDiacritics(Set<Diacritic> diacritics) {
+		// TODO
+	}
+	
+	public boolean isUseGlobalIgnoreTones() {
+		return this.ignoreTonesBox.getSelectedIndex() > 0;
+	}
+	
+	public void setUseDefaultIgnoreTones() {
+		this.ignoreTonesBox.setSelectedIndex(0);
+	}
+	
+	public boolean isIgnoreTones() {
+		return this.ignoreTonesBox.getSelectedIndex() == 1;
+	}
+	
+	public void setIgnoreTones(boolean ignoreTones) {
+		this.ignoreDiacriticsBox.setSelectedIndex( ignoreTones ? 1 : 2 );
 	}
 	
 	public boolean isUseInventoryGrouping() {

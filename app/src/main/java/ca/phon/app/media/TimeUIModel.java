@@ -1,6 +1,7 @@
 package ca.phon.app.media;
 
 import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.math.BigDecimal;
@@ -143,8 +144,7 @@ public class TimeUIModel {
 //	}
 	
 	public Marker addMarker(float time, Icon icon, String text) {
-		Marker marker = new Marker();
-		marker.time = time;
+		Marker marker = new Marker(time);
 		marker.icon = icon;
 		marker.text = text;
 		addMarker(marker);
@@ -160,12 +160,7 @@ public class TimeUIModel {
 	}
 	
 	public Interval addInterval(float startTime, float endTime) {
-		Interval interval = new Interval();
-		interval.startMarker = new Marker();
-		interval.startMarker.time = startTime;
-		
-		interval.endMarker = new Marker();
-		interval.endMarker.time = endTime;
+		Interval interval = new Interval(startTime, endTime);
 		addInterval(interval);
 		return interval;
 	}
@@ -202,15 +197,152 @@ public class TimeUIModel {
 		propSupport.removePropertyChangeListener(propertyName, listener);
 	}
 	
-	public class Marker {
-		public float time;
-		public Icon icon;
-		public String text;
+	public static class Marker {
+		
+		private PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
+		
+		private float time;
+		private Icon icon;
+		private String text;
+		
+		public Marker(float startTime) {
+			super();
+			this.time = startTime;
+			this.icon = null;
+			this.text = "";
+		}
+		
+		public float getTime() {
+			return this.time;
+		}
+		
+		public void setTime(float time) {
+			var oldVal = this.time;
+			this.time = time;
+			propSupport.firePropertyChange("time", oldVal, time);
+		}
+		
+		public Icon getIcon() {
+			return this.icon;
+		}
+		
+		public void setIcon(Icon icon) {
+			var oldVal = this.icon;
+			this.icon = icon;
+			propSupport.firePropertyChange("icon", oldVal, icon);
+		}
+		
+		public String getText() {
+			return this.text;
+		}
+		
+		public void setText(String text) {
+			var oldVal = this.text;
+			this.text = text;
+			propSupport.firePropertyChange("text", oldVal, text);
+		}
+
+		public void addPropertyChangeListener(PropertyChangeListener listener) {
+			propSupport.addPropertyChangeListener(listener);
+		}
+
+		public void removePropertyChangeListener(PropertyChangeListener listener) {
+			propSupport.removePropertyChangeListener(listener);
+		}
+
+		public PropertyChangeListener[] getPropertyChangeListeners() {
+			return propSupport.getPropertyChangeListeners();
+		}
+
+		public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+			propSupport.addPropertyChangeListener(propertyName, listener);
+		}
+
+		public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+			propSupport.removePropertyChangeListener(propertyName, listener);
+		}
+
+		public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+			return propSupport.getPropertyChangeListeners(propertyName);
+		}
+		
 	}
 	
-	public class Interval {
-		public Marker startMarker;
-		public Marker endMarker;
+	public static class Interval {
+		
+		private PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
+		
+		private final Marker startMarker;
+		private final Marker endMarker;
+		
+		public Interval() {
+			this(0.0f, 0.0f);
+		}
+		
+		public Interval(float startTime, float endTime) {
+			super();
+			
+			this.startMarker = new Marker(startTime);
+			this.startMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("startMarker.", propSupport));
+			this.endMarker = new Marker(endTime);
+			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("endMarker.", propSupport));
+		}
+		
+		public Marker getStartMarker() {
+			return this.startMarker;
+		}
+		
+		public Marker getEndMarker() {
+			return this.endMarker;
+		}
+
+		public void addPropertyChangeListener(PropertyChangeListener listener) {
+			propSupport.addPropertyChangeListener(listener);
+		}
+
+		public void removePropertyChangeListener(PropertyChangeListener listener) {
+			propSupport.removePropertyChangeListener(listener);
+		}
+
+		public PropertyChangeListener[] getPropertyChangeListeners() {
+			return propSupport.getPropertyChangeListeners();
+		}
+
+		public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+			propSupport.addPropertyChangeListener(propertyName, listener);
+		}
+
+		public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+			propSupport.removePropertyChangeListener(propertyName, listener);
+		}
+
+		public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+			return propSupport.getPropertyChangeListeners(propertyName);
+		}
+		
+	}
+	
+	private static class ForwardingPropertyChangeListener implements PropertyChangeListener {
+
+		private String prefix;
+		
+		private PropertyChangeSupport propSupport;
+		
+		public ForwardingPropertyChangeListener(String prefix, PropertyChangeSupport propSupport) {
+			super();
+			this.prefix = prefix;
+			this.propSupport = propSupport;
+		}
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			propSupport.firePropertyChange(createFowardingEvent(evt));
+		}
+		
+		private PropertyChangeEvent createFowardingEvent(PropertyChangeEvent evt) {
+			return new PropertyChangeEvent(evt.getSource(), prefix + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		}
+		
 	}
 
 }

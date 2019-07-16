@@ -14,6 +14,14 @@
 	<description>Phon application project.  This project includes all code related to the
 	UI and all application level logic.</description>
 
+	<repositories>
+		<repository>
+		  <id>jsi.sourceforge.net</id>
+		  <name>sourceforge jsi repository</name>
+		  <url>http://sourceforge.net/projects/jsi/files/m2_repo</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 	<dependency>
 			<groupId>org.antlr</groupId>
@@ -178,6 +186,12 @@
 			<groupId>com.github.zafarkhaja</groupId>
 			<artifactId>java-semver</artifactId>
 			<version>0.9.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>net.sourceforge.jsi</groupId>
+		  <artifactId>jsi</artifactId>
+		  <version>1.0.0</version>
 		</dependency>
 	</dependencies>
 

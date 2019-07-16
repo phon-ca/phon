@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.timegrid;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import ca.phon.session.Session;
 
 public class RecordGrid extends TimeComponent {
 
-	private final static int DEFAULT_TIER_HEIGHT = 30;
+	private final static int DEFAULT_TIER_HEIGHT = 25;
 	
 	private int tierHeight = DEFAULT_TIER_HEIGHT;
 	
@@ -32,7 +33,7 @@ public class RecordGrid extends TimeComponent {
 	
 	private Record currentRecord = null;
 	
-	private Collection<Record> highlightedRecords = new ArrayList<>();
+	private final List<RecordGridMouseListener> listeners = Collections.synchronizedList(new ArrayList<>());
 	
 	private final static String uiClassId = "RecordGridUI";
 	
@@ -87,6 +88,13 @@ public class RecordGrid extends TimeComponent {
 		firePropertyChange("tierCount", tierCount, tierSet.size());
 	}
 	
+	public void setTiers(Collection<String> tierNames) {
+		var currentTierCount = tierSet.size();
+		tierSet.clear();
+		tierSet.addAll(tierNames);
+		firePropertyChange("tierCount", currentTierCount, tierSet.size());
+	}
+	
 	public int getTierHeight() {
 		return this.tierHeight;
 	}
@@ -113,6 +121,34 @@ public class RecordGrid extends TimeComponent {
 		var oldVal = this.currentRecord;
 		this.currentRecord = record;
 		super.firePropertyChange("currentRecord", oldVal, record);
+	}
+	
+	public void addRecordGridMouseListener(RecordGridMouseListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeRecordGridMouseListener(RecordGridMouseListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public void fireRecordClicked(int recordIndex, MouseEvent me) {
+		listeners.forEach( (l) -> l.recordClicked(recordIndex, me) );
+	}
+	
+	public void fireRecordPressed(int recordIndex, MouseEvent me) {
+		listeners.forEach( (l) -> l.recordPressed(recordIndex, me) );
+	}
+	
+	public void fireRecordReleased(int recordIndex, MouseEvent me) {
+		listeners.forEach( (l) -> l.recordReleased(recordIndex, me) );
+	}
+	
+	public void fireRecordEntered(int recordIndex, MouseEvent me) {
+		listeners.forEach( (l) -> l.recordEntered(recordIndex, me) );
+	}
+	
+	public void fireRecordExited(int recordIndex, MouseEvent me) {
+		listeners.forEach( (l) -> l.recordExited(recordIndex, me) );
 	}
 
 	public String getUIClassID() {
