@@ -275,6 +275,9 @@ public class TimeUIModel {
 		private final Marker startMarker;
 		private final Marker endMarker;
 		
+		/* true when dragging markers */
+		private volatile boolean valueAdjusting = false;
+		
 		public Interval() {
 			this(0.0f, 0.0f);
 		}
@@ -286,6 +289,16 @@ public class TimeUIModel {
 			this.startMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("startMarker.", propSupport));
 			this.endMarker = new Marker(endTime);
 			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("endMarker.", propSupport));
+		}
+		
+		public boolean isValueAdjusting() {
+			return this.valueAdjusting;
+		}
+		
+		public void setValueAdjusting(boolean valueAdjusting) {
+			var oldVal = this.valueAdjusting;
+			this.valueAdjusting = valueAdjusting;
+			propSupport.firePropertyChange("valueAdjusting", oldVal, valueAdjusting);
 		}
 		
 		public Marker getStartMarker() {

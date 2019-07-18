@@ -36,10 +36,12 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonActionEvent;
@@ -65,12 +67,14 @@ public class RecordTier extends TimeGridTier {
 	private void init() {
 		Session session = getParentView().getEditor().getSession();
 		recordGrid = new RecordGrid(getTimeModel(), session);
+		setupRecord(getParentView().getEditor().currentRecord());
 		
 		recordGrid.setFont(FontPreferences.getTierFont());
 		setupSpeakers();
 		
 		// add ortho by default
 		tierVisibility.put(SystemTierType.Orthography.getName(), Boolean.TRUE);
+		tierVisibility.put(SystemTierType.Segment.getName(), Boolean.TRUE);
 		setupTiers();
 		
 		recordGrid.addRecordGridMouseListener(mouseListener);
@@ -112,12 +116,8 @@ public class RecordTier extends TimeGridTier {
 		getParentView().getEditor().getEventManager()
 			.removeActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantAddedAct);
 	}
-		
-	/* Editor events */
-	@RunOnEDT
-	public void onRecordChange(EditorEvent evt) {
-		Record r = (Record)evt.getEventData();
-		
+	
+	private void setupRecord(Record r) {
 		getTimeModel().clearIntervals();
 		MediaSegment segment = r.getSegment().getGroup(0);
 		var segStartTime = segment.getStartValue() / 1000.0f;
@@ -126,6 +126,15 @@ public class RecordTier extends TimeGridTier {
 		interval.addPropertyChangeListener(new RecordIntervalListener(interval));
 		
 		recordGrid.setCurrentRecord(r);
+	}
+		
+	/* Editor events */
+	@RunOnEDT
+	public void onRecordChange(EditorEvent evt) {
+		Record r = (Record)evt.getEventData();
+		setupRecord(r);
+		
+		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 	
 	
@@ -144,7 +153,8 @@ public class RecordTier extends TimeGridTier {
 	public void onTierChanged(EditorEvent ee) {
 		if(SystemTierType.Orthography.getName().equals(ee.getEventData().toString())
 				|| SystemTierType.Segment.getName().equals(ee.getEventData().toString())) {
-			recordGrid.repaint();
+			setupRecord(getParentView().getEditor().currentRecord());
+			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 	}
 	
@@ -263,6 +273,8 @@ public class RecordTier extends TimeGridTier {
 		
 		private Interval interval;
 		
+		private boolean isFirstChange = true;
+		
 		public RecordIntervalListener(Interval interval) {
 			this.interval = interval;
 		}
@@ -271,14 +283,32 @@ public class RecordTier extends TimeGridTier {
 		public void propertyChange(PropertyChangeEvent evt) {
 			Record r = recordGrid.getCurrentRecord();
 			MediaSegment segment = r.getSegment().getGroup(0);
+			final SessionFactory factory = SessionFactory.newFactory();
 			
-			if(evt.getSource() == this.interval.getStartMarker()) {
-				segment.setStartValue((float)evt.getNewValue() * 1000.0f);
-			} else if(evt.getSource() == this.interval.getEndMarker()) {
-				segment.setEndValue((float)evt.getNewValue() * 1000.0f);
+			if(evt.getPropertyName().equals("valueAdjusting")) {
+				if((boolean)evt.getNewValue()) {
+					isFirstChange = true;
+					getParentView().getEditor().getUndoSupport().beginUpdate();
+				} else {
+					getParentView().getEditor().getUndoSupport().endUpdate();
+				}
+			} else {
+				MediaSegment newSegment = factory.createMediaSegment();
+				newSegment.setStartValue(segment.getStartValue());
+				newSegment.setEndValue(segment.getEndValue());
+				
+				if(evt.getSource() == this.interval.getStartMarker()) {
+					newSegment.setStartValue((float)evt.getNewValue() * 1000.0f);
+				} else if(evt.getSource() == this.interval.getEndMarker()) {
+					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
+				}
+				
+				TierEdit<MediaSegment> segmentEdit = new TierEdit<MediaSegment>(getParentView().getEditor(), r.getSegment(), 0, newSegment);
+				getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
+				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
+				isFirstChange = false;
 			}
-			// TODO calculate clip rect
-			recordGrid.repaint();
+			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 		
 	}
@@ -287,11 +317,11 @@ public class RecordTier extends TimeGridTier {
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
-			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 		}
 
 		@Override
 		public void recordPressed(int recordIndex, MouseEvent me) {
+			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 		}
 
 		@Override

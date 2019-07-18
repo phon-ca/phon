@@ -100,11 +100,10 @@ public final class TimeGridView extends EditorView {
 	
 	private void init() {
 		toolbar = setupToolbar();
-		
-		tierPanel = new JPanel(new GridBagLayout());
-		JScrollPane scroller = new JScrollPane(tierPanel);
-		
+
+		// the shared time model
 		timeModel = new TimeUIModel();
+		
 		timeModel.addPropertyChangeListener((e) -> {
 			if(e.getPropertyName().equals("pixelsPerSecond")) {
 				int zoomIdx = Arrays.binarySearch(zoomValues, (float)e.getNewValue());
@@ -117,12 +116,18 @@ public final class TimeGridView extends EditorView {
 		});
 		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
-		timeModel.setEndTime(0.0f);
+		timeModel.setEndTime(0.0f);		
+		
+		tierPanel = new JPanel(new GridBagLayout());
+		JScrollPane scroller = new JScrollPane(tierPanel);
+		
+		// XXX Order here matters - for the purpose of
+		// editor events the record tier object must be created before the
+		// wav tier
+		recordGrid = new RecordTier(this);
 		
 		wavTier = new TimegridWaveformTier(this);
 		wavTier.getPreferredSize();
-		
-		recordGrid = new RecordTier(this);
 		
 		addTier(wavTier);
 		addTier(recordGrid);
@@ -162,25 +167,27 @@ public final class TimeGridView extends EditorView {
 	}
 	
 	private PropertyChangeListener intervalListener = (e) -> {
-		float oldTime = (float)e.getOldValue();
-		float newTime = (float)e.getNewValue();
-		
-		var oldX = (int)Math.round(getTimeModel().xForTime(oldTime));
-		var newX = (int)Math.round(getTimeModel().xForTime(newTime));
-		
-		Rectangle clipRect = new Rectangle(
-				(newTime < oldTime ? newX : oldX )-1,
-				0,
-				(newTime < oldTime ? oldX - newX : newX - oldX)+2,
-				wavTier.getHeight());
-		wavTier.repaint(clipRect);
-		
-		clipRect = new Rectangle(
-				(newTime < oldTime ? newX : oldX )-1,
-				0,
-				(newTime < oldTime ? oldX - newX : newX - oldX)+2,
-				recordGrid.getHeight());
-		recordGrid.repaint(clipRect);
+		if(e.getPropertyName().endsWith(".time")) {
+			float oldTime = (float)e.getOldValue();
+			float newTime = (float)e.getNewValue();
+			
+			var oldX = (int)Math.round(getTimeModel().xForTime(oldTime));
+			var newX = (int)Math.round(getTimeModel().xForTime(newTime));
+			
+			Rectangle clipRect = new Rectangle(
+					(newTime < oldTime ? newX : oldX )-1,
+					0,
+					(newTime < oldTime ? oldX - newX : newX - oldX)+2,
+					wavTier.getHeight());
+			wavTier.repaint(clipRect);
+			
+			clipRect = new Rectangle(
+					(newTime < oldTime ? newX : oldX )-1,
+					0,
+					(newTime < oldTime ? oldX - newX : newX - oldX)+2,
+					recordGrid.getHeight());
+			recordGrid.repaint(clipRect);
+		}
 	};
 	
 	private JToolBar setupToolbar() {

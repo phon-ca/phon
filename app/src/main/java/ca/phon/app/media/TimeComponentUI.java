@@ -89,18 +89,19 @@ public class TimeComponentUI extends ComponentUI {
 				if(p.x == startX) {
 					currentlyDraggedInterval = interval;
 					currentlyDraggedMarker = interval.getStartMarker();
+					currentlyDraggedInterval.setValueAdjusting(true);
 				} else if(p.x == endX) {
 					currentlyDraggedInterval = interval;
 					currentlyDraggedMarker = interval.getEndMarker();
-				} else {
-					currentlyDraggedInterval = null;
-					currentlyDraggedMarker = null;
+					currentlyDraggedInterval.setValueAdjusting(true);
 				}
 			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			if(currentlyDraggedInterval != null)
+				currentlyDraggedInterval.setValueAdjusting(false);
 			currentlyDraggedInterval = null;
 			currentlyDraggedMarker = null;
 		}

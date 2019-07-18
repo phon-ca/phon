@@ -2,6 +2,7 @@ package ca.phon.app.media;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -79,6 +80,22 @@ public abstract class TimeComponent extends JComponent {
 	
 	public Color getSelectionColor() {
 		return this.selectionColor;
+	}
+	
+	/**
+	 * Repaint rectangle between given time values
+	 * @param startTime
+	 * @param endTime
+	 */
+	public void repaint(float startTime, float endTime) {
+		if(endTime > startTime)
+			throw new IllegalArgumentException("end time > start time");
+		
+		var startX = (int)Math.round(xForTime(startTime));
+		var endX = (int)Math.round(xForTime(endTime));
+		
+		var clipRect = new Rectangle(startX, 0, endX-startX, getHeight());
+		super.repaint(clipRect);
 	}
 	
 	private final PropertyChangeListener modelPropListener = new PropertyChangeListener() {
