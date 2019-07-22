@@ -127,7 +127,7 @@ public class PhonWorker extends Thread {
 	@Override
 	public void run() {
 		shutdown = false;
-		LOGGER.info("Starting worker thread: " + getName());
+		LOGGER.trace("Starting worker thread: " + getName());
 		while(!shutdown) {
 			if(queue.peek() != null) {
 				// run the next task in the queue
@@ -174,7 +174,7 @@ public class PhonWorker extends Thread {
 			}
 		}
 		
-		LOGGER.info("Worker thread finished: " + getName());
+		LOGGER.trace("Worker thread finished: " + getName());
 	}
 	
 	public static PhonWorker getShutdownThread() {
@@ -191,7 +191,7 @@ public class PhonWorker extends Thread {
 	 */
 	public void shutdown() {
 		shutdown = true;
-		LOGGER.info("Shutdown worker thread: " + getName());
+		LOGGER.trace("Shutdown worker thread: " + getName());
 	}
 	
 	/**

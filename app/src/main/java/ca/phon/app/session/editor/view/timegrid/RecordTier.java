@@ -317,11 +317,11 @@ public class RecordTier extends TimeGridTier {
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
+			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 		}
 
 		@Override
 		public void recordPressed(int recordIndex, MouseEvent me) {
-			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 		}
 
 		@Override

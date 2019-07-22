@@ -53,6 +53,7 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 import groovy.swing.factory.GlueFactory;
 
 public final class TimeGridView extends EditorView {
@@ -116,7 +117,7 @@ public final class TimeGridView extends EditorView {
 		});
 		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
-		timeModel.setEndTime(0.0f);		
+		timeModel.setEndTime(0.0f);	
 		
 		tierPanel = new JPanel(new GridBagLayout());
 		JScrollPane scroller = new JScrollPane(tierPanel);
