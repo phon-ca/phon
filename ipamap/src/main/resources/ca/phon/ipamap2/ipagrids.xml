@@ -1,0 +1,1627 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+   Phon - An open source tool for research in phonology.
+   Copyright (C) 2018 Gregory Hedlund & Yvan Rose
+    
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<ipaGrids xmlns="http://phon.ling.mun.ca/ns/ipamap">
+
+    <grid cols="44" rows="16" name="Consonants">
+        <!-- Row 1 -->
+        <cell y="0" x="0" h="2" w="2">
+            <text>p</text>
+            <property name="Name">Lower-case P</property>
+            <property name="Description">Voiceless bilabial stop</property>
+            <property name="Unicode">0x70</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>b</text>
+            <property name="Name">Lower-case B</property>
+            <property name="Description">Voiced bilabial stop</property>
+            <property name="Unicode">0x62</property>
+        </cell>
+        <cell y="0" x="12" h="2" w="2">
+            <text>t</text>
+            <property name="Name">Lower-case T</property>
+            <property name="Description">Voiceless alveolar stop</property>
+            <property name="Unicode">0x74</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>d</text>
+            <property name="Name">Lower-case D</property>
+            <property name="Description">Voiced alveolar stop</property>
+            <property name="Unicode">0x64</property>
+        </cell>
+        <cell y="0" x="20" h="2" w="2">
+            <text>ʈ</text>
+            <property name="Name">Right-tail T</property>
+            <property name="Description">Voiceless retroflex stop</property>
+            <property name="Unicode">0x288</property>
+        </cell>
+        <cell y="0" x="22" h="2" w="2">
+            <text>ɖ</text>
+            <property name="Name">Right-tail D</property>
+            <property name="Description">Voiced retroflex stop</property>
+            <property name="Unicode">0x256</property>
+        </cell>
+        <cell y="0" x="24" h="2" w="2">
+            <text>c</text>
+            <property name="Name">Lower-case C</property>
+            <property name="Description">Voiceless palatal stop</property>
+            <property name="Unicode">0x63</property>
+        </cell>
+        <cell y="0" x="26" h="2" w="2">
+            <text>ɟ</text>
+            <property name="Name">Barred dotless J</property>
+            <property name="Description">Voiced palatal stop</property>
+            <property name="Unicode">0x25f</property>
+        </cell>
+        <cell y="0" x="28" h="2" w="2">
+            <text>k</text>
+            <property name="Name">Lower-case K</property>
+            <property name="Description">Voiceless velar stop</property>
+            <property name="Unicode">0x6b</property>
+        </cell>
+        <cell y="0" x="30" h="2" w="2">
+            <text>ɡ</text>
+            <property name="Name">Opentail lower-case G</property>
+            <property name="Description">Voiced velar stop</property>
+            <property name="Unicode">0x261</property>
+        </cell>
+        <cell y="0" x="32" h="2" w="2">
+            <text>q</text>
+            <property name="Name">Lower-case Q</property>
+            <property name="Description">Voiceless uvular stop</property>
+            <property name="Unicode">0x71</property>
+        </cell>
+        <cell y="0" x="34" h="2" w="2">
+            <text>ɢ</text>
+            <property name="Name">Small capital G</property>
+            <property name="Description">Voiced uvular stop</property>
+            <property name="Unicode">0x262</property>
+        </cell>
+        <cell y="0" x="40" h="2" w="2">
+            <text>ʔ</text>
+            <property name="Name">Glottal stop</property>
+            <property name="Description">Glottal stop</property>
+            <property name="Unicode">0x294</property>
+        </cell>
+        <cell y="0" x="42" h="2" w="2">
+            <text>ʡ</text>
+            <property name="Name">Barred glottal stop</property>
+            <property name="Description">Epiglottal stop</property>
+            <property name="Unicode">0x2a1</property>
+        </cell>
+
+        <!-- Row 2 -->
+        <cell y="2" x="2" h="2" w="2">
+            <text>m</text>
+            <property name="Name">Lower-case M</property>
+            <property name="Description">Voiced bilabial nasal</property>
+            <property name="Unicode">0x6d</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>ɱ</text>
+            <property name="Name">Left-tail M (at right)</property>
+            <property name="Description">Voiced labiodental nasal</property>
+            <property name="Unicode">0x271</property>
+        </cell>
+        <cell y="2" x="14" h="2" w="2">
+            <text>n</text>
+            <property name="Name">Lower-case N</property>
+            <property name="Description">Voiced alveolar nasal</property>
+            <property name="Unicode">0x6e</property>
+        </cell>
+        <cell y="2" x="22" h="2" w="2">
+            <text>ɳ</text>
+            <property name="Name">Right-tail N</property>
+            <property name="Description">Voiced retroflex nasal</property>
+            <property name="Unicode">0x273</property>
+        </cell>
+        <cell y="2" x="26" h="2" w="2">
+            <text>ɲ</text>
+            <property name="Name">Left-tail N (at left)</property>
+            <property name="Description">Voiced palatal nasal</property>
+            <property name="Unicode">0x272</property>
+        </cell>
+        <cell y="2" x="30" h="2" w="2">
+            <text>ŋ</text>
+            <property name="Name">Eng; left-tail N (at right)</property>
+            <property name="Description">Voiced velar nasal</property>
+            <property name="Unicode">0x14b</property>
+        </cell>
+        <cell y="2" x="34" h="2" w="2">
+            <text>ɴ</text>
+            <property name="Name">Small capital N</property>
+            <property name="Description">Voiced uvular nasal</property>
+            <property name="Unicode">0x274</property>
+        </cell>
+
+        <!-- Row 3 -->
+        <cell y="4" x="0" h="2" w="2">
+            <text>ɸ</text>
+            <property name="Name">Phi</property>
+            <property name="Description">Voiceless bilabial fricative</property>
+            <property name="Unicode">0x278</property>
+        </cell>
+        <cell y="4" x="2" h="2" w="2">
+            <text>β</text>
+            <property name="Name">Beta</property>
+            <property name="Description">Voiced bilabial fricative</property>
+            <property name="Unicode">0x3b2</property>
+        </cell>
+        <cell y="4" x="4" h="2" w="2">
+            <text>f</text>
+            <property name="Name">Lower-case F</property>
+            <property name="Description">Voiceless labiodental fricative</property>
+            <property name="Unicode">0x66</property>
+        </cell>
+        <cell y="4" x="6" h="2" w="2">
+            <text>v</text>
+            <property name="Name">Lower-case V</property>
+            <property name="Description">Voiced labiodental fricative</property>
+            <property name="Unicode">0x76</property>
+        </cell>
+        <cell y="4" x="8" h="2" w="2">
+            <text>θ</text>
+            <property name="Name">Theta</property>
+            <property name="Description">Voiceless dental fricative</property>
+            <property name="Unicode">0x3b8</property>
+        </cell>
+        <cell y="4" x="10" h="2" w="2">
+            <text>ð</text>
+            <property name="Name">Eth</property>
+            <property name="Description">Voiced dental fricative</property>
+            <property name="Unicode">0xf0</property>
+        </cell>
+        <cell y="4" x="12" h="2" w="2">
+            <text>s</text>
+            <property name="Name">Lower-case S</property>
+            <property name="Description">Voiceless alveolar fricative</property>
+            <property name="Unicode">0x73</property>
+        </cell>
+        <cell y="4" x="14" h="2" w="2">
+            <text>z</text>
+            <property name="Name">Lower-case Z</property>
+            <property name="Description">Voiced alveolar fricative</property>
+            <property name="Unicode">0x7a</property>
+        </cell>
+        <cell y="4" x="16" h="2" w="2">
+            <text>ʃ</text>
+            <property name="Name">Esh</property>
+            <property name="Description">Voiceless postalveolar fricative</property>
+            <property name="Unicode">0x283</property>
+        </cell>
+        <cell y="4" x="18" h="2" w="2">
+            <text>ʒ</text>
+            <property name="Name">Ezh; tailed Z</property>
+            <property name="Description">Voiced postalveolar fricative</property>
+            <property name="Unicode">0x292</property>
+        </cell>
+        <cell y="4" x="20" h="2" w="2">
+            <text>ʂ</text>
+            <property name="Name">Right-tail S</property>
+            <property name="Description">Voiceless retroflex fricative</property>
+            <property name="Unicode">0x282</property>
+        </cell>
+        <cell y="4" x="22" h="2" w="2">
+            <text>ʐ</text>
+            <property name="Name">Right-tail Z</property>
+            <property name="Description">Voiced retroflex fricative</property>
+            <property name="Unicode">0x290</property>
+        </cell>
+        <cell y="4" x="24" h="2" w="2">
+            <text>ç</text>
+            <property name="Name">C cedilla</property>
+            <property name="Description">Voiceless palatal fricative</property>
+            <property name="Unicode">0xe7</property>
+        </cell>
+        <cell y="4" x="26" h="2" w="2">
+            <text>ʝ</text>
+            <property name="Name">Curly-tail J</property>
+            <property name="Description">Voiced palatal fricative</property>
+            <property name="Unicode">0x29d</property>
+        </cell>
+        <cell y="4" x="28" h="2" w="2">
+            <text>x</text>
+            <property name="Name">Lower-case X</property>
+            <property name="Description">Voiceless velar fricative</property>
+            <property name="Unicode">0x78</property>
+        </cell>
+        <cell y="4" x="30" h="2" w="2">
+            <text>ɣ</text>
+            <property name="Name">Gamma</property>
+            <property name="Description">Voiced velar fricative</property>
+            <property name="Unicode">0x263</property>
+        </cell>
+        <cell y="4" x="32" h="2" w="2">
+            <text>χ</text>
+            <property name="Name">Chi</property>
+            <property name="Description">Voiceless uvular fricative</property>
+            <property name="Unicode">0x3c7</property>
+        </cell>
+        <cell y="4" x="34" h="2" w="2">
+            <text>ʁ</text>
+            <property name="Name">Inverted small capital R</property>
+            <property name="Description">Voiced uvular fricative</property>
+            <property name="Unicode">0x281</property>
+        </cell>
+        <cell y="4" x="36" h="2" w="2">
+            <text>ħ</text>
+            <property name="Name">Barred H</property>
+            <property name="Description">Voiceless pharyngeal fricative</property>
+            <property name="Unicode">0x127</property>
+        </cell>
+        <cell y="4" x="38" h="2" w="2">
+            <text>ʕ</text>
+            <property name="Name">Reversed glottal stop</property>
+            <property name="Description">Voiced phayngeal fricative</property>
+            <property name="Unicode">0x295</property>
+        </cell>
+        <cell y="4" x="40" h="2" w="2">
+            <text>h</text>
+            <property name="Name">Lower-case H</property>
+            <property name="Description">Voiceless glottal fricative</property>
+            <property name="Unicode">0x68</property>
+        </cell>
+        <cell y="4" x="42" h="2" w="2">
+            <text>ɦ</text>
+            <property name="Name">Hooktop H</property>
+            <property name="Description">Voiced glottal fricative</property>
+            <property name="Unicode">0x266</property>
+        </cell>
+
+        <!-- Row 4 -->
+        <cell y="6" x="12" h="2" w="2">
+            <text>ɬ</text>
+            <property name="Name">Belted L</property>
+            <property name="Description">Voiceless alveolar lateral fricative</property>
+            <property name="Unicode">0x26c</property>
+        </cell>
+        <cell y="6" x="14" h="2" w="2">
+            <text>ɮ</text>
+            <property name="Name">L-ezh</property>
+            <property name="Description">Voiced alveolar lateral fricative</property>
+            <property name="Unicode">0x26e</property>
+        </cell>
+        <cell y="6" x="20" h="2" w="2">
+            <text>ɕ</text>
+            <property name="Name">Curly tail C</property>
+            <property name="Description">Voiceless alveopalatal fricative</property>
+            <property name="Unicode">0x255</property>
+        </cell>
+        <cell y="6" x="22" h="2" w="2">
+            <text>ʑ</text>
+            <property name="Name">Curly tail Z</property>
+            <property name="Description">Voiced alveopalatal fricative</property>
+            <property name="Unicode">0x291</property>
+        </cell>
+        <cell y="6" x="28" h="2" w="2">
+            <text>ɧ</text>
+            <property name="Name">Hooktop heng</property>
+            <property name="Description">Simultaneous voiceless postalveolar and velar fricative</property>
+            <property name="Unicode">0x267</property>
+        </cell>
+        <cell y="6" x="40" h="2" w="2">
+            <text>ʜ</text>
+            <property name="Name">Small capital H</property>
+            <property name="Description">Voiceless epiglottal fricative</property>
+            <property name="Unicode">0x29c</property>
+        </cell>
+        <cell y="6" x="42" h="2" w="2">
+            <text>ʢ</text>
+            <property name="Name">Barred reversed glottal stop</property>
+            <property name="Description">Voiced epiglottal fricative</property>
+            <property name="Unicode">0x2a2</property>
+        </cell>
+
+        <!-- Row 5 -->
+        <cell y="8" x="12" h="2" w="2">
+            <text>ʦ</text>
+            <property name="Name">Lower-case T-S</property>
+            <property name="Description">Voiceless alveolar affricate</property>
+            <property name="Unicode">0x2a6</property>
+        </cell>
+        <cell y="8" x="14" h="2" w="2">
+            <text>ʣ</text>
+            <property name="Name">Lower-case D-Z</property>
+            <property name="Description">Voiced alveolar affricate</property>
+            <property name="Unicode">0x2a3</property>
+        </cell>
+        <cell y="8" x="16" h="2" w="2">
+            <text>ʧ</text>
+            <property name="Name">T-esh</property>
+            <property name="Description">Voiceless alveopalatal affricate</property>
+            <property name="Unicode">0x2a7</property>
+        </cell>
+        <cell y="8" x="18" h="2" w="2">
+            <text>ʤ</text>
+            <property name="Name">D-ezh</property>
+            <property name="Description">Voiced alveopalatal affricate</property>
+            <property name="Unicode">0x2a4</property>
+        </cell>
+        <cell y="8" x="20" h="2" w="2">
+            <text>ʨ</text>
+            <property name="Name">T-Curly tail C</property>
+            <property name="Description">Voiceless palatal affricate</property>
+            <property name="Unicode">0x2a8</property>
+        </cell>
+        <cell y="8" x="22" h="2" w="2">
+            <text>ʥ</text>
+            <property name="Name">D-Curly tail Z</property>
+            <property name="Description">Voiceless palatal affricate</property>
+            <property name="Unicode">0x2a5</property>
+        </cell>
+        <cell y="8" x="24" h="2" w="2">
+            <text>ƛ</text>
+            <property name="Name">Barred Lambda</property>
+            <property name="Description">Voiceless alveolar lateral affricate</property>
+            <property name="Unicode">0x19b</property>
+        </cell>
+        <cell y="8" x="26" h="2" w="2">
+            <text>λ</text>
+            <property name="Name">Lambda</property>
+            <property name="Description">Voiced alveolar lateral affricate</property>
+            <property name="Unicode">0x3bb</property>
+        </cell>
+
+        <!-- Row 6 -->
+        <cell y="10" x="4" h="2" w="2">
+            <text>ʙ</text>
+            <property name="Name">Small capital B</property>
+            <property name="Description">Voiced bilabial trill</property>
+            <property name="Unicode">0x299</property>
+        </cell>
+        <cell y="10" x="6" h="2" w="2">
+            <text>ⱱ</text>
+            <property name="Name">Hooked V</property>
+            <property name="Description">Voiced labial flap</property>
+            <property name="Unicode">0x2c71</property>
+        </cell>
+        <cell y="10 " x="12" h="2" w="2">
+            <text>ɾ</text>
+            <property name="Name">Fish hook R</property>
+            <property name="Description">Voiced alveolar flap</property>
+            <property name="Unicode">0x27e</property>
+        </cell>
+        <cell y="10" x="14" h="2" w="2">
+            <text>r</text>
+            <property name="Name">Lower-case R</property>
+            <property name="Description">Voiced alveolar trill</property>
+            <property name="Unicode">0x72</property>
+        </cell>
+        <cell y="10" x="18" h="2" w="2">
+            <text>ɹ</text>
+            <property name="Name">Turned R</property>
+            <property name="Description">Voiced alveolar approximant</property>
+            <property name="Unicode">0x279</property>
+        </cell>
+        <cell y="10" x="20" h="2" w="2">
+            <text>ɽ</text>
+            <property name="Name">Right-tail R</property>
+            <property name="Description">Voiced retroflex flap</property>
+            <property name="Unicode">0x27d</property>
+        </cell>
+        <cell y="10" x="22" h="2" w="2">
+            <text>ɻ</text>
+            <property name="Name">Turned R, right tail</property>
+            <property name="Description">Voiced retroflex approximant</property>
+            <property name="Unicode">0x27b</property>
+        </cell>
+        <cell y="10" x="34" h="2" w="2">
+            <text>ʀ</text>
+            <property name="Name">Small capital R</property>
+            <property name="Description">Voiced uvular trill</property>
+            <property name="Unicode">0x280</property>
+        </cell>
+
+        <!-- Row 7 -->
+        <cell y="12" x="12" h="2" w="2">
+            <text>ɺ</text>
+            <property name="Name">Turned long-leg R</property>
+            <property name="Description">Voiced alveolar lateral flap</property>
+            <property name="Unicode">0x27a</property>
+        </cell>
+        <cell y="12" x="14" h="2" w="2">
+            <text>l</text>
+            <property name="Name">Lower-case L</property>
+            <property name="Description">Voiced alveolar lateral approximant</property>
+            <property name="Unicode">0x6c</property>
+        </cell>
+        <cell y="12" x="18" h="2" w="2">
+            <text>ɫ</text>
+            <property name="Name">Lower-case L with tilde; Dark L</property>
+            <property name="Description">Velarized alveolar lateral approximant</property>
+            <property name="Unicode">0x26b</property>
+        </cell>
+        <cell y="12" x="22" h="2" w="2">
+            <text>ɭ</text>
+            <property name="Name">Right-tail L</property>
+            <property name="Description">Voiced retroflex lateral approximant</property>
+            <property name="Unicode">0x26d</property>
+        </cell>
+        <cell y="12" x="26" h="2" w="2">
+            <text>ʎ</text>
+            <property name="Name">Turned Y</property>
+            <property name="Description">Voiced palatal lateral approximant</property>
+            <property name="Unicode">0x28e</property>
+        </cell>
+        <cell y="12" x="30" h="2" w="2">
+            <text>ʟ</text>
+            <property name="Name">Small capital L</property>
+            <property name="Description">Voiced velar lateral approximant</property>
+            <property name="Unicode">0x29f</property>
+        </cell>
+
+        <!-- Row 8 -->
+        <cell y="14" x="0" h="2" w="2">
+            <text>ʍ</text>
+            <property name="Name">Turned W</property>
+            <property name="Description">Voiceless labial-velar fricative</property>
+            <property name="Unicode">0x28d</property>
+        </cell>
+        <cell y="14" x="2" h="2" w="2">
+            <text>w</text>
+            <property name="Name">Small W</property>
+            <property name="Description">Voiced labial-velar approximant</property>
+            <property name="Unicode">0x77</property>
+        </cell>
+        <cell y="14" x="6" h="2" w="2">
+            <text>ʋ</text>
+            <property name="Name">Cursive V</property>
+            <property name="Description">Voiced labiodental approximant</property>
+            <property name="Unicode">0x28b</property>
+        </cell>
+        <cell y="14" x="18" h="2" w="2">
+            <text>ɥ</text>
+            <property name="Name">Turned H</property>
+            <property name="Description">Voiced labial-palatal approximant</property>
+            <property name="Unicode">0x265</property>
+        </cell>
+        <cell y="14" x="26" h="2" w="2">
+            <text>j</text>
+            <property name="Name">Lower-case J</property>
+            <property name="Description">Voiced palatal approximant</property>
+            <property name="Unicode">0x6a</property>
+        </cell>
+        <cell y="14" x="30" h="2" w="2">
+            <text>ɰ</text>
+            <property name="Name">Turned M, right leg</property>
+            <property name="Description">Voiced velar approximant</property>
+            <property name="Unicode">0x270</property>
+        </cell>
+    </grid>
+    <grid name="Clicks and Implosives" rows="2" cols="22">
+        <!-- Clicks -->
+        <cell y="0" x="0" h="2" w="2">
+            <text>ʘ</text>
+            <property name="Name">Bullʼs eye</property>
+            <property name="Description">Bilabial click</property>
+            <property name="Unicode">0x298</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>ǀ</text>
+            <property name="Name">Pipe</property>
+            <property name="Description">Dental click</property>
+            <property name="Unicode">0x1c0</property>
+        </cell>
+        <cell y="0" x="4" h="2" w="2">
+            <text>ǁ</text>
+            <property name="Name">Double pipe</property>
+            <property name="Description">Alveolar lateral click</property>
+            <property name="Unicode">0x1c1</property>
+        </cell>
+        <cell y="0" x="6" h="2" w="2">
+            <text>ǃ</text>
+            <property name="Name">Exclamation point</property>
+            <property name="Description">Alveolar click</property>
+            <property name="Unicode">0x1c3</property>
+        </cell>
+        <cell y="0" x="8" h="2" w="2">
+            <text>¡</text>
+            <property name="Name">Upside-down exclamation point</property>
+            <property name="Description">Subapical lower alveolar click</property>
+            <property name="Unicode">0xa1</property>
+        </cell>
+        <cell y="0" x="10" h="2" w="2">
+            <text>ǂ</text>
+            <property name="Name">Double-barred pipe</property>
+            <property name="Description">Alveopalatal click</property>
+            <property name="Unicode">0x1c2</property>
+        </cell>
+
+        <!-- Implosives -->
+        <cell y="0" x="12" h="2" w="2">
+            <text>ɓ</text>
+            <property name="Name">Hooktop B</property>
+            <property name="Description">Voiced bilabial implosive</property>
+            <property name="Unicode">0x253</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>ɗ</text>
+            <property name="Name">Hooktop D</property>
+            <property name="Description">Voiced alveolar implosive</property>
+            <property name="Unicode">0x257</property>
+        </cell>
+        <cell y="0" x="16" h="2" w="2">
+            <text>ʄ</text>
+            <property name="Name">Hooktop barred dotless J</property>
+            <property name="Description">Voiced palatal implosive</property>
+            <property name="Unicode">0x284</property>
+        </cell>
+        <cell y="0" x="18" h="2" w="2">
+            <text>ɠ</text>
+            <property name="Name">Hooktop opentail G</property>
+            <property name="Description">Voiced velar implosive</property>
+            <property name="Unicode">0x260</property>
+        </cell>
+        <cell y="0" x="20" h="2" w="2">
+            <text>ʛ</text>
+            <property name="Name">Hooktop small capital G</property>
+            <property name="Description">Voiced uvular implosive</property>
+            <property name="Unicode">0x29b</property>
+        </cell>
+    </grid>
+
+    <!--Vowels-->
+    <grid cols="27" rows="14" name="Vowels">
+        <cell y="0" x="0" h="2" w="2">
+            <text>i</text>
+            <property name="Name">Lower-case I</property>
+            <property name="Description">Close front unrounded vowel</property>
+            <property name="Unicode">0x69</property>
+        </cell>
+        <cell y="0" x="3" h="2" w="2">
+            <text>y</text>
+            <property name="Name">Lower-case Y</property>
+            <property name="Description">Close front rounded vowel</property>
+            <property name="Unicode">0x79</property>
+        </cell>
+        <cell y="0" x="10" h="2" w="2">
+            <text>ɨ</text>
+            <property name="Name">Barred I</property>
+            <property name="Description">Close central unrounded vowel</property>
+            <property name="Unicode">0x268</property>
+        </cell>
+        <cell y="0" x="13" h="2" w="2">
+            <text>ʉ</text>
+            <property name="Name">Barred U</property>
+            <property name="Description">Close central rounded vowel</property>
+            <property name="Unicode">0x289</property>
+        </cell>
+        <cell y="0" x="19" h="2" w="2">
+            <text>ɯ</text>
+            <property name="Name">Turned M</property>
+            <property name="Description">Close back unrounded vowel</property>
+            <property name="Unicode">0x26f</property>
+        </cell>
+        <cell y="0" x="22" h="2" w="2">
+            <text>u</text>
+            <property name="Name">Lower-case U</property>
+            <property name="Description">Close back rounded vowel</property>
+            <property name="Unicode">0x75</property>
+        </cell>
+        <cell y="2" x="4" h="2" w="2">
+            <text>ɪ</text>
+            <property name="Name">Small capital I</property>
+            <property name="Description">Near-close near-front unrounded vowel</property>
+            <property name="Unicode">0x26a</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>ʏ</text>
+            <property name="Name">Small capital Y</property>
+            <property name="Description">Near-close near-front rounded vowel</property>
+            <property name="Unicode">0x28f</property>
+        </cell>
+        <cell y="2" x="17" h="2" w="2">
+            <text>ʊ</text>
+            <property name="Name">Upsilon</property>
+            <property name="Description">Near-close near-back rounded vowel</property>
+            <property name="Unicode">0x28a</property>
+        </cell>
+        <cell y="4" x="2" h="2" w="2">
+            <text>e</text>
+            <property name="Name">Lower-case E</property>
+            <property name="Description">Close-mid front unrounded vowel</property>
+            <property name="Unicode">0x65</property>
+        </cell>
+        <cell y="4" x="5" h="2" w="2">
+            <text>ø</text>
+            <property name="Name">Slashed O</property>
+            <property name="Description">Close-mid front rounded vowel</property>
+            <property name="Unicode">0xf8</property>
+        </cell>
+        <cell y="4" x="11" h="2" w="2">
+            <text>ɘ</text>
+            <property name="Name">Reversed E</property>
+            <property name="Description">Close-mid central unrounded vowel</property>
+            <property name="Unicode">0x258</property>
+        </cell>
+        <cell y="4" x="14" h="2" w="2">
+            <text>ɵ</text>
+            <property name="Name">Barred O</property>
+            <property name="Description">Close-mid central rounded vowel</property>
+            <property name="Unicode">0x275</property>
+        </cell>
+        <cell y="4" x="19" h="2" w="2">
+            <text>ɤ</text>
+            <property name="Name">Ramʼs horns</property>
+            <property name="Description">Close-mid back unrounded vowel</property>
+            <property name="Unicode">0x264</property>
+        </cell>
+        <cell y="4" x="22" h="2" w="2">
+            <text>o</text>
+            <property name="Name">Lower-case O</property>
+            <property name="Description">Open-mid back rounded vowel</property>
+            <property name="Unicode">0x6f</property>
+        </cell>
+        <cell y="6" x="13" h="2" w="2">
+            <text>ə</text>
+            <property name="Name">Schwa</property>
+            <property name="Description">Mid-central vowel</property>
+            <property name="Unicode">0x259</property>
+        </cell>
+        <cell y="6" x="25" h="2" w="2">
+            <text>ɚ</text>
+            <property name="Name">Rhoticized schwa</property>
+            <property name="Description">Rhoticized mid-central vowel</property>
+            <property name="Unicode">0x25a</property>
+        </cell>
+        <cell y="8" x="4" h="2" w="2">
+            <text>ɛ</text>
+            <property name="Name">Epsilon</property>
+            <property name="Description">Open-mid front unrounded vowel</property>
+            <property name="Unicode">0x25b</property>
+        </cell>
+        <cell y="8" x="7" h="2" w="2">
+            <text>œ</text>
+            <property name="Name">Lower-case O-E ligature</property>
+            <property name="Description">Open-mid front rounded vowel</property>
+            <property name="Unicode">0x153</property>
+        </cell>
+        <cell y="8" x="12" h="2" w="2">
+            <text>ɜ</text>
+            <property name="Name">Reversed epsilon</property>
+            <property name="Description">Open-mid central unrounded vowel</property>
+            <property name="Unicode">0x25c</property>
+        </cell>
+        <cell y="8" x="15" h="2" w="2">
+            <text>ɞ</text>
+            <property name="Name">Closed reversed epsilon</property>
+            <property name="Description">Open-mid central rounded vowel</property>
+            <property name="Unicode">0x25e</property>
+        </cell>
+        <cell y="8" x="19" h="2" w="2">
+            <text>ʌ</text>
+            <property name="Name">Turned V</property>
+            <property name="Description">Open-mid back unrounded vowel</property>
+            <property name="Unicode">0x28c</property>
+        </cell>
+        <cell y="8" x="22" h="2" w="2">
+            <text>ɔ</text>
+            <property name="Name">Open O</property>
+            <property name="Description">Open-mid back unrounded vowel</property>
+            <property name="Unicode">0x254</property>
+        </cell>
+        <cell y="8" x="25" h="2" w="2">
+            <text>ɝ</text>
+            <property name="Name">Rhoticized reversed epsilon</property>
+            <property name="Description">Rhoticized open-mid central unrounded vowel</property>
+            <property name="Unicode">0x25d</property>
+        </cell>
+        <cell y="10" x="5" h="2" w="2">
+            <text>æ</text>
+            <property name="Name">Ash; lower-case A-E ligature</property>
+            <property name="Description">Open front unrounded vowel</property>
+            <property name="Unicode">0xe6</property>
+        </cell>
+        <cell y="10" x="14" h="2" w="2">
+            <text>ɐ</text>
+            <property name="Name">Turned A</property>
+            <property name="Description">Near-open central vowel</property>
+            <property name="Unicode">0x250</property>
+        </cell>
+        <cell y="12" x="6" h="2" w="2">
+            <text>a</text>
+            <property name="Name">Lower-case A</property>
+            <property name="Description">Open central unrounded vowel</property>
+            <property name="Unicode">0x61</property>
+        </cell>
+        <cell y="12" x="9" h="2" w="2">
+            <text>ɶ</text>
+            <property name="Name">Small capital O-E ligature</property>
+            <property name="Description">Open front rounded vowel</property>
+            <property name="Unicode">0x276</property>
+        </cell>
+        <cell y="12" x="19" h="2" w="2">
+            <text>ɑ</text>
+            <property name="Name">Script A</property>
+            <property name="Description">Open back unrounded vowel</property>
+            <property name="Unicode">0x251</property>
+        </cell>
+        <cell y="12" x="22" h="2" w="2">
+            <text>ɒ</text>
+            <property name="Name">Turned script A</property>
+            <property name="Description">Open back rounded vowel</property>
+            <property name="Unicode">0x252</property>
+        </cell>
+    </grid>
+
+    <!--Suprasegmentals-->
+    <grid cols="18" rows="2" name="Suprasegmentals">
+        <cell y="0" x="0" h="2" w="2">
+            <text>ˈ</text>
+            <property name="Name">Vertical stroke (Superior)</property>
+            <property name="Description">Primary stress</property>
+            <property name="Unicode">0x2c8</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>ˌ</text>
+            <property name="Name"> Vertical stroke (Inferior)</property>
+            <property name="Description">Secondary stress</property>
+            <property name="Unicode">0x2cc</property>
+        </cell>
+        <cell y="0" x="4" h="2" w="2">
+            <text>ː</text>
+            <property name="Name">Length mark</property>
+            <property name="Description">Long</property>
+            <property name="Unicode">0x2d0</property>
+        </cell>
+        <cell y="0" x="6" h="2" w="2">
+            <text>◌͡</text>
+            <property name="Name">Top tie bar</property>
+            <property name="Description">Affricate or double articulation</property>
+            <property name="Unicode">0x361</property>
+        </cell>
+        <cell y="0" x="8" h="2" w="2">
+            <text>◌͜</text>
+            <property name="Name">Bottom tie bar</property>
+            <property name="Description">Affricate or double articulation</property>
+            <property name="Unicode">0x35c</property>
+        </cell>
+        <cell y="0" x="10" h="2" w="2">
+            <text>|</text>
+            <property name="Name">Vertical line</property>
+            <property name="Description">Minor (foot) group</property>
+            <property name="Unicode">0x7c</property>
+        </cell>
+        <cell y="0" x="12" h="2" w="2">
+            <text>‖</text>
+            <property name="Name">Double vertical line</property>
+            <property name="Description">Major (intonation) group</property>
+            <property name="Unicode">0x2016</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>ˑ</text>
+            <property name="Name">Half-length mark</property>
+            <property name="Description">Half-long</property>
+            <property name="Unicode">0x2d1</property>
+        </cell>
+        <cell y="0" x="16" h="2" w="2">
+            <text>.</text>
+            <property name="Name">Period</property>
+            <property name="Description">Syllable break</property>
+            <property name="Unicode">0x2e</property>
+        </cell>
+    </grid>
+
+    <!--Contours-->
+    <grid cols="22" rows="4" name="Contours">
+        <cell y="0" x="0" h="2" w="2">
+            <text>◌ʰ</text>
+            <property name="Name">Superscript H</property>
+            <property name="Description">Aspirated</property>
+            <property name="Unicode">0x2b0</property>
+        </cell>
+         <cell y="0" x="2" h="2" w="2">
+            <text>ʰ̵◌</text>
+            <property name="Name">Superscript H</property>
+            <property name="Description">Pre-aspirated</property>
+            <property name="Unicode">0x2b0 + 0x335</property>
+        </cell>
+        <cell y="0" x="4" h="2" w="2">
+            <text>◌⁼</text>
+            <property name="Name">Superscript equals</property>
+            <property name="Description">Unreleased</property>
+            <property name="Unicode">0x207c</property>
+        </cell>
+        <cell y="0" x="6" h="2" w="2">
+            <text>◌ʷ</text>
+            <property name="Name">Superscript W</property>
+            <property name="Description">Labialized</property>
+            <property name="Unicode">0x2b7</property>
+        </cell>
+        <cell y="0" x="8" h="2" w="2">
+            <text>◌ˡ</text>
+            <property name="Name">Superscript L</property>
+            <property name="Description">Lateral release</property>
+            <property name="Unicode">0x2e1</property>
+        </cell>
+        <cell y="0" x="10" h="2" w="2">
+            <text>◌ʴ</text>
+            <property name="Name">Superscript small turned r</property>
+            <property name="Description"></property>
+            <property name="Unicode">0x2b4</property>
+        </cell>
+        <cell y="0" x="12" h="2" w="2">
+            <text>◌ʲ</text>
+            <property name="Name">Superscript J</property>
+            <property name="Description">Palatalized</property>
+            <property name="Unicode">0x2b2</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>◌ˠ</text>
+            <property name="Name">Superscript gamma</property>
+            <property name="Description">Velarized</property>
+            <property name="Unicode">0x2e0</property>
+        </cell>
+        <cell y="0" x="16" h="2" w="2">
+            <text>◌ˤ</text>
+            <property name="Name">Superscript reversed glottal stop</property>
+            <property name="Description">Pharyngealized</property>
+            <property name="Unicode">0x2e4</property>
+        </cell>
+        <cell y="0" x="18" h="2" w="2">
+            <text>◌ˀ</text>
+            <property name="Name">Superscript glottal stop</property>
+            <property name="Description">Glottalized</property>
+            <property name="Unicode">0x2c0</property>
+        </cell>
+        <cell y="0" x="20" h="2" w="2">
+            <text>◌ʼ</text>
+            <property name="Name">Apostrophe</property>
+            <property name="Description">Ejective</property>
+            <property name="Unicode">0x2bc</property>
+        </cell>
+        <cell y="2" x="0" h="2" w="2">
+            <text>ᵐ◌</text>
+            <property name="Name">Superscript lower-case M</property>
+            <property name="Description">Bilabial prenasalization</property>
+            <property name="Unicode">0x1d50</property>
+        </cell>
+        <cell y="2" x="2" h="2" w="2">
+            <text>ᶬ◌</text>
+            <property name="Name">Superscript left-tail M (at right)</property>
+            <property name="Description">Labiodental prenasalization</property>
+            <property name="Unicode">0x1dac</property>
+        </cell>
+        <cell y="2" x="4" h="2" w="2">
+            <text>ⁿ◌</text>
+            <property name="Name">Superscript lower-case N</property>
+            <property name="Description">Alveolar prenasalization</property>
+            <property name="Unicode">0x207f</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>◌ⁿ̵</text>
+            <property name="Name">Superscript lower-case N</property>
+            <property name="Description">Nasal release</property>
+            <property name="Unicode">0x207f + 0x335</property>
+        </cell>
+        <cell y="2" x="8" h="2" w="2">
+            <text>ᶯ◌</text>
+            <property name="Name">Superscript right-tail N</property>
+            <property name="Description">Retroflex prenasalization</property>
+            <property name="Unicode">0x1daf</property>
+        </cell>
+        <cell y="2" x="10" h="2" w="2">
+            <text>ᶮ◌</text>
+            <property name="Name">Superscript left-tail N</property>
+            <property name="Description">Palatal prenasalization</property>
+            <property name="Unicode">0x1dae</property>
+        </cell>
+        <cell y="2" x="12" h="2" w="2">
+            <text>ᵑ◌</text>
+            <property name="Name">Superscript Eng</property>
+            <property name="Description">Velar prenasalization</property>
+            <property name="Unicode">0x1d51</property>
+        </cell>
+        <cell y="2" x="14" h="2" w="2">
+            <text>ᶰ◌</text>
+            <property name="Name">Superscript capital N</property>
+            <property name="Description">Uvular prenasalization</property>
+            <property name="Unicode">0x1db0</property>
+        </cell>
+        <cell y="0" x="22" h="2" w="2">
+            <text>◌ˢ</text>
+            <property name="Name">Superscript small S</property>
+            <property name="Description">Modifier letter small S</property>
+            <property name="Unicode">0x2e2</property>
+        </cell>
+        <cell y="0" x="24" h="2" w="2">
+            <text>◌ᶻ</text>
+            <property name="Name">Superscript small Z</property>
+            <property name="Description">Modifier letter small Z</property>
+            <property name="Unicode">0x1dbb</property>
+        </cell>
+        <cell y="0" x="26" h="2" w="2">
+            <text>◌ᶴ</text>
+            <property name="Name">Superscript small Esh</property>
+            <property name="Description">Modifier letter small Esh</property>
+            <property name="Unicode">0x1db4</property>
+        </cell>
+        <cell y="0" x="28" h="2" w="2">
+            <text>◌ᶾ</text>
+            <property name="Name">Superscript small Ezh</property>
+            <property name="Description">Modifier letter small Ezh</property>
+            <property name="Unicode">0x1dbe</property>
+        </cell>
+        <cell y="0" x="30" h="2" w="2">
+            <text>◌ᵊ</text>
+            <property name="Name">Superscript small Schwa</property>
+            <property name="Description">Modifier letter small Schwa</property>
+            <property name="Unicode">0x1d4a</property>
+        </cell>
+        <cell y="0" x="32" h="2" w="2">
+            <text>◌ʳ</text>
+            <property name="Name">Superscript small R</property>
+            <property name="Description">Modifier letter small R</property>
+            <property name="Unicode">0x2b3</property>
+        </cell>
+        <cell y="0" x="34" h="2" w="2">
+            <text>◌̵</text>
+            <property name="Name">Short stroke overlay; Role-switcher</property>
+            <property name="Description">Role-switcher</property>
+            <property name="Unicode">0x335</property>
+        </cell>
+    </grid>
+
+    <!--Diacritics-->
+    <grid cols="34" rows="4" name="Diacritics">
+        <cell y="0" x="0" h="2" w="2">
+            <text>◌̩</text>
+            <property name="Name">Syllabicity mark</property>
+            <property name="Description">Syllabic</property>
+            <property name="Unicode">0x329</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>◌̚</text>
+            <property name="Name">Corner</property>
+            <property name="Description">No audible release; Unreleased</property>
+            <property name="Unicode">0x31a</property>
+        </cell>
+        <cell y="0" x="4" h="2" w="2">
+            <text>◌̃</text>
+            <property name="Name">Superscript tilde</property>
+            <property name="Description">Nasalized</property>
+            <property name="Unicode">0x303</property>
+        </cell>
+        <cell y="0" x="6" h="2" w="2">
+            <text>◌̰</text>
+            <property name="Name">Subscript tilde</property>
+            <property name="Description">Creaky voiced</property>
+            <property name="Unicode">0x330</property>
+        </cell>
+        <cell y="0" x="8" h="2" w="2">
+            <text>◌̥</text>
+            <property name="Name">Under-ring</property>
+            <property name="Description">Voiceless</property>
+            <property name="Unicode">0x325</property>
+        </cell>
+        <cell y="2" x="0" h="2" w="2">
+            <text>◌̯</text>
+            <property name="Name">Subscript arch</property>
+            <property name="Description">Non-syllabic</property>
+            <property name="Unicode">0x32f</property>
+        </cell>
+        <cell y="2" x="2" h="2" w="2">
+            <text>◌̆</text>
+            <property name="Name">Breve</property>
+            <property name="Description">Extra-short</property>
+            <property name="Unicode">0x306</property>
+        </cell>
+        <cell y="2" x="4" h="2" w="2">
+            <text>◌̪</text>
+            <property name="Name">Subscript bridge</property>
+            <property name="Description">Dental</property>
+            <property name="Unicode">0x32a</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>◌̺</text>
+            <property name="Name">Inverted subscript bridge</property>
+            <property name="Description">Apical</property>
+            <property name="Unicode">0x33a</property>
+        </cell>
+        <cell y="2" x="8" h="2" w="2">
+            <text>◌̻</text>
+            <property name="Name">Subscript square</property>
+            <property name="Description">Laminal</property>
+            <property name="Unicode">0x33b</property>
+        </cell>
+        <cell y="0" x="12" h="2" w="2">
+            <text>◌̬</text>
+            <property name="Name">Subscript wedge</property>
+            <property name="Description">Voiced</property>
+            <property name="Unicode">0x32c</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>◌̹</text>
+            <property name="Name">Subscript right half-ring</property>
+            <property name="Description">More rounded</property>
+            <property name="Unicode">0x339</property>
+        </cell>
+        <cell y="0" x="16" h="2" w="2">
+            <text>◌̜</text>
+            <property name="Name">Subscript left half-ring</property>
+            <property name="Description">Less rounded</property>
+            <property name="Unicode">0x31c</property>
+        </cell>
+        <cell y="0" x="18" h="2" w="2">
+            <text>◌̈</text>
+            <property name="Name">Umlaut</property>
+            <property name="Description">Centralized</property>
+            <property name="Unicode">0x308</property>
+        </cell>
+        <cell y="0" x="20" h="2" w="2">
+            <text>◌̤</text>
+            <property name="Name">Subscript umlaut</property>
+            <property name="Description">Breathy voiced</property>
+            <property name="Unicode">0x324</property>
+        </cell>
+        <cell y="2" x="12" h="2" w="2">
+            <text>◌̝</text>
+            <property name="Name">Raising sign</property>
+            <property name="Description">Raised</property>
+            <property name="Unicode">0x31d</property>
+        </cell>
+        <cell y="2" x="14" h="2" w="2">
+            <text>◌̞</text>
+            <property name="Name">Lowering sign</property>
+            <property name="Description">Lowered</property>
+            <property name="Unicode">0x31e</property>
+        </cell>
+        <cell y="2" x="16" h="2" w="2">
+            <text>◌̘</text>
+            <property name="Name">Advancing sign</property>
+            <property name="Description">Advanced tongue root</property>
+            <property name="Unicode">0x318</property>
+        </cell>
+        <cell y="2" x="18" h="2" w="2">
+            <text>◌̙</text>
+            <property name="Name">Retracting sign</property>
+            <property name="Description">Retracted tongue root</property>
+            <property name="Unicode">0x319</property>
+        </cell>
+        <cell y="2" x="20" h="2" w="2">
+            <text>◌̟</text>
+            <property name="Name">Subscript plus</property>
+            <property name="Description">Advanced</property>
+            <property name="Unicode">0x31f</property>
+        </cell>
+        <cell y="0" x="24" h="2" w="2">
+            <text>◌̽</text>
+            <property name="Name">Over-cross</property>
+            <property name="Description">Mid-centralized</property>
+            <property name="Unicode">0x33d</property>
+        </cell>
+        <cell y="0" x="26" h="2" w="2">
+            <text>◌̠</text>
+            <property name="Name">Under-bar</property>
+            <property name="Description">Retracted</property>
+            <property name="Unicode">0x320</property>
+        </cell>
+        <cell y="0" x="28" h="2" w="2">
+            <text>◌̣</text>
+            <property name="Name">Under-dot</property>
+            <property name="Description">Lenis</property>
+            <property name="Unicode">0x323</property>
+        </cell>
+        <cell y="0" x="30" h="2" w="2">
+            <text>◌̇</text>
+            <property name="Name">Over-dot</property>
+            <property name="Description">Lenis</property>
+            <property name="Unicode">0x307</property>
+        </cell>
+        <cell y="0" x="32" h="2" w="2">
+            <text>◌˞</text>
+            <property name="Name">Right hook</property>
+            <property name="Description">Rhoticity</property>
+            <property name="Unicode">0x2de</property>
+        </cell>
+        <cell y="2" x="24" h="2" w="2">
+            <text>&#x25cc;&#x032e;</text>
+            <property name="Name">Breve Below</property>
+            <property name="Description">Rhoticity</property>
+            <property name="Unicode">0x32e</property>
+        </cell>
+    	<cell y="2" x="26" h="2" w="2">
+    		<text>&#x25cc;&#x0353;</text>
+    		<property name="Name">Combining X Below</property>
+    		<property name="Description">Spirant</property>
+    		<property name="Unicode">0x353</property>
+    	</cell>
+    	<cell y="2" x="28" h="2" w="2">
+    		<text>&#x25cc;&#x0321;</text>
+    		<property name="Name">Combining Palatalized Hook Below</property>
+    		<property name="Description">Palatal</property>
+    		<property name="Unicode">0x321</property>
+    	</cell>
+    	<cell y="2" x="30" h="2" w="2">
+    		<text>&#x25cc;&#x0322;</text>
+    		<property name="Name">Combining Retroflex Hook Below</property>
+    		<property name="Description">Retroflex</property>
+    		<property name="Unicode">0x322</property>
+    	</cell>
+    </grid>
+
+    <!--Tones-->
+    <grid cols="30" rows="4" name="Tones">
+        <cell y="0" x="0" h="2" w="2">
+            <text>◌̏</text>
+            <property name="Name">Double grave</property>
+            <property name="Description">Extra low tone</property>
+            <property name="Unicode">0x30f</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>◌̀</text>
+            <property name="Name">Grave accent</property>
+            <property name="Description">Low tone</property>
+            <property name="Unicode">0x300</property>
+        </cell>
+        <cell y="0" x="4" h="2" w="2">
+            <text>◌̄</text>
+            <property name="Name">Macron</property>
+            <property name="Description">Mid tone</property>
+            <property name="Unicode">0x304</property>
+        </cell>
+        <cell y="0" x="6" h="2" w="2">
+            <text>◌́</text>
+            <property name="Name">Acute accent</property>
+            <property name="Description">High tone</property>
+            <property name="Unicode">0x301</property>
+        </cell>
+        <cell y="0" x="8" h="2" w="2">
+            <text>◌̋</text>
+            <property name="Name">Double acute</property>
+            <property name="Description">Extra high tone</property>
+            <property name="Unicode">0x30b</property>
+        </cell>
+        <cell y="2" x="0" h="2" w="2">
+            <text>◌̌</text>
+            <property name="Name">Wedge; haček</property>
+            <property name="Description">Rising tone contour</property>
+            <property name="Unicode">0x30c</property>
+        </cell>
+        <cell y="2" x="2" h="2" w="2">
+            <text>◌̂</text>
+            <property name="Name">Circumflex</property>
+            <property name="Description">Falling tone contour</property>
+            <property name="Unicode">0x302</property>
+        </cell>
+        <cell y="2" x="4" h="2" w="2">
+            <text>◌&#x1dc4;</text>
+            <property name="Name"></property>
+            <property name="Description"></property>
+            <property name="Unicode">0x1dc4</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>◌&#x1dc5;</text>
+            <property name="Name"></property>
+            <property name="Description"></property>
+            <property name="Unicode">0x1dc5</property>
+        </cell>
+        <cell y="2" x="8" h="2" w="2">
+            <text>◌&#x1dc8;</text>
+            <property name="Name"></property>
+            <property name="Description"></property>
+            <property name="Unicode">0x1dc8</property>
+        </cell>
+        <cell y="2" x="10" h="2" w="2">
+            <text>◌&#x1dc9;</text>
+            <property name="Name">Falling-rising</property>
+            <property name="Description">Falling-rising tone contour</property>
+            <property name="Unicode">0x1dc9</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>ꜛ</text>
+            <property name="Name">Up arrow</property>
+            <property name="Description">Tone upstep</property>
+            <property name="Unicode">0xa71b</property>
+        </cell>
+        <cell y="0" x="16" h="2" w="2">
+            <text>ꜜ</text>
+            <property name="Name">Down arrow</property>
+            <property name="Description">Tone downstep</property>
+            <property name="Unicode">0xa71c</property>
+        </cell>
+        <cell y="2" x="14" h="2" w="2">
+            <text>↗</text>
+            <property name="Name">Upward diagonal arrow</property>
+            <property name="Description">Global rise</property>
+            <property name="Unicode">0x2197</property>
+        </cell>
+        <cell y="2" x="16" h="2" w="2">
+            <text>↘</text>
+            <property name="Name">Downward diagonal arrow</property>
+            <property name="Description">Global fall</property>
+            <property name="Unicode">0x2198</property>
+        </cell>
+        <cell y="0" x="20" h="2" w="2">
+            <text>◌¹</text>
+            <property name="Name">Tone 1</property>
+            <property name="Description">Tone number 1</property>
+            <property name="Unicode">0xb9</property>
+        </cell>
+        <cell y="0" x="22" h="2" w="2">
+            <text>◌²</text>
+            <property name="Name">Tone 2</property>
+            <property name="Description">Tone number 2</property>
+            <property name="Unicode">0xb2</property>
+        </cell>
+        <cell y="0" x="24" h="2" w="2">
+            <text>◌³</text>
+            <property name="Name">Tone 3</property>
+            <property name="Description">Tone number 3</property>
+            <property name="Unicode">0xb3</property>
+        </cell>
+        <cell y="0" x="26" h="2" w="2">
+            <text>◌⁴</text>
+            <property name="Name">Tone 4</property>
+            <property name="Description">Tone number 4</property>
+            <property name="Unicode">0x2074</property>
+        </cell>
+        <cell y="0" x="28" h="2" w="2">
+            <text>◌⁵</text>
+            <property name="Name">Tone 5</property>
+            <property name="Description">Tone number 5</property>
+            <property name="Unicode">0x2075</property>
+        </cell>
+        <cell y="2" x="20" h="2" w="2">
+            <text>◌⁶</text>
+            <property name="Name">Tone 6</property>
+            <property name="Description">Tone number 6</property>
+            <property name="Unicode">0x2076</property>
+        </cell>
+        <cell y="2" x="22" h="2" w="2">
+            <text>◌⁷</text>
+            <property name="Name">Tone 7</property>
+            <property name="Description">Tone number 7</property>
+            <property name="Unicode">0x2077</property>
+        </cell>
+        <cell y="2" x="24" h="2" w="2">
+            <text>◌⁸</text>
+            <property name="Name">Tone 8</property>
+            <property name="Description">Tone number 8</property>
+            <property name="Unicode">0x2078</property>
+        </cell>
+        <cell y="2" x="26" h="2" w="2">
+            <text>◌⁹</text>
+            <property name="Name">Tone 9</property>
+            <property name="Description">Tone number 9</property>
+            <property name="Unicode">0x2079</property>
+        </cell>
+    </grid>
+
+    <!--ExtIPA-->
+    <grid cols="34" rows="12" name="ExtIPA">
+        <cell y="0" x="0" h="2" w="2">
+            <text>p̪</text>
+            <property name="Name">Lower-case P; subscript bridge</property>
+            <property name="Description">Voiceless labiodental stop</property>
+            <property name="Unicode">0x70 + 0x32a</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>b̪</text>
+            <property name="Name">Lower-case B; subscript bridge</property>
+            <property name="Description">Voiced labiodental stop</property>
+            <property name="Unicode">0x62 + 0x32a</property>
+        </cell>
+        <cell y="0" x="4" h="2" w="2">
+            <text>p͆</text>
+            <property name="Name">Lower-case P; superscript bridge</property>
+            <property name="Description">Voiceless dentolabial stop</property>
+            <property name="Unicode">0x70 + 0x346</property>
+        </cell>
+        <cell y="0" x="6" h="2" w="2">
+            <text>b͆</text>
+            <property name="Name">Lower-case B; superscript bridge</property>
+            <property name="Description">Voiced dentolabial stop</property>
+            <property name="Unicode">0x62 + 0x346</property>
+        </cell>
+        <cell y="0" x="8" h="2" w="2">
+            <text>p͇</text>
+            <property name="Name">Lower-case P; subscript equals</property>
+            <property name="Description">Voiceless labioalveolar stop</property>
+            <property name="Unicode">0x70 + 0x347</property>
+        </cell>
+        <cell y="0" x="10" h="2" w="2">
+            <text>b͇</text>
+            <property name="Name">Lower-case B; subscript equals</property>
+            <property name="Description">Voiced labioalveolar stop</property>
+            <property name="Unicode">0x62 + 0x347</property>
+        </cell>
+        <cell y="0" x="14" h="2" w="2">
+            <text>t̼</text>
+            <property name="Name">Lower-case T; subscript seagull</property>
+            <property name="Description">Voiceless linguolabial stop</property>
+            <property name="Unicode">0x74 + 0x33c</property>
+        </cell>
+        <cell y="0" x="16" h="2" w="2">
+            <text>d̼</text>
+            <property name="Name">Lower-case D; subscript seagull</property>
+            <property name="Description">Voiced linguolabial stop</property>
+            <property name="Unicode">0x64 + 0x33c</property>
+        </cell>
+        <cell y="0" x="18" h="2" w="2">
+            <text>t̪͆</text>
+            <property name="Name">Lower-case T; subscript and superscript bridge</property>
+            <property name="Description">Voiceless interdental stop</property>
+            <property name="Unicode">0x74 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="0" x="20" h="2" w="2">
+            <text>d̪͆</text>
+            <property name="Name">Lower-case D; subscript and superscript bridge</property>
+            <property name="Description">Voiced interdental stop</property>
+            <property name="Unicode">0x64 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="2" x="2" h="2" w="2">
+            <text>m͋</text>
+            <property name="Name">Lower-case M; superscript dotted tilde</property>
+            <property name="Description">Bilabial nareal fricative</property>
+            <property name="Unicode">0x6d + 0x34b</property>
+        </cell>
+        <cell y="2" x="6" h="2" w="2">
+            <text>m͆</text>
+            <property name="Name">Lower-case M; superscript bridge</property>
+            <property name="Description">Dentolabial nasal</property>
+            <property name="Unicode">0x6d + 0x346</property>
+        </cell>
+        <cell y="2" x="10" h="2" w="2">
+            <text>m͇</text>
+            <property name="Name">Lower-case M; subscript bridge</property>
+            <property name="Description">Labioalveolar nasal</property>
+            <property name="Unicode">0x6d + 0x347</property>
+        </cell>
+        <cell y="2" x="16" h="2" w="2">
+            <text>n̼</text>
+            <property name="Name">Lower-case N; subscript seagull</property>
+            <property name="Description">Linguolabial nasal</property>
+            <property name="Unicode">0x6e + 0x33c</property>
+        </cell>
+        <cell y="2" x="20" h="2" w="2">
+            <text>n̪͆</text>
+            <property name="Name">Lower-case N; subscript and superscript bridge</property>
+            <property name="Description">Interdental nasal</property>
+            <property name="Unicode">0x6e + 0x32a + 0x346</property>
+        </cell>
+        <cell y="2" x="28" h="2" w="2">
+            <text>n͋</text>
+            <property name="Name">Lower-case N; superscript dotted tilde</property>
+            <property name="Description">Alveolar nareal fricative</property>
+            <property name="Unicode">0x6e + 0x34b</property>
+        </cell>
+        <cell y="2" x="32" h="2" w="2">
+            <text>ŋ͋</text>
+            <property name="Name">Eng; superscript dotted tilde</property>
+            <property name="Description">Velar nareal fricative</property>
+            <property name="Unicode">0x14b + 0x34b</property>
+        </cell>
+        <cell y="4" x="14" h="2" w="2">
+            <text>l̼</text>
+            <property name="Name">Lower-case L; subscript seagull</property>
+            <property name="Description">Linguolabial lateral approximant</property>
+            <property name="Unicode">0x6c + 0x33c</property>
+        </cell>
+        <cell y="4" x="16" h="2" w="2">
+            <text>r̼</text>
+            <property name="Name">Lower-case R; subscript seagull</property>
+            <property name="Description">Linguolabial trill</property>
+            <property name="Unicode">0x72 + 0x33c</property>
+        </cell>
+        <cell y="4" x="18" h="2" w="2">
+            <text>l̪͆</text>
+            <property name="Name">Lower-case L; subscript and superscript bridge</property>
+            <property name="Description">Interdental lateral approximant</property>
+            <property name="Unicode">0x6c + 0x32a + 0x346</property>
+        </cell>
+        <cell y="4" x="20" h="2" w="2">
+            <text>r̪͆</text>
+            <property name="Name">Lower-case R; subscript and superscript bridge</property>
+            <property name="Description">Interdental trill</property>
+            <property name="Unicode">0x72 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="4" x="26" h="2" w="2">
+            <text>ʪ</text>
+            <property name="Name">Lower-case LS</property>
+            <property name="Description">Voiceless alveolar lateral fricative</property>
+            <property name="Unicode">0x2aa</property>
+        </cell>
+        <cell y="4" x="28" h="2" w="2">
+            <text>ʫ</text>
+            <property name="Name">Lower-case LZ</property>
+            <property name="Description">Voiced alveolar lateral fricative</property>
+            <property name="Unicode">0x2ab</property>
+        </cell>
+        <cell y="6" x="4" h="2" w="2">
+            <text>f͆</text>
+            <property name="Name">Lower-case F; superscript bridge</property>
+            <property name="Description">Voiceless dentolabial fricative</property>
+            <property name="Unicode">0x66 + 0x346</property>
+        </cell>
+        <cell y="6" x="6" h="2" w="2">
+            <text>v͆</text>
+            <property name="Name">Lower-case V; superscript bridge</property>
+            <property name="Description">Voiced dentolabial fricative</property>
+            <property name="Unicode">0x76 + 0x346</property>
+        </cell>
+        <cell y="6" x="8" h="2" w="2">
+            <text>f͇</text>
+            <property name="Name">Lower-case F; subscript equals</property>
+            <property name="Description">Voiceless labioalveolar fricative</property>
+            <property name="Unicode">0x66 + 0x347</property>
+        </cell>
+        <cell y="6" x="10" h="2" w="2">
+            <text>v͇</text>
+            <property name="Name">Lower-case V; subscript equals</property>
+            <property name="Description">Voiced labioalveolar fricative</property>
+            <property name="Unicode">0x76 + 0x347</property>
+        </cell>
+        <cell y="6" x="14" h="2" w="2">
+            <text>θ̼</text>
+            <property name="Name">Theta; subscript seagull</property>
+            <property name="Description">Voiceless linguolabial fricative</property>
+            <property name="Unicode">0x3b8 + 0x33c</property>
+        </cell>
+        <cell y="6" x="16" h="2" w="2">
+            <text>ð̼</text>
+            <property name="Name">Eth; subscript seagull</property>
+            <property name="Description">Voiced linguolabial fricative</property>
+            <property name="Unicode">0xf0 + 0x33c</property>
+        </cell>
+        <cell y="6" x="18" h="2" w="2">
+            <text>θ̪͆</text>
+            <property name="Name">Theta; subscript and superscript bridge</property>
+            <property name="Description">Voiceless interdental fricative</property>
+            <property name="Unicode">0x3b8 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="6" x="20" h="2" w="2">
+            <text>ð̪͆</text>
+            <property name="Name">Eth; subscript and superscript bridge</property>
+            <property name="Description">Voiced interdental fricative</property>
+            <property name="Unicode">0xf0 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="6" x="22" h="2" w="2">
+            <text>h̪͆</text>
+            <property name="Name">Lower-case H; subscript and superscript bridge</property>
+            <property name="Description">Voiceless bidental fricative</property>
+            <property name="Unicode">0x68 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="6" x="24" h="2" w="2">
+            <text>ɦ̪͆</text>
+            <property name="Name">Hooktop H; subscript and superscript bridge</property>
+            <property name="Description">Voiced bidental fricative</property>
+            <property name="Unicode">0x266 + 0x32a + 0x346</property>
+        </cell>
+        <cell y="6" x="32" h="2" w="2">
+            <text>ʩ</text>
+            <property name="Name">Small letter feng</property>
+            <property name="Description">Velopharyngeal fricative</property>
+            <property name="Unicode">0x2a9</property>
+        </cell>
+        <cell y="8" x="2" h="2" w="2">
+            <text>ʬ</text>
+            <property name="Name">Bilabial percussive</property>
+            <property name="Description">Bilabial percussive</property>
+            <property name="Unicode">0x2ac</property>
+        </cell>
+        <cell y="8" x="24" h="2" w="2">
+            <text>ʭ</text>
+            <property name="Name">Bidental percussive</property>
+            <property name="Description">Bidental percussive</property>
+            <property name="Unicode">0x2ad</property>
+        </cell>
+        <cell y="10" x="0" h="2" w="2">
+            <text>◌͍</text>
+            <property name="Name">Subscript left-right arrow</property>
+            <property name="Description">Labial spread</property>
+            <property name="Unicode">0x34d</property>
+        </cell>
+        <cell y="10" x="2" h="2" w="2">
+            <text>◌͆</text>
+            <property name="Name">Superscript bridge</property>
+            <property name="Description">Lower-dental</property>
+            <property name="Unicode">0x346</property>
+        </cell>
+        <cell y="10" x="4" h="2" w="2">
+            <text>◌̪͆</text>
+            <property name="Name">Subscript bridge, superscript bridge</property>
+            <property name="Description">Interdental/bidental</property>
+            <property name="Unicode">0x32a + 0x346</property>
+        </cell>
+        <cell y="10" x="6" h="2" w="2">
+            <text>◌͇</text>
+            <property name="Name">Subscript equals</property>
+            <property name="Description">Alveolar</property>
+            <property name="Unicode">0x347</property>
+        </cell>
+        <cell y="10" x="8" h="2" w="2">
+            <text>◌̼</text>
+            <property name="Name">Subscript seagull</property>
+            <property name="Description">Labial</property>
+            <property name="Unicode">0x33c</property>
+        </cell>
+        <cell y="10" x="10" h="2" w="2">
+            <text>◌͈</text>
+            <property name="Name">Subscript double syllabicity mark</property>
+            <property name="Description">Strong articulation</property>
+            <property name="Unicode">0x348</property>
+        </cell>
+        <cell y="10" x="12" h="2" w="2">
+            <text>◌͉</text>
+            <property name="Name">Subscript left angle</property>
+            <property name="Description">Weak articulation</property>
+            <property name="Unicode">0x349</property>
+        </cell>
+
+        <cell y="10" x="16" h="2" w="2">
+            <text>◌͎</text>
+            <property name="Name">Subscript up arrow</property>
+            <property name="Description">Whistled articulation</property>
+            <property name="Unicode">0x34e</property>
+        </cell>
+        <cell y="10" x="18" h="2" w="2">
+            <text>◌͢</text>
+            <property name="Name">Subscript combining right arrow</property>
+            <property name="Description">Sliding articulation</property>
+            <property name="Unicode">0x362</property>
+        </cell>
+        <cell y="10" x="20" h="2" w="2">
+            <text>◌͊</text>
+            <property name="Name">Superscript not tilde</property>
+            <property name="Description">Denasalized</property>
+            <property name="Unicode">0x34a</property>
+        </cell>
+        <cell y="10" x="22" h="2" w="2">
+            <text>◌͋</text>
+            <property name="Name">Superscript dotted tilde</property>
+            <property name="Description">Nareal fricative</property>
+            <property name="Unicode">0x34b</property>
+        </cell>
+        <cell y="10" x="24" h="2" w="2">
+            <text>◌͌</text>
+            <property name="Name">Superscript almost-equal</property>
+            <property name="Description">Velopharyngeal frication</property>
+            <property name="Unicode">0x34c</property>
+        </cell>
+        <cell y="10" x="26" h="2" w="2">
+            <text>↓</text>
+            <property name="Name">Downwards arrow</property>
+            <property name="Description">Ingressive</property>
+            <property name="Unicode">0x2193</property>
+        </cell>
+        <cell y="10" x="28" h="2" w="2">
+            <text>↑</text>
+            <property name="Name">Upwards arrow</property>
+            <property name="Description">Egressive</property>
+            <property name="Unicode">0x2191</property>
+        </cell>
+        <cell y="10" x="30" h="2" w="2">
+            <text>◌ˬ</text>
+            <property name="Name">Subscript wedge</property>
+            <property name="Description">Post-voicing</property>
+            <property name="Unicode">0x2ec</property>
+        </cell>
+        <cell y="10" x="32" h="2" w="2">
+            <text>ˬ̵◌</text>
+            <property name="Name">Subscript wedge</property>
+            <property name="Description">Pre-voicing</property>
+            <property name="Unicode">0x2ec + 0x335</property>
+        </cell>
+        <cell y="10" x="34" h="2" w="2">
+            <text>◌̾</text>
+            <property name="Name">Combining Vertical Tilde</property>
+            <property name="Description">Distorted</property>
+            <property name="Unicode">0x33e</property>
+        </cell>
+    </grid>
+</ipaGrids>

@@ -30,7 +30,6 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
 
-import com.infomatiq.jsi.rtree.RTree;
 
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.session.MediaSegment;
@@ -40,7 +39,8 @@ import ca.phon.session.Session;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import gnu.trove.TIntProcedure;
+import gnu.trove.procedure.TIntProcedure;
+import net.sf.jsi.rtree.RTree;
 
 public class DefaultRecordGridUI extends RecordGridUI {
 	
@@ -87,38 +87,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 		});
 		
-		this.recordGrid.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				recordGrid.requestFocus();
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-
 		c.addPropertyChangeListener(propListener);
 		c.addMouseListener(mouseListener);
 		c.addMouseMotionListener(mouseListener);
@@ -137,7 +105,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		return (recordIndex == mouseListener.pressedRecordIdx);
 	}
 	
-	private boolean isRecordHover(int recordIndex) {
+	private boolean isRecordEntered(int recordIndex) {
 		return (recordIndex == mouseListener.enteredRecordIdx);
 	}
 	
@@ -213,7 +181,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			Rectangle2D segRect = paintSegment(g2, rIdx, r);
-			recordTree.add(new com.infomatiq.jsi.Rectangle(
+			recordTree.add(new net.sf.jsi.Rectangle(
 					(float)segRect.getX(), (float)segRect.getY(), 
 					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())), rIdx);
 		}
@@ -278,7 +246,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					g2.setColor(Color.LIGHT_GRAY);
 				}
 				g2.draw(roundedRect);
-				if(!isRecordPressed(recordIndex) && isRecordHover(recordIndex)) {
+				if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
 					InnerGlowPathEffect gpe = new InnerGlowPathEffect();
 					gpe.setBrushColor(Color.GRAY);
 					gpe.setEffectWidth(5);
@@ -330,7 +298,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			recordTree.intersects(new com.infomatiq.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
+			recordGrid.requestFocusInWindow();
+			recordTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
 				
 				@Override
 				public boolean execute(int value) {
@@ -345,7 +314,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			recordTree.intersects(new com.infomatiq.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
+			recordTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
 				
 				@Override
 				public boolean execute(int value) {
@@ -370,7 +339,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			AtomicInteger intersectedRecord = new AtomicInteger(-1);
-			recordTree.intersects(new com.infomatiq.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
+			recordTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
 				
 				@Override
 				public boolean execute(int value) {
@@ -381,7 +350,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			});
 			
 			if(intersectedRecord.get() >= 0 && enteredRecordIdx != intersectedRecord.get()) {
-				if(enteredRecordIdx > 0) {
+				if(enteredRecordIdx >= 0) {
 					recordGrid.fireRecordExited(enteredRecordIdx, e);
 				}
 				enteredRecordIdx = intersectedRecord.get();

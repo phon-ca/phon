@@ -14,14 +14,6 @@
 
   <dependencies>
   	<dependency>
-  		<groupId>org.swinglabs.swingx</groupId>
-  		<artifactId>swingx-all</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.jgoodies</groupId>
-  		<artifactId>jgoodies-forms</artifactId>
-  	</dependency>
-  	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>phon-ipa</artifactId>
   		<version>${project.version}</version>
@@ -35,6 +27,10 @@
   		<groupId>${project.groupId}</groupId>
   		<artifactId>phon-components</artifactId>
   		<version>${project.version}</version>
+	</dependency>
+	<dependency>
+	  <groupId>net.sf.jsi</groupId>
+	  <artifactId>jsi</artifactId>
 	</dependency>
   </dependencies>
 	
