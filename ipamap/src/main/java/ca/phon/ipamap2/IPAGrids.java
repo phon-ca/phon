@@ -50,7 +50,7 @@ public class IPAGrids {
 				Unmarshaller unmarshaller = ctx.createUnmarshaller();
 //				unmarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 				grids = (IpaGrids)unmarshaller.unmarshal(
-						IpaMap.class.getResource(GRID_FILE));
+						IPAGrids.class.getResource(GRID_FILE));
 				
 				// add generated grids
 				generateMissingGrids(grids);

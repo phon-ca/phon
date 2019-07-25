@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -71,12 +72,15 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		String tStr = (char)0x25cc + "" + (char)0x1d50;
 		glyphRenderer.setText(tStr);
 		glyphRenderer.setFont(ipaGrid.getFont());
-		
+		glyphRenderer.setBorder(BorderFactory.createEmptyBorder(ipaGrid.getCellInsets().top, 
+				ipaGrid.getCellInsets().left,
+				ipaGrid.getCellInsets().bottom, 
+				ipaGrid.getCellInsets().right));
 		retVal = glyphRenderer.getPreferredSize();
-		retVal.height /= 2;
-		retVal.width /= 2;
 		retVal.height += ipaGrid.getCellInsets().top + ipaGrid.getCellInsets().bottom;
 		retVal.width += ipaGrid.getCellInsets().left + ipaGrid.getCellInsets().right;
+		retVal.height /= 2;
+		retVal.width /= 2;
 
 		return retVal;
 	}
@@ -84,6 +88,9 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	@Override
 	public void paint(Graphics g, JComponent c) {
 		final Graphics2D g2 = (Graphics2D)g;
+		
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		if(ipaGrid.isOpaque()) {
 			g2.setColor(ipaGrid.getBackground());
