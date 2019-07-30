@@ -154,6 +154,18 @@ public final class SegmentationHandler {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), goForward1SKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), goForward1SKey);
 		
+		final String goBack5SKey = "goback_5s";
+		final PhonUIAction goBack5SAct = new PhonUIAction(this, "onGoBack", 5000L);
+		actionMap.put(goBack5SKey, goBack5SAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK), goBack5SKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, KeyEvent.SHIFT_DOWN_MASK), goBack5SKey);
+		
+		final String goForward5SKey = "goforward_5s";
+		final PhonUIAction goForward5SAct = new PhonUIAction(this, "onGoForward", 5000L);
+		actionMap.put(goForward5SKey, goForward5SAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK), goForward5SKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.SHIFT_DOWN_MASK), goForward5SKey);
+		
 		final String stopSegmentationKey = "stop_segmentation";
 		PhonUIAction stopSegmentationAction = new PhonUIAction(this, "stopSegmentation");
 		actionMap.put(stopSegmentationKey, stopSegmentationAction);
