@@ -122,7 +122,37 @@ public final class SegmentationHandler {
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + i, 0), speakerSegmentKey);
 		}
 		
+		// mark breaks
+		final String markBreakKey = "mark_break";
+		final PhonUIAction markBreakAct = new PhonUIAction(this, "onMarkBreak");
+		actionMap.put(markBreakKey, markBreakAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_B, 0), markBreakKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DECIMAL, 0), markBreakKey);
+		
 		// media controls
+		final String volumeUpKey = "volume_up";
+		final PhonUIAction volumeUpAct = new PhonUIAction(this, "onVolumeUp");
+		actionMap.put(volumeUpKey, volumeUpAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), volumeUpKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0), volumeUpKey);
+		
+		final String volumeDownKey = "volume_down";
+		final PhonUIAction volumeDownAct = new PhonUIAction(this, "onVolumeDown");
+		actionMap.put(volumeDownKey, volumeDownAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), volumeDownKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DIVIDE, 0), volumeDownKey);
+		
+		final String goBack1SKey = "goback_1s";
+		final PhonUIAction goBack1SAct = new PhonUIAction(this, "onGoBack", 1000L);
+		actionMap.put(goBack1SKey, goBack1SAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), goBack1SKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), goBack1SKey);
+		
+		final String goForward1SKey = "goforward_1s";
+		final PhonUIAction goForward1SAct = new PhonUIAction(this, "onGoForward", 1000L);
+		actionMap.put(goForward1SKey, goForward1SAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), goForward1SKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), goForward1SKey);
 		
 		final String stopSegmentationKey = "stop_segmentation";
 		PhonUIAction stopSegmentationAction = new PhonUIAction(this, "stopSegmentation");
@@ -341,7 +371,53 @@ public final class SegmentationHandler {
 		}
 	}
 	
+	public void onMarkBreak() {
+		MediaPlayerEditorView mediaView = 
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaView != null) {
+			long playbackPosition = mediaView.getPlayer().getTime();
+			window.setStartLockMs(playbackPosition);
+		}
+	}
+	
+	public void onVolumeUp() {
+		MediaPlayerEditorView mediaView = 
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaView != null) {
+		}
+	}
+	
+	public void onVolumeDown() {
+		MediaPlayerEditorView mediaView = 
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaView != null) {
+		}
+	}
+	
+	public void onGoBack(PhonActionEvent pae) {
+		long deltaMs = (long)pae.getData();
+		
+		MediaPlayerEditorView mediaView = 
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaView != null) {
+			long newTime = Math.max(Math.max(0, window.getStartLockMs()), mediaView.getPlayer().getTime() - deltaMs);
+			mediaView.getPlayer().setTime(newTime);
+		}
+	}
+	
+	public void onGoForward(PhonActionEvent pae) {
+		long deltaMs = (long)pae.getData();
+		
+		MediaPlayerEditorView mediaView = 
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaView != null) {
+			long newTime = Math.min(mediaView.getPlayer().getLength(), mediaView.getPlayer().getTime() + deltaMs);
+			mediaView.getPlayer().setTime(newTime);
+		}
+	}
+	
 	private void handleKeyEvent(KeyEvent ke) {
+//		if(!ke.isActionKey()) return;
 		if(ke.getID() == KeyEvent.KEY_PRESSED) {
 			var ks = KeyStroke.getKeyStrokeForEvent(ke);
 			var actionKey = inputMap.get(ks);

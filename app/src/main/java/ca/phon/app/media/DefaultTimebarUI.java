@@ -157,7 +157,9 @@ public class DefaultTimebarUI extends TimebarUI {
 			timeRect.setRect(x, timebar.getMinorTickHeight(), timeRect.getWidth(), timeRect.getHeight());
 			
 			if(lastTimeRect == null || !lastTimeRect.intersects(timeRect)) {
-				g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + timeRect.getHeight()));
+				if(timeRect.intersects(g2.getClipBounds())) {
+					g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + timeRect.getHeight()));
+				}
 				lastTimeRect = timeRect;
 			}
 		}
