@@ -30,6 +30,9 @@ import javax.swing.event.MouseInputAdapter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
 
+import com.github.davidmoten.rtree.RTree;
+import com.github.davidmoten.rtree.geometry.Geometries;
+import com.github.davidmoten.rtree.geometry.Geometry;
 
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.session.MediaSegment;
@@ -39,8 +42,6 @@ import ca.phon.session.Session;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import gnu.trove.procedure.TIntProcedure;
-import net.sf.jsi.rtree.RTree;
 
 public class DefaultRecordGridUI extends RecordGridUI {
 	
@@ -50,7 +51,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private final static int TIER_GAP = 5;
 	
-	private RTree recordTree;
+	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordTree;
 	
 	private RecordGrid recordGrid;
 	
@@ -59,8 +60,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	public DefaultRecordGridUI() {
 		super();
 		
-		recordTree = new RTree();
-		recordTree.init(null);
+		recordTree = RTree.create();
 		
 		renderer = new JLabel();
 		renderer.setOpaque(false);
@@ -177,13 +177,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		recordGrid.getSpeakers().forEach( (s) -> paintSpeakerLabel(g2, s) );
 		
 		Session session = recordGrid.getSession();
-		recordTree.init(null);
+		recordTree = RTree.create();
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			Rectangle2D segRect = paintSegment(g2, rIdx, r);
-			recordTree.add(new net.sf.jsi.Rectangle(
-					(float)segRect.getX(), (float)segRect.getY(), 
-					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())), rIdx);
+			
+			recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
+					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
 		}
 		
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
@@ -299,30 +299,20 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			recordGrid.requestFocusInWindow();
-			recordTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
-				
-				@Override
-				public boolean execute(int value) {
-					pressedRecordIdx = value;
-					recordGrid.fireRecordPressed(value, e);
-					recordGrid.repaint();
-					return true;
-				}
-				
+			var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
+			entries.map( entry -> entry.value() ).forEach( i -> {
+				pressedRecordIdx = i;
+				recordGrid.fireRecordPressed(i, e);
+				recordGrid.repaint();
 			});
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			recordTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
-				
-				@Override
-				public boolean execute(int value) {
-					recordGrid.fireRecordClicked(value, e);
-					recordGrid.repaint();
-					return true;
-				}
-				
+			var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
+			entries.map( entry -> entry.value() ).forEach( i -> {
+				recordGrid.fireRecordClicked(i, e);
+				recordGrid.repaint();
 			});
 		}
 
@@ -339,14 +329,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			AtomicInteger intersectedRecord = new AtomicInteger(-1);
-			recordTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
-				
-				@Override
-				public boolean execute(int value) {
-					intersectedRecord.set(value);
-					return true;
-				}
-				
+			var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
+			entries.map( entry -> entry.value() ).forEach( i -> {
+				intersectedRecord.set(i);
 			});
 			
 			if(intersectedRecord.get() >= 0 && enteredRecordIdx != intersectedRecord.get()) {

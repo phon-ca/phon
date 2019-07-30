@@ -403,7 +403,7 @@ public class PhonMediaPlayer extends JPanel {
 				});
 			
 			mediaPlayer.addMediaPlayerEventListener(mediaListener);
-			for(MediaPlayerEventListener listener:cachedListenerrs) {
+			for(MediaPlayerEventListener listener:cachedListeners) {
 				mediaPlayer.addMediaPlayerEventListener(listener);
 			}
 		}
@@ -910,13 +910,20 @@ public class PhonMediaPlayer extends JPanel {
 		slider.setValue(sliderPos);
 	}
 	
-	private final List<MediaPlayerEventListener> cachedListenerrs = 
+	private final List<MediaPlayerEventListener> cachedListeners = 
 			new ArrayList<MediaPlayerEventListener>();
 	public void addMediaPlayerListener(MediaPlayerEventListener listener) {
 		if(getMediaPlayer() != null) {
 			getMediaPlayer().addMediaPlayerEventListener(listener);
 		}
-		cachedListenerrs.add(listener);
+		cachedListeners.add(listener);
+	}
+	
+	public void removeMediaPlayerListener(MediaPlayerEventListener listener) {
+		if(getMediaPlayer() != null) {
+			getMediaPlayer().removeMediaPlayerEventListener(listener);
+		}
+		cachedListeners.remove(listener);
 	}
 	
 }

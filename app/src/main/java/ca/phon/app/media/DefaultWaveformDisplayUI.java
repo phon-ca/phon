@@ -283,7 +283,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		var endX = display.xForTime(interval.getEndMarker().getTime());
 		
 		var rect = new Rectangle2D.Double(startX, 0, endX-startX, display.getHeight());
-		g2.setColor(new Color(255, 255, 255, 50));
+		g2.setColor(interval.getColor());
 		g2.fill(rect);
 		
 		super.paintInterval(g2, interval);

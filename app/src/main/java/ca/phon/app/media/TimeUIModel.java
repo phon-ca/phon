@@ -1,5 +1,6 @@
 package ca.phon.app.media;
 
+import java.awt.Color;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -171,6 +172,12 @@ public class TimeUIModel {
 		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
 	}
 	
+	public void removeInterval(Interval interval) {
+		var intervalCount = intervals.size();
+		intervals.remove(interval);
+		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
+	}
+	
 	public Collection<Interval> getIntervals() {
 		return Collections.unmodifiableCollection(this.intervals);
 	}
@@ -275,6 +282,8 @@ public class TimeUIModel {
 		private final Marker startMarker;
 		private final Marker endMarker;
 		
+		private Color color = new Color(255, 255, 255, 50);
+		
 		/* true when dragging markers */
 		private volatile boolean valueAdjusting = false;
 		
@@ -308,7 +317,17 @@ public class TimeUIModel {
 		public Marker getEndMarker() {
 			return this.endMarker;
 		}
-
+		
+		public Color getColor() {
+			return this.color;
+		}
+		
+		public void setColor(Color color) {
+			var oldVal = this.color;
+			this.color = color;
+			propSupport.firePropertyChange("color", oldVal, color);
+		}
+		
 		public void addPropertyChangeListener(PropertyChangeListener listener) {
 			propSupport.addPropertyChangeListener(listener);
 		}

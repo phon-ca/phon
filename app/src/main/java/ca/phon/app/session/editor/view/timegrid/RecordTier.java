@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerMessage;
 
 import ca.phon.app.media.TimeUIModel.Interval;
+import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
@@ -57,6 +58,8 @@ public class RecordTier extends TimeGridTier {
 	
 	private Map<String, Boolean> tierVisibility = new HashMap<>();
 	
+	private TimeUIModel.Interval currentRecordInterval = null;
+	
 	public RecordTier(TimeGridView parent) {
 		super(parent);
 	
@@ -67,7 +70,8 @@ public class RecordTier extends TimeGridTier {
 	private void init() {
 		Session session = getParentView().getEditor().getSession();
 		recordGrid = new RecordGrid(getTimeModel(), session);
-		setupRecord(getParentView().getEditor().currentRecord());
+		if(getParentView().getEditor().currentRecord() != null)
+			setupRecord(getParentView().getEditor().currentRecord());
 		
 		recordGrid.setFont(FontPreferences.getTierFont());
 		setupSpeakers();
@@ -118,12 +122,15 @@ public class RecordTier extends TimeGridTier {
 	}
 	
 	private void setupRecord(Record r) {
-		getTimeModel().clearIntervals();
+		if(currentRecordInterval != null)
+			getTimeModel().removeInterval(currentRecordInterval);
 		MediaSegment segment = r.getSegment().getGroup(0);
 		var segStartTime = segment.getStartValue() / 1000.0f;
 		var segEndTime = segment.getEndValue() / 1000.0f;
-		var interval = getTimeModel().addInterval(segStartTime, segEndTime);
-		interval.addPropertyChangeListener(new RecordIntervalListener(interval));
+		currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
+		
+		// XXX Memory leak here?
+		currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener(currentRecordInterval));
 		
 		recordGrid.setCurrentRecord(r);
 	}
@@ -181,6 +188,19 @@ public class RecordTier extends TimeGridTier {
 	public void toggleSpeaker(PhonActionEvent pae) {
 		Participant speaker = (Participant)pae.getData();
 		setSpeakerVisible(speaker, !isSpeakerVisible(speaker));
+	}
+	
+	public List<Participant> getSpeakerList() {
+		List<Participant> retVal = new ArrayList<>();
+		
+		Session session = getParentView().getEditor().getSession();
+		for(var speaker:session.getParticipants()) {
+			if(isSpeakerVisible(speaker)) {
+				retVal.add(speaker);
+			}
+		}
+		
+		return retVal;
 	}
 	
 	private void setupSpeakers() {

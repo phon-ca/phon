@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.timegrid;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -7,6 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -17,6 +21,7 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -40,6 +45,9 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.segmentation.SegmentationHandler;
+import ca.phon.app.session.editor.view.segmentation.SegmentationStartDialog;
 import ca.phon.app.session.editor.view.timegrid.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
@@ -72,6 +80,8 @@ public final class TimeGridView extends EditorView {
 	private JToolBar toolbar;
 	
 	private JSlider zoomSlider;
+	
+	private JButton segmentationButton;
 	
 	private DropDownButton speakerVisibilityButton;
 	private JPopupMenu speakerVisibilityMenu;
@@ -195,6 +205,11 @@ public final class TimeGridView extends EditorView {
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 		
+		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
+		segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
+		segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		segmentationButton = new JButton(segmentationAction);
+		
 		speakerVisibilityMenu = new JPopupMenu();
 		speakerVisibilityMenu.addPopupMenuListener(new PopupMenuListener() {
 			@Override
@@ -264,6 +279,7 @@ public final class TimeGridView extends EditorView {
 			getTimeModel().setPixelsPerSecond(zoomValues[zoomSlider.getValue()]);
 		});
 		
+		toolbar.add(segmentationButton);
 		toolbar.add(speakerVisibilityButton);
 		toolbar.add(tierVisiblityButton);
 		toolbar.add(zoomSlider);
@@ -368,14 +384,24 @@ public final class TimeGridView extends EditorView {
 	
 	private final DelegateEditorAction onRecordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
 	
+	private final DelegateEditorAction onSegmentationStarted = new DelegateEditorAction(this, "onSegmentationStarted");
+	
+	private final DelegateEditorAction onSegmentationEnded = new DelegateEditorAction(this, "onSegmentationEnded");
+	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		
+		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
+		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
 	}
 	
 	private void deregisterEditorEvents() {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		
+		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
+		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
 	}
 	
 	@RunOnEDT
@@ -386,6 +412,14 @@ public final class TimeGridView extends EditorView {
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
 		Record r = getEditor().currentRecord();
+		
+		if(getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			// don't adjust scroll position while playing
+			if(mediaPlayerView.getPlayer().isPlaying())
+				return;
+		}
+		
 		if(r != null) {
 			MediaSegment seg = r.getSegment().getGroup(0);
 			float time = seg.getStartValue() / 1000.0f;
@@ -393,6 +427,43 @@ public final class TimeGridView extends EditorView {
 			var x = getTimeModel().xForTime(time);
 			if(!tierPanel.getVisibleRect().contains(x, 0)) {
 				scrollToTime(time);
+			}
+		}
+	}
+	
+	@RunOnEDT
+	public void onSegmentationStarted(EditorEvent ee) {
+		segmentationButton.setText("Stop Segmentation");
+		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+	}
+	
+	@RunOnEDT
+	public void onSegmentationEnded(EditorEvent ee) {
+		segmentationButton.setText("Start Segmentation");
+		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		
+		getEditor().putExtension(SegmentationHandler.class, null);
+	}
+	
+	public void toggleSegmentation() {
+		SegmentationHandler handler = getEditor().getExtension(SegmentationHandler.class);
+		if(handler != null) {
+			handler.stopSegmentation();
+		} else {
+			SegmentationStartDialog startDialog = new SegmentationStartDialog(getEditor());
+			startDialog.setModal(true);
+			startDialog.pack();
+			startDialog.setVisible(true);
+			
+			if(!startDialog.wasCanceled()) {
+				handler = new SegmentationHandler(getEditor());
+				handler.setMediaStart(startDialog.getMediaStart());
+				handler.setSegmentationMode(startDialog.getSegmentationMode());
+				handler.getWindow().setBackwardWindowLengthMs(startDialog.getWindowLength());
+				
+				getEditor().putExtension(SegmentationHandler.class, handler);
+				
+				handler.startSegmentation();
 			}
 		}
 	}

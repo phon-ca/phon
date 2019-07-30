@@ -18,10 +18,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
+import com.github.davidmoten.rtree.RTree;
+import com.github.davidmoten.rtree.geometry.Geometries;
+
 import ca.phon.ui.ipamap.io.Cell;
-import gnu.trove.procedure.TIntProcedure;
-import net.sf.jsi.SpatialIndex;
-import net.sf.jsi.rtree.RTree;
 
 public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	
@@ -29,7 +29,7 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	
 	protected JLabel glyphRenderer;
 	
-	private RTree glyphRectTree;
+	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> glyphRectTree;
 
 	public DefaultIPAMapGridUI() {
 		super();
@@ -41,7 +41,7 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		glyphRenderer.setVerticalTextPosition(SwingConstants.CENTER);
 		glyphRenderer.setDoubleBuffered(false);
 		
-		glyphRectTree = new RTree();
+		glyphRectTree = RTree.create();
 	}
 	
 	@Override
@@ -104,16 +104,16 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 				BorderFactory.createEmptyBorder(ipaGrid.getCellInsets().top, ipaGrid.getCellInsets().left, 
 						ipaGrid.getCellInsets().bottom, ipaGrid.getCellInsets().right));
 		
-		glyphRectTree.reset();
-		glyphRectTree.init(null);
+		glyphRectTree = RTree.create();
 		for(int cellIdx = 0; cellIdx < ipaGrid.getGrid().getCell().size(); cellIdx++) {
 			Cell cell = ipaGrid.getGrid().getCell().get(cellIdx);
 			Rectangle cellRect = getCellRect(cell, cellDim);
-			if(cellRect.intersects(g.getClipBounds())) {
-				glyphRectTree.add(new net.sf.jsi.Rectangle(cellRect.x, cellRect.y, 
-						cellRect.x+cellRect.width, cellRect.y+cellRect.height), cellIdx);
+//			if(cellRect.intersects(g.getClipBounds())) {
+				glyphRectTree = glyphRectTree.add(cellIdx,
+						Geometries.rectangle(cellRect.getX(), cellRect.getY(), 
+								cellRect.getX() + cellRect.getWidth(), cellRect.getY() + cellRect.getHeight()));
 				paintCell(g2, cell, cellIdx, cellRect);
-			}
+//			}
 		}
 	}
 	
@@ -198,29 +198,20 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			glyphRectTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
-				
-				@Override
-				public boolean execute(int value) {
-					ipaGrid.fireCellClicked(ipaGrid.getGrid().getCell().get(value), e);
-					return true;
-				}
-				
+			System.out.println(e.getPoint());
+			var entries = glyphRectTree.search(Geometries.point(e.getX(), e.getY()));
+			entries.map( entry -> entry.value() ).forEach( value -> {
+				ipaGrid.fireCellClicked(ipaGrid.getGrid().getCell().get(value), e);
 			});
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			glyphRectTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
-				
-				@Override
-				public boolean execute(int value) {
-					currentlyPressedCell = value;
-					ipaGrid.fireCellPressed(ipaGrid.getGrid().getCell().get(value), e);
-					ipaGrid.repaint();
-					return true;
-				}
-				
+			var entries = glyphRectTree.search(Geometries.point(e.getX(), e.getY()));
+			entries.map( entry -> entry.value() ).forEach( value -> {
+				currentlyPressedCell = value;
+				ipaGrid.fireCellPressed(ipaGrid.getGrid().getCell().get(value), e);
+				ipaGrid.repaint();
 			});
 		}
 
@@ -236,15 +227,11 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			System.out.println(e);
 			AtomicInteger intersectedCell = new AtomicInteger(-1);
-			glyphRectTree.intersects(new net.sf.jsi.Rectangle(e.getX(), e.getY(), e.getX(), e.getY()), new TIntProcedure() {
-				
-				@Override
-				public boolean execute(int value) {
-					intersectedCell.set(value);
-					return true;
-				}
-				
+			var entries = glyphRectTree.search(Geometries.point(e.getX(), e.getY()));
+			entries.map( entry -> entry.value() ).forEach( value -> {
+				intersectedCell.set(value);
 			});
 			
 			if(intersectedCell.get() >= 0 && currentlyEnteredCell != intersectedCell.get()) {

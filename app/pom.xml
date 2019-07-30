@@ -181,9 +181,10 @@
 		</dependency>
 		
 		<dependency>
-		  <groupId>net.sf.jsi</groupId>
-		  <artifactId>jsi</artifactId>
+		  <groupId>com.github.davidmoten</groupId>
+		  <artifactId>rtree</artifactId>
 		</dependency>
+		
 	</dependencies>
 
 </project>
