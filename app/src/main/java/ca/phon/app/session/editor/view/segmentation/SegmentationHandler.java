@@ -14,6 +14,8 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import javax.swing.undo.CompoundEdit;
 
+import com.teamdev.jxbrowser.chromium.be;
+
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
@@ -32,6 +34,10 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.MsFormatter;
 import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
 import uk.co.caprica.vlcj.player.MediaPlayer;
@@ -97,6 +103,13 @@ public final class SegmentationHandler {
 	private final long segmentationEventMask = AWTEvent.KEY_EVENT_MASK;
 	
 	private TimeUIModel.Interval segmentationInterval;
+	
+	private final static int MAX_BEEPS = 3;
+	
+	// number of times an invalid keypress has occured in a row
+	// if this number hits MAX_BEEPS a dialog explaining we
+	// are still in segmentation mode will be displayed
+	private int beepCount = 0;
 	
 	public SegmentationHandler(SessionEditor editor) {
 		super();
@@ -439,12 +452,38 @@ public final class SegmentationHandler {
 					action.actionPerformed(new ActionEvent(this, 0, actionKey.toString()));
 				}
 			} else {
+				++beepCount;
 				Toolkit.getDefaultToolkit().beep();
+				
+				// TODO improve message in dialog
+				if(beepCount >= MAX_BEEPS) {
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setParentWindow(editor);
+					props.setRunAsync(true);
+					props.setTitle("Segmentation Mode");
+					props.setHeader("Segmentation Mode");
+					props.setMessage("Editor is in segmentation mode.");
+					props.setOptions(new String[] { "Continue", "End Segmentation"} );
+					props.setListener(beepDialogListener);
+					NativeDialogs.showMessageDialog(props);
+				}
 			}
 		}
 		
 		ke.consume();
 	}
+	
+	private final NativeDialogListener beepDialogListener = new NativeDialogListener() {
+		
+		@Override
+		public void nativeDialogEvent(NativeDialogEvent arg0) {
+			if(arg0.getDialogResult() == 1) {
+				stopSegmentation();
+			}
+			beepCount = 0;
+		}
+		
+	};
 	
 	private void handleMouseEvent(MouseEvent me) {
 		
