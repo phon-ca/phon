@@ -120,9 +120,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		Area topArea = new Area(channelRect);
 		topArea.intersect(new Area(topRect));
+		topArea.intersect(new Area(g2.getClip()));
 		
 		Area btmArea = new Area(channelRect);
 		btmArea.intersect(new Area(btmRect));
+		btmArea.intersect(new Area(g2.getClip()));
 		
 		Color topColor = UIManager.getColor(BG_COLOR1);
 		Color btmColor = UIManager.getColor(BG_COLOR2);

@@ -463,7 +463,7 @@ public final class SegmentationHandler {
 					props.setTitle("Segmentation Mode");
 					props.setHeader("Segmentation Mode");
 					props.setMessage("Editor is in segmentation mode.");
-					props.setOptions(new String[] { "Continue", "End Segmentation"} );
+					props.setOptions(new String[] { "Continue", "End Segmentation" } );
 					props.setListener(beepDialogListener);
 					NativeDialogs.showMessageDialog(props);
 				}
