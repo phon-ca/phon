@@ -69,4 +69,5 @@ public class TimegridWaveformTier extends TimeGridTier  {
 			wavDisplay.repaint(wavDisplay.getVisibleRect());
 		}
 	};
+	
 }

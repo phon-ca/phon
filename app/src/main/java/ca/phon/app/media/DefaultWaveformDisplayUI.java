@@ -99,7 +99,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	private RoundRectangle2D getChannelRect(Channel ch) {
 		int x = display.getChannelInsets().left;
 		int y = getChannelY(ch);
-		int width = display.getWidth()- ( display.getChannelInsets().left + display.getChannelInsets().right );
+		
+		var audioMaxX = display.xForTime(
+				Math.min(display.getLongSound().length(), display.getTimeModel().getEndTime()) );
+		
+		int width = (int)(audioMaxX - x);
 		int height = display.getChannelHeight();
 		int cornerRadius = 5;
 		

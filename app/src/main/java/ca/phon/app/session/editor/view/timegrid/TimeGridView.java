@@ -313,26 +313,46 @@ public final class TimeGridView extends EditorView {
 		final File audioFile = getAudioFile();
 		if(audioFile != null && audioFile.exists() && audioFile.canRead()) {
 			loadSessionAudio(audioFile);
-		} else {
-			// determine time values based on record segements
-			float endTime = 0.0f;
-			
-			for(Record r:getEditor().getSession().getRecords()) {
-				MediaSegment segment = r.getSegment().getGroup(0);
-				if(segment != null) {
-					float segEnd = (float)(segment.getEndValue() / 1000.0f);
-					endTime = Math.max(segEnd, endTime);
-				}
-			}
-			
-			timeModel.setEndTime(endTime);
 		}
+		setupTimeModel();
+	}
+
+	private float getMaxRecordTime() {
+		float retVal = 0.0f;
+		
+		for(Record r:getEditor().getSession().getRecords()) {
+			MediaSegment segment = r.getSegment().getGroup(0);
+			if(segment != null) {
+				float segEnd = (float)(segment.getEndValue() / 1000.0f);
+				retVal = Math.max(segEnd, retVal);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	private void setupTimeModel() {
+		float endTime = getMaxRecordTime();
+		
+		final File audioFile = getAudioFile();
+		if(audioFile == null) {
+			// check if media is loaded in player, if so use time from player
+			MediaPlayerEditorView mediaPlayerView = 
+					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
+				endTime = Math.max(endTime, mediaPlayerView.getPlayer().getLength() / 1000.0f);
+			}
+		} else {
+			endTime = Math.max(endTime, wavTier.getWaveformDisplay().getLongSound().length());
+		}
+		
+		timeModel.setEndTime(endTime);
 	}
 	
 	private void loadSessionAudio(File audioFile) {
 		try {
 			LongSound ls = LongSound.fromFile(audioFile);
-			timeModel.setEndTime(ls.length());
+			//timeModel.setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setLongSound(ls);
 		} catch (IOException e) {
@@ -386,12 +406,22 @@ public final class TimeGridView extends EditorView {
 	
 	private final DelegateEditorAction onSegmentationEnded = new DelegateEditorAction(this, "onSegmentationEnded");
 	
+	private final DelegateEditorAction onRecordAddedAct = new DelegateEditorAction(this, "onRecordAdded");
+	
+	private final DelegateEditorAction onRecordDeletedAct = new DelegateEditorAction(this, "onRecordDeleted");
+	
+	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
+	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		
 		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
 		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
+		
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, onRecordAddedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeletedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	private void deregisterEditorEvents() {
@@ -400,6 +430,10 @@ public final class TimeGridView extends EditorView {
 		
 		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
 		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
+		
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_ADDED_EVT, onRecordAddedAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeletedAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 	}
 	
 	@RunOnEDT
@@ -443,6 +477,26 @@ public final class TimeGridView extends EditorView {
 		getEditor().putExtension(SegmentationHandler.class, null);
 		
 		repaint();
+	}
+	
+	@RunOnEDT
+	public void onRecordAdded(EditorEvent ee) {
+		setupTimeModel();
+		repaint();
+	}
+	
+	@RunOnEDT
+	public void onRecordDeleted(EditorEvent ee) {
+		setupTimeModel();
+		repaint();
+	}
+	
+	@RunOnEDT
+	public void onTierChanged(EditorEvent ee) {
+		String tierName = ee.getEventData().toString();
+		if(SystemTierType.Segment.getName().equals(tierName)) {
+			setupTimeModel();
+		}
 	}
 	
 	public void toggleSegmentation() {
