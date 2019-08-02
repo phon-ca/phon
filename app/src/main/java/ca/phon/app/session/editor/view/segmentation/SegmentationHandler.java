@@ -14,18 +14,14 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import javax.swing.undo.CompoundEdit;
 
-import com.teamdev.jxbrowser.chromium.be;
-
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
-import ca.phon.app.session.editor.view.segmentation.SegmentationEditorView.SegmentationMode;
 import ca.phon.app.session.editor.view.timegrid.TimeGridView;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
@@ -38,8 +34,6 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.MsFormatter;
-import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.MediaPlayerEventListener;

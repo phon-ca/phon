@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.segmentation;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.ParseException;
@@ -10,10 +11,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -40,7 +43,7 @@ public class SegmentationStartDialog extends JDialog {
 
 	private ButtonGroup insertModeGroup = new ButtonGroup();
 	private JRadioButton insertAtEndButton;
-	private JRadioButton insertAfterCurrentButton;
+//	private JRadioButton insertAfterCurrentButton;
 	private JRadioButton overwriteCurrentButton;
 	
 	private ButtonGroup playbackStartGroup = new ButtonGroup();
@@ -53,6 +56,8 @@ public class SegmentationStartDialog extends JDialog {
 	private JButton startButton;
 	
 	private JButton cancelButton;
+	
+	private JEditorPane keymapInfoPane;
 	
 	private boolean wasCanceled = false;
 	
@@ -68,7 +73,7 @@ public class SegmentationStartDialog extends JDialog {
 		JPanel centerPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		header = new DialogHeader("Start Segmentation", "Selection options and begin segmentation");
+		header = new DialogHeader("Start Segmentation", "Select options and begin segmentation");
 		
 		insertAtEndButton = new JRadioButton(SegmentationHandler.SegmentationMode.INSERT_AT_END.toString());
 		insertAtEndButton.setSelected(true);
@@ -105,6 +110,11 @@ public class SegmentationStartDialog extends JDialog {
 			
 		});
 		windowLengthField.setValue(0L);
+		
+		keymapInfoPane = new JEditorPane("text/html", KEYMAP_HTML);
+		keymapInfoPane.setEditable(false);
+		keymapInfoPane.setCaretPosition(0);
+		keymapInfoPane.setPreferredSize(new Dimension(0, 300));
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -115,7 +125,7 @@ public class SegmentationStartDialog extends JDialog {
 		gbc.weighty = 0.0;
 		gbc.anchor = GridBagConstraints.WEST;
 		
-		centerPanel.add(new JLabel("Playback media:"), gbc);
+		centerPanel.add(new JLabel("Play media:"), gbc);
 		gbc.gridx++;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
@@ -143,17 +153,30 @@ public class SegmentationStartDialog extends JDialog {
 		gbc.weightx = 0.0;
 		gbc.gridx = 0;
 		gbc.gridy++;
-		centerPanel.add(new JLabel("Window length:"), gbc);
+		centerPanel.add(new JLabel("Max segment length (ms):"), gbc);
 		gbc.gridx++;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
 		centerPanel.add(windowLengthField, gbc);
+		
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0.0;
+		gbc.gridx = 0;
+		gbc.gridy++;
+		centerPanel.add(new JLabel("Keymap:"), gbc);
+		gbc.gridy++;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridwidth = 2;
+		centerPanel.add(new JScrollPane(keymapInfoPane), gbc);
 			
 		centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		PhonUIAction okAct = new PhonUIAction(this, "onOk");
-		okAct.putValue(PhonUIAction.NAME, "Start Segmentation");
+		okAct.putValue(PhonUIAction.NAME, "Start segmentation");
 		startButton = new JButton(okAct);
+		getRootPane().setDefaultButton(startButton);
 		
 		PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
 		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
@@ -171,8 +194,6 @@ public class SegmentationStartDialog extends JDialog {
 		
 		if(insertAtEndButton.isSelected()) {
 			retVal = SegmentationMode.INSERT_AT_END;
-		} else if(insertAfterCurrentButton.isSelected()) {
-			retVal = SegmentationMode.INSERT_AFTER_CURRENT;
 		} else if(overwriteCurrentButton.isSelected()) {
 			retVal = SegmentationMode.REPLACE_CURRENT;
 		}
@@ -211,5 +232,86 @@ public class SegmentationStartDialog extends JDialog {
 	public boolean wasCanceled() {
 		return this.wasCanceled;
 	}
+	
+	private final static String KEYMAP_HTML = "<html>\n" +
+			"<h3>Segmentation Controls</h3>\n" + 
+			"<table>\n" + 
+			"  <thead>\n" + 
+			"    <tr>\n" + 
+			"      <th>Action </th>\n" + 
+			"      <th>Keystroke(s) </th>\n" + 
+			"    </tr>\n" + 
+			"  </thead>\n" + 
+			"  <tbody>\n" + 
+			"    <tr>\n" + 
+			"      <td>Stop segmentation </td>\n" + 
+			"      <td><code>Esc</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>Break (e.g., silence, noise, etc.) </td>\n" + 
+			"      <td><code>b</code> or <code>Numpad decimal</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>New segment (unidentified) </td>\n" + 
+			"      <td><code>Space</code> or <code>Numpad 0</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>New segment (speaker 1) </td>\n" + 
+			"      <td><code>1</code> or <code>Numpad 1</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>New segment (speaker 2) </td>\n" + 
+			"      <td><code>2</code> or <code>Numpad 2</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>New segment (speaker 3) </td>\n" + 
+			"      <td><code>3</code> or <code>Numpad 3</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>… </td>\n" + 
+			"      <td>… </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>New segment (speaker 9) </td>\n" + 
+			"      <td><code>9</code> or <code>Numpad 9</code> </td>\n" + 
+			"    </tr>\n" + 
+			"  </tbody>\n" + 
+			"</table>\n" + 
+			"<h3>Media Controls</h3>\n" + 
+			"<table>\n" + 
+			"  <thead>\n" + 
+			"    <tr>\n" + 
+			"      <th>Action </th>\n" + 
+			"      <th>Keystroke(s) </th>\n" + 
+			"    </tr>\n" + 
+			"  </thead>\n" + 
+			"  <tbody>\n" + 
+			"    <tr>\n" + 
+			"      <td>Volume up </td>\n" + 
+			"      <td><code>Up</code> or <code>Numpad multiply</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>Volume down </td>\n" + 
+			"      <td><code>Down</code> or <code>Numpad divide</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>Go back 1s </td>\n" + 
+			"      <td><code>Left</code> or <code>Numpad subtract</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>Go forward 1s </td>\n" + 
+			"      <td><code>Right</code> or <code>Numpad add</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>Go back 5s </td>\n" + 
+			"      <td><code>Shift+Left</code> or <code>Shift+Numpad subtract</code> </td>\n" + 
+			"    </tr>\n" + 
+			"    <tr>\n" + 
+			"      <td>Go forward 5s </td>\n" + 
+			"      <td><code>Shift+Right</code> or <code>Shift+Numpad add</code> </td>\n" + 
+			"    </tr>\n" + 
+			"  </tbody>\n" + 
+			"</table>"
+			+ "</html>\n";
 	
 }

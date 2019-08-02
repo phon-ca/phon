@@ -15,6 +15,8 @@
  */
 package ca.phon.app.opgraph;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -25,10 +27,12 @@ import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipamap.IpaMap;
+import ca.phon.ipamap2.IPAMap;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
@@ -63,7 +67,7 @@ public class GlobalParameterPanel extends JPanel {
 	private JComboBox<String> ignoreDiacriticsBox;
 	
 	private DropDownButton retainDiacriticsButton;
-	private IpaMap retainDiacriticsMap;
+	private IPAMap retainDiacriticsMap;
 	
 	private JComboBox<String> ignoreTonesBox;
 	
@@ -127,8 +131,11 @@ public class GlobalParameterPanel extends JPanel {
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		
-		retainDiacriticsMap = new IpaMap();
-		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, retainDiacriticsMap);
+		retainDiacriticsMap = new IPAMap();
+		JPanel mapPanel = new JPanel(new BorderLayout());
+		mapPanel.add(new JScrollPane(retainDiacriticsMap), BorderLayout.CENTER);
+		mapPanel.setPreferredSize(new Dimension(mapPanel.getPreferredSize().width, 400));
+		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, mapPanel);
 		
 		retainDiacriticsButton = new DropDownButton(dropDownAct);
 		retainDiacriticsButton.setOnlyPopup(true);

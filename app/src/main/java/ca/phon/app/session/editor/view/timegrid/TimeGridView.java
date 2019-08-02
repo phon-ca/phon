@@ -443,6 +443,8 @@ public final class TimeGridView extends EditorView {
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		
 		getEditor().putExtension(SegmentationHandler.class, null);
+		
+		repaint();
 	}
 	
 	public void toggleSegmentation() {
@@ -453,6 +455,7 @@ public final class TimeGridView extends EditorView {
 			SegmentationStartDialog startDialog = new SegmentationStartDialog(getEditor());
 			startDialog.setModal(true);
 			startDialog.pack();
+			startDialog.setLocationRelativeTo(this);
 			startDialog.setVisible(true);
 			
 			if(!startDialog.wasCanceled()) {
