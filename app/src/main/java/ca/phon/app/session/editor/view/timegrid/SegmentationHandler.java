@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.segmentation;
+package ca.phon.app.session.editor.view.timegrid;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -22,7 +22,6 @@ import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
-import ca.phon.app.session.editor.view.timegrid.TimeGridView;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;

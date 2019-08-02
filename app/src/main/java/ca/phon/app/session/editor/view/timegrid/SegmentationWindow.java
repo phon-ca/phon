@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.segmentation;
+package ca.phon.app.session.editor.view.timegrid;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

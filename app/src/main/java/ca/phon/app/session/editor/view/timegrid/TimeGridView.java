@@ -46,8 +46,6 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.segmentation.SegmentationHandler;
-import ca.phon.app.session.editor.view.segmentation.SegmentationStartDialog;
 import ca.phon.app.session.editor.view.timegrid.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
