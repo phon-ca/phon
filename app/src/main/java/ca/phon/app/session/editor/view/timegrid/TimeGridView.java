@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
@@ -299,13 +301,35 @@ public final class TimeGridView extends EditorView {
 		tierPanel.add(tier, gbc);
 		
 		if(tier.isResizeable()) {
-			var separator =  new JSeparator(SwingConstants.HORIZONTAL);
+			final JSeparator separator =  new JSeparator(SwingConstants.HORIZONTAL);
 			separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 			separator.addMouseMotionListener(new SeparatorMouseListener(tier));
 			
 			gbc.gridy = tierIdx++;
 			
 			tierPanel.add(separator, gbc);
+			tier.addComponentListener(new ComponentListener() {
+				
+				@Override
+				public void componentShown(ComponentEvent e) {
+					separator.setVisible(true);
+				}
+				
+				@Override
+				public void componentResized(ComponentEvent e) {
+					
+				}
+				
+				@Override
+				public void componentMoved(ComponentEvent e) {
+					
+				}
+				
+				@Override
+				public void componentHidden(ComponentEvent e) {
+					separator.setVisible(false);
+				}
+			});
 		}
 	}
 	
@@ -313,6 +337,11 @@ public final class TimeGridView extends EditorView {
 		final File audioFile = getAudioFile();
 		if(audioFile != null && audioFile.exists() && audioFile.canRead()) {
 			loadSessionAudio(audioFile);
+			wavTier.setVisible(true);
+			recordGrid.getTimebar().setVisible(false);
+		} else {
+			wavTier.setVisible(false);
+			recordGrid.getTimebar().setVisible(true);
 		}
 		setupTimeModel();
 	}

@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JToolTip;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
@@ -30,6 +31,8 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	protected JLabel glyphRenderer;
 	
 	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> glyphRectTree;
+	
+	private IPAMapToolTip currentToolTip;
 
 	public DefaultIPAMapGridUI() {
 		super();
@@ -56,6 +59,8 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	
 		ipaGrid.setOpaque(true);
 		ipaGrid.setBackground(Color.WHITE);
+		
+		ipaGrid.setToolTipText("kugkugh");
 	}
 
 	@Override
@@ -188,6 +193,15 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 				&& cellIdx == mouseListener.currentlyEnteredCell);
 	}
 	
+	@Override
+	public JToolTip createToolTip() {
+		currentToolTip = new IPAMapToolTip();
+		if(mouseListener.currentlyEnteredCell >= 0) {
+			currentToolTip.update(ipaGrid.getGrid().getCell().get(mouseListener.currentlyEnteredCell));
+		}
+		return currentToolTip;
+	}
+	
 	private IPAMapGridMouseAdapter mouseListener = new IPAMapGridMouseAdapter();
 		
 	private class IPAMapGridMouseAdapter extends MouseInputAdapter {
@@ -198,7 +212,6 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.println(e.getPoint());
 			var entries = glyphRectTree.search(Geometries.point(e.getX(), e.getY()));
 			entries.map( entry -> entry.value() ).forEach( value -> {
 				ipaGrid.fireCellClicked(ipaGrid.getGrid().getCell().get(value), e);
@@ -227,7 +240,6 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			System.out.println(e);
 			AtomicInteger intersectedCell = new AtomicInteger(-1);
 			var entries = glyphRectTree.search(Geometries.point(e.getX(), e.getY()));
 			entries.map( entry -> entry.value() ).forEach( value -> {

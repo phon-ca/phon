@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JToolTip;
 import javax.swing.Scrollable;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.ComponentUI;
@@ -111,6 +112,12 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 	
 	public void fireCellExited(Cell cell, MouseEvent me) {
 		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseExited(cell, me) );
+	}
+	
+	@Override
+	public JToolTip createToolTip() {
+		System.out.print("Here");
+		return getUI().createToolTip();
 	}
 
 	@Override

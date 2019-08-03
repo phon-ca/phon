@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.border.BevelBorder;
@@ -29,7 +30,7 @@ import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.IpaGrids;
 import ca.phon.ui.ipamap.io.ObjectFactory;
 
-public class IPAMap extends JComponent implements Scrollable {
+public class IPAMap extends JComponent {
 	
 	private IPAGrids grids;
 	
@@ -123,8 +124,6 @@ public class IPAMap extends JComponent implements Scrollable {
 		
 		@Override
 		public void mouseEntered(Cell cell, MouseEvent me) {
-			System.out.println(String.format("(%d, %d)", cell.getX(), cell.getY()));
-			System.out.println(mapGrids.get(0).getUI().getCellDimension());
 			fireCellEntered(cell, me);
 		}
 		
@@ -135,29 +134,33 @@ public class IPAMap extends JComponent implements Scrollable {
 		
 	};
 	
-	@Override
-	public Dimension getPreferredScrollableViewportSize() {
-		return getPreferredSize();
-	}
+	private class IPAMapGridPanel extends JPanel implements Scrollable {
+	
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			return getPreferredSize();
+		}
+	
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return (mapGrids.size() > 0 ? mapGrids.get(0).getUI().getCellDimension().height : 0);
+		}
+	
+		@Override
+		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return (mapGrids.size() > 0 ? mapGrids.get(0).getUI().getCellDimension().height * 4 : 0);
+		}
+	
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+	
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
 
-	@Override
-	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return (mapGrids.size() > 0 ? mapGrids.get(0).getUI().getCellDimension().height : 0);
-	}
-
-	@Override
-	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return (mapGrids.size() > 0 ? mapGrids.get(0).getUI().getCellDimension().height * 4 : 0);
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportWidth() {
-		return true;
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportHeight() {
-		return false;
 	}
 	
 }

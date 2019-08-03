@@ -2,6 +2,7 @@ package ca.phon.ipamap2;
 
 import java.awt.Dimension;
 
+import javax.swing.JToolTip;
 import javax.swing.plaf.ComponentUI;
 
 /**
@@ -10,5 +11,7 @@ import javax.swing.plaf.ComponentUI;
 public abstract class IPAMapGridUI extends ComponentUI {
 	
 	public abstract Dimension getCellDimension();
+	
+	public abstract JToolTip createToolTip();
 
 }
