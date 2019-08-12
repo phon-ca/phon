@@ -29,6 +29,7 @@ import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -64,6 +65,11 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCallbackAdapter;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat;
 
 /**
  * Media player using vlc4j (including media playback controls.)
@@ -102,7 +108,7 @@ public class PhonMediaPlayer extends JPanel {
 	private PhonPlayerComponent mediaPlayerCanvas;
 	//private DirectMediaPlayerComponent mediaPlayerComponent;
 	
-	private Timer mediaTimer;
+//	private Timer mediaTimer;
 
 	/* Media player listener */
 	private final MediaPlayerListener mediaListener = new MediaPlayerListener();
@@ -363,7 +369,7 @@ public class PhonMediaPlayer extends JPanel {
 //		});
 		
 		MediaPlayerFactory playerFactory = new MediaPlayerFactory();
-		mediaPlayer = playerFactory.mediaPlayers().newEmbeddedMediaPlayer();
+		EmbeddedMediaPlayer mediaPlayer = playerFactory.mediaPlayers().newEmbeddedMediaPlayer();
 		if(mediaPlayer == null) return;
 		
 		positionSlider.setValue(0);
@@ -378,8 +384,11 @@ public class PhonMediaPlayer extends JPanel {
 			replayBtn.setEnabled(true);
 			positionSlider.setEnabled(true);
 			mediaPlayer.media().prepare(getMediaFile(), ":play-and-pause", ":no-video-title-show");
+			mediaPlayer.videoSurface().set(playerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
 			
 			mediaPlayer.events().addMediaPlayerEventListener(mediaListener);
+			
+			this.mediaPlayer = mediaPlayer;
 //			mediaPlayer.addMediaPlayerEventListener(loadListener);
 //			mediaPlayer.play();
 		}
@@ -758,6 +767,39 @@ public class PhonMediaPlayer extends JPanel {
 //		}
 //	}
 	
+	private class MediaPlayerRenderCallback implements RenderCallback {
+
+		@Override
+		public void display(MediaPlayer mediaPlayer, ByteBuffer[] nativeBuffers, BufferFormat bufferFormat) {
+			if(nativeBuffers.length < 1) return;
+			
+			ByteBuffer nativeBuffer = nativeBuffers[0];
+			final Dimension videoDimension = getMediaPlayer().video().videoDimension();
+			if(videoDimension != null) {
+				int w = (int)videoDimension.getWidth();
+				int h = (int)videoDimension.getHeight();
+				
+				BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
+				if(img != null) {
+					int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+			        nativeBuffer.asIntBuffer().get(rgbBuffer, 0, h * w);
+				}
+			
+				mediaPlayerCanvas.repaint();
+			}			
+		}
+		
+	}
+	
+	private final class BufferFormatCallback extends BufferFormatCallbackAdapter {
+
+        @Override
+        public BufferFormat getBufferFormat(int sourceWidth, int sourceHeight) {
+            return new RV32BufferFormat(sourceWidth, sourceHeight);
+        }
+
+    }
+	
 	/**
 	 * Media player listener
 	 */
@@ -879,10 +921,10 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void stop() {
-		if(mediaTimer != null) {
-			mediaTimer.stop();
-			mediaTimer = null;
-		}
+//		if(mediaTimer != null) {
+//			mediaTimer.stop();
+//			mediaTimer = null;
+//		}
 		if(getMediaPlayer() != null)
 			getMediaPlayer().controls().stop();
 	}
