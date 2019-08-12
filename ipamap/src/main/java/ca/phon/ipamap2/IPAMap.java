@@ -50,12 +50,17 @@ public class IPAMap extends JComponent {
 	private void init() {
 		setLayout(new VerticalLayout());
 		
+		boolean collapse = false;
 		for(var ipaGrid:grids.getGridData().getGrid()) {
 			IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
 			mapGrid.addCellMouseListener(forwardingMouseListener);
-			mapGrid.setFont(new Font("Charis SIL Compact", Font.BOLD, 18));
-			mapGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY), 
-					mapGrid.getGrid().getName()));
+//			mapGrid.setFont(new Font("Charis SIL Compact", Font.BOLD, 18));
+//			mapGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY), 
+//					mapGrid.getGrid().getName()));
+			mapGrid.setCollapsed(!collapse);
+			collapse = !collapse;
+			mapGrid.setBorder(new IPAMapGridBorder(mapGrid));
+			
 			mapGrids.add(mapGrid);
 			
 			//System.out.println(mapGrid.getPreferredSize());

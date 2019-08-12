@@ -29,6 +29,8 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 
 	private Insets cellInsets = new Insets(2, 2, 2, 2);
 	
+	private boolean collapsed = false;
+	
 	private final EventListenerList listenerList = new EventListenerList();
 	
 	public IPAMapGrid(Grid grid) {
@@ -80,6 +82,16 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 		var oldVal = this.cellInsets;
 		this.cellInsets = cellInsets;
 		super.firePropertyChange("cellInsets", oldVal, cellInsets);
+	}
+	
+	public boolean isCollapsed() {
+		return this.collapsed;
+	}
+	
+	public void setCollapsed(boolean collapsed) {
+		var oldVal = this.collapsed;
+		this.collapsed = collapsed;
+		super.firePropertyChange("collapsed", oldVal, collapsed);
 	}
 	
 	public void addCellMouseListener(IPAMapGridMouseListener listener) {

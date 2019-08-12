@@ -173,14 +173,18 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
-		Dimension cellDimension = getCellDimension();
-		
-		int w = (cellDimension.width * ipaGrid.getColumnCount()) 
-				+ ipaGrid.getInsets().left + ipaGrid.getInsets().right;
-		int h = (cellDimension.height * ipaGrid.getRowCount()) 
-				+ ipaGrid.getInsets().top + ipaGrid.getInsets().bottom;
-		
-		return new Dimension(w, h);
+		if(ipaGrid.isCollapsed()) {
+			return new Dimension(ipaGrid.getInsets().left + ipaGrid.getInsets().right, 
+					ipaGrid.getInsets().top + ipaGrid.getInsets().bottom);
+		} else {
+			Dimension cellDimension = getCellDimension();
+			
+			int w = (cellDimension.width * ipaGrid.getColumnCount()) 
+					+ ipaGrid.getInsets().left + ipaGrid.getInsets().right;
+			int h = (cellDimension.height * ipaGrid.getRowCount()) 
+					+ ipaGrid.getInsets().top + ipaGrid.getInsets().bottom;
+			return new Dimension(w, h);
+		}		
 	}
 	
 	private boolean isCellPressed(int cellIdx) {
