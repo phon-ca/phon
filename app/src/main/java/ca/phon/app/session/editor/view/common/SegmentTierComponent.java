@@ -37,6 +37,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -58,8 +59,8 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import uk.co.caprica.vlcj.player.MediaPlayer;
-import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 /**
  * Editor for media segments.
@@ -170,8 +171,8 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 						@Override
 						public void paused(MediaPlayer mediaPlayer) {
-							mediaPlayer.removeMediaPlayerEventListener(this);
-							playButton.setIcon(playIcon);
+							mediaPlayer.events().removeMediaPlayerEventListener(this);
+							SwingUtilities.invokeLater( () -> playButton.setIcon(playIcon) );
 						}
 
 					});

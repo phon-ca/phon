@@ -25,11 +25,12 @@ import com.sun.jna.NativeLibrary;
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
-import uk.co.caprica.vlcj.Info;
 import uk.co.caprica.vlcj.binding.LibC;
 import uk.co.caprica.vlcj.binding.LibVlc;
-import uk.co.caprica.vlcj.runtime.RuntimeUtil;
-import uk.co.caprica.vlcj.version.LibVlcVersion;
+import uk.co.caprica.vlcj.binding.RuntimeUtil;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.support.Info;
+import uk.co.caprica.vlcj.support.version.LibVlcVersion;
 
 /**
  * Helper methods for using vlc4j
@@ -92,13 +93,11 @@ public class VLCHelper {
 					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
 				}
 				
-				Object lib = Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
-				isLoaded = true;
-				
 				// print info to logger
-				
-				LOGGER.info("Using vlcj " + Info.getInstance().version());
-				LOGGER.info("Found libVLC " + LibVlcVersion.getVersion() + " at " + getLibraryPath(lib));
+				LOGGER.info("Using vlcj " + Info.getInstance().vlcjVersion());
+				LibVlcVersion libvlcVersion = new LibVlcVersion();
+				LOGGER.info("Using libvlc " + libvlcVersion.getVersion());
+				isLoaded = true;
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 				if(showError)
@@ -107,19 +106,6 @@ public class VLCHelper {
 		}
 
 		return isLoaded;
-	}
-	
-	private static String getLibraryPath(Object lib) {
-		String txt = lib.toString();
-		// find path enclosed in '<>'
-		final Pattern pattern = Pattern.compile("\\<([^@]+)@[0-9a-fA-F]+\\>");
-		final Matcher matcher = pattern.matcher(txt);
-		
-		String retVal = "unknown";
-		if(matcher.find()) {
-			retVal = matcher.group(1);
-		}
-		return retVal;
 	}
 	
 }

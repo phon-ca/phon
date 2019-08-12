@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
 import ca.phon.app.media.TimeUIModel;
@@ -33,9 +34,9 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import uk.co.caprica.vlcj.player.MediaPlayer;
-import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
-import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
 
 public final class SegmentationHandler {
 
@@ -329,7 +330,7 @@ public final class SegmentationHandler {
 				Rectangle rect = timeGridView.getWaveformTier().getWaveformDisplay().getVisibleRect();
 				float maxTimeS = timeGridView.getTimeModel().timeAtX(rect.getMaxX());
 				if(newTime > (maxTimeS*1000.0)) {
-					timeGridView.scrollToTime((float)(window.getStartLockMs()/1000.0f));
+					SwingUtilities.invokeLater( () -> timeGridView.scrollToTime((float)(window.getStartLockMs()/1000.0f)) );
 				}
 			}
 		}

@@ -26,11 +26,10 @@ import java.util.concurrent.CountDownLatch;
 import ca.phon.media.exceptions.PhonMediaException;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonTask;
-import uk.co.caprica.vlcj.player.MediaPlayer;
-import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
-import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
-import uk.co.caprica.vlcj.player.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.headless.HeadlessMediaPlayer;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
 
 /**
  * Export video and/or audio with the option
@@ -167,7 +166,7 @@ public class VLCMediaExporter extends PhonTask {
 	
 	protected void doExport() throws PhonMediaException {
 		final MediaPlayerFactory factory = new MediaPlayerFactory();
-		final HeadlessMediaPlayer player = factory.newHeadlessMediaPlayer();
+		final MediaPlayer player = factory.mediaPlayers().newMediaPlayer();
 		
 		List<String> mediaOpts = new ArrayList<>();
 		final NumberFormat nf = NumberFormat.getNumberInstance();
@@ -179,9 +178,9 @@ public class VLCMediaExporter extends PhonTask {
 		}
 		mediaOpts.addAll(getMediaOptions());
 		
-		player.prepareMedia(inputFile.getAbsolutePath(), mediaOpts.toArray(new String[0]));
-		player.addMediaPlayerEventListener(playerEventListener);
-		boolean started = player.start();
+		player.media().prepare(inputFile.getAbsolutePath(), mediaOpts.toArray(new String[0]));
+		player.events().addMediaPlayerEventListener(playerEventListener);
+		boolean started = player.controls().start();
 
 		try {
 			if(!started)
