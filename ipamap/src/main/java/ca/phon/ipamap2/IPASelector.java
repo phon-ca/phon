@@ -17,7 +17,7 @@ public class IPASelector {
 
 	private IPAMapGrid selectedCellGrid;
 	
-	private IPAMap map;
+	private IPAMapGridContainer map;
 	
 	
 	public IPASelector() {

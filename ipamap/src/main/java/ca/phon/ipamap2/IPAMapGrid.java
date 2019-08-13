@@ -14,6 +14,8 @@ import javax.swing.Scrollable;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.ComponentUI;
 
+import org.jdesktop.swingx.JXCollapsiblePane;
+
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 
@@ -29,9 +31,9 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 
 	private Insets cellInsets = new Insets(2, 2, 2, 2);
 	
-	private boolean collapsed = false;
-	
 	private final EventListenerList listenerList = new EventListenerList();
+	
+	private IPAMapCellRenderer cellRenderer = new DefaultIPAMapCellRenderer();
 	
 	public IPAMapGrid(Grid grid) {
 		super();
@@ -84,14 +86,14 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 		super.firePropertyChange("cellInsets", oldVal, cellInsets);
 	}
 	
-	public boolean isCollapsed() {
-		return this.collapsed;
+	public IPAMapCellRenderer getCellRenderer() {
+		return this.cellRenderer;
 	}
 	
-	public void setCollapsed(boolean collapsed) {
-		var oldVal = this.collapsed;
-		this.collapsed = collapsed;
-		super.firePropertyChange("collapsed", oldVal, collapsed);
+	public void setCellRenderer(IPAMapCellRenderer cellRenderer) {
+		var oldVal = this.cellRenderer;
+		this.cellRenderer = cellRenderer;
+		super.firePropertyChange("cellRenderer", oldVal, cellRenderer);
 	}
 	
 	public void addCellMouseListener(IPAMapGridMouseListener listener) {
@@ -127,24 +129,18 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 	}
 	
 	@Override
-	public JToolTip createToolTip() {
-		System.out.print("Here");
-		return getUI().createToolTip();
-	}
-
-	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return getPreferredSize();
 	}
 
 	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return (int)getUI().getCellDimension().getHeight() * direction;
+		return (int)getCellRenderer().getCellDimension(this).getHeight() * direction;
 	}
 
 	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return (int)getUI().getCellDimension().getHeight() * 10 * direction;
+		return (int)getCellRenderer().getCellDimension(this).getHeight() * 10 * direction;
 	}
 
 	@Override

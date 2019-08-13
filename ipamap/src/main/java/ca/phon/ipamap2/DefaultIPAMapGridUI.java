@@ -28,21 +28,12 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	
 	protected IPAMapGrid ipaGrid;
 	
-	protected JLabel glyphRenderer;
-	
 	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> glyphRectTree;
 	
-	private IPAMapToolTip currentToolTip;
+	private IPAMapInfoPane currentToolTip;
 
 	public DefaultIPAMapGridUI() {
 		super();
-		
-		glyphRenderer = new JLabel();
-		glyphRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-		glyphRenderer.setHorizontalTextPosition(SwingConstants.CENTER);
-		glyphRenderer.setVerticalAlignment(SwingConstants.CENTER);
-		glyphRenderer.setVerticalTextPosition(SwingConstants.CENTER);
-		glyphRenderer.setDoubleBuffered(false);
 		
 		glyphRectTree = RTree.create();
 	}
@@ -59,8 +50,6 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	
 		ipaGrid.setOpaque(true);
 		ipaGrid.setBackground(Color.WHITE);
-		
-		ipaGrid.setToolTipText("kugkugh");
 	}
 
 	@Override
@@ -69,25 +58,6 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		
 		c.removeMouseListener(mouseListener);
 		c.removeMouseMotionListener(mouseListener);
-	}
-
-	public Dimension getCellDimension() {
-		Dimension retVal = new Dimension(0, 0);
-		
-		String tStr = (char)0x25cc + "" + (char)0x1d50;
-		glyphRenderer.setText(tStr);
-		glyphRenderer.setFont(ipaGrid.getFont());
-		glyphRenderer.setBorder(BorderFactory.createEmptyBorder(ipaGrid.getCellInsets().top, 
-				ipaGrid.getCellInsets().left,
-				ipaGrid.getCellInsets().bottom, 
-				ipaGrid.getCellInsets().right));
-		retVal = glyphRenderer.getPreferredSize();
-		retVal.height += ipaGrid.getCellInsets().top + ipaGrid.getCellInsets().bottom;
-		retVal.width += ipaGrid.getCellInsets().left + ipaGrid.getCellInsets().right;
-		retVal.height /= 2;
-		retVal.width /= 2;
-
-		return retVal;
 	}
 	
 	@Override
@@ -103,22 +73,17 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		}
 		paintStripes(g2);
 
-		Dimension cellDim = getCellDimension();
-		glyphRenderer.setFont(ipaGrid.getFont());
-		glyphRenderer.setBorder(
-				BorderFactory.createEmptyBorder(ipaGrid.getCellInsets().top, ipaGrid.getCellInsets().left, 
-						ipaGrid.getCellInsets().bottom, ipaGrid.getCellInsets().right));
-		
+		IPAMapCellRenderer cellRenderer = ipaGrid.getCellRenderer();
+		Dimension cellDim = cellRenderer.getCellDimension(ipaGrid);
+				
 		glyphRectTree = RTree.create();
 		for(int cellIdx = 0; cellIdx < ipaGrid.getGrid().getCell().size(); cellIdx++) {
 			Cell cell = ipaGrid.getGrid().getCell().get(cellIdx);
 			Rectangle cellRect = getCellRect(cell, cellDim);
-//			if(cellRect.intersects(g.getClipBounds())) {
-				glyphRectTree = glyphRectTree.add(cellIdx,
-						Geometries.rectangle(cellRect.getX(), cellRect.getY(), 
-								cellRect.getX() + cellRect.getWidth(), cellRect.getY() + cellRect.getHeight()));
-				paintCell(g2, cell, cellIdx, cellRect);
-//			}
+			glyphRectTree = glyphRectTree.add(cellIdx,
+					Geometries.rectangle(cellRect.getX(), cellRect.getY(), 
+							cellRect.getX() + cellRect.getWidth(), cellRect.getY() + cellRect.getHeight()));
+			cellRenderer.paintCell(ipaGrid, g2, cellRect, cell, isCellEntered(cellIdx), isCellPressed(cellIdx));
 		}
 	}
 	
@@ -131,34 +96,11 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		return new Rectangle (cellX, cellY, cellW, cellH);
 	}
 	
-	protected void paintCell(Graphics2D g2, Cell cell, int cellIdx, Rectangle cellRect) {
-		var roundRect = new RoundRectangle2D.Double(
-				cellRect.x + ipaGrid.getCellInsets().left,
-				cellRect.y + ipaGrid.getCellInsets().top,
-				cellRect.width - ipaGrid.getCellInsets().left - ipaGrid.getCellInsets().right,
-				cellRect.height - ipaGrid.getCellInsets().top - ipaGrid.getCellInsets().bottom,
-				5, 5);
-		
-		if(isCellEntered(cellIdx)) {
-			g2.setColor(Color.yellow);
-			g2.fill(roundRect);
-		}
-		if(isCellPressed(cellIdx)) {
-			g2.setColor(Color.GRAY);
-			g2.draw(roundRect);
-		}
-		
-		glyphRenderer.setText(cell.getText());
-		SwingUtilities.paintComponent(g2, glyphRenderer, ipaGrid, cellRect);
-		
-				
-	}
-	
 	protected void paintStripes(Graphics2D g2) {
 		g2.setColor(Color.WHITE);
 		g2.fill(g2.getClipBounds());
 		
-		Dimension cellDim = getCellDimension();
+		Dimension cellDim = ipaGrid.getCellRenderer().getCellDimension(ipaGrid);
 		Rectangle stripeRect = new Rectangle(ipaGrid.getInsets().left, 
 				ipaGrid.getInsets().top + cellDim.height * 2, 
 				ipaGrid.getWidth() - ipaGrid.getInsets().left - ipaGrid.getInsets().right, cellDim.height*2);
@@ -173,18 +115,13 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 
 	@Override
 	public Dimension getPreferredSize(JComponent c) {
-		if(ipaGrid.isCollapsed()) {
-			return new Dimension(ipaGrid.getInsets().left + ipaGrid.getInsets().right, 
-					ipaGrid.getInsets().top + ipaGrid.getInsets().bottom);
-		} else {
-			Dimension cellDimension = getCellDimension();
-			
-			int w = (cellDimension.width * ipaGrid.getColumnCount()) 
-					+ ipaGrid.getInsets().left + ipaGrid.getInsets().right;
-			int h = (cellDimension.height * ipaGrid.getRowCount()) 
-					+ ipaGrid.getInsets().top + ipaGrid.getInsets().bottom;
-			return new Dimension(w, h);
-		}		
+		Dimension cellDimension = ipaGrid.getCellRenderer().getCellDimension(ipaGrid);
+		
+		int w = (cellDimension.width * ipaGrid.getColumnCount()) 
+				+ ipaGrid.getInsets().left + ipaGrid.getInsets().right;
+		int h = (cellDimension.height * ipaGrid.getRowCount()) 
+				+ ipaGrid.getInsets().top + ipaGrid.getInsets().bottom;
+		return new Dimension(w, h);
 	}
 	
 	private boolean isCellPressed(int cellIdx) {
@@ -196,16 +133,7 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		return (mouseListener.currentlyEnteredCell >= 0 
 				&& cellIdx == mouseListener.currentlyEnteredCell);
 	}
-	
-	@Override
-	public JToolTip createToolTip() {
-		currentToolTip = new IPAMapToolTip();
-		if(mouseListener.currentlyEnteredCell >= 0) {
-			currentToolTip.update(ipaGrid.getGrid().getCell().get(mouseListener.currentlyEnteredCell));
-		}
-		return currentToolTip;
-	}
-	
+		
 	private IPAMapGridMouseAdapter mouseListener = new IPAMapGridMouseAdapter();
 		
 	private class IPAMapGridMouseAdapter extends MouseInputAdapter {
@@ -258,6 +186,15 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 				ipaGrid.fireCellEntered(ipaGrid.getGrid().getCell().get(currentlyEnteredCell), e);
 				ipaGrid.repaint();
 			} else if(intersectedCell.get() < 0 && currentlyEnteredCell >= 0) {
+				ipaGrid.fireCellExited(ipaGrid.getGrid().getCell().get(currentlyEnteredCell), e);
+				currentlyEnteredCell = -1;
+				ipaGrid.repaint();
+			}
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			if(currentlyEnteredCell >= 0) {
 				ipaGrid.fireCellExited(ipaGrid.getGrid().getCell().get(currentlyEnteredCell), e);
 				currentlyEnteredCell = -1;
 				ipaGrid.repaint();

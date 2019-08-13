@@ -10,8 +10,4 @@ import javax.swing.plaf.ComponentUI;
  */
 public abstract class IPAMapGridUI extends ComponentUI {
 	
-	public abstract Dimension getCellDimension();
-	
-	public abstract JToolTip createToolTip();
-
 }

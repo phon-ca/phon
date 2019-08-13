@@ -18,13 +18,13 @@ import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokens;
 import ca.phon.ui.ipamap.io.Cell;
 
-public class IPAMapToolTip extends JToolTip {
+public class IPAMapInfoPane extends JToolTip {
 	
 	private JLabel previewLabel;
 	
 	private JEditorPane infoPane;
 	
-	public IPAMapToolTip() {
+	public IPAMapInfoPane() {
 		super();
 		
 		init();

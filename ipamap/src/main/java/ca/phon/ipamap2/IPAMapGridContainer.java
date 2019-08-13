@@ -2,8 +2,11 @@ package ca.phon.ipamap2;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -11,34 +14,48 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.EventListenerList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.ipamap.IpaMap;
 import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.ipamap.io.IpaGrids;
 import ca.phon.ui.ipamap.io.ObjectFactory;
 
-public class IPAMap extends JComponent {
+/**
+ * Container for {@link IPAMapGrid}s.
+ * 
+ */
+public class IPAMapGridContainer extends JComponent implements Scrollable {
 	
 	private IPAGrids grids;
 	
 	private List<IPAMapGrid> mapGrids;
-	
+		
 	private final EventListenerList listenerList = new EventListenerList();
 	
-	public IPAMap() {
+	public IPAMapGridContainer() {
 		super();
 		
 		grids = new IPAGrids();
@@ -50,29 +67,79 @@ public class IPAMap extends JComponent {
 	private void init() {
 		setLayout(new VerticalLayout());
 		
-		boolean collapse = false;
 		for(var ipaGrid:grids.getGridData().getGrid()) {
 			IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
 			mapGrid.addCellMouseListener(forwardingMouseListener);
-//			mapGrid.setFont(new Font("Charis SIL Compact", Font.BOLD, 18));
-//			mapGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY), 
-//					mapGrid.getGrid().getName()));
-			mapGrid.setCollapsed(!collapse);
-			collapse = !collapse;
-			mapGrid.setBorder(new IPAMapGridBorder(mapGrid));
-			
+			mapGrid.setFont(new Font("Arial", Font.BOLD, 18));
 			mapGrids.add(mapGrid);
 			
+			JXCollapsiblePane cp = new JXCollapsiblePane(Direction.DOWN);
+			cp.setLayout(new BorderLayout());
+			cp.add(mapGrid, BorderLayout.NORTH);
+			cp.setAnimated(false);
+			
 			//System.out.println(mapGrid.getPreferredSize());
-			add(mapGrid);
+			add(getToggleButton(ipaGrid, cp));
+			add(cp);
 		}
 	}
 	
+	private JXButton getToggleButton(Grid grid, JXCollapsiblePane cp) {
+		Action toggleAction = cp.getActionMap().get(JXCollapsiblePane.TOGGLE_ACTION);
+		
+		// use the collapse/expand icons from the JTree UI
+		toggleAction.putValue(JXCollapsiblePane.COLLAPSE_ICON,
+		                      UIManager.getIcon("Tree.expandedIcon"));
+		toggleAction.putValue(JXCollapsiblePane.EXPAND_ICON,
+		                      UIManager.getIcon("Tree.collapsedIcon"));
+		toggleAction.putValue(Action.NAME, grid.getName());
+
+		JXButton btn = new JXButton(toggleAction) {
+			@Override
+			public Insets getInsets() {
+				Insets retVal = super.getInsets();
+				
+				retVal.top = 0;
+				retVal.bottom = 0;
+				
+				return retVal;
+			}
+
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(0, 20);
+			}
+			
+			
+		};
+		
+		btn.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		btn.setBackgroundPainter(new Painter<JXButton>() {
+			
+			@Override
+			public void paint(Graphics2D g, JXButton object, int width, int height) {
+				MattePainter mp = new MattePainter(UIManager.getColor("Button.background"));
+				mp.paint(g, object, width, height);
+			}
+		});
+		
+		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btn.setBorderPainted(false);
+		btn.setFocusable(false);
+		
+		btn.putClientProperty("JComponent.sizeVariant", "small");
+
+		btn.revalidate();
+		
+		return btn;
+	}
+	
 	public static void main(String[] args) {
-		IPAMap map = new IPAMap();
+		IPAMapGridContainer map = new IPAMapGridContainer();
 		JFrame f = new JFrame("Test");
 		f.setLayout(new BorderLayout());
-		f.add(map, BorderLayout.CENTER);
+		f.add(new JScrollPane(map), BorderLayout.CENTER);
 		
 		f.pack();
 		f.setVisible(true);
@@ -139,33 +206,32 @@ public class IPAMap extends JComponent {
 		
 	};
 	
-	private class IPAMapGridPanel extends JPanel implements Scrollable {
-	
-		@Override
-		public Dimension getPreferredScrollableViewportSize() {
-			return getPreferredSize();
-		}
-	
-		@Override
-		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-			return (mapGrids.size() > 0 ? mapGrids.get(0).getUI().getCellDimension().height : 0);
-		}
-	
-		@Override
-		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-			return (mapGrids.size() > 0 ? mapGrids.get(0).getUI().getCellDimension().height * 4 : 0);
-		}
-	
-		@Override
-		public boolean getScrollableTracksViewportWidth() {
-			return true;
-		}
-	
-		@Override
-		public boolean getScrollableTracksViewportHeight() {
-			return false;
-		}
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
 	}
 	
 }

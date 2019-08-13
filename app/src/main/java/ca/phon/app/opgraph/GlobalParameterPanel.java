@@ -32,7 +32,7 @@ import javax.swing.SwingConstants;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipamap.IpaMap;
-import ca.phon.ipamap2.IPAMap;
+import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
@@ -67,7 +67,7 @@ public class GlobalParameterPanel extends JPanel {
 	private JComboBox<String> ignoreDiacriticsBox;
 	
 	private DropDownButton retainDiacriticsButton;
-	private IPAMap retainDiacriticsMap;
+	private IPAMapGridContainer retainDiacriticsMap;
 	
 	private JComboBox<String> ignoreTonesBox;
 	
@@ -131,7 +131,7 @@ public class GlobalParameterPanel extends JPanel {
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		
-		retainDiacriticsMap = new IPAMap();
+		retainDiacriticsMap = new IPAMapGridContainer();
 		JPanel mapPanel = new JPanel(new BorderLayout());
 		mapPanel.add(new JScrollPane(retainDiacriticsMap), BorderLayout.CENTER);
 		mapPanel.setPreferredSize(new Dimension(mapPanel.getPreferredSize().width, 400));
