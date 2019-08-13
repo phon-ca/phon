@@ -385,33 +385,33 @@ public class PhonMediaPlayer extends JPanel {
 			positionSlider.setEnabled(true);
 			mediaPlayer.media().prepare(getMediaFile(), ":play-and-pause", ":no-video-title-show");
 			mediaPlayer.videoSurface().set(playerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
-			
-			mediaPlayer.events().addMediaPlayerEventListener(mediaListener);
-			
 			this.mediaPlayer = mediaPlayer;
-//			mediaPlayer.addMediaPlayerEventListener(loadListener);
-//			mediaPlayer.play();
+			
+			mediaPlayer.events().addMediaPlayerEventListener(loadListener);
+			mediaPlayer.controls().play();
 		}
 	}
 	
-//	private final MediaPlayerEventAdapter loadListener = new MediaPlayerEventAdapter() {
-//
-//		@Override
-//		public void playing(final MediaPlayer mediaPlayer) {
-//			mediaPlayer.pause();
-//			mediaPlayer.removeMediaPlayerEventListener(this);
-//			
-//			SwingUtilities.invokeLater( () -> {
-//					getPositionSlider().setMaximum((int)mediaPlayer.getLength());
-//				});
-//			
-//			mediaPlayer.addMediaPlayerEventListener(mediaListener);
-//			for(MediaPlayerEventListener listener:cachedListeners) {
-//				mediaPlayer.addMediaPlayerEventListener(listener);
-//			}
-//		}
-//		
-//	};
+	private final MediaPlayerEventAdapter loadListener = new MediaPlayerEventAdapter() {
+
+		@Override
+		public void playing(final MediaPlayer mediaPlayer) {
+			mediaPlayer.submit( () -> {
+				mediaPlayer.controls().pause();
+				mediaPlayer.events().removeMediaPlayerEventListener(this);
+				
+				SwingUtilities.invokeLater( () -> {
+						getPositionSlider().setMaximum((int)mediaPlayer.status().length());
+					});
+				
+				mediaPlayer.events().addMediaPlayerEventListener(mediaListener);
+				for(MediaPlayerEventListener listener:cachedListeners) {
+					mediaPlayer.events().addMediaPlayerEventListener(listener);
+				}
+			});
+		}
+		
+	};
 
 	/* UI actions */
 	public void toggleVolumeMute(PhonActionEvent pae) {
