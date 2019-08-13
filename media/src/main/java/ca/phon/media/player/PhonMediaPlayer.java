@@ -104,7 +104,8 @@ public class PhonMediaPlayer extends JPanel {
 	private JPanel mediaControlPanel;
 
 	/* Media player */
-	private MediaPlayer mediaPlayer;
+	private MediaPlayerFactory mediaPlayerFactory;
+	private EmbeddedMediaPlayer mediaPlayer;
 	private PhonPlayerComponent mediaPlayerCanvas;
 	//private DirectMediaPlayerComponent mediaPlayerComponent;
 	
@@ -142,6 +143,10 @@ public class PhonMediaPlayer extends JPanel {
 	}
 	
 	public void cleanup() {
+		if(mediaPlayerFactory != null) {
+			mediaPlayerFactory.release();
+			mediaPlayerFactory = null;
+		}
 		// clean up player
 		if(mediaPlayer != null) {
 			if(mediaPlayer.status().isPlaying()) {
@@ -357,22 +362,14 @@ public class PhonMediaPlayer extends JPanel {
 	
 	public void loadMedia(String loc) {
 		setMediaFile(loc);
-//		loadMedia();
 	}
 	
 	public void loadMedia() {
-		if(mediaPlayer != null) {
-			cleanup();
-		}
-//		mediaPlayerComponent = new DirectMediaPlayerComponent((int sourceWidth, int sourceHeight) -> {
-//			return new RV32BufferFormat(sourceWidth, sourceHeight);
-//		});
+		// cleanup any existing vlc objects
+		cleanup();
 		
-		MediaPlayerFactory playerFactory = new MediaPlayerFactory();
-		EmbeddedMediaPlayer mediaPlayer = playerFactory.mediaPlayers().newEmbeddedMediaPlayer();
-		if(mediaPlayer == null) return;
-		
-		positionSlider.setValue(0);
+		getPositionSlider().setValue(0);
+		getPositionSlider().setMaximum(0);
 		if(mediaFile == null) {
 			playPauseBtn.setEnabled(false);
 			replayBtn.setEnabled(false);
@@ -380,29 +377,36 @@ public class PhonMediaPlayer extends JPanel {
 			mediaPlayerCanvas.setBufferedImage(null);
 			mediaPlayerCanvas.repaint();
 		} else {
+			mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
+			mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
+			if(mediaPlayer == null) return;
+			
 			playPauseBtn.setEnabled(true);
 			replayBtn.setEnabled(true);
 			positionSlider.setEnabled(true);
+			
 			mediaPlayer.media().prepare(getMediaFile(), ":play-and-pause", ":no-video-title-show");
-			mediaPlayer.videoSurface().set(playerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
-			this.mediaPlayer = mediaPlayer;
+			mediaPlayer.videoSurface().set(
+					mediaPlayerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
 			
 			mediaPlayer.events().addMediaPlayerEventListener(loadListener);
 			mediaPlayer.controls().play();
 		}
 	}
 	
+	/*
+	 * Listener used when loading media to setup position slider maximum.
+	 */
 	private final MediaPlayerEventAdapter loadListener = new MediaPlayerEventAdapter() {
 
 		@Override
 		public void playing(final MediaPlayer mediaPlayer) {
 			mediaPlayer.submit( () -> {
 				mediaPlayer.controls().pause();
-				mediaPlayer.events().removeMediaPlayerEventListener(this);
+				mediaPlayer.events().removeMediaPlayerEventListener(loadListener);
 				
-				SwingUtilities.invokeLater( () -> {
-						getPositionSlider().setMaximum((int)mediaPlayer.status().length());
-					});
+				final int sliderMax = (int)mediaPlayer.status().length();
+				SwingUtilities.invokeLater( () -> getPositionSlider().setMaximum(sliderMax) );
 				
 				mediaPlayer.events().addMediaPlayerEventListener(mediaListener);
 				for(MediaPlayerEventListener listener:cachedListeners) {
