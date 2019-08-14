@@ -27,6 +27,6 @@ public interface IPAMapCellRenderer {
 	 * @param isPressed
 	 * @return
 	 */
-	public void paintCell(IPAMapGrid mapGrid, Graphics2D g2, Rectangle cellRect, Cell cell, boolean isHover, boolean isPressed);
+	public void paintCell(IPAMapGrid mapGrid, Graphics2D g2, Rectangle cellRect, Cell cell, boolean isHover, boolean isPressed, boolean isSelected);
 
 }

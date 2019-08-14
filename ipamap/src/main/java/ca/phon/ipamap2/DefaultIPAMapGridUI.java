@@ -8,8 +8,12 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -79,11 +83,15 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		glyphRectTree = RTree.create();
 		for(int cellIdx = 0; cellIdx < ipaGrid.getGrid().getCell().size(); cellIdx++) {
 			Cell cell = ipaGrid.getGrid().getCell().get(cellIdx);
-			Rectangle cellRect = getCellRect(cell, cellDim);
-			glyphRectTree = glyphRectTree.add(cellIdx,
-					Geometries.rectangle(cellRect.getX(), cellRect.getY(), 
-							cellRect.getX() + cellRect.getWidth(), cellRect.getY() + cellRect.getHeight()));
-			cellRenderer.paintCell(ipaGrid, g2, cellRect, cell, isCellEntered(cellIdx), isCellPressed(cellIdx));
+			
+			Predicate<Cell> cellFilter = ipaGrid.getCellFilter();
+			if(cellFilter == null || cellFilter.test(cell)) {
+				Rectangle cellRect = getCellRect(cell, cellDim);
+				glyphRectTree = glyphRectTree.add(cellIdx,
+						Geometries.rectangle(cellRect.getX(), cellRect.getY(), 
+								cellRect.getX() + cellRect.getWidth(), cellRect.getY() + cellRect.getHeight()));
+				cellRenderer.paintCell(ipaGrid, g2, cellRect, cell, isCellEntered(cellIdx), isCellPressed(cellIdx), isCellSelected(cellIdx));
+			}
 		}
 	}
 	
@@ -133,6 +141,20 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		return (mouseListener.currentlyEnteredCell >= 0 
 				&& cellIdx == mouseListener.currentlyEnteredCell);
 	}
+	
+	private boolean isCellSelected(int cellIdx) {
+		int[] selected = ipaGrid.getSelectionModel().getSelectedIndices();
+		return ipaGrid.isSelectionEnabled() 
+				&& Arrays.stream(selected).boxed().collect(Collectors.toList()).contains(cellIdx);
+	}
+	
+	private void toggleCellSelected(int cellIdx) {
+		if(ipaGrid.getSelectionModel().isSelectedIndex(cellIdx)) {
+			ipaGrid.getSelectionModel().removeSelectionInterval(cellIdx, cellIdx);
+		} else {
+			ipaGrid.getSelectionModel().addSelectionInterval(cellIdx, cellIdx);
+		}
+	}
 		
 	private IPAMapGridMouseAdapter mouseListener = new IPAMapGridMouseAdapter();
 		
@@ -147,6 +169,8 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 			var entries = glyphRectTree.search(Geometries.point(e.getX(), e.getY()));
 			entries.map( entry -> entry.value() ).forEach( value -> {
 				ipaGrid.fireCellClicked(ipaGrid.getGrid().getCell().get(value), e);
+				if(ipaGrid.isSelectionEnabled())
+					toggleCellSelected(value);
 			});
 		}
 

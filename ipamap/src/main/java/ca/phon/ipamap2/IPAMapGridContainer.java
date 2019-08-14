@@ -8,17 +8,24 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
@@ -42,16 +49,19 @@ import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.ipamap.io.IpaGrids;
 import ca.phon.ui.ipamap.io.ObjectFactory;
+import ca.phon.util.Tuple;
 
 /**
  * Container for {@link IPAMapGrid}s.
  * 
  */
-public class IPAMapGridContainer extends JComponent implements Scrollable {
+public class IPAMapGridContainer extends JPanel implements Scrollable {
 	
 	private IPAGrids grids;
 	
 	private List<IPAMapGrid> mapGrids;
+	
+	private Map<IPAMapGrid, JXCollapsiblePane> cpMap = new HashMap<>();
 		
 	private final EventListenerList listenerList = new EventListenerList();
 	
@@ -66,22 +76,48 @@ public class IPAMapGridContainer extends JComponent implements Scrollable {
 	
 	private void init() {
 		setLayout(new VerticalLayout());
-		
-		for(var ipaGrid:grids.getGridData().getGrid()) {
-			IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
-			mapGrid.addCellMouseListener(forwardingMouseListener);
-			mapGrid.setFont(new Font("Arial", Font.BOLD, 18));
-			mapGrids.add(mapGrid);
-			
-			JXCollapsiblePane cp = new JXCollapsiblePane(Direction.DOWN);
-			cp.setLayout(new BorderLayout());
-			cp.add(mapGrid, BorderLayout.NORTH);
-			cp.setAnimated(false);
-			
-			//System.out.println(mapGrid.getPreferredSize());
-			add(getToggleButton(ipaGrid, cp));
-			add(cp);
+	}
+	
+	/**
+	 * Adds all default {@link Grid}s found in the ipamap.xml layout file.
+	 * 
+	 * 
+	 */
+	public void addDefaultGrids() {
+		for(var ipaGrid:grids.loadGridData().getGrid()) {
+			addGrid(ipaGrid);
 		}
+	}
+	
+	/**
+	 * Add {@link Grid} to container. The method
+	 * creates a new toggle button and {@link IPAMapGrid}
+	 * component and returns them in a {@link Tuple}. The
+	 * new components are added to the container in a vertical
+	 * layout.
+	 * 
+	 * @param ipaGrid
+	 * @return
+	 */
+	public Tuple<JButton, IPAMapGrid> addGrid(Grid ipaGrid) {
+		IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
+		mapGrid.addCellMouseListener(forwardingMouseListener);
+		mapGrid.setFont(new Font("Arial", Font.BOLD, 18));
+		mapGrid.setCellFilter(cellFilter);
+		mapGrids.add(mapGrid);
+		
+		JXCollapsiblePane cp = new JXCollapsiblePane(Direction.DOWN);
+		cp.setLayout(new BorderLayout());
+		cp.add(mapGrid, BorderLayout.NORTH);
+		cp.setAnimated(false);
+		cpMap.put(mapGrid, cp);
+		
+		//System.out.println(mapGrid.getPreferredSize());
+		JButton toggleButton = getToggleButton(ipaGrid, cp);
+		add(toggleButton);
+		add(cp);
+		
+		return new Tuple<>(toggleButton, mapGrid);
 	}
 	
 	private JXButton getToggleButton(Grid grid, JXCollapsiblePane cp) {
@@ -132,49 +168,76 @@ public class IPAMapGridContainer extends JComponent implements Scrollable {
 
 		btn.revalidate();
 		
+		cp.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				btn.setVisible(true);
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				btn.setVisible(false);
+			}
+			
+		});
+		
 		return btn;
 	}
 	
-	public static void main(String[] args) {
-		IPAMapGridContainer map = new IPAMapGridContainer();
-		JFrame f = new JFrame("Test");
-		f.setLayout(new BorderLayout());
-		f.add(new JScrollPane(map), BorderLayout.CENTER);
-		
-		f.pack();
-		f.setVisible(true);
+	/**
+	 * Is the given section visible
+	 * 
+	 * @param gridName
+	 * @return <code>true</code> if section is visible
+	 */
+	public boolean isGridVisible(String gridName) {
+		Optional<IPAMapGrid> mapGrid =
+			mapGrids.stream().filter( (grid) -> grid.getGrid().getName().equals(gridName) ).findAny();
+		if(mapGrid.isPresent()) {
+			return isGridVisible(mapGrid.get());
+		} else {
+			return false;
+		}
 	}
 	
+	public void setGridVisible(String gridName, boolean visible) {
+		Optional<IPAMapGrid> mapGrid =
+			mapGrids.stream().filter( (grid) -> grid.getGrid().getName().equals(gridName) ).findAny();
+		if(mapGrid.isPresent()) {
+			setGridVisible(mapGrid.get(), visible);
+		}
+	}
+	
+	public boolean isGridVisible(IPAMapGrid mapGrid) {
+		if(cpMap.containsKey(mapGrid)) {
+			return cpMap.get(mapGrid).isVisible();
+		} else {
+			return false;
+		}
+	}
+	
+	public void setGridVisible(IPAMapGrid mapGrid, boolean visible) {
+		if(cpMap.containsKey(mapGrid)) {
+			cpMap.get(mapGrid).setVisible(visible);
+		}
+	}
+	
+	/* Mouse Events */
 	public void addCellMouseListener(IPAMapGridMouseListener listener) {
 		listenerList.add(IPAMapGridMouseListener.class, listener);
 	}
 
 	public void removeCellMouseListener(IPAMapGridMouseListener listener) {
 		listenerList.remove(IPAMapGridMouseListener.class, listener);
-	}
-	
-	public IPAMapGridMouseListener[] getCellMouseListeners() {
-		return listenerList.getListeners(IPAMapGridMouseListener.class);
-	}
-
-	public void fireCellPressed(Cell cell, MouseEvent me) {
-		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mousePressed(cell, me) );
-	}
-	
-	public void fireCellReleased(Cell cell, MouseEvent me) {
-		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseReleased(cell, me) );
-	}
-	
-	public void fireCellClicked(Cell cell, MouseEvent me) {
-		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseClicked(cell, me) );
-	}
-	
-	public void fireCellEntered(Cell cell, MouseEvent me) {
-		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseEntered(cell, me) );
-	}
-	
-	public void fireCellExited(Cell cell, MouseEvent me) {
-		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseExited(cell, me) );
 	}
 	
 	private final IPAMapGridMouseListener forwardingMouseListener = new IPAMapGridMouseListener() {
@@ -205,28 +268,130 @@ public class IPAMapGridContainer extends JComponent implements Scrollable {
 		}
 		
 	};
+
+	public IPAMapGridMouseListener[] getCellMouseListeners() {
+		return listenerList.getListeners(IPAMapGridMouseListener.class);
+	}
+
+	/* Cell filter */
+	private class DelegateCellFilter implements Predicate<Cell> {
+
+		private Predicate<Cell> delegate;
+		
+		public DelegateCellFilter(Predicate<Cell> delegate) {
+			this.delegate = delegate;
+		}
+				
+		@Override
+		public boolean test(Cell t) {
+			return (delegate != null ? delegate.test(t) : true);
+		}
+		
+	}
 	
+	private final DelegateCellFilter cellFilter = new DelegateCellFilter( (t) -> true );
+	
+	public Predicate<Cell> getCellFilter() {
+		return this.cellFilter.delegate;
+	}
+	
+	public void setCellFilter(Predicate<Cell> filter) {
+		this.cellFilter.delegate = filter;
+		revalidate();
+	}
+	
+	/* Cell renderer */
+	private class DelegateCellRenderer implements IPAMapCellRenderer {
+		
+		IPAMapCellRenderer delegate;
+		
+		public DelegateCellRenderer(IPAMapCellRenderer cellRenderer) {
+			this.delegate = cellRenderer;
+		}
+
+		@Override
+		public Dimension getCellDimension(IPAMapGrid mapGrid) {
+			return (delegate != null ? delegate.getCellDimension(mapGrid) : new Dimension());
+		}
+
+		@Override
+		public void paintCell(IPAMapGrid mapGrid, Graphics2D g2, Rectangle cellRect, Cell cell, boolean isHover,
+				boolean isPressed, boolean isSelected) {
+			if(delegate != null) {
+				delegate.paintCell(mapGrid, g2, cellRect, cell, isHover, isPressed, isSelected);
+			}
+		}
+				
+	}
+	
+	private final DelegateCellRenderer cellRenderer = new DelegateCellRenderer( new DefaultIPAMapCellRenderer() );
+	
+	public IPAMapCellRenderer getCellRenderer() {
+		return cellRenderer.delegate;
+	}
+	
+	public void setCellRenderer(IPAMapCellRenderer cellRenderer) {
+		this.cellRenderer.delegate = cellRenderer;
+		revalidate();
+		repaint();
+	}
+	
+	/*
+	 * IPAMap events
+	 */
+	public void fireCellPressed(Cell cell, MouseEvent me) {
+		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mousePressed(cell, me) );
+	}
+	
+	public void fireCellReleased(Cell cell, MouseEvent me) {
+		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseReleased(cell, me) );
+	}
+	
+	public void fireCellClicked(Cell cell, MouseEvent me) {
+		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseClicked(cell, me) );
+	}
+	
+	public void fireCellEntered(Cell cell, MouseEvent me) {
+		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseEntered(cell, me) );
+	}
+	
+	public void fireCellExited(Cell cell, MouseEvent me) {
+		Arrays.stream(getCellMouseListeners()).forEach( (ml) -> ml.mouseExited(cell, me) );
+	}
+	
+	/* Scrollable */
 	@Override
 	public Dimension getPreferredScrollableViewportSize() {
-		// TODO Auto-generated method stub
-		return null;
+		Dimension retVal = super.getPreferredSize();
+		retVal.width += (new JScrollBar(SwingConstants.VERTICAL)).getPreferredSize().width;
+		return retVal;
 	}
 
 	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		// TODO Auto-generated method stub
-		return 0;
+		int retVal = 0;
+		
+		if(mapGrids.size() > 0) {
+			retVal = mapGrids.get(0).getScrollableUnitIncrement(visibleRect, orientation, direction);
+		}
+		
+		return retVal;
 	}
 
 	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-		// TODO Auto-generated method stub
-		return 0;
+		int retVal = 0;
+		
+		if(mapGrids.size() > 0) {
+			retVal = mapGrids.get(0).getScrollableBlockIncrement(visibleRect, orientation, direction);
+		}
+		
+		return retVal;
 	}
 
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
-		return false;
+		return true;
 	}
 
 	@Override

@@ -7,9 +7,12 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
+import javax.swing.ListSelectionModel;
 import javax.swing.Scrollable;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.ComponentUI;
@@ -34,6 +37,15 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 	private final EventListenerList listenerList = new EventListenerList();
 	
 	private IPAMapCellRenderer cellRenderer = new DefaultIPAMapCellRenderer();
+	
+	// by default show all cells
+	private Predicate<Cell> cellFilter = (c) -> true ;
+	
+	// enable selection on click?
+	private boolean selectionEnabled = false;
+	
+	// selection model
+	private ListSelectionModel selectionModel = new DefaultListSelectionModel();
 	
 	public IPAMapGrid(Grid grid) {
 		super();
@@ -94,6 +106,36 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 		var oldVal = this.cellRenderer;
 		this.cellRenderer = cellRenderer;
 		super.firePropertyChange("cellRenderer", oldVal, cellRenderer);
+	}
+	
+	public Predicate<Cell> getCellFilter() {
+		return this.cellFilter;
+	}
+	
+	public void setCellFilter(Predicate<Cell> cellFilter) {
+		var oldVal = this.cellFilter;
+		this.cellFilter = cellFilter;
+		super.firePropertyChange("cellFilter", oldVal, cellFilter);
+	}
+	
+	public boolean isSelectionEnabled() {
+		return this.selectionEnabled;
+	}
+	
+	public void setSelectionEnabled(boolean enabled) {
+		var oldVal = this.selectionEnabled;
+		this.selectionEnabled = enabled;
+		super.firePropertyChange("selectionEnabled", oldVal, enabled);
+	}
+	
+	public ListSelectionModel getSelectionModel() {
+		return this.selectionModel;
+	}
+	
+	public void setSelectionModel(ListSelectionModel selectionModel) {
+		var oldVal = this.selectionModel;
+		this.selectionModel = selectionModel;
+		super.firePropertyChange("selectionModel", oldVal, selectionModel);
 	}
 	
 	public void addCellMouseListener(IPAMapGridMouseListener listener) {

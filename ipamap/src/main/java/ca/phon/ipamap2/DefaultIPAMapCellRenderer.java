@@ -30,7 +30,7 @@ public class DefaultIPAMapCellRenderer implements IPAMapCellRenderer {
 
 	@Override
 	public void paintCell(IPAMapGrid mapGrid, Graphics2D g2, Rectangle cellRect, Cell cell, boolean isHover,
-			boolean isPressed) {
+			boolean isPressed, boolean isSelected) {
 		var roundRect = new RoundRectangle2D.Double(
 				cellRect.x + mapGrid.getCellInsets().left,
 				cellRect.y + mapGrid.getCellInsets().top,
@@ -40,6 +40,10 @@ public class DefaultIPAMapCellRenderer implements IPAMapCellRenderer {
 		
 		if(isHover) {
 			g2.setColor(Color.yellow);
+			g2.fill(roundRect);
+		}
+		if(isSelected) {
+			g2.setColor(Color.BLUE);
 			g2.fill(roundRect);
 		}
 		if(isPressed) {

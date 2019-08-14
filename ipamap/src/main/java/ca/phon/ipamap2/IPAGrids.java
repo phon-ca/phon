@@ -42,7 +42,7 @@ public class IPAGrids {
 	 * Load static IPA map data
 	 * 
 	 */
-	public IpaGrids getGridData() {
+	public IpaGrids loadGridData() {
 		ObjectFactory factory = new ObjectFactory();
 		if(grids == null) {
 			try {
@@ -226,7 +226,7 @@ public class IPAGrids {
 		FeatureMatrix fm = FeatureMatrix.getInstance();
 		search = StringUtils.strip(search.toLowerCase());
 		if(search.length() > 0) {
-			for(Grid grid:getGridData().getGrid()) {
+			for(Grid grid:loadGridData().getGrid()) {
 				for(Cell cell:grid.getCell()) {
 	//				for(String searchTerm:searchTerms) {
 	//					searchTerm = StringUtils.strip(searchTerm).toLowerCase();
