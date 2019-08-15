@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,20 +12,20 @@ import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.EditorView;
 
-public abstract class TimeGridTier extends TimeComponent {
+public abstract class TimelineTier extends TimeComponent {
 
 	private static final long serialVersionUID = 1L;
 
-	public WeakReference<TimeGridView> parentViewRef;
+	public WeakReference<TimelineView> parentViewRef;
 	
 	private Timebar timebar;
 	
 	private JPanel contentPane;
 	
-	public TimeGridTier(TimeGridView parent) {
+	public TimelineTier(TimelineView parent) {
 		super(parent.getTimeModel());
 		
-		this.parentViewRef = new WeakReference<TimeGridView>(parent);
+		this.parentViewRef = new WeakReference<TimelineView>(parent);
 		init();
 	}
 	
@@ -59,7 +59,7 @@ public abstract class TimeGridTier extends TimeComponent {
 		super.firePropertyChange("contentPane", oldVal, contentPane);
 	}
 	
-	public TimeGridView getParentView() {
+	public TimelineView getParentView() {
 		return this.parentViewRef.get();
 	}
 	

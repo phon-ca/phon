@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -50,7 +50,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 
-public class RecordTier extends TimeGridTier {
+public class TimelineRecordTier extends TimelineTier {
 	
 	private RecordGrid recordGrid;
 	
@@ -60,7 +60,7 @@ public class RecordTier extends TimeGridTier {
 	
 	private TimeUIModel.Interval currentRecordInterval = null;
 	
-	public RecordTier(TimeGridView parent) {
+	public TimelineRecordTier(TimelineView parent) {
 		super(parent);
 	
 		init();

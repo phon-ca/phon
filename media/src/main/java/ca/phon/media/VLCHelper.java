@@ -57,6 +57,10 @@ public class VLCHelper {
 	
 	private static volatile boolean isLoaded = false;
 
+	private static String val(String val) {
+        return val != null ? val : "<not set>";
+    }
+	
 	/**
 	 * Check loading of the native library.
 	 *
@@ -93,10 +97,27 @@ public class VLCHelper {
 					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
 				}
 				
+				Info info = Info.getInstance();
+				 System.out.printf("vlcj             : %s%n", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>");
+			        System.out.printf("os               : %s%n", val(info.os()));
+			        System.out.printf("java             : %s%n", val(info.javaVersion()));
+			        System.out.printf("java.home        : %s%n", val(info.javaHome()));
+			        System.out.printf("jna.library.path : %s%n", val(info.jnaLibraryPath()));
+			        System.out.printf("java.library.path: %s%n", val(info.javaLibraryPath()));
+			        System.out.printf("PATH             : %s%n", val(info.path()));
+			        System.out.printf("VLC_PLUGIN_PATH  : %s%n", val(info.pluginPath()));
+
+			        if (RuntimeUtil.isNix()) {
+			            System.out.printf("LD_LIBRARY_PATH  : %s%n", val(info.ldLibraryPath()));
+			        } else if (RuntimeUtil.isMac()) {
+			            System.out.printf("DYLD_LIBRARY_PATH          : %s%n", val(info.dyldLibraryPath()));
+			            System.out.printf("DYLD_FALLBACK_LIBRARY_PATH : %s%n", val(info.dyldFallbackLibraryPath()));
+			        }
+				
 				// print info to logger
-				LOGGER.info("Using vlcj " + Info.getInstance().vlcjVersion());
-				LibVlcVersion libvlcVersion = new LibVlcVersion();
-				LOGGER.info("Using libvlc " + libvlcVersion.getVersion());
+//				LOGGER.info("Using vlcj " + Info.getInstance().vlcjVersion());
+//				LibVlcVersion libvlcVersion = new LibVlcVersion();
+//				LOGGER.info("Using libvlc " + libvlcVersion.getVersion());
 				isLoaded = true;
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.error( e.getLocalizedMessage(), e);

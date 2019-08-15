@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,8 +23,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.timegrid.SegmentationHandler.MediaStart;
-import ca.phon.app.session.editor.view.timegrid.SegmentationHandler.SegmentationMode;
+import ca.phon.app.session.editor.view.timeline.SegmentationHandler.MediaStart;
+import ca.phon.app.session.editor.view.timeline.SegmentationHandler.SegmentationMode;
 import ca.phon.formatter.Formatter;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

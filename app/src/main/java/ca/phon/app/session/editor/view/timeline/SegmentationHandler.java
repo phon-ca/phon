@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -216,7 +216,7 @@ public final class SegmentationHandler {
 		Participant speaker = null;
 		
 		// speaker index is determined by the 'Time Grid' view
-		TimeGridView tgView = (TimeGridView)editor.getViewModel().getView(TimeGridView.VIEW_TITLE);
+		TimelineView tgView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 		if(tgView != null) {
 			if(pae.getData() != null) {
 				int speakerIdx = (int)pae.getData();
@@ -325,12 +325,12 @@ public final class SegmentationHandler {
 				segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
 			}
 			
-			TimeGridView timeGridView = (TimeGridView)editor.getViewModel().getView(TimeGridView.VIEW_TITLE);
-			if(timeGridView != null) {
-				Rectangle rect = timeGridView.getWaveformTier().getWaveformDisplay().getVisibleRect();
-				float maxTimeS = timeGridView.getTimeModel().timeAtX(rect.getMaxX());
+			TimelineView timelineView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+			if(timelineView != null) {
+				Rectangle rect = timelineView.getWaveformTier().getWaveformDisplay().getVisibleRect();
+				float maxTimeS = timelineView.getTimeModel().timeAtX(rect.getMaxX());
 				if(newTime > (maxTimeS*1000.0)) {
-					SwingUtilities.invokeLater( () -> timeGridView.scrollToTime((float)(window.getStartLockMs()/1000.0f)) );
+					SwingUtilities.invokeLater( () -> timelineView.scrollToTime((float)(window.getStartLockMs()/1000.0f)) );
 				}
 			}
 		}
@@ -343,10 +343,10 @@ public final class SegmentationHandler {
 		// add event listener
 		Toolkit.getDefaultToolkit().addAWTEventListener(segmentationListener, segmentationEventMask);
 		
-		TimeGridView timeGridView = 
-				(TimeGridView)editor.getViewModel().getView(TimeGridView.VIEW_TITLE);
-		if(timeGridView != null) {
-			segmentationInterval = timeGridView.getTimeModel().addInterval(0.0f, 0.0f);
+		TimelineView timelineView = 
+				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+		if(timelineView != null) {
+			segmentationInterval = timelineView.getTimeModel().addInterval(0.0f, 0.0f);
 			segmentationInterval.setColor(new Color(255, 255, 0, 50));
 		}
 		
@@ -374,10 +374,10 @@ public final class SegmentationHandler {
 		
 		Toolkit.getDefaultToolkit().removeAWTEventListener(segmentationListener);
 		
-		TimeGridView timeGridView = 
-				(TimeGridView)editor.getViewModel().getView(TimeGridView.VIEW_TITLE);
-		if(timeGridView != null) {
-			timeGridView.getTimeModel().removeInterval(segmentationInterval);
+		TimelineView timelineView = 
+				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+		if(timelineView != null) {
+			timelineView.getTimeModel().removeInterval(segmentationInterval);
 			segmentationInterval = null;
 		}
 		

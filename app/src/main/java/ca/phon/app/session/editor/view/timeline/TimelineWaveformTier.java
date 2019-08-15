@@ -1,5 +1,5 @@
 
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,13 +16,13 @@ import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 
-public class TimegridWaveformTier extends TimeGridTier  {
+public class TimelineWaveformTier extends TimelineTier  {
 
 	private static final long serialVersionUID = -2864344329017995791L;
 
 	private WaveformDisplay wavDisplay;
 	
-	public TimegridWaveformTier(TimeGridView parent) {
+	public TimelineWaveformTier(TimelineView parent) {
 		super(parent);
 		
 		init();

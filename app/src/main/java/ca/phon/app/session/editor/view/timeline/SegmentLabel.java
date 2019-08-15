@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.Color;
 import java.awt.Cursor;

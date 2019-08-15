@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.EditorViewCategory;
@@ -8,9 +8,9 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-@PhonPlugin(name=TimeGridView.VIEW_TITLE)
-@EditorViewInfo(name=TimeGridView.VIEW_TITLE, category=EditorViewCategory.SESSION, icon="misc/table")
-public class TimeGridViewExtension implements IPluginExtensionPoint<EditorView> {
+@PhonPlugin(name=TimelineView.VIEW_TITLE)
+@EditorViewInfo(name=TimelineView.VIEW_TITLE, category=EditorViewCategory.SESSION, icon="misc/table")
+public class TimelineViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -19,7 +19,7 @@ public class TimeGridViewExtension implements IPluginExtensionPoint<EditorView> 
 
 	@Override
 	public IPluginExtensionFactory<EditorView> getFactory() {
-		return (args) -> new TimeGridView((SessionEditor)args[0]);
+		return (args) -> new TimelineView((SessionEditor)args[0]);
 	}
 
 }

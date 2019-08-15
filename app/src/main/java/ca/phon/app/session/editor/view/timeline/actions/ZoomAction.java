@@ -1,13 +1,13 @@
-package ca.phon.app.session.editor.view.timegrid.actions;
+package ca.phon.app.session.editor.view.timeline.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 
 import javax.swing.SwingConstants;
 
-import ca.phon.app.session.editor.view.timegrid.TimeGridView;
+import ca.phon.app.session.editor.view.timeline.TimelineView;
 
-public class ZoomAction extends TimeGridAction {
+public class ZoomAction extends TimelineAction {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -15,7 +15,7 @@ public class ZoomAction extends TimeGridAction {
 	
 	private int direction = 1;
 
-	public ZoomAction(TimeGridView view, int direction) {
+	public ZoomAction(TimelineView view, int direction) {
 		super(view);
 		
 		this.direction = direction;
@@ -27,14 +27,14 @@ public class ZoomAction extends TimeGridAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		int currentZoomIdx = 
-				Arrays.binarySearch(TimeGridView.zoomValues, getView().getTimeModel().getPixelsPerSecond());
+				Arrays.binarySearch(TimelineView.zoomValues, getView().getTimeModel().getPixelsPerSecond());
 		
 		int newZoomIdx = currentZoomIdx + direction;
 		if(newZoomIdx < 0)
 			newZoomIdx = 0;
-		if(newZoomIdx >= TimeGridView.zoomValues.length)
-			newZoomIdx = TimeGridView.zoomValues.length - 1;
-		getView().getTimeModel().setPixelsPerSecond(TimeGridView.zoomValues[newZoomIdx]);
+		if(newZoomIdx >= TimelineView.zoomValues.length)
+			newZoomIdx = TimelineView.zoomValues.length - 1;
+		getView().getTimeModel().setPixelsPerSecond(TimelineView.zoomValues[newZoomIdx]);
 	}
 
 }

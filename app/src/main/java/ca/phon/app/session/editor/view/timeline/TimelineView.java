@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.timegrid;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -48,7 +48,7 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.timegrid.actions.ZoomAction;
+import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.session.MediaSegment;
@@ -64,11 +64,11 @@ import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 import groovy.swing.factory.GlueFactory;
 
-public final class TimeGridView extends EditorView {
+public final class TimelineView extends EditorView {
 
 	private static final long serialVersionUID = 8442995100291417078L;
 	
-	public static final String VIEW_TITLE = "Time Grid";
+	public static final String VIEW_TITLE = "Timeline";
 	
 	/**
 	 * Values for the zoom bar
@@ -97,11 +97,11 @@ public final class TimeGridView extends EditorView {
 	 */
 	private TimeUIModel timeModel;
 	
-	private TimegridWaveformTier wavTier;
+	private TimelineWaveformTier wavTier;
 	
-	private RecordTier recordGrid;
+	private TimelineRecordTier recordGrid;
 	
-	public TimeGridView(SessionEditor editor) {
+	public TimelineView(SessionEditor editor) {
 		super(editor);
 		
 		init();
@@ -135,9 +135,9 @@ public final class TimeGridView extends EditorView {
 		// XXX Order here matters - for the purpose of
 		// editor events the record tier object must be created before the
 		// wav tier
-		recordGrid = new RecordTier(this);
+		recordGrid = new TimelineRecordTier(this);
 		
-		wavTier = new TimegridWaveformTier(this);
+		wavTier = new TimelineWaveformTier(this);
 		wavTier.getPreferredSize();
 		
 		addTier(wavTier);
@@ -160,11 +160,11 @@ public final class TimeGridView extends EditorView {
 		add(scroller, BorderLayout.CENTER);
 	}
 	
-	public TimegridWaveformTier getWaveformTier() {
+	public TimelineWaveformTier getWaveformTier() {
 		return this.wavTier;
 	}
 	
-	public RecordTier getRecordTier() {
+	public TimelineRecordTier getRecordTier() {
 		return this.recordGrid;
 	}
 	
@@ -288,7 +288,7 @@ public final class TimeGridView extends EditorView {
 	}
 	
 	private int tierIdx = 0;
-	private void addTier(TimeGridTier tier) {
+	private void addTier(TimelineTier tier) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
@@ -588,15 +588,15 @@ public final class TimeGridView extends EditorView {
 
 	private class SeparatorMouseListener extends MouseInputAdapter {
 		
-		private TimeGridTier tier;
+		private TimelineTier tier;
 		
-		public SeparatorMouseListener(TimeGridTier tier) {
+		public SeparatorMouseListener(TimelineTier tier) {
 			super();
 			
 			this.tier = tier;
 		}
 		
-		public TimeGridTier getTier() {
+		public TimelineTier getTier() {
 			return this.tier;
 		}
 		
