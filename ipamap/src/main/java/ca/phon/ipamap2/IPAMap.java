@@ -1,6 +1,7 @@
 package ca.phon.ipamap2;
 
 import java.awt.BorderLayout;
+import java.util.HashSet;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -11,11 +12,10 @@ public class IPAMap  {
 	
 	public static void main(String[] args) {
 		JFrame f = new JFrame("test");
-		IPAMapGridContainer mapContainer = new IPAMapGridContainer();
-		mapContainer.addDefaultGrids();
 		
-		f.setLayout(new BorderLayout());
-		f.add(new JScrollPane(mapContainer), BorderLayout.CENTER);
+		f.getContentPane().setLayout(new BorderLayout());
+		f.getContentPane().add(new IPAElementSelector(new HashSet<>()), BorderLayout.CENTER);
+		
 		f.pack();
 		f.setVisible(true);
 	}

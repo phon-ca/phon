@@ -4,21 +4,31 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JToolTip;
 import javax.swing.SwingConstants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.JXStatusBar;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokens;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipamap.io.Cell;
 
-public class IPAMapInfoPane extends JToolTip {
+public class IPAMapInfoPane extends JPanel {
+	
+	private JXStatusBar statusBar;
+	
+	private JLabel statusLabel;
+	
+	private JXCollapsiblePane collapsiblePane;
 	
 	private JLabel previewLabel;
 	
@@ -33,19 +43,43 @@ public class IPAMapInfoPane extends JToolTip {
 	private void init() {
 		setLayout(new BorderLayout());
 		
+		statusBar = new JXStatusBar();
+		statusLabel = new JLabel("[]");
+		
+		JXStatusBar.Constraint c1 = new JXStatusBar.Constraint(ResizeBehavior.FILL);
+		statusBar.add(statusLabel, c1);
+		
+		add(statusBar, BorderLayout.NORTH);
+		
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		collapsiblePane = new JXCollapsiblePane(Direction.UP);
+		collapsiblePane.setContentPane(bottomPanel);
+		collapsiblePane.setCollapsed(true);
+		
 		previewLabel = new JLabel();
-		previewLabel.setFont(getFont().deriveFont(36.0f));
+		previewLabel.setFont(FontPreferences.getUIIpaFont().deriveFont(72.0f));
 		previewLabel.setOpaque(true);
 		previewLabel.setBackground(Color.white);
 		previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		previewLabel.setPreferredSize(new Dimension(150, 150));
 		
 		infoPane = new JEditorPane("text/html", "<html><body></body></html>");
 		infoPane.setEditable(false);
 		infoPane.setOpaque(true);
 		infoPane.setBackground(getBackground());
+		infoPane.setPreferredSize(new Dimension(0, 150));
 		
-		add(previewLabel, BorderLayout.WEST);
-		add(new JScrollPane(infoPane), BorderLayout.CENTER);
+		bottomPanel.add(previewLabel, BorderLayout.WEST);
+		bottomPanel.add(new JScrollPane(infoPane), BorderLayout.CENTER);
+		
+		add(collapsiblePane, BorderLayout.CENTER);
+	}
+	
+	public void clear() {
+		statusLabel.setText("[]");
+		
+		previewLabel.setText("");
+		infoPane.setText("<html><body></body></html>");
 	}
 	
 	public void update(Cell cell) {
@@ -85,14 +119,9 @@ public class IPAMapInfoPane extends JToolTip {
 				"<tr><td>Features:</td><td>" + fsString + "</td></tr>" +
 				"</table></html>";
 		infoPane.setText(infoTxt);
+		
+		String statusText = String.format("[%s] %s", uniVal, name);
+		statusLabel.setText(statusText);
 	}
-
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(400, 500);
-	}
-	
-
-	
 
 }

@@ -178,11 +178,22 @@ public class IPAGrids {
 	/**
 	 * Create a search grid
 	 */
-	public Grid buildSearchGrid(Collection<Cell> searchResults) {
+	public Grid buildGrid(Collection<Cell> searchResults) {
 		ObjectFactory factory = new ObjectFactory();
 		Grid retVal = factory.createGrid();
-		retVal.setCols(22*2);
-		retVal.setName("Search Results (" + searchResults.size() + ")");
+		buildGrid(retVal, searchResults);
+		return retVal;
+	}
+	
+	/**
+	 * Setup grid of cells.
+	 * 
+	 */
+	public void buildGrid(Grid grid, Collection<Cell> searchResults) {
+		ObjectFactory factory = new ObjectFactory();
+		
+		grid.setCols(22*2);
+		grid.setName("Search Results (" + searchResults.size() + ")");
 		
 		for(Cell origCell:searchResults) {
 			Cell copyCell = factory.createCell();
@@ -193,25 +204,22 @@ public class IPAGrids {
 				newProp.setContent(origProp.getContent());
 				copyCell.getProperty().add(newProp);
 			}
-			retVal.getCell().add(copyCell);
+			grid.getCell().add(copyCell);
 		}
-//		retVal.getCell().addAll(searchResults);
 		
 		// setup cell locations and grid size
-		int numRows = ((retVal.getCell().size() / 22) + (retVal.getCell().size() % 22 > 0 ? 1 : 0)) * 2;
-		retVal.setRows(numRows);
+		int numRows = ((grid.getCell().size() / 22) + (grid.getCell().size() % 22 > 0 ? 1 : 0)) * 2;
+		grid.setRows(numRows);
 		
-		for(int i = 0; i < retVal.getCell().size(); i++) {
+		for(int i = 0; i < grid.getCell().size(); i++) {
 			int row = i / 22;
 			int col = i % 22;
-			Cell cell = retVal.getCell().get(i);
+			Cell cell = grid.getCell().get(i);
 			cell.setX(col * 2);
 			cell.setY(row * 2);
 			cell.setH(2);
 			cell.setW(2);
 		}
-		
-		return retVal;
 	}
 	
 	/**

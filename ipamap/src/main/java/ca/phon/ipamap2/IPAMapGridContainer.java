@@ -13,6 +13,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -60,6 +63,8 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	private IPAGrids grids;
 	
 	private List<IPAMapGrid> mapGrids;
+	
+	private boolean selectionEnabled = false;
 	
 	private Map<IPAMapGrid, JXCollapsiblePane> cpMap = new HashMap<>();
 		
@@ -102,8 +107,10 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	public Tuple<JButton, IPAMapGrid> addGrid(Grid ipaGrid) {
 		IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
 		mapGrid.addCellMouseListener(forwardingMouseListener);
-		mapGrid.setFont(new Font("Arial", Font.BOLD, 18));
+		mapGrid.setFont(new Font("Charis SIL", Font.BOLD, 18));
 		mapGrid.setCellFilter(cellFilter);
+		mapGrid.setSelectionEnabled(isSelectionEnabled());
+		mapGrid.getSelectionModel().addListSelectionListener(new SelectionListener(mapGrid));
 		mapGrids.add(mapGrid);
 		
 		JXCollapsiblePane cp = new JXCollapsiblePane(Direction.DOWN);
@@ -191,6 +198,61 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		});
 		
 		return btn;
+	}
+	
+	/* Selection */
+	private class SelectionListener implements ListSelectionListener {
+
+		private IPAMapGrid grid;
+		
+		public SelectionListener(IPAMapGrid grid) {
+			this.grid = grid;
+		}
+		
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			fireCellSelectionChanged(grid, e.getFirstIndex(), 
+					grid.getSelectionModel().isSelectedIndex(e.getFirstIndex()));
+		}
+		
+	}
+	
+	public boolean isSelectionEnabled() {
+		return this.selectionEnabled;
+	}
+	
+	public void setSelectionEnabled(boolean selectionEnabled) {
+		this.selectionEnabled = selectionEnabled;
+		mapGrids.forEach( (g) -> g.setSelectionEnabled(selectionEnabled) );
+	}
+	
+	public void addCellSelectionListener(IPAMapCellSelectionListener listener) {
+		listenerList.add(IPAMapCellSelectionListener.class, listener);
+	}
+	
+	public void removeCellSelecitonListener(IPAMapCellSelectionListener listener) {
+		listenerList.remove(IPAMapCellSelectionListener.class, listener);
+	}
+	
+	public void fireCellSelectionChanged(IPAMapGrid grid, int cellIdx, boolean selected) {
+		for(IPAMapCellSelectionListener listener:listenerList.getListeners(IPAMapCellSelectionListener.class)) {
+			listener.cellSelectionChanged(grid, cellIdx, selected);
+		}
+	}
+	
+	/**
+	 * Return an unmodifiable list of selected Cells
+	 * 
+	 * @return list of selected cells
+	 */
+	public List<Cell> getSelectedCells() {
+		List<Cell> retVal = new ArrayList<>();
+		for(IPAMapGrid grid:mapGrids) {
+			for(int selectedIdx:grid.getSelectionModel().getSelectedIndices()) {
+				retVal.add(grid.getGrid().getCell().get(selectedIdx));
+			}
+		}
+		return Collections.unmodifiableList(retVal);
 	}
 	
 	/**
