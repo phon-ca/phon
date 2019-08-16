@@ -73,6 +73,8 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 /**
  * Panel for embedded media player for editor.
@@ -436,7 +438,23 @@ public class MediaPlayerEditorView extends EditorView {
 		if(firstSegment != null && lastSegment != null) {
 			final long startTime = (long)firstSegment.getStartValue();
 			final long endTime = (long)lastSegment.getEndValue();
+			
+			
+			mediaPlayer.addMediaPlayerListener(new MediaPlayerEventAdapter() {
 
+				@Override
+				public void paused(MediaPlayer mediaPlayer) {
+					// TODO Auto-generated method stub
+					super.paused(mediaPlayer);
+				}
+
+				@Override
+				public void stopped(MediaPlayer mediaPlayer) {
+					// TODO Auto-generated method stub
+					super.stopped(mediaPlayer);
+				}
+				
+			});
 			mediaPlayer.playSegment(startTime, (endTime-startTime));
 		}
 

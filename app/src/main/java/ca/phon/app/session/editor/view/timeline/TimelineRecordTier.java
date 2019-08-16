@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -19,12 +20,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerMessage;
 
@@ -37,7 +41,10 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -74,6 +81,7 @@ public class TimelineRecordTier extends TimelineTier {
 			setupRecord(getParentView().getEditor().currentRecord());
 		
 		recordGrid.setFont(FontPreferences.getTierFont());
+		setupRecordGridActions();
 		setupSpeakers();
 		
 		// add ortho by default
@@ -85,6 +93,33 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(recordGrid, BorderLayout.CENTER);
+	}
+	
+	private void setupRecordGridActions() {
+		final InputMap inputMap = recordGrid.getInputMap();
+		final ActionMap actionMap = recordGrid.getActionMap();
+		
+		final String deleteRecordKey = "delete_record";
+		final DeleteRecordAction deleteRecordAction = new DeleteRecordAction(getParentView().getEditor());
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), deleteRecordKey);
+		actionMap.put(deleteRecordKey, deleteRecordAction);
+		
+		final String playSegmentKey = "play_segment";
+		final PhonUIAction playSegmentAction = new PhonUIAction(this, "onPlaySegment");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), playSegmentKey);
+		actionMap.put(playSegmentKey, playSegmentAction);
+		
+		recordGrid.setInputMap(WHEN_FOCUSED, inputMap);
+		recordGrid.setActionMap(actionMap);
+	}
+	
+	public void onPlaySegment(PhonActionEvent pae) {
+		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			MediaPlayerEditorView mediaView =
+					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			PlaySegmentAction playSegmentAction = new PlaySegmentAction(getParentView().getEditor(), mediaView);
+			playSegmentAction.actionPerformed(pae.getActionEvent());
+		}
 	}
 	
 	private final DelegateEditorAction onRecordChange = 

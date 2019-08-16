@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -35,6 +37,7 @@ import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Geometry;
 
 import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -100,7 +103,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		c.removeMouseListener(mouseListener);
 		c.removeMouseMotionListener(mouseListener);
 	}
-	
+		
 	private boolean isRecordPressed(int recordIndex) {
 		return (recordIndex == mouseListener.pressedRecordIdx);
 	}

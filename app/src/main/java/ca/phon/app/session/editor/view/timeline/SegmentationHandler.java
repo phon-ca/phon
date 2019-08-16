@@ -238,11 +238,9 @@ public final class SegmentationHandler {
 		}
 		
 		
-		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-		if(mediaView != null) {
-			long playbackPosition = mediaView.getPlayer().getTime();
-			
+		if(intervalTimerTask != null) {
+			long playbackPosition = intervalTimerTask.currentSegmentationPosition();
+					
 			long segmentStart = window.getWindowStartMs(playbackPosition);
 			long segmentEnd = window.getWindowEndMs(playbackPosition);
 			
@@ -377,6 +375,12 @@ public final class SegmentationHandler {
 					segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);					
 				}
 			}
+		}
+		
+		long currentSegmentationPosition() {
+			long currentTime = System.currentTimeMillis();
+			long newTime = segmentationMediaStartTime + (currentTime - segmentsationSystemStartTime);
+			return newTime;
 		}
 		
 	}

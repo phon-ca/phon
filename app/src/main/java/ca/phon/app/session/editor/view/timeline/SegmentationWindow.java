@@ -10,7 +10,7 @@ public class SegmentationWindow {
 
 	private long backwardWindowLengthMs = 0L;
 	
-	private long fowardWindowLengthMs = 100L;
+	private long fowardWindowLengthMs = 0L;
 
 	public long segmentStartLockMs = 0L;
 	
@@ -23,8 +23,7 @@ public class SegmentationWindow {
 	
 	public SegmentationWindow(long windowLengthMs) {
 		super();
-		this.backwardWindowLengthMs = windowLengthMs - 100L;
-		this.fowardWindowLengthMs = 100L;
+		this.backwardWindowLengthMs = windowLengthMs - this.getForwardWindowLengthMs();
 	}
 	
 	public long getBackwardWindowLengthMs() {

@@ -325,7 +325,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	}
 	
 	private void loadWaveformData(Sound snd, Channel ch, float startTime, float endTime) {
-		final double width = display.getWidth();
+		final RoundRectangle2D channelRect = getChannelRect(ch);
+		final double width = channelRect.getWidth();
 		final float secondsPerPixel = (float)(display.getLongSound().length() / width);
 		
 		float barSize = 1.0f;
