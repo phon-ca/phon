@@ -8,6 +8,8 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -95,6 +97,10 @@ public final class SegmentationHandler {
 	private final SegmentationAWTEventListener segmentationListener = new SegmentationAWTEventListener();
 	
 	private final long segmentationEventMask = AWTEvent.KEY_EVENT_MASK;
+	
+	private Timer intervalTimer;
+	
+	private SegmentationIntervalTimerTask intervalTimerTask;
 	
 	private TimeUIModel.Interval segmentationInterval;
 	
@@ -318,11 +324,12 @@ public final class SegmentationHandler {
 		
 		@Override
 		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-			if(segmentationInterval != null) {
-				long segStart = window.getWindowStartMs(newTime);
-				long segEnd = window.getWindowEndMs(newTime);
-				segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
-				segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
+			if(intervalTimerTask != null) {
+				// re-sync time with media player
+				synchronized (intervalTimerTask) {					
+					intervalTimerTask.segmentsationSystemStartTime = System.currentTimeMillis();
+					intervalTimerTask.segmentationMediaStartTime = newTime;
+				}
 			}
 			
 			TimelineView timelineView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
@@ -334,8 +341,45 @@ public final class SegmentationHandler {
 				}
 			}
 		}
+
+		@Override
+		public void paused(MediaPlayer mediaPlayer) {
+			stopSegmentation();
+		}
+
+		@Override
+		public void stopped(MediaPlayer mediaPlayer) {
+			stopSegmentation();
+		}
 		
 	};
+	
+	private class SegmentationIntervalTimerTask extends TimerTask {
+
+		volatile long segmentsationSystemStartTime;
+		
+		volatile long segmentationMediaStartTime = 0L;
+		
+		@Override
+		public void run() {
+			if(segmentationInterval != null) {
+				long currentTime = System.currentTimeMillis();
+				synchronized (this) {
+					long newTime = segmentationMediaStartTime + (currentTime - segmentsationSystemStartTime);
+					long segStart = window.getWindowStartMs(newTime);
+					long segEnd = window.getWindowEndMs(newTime);
+					
+					// indicate we are going to change multiple values
+					segmentationInterval.setValueAdjusting(true);
+					segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
+					// indicate we are finished changing values
+					segmentationInterval.setValueAdjusting(false);
+					segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);					
+				}
+			}
+		}
+		
+	}
 	
 	public void startSegmentation() {
 		editor.getEventManager().queueEvent(new EditorEvent(EDITOR_SEGMENTATION_START));
@@ -350,6 +394,7 @@ public final class SegmentationHandler {
 			segmentationInterval.setColor(new Color(255, 255, 0, 50));
 		}
 		
+		
 		// start media playback
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
@@ -362,6 +407,14 @@ public final class SegmentationHandler {
 			} else if(mediaStart == MediaStart.FROM_CURRENT_POSITION) {
 				window.setStartLockMs(mediaView.getPlayer().getTime());
 			}
+			
+			intervalTimerTask = new SegmentationIntervalTimerTask();
+			intervalTimerTask.segmentationMediaStartTime = mediaView.getPlayer().getTime();
+			intervalTimerTask.segmentsationSystemStartTime = System.currentTimeMillis();
+			
+			// setup timer for 30fps
+			intervalTimer = new Timer(true);
+			intervalTimer.schedule(intervalTimerTask, 0L, (long)(1/30.0f * 1000.0f));
 			
 			mediaView.getPlayer().addMediaPlayerListener(mediaTimeListener);
 			if(!mediaView.getPlayer().isPlaying())
@@ -379,6 +432,10 @@ public final class SegmentationHandler {
 		if(timelineView != null) {
 			timelineView.getTimeModel().removeInterval(segmentationInterval);
 			segmentationInterval = null;
+		}
+		
+		if(intervalTimer != null) {
+			intervalTimer.cancel();
 		}
 		
 		MediaPlayerEditorView mediaView = 

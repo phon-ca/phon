@@ -702,75 +702,6 @@ public class PhonMediaPlayer extends JPanel {
 		
 	}
 	
-//	/**
-//	 * Update frame using a timer.
-//	 */
-//	public void updateFrame() {
-//		if(getMediaPlayer() == null) return;
-//		Timer renderTimer = new Timer(Math.round(1000.0f/getMediaPlayer().getFps()), (ActionEvent ae) -> {
-//			renderFrame();
-//		});
-//		renderTimer.setRepeats(false);
-//		renderTimer.start();
-//	}
-	
-//	protected void renderFrame() {
-//		if(mediaPlayerComponent == null || mediaPlayerComponent.getMediaPlayer() == null) {
-//			return;
-//		}
-//		Memory[] nativeBuffers = mediaPlayerComponent.getMediaPlayer().lock();
-//		if(nativeBuffers != null && nativeBuffers.length > 0) {
-//			Memory nativeBuffer = nativeBuffers[0];
-//			if(nativeBuffer != null) {
-//				
-//				final Dimension videoDimension = mediaPlayerComponent.getMediaPlayer().getVideoDimension();
-//				if(videoDimension != null) {
-//					int w = (int)videoDimension.getWidth();
-//					int h = (int)videoDimension.getHeight();
-//					
-//					BufferedImage img = mediaPlayerCanvas.getBufferedImage(w, h);
-//					if(img != null) {
-//						int[] rgbBuffer = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-//				        nativeBuffer.getByteBuffer(0L, nativeBuffer.size()).asIntBuffer().get(rgbBuffer, 0, h * w);
-//					}
-//				}
-//				
-//		        mediaPlayerComponent.getMediaPlayer().unlock();
-//
-//				mediaPlayerCanvas.repaint(mediaTimer.getDelay());
-//			}
-//		} else {
-//	        mediaPlayerComponent.getMediaPlayer().unlock();
-//	        
-//			mediaPlayerCanvas.setBufferedImage(null);
-//			mediaPlayerCanvas.repaint();
-//		}
-//	}
-//
-//	protected void startRenderTimer() {
-//		final MediaPlayer mediaPlayer = getMediaPlayer();
-//		if(mediaTimer == null && mediaPlayer.getVideoTrackCount() > 0) {
-//			mediaTimer = new Timer(0, (e) -> {
-//					renderFrame();
-//				});
-//			float mediaFps = mediaPlayer.getFps();
-//			float delay = 
-//					(mediaFps > 0 && Float.isFinite(mediaFps) && !Float.isNaN(mediaFps) 
-//							? 1000.0f/mediaPlayer.getFps()
-//							: 1000.0f/29.97f);
-//			mediaTimer.setDelay(Math.round(delay));
-//			mediaTimer.setRepeats(true);
-//			mediaTimer.start();
-//		}
-//	}
-//	
-//	protected void stopRenderTimer() {
-//		if(mediaTimer != null) {
-//			mediaTimer.stop();
-//			mediaTimer = null;
-//		}
-//	}
-	
 	private class MediaPlayerRenderCallback implements RenderCallback {
 
 		@Override
@@ -789,7 +720,7 @@ public class PhonMediaPlayer extends JPanel {
 			        nativeBuffer.asIntBuffer().get(rgbBuffer, 0, h * w);
 				}
 			
-				mediaPlayerCanvas.repaint();
+				mediaPlayerCanvas.repaint((long)(1/30.0f * 1000.0f));
 			}			
 		}
 		
