@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -37,6 +38,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import org.apache.derby.impl.sql.compile.SetSchemaNode;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
@@ -48,6 +50,7 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
@@ -120,10 +123,8 @@ public final class TimelineView extends EditorView {
 				int zoomIdx = Arrays.binarySearch(zoomValues, (float)e.getNewValue());
 				if(zoomIdx >= 0)
 					zoomSlider.setValue(zoomIdx);
-			} else if(e.getPropertyName().equals("intervalCount")) {
-				updateIntervalListeners();
+				tierPanel.revalidate();
 			}
-			tierPanel.revalidate();
 		});
 		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
@@ -168,39 +169,6 @@ public final class TimelineView extends EditorView {
 		return this.recordGrid;
 	}
 	
-	private void updateIntervalListeners() {
-		for(var interval:getTimeModel().getIntervals()) {
-			if(!Arrays.asList(interval.getPropertyChangeListeners()).contains(intervalListener)) {
-				interval.addPropertyChangeListener(intervalListener);
-			}
-			
-		}
-	}
-	
-	private PropertyChangeListener intervalListener = (e) -> {
-		if(e.getPropertyName().endsWith(".time")) {
-			float oldTime = (float)e.getOldValue();
-			float newTime = (float)e.getNewValue();
-			
-			var oldX = (int)Math.round(getTimeModel().xForTime(oldTime));
-			var newX = (int)Math.round(getTimeModel().xForTime(newTime));
-			
-			Rectangle clipRect = new Rectangle(
-					(newTime < oldTime ? newX : oldX )-1,
-					0,
-					(newTime < oldTime ? oldX - newX : newX - oldX)+2,
-					wavTier.getHeight());
-			wavTier.repaint(clipRect);
-			
-			clipRect = new Rectangle(
-					(newTime < oldTime ? newX : oldX )-1,
-					0,
-					(newTime < oldTime ? oldX - newX : newX - oldX)+2,
-					recordGrid.getHeight());
-			recordGrid.repaint(clipRect);
-		}
-	};
-	
 	private JToolBar setupToolbar() {
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
@@ -225,6 +193,7 @@ public final class TimelineView extends EditorView {
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			
 		});
 		
 		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
@@ -268,6 +237,9 @@ public final class TimelineView extends EditorView {
 		tierVisiblityButton = new DropDownButton(tierVisibilityAct);
 		tierVisiblityButton.setOnlyPopup(true);
 		
+//		SplitRecordAction splitRecordAct = new SplitRecordAction(this);
+//		JButton splitRecordButton = new JButton(splitRecordAct);
+		
 		zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 0, zoomValues.length-1, defaultZoomIdx);
 		zoomSlider.setPaintLabels(false);
 		zoomSlider.setPaintTicks(true);
@@ -282,6 +254,7 @@ public final class TimelineView extends EditorView {
 		toolbar.add(segmentationButton);
 		toolbar.add(speakerVisibilityButton);
 		toolbar.add(tierVisiblityButton);
+//		toolbar.add(splitRecordButton);
 		toolbar.add(zoomSlider);
 		
 		return toolbar;

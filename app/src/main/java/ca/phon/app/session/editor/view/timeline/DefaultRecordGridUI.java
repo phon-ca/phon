@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -35,6 +36,7 @@ import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
 import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Geometry;
+import com.teamdev.jxbrowser.chromium.internal.ipc.message.GetTitleMessage;
 
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
@@ -56,6 +58,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordTree;
 	
+	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> markerTree;
+	
 	private RecordGrid recordGrid;
 	
 	private JLabel renderer;
@@ -64,6 +68,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		super();
 		
 		recordTree = RTree.create();
+		markerTree = RTree.create();
 		
 		renderer = new JLabel();
 		renderer.setOpaque(false);
@@ -93,6 +98,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		c.addPropertyChangeListener(propListener);
 		c.addMouseListener(mouseListener);
 		c.addMouseMotionListener(mouseListener);
+		recordGrid.getTimeModel().addPropertyChangeListener(propListener);
 	}
 
 	@Override
@@ -102,6 +108,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		c.removePropertyChangeListener(propListener);
 		c.removeMouseListener(mouseListener);
 		c.removeMouseMotionListener(mouseListener);
+		
+		recordGrid.getTimeModel().removePropertyChangeListener(propListener);
 	}
 		
 	private boolean isRecordPressed(int recordIndex) {
@@ -181,16 +189,31 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		Session session = recordGrid.getSession();
 		recordTree = RTree.create();
+		markerTree = RTree.create();
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			Rectangle2D segRect = paintSegment(g2, rIdx, r);
 			
 			recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
 					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
+			
+			// setup 'marker' rectangles 
+			
+			// start marker
+			markerTree = markerTree.add(rIdx, Geometries.rectangle((float)segRect.getX() - 1, (float)segRect.getY(),
+					(float)segRect.getX() + 1, (float)(segRect.getY()+segRect.getHeight())));
+			
+			// end marker
+			markerTree = markerTree.add(-rIdx, Geometries.rectangle((float)segRect.getMaxX() - 1, (float)segRect.getY(),
+					(float)segRect.getMaxX() + 1, (float)(segRect.getY()+segRect.getHeight())));
 		}
 		
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval);
+		}
+		
+		for(var marker:recordGrid.getTimeModel().getMarkers()) {
+			paintMarker(g2, marker);
 		}
 	}
 	
@@ -287,7 +310,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				|| "tierCount".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
 		} else if("currentRecord".equals(e.getPropertyName())) {
-			recordGrid.repaint();
+			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 	};
 	
@@ -298,6 +321,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		private int pressedRecordIdx = -1;
 		
 		private int enteredRecordIdx = -1;
+	
+		private int currentMouseOverMarkerRecordNum = 0;
+		
+		private TimeUIModel.Marker currentMouseOverMarker = null;
 
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -348,6 +375,34 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				recordGrid.fireRecordExited(enteredRecordIdx, e);
 				enteredRecordIdx = -1;
 				recordGrid.repaint();
+			}
+			
+			// check to see if we are 'hovering' over a ghost marker
+			AtomicReference<Integer> intersectedMarker = new AtomicReference<Integer>(null);
+			var markerEntries = markerTree.search(Geometries.point(e.getX(), e.getY()));
+			markerEntries.map ( entry -> entry.value() ).forEach( i -> {
+				intersectedMarker.set(i);
+			});
+			
+			if(intersectedMarker.get() != null) {
+				int currentMouseOverMarkerRecordIdx = Math.abs(intersectedMarker.get());
+				Record record = recordGrid.getSession().getRecord(currentMouseOverMarkerRecordIdx);
+				MediaSegment seg = record.getSegment().getGroup(0);
+				
+				float markerTime = intersectedMarker.get() > 0 ? 
+						seg.getStartValue() / 1000.0f : seg.getEndValue() / 1000.0f;
+				
+				if(currentMouseOverMarker == null || markerTime != currentMouseOverMarker.getTime()) {
+					if(currentMouseOverMarker != null)
+						recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
+					currentMouseOverMarker = new TimeUIModel.Marker(markerTime);
+					recordGrid.getTimeModel().addMarker(currentMouseOverMarker);
+				}
+			} else {
+				if(currentMouseOverMarker != null) {
+					recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
+					currentMouseOverMarker = null;
+				}
 			}
 		}
 

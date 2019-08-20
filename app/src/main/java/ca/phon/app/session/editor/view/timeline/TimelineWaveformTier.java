@@ -31,7 +31,6 @@ public class TimelineWaveformTier extends TimelineTier  {
 	
 	private void init() {
 		final TimeUIModel timeModel = getParentView().getTimeModel();
-		timeModel.addPropertyChangeListener(propListener);
 		
 		wavDisplay = new WaveformDisplay(timeModel);
 		Insets channelInsets = new Insets(wavDisplay.getChannelInsets().top, timeModel.getTimeInsets().left,
@@ -64,10 +63,4 @@ public class TimelineWaveformTier extends TimelineTier  {
 		wavDisplay.repaint(wavDisplay.getVisibleRect());
 	}
 		
-	private final PropertyChangeListener propListener = (e) -> {
-		if("intervalCount".equals(e.getPropertyName())) {
-			wavDisplay.repaint(wavDisplay.getVisibleRect());
-		}
-	};
-	
 }

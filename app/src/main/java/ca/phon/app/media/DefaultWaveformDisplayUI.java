@@ -281,6 +281,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		for(var interval:display.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval);
 		}
+		
+		for(var marker:display.getTimeModel().getMarkers()) {
+			paintMarker(g2, marker);
+		}
 	}
 	
 	@Override

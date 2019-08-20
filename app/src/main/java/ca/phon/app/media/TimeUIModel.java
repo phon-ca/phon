@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.Icon;
+import javax.swing.event.EventListenerList;
 
 /**
  * Time model for UI applications.  Useful for time based media.
@@ -40,6 +41,25 @@ public class TimeUIModel {
 	private final Collection<Interval> intervals = Collections.synchronizedList(new ArrayList<>());
 	
 	private PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
+	
+	private final PropertyChangeListener propEventForwarder = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			for(TimeUIModelListener listener:getTimeUIModelListeners()) {
+				listener.propertyChange(evt);
+			}
+		}
+		
+	};
+	
+	private final EventListenerList eventListeners = new EventListenerList();
+	
+	public TimeUIModel() {
+		super();
+		
+		addPropertyChangeListener(propEventForwarder);
+	}
 	
 	/**
 	 * Utility method to round time to nearest millisecond.
@@ -144,20 +164,29 @@ public class TimeUIModel {
 //		addMarker(time, icon, "");
 //	}
 	
-	public Marker addMarker(float time, Icon icon, String text) {
+	public Marker addMarker(float time, Color color) {
 		Marker marker = new Marker(time);
-		marker.icon = icon;
-		marker.text = text;
+		marker.color = color;
 		addMarker(marker);
 		return marker;
 	}
 	
 	public void addMarker(Marker marker) {
+		var oldVal = pointMarkers.size();
 		pointMarkers.add(marker);
+		propSupport.firePropertyChange("markerCount", oldVal, pointMarkers.size());
+		fireMarkerAdded(marker);
 	}
 	
 	public void removeMarker(Marker marker) {
+		var oldVal = pointMarkers.size();
 		pointMarkers.remove(marker);
+		propSupport.firePropertyChange("markerCount", oldVal, pointMarkers.size());
+		fireMarkerRemoved(marker);
+	}
+	
+	public Collection<Marker> getMarkers() {
+		return Collections.unmodifiableCollection(this.pointMarkers);
 	}
 	
 	public Interval addInterval(float startTime, float endTime) {
@@ -170,12 +199,14 @@ public class TimeUIModel {
 		var intervalCount = intervals.size();
 		intervals.add(interval);
 		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
+		fireIntervalAdded(interval);
 	}
 	
 	public void removeInterval(Interval interval) {
 		var intervalCount = intervals.size();
 		intervals.remove(interval);
 		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
+		fireIntervalRemoved(interval);
 	}
 	
 	public Collection<Interval> getIntervals() {
@@ -184,8 +215,46 @@ public class TimeUIModel {
 	
 	public void clearIntervals() {
 		var intervalCount = intervals.size();
+		Collection<Interval> removed = new ArrayList<>(intervals);
 		intervals.clear();
 		propSupport.firePropertyChange("intervalCount", intervalCount, intervals.size());
+		removed.forEach( this::fireIntervalRemoved );
+	}
+	
+	public void addTimeUIModelListener(TimeUIModelListener listener) {
+		eventListeners.add(TimeUIModelListener.class, listener);
+	}
+	
+	public void removeTimeUIModelListener(TimeUIModelListener listener) {
+		eventListeners.remove(TimeUIModelListener.class, listener);
+	}
+	
+	public TimeUIModelListener[] getTimeUIModelListeners() {
+		return eventListeners.getListeners(TimeUIModelListener.class);
+	}
+	
+	public void fireIntervalAdded(Interval interval) {
+		for(TimeUIModelListener listener:getTimeUIModelListeners()) {
+			listener.intervalAdded(interval);
+		}
+	}
+	
+	public void fireIntervalRemoved(Interval interval) {
+		for(TimeUIModelListener listener:getTimeUIModelListeners()) {
+			listener.intervalRemoved(interval);
+		}
+	}
+	
+	public void fireMarkerAdded(Marker marker) {
+		for(TimeUIModelListener listener:getTimeUIModelListeners()) {
+			listener.markerAdded(marker);
+		}
+	}
+	
+	public void fireMarkerRemoved(Marker marker) {
+		for(TimeUIModelListener listener:getTimeUIModelListeners()) {
+			listener.markerRemoved(marker);
+		}
 	}
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -209,14 +278,16 @@ public class TimeUIModel {
 		private PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 		
 		private float time;
-		private Icon icon;
-		private String text;
+		
+		private boolean draggable = true;
+		
+		private boolean valueAdjusting = false;
+		
+		private Color color = Color.black;
 		
 		public Marker(float startTime) {
 			super();
 			this.time = startTime;
-			this.icon = null;
-			this.text = "";
 		}
 		
 		public float getTime() {
@@ -228,31 +299,41 @@ public class TimeUIModel {
 			this.time = time;
 			propSupport.firePropertyChange("time", oldVal, time);
 		}
-		
-		public Icon getIcon() {
-			return this.icon;
-		}
-		
-		public void setIcon(Icon icon) {
-			var oldVal = this.icon;
-			this.icon = icon;
-			propSupport.firePropertyChange("icon", oldVal, icon);
-		}
-		
-		public String getText() {
-			return this.text;
-		}
-		
-		public void setText(String text) {
-			var oldVal = this.text;
-			this.text = text;
-			propSupport.firePropertyChange("text", oldVal, text);
-		}
 
+		public boolean isValueAdjusting() {
+			return this.valueAdjusting;
+		}
+		
+		public void setValueAdjusting(boolean valueAdjusting) {
+			var oldVal = this.valueAdjusting;
+			this.valueAdjusting = valueAdjusting;
+			propSupport.firePropertyChange("valueAdjusting", oldVal, valueAdjusting);
+		}
+		
 		public void addPropertyChangeListener(PropertyChangeListener listener) {
 			propSupport.addPropertyChangeListener(listener);
 		}
+		
+		public boolean isDraggable() {
+			return this.draggable;
+		}
+		
+		public void setDraggable(boolean draggable) {
+			var oldVal = this.draggable;
+			this.draggable = draggable;
+			propSupport.firePropertyChange("draggable", oldVal, draggable);
+		}
 
+		public Color getColor() {
+			return this.color;
+		}
+		
+		public void setColor(Color color) {
+			var oldVal = this.color;
+			this.color = color;
+			propSupport.firePropertyChange("color", oldVal, color);
+		}
+		
 		public void removePropertyChangeListener(PropertyChangeListener listener) {
 			propSupport.removePropertyChangeListener(listener);
 		}
