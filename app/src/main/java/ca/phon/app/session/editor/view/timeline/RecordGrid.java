@@ -183,4 +183,22 @@ public class RecordGrid extends TimeComponent {
 		return getUI().getPreferredSize(this);
 	}
 	
+	public static class GhostMarker extends TimeUIModel.Marker {
+
+		private boolean isStart = false;
+		
+		public GhostMarker(float startTime) {
+			super(startTime);
+		}
+		
+		public boolean isStart() {
+			return this.isStart;
+		}
+		
+		public void setStart(boolean start) {
+			this.isStart = start;
+		}
+		
+	}
+	
 }

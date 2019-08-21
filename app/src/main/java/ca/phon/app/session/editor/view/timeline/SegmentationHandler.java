@@ -452,10 +452,8 @@ public final class SegmentationHandler {
 	}
 	
 	public void onMarkBreak() {
-		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-		if(mediaView != null) {
-			long playbackPosition = mediaView.getPlayer().getTime();
+		if(intervalTimerTask != null) {
+			long playbackPosition = intervalTimerTask.currentSegmentationPosition();
 			window.setStartLockMs(playbackPosition);
 		}
 	}

@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -200,11 +201,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			// setup 'marker' rectangles 
 			
 			// start marker
-			markerTree = markerTree.add(rIdx, Geometries.rectangle((float)segRect.getX() - 1, (float)segRect.getY(),
+			markerTree = markerTree.add(rIdx + 1, Geometries.rectangle((float)segRect.getX() - 1, (float)segRect.getY(),
 					(float)segRect.getX() + 1, (float)(segRect.getY()+segRect.getHeight())));
 			
 			// end marker
-			markerTree = markerTree.add(-rIdx, Geometries.rectangle((float)segRect.getMaxX() - 1, (float)segRect.getY(),
+			markerTree = markerTree.add(-(rIdx + 1), Geometries.rectangle((float)segRect.getMaxX() - 1, (float)segRect.getY(),
 					(float)segRect.getMaxX() + 1, (float)(segRect.getY()+segRect.getHeight())));
 		}
 		
@@ -322,9 +323,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		private int enteredRecordIdx = -1;
 	
-		private int currentMouseOverMarkerRecordNum = 0;
-		
-		private TimeUIModel.Marker currentMouseOverMarker = null;
+		private RecordGrid.GhostMarker currentMouseOverMarker = null;
 
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -385,18 +384,32 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			});
 			
 			if(intersectedMarker.get() != null) {
-				int currentMouseOverMarkerRecordIdx = Math.abs(intersectedMarker.get());
+				int currentMouseOverMarkerRecordIdx = Math.abs(intersectedMarker.get()) - 1;
+						
 				Record record = recordGrid.getSession().getRecord(currentMouseOverMarkerRecordIdx);
-				MediaSegment seg = record.getSegment().getGroup(0);
 				
-				float markerTime = intersectedMarker.get() > 0 ? 
-						seg.getStartValue() / 1000.0f : seg.getEndValue() / 1000.0f;
-				
-				if(currentMouseOverMarker == null || markerTime != currentMouseOverMarker.getTime()) {
-					if(currentMouseOverMarker != null)
-						recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
-					currentMouseOverMarker = new TimeUIModel.Marker(markerTime);
-					recordGrid.getTimeModel().addMarker(currentMouseOverMarker);
+				if(record != recordGrid.getCurrentRecord()) {
+					MediaSegment seg = record.getSegment().getGroup(0);
+					
+					float markerTime = intersectedMarker.get() > 0 ? 
+					seg.getStartValue() / 1000.0f : seg.getEndValue() / 1000.0f;
+					
+					if(currentMouseOverMarker == null || markerTime != currentMouseOverMarker.getTime()) {
+						if(currentMouseOverMarker != null)
+							recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
+						currentMouseOverMarker = new RecordGrid.GhostMarker(markerTime);
+						currentMouseOverMarker.setStart(intersectedMarker.get() > 0);
+						currentMouseOverMarker.addPropertyChangeListener("valueAdjusting", (evt) -> {
+							if(currentMouseOverMarker.isValueAdjusting()) {
+								// set current record
+								recordGrid.fireRecordClicked(currentMouseOverMarkerRecordIdx, e);
+							}
+						});
+						
+						recordGrid.getTimeModel().addMarker(currentMouseOverMarker);
+					}
+			
+					recordGrid.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 				}
 			} else {
 				if(currentMouseOverMarker != null) {

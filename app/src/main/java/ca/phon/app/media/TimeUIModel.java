@@ -195,6 +195,12 @@ public class TimeUIModel {
 		return interval;
 	}
 	
+	public Interval addInterval(Marker startMarker, Marker endMarker) {
+		Interval interval = new Interval(startMarker, endMarker);
+		addInterval(interval);
+		return interval;
+	}
+	
 	public void addInterval(Interval interval) {
 		var intervalCount = intervals.size();
 		intervals.add(interval);
@@ -373,11 +379,15 @@ public class TimeUIModel {
 		}
 		
 		public Interval(float startTime, float endTime) {
+			this(new Marker(startTime), new Marker(endTime));
+		}
+
+		public Interval(Marker startMarker, Marker endMarker) {
 			super();
 			
-			this.startMarker = new Marker(startTime);
+			this.startMarker = startMarker;
 			this.startMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("startMarker.", propSupport));
-			this.endMarker = new Marker(endTime);
+			this.endMarker = endMarker;
 			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("endMarker.", propSupport));
 		}
 		

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ import javax.swing.KeyStroke;
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerMessage;
 
 import ca.phon.app.media.TimeUIModel.Interval;
+import ca.phon.app.media.TimeUIModel.Marker;
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -45,6 +47,7 @@ import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -159,13 +162,29 @@ public class TimelineRecordTier extends TimelineTier {
 	private void setupRecord(Record r) {
 		if(currentRecordInterval != null)
 			getTimeModel().removeInterval(currentRecordInterval);
+		
 		MediaSegment segment = r.getSegment().getGroup(0);
 		var segStartTime = segment.getStartValue() / 1000.0f;
 		var segEndTime = segment.getEndValue() / 1000.0f;
-		currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
 		
-		// XXX Memory leak here?
-		currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener(currentRecordInterval));
+		// check for 'GhostMarker's which, if present, will
+		// become the start/end marker for the record interval
+		Optional<RecordGrid.GhostMarker> ghostMarker = 
+				recordGrid.getTimeModel().getMarkers().parallelStream()
+					.filter( (m) -> m instanceof GhostMarker )
+					.map( (m) -> GhostMarker.class.cast(m) )
+					.findAny();
+		if(ghostMarker.isPresent()) {
+			Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
+			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
+			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener(currentRecordInterval));
+			currentRecordInterval.setValueAdjusting(true);
+		} else {
+			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener(currentRecordInterval));
+		}
+		
 		
 		recordGrid.setCurrentRecord(r);
 	}
@@ -335,7 +354,7 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
+		public void propertyChange(PropertyChangeEvent evt) {			
 			Record r = recordGrid.getCurrentRecord();
 			MediaSegment segment = r.getSegment().getGroup(0);
 			final SessionFactory factory = SessionFactory.newFactory();
@@ -348,6 +367,8 @@ public class TimelineRecordTier extends TimelineTier {
 					getParentView().getEditor().getUndoSupport().endUpdate();
 				}
 			} else {
+				if(!evt.getPropertyName().endsWith("time")) return;
+				
 				MediaSegment newSegment = factory.createMediaSegment();
 				newSegment.setStartValue(segment.getStartValue());
 				newSegment.setEndValue(segment.getEndValue());
@@ -363,7 +384,6 @@ public class TimelineRecordTier extends TimelineTier {
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
 			}
-			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 		
 	}
