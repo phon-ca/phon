@@ -20,10 +20,6 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 
 public class RecordGrid extends TimeComponent {
-
-	private final static int DEFAULT_TIER_HEIGHT = 25;
-	
-	private int tierHeight = DEFAULT_TIER_HEIGHT;
 	
 	private Session session;
 	
@@ -93,16 +89,6 @@ public class RecordGrid extends TimeComponent {
 		tierSet.clear();
 		tierSet.addAll(tierNames);
 		firePropertyChange("tierCount", currentTierCount, tierSet.size());
-	}
-	
-	public int getTierHeight() {
-		return this.tierHeight;
-	}
-	
-	public void setTierHeight(int height) {
-		var oldVal = this.tierHeight;
-		this.tierHeight = height;
-		super.firePropertyChange("tierHeight", oldVal, height);
 	}
 	
 	public List<Participant> getSpeakers() {

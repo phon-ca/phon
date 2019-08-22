@@ -20,6 +20,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -45,7 +46,9 @@ import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.TierViewItem;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -129,8 +132,38 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		return renderer.getPreferredSize().height;
 	}
 	
+	private Font getTierFont(String tierName) {
+		Optional<TierViewItem> tvi = 
+				recordGrid.getSession().getTierView()
+				.stream()
+				.filter( (vi) -> vi.getTierName().equals(tierName) )
+				.findAny();
+		String fontInfo = "default";
+		if(tvi.isPresent()) {
+			fontInfo = tvi.get().getTierFont();
+		}
+		
+		Font tierFont = ("default".equals(fontInfo)) ? FontPreferences.getTierFont() : Font.decode(fontInfo);
+		return tierFont;
+	}
+	
+	private int getTierHeight(String tierName) {
+		JLabel testLabel = new JLabel();
+		testLabel.setDoubleBuffered(false);
+		
+		Font tierFont = getTierFont(tierName);
+		testLabel.setFont(tierFont);
+		testLabel.setText("ABCDEF");
+		
+		return testLabel.getPreferredSize().height;
+	}
+	
 	private int getSpeakerTierHeight() {
-		return getSpeakerLabelHeight() + (recordGrid.getTiers().size() * recordGrid.getTierHeight());
+		int tierHeight = 0;
+		for(String tierName:recordGrid.getTiers()) {
+			tierHeight += getTierHeight(tierName);
+		}
+		return getSpeakerLabelHeight() + tierHeight;
 	}
 
 	/*
@@ -160,7 +193,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		int y = TOP_BOTTOM_MARGIN + getSpeakerLabelHeight() +
 				( recordGrid.getSpeakers().indexOf(record.getSpeaker()) * (getSpeakerTierHeight() + TIER_GAP));
 		
-		return new Rectangle2D.Double(x1, y, x2-x1, recordGrid.getTierHeight() * recordGrid.getTiers().size() );
+		int tierHeight = 0;
+		for(String tierName:recordGrid.getTiers()) {
+			tierHeight += getTierHeight(tierName);
+		}
+		
+		return new Rectangle2D.Double(x1, y, x2-x1, tierHeight );
 	}
 	
 	@Override
@@ -247,12 +285,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
 		
 		if(segmentRect.intersects(g2.getClipBounds())) {
-			Rectangle2D labelRect = new Rectangle2D.Double(
-					segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), recordGrid.getTierHeight());
+			int heightOffset = 0;
 			for(String tier:recordGrid.getTiers()) {
+				int tierHeight = getTierHeight(tier);
+				Rectangle2D labelRect = new Rectangle2D.Double(
+						segmentRect.getX(), segmentRect.getY() + heightOffset, segmentRect.getWidth(), tierHeight);
 				paintSegmentLabel(g2, r, tier, labelRect);
-				labelRect.setRect(
-						labelRect.getX(), labelRect.getY() + labelRect.getHeight(), labelRect.getWidth(), labelRect.getHeight());
+				heightOffset += tierHeight;
 			}
 				
 			if(recordGrid.getCurrentRecord() == r) {
@@ -286,9 +325,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	}
 	
 	protected void paintSegmentLabel(Graphics2D g2, Record r, String tierName, Rectangle2D labelRect) {
-		final Font font = recordGrid.getFont();
-		g2.setFont(font);
-		
+		final Font font = getTierFont(tierName);
+
 		renderer.setIcon(null);
 		renderer.setFont(font);
 		
