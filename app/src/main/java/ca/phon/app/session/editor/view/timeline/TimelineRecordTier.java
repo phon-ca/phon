@@ -180,11 +180,13 @@ public class TimelineRecordTier extends TimelineTier {
 			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
 			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 			currentRecordInterval.setValueAdjusting(true);
+			ghostMarker.get().addPropertyChangeListener( "valueAdjusting", (e) -> {
+				currentRecordInterval.setValueAdjusting((boolean)e.getNewValue());
+			});
 		} else {
 			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
 			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		}
-		
 		
 		recordGrid.setCurrentRecord(r);
 	}
