@@ -386,9 +386,9 @@ public class TimeUIModel {
 			super();
 			
 			this.startMarker = startMarker;
-			this.startMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("startMarker.", propSupport));
+			this.startMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener(this, "startMarker.", propSupport));
 			this.endMarker = endMarker;
-			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener("endMarker.", propSupport));
+			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener(this, "endMarker.", propSupport));
 		}
 		
 		public boolean isValueAdjusting() {
@@ -449,10 +449,13 @@ public class TimeUIModel {
 
 		private String prefix;
 		
+		private Object sourceBean;
+		
 		private PropertyChangeSupport propSupport;
 		
-		public ForwardingPropertyChangeListener(String prefix, PropertyChangeSupport propSupport) {
+		public ForwardingPropertyChangeListener(Object sourceBean, String prefix, PropertyChangeSupport propSupport) {
 			super();
+			this.sourceBean = sourceBean;
 			this.prefix = prefix;
 			this.propSupport = propSupport;
 		}
@@ -463,7 +466,7 @@ public class TimeUIModel {
 		}
 		
 		private PropertyChangeEvent createFowardingEvent(PropertyChangeEvent evt) {
-			return new PropertyChangeEvent(evt.getSource(), prefix + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+			return new PropertyChangeEvent(sourceBean, prefix + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		}
 		
 	}

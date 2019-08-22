@@ -178,11 +178,11 @@ public class TimelineRecordTier extends TimelineTier {
 			Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
 			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
 			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
-			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener(currentRecordInterval));
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 			currentRecordInterval.setValueAdjusting(true);
 		} else {
 			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
-			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener(currentRecordInterval));
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		}
 		
 		
@@ -345,16 +345,10 @@ public class TimelineRecordTier extends TimelineTier {
 	
 	private class RecordIntervalListener implements PropertyChangeListener {
 		
-		private Interval interval;
-		
 		private boolean isFirstChange = true;
-		
-		public RecordIntervalListener(Interval interval) {
-			this.interval = interval;
-		}
 
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {			
+		public void propertyChange(PropertyChangeEvent evt) {
 			Record r = recordGrid.getCurrentRecord();
 			MediaSegment segment = r.getSegment().getGroup(0);
 			final SessionFactory factory = SessionFactory.newFactory();
@@ -373,9 +367,9 @@ public class TimelineRecordTier extends TimelineTier {
 				newSegment.setStartValue(segment.getStartValue());
 				newSegment.setEndValue(segment.getEndValue());
 				
-				if(evt.getSource() == this.interval.getStartMarker()) {
+				if(evt.getPropertyName().startsWith("startMarker")) {
 					newSegment.setStartValue((float)evt.getNewValue() * 1000.0f);
-				} else if(evt.getSource() == this.interval.getEndMarker()) {
+				} else if(evt.getPropertyName().startsWith("endMarker")) {
 					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
 				}
 				

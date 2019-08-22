@@ -88,13 +88,13 @@ public class TimeComponentUI extends ComponentUI {
 
 		@Override
 		public void intervalAdded(Interval interval) {
-			interval.addPropertyChangeListener(markerTimeListener);
+			interval.addPropertyChangeListener(intervalTimeListener);
 			repaintInterval(interval);			
 		}
 
 		@Override
 		public void intervalRemoved(Interval interval) {
-			interval.removePropertyChangeListener(markerTimeListener);
+			interval.removePropertyChangeListener(intervalTimeListener);
 			repaintInterval(interval);
 		}
 
@@ -130,6 +130,39 @@ public class TimeComponentUI extends ComponentUI {
 				(int)Math.max(0, markerX - 1), 0, 3, timeComp.getHeight());
 		timeComp.repaint(clipRect);
 	}
+	
+	private PropertyChangeListener intervalTimeListener = (e) -> {
+		final Interval interval = (Interval)e.getSource();
+		
+		if(e.getPropertyName().endsWith(".time")) {
+			float oldTime = (float)e.getOldValue();
+			float newTime = (float)e.getNewValue();
+			
+			int oldStartX = (e.getPropertyName().startsWith("startMarker"))
+					? (int)Math.round(timeComp.getTimeModel().xForTime(oldTime))
+					: (int)Math.round(timeComp.getTimeModel().xForTime(interval.getStartMarker().getTime()));
+					
+			int newStartX = (e.getPropertyName().startsWith("startMarker")) 
+					? (int)Math.round(timeComp.getTimeModel().xForTime(newTime)) 
+					: oldStartX;
+					
+			int oldEndX = (e.getPropertyName().startsWith("startMarker"))
+					? (int)Math.round(timeComp.getTimeModel().xForTime(interval.getEndMarker().getTime()))
+					: (int)Math.round(timeComp.getTimeModel().xForTime(oldTime));
+					
+			int newEndX = (e.getPropertyName().startsWith("startMarker"))
+					? oldEndX
+					: (int)Math.round(timeComp.getTimeModel().xForTime(newTime));
+
+			Rectangle oldIntervalRect = new Rectangle(
+					Math.max(0, oldStartX-1), 0, oldEndX-oldStartX + 2, timeComp.getHeight());
+			Rectangle newIntervalRect = new Rectangle(
+					Math.max(0, newStartX-1), 0, newEndX-newStartX + 2, timeComp.getHeight());
+			Rectangle clipRect = oldIntervalRect.union(newIntervalRect);
+			
+			timeComp.repaint(clipRect);
+		}
+	};
 	
 	private PropertyChangeListener markerTimeListener = (e) -> {
 		if("time".equals(e.getPropertyName()) || e.getPropertyName().endsWith(".time")) {
