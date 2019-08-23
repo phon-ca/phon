@@ -56,6 +56,7 @@ import javax.swing.event.MouseInputAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
@@ -63,16 +64,15 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.app.session.editor.view.speech_analysis.actions.GenerateAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.StopAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ZoomAction;
-import ca.phon.media.export.VLCWavExporter;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
 import ca.phon.media.sampled.Sampled;
@@ -182,6 +182,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final DelegateEditorAction segmentChangedAct =
 				new DelegateEditorAction(this, "onMediaSegmentChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
+		
+		final DelegateEditorAction onSessionAudioAvailableAct = 
+				new DelegateEditorAction(this, "onSessionAudioAvailable");
+		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
 	}
 
 	private void loadPlugins() {
@@ -407,7 +411,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		exportButton = new JButton(exportAct);
 		exportButton.setFocusable(false);
 
-		final GenerateAction generateAct = new GenerateAction(getEditor(), this);
+		final GenerateSessionAudioAction generateAct = new GenerateSessionAudioAction(getEditor());
 		generateButton = new JButton(generateAct);
 		generateButton.setFocusable(false);
 
@@ -435,140 +439,106 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	}
 
-	/**
-	 * Generate audio file for wav display.
-	 *
-	 * The file will be placed in <proj_root>/__res/media/
-	 */
-	public void generateAudioFile() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
-
-		File movFile = MediaLocator.findMediaFile(
-				session.getMediaLocation(), editor.getProject(), session.getCorpus());
-		if(movFile == null) {
-//			final PathExpander pe = new PathExpander();
-			final String expandedPath = session.getMediaLocation();
-//					pe.expandPath(session.getMediaLocation());
-			movFile = new File(expandedPath);
-		}
-		if(movFile != null && movFile.exists()) {
-			int lastDot = movFile.getName().lastIndexOf(".");
-			if(lastDot > 0) {
-				String movExt = movFile.getName().substring(lastDot);
-				if(movExt.equals(".wav")) {
-					// already a wav, do nothing!
-					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setParentWindow(getEditor());
-					props.setTitle("Generate Wav");
-					props.setHeader("Failed to generate wav");
-					props.setMessage("Source file is already in wav format.");
-					props.setRunAsync(false);
-					props.setOptions(MessageDialogProperties.okOptions);
-					NativeDialogs.showMessageDialog(props);
-					return;
-				}
-				String audioFileName =
-					movFile.getName().substring(0, movFile.getName().lastIndexOf(".")) +
-						".wav";
-				File parentFile = movFile.getParentFile();
-				File resFile = new File(parentFile, audioFileName);
-
-				if(resFile.exists()) {
-					// ask to overwrite
-					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setParentWindow(getEditor());
-					props.setTitle("Generate Wav");
-					props.setHeader("Overwrite file?");
-					props.setMessage("Wav file already exists, overwrite?");
-					props.setRunAsync(false);
-					props.setOptions(MessageDialogProperties.yesNoOptions);
-					int retVal = NativeDialogs.showMessageDialog(props);
-					if(retVal != 0) return;
-				}
-
-				final VLCWavExporter exporter = new VLCWavExporter(movFile, resFile);
-				final PhonTaskButton taskBtn = new PhonTaskButton(exporter);
-				taskBtn.setTopLabelText("Media export - 0%");
-				exporter.addTaskListener(new PhonTaskListener() {
-
-					@Override
-					public void statusChanged(PhonTask task, TaskStatus oldStatus,
-							TaskStatus newStatus) {
-						if(newStatus == TaskStatus.FINISHED) {
-							File audioFile = getAudioFile();
-							if(audioFile != null) {
-								try {
-									final PCMSampled sampled = new PCMSampled(audioFile);
-									wavDisplay.setSampled(sampled);
-									(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
-								} catch (IOException e) {
-									LOGGER.error( e.getLocalizedMessage(), e);
-									ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
-								}
-							}
-						}
-						if(newStatus != TaskStatus.RUNNING) {
-							btmPanel.remove(taskBtn);
-							btmPanel.revalidate();
-						}
-					}
-
-					@Override
-					public void propertyChanged(PhonTask task, String property,
-							Object oldValue, Object newValue) {
-						if(PhonTask.PROGRESS_PROP.equals(property)) {
-							taskBtn.setTopLabelText("Media export - " +
-									(int)Math.round(100.0*(float)newValue) + "%");
-						}
-					}
-
-				});
-
-				messageButton.setVisible(false);
-
-				btmPanel.add(taskBtn, null, 0);
-
-				getEditor().getStatusBar().watchTask(exporter);
-				PhonWorker.getInstance().invokeLater(exporter);
-			}
-		}
-	}
+//	/**
+//	 * Generate audio file for wav display.
+//	 *
+//	 * The file will be placed in <proj_root>/__res/media/
+//	 */
+//	public void generateAudioFile() {
+//		final SessionEditor editor = getEditor();
+//		final Session session = editor.getSession();
+//		final SessionMediaModel mediaModel = editor.getMediaModel();
+//		
+//		if(mediaModel.isSessionMediaAvailable()) {
+//			File movFile = MediaLocator.findMediaFile(
+//				session.getMediaLocation(), editor.getProject(), session.getCorpus());
+//			int lastDot = movFile.getName().lastIndexOf(".");
+//			if(lastDot > 0) {
+//				String movExt = movFile.getName().substring(lastDot);
+//				if(movExt.equals(".wav")) {
+//					// already a wav, do nothing!
+//					final MessageDialogProperties props = new MessageDialogProperties();
+//					props.setParentWindow(getEditor());
+//					props.setTitle("Generate Wav");
+//					props.setHeader("Failed to generate wav");
+//					props.setMessage("Source file is already in wav format.");
+//					props.setRunAsync(false);
+//					props.setOptions(MessageDialogProperties.okOptions);
+//					NativeDialogs.showMessageDialog(props);
+//					return;
+//				}
+//				String audioFileName =
+//					movFile.getName().substring(0, movFile.getName().lastIndexOf(".")) +
+//						".wav";
+//				File parentFile = movFile.getParentFile();
+//				File resFile = new File(parentFile, audioFileName);
+//
+//				if(resFile.exists()) {
+//					// ask to overwrite
+//					final MessageDialogProperties props = new MessageDialogProperties();
+//					props.setParentWindow(getEditor());
+//					props.setTitle("Generate Wav");
+//					props.setHeader("Overwrite file?");
+//					props.setMessage("Wav file already exists, overwrite?");
+//					props.setRunAsync(false);
+//					props.setOptions(MessageDialogProperties.yesNoOptions);
+//					int retVal = NativeDialogs.showMessageDialog(props);
+//					if(retVal != 0) return;
+//				}
+//
+//				final VLCWavExporter exporter = new VLCWavExporter(movFile, resFile);
+//				final PhonTaskButton taskBtn = new PhonTaskButton(exporter);
+//				taskBtn.setTopLabelText("Media export - 0%");
+//				exporter.addTaskListener(new PhonTaskListener() {
+//
+//					@Override
+//					public void statusChanged(PhonTask task, TaskStatus oldStatus,
+//							TaskStatus newStatus) {
+//						if(newStatus == TaskStatus.FINISHED) {
+//							File audioFile = mediaModel.getSessionAudioFile();
+//							if(audioFile != null) {
+//								try {
+//									final PCMSampled sampled = new PCMSampled(audioFile);
+//									wavDisplay.setSampled(sampled);
+//									(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
+//								} catch (IOException e) {
+//									LOGGER.error( e.getLocalizedMessage(), e);
+//									ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
+//								}
+//							}
+//						}
+//						if(newStatus != TaskStatus.RUNNING) {
+//							btmPanel.remove(taskBtn);
+//							btmPanel.revalidate();
+//						}
+//					}
+//
+//					@Override
+//					public void propertyChanged(PhonTask task, String property,
+//							Object oldValue, Object newValue) {
+//						if(PhonTask.PROGRESS_PROP.equals(property)) {
+//							taskBtn.setTopLabelText("Media export - " +
+//									(int)Math.round(100.0*(float)newValue) + "%");
+//						}
+//					}
+//
+//				});
+//
+//				messageButton.setVisible(false);
+//
+//				btmPanel.add(taskBtn, null, 0);
+//
+//				getEditor().getStatusBar().watchTask(exporter);
+//				PhonWorker.getInstance().invokeLater(exporter);
+//			}
+//		}
+//	}
 
 	public void shutdown() {
 	}
 
 	public PCMSegmentView getWavDisplay() {
 		return this.wavDisplay;
-	}
-
-	/**
-	 * Get the location of the audio file.
-	 *
-	 */
-	public File getAudioFile() {
-		File selectedMedia =
-				MediaLocator.findMediaFile(getEditor().getProject(), getEditor().getSession());
-		if(selectedMedia == null) return null;
-		File audioFile = null;
-
-		int lastDot = selectedMedia.getName().lastIndexOf('.');
-		String mediaName = selectedMedia.getName();
-		if(lastDot >= 0) {
-			mediaName = mediaName.substring(0, lastDot);
-		}
-		if(!selectedMedia.isAbsolute()) selectedMedia =
-			MediaLocator.findMediaFile(getEditor().getSession().getMediaLocation(), getEditor().getProject(), getEditor().getSession().getCorpus());
-
-		if(selectedMedia != null) {
-			File parentFile = selectedMedia.getParentFile();
-			audioFile = new File(parentFile, mediaName + ".wav");
-
-			if(!audioFile.exists()) {
-				audioFile = null;
-			}
-		}
-		return audioFile;
 	}
 
 	private final static long CLIP_EXTENSION_MIN = 500L;
@@ -582,20 +552,18 @@ public class SpeechAnalysisEditorView extends EditorView {
 		Record utt = getEditor().currentRecord();
 		if(utt == null) return;
 
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+				
 		wavDisplay.setValuesAdusting(true);
 		if(wavDisplay.getSampled() == null) {
-			final File audioFile = getAudioFile();
-			if(audioFile != null) {
+			if(mediaModel.isSessionAudioAvailable()) {
 				try {
-					final PCMSampled sampled = new PCMSampled(audioFile);
+					final PCMSampled sampled = new PCMSampled(mediaModel.getSessionAudioFile());
 					wavDisplay.setSampled(sampled);
-//					msgLabel.setVisible(false);
 				} catch (IOException e) {
 					ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}
-			} else {
-//				msgLabel.setVisible(true);
 			}
 		}
 
@@ -661,8 +629,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 			final File mediaFile = MediaLocator.findMediaFile(getEditor().getProject(), session);
 			if(mediaFile != null && mediaFile.exists()) {
 				// show generate audio message
-				final GenerateAction generateAct = new GenerateAction(getEditor(), this);
-				generateAct.putValue(GenerateAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
+				final GenerateSessionAudioAction generateAct = new GenerateSessionAudioAction(getEditor());
+				generateAct.putValue(PhonUIAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
 
 				messageButton.setTopLabelText("<html><b>No wav file available for Speech Analysis view</b></html>");
 				messageButton.setBottomLabelText("<html>Click here to extract wav from Session media.</html>");
@@ -719,6 +687,13 @@ public class SpeechAnalysisEditorView extends EditorView {
 		wavDisplay.setSampled(null);
 		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
 	}
+	
+	@RunOnEDT
+	public void onSessionAudioAvailable(EditorEvent ee) {
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
+		wavDisplay.setSampled(null);
+		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
+	}
 
 	@RunOnEDT
 	public void onMediaSegmentChanged(EditorEvent ee) {
@@ -767,7 +742,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		retVal.add(new ZoomAction(getEditor(), this, false));
 		retVal.addSeparator();
 		retVal.add(new SaveAction(getEditor(), this));
-		retVal.add(new GenerateAction(getEditor(), this));
+		retVal.add(new GenerateSessionAudioAction(getEditor()));
 
 		for(SpeechAnalysisTier tier:pluginTiers) {
 			tier.addMenuItems(retVal, false);

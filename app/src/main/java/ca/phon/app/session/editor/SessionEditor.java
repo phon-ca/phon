@@ -40,6 +40,7 @@ import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.JXStatusBar;
 
 import ca.phon.app.project.ProjectFrame;
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
@@ -118,6 +119,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Selection model
 	 */
 	private final transient AtomicReference<EditorSelectionModel> selectionModelRef;
+	
+	/**
+	 * Media model
+	 */
+	private final transient AtomicReference<SessionMediaModel> mediaModelRef;
 
 	/**
 	 * Index of the current record
@@ -175,6 +181,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
 		this.viewModelRef =
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
+		this.mediaModelRef = 
+				new AtomicReference<SessionMediaModel>(new SessionMediaModel(project, session));
 
 		// check to ensure that the session has a tier view
 		if(session.getTierView() == null || session.getTierView().size() == 0) {
@@ -461,6 +469,15 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		return (selectionModelRef != null ? selectionModelRef.get() : null);
 	}
 
+	/**
+	 * Get the media model
+	 * 
+	 * @return session media model
+	 */
+	public SessionMediaModel getMediaModel() {
+		return (mediaModelRef != null ? mediaModelRef.get() : null);
+	}
+	
 	/**
 	 * Get session
 	 *

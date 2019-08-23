@@ -40,6 +40,7 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorAction;
@@ -158,20 +159,15 @@ public class MediaPlayerEditorView extends EditorView {
 	}
 
 	private void loadMedia() {
-		final Session t = getEditor().getSession();
-		final File mediaFile =
-				MediaLocator.findMediaFile(getEditor().getProject(), t);
-		if(mediaFile != null) {
+		final SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionMediaAvailable()) {
 			// first check to make sure VLC was found, if not issue a message
 			// and return
 			if(!VLCHelper.checkNativeLibrary(true)) return;
 
+			final File mediaFile = mediaModel.getSessionMediaFile();
 			mediaPlayer.loadMedia(mediaFile.getAbsolutePath());
 		}
-//		else {
-//			mediaPlayer.getCanvas().setMessage("Media not found");
-//			mediaPlayer.getCanvas().repaint();
-//		}
 	}
 
 	private void setupEditorActions() {
