@@ -178,6 +178,7 @@ public class TimelineRecordTier extends TimelineTier {
 			Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
 			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
 			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
+			currentRecordInterval.setRepaintEntireInterval(true);
 			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 			currentRecordInterval.setValueAdjusting(true);
 			ghostMarker.get().addPropertyChangeListener( "valueAdjusting", (e) -> {
@@ -185,6 +186,7 @@ public class TimelineRecordTier extends TimelineTier {
 			});
 		} else {
 			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
+			currentRecordInterval.setRepaintEntireInterval(true);
 			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		}
 		

@@ -495,7 +495,6 @@ public final class SegmentationHandler {
 	}
 	
 	private void handleKeyEvent(KeyEvent ke) {
-//		if(!ke.isActionKey()) return;
 		if(ke.getID() == KeyEvent.KEY_PRESSED) {
 			var ks = KeyStroke.getKeyStrokeForEvent(ke);
 			var actionKey = inputMap.get(ks);
@@ -505,21 +504,24 @@ public final class SegmentationHandler {
 					action.actionPerformed(new ActionEvent(this, 0, actionKey.toString()));
 				}
 			} else {
-				++beepCount;
-				Toolkit.getDefaultToolkit().beep();
-				
-				// TODO improve message in dialog
-				if(beepCount >= MAX_BEEPS) {
-					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setParentWindow(editor);
-					props.setRunAsync(true);
-					props.setTitle("Segmentation Mode");
-					props.setHeader("Segmentation Mode");
-					props.setMessage("Editor is in segmentation mode.");
-					props.setOptions(new String[] { "Continue", "End Segmentation" } );
-					props.setListener(beepDialogListener);
-					NativeDialogs.showMessageDialog(props);
-				}
+				// don't beep on meta-key press
+//				if(ke.isActionKey()) {
+					++beepCount;
+					Toolkit.getDefaultToolkit().beep();
+					
+					// TODO improve message in dialog
+					if(beepCount >= MAX_BEEPS) {
+						final MessageDialogProperties props = new MessageDialogProperties();
+						props.setParentWindow(editor);
+						props.setRunAsync(true);
+						props.setTitle("Segmentation Mode");
+						props.setHeader("Segmentation Mode");
+						props.setMessage("Editor is in segmentation mode.");
+						props.setOptions(new String[] { "Continue", "End Segmentation" } );
+						props.setListener(beepDialogListener);
+						NativeDialogs.showMessageDialog(props);
+					}
+//				}
 			}
 		}
 		

@@ -88,11 +88,11 @@ public abstract class TimeComponent extends JComponent {
 	 * @param endTime
 	 */
 	public void repaint(float startTime, float endTime) {
-		if(endTime > startTime)
-			throw new IllegalArgumentException("end time > start time");
+		if(endTime < startTime)
+			throw new IllegalArgumentException("end time < start time");
 		
-		var startX = (int)Math.round(xForTime(startTime));
-		var endX = (int)Math.round(xForTime(endTime));
+		var startX = (int)Math.round(xForTime(startTime)) - 1;
+		var endX = (int)Math.round(xForTime(endTime)) + 1;
 		
 		var clipRect = new Rectangle(startX, 0, endX-startX, getHeight());
 		super.repaint(clipRect);

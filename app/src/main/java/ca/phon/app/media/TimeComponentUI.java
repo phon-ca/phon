@@ -135,32 +135,39 @@ public class TimeComponentUI extends ComponentUI {
 		final Interval interval = (Interval)e.getSource();
 		
 		if(e.getPropertyName().endsWith(".time")) {
+			boolean movingStartMarker = e.getPropertyName().startsWith("startMarker");
+			
 			float oldTime = (float)e.getOldValue();
 			float newTime = (float)e.getNewValue();
 			
-			int oldStartX = (e.getPropertyName().startsWith("startMarker"))
-					? (int)Math.round(timeComp.getTimeModel().xForTime(oldTime))
-					: (int)Math.round(timeComp.getTimeModel().xForTime(interval.getStartMarker().getTime()));
+			if(interval.isRepaintEntireInterval()) {
+				int oldStartX = movingStartMarker
+						? (int)Math.round(timeComp.getTimeModel().xForTime(oldTime))
+						: (int)Math.round(timeComp.getTimeModel().xForTime(interval.getStartMarker().getTime()));
+						
+				int newStartX = movingStartMarker
+						? (int)Math.round(timeComp.getTimeModel().xForTime(newTime)) 
+						: oldStartX;
+						
+				int oldEndX = movingStartMarker
+						? (int)Math.round(timeComp.getTimeModel().xForTime(interval.getEndMarker().getTime()))
+						: (int)Math.round(timeComp.getTimeModel().xForTime(oldTime));
+						
+				int newEndX = movingStartMarker
+						? oldEndX
+						: (int)Math.round(timeComp.getTimeModel().xForTime(newTime));
+				
+				Rectangle oldIntervalRect = new Rectangle(
+						Math.max(0, oldStartX-1), 0, oldEndX-oldStartX + 2, timeComp.getHeight());
+				Rectangle newIntervalRect = new Rectangle(
+						Math.max(0, newStartX-1), 0, newEndX-newStartX + 2, timeComp.getHeight());
+				Rectangle clipRect = oldIntervalRect.union(newIntervalRect);
 					
-			int newStartX = (e.getPropertyName().startsWith("startMarker")) 
-					? (int)Math.round(timeComp.getTimeModel().xForTime(newTime)) 
-					: oldStartX;
-					
-			int oldEndX = (e.getPropertyName().startsWith("startMarker"))
-					? (int)Math.round(timeComp.getTimeModel().xForTime(interval.getEndMarker().getTime()))
-					: (int)Math.round(timeComp.getTimeModel().xForTime(oldTime));
-					
-			int newEndX = (e.getPropertyName().startsWith("startMarker"))
-					? oldEndX
-					: (int)Math.round(timeComp.getTimeModel().xForTime(newTime));
-
-			Rectangle oldIntervalRect = new Rectangle(
-					Math.max(0, oldStartX-1), 0, oldEndX-oldStartX + 2, timeComp.getHeight());
-			Rectangle newIntervalRect = new Rectangle(
-					Math.max(0, newStartX-1), 0, newEndX-newStartX + 2, timeComp.getHeight());
-			Rectangle clipRect = oldIntervalRect.union(newIntervalRect);
+				timeComp.repaint(clipRect);
+			} else {
+				timeComp.repaint(Math.min(oldTime, newTime), Math.max(oldTime, newTime));
+			}
 			
-			timeComp.repaint(clipRect);
 		}
 	};
 	
