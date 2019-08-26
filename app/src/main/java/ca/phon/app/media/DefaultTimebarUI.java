@@ -118,7 +118,16 @@ public class DefaultTimebarUI extends TimebarUI {
 		
 		Line2D.Double tickLine = new Line2D.Double();
 		
-		for(float time = timebar.getTimeModel().getStartTime(); time <= timebar.getTimeModel().getEndTime(); time += majorTickLength()) {
+		// determine start/end times for clip rect
+		float clipStart = timebar.timeAtX(g2.getClipBounds().getX());
+		float clipEnd = timebar.timeAtX(g2.getClipBounds().getMaxX());
+		
+		float startTime = clipStart - (clipStart % majorTickLength());
+		float endTime = clipEnd + (clipEnd % majorTickLength());
+		
+		for(float time = Math.max(timebar.getTimeModel().getStartTime(), startTime); 
+				time <= Math.min(timebar.getTimeModel().getEndTime(), endTime); 
+				time += majorTickLength()) {
 			time = (float)TimeUIModel.roundTime(time);
 			var x = timebar.getTimeModel().xForTime(time);
 			g2.setStroke(majorTickStroke);
@@ -146,8 +155,24 @@ public class DefaultTimebarUI extends TimebarUI {
 		g2.setFont(timebar.getFont());
 		g2.setColor(Color.BLACK);
 		
+		// determine start/end times for clip rect
+		float clipStart = timebar.timeAtX(g2.getClipBounds().getX());
+		float clipEnd = timebar.timeAtX(g2.getClipBounds().getMaxX());
+		
+		float startTime = clipStart - (clipStart % majorTickLength());
+		float endTime = clipEnd + (clipEnd % majorTickLength());
+		
 		Rectangle2D lastTimeRect = null;
-		for(float time = timebar.getTimeModel().getStartTime(); time <= timebar.getTimeModel().getEndTime(); time += (2.0 * majorTickLength()) ) {
+		for(float time = Math.max(timebar.getTimeModel().getStartTime(), startTime); 
+				time <= Math.min(timebar.getTimeModel().getEndTime(), endTime); 
+				time += majorTickLength()) {
+			
+			float m = time % majorTickLength();
+			if(m == 0.0f) {
+				float t = time / majorTickLength();
+				if(t % 2 == 1) continue;
+			}
+			
 			time = (float)TimeUIModel.roundTime(time);
 			long timeMs = (long)(time * 1000.0f);
 			String timeStr = MsFormatter.msToDisplayString(timeMs);

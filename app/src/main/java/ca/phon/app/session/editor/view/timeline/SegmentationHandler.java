@@ -17,6 +17,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
+import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
@@ -397,7 +398,6 @@ public final class SegmentationHandler {
 			segmentationInterval = timelineView.getTimeModel().addInterval(0.0f, 0.0f);
 			segmentationInterval.setColor(new Color(255, 255, 0, 50));
 		}
-		
 		
 		// start media playback
 		MediaPlayerEditorView mediaView = 

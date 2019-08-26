@@ -43,6 +43,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
@@ -307,9 +308,9 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void update() {
-		final File audioFile = getAudioFile();
-		if(audioFile != null && audioFile.exists() && audioFile.canRead()) {
-			loadSessionAudio(audioFile);
+		final SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionAudioAvailable()) {
+			loadSessionAudio();
 			wavTier.setVisible(true);
 			recordGrid.getTimebar().setVisible(false);
 		} else {
@@ -336,8 +337,8 @@ public final class TimelineView extends EditorView {
 	private void setupTimeModel() {
 		float endTime = getMaxRecordTime();
 		
-		final File audioFile = getAudioFile();
-		if(audioFile == null) {
+		final SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionMediaAvailable() && !mediaModel.isSessionAudioAvailable()) {
 			// check if media is loaded in player, if so use time from player
 			MediaPlayerEditorView mediaPlayerView = 
 					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
@@ -351,40 +352,16 @@ public final class TimelineView extends EditorView {
 		timeModel.setEndTime(endTime);
 	}
 	
-	private void loadSessionAudio(File audioFile) {
+	private void loadSessionAudio() {
+		final SessionMediaModel mediaModel = getEditor().getMediaModel();
 		try {
-			LongSound ls = LongSound.fromFile(audioFile);
+			LongSound ls = mediaModel.getSharedSessionAudio();
 			//timeModel.setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setLongSound(ls);
 		} catch (IOException e) {
 			LogUtil.severe(e);
 		}
-	}
-	
-	private File getAudioFile() {
-		File selectedMedia =
-				MediaLocator.findMediaFile(getEditor().getProject(), getEditor().getSession());
-		if(selectedMedia == null) return null;
-		File audioFile = null;
-
-		int lastDot = selectedMedia.getName().lastIndexOf('.');
-		String mediaName = selectedMedia.getName();
-		if(lastDot >= 0) {
-			mediaName = mediaName.substring(0, lastDot);
-		}
-		if(!selectedMedia.isAbsolute()) selectedMedia =
-			MediaLocator.findMediaFile(getEditor().getSession().getMediaLocation(), getEditor().getProject(), getEditor().getSession().getCorpus());
-
-		if(selectedMedia != null) {
-			File parentFile = selectedMedia.getParentFile();
-			audioFile = new File(parentFile, mediaName + ".wav");
-
-			if(!audioFile.exists()) {
-				audioFile = null;
-			}
-		}
-		return audioFile;
 	}
 	
 	public TimeUIModel getTimeModel() {

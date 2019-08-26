@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
@@ -21,7 +24,7 @@ public abstract class TimeComponent extends JComponent {
 	public static final String SELECTION_COLOR_PROP = "selectionColor";
 
 	private TimeUIModel timeModel;
-	
+		
 	public TimeComponent() {
 		this(new TimeUIModel());
 	}
@@ -78,10 +81,19 @@ public abstract class TimeComponent extends JComponent {
 		return timeModel.xForTime(time);
 	}
 	
+	public Rectangle rectForInterval(float startTime, float endTime) {
+		var startX = (int)Math.round(xForTime(startTime)) - 1;
+		var endX = (int)Math.round(xForTime(endTime)) + 1;
+		
+		var clipRect = new Rectangle(startX, 0, endX-startX, getHeight());
+		
+		return clipRect;
+	}
+	
 	public Color getSelectionColor() {
 		return this.selectionColor;
 	}
-	
+		
 	/**
 	 * Repaint rectangle between given time values
 	 * @param startTime
@@ -91,10 +103,7 @@ public abstract class TimeComponent extends JComponent {
 		if(endTime < startTime)
 			throw new IllegalArgumentException("end time < start time");
 		
-		var startX = (int)Math.round(xForTime(startTime)) - 1;
-		var endX = (int)Math.round(xForTime(endTime)) + 1;
-		
-		var clipRect = new Rectangle(startX, 0, endX-startX, getHeight());
+		var clipRect = rectForInterval(startTime, endTime);
 		super.repaint(clipRect);
 	}
 	

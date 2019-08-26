@@ -14,6 +14,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,12 +111,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		return new RoundRectangle2D.Double(x, y, width, height, cornerRadius, cornerRadius);
 	}
 	
-	private void paintChannelBorder(Graphics2D g2, Channel ch) {
+	private void paintChannelBorder(Graphics2D g2, Rectangle rect, Channel ch) {
 		g2.setColor(Color.LIGHT_GRAY);
 		g2.draw(getChannelRect(ch));
 	}
 	
-	private void paintChannelBackground(Graphics2D g2, Channel ch) {
+	private void paintChannelBackground(Graphics2D g2, Rectangle rect, Channel ch) {
 		RoundRectangle2D channelRect = getChannelRect(ch);
 		Rectangle2D topRect = new Rectangle2D.Double(
 				channelRect.getX(), channelRect.getY(), channelRect.getWidth(), channelRect.getHeight()/2);
@@ -254,11 +255,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		WaveformDisplay display = (WaveformDisplay)c;
 		
-		int w = display.getWidth();
-		int h = display.getHeight();
 		Rectangle bounds = 
-				(g.getClipBounds() != null ? g.getClipBounds() : new Rectangle(0, 0, w, h));
-		
+				(g.getClipBounds() != null ? g.getClipBounds() : display.getVisibleRect());
+
 		// paint background
 		if(display.isOpaque()) {
 			g2.setColor(display.getBackground());
@@ -268,8 +267,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		for(Channel ch:display.availableChannels()) {
 			if(display.isChannelVisible(ch)) {
 				// paint channel border and background
-				paintChannelBackground(g2, ch);
-				paintChannelBorder(g2, ch);
+				paintChannelBackground(g2, bounds, ch);
+				paintChannelBorder(g2, bounds, ch);
 				
 				RoundRectangle2D channelRect = getChannelRect(ch);
 				int sx = (int) Math.max(channelRect.getX(), bounds.x);

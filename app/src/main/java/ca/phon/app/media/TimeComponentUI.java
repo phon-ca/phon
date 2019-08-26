@@ -20,6 +20,7 @@ import javax.swing.plaf.ComponentUI;
 
 import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.app.media.TimeUIModel.Marker;
+import groovy.transform.Synchronized;
 
 public class TimeComponentUI extends ComponentUI {
 	
@@ -134,40 +135,41 @@ public class TimeComponentUI extends ComponentUI {
 	private PropertyChangeListener intervalTimeListener = (e) -> {
 		final Interval interval = (Interval)e.getSource();
 		
-		if(e.getPropertyName().endsWith(".time")) {
-			boolean movingStartMarker = e.getPropertyName().startsWith("startMarker");
-			
-			float oldTime = (float)e.getOldValue();
-			float newTime = (float)e.getNewValue();
-			
-			if(interval.isRepaintEntireInterval()) {
-				int oldStartX = movingStartMarker
-						? (int)Math.round(timeComp.getTimeModel().xForTime(oldTime))
-						: (int)Math.round(timeComp.getTimeModel().xForTime(interval.getStartMarker().getTime()));
-						
-				int newStartX = movingStartMarker
-						? (int)Math.round(timeComp.getTimeModel().xForTime(newTime)) 
-						: oldStartX;
-						
-				int oldEndX = movingStartMarker
-						? (int)Math.round(timeComp.getTimeModel().xForTime(interval.getEndMarker().getTime()))
-						: (int)Math.round(timeComp.getTimeModel().xForTime(oldTime));
-						
-				int newEndX = movingStartMarker
-						? oldEndX
-						: (int)Math.round(timeComp.getTimeModel().xForTime(newTime));
+		synchronized(interval) {
+			if(e.getPropertyName().endsWith(".time")) {
+				boolean movingStartMarker = e.getPropertyName().startsWith("startMarker");
 				
-				Rectangle oldIntervalRect = new Rectangle(
-						Math.max(0, oldStartX-1), 0, oldEndX-oldStartX + 2, timeComp.getHeight());
-				Rectangle newIntervalRect = new Rectangle(
-						Math.max(0, newStartX-1), 0, newEndX-newStartX + 2, timeComp.getHeight());
-				Rectangle clipRect = oldIntervalRect.union(newIntervalRect);
+				float oldTime = (float)e.getOldValue();
+				float newTime = (float)e.getNewValue();
+				
+				if(interval.isRepaintEntireInterval()) {
+					int oldStartX = movingStartMarker
+							? (int)Math.round(timeComp.getTimeModel().xForTime(oldTime))
+							: (int)Math.round(timeComp.getTimeModel().xForTime(interval.getStartMarker().getTime()));
+							
+					int newStartX = movingStartMarker
+							? (int)Math.round(timeComp.getTimeModel().xForTime(newTime)) 
+							: oldStartX;
+							
+					int oldEndX = movingStartMarker
+							? (int)Math.round(timeComp.getTimeModel().xForTime(interval.getEndMarker().getTime()))
+							: (int)Math.round(timeComp.getTimeModel().xForTime(oldTime));
+							
+					int newEndX = movingStartMarker
+							? oldEndX
+							: (int)Math.round(timeComp.getTimeModel().xForTime(newTime));
 					
-				timeComp.repaint(clipRect);
-			} else {
-				timeComp.repaint(Math.min(oldTime, newTime), Math.max(oldTime, newTime));
+					Rectangle oldIntervalRect = new Rectangle(
+							Math.max(0, oldStartX-1), 0, oldEndX-oldStartX + 2, timeComp.getHeight());
+					Rectangle newIntervalRect = new Rectangle(
+							Math.max(0, newStartX-1), 0, newEndX-newStartX + 2, timeComp.getHeight());
+					Rectangle clipRect = oldIntervalRect.union(newIntervalRect);
+					
+					timeComp.repaint(clipRect);
+				} else {
+					timeComp.repaint(Math.min(oldTime, newTime), Math.max(oldTime, newTime));
+				}
 			}
-			
 		}
 	};
 	

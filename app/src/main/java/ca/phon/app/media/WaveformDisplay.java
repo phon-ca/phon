@@ -175,7 +175,7 @@ public class WaveformDisplay extends TimeComponent implements Scrollable {
 		this.channelInsets = channelInsets;
 		super.firePropertyChange("channelInsets", oldVal, channelInsets);
 	}
-
+	
 	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		Dimension prefSize = getPreferredSize();
