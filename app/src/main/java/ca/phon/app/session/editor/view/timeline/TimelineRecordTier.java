@@ -47,6 +47,8 @@ import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
@@ -323,6 +325,12 @@ public class TimelineRecordTier extends TimelineTier {
 		toggleUnknownAct.putValue(PhonUIAction.SELECTED_KEY, isSpeakerVisible(Participant.UNKNOWN));
 		final JCheckBoxMenuItem toggleUnknownItem = new JCheckBoxMenuItem(toggleUnknownAct);
 		builder.addItem(".", toggleUnknownItem);
+		
+		builder.addSeparator(".", "speaker_actions");
+		
+		final NewParticipantAction newParticipantAct = new NewParticipantAction(getParentView().getEditor(),
+				(SessionInfoEditorView)getParentView().getEditor().getViewModel().getView(SessionInfoEditorView.VIEW_TITLE));
+		builder.addItem(".", newParticipantAct);
 	}
 	
 	public void setupTierMenu(MenuBuilder builder) {

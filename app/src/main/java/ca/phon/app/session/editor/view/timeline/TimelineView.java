@@ -77,18 +77,20 @@ public final class TimelineView extends EditorView {
 	/**
 	 * Values for the zoom bar
 	 */
-	public static final float zoomValues[] = { 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
+	public static final float zoomValues[] = { 1.0f, 3.125f,  6.25f, 12.5f, 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
 	
-	private static final int defaultZoomIdx = 3;
+	private static final int defaultZoomIdx = 5;
 	
 	private JToolBar toolbar;
 	
-	private JSlider zoomSlider;
+	private JButton zoomOutButton;
+	
+	private JButton zoomInButton;
 	
 	private JButton segmentationButton;
 	
-	private DropDownButton speakerVisibilityButton;
-	private JPopupMenu speakerVisibilityMenu;
+	private DropDownButton speakerButton;
+	private JPopupMenu speakerMenu;
 	
 	private DropDownButton tierVisiblityButton;
 	private JPopupMenu tierVisibilityMenu;
@@ -122,12 +124,17 @@ public final class TimelineView extends EditorView {
 		timeModel.addPropertyChangeListener((e) -> {
 			if(e.getPropertyName().equals("pixelsPerSecond")) {
 				int zoomIdx = Arrays.binarySearch(zoomValues, (float)e.getNewValue());
-				if(zoomIdx >= 0)
-					zoomSlider.setValue(zoomIdx);
-				tierPanel.revalidate();
+				if(zoomIdx == 0) {
+					zoomOutButton.setEnabled(false);
+				} else if (zoomIdx == zoomValues.length - 1) {
+					zoomInButton.setEnabled(false);
+				} else {
+					zoomInButton.setEnabled(true);
+					zoomOutButton.setEnabled(true);
+				}
 			}
 		});
-		timeModel.setPixelsPerSecond(100.0f);
+		timeModel.setPixelsPerSecond(zoomValues[defaultZoomIdx]);
 		timeModel.setStartTime(0.0f);
 		timeModel.setEndTime(0.0f);	
 		
@@ -179,12 +186,12 @@ public final class TimelineView extends EditorView {
 		segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		segmentationButton = new JButton(segmentationAction);
 		
-		speakerVisibilityMenu = new JPopupMenu();
-		speakerVisibilityMenu.addPopupMenuListener(new PopupMenuListener() {
+		speakerMenu = new JPopupMenu();
+		speakerMenu.addPopupMenuListener(new PopupMenuListener() {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				speakerVisibilityMenu.removeAll();
-				recordGrid.setupSpeakerMenu(new MenuBuilder(speakerVisibilityMenu));
+				speakerMenu.removeAll();
+				recordGrid.setupSpeakerMenu(new MenuBuilder(speakerMenu));
 			}
 			
 			@Override
@@ -201,12 +208,12 @@ public final class TimelineView extends EditorView {
 		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Speakers");
 		speakerVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show speaker visibility menu");
 		speakerVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
-		speakerVisibilityAct.putValue(DropDownButton.BUTTON_POPUP, speakerVisibilityMenu);
+		speakerVisibilityAct.putValue(DropDownButton.BUTTON_POPUP, speakerMenu);
 		speakerVisibilityAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingUtilities.BOTTOM);
 		speakerVisibilityAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		
-		speakerVisibilityButton = new DropDownButton(speakerVisibilityAct);
-		speakerVisibilityButton.setOnlyPopup(true);
+		speakerButton = new DropDownButton(speakerVisibilityAct);
+		speakerButton.setOnlyPopup(true);
 		
 		tierVisibilityMenu = new JPopupMenu();
 		tierVisibilityMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -238,25 +245,20 @@ public final class TimelineView extends EditorView {
 		tierVisiblityButton = new DropDownButton(tierVisibilityAct);
 		tierVisiblityButton.setOnlyPopup(true);
 		
+		zoomOutButton = new JButton(new ZoomAction(this, -1));
+		zoomInButton = new JButton(new ZoomAction(this, 1));
+		
 //		SplitRecordAction splitRecordAct = new SplitRecordAction(this);
 //		JButton splitRecordButton = new JButton(splitRecordAct);
 		
-		zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 0, zoomValues.length-1, defaultZoomIdx);
-		zoomSlider.setPaintLabels(false);
-		zoomSlider.setPaintTicks(true);
-		zoomSlider.setPaintTrack(true);
-		zoomSlider.setSnapToTicks(true);
-		zoomSlider.putClientProperty("JComponent.sizeVariant", "small");
-		
-		zoomSlider.addChangeListener( (e) -> {
-			getTimeModel().setPixelsPerSecond(zoomValues[zoomSlider.getValue()]);
-		});
-		
 		toolbar.add(segmentationButton);
-		toolbar.add(speakerVisibilityButton);
+		toolbar.addSeparator();
+		toolbar.add(speakerButton);
 		toolbar.add(tierVisiblityButton);
 //		toolbar.add(splitRecordButton);
-		toolbar.add(zoomSlider);
+		toolbar.addSeparator();
+		toolbar.add(zoomOutButton);
+		toolbar.add(zoomInButton);
 		
 		return toolbar;
 	}
@@ -338,15 +340,17 @@ public final class TimelineView extends EditorView {
 		float endTime = getMaxRecordTime();
 		
 		final SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(mediaModel.isSessionMediaAvailable() && !mediaModel.isSessionAudioAvailable()) {
-			// check if media is loaded in player, if so use time from player
-			MediaPlayerEditorView mediaPlayerView = 
-					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
-				endTime = Math.max(endTime, mediaPlayerView.getPlayer().getLength() / 1000.0f);
+		if(mediaModel.isSessionMediaAvailable()) {
+			if(mediaModel.isSessionAudioAvailable()) {
+				endTime = Math.max(endTime, wavTier.getWaveformDisplay().getLongSound().length());
+			} else {
+				// check if media is loaded in player, if so use time from player
+				MediaPlayerEditorView mediaPlayerView = 
+						(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				if(mediaPlayerView.getPlayer().getMediaFile() != null) {
+					endTime = Math.max(endTime, mediaPlayerView.getPlayer().getLength() / 1000.0f);
+				}
 			}
-		} else {
-			endTime = Math.max(endTime, wavTier.getWaveformDisplay().getLongSound().length());
 		}
 		
 		timeModel.setEndTime(endTime);
