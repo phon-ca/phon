@@ -17,4 +17,6 @@ public interface RecordGridMouseListener {
 	
 	public void recordExited(int recordIndex, MouseEvent me);
 	
+	public void recordDragged(int recordIndex, MouseEvent me);
+	
 }

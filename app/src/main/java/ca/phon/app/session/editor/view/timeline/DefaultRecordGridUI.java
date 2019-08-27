@@ -42,11 +42,14 @@ import com.teamdev.jxbrowser.chromium.internal.ipc.message.GetTitleMessage;
 
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.TierViewItem;
+import ca.phon.session.io.xml.v12.ObjectFactory;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
@@ -358,7 +361,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	private class RecordGridMouseAdapter extends MouseInputAdapter {
 		
 		private int pressedRecordIdx = -1;
-		
+				
 		private int enteredRecordIdx = -1;
 	
 		private RecordGrid.GhostMarker currentMouseOverMarker = null;
@@ -455,6 +458,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					currentMouseOverMarker = null;
 				}
 			}
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent me) {
+			if(pressedRecordIdx < 0) return;
+			recordGrid.fireRecordDragged(pressedRecordIdx, me);
 		}
 
 	};

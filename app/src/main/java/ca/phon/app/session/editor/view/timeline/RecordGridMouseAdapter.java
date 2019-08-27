@@ -23,5 +23,9 @@ public class RecordGridMouseAdapter implements RecordGridMouseListener {
 	@Override
 	public void recordExited(int recordIndex, MouseEvent me) {
 	}
+	
+	@Override
+	public void recordDragged(int recordIndex, MouseEvent me) {
+	}
 
 }

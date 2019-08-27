@@ -394,27 +394,57 @@ public class TimelineRecordTier extends TimelineTier {
 		
 	}
 	
-	private RecordGridMouseListener mouseListener = new RecordGridMouseListener() {
+	private RecordGridMouseListener mouseListener = new RecordGridMouseAdapter() {
 
+		private int currentDraggedRecord = -1;
+		
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
 			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 		}
-
+		
 		@Override
 		public void recordPressed(int recordIndex, MouseEvent me) {
 		}
-
+		
+		
+		
 		@Override
 		public void recordReleased(int recordIndex, MouseEvent me) {
+			if(currentDraggedRecord >= 0) {
+				currentDraggedRecord = -1;
+				if(currentRecordInterval != null)
+					currentRecordInterval.setValueAdjusting(false);
+			}
 		}
 
 		@Override
-		public void recordEntered(int recordIndex, MouseEvent me) {
-		}
-
-		@Override
-		public void recordExited(int recordIndex, MouseEvent me) {
+		public void recordDragged(int recordIndex, MouseEvent me) {
+			if(getParentView().getEditor().getCurrentRecordIndex() != recordIndex) {
+				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
+				return;
+			} else {
+				// shouldn't happen
+				if(currentRecordInterval == null) return;
+								
+				if(currentDraggedRecord != recordIndex) {
+					// don't adjust an already changing interval
+					if(currentRecordInterval.isValueAdjusting()) return;
+					currentDraggedRecord = recordIndex;
+					currentRecordInterval.setValueAdjusting(true);
+				}
+				
+				float startTime = currentRecordInterval.getStartMarker().getTime();
+				float endTime = currentRecordInterval.getEndMarker().getTime();
+				float intervalDuration = endTime - startTime;
+			
+				float newMidTime = recordGrid.timeAtX(me.getX());
+				float newStartTime = newMidTime - (intervalDuration / 2.0f);
+				float newEndTime = newMidTime + (intervalDuration / 2.0f);
+				
+				currentRecordInterval.getStartMarker().setTime(newStartTime);
+				currentRecordInterval.getEndMarker().setTime(newEndTime);
+			}
 		}
 		
 	};

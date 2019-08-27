@@ -136,6 +136,10 @@ public class RecordGrid extends TimeComponent {
 	public void fireRecordExited(int recordIndex, MouseEvent me) {
 		listeners.forEach( (l) -> l.recordExited(recordIndex, me) );
 	}
+	
+	public void fireRecordDragged(int recordIndex, MouseEvent me) {
+		listeners.forEach( (l) -> l.recordDragged(recordIndex, me) );
+	}
 
 	public String getUIClassID() {
 		return uiClassId;
