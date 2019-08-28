@@ -3,9 +3,13 @@ package ca.phon.app.session.editor.view.timeline.actions;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
 import ca.phon.app.session.editor.view.timeline.TimelineView;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class ZoomAction extends TimelineAction {
 
@@ -14,6 +18,12 @@ public class ZoomAction extends TimelineAction {
 	private final static String TXT = "Zoom";
 	
 	private int direction = 1;
+	
+	private final static ImageIcon ZOOMIN_ICON = 
+			IconManager.getInstance().getIcon("actions/zoom-in-3", IconSize.SMALL);
+	
+	private final static ImageIcon ZOOMOUT_ICON =
+			IconManager.getInstance().getIcon("actions/zoom-out-3", IconSize.SMALL);
 
 	public ZoomAction(TimelineView view, int direction) {
 		super(view);
@@ -22,6 +32,9 @@ public class ZoomAction extends TimelineAction {
 		
 		String name = TXT + (direction < 0 ? " out" : " in");
 		putValue(NAME, name);
+		
+		Icon icon = (direction < 0 ? ZOOMOUT_ICON : ZOOMIN_ICON);
+		putValue(SMALL_ICON, icon);
 	}
 
 	@Override
