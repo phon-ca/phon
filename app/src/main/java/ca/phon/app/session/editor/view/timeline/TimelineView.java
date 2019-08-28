@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -67,6 +70,8 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
 import groovy.swing.factory.GlueFactory;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 public final class TimelineView extends EditorView {
 
@@ -77,7 +82,7 @@ public final class TimelineView extends EditorView {
 	/**
 	 * Values for the zoom bar
 	 */
-	public static final float zoomValues[] = { 1.0f, 3.125f,  6.25f, 12.5f, 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
+	public static final float zoomValues[] = { 3.125f,  6.25f, 12.5f, 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
 	
 	private static final int defaultZoomIdx = 5;
 	
@@ -106,6 +111,8 @@ public final class TimelineView extends EditorView {
 	private TimelineWaveformTier wavTier;
 	
 	private TimelineRecordTier recordGrid;
+	
+	private PlaybackMediaListener playbackMediaListener = new PlaybackMediaListener();
 	
 	public TimelineView(SessionEditor editor) {
 		super(editor);
@@ -354,6 +361,15 @@ public final class TimelineView extends EditorView {
 		}
 		
 		timeModel.setEndTime(endTime);
+		
+	
+		if(mediaModel.isSessionMediaAvailable()) {
+			MediaPlayerEditorView mediaPlayerView = 
+					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
+				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMediaListener);
+			}
+		}
 	}
 	
 	private void loadSessionAudio() {
@@ -450,6 +466,8 @@ public final class TimelineView extends EditorView {
 	public void onSegmentationStarted(EditorEvent ee) {
 		segmentationButton.setText("Stop Segmentation");
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+		
+		timeModel.removeMarker(playbackMediaListener.playbackMarker);
 	}
 	
 	@RunOnEDT
@@ -458,7 +476,7 @@ public final class TimelineView extends EditorView {
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		
 		getEditor().putExtension(SegmentationHandler.class, null);
-		
+
 		repaint();
 	}
 	
@@ -538,6 +556,73 @@ public final class TimelineView extends EditorView {
 		deregisterEditorEvents();
 		wavTier.onClose();
 		recordGrid.onClose();
+	}
+	
+	private class PlaybackMediaListener extends MediaPlayerEventAdapter {
+
+		private TimeUIModel.Marker playbackMarker;
+		
+		private PlaybackMarkerTask playbackMarkerTask;
+		
+		@Override
+		public void playing(MediaPlayer mediaPlayer) {
+			float currentTime = mediaPlayer.status().time() / 1000.0f;
+			
+			playbackMarker = timeModel.addMarker(currentTime, Color.green);
+			
+			playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
+			playbackMarkerTask.mediaStartTime = mediaPlayer.status().time();
+			playbackMarkerTask.systemStartTime = System.currentTimeMillis();
+			
+			Timer timer = new Timer(true);
+			timer.schedule(playbackMarkerTask, 0L, (long)(1/30.0f * 1000.0f));
+		}
+
+		@Override
+		public void paused(MediaPlayer mediaPlayer) {
+			timeModel.removeMarker(playbackMarker);
+			
+			if(playbackMarkerTask != null) {
+				playbackMarkerTask.cancel();
+				playbackMarkerTask = null;
+			}
+		}
+
+		@Override
+		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+			// sync time
+			if(playbackMarkerTask != null) {
+				playbackMarkerTask.mediaStartTime = newTime;
+				playbackMarkerTask.systemStartTime = System.currentTimeMillis();
+			}
+		}
+		
+	}
+	
+	private class PlaybackMarkerTask extends TimerTask {
+
+		volatile long systemStartTime;
+		
+		volatile long mediaStartTime = 0L;
+		
+		TimeUIModel.Marker playbackMarker;
+		
+		public PlaybackMarkerTask(TimeUIModel.Marker playbackMarker) {
+			super();
+			this.playbackMarker = playbackMarker;
+		}
+		
+		@Override
+		public void run() {
+			if(playbackMarker != null) {
+				long currentTime = System.currentTimeMillis();
+				synchronized (this) {
+					long newTime = mediaStartTime + (currentTime - systemStartTime);
+					playbackMarker.setTime(newTime / 1000.0f);				
+				}
+			}
+		}
+		
 	}
 
 	private class SeparatorMouseListener extends MouseInputAdapter {
