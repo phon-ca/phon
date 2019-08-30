@@ -505,15 +505,16 @@ public final class TimelineView extends EditorView {
 		if(handler != null) {
 			handler.stopSegmentation();
 		} else {
-			SegmentationStartDialog startDialog = new SegmentationStartDialog(getEditor());
+			SegmentationDialog startDialog = new SegmentationDialog(getEditor());
 			startDialog.setModal(true);
 			startDialog.pack();
-			startDialog.setLocationRelativeTo(this);
+			startDialog.setLocationRelativeTo(getEditor());
 			startDialog.setVisible(true);
 			
 			if(!startDialog.wasCanceled()) {
 				handler = new SegmentationHandler(getEditor());
 				handler.setMediaStart(startDialog.getMediaStart());
+				handler.setParticipantForMediaStart(startDialog.getSelectedParticipant());
 				handler.setSegmentationMode(startDialog.getSegmentationMode());
 				handler.getWindow().setBackwardWindowLengthMs(startDialog.getWindowLength());
 				
@@ -537,6 +538,8 @@ public final class TimelineView extends EditorView {
 	@Override
 	public JMenu getMenu() {
 		JMenu menu = new JMenu();
+		
+		
 		
 		menu.add(new ZoomAction(this, 1));
 		menu.add(new ZoomAction(this, -1));

@@ -50,7 +50,7 @@ public final class SegmentationHandler {
 	
 	private final static long MIN_SEGMENT_LENGTH = 50L;
 	
-	public enum SegmentationMode {
+	public static enum SegmentationMode {
 		INSERT_AT_END("Insert record at end of session"),
 		INSERT_AFTER_CURRENT("Insert record after current one"),
 		REPLACE_CURRENT("Replace segment for current record");
@@ -65,12 +65,23 @@ public final class SegmentationHandler {
 		public String toString() {
 			return this.val;
 		}
+		
+		public static SegmentationMode fromString(String value) {
+			for(SegmentationMode v:values()) {
+				if(v.toString().equals(value)) {
+					return v;
+				}
+			}
+			return null;
+		}
+		
 	}
 	
-	public enum MediaStart {
+	public static enum MediaStart {
 		AT_BEGNINNING("Play media from beginning"),
-		FROM_CURRENT_POSITION("From current position"),
-		AT_END_OF_LAST_RECORD("Play media from end of last record");
+		FROM_CURRENT_POSITION("Play media from current position"),
+		AT_END_OF_LAST_RECORD("Play media from end of last record"),
+		AT_END_OF_LAST_RECORD_FOR_PARTICIPANT("Play media from end of last record for participant");
 		
 		String val = "";
 		
@@ -82,6 +93,15 @@ public final class SegmentationHandler {
 		public String toString() {
 			return this.val;
 		}
+		
+		public static MediaStart fromString(String value) {
+			for(MediaStart v:values()) {
+				if(v.toString().equals(value))
+					return v;
+			}
+			return null;
+		}
+		
 	}
 
 	private ActionMap actionMap = new ActionMap();
@@ -90,6 +110,8 @@ public final class SegmentationHandler {
 	private SegmentationMode segmentationMode = SegmentationMode.INSERT_AT_END;
 	
 	private MediaStart mediaStart = MediaStart.AT_END_OF_LAST_RECORD;
+	
+	private Participant participantForMediaStart = Participant.UNKNOWN;
 	
 	private SegmentationWindow window = new SegmentationWindow();
 	
@@ -200,6 +222,14 @@ public final class SegmentationHandler {
 
 	public void setSegmentationMode(SegmentationMode segmentationMode) {
 		this.segmentationMode = segmentationMode;
+	}
+	
+	public Participant getParticipantForMediaStart() {
+		return participantForMediaStart;
+	}
+
+	public void setParticipantForMediaStart(Participant participantForMediaStart) {
+		this.participantForMediaStart = participantForMediaStart;
 	}
 
 	public MediaStart getMediaStart() {
@@ -409,6 +439,9 @@ public final class SegmentationHandler {
 				(new GoToEndOfSegmentedAction(editor, mediaView)).actionPerformed(new ActionEvent(this, 0, null));
 				window.setStartLockMs(mediaView.getPlayer().getTime());
 			} else if(mediaStart == MediaStart.FROM_CURRENT_POSITION) {
+				window.setStartLockMs(mediaView.getPlayer().getTime());
+			} else if(mediaStart == MediaStart.AT_END_OF_LAST_RECORD_FOR_PARTICIPANT) {
+				(new GoToEndOfSegmentedAction(editor, mediaView, getParticipantForMediaStart())).actionPerformed(new ActionEvent(this, 0, null));
 				window.setStartLockMs(mediaView.getPlayer().getTime());
 			}
 			

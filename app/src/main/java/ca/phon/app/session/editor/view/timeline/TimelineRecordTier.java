@@ -437,10 +437,21 @@ public class TimelineRecordTier extends TimelineTier {
 				float startTime = currentRecordInterval.getStartMarker().getTime();
 				float endTime = currentRecordInterval.getEndMarker().getTime();
 				float intervalDuration = endTime - startTime;
+				float midTime = endTime - (intervalDuration / 2.0f);
 			
 				float newMidTime = recordGrid.timeAtX(me.getX());
-				float newStartTime = newMidTime - (intervalDuration / 2.0f);
-				float newEndTime = newMidTime + (intervalDuration / 2.0f);
+				
+				float direction = newMidTime - midTime;
+				float newStartTime = 0.0f;
+				float newEndTime = 0.0f;
+				
+				if(direction < 0) {
+					newStartTime = Math.max(newMidTime - (intervalDuration/2.0f), getTimeModel().getStartTime());
+					newEndTime = newStartTime + intervalDuration;
+				} else {
+					newEndTime = Math.min(newMidTime + (intervalDuration/2.0f), getTimeModel().getEndTime());
+					newStartTime = newEndTime - intervalDuration;
+				}
 				
 				currentRecordInterval.getStartMarker().setTime(newStartTime);
 				currentRecordInterval.getEndMarker().setTime(newEndTime);
