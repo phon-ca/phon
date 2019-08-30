@@ -369,12 +369,22 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			recordGrid.requestFocusInWindow();
-			var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
-			entries.map( entry -> entry.value() ).forEach( i -> {
-				pressedRecordIdx = i;
-				recordGrid.fireRecordPressed(i, e);
-				recordGrid.repaint();
+			
+			AtomicReference<Integer> markerRecordRef = new AtomicReference<Integer>(0);
+			var markerEntries = markerTree.search(Geometries.point(e.getX(), e.getY()));
+			markerEntries.map( entry -> entry.value() ).forEach( i -> {
+				markerRecordRef.set(i);
 			});
+
+			
+			if(markerRecordRef.get() == 0) {
+				var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
+				entries.map( entry -> entry.value() ).forEach( i -> {
+					pressedRecordIdx = i;
+					recordGrid.fireRecordPressed(i, e);
+					recordGrid.repaint();
+				});
+			}
 		}
 
 		@Override
