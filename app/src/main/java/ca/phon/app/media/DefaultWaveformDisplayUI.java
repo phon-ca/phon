@@ -14,22 +14,28 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.media.LongSound;
 import ca.phon.media.Sound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.Sampled;
 import ca.phon.util.Tuple;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonWorker;
 
 /**
  * Default implementation of UI for {@link WaveformDisplay}
@@ -62,12 +68,17 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	}
 	
 	private Map<Channel, double[][]> channelExtremaMap = new HashMap<>();
+
+	private Map<Channel, BufferedImage> channelImgMap = new HashMap<>();
 	
 	private WaveformDisplay display;
 	
-	private boolean needsRepaint = true;
+	private volatile boolean needsRepaint = true;
 	
-	private AtomicReference<SampledPaintWorker> workerRef = new AtomicReference<>();
+	private AtomicReference<SampledWorker> workerRef = new AtomicReference<>();
+	
+	/* Set to true when img cache is available */
+	private volatile boolean loaded = false; 
 	
 	@Override
 	public void installUI(JComponent c) {
@@ -141,7 +152,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		g2.fill(btmArea);
 	}
 	
-	private void paintChannelData(Graphics2D g2, Channel ch, double startX, double endX) {
+	private void paintChannelData(Graphics2D g2, Channel ch, int channelY, double startX, double endX) {
 		final RoundRectangle2D channelRect = getChannelRect(ch);
 		final double halfHeight = channelRect.getHeight() / 2.0;
 		
@@ -162,7 +173,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		
 		double[][] channelExtrema = channelExtremaMap.get(ch);
 		
-		int y = (int)channelRect.getY();
+		int y = channelY;
 		for(double x = startX; x <= endX && x < channelExtrema[0].length; x += barSize) {
 			g2.setStroke(stroke);
 					
@@ -225,7 +236,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		if(needsRepaint) {
 			needsRepaint = false;
 			
-			SampledPaintWorker currentWorker = workerRef.get();
+			loaded = false;
+			channelImgMap.clear();
+			
+			SampledWorker currentWorker = workerRef.get();
 			if(currentWorker != null && !currentWorker.isDone()) {
 				currentWorker.cancel(true);
 			}
@@ -241,7 +255,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				}
 			}
 			
-			SampledPaintWorker worker = new SampledPaintWorker();
+			SampledWorker worker = new SampledWorker();
 			workerRef = new AtomicReference<>(worker);
 			worker.execute();
 		}
@@ -273,7 +287,20 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				RoundRectangle2D channelRect = getChannelRect(ch);
 				int sx = (int) Math.max(channelRect.getX(), bounds.x);
 				int ex = (int) Math.min(channelRect.getX()+channelRect.getWidth(), bounds.x + bounds.width);
-				paintChannelData(g2, ch, sx, ex);
+				
+				if(!loaded) {
+					// paint channel data directly
+					paintChannelData(g2, ch, (int)channelRect.getY(), sx, ex);
+				} else {
+					// use cache
+					BufferedImage chImg = channelImgMap.get(ch);
+					if(chImg != null) {
+						g2.drawImage(chImg, sx, (int)channelRect.getY(), ex, (int)channelRect.getMaxY(), 
+								sx, 0, ex, chImg.getHeight(), display);
+					} else {
+						paintChannelData(g2, ch, (int)channelRect.getY(), sx, ex);
+					}
+				}
 			}
 		}
 		
@@ -353,8 +380,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 	}
 
-	private class SampledPaintWorker extends SwingWorker<Tuple<Float, Float>, Tuple<Float, Float>> {
-		
+	private class SampledWorker extends SwingWorker<Tuple<Float, Float>, Tuple<Float, Float>> {
+		 
 		@Override
 		protected Tuple<Float, Float> doInBackground() throws Exception {
 			final LongSound sound = display.getLongSound();
@@ -376,7 +403,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				time = endTime;
 			}
 
-			// done() is not used
 			return new Tuple<Float, Float>(0.0f, 0.0f);
 		}
 
@@ -392,6 +418,42 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			var endX = display.xForTime(endTime);
 
 			display.repaint((int)startX, 0, (int)endX, display.getHeight());
+		}
+
+		@Override
+		protected void done() {
+			loaded = false;
+			PaintTask paintTask = new PaintTask();
+			PhonWorker.getInstance().invokeLater(paintTask);
+		}
+
+	}
+	
+	private class PaintTask extends PhonTask {
+
+		@Override
+		public void performTask() {
+			setStatus(TaskStatus.RUNNING);
+			
+			for(Channel ch:display.availableChannels()) {
+				BufferedImage chImg = channelImgMap.get(ch);
+				if(chImg == null) {
+					chImg = new BufferedImage(display.getWidth(), (int)getChannelRect(ch).getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+					channelImgMap.put(ch, chImg);
+				}
+				Graphics2D g2 = chImg.createGraphics();
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+				
+				var sx = display.xForTime(display.getStartTime());
+				var ex = display.xForTime(display.getEndTime());
+				
+				paintChannelData(g2, ch, 0, sx, ex);
+			}
+			
+			loaded = true;
+			
+			setStatus(TaskStatus.FINISHED);
 		}
 		
 	}
