@@ -302,6 +302,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Rectangle speakerLabelRect = getSpeakerLabelRect(speaker);
 		speakerLabelRect.x += recordGrid.getVisibleRect().x;
 		
+		renderer.setForeground(recordGrid.getForeground());
 		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
 		renderer.setText(speaker.getName());
 		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
@@ -332,6 +333,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					gpe.setBrushColor(Color.blue);
 					gpe.setEffectWidth(5);
 					gpe.apply(g2, roundedRect, 5, 5);
+
+					paintRecordNumberLabel(g2, recordIndex, Color.black, segmentRect);
+				} else {
+					paintRecordNumberLabel(g2, recordIndex, Color.lightGray, segmentRect);
 				}
 				
 			} else {
@@ -347,10 +352,33 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					gpe.setEffectWidth(5);
 					gpe.apply(g2, roundedRect, 5, 5);
 				}
+				paintRecordNumberLabel(g2, recordIndex, Color.lightGray, segmentRect);
 			}
+			
 			
 		}
 		return segmentRect;
+	}
+	
+	private void paintRecordNumberLabel(Graphics2D g2, int recordIndex, Color color, Rectangle2D segmentRect) {
+		final Font font = recordGrid.getFont();
+		if(font != null) {
+			renderer.setFont(font);
+		}
+		renderer.setIcon(null);
+		
+		String labelText = String.format("#%d", (recordIndex+1));
+		renderer.setText(labelText);
+		
+		renderer.setForeground(color);
+		
+		Dimension prefSize = renderer.getPreferredSize();
+		
+		int labelX = (int)segmentRect.getX();
+		int labelY = (int)(segmentRect.getY() - prefSize.getHeight());
+		
+		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
+				labelX, labelY, prefSize.width, prefSize.height);
 	}
 	
 	protected void paintSegmentLabel(Graphics2D g2, Record r, String tierName, Rectangle2D labelRect) {
@@ -358,11 +386,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 		renderer.setIcon(null);
 		renderer.setFont(font);
+		renderer.setForeground(recordGrid.getForeground());
 		
 		String labelText = r.getTier(tierName).toString();
 		renderer.setText(labelText);
-		
-		g2.setColor(recordGrid.getForeground());
 		
 		int labelX = (int)labelRect.getX() + TEXT_MARGIN;
 		int labelY = (int)labelRect.getY();
