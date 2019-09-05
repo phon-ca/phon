@@ -33,6 +33,8 @@ public class TimeUIModel {
 	
 	private float endTime = 0.0f;
 	
+	private float mediaEndTime = 0.0f;
+	
 	/* Curent playback position */
 	private float currentTime = 0.0f;
 	
@@ -110,6 +112,16 @@ public class TimeUIModel {
 		var oldVal = this.endTime;
 		this.endTime = endTime;
 		propSupport.firePropertyChange("endTime", oldVal, endTime);
+	}
+	
+	public float getMediaEndTime() {
+		return this.mediaEndTime;
+	}
+	
+	public void setMediaEndTime(float mediaEndTime) {
+		var oldVal = this.mediaEndTime;
+		this.mediaEndTime = mediaEndTime;
+		propSupport.firePropertyChange("mediaEndTime", oldVal, mediaEndTime);
 	}
 	
 	public float getCurrentTime() {

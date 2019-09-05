@@ -350,12 +350,14 @@ public final class TimelineView extends EditorView {
 		if(mediaModel.isSessionMediaAvailable()) {
 			if(mediaModel.isSessionAudioAvailable()) {
 				endTime = Math.max(endTime, wavTier.getWaveformDisplay().getLongSound().length());
+				timeModel.setMediaEndTime(wavTier.getWaveformDisplay().getLongSound().length());
 			} else {
 				// check if media is loaded in player, if so use time from player
 				MediaPlayerEditorView mediaPlayerView = 
 						(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 				if(mediaPlayerView.getPlayer().getMediaFile() != null) {
 					endTime = Math.max(endTime, mediaPlayerView.getPlayer().getLength() / 1000.0f);
+					timeModel.setMediaEndTime(mediaPlayerView.getPlayer().getLength()/1000.0f);
 				}
 			}
 		}
@@ -467,7 +469,8 @@ public final class TimelineView extends EditorView {
 		segmentationButton.setText("Stop Segmentation");
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 		
-		timeModel.removeMarker(playbackMediaListener.playbackMarker);
+		if(playbackMediaListener.playbackMarker != null)
+			timeModel.removeMarker(playbackMediaListener.playbackMarker);
 	}
 	
 	@RunOnEDT

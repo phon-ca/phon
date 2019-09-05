@@ -369,11 +369,16 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			});
 			
 			if(overlapRef.get()) {
-				warnings = "Overlapping records";
+				warnings = "Overlapping segments";
 				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
 			}
 			
-			// TODO check to see if record is outside of media bounds			
+			// check to see if record is outside of media bounds			
+			float recordEndTime = recordGrid.timeAtX(segmentRect.getMaxX());
+			if(recordGrid.getTimeModel().getMediaEndTime() > 0.0f && recordEndTime > recordGrid.getTimeModel().getMediaEndTime()) {
+				warnings = (warnings != null ? warnings + "\n" : "" ) + "Segment out of bounds";
+				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			}
 			
 			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
 			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
