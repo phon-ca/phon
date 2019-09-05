@@ -131,6 +131,9 @@ public class TimelineRecordTier extends TimelineTier {
 	
 	private final DelegateEditorAction onRecordChange = 
 			new DelegateEditorAction(this, "onRecordChange");
+	
+	private final DelegateEditorAction onSpeakerChange = 
+			new DelegateEditorAction(this, "onSpeakerChange");
 		
 	private final DelegateEditorAction onTierChangedAct = 
 			new DelegateEditorAction(this, "onTierChanged");
@@ -145,6 +148,8 @@ public class TimelineRecordTier extends TimelineTier {
 		getParentView().getEditor().getEventManager()
 			.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
 		getParentView().getEditor().getEventManager()
+			.registerActionForEvent(EditorEventType.SPEAKER_CHANGE_EVT, onSpeakerChange);
+		getParentView().getEditor().getEventManager()
 			.registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 		getParentView().getEditor().getEventManager()
 			.registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantRemoveAct);
@@ -155,6 +160,8 @@ public class TimelineRecordTier extends TimelineTier {
 	private void deregisterEditorEvents() {
 		getParentView().getEditor().getEventManager()
 			.removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+		getParentView().getEditor().getEventManager()
+			.removeActionForEvent(EditorEventType.SPEAKER_CHANGE_EVT, onSpeakerChange);
 		getParentView().getEditor().getEventManager()
 			.removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 		getParentView().getEditor().getEventManager()
@@ -206,6 +213,10 @@ public class TimelineRecordTier extends TimelineTier {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 	
+	@RunOnEDT
+	public void onSpeakerChange(EditorEvent evt) {
+		recordGrid.repaint(recordGrid.getVisibleRect());
+	}
 	
 	@RunOnEDT
 	public void onParticipantRemoved(EditorEvent ee) {

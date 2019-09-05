@@ -257,6 +257,10 @@ public class RecordDataEditorView extends EditorView {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
 
+		final EditorAction onSpeakerChangeAct =
+				new DelegateEditorAction(this, "onSpeakerChange");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SPEAKER_CHANGE_EVT, onSpeakerChangeAct);
+		
 		final EditorAction onGroupListChangeAct =
 				new DelegateEditorAction(this, "onGroupsChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, onGroupListChangeAct);
@@ -830,6 +834,15 @@ public class RecordDataEditorView extends EditorView {
 		repaint();
 	}
 
+	@RunOnEDT
+	public void onSpeakerChange(EditorEvent event) {
+		updating = true;
+		
+		speakerBox.setSelectedItem(((Record)event.getEventData()).getSpeaker());
+		
+		updating = false;
+	}
+	
 	@RunOnEDT
 	public void onGroupsChange(EditorEvent event) {
 		final SessionLocation location = getSessionLocation();

@@ -79,7 +79,7 @@ public class EditorEventType {
 	public final static String SESSION_CHANGED_EVT = "_SESSION_CHANGED_";
 
 	/**
-	 * Record change
+	 * Current record has changed in editor
 	 * data: record handle - IUtterance
 	 */
 	public final static String RECORD_CHANGED_EVT = "_RECORD_CHANGED_";
@@ -102,6 +102,12 @@ public class EditorEventType {
 	 */
 	public final static String SESSION_LOCATION_CHANGED_EVT = "_SESSION_LOCATION_CHANGED_EVT_";
 
+	/**
+	 * Change to speaker for record
+	 * data: record
+	 */
+	public final static String SPEAKER_CHANGE_EVT = MODIFICATION_EVENT + "SPEAKER_CHANGE_";
+	
 	/**
 	 * Changes in tier data.
 	 * 

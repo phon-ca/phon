@@ -46,21 +46,21 @@ public class ChangeSpeakerEdit extends SessionEditorUndoableEdit {
 	public String getUndoPresentationName() {
 		return "Undo change record speaker";
 	}
-
+	
 	@Override
 	public void undo() throws CannotUndoException {
 		super.undo();
 		
 		record.setSpeaker(oldSpeaker);
 		
-		queueEvent(EditorEventType.RECORD_CHANGED_EVT, getEditor().getUndoSupport(), record);
+		queueEvent(EditorEventType.SPEAKER_CHANGE_EVT, getEditor().getUndoSupport(), record);
 	}
 
 	@Override
 	public void doIt() {
 		record.setSpeaker(speaker);
 		
-		queueEvent(EditorEventType.RECORD_CHANGED_EVT, getSource(), record);
+		queueEvent(EditorEventType.SPEAKER_CHANGE_EVT, getSource(), record);
 	}
 
 }

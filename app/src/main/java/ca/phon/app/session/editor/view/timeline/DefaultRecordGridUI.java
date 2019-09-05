@@ -338,7 +338,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				} else {
 					paintRecordNumberLabel(g2, recordIndex, Color.lightGray, segmentRect);
 				}
-				
 			} else {
 				if(isRecordPressed(recordIndex)) {
 					g2.setColor(Color.GRAY);
@@ -354,8 +353,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				}
 				paintRecordNumberLabel(g2, recordIndex, Color.lightGray, segmentRect);
 			}
-			
-			
 		}
 		return segmentRect;
 	}
@@ -380,6 +377,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
 				labelX, labelY, prefSize.width, prefSize.height);
 	}
+	
+	
 	
 	protected void paintSegmentLabel(Graphics2D g2, Record r, String tierName, Rectangle2D labelRect) {
 		final Font font = getTierFont(tierName);
