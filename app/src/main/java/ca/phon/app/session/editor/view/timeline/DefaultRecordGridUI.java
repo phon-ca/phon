@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.FocusEvent;
@@ -202,6 +203,31 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 		
 		return new Rectangle2D.Double(x1, y, x2-x1, tierHeight );
+	}
+	
+	@Override
+	public Rectangle2D getSpeakerTierRect(Participant participant) {
+		int speakerIdx = recordGrid.getSpeakers().indexOf(participant);
+		
+		int tierHeight = getSpeakerTierHeight();
+		int y = TOP_BOTTOM_MARGIN + (speakerIdx * (tierHeight + TIER_GAP));
+		int x = 0;
+		
+		return new Rectangle2D.Double(x, y, recordGrid.getWidth(), tierHeight);
+	}
+	
+	@Override
+	public Participant getSpeakerAtPoint(Point pt) {
+		Participant retVal = null;
+		
+		for(Participant p:recordGrid.getSpeakers()) {
+			if(getSpeakerTierRect(p).contains(pt)) {
+				retVal = p;
+				break;
+			}
+		}
+		
+		return retVal;
 	}
 	
 	@Override

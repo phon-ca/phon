@@ -39,6 +39,13 @@ public class TimeComponentUI extends ComponentUI {
 		c.addMouseListener(markerListener);
 		c.addMouseMotionListener(markerListener);
 		timeComp.getTimeModel().addTimeUIModelListener(timeModelListener);
+		
+		for(var interval:timeComp.getTimeModel().getIntervals()) {
+			interval.addPropertyChangeListener(intervalTimeListener);
+		}
+		for(var marker:timeComp.getTimeModel().getMarkers()) {
+			marker.addPropertyChangeListener(markerTimeListener);
+		}
 	}
 
 	@Override

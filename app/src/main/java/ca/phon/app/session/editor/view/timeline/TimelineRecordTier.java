@@ -35,6 +35,7 @@ import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerM
 
 import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.app.media.TimeUIModel.Marker;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -44,6 +45,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
@@ -369,8 +371,11 @@ public class TimelineRecordTier extends TimelineTier {
 				if((boolean)evt.getNewValue()) {
 					isFirstChange = true;
 					getParentView().getEditor().getUndoSupport().beginUpdate();
+					LogUtil.info("Begin Update");
+					
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
+					LogUtil.info("End Update");
 				}
 			} else {
 				if(!evt.getPropertyName().endsWith("time")) return;
@@ -393,6 +398,8 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 		
 	}
+	
+	
 	
 	private RecordGridMouseListener mouseListener = new RecordGridMouseAdapter() {
 
@@ -432,6 +439,13 @@ public class TimelineRecordTier extends TimelineTier {
 					if(currentRecordInterval.isValueAdjusting()) return;
 					currentDraggedRecord = recordIndex;
 					currentRecordInterval.setValueAdjusting(true);
+				}
+
+				Participant mouseOverSpeaker = recordGrid.getUI().getSpeakerAtPoint(me.getPoint());
+				if(mouseOverSpeaker != null && mouseOverSpeaker != getParentView().getEditor().currentRecord().getSpeaker()) {
+					// change speakers
+					ChangeSpeakerEdit chEdit = new ChangeSpeakerEdit(getParentView().getEditor(), getParentView().getEditor().currentRecord(), mouseOverSpeaker);
+					getParentView().getEditor().getUndoSupport().postEdit(chEdit);
 				}
 				
 				float startTime = currentRecordInterval.getStartMarker().getTime();

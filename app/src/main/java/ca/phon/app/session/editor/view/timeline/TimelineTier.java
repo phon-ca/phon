@@ -3,14 +3,17 @@ package ca.phon.app.session.editor.view.timeline;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 import java.lang.ref.WeakReference;
 
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 
 import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.ui.menu.MenuBuilder;
 
 public abstract class TimelineTier extends TimeComponent {
 
@@ -71,6 +74,13 @@ public abstract class TimelineTier extends TimeComponent {
 	
 	public boolean isResizeable() {
 		return true;
+	}
+	
+	/**
+	 * Setup context menu
+	 */
+	public void setupContextMenu(MouseEvent me, JMenu contextMenu) {
+		
 	}
 	
 	/**
