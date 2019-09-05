@@ -382,11 +382,8 @@ public class TimelineRecordTier extends TimelineTier {
 				if((boolean)evt.getNewValue()) {
 					isFirstChange = true;
 					getParentView().getEditor().getUndoSupport().beginUpdate();
-					LogUtil.info("Begin Update");
-					
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
-					LogUtil.info("End Update");
 				}
 			} else {
 				if(!evt.getPropertyName().endsWith("time")) return;

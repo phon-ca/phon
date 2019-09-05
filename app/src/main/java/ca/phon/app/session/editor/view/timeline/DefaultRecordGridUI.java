@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.ActionMap;
+import javax.swing.Icon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -68,6 +69,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> markerTree;
 	
+	private RTree<String, com.github.davidmoten.rtree.geometry.Rectangle> messageTree;
+	
 	private RecordGrid recordGrid;
 	
 	private JLabel renderer;
@@ -77,6 +80,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		recordTree = RTree.create();
 		markerTree = RTree.create();
+		messageTree = RTree.create();
 		
 		renderer = new JLabel();
 		renderer.setOpaque(false);
@@ -258,6 +262,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Session session = recordGrid.getSession();
 		recordTree = RTree.create();
 		markerTree = RTree.create();
+		messageTree = RTree.create();
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			Rectangle2D segRect = paintSegment(g2, rIdx, r);
@@ -323,7 +328,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				paintSegmentLabel(g2, r, tier, labelRect);
 				heightOffset += tierHeight;
 			}
-				
+			
+			Icon recordIcon = null;
+			Color recordLblColor = Color.lightGray;
+							
 			if(recordGrid.getCurrentRecord() == r) {
 				g2.setColor(Color.BLUE);
 				g2.draw(roundedRect);
@@ -334,9 +342,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					gpe.setEffectWidth(5);
 					gpe.apply(g2, roundedRect, 5, 5);
 
-					paintRecordNumberLabel(g2, recordIndex, Color.black, segmentRect);
-				} else {
-					paintRecordNumberLabel(g2, recordIndex, Color.lightGray, segmentRect);
+					recordLblColor = Color.black;
 				}
 			} else {
 				if(isRecordPressed(recordIndex)) {
@@ -351,18 +357,44 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					gpe.setEffectWidth(5);
 					gpe.apply(g2, roundedRect, 5, 5);
 				}
-				paintRecordNumberLabel(g2, recordIndex, Color.lightGray, segmentRect);
+			}
+			
+			String warnings = null;
+			// check to see if record overlaps other records for speaker
+			var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
+					segmentRect.getMaxX(), segmentRect.getMaxY()));
+			AtomicBoolean overlapRef = new AtomicBoolean(false);
+			overlapEntries.map( entry -> entry.value() ).forEach( i -> {
+				overlapRef.getAndSet(true);
+			});
+			
+			if(overlapRef.get()) {
+				warnings = "Overlapping records";
+				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			}
+			
+			// TODO check to see if record is outside of media bounds			
+			
+			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
+			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
+					(float)(lblRect.getX()+lblRect.getWidth()), (float)(lblRect.getY()+lblRect.getHeight())));
+	
+			if(warnings != null) {
+				// add warning to UI
+				messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
+						lblRect.getMaxX(), lblRect.getMaxY()));
 			}
 		}
 		return segmentRect;
 	}
 	
-	private void paintRecordNumberLabel(Graphics2D g2, int recordIndex, Color color, Rectangle2D segmentRect) {
+	private Rectangle2D paintRecordNumberLabel(Graphics2D g2, int recordIndex,
+			Icon icon, Color color, Rectangle2D segmentRect) {
 		final Font font = recordGrid.getFont();
 		if(font != null) {
 			renderer.setFont(font);
 		}
-		renderer.setIcon(null);
+		renderer.setIcon(icon);
 		
 		String labelText = String.format("#%d", (recordIndex+1));
 		renderer.setText(labelText);
@@ -376,9 +408,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
 				labelX, labelY, prefSize.width, prefSize.height);
+		
+		return new Rectangle2D.Double(labelX, labelY, prefSize.getWidth(), prefSize.getHeight());
 	}
-	
-	
 	
 	protected void paintSegmentLabel(Graphics2D g2, Record r, String tierName, Rectangle2D labelRect) {
 		final Font font = getTierFont(tierName);
@@ -520,6 +552,19 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					currentMouseOverMarker = null;
 				}
 			}
+			
+			// finally see if we should display a message
+			AtomicReference<String> messageRef = new AtomicReference<String>(null);
+			var messageEntries = messageTree.search(Geometries.point(e.getX(), e.getY()));
+			messageEntries.map ( entry -> entry.value() ).forEach( v -> {
+				messageRef.set(v);
+			});
+			
+			if(messageRef.get() != null) {
+				recordGrid.setToolTipText(messageRef.get());
+			} else {
+				recordGrid.setToolTipText(null);
+			}
 		}
 		
 		@Override
@@ -529,5 +574,5 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 
 	};
-	
+
 }
