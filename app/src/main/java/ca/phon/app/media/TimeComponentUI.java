@@ -249,8 +249,16 @@ public class TimeComponentUI extends ComponentUI {
 				float oldTime = currentlyDraggedMarker.getTime();
 				int oldX = (int)Math.round(timeComp.xForTime(oldTime));
 				
+				if(currentlyDraggedInterval != null) {
+					// ensure time values are within interval range
+					if(currentlyDraggedInterval.getStartMarker() == currentlyDraggedMarker) {
+						newTime = Math.min(newTime, currentlyDraggedInterval.getEndMarker().getTime());
+					} else if(currentlyDraggedInterval.getEndMarker() == currentlyDraggedMarker) {
+						newTime = Math.max(newTime, currentlyDraggedInterval.getStartMarker().getTime());
+					}
+				}
+				
 				// TODO snapping
-				// TODO sanity check new value
 				currentlyDraggedMarker.setTime(newTime);
 				
 				Rectangle clipRect = new Rectangle(
