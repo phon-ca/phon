@@ -102,6 +102,10 @@ public class TimelineRecordTier extends TimelineTier {
 		getContentPane().add(recordGrid, BorderLayout.CENTER);
 	}
 	
+	public RecordGrid getRecordGrid() {
+		return this.recordGrid;
+	}
+	
 	private void setupRecordGridActions() {
 		final InputMap inputMap = recordGrid.getInputMap();
 		final ActionMap actionMap = recordGrid.getActionMap();

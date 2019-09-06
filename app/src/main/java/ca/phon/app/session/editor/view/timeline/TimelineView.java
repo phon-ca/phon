@@ -312,6 +312,7 @@ public final class TimelineView extends EditorView {
 				public void componentHidden(ComponentEvent e) {
 					separator.setVisible(false);
 				}
+				
 			});
 		}
 	}
@@ -542,8 +543,6 @@ public final class TimelineView extends EditorView {
 	public JMenu getMenu() {
 		JMenu menu = new JMenu();
 		
-		
-		
 		menu.add(new ZoomAction(this, 1));
 		menu.add(new ZoomAction(this, -1));
 		
@@ -572,16 +571,18 @@ public final class TimelineView extends EditorView {
 		
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
-			float currentTime = mediaPlayer.status().time() / 1000.0f;
-			
-			playbackMarker = timeModel.addMarker(currentTime, Color.green);
-			
-			playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
-			playbackMarkerTask.mediaStartTime = mediaPlayer.status().time();
-			playbackMarkerTask.systemStartTime = System.currentTimeMillis();
-			
-			Timer timer = new Timer(true);
-			timer.schedule(playbackMarkerTask, 0L, (long)(1/30.0f * 1000.0f));
+			if(getEditor().getExtension(SegmentationHandler.class) == null) {
+				float currentTime = mediaPlayer.status().time() / 1000.0f;
+				
+				playbackMarker = timeModel.addMarker(currentTime, Color.green);
+				
+				playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
+				playbackMarkerTask.mediaStartTime = mediaPlayer.status().time();
+				playbackMarkerTask.systemStartTime = System.currentTimeMillis();
+				
+				Timer timer = new Timer(true);
+				timer.schedule(playbackMarkerTask, 0L, (long)(1/30.0f * 1000.0f));
+			}
 		}
 
 		@Override

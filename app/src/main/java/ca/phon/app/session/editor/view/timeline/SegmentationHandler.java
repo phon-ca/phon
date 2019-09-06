@@ -360,19 +360,11 @@ public final class SegmentationHandler {
 					intervalTimerTask.segmentationMediaStartTime = newTime;
 				}
 			}
-			
-			TimelineView timelineView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
-			if(timelineView != null) {
-				Rectangle rect = timelineView.getWaveformTier().getWaveformDisplay().getVisibleRect();
-				float maxTimeS = timelineView.getTimeModel().timeAtX(rect.getMaxX());
-				if(newTime > (maxTimeS*1000.0)) {
-					SwingUtilities.invokeLater( () -> timelineView.scrollToTime((float)(window.getStartLockMs()/1000.0f)) );
-				}
-			}
 		}
 
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
+
 			stopSegmentation();
 		}
 
@@ -403,7 +395,29 @@ public final class SegmentationHandler {
 					segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
 					// indicate we are finished changing values
 					segmentationInterval.setValueAdjusting(false);
-					segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);					
+					segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
+					
+					// Autoscroll 
+					if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
+						TimelineView timelineView = 
+								(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+						
+						// special case: segmenting with no media
+						//  update time model as we progress
+						if(!editor.getMediaModel().isSessionMediaAvailable()) {
+							float newEndTime = segEnd / 1000.0f;
+							if(timelineView.getTimeModel().getEndTime() < newEndTime) {
+								timelineView.getTimeModel().setEndTime(newEndTime);
+							}
+						}
+						
+						Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
+						if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
+							timelineView.scrollToTime(segStart/1000.0f);
+						}
+						
+					}
+					
 				}
 			}
 		}

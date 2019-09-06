@@ -382,7 +382,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			
 			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
 			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
-					(float)(lblRect.getX()+lblRect.getWidth()), (float)(lblRect.getY()+lblRect.getHeight())));
+					(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
 	
 			if(warnings != null) {
 				// add warning to UI
