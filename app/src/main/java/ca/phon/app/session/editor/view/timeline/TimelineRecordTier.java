@@ -411,8 +411,6 @@ public class TimelineRecordTier extends TimelineTier {
 		
 	}
 	
-	
-	
 	private RecordGridMouseListener mouseListener = new RecordGridMouseAdapter() {
 
 		private int currentDraggedRecord = -1;

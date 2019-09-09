@@ -454,7 +454,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				paintChannelData(g2, ch, 0, sx, ex);
 			}
 			
-			
 			loaded = true;
 			
 			setStatus(TaskStatus.FINISHED);

@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -27,11 +28,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.ActionMap;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 import javax.swing.event.MouseInputAdapter;
 
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
@@ -162,6 +165,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Font tierFont = getTierFont(tierName);
 		testLabel.setFont(tierFont);
 		testLabel.setText("ABCDEF");
+		
+		Insets insets = recordGrid.getTierInsets();
+		testLabel.setBorder(BorderFactory.createEmptyBorder(
+				insets.top, insets.left, insets.bottom, insets.right));
 		
 		return testLabel.getPreferredSize().height;
 	}
@@ -420,6 +427,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	protected void paintSegmentLabel(Graphics2D g2, Record r, String tierName, Rectangle2D labelRect) {
 		final Font font = getTierFont(tierName);
 
+		Border oldBorder = renderer.getBorder();
+		
+		Insets insets = recordGrid.getTierInsets();
+		
+		renderer.setBorder(BorderFactory.createEmptyBorder(
+			insets.top, insets.left, insets.bottom, insets.right));
 		renderer.setIcon(null);
 		renderer.setFont(font);
 		renderer.setForeground(recordGrid.getForeground());
@@ -434,11 +447,19 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
 				labelX, labelY, labelWidth, labelHeight);
+	
+		if(labelWidth < renderer.getPreferredSize().width) {
+			messageTree = messageTree.add(labelText, 
+					Geometries.rectangle(labelRect.getX(), labelRect.getY(), labelRect.getMaxX(), labelRect.getMaxY()));
+		}
+		
+		renderer.setBorder(oldBorder);
 	}
 
 	private final PropertyChangeListener propListener = (e) -> {
 		if("speakerCount".equals(e.getPropertyName())
-				|| "tierCount".equals(e.getPropertyName())) {
+				|| "tierCount".equals(e.getPropertyName())
+				|| "tierInsets".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
 		} else if("currentRecord".equals(e.getPropertyName())) {
 			recordGrid.repaint(recordGrid.getVisibleRect());

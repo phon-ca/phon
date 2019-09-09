@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,8 @@ public class RecordGrid extends TimeComponent {
 	private Set<String> tierSet = new LinkedHashSet<>();
 	
 	private Record currentRecord = null;
+	
+	private Insets tierInsets = new Insets(2, 2, 2, 2);
 	
 	private final List<RecordGridMouseListener> listeners = Collections.synchronizedList(new ArrayList<>());
 	
@@ -89,6 +92,16 @@ public class RecordGrid extends TimeComponent {
 		tierSet.clear();
 		tierSet.addAll(tierNames);
 		firePropertyChange("tierCount", currentTierCount, tierSet.size());
+	}
+	
+	public Insets getTierInsets() {
+		return this.tierInsets;
+	}
+	
+	public void setTierInsets(Insets insets) {
+		var oldInsets = this.tierInsets;
+		this.tierInsets = insets;
+		firePropertyChange("tierInsets", oldInsets, insets);
 	}
 	
 	public List<Participant> getSpeakers() {
