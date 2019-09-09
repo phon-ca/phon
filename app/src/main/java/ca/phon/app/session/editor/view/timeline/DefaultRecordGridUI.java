@@ -33,6 +33,7 @@ import javax.swing.Icon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputAdapter;
@@ -314,6 +315,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Rectangle speakerLabelRect = getSpeakerLabelRect(speaker);
 		speakerLabelRect.x += recordGrid.getVisibleRect().x;
 		
+		renderer.setHorizontalTextPosition(SwingConstants.RIGHT);
 		renderer.setForeground(recordGrid.getForeground());
 		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
 		renderer.setText(speaker.getName());
@@ -406,6 +408,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		if(font != null) {
 			renderer.setFont(font);
 		}
+		renderer.setHorizontalTextPosition(SwingConstants.LEFT);
 		renderer.setIcon(icon);
 		
 		String labelText = String.format("#%d", (recordIndex+1));
