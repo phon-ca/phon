@@ -261,11 +261,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 		
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, 
-				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
-				RenderingHints.VALUE_STROKE_PURE);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		setupRenderingHints(g2);
 		
 		WaveformDisplay display = (WaveformDisplay)c;
 		
@@ -379,6 +375,13 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			cachedMaxValue = Math.max(cachedMaxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
 		}
 	}
+	
+	private void setupRenderingHints(Graphics2D g2) {
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+	}
 
 	private class SampledWorker extends SwingWorker<Tuple<Float, Float>, Tuple<Float, Float>> {
 		 
@@ -428,7 +431,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 
 	}
-	
+
 	private class PaintTask extends PhonTask {
 
 		@Override
@@ -438,18 +441,19 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			for(Channel ch:display.availableChannels()) {
 				BufferedImage chImg = channelImgMap.get(ch);
 				if(chImg == null) {
-					chImg = new BufferedImage(display.getWidth(), (int)getChannelRect(ch).getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+					chImg = new BufferedImage(display.getWidth(), (int)getChannelRect(ch).getHeight(),
+							BufferedImage.TYPE_INT_ARGB);
 					channelImgMap.put(ch, chImg);
 				}
 				Graphics2D g2 = chImg.createGraphics();
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+				setupRenderingHints(g2);
 				
 				var sx = display.xForTime(display.getStartTime());
 				var ex = display.xForTime(display.getEndTime());
 				
 				paintChannelData(g2, ch, 0, sx, ex);
 			}
+			
 			
 			loaded = true;
 			
