@@ -425,7 +425,10 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		@Override
 		public void recordPressed(int recordIndex, MouseEvent me) {
-			
+			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
+			MediaSegment seg = r.getSegment().getGroup(0);
+			mouseDragOffset = getTimeModel().timeAtX(me.getX()) -
+					seg.getStartValue() / 1000.0f;
 		}
 		
 		@Override
@@ -451,9 +454,6 @@ public class TimelineRecordTier extends TimelineTier {
 					if(currentRecordInterval.isValueAdjusting()) return;
 					currentDraggedRecord = recordIndex;
 					currentRecordInterval.setValueAdjusting(true);
-
-					mouseDragOffset = getTimeModel().timeAtX(me.getX()) -
-							currentRecordInterval.getStartMarker().getTime();
 				}
 
 				Participant mouseOverSpeaker = recordGrid.getUI().getSpeakerAtPoint(me.getPoint());
