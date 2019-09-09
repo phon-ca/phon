@@ -417,6 +417,9 @@ public class TimelineRecordTier extends TimelineTier {
 
 		private int currentDraggedRecord = -1;
 		
+		// offset (in sec) from left of interval where we are starting the drag
+		private float mouseDragOffset = 0.0f;
+		
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
 			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
@@ -424,9 +427,8 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		@Override
 		public void recordPressed(int recordIndex, MouseEvent me) {
+			
 		}
-		
-		
 		
 		@Override
 		public void recordReleased(int recordIndex, MouseEvent me) {
@@ -451,6 +453,9 @@ public class TimelineRecordTier extends TimelineTier {
 					if(currentRecordInterval.isValueAdjusting()) return;
 					currentDraggedRecord = recordIndex;
 					currentRecordInterval.setValueAdjusting(true);
+
+					mouseDragOffset = getTimeModel().timeAtX(me.getX()) -
+							currentRecordInterval.getStartMarker().getTime();
 				}
 
 				Participant mouseOverSpeaker = recordGrid.getUI().getSpeakerAtPoint(me.getPoint());
@@ -463,19 +468,19 @@ public class TimelineRecordTier extends TimelineTier {
 				float startTime = currentRecordInterval.getStartMarker().getTime();
 				float endTime = currentRecordInterval.getEndMarker().getTime();
 				float intervalDuration = endTime - startTime;
-				float midTime = endTime - (intervalDuration / 2.0f);
-			
-				float newMidTime = recordGrid.timeAtX(me.getX());
+
+				float oldOffsetTime = currentRecordInterval.getStartMarker().getTime() + mouseDragOffset;
+				float newOffsetTime = recordGrid.timeAtX(me.getX());
+				int direction = (oldOffsetTime < newOffsetTime ? 1 : -1);
 				
-				float direction = newMidTime - midTime;
 				float newStartTime = 0.0f;
 				float newEndTime = 0.0f;
 				
 				if(direction < 0) {
-					newStartTime = Math.max(newMidTime - (intervalDuration/2.0f), getTimeModel().getStartTime());
+					newStartTime = Math.max(newOffsetTime - mouseDragOffset, getTimeModel().getStartTime());
 					newEndTime = newStartTime + intervalDuration;
 				} else {
-					newEndTime = Math.min(newMidTime + (intervalDuration/2.0f), getTimeModel().getEndTime());
+					newEndTime = Math.min(newOffsetTime + (intervalDuration-mouseDragOffset), getTimeModel().getEndTime());
 					newStartTime = newEndTime - intervalDuration;
 				}
 				
