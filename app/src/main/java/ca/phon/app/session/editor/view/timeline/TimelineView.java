@@ -15,7 +15,9 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import java.util.TimerTask;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -37,6 +40,7 @@ import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MenuEvent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -152,11 +156,19 @@ public final class TimelineView extends EditorView {
 		// editor events the record tier object must be created before the
 		// wav tier
 		recordGrid = new TimelineRecordTier(this);
+		recordGrid.getRecordGrid().addMouseListener(contextMenuListener);
 		
 		wavTier = new TimelineWaveformTier(this);
 		wavTier.getPreferredSize();
+		wavTier.getWaveformDisplay().addMouseListener(contextMenuListener);
 		
-		addTier(wavTier);
+		JSeparator wavSep = addTier(wavTier);
+		wavSep.addPropertyChangeListener("valueAdjusting", (e) -> {
+			if((boolean)e.getNewValue() == Boolean.FALSE) {
+				wavTier.getWaveformDisplay().getUI().updateCache();
+			}
+		});
+		
 		addTier(recordGrid);
 		
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -271,7 +283,7 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private int tierIdx = 0;
-	private void addTier(TimelineTier tier) {
+	private JSeparator addTier(TimelineTier tier) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
@@ -286,7 +298,10 @@ public final class TimelineView extends EditorView {
 		if(tier.isResizeable()) {
 			final JSeparator separator =  new JSeparator(SwingConstants.HORIZONTAL);
 			separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-			separator.addMouseMotionListener(new SeparatorMouseListener(tier));
+			
+			SeparatorMouseListener listener = new SeparatorMouseListener(tier);
+			separator.addMouseMotionListener(listener);
+			separator.addMouseListener(listener);
 			
 			gbc.gridy = tierIdx++;
 			
@@ -314,7 +329,9 @@ public final class TimelineView extends EditorView {
 				}
 				
 			});
+			return separator;
 		}
+		return null;
 	}
 	
 	private void update() {
@@ -402,6 +419,8 @@ public final class TimelineView extends EditorView {
 	
 	private final DelegateEditorAction onMediaChangedAct = new DelegateEditorAction(this, "onMediaChanged");
 	
+	private final DelegateEditorAction onSessionAudioAvailableAct = new DelegateEditorAction(this, "onSessionAudioAvailable");
+	
 	private final DelegateEditorAction onRecordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
 	
 	private final DelegateEditorAction onSegmentationStarted = new DelegateEditorAction(this, "onSegmentationStarted");
@@ -415,8 +434,9 @@ public final class TimelineView extends EditorView {
 	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
 	
 	private void registerEditorEvents() {
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
+		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
 		
 		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
 		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
@@ -427,8 +447,9 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void deregisterEditorEvents() {
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
+		getEditor().getEventManager().removeActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
 		
 		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
 		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
@@ -463,6 +484,11 @@ public final class TimelineView extends EditorView {
 				scrollToTime(time);
 			}
 		}
+	}
+	
+	@RunOnEDT
+	public void onSessionAudioAvailable(EditorEvent ee) {
+		update();
 	}
 	
 	@RunOnEDT
@@ -529,6 +555,18 @@ public final class TimelineView extends EditorView {
 		}
 	}
 	
+	private void showContextMenu(MouseEvent me) {
+		JPopupMenu contextMenu = new JPopupMenu();
+		
+		MenuBuilder builder = new MenuBuilder(contextMenu);
+		
+		if(wavTier.isVisible())
+			wavTier.setupContextMenu(me, builder);
+		recordGrid.setupContextMenu(me, builder);
+		
+		contextMenu.show(me.getComponent(), me.getX(), me.getY());
+	}
+		
 	@Override
 	public String getName() {
 		return VIEW_TITLE;
@@ -543,13 +581,13 @@ public final class TimelineView extends EditorView {
 	public JMenu getMenu() {
 		JMenu menu = new JMenu();
 		
-		menu.add(new ZoomAction(this, 1));
-		menu.add(new ZoomAction(this, -1));
-		
-		menu.addSeparator();
-		
 		MenuBuilder builder = new MenuBuilder(menu);
-		recordGrid.setupContextMenu(builder);
+		recordGrid.setupContextMenu(null, builder);
+		
+		builder.addSeparator(".", "zoom");
+		
+		builder.addItem(".", new ZoomAction(this, -1));
+		builder.addItem(".", new ZoomAction(this, 1));
 		
 		return menu;
 	}
@@ -636,6 +674,8 @@ public final class TimelineView extends EditorView {
 		
 		private TimelineTier tier;
 		
+		private boolean valueAdjusting = false;
+		
 		public SeparatorMouseListener(TimelineTier tier) {
 			super();
 			
@@ -647,9 +687,21 @@ public final class TimelineView extends EditorView {
 		}
 		
 		@Override
+		public void mousePressed(MouseEvent e) {
+			valueAdjusting = true;
+			((JComponent)e.getSource()).firePropertyChange("valueAdjusting", false, valueAdjusting);
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			valueAdjusting = false;
+			((JComponent)e.getSource()).firePropertyChange("valueAdjusting", true, valueAdjusting);
+		}
+		
+		@Override
 		public void mouseDragged(MouseEvent e) {
-			Dimension currentSize = wavTier.getSize();
-			Dimension prefSize = wavTier.getPreferredSize();
+			Dimension currentSize = tier.getSize();
+			Dimension prefSize = tier.getPreferredSize();
 
 			prefSize.height = currentSize.height + e.getY();
 			if(prefSize.height < 0) prefSize.height = 0;
@@ -659,5 +711,24 @@ public final class TimelineView extends EditorView {
 		}
 		
 	}
+	
+	private MouseListener contextMenuListener = new MouseAdapter() {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+		
+		
+	};
 	
 }

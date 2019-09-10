@@ -321,10 +321,18 @@ public class TimelineRecordTier extends TimelineTier {
 		);
 	}
 	
-	public void setupContextMenu(MenuBuilder builder) {
-		setupSpeakerMenu(builder);
-	}
 	
+	
+	@Override
+	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
+		JMenu participantMenu = builder.addMenu(".", "Participants");
+		setupSpeakerMenu(new MenuBuilder(participantMenu));
+
+		builder.addSeparator(".", "tiers");
+		JMenu tierMenu = builder.addMenu(".", "Tiers");
+		setupTierMenu(new MenuBuilder(tierMenu));
+	}
+
 	public void setupSpeakerMenu(MenuBuilder builder) {
 		Session session = getParentView().getEditor().getSession();
 		for(var speaker:session.getParticipants()) {

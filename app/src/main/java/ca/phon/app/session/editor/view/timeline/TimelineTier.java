@@ -9,6 +9,7 @@ import java.lang.ref.WeakReference;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.Timebar;
@@ -79,7 +80,7 @@ public abstract class TimelineTier extends TimeComponent {
 	/**
 	 * Setup context menu
 	 */
-	public void setupContextMenu(MouseEvent me, JMenu contextMenu) {
+	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
 		
 	}
 	

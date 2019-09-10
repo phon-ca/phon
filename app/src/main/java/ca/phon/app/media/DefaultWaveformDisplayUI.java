@@ -152,9 +152,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		g2.fill(btmArea);
 	}
 	
-	private void paintChannelData(Graphics2D g2, Channel ch, int channelY, double startX, double endX) {
+	private void paintChannelData(Graphics2D g2, Channel ch, boolean cache, int channelY, double startX, double endX) {
 		final RoundRectangle2D channelRect = getChannelRect(ch);
-		final double halfHeight = channelRect.getHeight() / 2.0;
+		final double halfHeight = 
+				(cache ? channelRect.getHeight() : channelRect.getHeight() / 2.0);
 		
 		float barSize = 1.0f;
 		final Stroke stroke = new BasicStroke(barSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -286,7 +287,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				
 				if(!loaded) {
 					// paint channel data directly
-					paintChannelData(g2, ch, (int)channelRect.getY(), sx, ex);
+					paintChannelData(g2, ch, false, (int)channelRect.getY(), sx, ex);
 				} else {
 					// use cache
 					BufferedImage chImg = channelImgMap.get(ch);
@@ -294,7 +295,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 						g2.drawImage(chImg, sx, (int)channelRect.getY(), ex, (int)channelRect.getMaxY(), 
 								sx, 0, ex, chImg.getHeight(), display);
 					} else {
-						paintChannelData(g2, ch, (int)channelRect.getY(), sx, ex);
+						paintChannelData(g2, ch, false, (int)channelRect.getY(), sx, ex);
 					}
 				}
 			}
@@ -319,6 +320,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		g2.fill(rect);
 		
 		super.paintInterval(g2, interval);
+	}
+	
+	@Override
+	public void updateCache() {
+		this.needsRepaint = true;
+		display.repaint();
 	}
 	
 	private final PropertyChangeListener propListener = (e) -> {
@@ -441,7 +448,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			for(Channel ch:display.availableChannels()) {
 				BufferedImage chImg = channelImgMap.get(ch);
 				if(chImg == null) {
-					chImg = new BufferedImage(display.getWidth(), (int)getChannelRect(ch).getHeight(),
+					chImg = new BufferedImage(display.getWidth(), 
+							(int)getChannelRect(ch).getHeight() * 2,
 							BufferedImage.TYPE_INT_ARGB);
 					channelImgMap.put(ch, chImg);
 				}
@@ -451,10 +459,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				var sx = display.xForTime(display.getStartTime());
 				var ex = display.xForTime(display.getEndTime());
 				
-				paintChannelData(g2, ch, 0, sx, ex);
+				paintChannelData(g2, ch, true, 0, sx, ex);
 			}
 			
 			loaded = true;
+			
+			display.repaint(display.getVisibleRect());
 			
 			setStatus(TaskStatus.FINISHED);
 		}
