@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information.actions;
+package ca.phon.app.session.editor.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -24,13 +24,14 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class BrowseForMediaAction extends SessionInfoAction {
+public class BrowseForMediaAction extends SessionEditorAction {
 
 	private static final long serialVersionUID = 5340838112757528304L;
 	
@@ -41,8 +42,8 @@ public class BrowseForMediaAction extends SessionInfoAction {
 	private final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/film-link", IconSize.SMALL);
 
-	public BrowseForMediaAction(SessionEditor editor, SessionInfoEditorView view) {
-		super(editor, view);
+	public BrowseForMediaAction(SessionEditor editor) {
+		super(editor);
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);

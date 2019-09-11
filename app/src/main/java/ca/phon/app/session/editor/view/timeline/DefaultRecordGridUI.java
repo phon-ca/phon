@@ -318,7 +318,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		renderer.setHorizontalTextPosition(SwingConstants.RIGHT);
 		renderer.setForeground(recordGrid.getForeground());
 		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
-		renderer.setText(speaker.getName());
+		renderer.setText(speaker.toString());
 		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
 	}

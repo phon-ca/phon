@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
@@ -120,8 +122,26 @@ public class TimelineRecordTier extends TimelineTier {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), playSegmentKey);
 		actionMap.put(playSegmentKey, playSegmentAction);
 		
+		for(int i = 0; i < 10; i++) {
+			final PhonUIAction chSpeakerAct = new PhonUIAction(this, "onChangeSpeakerByIndex", i);
+			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+			chSpeakerAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
+			String id = "change_speaker_" + i;
+
+			actionMap.put(id, chSpeakerAct);
+			inputMap.put(ks, id);
+		}
+		
 		recordGrid.setInputMap(WHEN_FOCUSED, inputMap);
 		recordGrid.setActionMap(actionMap);
+	}
+	
+	public void onChangeSpeakerByIndex(Integer speakerIdx) {
+		if(speakerIdx != 0 && (speakerIdx - 1) >= recordGrid.getSpeakers().size()) return;
+		var speaker = (speakerIdx == 0 ? Participant.UNKNOWN : recordGrid.getSpeakers().get(speakerIdx-1));
+		
+		final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getParentView().getEditor(), getParentView().getEditor().currentRecord(), speaker);
+		getParentView().getEditor().getUndoSupport().postEdit(edit);
 	}
 	
 	public void onPlaySegment(PhonActionEvent pae) {
@@ -325,10 +345,24 @@ public class TimelineRecordTier extends TimelineTier {
 	
 	@Override
 	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
+		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor(), 
+					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE));
+			playAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+			builder.addItem(".", playAct);
+		}
+
+		builder.addSeparator(".", "record_actions");
+		
+		var delAction = new DeleteRecordAction(getParentView().getEditor());
+		delAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		builder.addItem(".", new DeleteRecordAction(getParentView().getEditor()));
+		
+		builder.addSeparator(".", "visiblity");
+
 		JMenu participantMenu = builder.addMenu(".", "Participants");
 		setupSpeakerMenu(new MenuBuilder(participantMenu));
 
-		builder.addSeparator(".", "tiers");
 		JMenu tierMenu = builder.addMenu(".", "Tiers");
 		setupTierMenu(new MenuBuilder(tierMenu));
 	}

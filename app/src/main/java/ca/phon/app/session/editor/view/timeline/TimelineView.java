@@ -46,6 +46,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import org.apache.derby.impl.sql.compile.SetSchemaNode;
+import org.apache.tools.ant.taskdefs.condition.IsSet;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
@@ -57,6 +58,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
@@ -224,8 +227,8 @@ public final class TimelineView extends EditorView {
 		});
 		
 		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
-		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Speakers");
-		speakerVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show speaker visibility menu");
+		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Participants");
+		speakerVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show participant visibility menu");
 		speakerVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
 		speakerVisibilityAct.putValue(DropDownButton.BUTTON_POPUP, speakerMenu);
 		speakerVisibilityAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingUtilities.BOTTOM);
@@ -555,6 +558,54 @@ public final class TimelineView extends EditorView {
 		}
 	}
 	
+	@Override
+	public JMenu getMenu() {
+		JMenu menu = new JMenu();
+		
+		MenuBuilder builder = new MenuBuilder(menu);
+
+		// setup media actions
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionMediaAvailable()) {
+			if(!mediaModel.isSessionAudioAvailable()) {
+				// Add generate audio action
+				GenerateSessionAudioAction genAudioAct = new GenerateSessionAudioAction(getEditor());
+				builder.addItem(".", genAudioAct);
+			}
+		} else {
+			// Add browse for media action
+			builder.addItem(".", new BrowseForMediaAction(getEditor()));
+		}
+		
+		builder.addSeparator(".", "segmentation");
+		
+		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
+		if(getEditor().getExtension(SegmentationHandler.class) != null) {
+			segmentationAction.putValue(PhonUIAction.NAME, "Stop Segmentation");
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+		} else {
+			segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		}
+		builder.addItem(".", segmentationAction);
+		
+		if(mediaModel.isSessionAudioAvailable()) {
+			builder.addSeparator(".", "waveform_actions");
+			wavTier.setupContextMenu(null, builder);
+		}
+
+		builder.addSeparator(".", "record_actions");
+		
+		recordGrid.setupContextMenu(null, builder);
+		
+		builder.addSeparator(".", "zoom");
+		
+		builder.addItem(".", new ZoomAction(this, -1));
+		builder.addItem(".", new ZoomAction(this, 1));
+		
+		return menu;
+	}
+
 	private void showContextMenu(MouseEvent me) {
 		JPopupMenu contextMenu = new JPopupMenu();
 		
@@ -578,27 +629,14 @@ public final class TimelineView extends EditorView {
 	}
 
 	@Override
-	public JMenu getMenu() {
-		JMenu menu = new JMenu();
-		
-		MenuBuilder builder = new MenuBuilder(menu);
-		recordGrid.setupContextMenu(null, builder);
-		
-		builder.addSeparator(".", "zoom");
-		
-		builder.addItem(".", new ZoomAction(this, -1));
-		builder.addItem(".", new ZoomAction(this, 1));
-		
-		return menu;
-	}
-	
-	@Override
 	public void onClose() {
 		super.onClose();
 		
+		/* XXX Fix this
 		deregisterEditorEvents();
 		wavTier.onClose();
 		recordGrid.onClose();
+		*/
 	}
 	
 	private class PlaybackMediaListener extends MediaPlayerEventAdapter {

@@ -4,6 +4,7 @@ package ca.phon.app.session.editor.view.timeline;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 
@@ -15,6 +16,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 
 public class TimelineWaveformTier extends TimelineTier  {
 
@@ -56,6 +59,19 @@ public class TimelineWaveformTier extends TimelineTier  {
 	
 	private void setupEditorEvents() {
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+	}
+	
+	public void toggleVisible() {
+		setVisible(!isVisible());
+	}
+	
+	@Override
+	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
+		final PhonUIAction toggleVisiblityAct = new PhonUIAction(this, "toggleVisible");
+		toggleVisiblityAct.putValue(PhonUIAction.NAME, 
+				(isVisible() ? "Hide waveform tier" : "Show waveform tier"));
+		toggleVisiblityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle waveform visibility");
+		builder.addItem(".", toggleVisiblityAct);
 	}
 	
 	@RunOnEDT
