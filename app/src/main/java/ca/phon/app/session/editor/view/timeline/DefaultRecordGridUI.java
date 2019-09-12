@@ -275,7 +275,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			Record r = session.getRecord(rIdx);
 			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
 				paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit());
-				paintSegment(g2, -1, recordGrid.getRightRecordSplit());
+				paintSegment(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit());
 				
 				continue;
 			}
@@ -347,8 +347,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			
 			Icon recordIcon = null;
 			Color recordLblColor = Color.lightGray;
-							
-			if(recordGrid.getCurrentRecord() == r) {
+			
+			if(recordGrid.getCurrentRecordIndex() == recordIndex) {
 				g2.setColor(Color.BLUE);
 				g2.draw(roundedRect);
 				
@@ -396,14 +396,21 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
 			}
 			
-			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
-			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
-					(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
-	
-			if(warnings != null) {
-				// add warning to UI
-				messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
-						lblRect.getMaxX(), lblRect.getMaxY()));
+			// split mode record
+			if(recordIndex >= 0) {	
+				Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
+				recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
+						(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
+		
+				if(warnings != null) {
+					// add warning to UI
+					messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
+							lblRect.getMaxX(), lblRect.getMaxY()));
+				}
+			} else {
+				int recordNum = Math.abs(recordIndex);
+				recordIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+				paintRecordNumberLabel(g2, recordNum-1, recordIcon, recordLblColor, segmentRect);
 			}
 		}
 		return segmentRect;
@@ -471,7 +478,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				|| "tierCount".equals(e.getPropertyName())
 				|| "tierInsets".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
-		} else if("currentRecord".equals(e.getPropertyName())) {
+		} else if("currentRecordIndex".equals(e.getPropertyName())) {
 			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 	};

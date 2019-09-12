@@ -29,7 +29,7 @@ public class RecordGrid extends TimeComponent {
 	
 	private Set<String> tierSet = new LinkedHashSet<>();
 	
-	private Record currentRecord = null;
+	private int currentRecordIndex = -1;
 	
 	private Insets tierInsets = new Insets(2, 2, 2, 2);
 	
@@ -125,14 +125,26 @@ public class RecordGrid extends TimeComponent {
 		return Collections.unmodifiableList(new ArrayList<>(tierSet));
 	}
 	
-	public Record getCurrentRecord() {
-		return this.currentRecord;
+	public int getCurrentRecordIndex() {
+		return this.currentRecordIndex;
 	}
 	
-	public void setCurrentRecord(Record record) {
-		var oldVal = this.currentRecord;
-		this.currentRecord = record;
-		super.firePropertyChange("currentRecord", oldVal, record);
+	public void setCurrentRecordIndex(int recordIndex) {
+		var oldVal = this.currentRecordIndex;
+		this.currentRecordIndex = recordIndex;
+		super.firePropertyChange("currentRecordIndex", oldVal, recordIndex);
+	}
+	
+	public Record getCurrentRecord() {
+		return (this.currentRecordIndex >= 0 && this.currentRecordIndex < session.getRecordCount() ? 
+				session.getRecord(currentRecordIndex) : null);
+	}
+	
+	public void setCurrentRecord(Record r) {
+		int rIdx = session.getRecordPosition(r);
+		if(rIdx < 0)
+			throw new IllegalArgumentException("Record not part of session");
+		setCurrentRecordIndex(rIdx);
 	}
 	
 	public boolean isSplitMode() {
