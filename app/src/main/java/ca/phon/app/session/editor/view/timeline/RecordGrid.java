@@ -16,6 +16,7 @@ import javax.swing.plaf.ComponentUI;
 
 import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -35,6 +36,18 @@ public class RecordGrid extends TimeComponent {
 	private final List<RecordGridMouseListener> listeners = Collections.synchronizedList(new ArrayList<>());
 	
 	private final static String uiClassId = "RecordGridUI";
+	
+	/* 
+	 * Split mode.
+	 * 
+	 * During split mode, the current record will be replaced with the
+	 * given left/right records
+	 */
+	private boolean splitMode = false;
+	
+	private Record leftRecordSplit = null;
+	
+	private Record rightRecordSplit = null;
 	
 	public RecordGrid(Session session) {
 		this(new TimeUIModel(), session);
@@ -122,6 +135,51 @@ public class RecordGrid extends TimeComponent {
 		super.firePropertyChange("currentRecord", oldVal, record);
 	}
 	
+	public boolean isSplitMode() {
+		return this.splitMode;
+	}
+	
+	public void setSplitMode(boolean splitMode) {
+		var oldVal = this.splitMode;
+		this.splitMode = splitMode;
+		firePropertyChange("splitMode", oldVal, splitMode);
+	}
+	
+	public void toggleSplitMode() {
+		setSplitMode(!this.splitMode);
+	}
+
+	/**
+	 * Setup split mode - only fires a single property change event
+	 * @param leftRecord
+	 * @param rightRecord
+	 */
+	public void beginSplitMode(Record leftRecord, Record rightRecord) {
+		this.leftRecordSplit = leftRecord;
+		this.rightRecordSplit = rightRecord;
+		setSplitMode(true);
+	}
+	
+	public Record getLeftRecordSplit() {
+		return this.leftRecordSplit;
+	}
+	
+	public void setLeftRecordSplit(Record record) {
+		var oldVal = this.leftRecordSplit;
+		this.leftRecordSplit = record;
+		firePropertyChange("leftRecordSplit", oldVal, record);
+	}
+	
+	public Record getRightRecordSplit() {
+		return this.rightRecordSplit;
+	}
+	
+	public void setRightRecordSplit(Record record) {
+		var oldVal = this.rightRecordSplit;
+		this.rightRecordSplit = record;
+		firePropertyChange("rightRecordSplit", oldVal, record);
+	}
+	
 	public void addRecordGridMouseListener(RecordGridMouseListener listener) {
 		listeners.add(listener);
 	}
@@ -186,6 +244,12 @@ public class RecordGrid extends TimeComponent {
 		return getUI().getPreferredSize(this);
 	}
 	
+	
+	
+	/**
+	 * 'Ghost' markers are markers which are only visible
+	 * when the mouse hovers over them.
+	 */
 	public static class GhostMarker extends TimeUIModel.Marker {
 
 		private boolean isStart = false;

@@ -33,6 +33,12 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 	public DeleteRecordEdit(SessionEditor editor) {
 		super(editor);
 	}
+	
+	public DeleteRecordEdit(SessionEditor editor, int recordIndex) {
+		super(editor);
+		
+		this.recordIndex = recordIndex;
+	}
 
 	@Override
 	public void undo() {
@@ -50,11 +56,11 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 	public void doIt() {
 		final SessionEditor editor = getEditor();
 
-//		if(editor.getDataModel().getRecordCount() > 1) {
+		if(recordIndex < 0) {
 			recordIndex = editor.getCurrentRecordIndex();
-			deletedRecord = editor.currentRecord();
-			editor.getSession().removeRecord(deletedRecord);
-//		}
+		}
+		deletedRecord = editor.getSession().getRecord(recordIndex);
+		editor.getSession().removeRecord(deletedRecord);
 
 		queueEvent(EditorEventType.RECORD_DELETED_EVT, getSource(), deletedRecord);
 	}

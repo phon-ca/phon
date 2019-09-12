@@ -273,6 +273,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		messageTree = RTree.create();
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
+			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
+				paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit());
+				paintSegment(g2, -1, recordGrid.getRightRecordSplit());
+				
+				continue;
+			}
+			
 			Rectangle2D segRect = paintSegment(g2, rIdx, r);
 			
 			recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 

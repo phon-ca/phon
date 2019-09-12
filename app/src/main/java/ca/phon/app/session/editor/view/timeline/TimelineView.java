@@ -189,6 +189,15 @@ public final class TimelineView extends EditorView {
 		add(toolbar, BorderLayout.NORTH);
 		
 		add(scroller, BorderLayout.CENTER);
+		
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionMediaAvailable()) {
+			MediaPlayerEditorView mediaPlayerView = 
+					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
+				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMediaListener);
+			}
+		}
 	}
 	
 	public TimelineWaveformTier getWaveformTier() {
@@ -384,15 +393,6 @@ public final class TimelineView extends EditorView {
 		}
 		
 		timeModel.setEndTime(endTime);
-		
-	
-		if(mediaModel.isSessionMediaAvailable()) {
-			MediaPlayerEditorView mediaPlayerView = 
-					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
-				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMediaListener);
-			}
-		}
 	}
 	
 	private void loadSessionAudio() {
@@ -465,6 +465,14 @@ public final class TimelineView extends EditorView {
 	@RunOnEDT
 	public void onMediaChanged(EditorEvent ee) {
 		update();
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionMediaAvailable()) {
+			MediaPlayerEditorView mediaPlayerView = 
+					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
+				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMediaListener);
+			}
+		}
 	}
 	
 	@RunOnEDT
@@ -571,11 +579,17 @@ public final class TimelineView extends EditorView {
 				// Add generate audio action
 				GenerateSessionAudioAction genAudioAct = new GenerateSessionAudioAction(getEditor());
 				builder.addItem(".", genAudioAct);
+			} else {
+				wavTier.setupContextMenu(null, builder);
 			}
 		} else {
 			// Add browse for media action
 			builder.addItem(".", new BrowseForMediaAction(getEditor()));
 		}
+		
+		builder.addSeparator(".", "record_grid");
+		
+		recordGrid.setupContextMenu(null, builder);
 		
 		builder.addSeparator(".", "segmentation");
 		
@@ -589,14 +603,13 @@ public final class TimelineView extends EditorView {
 		}
 		builder.addItem(".", segmentationAction);
 		
-		if(mediaModel.isSessionAudioAvailable()) {
-			builder.addSeparator(".", "waveform_actions");
-			wavTier.setupContextMenu(null, builder);
-		}
+		builder.addSeparator(".", "visiblity");
 
-		builder.addSeparator(".", "record_actions");
-		
-		recordGrid.setupContextMenu(null, builder);
+		JMenu participantMenu = builder.addMenu(".", "Participants");
+		recordGrid.setupSpeakerMenu(new MenuBuilder(participantMenu));
+
+		JMenu tierMenu = builder.addMenu(".", "Tiers");
+		recordGrid.setupTierMenu(new MenuBuilder(tierMenu));
 		
 		builder.addSeparator(".", "zoom");
 		
@@ -611,9 +624,40 @@ public final class TimelineView extends EditorView {
 		
 		MenuBuilder builder = new MenuBuilder(contextMenu);
 		
-		if(wavTier.isVisible())
+		if(me.getComponent() == recordGrid.getRecordGrid()) {
+			recordGrid.setupContextMenu(me, builder);
+			builder.addSeparator(".", "wav_actions");
 			wavTier.setupContextMenu(me, builder);
-		recordGrid.setupContextMenu(me, builder);
+		} else {
+			wavTier.setupContextMenu(me, builder);
+			builder.addSeparator(".", "record_actions");
+			recordGrid.setupContextMenu(me, builder);
+		}
+		
+		builder.addSeparator(".", "segmentation");
+		
+		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
+		if(getEditor().getExtension(SegmentationHandler.class) != null) {
+			segmentationAction.putValue(PhonUIAction.NAME, "Stop Segmentation");
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+		} else {
+			segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		}
+		builder.addItem(".", segmentationAction);
+		
+		builder.addSeparator(".", "visiblity");
+
+		JMenu participantMenu = builder.addMenu(".", "Participants");
+		recordGrid.setupSpeakerMenu(new MenuBuilder(participantMenu));
+
+		JMenu tierMenu = builder.addMenu(".", "Tiers");
+		recordGrid.setupTierMenu(new MenuBuilder(tierMenu));
+		
+		builder.addSeparator(".", "zoom");
+		
+		builder.addItem(".", new ZoomAction(this, -1));
+		builder.addItem(".", new ZoomAction(this, 1));
 		
 		contextMenu.show(me.getComponent(), me.getX(), me.getY());
 	}
@@ -647,7 +691,7 @@ public final class TimelineView extends EditorView {
 		
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
-			if(getEditor().getExtension(SegmentationHandler.class) == null) {
+			if(playbackMarker == null && getEditor().getExtension(SegmentationHandler.class) == null) {
 				float currentTime = mediaPlayer.status().time() / 1000.0f;
 				
 				playbackMarker = timeModel.addMarker(currentTime, Color.green);
@@ -664,13 +708,14 @@ public final class TimelineView extends EditorView {
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			timeModel.removeMarker(playbackMarker);
+			playbackMarker = null;
 			
 			if(playbackMarkerTask != null) {
 				playbackMarkerTask.cancel();
 				playbackMarkerTask = null;
 			}
 		}
-
+		
 		@Override
 		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
 			// sync time

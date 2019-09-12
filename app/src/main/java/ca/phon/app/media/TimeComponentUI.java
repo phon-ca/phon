@@ -286,7 +286,15 @@ public class TimeComponentUI extends ComponentUI {
 						timeComp.setCursor(Cursor.getDefaultCursor());
 					}
 				}
-			}		
+			}
+			
+			for(Marker marker:timeComp.getTimeModel().getMarkers()) {
+				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
+
+				if(p.x >= x - 1 && p.x <= x + 1) {
+					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
+				}
+			}
 		}
 		
 	}

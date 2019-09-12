@@ -32,6 +32,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuEvent;
 
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerMessage;
 
@@ -47,24 +48,30 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.undo.DeleteRecordEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
+import ca.phon.app.session.editor.view.timeline.TimelineRecordTier.SplitMarker;
+import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.Tuple;
 
 public class TimelineRecordTier extends TimelineTier {
 	
@@ -75,6 +82,10 @@ public class TimelineRecordTier extends TimelineTier {
 	private Map<String, Boolean> tierVisibility = new HashMap<>();
 	
 	private TimeUIModel.Interval currentRecordInterval = null;
+	
+	private int splitGroupIdx = -1;
+	
+	private SplitMarker splitMarker = null;
 	
 	public TimelineRecordTier(TimelineView parent) {
 		super(parent);
@@ -108,6 +119,10 @@ public class TimelineRecordTier extends TimelineTier {
 		return this.recordGrid;
 	}
 	
+	public Interval currentRecordInterval() {
+		return this.currentRecordInterval;
+	}
+	
 	private void setupRecordGridActions() {
 		final InputMap inputMap = recordGrid.getInputMap();
 		final ActionMap actionMap = recordGrid.getActionMap();
@@ -132,12 +147,43 @@ public class TimelineRecordTier extends TimelineTier {
 			inputMap.put(ks, id);
 		}
 		
+		// split record
+		final String splitRecordId = "split_record";
+		final SplitRecordAction splitRecordAct = new SplitRecordAction(getParentView());
+		final KeyStroke splitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, 0);
+		inputMap.put(splitRecordKs, splitRecordId);
+		actionMap.put(splitRecordId, splitRecordAct);
+		
+		final String endSplitId = "end_split_record";
+		final PhonUIAction endSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", false);
+		final KeyStroke endSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		inputMap.put(endSplitRecordKs, endSplitId);
+		actionMap.put(endSplitId, endSplitRecordAct);
+		
+		final String acceptSplitId = "accept_split_record";
+		final PhonUIAction acceptSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", true);
+		final KeyStroke acceptSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		inputMap.put(acceptSplitRecordKs, acceptSplitId);
+		actionMap.put(acceptSplitId, acceptSplitRecordAct);
+		
+		// modify record split
+		final String splitAtGroupId = "split_record_at_group_";
+		for(int i = 0; i < 10; i++) {
+			final PhonUIAction splitRecordAtGrpAct = new PhonUIAction(this, "onSplitRecordOnGroup", i);
+			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0);
+			inputMap.put(ks, splitAtGroupId + i);
+			actionMap.put(splitAtGroupId + i, splitRecordAtGrpAct);
+		}
+		
 		recordGrid.setInputMap(WHEN_FOCUSED, inputMap);
 		recordGrid.setActionMap(actionMap);
 	}
 	
 	public void onChangeSpeakerByIndex(Integer speakerIdx) {
-		if(speakerIdx != 0 && (speakerIdx - 1) >= recordGrid.getSpeakers().size()) return;
+		if(speakerIdx != 0 && (speakerIdx - 1) >= recordGrid.getSpeakers().size()) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
 		var speaker = (speakerIdx == 0 ? Participant.UNKNOWN : recordGrid.getSpeakers().get(speakerIdx-1));
 		
 		final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getParentView().getEditor(), getParentView().getEditor().currentRecord(), speaker);
@@ -231,6 +277,9 @@ public class TimelineRecordTier extends TimelineTier {
 	/* Editor events */
 	@RunOnEDT
 	public void onRecordChange(EditorEvent evt) {
+		if(recordGrid.isSplitMode()) {
+			endSplitMode(false);
+		}
 		Record r = (Record)evt.getEventData();
 		setupRecord(r);
 		
@@ -341,30 +390,252 @@ public class TimelineRecordTier extends TimelineTier {
 		);
 	}
 	
+	public void beginSplitMode() {
+		if(this.splitMarker != null) {
+			endSplitMode(false);
+		}
+		
+		// reset split group idx
+		splitGroupIdx = -1;
+		
+		final TimelineView timelineView = getParentView();
+		final TimeUIModel timeModel = timelineView.getTimeModel();
+		
+		final Record record = timelineView.getEditor().currentRecord();
+		if(record == null) return;
+		
+		final MediaSegment segment = record.getSegment().getGroup(0);
+		if(segment == null) return;
+		
+		float segLength = segment.getEndValue() - segment.getStartValue();
+		if(segLength <= 0.0f) return;
+		
+		float middleOfRecord = (float)TimeUIModel.roundTime((segment.getEndValue() - (segLength / 2.0f)) / 1000.0f);
+		SplitMarker splitMarker = new SplitMarker(currentRecordInterval(), middleOfRecord);
+		
+		splitMarker.addPropertyChangeListener("time", (e) -> {
+			updateSplitRecords();
+		});
+		
+		timeModel.addMarker(splitMarker);
+		
+		setSplitMarker(splitMarker);
+		var splitRecords = getRecordSplit(middleOfRecord);
+		
+		getRecordGrid().beginSplitMode(splitRecords.getObj1(), splitRecords.getObj2());
+		getRecordGrid().getUI().repaintInterval(currentRecordInterval);
+	}
 	
+	public void endSplitMode(boolean acceptSplit) {
+		if(splitMarker != null) {
+			getTimeModel().removeMarker(splitMarker);
+			this.splitMarker = null;
+		}
+		
+		getRecordGrid().setSplitMode(false);
+		if(acceptSplit
+				&& getRecordGrid().getLeftRecordSplit() != null
+				&& getRecordGrid().getRightRecordSplit() != null) {
+			getParentView().getEditor().getUndoSupport().beginUpdate();
+			
+			int recordIdx = getParentView().getEditor().getCurrentRecordIndex();
+			
+			DeleteRecordEdit delRecord = new DeleteRecordEdit(getParentView().getEditor());
+			getParentView().getEditor().getUndoSupport().postEdit(delRecord);
+			
+			AddRecordEdit rightRecordEdit = new AddRecordEdit(getParentView().getEditor(),
+					getRecordGrid().getRightRecordSplit(), recordIdx);
+			getParentView().getEditor().getUndoSupport().postEdit(rightRecordEdit);
+			
+			AddRecordEdit leftRecordEdit = new AddRecordEdit(getParentView().getEditor(),
+					getRecordGrid().getLeftRecordSplit(), recordIdx);
+			getParentView().getEditor().getUndoSupport().postEdit(leftRecordEdit);
+			
+			getParentView().getEditor().getUndoSupport().endUpdate();
+		}
+		if(currentRecordInterval != null)
+			getRecordGrid().getUI().repaintInterval(currentRecordInterval);
+	}
+	
+	public void onEndSplitRecord(PhonActionEvent pae) {
+		endSplitMode((boolean)pae.getData());
+	}
+	
+	public void onSplitRecordOnGroup(PhonActionEvent pae) {
+		this.splitGroupIdx = (Integer)pae.getData();
+		updateSplitRecords();
+	}
+	
+	private void updateSplitRecords() {
+		if(splitMarker == null) return;
+		
+		var recordSplit = getRecordSplit(splitMarker.getTime());
+		getRecordGrid().setLeftRecordSplit(recordSplit.getObj1());
+		getRecordGrid().setRightRecordSplit(recordSplit.getObj2());
+		
+		getRecordGrid().getUI().repaintInterval(currentRecordInterval);
+	}
+	
+	private Tuple<Record, Record> getRecordSplit(float splitTime) {
+		SessionFactory factory = SessionFactory.newFactory();
+		
+		Record recordToSplit = getParentView().getEditor().currentRecord();
+		MediaSegment seg = recordToSplit.getSegment().getGroup(0);
+				
+		Record leftRecord = factory.cloneRecord(recordToSplit);
+		leftRecord.getSegment().getGroup(0).setEndValue(splitTime * 1000.0f);
+		
+		Record rightRecord = factory.createRecord();
+		rightRecord.addGroup();
+		MediaSegment rightSeg = factory.createMediaSegment();
+		rightSeg.setStartValue((splitTime * 1000.0f) + 1);
+		rightSeg.setEndValue(seg.getEndValue());
+		rightRecord.getSegment().setGroup(0, rightSeg);
+		
+		for(String tierName:leftRecord.getExtraTierNames()) {
+			Tier<?> tier = leftRecord.getTier(tierName);
+			rightRecord.putTier(factory.createTier(tierName, tier.getDeclaredType(), tier.isGrouped()));
+		}
+		
+		if(splitGroupIdx >= 0) {
+			// special case - reverse records
+			if(splitGroupIdx == 0) {
+				Record t = leftRecord;
+				leftRecord = rightRecord;
+				rightRecord = t;
+				
+				MediaSegment ls = leftRecord.getSegment().getGroup(0);
+				MediaSegment rs = rightRecord.getSegment().getGroup(0);
+				
+				leftRecord.getSegment().setGroup(0, rs);
+				rightRecord.getSegment().setGroup(0, ls);
+			} else if(splitGroupIdx <= leftRecord.numberOfGroups()) {
+				MediaSegment ls = leftRecord.getSegment().getGroup(0);
+				MediaSegment rs = rightRecord.getSegment().getGroup(0);
+				
+				rightRecord = factory.cloneRecord(recordToSplit);
+				
+				for(int i = leftRecord.numberOfGroups() - 1; i >= splitGroupIdx; i--) {
+					leftRecord.removeGroup(i);
+				}
+				
+				for(int i = splitGroupIdx-1; i >= 0; i--) {
+					rightRecord.removeGroup(i);
+				}
+				
+				leftRecord.getSegment().setGroup(0, ls);
+				rightRecord.getSegment().setGroup(0, rs);
+			}
+		}
+		
+		leftRecord.setSpeaker(recordToSplit.getSpeaker());
+		rightRecord.setSpeaker(recordToSplit.getSpeaker());
+		
+		return new Tuple<>(leftRecord, rightRecord);
+	}
+	
+	public SplitMarker getSplitMarker() {
+		return this.splitMarker;
+	}
+	
+	public void setSplitMarker(SplitMarker splitMarker) {
+		this.splitMarker = splitMarker;
+	}
 	
 	@Override
 	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
-		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor(), 
-					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE));
-			playAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-			builder.addItem(".", playAct);
-		}
+		setupSplitModeMenu(me, builder);
 
-		builder.addSeparator(".", "record_actions");
-		
 		var delAction = new DeleteRecordAction(getParentView().getEditor());
-		delAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		if(me != null)
+			delAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		builder.addItem(".", new DeleteRecordAction(getParentView().getEditor()));
 		
-		builder.addSeparator(".", "visiblity");
-
-		JMenu participantMenu = builder.addMenu(".", "Participants");
-		setupSpeakerMenu(new MenuBuilder(participantMenu));
-
-		JMenu tierMenu = builder.addMenu(".", "Tiers");
-		setupTierMenu(new MenuBuilder(tierMenu));
+		// change speaker menu
+		JMenu changeSpeakerMenu = builder.addMenu(".", "Change participant");
+		int speakerNum = 1;
+		for(Participant speaker:recordGrid.getSpeakers()) {
+			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + speakerNum, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+			if(speaker == Participant.UNKNOWN) {
+				ks = KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+				changeSpeakerMenu.addSeparator();
+			}
+			
+			final PhonUIAction onChangeSpeakerByIndexAct = new PhonUIAction(this, "onChangeSpeakerByIndex", speakerNum);
+			onChangeSpeakerByIndexAct.putValue(PhonUIAction.NAME, speaker.toString());
+			onChangeSpeakerByIndexAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Change record speaker to " + speaker.toString());
+			if(me != null)
+				onChangeSpeakerByIndexAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
+			if(getParentView().getEditor().currentRecord().getSpeaker() == speaker) {
+				onChangeSpeakerByIndexAct.putValue(PhonUIAction.SELECTED_KEY, true);
+			} else {
+				onChangeSpeakerByIndexAct.putValue(PhonUIAction.SELECTED_KEY, false);
+			}
+			
+			JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(onChangeSpeakerByIndexAct);
+			changeSpeakerMenu.add(menuItem);
+			
+			++speakerNum;
+		}
+		
+		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			builder.addSeparator(".", "play_action");
+			
+			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor(), 
+					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE));
+			if(me != null)
+				playAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+			builder.addItem(".", playAct);
+		}
+	}
+	
+	private void setupSplitModeMenu(MouseEvent me, MenuBuilder builder) {
+		if(splitMarker != null) {
+			final PhonUIAction acceptSplitAct = new PhonUIAction(this, "onEndSplitRecord", true);
+			acceptSplitAct.putValue(PhonUIAction.NAME, "Accept record split");
+			acceptSplitAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+			if(me != null)
+				acceptSplitAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+			builder.addItem(".", acceptSplitAct);
+			
+			final PhonUIAction endSplitModeAct = new PhonUIAction(this, "onEndSplitRecord", false);
+			endSplitModeAct.putValue(PhonUIAction.NAME, "Exit split record");
+			endSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exit split record mode without accepting split");
+			if(me != null)
+				endSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+			builder.addItem(".", endSplitModeAct);
+			
+			// split after group actions
+			Record r = getParentView().getEditor().currentRecord();
+			if(r != null) {
+				JMenu splitMenu = builder.addMenu(".", "Split data after group");
+				for(int i = 0; i <= r.numberOfGroups(); i++) {
+					final PhonUIAction splitAfterGroupAct = new PhonUIAction(this, "onSplitRecordOnGroup", i);
+					if(i == 0) {
+						splitAfterGroupAct.putValue(PhonUIAction.NAME, "All data to new record");
+					} else {
+						splitAfterGroupAct.putValue(PhonUIAction.NAME, "Group " + i);
+					}
+					if(me != null)
+						splitAfterGroupAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0));
+					if(splitGroupIdx >= 0) {
+						splitAfterGroupAct.putValue(PhonUIAction.SELECTED_KEY, i == splitGroupIdx);
+					} else {
+						splitAfterGroupAct.putValue(PhonUIAction.SELECTED_KEY, i >= r.numberOfGroups());
+					}
+					splitMenu.add(new JCheckBoxMenuItem(splitAfterGroupAct));
+				}
+			}
+			
+			builder.addSeparator(".", "split_actions");
+		} else {
+			final PhonUIAction enterSplitModeAct = new PhonUIAction(this, "beginSplitMode");
+			enterSplitModeAct.putValue(PhonUIAction.NAME, "Split record");
+			enterSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION,  "Enter split record mode for current record");
+			if(me != null)
+				enterSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, 0));
+			builder.addItem(".", enterSplitModeAct);
+		}
 	}
 
 	public void setupSpeakerMenu(MenuBuilder builder) {
@@ -425,6 +696,9 @@ public class TimelineRecordTier extends TimelineTier {
 			final SessionFactory factory = SessionFactory.newFactory();
 			
 			if(evt.getPropertyName().equals("valueAdjusting")) {
+				// exit split mode if active
+				endSplitMode(false);
+				
 				if((boolean)evt.getNewValue()) {
 					isFirstChange = true;
 					getParentView().getEditor().getUndoSupport().beginUpdate();
@@ -530,4 +804,32 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 		
 	};
+	
+	/**
+	 * The SpligMarker is used when splitting the
+	 * current record 
+	 *
+	 */
+	public static class SplitMarker extends TimeUIModel.Marker {
+
+		private Interval parentInterval;
+		
+		public SplitMarker(Interval parentInterval, float startTime) {
+			super(startTime);
+			setColor(Color.black);
+			setDraggable(true);
+			
+			this.parentInterval = parentInterval;
+		}
+
+		@Override
+		public void setTime(float time) {
+			if(time <= parentInterval.getStartMarker().getTime()
+					|| time >= parentInterval.getEndMarker().getTime())
+				return;
+			super.setTime(time);
+		}
+		
+	}
+	
 }
