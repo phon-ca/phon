@@ -71,7 +71,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="7ca6b2ef" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2019-08-30T12:43:31.316-02:30" name="Data Tiers" uuid="0793aa17-1abb-449e-a09e-04999bac6a7b">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2019-09-12T15:55:36.051-02:30" name="Data Tiers" uuid="97fd8971-d3c4-40ae-9547-c22041d6f1a4">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedWord.patternFilter.filter">AA+</param>
@@ -92,7 +92,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="b7c53c9330914507" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="28aa0bf6">
+            <graph id="3612e3f1">
                 <node id="40d46ee05cb1462c" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -150,7 +150,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="7e7f6d0b48264831" name="Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="7c336e2b">
+            <graph id="419d9e5d">
                 <node id="2564dd40d5ce4021" name="project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -691,7 +691,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4bb42cb62a99463c" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="77a91796">
+                    <graph id="7c14c886">
                         <node id="4579a77279ca4a66" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -819,7 +819,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="e8ae4a39fdd74375" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="42ce3e8e">
+                            <graph id="402ca24d">
                                 <node id="7a99452f69514e84" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -888,7 +888,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="e9d3beb84fbe42d4" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="1bc03ed">
+                            <graph id="1e36224e">
                                 <node id="fda3b374aa2e4b57" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1421,7 +1421,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="cd529cc9bedf4ecc" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="e21ead9">
+                                    <graph id="5fc4879f">
                                         <node id="9cd592ba93e14241" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1536,7 +1536,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="d0e50cd137aa45c3" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="1b8d01e2">
+                                            <graph id="746119ef">
                                                 <node id="6991d3ca2b8e4413" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1599,7 +1599,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c243d0cc85994d01" name="If Speaker has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="4c7e96d5">
+                                            <graph id="a5ab3a3">
                                                 <node id="7481fcacc2964d6d" name="Integer#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2059,7 +2059,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="6cca2ae5" name="For Each Row" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                                                    <graph id="57f53bf0">
+                                                    <graph id="4e1cb4dd">
                                                         <node id="36e48cb9" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2184,7 +2184,7 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="4541ca3a0e544ebd" name="Get Row Data" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="288eb1a8">
+                                                            <graph id="32a35380">
                                                                 <node id="3bd8dba5cdbd4ce8" name="row" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2363,7 +2363,7 @@ function run(context) {
                                                             </extensions>
                                                         </ogcn:macro>
                                                         <ogcn:macro id="93e56a1c9e0d4fa8" name="WAP" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="57802c29">
+                                                            <graph id="ebed7e3">
                                                                 <node id="429f5069103f4b19" name="Word" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -3187,7 +3187,7 @@ function run(context) {
  * https://github.com/phon-ca/phon/issues/55
  */
 function isDistored(targetEle, actualEle) {
-	var testExpr = targetEle.basePhone + ":diacritic(\"\u033e\")";
+	var testExpr = targetEle.basePhone + ":diacritic(\"[\u033e\u032e\u02e1\u032a]\")";
 	var transcript = (new IPATranscriptBuilder()).append(actualEle).toIPATranscript();
 	return transcript.matches(testExpr);
 }
@@ -3468,7 +3468,7 @@ function run(context) {
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="394b481a" name="Setup Section Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="5484ab9c">
+                                                            <graph id="6d972e4">
                                                                 <node id="584303a5" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -4046,7 +4046,7 @@ function sumcounts(total, subtotal) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1866f2d6" name="Print Segmental Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="49446934">
+                                                    <graph id="3c80ad3a">
                                                         <node id="1c103704" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4060,7 +4060,6 @@ function sumcounts(total, subtotal) {
                                                         <node id="78e6ee5a" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="contextKey"/>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                                                         <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
                                                                     </oga:property>
@@ -4286,7 +4285,7 @@ function run(context) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="42e3777a" name="Print Segmental Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="469195b3">
+                                                    <graph id="123d908b">
                                                         <node id="11f459df" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4379,7 +4378,7 @@ function run(context) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="24ad622f" name="Print Prosodic Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5d4e4b8d">
+                                                    <graph id="1f935c7f">
                                                         <node id="15777049" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4537,7 +4536,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="5c8d81fa" name="Print Prosodic CGV Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="13e1ad57">
+                                                    <graph id="49ba10dc">
                                                         <node id="69631dde" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4630,7 +4629,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1d24b4ef" name="Print Prosodic Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="26e12f2e">
+                                                    <graph id="77a8862b">
                                                         <node id="19ee6a60" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4723,7 +4722,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="a65548d" name="Print Word Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="2fe9db3">
+                                                    <graph id="2a82c1e7">
                                                         <node id="4c9b63df" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4862,7 +4861,7 @@ function addRow(table, category, total, correct, incorrect) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="513f7b3" name="Print Word Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6ce2f915">
+                                                    <graph id="2407368f">
                                                         <node id="6932ecdf" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -5377,7 +5376,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="78d3bb1a" name="Print Segmental Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="55b29f9">
+                                    <graph id="195565b5">
                                         <node id="c493495" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5616,7 +5615,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="1aa05ac1" name="Print Segmental Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="1505d86b">
+                                    <graph id="74735987">
                                         <node id="713fbaa8" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5698,7 +5697,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="674ba9c4" name="Print Prosodic Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2aaeddd9">
+                                    <graph id="2553aa6a">
                                         <node id="2e51249" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5856,7 +5855,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3b9b4b3b" name="Print Prosodic CGV Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2e4abbf6">
+                                    <graph id="713fb81e">
                                         <node id="728a95f5" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5950,7 +5949,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="592af60c" name="Print Prosodic Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="1948e28d">
+                                    <graph id="e359c93">
                                         <node id="9c21137" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -6044,7 +6043,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3f52b69f" name="Print Word Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="39515e2d">
+                                    <graph id="3c551abc">
                                         <node id="19bf134d" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -6183,7 +6182,7 @@ function addRow(table, category, total, correct, incorrect) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="20f336d" name="Print Word Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="295b16ef">
+                                    <graph id="2668fa9">
                                         <node id="37ef1fc6" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>

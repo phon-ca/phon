@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
@@ -38,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JToolBar;
+import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
@@ -107,7 +109,7 @@ public final class TimelineView extends EditorView {
 	private DropDownButton tierVisiblityButton;
 	private JPopupMenu tierVisibilityMenu;
 	
-	private JPanel tierPanel;
+	private TierPanel tierPanel;
 	
 	/**
 	 * Default {@link TimeUIModel} which should be
@@ -152,10 +154,10 @@ public final class TimelineView extends EditorView {
 		timeModel.setStartTime(0.0f);
 		timeModel.setEndTime(0.0f);	
 		
-		tierPanel = new JPanel(new GridBagLayout());
+		tierPanel = new TierPanel(new GridBagLayout());
 		JScrollPane scroller = new JScrollPane(tierPanel);
 		
-		// XXX Order here matters - for the purpose of
+		// Order here matters - for the purpose of
 		// editor events the record tier object must be created before the
 		// wav tier
 		recordGrid = new TimelineRecordTier(this);
@@ -813,5 +815,50 @@ public final class TimelineView extends EditorView {
 		
 		
 	};
+	
+	private class TierPanel extends JPanel implements Scrollable {
+		
+		public TierPanel() {
+			super();
+		}
+
+		public TierPanel(boolean isDoubleBuffered) {
+			super(isDoubleBuffered);
+		}
+
+		public TierPanel(LayoutManager layout, boolean isDoubleBuffered) {
+			super(layout, isDoubleBuffered);
+		}
+
+		public TierPanel(LayoutManager layout) {
+			super(layout);
+		}
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			return getPreferredSize();
+		}
+
+		@Override
+		public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 10;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+			return 100;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return false;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
+		
+	}
 	
 }
