@@ -238,7 +238,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				if(focusedView != null) {
 					JMenu focusMenu = focusedView.getMenu();
 					focusMenu.setText(focusedView.getName());
-					getEditor().setCurrentViewMenu(focusMenu);
+					getEditor().setCurrentView(focusedView);
 				}
 			}
 			

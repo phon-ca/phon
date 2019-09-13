@@ -159,6 +159,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	};
 	
 	/** Menu for currently focused view */
+	private EditorView currentView = null;
+	
 	private JMenu currentViewMenu = null;
 
 	/**
@@ -349,15 +351,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		super.setJMenuBar(menuBar);
 	}
 	
-	public void setCurrentViewMenu(JMenu currentViewMenu) {
+	public void setCurrentView(EditorView view) {
 		if(this.currentViewMenu != null) {
-			getJMenuBar().remove(this.currentViewMenu);
+			this.currentViewMenu.setText(view.getName());
 		}
-		this.currentViewMenu = currentViewMenu;
-		if(currentViewMenu != null) {
-			MenuBuilder builder = new MenuBuilder(getJMenuBar());
-			builder.addMenu(".@Session", currentViewMenu);
-		}
+		this.currentView = view;
 	}
 
 	public void setupMenu(JMenuBar menuBar) {
@@ -457,6 +455,31 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		
 		menuBar.add(viewMenu, 3);
 		menuBar.add(sessionMenu, 3);
+		
+		currentViewMenu = new JMenu("");
+		currentViewMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				if(currentView != null) {
+					JMenu viewMenu = currentView.getMenu();
+					currentViewMenu.removeAll();
+					for(var c:viewMenu.getMenuComponents()) {
+						currentViewMenu.add(c);
+					}
+				}
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		});
+//		currentViewMenu.setVisible(false);
+		menuBar.add(currentViewMenu, 4);
 	}
 
 	/**
