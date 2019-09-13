@@ -24,6 +24,12 @@ import groovy.transform.Synchronized;
 
 public class TimeComponentUI extends ComponentUI {
 	
+	/*
+	 * Padding added to left and right of markers (px) to make
+	 * them easier to drag.
+	 */
+	public final static int MARKER_PADDING = 5;
+	
 	private TimeComponent timeComp;
 	
 	private final MarkerMouseListener markerListener = new MarkerMouseListener();
@@ -78,7 +84,7 @@ public class TimeComponentUI extends ComponentUI {
 		var line = new Line2D.Double(x, 0, x, timeComp.getHeight());
 		
 		g2.setStroke(dashed);
-		g2.setColor(Color.darkGray);
+		g2.setColor(marker.getColor());
 		g2.draw(line);
 	}
 	
@@ -211,11 +217,11 @@ public class TimeComponentUI extends ComponentUI {
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 
-				if(p.x >= startX - 1 && p.x <= startX + 1) {
+				if(p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING) {
 					currentlyDraggedInterval = interval;
 					currentlyDraggedMarker = interval.getStartMarker();
 					currentlyDraggedInterval.setValueAdjusting(true);
-				} else if(p.x >= endX - 1 && p.x <= endX + 1) {
+				} else if(p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING) {
 					currentlyDraggedInterval = interval;
 					currentlyDraggedMarker = interval.getEndMarker();
 					currentlyDraggedInterval.setValueAdjusting(true);
@@ -225,7 +231,7 @@ public class TimeComponentUI extends ComponentUI {
 			for(Marker marker:timeComp.getTimeModel().getMarkers()) {
 				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 
-				if(p.x >= x - 1 && p.x <= x + 1) {
+				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
 					currentlyDraggedMarker = marker;
 					currentlyDraggedMarker.setValueAdjusting(true);
 				}
@@ -278,8 +284,8 @@ public class TimeComponentUI extends ComponentUI {
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 
-				if((p.x >= startX - 1 && p.x <= startX + 1) || 
-						(p.x >= endX - 1 && p.x <= endX + 1)) {
+				if((p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING) || 
+						(p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING)) {
 					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 				} else {
 					if(timeComp.getCursor() != Cursor.getDefaultCursor()) {
@@ -291,7 +297,7 @@ public class TimeComponentUI extends ComponentUI {
 			for(Marker marker:timeComp.getTimeModel().getMarkers()) {
 				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 
-				if(p.x >= x - 1 && p.x <= x + 1) {
+				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
 					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 				}
 			}

@@ -288,8 +288,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			// setup 'marker' rectangles 
 			
 			// start marker
-			markerTree = markerTree.add(rIdx + 1, Geometries.rectangle((float)segRect.getX() - 1, (float)segRect.getY(),
-					(float)segRect.getX() + 1, (float)(segRect.getY()+segRect.getHeight())));
+			markerTree = markerTree.add(rIdx + 1, Geometries.rectangle((float)segRect.getX() - MARKER_PADDING, (float)segRect.getY(),
+					(float)segRect.getX() + MARKER_PADDING, (float)(segRect.getY()+segRect.getHeight())));
 			
 			// end marker
 			markerTree = markerTree.add(-(rIdx + 1), Geometries.rectangle((float)segRect.getMaxX() - 1, (float)segRect.getY(),
