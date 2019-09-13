@@ -467,6 +467,9 @@ public final class SegmentationHandler {
 			intervalTimer = new Timer(true);
 			intervalTimer.schedule(intervalTimerTask, 0L, (long)(1/30.0f * 1000.0f));
 			
+			// scroll to current media time
+			timelineView.scrollToTime(mediaView.getPlayer().getTime() / 1000.0f);
+			
 			mediaView.getPlayer().addMediaPlayerListener(mediaTimeListener);
 			if(!mediaView.getPlayer().isPlaying())
 				mediaView.getPlayer().play();
