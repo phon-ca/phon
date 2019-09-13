@@ -281,7 +281,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 			
 			Rectangle2D segRect = paintSegment(g2, rIdx, r);
-			
+//			System.out.println((rIdx+1) + ":" + segRect);
 			recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
 					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
 			

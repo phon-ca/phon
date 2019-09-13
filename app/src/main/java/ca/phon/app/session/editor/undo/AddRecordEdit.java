@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
@@ -89,6 +90,7 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		if(record == null) {
 			final SessionFactory factory = SessionFactory.newFactory();
 			record = factory.createRecord();
+			record.setSpeaker(Participant.UNKNOWN);
 			record.addGroup();
 			final Tier<MediaSegment> segTier = record.getSegment();
 			segTier.setGroup(0, factory.createMediaSegment());
