@@ -80,6 +80,7 @@ import bibliothek.gui.dock.common.event.CControlListener;
 import bibliothek.gui.dock.common.event.CDockableLocationEvent;
 import bibliothek.gui.dock.common.event.CDockableLocationListener;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
+import bibliothek.gui.dock.common.event.CFocusListener;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import bibliothek.gui.dock.common.intern.CDockable;
@@ -107,6 +108,7 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -222,6 +224,25 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			}
 			
 		});
+		
+		dockControl.addFocusListener(new CFocusListener() {
+			
+			@Override
+			public void focusLost(CDockable arg0) {
+				
+			}
+			
+			@Override
+			public void focusGained(CDockable arg0) {
+				EditorView focusedView = getFocusedView();
+				if(focusedView != null) {
+					JMenu focusMenu = focusedView.getMenu();
+					focusMenu.setText(focusedView.getName());
+					getEditor().setCurrentViewMenu(focusMenu);
+				}
+			}
+			
+		});
 
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
@@ -292,6 +313,23 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	@Override
 	public Container getRoot() {
 		return rootArea;
+	}
+	
+	/**
+	 * Return focused view
+	 *
+	 * @return currently focused view or <code>null</code>
+	 */
+	@Override
+	public EditorView getFocusedView() {
+		CDockable focusedDockable = getDockControl().getFocusedCDockable();
+		if(focusedDockable != null) {
+			String viewName = focusedDockable.intern().getTitleText();
+			if(viewName.trim().length() > 0) {
+				return getView(viewName);
+			}
+		}
+		return null;
 	}
 
 	@Override

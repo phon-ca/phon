@@ -104,6 +104,13 @@ public interface EditorViewModel {
 	public void showView(String viewName);
 	
 	/**
+	 * Get currently focused view
+	 * 
+	 * @param focused view or <code>null</code>
+	 */
+	public EditorView getFocusedView();
+	
+	/**
 	 * Get the close action for a view
 	 * 
 	 * @param viewName

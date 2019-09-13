@@ -41,12 +41,14 @@ import org.jdesktop.swingx.JXStatusBar;
 
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.SessionMediaModel;
+import ca.phon.app.session.editor.actions.BrowseForMediaAction;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.ExportAsHTMLAction;
 import ca.phon.app.session.editor.actions.FirstRecordAction;
+import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.MoveRecordBackwardAction;
 import ca.phon.app.session.editor.actions.MoveRecordForwardAction;
@@ -74,6 +76,8 @@ import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -153,6 +157,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 
 	};
+	
+	/** Menu for currently focused view */
+	private JMenu currentViewMenu = null;
 
 	/**
 	 * Toolbar
@@ -341,6 +348,17 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			setupMenu(menuBar);
 		super.setJMenuBar(menuBar);
 	}
+	
+	public void setCurrentViewMenu(JMenu currentViewMenu) {
+		if(this.currentViewMenu != null) {
+			getJMenuBar().remove(this.currentViewMenu);
+		}
+		this.currentViewMenu = currentViewMenu;
+		if(currentViewMenu != null) {
+			MenuBuilder builder = new MenuBuilder(getJMenuBar());
+			builder.addMenu(".@Session", currentViewMenu);
+		}
+	}
 
 	public void setupMenu(JMenuBar menuBar) {
 		// get 'File' menu reference
@@ -378,6 +396,15 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");
+		
+		SessionMediaModel mediaModel = getMediaModel();
+		sessionMenu.add(new BrowseForMediaAction(this));
+		GenerateSessionAudioAction genAudioAct = new GenerateSessionAudioAction(this);
+		JMenuItem genAudioItem = new JMenuItem(genAudioAct);
+		genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
+		sessionMenu.add(genAudioItem);
+		sessionMenu.addSeparator();
+		
 		sessionMenu.add(new NewRecordAction(this));
 		sessionMenu.add(new DuplicateRecordAction(this));
 		sessionMenu.add(new DeleteRecordAction(this));
@@ -427,7 +454,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			final MenuEvent me = new MenuEvent(viewMenu);
 			viewMenuListener.menuSelected(me);
 		}
-
+		
 		menuBar.add(viewMenu, 3);
 		menuBar.add(sessionMenu, 3);
 	}

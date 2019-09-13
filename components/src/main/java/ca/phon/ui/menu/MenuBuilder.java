@@ -89,6 +89,14 @@ public final class MenuBuilder {
 		return addMenu(elem, insertIdx, text);
 	}
 	
+	public void addMenu(String path, JMenu menu) {
+		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
+		final MenuElement elem = deepest.getObj2();
+		int insertIdx = getInsertIndex(elem, deepest.getObj1());
+		
+		addItem(elem, insertIdx, menu);
+	}
+	
 	public JMenu getMenu(String path) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		if(deepest.getObj2() instanceof JMenu) {
