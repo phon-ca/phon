@@ -137,10 +137,10 @@ public class GlobalParameterPanel extends JPanel {
 		mapPanel.setPreferredSize(new Dimension(mapPanel.getPreferredSize().width, 400));
 		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, mapPanel);
 		
-		retainDiacriticsButton = new DropDownButton(dropDownAct);
-		retainDiacriticsButton.setOnlyPopup(true);
-		++gbc.gridx;
-		add(retainDiacriticsButton, gbc);
+//		retainDiacriticsButton = new DropDownButton(dropDownAct);
+//		retainDiacriticsButton.setOnlyPopup(true);
+//		++gbc.gridx;
+//		add(retainDiacriticsButton, gbc);
 		
 		++gbc.gridx;
 		JLabel grpingLbl = new JLabel("Inventory grouping:");
