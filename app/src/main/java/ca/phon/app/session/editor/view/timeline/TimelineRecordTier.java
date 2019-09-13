@@ -772,6 +772,16 @@ public class TimelineRecordTier extends TimelineTier {
 					currentRecordInterval.setValueAdjusting(true);
 				}
 
+				// scroll to mouse position if outside of visible rect
+				Rectangle visibleRect = recordGrid.getVisibleRect();
+				if(me.getX() < visibleRect.getX()) {
+					visibleRect.translate(-10, 0);
+					getParentView().scrollRectToVisible(visibleRect);
+				} else if(me.getX() > visibleRect.getMaxX()) {
+					visibleRect.translate(10, 0);
+					getParentView().scrollRectToVisible(visibleRect);
+				}
+				
 				Participant mouseOverSpeaker = recordGrid.getUI().getSpeakerAtPoint(me.getPoint());
 				if(mouseOverSpeaker != null && mouseOverSpeaker != getParentView().getEditor().currentRecord().getSpeaker()) {
 					// change speakers

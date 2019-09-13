@@ -419,6 +419,10 @@ public final class TimelineView extends EditorView {
 		tierPanel.scrollRectToVisible(rect);
 	}
 	
+	public void scrollRectToVisible(Rectangle rect) {
+		tierPanel.scrollRectToVisible(rect);
+	}
+	
 	/* Editor actions */
 	
 	private final DelegateEditorAction onMediaChangedAct = new DelegateEditorAction(this, "onMediaChanged");
