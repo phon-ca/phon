@@ -24,6 +24,8 @@ import javax.swing.KeyStroke;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Action for playing current segment in media player.
@@ -36,7 +38,7 @@ public class PlaySegmentAction extends MediaPlayerAction {
 	
 	private final static String SHORT_DESC = "Play segment for current record";
 	
-	private final static String ICON = "";
+	private final static String ICON = "actions/media-playback-start";
 	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
@@ -47,6 +49,7 @@ public class PlaySegmentAction extends MediaPlayerAction {
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
+		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
 	}
 
 	@Override

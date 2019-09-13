@@ -270,7 +270,7 @@ public final class TimelineView extends EditorView {
 		final PhonUIAction tierVisibilityAct = new PhonUIAction(this, null);
 		tierVisibilityAct.putValue(PhonUIAction.NAME, "Tiers");
 		tierVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show tier visibility menu");
-		tierVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("blank", IconSize.SMALL));
+		tierVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/record", IconSize.SMALL));
 		tierVisibilityAct.putValue(DropDownButton.BUTTON_POPUP, tierVisibilityMenu);
 		tierVisibilityAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		tierVisibilityAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
@@ -612,9 +612,11 @@ public final class TimelineView extends EditorView {
 		builder.addSeparator(".", "visiblity");
 
 		JMenu participantMenu = builder.addMenu(".", "Participants");
+		participantMenu.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
 		recordGrid.setupSpeakerMenu(new MenuBuilder(participantMenu));
 
 		JMenu tierMenu = builder.addMenu(".", "Tiers");
+		tierMenu.setIcon(IconManager.getInstance().getIcon("misc/record", IconSize.SMALL));
 		recordGrid.setupTierMenu(new MenuBuilder(tierMenu));
 		
 		builder.addSeparator(".", "zoom");
@@ -655,9 +657,11 @@ public final class TimelineView extends EditorView {
 		builder.addSeparator(".", "visiblity");
 
 		JMenu participantMenu = builder.addMenu(".", "Participants");
+		participantMenu.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
 		recordGrid.setupSpeakerMenu(new MenuBuilder(participantMenu));
 
 		JMenu tierMenu = builder.addMenu(".", "Tiers");
+		tierMenu.setIcon(IconManager.getInstance().getIcon("misc/record", IconSize.SMALL));
 		recordGrid.setupTierMenu(new MenuBuilder(tierMenu));
 		
 		builder.addSeparator(".", "zoom");

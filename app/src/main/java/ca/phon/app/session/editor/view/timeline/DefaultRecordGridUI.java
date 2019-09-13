@@ -418,6 +418,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			} else {
 				// split mode actions
 				int recordNum = Math.abs(recordIndex);
+				recordLblColor = Color.blue;
 				Rectangle2D lblRect = paintRecordNumberLabel(g2, recordNum-1, recordIcon, recordLblColor, segmentRect);
 				
 				ImageIcon acceptIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);

@@ -72,6 +72,8 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.Tuple;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class TimelineRecordTier extends TimelineTier {
 	
@@ -284,7 +286,8 @@ public class TimelineRecordTier extends TimelineTier {
 	@RunOnEDT
 	public void onRecordChange(EditorEvent evt) {
 		if(recordGrid.isSplitMode()) {
-			endSplitMode(false);
+			recordGrid.setSplitModeAccept(false);
+			recordGrid.setSplitMode(false);
 		}
 		Record r = (Record)evt.getEventData();
 		setupRecord(r);
@@ -432,7 +435,7 @@ public class TimelineRecordTier extends TimelineTier {
 		getRecordGrid().getUI().repaintInterval(currentRecordInterval);
 	}
 	
-	public void endSplitMode(boolean acceptSplit) {
+	private void endSplitMode(boolean acceptSplit) {
 		if(splitMarker != null) {
 			getTimeModel().removeMarker(splitMarker);
 			this.splitMarker = null;
@@ -560,6 +563,7 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		// change speaker menu
 		JMenu changeSpeakerMenu = builder.addMenu(".", "Change participant");
+		changeSpeakerMenu.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
 		int speakerNum = 1;
 		for(Participant speaker:recordGrid.getSpeakers()) {
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + speakerNum, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
@@ -601,6 +605,7 @@ public class TimelineRecordTier extends TimelineTier {
 			final PhonUIAction acceptSplitAct = new PhonUIAction(this, "onEndSplitRecord", true);
 			acceptSplitAct.putValue(PhonUIAction.NAME, "Accept record split");
 			acceptSplitAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+			acceptSplitAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
 			if(me != null)
 				acceptSplitAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
 			builder.addItem(".", acceptSplitAct);
@@ -608,6 +613,7 @@ public class TimelineRecordTier extends TimelineTier {
 			final PhonUIAction endSplitModeAct = new PhonUIAction(this, "onEndSplitRecord", false);
 			endSplitModeAct.putValue(PhonUIAction.NAME, "Exit split record");
 			endSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exit split record mode without accepting split");
+			endSplitModeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL));
 			if(me != null)
 				endSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
 			builder.addItem(".", endSplitModeAct);
@@ -704,7 +710,8 @@ public class TimelineRecordTier extends TimelineTier {
 			
 			if(evt.getPropertyName().equals("valueAdjusting")) {
 				// exit split mode if active
-				endSplitMode(false);
+				recordGrid.setSplitModeAccept(false);
+				recordGrid.setSplitMode(false);
 				
 				if((boolean)evt.getNewValue()) {
 					isFirstChange = true;

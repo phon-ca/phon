@@ -69,7 +69,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
 		final PhonUIAction toggleVisiblityAct = new PhonUIAction(this, "toggleVisible");
 		toggleVisiblityAct.putValue(PhonUIAction.NAME, 
-				(isVisible() ? "Hide waveform tier" : "Show waveform tier"));
+				(isVisible() ? "Hide waveform" : "Show waveform"));
 		toggleVisiblityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle waveform visibility");
 		builder.addItem(".", toggleVisiblityAct);
 	}
