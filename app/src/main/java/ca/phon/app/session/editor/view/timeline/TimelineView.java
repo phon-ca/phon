@@ -127,7 +127,6 @@ public final class TimelineView extends EditorView {
 		super(editor);
 		
 		init();
-		registerEditorEvents();
 		update();
 	}
 	
@@ -673,13 +672,31 @@ public final class TimelineView extends EditorView {
 	public ImageIcon getIcon() {
 		return IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
 	}
-
+	
+	@Override
+	public void onOpen() {
+		super.onOpen();
+		
+		registerEditorEvents();
+		
+		// scroll to current record position
+		SwingUtilities.invokeLater(() -> {
+			Record r = getEditor().currentRecord();
+			if(r != null) {
+				MediaSegment seg = r.getSegment().getGroup(0);
+				if(seg != null && seg.getEndValue() - seg.getStartValue() > 0) {
+					scrollToTime(seg.getStartValue() / 1000.0f);
+				}
+			}
+		});
+	}
+	
 	@Override
 	public void onClose() {
 		super.onClose();
 		
-		/* XXX Fix this
 		deregisterEditorEvents();
+		/* XXX Fix this
 		wavTier.onClose();
 		recordGrid.onClose();
 		*/
@@ -820,6 +837,7 @@ public final class TimelineView extends EditorView {
 		
 		public TierPanel() {
 			super();
+			setOpaque(false);
 		}
 
 		public TierPanel(boolean isDoubleBuffered) {

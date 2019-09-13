@@ -431,6 +431,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			for(AccessoryWindow accWin:accessoryWindows) {
 				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
 			}
+			
+			getView(viewName).onOpen();
 		}
 	}
 
@@ -438,7 +440,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	public void hideView(String viewName) {
 		if(!isShowing(viewName)) return;
 
-
+		// TODO ?
 	}
 
 	@Override

@@ -85,6 +85,19 @@ public abstract class EditorView extends JPanel implements IExtendable {
 	 */
 	public abstract JMenu getMenu();
 	
+	/**
+	 * Called when the editor view is placed into the 
+	 * view layout.
+	 * 
+	 */
+	public void onOpen() {
+		
+	}
+		
+	/**
+	 * Called when the close action is called on an editor view.
+	 * 
+	 */
 	public void onClose() {
 		
 	}
