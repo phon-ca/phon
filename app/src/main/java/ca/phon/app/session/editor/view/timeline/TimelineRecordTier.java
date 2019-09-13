@@ -100,6 +100,12 @@ public class TimelineRecordTier extends TimelineTier {
 		if(getParentView().getEditor().currentRecord() != null)
 			setupRecord(getParentView().getEditor().currentRecord());
 		
+		recordGrid.addPropertyChangeListener("splitMode", e -> {
+			if(!((boolean)e.getNewValue())) {
+				endSplitMode(recordGrid.isSplitModeAccept());
+			}
+		});
+		
 		recordGrid.setFont(FontPreferences.getTierFont());
 		setupRecordGridActions();
 		setupSpeakers();
@@ -432,7 +438,7 @@ public class TimelineRecordTier extends TimelineTier {
 			this.splitMarker = null;
 		}
 		
-		getRecordGrid().setSplitMode(false);
+		//getRecordGrid().setSplitMode(false);
 		if(acceptSplit
 				&& getRecordGrid().getLeftRecordSplit() != null
 				&& getRecordGrid().getRightRecordSplit() != null) {
@@ -458,7 +464,8 @@ public class TimelineRecordTier extends TimelineTier {
 	}
 	
 	public void onEndSplitRecord(PhonActionEvent pae) {
-		endSplitMode((boolean)pae.getData());
+		recordGrid.setSplitModeAccept((boolean)pae.getData());
+		recordGrid.setSplitMode(false);
 	}
 	
 	public void onSplitRecordOnGroup(PhonActionEvent pae) {

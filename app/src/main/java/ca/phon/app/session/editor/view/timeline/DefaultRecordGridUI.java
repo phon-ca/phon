@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -27,9 +28,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -57,6 +60,8 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.io.xml.v12.ObjectFactory;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -75,6 +80,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private RTree<String, com.github.davidmoten.rtree.geometry.Rectangle> messageTree;
 	
+	private RTree<Action, com.github.davidmoten.rtree.geometry.Rectangle> actionsTree;
+	
 	private RecordGrid recordGrid;
 	
 	private JLabel renderer;
@@ -85,6 +92,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		recordTree = RTree.create();
 		markerTree = RTree.create();
 		messageTree = RTree.create();
+		actionsTree = RTree.create();
 		
 		renderer = new JLabel();
 		renderer.setOpaque(false);
@@ -271,6 +279,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		recordTree = RTree.create();
 		markerTree = RTree.create();
 		messageTree = RTree.create();
+		actionsTree = RTree.create();
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
@@ -396,7 +405,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
 			}
 			
-			// split mode record
 			if(recordIndex >= 0) {	
 				Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
 				recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
@@ -408,12 +416,37 @@ public class DefaultRecordGridUI extends RecordGridUI {
 							lblRect.getMaxX(), lblRect.getMaxY()));
 				}
 			} else {
+				// split mode actions
 				int recordNum = Math.abs(recordIndex);
-				recordIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
-				paintRecordNumberLabel(g2, recordNum-1, recordIcon, recordLblColor, segmentRect);
+				Rectangle2D lblRect = paintRecordNumberLabel(g2, recordNum-1, recordIcon, recordLblColor, segmentRect);
+				
+				ImageIcon acceptIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+				Rectangle2D acceptRect = new Rectangle2D.Double(lblRect.getMaxX() + 2, lblRect.getY(),
+						acceptIcon.getIconWidth(), acceptIcon.getIconHeight());
+				g2.drawImage(acceptIcon.getImage(), (int)acceptRect.getX(), (int)acceptRect.getY(), recordGrid);
+				
+				final PhonUIAction acceptAct = new PhonUIAction(this, "endSplitMode", true);
+				var acceptRect2 = Geometries.rectangle(acceptRect.getX(), acceptRect.getY(), acceptRect.getMaxX(), acceptRect.getMaxY());
+				actionsTree = actionsTree.add(acceptAct, acceptRect2);
+				messageTree = messageTree.add("Accept split", acceptRect2);
+				
+				ImageIcon cancelIcon = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.XSMALL);
+				Rectangle2D cancelRect = new Rectangle2D.Double(acceptRect.getMaxX() + 2, acceptRect.getY(),
+						cancelIcon.getIconWidth(), cancelIcon.getIconHeight());
+				g2.drawImage(cancelIcon.getImage(), (int)cancelRect.getX(), (int)cancelRect.getY(), recordGrid);
+				
+				final PhonUIAction endAct = new PhonUIAction(this, "endSplitMode", false);
+				var cancelRect2 = Geometries.rectangle(cancelRect.getX(), cancelRect.getY(), cancelRect.getMaxX(), cancelRect.getMaxY());
+				actionsTree = actionsTree.add(endAct, cancelRect2);
+				messageTree = messageTree.add("Exit split mode", cancelRect2);
 			}
 		}
 		return segmentRect;
+	}
+	
+	public void endSplitMode(PhonActionEvent pae) {
+		recordGrid.setSplitModeAccept((boolean)pae.getData());
+		recordGrid.setSplitMode(false);
 	}
 	
 	private Rectangle2D paintRecordNumberLabel(Graphics2D g2, int recordIndex,
@@ -496,6 +529,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			recordGrid.requestFocusInWindow();
+			
+			var actionEntries = actionsTree.search(Geometries.point(e.getX(), e.getY()));
+			actionEntries.map( entry -> entry.value() ).forEach( action -> {
+				action.actionPerformed(new ActionEvent(recordGrid, -1, ""));
+			});
 			
 			AtomicReference<Integer> markerRecordRef = new AtomicReference<Integer>(0);
 			var markerEntries = markerTree.search(Geometries.point(e.getX(), e.getY()));

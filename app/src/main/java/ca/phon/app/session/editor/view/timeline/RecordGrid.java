@@ -43,11 +43,13 @@ public class RecordGrid extends TimeComponent {
 	 * During split mode, the current record will be replaced with the
 	 * given left/right records
 	 */
-	private boolean splitMode = false;
+	private transient boolean splitMode = false;
 	
-	private Record leftRecordSplit = null;
+	private transient Record leftRecordSplit = null;
 	
-	private Record rightRecordSplit = null;
+	private transient Record rightRecordSplit = null;
+	
+	private transient boolean splitModeAccept = false;
 	
 	public RecordGrid(Session session) {
 		this(new TimeUIModel(), session);
@@ -155,6 +157,14 @@ public class RecordGrid extends TimeComponent {
 		var oldVal = this.splitMode;
 		this.splitMode = splitMode;
 		firePropertyChange("splitMode", oldVal, splitMode);
+	}
+	
+	public boolean isSplitModeAccept() {
+		return this.splitModeAccept;
+	}
+	
+	public void setSplitModeAccept(boolean v) {
+		this.splitModeAccept = v;
 	}
 	
 	public void toggleSplitMode() {
