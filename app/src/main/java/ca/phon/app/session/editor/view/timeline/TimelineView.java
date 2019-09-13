@@ -717,7 +717,7 @@ public final class TimelineView extends EditorView {
 			if(playbackMarker == null && getEditor().getExtension(SegmentationHandler.class) == null) {
 				float currentTime = mediaPlayer.status().time() / 1000.0f;
 				
-				playbackMarker = timeModel.addMarker(currentTime, Color.green);
+				playbackMarker = timeModel.addMarker(currentTime, Color.darkGray);
 				
 				playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
 				playbackMarkerTask.mediaStartTime = mediaPlayer.status().time();

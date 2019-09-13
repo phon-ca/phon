@@ -826,7 +826,7 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		public SplitMarker(Interval parentInterval, float startTime) {
 			super(startTime);
-			setColor(Color.black);
+			setColor(Color.blue);
 			setDraggable(true);
 			
 			this.parentInterval = parentInterval;

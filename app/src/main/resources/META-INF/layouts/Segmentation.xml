@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <root>
-	<bounds x="-1" y="-1" width="935" height="805"/>
+	<bounds x="0" y="0" width="935" height="805" extendedState="6"/>
 	<windows/>
 	<stations>
 		<element name="root west">
@@ -35,6 +35,22 @@
 						<placeholders>
 							<version>0</version>
 							<format>dock.PlaceholderList</format>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Timeline</placeholder>
+								</key>
+								<item key="item" type="b">true</item>
+								<item key="item-keys" type="a">
+									<item type="s">x</item>
+									<item type="s">width</item>
+									<item type="s">y</item>
+									<item type="s">height</item>
+								</item>
+								<item key="item.x" type="i">1366</item>
+								<item key="item.width" type="i">2404</item>
+								<item key="item.y" type="i">453</item>
+								<item key="item.height" type="i">440</item>
+							</entry>
 						</placeholders>
 					</content>
 				</delegate>
@@ -83,6 +99,45 @@
 								<key shared="false">
 									<placeholder>dock.single.Session\ Information</placeholder>
 								</key>
+								<item key="map" type="p">
+									<version>0</version>
+									<format>dock.PlaceholderList</format>
+									<entry>
+										<key shared="false"/>
+										<item key="convert" type="b">true</item>
+										<item key="convert-keys" type="a"/>
+									</entry>
+								</item>
+							</entry>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Timeline</placeholder>
+									<placeholder>dock.single.IPA\ Lookup</placeholder>
+								</key>
+								<item key="map" type="p">
+									<version>0</version>
+									<format>dock.PlaceholderList</format>
+									<entry>
+										<key shared="false">
+											<placeholder>dock.single.Timeline</placeholder>
+										</key>
+									</entry>
+									<entry>
+										<key shared="false">
+											<placeholder>dock.single.Timeline</placeholder>
+										</key>
+									</entry>
+									<entry>
+										<key shared="false">
+											<placeholder>dock.single.IPA\ Lookup</placeholder>
+										</key>
+									</entry>
+								</item>
+							</entry>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Speech\ Analysis</placeholder>
+								</key>
 							</entry>
 						</placeholders>
 					</content>
@@ -104,65 +159,108 @@
 					<content delegate="SplitDockStationFactory">
 						<fullscreen-action>false</fullscreen-action>
 						<node nodeId="1411988523871" orientation="VERTICAL" divider="0.4403225806451613">
-							<node nodeId="1411988551213" orientation="HORIZONTAL" divider="0.33774834437086093">
-								<leaf id="0" nodeId="1411988551211">
+							<node nodeId="1566293434013" orientation="VERTICAL" divider="0.42298578199052134">
+								<node nodeId="1568192588369" orientation="VERTICAL" divider="0.513255567338282">
+									<node nodeId="1568310200583" orientation="VERTICAL" divider="0.5226554267650158">
+										<node nodeId="1568376657878" orientation="VERTICAL" divider="0.46357615894039733">
+											<node nodeId="1568376661557" orientation="HORIZONTAL" divider="0.3380952380952381">
+												<leaf id="0" nodeId="1411988551211">
+													<placeholders>
+														<placeholder>dock.single.Media\ Player</placeholder>
+													</placeholders>
+													<placeholder-map>
+														<version>0</version>
+														<format>dock.PlaceholderList</format>
+														<entry>
+															<key shared="false">
+																<placeholder>dock.single.Media\ Player</placeholder>
+															</key>
+														</entry>
+													</placeholder-map>
+												</leaf>
+												<leaf id="1" nodeId="1411988523869">
+													<placeholders>
+														<placeholder>dock.single.Tier\ Management</placeholder>
+														<placeholder>dock.single.Segmentation</placeholder>
+														<placeholder>dock.single.Waveform</placeholder>
+														<placeholder>dock.single.Record\ Data</placeholder>
+														<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
+														<placeholder>dock.single.Session\ Information</placeholder>
+													</placeholders>
+													<placeholder-map>
+														<version>0</version>
+														<format>dock.PlaceholderList</format>
+														<entry>
+															<key shared="false">
+																<placeholder>dock.single.Session\ Information</placeholder>
+															</key>
+															<item key="convert" type="b">true</item>
+															<item key="convert-keys" type="a"/>
+														</entry>
+														<entry>
+															<key shared="false">
+																<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
+															</key>
+														</entry>
+														<entry>
+															<key shared="false">
+																<placeholder>dock.single.Tier\ Management</placeholder>
+															</key>
+															<item key="convert" type="b">true</item>
+															<item key="convert-keys" type="a"/>
+														</entry>
+													</placeholder-map>
+												</leaf>
+											</node>
+											<leaf id="2" nodeId="1568376657876">
+												<placeholders>
+													<placeholder>dock.single.Timeline</placeholder>
+												</placeholders>
+											</leaf>
+										</node>
+										<leaf id="-1" nodeId="1568312414789">
+											<placeholders>
+												<placeholder>dock.single.Syllabification\ \&amp;\ Alignment</placeholder>
+											</placeholders>
+										</leaf>
+									</node>
+									<leaf id="-1" nodeId="1568192588368">
+										<placeholders>
+											<placeholder>dock.single.Speech\ Analysis</placeholder>
+										</placeholders>
+										<placeholder-map>
+											<version>0</version>
+											<format>dock.PlaceholderList</format>
+											<entry>
+												<key shared="false">
+													<placeholder>dock.single.Speech\ Analysis</placeholder>
+												</key>
+											</entry>
+										</placeholder-map>
+									</leaf>
+								</node>
+								<leaf id="-1" nodeId="1566293434011">
 									<placeholders>
-										<placeholder>dock.single.Media\ Player</placeholder>
-									</placeholders>
-								</leaf>
-								<leaf id="1" nodeId="1411988523869">
-									<placeholders>
-										<placeholder>dock.single.Tier\ Management</placeholder>
-										<placeholder>dock.single.Segmentation</placeholder>
-										<placeholder>dock.single.Waveform</placeholder>
-										<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
-										<placeholder>dock.single.Speech\ Analysis</placeholder>
-										<placeholder>dock.single.Session\ Information</placeholder>
+										<placeholder>dock.single.IPA\ Lookup</placeholder>
 									</placeholders>
 									<placeholder-map>
 										<version>0</version>
 										<format>dock.PlaceholderList</format>
 										<entry>
 											<key shared="false">
-												<placeholder>dock.single.Session\ Information</placeholder>
+												<placeholder>dock.single.IPA\ Lookup</placeholder>
 											</key>
-											<item key="convert" type="b">true</item>
-											<item key="convert-keys" type="a"/>
-										</entry>
-										<entry>
-											<key shared="false">
-												<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
-											</key>
-										</entry>
-										<entry>
-											<key shared="false">
-												<placeholder>dock.single.Tier\ Management</placeholder>
-											</key>
-											<item key="convert" type="b">true</item>
-											<item key="convert-keys" type="a"/>
-										</entry>
-										<entry>
-											<key shared="false">
-												<placeholder>dock.single.Segmentation</placeholder>
-											</key>
-											<item key="convert" type="b">true</item>
-											<item key="convert-keys" type="a"/>
 										</entry>
 									</placeholder-map>
 								</leaf>
 							</node>
-							<leaf id="2" nodeId="1411986763765">
+							<leaf id="-1" nodeId="1411986763765">
 								<placeholders>
-									<placeholder>dock.single.Record\ Data</placeholder>
+									<placeholder>dock.single.Time\ Grid</placeholder>
 								</placeholders>
 								<placeholder-map>
 									<version>0</version>
 									<format>dock.PlaceholderList</format>
-									<entry>
-										<key shared="false">
-											<placeholder>dock.single.Record\ Data</placeholder>
-										</key>
-									</entry>
 								</placeholder-map>
 							</leaf>
 						</node>
@@ -187,7 +285,7 @@
 				</child>
 				<child>
 					<layout factory="delegate_StackDockStationFactory">
-						<selected>1</selected>
+						<selected>2</selected>
 						<placeholders>
 							<version>0</version>
 							<format>dock.PlaceholderList</format>
@@ -207,7 +305,12 @@
 							</entry>
 							<entry>
 								<key shared="false">
-									<placeholder>dock.single.Segmentation</placeholder>
+									<placeholder>dock.single.Speech\ Analysis</placeholder>
+								</key>
+							</entry>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Tier\ Management</placeholder>
 								</key>
 								<item key="convert" type="b">true</item>
 								<item key="convert-keys" type="a">
@@ -217,11 +320,21 @@
 								</item>
 								<item key="dock.index" type="i">1</item>
 								<item key="dock.id" type="i">1</item>
-								<item key="dock.placeholder" type="s">dock.single.Segmentation</item>
+								<item key="dock.placeholder" type="s">dock.single.Tier\ Management</item>
 							</entry>
 							<entry>
 								<key shared="false">
-									<placeholder>dock.single.Speech\ Analysis</placeholder>
+									<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
+								</key>
+							</entry>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Media\ Player</placeholder>
+								</key>
+							</entry>
+							<entry>
+								<key shared="false">
+									<placeholder>dock.single.Record\ Data</placeholder>
 								</key>
 								<item key="convert" type="b">true</item>
 								<item key="convert-keys" type="a">
@@ -231,21 +344,11 @@
 								</item>
 								<item key="dock.index" type="i">2</item>
 								<item key="dock.id" type="i">2</item>
-								<item key="dock.placeholder" type="s">dock.single.Speech\ Analysis</item>
+								<item key="dock.placeholder" type="s">dock.single.Record\ Data</item>
 							</entry>
 							<entry>
 								<key shared="false">
-									<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Tier\ Management</placeholder>
-								</key>
-							</entry>
-							<entry>
-								<key shared="false">
-									<placeholder>dock.single.Media\ Player</placeholder>
+									<placeholder>dock.single.Timeline</placeholder>
 								</key>
 							</entry>
 						</placeholders>
@@ -262,20 +365,20 @@
 							<children ignore="false"/>
 						</child>
 						<child>
-							<layout factory="predefined" placeholder="dock.single.Segmentation">
-								<replacement id="dockablesingle Segmentation"/>
+							<layout factory="predefined" placeholder="dock.single.Tier\ Management">
+								<replacement id="dockablesingle Tier Management"/>
 								<delegate id="delegate_ccontrol backup factory id">
-									<id>Segmentation</id>
+									<id>Tier Management</id>
 									<area/>
 								</delegate>
 							</layout>
 							<children ignore="false"/>
 						</child>
 						<child>
-							<layout factory="predefined" placeholder="dock.single.Speech\ Analysis">
-								<replacement id="dockablesingle Speech Analysis"/>
+							<layout factory="predefined" placeholder="dock.single.Record\ Data">
+								<replacement id="dockablesingle Record Data"/>
 								<delegate id="delegate_ccontrol backup factory id">
-									<id>Speech Analysis</id>
+									<id>Record Data</id>
 									<area/>
 								</delegate>
 							</layout>
@@ -284,10 +387,10 @@
 					</children>
 				</child>
 				<child>
-					<layout factory="predefined" placeholder="dock.single.Record\ Data">
-						<replacement id="dockablesingle Record Data"/>
+					<layout factory="predefined" placeholder="dock.single.Timeline">
+						<replacement id="dockablesingle Timeline"/>
 						<delegate id="delegate_ccontrol backup factory id">
-							<id>Record Data</id>
+							<id>Timeline</id>
 							<area/>
 						</delegate>
 					</layout>
@@ -325,7 +428,11 @@
 					<placeholder>dock.single.Session\ Information</placeholder>
 					<backup-path>
 						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+						<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+						<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+						<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+						<node location="RIGHT" size="0.6619047619047619" id="1568376661557"/>
 						<leaf id="1411988523869"/>
 					</backup-path>
 				</property>
@@ -341,7 +448,11 @@
 					<placeholder>dock.single.Media\ Player</placeholder>
 					<backup-path>
 						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="LEFT" size="0.33774834437086093" id="1411988551213"/>
+						<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+						<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+						<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+						<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+						<node location="LEFT" size="0.3380952380952381" id="1568376661557"/>
 						<leaf id="1411988551211"/>
 					</backup-path>
 				</property>
@@ -352,119 +463,53 @@
 				<property factory="SplitDockPlaceholderProperty">
 					<placeholder>dock.single.Record\ Data</placeholder>
 					<backup-path>
-						<node location="BOTTOM" size="0.5596774193548387" id="1411988523871"/>
-						<leaf id="1411986763765"/>
-					</backup-path>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Speech Analysis">
-			<location root="root center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Speech\ Analysis</placeholder>
-					<backup-path>
 						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+						<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+						<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+						<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+						<node location="RIGHT" size="0.6619047619047619" id="1568376661557"/>
 						<leaf id="1411988523869"/>
 					</backup-path>
 				</property>
 				<property factory="StackDockPropertyFactory">
 					<index>2</index>
-					<placeholder>dock.single.Speech\ Analysis</placeholder>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Syllabification &amp; Alignment">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Syllabification\ \&amp;\ Alignment">
-					<replacement id="dockablesingle Syllabification &amp; Alignment"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Syllabification &amp; Alignment</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="root center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Syllabification\ \&amp;\ Alignment</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.4397590361445783" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-						<leaf id="1411988523869"/>
-					</backup-path>
-				</property>
-				<property factory="StackDockPropertyFactory">
-					<index>2</index>
-					<placeholder>dock.single.Syllabification\ \&amp;\ Alignment</placeholder>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Find &amp; Replace">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Find\ \&amp;\ Replace">
-					<replacement id="dockablesingle Find &amp; Replace"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Find &amp; Replace</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
-			<location root="root center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.461212976022567" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-						<leaf id="1411988523869"/>
-					</backup-path>
-				</property>
-				<property factory="StackDockPropertyFactory">
-					<index>1</index>
-					<placeholder>dock.single.Find\ \&amp;\ Replace</placeholder>
+					<placeholder>dock.single.Record\ Data</placeholder>
 				</property>
 			</location>
 		</dockable>
 		<dockable key="single Tier Management">
-			<content>
-				<layout factory="predefined" placeholder="dock.single.Tier\ Management">
-					<replacement id="dockablesingle Tier Management"/>
-					<delegate id="delegate_ccontrol backup factory id">
-						<id>Tier Management</id>
-						<area/>
-					</delegate>
-				</layout>
-				<children ignore="false"/>
-			</content>
 			<location root="root center" mode="dock.mode.normal">
 				<property factory="SplitDockPlaceholderProperty">
 					<placeholder>dock.single.Tier\ Management</placeholder>
 					<backup-path>
 						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-						<leaf id="1411988523869"/>
-					</backup-path>
-				</property>
-				<property factory="StackDockPropertyFactory">
-					<index>2</index>
-					<placeholder>dock.single.Tier\ Management</placeholder>
-				</property>
-			</location>
-		</dockable>
-		<dockable key="single Segmentation">
-			<location root="root center" mode="dock.mode.normal">
-				<property factory="SplitDockPlaceholderProperty">
-					<placeholder>dock.single.Segmentation</placeholder>
-					<backup-path>
-						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-						<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+						<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+						<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+						<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+						<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+						<node location="RIGHT" size="0.6619047619047619" id="1568376661557"/>
 						<leaf id="1411988523869"/>
 					</backup-path>
 				</property>
 				<property factory="StackDockPropertyFactory">
 					<index>1</index>
-					<placeholder>dock.single.Segmentation</placeholder>
+					<placeholder>dock.single.Tier\ Management</placeholder>
+				</property>
+			</location>
+		</dockable>
+		<dockable key="single Timeline">
+			<location root="root center" mode="dock.mode.normal">
+				<property factory="SplitDockPlaceholderProperty">
+					<placeholder>dock.single.Timeline</placeholder>
+					<backup-path>
+						<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+						<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+						<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+						<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+						<node location="BOTTOM" size="0.5364238410596027" id="1568376657878"/>
+						<leaf id="1568376657876"/>
+					</backup-path>
 				</property>
 			</location>
 		</dockable>
@@ -488,7 +533,11 @@
 								<placeholder>dock.single.Media\ Player</placeholder>
 								<backup-path>
 									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-									<node location="LEFT" size="0.33774834437086093" id="1411988551213"/>
+									<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+									<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+									<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+									<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+									<node location="LEFT" size="0.3380952380952381" id="1568376661557"/>
 									<leaf id="1411988551211"/>
 								</backup-path>
 							</property>
@@ -522,7 +571,11 @@
 								<placeholder>dock.single.Session\ Information</placeholder>
 								<backup-path>
 									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+									<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+									<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+									<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+									<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+									<node location="RIGHT" size="0.6619047619047619" id="1568376661557"/>
 									<leaf id="1411988523869"/>
 								</backup-path>
 							</property>
@@ -534,51 +587,51 @@
 					</property>
 				</properties>
 			</entry>
-			<entry id="single Segmentation" current="dock.mode.normal">
+			<entry id="single Tier Management" current="dock.mode.normal">
 				<history>
+					<mode>dock.mode.minimized</mode>
+					<mode>dock.mode.maximized</mode>
 					<mode>dock.mode.normal</mode>
 				</history>
 				<properties>
+					<property id="dock.mode.maximized">
+						<mode>dock.mode.maximized</mode>
+						<root>ccontrol center</root>
+						<location>
+							<property factory="SplitDockFullScreenPropertyFactory"/>
+						</location>
+					</property>
+					<property id="dock.mode.minimized">
+						<mode>dock.mode.minimized</mode>
+						<root>ccontrol south</root>
+						<location>
+							<property factory="flap dock">
+								<index>0</index>
+								<holding>false</holding>
+								<size>400</size>
+								<placeholder>dock.single.Tier\ Management</placeholder>
+							</property>
+						</location>
+					</property>
 					<property id="dock.mode.normal">
 						<mode>dock.mode.normal</mode>
 						<root>root center</root>
 						<location>
 							<property factory="SplitDockPlaceholderProperty">
-								<placeholder>dock.single.Segmentation</placeholder>
+								<placeholder>dock.single.Tier\ Management</placeholder>
 								<backup-path>
 									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
+									<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+									<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+									<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+									<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+									<node location="RIGHT" size="0.6619047619047619" id="1568376661557"/>
 									<leaf id="1411988523869"/>
 								</backup-path>
 							</property>
 							<property factory="StackDockPropertyFactory">
 								<index>1</index>
-								<placeholder>dock.single.Segmentation</placeholder>
-							</property>
-						</location>
-					</property>
-				</properties>
-			</entry>
-			<entry id="single Speech Analysis" current="dock.mode.normal">
-				<history>
-					<mode>dock.mode.normal</mode>
-				</history>
-				<properties>
-					<property id="dock.mode.normal">
-						<mode>dock.mode.normal</mode>
-						<root>root center</root>
-						<location>
-							<property factory="SplitDockPlaceholderProperty">
-								<placeholder>dock.single.Speech\ Analysis</placeholder>
-								<backup-path>
-									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
-									<node location="RIGHT" size="0.6622516556291391" id="1411988551213"/>
-									<leaf id="1411988523869"/>
-								</backup-path>
-							</property>
-							<property factory="StackDockPropertyFactory">
-								<index>2</index>
-								<placeholder>dock.single.Speech\ Analysis</placeholder>
+								<placeholder>dock.single.Tier\ Management</placeholder>
 							</property>
 						</location>
 					</property>
@@ -596,8 +649,41 @@
 							<property factory="SplitDockPlaceholderProperty">
 								<placeholder>dock.single.Record\ Data</placeholder>
 								<backup-path>
-									<node location="BOTTOM" size="0.5596774193548387" id="1411988523871"/>
-									<leaf id="1411986763765"/>
+									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+									<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+									<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+									<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+									<node location="TOP" size="0.46357615894039733" id="1568376657878"/>
+									<node location="RIGHT" size="0.6619047619047619" id="1568376661557"/>
+									<leaf id="1411988523869"/>
+								</backup-path>
+							</property>
+							<property factory="StackDockPropertyFactory">
+								<index>2</index>
+								<placeholder>dock.single.Record\ Data</placeholder>
+							</property>
+						</location>
+					</property>
+				</properties>
+			</entry>
+			<entry id="single Timeline" current="dock.mode.normal">
+				<history>
+					<mode>dock.mode.normal</mode>
+				</history>
+				<properties>
+					<property id="dock.mode.normal">
+						<mode>dock.mode.normal</mode>
+						<root>root center</root>
+						<location>
+							<property factory="SplitDockPlaceholderProperty">
+								<placeholder>dock.single.Timeline</placeholder>
+								<backup-path>
+									<node location="TOP" size="0.4403225806451613" id="1411988523871"/>
+									<node location="TOP" size="0.42298578199052134" id="1566293434013"/>
+									<node location="TOP" size="0.513255567338282" id="1568192588369"/>
+									<node location="TOP" size="0.5226554267650158" id="1568310200583"/>
+									<node location="BOTTOM" size="0.5364238410596027" id="1568376657878"/>
+									<leaf id="1568376657876"/>
 								</backup-path>
 							</property>
 						</location>

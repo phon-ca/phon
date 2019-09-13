@@ -76,6 +76,7 @@ import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
 import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.action.CloseActionFactory;
+import bibliothek.gui.dock.common.event.CControlListener;
 import bibliothek.gui.dock.common.event.CDockableLocationEvent;
 import bibliothek.gui.dock.common.event.CDockableLocationListener;
 import bibliothek.gui.dock.common.event.CDockableStateListener;
@@ -187,6 +188,40 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private void setupDockControl() {
 		// theme
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
+		
+		dockControl.addControlListener(new CControlListener() {
+			
+			@Override
+			public void removed(CControl arg0, CDockable arg1) {
+			}
+			
+			@Override
+			public void opened(CControl arg0, CDockable arg1) {
+				String viewName = arg1.intern().getTitleText();
+				if(viewName.trim().length() > 0) {
+					EditorView view = getView(viewName);
+					if(view != null) {
+						view.onOpen();
+					}
+				}
+			}
+			
+			@Override
+			public void closed(CControl arg0, CDockable arg1) {
+				String viewName = arg1.intern().getTitleText();
+				if(viewName.trim().length() > 0) {
+					EditorView view = getView(viewName);
+					if(view != null) {
+						view.onClose();
+					}
+				}
+			}
+			
+			@Override
+			public void added(CControl arg0, CDockable arg1) {
+			}
+			
+		});
 
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
@@ -431,8 +466,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			for(AccessoryWindow accWin:accessoryWindows) {
 				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
 			}
-			
-			getView(viewName).onOpen();
 		}
 	}
 
@@ -719,19 +752,19 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
 			super.setCloseable(true);
 
-			this.addVetoClosingListener(new CVetoClosingListener() {
-
-				@Override
-				public void closing(CVetoClosingEvent arg0) {
-
-				}
-
-				@Override
-				public void closed(CVetoClosingEvent arg0) {
-					getView().onClose();
-				}
-
-			});
+//			this.addVetoClosingListener(new CVetoClosingListener() {
+//
+//				@Override
+//				public void closing(CVetoClosingEvent arg0) {
+//
+//				}
+//
+//				@Override
+//				public void closed(CVetoClosingEvent arg0) {
+//					getView().onClose();
+//				}
+//
+//			});
 
 			final SimpleButtonAction externalizeAct = new SimpleButtonAction();
 			externalizeAct.setText("Open view in new window");
