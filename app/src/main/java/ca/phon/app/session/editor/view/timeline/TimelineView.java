@@ -19,6 +19,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -689,7 +690,13 @@ public final class TimelineView extends EditorView {
 			if(r != null) {
 				MediaSegment seg = r.getSegment().getGroup(0);
 				if(seg != null && seg.getEndValue() - seg.getStartValue() > 0) {
-					scrollToTime(seg.getStartValue() / 1000.0f);
+					
+					Rectangle2D segRect = new Rectangle2D.Double(
+							timeModel.xForTime(seg.getStartValue()/1000.0f), 0,
+							timeModel.xForTime(seg.getEndValue()/1000.0f) - timeModel.xForTime(seg.getStartValue()/1000.0f), 1);
+					if(!segRect.intersects(recordGrid.getVisibleRect())) {
+						scrollToTime(seg.getStartValue() / 1000.0f);
+					}
 				}
 			}
 		});
