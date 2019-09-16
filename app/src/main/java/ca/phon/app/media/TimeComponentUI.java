@@ -188,6 +188,9 @@ public class TimeComponentUI extends ComponentUI {
 	};
 	
 	private PropertyChangeListener markerTimeListener = (e) -> {
+		Marker marker = (Marker)e.getSource();
+		if(!marker.isRepaintOnTimeChange()) return;
+		
 		if("time".equals(e.getPropertyName()) || e.getPropertyName().endsWith(".time")) {
 			float oldTime = (float)e.getOldValue();
 			float newTime = (float)e.getNewValue();

@@ -729,6 +729,7 @@ public final class TimelineView extends EditorView {
 				float currentTime = mediaPlayer.status().time() / 1000.0f;
 				
 				playbackMarker = timeModel.addMarker(currentTime, Color.darkGray);
+				playbackMarker.setRepaintOnTimeChange(false);
 				
 				playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
 				playbackMarkerTask.mediaStartTime = mediaPlayer.status().time();
@@ -778,10 +779,10 @@ public final class TimelineView extends EditorView {
 		public void run() {
 			if(playbackMarker != null) {
 				long currentTime = System.currentTimeMillis();
-				synchronized (this) {
-					long newTime = mediaStartTime + (currentTime - systemStartTime);
-					playbackMarker.setTime(newTime / 1000.0f);				
-				}
+				long newTime = mediaStartTime + (currentTime - systemStartTime);
+				playbackMarker.setTime(newTime / 1000.0f);		
+				
+				repaint((long)(1/30.0f * 1000.0f));
 			}
 		}
 		

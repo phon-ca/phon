@@ -355,10 +355,8 @@ public final class SegmentationHandler {
 		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
 			if(intervalTimerTask != null) {
 				// re-sync time with media player
-				synchronized (intervalTimerTask) {					
-					intervalTimerTask.segmentsationSystemStartTime = System.currentTimeMillis();
-					intervalTimerTask.segmentationMediaStartTime = newTime;
-				}
+				intervalTimerTask.segmentsationSystemStartTime = System.currentTimeMillis();
+				intervalTimerTask.segmentationMediaStartTime = newTime;
 			}
 		}
 
@@ -385,38 +383,35 @@ public final class SegmentationHandler {
 		public void run() {
 			if(segmentationInterval != null) {
 				long currentTime = System.currentTimeMillis();
-				synchronized (this) {
-					long newTime = segmentationMediaStartTime + (currentTime - segmentsationSystemStartTime);
-					long segStart = window.getWindowStartMs(newTime);
-					long segEnd = window.getWindowEndMs(newTime);
+				long newTime = segmentationMediaStartTime + (currentTime - segmentsationSystemStartTime);
+				long segStart = window.getWindowStartMs(newTime);
+				long segEnd = window.getWindowEndMs(newTime);
+				
+				// indicate we are going to change multiple values
+				segmentationInterval.setValueAdjusting(true);
+				segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
+				// indicate we are finished changing values
+				segmentationInterval.setValueAdjusting(false);
+				segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
+				
+				if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
+					TimelineView timelineView = 
+							(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 					
-					// indicate we are going to change multiple values
-					segmentationInterval.setValueAdjusting(true);
-					segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
-					// indicate we are finished changing values
-					segmentationInterval.setValueAdjusting(false);
-					segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
+					timelineView.repaint((long)(1/30.0f * 1000.0f));
 					
-					if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
-						TimelineView timelineView = 
-								(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
-						
-						timelineView.repaint((long)(1/30.0f * 1000.0f));
-						
-						// special case: segmenting with no media
-						//  update time model as we progress
-						if(!editor.getMediaModel().isSessionMediaAvailable()) {
-							float newEndTime = segEnd / 1000.0f;
-							if(timelineView.getTimeModel().getEndTime() < newEndTime) {
-								timelineView.getTimeModel().setEndTime(newEndTime);
-							}
+					// special case: segmenting with no media
+					//  update time model as we progress
+					if(!editor.getMediaModel().isSessionMediaAvailable()) {
+						float newEndTime = segEnd / 1000.0f;
+						if(timelineView.getTimeModel().getEndTime() < newEndTime) {
+							timelineView.getTimeModel().setEndTime(newEndTime);
 						}
-						
-						Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
-						if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
-							timelineView.scrollToTime(segStart/1000.0f);
-						}
-						
+					}
+					
+					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
+					if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
+						timelineView.scrollToTime(segStart/1000.0f);
 					}
 					
 				}

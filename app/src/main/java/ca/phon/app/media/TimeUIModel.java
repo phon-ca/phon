@@ -303,9 +303,19 @@ public class TimeUIModel {
 		
 		private Color color = Color.black;
 		
+		private boolean repaintOnTimeChange = true;
+		
 		public Marker(float startTime) {
 			super();
 			this.time = startTime;
+		}
+		
+		public boolean isRepaintOnTimeChange() {
+			return this.repaintOnTimeChange;
+		}
+		
+		public void setRepaintOnTimeChange(boolean repaintOnTimeChange) {
+			this.repaintOnTimeChange = repaintOnTimeChange;
 		}
 		
 		public float getTime() {
