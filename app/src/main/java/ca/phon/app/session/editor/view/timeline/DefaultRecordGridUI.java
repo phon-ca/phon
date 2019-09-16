@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.timeline;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -22,7 +23,9 @@ import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,7 +43,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
 
@@ -63,6 +68,7 @@ import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.MsFormatter;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -84,6 +90,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private RecordGrid recordGrid;
 	
+	private Canvas canvas;
+	
 	private JLabel renderer;
 	
 	public DefaultRecordGridUI() {
@@ -103,7 +111,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		if(!(c instanceof RecordGrid)) throw new IllegalArgumentException("Invalid class");
+		
 		this.recordGrid = (RecordGrid)c;
+		this.recordGrid.setDoubleBuffered(true);
 		this.recordGrid.setFocusable(true);
 		
 		this.recordGrid.addFocusListener(new FocusListener() {
@@ -117,6 +127,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			public void focusGained(FocusEvent e) {
 				recordGrid.repaint();
 			}
+			
 		});
 		
 		c.addPropertyChangeListener(propListener);
@@ -280,17 +291,50 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		markerTree = RTree.create();
 		messageTree = RTree.create();
 		actionsTree = RTree.create();
+		
+		// calculate some size variables once!
+		Map<Participant, Integer> ymap = new HashMap<>();
+		Rectangle2D templateRect = (session.getRecordCount() > 0 ? getSegmentRect(session.getRecord(0)) : new Rectangle2D.Double());		
+		int speakerTierHeight = getSpeakerTierHeight();
+		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
+			
+			MediaSegment seg = r.getSegment().getGroup(0);
+			
+			// update segment rect location
+			int segY = 0;
+			if(ymap.containsKey(r.getSpeaker())) {
+				segY = ymap.get(r.getSpeaker());
+			} else {
+				segY = TOP_BOTTOM_MARGIN + 
+						( recordGrid.getSpeakers().indexOf(r.getSpeaker()) * (speakerTierHeight + TIER_GAP) );
+				segY += getSpeakerLabelHeight();
+				ymap.put(r.getSpeaker(), segY);
+			}
+			
+			var segXmin = recordGrid.xForTime(seg.getStartValue() / 1000.0f);
+			var segXmax = recordGrid.xForTime(seg.getEndValue() / 1000.0f);
+			
+			Rectangle2D segRect = new Rectangle2D.Double(segXmin, segY, segXmax-segXmin, templateRect.getHeight());
+			
 			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
-				paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit());
-				paintSegment(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit());
+				Record leftRecord = recordGrid.getLeftRecordSplit();
+				MediaSegment leftRecordSeg = leftRecord.getSegment().getGroup(0);
+				segRect.setFrame(segRect.getX(), segRect.getY(), 
+						recordGrid.xForTime(leftRecordSeg.getEndValue() / 1000.0f) - segRect.getX(), segRect.getHeight());
+				paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
+				
+				Record rightRecord = recordGrid.getRightRecordSplit();
+				MediaSegment rightRecordSeg = rightRecord.getSegment().getGroup(0);
+				segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getY(), 
+						recordGrid.xForTime(rightRecordSeg.getEndValue() / 1000.0f) - recordGrid.xForTime(rightRecordSeg.getStartValue()/1000.0f), segRect.getHeight());
+				paintSegment(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit(), segRect);
 				
 				continue;
 			}
 			
-			Rectangle2D segRect = paintSegment(g2, rIdx, r);
-//			System.out.println((rIdx+1) + ":" + segRect);
+			paintSegment(g2, rIdx, r, segRect);
 			recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
 					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
 			
@@ -304,6 +348,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			markerTree = markerTree.add(-(rIdx + 1), Geometries.rectangle((float)segRect.getMaxX() - 1, (float)segRect.getY(),
 					(float)segRect.getMaxX() + 1, (float)(segRect.getY()+segRect.getHeight())));
 		}
+	
 		
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval);
@@ -330,7 +375,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	protected void paintSpeakerLabel(Graphics g2, Participant speaker) {		
 		Rectangle speakerLabelRect = getSpeakerLabelRect(speaker);
 		speakerLabelRect.x += recordGrid.getVisibleRect().x;
-		
+				
 		renderer.setHorizontalTextPosition(SwingConstants.RIGHT);
 		renderer.setForeground(recordGrid.getForeground());
 		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
@@ -339,8 +384,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
 	}
 	
-	protected Rectangle2D paintSegment(Graphics2D g2, int recordIndex, Record r) {
-		Rectangle2D segmentRect = getSegmentRect(r);
+	protected Rectangle2D paintSegment(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
+//		Rectangle2D segmentRect = getSegmentRect(r);
 		RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
 				segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
 		

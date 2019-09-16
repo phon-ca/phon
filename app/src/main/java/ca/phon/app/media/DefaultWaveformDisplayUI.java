@@ -87,6 +87,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		super.installUI(c);
 		
 		display = (WaveformDisplay)c;
+		display.setDoubleBuffered(true);
 		
 		installListeners(display);
 	}

@@ -389,6 +389,9 @@ public class TimeUIModel {
 		/* If true, the entire interval will be repainted when values change */
 		private boolean repaintEntireInterval = false;
 		
+		/* If false, the interval will not be repainted during event changes */
+		private boolean repaintOnTimeChange = true;
+		
 		public Interval() {
 			this(0.0f, 0.0f);
 		}
@@ -404,6 +407,14 @@ public class TimeUIModel {
 			this.startMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener(this, "startMarker.", propSupport));
 			this.endMarker = endMarker;
 			this.endMarker.addPropertyChangeListener(new ForwardingPropertyChangeListener(this, "endMarker.", propSupport));
+		}
+		
+		public boolean isRepaintOnTimeChange() {
+			return this.repaintOnTimeChange;
+		}
+		
+		public void setRepaintOnTimeChange(boolean repaintOnTimeChange) {
+			this.repaintOnTimeChange = repaintOnTimeChange;
 		}
 		
 		public boolean isRepaintEntireInterval( ) {

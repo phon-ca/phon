@@ -147,6 +147,7 @@ public class TimeComponentUI extends ComponentUI {
 	
 	private PropertyChangeListener intervalTimeListener = (e) -> {
 		final Interval interval = (Interval)e.getSource();
+		if(!interval.isRepaintOnTimeChange()) return;
 		
 		synchronized(interval) {
 			if(e.getPropertyName().endsWith(".time")) {

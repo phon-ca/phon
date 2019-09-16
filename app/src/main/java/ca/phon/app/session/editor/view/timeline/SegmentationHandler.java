@@ -397,10 +397,11 @@ public final class SegmentationHandler {
 					segmentationInterval.setValueAdjusting(false);
 					segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
 					
-					// Autoscroll 
 					if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
 						TimelineView timelineView = 
 								(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+						
+						timelineView.repaint((long)(1/30.0f * 1000.0f));
 						
 						// special case: segmenting with no media
 						//  update time model as we progress
@@ -440,6 +441,7 @@ public final class SegmentationHandler {
 				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 		if(timelineView != null) {
 			segmentationInterval = timelineView.getTimeModel().addInterval(0.0f, 0.0f);
+			segmentationInterval.setRepaintOnTimeChange(false);
 			segmentationInterval.setColor(new Color(255, 255, 0, 50));
 		}
 		
