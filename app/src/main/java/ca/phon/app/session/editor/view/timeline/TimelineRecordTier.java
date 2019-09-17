@@ -423,7 +423,7 @@ public class TimelineRecordTier extends TimelineTier {
 		SplitMarker splitMarker = new SplitMarker(currentRecordInterval(), middleOfRecord);
 		
 		splitMarker.addPropertyChangeListener("time", (e) -> {
-			updateSplitRecords();
+			updateSplitRecordTimes((float)e.getNewValue());
 		});
 		
 		timeModel.addMarker(splitMarker);
@@ -486,25 +486,37 @@ public class TimelineRecordTier extends TimelineTier {
 		getRecordGrid().repaintInterval(currentRecordInterval);
 	}
 	
+	private void updateSplitRecordTimes(float splitTime) {
+		Record leftRecord = recordGrid.getLeftRecordSplit();
+		MediaSegment leftSeg = leftRecord.getSegment().getGroup(0);
+		leftSeg.setEndValue(splitTime * 1000.0f);
+		
+		Record rightRecord = recordGrid.getRightRecordSplit();
+		MediaSegment rightSeg = rightRecord.getSegment().getGroup(0);
+		rightSeg.setStartValue((splitTime * 1000.0f) + 1);
+		
+		getRecordGrid().repaintInterval(currentRecordInterval);
+	}	
+	
 	private Tuple<Record, Record> getRecordSplit(float splitTime) {
-		SessionFactory factory = SessionFactory.newFactory();
+		final SessionFactory sessionFactory = SessionFactory.newFactory();
 		
 		Record recordToSplit = getParentView().getEditor().currentRecord();
 		MediaSegment seg = recordToSplit.getSegment().getGroup(0);
 				
-		Record leftRecord = factory.cloneRecord(recordToSplit);
+		Record leftRecord = sessionFactory.cloneRecord(recordToSplit);
 		leftRecord.getSegment().getGroup(0).setEndValue(splitTime * 1000.0f);
 		
-		Record rightRecord = factory.createRecord();
+		Record rightRecord = sessionFactory.createRecord();
 		rightRecord.addGroup();
-		MediaSegment rightSeg = factory.createMediaSegment();
+		MediaSegment rightSeg = sessionFactory.createMediaSegment();
 		rightSeg.setStartValue((splitTime * 1000.0f) + 1);
 		rightSeg.setEndValue(seg.getEndValue());
 		rightRecord.getSegment().setGroup(0, rightSeg);
 		
 		for(String tierName:leftRecord.getExtraTierNames()) {
 			Tier<?> tier = leftRecord.getTier(tierName);
-			rightRecord.putTier(factory.createTier(tierName, tier.getDeclaredType(), tier.isGrouped()));
+			rightRecord.putTier(sessionFactory.createTier(tierName, tier.getDeclaredType(), tier.isGrouped()));
 		}
 		
 		if(splitGroupIdx >= 0) {
@@ -523,7 +535,7 @@ public class TimelineRecordTier extends TimelineTier {
 				MediaSegment ls = leftRecord.getSegment().getGroup(0);
 				MediaSegment rs = rightRecord.getSegment().getGroup(0);
 				
-				rightRecord = factory.cloneRecord(recordToSplit);
+				rightRecord = sessionFactory.cloneRecord(recordToSplit);
 				
 				for(int i = leftRecord.numberOfGroups() - 1; i >= splitGroupIdx; i--) {
 					leftRecord.removeGroup(i);
