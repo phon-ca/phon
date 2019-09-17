@@ -780,9 +780,16 @@ public final class TimelineView extends EditorView {
 			if(playbackMarker != null) {
 				long currentTime = System.currentTimeMillis();
 				long newTime = mediaStartTime + (currentTime - systemStartTime);
-				playbackMarker.setTime(newTime / 1000.0f);		
 				
-				repaint((long)(1/30.0f * 1000.0f));
+				float oldTime = playbackMarker.getTime();
+				playbackMarker.setTime(newTime / 1000.0f);
+
+				long tn = (long)(1/30.0f * 1000.0f);
+				float st = Math.min(oldTime, playbackMarker.getTime());
+				float et = Math.max(oldTime, playbackMarker.getTime());
+				
+				getWaveformTier().getWaveformDisplay().repaint(tn, st, et);
+				getRecordTier().getRecordGrid().repaint(tn, st, et);
 			}
 		}
 		

@@ -103,47 +103,28 @@ public class TimeComponentUI extends ComponentUI {
 		@Override
 		public void intervalAdded(Interval interval) {
 			interval.addPropertyChangeListener(intervalTimeListener);
-			repaintInterval(interval);			
+			timeComp.repaintInterval(interval);			
 		}
 
 		@Override
 		public void intervalRemoved(Interval interval) {
 			interval.removePropertyChangeListener(intervalTimeListener);
-			repaintInterval(interval);
+			timeComp.repaintInterval(interval);
 		}
 
 		@Override
 		public void markerAdded(Marker marker) {
 			marker.addPropertyChangeListener(markerTimeListener);
-			repaintMarker(marker);
+			timeComp.repaintMarker(marker);
 		}
 
 		@Override
 		public void markerRemoved(Marker marker) {
 			marker.removePropertyChangeListener(markerTimeListener);
-			repaintMarker(marker);
+			timeComp.repaintMarker(marker);
 		}
 		
 	};
-	
-	public void repaintInterval(Interval interval) {
-		var startX = 
-				Math.max(0, timeComp.xForTime(interval.getStartMarker().getTime()) - 1);
-		var endX = 
-				Math.min(timeComp.getWidth(), timeComp.xForTime(interval.getEndMarker().getTime()) + 1);
-		
-		Rectangle clipRect = new Rectangle(
-				(int)startX, 0, (int)(endX-startX), timeComp.getHeight());
-		timeComp.repaint(clipRect);
-	}
-	
-	public void repaintMarker(Marker marker) {
-		var markerX = timeComp.xForTime(marker.getTime());
-		
-		Rectangle clipRect = new Rectangle(
-				(int)Math.max(0, markerX - 1), 0, 3, timeComp.getHeight());
-		timeComp.repaint(clipRect);
-	}
 	
 	private PropertyChangeListener intervalTimeListener = (e) -> {
 		final Interval interval = (Interval)e.getSource();

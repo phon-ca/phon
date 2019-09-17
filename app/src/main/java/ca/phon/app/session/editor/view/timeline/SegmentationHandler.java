@@ -387,6 +387,9 @@ public final class SegmentationHandler {
 				long segStart = window.getWindowStartMs(newTime);
 				long segEnd = window.getWindowEndMs(newTime);
 				
+				float prevStart = segmentationInterval.getStartMarker().getTime();
+				float prevEnd = segmentationInterval.getEndMarker().getTime();
+				
 				// indicate we are going to change multiple values
 				segmentationInterval.setValueAdjusting(true);
 				segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
@@ -398,8 +401,13 @@ public final class SegmentationHandler {
 					TimelineView timelineView = 
 							(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 					
-					timelineView.repaint((long)(1/30.0f * 1000.0f));
-					
+					// repaint interval (with time limit)
+					long tn = (long)(1/30.0f * 1000.0f);
+					float st = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
+					float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
+					timelineView.getWaveformTier().getWaveformDisplay().repaint(tn, st, et);
+					timelineView.getRecordTier().getRecordGrid().repaint(tn, st, et);
+
 					// special case: segmenting with no media
 					//  update time model as we progress
 					if(!editor.getMediaModel().isSessionMediaAvailable()) {
@@ -409,6 +417,7 @@ public final class SegmentationHandler {
 						}
 					}
 					
+					// autoscroll if necessary
 					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
 					if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
 						timelineView.scrollToTime(segStart/1000.0f);

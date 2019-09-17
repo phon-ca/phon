@@ -432,7 +432,7 @@ public class TimelineRecordTier extends TimelineTier {
 		var splitRecords = getRecordSplit(middleOfRecord);
 		
 		getRecordGrid().beginSplitMode(splitRecords.getObj1(), splitRecords.getObj2());
-		getRecordGrid().getUI().repaintInterval(currentRecordInterval);
+		getRecordGrid().repaintInterval(currentRecordInterval);
 	}
 	
 	private void endSplitMode(boolean acceptSplit) {
@@ -463,7 +463,7 @@ public class TimelineRecordTier extends TimelineTier {
 			getParentView().getEditor().getUndoSupport().endUpdate();
 		}
 		if(currentRecordInterval != null)
-			getRecordGrid().getUI().repaintInterval(currentRecordInterval);
+			getRecordGrid().repaintInterval(currentRecordInterval);
 	}
 	
 	public void onEndSplitRecord(PhonActionEvent pae) {
@@ -483,7 +483,7 @@ public class TimelineRecordTier extends TimelineTier {
 		getRecordGrid().setLeftRecordSplit(recordSplit.getObj1());
 		getRecordGrid().setRightRecordSplit(recordSplit.getObj2());
 		
-		getRecordGrid().getUI().repaintInterval(currentRecordInterval);
+		getRecordGrid().repaintInterval(currentRecordInterval);
 	}
 	
 	private Tuple<Record, Record> getRecordSplit(float splitTime) {

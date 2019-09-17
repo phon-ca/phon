@@ -12,6 +12,9 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import ca.phon.app.media.TimeUIModel.Interval;
+import ca.phon.app.media.TimeUIModel.Marker;
+
 /**
  * Base class for components which display information on a horizontal timeline
  *
@@ -104,7 +107,46 @@ public abstract class TimeComponent extends JComponent {
 			throw new IllegalArgumentException("end time < start time");
 		
 		var clipRect = rectForInterval(startTime, endTime);
-		super.repaint(clipRect);
+		super.repaint(Math.max(0, clipRect.x - 1), clipRect.y, clipRect.width + 2, clipRect.height);
+	}
+	
+	/**
+	 * Repaint rectangle between given time values
+	 * 
+	 * @param tn
+	 * @param startTime
+	 * @param endTime
+	 */
+	public void repaint(long tn, float startTime, float endTime) {
+		if(endTime < startTime)
+			throw new IllegalArgumentException("end time < start time");
+		
+		var clipRect = rectForInterval(startTime, endTime);
+		super.repaint(tn, Math.max(0, clipRect.x - 2), clipRect.y, clipRect.width + 4, clipRect.height);
+	}
+	
+	public void repaintInterval(Interval interval) {
+		repaint(interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
+	}
+	
+	public void repaintInterval(long tn, Interval interval) {
+		repaint(tn, interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
+	}
+	
+	public void repaintMarker(Marker marker) {
+		var markerX = xForTime(marker.getTime());
+		
+		Rectangle clipRect = new Rectangle(
+				(int)Math.max(0, markerX - 1), 0, 3, getHeight());
+		super.repaint(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+	}
+	
+	public void repaintMarker(long tn, Marker marker) {
+		var markerX = xForTime(marker.getTime());
+		
+		Rectangle clipRect = new Rectangle(
+				(int)Math.max(0, markerX - 1), 0, 3, getHeight());
+		super.repaint(tn, clipRect.x, clipRect.y, clipRect.width, clipRect.height);
 	}
 	
 	private final PropertyChangeListener modelPropListener = new PropertyChangeListener() {
