@@ -16,6 +16,7 @@
 package ca.phon.script.params.ui;
 
 import java.awt.BorderLayout;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.swing.JCheckBox;
@@ -33,6 +34,7 @@ import org.jdesktop.swingx.VerticalLayout;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.phon.plugin.PluginManager;
 import ca.phon.script.params.BooleanScriptParam;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.script.params.LabelScriptParam;
@@ -94,7 +96,20 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	}
 
 	@Override
-	public void fallbackVisit(ScriptParam obj) {
+	public void fallbackVisit(ScriptParam param) {
+		Optional<ScriptParamComponentFactory> factoryOpt = 
+				PluginManager.getInstance().getExtensionPoints(ScriptParamComponentFactory.class)
+					.stream().map( (extPt) -> extPt.getFactory().createObject() )
+					.filter( (compFactory) -> compFactory.canCreateScriptParamComponent(param) )
+					.findAny();
+		
+		if(factoryOpt.isPresent()) {
+			var compFactory = factoryOpt.get();
+			final JLabel paramLabel = factory.createParamLabel(param);
+			final JComponent paramComp = compFactory.createScriptParamComponent(param);
+			final JPanel panel = createComponentPanel(paramLabel, paramComp);
+			currentContainer.add(panel);
+		}
 	}
 	
 	private JPanel createComponentPanel(JLabel label, JComponent comp) {

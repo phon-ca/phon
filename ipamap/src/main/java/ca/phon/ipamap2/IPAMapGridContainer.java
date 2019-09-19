@@ -48,6 +48,7 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.ipamap.IpaMap;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.ipamap.io.IpaGrids;
@@ -107,7 +108,7 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	public Tuple<JButton, IPAMapGrid> addGrid(Grid ipaGrid) {
 		IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
 		mapGrid.addCellMouseListener(forwardingMouseListener);
-		mapGrid.setFont(new Font("Charis SIL", Font.BOLD, 18));
+		mapGrid.setFont(FontPreferences.getUIIpaFont().deriveFont(Font.BOLD, 18.0f));
 		mapGrid.setCellFilter(cellFilter);
 		mapGrid.setSelectionEnabled(isSelectionEnabled());
 		mapGrid.getSelectionModel().addListSelectionListener(new SelectionListener(mapGrid));
