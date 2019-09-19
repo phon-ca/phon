@@ -90,34 +90,39 @@ public class VLCHelper {
 				}
 				final String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
+				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcCoreLibraryName(), vlcLocation);
 				
 				final String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, vlcPluginPathDefault);
-
 				if(vlcPluginPath != null && !OSInfo.isWindows()) {
-					LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1);
+					// System.getenv("VLC_PLUGIN_PATH") returns null even after the call
+					// but the setting seems to be necessary for vlcj
+					if(LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1) < 0) {
+						LOGGER.warn("Unable to set VLC_PLUGIN_PATH");
+					}
 				}
 				
 				Info info = Info.getInstance();
-				 System.out.printf("vlcj             : %s%n", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>");
-			        System.out.printf("os               : %s%n", val(info.os()));
-			        System.out.printf("java             : %s%n", val(info.javaVersion()));
-			        System.out.printf("java.home        : %s%n", val(info.javaHome()));
-			        System.out.printf("jna.library.path : %s%n", val(info.jnaLibraryPath()));
-			        System.out.printf("java.library.path: %s%n", val(info.javaLibraryPath()));
-			        System.out.printf("PATH             : %s%n", val(info.path()));
-			        System.out.printf("VLC_PLUGIN_PATH  : %s%n", val(info.pluginPath()));
+				LOGGER.info(String.format("vlcj             : %s", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>"));
+				LOGGER.info(String.format("os               : %s", val(info.os())));
+				LOGGER.info(String.format("java             : %s", val(info.javaVersion())));
+				LOGGER.info(String.format("java.home        : %s", val(info.javaHome())));
+				LOGGER.info(String.format("jna.library.path : %s", val(info.jnaLibraryPath())));
+				LOGGER.info(String.format("java.library.path: %s", val(info.javaLibraryPath())));
+				LOGGER.info(String.format("PATH             : %s", val(info.path())));
+				LOGGER.info(String.format("VLC_PLUGIN_PATH  : %s", vlcPluginPath));
 
-			        if (RuntimeUtil.isNix()) {
-			            System.out.printf("LD_LIBRARY_PATH  : %s%n", val(info.ldLibraryPath()));
-			        } else if (RuntimeUtil.isMac()) {
-			            System.out.printf("DYLD_LIBRARY_PATH          : %s%n", val(info.dyldLibraryPath()));
-			            System.out.printf("DYLD_FALLBACK_LIBRARY_PATH : %s%n", val(info.dyldFallbackLibraryPath()));
-			        }
+		        if (RuntimeUtil.isNix()) {
+		        	LOGGER.info(String.format("LD_LIBRARY_PATH  : %s", val(info.ldLibraryPath())));
+		        } else if (RuntimeUtil.isMac()) {
+		        	LOGGER.info(String.format("DYLD_LIBRARY_PATH          : %s", val(info.dyldLibraryPath())));
+		        	LOGGER.info(String.format("DYLD_FALLBACK_LIBRARY_PATH : %s", val(info.dyldFallbackLibraryPath())));
+		        }
+		        
+		        // attempt to load native libraries for vlc
+		        NativeLibrary vlcLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcLibraryName());
+		        NativeLibrary vlccoreLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcCoreLibraryName());
+		        
 				
-				// print info to logger
-//				LOGGER.info("Using vlcj " + Info.getInstance().vlcjVersion());
-//				LibVlcVersion libvlcVersion = new LibVlcVersion();
-//				LOGGER.info("Using libvlc " + libvlcVersion.getVersion());
 				isLoaded = true;
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
@@ -126,6 +131,10 @@ public class VLCHelper {
 			}
 		}
 
+		return isLoaded;
+	}
+	
+	public static boolean isLoaded() {
 		return isLoaded;
 	}
 	

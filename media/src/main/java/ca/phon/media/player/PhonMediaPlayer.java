@@ -53,6 +53,7 @@ import org.apache.logging.log4j.LogManager;
 
 import com.sun.jna.Memory;
 
+import ca.phon.media.VLCHelper;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -376,7 +377,7 @@ public class PhonMediaPlayer extends JPanel {
 			positionSlider.setEnabled(false);
 			mediaPlayerCanvas.setBufferedImage(null);
 			mediaPlayerCanvas.repaint();
-		} else {
+		} else if(VLCHelper.isLoaded()) {
 			mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
 			mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
 			if(mediaPlayer == null) return;
