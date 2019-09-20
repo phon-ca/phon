@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipamap.IpaMap;
+import ca.phon.ipamap2.DiacriticSelector;
 import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
@@ -55,9 +56,6 @@ public class GlobalParameterPanel extends JPanel {
 	
 	private final static String RETAIN_DIACRITICS_PROP =
 			GlobalParameterPanel.class.getName() + ".retainDiacritics";
-
-	private final static String IGNORE_TONES_PROP =
-			GlobalParameterPanel.class.getName() + ".ignoreTones";
 	
 	private final static String INVENTORY_GROUPING_PROP = 
 			GlobalParameterPanel.class.getName() + ".inventoryGrouping";
@@ -66,8 +64,7 @@ public class GlobalParameterPanel extends JPanel {
 	
 	private JComboBox<String> ignoreDiacriticsBox;
 	
-	private DropDownButton retainDiacriticsButton;
-	private IPAMapGridContainer retainDiacriticsMap;
+	private DiacriticSelector diacriticSelector;
 	
 	private JComboBox<String> ignoreTonesBox;
 	
@@ -130,17 +127,6 @@ public class GlobalParameterPanel extends JPanel {
 		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select diacritics which will be retained when using the ignore diacritics setting");
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-		
-		retainDiacriticsMap = new IPAMapGridContainer();
-		JPanel mapPanel = new JPanel(new BorderLayout());
-		mapPanel.add(new JScrollPane(retainDiacriticsMap), BorderLayout.CENTER);
-		mapPanel.setPreferredSize(new Dimension(mapPanel.getPreferredSize().width, 400));
-		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, mapPanel);
-		
-//		retainDiacriticsButton = new DropDownButton(dropDownAct);
-//		retainDiacriticsButton.setOnlyPopup(true);
-//		++gbc.gridx;
-//		add(retainDiacriticsButton, gbc);
 		
 		++gbc.gridx;
 		JLabel grpingLbl = new JLabel("Inventory grouping:");

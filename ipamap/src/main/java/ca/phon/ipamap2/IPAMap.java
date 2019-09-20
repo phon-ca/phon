@@ -14,7 +14,7 @@ public class IPAMap  {
 		JFrame f = new JFrame("test");
 		
 		f.getContentPane().setLayout(new BorderLayout());
-		f.getContentPane().add(new IPAElementSelector(new HashSet<>()), BorderLayout.CENTER);
+		f.getContentPane().add(new DiacriticSelector(), BorderLayout.CENTER);
 		
 		f.pack();
 		f.setVisible(true);

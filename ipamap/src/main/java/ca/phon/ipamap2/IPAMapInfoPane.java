@@ -54,7 +54,7 @@ public class IPAMapInfoPane extends JPanel {
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		collapsiblePane = new JXCollapsiblePane(Direction.UP);
 		collapsiblePane.setContentPane(bottomPanel);
-		collapsiblePane.setCollapsed(true);
+		collapsiblePane.setCollapsed(false);
 		
 		previewLabel = new JLabel();
 		previewLabel.setFont(FontPreferences.getUIIpaFont().deriveFont(72.0f));

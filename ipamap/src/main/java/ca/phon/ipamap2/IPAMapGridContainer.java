@@ -125,6 +125,27 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		add(toggleButton);
 		add(cp);
 		
+		mapGrid.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				toggleButton.setVisible(true);
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				toggleButton.setVisible(false);
+			}
+		});
+		
 		return new Tuple<>(toggleButton, mapGrid);
 	}
 	
