@@ -200,6 +200,7 @@ public class InventorySettings implements Cloneable {
 			ColumnInfo groupBy = new ColumnInfo();
 			groupBy.caseSensitive = getGroupBy().caseSensitive;
 			groupBy.ignoreDiacritics = getGroupBy().ignoreDiacritics;
+			groupBy.retainDiacritics = getGroupBy().retainDiacritics;
 			groupBy.name = getGroupBy().name;
 			
 			retVal.setGroupBy(groupBy);
@@ -209,6 +210,7 @@ public class InventorySettings implements Cloneable {
 			ColumnInfo colInfo = new ColumnInfo();
 			colInfo.caseSensitive = columnInfo.caseSensitive;
 			colInfo.ignoreDiacritics = columnInfo.ignoreDiacritics;
+			colInfo.retainDiacritics = columnInfo.retainDiacritics;
 			colInfo.name = columnInfo.name;
 			retVal.addColumn(colInfo);
 		}

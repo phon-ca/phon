@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -226,11 +227,12 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			int grouping = getColumnIndex(table, settings.getGroupBy().name);
 			if(grouping >= 0 && grouping < table.getColumnCount()) {
 				for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
-					retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping), settings.getGroupBy().caseSensitive, settings.getGroupBy().ignoreDiacritics));
+					retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping), settings.getGroupBy().caseSensitive, 
+							settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().retainDiacritics));
 				}
 			}
 		} else {
-			retVal.add(new GroupKey("Total", true, false));
+			retVal.add(new GroupKey("Total", true, false, new HashSet<>()));
 		}
 
 		return retVal;
@@ -255,11 +257,12 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				rowData[ic] = (col >= 0 ?
 						table.getValueAt(row, inventoryCols[ic]) : "");
 				if(rowData[ic] instanceof IPATranscript && settings.getColumns().get(ic).ignoreDiacritics) {
-					rowData[ic] = ((IPATranscript)rowData[ic]).removePunctuation().stripDiacritics();
+					rowData[ic] = ((IPATranscript)rowData[ic]).removePunctuation().stripDiacritics(settings.getColumns().get(ic).retainDiacritics::contains);
 				}
 			}
 
-			final GroupKey groupKey = new GroupKey(grouping, settings.getGroupBy().caseSensitive, settings.getGroupBy().ignoreDiacritics);
+			final GroupKey groupKey = new GroupKey(grouping, settings.getGroupBy().caseSensitive, 
+					settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().retainDiacritics);
 			final InventoryRowData key = new InventoryRowData(settings, rowData);
 			Map<GroupKey, Long> counts = retVal.get(key);
 			if(counts == null) {
@@ -281,8 +284,13 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		
 		boolean ignoreDiacritics;
 		
-		public GroupKey(Object key, boolean caseSensitive, boolean ignoreDiacritics) {
+		Set<Diacritic> retainDiacritics;
+		
+		public GroupKey(Object key, boolean caseSensitive, boolean ignoreDiacritics, Set<Diacritic> retainDiacritics) {
 			this.key = key;
+			this.caseSensitive = caseSensitive;
+			this.ignoreDiacritics = ignoreDiacritics;
+			this.retainDiacritics = retainDiacritics;
 		}
 
 		@Override
@@ -290,12 +298,13 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			if(!(o2 instanceof GroupKey)) return false;
 			return TableUtils.checkEquals(key, ((GroupKey)o2).key,
 					caseSensitive,
-					ignoreDiacritics);
+					ignoreDiacritics,
+					retainDiacritics);
 		}
 
 		@Override
 		public String toString() {
-			return TableUtils.objToString(key, ignoreDiacritics);
+			return TableUtils.objToString(key, ignoreDiacritics, retainDiacritics);
 		}
 
 		@Override
