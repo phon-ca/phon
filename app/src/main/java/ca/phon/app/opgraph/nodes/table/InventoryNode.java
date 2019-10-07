@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
@@ -170,6 +171,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		}
 		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 			groupBy.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
+			groupBy.retainDiacritics = (Set<Diacritic>)context.get(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION);
 		}
 		for(ColumnInfo info:settings.getColumns()) {
 			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) && !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
@@ -177,6 +179,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			}
 			if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 				info.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
+				info.retainDiacritics = (Set<Diacritic>)context.get(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION);
 			}
 		}
 		

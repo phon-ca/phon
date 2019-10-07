@@ -230,6 +230,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = GlobalParameter.CASE_SENSITIVE.getParamId();
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = GlobalParameter.IGNORE_DIACRITICS.getParamId();
 	public final static String INVENTORY_GROUPING_GLOBAL_OPTION = GlobalParameter.INVENTORY_GROUPING_COLUMN.getParamId();
+	public final static String RETAIN_DIACRITICS_GLOBAL_OPTION = GlobalParameter.RETAIN_DIACRITICS_SET.getParamId();
 
 	protected boolean inInit = true;
 

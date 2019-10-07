@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import ca.phon.ipa.Diacritic;
+import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipamap.IpaMap;
 import ca.phon.ipamap2.DiacriticSelector;
 import ca.phon.ipamap2.IPAMapGridContainer;
@@ -65,9 +66,7 @@ public class GlobalParameterPanel extends JPanel {
 	private JComboBox<String> ignoreDiacriticsBox;
 	
 	private DiacriticSelector diacriticSelector;
-	
-	private JComboBox<String> ignoreTonesBox;
-	
+
 	private JComboBox<String> inventoryGroupingBox;
 	
 	public GlobalParameterPanel() {
@@ -179,23 +178,14 @@ public class GlobalParameterPanel extends JPanel {
 	}
 	
 	public Set<Diacritic> getGlobalRetainDiacritics() {
-		return new HashSet<>();
+		IPAElementFactory factory = new IPAElementFactory();
+		HashSet<Diacritic> retVal = new HashSet<>();
+		retVal.add(factory.createDiacritic('\u00b9'));
+		return retVal;
 	}
 	
 	public void setGlobalRetainDiacritics(Set<Diacritic> diacritics) {
 		// TODO
-	}
-	
-	public boolean isUseGlobalIgnoreTones() {
-		return this.ignoreTonesBox.getSelectedIndex() > 0;
-	}
-	
-	public void setUseDefaultIgnoreTones() {
-		this.ignoreTonesBox.setSelectedIndex(0);
-	}
-	
-	public boolean isIgnoreTones() {
-		return this.ignoreTonesBox.getSelectedIndex() == 1;
 	}
 	
 	public void setIgnoreTones(boolean ignoreTones) {
@@ -224,6 +214,9 @@ public class GlobalParameterPanel extends JPanel {
 			
 		case INVENTORY_GROUPING_COLUMN:
 			return getInventoryGrouping();
+			
+		case RETAIN_DIACRITICS_SET:
+			return getGlobalRetainDiacritics();
 	
 		default:
 			return null;

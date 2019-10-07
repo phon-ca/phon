@@ -16,7 +16,11 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import ca.phon.ipa.Diacritic;
 
 
 public class InventorySettings implements Cloneable {
@@ -152,6 +156,7 @@ public class InventorySettings implements Cloneable {
 		String name = "";
 		boolean caseSensitive = false;
 		boolean ignoreDiacritics = true;
+		Set<Diacritic> retainDiacritics = new HashSet<>();
 		public String getName() {
 			return name;
 		}
@@ -170,7 +175,12 @@ public class InventorySettings implements Cloneable {
 		public void setIgnoreDiacritics(boolean ignoreDiacritics) {
 			this.ignoreDiacritics = ignoreDiacritics;
 		}
-		
+		public Set<Diacritic> getRetainDiacritics() {
+			return this.retainDiacritics;
+		}
+		public void setRetainDiacritics(Set<Diacritic> set) {
+			this.retainDiacritics = set;
+		}
 	}
 	
 	@Override
