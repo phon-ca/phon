@@ -26,9 +26,12 @@ import java.util.Set;
 import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingContainer;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElementFactory;
@@ -36,6 +39,7 @@ import ca.phon.ipamap.IpaMap;
 import ca.phon.ipamap2.DiacriticSelector;
 import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
@@ -63,7 +67,12 @@ public class GlobalParameterPanel extends JPanel {
 	
 	private JComboBox<String> caseSensitiveBox;
 	
-	private JComboBox<String> ignoreDiacriticsBox;
+	private DropDownButton ignoreDiacriticsBtn;
+	private JPopupMenu ignoreDiacriticsMenu;
+	private boolean useIgnoreDiacritics = false;
+	private boolean ignoreDiacritics = false;
+	
+//	private JComboBox<String> ignoreDiacriticsBox;
 	
 	private DiacriticSelector diacriticSelector;
 
@@ -73,6 +82,7 @@ public class GlobalParameterPanel extends JPanel {
 		super();
 		
 		init();
+		updateButtons();
 	}
 	
 	private void init() {
@@ -114,11 +124,32 @@ public class GlobalParameterPanel extends JPanel {
 		add(diaLbl, gbc);
 		
 		++gbc.gridx;
-		ignoreDiacriticsBox = new JComboBox<>(comboBoxItems);
-		ignoreDiacriticsBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
-		ignoreDiacriticsBox.putClientProperty("JComponent.sizeVariant", "small");
-		ignoreDiacriticsBox.setSelectedItem(PrefHelper.get(IGNORE_DIACRITICS_PROP, comboBoxItems[0]));
-		add(ignoreDiacriticsBox, gbc);
+		
+		ignoreDiacriticsMenu = new JPopupMenu();
+		for(String itemTxt:comboBoxItems) {
+			final PhonUIAction idAct = new PhonUIAction(this, "onIgnoreDiacriticsMenu", itemTxt);
+			idAct.putValue(PhonUIAction.NAME, itemTxt);
+			ignoreDiacriticsMenu.add(idAct);
+		}
+		ignoreDiacriticsMenu.addSeparator();
+		
+		diacriticSelector = new DiacriticSelector();
+		ignoreDiacriticsMenu.add(diacriticSelector);
+				
+		PhonUIAction ignoreDiacriticsAct = new PhonUIAction(this, "noOp");
+		ignoreDiacriticsAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		ignoreDiacriticsAct.putValue(PhonUIAction.NAME, "default");
+		ignoreDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+		ignoreDiacriticsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("blank", IconSize.XSMALL));
+		ignoreDiacriticsAct.putValue(DropDownButton.BUTTON_POPUP, ignoreDiacriticsMenu);
+		
+		ignoreDiacriticsBtn = new DropDownButton(ignoreDiacriticsAct);
+		ignoreDiacriticsBtn.setOnlyPopup(true);
+		ignoreDiacriticsBtn.setPreferredSize(ignoreDiacriticsBtn.getPreferredSize());
+		ignoreDiacriticsBtn.setHorizontalTextPosition(SwingConstants.LEFT);
+		ignoreDiacriticsBtn.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		add(ignoreDiacriticsBtn, gbc);
 		
 		final PhonUIAction dropDownAct = new PhonUIAction(this, "noOp");
 		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
@@ -145,6 +176,32 @@ public class GlobalParameterPanel extends JPanel {
 		add(Box.createHorizontalGlue(), gbc);
 	}
 	
+	private void updateButtons() {
+		String ignoreDiacriticsVal = 
+				(isUseGlobalIgnoreDiacritics() ? 
+						(isIgnoreDiacritics() ? "yes" : "no") : "default");
+		ignoreDiacriticsBtn.setText(ignoreDiacriticsVal);
+	}
+	
+	/*
+	 * Event handlers
+	 */
+	
+	// ignore diacritics menu
+	public void onIgnoreDiacriticsMenu(PhonActionEvent pae) {
+		String value = pae.getData().toString();
+		if("default".equals(value)) {
+			useDefaultIgnoreDiacritics();
+		} else if("yes".equals(value)) {
+			this.useIgnoreDiacritics = true;
+			this.ignoreDiacritics = true;
+		} else if("no".equals(value)) {
+			this.useIgnoreDiacritics = true;
+			this.ignoreDiacritics = false;
+		}
+		updateButtons();
+	}
+	
 	public boolean isUseGlobalCaseSensitive() {
 		return this.caseSensitiveBox.getSelectedIndex() > 0;
 	}
@@ -162,34 +219,29 @@ public class GlobalParameterPanel extends JPanel {
 	}
 
 	public boolean isUseGlobalIgnoreDiacritics() {
-		return this.ignoreDiacriticsBox.getSelectedIndex() > 0;
+		return this.useIgnoreDiacritics;
 	}
 	
 	public void useDefaultIgnoreDiacritics() {
-		this.ignoreDiacriticsBox.setSelectedIndex(0);
+		this.useIgnoreDiacritics = true;
+		updateButtons();
 	}
 
 	public boolean isIgnoreDiacritics() {
-		return this.ignoreDiacriticsBox.getSelectedIndex() == 1;
+		return this.ignoreDiacritics;
 	}
 	
 	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
-		this.ignoreDiacriticsBox.setSelectedIndex( ignoreDiacritics ? 1 : 2 );
+		this.ignoreDiacritics = ignoreDiacritics;
+		updateButtons();
 	}
 	
 	public Set<Diacritic> getGlobalRetainDiacritics() {
-		IPAElementFactory factory = new IPAElementFactory();
-		HashSet<Diacritic> retVal = new HashSet<>();
-		retVal.add(factory.createDiacritic('\u00b9'));
-		return retVal;
+		return diacriticSelector.getSelectedDiacritics();
 	}
 	
 	public void setGlobalRetainDiacritics(Set<Diacritic> diacritics) {
 		// TODO
-	}
-	
-	public void setIgnoreTones(boolean ignoreTones) {
-		this.ignoreDiacriticsBox.setSelectedIndex( ignoreTones ? 1 : 2 );
 	}
 	
 	public boolean isUseInventoryGrouping() {

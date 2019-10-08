@@ -41,6 +41,10 @@ import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 
+/**
+ * Calculate inventory for a table
+ *
+ */
 @OpNodeInfo(
 		name="Inventory",
 		description="Aggregated inventory of query results",
@@ -343,7 +347,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				Object rowVal1 = rowVals[i];
 				Object rowVal2 = otherRow.rowVals[i];
 				final ColumnInfo info = settings.getColumns().get(i);
-				equals &= TableUtils.checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics);
+				equals &= TableUtils.checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics, info.retainDiacritics);
 			}
 			return equals;
 		}
@@ -355,7 +359,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			for(Object rowVal:rowVals) {
 				sb.append((sb.length() > 0 ? "," : ""));
 				final  ColumnInfo info = settings.getColumns().get(i++);
-				sb.append(TableUtils.objToString(rowVal, info.ignoreDiacritics));
+				sb.append(TableUtils.objToString(rowVal, info.ignoreDiacritics, info.retainDiacritics));
 			}
 			return sb.toString();
 		}
@@ -364,6 +368,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		public int hashCode() {
 			return toString().hashCode();
 		}
+		
 	}
 
 }
