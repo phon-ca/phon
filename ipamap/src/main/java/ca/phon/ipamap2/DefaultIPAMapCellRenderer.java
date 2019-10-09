@@ -44,7 +44,7 @@ public class DefaultIPAMapCellRenderer implements IPAMapCellRenderer {
 		}
 		if(isSelected) {
 			g2.setColor(Color.BLUE);
-			g2.fill(roundRect);
+			g2.draw(roundRect);
 		}
 		if(isPressed) {
 			g2.setColor(Color.GRAY);

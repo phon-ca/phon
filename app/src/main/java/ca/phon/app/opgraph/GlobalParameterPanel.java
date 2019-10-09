@@ -223,7 +223,7 @@ public class GlobalParameterPanel extends JPanel {
 	}
 	
 	public void useDefaultIgnoreDiacritics() {
-		this.useIgnoreDiacritics = true;
+		this.useIgnoreDiacritics = false;
 		updateButtons();
 	}
 

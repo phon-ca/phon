@@ -99,11 +99,17 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				(context.containsKey(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION) && !context.get(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION).equals("default")
 						? context.get(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION).toString() : null);
 		
+		final Set<Diacritic> retainDiacritics = 
+				(context.containsKey(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION) ? 
+						((Set<Diacritic>)context.get(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION)) : new HashSet<>());
+		
+		
 		if(settings.isAutoGrouping()) {
 			ColumnInfo groupBy = new ColumnInfo();
 			groupBy.name = (groupingColumn == null ? settings.getAutoGroupingColumn() : groupingColumn);
 			groupBy.caseSensitive = caseSensitive;
 			groupBy.ignoreDiacritics = ignoreDiacritics;
+			groupBy.retainDiacritics = retainDiacritics;
 			settings.setGroupBy(groupBy);
 		}
 		
@@ -135,6 +141,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			ColumnInfo colInfo = new ColumnInfo();
 			colInfo.caseSensitive = caseSensitive;
 			colInfo.ignoreDiacritics = ignoreDiacritics;
+			colInfo.retainDiacritics = retainDiacritics;
 			colInfo.name = colName;
 			settings.addColumn(colInfo);
 		}

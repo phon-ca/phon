@@ -2,13 +2,16 @@ package ca.phon.ipamap2;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXCollapsiblePane;
@@ -45,6 +48,19 @@ public class IPAMapInfoPane extends JPanel {
 		
 		statusBar = new JXStatusBar();
 		statusLabel = new JLabel("[]");
+		statusLabel.addMouseListener(new MouseInputAdapter() {
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println(e);
+				if(e.getButton() == MouseEvent.BUTTON1) {
+					collapsiblePane.setCollapsed(!collapsiblePane.isCollapsed());
+				}
+			}
+			
+		});
+		statusLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		statusLabel.setToolTipText("Click to toggle details");
 		
 		JXStatusBar.Constraint c1 = new JXStatusBar.Constraint(ResizeBehavior.FILL);
 		statusBar.add(statusLabel, c1);
@@ -54,7 +70,7 @@ public class IPAMapInfoPane extends JPanel {
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		collapsiblePane = new JXCollapsiblePane(Direction.UP);
 		collapsiblePane.setContentPane(bottomPanel);
-		collapsiblePane.setCollapsed(false);
+		collapsiblePane.setCollapsed(true);
 		
 		previewLabel = new JLabel();
 		previewLabel.setFont(FontPreferences.getUIIpaFont().deriveFont(72.0f));

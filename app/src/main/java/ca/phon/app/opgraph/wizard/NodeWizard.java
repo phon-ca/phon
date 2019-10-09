@@ -1255,6 +1255,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, globalOptionsPanel.isCaseSensitive());
 		if(globalOptionsPanel.isUseGlobalIgnoreDiacritics())
 			ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.isIgnoreDiacritics());
+		ctx.put(RETAIN_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.getGlobalRetainDiacritics());
 		if(globalOptionsPanel.isUseInventoryGrouping())
 			ctx.put(INVENTORY_GROUPING_GLOBAL_OPTION, globalOptionsPanel.getInventoryGrouping());
 	}

@@ -177,12 +177,12 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 
 	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return (int)getCellRenderer().getCellDimension(this).getHeight() * direction;
+		return (int)getCellRenderer().getCellDimension(this).getHeight();
 	}
 
 	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return (int)getCellRenderer().getCellDimension(this).getHeight() * 10 * direction;
+		return (int)getCellRenderer().getCellDimension(this).getHeight() * 10;
 	}
 
 	@Override

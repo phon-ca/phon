@@ -232,6 +232,20 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	}
 	
 	@Override
+	public int hashCode() {
+		String hashTxt = getText() + ":" + getScType().getIdChar();
+		return hashTxt.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object ele) {
+		if(!(ele instanceof IPAElement)) return false;
+		String s1 = getText() + ":" + getScType().getIdChar();
+		String s2 = ((IPAElement)ele).getText() + ":" + ((IPAElement)ele).getScType().getIdChar();
+		return s1.contentEquals(s2);
+	}
+	
+	@Override
 	public void accept(Visitor<IPAElement> phoneVisitor) {
 		phoneVisitor.visit(this);
 	}
