@@ -106,7 +106,7 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		if(!QNAME.equals(XMLSerializerFactory.getQName(elem)))
 			throw new IOException("Incorrect element");
 		
-		final InventorySettings retVal = new InventorySettings();
+		final InventorySettings retVal = ((OpNode)parent).getExtension(InventorySettings.class);
 		retVal.getColumns().clear();
 		NodeList childNodes = elem.getChildNodes();
 		boolean hasAutoConfig = false;
@@ -125,10 +125,10 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 			retVal.setConfigureAutomatically(false);
 		}
 		
-		if(parent instanceof OpNode) {
-			final OpNode node = (OpNode)parent;
-			node.putExtension(InventorySettings.class, retVal);
-		}
+//		if(parent instanceof OpNode) {
+//			final OpNode node = (OpNode)parent;
+//			node.putExtension(InventorySettings.class, retVal);
+//		}
 		
 		return retVal;
 	}

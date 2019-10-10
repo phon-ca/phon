@@ -52,6 +52,8 @@ import ca.phon.query.report.datasource.TableDataSource;
 )
 public class InventoryNode extends TableOpNode implements NodeSettings {
 
+	private InventorySettings settings = new InventorySettings();
+	
 	private InventorySettingsPanel settingsPanel = null;
 	
 	private OutputField settingsOutput = new OutputField("settings", "Inventory settings", true, InventorySettings.class);
@@ -61,7 +63,6 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 		putField(settingsOutput);
 		
-		final InventorySettings settings = new InventorySettings();
 		putExtension(InventorySettings.class, settings);
 		putExtension(NodeSettings.class, this);
 	}

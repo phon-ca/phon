@@ -124,7 +124,7 @@
 
 		<ca.hedlund.tst.version>0.3</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3-SNAPSHOT</ca.hedlund.desktopicons.version>
-		<ca.phon.opgraph.version>2.0.1</ca.phon.opgraph.version>
+		<ca.phon.opgraph.version>2.0.2</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>12</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>4</ca.phon.jbreadcrumb.version>
 		
