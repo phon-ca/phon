@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JEditorPane;
@@ -47,21 +48,32 @@ public class IPAMapInfoPane extends JPanel {
 		setLayout(new BorderLayout());
 		
 		statusBar = new JXStatusBar();
+		
+		final JLabel expandLabel = new JLabel("+");
+		expandLabel.setFont(expandLabel.getFont().deriveFont(Font.BOLD));
+		
 		statusLabel = new JLabel("[]");
-		statusLabel.addMouseListener(new MouseInputAdapter() {
+		statusLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		statusLabel.setToolTipText("Click to toggle details");
+		
+		var expandListener = new MouseInputAdapter() {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println(e);
 				if(e.getButton() == MouseEvent.BUTTON1) {
 					collapsiblePane.setCollapsed(!collapsiblePane.isCollapsed());
+					String expandLblTxt =
+							collapsiblePane.isCollapsed() ? "+" : "-";
+					expandLabel.setText(expandLblTxt);
 				}
 			}
 			
-		});
-		statusLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		statusLabel.setToolTipText("Click to toggle details");
+		};
+		expandLabel.addMouseListener(expandListener);
+		statusLabel.addMouseListener(expandListener);
 		
+		statusBar.add(expandLabel, new JXStatusBar.Constraint(ResizeBehavior.FIXED));
 		JXStatusBar.Constraint c1 = new JXStatusBar.Constraint(ResizeBehavior.FILL);
 		statusBar.add(statusLabel, c1);
 		
