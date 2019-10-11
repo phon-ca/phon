@@ -96,6 +96,7 @@ public class SegmentationDialog extends JDialog {
 		this.editor = editor;
 		
 		init();
+		//setResizable(false);
 		loadSettings();
 	}
 	
@@ -153,7 +154,7 @@ public class SegmentationDialog extends JDialog {
 		keymapInfoPane = new JEditorPane("text/html", KEYMAP_HTML);
 		keymapInfoPane.setEditable(false);
 		keymapInfoPane.setCaretPosition(0);
-		keymapInfoPane.setPreferredSize(new Dimension(0, 300));
+		keymapInfoPane.setPreferredSize(new Dimension(350, 450));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		JPanel mediaPlaybackPanel = new JPanel(new GridBagLayout());
@@ -238,7 +239,8 @@ public class SegmentationDialog extends JDialog {
 		centerPanel.add(mediaPlaybackPanel);
 		centerPanel.add(recordCreationPanel);
 		
-		add(centerPanel, BorderLayout.CENTER);
+		add(mediaPlaybackPanel, BorderLayout.NORTH);
+		add(recordCreationPanel, BorderLayout.CENTER);
 		add(buttonBar, BorderLayout.SOUTH);
 	}
 	
