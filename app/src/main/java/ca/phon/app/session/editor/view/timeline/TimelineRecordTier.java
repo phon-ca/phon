@@ -730,6 +730,7 @@ public class TimelineRecordTier extends TimelineTier {
 					getParentView().getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
+					getParentView().getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TIER_CHANGED_EVT, TimelineRecordTier.class, SystemTierType.Segment.getName()));
 				}
 			} else {
 				if(!evt.getPropertyName().endsWith("time")) return;
