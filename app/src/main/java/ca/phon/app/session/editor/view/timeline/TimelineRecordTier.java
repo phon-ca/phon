@@ -212,6 +212,9 @@ public class TimelineRecordTier extends TimelineTier {
 	
 	private final DelegateEditorAction onSpeakerChange = 
 			new DelegateEditorAction(this, "onSpeakerChange");
+	
+	private final DelegateEditorAction onRecordDeleted = 
+			new DelegateEditorAction(this, "onRecordDeleted");
 		
 	private final DelegateEditorAction onTierChangedAct = 
 			new DelegateEditorAction(this, "onTierChanged");
@@ -233,6 +236,8 @@ public class TimelineRecordTier extends TimelineTier {
 			.registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantRemoveAct);
 		getParentView().getEditor().getEventManager()
 			.registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantAddedAct);
+		getParentView().getEditor().getEventManager()
+			.registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeleted);
 	}
 	
 	private void deregisterEditorEvents() {
@@ -246,6 +251,8 @@ public class TimelineRecordTier extends TimelineTier {
 			.removeActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantRemoveAct);
 		getParentView().getEditor().getEventManager()
 			.removeActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantAddedAct);
+		getParentView().getEditor().getEventManager()
+			.removeActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeleted);
 	}
 	
 	private void setupRecord(Record r) {
@@ -293,6 +300,18 @@ public class TimelineRecordTier extends TimelineTier {
 		setupRecord(r);
 		
 		recordGrid.repaint(recordGrid.getVisibleRect());
+	}
+	
+	@RunOnEDT
+	public void onRecordDeleted(EditorEvent evt) {
+		if(currentRecordInterval != null) {
+			getTimeModel().removeInterval(currentRecordInterval);
+			
+			Record currentRecord = getParentView().getEditor().currentRecord();
+			if(currentRecord != null) {
+				setupRecord(currentRecord);
+			}
+		}
 	}
 	
 	@RunOnEDT

@@ -244,12 +244,23 @@ public class TimeComponentUI extends ComponentUI {
 					// ensure time values are within interval range
 					if(currentlyDraggedInterval.getStartMarker() == currentlyDraggedMarker) {
 						newTime = Math.min(newTime, currentlyDraggedInterval.getEndMarker().getTime());
+						
+						if(newTime >= currentlyDraggedInterval.getEndMarker().getTime()
+								&& (newTime - oldTime > 0)) {
+							double newX = timeComp.xForTime(currentlyDraggedInterval.getEndMarker().getTime()) - 1;
+							newTime = timeComp.timeAtX(newX);
+						}
 					} else if(currentlyDraggedInterval.getEndMarker() == currentlyDraggedMarker) {
 						newTime = Math.max(newTime, currentlyDraggedInterval.getStartMarker().getTime());
+						
+						if(newTime <= currentlyDraggedInterval.getStartMarker().getTime()
+								&& (newTime - oldTime < 0) ) {
+							double newX = timeComp.xForTime(currentlyDraggedInterval.getStartMarker().getTime()) + 1;
+							newTime = timeComp.timeAtX(newX);
+						}
 					}
 				}
 				
-				// TODO snapping
 				currentlyDraggedMarker.setTime(newTime);
 				
 				Rectangle clipRect = new Rectangle(
