@@ -232,7 +232,8 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 	}
 	
 	/*
-	 * XXX These methods cause issues if implemented.
+	 * XXX These methods cause issues if implemented.  Need to track down what code
+	 * uses equals in a non-content way
 	@Override
 	public int hashCode() {
 		String hashTxt = getText() + ":" + getScType().getIdChar();
@@ -247,6 +248,12 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 		return s1.contentEquals(s2);
 	}
 	*/
+	
+	public boolean contentEquals(IPAElement ele) {
+		String s1 = getText() + ":" + getScType().getIdChar();
+		String s2 = ((IPAElement)ele).getText() + ":" + ((IPAElement)ele).getScType().getIdChar();
+		return s1.contentEquals(s2);
+	}
 	
 	@Override
 	public void accept(Visitor<IPAElement> phoneVisitor) {

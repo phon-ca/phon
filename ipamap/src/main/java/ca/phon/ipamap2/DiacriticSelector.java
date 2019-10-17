@@ -6,12 +6,17 @@ import java.util.stream.Collectors;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElementFactory;
+import ca.phon.ui.tristatecheckbox.TristateCheckBox;
 
 public class DiacriticSelector extends IPAMapSelector {
 	
 	public DiacriticSelector() {
 		super();
-		
+
+		init();
+	}
+	
+	private void init() {
 		// remove all non-diacritic sections
 		setSectionVisible("Consonants", false);
 		setSectionVisible("Clicks and Implosives", false);
@@ -21,8 +26,9 @@ public class DiacriticSelector extends IPAMapSelector {
 		setSectionVisible("Other Consonants", false);
 		setSectionVisible("Other Vowels", false);
 		setSectionVisible("Other Symbols", false);
+		
+		
 	}
-	
 	
 	public Set<Diacritic> getSelectedDiacritics() {
 		final IPAElementFactory factory = new IPAElementFactory();

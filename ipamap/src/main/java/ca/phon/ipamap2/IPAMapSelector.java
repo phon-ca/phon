@@ -12,11 +12,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.ipamap.io.ObjectFactory;
+import ca.phon.ui.tristatecheckbox.TristateCheckBox;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 
 /**
  * Allows for selection of a set of IPA elements.
@@ -58,6 +61,51 @@ public class IPAMapSelector extends JComponent {
 		}
 	}
 	
+	public void addCheckBox(final IPAMapGrid mapGrid) {
+		JPanel gridPanel = map.getMapGridPanel(mapGrid);
+		
+		TristateCheckBox triStateCheckbox = new TristateCheckBox();
+		triStateCheckbox.setToolTipText("Select all");
+		triStateCheckbox.setSelectionState(getSelectionStateForGrid(mapGrid));
+		
+		triStateCheckbox.addActionListener( (e) -> {
+			TristateCheckBoxState currentState = triStateCheckbox.getSelectionState();
+			
+			switch(currentState) {
+			case UNCHECKED:
+				// select all
+				mapGrid.selectAll();
+				break;
+				
+			case PARTIALLY_CHECKED:
+				// select all
+				mapGrid.selectAll();
+				break;
+				
+			case CHECKED:
+				// de-select all
+				mapGrid.clearSelection();
+				break;
+				
+			default:
+				break;
+			}
+			
+			triStateCheckbox.setSelectionState(getSelectionStateForGrid(mapGrid));
+			triStateCheckbox.setSelected(true);
+		});
+		
+		gridPanel.add(triStateCheckbox, BorderLayout.WEST);
+	}
+	
+	private TristateCheckBoxState getSelectionStateForGrid(IPAMapGrid grid) {
+		int totalCount = grid.getGrid().getCell().size();
+		int selectedCount = grid.getSelectionModel().getSelectedItemsCount();
+		
+		return (selectedCount == 0 ? TristateCheckBoxState.UNCHECKED :
+			(totalCount == selectedCount ? TristateCheckBoxState.CHECKED : TristateCheckBoxState.PARTIALLY_CHECKED));
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 		
@@ -77,11 +125,11 @@ public class IPAMapSelector extends JComponent {
 		for(var ipaGrid:ipaGrids.loadGridData().getGrid()) {
 			var tuple = map.addGrid(ipaGrid);
 			gridMap.put(ipaGrid.getName(), tuple.getObj2());
+			addCheckBox(tuple.getObj2());
 		}
 		
 		map.setSelectionEnabled(true);
 		map.addCellSelectionListener(cellSelectionListener);
-		
 		infoPane = new IPAMapInfoPane();
 		
 		map.addCellMouseListener(cellMouseListener);

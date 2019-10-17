@@ -68,6 +68,8 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	private boolean selectionEnabled = false;
 	
 	private Map<IPAMapGrid, JXCollapsiblePane> cpMap = new HashMap<>();
+	
+	private Map<IPAMapGrid, JPanel> togglePanelMap = new HashMap<>();
 		
 	private final EventListenerList listenerList = new EventListenerList();
 	
@@ -120,16 +122,21 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		cp.setAnimated(false);
 		cpMap.put(mapGrid, cp);
 		
-		//System.out.println(mapGrid.getPreferredSize());
 		JButton toggleButton = getToggleButton(ipaGrid, cp);
-		add(toggleButton);
+		
+		JPanel togglePanel = new JPanel(new BorderLayout());
+		togglePanel.add(toggleButton, BorderLayout.CENTER);
+		
+		togglePanelMap.put(mapGrid, togglePanel);
+		
+		add(togglePanel);
 		add(cp);
 		
 		mapGrid.addComponentListener(new ComponentListener() {
 			
 			@Override
 			public void componentShown(ComponentEvent e) {
-				toggleButton.setVisible(true);
+				togglePanel.setVisible(true);
 			}
 			
 			@Override
@@ -142,7 +149,7 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 			
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				toggleButton.setVisible(false);
+				togglePanel.setVisible(false);
 			}
 		});
 		
@@ -220,6 +227,18 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		});
 		
 		return btn;
+	}
+	
+	/**
+	 * Return the panel displayed above the given grid.
+	 * The returned panel has a {@link BorderLayout} with
+	 * the togglebutton in the center position.
+	 * 
+	 * @param gridName
+	 * @return panel or <code>null</code>
+	 */
+	public JPanel getMapGridPanel(IPAMapGrid mapGrid) {
+		return togglePanelMap.get(mapGrid);
 	}
 	
 	/* Selection */

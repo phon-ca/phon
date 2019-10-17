@@ -132,6 +132,16 @@ public class IPAMapGrid extends JComponent implements Scrollable {
 		return this.selectionModel;
 	}
 	
+	public void clearSelection() {
+		getSelectionModel().clearSelection();
+	}
+	
+	public void selectAll() {
+		var selectionModel = getSelectionModel();
+		selectionModel.clearSelection();
+		selectionModel.addSelectionInterval(0, getGrid().getCell().size()-1);
+	}
+	
 	public void setSelectionModel(ListSelectionModel selectionModel) {
 		var oldVal = this.selectionModel;
 		this.selectionModel = selectionModel;
