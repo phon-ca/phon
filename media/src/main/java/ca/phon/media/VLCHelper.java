@@ -118,9 +118,10 @@ public class VLCHelper {
 		        	LOGGER.info(String.format("DYLD_FALLBACK_LIBRARY_PATH : %s", val(info.dyldFallbackLibraryPath())));
 		        }
 		        
+		        // XXX This seems not to work as expected
 		        // attempt to load native libraries for vlc
-		        NativeLibrary vlcLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcLibraryName());
-		        NativeLibrary vlccoreLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcCoreLibraryName());
+//		        NativeLibrary vlcLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcLibraryName());
+//		        NativeLibrary vlccoreLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcCoreLibraryName());
 		        
 				
 				isLoaded = true;
