@@ -18,6 +18,7 @@ package ca.phon.ipa;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -453,7 +454,25 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		accept(filter);
 		return filter.getIPATranscript();
 	}
-		
+	
+	/**
+	 * Strip diacritics, keeping those found in the retainDiacritics list.
+	 * 
+	 * @param retainDiacritics
+	 * @return
+	 */
+	public IPATranscript stripDiacritics(Collection<Diacritic> retainDiacritics) {
+		Predicate<Diacritic> pred = (dia) -> {
+			boolean contains = false;
+			for(Diacritic d:retainDiacritics) {
+				contains = dia.getText().contentEquals(d.getText());
+				if(contains) break;
+			}
+			return contains;
+		};
+		return stripDiacritics(pred);
+	}
+	
 	/**
 	 * Strip diacritics from transcript using custom filter.
 	 * 

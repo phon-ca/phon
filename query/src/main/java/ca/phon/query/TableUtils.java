@@ -16,6 +16,7 @@
 package ca.phon.query;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.Set;
 
 import ca.phon.formatter.Formatter;
@@ -27,28 +28,7 @@ import ca.phon.ipa.IPATranscript;
 public class TableUtils {
 	
 	public static boolean checkEquals(Object o1, Object o2, boolean caseSensitive, boolean ignoreDiacritics) {
-		if(o1 == null && o2 != null) return false;
-		else if(o1 == null && o2 == o1) return true;
-		
-		final Class<?> type = o1.getClass();
-		@SuppressWarnings("unchecked")
-		final Formatter<Object> formatter = 
-				(Formatter<Object>)FormatterFactory.createFormatter(type);
-		
-		String o1Txt = (formatter != null ? formatter.format(o1) : o1.toString());
-		String o2Txt = (formatter != null ? formatter.format(o2) : o2.toString());
-		
-		if(ignoreDiacritics && o1 instanceof IPATranscript && o2 instanceof IPATranscript) {
-			try {
-				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
-				o1Txt = ipa.removePunctuation().stripDiacritics().toString();
-				
-				final IPATranscript ipa2 = IPATranscript.parseIPATranscript(o2Txt);
-				o2Txt = ipa2.removePunctuation().stripDiacritics().toString();
-			} catch (ParseException e) {}
-		}
-		
-		return (caseSensitive ? o1Txt.equals(o2Txt) : o1Txt.equalsIgnoreCase(o2Txt));
+		return checkEquals(o1, o2, caseSensitive, ignoreDiacritics, new HashSet<>());
 	}
 	
 	public static boolean checkEquals(Object o1, Object o2, boolean caseSensitive, boolean ignoreDiacritics, Set<Diacritic> retainDiacritics) {
@@ -66,10 +46,10 @@ public class TableUtils {
 		if(ignoreDiacritics && o1 instanceof IPATranscript && o2 instanceof IPATranscript) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
-				o1Txt = ipa.removePunctuation().stripDiacritics(retainDiacritics::contains).toString();
+				o1Txt = ipa.removePunctuation().stripDiacritics(retainDiacritics).toString();
 				
 				final IPATranscript ipa2 = IPATranscript.parseIPATranscript(o2Txt);
-				o2Txt = ipa2.removePunctuation().stripDiacritics(retainDiacritics::contains).toString();
+				o2Txt = ipa2.removePunctuation().stripDiacritics(retainDiacritics).toString();
 			} catch (ParseException e) {}
 		}
 		
@@ -77,17 +57,7 @@ public class TableUtils {
 	}
 	
 	public static String objToString(Object val, boolean ignoreDiacritics) {
-		String retVal = (val != null ? FormatterUtil.format(val) : "");
-		if(ignoreDiacritics && val instanceof IPATranscript) {
-			try {
-				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
-					IPATranscript.parseIPATranscript(retVal));
-				retVal = transcript.removePunctuation().stripDiacritics().toString();
-			} catch (ParseException e) {
-				
-			}
-		}
-		return retVal;
+		return objToString(val, ignoreDiacritics, new HashSet<>());
 	}
 	
 	public static String objToString(Object val, boolean ignoreDiacritics, Set<Diacritic> retainDiacritics) {
@@ -96,7 +66,7 @@ public class TableUtils {
 			try {
 				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
 					IPATranscript.parseIPATranscript(retVal));
-				retVal = transcript.removePunctuation().stripDiacritics(retainDiacritics::contains).toString();
+				retVal = transcript.removePunctuation().stripDiacritics(retainDiacritics).toString();
 			} catch (ParseException e) {
 				
 			}

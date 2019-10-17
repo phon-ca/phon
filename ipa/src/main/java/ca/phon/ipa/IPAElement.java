@@ -231,6 +231,8 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 		return extensionSupport;
 	}
 	
+	/*
+	 * XXX These methods cause issues if implemented.
 	@Override
 	public int hashCode() {
 		String hashTxt = getText() + ":" + getScType().getIdChar();
@@ -244,6 +246,7 @@ public abstract class IPAElement implements Visitable<IPAElement>, IExtendable {
 		String s2 = ((IPAElement)ele).getText() + ":" + ((IPAElement)ele).getScType().getIdChar();
 		return s1.contentEquals(s2);
 	}
+	*/
 	
 	@Override
 	public void accept(Visitor<IPAElement> phoneVisitor) {
