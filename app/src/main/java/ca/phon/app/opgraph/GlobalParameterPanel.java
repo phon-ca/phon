@@ -20,8 +20,14 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Properties;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -37,6 +43,7 @@ import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipamap.IpaMap;
 import ca.phon.ipamap2.DiacriticSelector;
+import ca.phon.ipamap2.IPAMapGrid;
 import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonActionEvent;
@@ -53,14 +60,23 @@ import ca.phon.util.icons.IconSize;
  */
 public class GlobalParameterPanel extends JPanel {
 	
+	private final static String USE_CASE_SENSITIVE_PROP =
+			GlobalParameterPanel.class.getName() + ".useCaseSensitive";
+	
 	private final static String CASE_SENSITIVE_PROP = 
 			GlobalParameterPanel.class.getName() + ".caseSensitive";
+	
+	private final static String USE_IGNORE_DIACRITICS_PROP =
+			GlobalParameterPanel.class.getName() + ".useIgnoreDiacritics";
 	
 	private final static String IGNORE_DIACRITICS_PROP =
 			GlobalParameterPanel.class.getName() + ".ignoreDiacritics";
 	
 	private final static String RETAIN_DIACRITICS_PROP =
 			GlobalParameterPanel.class.getName() + ".retainDiacritics";
+	
+	private final static String USE_INVENTORY_GROUPING_PROP =
+			GlobalParameterPanel.class.getName() + ".useInventoryGrouping";
 	
 	private final static String INVENTORY_GROUPING_PROP = 
 			GlobalParameterPanel.class.getName() + ".inventoryGrouping";
@@ -72,8 +88,6 @@ public class GlobalParameterPanel extends JPanel {
 	private boolean useIgnoreDiacritics = false;
 	private boolean ignoreDiacritics = false;
 	
-//	private JComboBox<String> ignoreDiacriticsBox;
-	
 	private DiacriticSelector diacriticSelector;
 
 	private JComboBox<String> inventoryGroupingBox;
@@ -82,6 +96,7 @@ public class GlobalParameterPanel extends JPanel {
 		super();
 		
 		init();
+		loadPreferences();
 		updateButtons();
 	}
 	
@@ -115,6 +130,7 @@ public class GlobalParameterPanel extends JPanel {
 		caseSensitiveBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
 		caseSensitiveBox.putClientProperty("JComponent.sizeVariant", "small");
 		caseSensitiveBox.setSelectedItem(PrefHelper.get(CASE_SENSITIVE_PROP, comboBoxItems[0]));
+		caseSensitiveBox.setToolTipText("Override case sensitive setting for report.  Use 'default' to accept setting as configured in report.");
 		add(caseSensitiveBox, gbc);
 
 		
@@ -240,12 +256,13 @@ public class GlobalParameterPanel extends JPanel {
 		return diacriticSelector.getSelectedDiacritics();
 	}
 	
-	public void setGlobalRetainDiacritics(Set<Diacritic> diacritics) {
-		// TODO
-	}
-	
 	public boolean isUseInventoryGrouping() {
 		return this.inventoryGroupingBox.getSelectedIndex() > 0;
+	}
+	
+	public void useDefaultInventoryGrouping() {
+		inventoryGroupingBox.setSelectedIndex(0);
+		updateButtons();
 	}
 	
 	public void setInventoryGrouping(String grouping) {
@@ -274,5 +291,95 @@ public class GlobalParameterPanel extends JPanel {
 			return null;
 		}
 	}
-
+	
+	private String getIPAMapSelectionString() {
+		return diacriticSelector.getMapGrids().stream()
+			.map( (grid) -> {
+				String retVal = grid.getGrid().getName() + "(";
+				
+				for(int i = 0; i < grid.getSelectionModel().getSelectedItemsCount(); i++) {
+					if(i > 0) retVal += ",";
+					retVal += grid.getSelectionModel().getSelectedIndices()[i];
+				}
+				
+				retVal += ")";
+				return retVal;
+			}).collect(Collectors.joining(";"));
+	}
+	
+	private void loadIPAMapSelection(String selectionString) {
+		String regex = "(\\w+)\\(([0-9,]+)\\)";
+		Pattern p = Pattern.compile(regex);
+		
+		diacriticSelector.clearSelection();
+		
+		try(Scanner s1 = new Scanner(selectionString)) {
+			String gridData = null;
+			while((gridData = s1.findInLine(p)) != null) {
+				Matcher m = p.matcher(gridData);
+				if(m.matches()) {
+					String gridName = m.group(1);
+					String selectedIndices = m.group(2);
+					
+					var mapGridOpt = diacriticSelector.getMapGrids().stream()
+							.filter( (grid) -> grid.getGrid().getName().contentEquals(gridName) )
+							.findAny();
+					
+					if(mapGridOpt.isPresent()) {
+						IPAMapGrid mapGrid = mapGridOpt.get();
+						try(Scanner s2 = new Scanner(selectedIndices)) {
+							s2.useDelimiter(",");
+							while(s2.hasNextInt()) {
+								int selectedIdx = s2.nextInt();
+								
+								mapGrid.getSelectionModel().addSelectionInterval(selectedIdx, selectedIdx);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void savePreferences() {
+		var userPrefs = PrefHelper.getUserPreferences();
+		userPrefs.putBoolean(USE_CASE_SENSITIVE_PROP, isUseGlobalCaseSensitive());
+		userPrefs.putBoolean(CASE_SENSITIVE_PROP, isCaseSensitive());
+		
+		userPrefs.putBoolean(USE_IGNORE_DIACRITICS_PROP, isUseGlobalIgnoreDiacritics());
+		userPrefs.putBoolean(IGNORE_DIACRITICS_PROP, isIgnoreDiacritics());
+		userPrefs.put(RETAIN_DIACRITICS_PROP, getIPAMapSelectionString());
+		
+		userPrefs.putBoolean(USE_INVENTORY_GROUPING_PROP, isUseInventoryGrouping());
+		userPrefs.put(INVENTORY_GROUPING_PROP, getInventoryGrouping());
+	}
+	
+	public void loadPreferences() {
+		var userPrefs = PrefHelper.getUserPreferences();
+		
+		boolean useCaseSensitive = userPrefs.getBoolean(USE_CASE_SENSITIVE_PROP, false);
+		if(useCaseSensitive) {
+			setCaseSensitive(userPrefs.getBoolean(CASE_SENSITIVE_PROP, true));
+		} else {
+			useDefaultCaseSensitive();
+		}
+		
+		boolean useIgnoreDiacritics = userPrefs.getBoolean(USE_IGNORE_DIACRITICS_PROP, false);
+		if(useIgnoreDiacritics) {
+			setIgnoreDiacritics(userPrefs.getBoolean(IGNORE_DIACRITICS_PROP, false));
+		} else {
+			useDefaultIgnoreDiacritics();
+		}
+		
+		String retainDiacriticsSelection = userPrefs.get(RETAIN_DIACRITICS_PROP, "");
+		loadIPAMapSelection(retainDiacriticsSelection);
+		
+		boolean useInventoryGrouping = userPrefs.getBoolean(USE_INVENTORY_GROUPING_PROP, false);
+		if(useInventoryGrouping) {
+			setInventoryGrouping(userPrefs.get(INVENTORY_GROUPING_PROP, "Session"));
+		} else {
+			useDefaultInventoryGrouping();
+		}
+	}
+	
 }

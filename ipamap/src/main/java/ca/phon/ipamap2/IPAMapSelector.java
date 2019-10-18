@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
@@ -61,6 +64,10 @@ public class IPAMapSelector extends JComponent {
 		}
 	}
 	
+	public Collection<IPAMapGrid> getMapGrids() {
+		return gridMap.values();
+	}
+	
 	public void addCheckBox(final IPAMapGrid mapGrid) {
 		JPanel gridPanel = map.getMapGridPanel(mapGrid);
 		
@@ -73,17 +80,14 @@ public class IPAMapSelector extends JComponent {
 			
 			switch(currentState) {
 			case UNCHECKED:
-				// select all
 				mapGrid.selectAll();
 				break;
 				
 			case PARTIALLY_CHECKED:
-				// select all
 				mapGrid.selectAll();
 				break;
 				
 			case CHECKED:
-				// de-select all
 				mapGrid.clearSelection();
 				break;
 				
@@ -91,8 +95,18 @@ public class IPAMapSelector extends JComponent {
 				break;
 			}
 			
-			triStateCheckbox.setSelectionState(getSelectionStateForGrid(mapGrid));
-			triStateCheckbox.setSelected(true);
+			SwingUtilities.invokeLater( () -> 
+				triStateCheckbox.setSelectionState(getSelectionStateForGrid(mapGrid)) );
+		});
+		
+		mapGrid.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				triStateCheckbox.setSelectionState(getSelectionStateForGrid(mapGrid));
+				triStateCheckbox.repaint();
+			}
+			
 		});
 		
 		gridPanel.add(triStateCheckbox, BorderLayout.WEST);
