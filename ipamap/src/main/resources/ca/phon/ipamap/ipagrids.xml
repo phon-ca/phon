@@ -1222,13 +1222,15 @@
             <property name="Description">Falling-rising tone contour</property>
             <property name="Unicode">0x1dc9</property>
         </cell>
-        <cell y="0" x="14" h="2" w="2">
+       
+       <!-- Removed in Phon 3.1.0
+       <cell y="0" x="14" h="2" w="2">
             <text>ꜛ</text>
             <property name="Name">Up arrow</property>
             <property name="Description">Tone upstep</property>
             <property name="Unicode">0xa71b</property>
-        </cell>
-        <cell y="0" x="16" h="2" w="2">
+       </cell>
+       <cell y="0" x="16" h="2" w="2">
             <text>ꜜ</text>
             <property name="Name">Down arrow</property>
             <property name="Description">Tone downstep</property>
@@ -1246,55 +1248,56 @@
             <property name="Description">Global fall</property>
             <property name="Unicode">0x2198</property>
         </cell>
-        <cell y="0" x="20" h="2" w="2">
+        -->
+        <cell y="0" x="14" h="2" w="2">
             <text>◌¹</text>
             <property name="Name">Tone 1</property>
             <property name="Description">Tone number 1</property>
             <property name="Unicode">0xb9</property>
         </cell>
-        <cell y="0" x="22" h="2" w="2">
+        <cell y="0" x="16" h="2" w="2">
             <text>◌²</text>
             <property name="Name">Tone 2</property>
             <property name="Description">Tone number 2</property>
             <property name="Unicode">0xb2</property>
         </cell>
-        <cell y="0" x="24" h="2" w="2">
+        <cell y="0" x="18" h="2" w="2">
             <text>◌³</text>
             <property name="Name">Tone 3</property>
             <property name="Description">Tone number 3</property>
             <property name="Unicode">0xb3</property>
         </cell>
-        <cell y="0" x="26" h="2" w="2">
+        <cell y="0" x="20" h="2" w="2">
             <text>◌⁴</text>
             <property name="Name">Tone 4</property>
             <property name="Description">Tone number 4</property>
             <property name="Unicode">0x2074</property>
         </cell>
-        <cell y="0" x="28" h="2" w="2">
+        <cell y="0" x="22" h="2" w="2">
             <text>◌⁵</text>
             <property name="Name">Tone 5</property>
             <property name="Description">Tone number 5</property>
             <property name="Unicode">0x2075</property>
         </cell>
-        <cell y="2" x="20" h="2" w="2">
+        <cell y="2" x="14" h="2" w="2">
             <text>◌⁶</text>
             <property name="Name">Tone 6</property>
             <property name="Description">Tone number 6</property>
             <property name="Unicode">0x2076</property>
         </cell>
-        <cell y="2" x="22" h="2" w="2">
+        <cell y="2" x="16" h="2" w="2">
             <text>◌⁷</text>
             <property name="Name">Tone 7</property>
             <property name="Description">Tone number 7</property>
             <property name="Unicode">0x2077</property>
         </cell>
-        <cell y="2" x="24" h="2" w="2">
+        <cell y="2" x="18" h="2" w="2">
             <text>◌⁸</text>
             <property name="Name">Tone 8</property>
             <property name="Description">Tone number 8</property>
             <property name="Unicode">0x2078</property>
         </cell>
-        <cell y="2" x="26" h="2" w="2">
+        <cell y="2" x="20" h="2" w="2">
             <text>◌⁹</text>
             <property name="Name">Tone 9</property>
             <property name="Description">Tone number 9</property>
