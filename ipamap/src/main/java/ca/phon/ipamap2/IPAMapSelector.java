@@ -31,6 +31,7 @@ import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 public class IPAMapSelector extends JComponent {
 	
 	private Grid selectedCellGrid;
+	
 	private IPAMapGridContainer selectedMapContainer;
 	private IPAMapGrid selectedMap;
 	

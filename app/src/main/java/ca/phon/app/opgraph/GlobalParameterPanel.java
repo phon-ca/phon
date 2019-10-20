@@ -33,6 +33,7 @@ import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -130,7 +131,7 @@ public class GlobalParameterPanel extends JPanel {
 		caseSensitiveBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
 		caseSensitiveBox.putClientProperty("JComponent.sizeVariant", "small");
 		caseSensitiveBox.setSelectedItem(PrefHelper.get(CASE_SENSITIVE_PROP, comboBoxItems[0]));
-		caseSensitiveBox.setToolTipText("Override case sensitive setting for report.  Use 'default' to accept setting as configured in report.");
+		caseSensitiveBox.setToolTipText("Override case sensitive setting for report.  Use 'default' to accept setting as configured in report options.");
 		add(caseSensitiveBox, gbc);
 
 		
@@ -150,6 +151,10 @@ public class GlobalParameterPanel extends JPanel {
 		ignoreDiacriticsMenu.addSeparator();
 		
 		diacriticSelector = new DiacriticSelector();
+		
+		JMenuItem promptItem = new JMenuItem("The following diacritics will not be ignored:");
+		promptItem.setEnabled(false);
+		ignoreDiacriticsMenu.add(promptItem);
 		ignoreDiacriticsMenu.add(diacriticSelector);
 				
 		PhonUIAction ignoreDiacriticsAct = new PhonUIAction(this, "noOp");
@@ -170,7 +175,8 @@ public class GlobalParameterPanel extends JPanel {
 		final PhonUIAction dropDownAct = new PhonUIAction(this, "noOp");
 		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
 		dropDownAct.putValue(PhonUIAction.NAME, "Retain diacritics");
-		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select diacritics which will be retained when using the ignore diacritics setting");
+		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, 
+				"Override ignore diacritics setting for report and select diacritics which will be retained when using the ignore diacritics setting");
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		
@@ -185,6 +191,7 @@ public class GlobalParameterPanel extends JPanel {
 		inventoryGroupingBox.putClientProperty("JComboBox.isSquare", Boolean.TRUE);
 		inventoryGroupingBox.putClientProperty("JComponent.sizeVariant", "small");
 		inventoryGroupingBox.setSelectedItem(PrefHelper.get(INVENTORY_GROUPING_PROP, groupingOptions[0]));
+		inventoryGroupingBox.setToolTipText("Override inventory grouping column for report.  Use 'default' to accept setting as configured in report options.");
 		add(inventoryGroupingBox, gbc);
 		
 		gbc.weightx = 1.0;
