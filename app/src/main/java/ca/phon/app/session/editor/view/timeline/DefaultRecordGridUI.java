@@ -21,6 +21,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
+import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,6 +70,7 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.MsFormatter;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -562,6 +564,65 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 	};
 	
+	/* Hit tests */
+	private <T> Optional<T> hitTest(RTree<T, com.github.davidmoten.rtree.geometry.Rectangle> tree, com.github.davidmoten.rtree.geometry.Point p) {
+		var entries = tree.search(p);
+		List<Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>> tupleList = new ArrayList<>();
+		entries
+		.map( entry -> new Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>(entry.geometry(), entry.value()))
+		.subscribe(tupleList::add);
+		
+		if(tupleList.size() > 0) {
+			double dist = Double.MAX_VALUE;
+			T v = null;
+			for(var tuple:tupleList) {
+				double d = p.distance(tuple.getObj1());
+				
+				if(d < dist) {
+					dist = d;
+					v = tuple.getObj2();
+				}
+			}
+			return Optional.of(v);
+		} else {
+			return Optional.empty();
+		}
+	}
+	
+	/**
+	 * Return the closest action to the given point.
+	 * 
+	 * @param p
+	 * @return
+	 */
+	private Optional<Action> actionHitTest(com.github.davidmoten.rtree.geometry.Point p) {
+		return hitTest(actionsTree, p);
+	}
+	
+	/**
+	 * Return the closest marker to the given point
+	 * @param p
+	 * @return
+	 */
+	private Optional<Integer> markerHitTest(com.github.davidmoten.rtree.geometry.Point p) {
+		return hitTest(markerTree, p);
+	}
+	
+	/**
+	 * Return the best record (if any) for the given point.
+	 * TODO: Define 'best'
+	 * 
+	 * @param p
+	 * @return
+	 */
+	private Optional<Integer> recordHitTest(com.github.davidmoten.rtree.geometry.Point p) {
+		return hitTest(recordTree, p);
+	}
+	
+	private Optional<String> messageHitTest(com.github.davidmoten.rtree.geometry.Point p) {
+		return hitTest(messageTree, p);
+	}
+	
 	private final RecordGridMouseAdapter mouseListener = new RecordGridMouseAdapter();
 	
 	private class RecordGridMouseAdapter extends MouseInputAdapter {
@@ -576,35 +637,32 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		public void mousePressed(MouseEvent e) {
 			recordGrid.requestFocusInWindow();
 			
-			var actionEntries = actionsTree.search(Geometries.point(e.getX(), e.getY()));
-			actionEntries.map( entry -> entry.value() ).forEach( action -> {
-				action.actionPerformed(new ActionEvent(recordGrid, -1, ""));
-			});
+			com.github.davidmoten.rtree.geometry.Point p = 
+					Geometries.point(e.getX(), e.getY());
+			Optional<Action> actionOpt = actionHitTest(p);
+			if(actionOpt.isPresent()) {
+				actionOpt.get().actionPerformed(new ActionEvent(recordGrid, -1, ""));
+			}
 			
-			AtomicReference<Integer> markerRecordRef = new AtomicReference<Integer>(0);
-			var markerEntries = markerTree.search(Geometries.point(e.getX(), e.getY()));
-			markerEntries.map( entry -> entry.value() ).forEach( i -> {
-				markerRecordRef.set(i);
-			});
-
-			
-			if(markerRecordRef.get() == 0) {
-				var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
-				entries.map( entry -> entry.value() ).forEach( i -> {
+			Optional<Integer> markerOpt = markerHitTest(p);
+			if(markerOpt.isEmpty()) {
+				Optional<Integer> recordOpt = recordHitTest(p);
+				if(recordOpt.isPresent()) {
+					var i = recordOpt.get();
 					pressedRecordIdx = i;
 					recordGrid.fireRecordPressed(i, e);
-					recordGrid.repaint();
-				});
+//					recordGrid.repaint();
+				}
 			}
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
-			entries.map( entry -> entry.value() ).forEach( i -> {
-				recordGrid.fireRecordClicked(i, e);
-				recordGrid.repaint();
-			});
+			Optional<Integer> recordOpt = recordHitTest(Geometries.point(e.getX(), e.getY()));
+			if(recordOpt.isPresent()) {
+				recordGrid.fireRecordClicked(recordOpt.get(), e);
+//				recordGrid.repaint();
+			}
 		}
 
 		@Override
@@ -612,40 +670,34 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			if(pressedRecordIdx >= 0) {
 				recordGrid.fireRecordReleased(pressedRecordIdx, e);
 				pressedRecordIdx = -1;
-				recordGrid.repaint();
+//				recordGrid.repaint();
 			}
 			pressedRecordIdx = -1;
 		}
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			AtomicInteger intersectedRecord = new AtomicInteger(-1);
-			var entries = recordTree.search(Geometries.point(e.getX(), e.getY()));
-			entries.map( entry -> entry.value() ).forEach( i -> {
-				intersectedRecord.set(i);
-			});
-			
-			if(intersectedRecord.get() >= 0 && enteredRecordIdx != intersectedRecord.get()) {
-				if(enteredRecordIdx >= 0) {
+			var p = Geometries.point(e.getX(), e.getY());
+			Optional<Integer> intersectedRecord = recordHitTest(p);
+			if(intersectedRecord.isPresent()) {
+				if(intersectedRecord.get() >= 0 && enteredRecordIdx != intersectedRecord.get()) {
+					if(enteredRecordIdx >= 0) {
+						recordGrid.fireRecordExited(enteredRecordIdx, e);
+					}
+					enteredRecordIdx = intersectedRecord.get();
+					recordGrid.fireRecordEntered(enteredRecordIdx, e);
+					recordGrid.repaint();
+				} else if(intersectedRecord.get() < 0 && enteredRecordIdx >= 0) {
 					recordGrid.fireRecordExited(enteredRecordIdx, e);
+					enteredRecordIdx = -1;
+					recordGrid.repaint();
 				}
-				enteredRecordIdx = intersectedRecord.get();
-				recordGrid.fireRecordEntered(enteredRecordIdx, e);
-				recordGrid.repaint();
-			} else if(intersectedRecord.get() < 0 && enteredRecordIdx >= 0) {
-				recordGrid.fireRecordExited(enteredRecordIdx, e);
-				enteredRecordIdx = -1;
-				recordGrid.repaint();
 			}
 			
 			// check to see if we are 'hovering' over a ghost marker
-			AtomicReference<Integer> intersectedMarker = new AtomicReference<Integer>(null);
-			var markerEntries = markerTree.search(Geometries.point(e.getX(), e.getY()));
-			markerEntries.map ( entry -> entry.value() ).forEach( i -> {
-				intersectedMarker.set(i);
-			});
+			Optional<Integer> intersectedMarker = markerHitTest(p);
 			
-			if(intersectedMarker.get() != null) {
+			if(intersectedMarker.isPresent()) {
 				int currentMouseOverMarkerRecordIdx = Math.abs(intersectedMarker.get()) - 1;
 						
 				Record record = recordGrid.getSession().getRecord(currentMouseOverMarkerRecordIdx);
@@ -681,13 +733,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 			
 			// finally see if we should display a message
-			AtomicReference<String> messageRef = new AtomicReference<String>(null);
-			var messageEntries = messageTree.search(Geometries.point(e.getX(), e.getY()));
-			messageEntries.map ( entry -> entry.value() ).forEach( v -> {
-				messageRef.set(v);
-			});
+			Optional<String> messageRef = messageHitTest(p);
 			
-			if(messageRef.get() != null) {
+			if(messageRef.isPresent()) {
 				recordGrid.setToolTipText(messageRef.get());
 			} else {
 				recordGrid.setToolTipText(null);
