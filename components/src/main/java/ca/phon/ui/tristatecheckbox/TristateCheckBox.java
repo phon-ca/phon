@@ -137,32 +137,4 @@ public class TristateCheckBox extends JCheckBox {
 		putClientProperty(CUSTOM_STATE_PROP, state);
 	}
 	
-	public static void main(String[] args) throws Exception {
-		final JFrame testFrame = new JFrame("test");
-		testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		TristateCheckBox ch1 = new TristateCheckBox();
-		ch1.setSelectionState(TristateCheckBoxState.UNCHECKED);
-		ch1.setEnablePartialCheck(false);
-		ch1.setText("Unselected");
-		
-		TristateCheckBox ch2 = new TristateCheckBox();
-		ch2.setSelectionState(TristateCheckBoxState.PARTIALLY_CHECKED);
-		ch2.setEnablePartialCheck(false);
-		ch2.setText("Partially Selected");
-		
-		TristateCheckBox ch3 = new TristateCheckBox();
-		ch3.setSelectionState(TristateCheckBoxState.CHECKED);
-		ch3.setText("Checked");
-		
-		final JPanel panel = new JPanel(new FlowLayout());
-		panel.add(ch1);
-		panel.add(ch2);
-		panel.add(ch3);
-		
-		testFrame.add(panel);
-		testFrame.pack();
-		testFrame.setVisible(true);
-	}
-	
 }
