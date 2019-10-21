@@ -18,25 +18,44 @@ package ca.phon.ui.tristatecheckbox;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import ca.phon.util.OSInfo;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class TristateCheckBox extends JCheckBox {
 
 	private static final long serialVersionUID = 7998392527523539504L;
+	
+	public static final String CUSTOM_STATE_PROP = "CustomSelectionState";
+	
+	/* Icons */
+	private final static String CHECKBOX_ICON_NAME = "tristatecheckbox/checkbox-unchecked";
+	private Icon checkboxIcon;
+		
+	private final static String PARTIAL_CHECKBOX_ICON_NAME = "tristatecheckbox/checkbox-partialcheck";
+	private Icon partiallyCheckedIcon;
+	
+	private final static String CHECKED_ICON_NAME = "tristatecheckbox/checkbox-checked";
+	private Icon checkedIcon;
 
 	/** Do clicks follow three states? */
 	private boolean enablePartialCheck = true;
 	
-	private boolean partialIsSelected = false;
-	
 	public TristateCheckBox() {
 		super();
+		loadIcons();
 		setSelectionState(TristateCheckBoxState.UNCHECKED);
 		addActionListener( (e) -> {
 			final TristateCheckBoxState currentState = getSelectionState();
@@ -56,10 +75,17 @@ public class TristateCheckBox extends JCheckBox {
 		});
 	}
 	
+	private void loadIcons() {
+		checkboxIcon = IconManager.getInstance().getIcon(CHECKBOX_ICON_NAME, IconSize.SMALL);
+		
+		partiallyCheckedIcon = IconManager.getInstance().getIcon(PARTIAL_CHECKBOX_ICON_NAME, IconSize.SMALL);
+		
+		checkedIcon = IconManager.getInstance().getIcon(CHECKED_ICON_NAME, IconSize.SMALL);
+	}
+	
 	@Override
 	public boolean isSelected() {
-		return (getSelectionState() == TristateCheckBoxState.CHECKED || 
-				(isPartialSelected() && getSelectionState() == TristateCheckBoxState.PARTIALLY_CHECKED));
+		return (getSelectionState() == TristateCheckBoxState.CHECKED);
 	}
 	
 	@Override
@@ -87,37 +113,33 @@ public class TristateCheckBox extends JCheckBox {
 	}
 	
 	public TristateCheckBoxState getSelectionState() {
-		return (getClientProperty("CustomSelectionState") != null ? (TristateCheckBoxState)getClientProperty("CustomSelectionState")
+		return (getClientProperty(CUSTOM_STATE_PROP) != null ? (TristateCheckBoxState)getClientProperty(CUSTOM_STATE_PROP)
 				: (super.isSelected() ? TristateCheckBoxState.CHECKED : TristateCheckBoxState.UNCHECKED));
-	}
-	
-	public boolean isPartialSelected() {
-		return this.partialIsSelected;
-	}
-	
-	public void setPartialSelected(boolean partialSelected) {
-		this.partialIsSelected = partialSelected;
 	}
 	
 	public void setSelectionState(TristateCheckBoxState state) {
 		switch(state) {
 		case UNCHECKED:
+			setIcon(checkboxIcon);
 			super.setSelected(false);
 			break;
 			
 		case PARTIALLY_CHECKED:
+			setIcon(partiallyCheckedIcon);
 			super.setSelected(false);
 			break;
 			
 		case CHECKED:
+			setIcon(checkedIcon);
 			super.setSelected(true);
 			break;
 		}
-		putClientProperty("CustomSelectionState", state);
+		putClientProperty(CUSTOM_STATE_PROP, state);
 	}
 	
 	public static void main(String[] args) throws Exception {
 		final JFrame testFrame = new JFrame("test");
+		testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		TristateCheckBox ch1 = new TristateCheckBox();
 		ch1.setSelectionState(TristateCheckBoxState.UNCHECKED);
@@ -141,30 +163,6 @@ public class TristateCheckBox extends JCheckBox {
 		testFrame.add(panel);
 		testFrame.pack();
 		testFrame.setVisible(true);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		
-		if(getSelectionState() == TristateCheckBoxState.PARTIALLY_CHECKED) {
-			if(OSInfo.isMacOs()) {
-				int rectSize = 
-						getHeight() - (getInsets().top + getMargin().top);
-				final Rectangle macOSRect = 
-						new Rectangle(getInsets().left+getMargin().left+2, getInsets().top+getMargin().top, 14, 14);
-				final int macOSRectArc = 4;
-				g.setColor(Color.yellow);
-				g.fillRoundRect(macOSRect.x, macOSRect.y, macOSRect.width, macOSRect.height,
-						macOSRectArc, macOSRectArc);
-				g.setColor(Color.lightGray);
-				g.drawRoundRect(macOSRect.x, macOSRect.y, macOSRect.width, macOSRect.height,
-						macOSRectArc, macOSRectArc);
-			} else {
-				// TODO windows
-			}
-		}
 	}
 	
 }

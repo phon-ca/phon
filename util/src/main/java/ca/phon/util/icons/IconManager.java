@@ -93,6 +93,10 @@ public class IconManager {
 		final ImageIcon icon = getIcon(iconName, size);
 		if(icon == null) return null;
 		
+		return getGrayedIcon(icon);
+	}
+	
+	public ImageIcon getGrayedIcon(Icon icon) {
 		final int w = icon.getIconWidth();
 		final int h = icon.getIconHeight();
 		
@@ -118,6 +122,10 @@ public class IconManager {
 		final ImageIcon icon = getIcon(iconName, size);
 		if(icon == null) return null;
 		
+		return getDisabledIcon(icon);
+	}
+	
+	public ImageIcon getDisabledIcon(Icon icon) {
 		final int w = icon.getIconWidth();
 		final int h = icon.getIconHeight();
 		
