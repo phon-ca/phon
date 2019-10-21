@@ -290,8 +290,8 @@ public final class TimelineView extends EditorView {
 		toolbar.add(tierVisiblityButton);
 //		toolbar.add(splitRecordButton);
 		toolbar.addSeparator();
-		toolbar.add(zoomOutButton);
 		toolbar.add(zoomInButton);
+		toolbar.add(zoomOutButton);
 		
 		return toolbar;
 	}
@@ -621,8 +621,8 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "zoom");
 		
-		builder.addItem(".", new ZoomAction(this, -1));
 		builder.addItem(".", new ZoomAction(this, 1));
+		builder.addItem(".", new ZoomAction(this, -1));
 		
 		return menu;
 	}
@@ -666,8 +666,8 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "zoom");
 		
-		builder.addItem(".", new ZoomAction(this, -1));
 		builder.addItem(".", new ZoomAction(this, 1));
+		builder.addItem(".", new ZoomAction(this, -1));
 		
 		contextMenu.show(me.getComponent(), me.getX(), me.getY());
 	}
