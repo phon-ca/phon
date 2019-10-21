@@ -202,14 +202,30 @@ public class TimeComponentUI extends ComponentUI {
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 
-				if(p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING) {
+				boolean insideStartMarker = (p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING);
+				boolean insideEndMarker = (p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING);
+						
+				if(insideStartMarker && !insideEndMarker) {
 					currentlyDraggedInterval = interval;
 					currentlyDraggedMarker = interval.getStartMarker();
 					currentlyDraggedInterval.setValueAdjusting(true);
-				} else if(p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING) {
+				} else if(!insideStartMarker && insideEndMarker) {
 					currentlyDraggedInterval = interval;
 					currentlyDraggedMarker = interval.getEndMarker();
 					currentlyDraggedInterval.setValueAdjusting(true);
+				} else if(insideStartMarker && insideEndMarker) {
+					// choose the closest
+					var ds = Math.abs(p.x - startX);
+					var de = Math.abs(p.x - endX);
+					if(ds <= de) {
+						currentlyDraggedInterval = interval;
+						currentlyDraggedMarker = interval.getStartMarker();
+						currentlyDraggedInterval.setValueAdjusting(true);
+					} else {
+						currentlyDraggedInterval = interval;
+						currentlyDraggedMarker = interval.getEndMarker();
+						currentlyDraggedInterval.setValueAdjusting(true);
+					}
 				}
 			}
 			
