@@ -35,17 +35,3 @@ To uninstall Phon:
 ```
 sudo dpkg --remove phon
 ```
-
-## Other linux distributions
-
- * Downloand and install java 11 and VLC
- * Install Phon.
-Download the Phon_unix_<version>.sh installer from the [releases](https://github.com/phon-ca/phon/releases) page.
-```
-chmod u+x Phon_unix_<version>.sh
-./Phon_unix_<version>.sh
-```
-or use ```sudo``` if installing for all users
-```
-sudo ./Phon_unix_<version>.sh
-```

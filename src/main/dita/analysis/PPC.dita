@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="analysis-ppc">
+    <title>Analysis: PPC</title>
+    <body>
+        <p>The PPC analysis will calculate the percent phones/consonants/vowels correct in the
+            sampled data.</p>
+    </body>
+    <topic id="report-outline">
+        <title>Report Outline</title>
+        <body>
+            <p>The report will be composed of two types of tables:</p>
+            <ul>
+                <li><p>PPC Summary</p></li>
+                <li><p>PPC Listing</p></li>
+            </ul>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are one of the tables listed above. Other headings are
+                standard Phon report elements or text blocks.</p>
+            <ul>
+                <li><p><b>PPC</b></p><ul>
+                        <li><p>Parameters</p></li>
+                        <li><p><b>Summary</b></p><ul>
+                                <li><p><i>PPC Summary</i> (All Participants)</p></li>
+                                <li><p><i>PPC Summary</i> (Participant 1)</p></li>
+                                <li><p>...</p></li>
+                            </ul></li>
+                        <li><p><b>Breakdown</b></p><ul>
+                                <li><p><i>PPC Listing</i> (Participant 1)</p></li>
+                                <li><p>...</p></li>
+                            </ul></li>
+                    </ul></li>
+            </ul>
+        </body>
+    </topic>
+    <topic id="data-preparation">
+        <title>Data Preparation</title>
+        <body>
+            <p>Session data is queried by word for each IPA Target and IPA Actual tuple. Proper
+                syllabification and phone alignment is required for accurate results. All
+                participants should have unique names/identification numbers and a speaker should be
+                assigned to all records.</p>
+        </body>
+    </topic>
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <p/>
+        </body>
+    </topic>
+    <topic id="topic_wgv_ybb_mjb">
+        <title>PPC Calculation</title>
+        <body>
+            <p>PPC is calculated using the following equation:</p>
+            <p><foreign outputclass="embed-latex">\begin{split}
+                PPC &amp;= \frac{correct}{(correct + incorrect)} \times 100 \\
+                &amp;= \frac{correct}{(correct + deletions + substitutions + epenthesis)} \times 100
+                \end{split}</foreign></p>
+            <p>Traditionally PPC does not include epenthesis.  If requested, a second PPC column may
+                be added to the report which does not include epenthesis in the caclculation.</p>
+            <p><foreign outputclass="embed-latex">\begin{split} PPC\textsubscript{NoEpen} &amp;=
+                    \frac{correct}{(correct + incorrect)} \times 100 \\ &amp;=
+                    \frac{correct}{(correct + deletions + substitutions)} \times 100
+                    \end{split}</foreign></p>
+        </body>
+    </topic>
+    <topic id="ppc-summary">
+        <title>PPC Summary</title>
+        <body>
+            <p>The <i>PPC Summary</i> tables display # Target, # Correct, # Substituted, # Deleted,
+                # Epenthesis, PPC for the sampled data. When displaying the summary for "All
+                Participants" each row is the summary for a single speaker with a final row
+                displaying totals for all speakers. When displaying the summary for a participant,
+                each row shows the totals for the participant in the indicated session. The caption
+                of the table will be “All Participants” or “Participant Name”.</p>
+            <p>Example (All Participants)</p>
+            <table>
+                <tgroup cols="8">
+                    <colspec colname="col1"/>
+                    <colspec colname="col2"/>
+                    <colspec colname="col3"/>
+                    <colspec colname="col4"/>
+                    <colspec colname="col5"/>
+                    <colspec colname="col6"/>
+                    <colspec colname="col7"/>
+                    <colspec colname="col8"/>
+                    <thead>
+                        <row>
+                            <entry>Speaker</entry>
+                            <entry>Role</entry>
+                            <entry># Target</entry>
+                            <entry># Correct</entry>
+                            <entry># Substituted</entry>
+                            <entry># Deleted</entry>
+                            <entry># Epenthesized</entry>
+                            <entry>PCC</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>CHI</entry>
+                            <entry>Target Child</entry>
+                            <entry>1202</entry>
+                            <entry>700</entry>
+                            <entry>265</entry>
+                            <entry>237</entry>
+                            <entry>64</entry>
+                            <entry>55.29</entry>
+                        </row>
+                        <row>
+                            <entry>Kiddo</entry>
+                            <entry>Target Child</entry>
+                            <entry>249</entry>
+                            <entry>168</entry>
+                            <entry>60</entry>
+                            <entry>21</entry>
+                            <entry>16</entry>
+                            <entry>63.4</entry>
+                        </row>
+                        <row>
+                            <entry>Total</entry>
+                            <entry/>
+                            <entry>1451</entry>
+                            <entry>868</entry>
+                            <entry>325</entry>
+                            <entry>258</entry>
+                            <entry>80</entry>
+                            <entry>56.69</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <p>Example (Participant)</p>
+            <table>
+                <tgroup cols="9">
+                    <colspec colname="col1" colwidth="1.12*"/>
+                    <colspec colname="col2" colwidth="1*"/>
+                    <colspec colname="col3" colwidth="1*"/>
+                    <colspec colname="col4" colwidth="1*"/>
+                    <colspec colname="col5" colwidth="1*"/>
+                    <colspec colname="col6" colwidth="1.01*"/>
+                    <colspec colname="col7" colwidth="1*"/>
+                    <colspec colname="col8" colwidth="1.14*"/>
+                    <colspec colname="col9" colwidth="1*"/>
+                    <thead>
+                        <row>
+                            <entry>Session</entry>
+                            <entry>Role</entry>
+                            <entry>Age</entry>
+                            <entry># Target</entry>
+                            <entry># Correct</entry>
+                            <entry># Substituted</entry>
+                            <entry># Deleted</entry>
+                            <entry># Epenthesized</entry>
+                            <entry>PCC</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>CHI.Session1</entry>
+                            <entry>Target Child</entry>
+                            <entry>01;10.11</entry>
+                            <entry>321</entry>
+                            <entry>165</entry>
+                            <entry>68</entry>
+                            <entry>88</entry>
+                            <entry>17</entry>
+                            <entry>48.82</entry>
+                        </row>
+                        <row>
+                            <entry>CHI.Session2</entry>
+                            <entry>Target Child</entry>
+                            <entry>01;11.22</entry>
+                            <entry>445</entry>
+                            <entry>254</entry>
+                            <entry>106</entry>
+                            <entry>85</entry>
+                            <entry>30</entry>
+                            <entry>53.47</entry>
+                        </row>
+                        <row>
+                            <entry>CHI.Session3</entry>
+                            <entry>Target Child</entry>
+                            <entry>02;02.15</entry>
+                            <entry>436</entry>
+                            <entry>281</entry>
+                            <entry>91</entry>
+                            <entry>64</entry>
+                            <entry>17</entry>
+                            <entry>62.03</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </body>
+    </topic>
+    <topic id="ppc-listing">
+        <title>PPC Listing</title>
+        <body>
+            <p>The <i>PPC Listing</i> table displays # Target, # Correct, # Substituted, # Deleted,
+                # Epenthesis, PCC/PVC (Percent Consonant/Vowel Correct) for each word sampled. The
+                table will have the caption “Participant Name”.</p>
+            <p>Example</p>
+            <table>
+                <tgroup cols="10">
+                    <colspec colname="col1"/>
+                    <colspec colname="col2"/>
+                    <colspec colname="col3"/>
+                    <colspec colname="col4"/>
+                    <colspec colname="col5"/>
+                    <colspec colname="col6"/>
+                    <colspec colname="col7"/>
+                    <colspec colname="col8"/>
+                    <colspec colname="col9"/>
+                    <colspec colname="col10"/>
+                    <thead>
+                        <row>
+                            <entry>Record #</entry>
+                            <entry>IPA Target</entry>
+                            <entry>IPA Actual</entry>
+                            <entry># Target</entry>
+                            <entry># Actual</entry>
+                            <entry># Correct</entry>
+                            <entry># Substituted</entry>
+                            <entry># Deleted</entry>
+                            <entry># Epenthesized</entry>
+                            <entry>PCC</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>1</entry>
+                            <entry>ˈɛis</entry>
+                            <entry>ˈʔɛi</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>1</entry>
+                            <entry>ˈɛis</entry>
+                            <entry>ʔœys</entry>
+                            <entry>1</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>2</entry>
+                            <entry>ˈent</entry>
+                            <entry>ˈeĭn</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>3</entry>
+                            <entry>ˈvoχəl</entry>
+                            <entry>ˈhoˑʁa</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>4</entry>
+                            <entry>ˈblumə</entry>
+                            <entry>ˈbo̝ːmɪ</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>66.67</entry>
+                        </row>
+                        <row>
+                            <entry>5</entry>
+                            <entry>ˈsɛnt͡jəs</entry>
+                            <entry>ˈtɪːtæ</entry>
+                            <entry>4</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>6</entry>
+                            <entry>ˈɦœys</entry>
+                            <entry>ˈhœis</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>7</entry>
+                            <entry>ˈɦœys</entry>
+                            <entry>ˈhœys</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>8</entry>
+                            <entry>ˈkɪkəɹ</entry>
+                            <entry>ˈkikä</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>66.67</entry>
+                        </row>
+                        <row>
+                            <entry>9</entry>
+                            <entry>ˈklɔk</entry>
+                            <entry>ˈkɔt</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>33.33</entry>
+                        </row>
+                        <row>
+                            <entry>10</entry>
+                            <entry>ˈsχunə</entry>
+                            <entry>ˈuːmi</entry>
+                            <entry>3</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>11</entry>
+                            <entry>ˈsχun</entry>
+                            <entry>ˈuˑm</entry>
+                            <entry>3</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>12</entry>
+                            <entry>ˈpus</entry>
+                            <entry>ˈpys</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>100.0</entry>
+                        </row>
+                        <row>
+                            <entry>13</entry>
+                            <entry>ˈnɔχ</entry>
+                            <entry>ˈnɔkə</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>13</entry>
+                            <entry>ən</entry>
+                            <entry>əm</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>13</entry>
+                            <entry>ˈpus</entry>
+                            <entry>ˈpys</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>100.0</entry>
+                        </row>
+                        <row>
+                            <entry>14</entry>
+                            <entry>ˈpaɹt</entry>
+                            <entry>ˈpaːt</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>66.67</entry>
+                        </row>
+                        <row>
+                            <entry>15</entry>
+                            <entry>ˈvɪs</entry>
+                            <entry>ˈhis</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>16</entry>
+                            <entry>ˈvɪs</entry>
+                            <entry>ˈhɪ̟s</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>17</entry>
+                            <entry>ˈʋɔɹm</entry>
+                            <entry>ˈʋoːˌmɪn</entry>
+                            <entry>3</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>50.0</entry>
+                        </row>
+                        <row>
+                            <entry>18</entry>
+                            <entry>ˈnits</entry>
+                            <entry>ˈnːt</entry>
+                            <entry>3</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>66.67</entry>
+                        </row>
+                        <row>
+                            <entry>19</entry>
+                            <entry>ˈoto</entry>
+                            <entry>ˈo̞ːto</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>0</entry>
+                            <entry>100.0</entry>
+                        </row>
+                        <row>
+                            <entry>20</entry>
+                            <entry>ˈbʀɑnˌtʋeɹˈoto</entry>
+                            <entry>ˈbɑ̟ːntˈɔtʌ</entry>
+                            <entry>7</entry>
+                            <entry>4</entry>
+                            <entry>4</entry>
+                            <entry>0</entry>
+                            <entry>3</entry>
+                            <entry>0</entry>
+                            <entry>57.14</entry>
+                        </row>
+                        <row>
+                            <entry>21</entry>
+                            <entry>ˈaɹˌbɛi</entry>
+                            <entry>ˈʔaːˈbɛi</entry>
+                            <entry>2</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>1</entry>
+                            <entry>1</entry>
+                            <entry>33.33</entry>
+                        </row>
+                        <row>
+                            <entry>22</entry>
+                            <entry>ˌɪndiˈjan</entry>
+                            <entry>ˈhaːnɪ</entry>
+                            <entry>4</entry>
+                            <entry>2</entry>
+                            <entry>1</entry>
+                            <entry>0</entry>
+                            <entry>3</entry>
+                            <entry>1</entry>
+                            <entry>20.0</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </body>
+    </topic>
+</topic>

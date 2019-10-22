@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="20.1">
+<project version="21.1">
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="20.1" xml:space="preserve">
+            <serialized version="21.1" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>enable.project.master.files.support</String>
@@ -18,7 +18,7 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>Phon Manual (PDF)</String>
+                                        <String>PhonManual - Web</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -120,9 +120,6 @@
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
                                 </field>
-                                <field name="outputFile">
-                                    <File>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/features.xml</File>
-                                </field>
                                 <field name="outputResource">
                                     <String>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/features.xml</String>
                                 </field>
@@ -205,9 +202,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/ipa.xml</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/ipa.xml</String>
@@ -300,6 +294,9 @@
                                     <null/>
                                 </field>
                                 <field name="publishingTemplateDataPO">
+                                    <null/>
+                                </field>
+                                <field name="oxygenFeedbackPO">
                                     <null/>
                                 </field>
                                 <field name="additionalAntArgs">
@@ -427,9 +424,6 @@
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
                                 </field>
-                                <field name="outputFile">
-                                    <null/>
-                                </field>
                                 <field name="outputResource">
                                     <null/>
                                 </field>
@@ -521,6 +515,9 @@
                                     <null/>
                                 </field>
                                 <field name="publishingTemplateDataPO">
+                                    <null/>
+                                </field>
+                                <field name="oxygenFeedbackPO">
                                     <null/>
                                 </field>
                                 <field name="additionalAntArgs">
@@ -686,9 +683,6 @@
                                 <field name="openInBrowser">
                                     <Boolean>true</Boolean>
                                 </field>
-                                <field name="outputFile">
-                                    <null/>
-                                </field>
                                 <field name="outputResource">
                                     <null/>
                                 </field>
@@ -791,6 +785,9 @@
                                             <Boolean>false</Boolean>
                                         </field>
                                     </publishingTemplate>
+                                </field>
+                                <field name="oxygenFeedbackPO">
+                                    <null/>
                                 </field>
                                 <field name="additionalAntArgs">
                                     <String></String>
@@ -1071,10 +1068,7 @@
                                     <Boolean>true</Boolean>
                                 </field>
                                 <field name="openInBrowser">
-                                    <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <null/>
+                                    <Boolean>true</Boolean>
                                 </field>
                                 <field name="outputResource">
                                     <null/>
@@ -1158,9 +1152,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/featurematrix.xml</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/featurematrix.xml</String>

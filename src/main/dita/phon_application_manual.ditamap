@@ -161,9 +161,7 @@
                     <topicref href="praat-plugin/tasks/open_textgrid_in_praat.dita"/>
                 </topicref>
             </topicref>
-            <topicref href="editor/editor_view-segmentation.md" format="markdown">
-                <topicref href="editor/tasks/SegmentMedia.xml"/>
-            </topicref>
+            <topicref href="editor/editor_view-timeline.md" format="markdown"/>
             <topicref href="editor/editor_view-ipa_lookup.md" format="markdown">
                 <topicref href="editor/tasks/Auto-transcribe.xml"/>
                 <topicref href="editor/concepts/AboutIPALookupConsole.xml"/>
@@ -273,7 +271,7 @@
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/consonants.md" format="markdown"/>
-        <topicref href="analysis/PPC.md" format="markdown"/>
+        <topicref href="analysis/PPC.dita" format="dita"/>
         <topicref href="analysis/Phone%20Inventory.md" format="markdown"/>
         <topicref href="analysis/Phonological%20Processes.md" format="markdown"/>
         <topicref href="analysis/PMLU.md" format="markdown"/>
