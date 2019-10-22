@@ -239,6 +239,9 @@ public class ParamComponentFactory {
 		installParamListener(retVal, patternScriptParam);
 		installPatternParamListener(retVal, patternScriptParam);
 		
+		retVal.setEnabled(patternScriptParam.isEnabled());
+		retVal.setVisible(patternScriptParam.getVisible());
+		
 		return retVal;
 	}
 

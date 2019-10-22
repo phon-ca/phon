@@ -195,8 +195,13 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 		p.setLayout(new BorderLayout());
 		p.add(scroller, BorderLayout.CENTER);
 		p.add(strip, BorderLayout.LINE_END);
+
 		
 		final JPanel panel = createComponentPanel(paramLabel, p);
+		param.addPropertyChangeListener(ScriptParam.VISIBLE_PROP, e -> {
+			panel.setVisible(param.getVisible());
+		});
+		panel.setVisible(param.getVisible());
 		currentContainer.add(panel);
 	}
 

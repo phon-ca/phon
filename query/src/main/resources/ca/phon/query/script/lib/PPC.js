@@ -119,13 +119,13 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
-		"choices": ["Percent Consonants Correct (PCC)",
-					"Percent Singleton Consonants Correct (PCC)",
-					"Percent Cluster Consonants Correct (PCC)",
-					"Percent Vowels Correct (PVC)",
-					"Percent Phones Correct (PPC)",
+		"choices": ["Percent Consonants Correct",
+					"Percent Singleton Consonants Correct",
+					"Percent Cluster Consonants Correct",
+					"Percent Vowels Correct",
+					"Percent Phones Correct",
 					"Percent Correct (custom)"],
-		"colnames": ["PCC", "PCC", "PCC", "PVC", "PPC", "PC"],
+		"colnames": ["PPC", "PPC", "PPC", "PPC", "PPC", "PPC"],
 		"phonex": [ "\\c",
 					"see singletonTypeParamInfo",
 					"see clusterTypeParamInfo",
@@ -181,6 +181,15 @@ exports.PPCOptions = function (id, aligned) {
 	};
 	var ignoreDiacriticsParam;
 	this.ignoreDicacritics = ignoreDiacriticsParamInfo.def;
+	
+	var includePPCNoEpenParamInfo = {
+		"id": id +(".includePPCNoEpen"),
+		"title": "Include alternate PPC calculation",
+		"desc": "Include PPC w/o epenthesis 'PPC (NoEpen)'",
+		"def": false
+	};
+	var includePPCNoEpenParam;
+	this.includePPCNoEpen = includePPCNoEpenParamInfo.def;
 
 	this.getColumnName = function () {
 		return ppcTypeParamInfo.colnames[ppcTypeParam.getValue(ppcTypeParamInfo.id).index];
@@ -237,23 +246,30 @@ exports.PPCOptions = function (id, aligned) {
 			ignoreDiacriticsParamInfo.title,
 			ignoreDiacriticsParamInfo.def);
 
+		includePPCNoEpenParam = new BooleanScriptParam(
+			includePPCNoEpenParamInfo.id,
+			includePPCNoEpenParamInfo.desc,
+			includePPCNoEpenParamInfo.title,
+			includePPCNoEpenParamInfo.def);
+	
 		var patternParams = new java.util.ArrayList();
 		this.pattern.setSelectedPatternType(PatternType.PHONEX);
 		this.pattern.param_setup(patternParams);
 		//this.pattern.setExactMatch(true);
 		this.pattern.set_required(true);
 		params.add(patternParams.get(1));
+		
 
 		// setup listeners
 		var patternFilter = this.pattern;
-		patternFilter.setEnabled(false);
-		patternFilter.setPattern("\\c");
+		patternFilter.setVisible(ppcTypeParamInfo.def == 5);
+		patternFilter.setPattern(ppcTypeParamInfo.phonex[ppcTypeParamInfo.def]);
 		ppcTypeParam.addPropertyChangeListener(ppcTypeParamInfo.id, new java.beans.PropertyChangeListener() {
 			propertyChange: function(e) {
 				var idx = e.source.getValue(e.source.paramId).index;
 
 				if(idx < 5) {
-    				patternFilter.setEnabled(false);
+    				patternFilter.setVisible(false);
 				    if(idx == 1) {
 				        patternFilter.setPattern(singletonTypeParamInfo.phonex[singletonTypeParam.getValue(singletonTypeParam.paramId).index]);
 				    } else if(idx == 2) {
@@ -261,8 +277,9 @@ exports.PPCOptions = function (id, aligned) {
 				    } else {
     					patternFilter.setPattern(ppcTypeParamInfo.phonex[idx]);
 					}
-				} else
-					patternFilter.setEnabled(true);
+				} else {
+					patternFilter.setVisible(true);
+				}
 
 			    switch(idx) {
 			    case 1:
@@ -283,6 +300,8 @@ exports.PPCOptions = function (id, aligned) {
 		});
 
 		params.add(ignoreDiacriticsParam);
+		params.add(includePPCNoEpenParam);
+		
 	};
 
 };

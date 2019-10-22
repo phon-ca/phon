@@ -234,6 +234,11 @@ function query_record(recordIndex, record) {
 
 			var pcVal = (pc.target > 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted + pc.epen)): 0) * 100;
 			result.metadata.put(filters.ppc.getColumnName() + "", nf.format(pcVal));
+			
+			if(filters.ppc.includePPCNoEpen == true) {
+				var pcNoEpenVal = (pc.target > 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted)): 0) * 100;
+				result.metadata.put(filters.ppc.getColumnName() + " (NoEpen)", nf.format(pcNoEpenVal));
+			}
 
 			for (var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
 				result.addResultValue(alignedResults[alignedResultIdx]);
