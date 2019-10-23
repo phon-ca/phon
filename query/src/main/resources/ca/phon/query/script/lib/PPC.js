@@ -137,7 +137,7 @@ exports.PPCOptions = function (id, aligned) {
 	};
 	var ppcTypeParam;
 	this.ppcTypeParameter;
-	this.ppcType = { index:0, toString: function() { return ppcTypeParamInfo.choices[0]; } };
+	this.ppcType = { index:ppcTypeParamInfo.def, toString: function() { return ppcTypeParamInfo.choices[ppcTypeParamInfo.def]; } };
 
 	var singletonTypeParamInfo = {
 	    "id": id + ".singletonType",
@@ -154,7 +154,7 @@ exports.PPCOptions = function (id, aligned) {
 	};
 	var singletonTypeParam;
 	this.singletonTypeParameter;
-	this.singletonType = { index:0, toString: function() { return singletonTypeParamInfo.choices[0]; } };
+	this.singletonType = { index:singletonTypeParamInfo.def, toString: function() { return singletonTypeParamInfo.choices[singletonTypeParamInfo.def]; } };
 
 	var clusterTypeParamInfo = {
 	    "id": id + ".clusterType",
@@ -171,7 +171,7 @@ exports.PPCOptions = function (id, aligned) {
 	};
 	var clusterTypeParam;
 	this.clusterTypeParameter;
-	this.clusterType = { index:0, toString: function() { return clusterTypeParamInfo.choices[0]; } };
+	this.clusterType = { index:clusterTypeParamInfo.def, toString: function() { return clusterTypeParamInfo.choices[clusterTypeParamInfo.def]; } };
 
 	var ignoreDiacriticsParamInfo = {
 		"id": id +(".ignoreDiacritics"),
@@ -258,7 +258,6 @@ exports.PPCOptions = function (id, aligned) {
 		//this.pattern.setExactMatch(true);
 		this.pattern.set_required(true);
 		params.add(patternParams.get(1));
-		
 
 		// setup listeners
 		var patternFilter = this.pattern;
@@ -301,7 +300,6 @@ exports.PPCOptions = function (id, aligned) {
 
 		params.add(ignoreDiacriticsParam);
 		params.add(includePPCNoEpenParam);
-		
 	};
 
 };
