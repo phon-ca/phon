@@ -887,7 +887,7 @@ public final class TimelineView extends EditorView {
 
 		@Override
 		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-			return 100;
+			return (int)visibleRect.getWidth();
 		}
 
 		@Override
