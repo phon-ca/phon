@@ -237,12 +237,7 @@ public class RecordGrid extends TimeComponent {
 	public String getUIClassID() {
 		return uiClassId;
 	}
-
-	@Override
-	protected void setUI(ComponentUI newUI) {
-		super.setUI(newUI);
-	}
-
+	
 	@Override
 	public void updateUI() {
 		setUI(new DefaultRecordGridUI());

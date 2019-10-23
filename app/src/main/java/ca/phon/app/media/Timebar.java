@@ -29,11 +29,6 @@ public class Timebar extends TimeComponent {
 	}
 
 	@Override
-	protected void setUI(ComponentUI newUI) {
-		super.setUI(newUI);
-	}
-
-	@Override
 	public void updateUI() {
 		setUI(new DefaultTimebarUI());
 	}

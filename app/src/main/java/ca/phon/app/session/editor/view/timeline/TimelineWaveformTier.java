@@ -4,11 +4,15 @@ package ca.phon.app.session.editor.view.timeline;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 
+import javax.swing.event.MouseInputAdapter;
+
 import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.app.media.WaveformDisplay;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -46,6 +50,9 @@ public class TimelineWaveformTier extends TimelineTier  {
 		
 		wavDisplay.getPreferredSize();
 		
+		wavDisplay.addMouseListener(selectionListener);
+		wavDisplay.addMouseMotionListener(selectionListener);
+		
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(wavDisplay, BorderLayout.CENTER);
 	}
@@ -78,5 +85,63 @@ public class TimelineWaveformTier extends TimelineTier  {
 	public void onRecordChange(EditorEvent ee) {
 		wavDisplay.repaint(wavDisplay.getVisibleRect());
 	}
+	
+	/* Selection using mouse */
+	private Interval selectionInterval = null;
+	
+	private float initialSelectionTime = -1.0f;
+	
+	private MouseInputAdapter selectionListener = new MouseInputAdapter() {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			wavDisplay.requestFocus();
+			if(wavDisplay.getUI().getCurrentlyDraggedMarker() != null) {
+				initialSelectionTime = -1.0f;
+				return;
+			}
+			
+			if(e.getButton() == MouseEvent.BUTTON1) {
+				
+				if(selectionInterval != null) {
+					getTimeModel().removeInterval(selectionInterval);
+					selectionInterval = null;
+				}
+				
+				initialSelectionTime = getTimeModel().timeAtX(e.getX());
+				
+				// TODO change media playback position
+			}
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if(initialSelectionTime > 0) {
+				float currentTime = getTimeModel().timeAtX(e.getX());
+				float diff = currentTime - initialSelectionTime;
+				if(selectionInterval == null) {
+					float intervalStartTime, intervalEndTime = 0.0f;
+					if(diff > 0) {
+						intervalStartTime = initialSelectionTime;
+						intervalEndTime = currentTime; 
+						
+					} else {
+						intervalStartTime = currentTime;
+						intervalEndTime = initialSelectionTime;
+					}
+					
+					selectionInterval = getTimeModel().addInterval(intervalStartTime, intervalEndTime);
+					selectionInterval.setColor(new Color(50, 125, 200, 50));
+					
+					if(diff > 0) {
+						wavDisplay.getUI().beginDrag(selectionInterval, selectionInterval.getEndMarker());
+					} else {
+						wavDisplay.getUI().beginDrag(selectionInterval, selectionInterval.getStartMarker());
+					}
+				}
+			}
+		}
+		
+	};
 		
 }

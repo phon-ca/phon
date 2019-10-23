@@ -54,6 +54,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.media.TimebarMarkerModel.Interval;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -852,6 +853,12 @@ public final class TimelineView extends EditorView {
 				showContextMenu(e);
 			}
 		}
+		
+		
+	};
+	
+	private MouseAdapter mouseSelectionListener = new MouseInputAdapter() {
+		
 		
 		
 	};

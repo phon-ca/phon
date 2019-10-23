@@ -65,11 +65,6 @@ public class WaveformDisplay extends TimeComponent implements Scrollable {
 	}
 
 	@Override
-	protected void setUI(ComponentUI newUI) {
-		super.setUI(newUI);
-	}
-
-	@Override
 	public void updateUI() {
 		setUI(new DefaultWaveformDisplayUI());
 	}

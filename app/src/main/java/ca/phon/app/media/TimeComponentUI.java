@@ -93,6 +93,73 @@ public class TimeComponentUI extends ComponentUI {
 		paintMarker(g2, interval.getEndMarker());
 	}
 	
+	/* Marker dragging */
+	private TimeUIModel.Interval currentlyDraggedInterval = null;
+	
+	private TimeUIModel.Marker currentlyDraggedMarker = null;
+	
+	/**
+	 * Begin drag with given {@link Marker}
+	 * 
+	 * @param marker
+	 */
+	public void beginDrag(Marker marker) {
+		currentlyDraggedInterval = null;
+		currentlyDraggedMarker = marker;
+		currentlyDraggedMarker.setValueAdjusting(true);
+	}
+	
+	/**
+	 * Begin drag with given {@link Interval} and {@link Marker}
+	 * 
+	 * @param interval
+	 * @param marker
+	 */
+	public void beginDrag(Interval interval, Marker marker) {
+		if(interval.getStartMarker() != marker && interval.getEndMarker() != marker)
+			throw new IllegalArgumentException("Marker must have given interval as parent");
+		currentlyDraggedInterval = interval;
+		currentlyDraggedMarker = marker;
+		currentlyDraggedInterval.setValueAdjusting(true);
+	}
+	
+	/**
+	 * Swap dragged marker for currently dragged interval.
+	 * Has no effect if no interval is currently being dragged.
+	 * 
+	 *
+	 */
+	public void beginDragOtherIntervalMarker() {
+		if(currentlyDraggedInterval == null) return;
+		
+		Marker currentMarker = this.currentlyDraggedMarker;
+		Marker otherMarker = (currentMarker == currentlyDraggedInterval.getStartMarker() ? 
+				currentlyDraggedInterval.getEndMarker() : currentlyDraggedInterval.getStartMarker());
+		
+		currentlyDraggedMarker = otherMarker;
+	}
+	
+	/**
+	 * End current drag
+	 * 
+	 */
+	public void endDrag() {
+		if(currentlyDraggedInterval != null)
+			currentlyDraggedInterval.setValueAdjusting(false);
+		if(currentlyDraggedMarker != null)
+			currentlyDraggedMarker.setValueAdjusting(false);
+		currentlyDraggedInterval = null;
+		currentlyDraggedMarker = null;
+	}
+	
+	public Interval getCurrentlyDraggedInterval() {
+		return this.currentlyDraggedInterval;
+	}
+	
+	public Marker getCurrentlyDraggedMarker() {
+		return this.currentlyDraggedMarker;
+	}
+	
 	private TimeUIModelListener timeModelListener = new TimeUIModelListener() {
 
 		@Override
@@ -190,10 +257,6 @@ public class TimeComponentUI extends ComponentUI {
 	
 	private class MarkerMouseListener extends MouseInputAdapter {
 		
-		private TimeUIModel.Interval currentlyDraggedInterval = null;
-		
-		private TimeUIModel.Marker currentlyDraggedMarker = null;
-
 		@Override
 		public void mousePressed(MouseEvent e) {
 			var p = e.getPoint();
@@ -206,25 +269,17 @@ public class TimeComponentUI extends ComponentUI {
 				boolean insideEndMarker = (p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING);
 						
 				if(insideStartMarker && !insideEndMarker) {
-					currentlyDraggedInterval = interval;
-					currentlyDraggedMarker = interval.getStartMarker();
-					currentlyDraggedInterval.setValueAdjusting(true);
+					beginDrag(interval, interval.getStartMarker());
 				} else if(!insideStartMarker && insideEndMarker) {
-					currentlyDraggedInterval = interval;
-					currentlyDraggedMarker = interval.getEndMarker();
-					currentlyDraggedInterval.setValueAdjusting(true);
+						beginDrag(interval, interval.getEndMarker());
 				} else if(insideStartMarker && insideEndMarker) {
 					// choose the closest
 					var ds = Math.abs(p.x - startX);
 					var de = Math.abs(p.x - endX);
 					if(ds <= de) {
-						currentlyDraggedInterval = interval;
-						currentlyDraggedMarker = interval.getStartMarker();
-						currentlyDraggedInterval.setValueAdjusting(true);
+						beginDrag(interval, interval.getStartMarker());
 					} else {
-						currentlyDraggedInterval = interval;
-						currentlyDraggedMarker = interval.getEndMarker();
-						currentlyDraggedInterval.setValueAdjusting(true);
+						beginDrag(interval, interval.getEndMarker());
 					}
 				}
 			}
@@ -233,20 +288,14 @@ public class TimeComponentUI extends ComponentUI {
 				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 
 				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
-					currentlyDraggedMarker = marker;
-					currentlyDraggedMarker.setValueAdjusting(true);
+					beginDrag(marker);
 				}
 			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			if(currentlyDraggedInterval != null)
-				currentlyDraggedInterval.setValueAdjusting(false);
-			if(currentlyDraggedMarker != null)
-				currentlyDraggedMarker.setValueAdjusting(false);
-			currentlyDraggedInterval = null;
-			currentlyDraggedMarker = null;
+			endDrag();
 		}
 
 		@Override
@@ -263,16 +312,18 @@ public class TimeComponentUI extends ComponentUI {
 						
 						if(newTime >= currentlyDraggedInterval.getEndMarker().getTime()
 								&& (newTime - oldTime > 0)) {
-							double newX = timeComp.xForTime(currentlyDraggedInterval.getEndMarker().getTime()) - 1;
-							newTime = timeComp.timeAtX(newX);
+//							double newX = timeComp.xForTime(currentlyDraggedInterval.getEndMarker().getTime()) - 1;
+//							newTime = timeComp.timeAtX(newX);
+							beginDragOtherIntervalMarker();
 						}
 					} else if(currentlyDraggedInterval.getEndMarker() == currentlyDraggedMarker) {
 						newTime = Math.max(newTime, currentlyDraggedInterval.getStartMarker().getTime());
 						
 						if(newTime <= currentlyDraggedInterval.getStartMarker().getTime()
 								&& (newTime - oldTime < 0) ) {
-							double newX = timeComp.xForTime(currentlyDraggedInterval.getStartMarker().getTime()) + 1;
-							newTime = timeComp.timeAtX(newX);
+//							double newX = timeComp.xForTime(currentlyDraggedInterval.getStartMarker().getTime()) + 1;
+//							newTime = timeComp.timeAtX(newX);
+							beginDragOtherIntervalMarker();
 						}
 					}
 				}

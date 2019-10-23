@@ -39,6 +39,18 @@ public abstract class TimeComponent extends JComponent {
 		this.timeModel.addPropertyChangeListener(modelPropListener);
 	}
 	
+	@Override
+	public void setUI(ComponentUI ui) {
+		if(!(ui instanceof TimeComponentUI))
+			throw new IllegalArgumentException("ui must extends TimeComponentUI");
+		super.setUI(ui);
+	}
+	
+	@Override
+	public TimeComponentUI getUI() {
+		return TimeComponentUI.class.cast(super.getUI());
+	}
+	
 	public TimeUIModel getTimeModel() {
 		return this.timeModel;
 	}
