@@ -276,7 +276,7 @@ public class TimelineRecordTier extends TimelineTier {
 			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
 			currentRecordInterval.setRepaintEntireInterval(true);
 			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
-			currentRecordInterval.setValueAdjusting(true);
+			recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
 			ghostMarker.get().addPropertyChangeListener( "valueAdjusting", (e) -> {
 				currentRecordInterval.setValueAdjusting((boolean)e.getNewValue());
 			});
@@ -862,7 +862,7 @@ public class TimelineRecordTier extends TimelineTier {
 	};
 	
 	/**
-	 * The SpligMarker is used when splitting the
+	 * The SplitMarker is used when splitting the
 	 * current record 
 	 *
 	 */

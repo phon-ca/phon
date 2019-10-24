@@ -312,8 +312,6 @@ public class TimeComponentUI extends ComponentUI {
 						
 						if(newTime >= currentlyDraggedInterval.getEndMarker().getTime()
 								&& (newTime - oldTime > 0)) {
-//							double newX = timeComp.xForTime(currentlyDraggedInterval.getEndMarker().getTime()) - 1;
-//							newTime = timeComp.timeAtX(newX);
 							beginDragOtherIntervalMarker();
 						}
 					} else if(currentlyDraggedInterval.getEndMarker() == currentlyDraggedMarker) {
@@ -321,8 +319,6 @@ public class TimeComponentUI extends ComponentUI {
 						
 						if(newTime <= currentlyDraggedInterval.getStartMarker().getTime()
 								&& (newTime - oldTime < 0) ) {
-//							double newX = timeComp.xForTime(currentlyDraggedInterval.getStartMarker().getTime()) + 1;
-//							newTime = timeComp.timeAtX(newX);
 							beginDragOtherIntervalMarker();
 						}
 					}
