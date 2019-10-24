@@ -463,12 +463,9 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 */
 	public IPATranscript stripDiacritics(Collection<Diacritic> retainDiacritics) {
 		Predicate<Diacritic> pred = (dia) -> {
-			boolean contains = false;
-			for(Diacritic d:retainDiacritics) {
-				contains = dia.getText().contentEquals(d.getText());
-				if(contains) break;
-			}
-			return contains;
+			return retainDiacritics.parallelStream()
+				.filter( (d) -> dia.getText().contentEquals(d.getText()) )
+				.count() > 0;
 		};
 		return stripDiacritics(pred);
 	}
