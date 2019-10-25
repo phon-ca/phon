@@ -137,6 +137,7 @@ public class TimeComponentUI extends ComponentUI {
 				currentlyDraggedInterval.getEndMarker() : currentlyDraggedInterval.getStartMarker());
 		
 		currentlyDraggedMarker = otherMarker;
+		currentMarker.setTime(otherMarker.getTime());
 	}
 	
 	/**
@@ -311,14 +312,14 @@ public class TimeComponentUI extends ComponentUI {
 						newTime = Math.min(newTime, currentlyDraggedInterval.getEndMarker().getTime());
 						
 						if(newTime >= currentlyDraggedInterval.getEndMarker().getTime()
-								&& (newTime - oldTime > 0)) {
+								&& (newTime - oldTime >= 0)) {
 							beginDragOtherIntervalMarker();
 						}
 					} else if(currentlyDraggedInterval.getEndMarker() == currentlyDraggedMarker) {
 						newTime = Math.max(newTime, currentlyDraggedInterval.getStartMarker().getTime());
 						
 						if(newTime <= currentlyDraggedInterval.getStartMarker().getTime()
-								&& (newTime - oldTime < 0) ) {
+								&& (newTime - oldTime <= 0) ) {
 							beginDragOtherIntervalMarker();
 						}
 					}

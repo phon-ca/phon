@@ -135,6 +135,11 @@ public class TimelineRecordTier extends TimelineTier {
 		final InputMap inputMap = recordGrid.getInputMap();
 		final ActionMap actionMap = recordGrid.getActionMap();
 		
+		final String escapeKey = "escape";
+		final PhonUIAction escapeAction = new PhonUIAction(this, "onEscape", false);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), escapeKey);
+		actionMap.put(escapeKey, escapeAction);
+		
 		final String deleteRecordKey = "delete_record";
 		final DeleteRecordAction deleteRecordAction = new DeleteRecordAction(getParentView().getEditor());
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), deleteRecordKey);
@@ -162,11 +167,11 @@ public class TimelineRecordTier extends TimelineTier {
 		inputMap.put(splitRecordKs, splitRecordId);
 		actionMap.put(splitRecordId, splitRecordAct);
 		
-		final String endSplitId = "end_split_record";
-		final PhonUIAction endSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", false);
-		final KeyStroke endSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-		inputMap.put(endSplitRecordKs, endSplitId);
-		actionMap.put(endSplitId, endSplitRecordAct);
+//		final String endSplitId = "end_split_record";
+//		final PhonUIAction endSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", false);
+//		final KeyStroke endSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+//		inputMap.put(endSplitRecordKs, endSplitId);
+//		actionMap.put(endSplitId, endSplitRecordAct);
 		
 		final String acceptSplitId = "accept_split_record";
 		final PhonUIAction acceptSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", true);
@@ -196,6 +201,18 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getParentView().getEditor(), getParentView().getEditor().currentRecord(), speaker);
 		getParentView().getEditor().getUndoSupport().postEdit(edit);
+	}
+	
+	public void onEscape(PhonActionEvent pae) {
+		if(isSplitModeActive()) {
+			onEndSplitRecord(pae);
+		} else if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			MediaPlayerEditorView mediaView =
+					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaView.getPlayer().isPlaying()) {
+				mediaView.getPlayer().pause();
+			}
+		}
 	}
 	
 	public void onPlaySegment(PhonActionEvent pae) {
@@ -288,7 +305,7 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		recordGrid.setCurrentRecord(r);
 	}
-		
+
 	/* Editor events */
 	@RunOnEDT
 	public void onRecordChange(EditorEvent evt) {
@@ -416,6 +433,10 @@ public class TimelineRecordTier extends TimelineTier {
 					.filter( this::isTierVisible )
 					.collect( Collectors.toList() )
 		);
+	}
+	
+	public boolean isSplitModeActive() {
+		return this.splitMarker != null;
 	}
 	
 	public void beginSplitMode() {

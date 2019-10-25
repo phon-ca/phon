@@ -4,11 +4,18 @@ package ca.phon.app.session.editor.view.timeline;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.app.media.TimeUIModel;
@@ -18,8 +25,18 @@ import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
+import ca.phon.orthography.Orthography;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 
@@ -33,6 +50,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 		super(parent);
 		
 		init();
+		setupWavformActions();
 		setupEditorEvents();
 	}
 	
@@ -55,6 +73,35 @@ public class TimelineWaveformTier extends TimelineTier  {
 		
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(wavDisplay, BorderLayout.CENTER);
+	}
+	
+	private void setupWavformActions() {
+		final InputMap inputMap = wavDisplay.getInputMap();
+		final ActionMap actionMap = wavDisplay.getActionMap();
+		
+		final String playKey = "play";
+		final PhonUIAction playAction = new PhonUIAction(this, "onPlay");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), playKey);
+		actionMap.put(playKey, playAction);
+		
+		final String escapeKey = "escape";
+		final PhonUIAction escapeAction = new PhonUIAction(this, "onEscape");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), escapeKey);
+		actionMap.put(escapeKey, escapeAction);
+		
+		// setup record creation actions
+		for(int i = 0; i < 10; i++) {
+			final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i);
+			final KeyStroke ks1 = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0);
+			final KeyStroke ks2 = KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + i, 0);
+			final String recordCreationId = "create_record_for_speaker_" + i;
+			inputMap.put(ks1, recordCreationId);
+			inputMap.put(ks2, recordCreationId);
+			actionMap.put(recordCreationId, recordCreationAct);
+		}
+		
+		wavDisplay.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
+		wavDisplay.setActionMap(actionMap);
 	}
 	
 	public WaveformDisplay getWaveformDisplay() {
@@ -81,6 +128,69 @@ public class TimelineWaveformTier extends TimelineTier  {
 		builder.addItem(".", toggleVisiblityAct);
 	}
 	
+	/* UI Events */
+	public void onPlay(PhonActionEvent pae) {
+		if(selectionInterval != null) {
+			// play selected interval
+			if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+				MediaPlayerEditorView mediaView =
+						(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				
+				long startTime = (int)(selectionInterval.getStartMarker().getTime() * 1000.0f);
+				long duration = ((int)(selectionInterval.getEndMarker().getTime() * 1000.0f)) - startTime;
+				mediaView.getPlayer().playSegment(startTime, duration);
+			}
+		} else {
+			// play from current position
+		}
+	}
+	
+	public void onEscape(PhonActionEvent pae) {
+		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			MediaPlayerEditorView mediaView =
+					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaView.getPlayer().isPlaying()) {
+				mediaView.getPlayer().pause();
+			} else {
+				clearSelection();
+			}
+		} else if(selectionInterval != null) {
+			clearSelection();
+		}
+	}
+	
+	public void onCreateRecord(PhonActionEvent pae) {
+		if(selectionInterval == null) return;
+		
+		Participant speaker = Participant.UNKNOWN;
+		int speakerNum = (int)pae.getData();
+		if(speakerNum > 0) {
+			List<Participant> speakerList = 
+					getParentView().getRecordTier().getSpeakerList();
+			if(speakerNum - 1 < speakerList.size()) {
+				speaker = speakerList.get(speakerNum-1);
+			}
+		}
+		
+		final SessionFactory factory = SessionFactory.newFactory();
+		Record utt = factory.createRecord();
+		utt.setSpeaker(speaker);
+		
+		MediaSegment m = factory.createMediaSegment();
+		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
+		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
+		
+		utt.getOrthography().addGroup(new Orthography());
+		utt.getSegment().setGroup(0, m);
+		
+		final SessionEditor editor = getParentView().getEditor();
+		final AddRecordEdit edit = new AddRecordEdit(editor, utt);
+		editor.getUndoSupport().postEdit(edit);
+		
+		clearSelection();
+	}
+	
+	/* Editor Events */
 	@RunOnEDT
 	public void onRecordChange(EditorEvent ee) {
 		wavDisplay.repaint(wavDisplay.getVisibleRect());
@@ -90,6 +200,16 @@ public class TimelineWaveformTier extends TimelineTier  {
 	private Interval selectionInterval = null;
 	
 	private float initialSelectionTime = -1.0f;
+	
+	public Interval getSelection() {
+		return this.selectionInterval;
+	}
+	
+	public void clearSelection() {
+		if(selectionInterval != null)
+			getTimeModel().removeInterval(selectionInterval);
+		selectionInterval = null;
+	}
 	
 	private MouseInputAdapter selectionListener = new MouseInputAdapter() {
 
