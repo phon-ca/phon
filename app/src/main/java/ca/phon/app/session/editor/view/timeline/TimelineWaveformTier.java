@@ -15,6 +15,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.swing.ActionMap;
+import javax.swing.FocusManager;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
@@ -210,8 +211,10 @@ public class TimelineWaveformTier extends TimelineTier  {
 	}
 	
 	public void clearSelection() {
-		if(selectionInterval != null)
+		if(selectionInterval != null) {
 			getTimeModel().removeInterval(selectionInterval);
+			FocusManager.getCurrentManager().focusNextComponent();
+		}
 		selectionInterval = null;
 	}
 	
@@ -220,6 +223,8 @@ public class TimelineWaveformTier extends TimelineTier  {
 		@Override
 		public void focusLost(FocusEvent e) {
 			if(selectionInterval != null) {
+				selectionInterval.getStartMarker().setColor(UIManager.getColor(TimelineViewColors.INTERVAL_MARKER_COLOR));
+				selectionInterval.getEndMarker().setColor(UIManager.getColor(TimelineViewColors.INTERVAL_MARKER_COLOR));
 				selectionInterval.setColor(UIManager.getColor(TimelineViewColors.INTERVAL_BACKGROUND));
 			}
 		}
@@ -227,6 +232,8 @@ public class TimelineWaveformTier extends TimelineTier  {
 		@Override
 		public void focusGained(FocusEvent e) {
 			if(selectionInterval != null) {
+				selectionInterval.getStartMarker().setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR));
+				selectionInterval.getEndMarker().setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR));
 				selectionInterval.setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND));
 			}
 		}
@@ -237,7 +244,9 @@ public class TimelineWaveformTier extends TimelineTier  {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			wavDisplay.requestFocus();
+			if(wavDisplay.isFocusable() && wavDisplay.getUI().getCurrentlyDraggedInterval() == null)
+				wavDisplay.requestFocusInWindow();
+			
 			if(wavDisplay.getUI().getCurrentlyDraggedMarker() != null) {
 				initialSelectionTime = -1.0f;
 				return;
@@ -273,7 +282,13 @@ public class TimelineWaveformTier extends TimelineTier  {
 					}
 					
 					selectionInterval = getTimeModel().addInterval(intervalStartTime, intervalEndTime);
-					selectionInterval.setColor(new Color(50, 125, 200, 50));
+					selectionInterval.setColor(UIManager.getColor(
+							wavDisplay.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND : TimelineViewColors.INTERVAL_BACKGROUND));
+					selectionInterval.addPropertyChangeListener("valueAdjusting", (evt) -> {
+						if(wavDisplay.isFocusable() && Boolean.parseBoolean(evt.getNewValue().toString())) {
+							wavDisplay.requestFocusInWindow();
+						}
+					});
 					
 					if(diff > 0) {
 						wavDisplay.getUI().beginDrag(selectionInterval, selectionInterval.getEndMarker());

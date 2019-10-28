@@ -635,7 +635,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			recordGrid.requestFocusInWindow();
+			if(recordGrid.isFocusable() && getCurrentlyDraggedMarker() == null)
+				recordGrid.requestFocusInWindow();
 			
 			com.github.davidmoten.rtree.geometry.Point p = 
 					Geometries.point(e.getX(), e.getY());

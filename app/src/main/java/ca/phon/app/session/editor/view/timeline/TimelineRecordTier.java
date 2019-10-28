@@ -772,6 +772,9 @@ public class TimelineRecordTier extends TimelineTier {
 			final SessionFactory factory = SessionFactory.newFactory();
 			
 			if(evt.getPropertyName().equals("valueAdjusting")) {
+				if(recordGrid.isFocusable()) {
+					recordGrid.requestFocusInWindow();
+				}
 				// exit split mode if active
 				recordGrid.setSplitModeAccept(false);
 				recordGrid.setSplitMode(false);
