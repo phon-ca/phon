@@ -97,6 +97,10 @@ public final class TimelineView extends EditorView {
 	
 	private static final int defaultZoomIdx = 5;
 	
+	static {
+		TimelineViewColors.install();
+	}
+	
 	private JToolBar toolbar;
 	
 	private JButton zoomOutButton;

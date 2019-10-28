@@ -15,6 +15,7 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.undo.CompoundEdit;
 
 import ca.phon.app.media.TimeComponent;
@@ -446,7 +447,7 @@ public final class SegmentationHandler {
 		if(timelineView != null) {
 			segmentationInterval = timelineView.getTimeModel().addInterval(0.0f, 0.0f);
 			segmentationInterval.setRepaintOnTimeChange(false);
-			segmentationInterval.setColor(new Color(255, 255, 0, 50));
+			segmentationInterval.setColor(UIManager.getColor(TimelineViewColors.SEGMENTATION_INTERVAL_BACKGROUND));
 		}
 		
 		// start media playback

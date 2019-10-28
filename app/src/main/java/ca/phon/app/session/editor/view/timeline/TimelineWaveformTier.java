@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,6 +18,7 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.app.media.TimeUIModel;
@@ -65,6 +68,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 		wavDisplay.setTrackViewportHeight(true);
 		wavDisplay.setBackground(Color.WHITE);
 		wavDisplay.setOpaque(true);
+		wavDisplay.addFocusListener(selectionFocusListener);
 		
 		wavDisplay.getPreferredSize();
 		
@@ -210,6 +214,24 @@ public class TimelineWaveformTier extends TimelineTier  {
 			getTimeModel().removeInterval(selectionInterval);
 		selectionInterval = null;
 	}
+	
+	private FocusListener selectionFocusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+			if(selectionInterval != null) {
+				selectionInterval.setColor(UIManager.getColor(TimelineViewColors.INTERVAL_BACKGROUND));
+			}
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+			if(selectionInterval != null) {
+				selectionInterval.setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND));
+			}
+		}
+		
+	};
 	
 	private MouseInputAdapter selectionListener = new MouseInputAdapter() {
 

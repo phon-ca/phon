@@ -193,7 +193,7 @@ public class TimeComponentUI extends ComponentUI {
 		}
 		
 	};
-	
+		
 	private PropertyChangeListener intervalTimeListener = (e) -> {
 		final Interval interval = (Interval)e.getSource();
 		if(!interval.isRepaintOnTimeChange()) return;
@@ -232,6 +232,8 @@ public class TimeComponentUI extends ComponentUI {
 				} else {
 					timeComp.repaint(Math.min(oldTime, newTime), Math.max(oldTime, newTime));
 				}
+			} else if(e.getPropertyName().contentEquals("color")) {
+				timeComp.repaintInterval(interval);
 			}
 		}
 	};

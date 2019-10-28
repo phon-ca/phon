@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -32,6 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerMessage;
@@ -107,6 +110,7 @@ public class TimelineRecordTier extends TimelineTier {
 				endSplitMode(recordGrid.isSplitModeAccept());
 			}
 		});
+		recordGrid.addFocusListener(selectionFocusListener);
 		
 		recordGrid.setFont(FontPreferences.getTierFont());
 		setupRecordGridActions();
@@ -292,7 +296,6 @@ public class TimelineRecordTier extends TimelineTier {
 			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
 			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
 			currentRecordInterval.setRepaintEntireInterval(true);
-			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 			recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
 			ghostMarker.get().addPropertyChangeListener( "valueAdjusting", (e) -> {
 				currentRecordInterval.setValueAdjusting((boolean)e.getNewValue());
@@ -300,8 +303,14 @@ public class TimelineRecordTier extends TimelineTier {
 		} else {
 			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
 			currentRecordInterval.setRepaintEntireInterval(true);
-			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		}
+		currentRecordInterval.getStartMarker().setColor(UIManager.getColor(
+				recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR : TimelineViewColors.INTERVAL_MARKER_COLOR));
+		currentRecordInterval.getEndMarker().setColor(UIManager.getColor(
+				recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR : TimelineViewColors.INTERVAL_MARKER_COLOR));
+		currentRecordInterval.setColor(UIManager.getColor(
+				recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND : TimelineViewColors.INTERVAL_BACKGROUND));
+		currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		
 		recordGrid.setCurrentRecord(r);
 	}
@@ -757,6 +766,8 @@ public class TimelineRecordTier extends TimelineTier {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			Record r = recordGrid.getCurrentRecord();
+			if(r == null) return;
+			
 			MediaSegment segment = r.getSegment().getGroup(0);
 			final SessionFactory factory = SessionFactory.newFactory();
 			
@@ -793,6 +804,31 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 		
 	}
+	
+	private FocusListener selectionFocusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+			if(currentRecordInterval != null) {
+				currentRecordInterval.setColor(UIManager.getColor(TimelineViewColors.INTERVAL_BACKGROUND));
+				currentRecordInterval.getStartMarker()
+					.setColor(UIManager.getColor(TimelineViewColors.INTERVAL_MARKER_COLOR));
+				currentRecordInterval.getEndMarker()
+					.setColor(UIManager.getColor(TimelineViewColors.INTERVAL_MARKER_COLOR));
+			}
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+			if(currentRecordInterval != null) {
+				currentRecordInterval.setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND));
+				currentRecordInterval.getStartMarker()
+					.setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR));
+				currentRecordInterval.getEndMarker()
+					.setColor(UIManager.getColor(TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR));
+			}
+		}
+	};
 	
 	private RecordGridMouseListener mouseListener = new RecordGridMouseAdapter() {
 
