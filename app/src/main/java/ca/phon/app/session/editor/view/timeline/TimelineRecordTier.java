@@ -799,6 +799,12 @@ public class TimelineRecordTier extends TimelineTier {
 				getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
+				
+				// repaint extra space at end of record interval to compensate for labels
+				double repaintX = recordGrid.xForTime(segment.getEndValue()/1000.0f);
+				double repaintW = 50;
+				
+				recordGrid.repaint((int)repaintX, 0, (int)repaintW, recordGrid.getHeight());
 			}
 		}
 		
