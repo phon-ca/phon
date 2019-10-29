@@ -279,7 +279,13 @@ public final class SegmentationHandler {
 			if(segmentEnd - segmentStart < MIN_SEGMENT_LENGTH)
 				return;
 			
-			window.setStartLockMs(segmentEnd+1);
+			long segmentOffset = 1;
+			if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
+				TimelineView timelineView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+				float singlePxTime = timelineView.getTimeModel().timeAtX(timelineView.getTimeModel().getTimeInsets().left + 1);
+				segmentOffset = (long)Math.ceil(singlePxTime * 1000.0f);
+			}
+			window.setStartLockMs(segmentEnd+segmentOffset);
 			
 			final SessionFactory factory = SessionFactory.newFactory();
 			Record utt = factory.createRecord();
