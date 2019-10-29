@@ -652,7 +652,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					var i = recordOpt.get();
 					pressedRecordIdx = i;
 					recordGrid.fireRecordPressed(i, e);
-//					recordGrid.repaint();
 				}
 			}
 		}
@@ -662,7 +661,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			Optional<Integer> recordOpt = recordHitTest(Geometries.point(e.getX(), e.getY()));
 			if(recordOpt.isPresent()) {
 				recordGrid.fireRecordClicked(recordOpt.get(), e);
-//				recordGrid.repaint();
 			}
 		}
 
@@ -671,7 +669,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			if(pressedRecordIdx >= 0) {
 				recordGrid.fireRecordReleased(pressedRecordIdx, e);
 				pressedRecordIdx = -1;
-//				recordGrid.repaint();
 			}
 			pressedRecordIdx = -1;
 		}

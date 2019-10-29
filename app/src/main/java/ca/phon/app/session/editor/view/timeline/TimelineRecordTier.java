@@ -291,18 +291,17 @@ public class TimelineRecordTier extends TimelineTier {
 					.filter( (m) -> m instanceof GhostMarker )
 					.map( (m) -> GhostMarker.class.cast(m) )
 					.findAny();
-		if(ghostMarker.isPresent()) {
+		if(ghostMarker.isPresent() && recordGrid.getUI().getCurrentlyDraggedMarker() == ghostMarker.get()) {
 			Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
 			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
 			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
 			currentRecordInterval.setRepaintEntireInterval(true);
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 			recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
-			ghostMarker.get().addPropertyChangeListener( "valueAdjusting", (e) -> {
-				currentRecordInterval.setValueAdjusting((boolean)e.getNewValue());
-			});
 		} else {
 			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
 			currentRecordInterval.setRepaintEntireInterval(true);
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		}
 		currentRecordInterval.getStartMarker().setColor(UIManager.getColor(
 				recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR : TimelineViewColors.INTERVAL_MARKER_COLOR));
@@ -310,7 +309,6 @@ public class TimelineRecordTier extends TimelineTier {
 				recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR : TimelineViewColors.INTERVAL_MARKER_COLOR));
 		currentRecordInterval.setColor(UIManager.getColor(
 				recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND : TimelineViewColors.INTERVAL_BACKGROUND));
-		currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 		
 		recordGrid.setCurrentRecord(r);
 	}
@@ -786,9 +784,7 @@ public class TimelineRecordTier extends TimelineTier {
 					getParentView().getEditor().getUndoSupport().endUpdate();
 					getParentView().getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TIER_CHANGED_EVT, TimelineRecordTier.class, SystemTierType.Segment.getName()));
 				}
-			} else {
-				if(!evt.getPropertyName().endsWith("time")) return;
-				
+			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
 				newSegment.setStartValue(segment.getStartValue());
 				newSegment.setEndValue(segment.getEndValue());
@@ -932,7 +928,7 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		public SplitMarker(Interval parentInterval, float startTime) {
 			super(startTime);
-			setColor(Color.blue);
+			setColor(UIManager.getColor(TimelineViewColors.SPLIT_MARKER_COLOR));
 			setDraggable(true);
 			
 			this.parentInterval = parentInterval;

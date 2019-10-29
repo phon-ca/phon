@@ -12,6 +12,7 @@ public class TimelineViewColors {
 		UIManager.put(SEGMENTATION_INTERVAL_BACKGROUND, DEFAULT_SEGMENTATION_INTERVAL_BACKGROUND);
 		UIManager.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
 		UIManager.put(FOCUSED_INTERVAL_MARKER_COLOR, DEFAULT_FOCUSED_INTERVAL_MARKER_COLOR);
+		UIManager.put(SPLIT_MARKER_COLOR, DEFAULT_SPLIT_MARKER_COLOR);
 	}
 
 	/**
@@ -43,5 +44,11 @@ public class TimelineViewColors {
 	 */
 	public final static String FOCUSED_INTERVAL_MARKER_COLOR = "TimelineView.focusedIntervalMarkerColor";
 	public final static Color DEFAULT_FOCUSED_INTERVAL_MARKER_COLOR = Color.darkGray;
+	
+	/**
+	 * Split marker color
+	 */
+	public final static String SPLIT_MARKER_COLOR = "TimelineView.splitMarkerColor";
+	public final static Color DEFAULT_SPLIT_MARKER_COLOR = Color.blue;
 	
 }

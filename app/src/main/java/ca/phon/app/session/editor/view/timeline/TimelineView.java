@@ -1,3 +1,4 @@
+
 package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;

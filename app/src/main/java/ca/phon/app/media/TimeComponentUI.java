@@ -104,7 +104,6 @@ public class TimeComponentUI extends ComponentUI {
 	 * @param marker
 	 */
 	public void beginDrag(Marker marker) {
-		currentlyDraggedInterval = null;
 		currentlyDraggedMarker = marker;
 		currentlyDraggedMarker.setValueAdjusting(true);
 	}
@@ -119,7 +118,7 @@ public class TimeComponentUI extends ComponentUI {
 		if(interval.getStartMarker() != marker && interval.getEndMarker() != marker)
 			throw new IllegalArgumentException("Marker must have given interval as parent");
 		currentlyDraggedInterval = interval;
-		currentlyDraggedMarker = marker;
+		beginDrag(marker);
 		currentlyDraggedInterval.setValueAdjusting(true);
 	}
 	
@@ -136,7 +135,7 @@ public class TimeComponentUI extends ComponentUI {
 		Marker otherMarker = (currentMarker == currentlyDraggedInterval.getStartMarker() ? 
 				currentlyDraggedInterval.getEndMarker() : currentlyDraggedInterval.getStartMarker());
 		
-		currentlyDraggedMarker = otherMarker;
+		beginDrag(otherMarker);
 		currentMarker.setTime(otherMarker.getTime());
 	}
 	
@@ -264,6 +263,11 @@ public class TimeComponentUI extends ComponentUI {
 		public void mousePressed(MouseEvent e) {
 			var p = e.getPoint();
 			
+			if(getCurrentlyDraggedInterval() != null
+					|| getCurrentlyDraggedMarker() != null) {
+				endDrag();
+			}
+			
 			for(Interval interval:timeComp.getTimeModel().getIntervals()) {
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
@@ -274,7 +278,7 @@ public class TimeComponentUI extends ComponentUI {
 				if(insideStartMarker && !insideEndMarker) {
 					beginDrag(interval, interval.getStartMarker());
 				} else if(!insideStartMarker && insideEndMarker) {
-						beginDrag(interval, interval.getEndMarker());
+					beginDrag(interval, interval.getEndMarker());
 				} else if(insideStartMarker && insideEndMarker) {
 					// choose the closest
 					var ds = Math.abs(p.x - startX);
