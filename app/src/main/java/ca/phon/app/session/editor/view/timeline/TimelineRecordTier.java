@@ -540,7 +540,9 @@ public class TimelineRecordTier extends TimelineTier {
 		
 		Record rightRecord = recordGrid.getRightRecordSplit();
 		MediaSegment rightSeg = rightRecord.getSegment().getGroup(0);
-		rightSeg.setStartValue((splitTime * 1000.0f) + 1);
+		
+		long segOffset = (long)Math.ceil(timeAtX(getTimeModel().getTimeInsets().left+1)*1000.0f);
+		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
 		
 		getRecordGrid().repaintInterval(currentRecordInterval);
 	}	
@@ -557,7 +559,8 @@ public class TimelineRecordTier extends TimelineTier {
 		Record rightRecord = sessionFactory.createRecord();
 		rightRecord.addGroup();
 		MediaSegment rightSeg = sessionFactory.createMediaSegment();
-		rightSeg.setStartValue((splitTime * 1000.0f) + 1);
+		long segOffset = (long)Math.ceil(timeAtX(getTimeModel().getTimeInsets().left+1)*1000.0f);
+		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
 		rightSeg.setEndValue(seg.getEndValue());
 		rightRecord.getSegment().setGroup(0, rightSeg);
 		
