@@ -336,9 +336,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				continue;
 			}
 			
-			paintSegment(g2, rIdx, r, segRect);
-			recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
+			if(segRect.getWidth() > 0) {
+				paintSegment(g2, rIdx, r, segRect);
+				recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
 					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
+			} else {
+				paintZeroLengthSegment(g2, rIdx, r, segRect);
+			}
 			
 			// setup 'marker' rectangles 
 			
@@ -386,8 +390,63 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
 	}
 	
+	protected void paintZeroLengthSegment(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
+		if(g2.getClipBounds().contains(new Point((int)segmentRect.getX(), (int)segmentRect.getY()))) {
+			Icon recordIcon = null;
+			Color recordLblColor = Color.lightGray;
+			
+			Line2D recordLine = new Line2D.Double(segmentRect.getX(), segmentRect.getY(), segmentRect.getX(), segmentRect.getY()+segmentRect.getHeight());
+			
+			if(recordGrid.getCurrentRecordIndex() == recordIndex) {
+				g2.setColor(Color.BLUE);
+				g2.draw(recordLine);
+				
+				if(recordGrid.hasFocus()) {
+					recordLblColor = Color.black;
+				}
+			} else {
+				if(isRecordPressed(recordIndex)) {
+					g2.setColor(Color.GRAY);
+				} else {
+					g2.setColor(Color.LIGHT_GRAY);
+				}
+				g2.draw(recordLine);
+			}
+			
+			String warnings = null;
+			// check to see if record overlaps other records for speaker
+			var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
+					segmentRect.getMaxX(), segmentRect.getMaxY()));
+			AtomicBoolean overlapRef = new AtomicBoolean(false);
+			overlapEntries.map( entry -> entry.value() ).forEach( i -> {
+				overlapRef.getAndSet(true);
+			});
+			
+			if(overlapRef.get()) {
+				warnings = "Overlapping segments";
+				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			}
+			
+			// check to see if record is outside of media bounds			
+			float recordEndTime = recordGrid.timeAtX(segmentRect.getMaxX());
+			if(recordGrid.getTimeModel().getMediaEndTime() > 0.0f && recordEndTime > recordGrid.getTimeModel().getMediaEndTime()) {
+				warnings = (warnings != null ? warnings + "\n" : "" ) + "Segment out of bounds";
+				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			}
+			
+			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
+			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
+					(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
+	
+			if(warnings != null) {
+				// add warning to UI
+				messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
+						lblRect.getMaxX(), lblRect.getMaxY()));
+			}
+		}
+	}
+	
 	protected Rectangle2D paintSegment(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
-//		Rectangle2D segmentRect = getSegmentRect(r);
 		RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
 				segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
 		
@@ -749,7 +808,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			
 			if(currentMouseOverMarker != null && getCurrentlyDraggedMarker() != currentMouseOverMarker) {
 				recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
-				currentMouseOverMarker = null;
+//				currentMouseOverMarker = null;
 			}
 		}
 
