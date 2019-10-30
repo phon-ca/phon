@@ -569,21 +569,21 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		var entries = tree.search(p);
 		List<Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>> tupleList = new ArrayList<>();
 		entries
-		.map( entry -> new Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>(entry.geometry(), entry.value()))
-		.subscribe(tupleList::add);
+			.map( entry -> new Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>(entry.geometry(), entry.value()))
+			.subscribe(tupleList::add);
 		
 		if(tupleList.size() > 0) {
 			double dist = Double.MAX_VALUE;
-			T v = null;
+			Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T> currentTuple = null;
 			for(var tuple:tupleList) {
 				double d = p.distance(tuple.getObj1());
 				
 				if(d < dist) {
 					dist = d;
-					v = tuple.getObj2();
+					currentTuple = tuple;
 				}
 			}
-			return Optional.of(v);
+			return Optional.of(currentTuple.getObj2());
 		} else {
 			return Optional.empty();
 		}
@@ -634,8 +634,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		private RecordGrid.GhostMarker currentMouseOverMarker = null;
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-			if(recordGrid.isFocusable() && getCurrentlyDraggedMarker() == null)
+		public void mousePressed(MouseEvent e) {			
+			if(getCurrentlyDraggedMarker() != null) return;
+
+			if(recordGrid.isFocusable())
 				recordGrid.requestFocusInWindow();
 			
 			com.github.davidmoten.rtree.geometry.Point p = 
@@ -742,8 +744,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		@Override
 		public void mouseDragged(MouseEvent me) {
-			if(pressedRecordIdx < 0) return;
-			recordGrid.fireRecordDragged(pressedRecordIdx, me);
+			if(pressedRecordIdx >= 0) 
+				recordGrid.fireRecordDragged(pressedRecordIdx, me);
+			
+			if(currentMouseOverMarker != null && getCurrentlyDraggedMarker() != currentMouseOverMarker) {
+				recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
+				currentMouseOverMarker = null;
+			}
 		}
 
 	};

@@ -291,11 +291,13 @@ public class TimeComponentUI extends ComponentUI {
 				}
 			}
 			
-			for(Marker marker:timeComp.getTimeModel().getMarkers()) {
-				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
-
-				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
-					beginDrag(marker);
+			if(getCurrentlyDraggedMarker() == null) {
+				for(Marker marker:timeComp.getTimeModel().getMarkers()) {
+					int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
+	
+					if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
+						beginDrag(marker);
+					}
 				}
 			}
 		}

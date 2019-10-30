@@ -126,6 +126,38 @@ public class TimelineWaveformTier extends TimelineTier  {
 	
 	@Override
 	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
+		if(selectionInterval != null) {
+			final PhonUIAction playAction = new PhonUIAction(this, "onPlay");
+			playAction.putValue(PhonUIAction.NAME, "Play selection");
+			playAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
+			if(me != null && me.isPopupTrigger())
+				playAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+			builder.addItem(".", playAction);
+			
+			builder.addSeparator(".", "play_actions");
+			
+			List<Participant> speakerList = getParentView().getRecordTier().getSpeakerList();
+			for(int i = 0; i < speakerList.size(); i++) {
+				final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i);
+				recordCreationAct.putValue(PhonUIAction.NAME, speakerList.get(i) + "");
+				recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + speakerList.get(i));
+				final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_1 + i, 0);
+				if(me != null && me.isPopupTrigger()) {
+					recordCreationAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
+				}
+				builder.addItem("./New record from selection/", recordCreationAct);
+			}
+			if(speakerList.size() > 1) {
+				builder.addSeparator("./New record from selection/", "record_creation_user");
+			}
+			final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", 0);
+			recordCreationAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN + "");
+			recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + Participant.UNKNOWN);
+			builder.addItem("./New record from selection/", recordCreationAct);
+			
+			builder.addSeparator(".", "record_creation");
+		}
+		
 		final PhonUIAction toggleVisiblityAct = new PhonUIAction(this, "toggleVisible");
 		toggleVisiblityAct.putValue(PhonUIAction.NAME, 
 				(isVisible() ? "Hide waveform" : "Show waveform"));
