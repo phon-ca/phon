@@ -369,13 +369,7 @@ public final class SegmentationHandler {
 
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
-
-			stopSegmentation();
-		}
-
-		@Override
-		public void stopped(MediaPlayer mediaPlayer) {
-			stopSegmentation();
+			SwingUtilities.invokeLater( () -> stopSegmentation());
 		}
 		
 	};

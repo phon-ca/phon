@@ -748,13 +748,16 @@ public final class TimelineView extends EditorView {
 
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
-			timeModel.removeMarker(playbackMarker);
-			playbackMarker = null;
-			
-			if(playbackMarkerTask != null) {
-				playbackMarkerTask.cancel();
-				playbackMarkerTask = null;
-			}
+			if(playbackMarker != null)
+				SwingUtilities.invokeLater( () -> {
+					timeModel.removeMarker(playbackMarker);
+					playbackMarker = null;
+					
+					if(playbackMarkerTask != null) {
+						playbackMarkerTask.cancel();
+						playbackMarkerTask = null;
+					}
+				});
 		}
 		
 		@Override
@@ -796,6 +799,8 @@ public final class TimelineView extends EditorView {
 				
 				getWaveformTier().getWaveformDisplay().repaint(tn, st, et);
 				getRecordTier().getRecordGrid().repaint(tn, st, et);
+			} else {
+				cancel();
 			}
 		}
 		
