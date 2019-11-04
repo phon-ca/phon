@@ -48,10 +48,19 @@ public class ZoomAction extends TimelineAction {
 		if(newZoomIdx >= TimelineView.zoomValues.length)
 			newZoomIdx = TimelineView.zoomValues.length - 1;
 		
-		float currentViewStartTime = getView().getTimeModel().timeAtX(
-				getView().getRecordTier().getVisibleRect().getX());
+		float oldViewMidTime = getView().getTimeModel().timeAtX(
+				getView().getRecordTier().getVisibleRect().getCenterX());
+		
 		getView().getTimeModel().setPixelsPerSecond(TimelineView.zoomValues[newZoomIdx]);
-		getView().scrollToTime(currentViewStartTime);
+		
+		float newViewStartTime = getView().getTimeModel().timeAtX(
+				getView().getRecordTier().getVisibleRect().getX());
+		float newViewEndTime = getView().getTimeModel().timeAtX(
+				getView().getRecordTier().getVisibleRect().getMaxX());
+		
+		float scrollToTime = oldViewMidTime - ((newViewEndTime-newViewStartTime)/2.0f);
+		
+		getView().scrollToTime(scrollToTime);
 	}
 
 }
