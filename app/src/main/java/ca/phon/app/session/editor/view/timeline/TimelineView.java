@@ -735,6 +735,7 @@ public final class TimelineView extends EditorView {
 				float currentTime = mediaPlayer.status().time() / 1000.0f;
 				
 				playbackMarker = timeModel.addMarker(currentTime, Color.darkGray);
+				playbackMarker.setOwner(wavTier.getWaveformDisplay());
 				playbackMarker.setRepaintOnTimeChange(false);
 				
 				playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);

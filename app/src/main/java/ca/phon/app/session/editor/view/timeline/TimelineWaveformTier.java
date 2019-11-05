@@ -314,6 +314,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 					}
 					
 					selectionInterval = getTimeModel().addInterval(intervalStartTime, intervalEndTime);
+					selectionInterval.setOwner(wavDisplay);
 					selectionInterval.setColor(UIManager.getColor(
 							wavDisplay.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND : TimelineViewColors.INTERVAL_BACKGROUND));
 					selectionInterval.addPropertyChangeListener("valueAdjusting", (evt) -> {

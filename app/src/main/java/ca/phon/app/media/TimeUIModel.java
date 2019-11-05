@@ -1,6 +1,7 @@
 package ca.phon.app.media;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -305,6 +306,8 @@ public class TimeUIModel {
 		
 		private boolean repaintOnTimeChange = true;
 		
+		private TimeComponent owner = null;
+		
 		public Marker(float startTime) {
 			super();
 			this.time = startTime;
@@ -362,6 +365,16 @@ public class TimeUIModel {
 			propSupport.firePropertyChange("color", oldVal, color);
 		}
 		
+		public TimeComponent getOwner() {
+			return this.owner;
+		}
+		
+		public void setOwner(TimeComponent owner) {
+			var oldVal = this.owner;
+			this.owner = owner;
+			propSupport.firePropertyChange("owner", oldVal, owner);
+		}
+		
 		public void removePropertyChangeListener(PropertyChangeListener listener) {
 			propSupport.removePropertyChangeListener(listener);
 		}
@@ -401,6 +414,9 @@ public class TimeUIModel {
 		
 		/* If false, the interval will not be repainted during event changes */
 		private boolean repaintOnTimeChange = true;
+		
+		/* Owner, if not null interval will only be painted on owner component */
+		private TimeComponent owner = null;
 		
 		public Interval() {
 			this(0.0f, 0.0f);
@@ -463,6 +479,16 @@ public class TimeUIModel {
 			var oldVal = this.color;
 			this.color = color;
 			propSupport.firePropertyChange("color", oldVal, color);
+		}
+		
+		public TimeComponent getOwner() {
+			return this.owner;
+		}
+		
+		public void setOwner(TimeComponent owner) {
+			var oldVal = this.owner;
+			this.owner = owner;
+			propSupport.firePropertyChange("owner", oldVal, owner);
 		}
 		
 		public void addPropertyChangeListener(PropertyChangeListener listener) {
