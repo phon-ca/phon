@@ -128,7 +128,7 @@ The following examples are available in Phon from the *Phones* query window as *
 ## Syllable-initial Clusters
 ```
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
-^(\c:L:O:E<2,>) ||
+(?<^\s?)(\c:L:O:E<2,>) ||
 (?<\v\s?)(\c:L:O:E<2,>)
 ```
 
