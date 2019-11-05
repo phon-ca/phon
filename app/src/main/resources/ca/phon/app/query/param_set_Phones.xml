@@ -135,11 +135,11 @@
 // Heterosyllabic Clusters
 (\c+[\s\.]\c+)</param>
     </param_set>
-    <param_set date="2018-11-13T05:09:32.903-03:30" hash="5b5a6d91d6413d7c7319b34f3fe9ac230964c46e" name="Syllable-initial Clusters">
+    <param_set date="2018-11-13T05:09:32.903-03:30" hash="57dc2256a25f00fe9e2deb1907f22fd4013dbeb7" name="Syllable-initial Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Syllable-initial Clusters
 // Includes left appendices ':L', onsets ':O' and OEHS ':E'
-^(\c:L:O:E&lt;2,&gt;) ||
+(?&lt;^\s?)(\c:L:O:E&lt;2,&gt;) ||
 (?&lt;\v\s?)(\c:L:O:E&lt;2,&gt;)</param>
     </param_set>
     <param_set date="2018-11-13T05:22:28.370-03:30" hash="59968c58bb9552a5cc6d5eb5557bb1986071227b" name="Syllable-final Clusters">
