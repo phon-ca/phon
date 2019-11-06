@@ -197,6 +197,7 @@ public class TimeComponentUI extends ComponentUI {
 		
 	private PropertyChangeListener intervalTimeListener = (e) -> {
 		final Interval interval = (Interval)e.getSource();
+		if(interval.getOwner() != null && interval.getOwner() != timeComp) return;
 		if(!interval.isRepaintOnTimeChange()) return;
 		
 		synchronized(interval) {
@@ -241,6 +242,7 @@ public class TimeComponentUI extends ComponentUI {
 	
 	private PropertyChangeListener markerTimeListener = (e) -> {
 		Marker marker = (Marker)e.getSource();
+		if(marker.getOwner() != null && marker.getOwner() != timeComp) return;
 		if(!marker.isRepaintOnTimeChange()) return;
 		
 		if("time".equals(e.getPropertyName()) || e.getPropertyName().endsWith(".time")) {
@@ -271,6 +273,7 @@ public class TimeComponentUI extends ComponentUI {
 			}
 			
 			for(Interval interval:timeComp.getTimeModel().getIntervals()) {
+				if(interval.getOwner() != null && interval.getOwner() != timeComp) continue;
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 
@@ -295,6 +298,7 @@ public class TimeComponentUI extends ComponentUI {
 			
 			if(getCurrentlyDraggedMarker() == null) {
 				for(Marker marker:timeComp.getTimeModel().getMarkers()) {
+					if(marker.getOwner() != null && marker.getOwner() != timeComp) continue;
 					int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 	
 					if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
@@ -351,6 +355,7 @@ public class TimeComponentUI extends ComponentUI {
 			var p = e.getPoint();
 			
 			for(Interval interval:timeComp.getTimeModel().getIntervals()) {
+				if(interval.getOwner() != null && interval.getOwner() != timeComp) continue;
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 
@@ -365,6 +370,7 @@ public class TimeComponentUI extends ComponentUI {
 			}
 			
 			for(Marker marker:timeComp.getTimeModel().getMarkers()) {
+				if(marker.getOwner() != null && marker.getOwner() != timeComp) continue;
 				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 
 				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {

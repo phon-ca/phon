@@ -14,12 +14,15 @@ import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -78,6 +81,7 @@ import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
@@ -89,6 +93,10 @@ public final class TimelineView extends EditorView {
 
 	private static final long serialVersionUID = 8442995100291417078L;
 	
+	static {
+		TimelineViewColors.install();
+	}
+
 	public static final String VIEW_TITLE = "Timeline";
 	
 	/**
@@ -98,9 +106,20 @@ public final class TimelineView extends EditorView {
 	
 	private static final int defaultZoomIdx = 5;
 	
-	static {
-		TimelineViewColors.install();
-	}
+//	public static enum PlaybackMarkerUpdateMode {
+//		ON_VLC_EVENT,  // only updates position when vlc event is triggered
+//		SYNCED,        // estimates time and syncs with vlc events
+//		ON_CALL	       // read time from vlc in a loop
+//	};
+//	
+//	private final static String PLAYBACK_UPDATE_MODE = "TimelineView.playbackUpdateMode";
+//	private final static PlaybackMarkerUpdateMode DEFAULT_PLAYBACK_UPDATE_MODE = PlaybackMarkerUpdateMode.SYNCED;
+//	private PlaybackMarkerUpdateMode playbackMarkerUpdateMode = PrefHelper.getEnum(PlaybackMarkerUpdateMode.class,
+//			PLAYBACK_UPDATE_MODE, DEFAULT_PLAYBACK_UPDATE_MODE);
+	
+	private final static String PLABACK_FPS = "TimelineView.playbackFps";
+	private final float DEFAULT_PLAYBACK_FPS = 30.0f;
+	private float playbackMarkerFps = PrefHelper.getFloat(PLABACK_FPS, DEFAULT_PLAYBACK_FPS);
 	
 	private JToolBar toolbar;
 	
@@ -116,6 +135,7 @@ public final class TimelineView extends EditorView {
 	private DropDownButton tierVisiblityButton;
 	private JPopupMenu tierVisibilityMenu;
 	
+	private JScrollPane tierScrollPane;
 	private TierPanel tierPanel;
 	
 	/**
@@ -128,7 +148,7 @@ public final class TimelineView extends EditorView {
 	
 	private TimelineRecordTier recordGrid;
 	
-	private PlaybackMediaListener playbackMediaListener = new PlaybackMediaListener();
+	private PlaybackMarkerSyncListener playbackMarkerSyncListener = new PlaybackMarkerSyncListener();
 	
 	public TimelineView(SessionEditor editor) {
 		super(editor);
@@ -161,17 +181,19 @@ public final class TimelineView extends EditorView {
 		timeModel.setEndTime(0.0f);	
 		
 		tierPanel = new TierPanel(new GridBagLayout());
-		JScrollPane scroller = new JScrollPane(tierPanel);
+		tierScrollPane = new JScrollPane(tierPanel);
 		
 		// Order here matters - for the purpose of
 		// editor events the record tier object must be created before the
 		// wav tier
 		recordGrid = new TimelineRecordTier(this);
 		recordGrid.getRecordGrid().addMouseListener(contextMenuListener);
+//		recordGrid.getRecordGrid().addMouseWheelListener(zoomListener);
 		
 		wavTier = new TimelineWaveformTier(this);
 		wavTier.getPreferredSize();
 		wavTier.getWaveformDisplay().addMouseListener(contextMenuListener);
+//		wavTier.getWaveformDisplay().addMouseWheelListener(zoomListener);
 		
 		JSeparator wavSep = addTier(wavTier);
 		wavSep.addPropertyChangeListener("valueAdjusting", (e) -> {
@@ -196,14 +218,14 @@ public final class TimelineView extends EditorView {
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.NORTH);
 		
-		add(scroller, BorderLayout.CENTER);
+		add(tierScrollPane, BorderLayout.CENTER);
 		
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionMediaAvailable()) {
 			MediaPlayerEditorView mediaPlayerView = 
 					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
-				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMediaListener);
+				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
 			}
 		}
 	}
@@ -482,7 +504,7 @@ public final class TimelineView extends EditorView {
 			MediaPlayerEditorView mediaPlayerView = 
 					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
-				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMediaListener);
+				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
 			}
 		}
 	}
@@ -519,8 +541,8 @@ public final class TimelineView extends EditorView {
 		segmentationButton.setText("Stop Segmentation");
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 		
-		if(playbackMediaListener.playbackMarker != null)
-			timeModel.removeMarker(playbackMediaListener.playbackMarker);
+		if(playbackMarkerSyncListener.playbackMarker != null)
+			timeModel.removeMarker(playbackMarkerSyncListener.playbackMarker);
 	}
 	
 	@RunOnEDT
@@ -723,27 +745,25 @@ public final class TimelineView extends EditorView {
 		*/
 	}
 	
-	private class PlaybackMediaListener extends MediaPlayerEventAdapter {
+	private class PlaybackMarkerSyncListener extends MediaPlayerEventAdapter {
 
 		private TimeUIModel.Marker playbackMarker;
+		
+		private Timer playbackTimer;
 		
 		private PlaybackMarkerTask playbackMarkerTask;
 		
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			if(playbackMarker == null && getEditor().getExtension(SegmentationHandler.class) == null) {
-				float currentTime = mediaPlayer.status().time() / 1000.0f;
+				float currentTime = (float)TimeUIModel.roundTime(mediaPlayer.status().time() / 1000.0f);
 				
 				playbackMarker = timeModel.addMarker(currentTime, Color.darkGray);
 				playbackMarker.setOwner(wavTier.getWaveformDisplay());
-				playbackMarker.setRepaintOnTimeChange(false);
 				
 				playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
-				playbackMarkerTask.mediaStartTime = mediaPlayer.status().time();
-				playbackMarkerTask.systemStartTime = System.currentTimeMillis();
-				
-				Timer timer = new Timer(true);
-				timer.schedule(playbackMarkerTask, 0L, (long)(1/30.0f * 1000.0f));
+				playbackMarkerTask.mediaSyncTime = mediaPlayer.status().time();
+				playbackMarkerTask.startTime = System.currentTimeMillis();
 			}
 		}
 
@@ -753,6 +773,7 @@ public final class TimelineView extends EditorView {
 				SwingUtilities.invokeLater( () -> {
 					timeModel.removeMarker(playbackMarker);
 					playbackMarker = null;
+					playbackTimer = null;
 					
 					if(playbackMarkerTask != null) {
 						playbackMarkerTask.cancel();
@@ -763,10 +784,14 @@ public final class TimelineView extends EditorView {
 		
 		@Override
 		public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-			// sync time
 			if(playbackMarkerTask != null) {
-				playbackMarkerTask.mediaStartTime = newTime;
-				playbackMarkerTask.systemStartTime = System.currentTimeMillis();
+				// sync playback time
+				playbackMarkerTask.mediaSyncTime = newTime;
+				playbackMarkerTask.startTime = System.currentTimeMillis();
+				if(playbackTimer == null) {
+					playbackTimer = new Timer(true);
+					playbackTimer.schedule(playbackMarkerTask, 0L, (long)(1/playbackMarkerFps * 1000.0f));
+				}
 			}
 		}
 		
@@ -774,9 +799,9 @@ public final class TimelineView extends EditorView {
 	
 	private class PlaybackMarkerTask extends TimerTask {
 
-		volatile long systemStartTime;
+		volatile long startTime;
 		
-		volatile long mediaStartTime = 0L;
+		volatile long mediaSyncTime = 0L;
 		
 		TimeUIModel.Marker playbackMarker;
 		
@@ -789,17 +814,9 @@ public final class TimelineView extends EditorView {
 		public void run() {
 			if(playbackMarker != null) {
 				long currentTime = System.currentTimeMillis();
-				long newTime = mediaStartTime + (currentTime - systemStartTime);
+				long newTime = mediaSyncTime + (currentTime - startTime);
 				
-				float oldTime = playbackMarker.getTime();
-				playbackMarker.setTime(newTime / 1000.0f);
-
-				long tn = (long)(1/30.0f * 1000.0f);
-				float st = Math.min(oldTime, playbackMarker.getTime());
-				float et = Math.max(oldTime, playbackMarker.getTime());
-				
-				getWaveformTier().getWaveformDisplay().repaint(tn, st, et);
-				getRecordTier().getRecordGrid().repaint(tn, st, et);
+				playbackMarker.setTime((float)TimeUIModel.roundTime(newTime / 1000.0f));
 			} else {
 				cancel();
 			}
@@ -864,13 +881,6 @@ public final class TimelineView extends EditorView {
 				showContextMenu(e);
 			}
 		}
-		
-		
-	};
-	
-	private MouseAdapter mouseSelectionListener = new MouseInputAdapter() {
-		
-		
 		
 	};
 	
