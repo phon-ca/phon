@@ -90,9 +90,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private RTree<Action, com.github.davidmoten.rtree.geometry.Rectangle> actionsTree;
 	
-	private RecordGrid recordGrid;
+	private Map<Integer, Rectangle2D> visibleRecords = Collections.synchronizedMap(new HashMap<>());
 	
-	private Canvas canvas;
+	private RecordGrid recordGrid;
 	
 	private JLabel renderer;
 	
@@ -221,6 +221,19 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	}
 	
 	@Override
+	public void paintOverlappingRecords(Record record) {
+		Rectangle2D rect = getSegmentRect(record);
+		paintOverlappingRecords(rect);
+	}
+	
+	@Override
+	public void paintOverlappingRecords(Rectangle2D segRect) {
+		visibleRecords.values().parallelStream()
+			.filter( (r) -> r.intersects(segRect) )
+			.forEach( (r) -> recordGrid.repaint(r.getBounds()) );
+	}
+	
+	@Override
 	public Rectangle2D getSegmentRect(Record record) {
 		final MediaSegment seg = record.getSegment().getGroup(0);
 		
@@ -299,6 +312,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Rectangle2D templateRect = (session.getRecordCount() > 0 ? getSegmentRect(session.getRecord(0)) : new Rectangle2D.Double());		
 		int speakerTierHeight = getSpeakerTierHeight();
 		
+		// keep track of segment rects which are visible
+		// used to paint segment labels and actions later
+		// this ensures that warnings are shown correctly
+		visibleRecords.clear();
+				
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			
@@ -319,6 +337,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			var segXmax = recordGrid.xForTime(seg.getEndValue() / 1000.0f);
 			
 			Rectangle2D segRect = new Rectangle2D.Double(segXmin, segY, segXmax-segXmin, templateRect.getHeight());
+			if(!recordGrid.isSplitMode())
+				recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
+						(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
+			if(!g2.getClipBounds().intersects(segRect)) continue;
 			
 			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
 				Record leftRecord = recordGrid.getLeftRecordSplit();
@@ -326,20 +348,21 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				segRect.setFrame(segRect.getX(), segRect.getY(), 
 						recordGrid.xForTime(leftRecordSeg.getEndValue() / 1000.0f) - segRect.getX(), segRect.getHeight());
 				paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
+				paintSegmentLabelAndActions(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
 				
 				Record rightRecord = recordGrid.getRightRecordSplit();
 				MediaSegment rightRecordSeg = rightRecord.getSegment().getGroup(0);
 				segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getY(), 
 						recordGrid.xForTime(rightRecordSeg.getEndValue() / 1000.0f) - recordGrid.xForTime(rightRecordSeg.getStartValue()/1000.0f), segRect.getHeight());
 				paintSegment(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit(), segRect);
+				paintSegmentLabelAndActions(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit(), segRect);
 				
 				continue;
 			}
 			
 			if(segRect.getWidth() > 0) {
 				paintSegment(g2, rIdx, r, segRect);
-				recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
-					(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
+				visibleRecords.put(rIdx, segRect);
 			} else {
 				paintZeroLengthSegment(g2, rIdx, r, segRect);
 			}
@@ -355,7 +378,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					(float)segRect.getMaxX() + 1, (float)(segRect.getY()+segRect.getHeight())));
 		}
 	
-		
+		// paint segment labels
+		for(Integer rIdx:visibleRecords.keySet()) {
+			Rectangle2D segRect = visibleRecords.get(rIdx);
+			paintSegmentLabelAndActions(g2, rIdx, session.getRecord(rIdx), segRect);
+		}
+				
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval);
 		}
@@ -446,108 +474,108 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 	}
 	
+	protected void paintSegmentLabelAndActions(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
+		Icon recordIcon = null;
+		Color recordLblColor = (recordIndex == recordGrid.getCurrentRecordIndex() ? Color.black : Color.lightGray);
+		
+		String warnings = null;
+		// check to see if record overlaps other records for speaker
+		var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
+				segmentRect.getMaxX(), segmentRect.getMaxY()));
+		AtomicBoolean overlapRef = new AtomicBoolean(false);
+		overlapEntries.map( entry -> entry.value() ).forEach( i -> {
+			if(i != recordIndex)
+				overlapRef.getAndSet(true);
+		});
+		
+		if(overlapRef.get()) {
+			warnings = "Overlapping segments";
+			recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+		}
+		
+		// check to see if record is outside of media bounds			
+		float recordEndTime = recordGrid.timeAtX(segmentRect.getMaxX());
+		if(recordGrid.getTimeModel().getMediaEndTime() > 0.0f && recordEndTime > recordGrid.getTimeModel().getMediaEndTime()) {
+			warnings = (warnings != null ? warnings + "\n" : "" ) + "Segment out of bounds";
+			recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+		}
+		
+		if(recordIndex >= 0) {	
+			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
+			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
+					(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
+	
+			if(warnings != null) {
+				// add warning to UI
+				messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
+						lblRect.getMaxX(), lblRect.getMaxY()));
+			}
+		} else {
+			// split mode actions
+			int recordNum = Math.abs(recordIndex);
+			recordLblColor = Color.blue;
+			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordNum-1, recordIcon, recordLblColor, segmentRect);
+			
+			ImageIcon acceptIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
+			Rectangle2D acceptRect = new Rectangle2D.Double(lblRect.getMaxX() + 2, lblRect.getY(),
+					acceptIcon.getIconWidth(), acceptIcon.getIconHeight());
+			g2.drawImage(acceptIcon.getImage(), (int)acceptRect.getX(), (int)acceptRect.getY(), recordGrid);
+			
+			final PhonUIAction acceptAct = new PhonUIAction(this, "endSplitMode", true);
+			var acceptRect2 = Geometries.rectangle(acceptRect.getX(), acceptRect.getY(), acceptRect.getMaxX(), acceptRect.getMaxY());
+			actionsTree = actionsTree.add(acceptAct, acceptRect2);
+			messageTree = messageTree.add("Accept split", acceptRect2);
+			
+			ImageIcon cancelIcon = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.XSMALL);
+			Rectangle2D cancelRect = new Rectangle2D.Double(acceptRect.getMaxX() + 2, acceptRect.getY(),
+					cancelIcon.getIconWidth(), cancelIcon.getIconHeight());
+			g2.drawImage(cancelIcon.getImage(), (int)cancelRect.getX(), (int)cancelRect.getY(), recordGrid);
+			
+			final PhonUIAction endAct = new PhonUIAction(this, "endSplitMode", false);
+			var cancelRect2 = Geometries.rectangle(cancelRect.getX(), cancelRect.getY(), cancelRect.getMaxX(), cancelRect.getMaxY());
+			actionsTree = actionsTree.add(endAct, cancelRect2);
+			messageTree = messageTree.add("Exit split mode", cancelRect2);
+		}
+	}
+	
 	protected Rectangle2D paintSegment(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
 		RoundRectangle2D roundedRect = new RoundRectangle2D.Double(
 				segmentRect.getX(), segmentRect.getY(), segmentRect.getWidth(), segmentRect.getHeight(), 5, 5);
 		
-		if(segmentRect.intersects(g2.getClipBounds())) {
-			int heightOffset = 0;
-			for(String tier:recordGrid.getTiers()) {
-				int tierHeight = getTierHeight(tier);
-				Rectangle2D labelRect = new Rectangle2D.Double(
-						segmentRect.getX(), segmentRect.getY() + heightOffset, segmentRect.getWidth(), tierHeight);
-				paintSegmentLabel(g2, r, tier, labelRect);
-				heightOffset += tierHeight;
-			}
-			
-			Icon recordIcon = null;
-			Color recordLblColor = Color.lightGray;
-			
-			if(recordGrid.getCurrentRecordIndex() == recordIndex) {
-				g2.setColor(Color.BLUE);
-				g2.draw(roundedRect);
-				
-				if(recordGrid.hasFocus()) {
-					InnerGlowPathEffect gpe = new InnerGlowPathEffect();
-					gpe.setBrushColor(Color.blue);
-					gpe.setEffectWidth(5);
-					gpe.apply(g2, roundedRect, 5, 5);
-
-					recordLblColor = Color.black;
-				}
-			} else {
-				if(isRecordPressed(recordIndex)) {
-					g2.setColor(Color.GRAY);
-				} else {
-					g2.setColor(Color.LIGHT_GRAY);
-				}
-				g2.draw(roundedRect);
-				if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
-					InnerGlowPathEffect gpe = new InnerGlowPathEffect();
-					gpe.setBrushColor(Color.GRAY);
-					gpe.setEffectWidth(5);
-					gpe.apply(g2, roundedRect, 5, 5);
-				}
-			}
-			
-			String warnings = null;
-			// check to see if record overlaps other records for speaker
-			var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
-					segmentRect.getMaxX(), segmentRect.getMaxY()));
-			AtomicBoolean overlapRef = new AtomicBoolean(false);
-			overlapEntries.map( entry -> entry.value() ).forEach( i -> {
-				overlapRef.getAndSet(true);
-			});
-			
-			if(overlapRef.get()) {
-				warnings = "Overlapping segments";
-				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
-			}
-			
-			// check to see if record is outside of media bounds			
-			float recordEndTime = recordGrid.timeAtX(segmentRect.getMaxX());
-			if(recordGrid.getTimeModel().getMediaEndTime() > 0.0f && recordEndTime > recordGrid.getTimeModel().getMediaEndTime()) {
-				warnings = (warnings != null ? warnings + "\n" : "" ) + "Segment out of bounds";
-				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
-			}
-			
-			if(recordIndex >= 0) {	
-				Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
-				recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
-						(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
+		int heightOffset = 0;
+		for(String tier:recordGrid.getTiers()) {
+			int tierHeight = getTierHeight(tier);
+			Rectangle2D labelRect = new Rectangle2D.Double(
+					segmentRect.getX(), segmentRect.getY() + heightOffset, segmentRect.getWidth(), tierHeight);
+			paintSegmentLabel(g2, r, tier, labelRect);
+			heightOffset += tierHeight;
+		}
 		
-				if(warnings != null) {
-					// add warning to UI
-					messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
-							lblRect.getMaxX(), lblRect.getMaxY()));
-				}
+		if(recordGrid.getCurrentRecordIndex() == recordIndex) {
+			g2.setColor(Color.BLUE);
+			g2.draw(roundedRect);
+			
+			if(recordGrid.hasFocus()) {
+				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
+				gpe.setBrushColor(Color.blue);
+				gpe.setEffectWidth(5);
+				gpe.apply(g2, roundedRect, 5, 5);
+			}
+		} else {
+			if(isRecordPressed(recordIndex)) {
+				g2.setColor(Color.GRAY);
 			} else {
-				// split mode actions
-				int recordNum = Math.abs(recordIndex);
-				recordLblColor = Color.blue;
-				Rectangle2D lblRect = paintRecordNumberLabel(g2, recordNum-1, recordIcon, recordLblColor, segmentRect);
-				
-				ImageIcon acceptIcon = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
-				Rectangle2D acceptRect = new Rectangle2D.Double(lblRect.getMaxX() + 2, lblRect.getY(),
-						acceptIcon.getIconWidth(), acceptIcon.getIconHeight());
-				g2.drawImage(acceptIcon.getImage(), (int)acceptRect.getX(), (int)acceptRect.getY(), recordGrid);
-				
-				final PhonUIAction acceptAct = new PhonUIAction(this, "endSplitMode", true);
-				var acceptRect2 = Geometries.rectangle(acceptRect.getX(), acceptRect.getY(), acceptRect.getMaxX(), acceptRect.getMaxY());
-				actionsTree = actionsTree.add(acceptAct, acceptRect2);
-				messageTree = messageTree.add("Accept split", acceptRect2);
-				
-				ImageIcon cancelIcon = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.XSMALL);
-				Rectangle2D cancelRect = new Rectangle2D.Double(acceptRect.getMaxX() + 2, acceptRect.getY(),
-						cancelIcon.getIconWidth(), cancelIcon.getIconHeight());
-				g2.drawImage(cancelIcon.getImage(), (int)cancelRect.getX(), (int)cancelRect.getY(), recordGrid);
-				
-				final PhonUIAction endAct = new PhonUIAction(this, "endSplitMode", false);
-				var cancelRect2 = Geometries.rectangle(cancelRect.getX(), cancelRect.getY(), cancelRect.getMaxX(), cancelRect.getMaxY());
-				actionsTree = actionsTree.add(endAct, cancelRect2);
-				messageTree = messageTree.add("Exit split mode", cancelRect2);
+				g2.setColor(Color.LIGHT_GRAY);
+			}
+			g2.draw(roundedRect);
+			if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
+				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
+				gpe.setBrushColor(Color.GRAY);
+				gpe.setEffectWidth(5);
+				gpe.apply(g2, roundedRect, 5, 5);
 			}
 		}
+			
 		return segmentRect;
 	}
 	

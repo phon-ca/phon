@@ -17,4 +17,8 @@ public abstract class RecordGridUI extends TimeComponentUI {
 	
 	public abstract Participant getSpeakerAtPoint(Point pt);
 	
+	public abstract void paintOverlappingRecords(Record r);
+	
+	public abstract void paintOverlappingRecords(Rectangle2D segRect);
+	
 }
