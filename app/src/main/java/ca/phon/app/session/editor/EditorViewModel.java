@@ -120,12 +120,21 @@ public interface EditorViewModel {
 	public Action getCloseAction(String viewView);
 	
 	/**
-	 * Is the specified view showing
+	 * Is the specified view showing in the current
+	 * layout.
 	 * 
 	 * @return <code>true</code> if the given view is part
 	 *  of the current dock control, <code>false</code> otherwise
 	 */
 	public boolean isShowing(String viewName);
+	
+	/**
+	 * Is the specified view top-most in its stack.
+	 * 
+	 * @return <code>true</code> if the view is showing and
+	 *  topmost in its stack
+	 */
+	public boolean isShowingInStack(String viewName);
 	
 	/**
 	 * Show the specified view as a new dynamic floating

@@ -64,6 +64,8 @@ import javax.swing.undo.UndoManager;
 
 import org.apache.logging.log4j.LogManager;
 
+import bibliothek.gui.DockStation;
+import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.action.DefaultDockActionSource;
 import bibliothek.gui.dock.action.LocationHint;
 import bibliothek.gui.dock.action.actions.SimpleButtonAction;
@@ -422,6 +424,23 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		return retVal;
 	}
 
+	@Override
+	public boolean isShowingInStack(String viewName) {
+		boolean retVal = false;
+		final CControlRegister register = dockControl.getRegister();
+		for(CDockable currentDockable:register.getDockables()) {
+			if(currentDockable.intern().getTitleText().equals(viewName)) {
+				retVal = currentDockable.isVisible();
+				
+				DockStation station = currentDockable.intern().getDockParent();
+				if(station instanceof StackDockStation) {
+					retVal = ((StackDockStation)station).isChildShowing(currentDockable.intern());
+				}
+			}
+		}
+		return retVal;
+	}
+	
 	@Override
 	public void cleanup() {
 
