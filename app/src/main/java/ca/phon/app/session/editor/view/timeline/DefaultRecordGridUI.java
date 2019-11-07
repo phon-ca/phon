@@ -200,7 +200,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		for(String tierName:recordGrid.getTiers()) {
 			tierHeight += getTierHeight(tierName);
 		}
-		return getSpeakerLabelHeight() + tierHeight;
+		return (2 * getSpeakerLabelHeight()) + tierHeight;
 	}
 
 	/*
@@ -240,7 +240,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		double x1 = recordGrid.getTimeModel().xForTime(seg.getStartValue() / 1000.0f);
 		double x2 = recordGrid.getTimeModel().xForTime(seg.getEndValue() / 1000.0f);
 		
-		int y = TOP_BOTTOM_MARGIN + getSpeakerLabelHeight() +
+		int y = TOP_BOTTOM_MARGIN + (2*getSpeakerLabelHeight()) +
 				( recordGrid.getSpeakers().indexOf(record.getSpeaker()) * (getSpeakerTierHeight() + TIER_GAP));
 		
 		int tierHeight = 0;
@@ -329,7 +329,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			} else {
 				segY = TOP_BOTTOM_MARGIN + 
 						( recordGrid.getSpeakers().indexOf(r.getSpeaker()) * (speakerTierHeight + TIER_GAP) );
-				segY += getSpeakerLabelHeight();
+				segY += 2 * getSpeakerLabelHeight();
 				ymap.put(r.getSpeaker(), segY);
 			}
 			
