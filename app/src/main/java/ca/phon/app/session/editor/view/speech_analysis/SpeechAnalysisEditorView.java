@@ -549,6 +549,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	public void update(boolean force) {
+		// TODO
+//		if(!force &&
+//				!getEditor().getViewModel().isShowingInStack(VIEW_TITLE)) return;
+		
 		Record utt = getEditor().currentRecord();
 		if(utt == null) return;
 

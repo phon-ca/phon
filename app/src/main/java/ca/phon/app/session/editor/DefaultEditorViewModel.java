@@ -64,7 +64,9 @@ import javax.swing.undo.UndoManager;
 
 import org.apache.logging.log4j.LogManager;
 
+import bibliothek.gui.DockFrontend;
 import bibliothek.gui.DockStation;
+import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.action.DefaultDockActionSource;
 import bibliothek.gui.dock.action.LocationHint;
@@ -73,6 +75,9 @@ import bibliothek.gui.dock.common.CContentArea;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CControlRegister;
 import bibliothek.gui.dock.common.CLocation;
+import bibliothek.gui.dock.common.CStation;
+import bibliothek.gui.dock.common.CStationContainer;
+import bibliothek.gui.dock.common.CStationContainerListener;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockableFactory;
@@ -85,13 +90,18 @@ import bibliothek.gui.dock.common.event.CDockableStateListener;
 import bibliothek.gui.dock.common.event.CFocusListener;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
+import bibliothek.gui.dock.common.intern.CDockFrontend;
+import bibliothek.gui.dock.common.intern.CDockFrontendListener;
 import bibliothek.gui.dock.common.intern.CDockable;
+import bibliothek.gui.dock.common.intern.CSetting;
 import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.perspective.CDockablePerspective;
 import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.gui.dock.common.theme.ThemeMap;
+import bibliothek.gui.dock.event.DockFrontendListener;
+import bibliothek.gui.dock.event.DockStationListener;
 import bibliothek.gui.dock.themes.color.TitleColor;
 import bibliothek.gui.dock.util.FocusedWindowProvider;
 import bibliothek.gui.dock.util.Priority;
@@ -223,6 +233,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			
 			@Override
 			public void added(CControl arg0, CDockable arg1) {
+				
 			}
 			
 		});
@@ -245,13 +256,28 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			}
 			
 		});
-
+		
+		dockControl.addStateListener(new CDockableStateListener() {
+			
+			@Override
+			public void visibilityChanged(CDockable arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
+				System.out.println(arg0 + " " + arg1);
+			}
+			
+		});
+		
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
 			// fix accelerators for non-mac systems
-			dockControl.putProperty( CControl.KEY_MAXIMIZE_CHANGE, KeyStroke.getKeyStroke( KeyEvent.VK_M, InputEvent.CTRL_MASK | InputEvent.SHIFT_DOWN_MASK ) );
-			dockControl.putProperty( CControl.KEY_GOTO_EXTERNALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_E, InputEvent.CTRL_MASK | InputEvent.SHIFT_DOWN_MASK ) );
-			dockControl.putProperty( CControl.KEY_GOTO_NORMALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_N, InputEvent.CTRL_MASK | InputEvent.SHIFT_DOWN_MASK ) );
+			dockControl.putProperty( CControl.KEY_MAXIMIZE_CHANGE, KeyStroke.getKeyStroke( KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK ) );
+			dockControl.putProperty( CControl.KEY_GOTO_EXTERNALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK ) );
+			dockControl.putProperty( CControl.KEY_GOTO_NORMALIZED, KeyStroke.getKeyStroke( KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK ) );
 		}
 
 		// setup factory
