@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -98,6 +99,8 @@ public final class TimelineView extends EditorView {
 	}
 
 	public static final String VIEW_TITLE = "Timeline";
+	
+	public static final String VIEW_ICON = "docking-frames/timeline";
 	
 	/**
 	 * Values for the zoom bar
@@ -423,6 +426,7 @@ public final class TimelineView extends EditorView {
 		}
 		
 		timeModel.setEndTime(endTime);
+		
 	}
 	
 	private void loadSessionAudio() {
@@ -707,7 +711,7 @@ public final class TimelineView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
+		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
 	}
 	
 	@Override

@@ -110,7 +110,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	}
 			
 	private RoundRectangle2D getChannelRect(Channel ch) {
-		int x = display.getChannelInsets().left;
+		int x = display.getTimeModel().getTimeInsets().left + display.getChannelInsets().left;
 		int y = getChannelY(ch);
 		
 		var audioMaxX = display.xForTime(

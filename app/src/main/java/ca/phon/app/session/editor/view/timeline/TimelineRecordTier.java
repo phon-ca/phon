@@ -307,6 +307,8 @@ public class TimelineRecordTier extends TimelineTier {
 						: TimelineViewColors.INTERVAL_BACKGROUND));
 
 		recordGrid.setCurrentRecord(r);
+		
+		mouseListener.waitForRecordChange = false;
 	}
 
 	/* Editor events */
@@ -844,12 +846,16 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 	};
 
-	private RecordGridMouseListener mouseListener = new RecordGridMouseAdapter() {
+	private final RecordMouseListener mouseListener = new RecordMouseListener();
+	
+	private class RecordMouseListener extends RecordGridMouseAdapter {
 
 		private int currentDraggedRecord = -1;
 
 		// offset (in sec) from left of interval where we are starting the drag
 		private float mouseDragOffset = 0.0f;
+		
+		volatile boolean waitForRecordChange = false;
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
@@ -876,6 +882,9 @@ public class TimelineRecordTier extends TimelineTier {
 		public void recordDragged(int recordIndex, MouseEvent me) {
 			if (getParentView().getEditor().getCurrentRecordIndex() != recordIndex) {
 				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
+				waitForRecordChange = true;
+				return;
+			} else if(waitForRecordChange) {
 				return;
 			} else {
 				// shouldn't happen

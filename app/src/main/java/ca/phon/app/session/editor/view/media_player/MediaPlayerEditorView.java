@@ -435,22 +435,6 @@ public class MediaPlayerEditorView extends EditorView {
 			final long startTime = (long)firstSegment.getStartValue();
 			final long endTime = (long)lastSegment.getEndValue();
 			
-			
-			mediaPlayer.addMediaPlayerListener(new MediaPlayerEventAdapter() {
-
-				@Override
-				public void paused(MediaPlayer mediaPlayer) {
-					// TODO Auto-generated method stub
-					super.paused(mediaPlayer);
-				}
-
-				@Override
-				public void stopped(MediaPlayer mediaPlayer) {
-					// TODO Auto-generated method stub
-					super.stopped(mediaPlayer);
-				}
-				
-			});
 			mediaPlayer.playSegment(startTime, (endTime-startTime));
 		}
 

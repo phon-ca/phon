@@ -62,9 +62,6 @@ public class TimelineWaveformTier extends TimelineTier  {
 		final TimeUIModel timeModel = getParentView().getTimeModel();
 		
 		wavDisplay = new WaveformDisplay(timeModel);
-		Insets channelInsets = new Insets(wavDisplay.getChannelInsets().top, timeModel.getTimeInsets().left,
-				wavDisplay.getChannelInsets().bottom, timeModel.getTimeInsets().right);
-		wavDisplay.setChannelInsets(channelInsets);
 		wavDisplay.setPreferredChannelHeight(50);
 		wavDisplay.setTrackViewportHeight(true);
 		wavDisplay.setBackground(Color.WHITE);

@@ -42,7 +42,7 @@ public class WaveformDisplay extends TimeComponent implements Scrollable {
 	
 	private final static String uiClassId = "WaveformDisplayUI";
 	
-	private Insets channelInsets = new Insets(5, 10, 5, 10);
+	private Insets channelInsets = new Insets(5, 0, 5, 0);
 	
 	public WaveformDisplay() {
 		this(new TimeUIModel());
