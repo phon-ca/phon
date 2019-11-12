@@ -421,6 +421,7 @@ public final class SegmentationHandler {
 					// autoscroll if necessary
 					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
 					if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
+						
 						timelineView.scrollToTime(segStart/1000.0f);
 					}
 					

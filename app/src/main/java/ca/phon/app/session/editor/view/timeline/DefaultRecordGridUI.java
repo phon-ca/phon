@@ -307,7 +307,6 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		messageTree = RTree.create();
 		actionsTree = RTree.create();
 		
-		// calculate some size variables once!
 		Map<Participant, Integer> ymap = new HashMap<>();
 		Rectangle2D templateRect = (session.getRecordCount() > 0 ? getSegmentRect(session.getRecord(0)) : new Rectangle2D.Double());		
 		int speakerTierHeight = getSpeakerTierHeight();
@@ -340,7 +339,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			if(!recordGrid.isSplitMode())
 				recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
 						(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
-			if(!g2.getClipBounds().intersects(segRect)) continue;
+		
+			if(segRect.getWidth() > 0 && !g2.getClipBounds().intersects(segRect)) continue;
+			if(segRect.getWidth() == 0 && !g2.getClipBounds().contains(new Point((int)segRect.getX(), (int)segRect.getY()))) continue;
 			
 			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
 				Record leftRecord = recordGrid.getLeftRecordSplit();
@@ -446,9 +447,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
 					segmentRect.getMaxX(), segmentRect.getMaxY()));
 			AtomicBoolean overlapRef = new AtomicBoolean(false);
-			overlapEntries.map( entry -> entry.value() ).forEach( i -> {
-				overlapRef.getAndSet(true);
-			});
+			overlapEntries.map( entry -> entry.value() )
+				.filter( (v) -> recordIndex != v )
+				.forEach( i -> {
+					overlapRef.getAndSet(true);
+				});
 			
 			if(overlapRef.get()) {
 				warnings = "Overlapping segments";

@@ -806,17 +806,8 @@ public class TimelineRecordTier extends TimelineTier {
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
 				
-				Rectangle2D segRect = recordGrid.getUI().getSegmentRect(r);
-				if("endMarker.time".equals(evt.getPropertyName())) {
-					// repaint extra space at end of record interval to compensate for labels
-					double repaintX = segRect.getMaxX();
-					double repaintW = 50;
-					recordGrid.repaint((int)repaintX, 0, (int)repaintW, recordGrid.getHeight());
-				} else if("startMarker.time".equals(evt.getPropertyName())) {
-					double oldX = recordGrid.xForTime((float)evt.getOldValue());
-					recordGrid.getUI().paintOverlappingRecords(new Rectangle2D.Double(oldX-1, segRect.getY(), 2, segRect.getHeight()));
-				}
-			} 
+				recordGrid.repaint(recordGrid.getVisibleRect());
+			}
 		}
 
 	}
