@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import javax.swing.SwingUtilities;
 
@@ -49,11 +52,24 @@ public class AnalysisComposerEP implements IPluginEntryPoint {
 	
 	public final static String ANALYSIS_FILE = "file";
 	
+	private volatile CountDownLatch latch = new CountDownLatch(0);
+
+	private SimpleEditor editor;
+
 	@Override
 	public String getName() {
 		return EP_NAME;
 	}
 
+	public Future<SimpleEditor> getFutureEditor() {
+		var retVal = new FutureTask<SimpleEditor>( () -> {
+			latch.await();
+			return AnalysisComposerEP.this.editor;
+		});
+		retVal.run();
+		return retVal;
+	}
+	
 	@Override
 	public void pluginStart(Map<String, Object> args) {
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
@@ -61,8 +77,9 @@ public class AnalysisComposerEP implements IPluginEntryPoint {
 		final Project project = epArgs.getProject();
 		final OpGraph graph = epArgs.containsKey(ANALYSIS_GRAPH) ? (OpGraph)epArgs.get(ANALYSIS_GRAPH) : new OpGraph();
 		final File file = (File)epArgs.get(ANALYSIS_FILE);
+		latch = new CountDownLatch(1);
 		Runnable onEDT = () -> {
-			final SimpleEditor editor =
+			editor =
 					new SimpleEditor(project, new AnalysisLibrary(), graph,
 							new AnalysisEditorModelInstantiator(), new AnalysisNodeInstantiator(),
 							(qs, reportGraph) ->  {
@@ -90,6 +107,8 @@ public class AnalysisComposerEP implements IPluginEntryPoint {
 			editor.setSize(new Dimension(1024, 768));
 			editor.centerWindow();
 			editor.setVisible(true);
+			
+			latch.countDown();
 		};
 		
 		if(SwingUtilities.isEventDispatchThread())

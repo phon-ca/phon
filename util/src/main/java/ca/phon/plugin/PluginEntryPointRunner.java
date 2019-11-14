@@ -104,7 +104,7 @@ public class PluginEntryPointRunner {
 	 * Execute plugin on calling thread.
 	 * Calling thread will be blocked until pluginStart
 	 * is finished.
-	 * 
+	 *  
 	 */
 	public void executePlugin()
 		throws PluginException {
@@ -122,36 +122,40 @@ public class PluginEntryPointRunner {
 	}
 	
 	/* Helper static methods */
-	public static void executePlugin(IPluginEntryPoint ep)
+	public static IPluginEntryPoint executePlugin(IPluginEntryPoint ep)
 		throws PluginException {
 		
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(ep);
 		runner.executePlugin();
 	
+		return runner.getEp();
 	}
 	
-	public static void executePlugin(String epName)
+	public static IPluginEntryPoint executePlugin(String epName)
 		throws PluginException {
 		
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(epName);
 		runner.executePlugin();
 		
+		return runner.getEp();
 	}
 	
-	public static void executePlugin(IPluginEntryPoint ep, Map<String, Object> args)
+	public static IPluginEntryPoint executePlugin(IPluginEntryPoint ep, Map<String, Object> args)
 		throws PluginException {
 		
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(ep, args);
 		runner.executePlugin();
 		
+		return runner.getEp();
 	}
 	
-	public static void executePlugin(String epName, Map<String, Object> args) 
+	public static IPluginEntryPoint executePlugin(String epName, Map<String, Object> args) 
 		throws PluginException {
 		
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(epName, args);
 		runner.executePlugin();
 		
+		return runner.getEp();
 	}
 
 	
@@ -161,29 +165,29 @@ public class PluginEntryPointRunner {
 	 *
 	 * @return the plugin task
 	 */
-	public PhonTask executePluginInBackground() {
-		PhonTask retVal = new PluginEntryPointTask();
+	public PluginEntryPointTask executePluginInBackground() {
+		PluginEntryPointTask retVal = new PluginEntryPointTask();
 		PhonWorker.getInstance().invokeLater(retVal);
 		return retVal;
 	}
 	
 	/* Helper static methods */
-	public static PhonTask executePluginInBackground(String epName) {
+	public static PluginEntryPointTask executePluginInBackground(String epName) {
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(epName);
 		return runner.executePluginInBackground();
 	}
 	
-	public static PhonTask executePluginInBackground(String epName, Map<String, Object> args) {
+	public static PluginEntryPointTask executePluginInBackground(String epName, Map<String, Object> args) {
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(epName, args);
 		return runner.executePluginInBackground();
 	}
 	
-	public static PhonTask executePluginInBackground(IPluginEntryPoint ep) {
+	public static PluginEntryPointTask executePluginInBackground(IPluginEntryPoint ep) {
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(ep);
 		return runner.executePluginInBackground();
 	}
 	
-	public static PhonTask executePluginInBackground(IPluginEntryPoint ep, Map<String, Object> args) {
+	public static PluginEntryPointTask executePluginInBackground(IPluginEntryPoint ep, Map<String, Object> args) {
 		PluginEntryPointRunner runner = new PluginEntryPointRunner(ep, args);
 		return runner.executePluginInBackground();
 	}

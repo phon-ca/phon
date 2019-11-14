@@ -17,6 +17,8 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
@@ -37,7 +39,7 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 	
 	private final OpGraph analysisGraph;
 	
-	private SimpleEditor editor;
+	private Future<SimpleEditor> futureEditor;
 	
 	public OpenSimpleAnalysisComposerAction(Project project) {
 		this(project, null);
@@ -52,8 +54,8 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 		this.analysisGraph = analysisGraph;
 	}
 	
-	public SimpleEditor getEditor() {
-		return this.editor;
+	public Future<SimpleEditor> getEditor() {
+		return this.futureEditor;
 	}
 	
 	@Override
@@ -64,7 +66,8 @@ public class OpenSimpleAnalysisComposerAction extends HookableAction {
 			args.put(AnalysisComposerEP.ANALYSIS_GRAPH, analysisGraph);
 		
 		try {
-			PluginEntryPointRunner.executePlugin(AnalysisComposerEP.EP_NAME, args);
+			AnalysisComposerEP ep = (AnalysisComposerEP)PluginEntryPointRunner.executePlugin(AnalysisComposerEP.EP_NAME, args);
+			this.futureEditor = ep.getFutureEditor();
 		} catch (PluginException e) {
 			Toolkit.getDefaultToolkit().beep();
 			LogUtil.severe(e);

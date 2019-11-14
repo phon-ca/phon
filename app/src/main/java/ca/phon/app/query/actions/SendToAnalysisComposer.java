@@ -3,6 +3,9 @@ package ca.phon.app.query.actions;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
@@ -19,6 +22,7 @@ import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 public class SendToAnalysisComposer extends HookableAction {
 
@@ -51,11 +55,26 @@ public class SendToAnalysisComposer extends HookableAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		if(analysisComposer == null) {
 			OpenSimpleAnalysisComposerAction openAnalysisComposerAct = new OpenSimpleAnalysisComposerAction(wizard.getExtension(Project.class));
-			openAnalysisComposerAct.actionPerformed(ae);
+			openAnalysisComposerAct.actionPerformed(ae);			
 			
-			analysisComposer = openAnalysisComposerAct.getEditor();
+			PhonWorker worker = PhonWorker.createWorker();
+			worker.setFinishWhenQueueEmpty(true);
+			
+			worker.invokeLater( () -> {
+				try {
+					var analysisComposer = openAnalysisComposerAct.getEditor().get();
+					sendScriptToEditor(analysisComposer);
+				} catch (InterruptedException | ExecutionException e) {
+					LogUtil.severe(e);
+				}
+			});
+			worker.start();
+		} else {
+			sendScriptToEditor(analysisComposer);
 		}
-		
+	}
+
+	public void sendScriptToEditor(SimpleEditor analysisComposer) {		
 		QueryScript qs = (QueryScript)wizard.getQueryScript().clone();
 		try {
 			OpGraph reportGraph = OpgraphIO.roundtrip(wizard.getReportComposer().getGraph());
@@ -70,5 +89,4 @@ public class SendToAnalysisComposer extends HookableAction {
 			LogUtil.severe(e);
 		}
 	}
-
 }
