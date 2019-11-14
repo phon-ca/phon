@@ -74,6 +74,7 @@ import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaLocator;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -207,6 +208,12 @@ public final class TimelineView extends EditorView {
 		
 		addTier(recordGrid);
 		
+		for(var extPt:PluginManager.getInstance().getExtensionPoints(TimelineTier.class)) {
+			var tier = extPt.getFactory().createObject(this);
+			tier.getTimebar().setVisible(false);
+			addTier(tier);
+		}
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
@@ -231,6 +238,14 @@ public final class TimelineView extends EditorView {
 				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
 			}
 		}
+	}
+	
+	public JToolBar getToolbar() {
+		return this.toolbar;
+	}
+	
+	public JComponent getTierPanel() {
+		return this.tierPanel;
 	}
 	
 	public TimelineWaveformTier getWaveformTier() {
