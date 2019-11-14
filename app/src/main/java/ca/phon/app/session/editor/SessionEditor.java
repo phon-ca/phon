@@ -161,8 +161,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/** Menu for currently focused view */
 	private EditorView currentView = null;
 	
-	private JMenu currentViewMenu = null;
-
 	/**
 	 * Toolbar
 	 */
@@ -352,9 +350,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	}
 	
 	public void setCurrentView(EditorView view) {
-		if(this.currentViewMenu != null) {
-			this.currentViewMenu.setText(view.getName());
-		}
 		this.currentView = view;
 	}
 
@@ -455,31 +450,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		
 		menuBar.add(viewMenu, 3);
 		menuBar.add(sessionMenu, 3);
-		
-		currentViewMenu = new JMenu("");
-		currentViewMenu.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent e) {
-				if(currentView != null) {
-					JMenu viewMenu = currentView.getMenu();
-					currentViewMenu.removeAll();
-					for(var c:viewMenu.getMenuComponents()) {
-						currentViewMenu.add(c);
-					}
-				}
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-		});
-//		currentViewMenu.setVisible(false);
-		menuBar.add(currentViewMenu, 4);
 	}
 
 	/**
