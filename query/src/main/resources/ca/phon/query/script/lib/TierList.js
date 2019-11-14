@@ -71,8 +71,6 @@ exports.TierList = function(id) {
 		var resultValues = new Array();
 		var metadata = new java.util.LinkedHashMap();
 		
-		java.lang.System.out.println(obj + "");
-		
 		if(typeof obj.getTier !== "function") return [ [], new java.util.HashMap() ];
 
 		var extraTiers = this.getTiers();

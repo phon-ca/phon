@@ -180,7 +180,7 @@ public class WordImpl implements Word {
 	public TierString getNotes() {
 		final TierString notes = getGroup().getNotes();
 
-		if(wordIndex >= 0 && wordIndex < notes.numberOfWords()) {
+		if(notes != null && wordIndex >= 0 && wordIndex < notes.numberOfWords()) {
 			return notes.getWord(wordIndex);
 		} else {
 			return null;
