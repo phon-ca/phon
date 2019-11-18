@@ -37,7 +37,7 @@ import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.event.DateSelectionEvent;
 import org.jdesktop.swingx.event.DateSelectionListener;
 
-import ca.phon.session.DateFormatter;
+import ca.phon.session.util.DateFormatter;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.toast.ToastFactory;

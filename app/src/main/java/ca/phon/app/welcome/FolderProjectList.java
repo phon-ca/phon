@@ -63,7 +63,7 @@ import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectFactory;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.session.DateFormatter;
+import ca.phon.session.util.DateFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.PhonGuiConstants;

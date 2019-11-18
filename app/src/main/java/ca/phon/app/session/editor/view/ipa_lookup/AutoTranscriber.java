@@ -36,11 +36,11 @@ import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.OrthoElement;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
-import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Transcriber;
 import ca.phon.session.Word;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.util.Tuple;
 

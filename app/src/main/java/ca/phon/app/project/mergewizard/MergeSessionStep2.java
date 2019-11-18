@@ -42,11 +42,11 @@ import org.jdesktop.swingx.JXList;
 
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
-import ca.phon.session.AbstractRecordFilter;
 import ca.phon.session.Record;
-import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
+import ca.phon.session.filter.AbstractRecordFilter;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.CollatorFactory;

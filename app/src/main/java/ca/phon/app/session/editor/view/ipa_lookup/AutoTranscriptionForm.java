@@ -36,8 +36,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
-import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Language;

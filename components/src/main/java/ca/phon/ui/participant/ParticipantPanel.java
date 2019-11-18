@@ -52,11 +52,11 @@ import org.jdesktop.swingx.VerticalLayout;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import ca.phon.session.AgeFormatter;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Sex;
+import ca.phon.session.util.AgeFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;

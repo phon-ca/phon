@@ -24,8 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import ca.phon.session.AgeFormatter;
 import ca.phon.session.Sex;
+import ca.phon.session.util.AgeFormatter;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 

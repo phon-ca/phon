@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session;
+package ca.phon.session.filter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ca.phon.session.Record;
+import ca.phon.session.Session;
 import ca.phon.util.Range;
 
 /**

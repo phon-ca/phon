@@ -26,14 +26,14 @@ import java.util.TreeMap;
 
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
-import ca.phon.session.RangeRecordFilter;
 import ca.phon.session.Record;
-import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
+import ca.phon.session.filter.RangeRecordFilter;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.worker.PhonTask;
 
 /**

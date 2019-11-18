@@ -13,8 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session;
+package ca.phon.session.util;
 
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.Participant;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.Tier;
 
 /**
  * Used to calculate the start/end time values for

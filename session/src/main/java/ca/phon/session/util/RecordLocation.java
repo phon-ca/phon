@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session;
+package ca.phon.session.util;
 
+import ca.phon.session.GroupLocation;
 import ca.phon.util.Tuple;
 
-public class RecordRange extends Tuple<String, GroupRange> {
+public class RecordLocation extends Tuple<String, GroupLocation> {
 
-	public RecordRange(String tier, GroupRange r) {
-		super(tier, r);
+	public RecordLocation(String tier, GroupLocation pos) {
+		super(tier, pos);
 	}
 
 	public String getTier() {
@@ -31,20 +32,11 @@ public class RecordRange extends Tuple<String, GroupRange> {
 		super.setObj1(tier);
 	}
 
-	public GroupRange getGroupRange() {
+	public GroupLocation getGroupLocation() {
 		return super.getObj2();
 	}
 
-	public void setGroupRange(GroupRange r) {
-		super.setObj2(r);
+	public void setGroupLocation(GroupLocation loc) {
+		super.setObj2(loc);
 	}
-	
-	public RecordLocation start() {
-		return new RecordLocation(getTier(), getGroupRange().start());
-	}
-	
-	public RecordLocation end() {
-		return new RecordLocation(getTier(), getGroupRange().end());
-	}
-	
 }

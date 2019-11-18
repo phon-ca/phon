@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session;
+package ca.phon.session.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.phon.session.Participant;
+import ca.phon.session.Record;
 
 /**
  * Filter utterances by speaker.  If 'null' is given during construction

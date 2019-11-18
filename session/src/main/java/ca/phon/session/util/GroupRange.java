@@ -1,0 +1,52 @@
+/*
+ * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ca.phon.session.util;
+
+import ca.phon.session.GroupLocation;
+import ca.phon.util.Range;
+import ca.phon.util.Tuple;
+
+public class GroupRange extends Tuple<Integer, Range> {
+	
+	public GroupRange(Integer grpIndex, Range charRange) {
+		super(grpIndex, charRange);
+	}
+	
+	public Integer getGroupIndex() {
+		return super.getObj1();
+	}
+	
+	public void setGroupIndex(Integer grpIndex) {
+		super.setObj1(grpIndex);
+	}
+	
+	public Range getRange() {
+		return super.getObj2();
+	}
+	
+	public void setRange(Range r) {
+		super.setObj2(r);
+	}
+	
+	public GroupLocation start() {
+		return new GroupLocation(getGroupIndex(), getRange().getStart());
+	}
+	
+	public GroupLocation end() {
+		return new GroupLocation(getGroupIndex(), getRange().getEnd());
+	}
+
+}

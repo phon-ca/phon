@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session;
+package ca.phon.session.util;
 
 import java.text.ParseException;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterType;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.SessionFactory;
 import ca.phon.util.MsFormatter;
 
 @FormatterType(MediaSegment.class)

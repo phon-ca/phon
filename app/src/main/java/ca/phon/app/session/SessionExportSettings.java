@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.prefs.Preferences;
 
 import ca.phon.query.db.ResultSet;
-import ca.phon.session.RecordFilter;
 import ca.phon.session.TierViewItem;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.util.PrefHelper;
 
 /**

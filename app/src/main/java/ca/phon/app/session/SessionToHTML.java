@@ -36,9 +36,9 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetRecordFilter;
 import ca.phon.query.db.ResultValue;
 import ca.phon.session.Record;
-import ca.phon.session.RecordFilter;
 import ca.phon.session.Session;
 import ca.phon.session.TierViewItem;
+import ca.phon.session.filter.RecordFilter;
 
 /**
  * Class for constructing an HTML page from a Phon session.
