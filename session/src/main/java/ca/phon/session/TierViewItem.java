@@ -15,32 +15,36 @@
  */
 package ca.phon.session;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.TierViewItemSPI;
+
 /**
  * An entry for tier ordering, vibility and locking.
  *
  */
-public interface TierViewItem {
+public final class TierViewItem extends ExtendableObject {
 
-	/**
-	 * Tier name
-	 * 
-	 */
-	public String getTierName();
+	private TierViewItemSPI tierViewItemImpl;
 	
-	/**
-	 * Tier visibility
-	 */
-	public boolean isVisible();
-	
-	/**
-	 * Get the font.  The string should be parsable
-	 * by the standard awt.Font class.
- 	 */
-	public String getTierFont();
-	
-	/**
-	 * Get is locked
-	 */
-	public boolean isTierLocked();
+	TierViewItem(TierViewItemSPI impl) {
+		super();
+		this.tierViewItemImpl = impl;
+	}
+
+	public String getTierName() {
+		return tierViewItemImpl.getTierName();
+	}
+
+	public boolean isVisible() {
+		return tierViewItemImpl.isVisible();
+	}
+
+	public String getTierFont() {
+		return tierViewItemImpl.getTierFont();
+	}
+
+	public boolean isTierLocked() {
+		return tierViewItemImpl.isTierLocked();
+	}
 	
 }

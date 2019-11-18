@@ -29,8 +29,9 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.session.Tier;
 import ca.phon.session.TierListener;
+import ca.phon.session.spi.TierSPI;
 
-public class TierImpl<T> implements Tier<T> {
+public class TierImpl<T> implements TierSPI<T> {
 	
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TierImpl.class.getName());
 	
@@ -55,17 +56,7 @@ public class TierImpl<T> implements Tier<T> {
 	private final List<T> tierData =
 			Collections.synchronizedList(new ArrayList<T>());
 
-	/**
-	 * Tier listeners, using a {@link WeakHashMap} so that listeners
-	 * are removed when their references are no longer needed.  The second
-	 * {@link Boolean} parameter is unused
-	 */
-	private final Map<TierListener<T>, Boolean> tierListeners;
 	
-	/**
-	 * Extension support
-	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Tier.class, this);
 	
 	/**
 	 * Constructor
@@ -79,12 +70,7 @@ public class TierImpl<T> implements Tier<T> {
 		this.tierName = name;
 		this.declaredType = type;
 		this.grouped = grouped;
-		
-		extSupport.initExtensions();
-		
-		final WeakHashMap<TierListener<T>, Boolean> weakHash = 
-				new WeakHashMap<TierListener<T>, Boolean>();
-		tierListeners = Collections.synchronizedMap(weakHash);
+
 	}
 
 	@Override
@@ -123,7 +109,6 @@ public class TierImpl<T> implements Tier<T> {
 
 	@Override
 	public void setGroup(int idx, T val) {
-		final T oldVal = (idx < numberOfGroups() ? getGroup(idx) : null);
 		synchronized(tierData) {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
@@ -138,7 +123,7 @@ public class TierImpl<T> implements Tier<T> {
 			else
 				tierData.set(idx, val);
 		}
-		fireTierGroupChanged(idx, oldVal, val);
+		
 	}
 	
 	@Override
@@ -175,7 +160,6 @@ public class TierImpl<T> implements Tier<T> {
 			}
 			tierData.add(val);
 		}
-		fireTierGroupAdded(numberOfGroups()-1, val);
 	}
 	
 	@Override
@@ -192,19 +176,16 @@ public class TierImpl<T> implements Tier<T> {
 			}
 			tierData.add(idx, val);
 		}
-		fireTierGroupAdded(idx, val);
 	}
 
 	@Override
-	public void removeGroup(int idx) {
-		final T val = getGroup(idx);
+	public T removeGroup(int idx) {
 		synchronized(tierData) {
 			if(!grouped && idx > 0) {
 				throw new ArrayIndexOutOfBoundsException(idx);
 			}
-			tierData.remove(idx);
+			return tierData.remove(idx);
 		}
-		fireTierGroupRemoved(idx, val);
 	}
 
 	@Override
@@ -212,7 +193,6 @@ public class TierImpl<T> implements Tier<T> {
 		synchronized(tierData) {
 			tierData.clear();
 		}
-		fireTierGroupsCleared();
 	}
 
 	@Override
@@ -229,104 +209,5 @@ public class TierImpl<T> implements Tier<T> {
 	public Class<T> getDeclaredType() {
 		return declaredType;
 	}
-	
-	@Override
-	public Iterator<T> iterator() {
-		return tierData.iterator();
-	}
-	
-	@Override
-	public String toString() {
-		final StringBuffer buffer = new StringBuffer();
-		
-		if(isGrouped()) {
-			buffer.append("[");
-			for(int i = 0; i < numberOfGroups(); i++) {
-				if(i > 0) buffer.append("] [");
-				final T grpVal = getGroup(i);
-				String grpTxt = (grpVal != null ? grpVal.toString() : "");
-				if(grpTxt.length() == 0) {
-					// XXX Check for unvalidated values
-					if(grpVal instanceof IExtendable) {
-						final IExtendable extGrp = (IExtendable)grpVal;
-						final UnvalidatedValue uv = extGrp.getExtension(UnvalidatedValue.class);
-						if(uv != null) 
-							grpTxt = uv.getValue();
-					}
-				}
-				if(grpVal != null)
-					buffer.append(grpTxt);
-			}
-			buffer.append("]");
-		} else {
-			if(numberOfGroups() > 0) {
-				final T grpVal = getGroup(0);
-				String grpTxt = (grpVal != null ? grpVal.toString() : "");
-				if(grpTxt.length() == 0 && grpVal instanceof IExtendable) {
-					final IExtendable extGrp = (IExtendable)grpVal;
-					final UnvalidatedValue uv = extGrp.getExtension(UnvalidatedValue.class);
-					if(uv != null) 
-						grpTxt = uv.getValue();
-				}
-				buffer.append(grpTxt);
-			}
-		}
-		
-		return buffer.toString();
-	}
-
-	/*
-	 * Tier Listeners
-	 */
-	@Override
-	public void addTierListener(TierListener<T> listener) {
-		tierListeners.put(listener, Boolean.TRUE);
-	}
-
-	@Override
-	public void removeTierListener(TierListener<T> listener) {
-		tierListeners.remove(listener);
-	}
-	
-	private void fireTierGroupAdded(int index, T value) {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupAdded(this, index, value);
-		}
-	}
-	
-	private void fireTierGroupRemoved(int index, T value) {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupRemoved(this, index, value);
-		}
-	}
-	
-	private void fireTierGroupChanged(int index, T oldValue, T value) {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupChanged(this, index, oldValue, value);
-		}
-	}
-	
-	private void fireTierGroupsCleared() {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupsCleared(this);
-		}
-	}
-
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
-	
 	
 }

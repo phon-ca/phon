@@ -22,7 +22,7 @@ import ca.phon.orthography.Orthography;
 /**
  * Tier descriptions for default tiers.
  */
-public enum SystemTierType implements TierDescription {
+public enum SystemTierType {
 	Orthography("Orthography", true, Orthography.class),
 	IPATarget("IPA Target", true, IPATranscript.class),
 	TargetSyllables("Target Syllables", true, IPATranscript.class),
@@ -56,19 +56,17 @@ public enum SystemTierType implements TierDescription {
 		
 		return null;
 	}
-	
-	@Override
+
 	public boolean isGrouped() {
 		return this.grouped;
 	}
 
-	@Override
 	public String getName() {
 		return this.tierName;
 	}
 
-	@Override
 	public Class<?> getDeclaredType() {
 		return this.type;
 	}
+	
 }

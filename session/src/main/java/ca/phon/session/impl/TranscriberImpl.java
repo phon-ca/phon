@@ -18,8 +18,9 @@ package ca.phon.session.impl;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.session.Transcriber;
+import ca.phon.session.spi.TranscriberSPI;
 
-public class TranscriberImpl implements Transcriber {
+public class TranscriberImpl implements TranscriberSPI {
 	
 	private final AtomicReference<String> usernameRef = 
 			new AtomicReference<String>();

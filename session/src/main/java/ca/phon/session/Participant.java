@@ -20,124 +20,118 @@ package ca.phon.session;
 import java.time.LocalDate;
 import java.time.Period;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.spi.ParticipantSPI;
 
 /**
  * Immutable participant object.
  *
  */
-public interface Participant extends IExtendable {
+public final class Participant extends ExtendableObject {
 	
 	public static final Participant UNKNOWN = SessionFactory.newFactory().createUnknownParticipant();
-	
-	/**
-	 * @return Returns the age.
-	 */
-	public abstract Period getAge(LocalDate fromDate);
 
-	/**
-	 * @return Returns the ageTo.
-	 */
-	public abstract Period getAgeTo();
+	private ParticipantSPI participantImpl;
+	
+	Participant(ParticipantSPI impl) {
+		super();
+		this.participantImpl = impl;
+	}
 
-	/**
-	 * @return Returns the birthDate.
-	 */
-	public abstract LocalDate getBirthDate();
+	public Period getAge(LocalDate fromDate) {
+		return participantImpl.getAge(fromDate);
+	}
 
-	/**
-	 * @return Returns the education.
-	 */
-	public abstract String getEducation();
-	
-	/**
-	 * @return Returns the group.
-	 */
-	public abstract String getGroup();
+	public Period getAgeTo() {
+		return participantImpl.getAgeTo();
+	}
 
-	/**
-	 * @return Returns the id.
-	 */
-	public abstract String getId();
+	public LocalDate getBirthDate() {
+		return participantImpl.getBirthDate();
+	}
 
-	/**
-	 * @return Returns the language.
-	 */
-	public abstract String getLanguage();
+	public String getEducation() {
+		return participantImpl.getEducation();
+	}
 
-	/**
-	 * @return Returns the name.
-	 */
-	public abstract String getName();
+	public String getGroup() {
+		return participantImpl.getGroup();
+	}
 
-	/**
-	 * @return Returns the role.
-	 */
-	public abstract ParticipantRole getRole();
-	
-	/**
-	 * @return Returns the sES.
-	 */
-	public abstract String getSES();
+	public String getId() {
+		return participantImpl.getId();
+	}
 
-	/**
-	 * @return Returns the sex.
-	 */
-	public abstract Sex getSex();
-	
-	/**
-	 * @param age The age to set.
-	 */
-	public abstract void setAge(Period age);
-	
-	/**
-	 * @param ageTo The ageTo to set.
-	 */
-	public abstract void setAgeTo(Period ageTo);
-	
-	/**
-	 * @param birthDate The birthDate to set.
-	 */
-	public abstract void setBirthDate(LocalDate birthDate);
-	
-	/**
-	 * @param education The education to set.
-	 */
-	public abstract void setEducation(String education);
-	
-	/**
-	 * @param group The group to set.
-	 */
-	public abstract void setGroup(String group);
-	
-	/**
-	 * @param id The id to set.
-	 */
-	public abstract void setId(String id);
-	
-	/**
-	 * @param language The language to set.
-	 */
-	public abstract void setLanguage(String language);
-	
-	/**
-	 * @param name The name to set.
-	 */
-	public abstract void setName(String name);
-	
-	/**
-	 * @param role The role to set.
-	 */
-	public abstract void setRole(ParticipantRole role);
-	
-	/**
-	 * @param ses The sES to set.
-	 */
-	public abstract void setSES(String ses);
-	
-	/**
-	 * @param sex The sex to set.
-	 */
-	public abstract void setSex(Sex sex);
+	public String getLanguage() {
+		return participantImpl.getLanguage();
+	}
 
+	public String getName() {
+		return participantImpl.getName();
+	}
+
+	public ParticipantRole getRole() {
+		return participantImpl.getRole();
+	}
+
+	public String getSES() {
+		return participantImpl.getSES();
+	}
+
+	public Sex getSex() {
+		return participantImpl.getSex();
+	}
+
+	public void setAge(Period age) {
+		participantImpl.setAge(age);
+	}
+
+	public void setAgeTo(Period ageTo) {
+		participantImpl.setAgeTo(ageTo);
+	}
+
+	public void setBirthDate(LocalDate birthDate) {
+		participantImpl.setBirthDate(birthDate);
+	}
+
+	public void setEducation(String education) {
+		participantImpl.setEducation(education);
+	}
+
+	public void setGroup(String group) {
+		participantImpl.setGroup(group);
+	}
+
+	public void setId(String id) {
+		participantImpl.setId(id);
+	}
+
+	public void setLanguage(String language) {
+		participantImpl.setLanguage(language);
+	}
+
+	public void setName(String name) {
+		participantImpl.setName(name);
+	}
+
+	public void setRole(ParticipantRole role) {
+		participantImpl.setRole(role);
+	}
+
+	public void setSES(String ses) {
+		participantImpl.setSES(ses);
+	}
+
+	public void setSex(Sex sex) {
+		participantImpl.setSex(sex);
+	}
+	
+	@Override
+	public String toString() {
+		return (getName() != null ? getName() : 
+				(getId() != null ? getId() : getRole().toString() ));
+	}
+	
 }

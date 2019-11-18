@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 
@@ -30,14 +31,12 @@ import ca.phon.extensions.IExtendable;
  * Custom String implementation for tiers with extension support.
  * 
  */
-public class TierString
-	implements java.io.Serializable, Comparable<String>, CharSequence, IExtendable {
+public class TierString extends ExtendableObject
+	implements java.io.Serializable, Comparable<String>, CharSequence {
 	
 	private static final long serialVersionUID = 7079791690885598508L;
 
 	private final String delegate;
-	
-	private final ExtensionSupport extSupport = new ExtensionSupport(TierString.class, this);
 	
 	private List<TierString> words = null;
 	
@@ -50,8 +49,6 @@ public class TierString
 	public TierString(String value) {
 		super();
 		this.delegate = value;
-		
-		extSupport.initExtensions();
 	}
 	
 	private void tokenize() {
@@ -314,23 +311,5 @@ public class TierString
 	public String intern() {
 		return delegate.intern();
 	}
-
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
-	
-	
 
 }

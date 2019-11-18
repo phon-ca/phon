@@ -16,37 +16,57 @@
 
 package ca.phon.session;
 
+import java.util.Set;
+
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.spi.CommentSPI;
 
 /**
  * Entity class for comments.
  * 
  *
  */
-public interface Comment extends IExtendable {
+public final class Comment extends ExtendableObject {
+	
+	private CommentSPI commentImpl;
+	
+	Comment(CommentSPI impl) {
+		super();
+		this.commentImpl = impl;
+	}
 	
 	/** 
 	 * Get the comment string.
 	 * @return String
 	 */
-	public String getValue();
+	public String getValue() {
+		return commentImpl.getValue();
+	}
 	
 	/**
 	 * Set the comment string.
 	 * @param comment
 	 */
-	public void setValue(String comment);
+	public void setValue(String comment) {
+		commentImpl.setValue(comment);
+	}
 	
 	/**
 	 * Get the type.
 	 * @return CommentEnum
 	 */
-	public CommentEnum getType();
+	public CommentEnum getType() {
+		return commentImpl.getType();
+	}
 	
 	/**
 	 * Set the type.
 	 * @param type
 	 */
-	public void setType(CommentEnum type);
+	public void setType(CommentEnum type) {
+		commentImpl.setType(type);
+	}
 
 }

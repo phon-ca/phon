@@ -15,10 +15,13 @@
  */
 package ca.phon.session;
 
+import java.util.Iterator;
 import java.util.Set;
 
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.impl.SessionImpl;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
@@ -26,33 +29,39 @@ import ca.phon.visitor.Visitor;
  * Iteratable/visitable access for {@link Session} {@link Record}s
  *
  */
-public abstract class Records implements IExtendable, Iterable<Record>, Visitable<Record> {
+public final class Records extends ExtendableObject implements Iterable<Record>, Visitable<Record> {
 
-	private final ExtensionSupport extSupport = new ExtensionSupport(Records.class, this);
-
-	protected Records() {
+	private final Session session;
+	
+	Records(Session session) {
 		super();
-		extSupport.initExtensions();
+		this.session = session;
 	}
 	
 	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
+	public Iterator<Record> iterator() {
+		return new RecordIterator();
 	}
+	
+	private final class RecordIterator implements Iterator<Record> {
 
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
+		private int idx = 0;
+		
+		@Override
+		public boolean hasNext() {
+			return (idx < session.getRecordCount());
+		}
 
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
+		@Override
+		public Record next() {
+			return session.getRecord(idx++);
+		}
 
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
+		@Override
+		public void remove() {
+			session.removeRecord(idx-1);
+		}
+		
 	}
 	
 	@Override

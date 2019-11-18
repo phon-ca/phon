@@ -15,9 +15,16 @@
  */
  package ca.phon.session;
 
+import java.util.Set;
+
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.SyllableAligner;
 import ca.phon.ipa.alignment.SyllableMap;
+import ca.phon.orthography.OrthoWordExtractor;
 import ca.phon.orthography.Orthography;
 
 /**
@@ -25,122 +32,160 @@ import ca.phon.orthography.Orthography;
  * in a record.
  * 
  */
-public interface Group {
+public final class Group extends ExtendableObject {
 	
-	/**
-	 * Record
-	 */
-	public Record getRecord();
-	
+	private final Record record;
+
 	/**
 	 * Group index
 	 */
-	public int getGroupIndex();
+	private final int groupIndex;
 	
-	/**
-	 * Get orthography
-	 */
-	public Orthography getOrthography();
+	Group(Record record, int idx) {
+		super();
+		this.record = record;
+		this.groupIndex = idx;
+	}
 	
-	/**
-	 * Set orthography
-	 * 
-	 * @param ortho
-	 */
-	public void setOrthography(Orthography ortho);
+	public Record getRecord() {
+		return this.record;
+	}
+	
+	public int getGroupIndex() {
+		return this.groupIndex;
+	}
+	
+	public Orthography getOrthography() {
+		return 
+				(record.getOrthography().numberOfGroups() > groupIndex ? record.getOrthography().getGroup(groupIndex) 
+						: new Orthography());
+	}
 
-	/**
-	 * IPA target
-	 */
-	public IPATranscript getIPATarget();
+	public void setOrthography(Orthography ortho) {
+		record.getOrthography().setGroup(groupIndex, ortho);
+	}
+
+	public IPATranscript getIPATarget() {
+		return 
+				(record.getIPATarget().numberOfGroups() > groupIndex ?  record.getIPATarget().getGroup(groupIndex)
+						: new IPATranscript());
+	}
+
+	public IPATranscript getIPAActual() {
+		return 
+				(record.getIPAActual().numberOfGroups() > groupIndex ? record.getIPAActual().getGroup(groupIndex)
+						: new IPATranscript());
+	}
 	
-	public void setIPATarget(IPATranscript ipa);
+	public Object getTier(String name) {
+		final Tier<?> tier = record.getTier(name);
+		if(tier == null) return null;
+		int gIdx = groupIndex;
+		if(!tier.isGrouped())
+			gIdx = 0;
+		final Object retVal = 
+				(tier.numberOfGroups() > gIdx ? tier.getGroup(gIdx) : null);
+		return retVal;
+	}
+
+	public <T> T getTier(String name, Class<T> type) {
+		final Tier<T> tier = record.getTier(name, type);
+		if(tier == null) return null;
+		int gIdx = groupIndex;
+		if(!tier.isGrouped())
+			gIdx = 0;
+		final T retVal = 
+				(tier.numberOfGroups() > gIdx ? tier.getGroup(gIdx) : null);
+		return retVal;
+	}
+
+	public void setIPATarget(IPATranscript ipa) {
+		record.getIPATarget().setGroup(groupIndex, ipa);
+	}
+
+	public void setIPAActual(IPATranscript ipa) {
+		record.getIPAActual().setGroup(groupIndex, ipa);
+	}
+
+	public PhoneMap getPhoneAlignment() {
+		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+		return (alignmentTier != null && 
+				alignmentTier.numberOfGroups() > groupIndex ? alignmentTier.getGroup(groupIndex) : null);
+	}
+
+	public void setPhoneAlignment(PhoneMap alignment) {
+		record.getPhoneAlignment().setGroup(groupIndex, alignment);
+	}
+
+	public TierString getNotes() {
+		return 
+				(record.getNotes() != null && 
+					record.getNotes().numberOfGroups() > 0 ? record.getNotes().getGroup(0) : null);
+	}
+
+	public void setNotes(TierString notes) {
+		record.getNotes().setGroup(0, notes);
+	}
+
+	public <T> void setTier(String name, Class<T> type, T val) {
+		final Tier<T> tier = record.getTier(name, type);
+		if(tier != null) {
+			if(tier.isGrouped())
+				tier.setGroup(groupIndex, val);
+			else
+				tier.setGroup(0, val);
+		}
+	}
+
+	public Word getAlignedWord(int wordIndex) {
+		return new Word(getRecord(), groupIndex, wordIndex);
+	}
 	
-	/**
-	 * IPA actual
-	 */
-	public IPATranscript getIPAActual();
+	public int getAlignedWordCount() {
+		int retVal = getWordCount(SystemTierType.Orthography.getName());
+		retVal = Math.max(retVal, getWordCount(SystemTierType.IPATarget.getName()));
+		retVal = Math.max(retVal, getWordCount(SystemTierType.IPAActual.getName()));
+		
+		for(String tierName:record.getExtraTierNames()) {
+			final Tier<String> tier = record.getTier(tierName, String.class);
+			if(tier.isGrouped())
+				retVal = Math.max(retVal, getWordCount(tierName));
+		}
+		
+		return retVal;
+	}
 	
-	public void setIPAActual(IPATranscript ipa);
+	public int getWordCount(String tierName) {
+		final Object obj = getTier(tierName);
+		
+		int retVal = 0;
+		if(obj instanceof Orthography) {
+			final Orthography ortho = (Orthography)obj;
+			final OrthoWordExtractor extractor = new OrthoWordExtractor();
+			ortho.accept(extractor);
+			retVal = extractor.getWordList().size();
+		} else if(obj instanceof IPATranscript) {
+			retVal = ((IPATranscript)obj).words().size();
+		} else if(obj instanceof TierString) {
+			retVal = ((TierString)obj).numberOfWords();
+		} else if(obj instanceof String) {
+			retVal = obj.toString().split("\\p{Space}").length;
+		}
+		
+		return retVal;
+	}
+
+	public SyllableMap getSyllableAlignment() {
+		final SyllableAligner aligner = new SyllableAligner();
+		return aligner.calculateSyllableAlignment(getIPATarget(), getIPAActual(), getPhoneAlignment());
+	}
+
+	public int getAlignedSyllableCount() {
+		return getSyllableAlignment().getAlignmentLength();
+	}
 	
-	/**
-	 * Alignment
-	 */
-	public PhoneMap getPhoneAlignment();
-	
-	public void setPhoneAlignment(PhoneMap alignment);
-	
-	public SyllableMap getSyllableAlignment();
-	
-	/**
-	 * Notes - this will be the same for every group!
-	 */
-	public TierString getNotes();
-	
-	public void setNotes(TierString notes);
-	
-	/**
-	 * Get the value for the specified tier
-	 * and type.
-	 * 
-	 * @param name
-	 * @param type
-	 * 
-	 * @return the value for the specified tier or
-	 *  <code>null</code> if not found
-	 *  
-	 */
-	public <T> T getTier(String name, Class<T> type);
-	
-	/**
-	 * Get the tier.
-	 * @param name
-	 */
-	public Object getTier(String name);
-	
-	public <T> void setTier(String name, Class<T> type, T val);
-	
-	/**
-	 * Get the aligned word data for the given index
-	 * 
-	 * @param wordIndex
-	 * 
-	 * @return the aligned word data for the given index
-	 */
-	public Word getAlignedWord(int wordIndex);
-	
-	/**
-	 * Return the number of aligned words based on
-	 * the orthography tier.
-	 * 
-	 * @return the number of aligned words in orthography
-	 */
-	public int getAlignedWordCount();
-	
-	/**
-	 * Get the word count for the specified tier
-	 * 
-	 * @param tierName
-	 * @return the number of words in the tier, or 0 if the tier
-	 *  is empty or not a grouped tier
-	 */
-	public int getWordCount(String tierName);
-	
-	/**
-	 * Return the number of aligned syllables in this
-	 * group.
-	 * 
-	 * @return number of aligned syllables
-	 */
-	public int getAlignedSyllableCount();
-	
-	/**
-	 * Return the aligned syllable at given index
-	 * 
-	 * @param index
-	 * 
-	 * @return aligned syllable
-	 */
-	public AlignedSyllable getAlignedSyllable(int index);
+	public AlignedSyllable getAlignedSyllable(int index) {
+		return new AlignedSyllable(getRecord(), groupIndex, index);
+	}
 	
 }

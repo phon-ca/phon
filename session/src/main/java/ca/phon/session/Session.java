@@ -1,250 +1,208 @@
-/*
- * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
-
- *    http://www.apache.org/licenses/LICENSE-2.0
-
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package ca.phon.session;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.spi.SessionSPI;
 
 /**
  * A session in a project.
  *
  */
-public interface Session extends IExtendable {
+public final class Session extends ExtendableObject {
 
-	/** Get the corpus */
-	public String getCorpus();
+	private SessionSPI sessionImpl;
 	
-	/** Get the transcript name */
-	public String getName();
-
-	/** Get the transcript date */
-	public LocalDate getDate();
+	Session(SessionSPI sessionImpl) {
+		super();
+		this.sessionImpl = sessionImpl;
+	}
 	
-	/** Get the language */
-	public String getLanguage();
-	
-	/** Get/Set the media file location */
-	public String getMediaLocation();
-
-	/** Get/Set the tier view */
-	public List<TierViewItem> getTierView();
-	
-	/*
-	 * Custom tiers defined for the session
-	 */
+	/* Delegates */
 	/**
-	 * Number of user-defined tiers for this session
+	 * @return corpus name
 	 */
-	public int getUserTierCount();
-	
-	/**
-	 * Get user tier for the specified index.
-	 * 
-	 * @param idx
-	 * 
-	 * @return tier description 
-	 */
-	public TierDescription getUserTier(int idx);
-	
-	/**
-	 * Remove user tier 
-	 * 
-	 * @param idx
-	 */
-	public TierDescription removeUserTier(int idx);
-	
-	public TierDescription removeUserTier(TierDescription tierDescription);
-	
-	/**
-	 * Add a user tier
-	 */
-	public void addUserTier(TierDescription tierDescription);
-	public void addUserTier(int idx, TierDescription tierDescription);
-	
-	public TierDescriptions getUserTiers();
-	
-	/**
-	 * Get the number of transcribers
-	 */
-	public int getTranscriberCount();
-	
-	/**
-	 * Get transcriber for the specified username
-	 * @param username
-	 * @return
-	 */
-	public Transcriber getTranscriber(String username);
-	
-	/**
-	 * Get the <code>i</code>th transcriber.
-	 * @param i
-	 * @return
-	 */
-	public Transcriber getTranscriber(int i);
-	
-	/**
-	 * Remove the <code>i</code>th transcriber
-	 * 
-	 * @param i
-	 */
-	public void removeTranscriber(int i);
-	
-	public Transcribers getTranscribers();
-	
-	/**
-	 * Get the metadata
-	 * 
-	 * @return Metadata
-	 */
-	public SessionMetadata getMetadata();
-	
-	/**
-	 * Return the record at the given index.
-	 * 
-	 * @param pos
-	 * @return the specified record
-	 */
-	public Record getRecord(int pos);
-	
-	/**
-	 * Return the number of records.
-	 * 
-	 * @return the number of records
-	 */
-	public int getRecordCount();
-	
-	public Records getRecords();
-	
-	/**
-	 * Get the position of the given record.
-	 * 
-	 * @param record
-	 */
-	public int getRecordPosition(Record record);
-	
-	/**
-	 * Set the position of the given record
-	 * 
-	 * @param record
-	 * @param position
-	 */
-	public void setRecordPosition(Record record, int position);
-	
-	/**
-	 * Get the number of participants
-	 * 
-	 * @return the number of participants
-	 */
-	public int getParticipantCount();
+	public String getCorpus() {
+		return sessionImpl.getCorpus();
+	}
 
 	/**
-	 * Add a new participant
-	 * 
-	 * @param participant
+	 * @return session name
 	 */
-	public void addParticipant(Participant participant);
-	
+	public String getName() {
+		return sessionImpl.getName();
+	}
+
 	/**
-	 * Get the participant at the given index
-	 * 
-	 * @param idx
-	 * @return the specified participant
+	 * @return session recording date
 	 */
-	public Participant getParticipant(int idx);
-	
-	/**
-	 * Iterable/visitable participant informamtion.
-	 * 
-	 * @return Participants
-	 */
-	public Participants getParticipants();
-	
-	/** Set the corpus */
-	public void setCorpus(String corpus);
-	
-	/** Set the transcript name */
-	public void setName(String name);
-	
-	/** Get the transcript date */
-	public void setDate(LocalDate date);
-	
-	/** Set the language */
-	public void setLanguage(String language);
-	
-	/** Media location */
-	public void setMediaLocation(String mediaLocation);
-	
-	/** Tier view */
-	public void setTierView(List<TierViewItem> view);
-	
-	/**
-	 * Add a new transcriber
-	 */
-	public void addTranscriber(Transcriber t);
-	
-	/**
-	 * Remove a transcriber
-	 */
-	public void removeTranscriber(Transcriber t);
-	public void removeTranscriber(String username);
-	
-	/**
-	 * Add a new record to the session
-	 * 
-	 * @param record
-	 */
-	public void addRecord(Record record);
-	
-	/**
-	 * Add a new record to the list in the given position.
-	 * 
-	 * @param record
-	 * @param idx
-	 */
-	public void addRecord(int pos, Record record);
-	
-	/**
-	 * Remove a record from the session.
-	 * 
-	 * @param record
-	 */
-	public void removeRecord(Record record);
-	
-	/**
-	 * Remove a record from the session
-	 * 
-	 * @param pos
-	 */
-	public void removeRecord(int pos);
-	
-	/**
-	 * Remove a participant.
-	 * 
-	 * @param participant
-	 */
-	public void removeParticipant(Participant participant);
-	
-	/**
-	 * Remove a participant
-	 * 
-	 * @param idx
-	 */
-	public void removeParticipant(int idx);
+	public LocalDate getDate() {
+		return sessionImpl.getDate();
+	}
+
+	public String getLanguage() {
+		return sessionImpl.getLanguage();
+	}
+
+	public String getMediaLocation() {
+		return sessionImpl.getMediaLocation();
+	}
+
+	public List<TierViewItem> getTierView() {
+		return sessionImpl.getTierView();
+	}
+
+
+	public int getUserTierCount() {
+		return sessionImpl.getUserTierCount();
+	}
+
+	public TierDescription getUserTier(int idx) {
+		return sessionImpl.getUserTier(idx);
+	}
+
+	public TierDescription removeUserTier(int idx) {
+		return sessionImpl.removeUserTier(idx);
+	}
+
+	public TierDescription removeUserTier(TierDescription tierDescription) {
+		return sessionImpl.removeUserTier(tierDescription);
+	}
+
+	public void addUserTier(TierDescription tierDescription) {
+		sessionImpl.addUserTier(tierDescription);
+	}
+
+	public void addUserTier(int idx, TierDescription tierDescription) {
+		sessionImpl.addUserTier(idx, tierDescription);
+	}
+
+	public TierDescriptions getUserTiers() {
+		return new TierDescriptions(this);
+	}
+
+	public int getTranscriberCount() {
+		return sessionImpl.getTranscriberCount();
+	}
+
+	public Transcriber getTranscriber(String username) {
+		return sessionImpl.getTranscriber(username);
+	}
+
+	public Transcriber getTranscriber(int i) {
+		return sessionImpl.getTranscriber(i);
+	}
+
+	public void removeTranscriber(int i) {
+		sessionImpl.removeTranscriber(i);
+	}
+
+	public Transcribers getTranscribers() {
+		return new Transcribers(this);
+	}
+
+	public SessionMetadata getMetadata() {
+		return sessionImpl.getMetadata();
+	}
+
+	public Record getRecord(int pos) {
+		return sessionImpl.getRecord(pos);
+	}
+
+	public int getRecordCount() {
+		return sessionImpl.getRecordCount();
+	}
+
+	public Records getRecords() {
+		return new Records(this);
+	}
+
+	public int getRecordPosition(Record record) {
+		return sessionImpl.getRecordPosition(record);
+	}
+
+	public void setRecordPosition(Record record, int position) {
+		sessionImpl.setRecordPosition(record, position);
+	}
+
+	public int getParticipantCount() {
+		return sessionImpl.getParticipantCount();
+	}
+
+	public void addParticipant(Participant participant) {
+		sessionImpl.addParticipant(participant);
+	}
+
+	public Participant getParticipant(int idx) {
+		return sessionImpl.getParticipant(idx);
+	}
+
+	public Participants getParticipants() {
+		return new Participants(this);
+	}
+
+	public void setCorpus(String corpus) {
+		sessionImpl.setCorpus(corpus);
+	}
+
+	public void setName(String name) {
+		sessionImpl.setName(name);
+	}
+
+	public void setDate(LocalDate date) {
+		sessionImpl.setDate(date);
+	}
+
+	public void setLanguage(String language) {
+		sessionImpl.setLanguage(language);
+	}
+
+	public void setMediaLocation(String mediaLocation) {
+		sessionImpl.setMediaLocation(mediaLocation);
+	}
+
+	public void setTierView(List<TierViewItem> view) {
+		sessionImpl.setTierView(view);
+	}
+
+	public void addTranscriber(Transcriber t) {
+		sessionImpl.addTranscriber(t);
+	}
+
+	public void removeTranscriber(Transcriber t) {
+		sessionImpl.removeTranscriber(t);
+	}
+
+	public void removeTranscriber(String username) {
+		sessionImpl.removeTranscriber(username);
+	}
+
+	public void addRecord(Record record) {
+		sessionImpl.addRecord(record);
+	}
+
+	public void addRecord(int pos, Record record) {
+		sessionImpl.addRecord(pos, record);
+	}
+
+	public void removeRecord(Record record) {
+		sessionImpl.removeRecord(record);
+	}
+
+	public void removeRecord(int pos) {
+		sessionImpl.removeRecord(pos);
+	}
+
+	public void removeParticipant(Participant participant) {
+		sessionImpl.removeParticipant(participant);
+	}
+
+	public void removeParticipant(int idx) {
+		sessionImpl.removeParticipant(idx);
+	}
 	
 }

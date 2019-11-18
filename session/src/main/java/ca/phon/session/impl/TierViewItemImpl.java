@@ -16,12 +16,13 @@
 package ca.phon.session.impl;
 
 import ca.phon.session.TierViewItem;
+import ca.phon.session.spi.TierViewItemSPI;
 
 /**
  * Information about tier visibility, font and locking.  This
  * item is also used in a list for ordering.
  */
-public class TierViewItemImpl implements TierViewItem {
+public class TierViewItemImpl implements TierViewItemSPI {
 	
 	private final String name;
 	

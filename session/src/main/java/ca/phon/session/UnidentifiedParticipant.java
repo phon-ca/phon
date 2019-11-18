@@ -20,36 +20,14 @@ import java.time.Period;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
+import ca.phon.session.spi.ParticipantSPI;
 
 /**
  * A participant implementation for 'unidentified' or unknown participants.
  * Property values for instances of this class cannot be modified.
  */
-public final class UnidentifiedParticipant implements Participant {
-	
-	private final ExtensionSupport extSupport =
-			new ExtensionSupport(UnidentifiedParticipant.class, this);
-	
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
-	
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-	
-	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-	
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-	
+public final class UnidentifiedParticipant implements ParticipantSPI {
+
 	@Override
 	public void setSex(Sex sex) {
 	}
@@ -147,11 +125,6 @@ public final class UnidentifiedParticipant implements Participant {
 	@Override
 	public Period getAge(LocalDate fromDate) {
 		return null;
-	}
-	
-	@Override
-	public String toString() {
-		return getName();
 	}
 	
 }

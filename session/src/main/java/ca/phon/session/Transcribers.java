@@ -15,10 +15,13 @@
  */
 package ca.phon.session;
 
+import java.util.Iterator;
 import java.util.Set;
 
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.impl.SessionImpl;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
@@ -26,38 +29,49 @@ import ca.phon.visitor.Visitor;
  * Iterator/vistor access for {@link Session} {@link Transcriber}s
  *
  */
-public abstract class Transcribers implements IExtendable, Iterable<Transcriber>, Visitable<Transcriber> {
+public final class Transcribers extends ExtendableObject implements Iterable<Transcriber>, Visitable<Transcriber> {
 
-	/**
-	 * Extension support
-	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Transcribers.class, this);
-
-	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
+	private final Session session;
+	
+	Transcribers(Session session) {
+		super();
+		this.session = session;
 	}
-
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
+	
+	public Session getSession() {
+		return this.session;
 	}
 	
 	@Override
+	public Iterator<Transcriber> iterator() {
+		return new TranscriberIterator();
+	}
+	
+	
+	@Override
 	public void accept(Visitor<Transcriber> visitor) {
-		for(Transcriber transcriber:this) {
-			visitor.visit(transcriber);
+		iterator().forEachRemaining(visitor::visit);
+	}
+
+	private final class TranscriberIterator implements Iterator<Transcriber> {
+
+		private int idx = 0;
+		
+		@Override
+		public boolean hasNext() {
+			return (idx < session.getTranscriberCount());
 		}
+
+		@Override
+		public Transcriber next() {
+			return session.getTranscriber(idx++);
+		}
+
+		@Override
+		public void remove() {
+			session.removeTranscriber(idx - 1);
+		}
+		
 	}
 	
 }

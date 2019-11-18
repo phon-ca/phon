@@ -23,11 +23,12 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.Sex;
+import ca.phon.session.spi.ParticipantSPI;
 
 /**
  * Basic participant implementation.
  */
-public class ParticipantImpl implements Participant {
+public class ParticipantImpl implements ParticipantSPI {
 	
 	/*
 	 * Attributes
@@ -56,7 +57,6 @@ public class ParticipantImpl implements Participant {
 	
 	ParticipantImpl() {
 		super();
-		extSupport.initExtensions();
 	}
 
 	@Override
@@ -179,33 +179,6 @@ public class ParticipantImpl implements Participant {
 	public void setSex(Sex sex) {
 		this.sex = sex;
 	}
-
-	/* Class extensions */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Participant.class, this);
-	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
 	
-	@Override
-	public String toString() {
-		return (getName() != null ? getName() : 
-				(getId() != null ? getId() : getRole().toString() ));
-	}
 	
 }

@@ -15,33 +15,32 @@
  */
 package ca.phon.session;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.TierDescriptionSPI;
+
 /**
  * Name and grouped information for a tier.
  *
  */
-public interface TierDescription {
+public final class TierDescription extends ExtendableObject {
 	
-	/**
-	 * Is the tier grouped, if tier is not grouped,
-	 * {@link Tier#numberOfGroups()} will always return 1.
-	 * 
-	 * @return <code>true</code> if the tier is grouped, <code>false</code>
-	 *  otherwise
-	 */
-	public boolean isGrouped();
+	private TierDescriptionSPI tierDescriptionImpl;
 	
-	/**
-	 * Get the name of the tier.
-	 * 
-	 * @return name of the tier
-	 */
-	public String getName();
-	
-	/**
-	 * Get declared type of the tier
-	 * 
-	 * 
-	 */
-	public Class<?> getDeclaredType();
+	TierDescription(TierDescriptionSPI impl) {
+		super();
+		this.tierDescriptionImpl = impl;
+	}
 
+	public boolean isGrouped() {
+		return tierDescriptionImpl.isGrouped();
+	}
+
+	public String getName() {
+		return tierDescriptionImpl.getName();
+	}
+
+	public Class<?> getDeclaredType() {
+		return tierDescriptionImpl.getDeclaredType();
+	}
+	
 }

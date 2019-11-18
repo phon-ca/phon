@@ -17,11 +17,12 @@ package ca.phon.session.impl;
 
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierString;
+import ca.phon.session.spi.TierDescriptionSPI;
 
 /**
  * Basic description of a tier.
  */
-public class TierDescriptionImpl implements TierDescription {
+public class TierDescriptionImpl implements TierDescriptionSPI {
 
 	private final boolean isGrouped;
 	

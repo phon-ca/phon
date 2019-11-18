@@ -15,59 +15,139 @@
  */
 package ca.phon.session;
 
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.SyllableMap;
 
-public abstract class AlignedSyllable implements IExtendable {
+public final class AlignedSyllable extends ExtendableObject {
 	
-	private final ExtensionSupport extSupport = new ExtensionSupport(AlignedSyllable.class, this);
+	// record
+	private final AtomicReference<Record> recordRef;
+
+	// group
+	private final int groupIndex;
+
+	// word index
+	private final int wordIndex;
 	
-	public AlignedSyllable() {
+	// syllable index
+	private final int syllIndex;
+
+	public AlignedSyllable(Record record, int groupIndex, int syllIndex) {
 		super();
 		
-		extSupport.initExtensions();
+		this.recordRef = new AtomicReference<Record>(record);
+		this.groupIndex = groupIndex;
+		this.wordIndex = -1;
+		this.syllIndex = syllIndex;
 	}
 	
-	public abstract Group getGroup();
-	
-	public abstract Word getWord();
-	
-	public abstract int getGroupIndex();
-
-	public abstract int getWordIndex();
-	
-	public abstract int getSyllableIndex();
-	
-	public abstract IPATranscript getIPATarget();
-	
-	public abstract IPATranscript getIPAActual();
-	
-	public abstract int getIPATargetLocation();
-	
-	public abstract int getIPAActualLocation();
-
-	public abstract PhoneMap getPhoneAlignment();
-	
-	public abstract int getPhoneAlignmentLocation();
-	
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
+	public AlignedSyllable(Record record, int groupIndex, int wordIndex, int syllIndex) {
+		super();
+		this.recordRef = new AtomicReference<Record>(record);
+		this.groupIndex = groupIndex;
+		this.wordIndex = wordIndex;
+		this.syllIndex = syllIndex;
 	}
 
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
+	public IPATranscript getIPATarget() {
+		final SyllableMap syllableAlignment = 
+				(getWordIndex() >= 0 ? getWord().getSyllableAlignment() : getGroup().getSyllableAlignment());
+		if(getSyllableIndex() < syllableAlignment.getAlignmentLength()) {
+			return syllableAlignment.getTopAlignmentElements().get(getSyllableIndex());
+		} else {
+			return null;
+		}
 	}
 
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
+	public IPATranscript getIPAActual() {
+		final SyllableMap syllableAlignment = 
+				(getWordIndex() >= 0 ? getWord().getSyllableAlignment() : getGroup().getSyllableAlignment());
+		if(getSyllableIndex() < syllableAlignment.getAlignmentLength()) {
+			return syllableAlignment.getBottomAlignmentElements().get(getSyllableIndex());
+		} else {
+			return null;
+		}
 	}
 
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
+	public int getIPATargetLocation() {
+		int retVal = -1;
+		
+		final IPATranscript target = getGroup().getIPATarget();
+		if(target != null) {
+			final IPATranscript ipa = getIPATarget();
+		
+			if(ipa != null) {
+				final int eleIdx = target.indexOf(ipa);
+				retVal = target.stringIndexOfElement(eleIdx);
+			}
+		}
+		
+		return retVal;
+	}
+	
+	public int getIPAActualLocation() {
+		int retVal = -1;
+		
+		final IPATranscript actual = getGroup().getIPAActual();
+		if(actual != null) {
+			final IPATranscript ipa = getIPAActual();
+		
+			if(ipa != null) {
+				final int eleIdx = actual.indexOf(ipa);
+				retVal = actual.stringIndexOfElement(eleIdx);
+			}
+		}
+		
+		return retVal;
+	}
+
+	public PhoneMap getPhoneAlignment() {
+		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
+		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
+
+		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		if(grpAlignment == null) new PhoneMap();
+
+		return grpAlignment.getSubAlignment(ipaT, ipaA);
+	}
+	
+	public int getPhoneAlignmentLocation() {
+		final IPATranscript ipaT = (getIPATarget() == null ? new IPATranscript() : getIPATarget());
+		final IPATranscript ipaA = (getIPAActual() == null ? new IPATranscript() : getIPAActual());
+
+		final PhoneMap grpAlignment = getGroup().getPhoneAlignment();
+		if(grpAlignment == null) return -1;
+		
+		return grpAlignment.getSubAlignmentIndex(ipaT, ipaA);
+	}
+
+	public Group getGroup() {
+		final Record record = recordRef.get();
+		if(record != null) {
+			return record.getGroup(groupIndex);
+		} else {
+			return null;
+		}
+	}
+
+	public Word getWord() {
+		return new Word(recordRef.get(), groupIndex, wordIndex);
+	}
+
+	public int getWordIndex() {
+		return wordIndex;
+	}
+
+	public int getSyllableIndex() {
+		return syllIndex;
+	}
+
+	public int getGroupIndex() {
+		return groupIndex;
 	}
 	
 }

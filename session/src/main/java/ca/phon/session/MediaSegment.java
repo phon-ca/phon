@@ -16,44 +16,52 @@
 
 package ca.phon.session;
 
+import java.util.Set;
+
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.session.spi.MediaSegmentSPI;
+
 /**
- * Media info.
+ * Media segment
  *
  */ 
-public interface MediaSegment {
-	/**
-	 * Get the start value
-	 * @return float
-	 */
-	public float getStartValue();
+public final class MediaSegment extends ExtendableObject {
 	
-	/**
-	 * Set the start value
-	 * @param start
-	 */
-	public void setStartValue(float start);
+	private MediaSegmentSPI mediaSegmentImpl;
 	
-	/**
-	 * Get the end value
-	 * @return float
-	 */
-	public float getEndValue();
+	MediaSegment(MediaSegmentSPI impl) {
+		super();
+		this.mediaSegmentImpl = impl;
+	}
+
+	public float getStartValue() {
+		return mediaSegmentImpl.getStartValue();
+	}
+
+	public void setStartValue(float start) {
+		mediaSegmentImpl.setStartValue(start);
+	}
+
+	public float getEndValue() {
+		return mediaSegmentImpl.getEndValue();
+	}
+
+	public void setEndValue(float end) {
+		mediaSegmentImpl.setEndValue(end);
+	}
+
+	public MediaUnit getUnitType() {
+		return mediaSegmentImpl.getUnitType();
+	}
+
+	public void setUnitType(MediaUnit type) {
+		mediaSegmentImpl.setUnitType(type);
+	}
+
+	public String toString() {
+		return (new MediaSegmentFormatter()).format(this);
+	}
 	
-	/**
-	 * Set the end value
-	 * @param end
-	 */
-	public void setEndValue(float end);
-	
-	/**
-	 * Get the unit type.
-	 * @return MediaUnitType
-	 */
-	public MediaUnit getUnitType();
-	
-	/**
-	 * Set the unit type
-	 * @param type
-	 */
-	public void setUnitType(MediaUnit type);
 }

@@ -15,26 +15,64 @@
  */
 package ca.phon.session;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.session.impl.SessionImpl;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 
 /**
  * Iterable/visitor access for {@link Session} {@link TierDescription}s.
  */
-public abstract class TierDescriptions implements IExtendable, Iterable<TierDescription>, Visitable<TierDescription> {
+public final class TierDescriptions implements IExtendable, Iterable<TierDescription>, Visitable<TierDescription> {
 
 	/**
 	 * Extension support
 	 */
 	private final ExtensionSupport extSupport = new ExtensionSupport(TierDescriptions.class, this);
 	
-	protected TierDescriptions() {
+	/**
+	 * Session reference
+	 */
+	private final Session session;
+	
+	TierDescriptions(Session session) {
 		super();
+		this.session = session;
+		
 		extSupport.initExtensions();
+	}
+
+	@Override
+	public Iterator<TierDescription> iterator() {
+		return new TierDescriptionIterator();
+	}
+
+	/**
+	 * Iterator
+	 */
+	private final class TierDescriptionIterator implements Iterator<TierDescription> {
+
+		private int idx = 0;
+		
+		@Override
+		public boolean hasNext() {
+			return (idx < session.getUserTierCount());
+		}
+
+		@Override
+		public TierDescription next() {
+			return session.getUserTier(idx++);
+		}
+
+		@Override
+		public void remove() {
+			session.removeUserTier(idx - 1);
+		}
+		
 	}
 
 	@Override

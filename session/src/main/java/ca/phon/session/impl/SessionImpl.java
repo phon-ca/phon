@@ -28,14 +28,16 @@ import ca.phon.session.Participants;
 import ca.phon.session.Record;
 import ca.phon.session.Records;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionMetadata;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierDescriptions;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
 import ca.phon.session.Transcribers;
+import ca.phon.session.spi.SessionSPI;
 
-public class SessionImpl implements Session {
+public class SessionImpl implements SessionSPI {
 	
 	/*
 	 * Properties
@@ -67,15 +69,9 @@ public class SessionImpl implements Session {
 	private final List<Record> records =
 			Collections.synchronizedList(new ArrayList<Record>());
 	
-	/*
-	 * Extension support
-	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Session.class, this);
-	
 	SessionImpl() {
 		super();
-		metadata = new SessionMetadataImpl();
-		extSupport.initExtensions();
+		metadata = SessionFactory.newFactory().createSessionMetadata();
 	}
 
 	@Override
@@ -129,11 +125,6 @@ public class SessionImpl implements Session {
 	}
 	
 	@Override
-	public Transcribers getTranscribers() {
-		return new TranscribersImpl(this);
-	}
-	
-	@Override
 	public void removeTranscriber(int i) {
 		transcribers.remove(i);
 	}
@@ -153,11 +144,6 @@ public class SessionImpl implements Session {
 		return records.size();
 	}
 
-	@Override
-	public Records getRecords() {
-		return new RecordsImpl(this);
-	}
-	
 	@Override
 	public int getRecordPosition(Record record) {
 		return records.indexOf(record);
@@ -187,11 +173,6 @@ public class SessionImpl implements Session {
 		return participants.get(idx);
 	}
 	
-	@Override
-	public Participants getParticipants() {
-		return new ParticipantsImpl(this);
-	}
-
 	@Override
 	public void setCorpus(String corpus) {
 		corpusRef.getAndSet(corpus);
@@ -278,26 +259,6 @@ public class SessionImpl implements Session {
 	}
 	
 	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
-
-	@Override
 	public int getUserTierCount() {
 		return userTiers.size();
 	}
@@ -328,11 +289,6 @@ public class SessionImpl implements Session {
 		userTiers.add(idx, tierDescription);
 	}
 	
-	@Override
-	public TierDescriptions getUserTiers() {
-		return new TierDescriptionsImpl(this);
-	}
-
 	@Override
 	public int getTranscriberCount() {
 		return transcribers.size();

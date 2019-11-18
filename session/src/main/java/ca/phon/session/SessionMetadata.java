@@ -16,169 +16,171 @@
 
 package ca.phon.session;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.SessionMetadataSPI;
+
 /**
  * Transcript Metadata
  * 
  *
  */
-public interface SessionMetadata {
-	/**
-	 * Title
-	 * @return String
-	 */
-	public String getTitle();
+public final class SessionMetadata extends ExtendableObject {
 	
-	public void setTitle(String title);
+	private SessionMetadataSPI sessionMetadataImpl;
 	
-	/**
-	 * Creator
-	 * @return String
-	 */
-	public String getCreator();
+	SessionMetadata(SessionMetadataSPI impl) {
+		super();
+		this.sessionMetadataImpl = impl;
+	}
+
+	public String getTitle() {
+		return sessionMetadataImpl.getTitle();
+	}
+
+	public void setTitle(String title) {
+		sessionMetadataImpl.setTitle(title);
+	}
+
+	public String getCreator() {
+		return sessionMetadataImpl.getCreator();
+	}
+
+	public void setCreator(String creator) {
+		sessionMetadataImpl.setCreator(creator);
+	}
+
+	public String getAppID() {
+		return sessionMetadataImpl.getAppID();
+	}
+
+	public void setAppID(String appID) {
+		sessionMetadataImpl.setAppID(appID);
+	}
+
+	public String getSubject() {
+		return sessionMetadataImpl.getSubject();
+	}
+
+	public void setSubject(String subject) {
+		sessionMetadataImpl.setSubject(subject);
+	}
+
+	public String getDescription() {
+		return sessionMetadataImpl.getDescription();
+	}
+
+	public void setDescription(String description) {
+		sessionMetadataImpl.setDescription(description);
+	}
+
+	public String getPublisher() {
+		return sessionMetadataImpl.getPublisher();
+	}
+
+	public void setPublisher(String publisher) {
+		sessionMetadataImpl.setPublisher(publisher);
+	}
+
+	public String getContributor() {
+		return sessionMetadataImpl.getContributor();
+	}
+
+	public void setContributor(String contributer) {
+		sessionMetadataImpl.setContributor(contributer);
+	}
+
+	public String getDate() {
+		return sessionMetadataImpl.getDate();
+	}
+
+	public void setDate(String date) {
+		sessionMetadataImpl.setDate(date);
+	}
+
+	public String getType() {
+		return sessionMetadataImpl.getType();
+	}
+
+	public void setType(String type) {
+		sessionMetadataImpl.setType(type);
+	}
+
+	public String getFormat() {
+		return sessionMetadataImpl.getFormat();
+	}
+
+	public void setFormat(String format) {
+		sessionMetadataImpl.setFormat(format);
+	}
+
+	public String getIdentifier() {
+		return sessionMetadataImpl.getIdentifier();
+	}
+
+	public void setIdentifier(String identifier) {
+		sessionMetadataImpl.setIdentifier(identifier);
+	}
+
+	public String getSource() {
+		return sessionMetadataImpl.getSource();
+	}
+
+	public void setSource(String source) {
+		sessionMetadataImpl.setSource(source);
+	}
+
+	public String getLanguage() {
+		return sessionMetadataImpl.getLanguage();
+	}
+
+	public void setLanguage(String language) {
+		sessionMetadataImpl.setLanguage(language);
+	}
+
+	public String getRelation() {
+		return sessionMetadataImpl.getRelation();
+	}
+
+	public void setRelation(String relation) {
+		sessionMetadataImpl.setRelation(relation);
+	}
+
+	public String getCoverage() {
+		return sessionMetadataImpl.getCoverage();
+	}
+
+	public void setCoverage(String coverage) {
+		sessionMetadataImpl.setCoverage(coverage);
+	}
+
+	public String getRights() {
+		return sessionMetadataImpl.getRights();
+	}
+
+	public void setRights(String rights) {
+		sessionMetadataImpl.setRights(rights);
+	}
+
+	public int getNumberOfComments() {
+		return sessionMetadataImpl.getNumberOfComments();
+	}
+
+	public Comment getComment(int idx) {
+		return sessionMetadataImpl.getComment(idx);
+	}
+
+	public void addComment(Comment comment) {
+		sessionMetadataImpl.addComment(comment);
+	}
+
+	public void removeComment(Comment comment) {
+		sessionMetadataImpl.removeComment(comment);
+	}
+
+	public void removeComment(int idx) {
+		sessionMetadataImpl.removeComment(idx);
+	}
 	
-	public void setCreator(String creator);
 	
-	/**
-	 * App ID
-	 * @return String
-	 */
-	public String getAppID();
-	
-	public void setAppID(String appID);
-	
-	/**
-	 * Subject
-	 * @return String
-	 */
-	public String getSubject();
-	
-	public void setSubject(String subject);
-	
-	/**
-	 * Description
-	 * @return String
-	 */
-	public String getDescription();
-	
-	public void setDescription(String description);
-	
-	/**
-	 * Publisher
-	 * @return String
-	 */
-	public String getPublisher();
-	
-	public void setPublisher(String publisher);
-	
-	/**
-	 * Contributer
-	 * @return String
-	 */
-	public String getContributor();
-	
-	public void setContributor(String contributer);
-	
-	/**
-	 * Date
-	 * @return String
-	 */
-	public String getDate();
-	
-	public void setDate(String date);
-	
-	/**
-	 * Type
-	 * @return String
-	 */
-	public String getType();
-	
-	public void setType(String type);
-	
-	/**
-	 * Format
-	 * @return String
-	 */
-	public String getFormat();
-	
-	public void setFormat(String format);
-	
-	/**
-	 * Identifier
-	 * @return String
-	 */
-	public String getIdentifier();
-	
-	public void setIdentifier(String identifier);
-	
-	/**
-	 * Source
-	 * @return String
-	 */
-	public String getSource();
-	
-	public void setSource(String source);
-	
-	/**
-	 * Language
-	 * @return String
-	 */
-	public String getLanguage();
-	
-	public void setLanguage(String language);
-	
-	/**
-	 * Relation
-	 * @return String
-	 */
-	public String getRelation();
-	
-	public void setRelation(String relation);
-	
-	/**
-	 * Coverage
-	 * @return String
-	 */
-	public String getCoverage();
-	
-	public void setCoverage(String coverage);
-	
-	/**
-	 * Rights
-	 * @return String
-	 */
-	public String getRights();
-	
-	public void setRights(String rights);
-	
-	/**
-	 * number of comments
-	 * @return int
-	 */
-	public int getNumberOfComments();
-	
-	/**
-	 * get comment at given index
-	 * 
-	 * @param idx
-	 * @return comment
-	 * 
-	 * @throws ArrayIndexOutOfBoundsException
-	 */
-	public Comment getComment(int idx);
-	
-	/**
-	 * Add comment
-	 * 
-	 * @param comment
-	 */
-	public void addComment(Comment comment);
-	
-	/**
-	 * Remove comment
-	 * 
-	 * @param comment
-	 */
-	public void removeComment(Comment comment);
-	public void removeComment(int idx);
 	
 }

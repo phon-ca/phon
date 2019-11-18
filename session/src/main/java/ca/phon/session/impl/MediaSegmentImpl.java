@@ -18,11 +18,12 @@ package ca.phon.session.impl;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaSegmentFormatter;
 import ca.phon.session.MediaUnit;
+import ca.phon.session.spi.MediaSegmentSPI;
 
 /**
  * Media segment
  */
-public class MediaSegmentImpl implements MediaSegment {
+public class MediaSegmentImpl implements MediaSegmentSPI {
 	
 	MediaSegmentImpl() {
 		super();
@@ -80,8 +81,4 @@ public class MediaSegmentImpl implements MediaSegment {
 		this.unit = type;
 	}
 
-	public String toString() {
-		return (new MediaSegmentFormatter()).format(this);
-	}
-	
 }

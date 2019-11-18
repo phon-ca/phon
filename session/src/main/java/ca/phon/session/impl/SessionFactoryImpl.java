@@ -21,6 +21,7 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Comment;
+import ca.phon.session.Group;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -31,102 +32,84 @@ import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
+import ca.phon.session.spi.CommentSPI;
+import ca.phon.session.spi.MediaSegmentSPI;
+import ca.phon.session.spi.ParticipantSPI;
+import ca.phon.session.spi.RecordSPI;
+import ca.phon.session.spi.SessionFactorySPI;
+import ca.phon.session.spi.SessionMetadataSPI;
+import ca.phon.session.spi.SessionSPI;
+import ca.phon.session.spi.TierDescriptionSPI;
+import ca.phon.session.spi.TierSPI;
+import ca.phon.session.spi.TierViewItemSPI;
+import ca.phon.session.spi.TranscriberSPI;
 
 /**
  * Default implementation of a session factory.
  */
 @Rank(0)
-public class SessionFactoryImpl extends SessionFactory implements IPluginExtensionPoint<SessionFactory> {
+public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPoint<SessionFactorySPI> {
 	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionFactoryImpl.class.getName());
-
 	@Override
-	public Session createSession() {
+	public SessionSPI createSession() {
 		return new SessionImpl();
 	}
 
 	@Override
-	public Record createRecord() {
+	public RecordSPI createRecord() {
 		return new RecordImpl();
 	}
 
 	@Override
-	public Participant createParticipant() {
+	public ParticipantSPI createParticipant() {
 		return new ParticipantImpl();
 	}
 
 	@Override
-	public MediaSegment createMediaSegment() {
+	public MediaSegmentSPI createMediaSegment() {
 		return new MediaSegmentImpl();
 	}
 
 	@Override
-	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) {
+	public <T> TierSPI<T> createTier(String name, Class<T> type, boolean grouped) {
 		final TierImpl<T> retVal = new TierImpl<T>(name, type, grouped);
 		return retVal;
 	}
 
 	@Override
-	public TierDescription createTierDescription(String name, boolean grouped) {
-		return new TierDescriptionImpl(name, grouped);
-	}
-
-	@Override
-	public TierDescription createTierDescription(String name, boolean grouped,
+	public TierDescriptionSPI createTierDescription(String name, boolean grouped,
 			Class<?> type) {
 		return new TierDescriptionImpl(name, grouped, type);
 	}
 
 	@Override
-	public Transcriber createTranscriber() {
+	public TranscriberSPI createTranscriber() {
 		return new TranscriberImpl();
 	}
 
 	@Override
-	public TierViewItem createTierViewItem(String name) {
-		return new TierViewItemImpl(name);
-	}
-
-	@Override
-	public TierViewItem createTierViewItem(String name, boolean visible) {
-		return new TierViewItemImpl(name, visible);
-	}
-
-	@Override
-	public TierViewItem createTierViewItem(String name, boolean visible,
-			String font) {
-		return new TierViewItemImpl(name, visible, font);
-	}
-
-	@Override
-	public TierViewItem createTierViewItem(String name, boolean visible,
-			boolean locked) {
-		return new TierViewItemImpl(name, visible, locked);
-	}
-
-	@Override
-	public TierViewItem createTierViewItem(String name, boolean visible,
+	public TierViewItemSPI createTierViewItem(String name, boolean visible,
 			String font, boolean locked) {
 		return new TierViewItemImpl(name, visible, font, locked);
 	}
 
 	@Override
-	public Comment createComment() {
+	public CommentSPI createComment() {
 		return new CommentImpl();
 	}
 
 	@Override
-	public SessionMetadata createSessionMetadata() {
+	public SessionMetadataSPI createSessionMetadata() {
 		return new SessionMetadataImpl();
 	}
 
 	@Override
 	public Class<?> getExtensionType() {
-		return SessionFactory.class;
+		return SessionFactorySPI.class;
 	}
 
 	@Override
-	public IPluginExtensionFactory<SessionFactory> getFactory() {
+	public IPluginExtensionFactory<SessionFactorySPI> getFactory() {
 		return (args) -> this;
 	}
 

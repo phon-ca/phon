@@ -26,21 +26,36 @@ import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.session.spi.CommentSPI;
+import ca.phon.session.spi.MediaSegmentSPI;
+import ca.phon.session.spi.ParticipantSPI;
+import ca.phon.session.spi.RecordSPI;
+import ca.phon.session.spi.SessionFactorySPI;
+import ca.phon.session.spi.SessionMetadataSPI;
+import ca.phon.session.spi.SessionSPI;
+import ca.phon.session.spi.TierDescriptionSPI;
+import ca.phon.session.spi.TierSPI;
+import ca.phon.session.spi.TierViewItemSPI;
+import ca.phon.session.spi.TranscriberSPI;
 
 /**
  * A factory for creating mutable session objects.
  * 
  * 
  */
-public abstract class SessionFactory {
+public final class SessionFactory extends ExtendableObject {
 	
 	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionFactory.class.getName());
+	
+	private final SessionFactorySPI sessionFactoryImpl;
+	
 	
 	/**
 	 * Create a new session factory.
@@ -51,23 +66,35 @@ public abstract class SessionFactory {
 	 */
 	public static SessionFactory newFactory() {
 		final PluginManager manager = PluginManager.getInstance();
-		final List<IPluginExtensionPoint<SessionFactory>> sessionFactoryExtPts = 
-				manager.getExtensionPoints(SessionFactory.class);
+		final List<IPluginExtensionPoint<SessionFactorySPI>> sessionFactoryExtPts = 
+				manager.getExtensionPoints(SessionFactorySPI.class);
 		
 		if(sessionFactoryExtPts.size() > 0) {
-			return sessionFactoryExtPts.get(0).getFactory().createObject(new Object[0]);
+			return new SessionFactory(sessionFactoryExtPts.get(0).getFactory().createObject(new Object[0]));
 		} else {
 			return null;
 		}
 	}
 
+	private SessionFactory(SessionFactorySPI impl) {
+		super();
+		this.sessionFactoryImpl = impl;
+	}
+	
 	/**
 	 * Create a new empty session.
 	 * Tier view 
 	 * 
 	 * @return a new session object
 	 */
-	public abstract Session createSession();
+	public Session createSession() {
+		SessionSPI sessionImpl = sessionFactoryImpl.createSession();
+		return createSession(sessionImpl);
+	}
+	
+	public Session createSession(SessionSPI sessionImpl) {
+		return new Session(sessionImpl);
+	}
 	
 	/**
 	 * Create a new session with the specified
@@ -156,7 +183,14 @@ public abstract class SessionFactory {
 	 * 
 	 * 
 	 */
-	public abstract Comment createComment();
+	public Comment createComment() {
+		final CommentSPI commentImpl = sessionFactoryImpl.createComment();
+		return createComment(commentImpl);
+	}
+	
+	public Comment createComment(CommentSPI commentImpl) {
+		return new Comment(commentImpl);
+	}
 	
 	/**
 	 * Create comment
@@ -190,7 +224,14 @@ public abstract class SessionFactory {
 	 * 
 	 * @return session metadata
 	 */
-	public abstract SessionMetadata createSessionMetadata();
+	public SessionMetadata createSessionMetadata() {
+		final SessionMetadataSPI sessionMetadataImpl = sessionFactoryImpl.createSessionMetadata();
+		return createSessionMetadata(sessionMetadataImpl);
+	}
+	
+	public SessionMetadata createSessionMetadata(SessionMetadataSPI sessionMetadataImpl) {
+		return new SessionMetadata(sessionMetadataImpl);
+	}
 	
 	/**
 	 * Clone session metadata
@@ -253,7 +294,25 @@ public abstract class SessionFactory {
 	 * 
 	 * @return a new empty record
 	 */
-	public abstract Record createRecord();
+	public Record createRecord() {
+		final RecordSPI recordImpl = sessionFactoryImpl.createRecord();
+		return createRecord(recordImpl);
+	}
+	
+	public Record createRecord(RecordSPI recordImpl) {
+		return new Record(recordImpl);
+	}
+	
+	/**
+	 * Create group object for given record and index
+	 * 
+	 * @param r
+	 * @param gIdx
+	 * @return
+	 */
+	public Group createGroup(Record r, int gIdx) {
+		return new Group(r, gIdx);
+	}
 	
 	/**
 	 * Create a new record with the specified speaker.
@@ -325,7 +384,14 @@ public abstract class SessionFactory {
 	 * 
 	 * @return new participant object
 	 */
-	public abstract Participant createParticipant();
+	public Participant createParticipant() {
+		final ParticipantSPI participantImpl = sessionFactoryImpl.createParticipant();
+		return createParticipant(participantImpl);
+	}
+	
+	public Participant createParticipant(ParticipantSPI participantImpl) {
+		return new Participant(participantImpl);
+	}
 	
 	/**
 	 * Create the unknown participant object.
@@ -334,7 +400,7 @@ public abstract class SessionFactory {
 	 * an unknown speaker
 	 */
 	public Participant createUnknownParticipant() {
-		return new UnidentifiedParticipant();
+		return new Participant( new UnidentifiedParticipant() );
 	}
 	
 	/**
@@ -372,12 +438,26 @@ public abstract class SessionFactory {
 	 * 
 	 * @return new transcriber
 	 */
-	public abstract Transcriber createTranscriber();
+	public Transcriber createTranscriber() {
+		final TranscriberSPI transcriberImpl = sessionFactoryImpl.createTranscriber();
+		return createTranscriber(transcriberImpl);
+	}
+	
+	public Transcriber createTranscriber(TranscriberSPI transcriberImpl) {
+		return new Transcriber(transcriberImpl);
+	}
 	
 	/**
 	 * Create a new media segment
 	 */
-	public abstract MediaSegment createMediaSegment();
+	public MediaSegment createMediaSegment() {
+		final MediaSegmentSPI mediaSegmentImpl = sessionFactoryImpl.createMediaSegment();
+		return createMediaSegment(mediaSegmentImpl);
+	}
+	
+	public MediaSegment createMediaSegment(MediaSegmentSPI mediaSegmentImpl) {
+		return new MediaSegment(mediaSegmentImpl);
+	}
 	
 	/**
 	 * Create a new tier object with the specified type.
@@ -387,17 +467,14 @@ public abstract class SessionFactory {
 	 * @param grouped
 	 * @return the new tier
 	 */
-	public abstract <T> Tier<T> createTier(String name, Class<T> type, boolean grouped);
+	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) { 
+		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, grouped);
+		return createTier(type, tierImpl);
+	}
 	
-//	/**
-//	 * Create a new tier object with the given description.
-//	 * 
-//	 * @param tierDescription
-//	 * @return the new tier
-//	 */
-//	public <T> Tier<T> createTier(TierDescription tierDescription) {
-//		return createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.isGrouped());
-//	}
+	public <T> Tier<T> createTier(Class<T> type, TierSPI<T> tierImpl) {
+		return new Tier<T>(tierImpl);
+	}
 	
 	/**
 	 * Create a new text tier.
@@ -405,8 +482,8 @@ public abstract class SessionFactory {
 	 * @param name
 	 * @return the new tier
 	 */
-	public Tier<String> createTier(String name) {
-		return createTier(name, String.class, true);
+	public Tier<TierString> createTier(String name) {
+		return createTier(name, TierString.class, true);
 	}
 	
 	/**
@@ -417,7 +494,9 @@ public abstract class SessionFactory {
 	 * 
 	 * @return new tier description
 	 */
-	public abstract TierDescription createTierDescription(String name, boolean grouped);
+	public TierDescription createTierDescription(String name, boolean grouped) {
+		return createTierDescription(name, grouped, TierString.class);
+	}
 	
 	/**
 	 * Create tier description.
@@ -428,14 +507,23 @@ public abstract class SessionFactory {
 	 * 
 	 * @return new tier description
 	 */
-	public abstract TierDescription createTierDescription(String name, boolean grouped, Class<?> type);
+	public TierDescription createTierDescription(String name, boolean grouped, Class<?> type) {
+		final TierDescriptionSPI tierDescriptionImpl = sessionFactoryImpl.createTierDescription(name, grouped, type);
+		return createTierDescription(tierDescriptionImpl);
+	}
+
+	public TierDescription createTierDescription(TierDescriptionSPI tierDescriptionImpl) {
+		return new TierDescription(tierDescriptionImpl);
+	}
 	
 	/**
 	 * Create a tier display and ordering object
 	 * @param name
 	 * @return
 	 */
-	public abstract TierViewItem createTierViewItem(String name);
+	public TierViewItem createTierViewItem(String name) {
+		return createTierViewItem(name, true);
+	}
 	
 	/**
 	 * Create a tier display and ordering object
@@ -443,7 +531,9 @@ public abstract class SessionFactory {
 	 * @param visible
 	 * @return
 	 */
-	public abstract TierViewItem createTierViewItem(String name, boolean visible);
+	public TierViewItem createTierViewItem(String name, boolean visible) {
+		return createTierViewItem(name, visible, false);
+	}
 	
 	/**
 	 * Create a tier display and ordering object
@@ -452,7 +542,9 @@ public abstract class SessionFactory {
 	 * @param font
 	 * @return
 	 */
-	public abstract TierViewItem createTierViewItem(String name, boolean visible, String font);
+	public TierViewItem createTierViewItem(String name, boolean visible, String font) {
+		return createTierViewItem(name, visible, font, false);
+	}
 	
 	/**
 	 * Create a tier display and ordering object
@@ -461,7 +553,9 @@ public abstract class SessionFactory {
 	 * @param locked
 	 * @return
 	 */
-	public abstract TierViewItem createTierViewItem(String name, boolean visible, boolean locked);
+	public TierViewItem createTierViewItem(String name, boolean visible, boolean locked) {
+		return createTierViewItem(name, visible, "default", locked);
+	}
 	
 	/**
 	 * Create a tier display and ordering object
@@ -471,7 +565,14 @@ public abstract class SessionFactory {
 	 * @param locked
 	 * @return
 	 */
-	public abstract TierViewItem createTierViewItem(String name, boolean visible, String font, boolean locked);
+	public TierViewItem createTierViewItem(String name, boolean visible, String font, boolean locked) {
+		final TierViewItemSPI tierViewItemImpl = sessionFactoryImpl.createTierViewItem(name, visible, font, locked);
+		return createTierViewItem(tierViewItemImpl);
+	}
+	
+	public TierViewItem createTierViewItem(TierViewItemSPI tierViewItemImpl) {
+		return new TierViewItem(tierViewItemImpl);
+	}
 	
 	/**
 	 * Get the default tier view for a given sesion.

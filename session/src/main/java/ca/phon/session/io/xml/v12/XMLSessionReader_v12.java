@@ -225,7 +225,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 					Record record = null;
 					try {
-						record = new LazyRecord(factory, retVal, rt);
+						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
 					} catch (Exception e) {
 						LOGGER.info(rt.getId());
 						LOGGER.error(

@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
@@ -31,8 +33,9 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierString;
+import ca.phon.session.spi.RecordSPI;
 
-public class LazyRecord implements Record {
+public final class LazyRecord implements RecordSPI {
 	
 	private SessionFactory factory;
 	
@@ -41,26 +44,6 @@ public class LazyRecord implements Record {
 	private RecordType recordElement;
 	
 	private Record internalRecord;
-	
-	public Set<Class<?>> getExtensions() {
-		loadRecord();
-		return internalRecord.getExtensions();
-	}
-
-	public <T> T getExtension(Class<T> cap) {
-		loadRecord();
-		return internalRecord.getExtension(cap);
-	}
-
-	public <T> T putExtension(Class<T> cap, T impl) {
-		loadRecord();
-		return internalRecord.putExtension(cap, impl);
-	}
-
-	public <T> T removeExtension(Class<T> cap) {
-		loadRecord();
-		return internalRecord.removeExtension(cap);
-	}
 
 	public UUID getUuid() {
 		if(internalRecord == null) {
@@ -132,41 +115,6 @@ public class LazyRecord implements Record {
 	public void setOrthography(Tier<Orthography> ortho) {
 		loadRecord();
 		internalRecord.setOrthography(ortho);
-	}
-
-	public int numberOfGroups() {
-		loadRecord();
-		return internalRecord.numberOfGroups();
-	}
-
-	public Group getGroup(int idx) {
-		loadRecord();
-		return internalRecord.getGroup(idx);
-	}
-
-	public void removeGroup(int idx) {
-		loadRecord();
-		internalRecord.removeGroup(idx);
-	}
-
-	public Group addGroup() {
-		loadRecord();
-		return internalRecord.addGroup();
-	}
-
-	public Group addGroup(int idx) {
-		loadRecord();
-		return internalRecord.addGroup(idx);
-	}
-
-	public int mergeGroups(int grp1, int grp2) {
-		loadRecord();
-		return internalRecord.mergeGroups(grp1, grp2);
-	}
-
-	public Group splitGroup(int grp, int wrd) {
-		loadRecord();
-		return internalRecord.splitGroup(grp, wrd);
 	}
 
 	public Tier<IPATranscript> getIPATarget() {
@@ -269,7 +217,7 @@ public class LazyRecord implements Record {
 		internalRecord.removeComment(idx);
 	}
 
-	public LazyRecord(SessionFactory factory, Session session, RecordType ele) {
+	LazyRecord(SessionFactory factory, Session session, RecordType ele) {
 		super();
 		this.factory = factory;
 		this.session = session;

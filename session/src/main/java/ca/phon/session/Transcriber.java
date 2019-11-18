@@ -15,38 +15,52 @@
  */
 package ca.phon.session;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.TranscriberSPI;
+
 /**
  * A transcriber.
  *
  */
-public interface Transcriber {
+public final class Transcriber extends ExtendableObject {
 	
-	/**
-	 * The transcriber username
-	 */
-	public String getUsername();
+	private final TranscriberSPI transcriberImpl;
 	
-	public void setUsername(String username);
-	
-	/**
-	 * The real name
-	 */
-	public String getRealName();
-	
-	public void setRealName(String name);
-	
-	/**
-	 * Using password?
-	 */
-	public boolean usePassword();
-	
-	public void setUsePassword(boolean v);
-	
-	/**
-	 * The hashed-password
-	 */
-	public String getPassword();
+	Transcriber(TranscriberSPI impl) {
+		super();
+		this.transcriberImpl = impl;
+	}
 
-	public void setPassword(String password);
+	public String getUsername() {
+		return transcriberImpl.getUsername();
+	}
+
+	public void setUsername(String username) {
+		transcriberImpl.setUsername(username);
+	}
+
+	public String getRealName() {
+		return transcriberImpl.getRealName();
+	}
+
+	public void setRealName(String name) {
+		transcriberImpl.setRealName(name);
+	}
+
+	public boolean usePassword() {
+		return transcriberImpl.usePassword();
+	}
+
+	public void setUsePassword(boolean v) {
+		transcriberImpl.setUsePassword(v);
+	}
+
+	public String getPassword() {
+		return transcriberImpl.getPassword();
+	}
+
+	public void setPassword(String password) {
+		transcriberImpl.setPassword(password);
+	}
 	
 }

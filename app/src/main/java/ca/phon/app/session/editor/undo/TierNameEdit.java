@@ -27,6 +27,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
+import ca.phon.session.TierString;
 import ca.phon.session.TierViewItem;
 
 public class TierNameEdit extends SessionEditorUndoableEdit {
@@ -99,11 +100,11 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 		// change tier name in records
 		for(Record r:session.getRecords()) {
 			if(r.hasTier(tierName)) {
-				final Tier<String> oldTier = r.getTier(tierName, String.class);
+				final Tier<TierString> oldTier = r.getTier(tierName, TierString.class);
 				r.removeTier(tierName);
 				
-				final Tier<String> newTier = factory.createTier(newTierName);
-				for(String v:oldTier) 
+				final Tier<TierString> newTier = factory.createTier(newTierName);
+				for(TierString v:oldTier) 
 					newTier.addGroup(v);
 				r.putTier(newTier);
 			}

@@ -20,12 +20,13 @@ import java.util.Set;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.session.Comment;
 import ca.phon.session.CommentEnum;
+import ca.phon.session.spi.CommentSPI;
 
 /**
  * Implemtation for comment elements.
  *
  */
-public class CommentImpl implements Comment {
+public class CommentImpl implements CommentSPI {
 	
 	private String value;
 	
@@ -33,7 +34,6 @@ public class CommentImpl implements Comment {
 	
 	CommentImpl() {
 		super();
-		extSupport.initExtensions();
 	}
 	
 	CommentImpl(String value, CommentEnum type) {
@@ -62,29 +62,4 @@ public class CommentImpl implements Comment {
 		this.type = type;
 	}
 	
-	/**
-	 * Extension support
-	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Comment.class, this);
-
-	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
-
 }
