@@ -15,7 +15,6 @@
  */
 package ca.phon.session.position;
 
-import ca.phon.session.GroupLocation;
 import ca.phon.util.Tuple;
 
 public class RecordLocation extends Tuple<String, GroupLocation> {
