@@ -42,7 +42,6 @@ import ca.phon.session.spi.TierDescriptionSPI;
 import ca.phon.session.spi.TierSPI;
 import ca.phon.session.spi.TierViewItemSPI;
 import ca.phon.session.spi.TranscriberSPI;
-import ca.phon.session.util.UnidentifiedParticipant;
 
 /**
  * A factory for creating mutable session objects.

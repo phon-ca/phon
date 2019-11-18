@@ -24,8 +24,8 @@ import ca.phon.app.session.editor.view.syllabification_and_alignment.Syllabifica
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabifyEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
+import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.Tier;
-import ca.phon.session.util.SyllabifierInfo;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.util.Language;

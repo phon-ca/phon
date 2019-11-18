@@ -17,8 +17,8 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.spi.MediaSegmentSPI;
-import ca.phon.session.util.MediaSegmentFormatter;
 
 /**
  * Media segment

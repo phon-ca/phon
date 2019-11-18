@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.util;
+package ca.phon.session.position;
 
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;

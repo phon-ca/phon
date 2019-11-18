@@ -46,8 +46,8 @@ import ca.phon.query.report.io.SummarySection;
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
 import ca.phon.session.Sex;
-import ca.phon.session.util.AgeFormatter;
-import ca.phon.session.util.DateFormatter;
+import ca.phon.session.format.AgeFormatter;
+import ca.phon.session.format.DateFormatter;
 import ca.phon.util.OSInfo;
 
 /**

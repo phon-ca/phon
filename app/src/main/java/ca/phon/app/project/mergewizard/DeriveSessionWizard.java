@@ -36,7 +36,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.session.filter.RecordFilter;
-import ca.phon.session.util.DateFormatter;
+import ca.phon.session.format.DateFormatter;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardFrame;

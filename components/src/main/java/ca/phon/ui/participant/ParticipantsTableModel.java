@@ -21,7 +21,7 @@ import javax.swing.table.AbstractTableModel;
 
 import ca.phon.session.Participant;
 import ca.phon.session.Session;
-import ca.phon.session.util.AgeFormatter;
+import ca.phon.session.format.AgeFormatter;
 
 public class ParticipantsTableModel extends AbstractTableModel {
 	

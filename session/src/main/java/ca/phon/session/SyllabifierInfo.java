@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.util;
+package ca.phon.session;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,10 +27,6 @@ import java.util.regex.Pattern;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.session.Comment;
-import ca.phon.session.CommentEnum;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
 import ca.phon.util.Language;
 
 /**

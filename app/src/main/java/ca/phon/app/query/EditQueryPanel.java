@@ -31,7 +31,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.query.db.Query;
-import ca.phon.session.util.DateFormatter;
+import ca.phon.session.format.DateFormatter;
 import ca.phon.ui.StarBox;
 import ca.phon.util.icons.IconSize;
 

@@ -24,7 +24,7 @@ import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
-import ca.phon.session.util.DateFormatter;
+import ca.phon.session.format.DateFormatter;
 
 @PhonPlugin(name="default")
 public class ProjectArchiveEP implements IPluginEntryPoint {

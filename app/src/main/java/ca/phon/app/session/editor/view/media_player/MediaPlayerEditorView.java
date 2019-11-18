@@ -66,7 +66,7 @@ import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
-import ca.phon.session.util.SegmentCalculator;
+import ca.phon.session.position.SegmentCalculator;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.MsFormatter;

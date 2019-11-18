@@ -28,8 +28,8 @@ import javax.swing.JPanel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationSettingsPanel;
+import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
-import ca.phon.session.util.SyllabifierInfo;
 import ca.phon.ui.decorations.DialogHeader;
 
 public class SyllabificationSettingsCommand extends SyllabificationAlignmentCommand {

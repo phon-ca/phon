@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.util;
+package ca.phon.session.position;
 
-import java.text.ParseException;
+import ca.phon.session.GroupLocation;
+import ca.phon.util.Tuple;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterType;
-import ca.phon.session.TierString;
+public class RecordLocation extends Tuple<String, GroupLocation> {
 
-@FormatterType(TierString.class)
-public class TierStringFormatter implements Formatter<TierString> {
-
-	@Override
-	public String format(TierString obj) {
-		return obj.toString();
+	public RecordLocation(String tier, GroupLocation pos) {
+		super(tier, pos);
 	}
 
-	@Override
-	public TierString parse(String text) throws ParseException {
-		return new TierString(text);
+	public String getTier() {
+		return super.getObj1();
 	}
 
+	public void setTier(String tier) {
+		super.setObj1(tier);
+	}
+
+	public GroupLocation getGroupLocation() {
+		return super.getObj2();
+	}
+
+	public void setGroupLocation(GroupLocation loc) {
+		super.setObj2(loc);
+	}
 }

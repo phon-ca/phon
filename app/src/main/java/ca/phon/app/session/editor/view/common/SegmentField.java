@@ -36,7 +36,7 @@ import javax.swing.text.MaskFormatter;
 import org.apache.logging.log4j.LogManager;
 
 import ca.phon.session.MediaSegment;
-import ca.phon.session.util.MediaSegmentFormatter;
+import ca.phon.session.format.MediaSegmentFormatter;
 
 public class SegmentField extends JFormattedTextField {
 	

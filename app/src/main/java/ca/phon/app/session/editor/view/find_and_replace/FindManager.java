@@ -26,11 +26,11 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
-import ca.phon.session.util.GroupRange;
-import ca.phon.session.util.RecordLocation;
-import ca.phon.session.util.RecordRange;
-import ca.phon.session.util.SessionLocation;
-import ca.phon.session.util.SessionRange;
+import ca.phon.session.position.GroupRange;
+import ca.phon.session.position.RecordLocation;
+import ca.phon.session.position.RecordRange;
+import ca.phon.session.position.SessionLocation;
+import ca.phon.session.position.SessionRange;
 import ca.phon.util.Range;
 
 /**

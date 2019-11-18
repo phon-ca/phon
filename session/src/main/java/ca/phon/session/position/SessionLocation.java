@@ -13,38 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.util;
+package ca.phon.session.position;
 
 import ca.phon.util.Tuple;
 
-public class RecordRange extends Tuple<String, GroupRange> {
+/**
+ * Helper classes for holding current and start locations
+ */
+public class SessionLocation extends Tuple<Integer, RecordLocation> {
 
-	public RecordRange(String tier, GroupRange r) {
-		super(tier, r);
+	public SessionLocation(Integer recIdx, RecordLocation recLoc) {
+		super(recIdx, recLoc);
 	}
 
-	public String getTier() {
+	public Integer getRecordIndex() {
 		return super.getObj1();
 	}
 
-	public void setTier(String tier) {
-		super.setObj1(tier);
+	public void setRecordIndex(Integer idx) {
+		super.setObj1(idx);
 	}
 
-	public GroupRange getGroupRange() {
+	public RecordLocation getRecordLocation() {
 		return super.getObj2();
 	}
 
-	public void setGroupRange(GroupRange r) {
-		super.setObj2(r);
+	public void setRecordLocation(RecordLocation recLoc) {
+		super.setObj2(recLoc);
 	}
-	
-	public RecordLocation start() {
-		return new RecordLocation(getTier(), getGroupRange().start());
-	}
-	
-	public RecordLocation end() {
-		return new RecordLocation(getTier(), getGroupRange().end());
-	}
-	
 }

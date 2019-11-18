@@ -1,4 +1,4 @@
-ca.phon.session.util.AgeFormatter
-ca.phon.session.util.DateFormatter
-ca.phon.session.util.MediaSegmentFormatter
-ca.phon.session.util.TierStringFormatter
+ca.phon.session.format.AgeFormatter
+ca.phon.session.format.DateFormatter
+ca.phon.session.format.MediaSegmentFormatter
+ca.phon.session.format.TierStringFormatter
