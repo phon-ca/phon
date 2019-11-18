@@ -27,7 +27,10 @@ import java.util.regex.Pattern;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.session.Comment;
+import ca.phon.session.CommentEnum;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.util.Language;
 
 /**
