@@ -2,11 +2,8 @@ package ca.phon.session;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
 import ca.phon.session.spi.SessionSPI;
 
 /**

@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.extensions.IExtendable;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneMap;

@@ -20,11 +20,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 

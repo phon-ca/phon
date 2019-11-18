@@ -21,11 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
 
 /**
  * Custom String implementation for tiers with extension support.

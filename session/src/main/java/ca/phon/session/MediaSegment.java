@@ -16,11 +16,7 @@
 
 package ca.phon.session;
 
-import java.util.Set;
-
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
 import ca.phon.session.spi.MediaSegmentSPI;
 
 /**
