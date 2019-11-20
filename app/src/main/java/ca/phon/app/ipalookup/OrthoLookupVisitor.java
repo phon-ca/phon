@@ -121,7 +121,14 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		if(ext == null || ext.getDictLang() != dictionary.getLanguage()) {
 			String text = word.getWord();
 			
-			String[] opts = lookup(text);
+			String opts[];
+			if("xxx".contentEquals(text) || "yyy".contentEquals(text)
+					|| "www".contains(text) || "*".contentEquals(text)) {
+				opts = new String[] { "*" };
+			} else {
+				opts = lookup(text);
+			}
+			
 			ext = new OrthoWordIPAOptions(opts);
 			ext.setDictLang(dictionary.getLanguage());
 			if(opts.length > 0) ext.setSelectedOption(0);
