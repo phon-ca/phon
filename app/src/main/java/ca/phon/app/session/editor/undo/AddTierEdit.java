@@ -22,17 +22,25 @@ import javax.swing.undo.CannotUndoException;
 
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 
+/**
+ * Add a new tier to the session.  This will also add a new empty tier
+ * to each record.
+ *
+ */
 public class AddTierEdit extends SessionEditorUndoableEdit {
 
 	private static final long serialVersionUID = 5600095287675463984L;
 
-	protected final TierDescription tierDescription;
+	private final TierDescription tierDescription;
 	
-	protected final TierViewItem tierViewItem;
+	private final TierViewItem tierViewItem;
 	
 	public AddTierEdit(SessionEditor editor, TierDescription tierDesc, TierViewItem tvi) {
 		super(editor);
@@ -67,6 +75,10 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		newView.remove(this.tierViewItem);
 		session.setTierView(newView);
 		
+		for(Record r:session.getRecords()) {
+			r.removeTier(tierDescription.getName());
+		}
+		
 		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newView);
 		
 		setSource(oldSource);
@@ -83,6 +95,17 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		final List<TierViewItem> newView = new ArrayList<TierViewItem>(tierView);
 		newView.add(this.tierViewItem);
 		session.setTierView(newView);
+		
+		SessionFactory factory = SessionFactory.newFactory();
+		for(Record r:session.getRecords()) {
+			if(!r.hasTier(tierViewItem.getTierName())) {
+				Tier<?> tier = factory.createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.isGrouped());
+				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
+					tier.addGroup();
+				}
+				r.putTier(tier);
+			}
+		}
 		
 		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newView);
 	}

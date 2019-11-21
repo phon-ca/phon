@@ -15,19 +15,43 @@
  */
 package ca.phon.app.session.editor.undo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.StreamSupport;
+
 import javax.swing.undo.CannotUndoException;
 
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
+import ca.phon.session.Tier;
 import ca.phon.session.TierDescription;
 import ca.phon.session.TierViewItem;
 
-public class RemoveTierEdit extends AddTierEdit {
+public class RemoveTierEdit extends SessionEditorUndoableEdit {
 
 	private static final long serialVersionUID = 5829729907299422281L;
+	
+	private final TierDescription tierDescription;
+	
+	private int tierIdx = -1;
+	
+	private final TierViewItem tierViewItem;
+	
+	private int tierViewIdx = -1;
+	
+	private Map<UUID, Tier<?>> tierMap = new HashMap<>();
 
 	public RemoveTierEdit(SessionEditor editor, TierDescription tierDesc,
 			TierViewItem tvi) {
-		super(editor, tierDesc, tvi);
+		super(editor);
+		
+		this.tierDescription = tierDesc;
+		this.tierViewItem = tvi;
 	}
 
 	@Override
@@ -42,12 +66,67 @@ public class RemoveTierEdit extends AddTierEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		super.doIt();
+		Session session = getEditor().getSession();
+		
+		final Object oldSource = getSource();
+		setSource(getEditor().getUndoSupport());
+		
+		if(tierIdx >= 0)
+			session.addUserTier(tierIdx, tierDescription);
+		else
+			session.addUserTier(tierDescription);
+		
+		List<TierViewItem> tierView = new ArrayList<>(session.getTierView());
+		if(tierViewIdx >= 0) {
+			tierView.add(tierViewIdx, tierViewItem);
+		} else {
+			tierView.add(tierViewItem);
+		}
+		session.setTierView(tierView);
+		
+		for(Record r:session.getRecords()) {
+			Tier<?> tier = tierMap.get(r.getUuid());
+			if(tier != null) {
+				r.putTier(tier);
+			}
+		}
+
+		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), tierView);
+		
+		setSource(oldSource);
 	}
 
 	@Override
 	public void doIt() {
-		super.undo();
+		Session session = getEditor().getSession();
+		
+		final Object oldSource = getSource();
+		setSource(getEditor().getUndoSupport());
+		
+		tierMap.clear();
+		for(Record r:session.getRecords()) {
+			if(r.hasTier(tierDescription.getName())) {
+				tierMap.put(r.getUuid(), r.getTier(tierDescription.getName()));
+				r.removeTier(tierDescription.getName());
+			}
+		}
+		
+		for(int i = 0; i < session.getUserTierCount(); i++) {
+			if(session.getUserTier(i) == tierDescription) {
+				tierIdx = i;
+				break;
+			}
+		}
+		session.removeUserTier(tierIdx);
+		
+		List<TierViewItem> tierView = new ArrayList<>(session.getTierView());
+		tierViewIdx = tierView.indexOf(this.tierViewItem);
+		tierView.remove(this.tierViewItem);
+		session.setTierView(tierView);
+		
+		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), tierView);
+		
+		setSource(oldSource);
 	}
 	
 }
