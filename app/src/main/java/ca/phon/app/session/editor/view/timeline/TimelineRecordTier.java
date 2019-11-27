@@ -272,41 +272,43 @@ public class TimelineRecordTier extends TimelineTier {
 				onRecordDeleted);
 	}
 
-	private void setupRecord(Record r) {
+	public void setupRecord(Record r) {
 		if (currentRecordInterval != null)
 			getTimeModel().removeInterval(currentRecordInterval);
 
-		MediaSegment segment = r.getSegment().getGroup(0);
-		var segStartTime = segment.getStartValue() / 1000.0f;
-		var segEndTime = segment.getEndValue() / 1000.0f;
-
-		// check for 'GhostMarker's which, if present, will
-		// become the start/end marker for the record interval
-		Optional<RecordGrid.GhostMarker> ghostMarker = recordGrid.getTimeModel().getMarkers().parallelStream()
-				.filter((m) -> m instanceof GhostMarker).map((m) -> GhostMarker.class.cast(m)).findAny();
-		if (ghostMarker.isPresent() && recordGrid.getUI().getCurrentlyDraggedMarker() == ghostMarker.get()) {
-			Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
-			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
-			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
-			currentRecordInterval.setRepaintEntireInterval(true);
-			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
-			recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
-		} else {
-			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
-			currentRecordInterval.setRepaintEntireInterval(true);
-			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
+		if(r != null) {
+			MediaSegment segment = r.getSegment().getGroup(0);
+			var segStartTime = segment.getStartValue() / 1000.0f;
+			var segEndTime = segment.getEndValue() / 1000.0f;
+	
+			// check for 'GhostMarker's which, if present, will
+			// become the start/end marker for the record interval
+			Optional<RecordGrid.GhostMarker> ghostMarker = recordGrid.getTimeModel().getMarkers().parallelStream()
+					.filter((m) -> m instanceof GhostMarker).map((m) -> GhostMarker.class.cast(m)).findAny();
+			if (ghostMarker.isPresent() && recordGrid.getUI().getCurrentlyDraggedMarker() == ghostMarker.get()) {
+				Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
+				Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
+				currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
+				currentRecordInterval.setRepaintEntireInterval(true);
+				currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
+				recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
+			} else {
+				currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
+				currentRecordInterval.setRepaintEntireInterval(true);
+				currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
+			}
+			currentRecordInterval.getStartMarker()
+					.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
+							: TimelineViewColors.INTERVAL_MARKER_COLOR));
+			currentRecordInterval.getEndMarker()
+					.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
+							: TimelineViewColors.INTERVAL_MARKER_COLOR));
+			currentRecordInterval
+					.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND
+							: TimelineViewColors.INTERVAL_BACKGROUND));
+	
+			recordGrid.setCurrentRecord(r);
 		}
-		currentRecordInterval.getStartMarker()
-				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
-						: TimelineViewColors.INTERVAL_MARKER_COLOR));
-		currentRecordInterval.getEndMarker()
-				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
-						: TimelineViewColors.INTERVAL_MARKER_COLOR));
-		currentRecordInterval
-				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND
-						: TimelineViewColors.INTERVAL_BACKGROUND));
-
-		recordGrid.setCurrentRecord(r);
 		
 		mouseListener.waitForRecordChange = false;
 	}
@@ -638,7 +640,8 @@ public class TimelineRecordTier extends TimelineTier {
 					"Change record speaker to " + speaker.toString());
 			if (me != null)
 				onChangeSpeakerByIndexAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
-			if (getParentView().getEditor().currentRecord().getSpeaker() == speaker) {
+			if (getParentView().getEditor().currentRecord() != null
+					&& getParentView().getEditor().currentRecord().getSpeaker() == speaker) {
 				onChangeSpeakerByIndexAct.putValue(PhonUIAction.SELECTED_KEY, true);
 			} else {
 				onChangeSpeakerByIndexAct.putValue(PhonUIAction.SELECTED_KEY, false);
