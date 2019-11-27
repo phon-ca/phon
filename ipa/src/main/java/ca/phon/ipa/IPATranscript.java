@@ -456,18 +456,39 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 	
 	/**
-	 * Strip diacritics, keeping those found in the retainDiacritics list.
+	 * Strip only diacritics found in given diacritics
 	 * 
-	 * @param retainDiacritics
-	 * @return
+	 * @param selectedDiacritics
 	 */
-	public IPATranscript stripDiacritics(Collection<Diacritic> retainDiacritics) {
-		Predicate<Diacritic> pred = (dia) -> {
-			return retainDiacritics.parallelStream()
-				.filter( (d) -> dia.getText().contentEquals(d.getText()) )
-				.count() > 0;
-		};
-		return stripDiacritics(pred);
+	public IPATranscript stripDiacritics(Collection<Diacritic> selectedDiacritics) {
+		if(selectedDiacritics.size() == 0) {
+			return new IPATranscript(this);
+		} else {
+			Predicate<Diacritic> pred = (dia) -> {
+				return selectedDiacritics.parallelStream()
+						.filter( (d) -> dia.getText().contentEquals(d.getText()) )
+						.count() == 0;
+			};
+			return stripDiacritics(pred);
+		}
+	}
+	
+	/**
+	 * Strip diacritics except those found in the given diacritics
+	 * 
+	 * @param selectedDiacritics
+	 */
+	public IPATranscript stripDiacriticsExcept(Collection<Diacritic> selectedDiacritics) {
+		if(selectedDiacritics.size() == 0) {
+			return stripDiacritics();
+		} else {
+			Predicate<Diacritic> pred = (dia) -> {
+				return selectedDiacritics.parallelStream()
+						.filter( (d) -> dia.getText().contentEquals(d.getText()) )
+						.count() > 0;
+			};
+			return stripDiacritics(pred);		
+		}
 	}
 	
 	/**

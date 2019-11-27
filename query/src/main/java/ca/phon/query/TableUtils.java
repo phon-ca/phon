@@ -46,10 +46,10 @@ public class TableUtils {
 		if(ignoreDiacritics && o1 instanceof IPATranscript && o2 instanceof IPATranscript) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
-				o1Txt = ipa.removePunctuation().stripDiacritics(retainDiacritics).toString();
+				o1Txt = ipa.removePunctuation().stripDiacriticsExcept(retainDiacritics).toString();
 				
 				final IPATranscript ipa2 = IPATranscript.parseIPATranscript(o2Txt);
-				o2Txt = ipa2.removePunctuation().stripDiacritics(retainDiacritics).toString();
+				o2Txt = ipa2.removePunctuation().stripDiacriticsExcept(retainDiacritics).toString();
 			} catch (ParseException e) {}
 		}
 		
@@ -66,7 +66,7 @@ public class TableUtils {
 			try {
 				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
 					IPATranscript.parseIPATranscript(retVal));
-				retVal = transcript.removePunctuation().stripDiacritics(retainDiacritics).toString();
+				retVal = transcript.removePunctuation().stripDiacriticsExcept(retainDiacritics).toString();
 			} catch (ParseException e) {
 				
 			}
