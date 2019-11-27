@@ -45,7 +45,7 @@ public final class AlignedSyllable extends ExtendableObject {
 		this.syllIndex = syllIndex;
 	}
 	
-	public AlignedSyllable(Record record, int groupIndex, int wordIndex, int syllIndex) {
+	AlignedSyllable(Record record, int groupIndex, int wordIndex, int syllIndex) {
 		super();
 		this.recordRef = new AtomicReference<Record>(record);
 		this.groupIndex = groupIndex;

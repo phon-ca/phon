@@ -18,6 +18,7 @@ package ca.phon.session;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.alignment.SyllableAligner;
@@ -46,7 +47,7 @@ import ca.phon.orthography.Orthography;
  * 
  * 
  */
-public final class Word {
+public final class Word extends ExtendableObject {
 
 	// record
 	private final AtomicReference<Record> recordRef;
