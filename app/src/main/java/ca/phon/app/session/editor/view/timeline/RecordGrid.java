@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.plaf.ComponentUI;
 
 import ca.phon.app.media.TimeComponent;
@@ -20,6 +21,8 @@ import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 
 public class RecordGrid extends TimeComponent {
 	
@@ -147,6 +150,18 @@ public class RecordGrid extends TimeComponent {
 		if(rIdx < 0)
 			throw new IllegalArgumentException("Record not part of session");
 		setCurrentRecordIndex(rIdx);
+	}
+	
+	/**
+	 * Setup speaker menu for given participant
+	 * 
+	 * @param participant
+	 */
+	public void setupParticipantMenu(Participant participant, MenuBuilder builder) {
+		final PhonUIAction removeSpeakerAct = new PhonUIAction(this, "removeSpeaker", participant);
+		removeSpeakerAct.putValue(PhonUIAction.NAME, "Hide participant");
+		removeSpeakerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove " + participant + " tier from view");
+		builder.addItem(".", removeSpeakerAct);
 	}
 	
 	public boolean isSplitMode() {

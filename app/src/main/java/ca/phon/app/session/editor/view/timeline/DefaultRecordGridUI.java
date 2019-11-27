@@ -40,6 +40,7 @@ import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -69,6 +70,7 @@ import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.MsFormatter;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
@@ -220,6 +222,18 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		return new Rectangle(x, y, w, h);
 	}
 	
+	public void showSpeakerMenu(PhonActionEvent pae) {
+		@SuppressWarnings("unchecked")
+		Tuple<Participant, Rectangle> tpl = (Tuple<Participant, Rectangle>)pae.getData();
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		MenuBuilder builder = new MenuBuilder(popupMenu);
+		recordGrid.setupParticipantMenu(tpl.getObj1(), builder);
+		
+		popupMenu.show(recordGrid, tpl.getObj2().x, 
+				tpl.getObj2().y + tpl.getObj2().height);
+	}
+	
 	@Override
 	public void paintOverlappingRecords(Record record) {
 		Rectangle2D rect = getSegmentRect(record);
@@ -293,19 +307,25 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		
+		Session session = recordGrid.getSession();
+		recordTree = RTree.create();
+		markerTree = RTree.create();
+		messageTree = RTree.create();
+		actionsTree = RTree.create();
+
 		if(recordGrid.isOpaque()) {
 			g2.setColor(recordGrid.getBackground());
 			g2.fill(g.getClipBounds());
 		}
 		
 		paintStripes(g2);
-		recordGrid.getSpeakers().forEach( (s) -> paintSpeakerLabel(g2, s) );
-		
-		Session session = recordGrid.getSession();
-		recordTree = RTree.create();
-		markerTree = RTree.create();
-		messageTree = RTree.create();
-		actionsTree = RTree.create();
+		//recordGrid.getSpeakers().forEach( (s) -> paintSpeakerLabel(g2, s) );
+		for(Participant speaker:recordGrid.getSpeakers()) {
+			Rectangle speakerLblRect = paintSpeakerLabel(g2, speaker);
+			final PhonUIAction showSpeakerMenuAct = new PhonUIAction(this, "showSpeakerMenu", new Tuple<Participant, Rectangle>(speaker, speakerLblRect));
+			actionsTree = actionsTree.add(showSpeakerMenuAct, Geometries.rectangle(speakerLblRect.getX(), speakerLblRect.getY(), 
+					speakerLblRect.getMaxX(), speakerLblRect.getMaxY()));
+		}
 		
 		Map<Participant, Integer> ymap = new HashMap<>();
 		Rectangle2D templateRect = (session.getRecordCount() > 0 ? getSegmentRect(session.getRecord(0)) : new Rectangle2D.Double());		
@@ -407,7 +427,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 	}
 	
-	protected void paintSpeakerLabel(Graphics g2, Participant speaker) {		
+	protected Rectangle paintSpeakerLabel(Graphics g2, Participant speaker) {		
 		Rectangle speakerLabelRect = getSpeakerLabelRect(speaker);
 		speakerLabelRect.x += recordGrid.getVisibleRect().x;
 				
@@ -417,6 +437,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		renderer.setText(speaker.toString());
 		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
+		
+		return speakerLabelRect;
 	}
 	
 	protected void paintZeroLengthSegment(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
