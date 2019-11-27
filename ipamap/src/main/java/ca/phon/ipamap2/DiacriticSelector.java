@@ -1,5 +1,6 @@
 package ca.phon.ipamap2;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,6 +38,10 @@ public class DiacriticSelector extends IPAMapSelector {
 					var ch = str.replaceAll("\u25cc", "").charAt(0);
 					return factory.createDiacritic(ch);
 				}).collect(Collectors.toSet());
+	}
+	
+	public void setSelectedDiacritics(Collection<Diacritic> diacritics) {
+		setSelected(diacritics.stream().map(Diacritic::toString).collect(Collectors.toList()));
 	}
 	
 }

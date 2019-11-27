@@ -146,6 +146,7 @@ public class DropDownButton extends JButton {
 	            
             @Override
             public void mousePressed( MouseEvent e ) {
+            	if(!isEnabled()) return;
                 popupMenuOperation = false;
                 if ( buttonPopup != null && getModel() instanceof DropDownButtonModel ) {
                     DropDownButtonModel model = (DropDownButtonModel) getModel();
@@ -164,6 +165,7 @@ public class DropDownButton extends JButton {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+            	if(!isEnabled()) return;
             	if (popupMenuOperation || onlyPopup) {
                     popupMenuOperation = false;
                     e.consume();
@@ -172,6 +174,7 @@ public class DropDownButton extends JButton {
 
             @Override
             public void mouseEntered( MouseEvent e ) {
+            	if(!isEnabled()) return;
             	if(!onlyPopup) {
 	                mouseInArrowArea = isInArrowArea( e.getPoint() );
 	                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
@@ -181,6 +184,7 @@ public class DropDownButton extends JButton {
 
             @Override
             public void mouseExited( MouseEvent e ) {
+            	if(!isEnabled()) return;
             	if(!onlyPopup) {
 	                mouseInArrowArea = false;
 	                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );
@@ -192,6 +196,7 @@ public class DropDownButton extends JButton {
 			
 			@Override
 			public void mouseMoved(MouseEvent e) {
+				if(!isEnabled()) return;
 				if(!onlyPopup) {
 					mouseInArrowArea = isInArrowArea( e.getPoint() );
 	                updateRollover( _getRolloverIcon(), _getRolloverSelectedIcon() );

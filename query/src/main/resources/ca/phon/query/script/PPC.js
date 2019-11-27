@@ -12,7 +12,6 @@ var ResultType = require("lib/PhonScriptConstants").ResultType;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
-
 /********************************
  * Setup params
  *******************************/
@@ -191,7 +190,7 @@ function query_record(recordIndex, record) {
 			var alignedResults = toSearch[j][1];
 			var alignedMetadata = toSearch[j][2];
 
-			var pc = PPC.calc_ppc_aligned(obj, filters.ppc.pattern, filters.ppc.ignoreDiacritics == true);
+			var pc = PPC.calc_ppc_aligned(obj, filters.ppc.pattern, filters.ppc.diacriticOptions);
 			if(pc.target == 0) continue;
 
 			var ipaT = (obj.IPATarget != null ? obj.IPATarget: new IPATranscript());

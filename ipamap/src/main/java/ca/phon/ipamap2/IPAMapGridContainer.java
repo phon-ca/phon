@@ -296,6 +296,12 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		return Collections.unmodifiableList(retVal);
 	}
 	
+	public void invertSelection() {
+		for(IPAMapGrid grid:mapGrids) {
+			grid.invertSelection();
+		}
+	}
+	
 	/**
 	 * Is the given section visible
 	 * 

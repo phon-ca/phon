@@ -143,12 +143,6 @@ public abstract class ScriptParam {
 		Object oldval = getValue(paramId);
 		values.put(paramId, val);
 		
-		if(paramId.equals("searchTier")) {
-			for(var listener:propSupport.getPropertyChangeListeners()) {
-				System.out.println(this + ": " + listener);
-			}
-		}
-		
 		propSupport.firePropertyChange(paramId, oldval, val);
 	}
 

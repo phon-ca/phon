@@ -165,7 +165,7 @@ public class IPAMapSelector extends JComponent {
 		for(var ipaGrid:gridMap.values()) {
 			for(int i = 0; i < ipaGrid.getGrid().getCell().size(); i++) {
 				Cell c = ipaGrid.getGrid().getCell().get(i);
-				if(selected.contains(c.getText())) {
+				if(selected.contains(c.getText()) || selected.contains(c.getText().replaceAll("\u25cc", ""))) {
 					ipaGrid.getSelectionModel().addSelectionInterval(i, i);
 				}
 			}
@@ -178,11 +178,23 @@ public class IPAMapSelector extends JComponent {
 		updateSelectedMap();
 	}
 	
+	public void invertSelection() {
+		
+	}
+	
+	/**
+	 * Called when cell selected has changed.
+	 */
+	public void cellSelectionChanged(IPAMapGrid mapGrid, int cellIdx, boolean selected) {
+		// override where necessary
+	}
+	
 	private IPAMapCellSelectionListener cellSelectionListener = new IPAMapCellSelectionListener() {
 		
 		@Override
 		public void cellSelectionChanged(IPAMapGrid mapGrid, int cellIdx, boolean selected) {
 			updateSelectedMap();
+			IPAMapSelector.this.cellSelectionChanged(mapGrid, cellIdx, selected);
 		}
 		
 	};

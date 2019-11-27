@@ -20,6 +20,7 @@
  * PCC/PVC Library functions for query scripts
  */
 importPackage(Packages.ca.phon.ipa.features)
+importClass(Packages.ca.phon.query.script.params.DiacriticOptionsScriptParam)
 
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
@@ -40,7 +41,7 @@ exports.PPC = {
 	epen: numEpenthesized
 	};
 	 */
-	calc_ppc_aligned: function (group, filter, ignoreDiacritics) {
+	calc_ppc_aligned: function (group, filter, diacriticOptions) {
 		var numTarget = 0;
 		var numDeleted = 0;
 		var numActual = 0;
@@ -51,7 +52,6 @@ exports.PPC = {
 		var targetGroup = (group.getIPATarget() == null ? new IPATranscript(): group.getIPATarget());
 		var actualGroup = (group.getIPAActual() == null ? new IPATranscript(): group.getIPAActual());
 		var alignment = group.getPhoneAlignment();
-
 
 		// check target side
 		var targetResults = filter.find_pattern(targetGroup);
@@ -67,9 +67,13 @@ exports.PPC = {
 					var actualPhone = alignedData.get(0);
 					if (actualPhone != null) {
 						var targetPhoneString =
-						(ignoreDiacritics ? (new IPATranscript([phone])).removePunctuation(true).stripDiacritics().toString(): phone.toString());
+							(diacriticOptions.ignoreDiacritics == true 
+								? this.strip_diacritics(new IPATranscript([phone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
+								: phone.toString());
 						var actualPhoneString =
-						(ignoreDiacritics ? (new IPATranscript([actualPhone])).removePunctuation(true).stripDiacritics().toString(): actualPhone.toString());
+							(diacriticOptions.ignoreDiacritics == true 
+								? this.strip_diacritics(new IPATranscript([actualPhone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
+								: actualPhone.toString());
 
 						if (targetPhoneString == actualPhoneString) {
 							numCorrect++;
@@ -108,8 +112,21 @@ exports.PPC = {
 			epen: numEpenthesized
 		};
 		return retVal;
+	},
+	
+	/**
+	 * Strip diacritics using given diacritic options.
+     * @param 
+     */
+	strip_diacritics: function (ipa, selectionMode, selectedDiacritics) {
+		if("except" == selectionMode.toLowerCase()) {
+			return ipa.stripDiacriticsExcept(selectedDiacritics);
+		} else if("only" == selectionMode.toLowerCase()) {
+			return ipa.stripDiacritics(selectedDiacritics);
+		} else {
+			return ipa;
+		}
 	}
-
 };
 
 exports.PPCOptions = function (id, aligned) {
@@ -173,15 +190,15 @@ exports.PPCOptions = function (id, aligned) {
 	this.clusterTypeParameter;
 	this.clusterType = { index:clusterTypeParamInfo.def, toString: function() { return clusterTypeParamInfo.choices[clusterTypeParamInfo.def]; } };
 
-	var ignoreDiacriticsParamInfo = {
-		"id": id +(".ignoreDiacritics"),
-		"title": "",
-		"desc": "Ignore diacritics",
-		"def": true
+	var diacriticOptionsParamInfo = {
+		"id": id +(".diacriticOptions"),
+		"desc": "Diacritic Options",
+		"def": false,
+		"retainDia": new java.util.ArrayList()
 	};
-	var ignoreDiacriticsParam;
-	this.ignoreDicacritics = ignoreDiacriticsParamInfo.def;
-	
+	var diacriticOptionsParam;
+	this.diacriticOptions = {};
+			
 	var includePPCNoEpenParamInfo = {
 		"id": id +(".includePPCNoEpen"),
 		"title": "Include alternate PPC calculation",
@@ -239,13 +256,14 @@ exports.PPCOptions = function (id, aligned) {
 		});
 		this.clusterTypeParameter = clusterTypeParam;
 	    params.add(clusterTypeParam);
-
-		ignoreDiacriticsParam = new BooleanScriptParam(
-			ignoreDiacriticsParamInfo.id,
-			ignoreDiacriticsParamInfo.desc,
-			ignoreDiacriticsParamInfo.title,
-			ignoreDiacriticsParamInfo.def);
-
+			
+		diacriticOptionsParam = new DiacriticOptionsScriptParam(
+			diacriticOptionsParamInfo.id,
+			diacriticOptionsParamInfo.desc,
+			diacriticOptionsParamInfo.def,
+			diacriticOptionsParamInfo.retainDia
+		);
+		
 		includePPCNoEpenParam = new BooleanScriptParam(
 			includePPCNoEpenParamInfo.id,
 			includePPCNoEpenParamInfo.desc,
@@ -298,7 +316,7 @@ exports.PPCOptions = function (id, aligned) {
 			}
 		});
 
-		params.add(ignoreDiacriticsParam);
+		params.add(diacriticOptionsParam);
 		params.add(includePPCNoEpenParam);
 	};
 
