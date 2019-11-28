@@ -16,11 +16,13 @@
 package ca.phon.app.session.editor;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
@@ -41,6 +43,11 @@ public abstract class EditorView extends JPanel implements IExtendable {
 	 * Preferred dock position
 	 */
 	private DockPosition preferredDockPosition = DockPosition.CENTER;
+	
+	/**
+	 * Editor view listeners
+	 */
+	private final EventListenerList listenerList = new EventListenerList();
 	
 	/**
 	 * Parent editor
@@ -90,16 +97,56 @@ public abstract class EditorView extends JPanel implements IExtendable {
 	 * view layout.
 	 * 
 	 */
-	public void onOpen() {
-		
+	void onOpen() {
+		for(EditorViewListener listener:getEditorViewListeners()) {
+			listener.onOpened(this);
+		}
 	}
-		
+	
 	/**
 	 * Called when the close action is called on an editor view.
 	 * 
 	 */
-	public void onClose() {
-		
+	void onClose() {
+		for(EditorViewListener listener:getEditorViewListeners()) {
+			listener.onClosed(this);
+		}
+	}
+	
+	/**
+	 * Called when the view is focused
+	 */
+	void onFocused() {
+		for(EditorViewListener listener:getEditorViewListeners()) {
+			listener.onFocused(this);
+		}
+	}
+	
+	/**
+	 * Add editor view listener
+	 * 
+	 * @param listener
+	 */
+	public void addEditorViewListener(EditorViewListener listener) {
+		listenerList.add(EditorViewListener.class, listener);
+	}
+	
+	/**
+	 * Remove editor view listener
+	 * 
+	 * @param listener
+	 */
+	public void removeEditorViewListner(EditorViewListener listener) {
+		listenerList.remove(EditorViewListener.class, listener);
+	}
+	
+	/**
+	 * Get editor view listeners
+	 * 
+	 * @return editor view listeners
+	 */
+	public EditorViewListener[] getEditorViewListeners() {
+		return listenerList.getListeners(EditorViewListener.class);
 	}
 	
 	/**

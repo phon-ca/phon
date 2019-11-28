@@ -60,6 +60,7 @@ import org.jdesktop.swingx.VerticalLayout;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.media.TimebarMarkerModel.Interval;
+import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -156,6 +157,7 @@ public final class TimelineView extends EditorView {
 	
 	public TimelineView(SessionEditor editor) {
 		super(editor);
+		addEditorViewListener(editorViewListener);
 		
 		init();
 		update();
@@ -729,40 +731,36 @@ public final class TimelineView extends EditorView {
 		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
 	}
 	
-	@Override
-	public void onOpen() {
-		super.onOpen();
-		
-		registerEditorEvents();
-		
-		// scroll to current record position
-		SwingUtilities.invokeLater(() -> {
-			Record r = getEditor().currentRecord();
-			if(r != null) {
-				MediaSegment seg = r.getSegment().getGroup(0);
-				if(seg != null && seg.getEndValue() - seg.getStartValue() > 0) {
-					
-					Rectangle2D segRect = new Rectangle2D.Double(
-							timeModel.xForTime(seg.getStartValue()/1000.0f), 0,
-							timeModel.xForTime(seg.getEndValue()/1000.0f) - timeModel.xForTime(seg.getStartValue()/1000.0f), 1);
-					if(!segRect.intersects(recordGrid.getVisibleRect())) {
-						scrollToTime(seg.getStartValue() / 1000.0f);
+	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {
+
+		@Override
+		public void onOpened(EditorView view) {
+			registerEditorEvents();
+			
+			// scroll to current record position
+			SwingUtilities.invokeLater(() -> {
+				Record r = getEditor().currentRecord();
+				if(r != null) {
+					MediaSegment seg = r.getSegment().getGroup(0);
+					if(seg != null && seg.getEndValue() - seg.getStartValue() > 0) {
+						
+						Rectangle2D segRect = new Rectangle2D.Double(
+								timeModel.xForTime(seg.getStartValue()/1000.0f), 0,
+								timeModel.xForTime(seg.getEndValue()/1000.0f) - timeModel.xForTime(seg.getStartValue()/1000.0f), 1);
+						if(!segRect.intersects(recordGrid.getVisibleRect())) {
+							scrollToTime(seg.getStartValue() / 1000.0f);
+						}
 					}
 				}
-			}
-		});
-	}
-	
-	@Override
-	public void onClose() {
-		super.onClose();
+			});
+		}
+
+		@Override
+		public void onClosed(EditorView view) {
+			deregisterEditorEvents();
+		}
 		
-		deregisterEditorEvents();
-		/* XXX Fix this
-		wavTier.onClose();
-		recordGrid.onClose();
-		*/
-	}
+	};
 	
 	private class PlaybackMarkerSyncListener extends MediaPlayerEventAdapter {
 

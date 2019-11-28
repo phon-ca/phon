@@ -40,6 +40,7 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.logging.log4j.LogManager;
 
+import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -93,6 +94,7 @@ public class MediaPlayerEditorView extends EditorView {
 		super(editor);
 
 		init();
+		addEditorViewListener(editorViewListener);
 	}
 
 	private void init() {
@@ -234,14 +236,6 @@ public class MediaPlayerEditorView extends EditorView {
 	@RunOnEDT
 	public void doCleanup(EditorEvent ee) {
 		mediaPlayer.cleanup();
-	}
-
-	// called when the docking window containing this component is closed
-	@Override
-	public void onClose() {
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-			mediaPlayer.pause();
-		}
 	}
 
 	/**
@@ -471,6 +465,59 @@ public class MediaPlayerEditorView extends EditorView {
 		return isAdjustVideo;
 	}
 
+	@Override
+	public ImageIcon getIcon() {
+		return IconManager.getInstance().getIcon("apps/vlc", IconSize.SMALL);
+	}
+
+	@Override
+	public JMenu getMenu() {
+		final JMenu menu = new JMenu();
+	
+		menu.add(new TakeSnapshotAction(getEditor(), this));
+		menu.addSeparator();
+		menu.add(new PlayCustomSegmentAction(getEditor(), this));
+		menu.add(new PlaySegmentAction(getEditor(), this));
+		menu.add(new PlaySpeechTurnAction(getEditor(), this));
+		menu.add(new PlayAdjacencySequenceAction(getEditor(), this));
+		menu.addSeparator();
+		final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
+		adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
+		JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
+		menu.add(adjustVideoItem);
+		menu.addSeparator();
+		menu.add(new GoToAction(getEditor(), this));
+		menu.add(new GoToEndOfSegmentedAction(getEditor(), this));
+	
+		final SessionEditor editor = getEditor();
+		final Session session = editor.getSession();
+		// for each participant
+		for(int i = 0; i < session.getParticipantCount(); i++) {
+			final Participant p = session.getParticipant(i);
+			final GoToEndOfSegmentedAction gotoPartSegmentAct =
+					new GoToEndOfSegmentedAction(getEditor(), this, p);
+			menu.add(gotoPartSegmentAct);
+		}
+	
+		return menu;
+	}
+
+	@Override
+	public DockPosition getPreferredDockPosition() {
+		return DockPosition.WEST;
+	}
+
+	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {
+
+		@Override
+		public void onClosed(EditorView view) {
+			if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+				mediaPlayer.pause();
+			}
+		}
+		
+	};
+	
 	/**
 	 * Media player menu filter
 	 */
@@ -528,48 +575,6 @@ public class MediaPlayerEditorView extends EditorView {
 			}
 		}
 
-	}
-
-	@Override
-	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("apps/vlc", IconSize.SMALL);
-	}
-
-	@Override
-	public JMenu getMenu() {
-		final JMenu menu = new JMenu();
-
-		menu.add(new TakeSnapshotAction(getEditor(), this));
-		menu.addSeparator();
-		menu.add(new PlayCustomSegmentAction(getEditor(), this));
-		menu.add(new PlaySegmentAction(getEditor(), this));
-		menu.add(new PlaySpeechTurnAction(getEditor(), this));
-		menu.add(new PlayAdjacencySequenceAction(getEditor(), this));
-		menu.addSeparator();
-		final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
-		adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
-		JCheckBoxMenuItem adjustVideoItem = new JCheckBoxMenuItem(adjustVideoAct);
-		menu.add(adjustVideoItem);
-		menu.addSeparator();
-		menu.add(new GoToAction(getEditor(), this));
-		menu.add(new GoToEndOfSegmentedAction(getEditor(), this));
-
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
-		// for each participant
-		for(int i = 0; i < session.getParticipantCount(); i++) {
-			final Participant p = session.getParticipant(i);
-			final GoToEndOfSegmentedAction gotoPartSegmentAct =
-					new GoToEndOfSegmentedAction(getEditor(), this, p);
-			menu.add(gotoPartSegmentAct);
-		}
-
-		return menu;
-	}
-
-	@Override
-	public DockPosition getPreferredDockPosition() {
-		return DockPosition.WEST;
 	}
 
 }

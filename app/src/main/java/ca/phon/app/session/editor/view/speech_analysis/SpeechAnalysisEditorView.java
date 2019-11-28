@@ -56,6 +56,7 @@ import javax.swing.event.MouseInputAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -549,10 +550,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	public void update(boolean force) {
-		// TODO
-//		if(!force &&
-//				!getEditor().getViewModel().isShowingInStack(VIEW_TITLE)) return;
-		
 		Record utt = getEditor().currentRecord();
 		if(utt == null) return;
 
@@ -663,19 +660,25 @@ public class SpeechAnalysisEditorView extends EditorView {
 		wavDisplay.setValuesAdusting(false);
 		wavDisplay.repaint();
 	}
-
+	
 	/** Editor events */
 	private int lastRecord = -1;
 
 	@RunOnEDT
 	public void onSessionChanged(EditorEvent ee) {
-		update();
+		update(true);
+		lastRecord = getEditor().getCurrentRecordIndex();
 	}
 
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
-		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)
+				|| !getEditor().getViewModel().isShowingInStack(VIEW_TITLE)) return;
 
+		updateAndChangedRecord();
+	}
+
+	private void updateAndChangedRecord() {
 		if(lastRecord != getEditor().getCurrentRecordIndex()) {
 			update();
 
@@ -684,7 +687,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 		lastRecord = getEditor().getCurrentRecordIndex();
 	}
-
+	
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
@@ -763,6 +766,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public JPanel getErrorPane() {
 		return this.errorPanel;
 	}
+	
+	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {
+
+		@Override
+		public void onFocused(EditorView view) {
+			updateAndChangedRecord();
+		}
+		
+	};
 
 	private final PropertyChangeListener segmentListener = new PropertyChangeListener() {
 

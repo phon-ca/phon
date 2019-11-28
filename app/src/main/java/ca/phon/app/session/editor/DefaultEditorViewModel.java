@@ -100,6 +100,8 @@ import bibliothek.gui.dock.common.perspective.CDockablePerspective;
 import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.SingleCDockablePerspective;
 import bibliothek.gui.dock.common.theme.ThemeMap;
+import bibliothek.gui.dock.dockable.DockableStateEvent;
+import bibliothek.gui.dock.dockable.DockableStateListener;
 import bibliothek.gui.dock.event.DockFrontendListener;
 import bibliothek.gui.dock.event.DockStationListener;
 import bibliothek.gui.dock.themes.color.TitleColor;
@@ -249,28 +251,24 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			public void focusGained(CDockable arg0) {
 				EditorView focusedView = getFocusedView();
 				if(focusedView != null) {
-					JMenu focusMenu = focusedView.getMenu();
-					focusMenu.setText(focusedView.getName());
 					getEditor().setCurrentView(focusedView);
+					focusedView.onFocused();
 				}
 			}
 			
 		});
 		
-		dockControl.addStateListener(new CDockableStateListener() {
-			
-			@Override
-			public void visibilityChanged(CDockable arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
-				System.out.println(arg0 + " " + arg1);
-			}
-			
-		});
+//		dockControl.addStateListener(new CDockableStateListener() {
+//			
+//			@Override
+//			public void visibilityChanged(CDockable arg0) {
+//			}
+//			
+//			@Override
+//			public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
+//			}
+//			
+//		});
 		
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {
@@ -680,6 +678,18 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
 			for(AccessoryWindow accWin:accessoryWindows) {
 				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+			}
+			
+			for(var station:dockControl.getStations()) {
+				if(station instanceof StackDockStation) {
+					((StackDockStation)station).addDockableStateListener(new DockableStateListener() {
+						
+						@Override
+						public void changed(DockableStateEvent arg0) {
+							System.out.println(arg0);
+						}
+					});
+				}
 			}
 		} catch (IOException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
