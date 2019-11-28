@@ -37,6 +37,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+import ca.phon.app.session.EditorViewAdapter;
+import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
@@ -95,6 +97,7 @@ public class IPALookupView extends EditorView {
 	 */
 	public IPALookupView(SessionEditor editor) {
 		super(editor);
+		addEditorViewListener(editorViewListener);
 		
 		lookupContext = new IPALookupViewContext();
 		init();
@@ -245,12 +248,16 @@ public class IPALookupView extends EditorView {
 	 */
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
+		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
+		
 		final Record r = getEditor().currentRecord();
 		recordLookupPanel.setRecord(r);
 	}
 	
 	@RunOnEDT
 	public void onTierChanged(EditorEvent ee) {
+		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
+		
 		if(ee.getEventData() != null && 
 				SystemTierType.Orthography.getName().equals(ee.getEventData())) {
 			recordLookupPanel.update();
@@ -271,6 +278,17 @@ public class IPALookupView extends EditorView {
 	public JMenu getMenu() {
 		return new IPALookupViewMenu(this);
 	}
+	
+	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {
+
+		@Override
+		public void onFocused(EditorView view) {
+			final Record r = getEditor().currentRecord();
+			if(r != recordLookupPanel.getRecord()) 
+				recordLookupPanel.setRecord(r);
+		}
+		
+	};
 	
 	private class LanguageComparator implements Comparator<Language> {
 
