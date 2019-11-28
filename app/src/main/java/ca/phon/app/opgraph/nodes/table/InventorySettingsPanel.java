@@ -20,6 +20,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -39,6 +40,9 @@ import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
+import ca.phon.query.script.params.DiacriticOptionsPanel;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.layout.ButtonBarBuilder;
@@ -65,7 +69,8 @@ public class InventorySettingsPanel extends JPanel {
 	private JRadioButton groupByAgeBtn;
 	private JRadioButton groupBySessionBtn;
 	
-	private JCheckBox ignoreDiacriticsBox;
+//	private JCheckBox ignoreDiacriticsBox;
+	private DiacriticOptionsPanel diacriticOptionsPanel;
 	private JCheckBox caseSensitiveBox;
 	private JCheckBox includeGroupDataBox;
 	private JCheckBox includeWordDataBox;
@@ -141,9 +146,17 @@ public class InventorySettingsPanel extends JPanel {
 		includeWordDataBox.setSelected(settings.isIncludeAdditionalWordData());
 		includeWordDataBox.addActionListener( (e) -> settings.setIncludeAdditionalWordData(includeWordDataBox.isSelected()) );
 		
-		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
-		ignoreDiacriticsBox.setSelected(settings.isIgnoreDiacritics());
-		ignoreDiacriticsBox.addActionListener( (e) -> settings.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected()) );
+		final DiacriticOptionsScriptParam diacriticOptions = new DiacriticOptionsScriptParam("", "", false, new ArrayList<>());
+		diacriticOptions.addPropertyChangeListener( (e) -> {
+			if(("." + DiacriticOptionsScriptParam.IGNORE_DIACRITICS_PARAM).contentEquals(e.getPropertyName())) {
+				settings.setIgnoreDiacritics(diacriticOptions.isIgnoreDiacritics());
+			} else if(("." + DiacriticOptionsScriptParam.SELECTION_MODE_PARAM).contentEquals(e.getPropertyName())) {
+				settings.setOnlyOrExcept(diacriticOptions.getSelectionMode() == SelectionMode.ONLY);
+			} else if(("." + DiacriticOptionsScriptParam.SELECTED_DIACRITICS_PARAM).contentEquals(e.getPropertyName())) {
+				settings.setSelectedDiacritics(diacriticOptions.getSelectedDiacritics());
+			}
+		});
+		diacriticOptionsPanel = new DiacriticOptionsPanel(diacriticOptions);
 		
 		caseSensitiveBox = new JCheckBox("Case sensititve");
 		caseSensitiveBox.setSelected(settings.isCaseSensitive());
@@ -154,7 +167,7 @@ public class InventorySettingsPanel extends JPanel {
 		autoConfigPanel.getContentContainer().add(includeMetadataBox);
 		autoConfigPanel.getContentContainer().add(includeGroupDataBox);
 		autoConfigPanel.getContentContainer().add(includeWordDataBox);
-		autoConfigPanel.getContentContainer().add(ignoreDiacriticsBox);
+		autoConfigPanel.getContentContainer().add(diacriticOptionsPanel);
 		autoConfigPanel.getContentContainer().add(caseSensitiveBox);
 		
 		// manual config options
@@ -275,7 +288,7 @@ public class InventorySettingsPanel extends JPanel {
 
 		private JCheckBox caseSensitiveBox;
 
-		private JCheckBox ignoreDiacriticsBox;
+		private DiacriticOptionsPanel diacriticOptionsPanel;
 
 		private InventorySettings.ColumnInfo info;
 
@@ -352,16 +365,29 @@ public class InventorySettingsPanel extends JPanel {
 			add(caseSensitiveBox, gbc);
 
 			gbc.gridx++;
-			ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
-			ignoreDiacriticsBox.setSelected(info.ignoreDiacritics);
-			ignoreDiacriticsBox.addChangeListener( (e) -> info.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected()) );
-			add(ignoreDiacriticsBox, gbc);
+			gbc.weightx = 1.0;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			final DiacriticOptionsScriptParam diacriticOptions = new DiacriticOptionsScriptParam("", "", false, new ArrayList<>());
+			diacriticOptions.addPropertyChangeListener( (e) -> {
+				if(("." + DiacriticOptionsScriptParam.IGNORE_DIACRITICS_PARAM).contentEquals(e.getPropertyName())) {
+					info.setIgnoreDiacritics(diacriticOptions.isIgnoreDiacritics());
+				} else if(("." + DiacriticOptionsScriptParam.SELECTION_MODE_PARAM).contentEquals(e.getPropertyName())) {
+					info.setOnlyOrExcept(diacriticOptions.getSelectionMode() == SelectionMode.ONLY);
+				} else if(("." + DiacriticOptionsScriptParam.SELECTED_DIACRITICS_PARAM).contentEquals(e.getPropertyName())) {
+					info.setSelectedDiacritics(diacriticOptions.getSelectedDiacritics());
+				}
+			});
+			diacriticOptionsPanel = new DiacriticOptionsPanel(diacriticOptions);
+			
+			add(diacriticOptionsPanel, gbc);
 		}
 		
 		private void update() {
 			nameField.setText(info.getName());
 			caseSensitiveBox.setSelected(info.caseSensitive);
-			ignoreDiacriticsBox.setSelected(info.ignoreDiacritics);
+			diacriticOptionsPanel.getDiacriticOptions().setIgnoreDiacritics(info.ignoreDiacritics);
+			diacriticOptionsPanel.getDiacriticOptions().setSelectionMode(info.onlyOrExcept ? SelectionMode.ONLY : SelectionMode.EXCEPT);
+			diacriticOptionsPanel.getDiacriticOptions().setSelectedDiacritics(info.selectedDiacritics);
 		}
 
 		private void updateColumnInfo() {

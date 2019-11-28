@@ -20,9 +20,12 @@ package ca.phon.app.opgraph;
  */
 public enum GlobalParameter {
 	CASE_SENSITIVE("__caseSensitive"),
+	INVENTORY_GROUPING_COLUMN("__inventoryGroupingColumn"),
+	
+	// diacritic options
 	IGNORE_DIACRITICS("__ignoreDiacritics"),
-	RETAIN_DIACRITICS_SET("__retainDiacritics"),
-	INVENTORY_GROUPING_COLUMN("__inventoryGroupingColumn");
+	ONLY_OR_EXCEPT("__onlyOrExcept"),
+	SELECTED_DIACRITICS("__selectedDiacritics");
 	
 	private String paramId;
 	

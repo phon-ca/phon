@@ -115,6 +115,10 @@ public class DiacriticOptionsPanel extends JPanel {
 		updateButtons();
 	}
 	
+	public DiacriticOptionsScriptParam getDiacriticOptions() {
+		return this.diacriticOptionsParam;
+	}
+	
 	private void updateButtons() {
 		modeBox.setEnabled(ignoreDiacriticsBox.isSelected());
 		dropDownButton.setEnabled(ignoreDiacriticsBox.isSelected());

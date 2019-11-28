@@ -110,7 +110,7 @@ import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.GlobalParameter;
-import ca.phon.app.opgraph.GlobalParameterPanel;
+import ca.phon.app.opgraph.OverrideParameterPanel;
 import ca.phon.app.opgraph.nodes.log.BufferNodeConstants;
 import ca.phon.app.opgraph.nodes.log.PrintBufferNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
@@ -226,12 +226,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private Map<OpNode, WizardStep> optionalSteps;
 
-	protected GlobalParameterPanel globalOptionsPanel;
+	protected OverrideParameterPanel globalOptionsPanel;
 	public final static String CASE_SENSITIVE_GLOBAL_OPTION = GlobalParameter.CASE_SENSITIVE.getParamId();
-	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = GlobalParameter.IGNORE_DIACRITICS.getParamId();
 	public final static String INVENTORY_GROUPING_GLOBAL_OPTION = GlobalParameter.INVENTORY_GROUPING_COLUMN.getParamId();
-	public final static String RETAIN_DIACRITICS_GLOBAL_OPTION = GlobalParameter.RETAIN_DIACRITICS_SET.getParamId();
-
+	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = GlobalParameter.IGNORE_DIACRITICS.getParamId();
+	public final static String ONLYOREXCEPT_GLOBAL_OPTION = GlobalParameter.ONLY_OR_EXCEPT.getParamId();
+	public final static String SELECTED_DIACRITICS_GLOBAL_OPTION = GlobalParameter.SELECTED_DIACRITICS.getParamId();
+	
 	protected boolean inInit = true;
 
 	private volatile boolean running = false;
@@ -372,89 +373,89 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 		
 		// add global options
-		if(globalOptionsPanel != null && globalOptionsPanel.isVisible()) {
-			builder.addItem(".", "-- Global Options --").setEnabled(false);
-			
-			final String caseSensitiveValue = (globalOptionsPanel.isUseGlobalCaseSensitive()
-					? (globalOptionsPanel.isCaseSensitive() ? "yes" : "no")
-					: "default");
-			final JMenu caseSensitiveMenu = builder.addMenu(".", "Case sensitive: " + caseSensitiveValue);
-			
-			final PhonUIAction defCSAct = new PhonUIAction(globalOptionsPanel, "useDefaultCaseSensitive");
-			defCSAct.putValue(PhonUIAction.NAME, "default");
-			defCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
-			defCSAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalCaseSensitive());
-			final JCheckBoxMenuItem defCSItem = new JCheckBoxMenuItem(defCSAct);
-			caseSensitiveMenu.add(defCSItem);
-			
-			final PhonUIAction yesCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", true);
-			yesCSAct.putValue(PhonUIAction.NAME, "yes");
-			yesCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
-			yesCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && globalOptionsPanel.isCaseSensitive());
-			final JCheckBoxMenuItem yesCSItem = new JCheckBoxMenuItem(yesCSAct);
-			caseSensitiveMenu.add(yesCSItem);
-			
-			final PhonUIAction noCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", false);
-			noCSAct.putValue(PhonUIAction.NAME, "no");
-			noCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
-			noCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && !globalOptionsPanel.isCaseSensitive());
-			final JCheckBoxMenuItem noCSItem = new JCheckBoxMenuItem(noCSAct);
-			caseSensitiveMenu.add(noCSItem);
-			
-			final String ignoreDiacriticsValue = (globalOptionsPanel.isUseGlobalIgnoreDiacritics()
-					? (globalOptionsPanel.isIgnoreDiacritics() ? "yes" : "no")
-					: "default");
-			final JMenu ignoreDiacriticsMenu = builder.addMenu(".", "Ignore diacritics: " + ignoreDiacriticsValue);
-			
-			final PhonUIAction defIDAct = new PhonUIAction(globalOptionsPanel, "useDefaultIgnoreDiacritics");
-			defIDAct.putValue(PhonUIAction.NAME, "default");
-			defIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
-			defIDAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalIgnoreDiacritics());
-			final JCheckBoxMenuItem defIDItem = new JCheckBoxMenuItem(defIDAct);
-			ignoreDiacriticsMenu.add(defIDItem);
-			
-			final PhonUIAction yesIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", true);
-			yesIDAct.putValue(PhonUIAction.NAME, "yes");
-			yesIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
-			yesIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && globalOptionsPanel.isIgnoreDiacritics());
-			final JCheckBoxMenuItem yesIDItem = new JCheckBoxMenuItem(yesIDAct);
-			ignoreDiacriticsMenu.add(yesIDItem);
-			
-			final PhonUIAction noIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", false);
-			noIDAct.putValue(PhonUIAction.NAME, "no");
-			noIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
-			noIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && !globalOptionsPanel.isIgnoreDiacritics());
-			final JCheckBoxMenuItem noIDItem = new JCheckBoxMenuItem(noIDAct);
-			ignoreDiacriticsMenu.add(noIDItem);
-			
-			final String inventoryGroupingValue = (globalOptionsPanel.isUseInventoryGrouping()
-					? globalOptionsPanel.getInventoryGrouping()
-					: "default");
-			final JMenu inventoryGroupingMenu = builder.addMenu(".", "Inventory grouping: " + inventoryGroupingValue);
-			
-			final PhonUIAction defIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "default");
-			defIGAct.putValue(PhonUIAction.NAME, "default");
-			defIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
-			defIGAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseInventoryGrouping());
-			final JCheckBoxMenuItem defIGItem = new JCheckBoxMenuItem(defIGAct);
-			inventoryGroupingMenu.add(defIGItem);
-			
-			final PhonUIAction sessionIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Session");
-			sessionIGAct.putValue(PhonUIAction.NAME, "Session");
-			sessionIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
-			sessionIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Session"));
-			final JCheckBoxMenuItem sessionIGItem = new JCheckBoxMenuItem(sessionIGAct);
-			inventoryGroupingMenu.add(sessionIGItem);
-			
-			final PhonUIAction ageIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Age");
-			ageIGAct.putValue(PhonUIAction.NAME, "Age");
-			ageIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
-			ageIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Age"));
-			final JCheckBoxMenuItem ageIGItem = new JCheckBoxMenuItem(ageIGAct);
-			inventoryGroupingMenu.add(ageIGItem);
-			
-			builder.addSeparator(".", "_globalOptions");
-		}
+//		if(globalOptionsPanel != null && globalOptionsPanel.isVisible()) {
+//			builder.addItem(".", "-- Global Options --").setEnabled(false);
+//			
+//			final String caseSensitiveValue = (globalOptionsPanel.isUseGlobalCaseSensitive()
+//					? (globalOptionsPanel.isCaseSensitive() ? "yes" : "no")
+//					: "default");
+//			final JMenu caseSensitiveMenu = builder.addMenu(".", "Case sensitive: " + caseSensitiveValue);
+//			
+//			final PhonUIAction defCSAct = new PhonUIAction(globalOptionsPanel, "useDefaultCaseSensitive");
+//			defCSAct.putValue(PhonUIAction.NAME, "default");
+//			defCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+//			defCSAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalCaseSensitive());
+//			final JCheckBoxMenuItem defCSItem = new JCheckBoxMenuItem(defCSAct);
+//			caseSensitiveMenu.add(defCSItem);
+//			
+//			final PhonUIAction yesCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", true);
+//			yesCSAct.putValue(PhonUIAction.NAME, "yes");
+//			yesCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
+//			yesCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && globalOptionsPanel.isCaseSensitive());
+//			final JCheckBoxMenuItem yesCSItem = new JCheckBoxMenuItem(yesCSAct);
+//			caseSensitiveMenu.add(yesCSItem);
+//			
+//			final PhonUIAction noCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", false);
+//			noCSAct.putValue(PhonUIAction.NAME, "no");
+//			noCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
+//			noCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && !globalOptionsPanel.isCaseSensitive());
+//			final JCheckBoxMenuItem noCSItem = new JCheckBoxMenuItem(noCSAct);
+//			caseSensitiveMenu.add(noCSItem);
+//			
+//			final String ignoreDiacriticsValue = (globalOptionsPanel.isUseGlobalIgnoreDiacritics()
+//					? (globalOptionsPanel.isIgnoreDiacritics() ? "yes" : "no")
+//					: "default");
+//			final JMenu ignoreDiacriticsMenu = builder.addMenu(".", "Ignore diacritics: " + ignoreDiacriticsValue);
+//			
+//			final PhonUIAction defIDAct = new PhonUIAction(globalOptionsPanel, "useDefaultIgnoreDiacritics");
+//			defIDAct.putValue(PhonUIAction.NAME, "default");
+//			defIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+//			defIDAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalIgnoreDiacritics());
+//			final JCheckBoxMenuItem defIDItem = new JCheckBoxMenuItem(defIDAct);
+//			ignoreDiacriticsMenu.add(defIDItem);
+//			
+//			final PhonUIAction yesIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", true);
+//			yesIDAct.putValue(PhonUIAction.NAME, "yes");
+//			yesIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
+//			yesIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && globalOptionsPanel.isIgnoreDiacritics());
+//			final JCheckBoxMenuItem yesIDItem = new JCheckBoxMenuItem(yesIDAct);
+//			ignoreDiacriticsMenu.add(yesIDItem);
+//			
+//			final PhonUIAction noIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", false);
+//			noIDAct.putValue(PhonUIAction.NAME, "no");
+//			noIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
+//			noIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && !globalOptionsPanel.isIgnoreDiacritics());
+//			final JCheckBoxMenuItem noIDItem = new JCheckBoxMenuItem(noIDAct);
+//			ignoreDiacriticsMenu.add(noIDItem);
+//			
+//			final String inventoryGroupingValue = (globalOptionsPanel.isUseInventoryGrouping()
+//					? globalOptionsPanel.getInventoryGrouping()
+//					: "default");
+//			final JMenu inventoryGroupingMenu = builder.addMenu(".", "Inventory grouping: " + inventoryGroupingValue);
+//			
+//			final PhonUIAction defIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "default");
+//			defIGAct.putValue(PhonUIAction.NAME, "default");
+//			defIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+//			defIGAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseInventoryGrouping());
+//			final JCheckBoxMenuItem defIGItem = new JCheckBoxMenuItem(defIGAct);
+//			inventoryGroupingMenu.add(defIGItem);
+//			
+//			final PhonUIAction sessionIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Session");
+//			sessionIGAct.putValue(PhonUIAction.NAME, "Session");
+//			sessionIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
+//			sessionIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Session"));
+//			final JCheckBoxMenuItem sessionIGItem = new JCheckBoxMenuItem(sessionIGAct);
+//			inventoryGroupingMenu.add(sessionIGItem);
+//			
+//			final PhonUIAction ageIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Age");
+//			ageIGAct.putValue(PhonUIAction.NAME, "Age");
+//			ageIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
+//			ageIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Age"));
+//			final JCheckBoxMenuItem ageIGItem = new JCheckBoxMenuItem(ageIGAct);
+//			inventoryGroupingMenu.add(ageIGItem);
+//			
+//			builder.addSeparator(".", "_globalOptions");
+//		}
 				
 		final JMenuItem runAgainItem = new JMenuItem("Run again");
 		runAgainItem.setToolTipText("Clear results and run report again");
@@ -601,7 +602,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 	
 	private void init() {
-		globalOptionsPanel = new GlobalParameterPanel();
+		globalOptionsPanel = new OverrideParameterPanel();
 		
 		bufferPanel = new WizardMultiBufferPanel(this);
 		
@@ -979,7 +980,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		processor.reset();
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
-		globalOptionsPanel.savePreferences();
+		// TODO
+//		globalOptionsPanel.savePreferences();
 		processor.addProcessorListener(processorListener);
 
 		reportStartTime = System.currentTimeMillis();
@@ -1252,13 +1254,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 
 	protected void setupGlobalOptions(OpContext ctx) {
-		if(globalOptionsPanel.isUseGlobalCaseSensitive())
+		if(globalOptionsPanel.isOverrideCaseSensitive())
 			ctx.put(CASE_SENSITIVE_GLOBAL_OPTION, globalOptionsPanel.isCaseSensitive());
-		if(globalOptionsPanel.isUseGlobalIgnoreDiacritics())
+		if(globalOptionsPanel.isOverrideIgnoreDiacritics()) {
 			ctx.put(IGNORE_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.isIgnoreDiacritics());
-		ctx.put(RETAIN_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.getGlobalRetainDiacritics());
-		if(globalOptionsPanel.isUseInventoryGrouping())
-			ctx.put(INVENTORY_GROUPING_GLOBAL_OPTION, globalOptionsPanel.getInventoryGrouping());
+			ctx.put(ONLYOREXCEPT_GLOBAL_OPTION, globalOptionsPanel.isOnlyOrExcept());
+			ctx.put(SELECTED_DIACRITICS_GLOBAL_OPTION, globalOptionsPanel.getSelectedDiacritics());
+		}
+		if(globalOptionsPanel.isOverrideInventoryGroupingColumn())
+			ctx.put(INVENTORY_GROUPING_GLOBAL_OPTION, globalOptionsPanel.getInventoryGroupingColumn());
 	}
 
 	protected WizardStep createStep(WizardExtension ext, OpNode node) {

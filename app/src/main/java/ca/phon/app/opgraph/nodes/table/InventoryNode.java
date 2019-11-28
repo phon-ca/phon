@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -90,9 +91,6 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	}
 	
 	private void automaticConfiguration(InventorySettings settings, OpContext context, Result result) {
-		final boolean ignoreDiacritics = 
-				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ? 
-						(boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) : settings.isIgnoreDiacritics());
 		final boolean caseSensitive = 
 				(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) && !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default") ? 
 						(boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) : settings.isCaseSensitive());
@@ -100,17 +98,27 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				(context.containsKey(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION) && !context.get(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION).equals("default")
 						? context.get(NodeWizard.INVENTORY_GROUPING_GLOBAL_OPTION).toString() : null);
 		
-		final Set<Diacritic> retainDiacritics = 
-				(context.containsKey(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION) ? 
-						((Set<Diacritic>)context.get(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION)) : new HashSet<>());
+		// diacritic options - the following three settings are controled by the ignoreDiacritics flag
+		final boolean ignoreDiacritics = 
+				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ? 
+						(boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) : settings.isIgnoreDiacritics());
 		
+		final boolean onlyOrExcept = 
+				(context.containsKey(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ?
+						(boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) : settings.isOnlyOrExcept());
+		
+		@SuppressWarnings("unchecked")
+		final Collection<Diacritic> selectedDiacritics = 
+				(context.containsKey(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ? 
+						((Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION)) : settings.getSelectedDiacritics());
 		
 		if(settings.isAutoGrouping()) {
 			ColumnInfo groupBy = new ColumnInfo();
 			groupBy.name = (groupingColumn == null ? settings.getAutoGroupingColumn() : groupingColumn);
 			groupBy.caseSensitive = caseSensitive;
 			groupBy.ignoreDiacritics = ignoreDiacritics;
-			groupBy.retainDiacritics = retainDiacritics;
+			groupBy.onlyOrExcept = onlyOrExcept;
+			groupBy.selectedDiacritics = selectedDiacritics;
 			settings.setGroupBy(groupBy);
 		}
 		
@@ -142,12 +150,14 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			ColumnInfo colInfo = new ColumnInfo();
 			colInfo.caseSensitive = caseSensitive;
 			colInfo.ignoreDiacritics = ignoreDiacritics;
-			colInfo.retainDiacritics = retainDiacritics;
+			colInfo.onlyOrExcept = onlyOrExcept;
+			colInfo.selectedDiacritics = selectedDiacritics;
 			colInfo.name = colName;
 			settings.addColumn(colInfo);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		final TableDataSource inputTable = (TableDataSource)context.get(tableInput);
@@ -184,7 +194,8 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		}
 		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 			groupBy.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
-			groupBy.retainDiacritics = (Set<Diacritic>)context.get(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION);
+			groupBy.onlyOrExcept = (boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION);
+			groupBy.selectedDiacritics = (Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION);
 		}
 		for(ColumnInfo info:settings.getColumns()) {
 			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) && !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
@@ -192,7 +203,8 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			}
 			if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 				info.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
-				info.retainDiacritics = (Set<Diacritic>)context.get(NodeWizard.RETAIN_DIACRITICS_GLOBAL_OPTION);
+				info.onlyOrExcept = (boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION);
+				info.selectedDiacritics = (Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION);
 			}
 		}
 		
@@ -240,11 +252,11 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			if(grouping >= 0 && grouping < table.getColumnCount()) {
 				for(int rowIdx = 0; rowIdx < table.getRowCount(); rowIdx++) {
 					retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping), settings.getGroupBy().caseSensitive, 
-							settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().retainDiacritics));
+							settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().onlyOrExcept, settings.getGroupBy().selectedDiacritics));
 				}
 			}
 		} else {
-			retVal.add(new GroupKey("Total", true, false, new HashSet<>()));
+			retVal.add(new GroupKey("Total", true, false, false, new HashSet<>()));
 		}
 
 		return retVal;
@@ -269,12 +281,16 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				rowData[ic] = (col >= 0 ?
 						table.getValueAt(row, inventoryCols[ic]) : "");
 				if(rowData[ic] instanceof IPATranscript && settings.getColumns().get(ic).ignoreDiacritics) {
-					rowData[ic] = ((IPATranscript)rowData[ic]).removePunctuation().stripDiacriticsExcept(settings.getColumns().get(ic).retainDiacritics);
+					IPATranscript val = ((IPATranscript)rowData[ic]).removePunctuation();
+					val = (settings.getColumns().get(ic).onlyOrExcept
+							? val.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics)
+							: val.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics));
+					rowData[ic] = val;
 				}
 			}
 
 			final GroupKey groupKey = new GroupKey(grouping, settings.getGroupBy().caseSensitive, 
-					settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().retainDiacritics);
+					settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().onlyOrExcept, settings.getGroupBy().selectedDiacritics);
 			final InventoryRowData key = new InventoryRowData(settings, rowData);
 			Map<GroupKey, Long> counts = retVal.get(key);
 			if(counts == null) {
@@ -296,13 +312,16 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		
 		boolean ignoreDiacritics;
 		
-		Set<Diacritic> retainDiacritics;
+		boolean onlyOrExcept;
 		
-		public GroupKey(Object key, boolean caseSensitive, boolean ignoreDiacritics, Set<Diacritic> retainDiacritics) {
+		Collection<Diacritic> selectedDiacritics;
+		
+		public GroupKey(Object key, boolean caseSensitive, boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
 			this.key = key;
 			this.caseSensitive = caseSensitive;
 			this.ignoreDiacritics = ignoreDiacritics;
-			this.retainDiacritics = retainDiacritics;
+			this.onlyOrExcept = onlyOrExcept;
+			this.selectedDiacritics = selectedDiacritics;
 		}
 
 		@Override
@@ -311,12 +330,13 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			return TableUtils.checkEquals(key, ((GroupKey)o2).key,
 					caseSensitive,
 					ignoreDiacritics,
-					retainDiacritics);
+					onlyOrExcept,
+					selectedDiacritics);
 		}
 
 		@Override
 		public String toString() {
-			return TableUtils.objToString(key, ignoreDiacritics, retainDiacritics);
+			return TableUtils.objToString(key, ignoreDiacritics, onlyOrExcept, selectedDiacritics);
 		}
 
 		@Override
@@ -355,7 +375,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				Object rowVal1 = rowVals[i];
 				Object rowVal2 = otherRow.rowVals[i];
 				final ColumnInfo info = settings.getColumns().get(i);
-				equals &= TableUtils.checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics, info.retainDiacritics);
+				equals &= TableUtils.checkEquals(rowVal1, rowVal2, info.caseSensitive, info.ignoreDiacritics, info.onlyOrExcept, info.selectedDiacritics);
 			}
 			return equals;
 		}
@@ -367,7 +387,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			for(Object rowVal:rowVals) {
 				sb.append((sb.length() > 0 ? "," : ""));
 				final  ColumnInfo info = settings.getColumns().get(i++);
-				sb.append(TableUtils.objToString(rowVal, info.ignoreDiacritics, info.retainDiacritics));
+				sb.append(TableUtils.objToString(rowVal, info.ignoreDiacritics, info.onlyOrExcept, info.selectedDiacritics));
 			}
 			return sb.toString();
 		}

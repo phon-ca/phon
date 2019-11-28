@@ -15,7 +15,7 @@ import ca.phon.session.SessionFactory;
 public class DiacriticOptionsScriptParam extends ScriptParam {
 
 	public static final String IGNORE_DIACRITICS_PARAM = "ignoreDiacritics";
-	public static final String RETAIN_DIACRITICS_PARAM = "selectedDiacritics";
+	public static final String SELECTED_DIACRITICS_PARAM = "selectedDiacritics";
 	public static final String SELECTION_MODE_PARAM = "selectionMode";
 	
 	public static enum SelectionMode {
@@ -53,7 +53,7 @@ public class DiacriticOptionsScriptParam extends ScriptParam {
 		
 		ignoreDiacriticsParamId = id + "." + IGNORE_DIACRITICS_PARAM;
 		selectionModeParamId = id + "." + SELECTION_MODE_PARAM;
-		selectedDiacriticsParamId = id + "." + RETAIN_DIACRITICS_PARAM;
+		selectedDiacriticsParamId = id + "." + SELECTED_DIACRITICS_PARAM;
 		
 		setValue(ignoreDiacriticsParamId, defaultIgnoreDiacritics);
 		setDefaultValue(ignoreDiacriticsParamId, defaultIgnoreDiacritics);

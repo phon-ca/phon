@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,14 @@ public class InventorySettings implements Cloneable {
 	private boolean caseSensitive = true;
 	
 	private boolean ignoreDiacritics = false;
+	
+	/*
+	 * Only = true
+	 * Except = false
+	 */
+	private boolean onlyOrExcept = false;
+	
+	private Collection<Diacritic> selectedDiacritics = new ArrayList<>();
 	
 	private boolean autoGrouping = true;
 	
@@ -89,6 +98,35 @@ public class InventorySettings implements Cloneable {
 
 	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
 		this.ignoreDiacritics = ignoreDiacritics;
+	}
+	
+	/**
+	 * Selection mode when ignoring diacritics.  If <code>true</code>
+	 * selection mode will be 'Only' if <code>false</code> selection mode
+	 * will b 'Except'.  This setting is related to the selected diacritics.
+	 * 
+	 * @return diacritic filtering mode
+	 */
+	public boolean isOnlyOrExcept() {
+		return this.onlyOrExcept;
+	}
+	
+	public void setOnlyOrExcept(boolean onlyOrExcept) {
+		this.onlyOrExcept = onlyOrExcept;
+	}
+	
+	/**
+	 * Diacritics selected for filtering.  The behaviour is determined
+	 * by the onlyOrExcept paramter.
+	 * 
+	 * @return selected diacritics
+	 */
+	public Collection<Diacritic> getSelectedDiacritics() {
+		return this.selectedDiacritics;
+	}
+	
+	public void setSelectedDiacritics(Collection<Diacritic> selectedDiacritics) {
+		this.selectedDiacritics = selectedDiacritics;
 	}
 
 	public boolean isIncludeMetadata() {
@@ -155,8 +193,12 @@ public class InventorySettings implements Cloneable {
 	public static class ColumnInfo {
 		String name = "";
 		boolean caseSensitive = false;
+		
+		// diacritic options
 		boolean ignoreDiacritics = true;
-		Set<Diacritic> retainDiacritics = new HashSet<>();
+		boolean onlyOrExcept = false;
+		Collection<Diacritic> selectedDiacritics = new ArrayList<Diacritic>();
+		
 		public String getName() {
 			return name;
 		}
@@ -169,17 +211,26 @@ public class InventorySettings implements Cloneable {
 		public void setCaseSensitive(boolean caseSensitive) {
 			this.caseSensitive = caseSensitive;
 		}
+	
 		public boolean isIgnoreDiacritics() {
 			return ignoreDiacritics;
 		}
 		public void setIgnoreDiacritics(boolean ignoreDiacritics) {
 			this.ignoreDiacritics = ignoreDiacritics;
 		}
-		public Set<Diacritic> getRetainDiacritics() {
-			return this.retainDiacritics;
+	
+		public boolean isOnlyOrExcept() {
+			return this.onlyOrExcept;
 		}
-		public void setRetainDiacritics(Set<Diacritic> set) {
-			this.retainDiacritics = set;
+		public void setOnlyOrExcept(boolean onlyOrExcept) {
+			this.onlyOrExcept = onlyOrExcept;
+		}
+		
+		public Collection<Diacritic> getSelectedDiacritics() {
+			return this.selectedDiacritics;
+		}
+		public void setSelectedDiacritics(Collection<Diacritic> selectedDiacritics) {
+			this.selectedDiacritics = selectedDiacritics;
 		}
 	}
 	
@@ -195,12 +246,15 @@ public class InventorySettings implements Cloneable {
 		retVal.setIncludeAdditionalWordData(isIncludeAdditionalWordData());
 		retVal.setCaseSensitive(isCaseSensitive());
 		retVal.setIgnoreDiacritics(isIgnoreDiacritics());
+		retVal.setOnlyOrExcept(isOnlyOrExcept());
+		retVal.setSelectedDiacritics(getSelectedDiacritics());
 				
 		if(getGroupBy() != null) {
 			ColumnInfo groupBy = new ColumnInfo();
 			groupBy.caseSensitive = getGroupBy().caseSensitive;
 			groupBy.ignoreDiacritics = getGroupBy().ignoreDiacritics;
-			groupBy.retainDiacritics = getGroupBy().retainDiacritics;
+			groupBy.onlyOrExcept = getGroupBy().onlyOrExcept;
+			groupBy.selectedDiacritics = getGroupBy().selectedDiacritics;
 			groupBy.name = getGroupBy().name;
 			
 			retVal.setGroupBy(groupBy);
@@ -210,7 +264,8 @@ public class InventorySettings implements Cloneable {
 			ColumnInfo colInfo = new ColumnInfo();
 			colInfo.caseSensitive = columnInfo.caseSensitive;
 			colInfo.ignoreDiacritics = columnInfo.ignoreDiacritics;
-			colInfo.retainDiacritics = columnInfo.retainDiacritics;
+			colInfo.onlyOrExcept = columnInfo.onlyOrExcept;
+			colInfo.selectedDiacritics = columnInfo.selectedDiacritics;
 			colInfo.name = columnInfo.name;
 			retVal.addColumn(colInfo);
 		}
