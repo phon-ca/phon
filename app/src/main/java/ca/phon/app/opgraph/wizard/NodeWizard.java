@@ -22,6 +22,10 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -55,6 +59,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.FocusManager;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -67,6 +72,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
@@ -74,11 +80,14 @@ import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.tree.TreePath;
 
 import org.apache.velocity.tools.generic.MathTool;
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import com.teamdev.jxbrowser.chromium.Browser;
@@ -148,6 +157,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.DropDownButton;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -373,16 +383,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 		
 		// add global options
-//		if(globalOptionsPanel != null && globalOptionsPanel.isVisible()) {
-//			builder.addItem(".", "-- Global Options --").setEnabled(false);
+		if(globalOptionsPanel != null) {
+			globalOptionsPanel.setupMenu(builder);
+			
+//			builder.addItem(".", "-- Overrides --").setEnabled(false);
 //			
-//			final String caseSensitiveValue = (globalOptionsPanel.isUseGlobalCaseSensitive()
+//			final String caseSensitiveValue = (globalOptionsPanel.isOverrideCaseSensitive()
 //					? (globalOptionsPanel.isCaseSensitive() ? "yes" : "no")
-//					: "default");
+//					: "Don't override");
 //			final JMenu caseSensitiveMenu = builder.addMenu(".", "Case sensitive: " + caseSensitiveValue);
 //			
-//			final PhonUIAction defCSAct = new PhonUIAction(globalOptionsPanel, "useDefaultCaseSensitive");
-//			defCSAct.putValue(PhonUIAction.NAME, "default");
+//			final PhonUIAction defCSAct = new PhonUIAction(globalOptionsPanel, "setOverrideCaseSensitive", false);
+//			defCSAct.putValue(PhonUIAction.NAME, "Don't override");
 //			defCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
 //			defCSAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalCaseSensitive());
 //			final JCheckBoxMenuItem defCSItem = new JCheckBoxMenuItem(defCSAct);
@@ -453,9 +465,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 //			ageIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Age"));
 //			final JCheckBoxMenuItem ageIGItem = new JCheckBoxMenuItem(ageIGAct);
 //			inventoryGroupingMenu.add(ageIGItem);
-//			
-//			builder.addSeparator(".", "_globalOptions");
-//		}
+			
+			builder.addSeparator(".", "_globalOptions");
+		}
 				
 		final JMenuItem runAgainItem = new JMenuItem("Run again");
 		runAgainItem.setToolTipText("Clear results and run report again");
@@ -677,8 +689,63 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		addWizardStep(reportDataStep);
 
 		// setup card layout
-		add(stepPanel, BorderLayout.CENTER);
-
+		//add(stepPanel, BorderLayout.CENTER);
+		JPanel stepWithOverrides = new JPanel(new BorderLayout());
+		stepWithOverrides.add(globalOptionsPanel, BorderLayout.NORTH);
+		stepWithOverrides.add(stepPanel, BorderLayout.CENTER);
+		add(stepWithOverrides, BorderLayout.CENTER);
+		
+		final JPopupMenu overridesMenu = new JPopupMenu("Overrides");
+		overridesMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				overridesMenu.removeAll();
+				globalOptionsPanel.setupMenu(new MenuBuilder(overridesMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
+		
+		PhonUIAction overridesMenuAct = new PhonUIAction(this, "noop");
+		overridesMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show overrides menu");
+		overridesMenuAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
+		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		overridesMenuAct.putValue(DropDownButton.BUTTON_POPUP, overridesMenu);
+		
+		DropDownButton overridesButton = new DropDownButton(overridesMenuAct);
+		overridesButton.setOnlyPopup(true);
+		overridesButton.setBorderPainted(true);
+		overridesButton.setBackground(Color.white);
+		overridesButton.setOpaque(true);
+		overridesButton.setBorder(
+				BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.black),
+						BorderFactory.createEmptyBorder(0, 5, 0, 5)));
+				
+		JPanel topPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		topPanel.add(super.breadcrumbScroller, gbc);
+		
+		++gbc.gridx;
+		gbc.weightx = 0.0;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		topPanel.add(overridesButton, gbc);
+		
+		add(topPanel, BorderLayout.NORTH);
 	}
 	
 	/**

@@ -115,6 +115,18 @@ public class DiacriticOptionsPanel extends JPanel {
 		updateButtons();
 	}
 	
+	public JCheckBox getIgnoreDiacriticsBox() {
+		return this.ignoreDiacriticsBox;
+	}
+	
+	public DiacriticSelector getDiacriticSelector() {
+		return this.diacriticSelector;
+	}
+	
+	public JComboBox<SelectionMode> getSelectionModeBox() {
+		return this.modeBox;
+	}
+	
 	public DiacriticOptionsScriptParam getDiacriticOptions() {
 		return this.diacriticOptionsParam;
 	}

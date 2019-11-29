@@ -56,6 +56,7 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.script.InputFields;
 import ca.phon.opgraph.nodes.general.script.OutputFields;
 import ca.phon.plugin.PluginManager;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptContext;
@@ -221,13 +222,18 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 					sp.setValue(paramId, inputParams.get(paramId));
 				}
 
-				if(paramId.endsWith("ignoreDiacritics")
+				if(paramId.endsWith(DiacriticOptionsScriptParam.IGNORE_DIACRITICS_PARAM)
 						&& context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)
 						&& !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
 					sp.setValue(paramId, context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION));
-				}
-
-				if(paramId.endsWith("caseSensitive")
+				} else if(paramId.endsWith(DiacriticOptionsScriptParam.SELECTION_MODE_PARAM)
+						&& context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) != null) {
+					boolean onlyOrExcept = Boolean.valueOf(context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION).toString());
+					sp.setValue(paramId, onlyOrExcept ? DiacriticOptionsScriptParam.SelectionMode.ONLY.toString() : DiacriticOptionsScriptParam.SelectionMode.EXCEPT.toString());
+				} else if(paramId.endsWith(DiacriticOptionsScriptParam.SELECTED_DIACRITICS_PARAM)
+						&& context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION) != null) {
+					sp.setValue(paramId, context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION));
+				} else if(paramId.endsWith("caseSensitive")
 						&& context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION)
 						&& !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
 					sp.setValue(paramId, context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION));

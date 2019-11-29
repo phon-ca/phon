@@ -914,7 +914,6 @@ public class QueryAndReportWizard extends NodeWizard {
 				(graph, project) -> new ReportRunner(graph, getCurrentQueryProject(), getCurrentQueryId()) );
 		// toolbar customizations
 		reportEditor.getRunButton().setVisible(false);
-		reportEditor.getListTopPanel().add(super.globalOptionsPanel);
 		
 		retVal.setLayout(new BorderLayout());
 		retVal.add(reportEditor, BorderLayout.CENTER);

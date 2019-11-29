@@ -41,6 +41,7 @@ public class BreadcrumbWizardFrame extends WizardFrame {
 	
 	/** The breadCrumb */
 	private Breadcrumb<WizardStep, String> breadCrumb;
+	protected JScrollPane breadcrumbScroller;
 	protected JBreadcrumb<WizardStep, String> breadCrumbViewer;
 	
 	protected BreadcrumbButton nextButton;
@@ -83,7 +84,7 @@ public class BreadcrumbWizardFrame extends WizardFrame {
 		breadCrumbViewer.getBreadcrumb().addBreadcrumbListener( (e) -> SwingUtilities.invokeLater( this::updateBreadcrumbButtons) );
 		SwingUtilities.invokeLater( this::updateBreadcrumbButtons );
 
-		final JScrollPane breadcrumbScroller = new JScrollPane(breadCrumbViewer);
+		breadcrumbScroller = new JScrollPane(breadCrumbViewer);
 		breadcrumbScroller.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.darkGray));
 		breadcrumbScroller.getViewport().setBackground(breadCrumbViewer.getBackground());
 		breadcrumbScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);

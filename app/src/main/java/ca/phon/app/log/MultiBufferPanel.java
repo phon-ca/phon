@@ -125,7 +125,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		builder.addSeparator(".", "_saveActions");
 		
-		if(getCurrentBuffer().isShowingHtml()) {
+		if(getCurrentBuffer() != null && getCurrentBuffer().isShowingHtml()) {
 			final PrintHTMLBufferAction printAct = new PrintHTMLBufferAction(getCurrentBuffer());
 			builder.addItem(".", printAct);
 			builder.addSeparator(".", "_printActions");
