@@ -4,8 +4,6 @@ ca.phon.app.PhonDesktopStartupHook
 ca.phon.app.autosave.AutosaveStartupHook
 # Theme
 ca.phon.app.ThemeHook
-# Fonts
-ca.phon.app.fonts.FontLoaderStartupHook
 # VLC
 ca.phon.app.VLCInitHook
 # JxBrowser

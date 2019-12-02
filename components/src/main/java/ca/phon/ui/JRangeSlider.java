@@ -49,12 +49,7 @@ public class JRangeSlider extends JComponent implements SwingConstants {
 
 	/** uiClassID */
 	private static final String uiClassID = "RangeSliderUI";
-	
-//	private boolean paintTicks = false;
-//	private boolean paintTrack = true;
-//	private boolean paintLabels = false;
-//	private boolean isInverted = false;
-	
+		
 	/** The model */
 	private BoundedRangeModel _model;
 	
@@ -371,18 +366,14 @@ public class JRangeSlider extends JComponent implements SwingConstants {
 		JRangeSlider slider = new JRangeSlider(1000, 10000, 1000, 3000);
 		slider.setLabelFormat(new MsFormat());
 		slider.setPaintSlidingLabel(true);
-//		slider.setPreferredSize(new Dimension(100, 30));
-//		slider.setFont(new Font("Charis SIL", Font.PLAIN, 10));
 		
 		JFrame f = new JFrame("Test Slider");
 		
 		FormLayout layout = new FormLayout(
 				"3dlu, fill:pref:grow, 3dlu",
 				"3dlu, pref, 3dlu");
-//		f.getContentPane().setLayout(layout);
 		
 		CellConstraints cc = new CellConstraints();
-//		f.getContentPane().add(slider, cc.xy(2,2));
 		f.add(slider);
 		f.pack();
 		f.setVisible(true);
@@ -408,8 +399,6 @@ public class JRangeSlider extends JComponent implements SwingConstants {
 	public boolean isPaintSlidingLabel() {
 		return paintSlidingLabel;
 	}
-
-
 
 	public void setPaintSlidingLabel(boolean paintSlidingLabel) {
 		this.paintSlidingLabel = paintSlidingLabel;

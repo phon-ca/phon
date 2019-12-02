@@ -16,6 +16,8 @@
 package ca.phon.ui.fonts;
 
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -26,12 +28,36 @@ public class FontPreferences {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
 	
+	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
+		"Arial Unicode MS", 
+		"Arial", 
+		"Charis SIL", 
+		"Charis SIL Compact", 
+		"Doulos SIL",
+		"Gentium", 
+		"Lucida Grande", 
+		"Tahoma"
+	};
+	
+	// return the name of the first available IPA font
+	public static final String getFirstAvailableIPAFont() {
+		final String[] allFonts = 
+				GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		for(String ipaFont:SUGGESTED_IPA_FONT_NAMES) {
+			int idx = Arrays.binarySearch(allFonts, ipaFont);
+			if(idx > 0)
+				return ipaFont;
+		}
+		// need to return something valid
+		return "SansSerif";
+	}
+	
 	/**
 	 * Tier font
 	 */
 	public final static String TIER_FONT = FontPreferences.class.getName() + ".tierFont";
 	
-	public final static String DEFAULT_TIER_FONT = "Charis SIL-PLAIN-12";
+	public final static String DEFAULT_TIER_FONT = getFirstAvailableIPAFont() + "-PLAIN-12";
 	
 	public static Font getTierFont() {
 		return PrefHelper.getFont(TIER_FONT, Font.decode(DEFAULT_TIER_FONT));
@@ -46,7 +72,7 @@ public class FontPreferences {
 	 */
 	public static final String UI_IPA_FONT = FontPreferences.class.getName() + ".uiIpaFont";
 	
-	public static final String DEFAULT_UI_IPA_FONT = "Charis SIL Compact-PLAIN-12";
+	public static final String DEFAULT_UI_IPA_FONT = getFirstAvailableIPAFont() + "-PLAIN-12";
 	
 	public static Font getUIIpaFont() {
 		return PrefHelper.getFont(UI_IPA_FONT, Font.decode(DEFAULT_UI_IPA_FONT));
@@ -61,7 +87,7 @@ public class FontPreferences {
 	 */
 	public final static String CONTROL_FONT = FontPreferences.class.getName() + ".controlFont";
 	
-	public final static String DEFAULT_CONTROL_FONT = "Liberation Sans-PLAIN-12";
+	public final static String DEFAULT_CONTROL_FONT = "Dialog-PLAIN-12";
 	
 	public static Font getControlFont() {
 		return PrefHelper.getFont(CONTROL_FONT, Font.decode(DEFAULT_CONTROL_FONT));
@@ -76,7 +102,7 @@ public class FontPreferences {
 	 */
 	public final static String MENU_FONT = FontPreferences.class.getName() + ".menuFont";
 	
-	public final static String DEFAULT_MENU_FONT = "Liberation Sans-PLAIN-12";
+	public final static String DEFAULT_MENU_FONT = "Dialog-PLAIN-12";
 	
 	public static Font getMenuFont() {
 		return PrefHelper.getFont(MENU_FONT, Font.decode(DEFAULT_MENU_FONT));
@@ -91,7 +117,7 @@ public class FontPreferences {
 	 */
 	public final static String MESSAGE_DIALOG_FONT = FontPreferences.class.getName() + ".messageDialogFont";
 	
-	public final static String DEFAULT_MESSAGE_DIALOG_FONT = "Liberation Sans-PLAIN-12";
+	public final static String DEFAULT_MESSAGE_DIALOG_FONT = "Dialog-PLAIN-12";
 	
 	public static Font getMessageDialogFont() {
 		return PrefHelper.getFont(MESSAGE_DIALOG_FONT, Font.decode(DEFAULT_MESSAGE_DIALOG_FONT));
@@ -106,7 +132,7 @@ public class FontPreferences {
 	 */
 	public final static String SMALL_FONT = FontPreferences.class.getName() + ".smallFont";
 	
-	public final static String DEFAULT_SMALL_FONT = "Liberation Sans-PLAIN-11";
+	public final static String DEFAULT_SMALL_FONT = "Dialog-PLAIN-11";
 
 	public static Font getSmallFont() {
 		return PrefHelper.getFont(SMALL_FONT, Font.decode(DEFAULT_SMALL_FONT));
@@ -121,7 +147,7 @@ public class FontPreferences {
 	 */
 	public final static String TITLE_FONT = FontPreferences.class.getName() + ".titleFont";
 	
-	public final static String DEFAULT_TITLE_FONT = "Liberation Sans-PLAIN-14";
+	public final static String DEFAULT_TITLE_FONT = "Dialog-PLAIN-14";
 	
 	public static Font getTitleFont() {
 		return PrefHelper.getFont(TITLE_FONT, Font.decode(DEFAULT_TITLE_FONT));
@@ -136,7 +162,7 @@ public class FontPreferences {
 	 */
 	public final static String WINDOW_TITLE_FONT = FontPreferences.class.getName() + ".windowTitleFont";
 	
-	public final static String DEFAULT_WINDOW_TITLE_FONT = "Liberation Sans-BOLD-14";
+	public final static String DEFAULT_WINDOW_TITLE_FONT = "Dialog-BOLD-14";
 	
 	public static Font getWindowTitleFont() {
 		return PrefHelper.getFont(WINDOW_TITLE_FONT, Font.decode(DEFAULT_WINDOW_TITLE_FONT));
@@ -151,7 +177,7 @@ public class FontPreferences {
 	 */
 	public final static String MONOSPACE_FONT = FontPreferences.class.getName() + ".monospaceFont";
 	
-	public final static String DEFAULT_MONOSPACE_FONT = "Liberation Mono-PLAIN-12";
+	public final static String DEFAULT_MONOSPACE_FONT = "Courier New-PLAIN-12";
 	
 	public static Font getMonospaceFont() {
 		return PrefHelper.getFont(MONOSPACE_FONT, Font.decode(DEFAULT_MONOSPACE_FONT));

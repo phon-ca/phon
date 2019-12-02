@@ -116,9 +116,11 @@ import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
 import ca.phon.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.FontFormatter;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.CellProp;
 import ca.phon.ui.ipamap.io.Grid;
@@ -205,7 +207,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Default font
 	 */
-	private final static String DEFAULT_FONT = "Charis SIL Compact-PLAIN-13";
+	private final static String DEFAULT_FONT = (new FontFormatter()).format(FontPreferences.getUIIpaFont());
 	
 	/**
 	 * Load the scale property
