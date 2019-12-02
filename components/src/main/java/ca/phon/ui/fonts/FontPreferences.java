@@ -29,10 +29,10 @@ public class FontPreferences {
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
 	
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
-		"Arial Unicode MS", 
-		"Arial", 
 		"Charis SIL", 
 		"Charis SIL Compact", 
+		"Arial Unicode MS", 
+		"Arial", 
 		"Doulos SIL",
 		"Gentium", 
 		"Lucida Grande", 
