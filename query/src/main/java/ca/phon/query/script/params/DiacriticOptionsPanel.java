@@ -56,7 +56,7 @@ public class DiacriticOptionsPanel extends JPanel {
 		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
 		ignoreDiacriticsBox.setSelected(diacriticOptionsParam.isIgnoreDiacritics());
 		ignoreDiacriticsBox.setToolTipText("Select to ignore diacritics");
-		ignoreDiacriticsBox.addActionListener( (e) -> {
+		ignoreDiacriticsBox.addChangeListener( (e) -> {
 			updateButtons();
 			diacriticOptionsParam.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected());
 		});
