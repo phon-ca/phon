@@ -184,18 +184,18 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 						(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
 				if(waveformEditorView != null) {
 					playButton.setIcon(pauseIcon);
-					waveformEditorView.getWavDisplay().addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, new PropertyChangeListener() {
-
-						@Override
-						public void propertyChange(PropertyChangeEvent evt) {
-							if(!waveformEditorView.getWavDisplay().isPlaying()) {
-								playButton.setIcon(playIcon);
-								waveformEditorView.getWavDisplay().removePropertyChangeListener(this);
-							}
-						}
-
-					});
-					waveformEditorView.play();
+//					waveformEditorView.getWavDisplay().addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, new PropertyChangeListener() {
+//
+//						@Override
+//						public void propertyChange(PropertyChangeEvent evt) {
+//							if(!waveformEditorView.getWavDisplay().isPlaying()) {
+//								playButton.setIcon(playIcon);
+//								waveformEditorView.getWavDisplay().removePropertyChangeListener(this);
+//							}
+//						}
+//
+//					});
+//					waveformEditorView.play();
 				}
 			}
 		} else {
@@ -206,11 +206,11 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 					mediaPlayerEditorView.getPlayer().pause();
 				}
 			} else if(editor.getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
-				final SpeechAnalysisEditorView waveformEditorView =
-						(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
-				if(waveformEditorView != null) {
-					waveformEditorView.getWavDisplay().stop();
-				}
+//				final SpeechAnalysisEditorView waveformEditorView =
+//						(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
+//				if(waveformEditorView != null) {
+//					waveformEditorView.getWavDisplay().stop();
+//				}
 			}
 		}
 	}
@@ -271,13 +271,13 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		// check if segment exceeds media length
 		final SpeechAnalysisEditorView speechAnalysisView = 
 				(SpeechAnalysisEditorView)getEditor().getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
-		if(speechAnalysisView != null && speechAnalysisView.getWavDisplay().getSampled() != null) {
-			float mediaEndMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
-			if(validated.getEndValue() > mediaEndMS) {
-				getGroupFieldBorder().setShowWarningIcon(true);
-				segmentField.setToolTipText("Segment time exceeds media length");
-			}
-		}
+//		if(speechAnalysisView != null && speechAnalysisView.getWavDisplay().getSampled() != null) {
+//			float mediaEndMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
+//			if(validated.getEndValue() > mediaEndMS) {
+//				getGroupFieldBorder().setShowWarningIcon(true);
+//				segmentField.setToolTipText("Segment time exceeds media length");
+//			}
+//		}
 
 		return retVal;
 	}

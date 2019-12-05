@@ -43,7 +43,7 @@ public class StopAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		getView().getWavDisplay().stop();
+//		getView().getWavDisplay().stop();
 	}
 
 }

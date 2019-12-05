@@ -44,22 +44,22 @@ public class SegmentBoundsCheck implements SessionCheck, IPluginExtensionPoint<S
 		
 		final SpeechAnalysisEditorView speechAnalysisView = 
 				(SpeechAnalysisEditorView)editor.getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
-		if(speechAnalysisView == null || speechAnalysisView.getWavDisplay().getSampled() == null) return modified;
+//		if(speechAnalysisView == null || speechAnalysisView.getWavDisplay().getSampled() == null) return modified;
+//		
+//		float maxTimeMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
 		
-		float maxTimeMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
-		
-		for(int i = 0; i < session.getRecordCount(); i++) {
-			final Record r = session.getRecord(i);
-			final Tier<MediaSegment> segmentTier = r.getSegment();
-			if(segmentTier != null && segmentTier.numberOfGroups() > 0) {
-				final MediaSegment segment = segmentTier.getGroup(0);
-				
-				if(segment.getEndValue() > maxTimeMS) {
-					// fire warning
-					validator.fireValidationEvent(session, i, SystemTierType.Segment.getName(), 0, "Segment time exceeds media length");
-				}
-			}
-		}
+//		for(int i = 0; i < session.getRecordCount(); i++) {
+//			final Record r = session.getRecord(i);
+//			final Tier<MediaSegment> segmentTier = r.getSegment();
+//			if(segmentTier != null && segmentTier.numberOfGroups() > 0) {
+//				final MediaSegment segment = segmentTier.getGroup(0);
+//				
+//				if(segment.getEndValue() > maxTimeMS) {
+//					// fire warning
+//					validator.fireValidationEvent(session, i, SystemTierType.Segment.getName(), 0, "Segment time exceeds media length");
+//				}
+//			}
+//		}
 		return false;
 	}
 

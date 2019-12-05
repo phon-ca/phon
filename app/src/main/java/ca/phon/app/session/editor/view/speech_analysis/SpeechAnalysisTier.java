@@ -15,21 +15,56 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
+import java.awt.BorderLayout;
+
+import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JPanel;
+
+import ca.phon.app.media.TimeComponent;
+import ca.phon.app.media.TimeUIModel;
 
 /**
  * Extension point for waveform view tiers.
  *
  */
-public interface SpeechAnalysisTier {
+public abstract class SpeechAnalysisTier extends TimeComponent {
 	
-	/**
-	 * Get the tier component
-	 * 
-	 * @return component
-	 */
-	public JComponent getTierComponent();
+	private SpeechAnalysisEditorView speechAnalysisView;
+	
+	private JPanel contentPane;
+	
+	public SpeechAnalysisTier(SpeechAnalysisEditorView parentView) {
+		super(parentView.getTimeModel());
+		this.speechAnalysisView = parentView;
+		
+		init();
+	}
+	
+	private void init() {
+		setLayout(new BorderLayout());
+		contentPane = new JPanel();
+		add(contentPane, BorderLayout.CENTER);
+	}
+	
+	public SpeechAnalysisEditorView getParentView() {
+		return this.speechAnalysisView;
+	}
+	
+	public JPanel getContentPane() {
+		return this.contentPane;
+	}
+	
+	public void setContentPane(JPanel contentPane) {
+		var oldVal = this.contentPane;
+		remove(this.contentPane);
+		this.contentPane = contentPane;
+		if(contentPane != null)
+			add(contentPane, BorderLayout.CENTER);
+		revalidate();
+		super.firePropertyChange("contentPane", oldVal, contentPane);
+	}
 	
 	/**
 	 * Add custom commands to the editor view menu.
@@ -37,12 +72,12 @@ public interface SpeechAnalysisTier {
 	 * @param menu
 	 * @param includeAccelerators
 	 */
-	public void addMenuItems(JMenu menuEle, boolean includeAccelerators);
+	public abstract void addMenuItems(JMenu menuEle, boolean includeAccelerators);
 	
 	/**
 	 * Called on the Refresh action for the tier.
 	 * 
 	 */
-	public void onRefresh();
+	public abstract void onRefresh();
 	
 }

@@ -62,43 +62,43 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		final PCMSegmentView wavDisplay = getView().getWavDisplay();
-		float start = wavDisplay.getWindowStart();
-		float len = wavDisplay.getWindowLength();
-		
-		if(len <= 1.0f && zoomIn) {
-			Toolkit.getDefaultToolkit().beep();
-			return;
-		}
-		
-		float end = start + len;
-		float endTime = wavDisplay.getSampled().getStartTime() + wavDisplay.getSampled().getLength();
-		
-		float zoomAmount = this.zoomAmount;
-		if(zoomIn) {
-			zoomAmount *= -1.0f;
-		}
-		
-		start -= zoomAmount;
-		end += zoomAmount;
-		
-		start = Math.min(Math.max(wavDisplay.getSampled().getStartTime(), start), 
-				endTime);
-		end = Math.min(endTime, Math.max(wavDisplay.getSampled().getStartTime(), end));
-		len = end - start;
-		
-		if(len < 0.1f && (endTime - start) >= 0.1f) {
-			len = 0.1f;
-		}
-		
-		if(len >= 0.1f && len < wavDisplay.getSampled().getLength()) {
-			// adjust values
-			wavDisplay.setWindowStart(start);
-			wavDisplay.setWindowLength(len);
-		} else {
-			// beep
-			Toolkit.getDefaultToolkit().beep();
-		}
+//		final PCMSegmentView wavDisplay = getView().getWavDisplay();
+//		float start = wavDisplay.getWindowStart();
+//		float len = wavDisplay.getWindowLength();
+//		
+//		if(len <= 1.0f && zoomIn) {
+//			Toolkit.getDefaultToolkit().beep();
+//			return;
+//		}
+//		
+//		float end = start + len;
+//		float endTime = wavDisplay.getSampled().getStartTime() + wavDisplay.getSampled().getLength();
+//		
+//		float zoomAmount = this.zoomAmount;
+//		if(zoomIn) {
+//			zoomAmount *= -1.0f;
+//		}
+//		
+//		start -= zoomAmount;
+//		end += zoomAmount;
+//		
+//		start = Math.min(Math.max(wavDisplay.getSampled().getStartTime(), start), 
+//				endTime);
+//		end = Math.min(endTime, Math.max(wavDisplay.getSampled().getStartTime(), end));
+//		len = end - start;
+//		
+//		if(len < 0.1f && (endTime - start) >= 0.1f) {
+//			len = 0.1f;
+//		}
+//		
+//		if(len >= 0.1f && len < wavDisplay.getSampled().getLength()) {
+//			// adjust values
+//			wavDisplay.setWindowStart(start);
+//			wavDisplay.setWindowLength(len);
+//		} else {
+//			// beep
+//			Toolkit.getDefaultToolkit().beep();
+//		}
 	}
 
 }

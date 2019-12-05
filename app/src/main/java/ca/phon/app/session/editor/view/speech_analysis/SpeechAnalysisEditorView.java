@@ -17,10 +17,15 @@ package ca.phon.app.session.editor.view.speech_analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -46,6 +51,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.Scrollable;
@@ -56,6 +62,11 @@ import javax.swing.event.MouseInputAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.media.TimeUIModel.Interval;
+import ca.phon.app.media.Timebar;
+import ca.phon.app.media.WaveformDisplay;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
@@ -74,6 +85,8 @@ import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.StopAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ZoomAction;
+import ca.phon.app.session.editor.view.timeline.TimelineTier;
+import ca.phon.media.LongSound;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.PCMSegmentView;
 import ca.phon.media.sampled.Sampled;
@@ -119,12 +132,27 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	public static final int MAX_TIER_HEIGHT = Integer.MAX_VALUE;
 
-	private JPanel contentPane;
+	private TierPanel tierPane;
+
+	/**
+	 * Time model for the view
+	 */
+	private TimeUIModel timeModel;
 
 	/**
 	 * Wav display
 	 */
-	private PCMSegmentView wavDisplay;
+	private SpeechAnalysisWaveformTier waveformTier;
+	
+	/**
+	 * Current record interval
+	 */
+	private Interval currentRecordInterval;
+	
+	/**
+	 * Current selection interval
+	 */
+	private Interval selectionInterval;
 
 	/* Toolbar and buttons */
 	private JToolBar toolbar;
@@ -150,8 +178,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private int wavDisplayHeight =
 			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, DEFAULT_WAV_DISPLAY_HEIGHT);
 
-	private JScrollBar horizontalScroller;
-	private volatile boolean isDragging = false;
+//	private JScrollBar horizontalScroller;
+//	private volatile boolean isDragging = false;
 
 	private final List<SpeechAnalysisTier> pluginTiers =
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
@@ -213,29 +241,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private void init() {
 		setLayout(new BorderLayout());
 		setupToolbar();
-
-		horizontalScroller = new JScrollBar(SwingConstants.HORIZONTAL);
-		horizontalScroller.addMouseListener(new MouseInputAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				isDragging = true;
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				isDragging = false;
-			}
-
-		});
-		horizontalScroller.addAdjustmentListener( (e) -> {
-			if(!e.getValueIsAdjusting() || isDragging) {
-				int val = e.getValue();
-				float time = val / 1000.0f;
-				getWavDisplay().setWindowStart(time);
-			}
-		});
-
+		
 		btmPanel = new JPanel(new VerticalLayout());
 		btmPanel.removeAll();
 
@@ -243,118 +249,81 @@ public class SpeechAnalysisEditorView extends EditorView {
 		errorPanel.add(messageButton);
 
 		btmPanel.add(errorPanel);
-		btmPanel.add(horizontalScroller);
 		add(btmPanel, BorderLayout.SOUTH);
 
-		wavDisplay = new PCMSegmentView();
-		wavDisplay.setFocusable(true);
-		wavDisplay.setBackground(Color.white);
-		wavDisplay.setOpaque(true);
-		wavDisplay.setFont(FontPreferences.getMonospaceFont());
-		wavDisplay.addPropertyChangeListener(PCMSegmentView.SEGMENT_LENGTH_PROP, segmentListener);
-		wavDisplay.addPropertyChangeListener(PCMSegmentView.WINDOW_LENGTH_PROP, (e) -> { setupTimeScrollbar(); });
-		wavDisplay.addPropertyChangeListener(PCMSegmentView.PLAYING_PROP, (e) -> {
-			if(wavDisplay.isPlaying()) {
-				// setup stop button
-				playButton.setAction(new StopAction(getEditor(), SpeechAnalysisEditorView.this));
-			} else {
-				playButton.setAction(new PlayAction(getEditor(), SpeechAnalysisEditorView.this));
-			}
-		});
-		wavDisplay.addMouseListener(contenxtMenuHandler);
+		timeModel = new TimeUIModel();
+		waveformTier = new SpeechAnalysisWaveformTier(this);
+//		wavDisplay.addMouseListener(contenxtMenuHandler);
 
-		Dimension prefSize = wavDisplay.getPreferredSize();
+		Timebar timebar = new Timebar(timeModel);
+		timebar.setBackground(Color.white);
+		timebar.setOpaque(true);
 
-		if(wavDisplayHeight < 0) wavDisplayHeight = prefSize.height;
+		tierPane = new TierPanel(new GridBagLayout());
+		addTier(timebar);
+		addTier(waveformTier);
+		
+//		// add plug-in tiers
+//		final JPanel tierPanel = initPlugins();
+//		contentPane.add(tierPanel);
 
-		prefSize.height = wavDisplayHeight;
-		if(prefSize.height < 0) prefSize.height = 0;
-		if(prefSize.height > MAX_TIER_HEIGHT) prefSize.height = MAX_TIER_HEIGHT;
-
-		wavDisplay.setPreferredSize(prefSize);
-
-		contentPane = new ContentPane(new VerticalLayout());
-
-		contentPane.add(wavDisplay);
-
-		sizer = new SpeechAnalysisDivider();
-		sizer.addMouseMotionListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				Dimension currentSize = wavDisplay.getSize();
-				Dimension prefSize = wavDisplay.getPreferredSize();
-
-				prefSize.height = currentSize.height + e.getY();
-				if(prefSize.height < 0) prefSize.height = 0;
-				if(prefSize.height > MAX_TIER_HEIGHT) prefSize.height = MAX_TIER_HEIGHT;
-				wavDisplayHeight = prefSize.height;
-
-				PrefHelper.getUserPreferences().putInt(WAV_DISPLAY_HEIGHT, wavDisplayHeight);
-
-				wavDisplay.setPreferredSize(prefSize);
-				contentPane.invalidate();
-				contentPane.revalidate();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-
-		});
-		contentPane.add(sizer);
-
-		// add plug-in tiers
-		final JPanel tierPanel = initPlugins();
-		contentPane.add(tierPanel);
-
-		final JScrollPane scroller = new JScrollPane(contentPane);
-		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		final JScrollPane scroller = new JScrollPane(tierPane);
+//		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scroller, BorderLayout.CENTER);
 
 		setupInputMap();
 		setupEditorActions();
 		setupTimeScrollbar();
 	}
+	
+	private int tierIdx = 0;
+	private void addTier(JComponent tierComp) {
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.weightx = 1.0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = tierIdx++;
+		
+		tierPane.add(tierComp, gbc);
+	}
 
 	private void setupTimeScrollbar() {
-		final Sampled samples = getWavDisplay().getSampled();
-		if(samples != null) {
-			float length = samples.getLength();
-			final int numTicks =
-					(length - getWavDisplay().getWindowLength() <= 0 ? 1 : (int)Math.ceil( (length - getWavDisplay().getWindowLength()) * 1000));
-
-			Runnable onEDT = () -> {
-				horizontalScroller.setEnabled(true);
-				horizontalScroller.setValueIsAdjusting(true);
-				horizontalScroller.setMinimum(0);
-				horizontalScroller.setMaximum(numTicks);
-				horizontalScroller.setUnitIncrement(100);
-				horizontalScroller.setBlockIncrement(1000);
-				horizontalScroller.setValue((int)Math.floor(getWavDisplay().getWindowStart() * 1000));
-				horizontalScroller.setValueIsAdjusting(false);
-			};
-			if(SwingUtilities.isEventDispatchThread())
-				onEDT.run();
-			else
-				SwingUtilities.invokeLater(onEDT);
-		} else {
-			horizontalScroller.setEnabled(false);
-		}
+//		final Sampled samples = getWavDisplay().getSampled();
+//		if(samples != null) {
+//			float length = samples.getLength();
+//			final int numTicks =
+//					(length - getWavDisplay().getWindowLength() <= 0 ? 1 : (int)Math.ceil( (length - getWavDisplay().getWindowLength()) * 1000));
+//
+//			Runnable onEDT = () -> {
+//				horizontalScroller.setEnabled(true);
+//				horizontalScroller.setValueIsAdjusting(true);
+//				horizontalScroller.setMinimum(0);
+//				horizontalScroller.setMaximum(numTicks);
+//				horizontalScroller.setUnitIncrement(100);
+//				horizontalScroller.setBlockIncrement(1000);
+//				horizontalScroller.setValue((int)Math.floor(getWavDisplay().getWindowStart() * 1000));
+//				horizontalScroller.setValueIsAdjusting(false);
+//			};
+//			if(SwingUtilities.isEventDispatchThread())
+//				onEDT.run();
+//			else
+//				SwingUtilities.invokeLater(onEDT);
+//		} else {
+//			horizontalScroller.setEnabled(false);
+//		}
 	}
 
 	private JPanel initPlugins() {
 		loadPlugins();
 		final JPanel retVal = new JPanel(new VerticalLayout());
-		for(SpeechAnalysisTier tier:pluginTiers) {
-			final JComponent comp = tier.getTierComponent();
-			comp.addMouseListener(contenxtMenuHandler);
-			retVal.add(comp);
-		}
+//		for(SpeechAnalysisTier tier:pluginTiers) {
+//			final JComponent comp = tier.getTierComponent();
+//			comp.addMouseListener(contenxtMenuHandler);
+//			retVal.add(comp);
+//		}
 		return retVal;
 	}
 
@@ -371,11 +340,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final ActionMap am = getActionMap();
 		final InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-		final String selectId = "select";
-		final SelectSegmentAction selectAct = new SelectSegmentAction(wavDisplay);
-		final KeyStroke selectKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		am.put(selectId, selectAct);
-		im.put(selectKs, selectId);
+//		final String selectId = "select";
+//		final SelectSegmentAction selectAct = new SelectSegmentAction(wavDisplay);
+//		final KeyStroke selectKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+//		am.put(selectId, selectAct);
+//		im.put(selectKs, selectId);
 
 		final String playId = "play";
 		final Action playAct = new PlayAction(getEditor(), this);
@@ -430,7 +399,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	/* toolbar actions */
 	public void play() {
-		wavDisplay.play();
+//		wavDisplay.play();
 	}
 
 	public void onExport() {
@@ -440,106 +409,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	}
 
-//	/**
-//	 * Generate audio file for wav display.
-//	 *
-//	 * The file will be placed in <proj_root>/__res/media/
-//	 */
-//	public void generateAudioFile() {
-//		final SessionEditor editor = getEditor();
-//		final Session session = editor.getSession();
-//		final SessionMediaModel mediaModel = editor.getMediaModel();
-//		
-//		if(mediaModel.isSessionMediaAvailable()) {
-//			File movFile = MediaLocator.findMediaFile(
-//				session.getMediaLocation(), editor.getProject(), session.getCorpus());
-//			int lastDot = movFile.getName().lastIndexOf(".");
-//			if(lastDot > 0) {
-//				String movExt = movFile.getName().substring(lastDot);
-//				if(movExt.equals(".wav")) {
-//					// already a wav, do nothing!
-//					final MessageDialogProperties props = new MessageDialogProperties();
-//					props.setParentWindow(getEditor());
-//					props.setTitle("Generate Wav");
-//					props.setHeader("Failed to generate wav");
-//					props.setMessage("Source file is already in wav format.");
-//					props.setRunAsync(false);
-//					props.setOptions(MessageDialogProperties.okOptions);
-//					NativeDialogs.showMessageDialog(props);
-//					return;
-//				}
-//				String audioFileName =
-//					movFile.getName().substring(0, movFile.getName().lastIndexOf(".")) +
-//						".wav";
-//				File parentFile = movFile.getParentFile();
-//				File resFile = new File(parentFile, audioFileName);
-//
-//				if(resFile.exists()) {
-//					// ask to overwrite
-//					final MessageDialogProperties props = new MessageDialogProperties();
-//					props.setParentWindow(getEditor());
-//					props.setTitle("Generate Wav");
-//					props.setHeader("Overwrite file?");
-//					props.setMessage("Wav file already exists, overwrite?");
-//					props.setRunAsync(false);
-//					props.setOptions(MessageDialogProperties.yesNoOptions);
-//					int retVal = NativeDialogs.showMessageDialog(props);
-//					if(retVal != 0) return;
-//				}
-//
-//				final VLCWavExporter exporter = new VLCWavExporter(movFile, resFile);
-//				final PhonTaskButton taskBtn = new PhonTaskButton(exporter);
-//				taskBtn.setTopLabelText("Media export - 0%");
-//				exporter.addTaskListener(new PhonTaskListener() {
-//
-//					@Override
-//					public void statusChanged(PhonTask task, TaskStatus oldStatus,
-//							TaskStatus newStatus) {
-//						if(newStatus == TaskStatus.FINISHED) {
-//							File audioFile = mediaModel.getSessionAudioFile();
-//							if(audioFile != null) {
-//								try {
-//									final PCMSampled sampled = new PCMSampled(audioFile);
-//									wavDisplay.setSampled(sampled);
-//									(new ResetAction(getEditor(), SpeechAnalysisEditorView.this)).actionPerformed(new ActionEvent(this, -1, "reset"));
-//								} catch (IOException e) {
-//									LOGGER.error( e.getLocalizedMessage(), e);
-//									ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
-//								}
-//							}
-//						}
-//						if(newStatus != TaskStatus.RUNNING) {
-//							btmPanel.remove(taskBtn);
-//							btmPanel.revalidate();
-//						}
-//					}
-//
-//					@Override
-//					public void propertyChanged(PhonTask task, String property,
-//							Object oldValue, Object newValue) {
-//						if(PhonTask.PROGRESS_PROP.equals(property)) {
-//							taskBtn.setTopLabelText("Media export - " +
-//									(int)Math.round(100.0*(float)newValue) + "%");
-//						}
-//					}
-//
-//				});
-//
-//				messageButton.setVisible(false);
-//
-//				btmPanel.add(taskBtn, null, 0);
-//
-//				getEditor().getStatusBar().watchTask(exporter);
-//				PhonWorker.getInstance().invokeLater(exporter);
-//			}
-//		}
-//	}
-
 	public void shutdown() {
 	}
 
-	public PCMSegmentView getWavDisplay() {
-		return this.wavDisplay;
+	public TimeUIModel getTimeModel() {
+		return this.timeModel;
+	}
+	
+	public SpeechAnalysisWaveformTier getWaveformTier() {
+		return this.waveformTier;
 	}
 
 	private final static long CLIP_EXTENSION_MIN = 500L;
@@ -554,21 +432,30 @@ public class SpeechAnalysisEditorView extends EditorView {
 		if(utt == null) return;
 
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
-				
-		wavDisplay.setValuesAdusting(true);
-		if(wavDisplay.getSampled() == null) {
-			if(mediaModel.isSessionAudioAvailable()) {
-				try {
-					final PCMSampled sampled = new PCMSampled(mediaModel.getSessionAudioFile());
-					wavDisplay.setSampled(sampled);
-				} catch (IOException e) {
-					ToastFactory.makeToast(e.getLocalizedMessage()).start(getToolbar());
-					LOGGER.error( e.getLocalizedMessage(), e);
-				}
+		
+		try {
+			LongSound ls = mediaModel.getSharedSessionAudio();
+			if(waveformTier.getWaveformDisplay().getLongSound() != ls) {
+				timeModel.setStartTime(0.0f);
+				timeModel.setEndTime(ls.length());
+				timeModel.setPixelsPerSecond(100.0f);
+				waveformTier.getWaveformDisplay().setLongSound(ls);
 			}
+		} catch (IOException e) {
+			LogUtil.severe(e);
+		}
+		
+		if(currentRecordInterval != null) {
+			timeModel.removeInterval(currentRecordInterval);
+			currentRecordInterval = null;
+		}
+		
+		if(selectionInterval != null) {
+			timeModel.removeInterval(selectionInterval);
+			selectionInterval = null;
 		}
 
-		if(utt != null && wavDisplay.getSampled() != null) {
+		if(utt != null && waveformTier.getWaveformDisplay().getLongSound() != null) {
 			final MediaSegment segment = utt.getSegment().getGroup(0);
 
 			double length = (segment.getEndValue() - segment.getStartValue());
@@ -578,20 +465,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 			if(preferredClipExtension > CLIP_EXTENSION_MAX)
 				preferredClipExtension = CLIP_EXTENSION_MAX;
 
-			float clipStart =
-					(Math.round(segment.getStartValue() - preferredClipExtension)) / 1000.0f;
-			float displayStart =
-				Math.max(wavDisplay.getSampled().getStartTime(),
-						clipStart);
-			float segStart =
-					segment.getStartValue() / 1000.0f;
-			float segLength =
-				(segment.getEndValue() - segment.getStartValue()) / 1000.0f;
-			float displayLength =
-				segLength + ((2*preferredClipExtension) / 1000.0f);
+			float clipStart = (Math.round(segment.getStartValue() - preferredClipExtension)) / 1000.0f;
+			float displayStart = Math.max(0.0f, clipStart);
+			float segStart = segment.getStartValue() / 1000.0f;
+			float segLength = (segment.getEndValue() - segment.getStartValue()) / 1000.0f;
+			float displayLength = segLength + ((2*preferredClipExtension) / 1000.0f);
+			
 			if(segLength == 0.0f) {
 				// using a default display length of 3.0 seconds (or length of sampled)
-				displayLength = Math.min(3.0f, wavDisplay.getSampled().getLength());
+				displayLength = Math.min(3.0f, waveformTier.getWaveformDisplay().getLongSound().length());
 			} else if(segLength > 60.0f && !force) {
 				messageButton.setTopLabelText("<html><b>Segment not loaded</b></html>");
 				messageButton.setBottomLabelText("Segment length exceeds 60 seconds, click this message to force loading.");
@@ -600,24 +482,26 @@ public class SpeechAnalysisEditorView extends EditorView {
 				final PhonUIAction forceUpdateAct = new PhonUIAction(this, "update", true);
 				messageButton.setDefaultAction(forceUpdateAct);
 				
-				wavDisplay.setVisible(false);
+				waveformTier.getWaveformDisplay().setVisible(false);
 				messageButton.setVisible(true);
 			} else {
-				if((displayStart + displayLength) > wavDisplay.getSampled().getLength()) {
-					displayStart = wavDisplay.getSampled().getLength() - displayLength;
+				if((displayStart + displayLength) > waveformTier.getWaveformDisplay().getLongSound().length()) {
+					displayStart = waveformTier.getWaveformDisplay().getLongSound().length() - displayLength;
 	
-					if(displayStart < wavDisplay.getSampled().getStartTime()) {
-						displayStart = wavDisplay.getSampled().getStartTime();
-						displayLength = wavDisplay.getSampled().getLength();
+					if(displayStart < 0.0f) {
+						displayStart = 0.0f;
+						displayLength = waveformTier.getWaveformDisplay().getLongSound().length();
 					}
 				}
-	
-				wavDisplay.setWindowStart(displayStart);
-				wavDisplay.setWindowLength(displayLength);
-				wavDisplay.setSegmentStart(segStart);
-				wavDisplay.setSegmentLength(segLength);
-	
-				wavDisplay.setVisible(true);
+
+				int displayWidth = getVisibleRect().width;
+				float pxPerS = displayWidth / displayLength;
+				
+				timeModel.setPixelsPerSecond(pxPerS);
+				currentRecordInterval = timeModel.addInterval(segStart, segStart+segLength);
+				scrollToTime(displayStart);
+				
+				waveformTier.getWaveformDisplay().setVisible(true);
 				messageButton.setVisible(false);
 			}
 		} else {
@@ -657,8 +541,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		setupTimeScrollbar();
 		revalidate();
-		wavDisplay.setValuesAdusting(false);
-		wavDisplay.repaint();
+		
+		waveformTier.getWaveformDisplay().repaint();
+	}
+	
+	public void scrollToTime(float time) {
+		var x = getTimeModel().xForTime(time);
+		var rect = tierPane.getVisibleRect();
+		rect.x = (int)x;
+		tierPane.scrollRectToVisible(rect);
 	}
 	
 	/** Editor events */
@@ -681,9 +572,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private void updateAndChangedRecord() {
 		if(lastRecord != getEditor().getCurrentRecordIndex()) {
 			update();
-
-			wavDisplay.setSelectionStart(0.0f);
-			wavDisplay.setSelectionLength(0.0f);
 		}
 		lastRecord = getEditor().getCurrentRecordIndex();
 	}
@@ -691,14 +579,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
-		wavDisplay.setSampled(null);
+//		wavDisplay.setSampled(null);
 		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
 	}
 	
 	@RunOnEDT
 	public void onSessionAudioAvailable(EditorEvent ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
-		wavDisplay.setSampled(null);
+//		wavDisplay.setSampled(null);
 		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
 	}
 
@@ -723,27 +611,27 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
 
-		if(getWavDisplay().isPlaying()) {
-			retVal.add(new StopAction(getEditor(), this));
-		} else {
-			retVal.add(new PlayAction(getEditor(), this));
-			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(getWavDisplay()));
-			retVal.add(loopItem);
-
-			// output device selection
-			final JMenu mixerMenu = new JMenu("Output Device");
-			final Info[] mixers = AudioSystem.getMixerInfo();
-			for(Info mixerInfo:mixers) {
-				// if we have no source lines, we can't use this device
-				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
-				final SelectMixerAction mixerAct = new SelectMixerAction(getWavDisplay(), mixerInfo);
-				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
-						getWavDisplay().getMixerInfo() == mixerInfo);
-				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
-			}
-			retVal.add(mixerMenu);
-		}
-		retVal.addSeparator();
+//		if(getWavDisplay().isPlaying()) {
+//			retVal.add(new StopAction(getEditor(), this));
+//		} else {
+//			retVal.add(new PlayAction(getEditor(), this));
+//			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(getWavDisplay()));
+//			retVal.add(loopItem);
+//
+//			// output device selection
+//			final JMenu mixerMenu = new JMenu("Output Device");
+//			final Info[] mixers = AudioSystem.getMixerInfo();
+//			for(Info mixerInfo:mixers) {
+//				// if we have no source lines, we can't use this device
+//				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
+//				final SelectMixerAction mixerAct = new SelectMixerAction(getWavDisplay(), mixerInfo);
+//				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
+//						getWavDisplay().getMixerInfo() == mixerInfo);
+//				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
+//			}
+//			retVal.add(mixerMenu);
+//		}
+//		retVal.addSeparator();
 		retVal.add(new ResetAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this, false));
@@ -776,36 +664,36 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 	};
 
-	private final PropertyChangeListener segmentListener = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			// don't update while adjusting values
-			if(getWavDisplay().isValuesAdjusting()) return;
-
-			final float segmentStart = getWavDisplay().getSegmentStart();
-			final float segmentEnd = getWavDisplay().getSegmentStart() + getWavDisplay().getSegmentLength();
-
-			final long newSegStart = Math.round(segmentStart * 1000.0f);
-			final long newSegEnd = Math.round(segmentEnd * 1000.0f);
-
-			final SessionFactory factory = SessionFactory.newFactory();
-			final MediaSegment newSegment = factory.createMediaSegment();
-			newSegment.setStartValue(newSegStart);
-			newSegment.setEndValue(newSegEnd);
-			newSegment.setUnitType(MediaUnit.Millisecond);
-
-			final SessionEditor editor = getEditor();
-			final Record record = editor.currentRecord();
-			final Tier<MediaSegment> segmentTier = record.getSegment();
-
-			final TierEdit<MediaSegment> segmentEdit =
-					new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
-			segmentEdit.setFireHardChangeOnUndo(true);
-			editor.getUndoSupport().postEdit(segmentEdit);
-		}
-
-	};
+//	private final PropertyChangeListener segmentListener = new PropertyChangeListener() {
+//
+//		@Override
+//		public void propertyChange(PropertyChangeEvent evt) {
+//			// don't update while adjusting values
+//			if(getWavDisplay().isValuesAdjusting()) return;
+//
+//			final float segmentStart = getWavDisplay().getSegmentStart();
+//			final float segmentEnd = getWavDisplay().getSegmentStart() + getWavDisplay().getSegmentLength();
+//
+//			final long newSegStart = Math.round(segmentStart * 1000.0f);
+//			final long newSegEnd = Math.round(segmentEnd * 1000.0f);
+//
+//			final SessionFactory factory = SessionFactory.newFactory();
+//			final MediaSegment newSegment = factory.createMediaSegment();
+//			newSegment.setStartValue(newSegStart);
+//			newSegment.setEndValue(newSegEnd);
+//			newSegment.setUnitType(MediaUnit.Millisecond);
+//
+//			final SessionEditor editor = getEditor();
+//			final Record record = editor.currentRecord();
+//			final Tier<MediaSegment> segmentTier = record.getSegment();
+//
+//			final TierEdit<MediaSegment> segmentEdit =
+//					new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
+//			segmentEdit.setFireHardChangeOnUndo(true);
+//			editor.getUndoSupport().postEdit(segmentEdit);
+//		}
+//
+//	};
 
 	private final MouseInputAdapter contenxtMenuHandler = new MouseInputAdapter() {
 
@@ -827,20 +715,20 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private JMenu createContextMenu() {
 		final JMenu menu = new JMenu();
-
-		final SelectSegmentAction selectSegAct = new SelectSegmentAction(wavDisplay);
-		selectSegAct.putValue(Action.NAME, "Set segment for current record");
-		selectSegAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
-		menu.add(new JMenuItem(selectSegAct));
-
-		if(wavDisplay.hasSelection()) {
-			final NewRecordAction newRecordAct = new NewRecordAction(getEditor(), this);
-			menu.add(newRecordAct);
-		}
-
-		menu.addSeparator();
-
-		wavDisplay.getUI().addContextMenuItems(menu);
+//
+//		final SelectSegmentAction selectSegAct = new SelectSegmentAction(wavDisplay);
+//		selectSegAct.putValue(Action.NAME, "Set segment for current record");
+//		selectSegAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+//		menu.add(new JMenuItem(selectSegAct));
+//
+//		if(wavDisplay.hasSelection()) {
+//			final NewRecordAction newRecordAct = new NewRecordAction(getEditor(), this);
+//			menu.add(newRecordAct);
+//		}
+//
+//		menu.addSeparator();
+//
+//		wavDisplay.getUI().addContextMenuItems(menu);
 
 		for(SpeechAnalysisTier tier:getPluginTiers()) {
 			tier.addMenuItems(menu, true);
@@ -855,15 +743,28 @@ public class SpeechAnalysisEditorView extends EditorView {
 		menu.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
 	}
 
-	private class ContentPane extends JPanel implements Scrollable {
+	private class TierPanel extends JPanel implements Scrollable {
+		
+		public TierPanel() {
+			super();
+			setOpaque(false);
+		}
 
-		public ContentPane(LayoutManager layout) {
+		public TierPanel(boolean isDoubleBuffered) {
+			super(isDoubleBuffered);
+		}
+
+		public TierPanel(LayoutManager layout, boolean isDoubleBuffered) {
+			super(layout, isDoubleBuffered);
+		}
+
+		public TierPanel(LayoutManager layout) {
 			super(layout);
 		}
 
 		@Override
 		public Dimension getPreferredScrollableViewportSize() {
-			return null;
+			return getPreferredSize();
 		}
 
 		@Override
@@ -873,19 +774,21 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		@Override
 		public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-			return 100;
+			return (int)visibleRect.getWidth();
 		}
 
 		@Override
 		public boolean getScrollableTracksViewportWidth() {
-			return true;
+			return false;
 		}
 
 		@Override
 		public boolean getScrollableTracksViewportHeight() {
 			return false;
 		}
-
+		
 	}
+	
+	
 
 }

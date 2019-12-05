@@ -41,26 +41,26 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		if(!getView().getWavDisplay().hasSelection()) return;
-		
-		final Record currentRecord = getEditor().currentRecord();
-		
-		final float startTime = getView().getWavDisplay().getSelectionStart();
-		final float endTime = startTime + getView().getWavDisplay().getSelectionLength();
-		
-		final SessionFactory factory = SessionFactory.newFactory();
-		final Record record = factory.createRecord();
-		record.setSpeaker(currentRecord.getSpeaker());
-		record.addGroup();
-		
-		final MediaSegment segment = factory.createMediaSegment();
-		segment.setStartValue(startTime*1000.0f);
-		segment.setEndValue(endTime*1000.0f);
-		
-		record.getSegment().setGroup(0, segment);
-		
-		final AddRecordEdit edit = new AddRecordEdit(getEditor(), record, getEditor().getCurrentRecordIndex()+1);
-		getEditor().getUndoSupport().postEdit(edit);
+//		if(!getView().getWavDisplay().hasSelection()) return;
+//		
+//		final Record currentRecord = getEditor().currentRecord();
+//		
+//		final float startTime = getView().getWavDisplay().getSelectionStart();
+//		final float endTime = startTime + getView().getWavDisplay().getSelectionLength();
+//		
+//		final SessionFactory factory = SessionFactory.newFactory();
+//		final Record record = factory.createRecord();
+//		record.setSpeaker(currentRecord.getSpeaker());
+//		record.addGroup();
+//		
+//		final MediaSegment segment = factory.createMediaSegment();
+//		segment.setStartValue(startTime*1000.0f);
+//		segment.setEndValue(endTime*1000.0f);
+//		
+//		record.getSegment().setGroup(0, segment);
+//		
+//		final AddRecordEdit edit = new AddRecordEdit(getEditor(), record, getEditor().getCurrentRecordIndex()+1);
+//		getEditor().getUndoSupport().postEdit(edit);
 	}
 
 }

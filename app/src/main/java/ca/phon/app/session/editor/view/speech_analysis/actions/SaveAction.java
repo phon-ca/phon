@@ -45,7 +45,7 @@ public class SaveAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		getView().getWavDisplay().save();
+//		getView().getWavDisplay().save();
 	}
 
 }
