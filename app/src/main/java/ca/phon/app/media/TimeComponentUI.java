@@ -76,7 +76,7 @@ public class TimeComponentUI extends ComponentUI {
 	}
 	
 	public void paintMarker(Graphics2D g2, Marker marker) {
-		if(marker.getOwner() != null && marker.getOwner() != timeComp) return;
+		if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) return;
 		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
 		
 		final TimeUIModel timeModel = timeComp.getTimeModel();
@@ -90,7 +90,7 @@ public class TimeComponentUI extends ComponentUI {
 	}
 	
 	public void paintInterval(Graphics2D g2, Interval interval) {
-		if(interval.getOwner() != null && interval.getOwner() != timeComp) return;
+		if(!timeComp.isRepaintAll() && interval.getOwner() != null && interval.getOwner() != timeComp) return;
 		paintMarker(g2, interval.getStartMarker());
 		paintMarker(g2, interval.getEndMarker());
 	}
@@ -197,7 +197,7 @@ public class TimeComponentUI extends ComponentUI {
 		
 	private PropertyChangeListener intervalTimeListener = (e) -> {
 		final Interval interval = (Interval)e.getSource();
-		if(interval.getOwner() != null && interval.getOwner() != timeComp) return;
+		if(!timeComp.isRepaintAll() && interval.getOwner() != null && interval.getOwner() != timeComp) return;
 		if(!interval.isRepaintOnTimeChange()) return;
 		
 		synchronized(interval) {
@@ -242,7 +242,7 @@ public class TimeComponentUI extends ComponentUI {
 	
 	private PropertyChangeListener markerTimeListener = (e) -> {
 		Marker marker = (Marker)e.getSource();
-		if(marker.getOwner() != null && marker.getOwner() != timeComp) return;
+		if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) return;
 		if(!marker.isRepaintOnTimeChange()) return;
 		
 		if("time".equals(e.getPropertyName()) || e.getPropertyName().endsWith(".time")) {
@@ -273,10 +273,10 @@ public class TimeComponentUI extends ComponentUI {
 			}
 			
 			for(Interval interval:timeComp.getTimeModel().getIntervals()) {
-				if(interval.getOwner() != null && interval.getOwner() != timeComp) continue;
+				if(!timeComp.isRepaintAll() && interval.getOwner() != null && interval.getOwner() != timeComp) continue;
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
-
+	
 				boolean insideStartMarker = (p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING);
 				boolean insideEndMarker = (p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING);
 						
@@ -298,7 +298,7 @@ public class TimeComponentUI extends ComponentUI {
 			
 			if(getCurrentlyDraggedMarker() == null) {
 				for(Marker marker:timeComp.getTimeModel().getMarkers()) {
-					if(marker.getOwner() != null && marker.getOwner() != timeComp) continue;
+					if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) continue;
 					int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 	
 					if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
@@ -307,12 +307,12 @@ public class TimeComponentUI extends ComponentUI {
 				}
 			}
 		}
-
+	
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			endDrag();
 		}
-
+	
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if(currentlyDraggedMarker != null) {
@@ -355,10 +355,10 @@ public class TimeComponentUI extends ComponentUI {
 			var p = e.getPoint();
 			
 			for(Interval interval:timeComp.getTimeModel().getIntervals()) {
-				if(interval.getOwner() != null && interval.getOwner() != timeComp) continue;
+				if(!timeComp.isRepaintAll() && interval.getOwner() != null && interval.getOwner() != timeComp) continue;
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
-
+	
 				if((p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING) || 
 						(p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING)) {
 					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
@@ -370,9 +370,9 @@ public class TimeComponentUI extends ComponentUI {
 			}
 			
 			for(Marker marker:timeComp.getTimeModel().getMarkers()) {
-				if(marker.getOwner() != null && marker.getOwner() != timeComp) continue;
+				if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) continue;
 				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
-
+	
 				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
 					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 				}
@@ -380,5 +380,5 @@ public class TimeComponentUI extends ComponentUI {
 		}
 		
 	}
-	
+
 }

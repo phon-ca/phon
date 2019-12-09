@@ -108,6 +108,17 @@ public abstract class TimeComponent extends JComponent {
 	public Color getSelectionColor() {
 		return this.selectionColor;
 	}
+	
+	/**
+	 * Flag for repaint events on intervals which do not belong to this component.
+	 * If <code>true</code> this component will receive all repaint events for intervals
+	 * registered with the same {@link TimeUIModel} 
+	 * 
+	 * @return <code>true</code> if repaints all interval events, <code>false</code> otherwise
+	 */
+	public boolean isRepaintAll() {
+		return false;
+	}
 		
 	/**
 	 * Repaint rectangle between given time values

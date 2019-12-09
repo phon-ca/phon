@@ -1,7 +1,12 @@
 package ca.phon.app.media;
 
+import java.awt.Rectangle;
+
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+
+import ca.phon.app.media.TimeUIModel.Interval;
+import ca.phon.app.media.TimeUIModel.Marker;
 
 public class Timebar extends TimeComponent {
 
@@ -55,6 +60,49 @@ public class Timebar extends TimeComponent {
 		var oldVal = this.majorTickHeight;
 		this.majorTickHeight = majorTickHeight;
 		super.firePropertyChange("majorTickHeight", oldVal, majorTickHeight);
+	}
+	
+	public boolean isRepaintAll() {
+		return true;
+	}
+
+	@Override
+	public void repaint(float startTime, float endTime) {
+		repaintAll();
+	}
+
+	@Override
+	public void repaint(long tn, float startTime, float endTime) {
+		repaintAll();
+	}
+
+	@Override
+	public void repaintInterval(Interval interval) {
+		repaintAll();
+	}
+
+	@Override
+	public void repaintInterval(long tn, Interval interval) {
+		repaintAll();
+	}
+
+	@Override
+	public void repaintMarker(Marker marker) {
+		repaintAll();
+	}
+
+	@Override
+	public void repaintMarker(long tn, Marker marker) {
+		repaintAll();
+	}
+	
+	@Override
+	public void repaint(Rectangle clip) {
+		repaintAll();
+	}
+	
+	public void repaintAll() {
+		super.repaint(getVisibleRect());
 	}
 	
 }

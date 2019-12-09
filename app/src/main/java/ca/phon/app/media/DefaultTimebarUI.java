@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
@@ -15,10 +16,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
+import ca.phon.app.media.TimeUIModel.Marker;
 import ca.phon.util.MsFormatter;
 
 public class DefaultTimebarUI extends TimebarUI {
@@ -66,12 +72,10 @@ public class DefaultTimebarUI extends TimebarUI {
 	
 	private void installListeners(Timebar timebar) {
 		timebar.addPropertyChangeListener(propListener);
-//		timebar.getModel().addPropertyChangeListener(propListener);
 	}
 
 	private void uninstallListeners(Timebar timebar) {
 		timebar.removePropertyChangeListener(propListener);
-//		timebar.getModel().removePropertyChangeListener(propListener);
 	}
 	
 	@Override
@@ -81,8 +85,8 @@ public class DefaultTimebarUI extends TimebarUI {
 		Font font = timebar.getFont();
 		FontMetrics fm = timebar.getFontMetrics(font);
 		
-		int prefHeight = timebar.getTimeModel().getTimeInsets().top + timebar.getTimeModel().getTimeInsets().bottom + 
-				(Math.max(timebar.getMajorTickHeight(), fm.getHeight() + timebar.getMinorTickHeight()));
+		int prefHeight =
+				(fm.getHeight() * 2) + timebar.getMinorTickHeight();
 		retVal.height = prefHeight;
 		
 		return retVal;
@@ -98,19 +102,13 @@ public class DefaultTimebarUI extends TimebarUI {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	
 		paintTicks(g2, timebar);
-		paintLabels(g2, timebar);
-	}
-	
-	private float majorTickLength() {
-		float pixelsPerSecond = timebar.getTimeModel().getPixelsPerSecond();
-		return (100.0f / pixelsPerSecond);
-	}
-	
-	private float minorTickLength() {
-		return majorTickLength() / 10.0f;
+		paintMarkers(g2, timebar);
 	}
 	
 	protected void paintTicks(Graphics2D g2, Timebar timebar) {
+		Font font = timebar.getFont();
+		FontMetrics fm = g2.getFontMetrics(font);
+		
 		Stroke minorTickStroke = new BasicStroke(1.0f);
 		Stroke majorTickStroke = new BasicStroke(1.2f);
 		
@@ -118,75 +116,66 @@ public class DefaultTimebarUI extends TimebarUI {
 		
 		Line2D.Double tickLine = new Line2D.Double();
 		
-		// determine start/end times for clip rect
-		float clipStart = timebar.timeAtX(g2.getClipBounds().getX());
-		float clipEnd = timebar.timeAtX(g2.getClipBounds().getMaxX());
+		Rectangle clipRect = timebar.getVisibleRect();
+		int leftInset = timebar.getTimeModel().getTimeInsets().left;
+		int rightInset = timebar.getTimeModel().getTimeInsets().right;
+		int startX = (clipRect.x < leftInset ? leftInset : 
+			// start at most recent major tick
+			clipRect.x - (clipRect.x % 100));
 		
-		float startTime = clipStart - (clipStart % majorTickLength());
-		float endTime = clipEnd + (clipEnd % majorTickLength());
-		
-		for(float time = Math.max(timebar.getTimeModel().getStartTime(), startTime); 
-				time <= Math.min(timebar.getTimeModel().getEndTime(), endTime); 
-				time += majorTickLength()) {
-			time = (float)TimeUIModel.roundTime(time);
-			var x = timebar.getTimeModel().xForTime(time);
-			g2.setStroke(majorTickStroke);
-			
-			tickLine.setLine(x, 0, x, timebar.getMajorTickHeight());
-			g2.draw(tickLine);
-			
-			for(float mt = time + minorTickLength(); mt <= time + (majorTickLength()-(minorTickLength()/2)); mt += minorTickLength()) {
-				mt = (float)TimeUIModel.roundTime(mt);
-				if(mt > timebar.getTimeModel().getEndTime()) break;
-				var x2 = timebar.getTimeModel().xForTime(mt);
+		for(int tickPos = startX; 
+				tickPos <= clipRect.x + clipRect.width && tickPos <= timebar.getWidth() - rightInset; 
+				tickPos += 10) {
+			if( (tickPos - leftInset) % 100 == 0 ) {
+				g2.setStroke(majorTickStroke);
+				tickLine.setLine(tickPos, fm.getHeight() - 2, tickPos, fm.getHeight()- 2 + timebar.getMajorTickHeight());
 				
+				if( (tickPos - leftInset) % 200 == 0 ) {
+					long timeMs = (long)(timebar.timeAtX(tickPos) * 1000.0f);
+					String timeStr = MsFormatter.msToDisplayString(timeMs);
+					
+					Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
+					timeRect.setRect(tickPos, 0, timeRect.getWidth(), timeRect.getHeight());
+					g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + fm.getAscent()));
+				}
+			} else {
 				g2.setStroke(minorTickStroke);
-				
-				tickLine.setLine(x2, 0, x2, timebar.getMinorTickHeight());
-				g2.draw(tickLine);
+				tickLine.setLine(tickPos, fm.getHeight(), tickPos, fm.getHeight() + timebar.getMinorTickHeight());
 			}
+			g2.draw(tickLine);
 		}
 	}
 	
-	protected void paintLabels(Graphics2D g2, Timebar timebar) {
+	private void paintMarkers(Graphics2D g2, Timebar timebar) {
 		Font font = timebar.getFont();
 		FontMetrics fm = g2.getFontMetrics(font);
 		
-		g2.setFont(timebar.getFont());
-		g2.setColor(Color.BLACK);
+		List<Marker> markerList = new ArrayList<>();
+		markerList.addAll(timebar.getTimeModel().getMarkers());
+		timebar.getTimeModel().getIntervals().forEach( (i) -> {
+			markerList.add(i.getStartMarker());
+			markerList.add(i.getEndMarker());
+		});
+		markerList.sort( (m1, m2) -> {
+			return Float.valueOf(m1.getTime()).compareTo(m2.getTime());
+		});
 		
-		// determine start/end times for clip rect
-		float clipStart = timebar.timeAtX(g2.getClipBounds().getX());
-		float clipEnd = timebar.timeAtX(g2.getClipBounds().getMaxX());
+		int markerY = fm.getHeight() + timebar.getMinorTickHeight();
 		
-		float startTime = clipStart - (clipStart % majorTickLength());
-		float endTime = clipEnd + (clipEnd % majorTickLength());
-		
-		Rectangle2D lastTimeRect = null;
-		for(float time = Math.max(timebar.getTimeModel().getStartTime(), startTime); 
-				time <= Math.min(timebar.getTimeModel().getEndTime(), endTime); 
-				time += majorTickLength()) {
+		Map<Marker, Rectangle2D> markerRects = new HashMap<>();
+		for(Marker marker:markerList) {
+			int markerX = (int)Math.round(timebar.xForTime(marker.getTime()));
 			
-			float m = time % majorTickLength();
-			if(m == 0.0f) {
-				float t = time / majorTickLength();
-				if(t % 2 == 1) continue;
-			}
+			g2.setColor(marker.getColor());
 			
-			time = (float)TimeUIModel.roundTime(time);
-			long timeMs = (long)(time * 1000.0f);
+			long timeMs = (long)(marker.getTime() * 1000.0f);
 			String timeStr = MsFormatter.msToDisplayString(timeMs);
-						
-			var x = timebar.getTimeModel().xForTime(time);
-			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
-			timeRect.setRect(x, timebar.getMinorTickHeight(), timeRect.getWidth(), timeRect.getHeight());
 			
-			if(lastTimeRect == null || !lastTimeRect.intersects(timeRect)) {
-				if(timeRect.intersects(g2.getClipBounds())) {
-					g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + timeRect.getHeight()));
-				}
-				lastTimeRect = timeRect;
-			}
+			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
+			timeRect.setRect(markerX, markerY, timeRect.getWidth(), timeRect.getHeight());
+			g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + fm.getAscent()));
+			
+			markerRects.put(marker, timeRect);
 		}
 	}
 	
