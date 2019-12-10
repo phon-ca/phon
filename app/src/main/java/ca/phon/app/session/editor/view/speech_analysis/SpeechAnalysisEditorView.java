@@ -65,6 +65,7 @@ import org.jdesktop.swingx.VerticalLayout;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.media.TimeUIModel.Interval;
+import ca.phon.app.media.TimeUIModel.Marker;
 import ca.phon.app.media.Timebar;
 import ca.phon.app.media.WaveformDisplay;
 import ca.phon.app.session.EditorViewAdapter;
@@ -145,6 +146,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private SpeechAnalysisWaveformTier waveformTier;
 	
 	/**
+	 * Cursor
+	 */
+	private Marker cursorMarker;
+	
+	/**
 	 * Current record interval
 	 */
 	private Interval currentRecordInterval;
@@ -172,15 +178,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JPanel errorPanel;
 	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
 
-	private final static String WAV_DISPLAY_HEIGHT = "SpeechAnalysisView.wavDisplayHeight";
-	private final int DEFAULT_WAV_DISPLAY_HEIGHT = 100;
-	private JComponent sizer;
-	private int wavDisplayHeight =
-			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, DEFAULT_WAV_DISPLAY_HEIGHT);
-
-//	private JScrollBar horizontalScroller;
-//	private volatile boolean isDragging = false;
-
 	private final List<SpeechAnalysisTier> pluginTiers =
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
 
@@ -189,32 +186,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		init();
 		update();
-	}
-
-	private void setupEditorActions() {
-		final DelegateEditorAction sessionChangedAct =
-			new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, sessionChangedAct);
-
-		final DelegateEditorAction recordChangedAct =
-				new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
-
-		final DelegateEditorAction recordRefershAct =
-				new DelegateEditorAction(this, "onRecordRefresh");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, recordRefershAct);
-
-		final DelegateEditorAction sessionMediaChangedAct =
-				new DelegateEditorAction(this, "onSessionMediaChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
-
-		final DelegateEditorAction segmentChangedAct =
-				new DelegateEditorAction(this, "onMediaSegmentChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
-		
-		final DelegateEditorAction onSessionAudioAvailableAct = 
-				new DelegateEditorAction(this, "onSessionAudioAvailable");
-		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
 	}
 
 	private void loadPlugins() {
@@ -227,7 +198,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 			try {
 				// ANYTHING can happen during plug-in object creation,
 				// try to catch exceptions which the plug-in lets through
-				pluginTiers.add(extraTier.getFactory().createObject(this));
+				SpeechAnalysisTier tier = extraTier.getFactory().createObject(this);
+				addTier(tier);
+				pluginTiers.add(tier);
 			} catch (Exception e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 			}
@@ -263,17 +236,13 @@ public class SpeechAnalysisEditorView extends EditorView {
 		addTier(timebar);
 		addTier(waveformTier);
 		
-//		// add plug-in tiers
-//		final JPanel tierPanel = initPlugins();
-//		contentPane.add(tierPanel);
-
+		loadPlugins();
+		
 		final JScrollPane scroller = new JScrollPane(tierPane);
-//		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scroller, BorderLayout.CENTER);
 
 		setupInputMap();
 		setupEditorActions();
-		setupTimeScrollbar();
 	}
 	
 	private int tierIdx = 0;
@@ -289,44 +258,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		tierPane.add(tierComp, gbc);
 	}
-
-	private void setupTimeScrollbar() {
-//		final Sampled samples = getWavDisplay().getSampled();
-//		if(samples != null) {
-//			float length = samples.getLength();
-//			final int numTicks =
-//					(length - getWavDisplay().getWindowLength() <= 0 ? 1 : (int)Math.ceil( (length - getWavDisplay().getWindowLength()) * 1000));
-//
-//			Runnable onEDT = () -> {
-//				horizontalScroller.setEnabled(true);
-//				horizontalScroller.setValueIsAdjusting(true);
-//				horizontalScroller.setMinimum(0);
-//				horizontalScroller.setMaximum(numTicks);
-//				horizontalScroller.setUnitIncrement(100);
-//				horizontalScroller.setBlockIncrement(1000);
-//				horizontalScroller.setValue((int)Math.floor(getWavDisplay().getWindowStart() * 1000));
-//				horizontalScroller.setValueIsAdjusting(false);
-//			};
-//			if(SwingUtilities.isEventDispatchThread())
-//				onEDT.run();
-//			else
-//				SwingUtilities.invokeLater(onEDT);
-//		} else {
-//			horizontalScroller.setEnabled(false);
-//		}
-	}
-
-	private JPanel initPlugins() {
-		loadPlugins();
-		final JPanel retVal = new JPanel(new VerticalLayout());
-//		for(SpeechAnalysisTier tier:pluginTiers) {
-//			final JComponent comp = tier.getTierComponent();
-//			comp.addMouseListener(contenxtMenuHandler);
-//			retVal.add(comp);
-//		}
-		return retVal;
-	}
-
+	
 	@Override
 	public String getName() {
 		return VIEW_TITLE;
@@ -402,18 +334,20 @@ public class SpeechAnalysisEditorView extends EditorView {
 //		wavDisplay.play();
 	}
 
-	public void onExport() {
-	}
-
-	public void showMore() {
-
-	}
-
-	public void shutdown() {
-	}
-
 	public TimeUIModel getTimeModel() {
 		return this.timeModel;
+	}
+	
+	public Marker getCursorMarker() {
+		return this.cursorMarker;
+	}
+	
+	public Interval getSelectionInterval() {
+		return this.selectionInterval;
+	}
+	
+	public Interval getCurrentRecordInterval() {
+		return this.currentRecordInterval;
 	}
 	
 	public SpeechAnalysisWaveformTier getWaveformTier() {
@@ -423,40 +357,18 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private final static long CLIP_EXTENSION_MIN = 500L;
 	private final static long CLIP_EXTENSION_MAX = 1000L;
 
-	public void update() {
-		update(false);
-	}
-	
-	public void update(boolean force) {
-		Record utt = getEditor().currentRecord();
-		if(utt == null) return;
-
-		SessionMediaModel mediaModel = getEditor().getMediaModel();
+	private void setupTimeModel() {
+		float startTime = 0.0f;
+		float pxPerS = 100.0f;
+		float endTime = 0.0f;
+		float scrollTo = 0.0f;
 		
-		try {
-			LongSound ls = mediaModel.getSharedSessionAudio();
-			if(waveformTier.getWaveformDisplay().getLongSound() != ls) {
-				timeModel.setStartTime(0.0f);
-				timeModel.setEndTime(ls.length());
-				timeModel.setPixelsPerSecond(100.0f);
-				waveformTier.getWaveformDisplay().setLongSound(ls);
-			}
-		} catch (IOException e) {
-			LogUtil.severe(e);
-		}
-		
-		if(currentRecordInterval != null) {
+		if(currentRecordInterval != null)
 			timeModel.removeInterval(currentRecordInterval);
-			currentRecordInterval = null;
-		}
-		
-		if(selectionInterval != null) {
-			timeModel.removeInterval(selectionInterval);
-			selectionInterval = null;
-		}
-
-		if(utt != null && waveformTier.getWaveformDisplay().getLongSound() != null) {
-			final MediaSegment segment = utt.getSegment().getGroup(0);
+				
+		Record r = getEditor().currentRecord();
+		if(r != null) {
+			final MediaSegment segment = r.getSegment().getGroup(0);
 
 			double length = (segment.getEndValue() - segment.getStartValue());
 			long preferredClipExtension = (long)Math.ceil(length * 0.4);
@@ -471,38 +383,47 @@ public class SpeechAnalysisEditorView extends EditorView {
 			float segLength = (segment.getEndValue() - segment.getStartValue()) / 1000.0f;
 			float displayLength = segLength + ((2*preferredClipExtension) / 1000.0f);
 			
-			if(segLength == 0.0f) {
-				// using a default display length of 3.0 seconds (or length of sampled)
-				displayLength = Math.min(3.0f, waveformTier.getWaveformDisplay().getLongSound().length());
-			} else if(segLength > 60.0f && !force) {
-				messageButton.setTopLabelText("<html><b>Segment not loaded</b></html>");
-				messageButton.setBottomLabelText("Segment length exceeds 60 seconds, click this message to force loading.");
-				messageButton.clearActions();
-				
-				final PhonUIAction forceUpdateAct = new PhonUIAction(this, "update", true);
-				messageButton.setDefaultAction(forceUpdateAct);
-				
-				waveformTier.getWaveformDisplay().setVisible(false);
-				messageButton.setVisible(true);
-			} else {
-				if((displayStart + displayLength) > waveformTier.getWaveformDisplay().getLongSound().length()) {
-					displayStart = waveformTier.getWaveformDisplay().getLongSound().length() - displayLength;
-	
-					if(displayStart < 0.0f) {
-						displayStart = 0.0f;
-						displayLength = waveformTier.getWaveformDisplay().getLongSound().length();
-					}
-				}
+			if((displayStart + displayLength) > waveformTier.getWaveformDisplay().getLongSound().length()) {
+				displayStart = waveformTier.getWaveformDisplay().getLongSound().length() - displayLength;
 
-				int displayWidth = getVisibleRect().width;
-				float pxPerS = displayWidth / displayLength;
-				
-				timeModel.setPixelsPerSecond(pxPerS);
-				currentRecordInterval = timeModel.addInterval(segStart, segStart+segLength);
-				scrollToTime(displayStart);
-				
-				waveformTier.getWaveformDisplay().setVisible(true);
-				messageButton.setVisible(false);
+				if(displayStart < 0.0f) {
+					displayStart = 0.0f;
+					displayLength = waveformTier.getWaveformDisplay().getLongSound().length();
+				}
+			}
+
+			int displayWidth = getVisibleRect().width;
+			if(displayWidth > 0)
+				pxPerS = displayWidth / displayLength;
+			
+			currentRecordInterval = timeModel.addInterval(segStart, segStart+segLength);
+			scrollTo = displayStart;
+		}
+		
+		if(waveformTier.getWaveformDisplay().getLongSound() != null) {
+			endTime = waveformTier.getWaveformDisplay().getLongSound().length();
+		}
+		
+		System.out.println("(" + startTime + "," + endTime + ")@" + pxPerS);
+		
+		timeModel.setStartTime(startTime);
+		timeModel.setEndTime(endTime);
+		timeModel.setPixelsPerSecond(pxPerS);
+		scrollToTime(scrollTo);
+	}
+	
+	public void update() {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionAudioAvailable()) {
+			try {
+				LongSound ls = mediaModel.getSharedSessionAudio();
+				if(waveformTier.getWaveformDisplay().getLongSound() != ls) {
+					waveformTier.getWaveformDisplay().setEndTime(ls.length());
+					waveformTier.getWaveformDisplay().setLongSound(ls);
+				}
+				messageButton.setVisible(true);
+			} catch (IOException e) {
+				LogUtil.severe(e);
 			}
 		} else {
 			messageButton.setTopLabelText("<html><b>Unable to open audio file</b></html>");
@@ -538,11 +459,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			}
 			messageButton.setVisible(true);
 		}
-
-		setupTimeScrollbar();
-		revalidate();
-		
-		waveformTier.getWaveformDisplay().repaint();
+		setupTimeModel();
 	}
 	
 	public void scrollToTime(float time) {
@@ -553,47 +470,43 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	/** Editor events */
-	private int lastRecord = -1;
+	private final DelegateEditorAction sessionMediaChangedAct = new DelegateEditorAction(this, "onSessionMediaChanged");
+	private final DelegateEditorAction onSessionAudioAvailableAct = new DelegateEditorAction(this, "onSessionAudioAvailable");
+	private final DelegateEditorAction recordChangedAct = new DelegateEditorAction(this, "onRecordChanged");
+	private final DelegateEditorAction recordRefershAct = new DelegateEditorAction(this, "onRecordRefresh");
+	private final DelegateEditorAction segmentChangedAct = new DelegateEditorAction(this, "onMediaSegmentChanged");
+	
+	private void setupEditorActions() {
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
-		update(true);
-		lastRecord = getEditor().getCurrentRecordIndex();
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, recordRefershAct);
+
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
 	}
-
+	
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)
 				|| !getEditor().getViewModel().isShowingInStack(VIEW_TITLE)) return;
-
-		updateAndChangedRecord();
+		setupTimeModel();
 	}
 
-	private void updateAndChangedRecord() {
-		if(lastRecord != getEditor().getCurrentRecordIndex()) {
-			update();
-		}
-		lastRecord = getEditor().getCurrentRecordIndex();
-	}
-	
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {
-		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
-//		wavDisplay.setSampled(null);
-		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
+		update();
 	}
 	
 	@RunOnEDT
 	public void onSessionAudioAvailable(EditorEvent ee) {
-		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
-//		wavDisplay.setSampled(null);
-		(new ResetAction(getEditor(), this)).actionPerformed(new ActionEvent(ee.getSource(), -1, ee.getEventName()));
+		update();
 	}
 
 	@RunOnEDT
 	public void onMediaSegmentChanged(EditorEvent ee) {
 		if(ee.getEventData() != null && ee.getEventData().toString().equals(SystemTierType.Segment.getName()))
-			update();
+			setupTimeModel();
 	}
 
 	@RunOnEDT
@@ -659,41 +572,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		@Override
 		public void onFocused(EditorView view) {
-			updateAndChangedRecord();
+			setupTimeModel();
 		}
 		
 	};
-
-//	private final PropertyChangeListener segmentListener = new PropertyChangeListener() {
-//
-//		@Override
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			// don't update while adjusting values
-//			if(getWavDisplay().isValuesAdjusting()) return;
-//
-//			final float segmentStart = getWavDisplay().getSegmentStart();
-//			final float segmentEnd = getWavDisplay().getSegmentStart() + getWavDisplay().getSegmentLength();
-//
-//			final long newSegStart = Math.round(segmentStart * 1000.0f);
-//			final long newSegEnd = Math.round(segmentEnd * 1000.0f);
-//
-//			final SessionFactory factory = SessionFactory.newFactory();
-//			final MediaSegment newSegment = factory.createMediaSegment();
-//			newSegment.setStartValue(newSegStart);
-//			newSegment.setEndValue(newSegEnd);
-//			newSegment.setUnitType(MediaUnit.Millisecond);
-//
-//			final SessionEditor editor = getEditor();
-//			final Record record = editor.currentRecord();
-//			final Tier<MediaSegment> segmentTier = record.getSegment();
-//
-//			final TierEdit<MediaSegment> segmentEdit =
-//					new TierEdit<MediaSegment>(editor, segmentTier, 0, newSegment);
-//			segmentEdit.setFireHardChangeOnUndo(true);
-//			editor.getUndoSupport().postEdit(segmentEdit);
-//		}
-//
-//	};
 
 	private final MouseInputAdapter contenxtMenuHandler = new MouseInputAdapter() {
 
@@ -789,6 +671,4 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 	}
 	
-	
-
 }

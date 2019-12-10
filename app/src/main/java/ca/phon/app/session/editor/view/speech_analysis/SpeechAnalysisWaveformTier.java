@@ -16,8 +16,14 @@ import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.app.media.WaveformDisplay;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
 
 public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
+	
+	private final static String WAV_DISPLAY_HEIGHT = "SpeechAnalysisView.wavDisplayHeight";
+	private final int DEFAULT_WAV_DISPLAY_HEIGHT = 100;
+	private int wavDisplayHeight =
+			PrefHelper.getInt(WAV_DISPLAY_HEIGHT, DEFAULT_WAV_DISPLAY_HEIGHT);
 	
 	private WaveformDisplay wavDisplay;
 	
