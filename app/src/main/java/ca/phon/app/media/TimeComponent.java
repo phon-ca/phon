@@ -1,6 +1,7 @@
 package ca.phon.app.media;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
@@ -37,6 +38,8 @@ public abstract class TimeComponent extends JComponent {
 		
 		this.timeModel = timeModel;
 		this.timeModel.addPropertyChangeListener(modelPropListener);
+		
+		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 	}
 	
 	@Override

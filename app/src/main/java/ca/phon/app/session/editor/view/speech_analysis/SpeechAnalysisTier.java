@@ -15,15 +15,9 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.BorderLayout;
-
-import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
-import javax.swing.JPanel;
 
 import ca.phon.app.media.TimeComponent;
-import ca.phon.app.media.TimeUIModel;
 
 /**
  * Extension point for waveform view tiers.
@@ -33,37 +27,13 @@ public abstract class SpeechAnalysisTier extends TimeComponent {
 	
 	private SpeechAnalysisEditorView speechAnalysisView;
 	
-	private JPanel contentPane;
-	
 	public SpeechAnalysisTier(SpeechAnalysisEditorView parentView) {
 		super(parentView.getTimeModel());
 		this.speechAnalysisView = parentView;
-		
-		init();
-	}
-	
-	private void init() {
-		setLayout(new BorderLayout());
-		contentPane = new JPanel();
-		add(contentPane, BorderLayout.CENTER);
 	}
 	
 	public SpeechAnalysisEditorView getParentView() {
 		return this.speechAnalysisView;
-	}
-	
-	public JPanel getContentPane() {
-		return this.contentPane;
-	}
-	
-	public void setContentPane(JPanel contentPane) {
-		var oldVal = this.contentPane;
-		remove(this.contentPane);
-		this.contentPane = contentPane;
-		if(contentPane != null)
-			add(contentPane, BorderLayout.CENTER);
-		revalidate();
-		super.firePropertyChange("contentPane", oldVal, contentPane);
 	}
 	
 	/**

@@ -29,8 +29,12 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,9 +58,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 
 import org.apache.logging.log4j.LogManager;
@@ -233,12 +240,13 @@ public class SpeechAnalysisEditorView extends EditorView {
 		timebar.setOpaque(true);
 
 		tierPane = new TierPanel(new GridBagLayout());
-		addTier(timebar);
 		addTier(waveformTier);
 		
 		loadPlugins();
 		
 		final JScrollPane scroller = new JScrollPane(tierPane);
+		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroller.setColumnHeaderView(timebar);
 		add(scroller, BorderLayout.CENTER);
 
 		setupInputMap();
@@ -404,8 +412,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 			endTime = waveformTier.getWaveformDisplay().getLongSound().length();
 		}
 		
-		System.out.println("(" + startTime + "," + endTime + ")@" + pxPerS);
-		
 		timeModel.setStartTime(startTime);
 		timeModel.setEndTime(endTime);
 		timeModel.setPixelsPerSecond(pxPerS);
@@ -470,6 +476,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	/** Editor events */
+	private final DelegateEditorAction sessionLoadedAct = new DelegateEditorAction(this, "onSessionLoaded");
 	private final DelegateEditorAction sessionMediaChangedAct = new DelegateEditorAction(this, "onSessionMediaChanged");
 	private final DelegateEditorAction onSessionAudioAvailableAct = new DelegateEditorAction(this, "onSessionAudioAvailable");
 	private final DelegateEditorAction recordChangedAct = new DelegateEditorAction(this, "onRecordChanged");
@@ -477,6 +484,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private final DelegateEditorAction segmentChangedAct = new DelegateEditorAction(this, "onMediaSegmentChanged");
 	
 	private void setupEditorActions() {
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, sessionLoadedAct);
+		
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
 		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
 
@@ -484,6 +493,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, recordRefershAct);
 
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
+	}
+	
+	@RunOnEDT
+	public void onSessionLoaded(EditorEvent ee) {
+		// time model will be at default settings when initialized
+		setupTimeModel();
 	}
 	
 	@RunOnEDT

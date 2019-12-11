@@ -42,28 +42,17 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 		wavDisplay.setOpaque(true);
 		wavDisplay.setFont(FontPreferences.getMonospaceFont());
 		
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(wavDisplay, BorderLayout.CENTER);
+		setLayout(new BorderLayout());
+		add(wavDisplay, BorderLayout.CENTER);
 	
-		final JSeparator separator =  new JSeparator(SwingConstants.HORIZONTAL);
+		final JSeparator separator =  new SpeechAnalysisTierDivider(this);
 		separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-		
-		SeparatorMouseListener listener = new SeparatorMouseListener();
-		separator.addMouseMotionListener(listener);
-		separator.addMouseListener(listener);
-		
-		getContentPane().add(separator, BorderLayout.SOUTH);
-	}
-	
-	private void setupEditorAction() {
-		
+		add(separator, BorderLayout.SOUTH);
 	}
 	
 	private void setupActionMap() {
 		final InputMap inputMap = new InputMap();
 		final ActionMap actionMap = wavDisplay.getActionMap();
-		
-		
 		
 		wavDisplay.setActionMap(actionMap);
 		wavDisplay.setInputMap(WHEN_FOCUSED, inputMap);
@@ -81,42 +70,6 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 
 	@Override
 	public void onRefresh() {
-		// TODO Auto-generated method stub
-		
 	}
 	
-	private class SeparatorMouseListener extends MouseInputAdapter {
-		
-		private boolean valueAdjusting = false;
-		
-		public SeparatorMouseListener() {
-			super();
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			valueAdjusting = true;
-			((JComponent)e.getSource()).firePropertyChange("valueAdjusting", false, valueAdjusting);
-		}
-		
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			valueAdjusting = false;
-			((JComponent)e.getSource()).firePropertyChange("valueAdjusting", true, valueAdjusting);
-		}
-		
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			Dimension currentSize = getSize();
-			Dimension prefSize = getPreferredSize();
-
-			prefSize.height = currentSize.height + e.getY();
-			if(prefSize.height < 0) prefSize.height = 0;
-			
-			setPreferredSize(prefSize);
-			revalidate();
-		}
-		
-	}
-
 }
