@@ -73,8 +73,16 @@ public class TimelineWaveformTier extends TimelineTier  {
 		wavDisplay.addMouseListener(selectionListener);
 		wavDisplay.addMouseMotionListener(selectionListener);
 		
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(wavDisplay, BorderLayout.CENTER);
+		setLayout(new BorderLayout());
+		add(wavDisplay, BorderLayout.CENTER);
+		
+		TimelineTierDivider divider = new TimelineTierDivider(wavDisplay);
+		divider.addPropertyChangeListener("valueAdjusting", (e) -> {
+			if((boolean)e.getNewValue() == Boolean.FALSE) {
+				wavDisplay.getUI().updateCache();
+			}
+		});
+		add(divider, BorderLayout.SOUTH);
 	}
 	
 	private void setupWavformActions() {
@@ -122,12 +130,12 @@ public class TimelineWaveformTier extends TimelineTier  {
 	}
 	
 	@Override
-	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
+	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
 		if(selectionInterval != null) {
 			final PhonUIAction playAction = new PhonUIAction(this, "onPlay");
 			playAction.putValue(PhonUIAction.NAME, "Play selection");
 			playAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
-			if(me != null && me.isPopupTrigger())
+			if(includeAccel)
 				playAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
 			builder.addItem(".", playAction);
 			
@@ -139,7 +147,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 				recordCreationAct.putValue(PhonUIAction.NAME, speakerList.get(i) + "");
 				recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + speakerList.get(i));
 				final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_1 + i, 0);
-				if(me != null && me.isPopupTrigger()) {
+				if(includeAccel) {
 					recordCreationAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
 				}
 				builder.addItem("./New record from selection/", recordCreationAct);
@@ -330,5 +338,11 @@ public class TimelineWaveformTier extends TimelineTier  {
 		}
 		
 	};
+
+	@Override
+	public void onClose() {
+		// TODO Auto-generated method stub
+		
+	}
 		
 }

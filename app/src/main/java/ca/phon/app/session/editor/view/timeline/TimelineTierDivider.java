@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.speech_analysis;
+package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -9,15 +9,16 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-public class SpeechAnalysisTierDivider extends JSeparator {
-	
+public class TimelineTierDivider extends JSeparator {
+
 	private JComponent comp;
 
-	public SpeechAnalysisTierDivider(JComponent toResize) {
+	public TimelineTierDivider(JComponent toResize) {
 		super(SwingConstants.HORIZONTAL);
 		this.comp = toResize;
 		
 		setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+		
 		if(this.comp != null) {
 			SeparatorMouseListener l = new SeparatorMouseListener();
 			addMouseListener(l);

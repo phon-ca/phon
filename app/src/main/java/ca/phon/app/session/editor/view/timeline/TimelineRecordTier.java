@@ -123,8 +123,8 @@ public class TimelineRecordTier extends TimelineTier {
 
 		recordGrid.addRecordGridMouseListener(mouseListener);
 
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(recordGrid, BorderLayout.CENTER);
+		setLayout(new BorderLayout());
+		add(recordGrid, BorderLayout.CENTER);
 	}
 
 	public RecordGrid getRecordGrid() {
@@ -614,11 +614,11 @@ public class TimelineRecordTier extends TimelineTier {
 	}
 
 	@Override
-	public void setupContextMenu(MouseEvent me, MenuBuilder builder) {
-		setupSplitModeMenu(me, builder);
+	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
+		setupSplitModeMenu(builder, includeAccel);
 
 		var delAction = new DeleteRecordAction(getParentView().getEditor());
-		if (me != null)
+		if (includeAccel)
 			delAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		builder.addItem(".", new DeleteRecordAction(getParentView().getEditor()));
 
@@ -638,7 +638,7 @@ public class TimelineRecordTier extends TimelineTier {
 			onChangeSpeakerByIndexAct.putValue(PhonUIAction.NAME, speaker.toString());
 			onChangeSpeakerByIndexAct.putValue(PhonUIAction.SHORT_DESCRIPTION,
 					"Change record speaker to " + speaker.toString());
-			if (me != null)
+			if (includeAccel)
 				onChangeSpeakerByIndexAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
 			if (getParentView().getEditor().currentRecord() != null
 					&& getParentView().getEditor().currentRecord().getSpeaker() == speaker) {
@@ -659,20 +659,20 @@ public class TimelineRecordTier extends TimelineTier {
 			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor(),
 					(MediaPlayerEditorView) getParentView().getEditor().getViewModel()
 							.getView(MediaPlayerEditorView.VIEW_TITLE));
-			if (me != null)
+			if (includeAccel)
 				playAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
 			builder.addItem(".", playAct);
 		}
 	}
 
-	private void setupSplitModeMenu(MouseEvent me, MenuBuilder builder) {
+	private void setupSplitModeMenu(MenuBuilder builder, boolean includeAccel) {
 		if (splitMarker != null) {
 			final PhonUIAction acceptSplitAct = new PhonUIAction(this, "onEndSplitRecord", true);
 			acceptSplitAct.putValue(PhonUIAction.NAME, "Accept record split");
 			acceptSplitAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
 			acceptSplitAct.putValue(PhonUIAction.SMALL_ICON,
 					IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
-			if (me != null)
+			if (includeAccel)
 				acceptSplitAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
 			builder.addItem(".", acceptSplitAct);
 
@@ -681,7 +681,7 @@ public class TimelineRecordTier extends TimelineTier {
 			endSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exit split record mode without accepting split");
 			endSplitModeAct.putValue(PhonUIAction.SMALL_ICON,
 					IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL));
-			if (me != null)
+			if (includeAccel)
 				endSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
 			builder.addItem(".", endSplitModeAct);
 
@@ -696,7 +696,7 @@ public class TimelineRecordTier extends TimelineTier {
 					} else {
 						splitAfterGroupAct.putValue(PhonUIAction.NAME, "Group " + i);
 					}
-					if (me != null)
+					if (includeAccel)
 						splitAfterGroupAct.putValue(PhonUIAction.ACCELERATOR_KEY,
 								KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0));
 					if (splitGroupIdx >= 0) {
@@ -713,7 +713,7 @@ public class TimelineRecordTier extends TimelineTier {
 			final PhonUIAction enterSplitModeAct = new PhonUIAction(this, "beginSplitMode");
 			enterSplitModeAct.putValue(PhonUIAction.NAME, "Split record");
 			enterSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Enter split record mode for current record");
-			if (me != null)
+			if (includeAccel)
 				enterSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, 0));
 			builder.addItem(".", enterSplitModeAct);
 		}

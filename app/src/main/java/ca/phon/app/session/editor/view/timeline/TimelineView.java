@@ -59,6 +59,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeUIModel;
+import ca.phon.app.media.Timebar;
 import ca.phon.app.media.TimebarMarkerModel.Interval;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.SessionMediaModel;
@@ -149,6 +150,8 @@ public final class TimelineView extends EditorView {
 	 */
 	private TimeUIModel timeModel;
 	
+	private Timebar timebar;
+	
 	private TimelineWaveformTier wavTier;
 	
 	private TimelineRecordTier recordGrid;
@@ -186,8 +189,11 @@ public final class TimelineView extends EditorView {
 		timeModel.setStartTime(0.0f);
 		timeModel.setEndTime(0.0f);	
 		
+		timebar = new Timebar(timeModel);
+		
 		tierPanel = new TierPanel(new GridBagLayout());
 		tierScrollPane = new JScrollPane(tierPanel);
+		tierScrollPane.setColumnHeaderView(timebar);
 		
 		// Order here matters - for the purpose of
 		// editor events the record tier object must be created before the
@@ -201,18 +207,11 @@ public final class TimelineView extends EditorView {
 		wavTier.getWaveformDisplay().addMouseListener(contextMenuListener);
 //		wavTier.getWaveformDisplay().addMouseWheelListener(zoomListener);
 		
-		JSeparator wavSep = addTier(wavTier);
-		wavSep.addPropertyChangeListener("valueAdjusting", (e) -> {
-			if((boolean)e.getNewValue() == Boolean.FALSE) {
-				wavTier.getWaveformDisplay().getUI().updateCache();
-			}
-		});
-		
+		addTier(wavTier);
 		addTier(recordGrid);
 		
 		for(var extPt:PluginManager.getInstance().getExtensionPoints(TimelineTier.class)) {
 			var tier = extPt.getFactory().createObject(this);
-			tier.getTimebar().setVisible(false);
 			addTier(tier);
 		}
 		
@@ -345,7 +344,7 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private int tierIdx = 0;
-	private JSeparator addTier(TimelineTier tier) {
+	private void addTier(TimelineTier tier) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
@@ -356,44 +355,6 @@ public final class TimelineView extends EditorView {
 		gbc.gridy = tierIdx++;
 		
 		tierPanel.add(tier, gbc);
-		
-		if(tier.isResizeable()) {
-			final JSeparator separator =  new JSeparator(SwingConstants.HORIZONTAL);
-			separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-			
-			SeparatorMouseListener listener = new SeparatorMouseListener(tier);
-			separator.addMouseMotionListener(listener);
-			separator.addMouseListener(listener);
-			
-			gbc.gridy = tierIdx++;
-			
-			tierPanel.add(separator, gbc);
-			tier.addComponentListener(new ComponentListener() {
-				
-				@Override
-				public void componentShown(ComponentEvent e) {
-					separator.setVisible(true);
-				}
-				
-				@Override
-				public void componentResized(ComponentEvent e) {
-					
-				}
-				
-				@Override
-				public void componentMoved(ComponentEvent e) {
-					
-				}
-				
-				@Override
-				public void componentHidden(ComponentEvent e) {
-					separator.setVisible(false);
-				}
-				
-			});
-			return separator;
-		}
-		return null;
 	}
 	
 	private void update() {
@@ -401,10 +362,8 @@ public final class TimelineView extends EditorView {
 		if(mediaModel.isSessionAudioAvailable()) {
 			loadSessionAudio();
 			wavTier.setVisible(true);
-			recordGrid.getTimebar().setVisible(false);
 		} else {
 			wavTier.setVisible(false);
-			recordGrid.getTimebar().setVisible(true);
 		}
 		setupTimeModel();
 	}
@@ -635,7 +594,7 @@ public final class TimelineView extends EditorView {
 				GenerateSessionAudioAction genAudioAct = new GenerateSessionAudioAction(getEditor());
 				builder.addItem(".", genAudioAct);
 			} else {
-				wavTier.setupContextMenu(null, builder);
+				wavTier.setupContextMenu(builder, false);
 			}
 		} else {
 			// Add browse for media action
@@ -644,7 +603,7 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "record_grid");
 		
-		recordGrid.setupContextMenu(null, builder);
+		recordGrid.setupContextMenu(builder, false);
 		
 		builder.addSeparator(".", "segmentation");
 		
@@ -682,11 +641,11 @@ public final class TimelineView extends EditorView {
 		MenuBuilder builder = new MenuBuilder(contextMenu);
 		
 		if(me.getComponent() == recordGrid.getRecordGrid()) {
-			recordGrid.setupContextMenu(me, builder);
+			recordGrid.setupContextMenu(builder, true);
 //			builder.addSeparator(".", "wav_actions");
 //			wavTier.setupContextMenu(me, builder);
 		} else {
-			wavTier.setupContextMenu(me, builder);
+			wavTier.setupContextMenu(builder, true);
 //			builder.addSeparator(".", "record_actions");
 //			recordGrid.setupContextMenu(me, builder);
 		}

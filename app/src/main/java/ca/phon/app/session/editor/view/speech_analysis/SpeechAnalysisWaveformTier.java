@@ -46,7 +46,6 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 		add(wavDisplay, BorderLayout.CENTER);
 	
 		final JSeparator separator =  new SpeechAnalysisTierDivider(this);
-		separator.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 		add(separator, BorderLayout.SOUTH);
 	}
 	
