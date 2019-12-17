@@ -277,8 +277,8 @@ public class TimeComponentUI extends ComponentUI {
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 	
-				boolean insideStartMarker = (p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING);
-				boolean insideEndMarker = (p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING);
+				boolean insideStartMarker = interval.getStartMarker().isDraggable() && (p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING);
+				boolean insideEndMarker = interval.getEndMarker().isDraggable() && (p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING);
 						
 				if(insideStartMarker && !insideEndMarker) {
 					beginDrag(interval, interval.getStartMarker());
@@ -301,7 +301,7 @@ public class TimeComponentUI extends ComponentUI {
 					if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) continue;
 					int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 	
-					if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
+					if(marker.isDraggable() && p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
 						beginDrag(marker);
 					}
 				}
@@ -359,12 +359,12 @@ public class TimeComponentUI extends ComponentUI {
 				int startX = (int)Math.round(timeComp.xForTime(interval.getStartMarker().getTime()));
 				int endX = (int)Math.round(timeComp.xForTime(interval.getEndMarker().getTime()));
 	
-				if((p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING) || 
-						(p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING)) {
+				if(interval.getStartMarker().isDraggable() && (p.x >= startX - MARKER_PADDING && p.x <= startX + MARKER_PADDING) || 
+						interval.getEndMarker().isDraggable() && (p.x >= endX - MARKER_PADDING && p.x <= endX + MARKER_PADDING)) {
 					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 				} else {
-					if(timeComp.getCursor() != Cursor.getDefaultCursor()) {
-						timeComp.setCursor(Cursor.getDefaultCursor());
+					if(timeComp.getCursor() != timeComp.getDefaultCursor()) {
+						timeComp.setCursor(timeComp.getDefaultCursor());
 					}
 				}
 			}
@@ -373,7 +373,7 @@ public class TimeComponentUI extends ComponentUI {
 				if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) continue;
 				int x = (int)Math.round(timeComp.xForTime(marker.getTime()));
 	
-				if(p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
+				if(marker.isDraggable() && p.x >= x - MARKER_PADDING && p.x <= x + MARKER_PADDING) {
 					timeComp.setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
 				}
 			}

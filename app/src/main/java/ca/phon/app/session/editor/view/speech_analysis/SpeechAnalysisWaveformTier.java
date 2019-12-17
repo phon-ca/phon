@@ -31,6 +31,7 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 		super(parentView);
 		
 		init();
+		setupActionMap();
 	}
 	
 	private void init() {
@@ -42,10 +43,13 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 		wavDisplay.setOpaque(true);
 		wavDisplay.setFont(FontPreferences.getMonospaceFont());
 		
+		wavDisplay.addMouseListener(getParentView().getMouseAdapter());
+		wavDisplay.addMouseMotionListener(getParentView().getMouseAdapter());
+		
 		setLayout(new BorderLayout());
 		add(wavDisplay, BorderLayout.CENTER);
 	
-		final JSeparator separator =  new SpeechAnalysisTierDivider(this);
+		final JSeparator separator =  new SpeechAnalysisTierDivider(wavDisplay);
 		add(separator, BorderLayout.SOUTH);
 	}
 	

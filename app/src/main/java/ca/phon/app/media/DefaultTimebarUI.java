@@ -165,14 +165,15 @@ public class DefaultTimebarUI extends TimebarUI {
 		Map<Marker, Rectangle2D> markerRects = new HashMap<>();
 		for(Marker marker:markerList) {
 			int markerX = (int)Math.round(timebar.xForTime(marker.getTime()));
-			
-			g2.setColor(marker.getColor());
-			
 			long timeMs = (long)(marker.getTime() * 1000.0f);
 			String timeStr = MsFormatter.msToDisplayString(timeMs);
-			
 			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
 			timeRect.setRect(markerX, markerY, timeRect.getWidth(), timeRect.getHeight());
+			
+			g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.7f));
+			g2.fill(timeRect);
+
+			g2.setColor(marker.getColor());
 			g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + fm.getAscent()));
 			
 			markerRects.put(marker, timeRect);

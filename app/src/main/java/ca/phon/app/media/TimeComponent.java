@@ -2,6 +2,7 @@ package ca.phon.app.media;
 
 import java.awt.Color;
 import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
@@ -28,6 +29,8 @@ public abstract class TimeComponent extends JComponent {
 	public static final String SELECTION_COLOR_PROP = "selectionColor";
 
 	private TimeUIModel timeModel;
+	
+	private Cursor defaultCursor = Cursor.getDefaultCursor();
 		
 	public TimeComponent() {
 		this(new TimeUIModel());
@@ -40,6 +43,16 @@ public abstract class TimeComponent extends JComponent {
 		this.timeModel.addPropertyChangeListener(modelPropListener);
 		
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+	}
+	
+	public Cursor getDefaultCursor() {
+		return this.defaultCursor;
+	}
+	
+	public void setDefaultCursor(Cursor cursor) {
+		var oldVal = this.defaultCursor;
+		this.defaultCursor = cursor;
+		super.firePropertyChange("defaultCursor", oldVal, cursor);
 	}
 	
 	@Override

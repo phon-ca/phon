@@ -143,8 +143,12 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 			tier.addGroup(newValue);
 		}
 		
-		if(getEditor() != null)
+		if(getEditor() != null) { 
 			queueEvent(EditorEventType.TIER_CHANGE_EVT, getSource(), tier.getName());
+			if(isFireHardChangeOnUndo()) {
+				queueEvent(EditorEventType.TIER_CHANGED_EVT, getSource(), tier.getName());
+			}
+		}
 	}
 
 }
