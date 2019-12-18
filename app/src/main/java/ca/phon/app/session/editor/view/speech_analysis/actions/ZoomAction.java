@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 
+import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.media.sampled.PCMSegmentView;
@@ -47,6 +48,10 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 	private float zoomAmount = PrefHelper.getFloat(ZOOM_AMOUNT_PROP, DEFAULT_ZOOM_AMOUNT);
 	
 	private boolean zoomIn = true;
+	
+	private final static float MIN_PXPERS = 1.0f;
+	
+	private final static float MAX_PXPERS = 3200.0f;
 
 	public ZoomAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		this(editor, view, true);
@@ -62,43 +67,22 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-//		final PCMSegmentView wavDisplay = getView().getWavDisplay();
-//		float start = wavDisplay.getWindowStart();
-//		float len = wavDisplay.getWindowLength();
-//		
-//		if(len <= 1.0f && zoomIn) {
-//			Toolkit.getDefaultToolkit().beep();
-//			return;
-//		}
-//		
-//		float end = start + len;
-//		float endTime = wavDisplay.getSampled().getStartTime() + wavDisplay.getSampled().getLength();
-//		
-//		float zoomAmount = this.zoomAmount;
-//		if(zoomIn) {
-//			zoomAmount *= -1.0f;
-//		}
-//		
-//		start -= zoomAmount;
-//		end += zoomAmount;
-//		
-//		start = Math.min(Math.max(wavDisplay.getSampled().getStartTime(), start), 
-//				endTime);
-//		end = Math.min(endTime, Math.max(wavDisplay.getSampled().getStartTime(), end));
-//		len = end - start;
-//		
-//		if(len < 0.1f && (endTime - start) >= 0.1f) {
-//			len = 0.1f;
-//		}
-//		
-//		if(len >= 0.1f && len < wavDisplay.getSampled().getLength()) {
-//			// adjust values
-//			wavDisplay.setWindowStart(start);
-//			wavDisplay.setWindowLength(len);
-//		} else {
-//			// beep
-//			Toolkit.getDefaultToolkit().beep();
-//		}
+		TimeUIModel timeModel = getView().getTimeModel();
+		
+		float pxPerS = timeModel.getPixelsPerSecond();
+		float zoomAmount = -1.0f * pxPerS * this.zoomAmount;
+		if(zoomIn) {
+			zoomAmount *= -1.0f;
+		}
+		pxPerS += zoomAmount;
+		
+		pxPerS = Math.max(MIN_PXPERS, Math.min(pxPerS, MAX_PXPERS));
+		
+		// beep to indicate we are at a limit
+		if(pxPerS == MIN_PXPERS || pxPerS == MAX_PXPERS)
+			Toolkit.getDefaultToolkit().beep();
+		
+		timeModel.setPixelsPerSecond(pxPerS);
 	}
 
 }

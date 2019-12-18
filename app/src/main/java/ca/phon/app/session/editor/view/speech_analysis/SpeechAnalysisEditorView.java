@@ -471,6 +471,23 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public SpeechAnalysisWaveformTier getWaveformTier() {
 		return this.waveformTier;
 	}
+	
+	/**
+	 * Return the start time of the visible rect
+	 * 
+	 * @return
+	 */
+	public float getWindowStart() {
+		return getTimeModel().timeAtX(tierPane.getVisibleRect().getX());
+	}
+	
+	public float getWindowEnd() {
+		return getTimeModel().timeAtX(tierPane.getVisibleRect().getMaxX());
+	}
+	
+	public float getWindowLength() {
+		return getWindowEnd() - getWindowStart();
+	}
 
 	private void setupTimeModel() {
 		float startTime = 0.0f;
