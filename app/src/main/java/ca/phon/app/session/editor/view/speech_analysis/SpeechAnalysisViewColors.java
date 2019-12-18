@@ -11,6 +11,8 @@ public class SpeechAnalysisViewColors {
 		UIManager.put(SELECTED_INTERVAL_BACKGROUND, DEFAULT_SELECTED_INTERVAL_BACKGROUND);
 		UIManager.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
 		UIManager.put(SELECTED_INTERVAL_MARKER_COLOR, DEFAULT_SELECTED_INTERVAL_MARKER_COLOR);
+		UIManager.put(CURSOR_MARKER_COLOR, DEFAULT_CURSOR_MARKER_COLOR);
+		UIManager.put(PLAYBACK_MARKER_COLOR, DEFAULT_PLAYBACK_MARKER_COLOR);
 	}
 
 	/**
@@ -38,5 +40,16 @@ public class SpeechAnalysisViewColors {
 	public final static String SELECTED_INTERVAL_MARKER_COLOR = "SpeechAnalysisView.focusedIntervalMarkerColor";
 	public final static Color DEFAULT_SELECTED_INTERVAL_MARKER_COLOR = Color.darkGray;
 	
+	/**
+	 * Cursor color
+	 */
+	public final static String CURSOR_MARKER_COLOR = "SpeechAnalysisView.cursorMarkerColor";
+	public final static Color DEFAULT_CURSOR_MARKER_COLOR = Color.lightGray;
+	
+	/**
+	 * Playback marker color
+	 */
+	public final static String PLAYBACK_MARKER_COLOR = "SpeechAnalysisView.playbackMarkerColor";
+	public final static Color DEFAULT_PLAYBACK_MARKER_COLOR = Color.blue;
 	
 }

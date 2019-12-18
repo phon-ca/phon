@@ -15,12 +15,24 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.media.ExportSegment;
+import ca.phon.media.LongSound;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -45,7 +57,56 @@ public class SaveAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-//		getView().getWavDisplay().save();
+		final SaveDialogProperties props = new SaveDialogProperties();
+		props.setParentWindow(getEditor());
+		props.setFileFilter(FileFilter.wavFilter);
+		props.setTitle("Save segment");
+		props.setPrompt("Save");
+		props.setCanCreateDirectories(true);
+		props.setRunAsync(true);
+		props.setListener(saveListener);
+		
+		NativeDialogs.showSaveDialog(props);
+	}
+	
+	private void exportSegment(File file) throws IOException {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(!mediaModel.isSessionAudioAvailable()) return;
+		
+		LongSound sharedSound = mediaModel.getSharedSessionAudio();
+		if(sharedSound == null) return;
+		
+		ExportSegment exportSegment = sharedSound.getExtension(ExportSegment.class);
+		if(exportSegment == null) return;
+		
+		float startTime = 0.0f;
+		float endTime = 0.0f;
+		
+		if(getView().getSelectionInterval() != null) {
+			startTime = getView().getSelectionInterval().getStartMarker().getTime();
+			endTime = getView().getSelectionInterval().getEndMarker().getTime();
+		} else if(getView().getCurrentRecordInterval() != null) {
+			startTime = getView().getCurrentRecordInterval().getStartMarker().getTime();
+			endTime = getView().getCurrentRecordInterval().getEndMarker().getTime();
+		}
+		
+		exportSegment.exportSegment(file, startTime, endTime);
 	}
 
+	private final NativeDialogListener saveListener = new NativeDialogListener() {
+		
+		@Override
+		public void nativeDialogEvent(NativeDialogEvent event) {
+			if(event.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+				try {
+					exportSegment(new File(event.getDialogData().toString()));
+				} catch (IOException e) {
+					LogUtil.severe(e);
+					Toolkit.getDefaultToolkit().beep();
+				}
+			}
+		}
+		
+	};
+	
 }

@@ -3,7 +3,9 @@ package ca.phon.media.sampled;
 import java.io.File;
 import java.io.IOException;
 
+import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
+import ca.phon.media.PlaySegment;
 import ca.phon.media.Sound;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -19,6 +21,9 @@ public class SampledLongSound extends LongSound implements IPluginExtensionPoint
 		this.file = file;
 		
 		this.sampled = new PCMSampled(file);
+		
+		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
+		putExtension(ExportSegment.class, new SampledExportSegment(sampled));
 	}
 	
 	public Sampled getSampled() {

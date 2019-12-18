@@ -3,8 +3,12 @@ package ca.phon.media;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.media.sampled.SampledLongSound;
+import ca.phon.opgraph.extensions.ExtendableSupport;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 
@@ -14,10 +18,8 @@ import ca.phon.plugin.PluginManager;
  * be extracted from the LongSound for analysis.
  * 
  */
-public abstract class LongSound {
+public abstract class LongSound implements IExtendable {
 
-	private final File file;
-	
 	public static LongSound fromFile(File file) throws IOException {
 		final List<IPluginExtensionPoint<LongSound>> soundLoaders =
 				PluginManager.getInstance().getExtensionPoints(LongSound.class);
@@ -33,10 +35,16 @@ public abstract class LongSound {
 		}
 	}
 	
+	private final File file;	
+	
+	private ExtensionSupport extSupport = new ExtensionSupport(LongSound.class, this);
+	
 	protected LongSound(File file) {
 		super();
 		
 		this.file = file;
+		
+		extSupport.initExtensions();
 	}
 	
 	public File getFile() {
@@ -65,5 +73,21 @@ public abstract class LongSound {
 	 * @return sound segment
 	 */
 	public abstract Sound extractPart(float startTime, float endTime);
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
+	}
 	
 }

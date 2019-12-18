@@ -50,6 +50,8 @@ import ca.phon.ui.nativedialogs.SaveDialogProperties;
 
 /**
  * Display a window of PCM data.
+ * 
+ * @deprecated
  */
 public class PCMSegmentView extends JComponent {
 	
