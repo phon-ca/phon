@@ -45,7 +45,7 @@ public class PlayAction extends SpeechAnalysisEditorViewAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		getView().play();
+		getView().playPause();
 	}
 
 }

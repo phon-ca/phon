@@ -44,6 +44,12 @@ public abstract class PlaySegment {
 	 * @throws IOException on error
 	 */
 	public abstract void playSegment(float startTime, float endTime) throws IOException;
+	
+	/**
+	 * Stop playing segment.
+	 * 
+	 */
+	public abstract void stop();
 
 	public boolean isLoop() {
 		return this.loop;

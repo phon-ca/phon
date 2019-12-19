@@ -41,17 +41,22 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Scrollable;
 import javax.swing.UIManager;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
+import bibliothek.gui.dock.action.DropDownAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.media.TimeComponent;
 import ca.phon.app.media.TimeUIModel;
@@ -85,9 +90,11 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
+import ca.phon.ui.DropDownButton;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -148,11 +155,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	/* Toolbar and buttons */
 	private JToolBar toolbar;
 
-	private JButton playButton;
-	private JButton refreshButton;
-
+	private DropDownButton playButton;
 	private JButton exportButton;
 
+	private JButton refreshButton;
 	private JButton showMoreButton;
 	private JButton zoomOutButton;
 
@@ -281,9 +287,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	public void onEscape(PhonActionEvent pae) {
-		if(selectionInterval != null) {
+		if(isPlaying()) {
+			stopPlaying();
+		} else if(selectionInterval != null) {
 			clearSelection();
-			return;
 		}
 	}
 	
@@ -309,12 +316,39 @@ public class SpeechAnalysisEditorView extends EditorView {
 		toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 
-		// play button
-		final PlayAction playAct = new PlayAction(getEditor(), this);
-		playButton = new JButton(playAct);
+		final JPopupMenu playMenu = new JPopupMenu();
+		playMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				playMenu.removeAll();
+				setupPlaybackMenu(new MenuBuilder(playMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
+		
+		final PhonUIAction playAct = new PhonUIAction(this,  "playPause");
+		playAct.putValue(PhonUIAction.NAME, "Play");
+		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
+		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
+		playButton = new DropDownButton(playAct);
 		playButton.setFocusable(false);
 		playButton.setEnabled(false);
 
+		final SaveAction exportAct = new SaveAction(getEditor(), this);
+		exportButton = new JButton(exportAct);
+		exportButton.setFocusable(false);
+		exportButton.setEnabled(false);
+		
 		final ResetAction refreshAct = new ResetAction(getEditor(), this);
 		refreshButton = new JButton(refreshAct);
 		refreshButton.setFocusable(false);
@@ -327,29 +361,73 @@ public class SpeechAnalysisEditorView extends EditorView {
 		zoomOutButton = new JButton(zoomOutAct);
 		zoomOutButton.setFocusable(false);
 
-		final SaveAction exportAct = new SaveAction(getEditor(), this);
-		exportButton = new JButton(exportAct);
-		exportButton.setFocusable(false);
-		exportButton.setEnabled(false);
-
-		final GenerateSessionAudioAction generateAct = new GenerateSessionAudioAction(getEditor());
-		generateButton = new JButton(generateAct);
-		generateButton.setFocusable(false);
-
 		toolbar.add(playButton);
+		toolbar.add(exportButton);
 		toolbar.addSeparator();
 		toolbar.add(refreshButton);
 		toolbar.add(showMoreButton);
 		toolbar.add(zoomOutButton);
-		toolbar.addSeparator();
-		toolbar.add(exportButton);
-		toolbar.add(generateButton);
 
 		add(toolbar, BorderLayout.NORTH);
 	}
+	
+	private void setupPlaybackMenu(MenuBuilder builder) {
+		if(isPlaying()) {
+			final PhonUIAction stopAct = new PhonUIAction(SpeechAnalysisEditorView.this, "stopPlaying");
+			stopAct.putValue(PhonUIAction.NAME, "Stop");
+			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop playback");
+			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+			
+			builder.addItem(".", stopAct);
+			builder.addSeparator(".", "stop");
+		}
+		
+		final PhonUIAction playSelectionAct = new PhonUIAction(SpeechAnalysisEditorView.this, "playSelection");
+		playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
+		playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
+		playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		final JMenuItem playSelectionItem = new JMenuItem(playSelectionAct);
+		playSelectionItem.setEnabled( selectionInterval != null );
+		
+		final PhonUIAction playSegmentAct = new PhonUIAction(SpeechAnalysisEditorView.this, "playSegment");
+		playSegmentAct.putValue(PhonUIAction.NAME, "Play record segment");
+		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
+		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		final JMenuItem playSegmentItem = new JMenuItem(playSegmentAct);
+		playSegmentItem.setEnabled( currentRecordInterval != null );
+		
+		
+		
+		builder.addItem(".", playSelectionItem);
+		builder.addItem(".", playSegmentItem);
+	}
 
 	/* toolbar actions */
-	public void play() {
+	public void playPause() {
+		if(isPlaying()) {
+			stopPlaying();
+		} else if(selectionInterval != null) {
+			playSelection();
+		} else if(currentRecordInterval != null) {
+			playSegment();
+		}
+	}
+	
+	public void playSelection() {
+		if(selectionInterval != null)
+			playInterval(selectionInterval);
+	}
+	
+	public void playSegment() {
+		if(currentRecordInterval != null)
+			playInterval(currentRecordInterval);
+	}
+	
+	private void playInterval(Interval interval) {
+		playInterval(interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
+	}
+	
+	private void playInterval(float startTime, float endTime) {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(!mediaModel.isSessionAudioAvailable()) return;
 		
@@ -357,15 +435,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 			LongSound sharedSound = mediaModel.getSharedSessionAudio();
 			if(sharedSound == null) return;
 			
-			float startTime = 0.0f;
-			float endTime = 0.0f;
-			if(selectionInterval != null) {
-				startTime = selectionInterval.getStartMarker().getTime();
-				endTime = selectionInterval.getEndMarker().getTime();
-			} else if(currentRecordInterval != null) {
-				startTime = currentRecordInterval.getStartMarker().getTime();
-				endTime = currentRecordInterval.getEndMarker().getTime();
-			}
+			// fix bounds if necessary
+			startTime = Math.max(0.0f, Math.min(startTime, sharedSound.length()));
+			endTime = Math.max(startTime, Math.min(endTime, sharedSound.length()));
 			
 			final PlaySegment playSeg = sharedSound.getExtension(PlaySegment.class);
 			if(playSeg == null || playSeg.isPlaying()) return;
@@ -373,7 +445,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		} catch (IOException e) {
 			LogUtil.severe(e);
 			Toolkit.getDefaultToolkit().beep();
-		}
+		}		
 	}
 	
 	public boolean isPlaying() {
@@ -392,7 +464,25 @@ public class SpeechAnalysisEditorView extends EditorView {
 			return false;
 		}
 	}
-
+	
+	public void stopPlaying() {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(!mediaModel.isSessionAudioAvailable()) return;
+		
+		try {
+			LongSound sharedSound = mediaModel.getSharedSessionAudio();
+			if(sharedSound == null) return;
+			
+			final PlaySegment playSeg = sharedSound.getExtension(PlaySegment.class);
+			if(playSeg == null) return;
+			
+			playSeg.stop();
+		} catch (IOException e) {
+			LogUtil.severe(e);
+			Toolkit.getDefaultToolkit().beep();
+		}
+	}
+	
 	public TimeUIModel getTimeModel() {
 		return this.timeModel;
 	}
@@ -483,6 +573,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	public float getWindowEnd() {
 		return getTimeModel().timeAtX(tierPane.getVisibleRect().getMaxX());
+	}
+
+	public double getWindowStartX() {
+		return tierPane.getVisibleRect().getX();
+	}
+	
+	public double getWindowEndX() {
+		return tierPane.getVisibleRect().getMaxX();
 	}
 	
 	public float getWindowLength() {
@@ -662,7 +760,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	@RunOnEDT
 	public void onMediaSegmentChanged(EditorEvent ee) {
-		if(ee.getEventData() != null && ee.getEventData().toString().equals(SystemTierType.Segment.getName()))
+		if(ee.getEventData() != null && ee.getEventData().toString().equals(SystemTierType.Segment.getName())
+				&& getEditor().getViewModel().isShowingInStack(VIEW_TITLE))
 			setupTimeModel();
 	}
 
@@ -681,6 +780,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
 
+		MenuBuilder builder = new MenuBuilder(retVal);
+		setupPlaybackMenu(builder);
+		builder.addSeparator(".", "playback");
+		
 //		if(getWavDisplay().isPlaying()) {
 //			retVal.add(new StopAction(getEditor(), this));
 //		} else {
@@ -702,6 +805,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 //			retVal.add(mixerMenu);
 //		}
 //		retVal.addSeparator();
+		
 		retVal.add(new ResetAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this, false));
@@ -775,10 +879,16 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playbackMarker = timeModel.addMarker(playSeg.getPosition(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
 					playbackMarker.setOwner(waveformTier.getWaveformDisplay());
 					playbackMarker.setDraggable(false);
+					
+					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+					playButton.setText("Stop");
 				} else {
 					if(playbackMarker != null)
 						timeModel.removeMarker(playbackMarker);
 					playbackMarker = null;
+					
+					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+					playButton.setText("Play");
 				}
 			} else if("position".contentEquals(evt.getPropertyName())) {
 				if(playbackMarker != null) {

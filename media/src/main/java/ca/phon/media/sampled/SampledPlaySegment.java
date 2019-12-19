@@ -27,6 +27,8 @@ public class SampledPlaySegment extends PlaySegment {
 	
 	private Info mixerInfo = null;
 	
+	private PlaybackMarkerTask playbackTask = null;
+	
 	public SampledPlaySegment(Sampled sampled) {
 		super();
 		
@@ -37,13 +39,13 @@ public class SampledPlaySegment extends PlaySegment {
 		return this.sampled;
 	}
 	
-//	private PlaybackMarkerTask getPlaybackTask() {
-//		return this.playbackTask;
-//	}
-//	
-//	private void setPlaybackTask(PlaybackMarkerTask task) {
-//		this.playbackTask = task;
-//	}
+	private PlaybackMarkerTask getPlaybackTask() {
+		return this.playbackTask;
+	}
+	
+	private void setPlaybackTask(PlaybackMarkerTask task) {
+		this.playbackTask = task;
+	}
 	
 	public AudioFormat getAudioFormat() {
 		final AudioFormat format = new AudioFormat(getSampled().getSampleRate(), 
@@ -94,6 +96,14 @@ public class SampledPlaySegment extends PlaySegment {
 	}
 	
 	@Override
+	public void stop() {
+		if(!isPlaying()) return;
+		PlaybackMarkerTask task = getPlaybackTask();
+		if(task != null)
+			task.clip.stop();
+	}
+	
+	@Override
 	public void playSegment(float startTime, float endTime) throws IOException {
 		if(isPlaying()) return;
 		
@@ -131,9 +141,11 @@ public class SampledPlaySegment extends PlaySegment {
 						setPosition(startTime);
 						setPlaying(true);
 						final PlaybackMarkerTask task = new PlaybackMarkerTask(audioClip, startTime);
+						setPlaybackTask(task);
 						task.execute();
 					} else if(event.getType() == LineEvent.Type.STOP) {
 						setPlaying(false);
+						setPlaybackTask(null);
 						event.getLine().close();
 					}
 				}
