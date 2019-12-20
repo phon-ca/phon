@@ -64,23 +64,23 @@
 // Final Consonants
 (?&lt;\v)(\c)$</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="e479dcf0bf5e4757c877cff00f9bc8ac23d341db" name="Singleton Onsets">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="5f48c55b85f7f9cb446d8026c5c928aba8f7ca61" name="Singleton Onsets">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Singleton Onsets
 // The double pipe operator will combine results of independent expressions
 // Standalone Onsets
 (?&lt;^\s?)(\c:O:E)$ || 
 // All other Singleton Onsets
-(?&lt;\S)(\c:O)(?&gt;\v)</param>
+(?&lt;\S)(\c:O)(?&gt;.:N)</param>
     </param_set>
-    <param_set date="2018-07-19T16:11:45.540-02:30" hash="5dab96495da49969afe0e2d6383c9d6872341959" name="Singleton Codas">
+    <param_set date="2018-07-19T16:11:45.540-02:30" hash="7312e36946c08495b9a5e148359659732a6506d9" name="Singleton Codas">
         <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.primary.filter">// Singleton Codas
 // The double pipe operator will combine results of independent expressions
 // Medial Singleton Codas
-(?&lt;\v)(\c:C)(?&gt;\s? (\c:O | \v)) ||
+(?&lt;.:N)(\c:C)(?&gt;\s? (\c:O | .:N)) ||
 // Final Singleton Codas
-(?&lt;\v)(\c:C)$</param>
+(?&lt;.:N)(\c:C)$</param>
     </param_set>
     <param_set date="2018-07-19T16:11:45.540-02:30" hash="14cdcda73ed3c622b9e67fe5d74be9b37379f570" name="Initial Consonant Clusters">
         <param id="filters.searchBy.searchBy">Word</param>
