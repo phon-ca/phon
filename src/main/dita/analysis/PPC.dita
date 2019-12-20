@@ -25,7 +25,7 @@
                                 <li><p><i>PPC Summary</i> (Participant 1)</p></li>
                                 <li><p>...</p></li>
                             </ul></li>
-                        <li><p><b>Breakdown</b></p><ul>
+                        <li><p><b>Listing by Participant</b></p><ul>
                                 <li><p><i>PPC Listing</i> (Participant 1)</p></li>
                                 <li><p>...</p></li>
                             </ul></li>
@@ -45,23 +45,57 @@
     <topic id="parameters">
         <title>Parameters</title>
         <body>
-            <p/>
+            <p>The PPC report can be restricted to different sets of phones. Several pre-defined
+                sets have been defined and are available by using the radio buttons displayed in the
+                PPC form (see below.) The following pre-defined report types are available:<ol>
+                    <li>Percent Consonants Correct - all consonants (i.e., PCC)</li>
+                    <li>Percent Singleton Consonants Correct - singleton consonants. There are three
+                        report sub-types available when this option is selected:<ol
+                            id="ol_tvk_3ny_mjb">
+                            <li>All singletone consonants</li>
+                            <li>Singleton onsets</li>
+                            <li>Singleton codas</li>
+                        </ol></li>
+                    <li>Percent Cluster Consonants Correct - cluster consonants. There are three
+                        report sub-types available when this option is selected:<ol
+                            id="ol_lfj_zny_mjb">
+                            <li>All clusters</li>
+                            <li>Tautosyllabic clusters</li>
+                            <li>Heterosyllabic clusters</li>
+                        </ol></li>
+                    <li>Percent Vowels Correct</li>
+                    <li>Percent Phones Correct - all phones.</li>
+                </ol></p>
+            <p>When 'Percent Correct (custom)' is selected a custom <xref
+                    href="../phonex/intro.dita">Phonex</xref> expression may be entered to create a
+                custom phone set. See <xref href="../phonex/examples/phones.md" format="md">Example
+                    Phones Queries</xref> for some useful examples.</p>
+            <p>Other parameters:<ol id="ol_qkx_cqy_mjb">
+                    <li>Ignore diacritics - ignore diacritics when comparing phones (default:
+                        yes.)</li>
+                    <li>Include PPC w/o epenthesis 'PPC (NoEpen)' (see below.)</li>
+                    <li><xref href="../query/tasks/GroupFilter.xml"/></li>
+                    <li><xref href="../query/tasks/WordFilter.xml"/></li>
+                    <li><xref href="../query/tasks/SyllableFilter.xml"/></li>
+                </ol></p>
         </body>
     </topic>
     <topic id="topic_wgv_ybb_mjb">
         <title>PPC Calculation</title>
         <body>
             <p>PPC is calculated using the following equation:</p>
-            <p><foreign outputclass="embed-latex">\begin{split}
+            <p><foreign outputclass="embed-latex">
+                \begin{align} 
                 PPC &amp;= \frac{correct}{(correct + incorrect)} \times 100 \\
-                &amp;= \frac{correct}{(correct + deletions + substitutions + epenthesis)} \times 100
-                \end{split}</foreign></p>
-            <p>Traditionally PPC does not include epenthesis.  If requested, a second PPC column may
-                be added to the report which does not include epenthesis in the caclculation.</p>
-            <p><foreign outputclass="embed-latex">\begin{split} PPC\textsubscript{NoEpen} &amp;=
+                    &amp;= \frac{correct}{(correct + deletions + substitutions + epenthesis)} \times 100
+                \end{align}</foreign></p>
+            <p>If requested a second PPC column which does not include epenthesis may be added to
+                the report.  The column will be named 'PPC (NoEpen)'.</p>
+            <p><foreign outputclass="embed-latex">\begin{align} PPC\textsubscript{NoEpen} &amp;=
                     \frac{correct}{(correct + incorrect)} \times 100 \\ &amp;=
                     \frac{correct}{(correct + deletions + substitutions)} \times 100
-                    \end{split}</foreign></p>
+                 \end{align}</foreign>
+            </p>
         </body>
     </topic>
     <topic id="ppc-summary">
@@ -93,7 +127,7 @@
                             <entry># Substituted</entry>
                             <entry># Deleted</entry>
                             <entry># Epenthesized</entry>
-                            <entry>PCC</entry>
+                            <entry>PPC</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -152,7 +186,7 @@
                             <entry># Substituted</entry>
                             <entry># Deleted</entry>
                             <entry># Epenthesized</entry>
-                            <entry>PCC</entry>
+                            <entry>PPC</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -198,8 +232,8 @@
         <title>PPC Listing</title>
         <body>
             <p>The <i>PPC Listing</i> table displays # Target, # Correct, # Substituted, # Deleted,
-                # Epenthesis, PCC/PVC (Percent Consonant/Vowel Correct) for each word sampled. The
-                table will have the caption “Participant Name”.</p>
+                # Epenthesis, PPC for each word sampled. The table will have the caption
+                “Participant Name”.</p>
             <p>Example</p>
             <table>
                 <tgroup cols="10">
@@ -224,7 +258,7 @@
                             <entry># Substituted</entry>
                             <entry># Deleted</entry>
                             <entry># Epenthesized</entry>
-                            <entry>PCC</entry>
+                            <entry>PPC</entry>
                         </row>
                     </thead>
                     <tbody>

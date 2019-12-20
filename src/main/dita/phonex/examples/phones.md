@@ -60,16 +60,16 @@ The following examples are available in Phon from the *Phones* query window as *
 // Standalone Onsets
 (?<^\s?)(\c:O:E)$ || 
 // All other Singleton Onsets
-(?<\S)(\c:O)(?>\v)
+(?<\S)(\c:O)(?>.N)
 ```
 
 ## Singleton Codas
 ```
 // The double pipe operator will combine results of independent expressions
 // Medial Singleton Codas
-(?<\v)(\c:C)(?>\s? (\c:O | \v)) ||
+(?<.:N)(\c:C)(?>\s? (\c:O | .:N)) ||
 // Final Singleton Codas
-(?<\v)(\c:C)$
+(?<.:N)(\c:C)$
 ```
 
 ## Initial Consonant Clusters
