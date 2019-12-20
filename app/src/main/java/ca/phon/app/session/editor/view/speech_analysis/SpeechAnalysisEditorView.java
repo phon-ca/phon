@@ -178,6 +178,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		init();
 		update();
+		
+		addEditorViewListener(editorViewListener);
 	}
 
 	private void loadPlugins() {
@@ -983,6 +985,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 		@Override
 		public void onFocused(EditorView view) {
 			setupTimeModel();
+			for(SpeechAnalysisTier tier:getPluginTiers())
+				tier.onRefresh();
 		}
 		
 	};
