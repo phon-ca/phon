@@ -76,7 +76,7 @@ public class QueryScript extends LazyQueryScript {
 			script.addPackageImport("Packages.ca.phon.util");
 			script.addPackageImport("Packages.ca.phon.project");
 			script.addPackageImport("Packages.ca.phon.session");
-			script.addPackageImport("Packages.ca.phon.session");
+			script.addPackageImport("Packages.ca.phon.session.format");
 			script.addPackageImport("Packages.ca.phon.project");
 			script.addPackageImport("Packages.ca.phon.query");
 			script.addPackageImport("Packages.ca.phon.query.report");
@@ -162,6 +162,7 @@ public class QueryScript extends LazyQueryScript {
 		super.addPackageImport("Packages.ca.phon.util");
 		super.addPackageImport("Packages.ca.phon.project");
 		super.addPackageImport("Packages.ca.phon.session");
+		super.addPackageImport("Packages.ca.phon.session.format");
 		
 		super.addClassImport("Packages.org.apache.commons.lang3.StringUtils");
 	}
