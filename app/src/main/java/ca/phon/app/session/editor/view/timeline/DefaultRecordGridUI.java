@@ -669,7 +669,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	private final PropertyChangeListener propListener = (e) -> {
 		if("speakerCount".equals(e.getPropertyName())
 				|| "tierCount".equals(e.getPropertyName())
-				|| "tierInsets".equals(e.getPropertyName())) {
+				|| "tierInsets".equals(e.getPropertyName())
+				|| "pixelsPerSecond".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
 		} else if("currentRecordIndex".equals(e.getPropertyName())) {
 			recordGrid.repaint(recordGrid.getVisibleRect());

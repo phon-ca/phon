@@ -325,8 +325,8 @@ public final class TimelineView extends EditorView {
 		tierVisiblityButton = new DropDownButton(tierVisibilityAct);
 		tierVisiblityButton.setOnlyPopup(true);
 		
-		zoomOutButton = new JButton(new ZoomAction(this, -1));
-		zoomInButton = new JButton(new ZoomAction(this, 1));
+		zoomOutButton = new JButton(new ZoomAction(this, false));
+		zoomInButton = new JButton(new ZoomAction(this, true));
 		
 //		SplitRecordAction splitRecordAct = new SplitRecordAction(this);
 //		JButton splitRecordButton = new JButton(splitRecordAct);
@@ -443,15 +443,11 @@ public final class TimelineView extends EditorView {
 		float viewLen = viewEnd - viewStart;
 		
 		if(windowLen <= viewLen) {
-			if( (windowStart >= viewStart && windowEnd <= viewEnd) ) {
-				// noop
-			} else if( (windowStart >= viewStart && windowEnd > viewEnd) 
-					|| (windowStart > viewEnd && windowEnd > viewEnd)
-			) {
+			if( (windowStart >= viewStart && windowEnd > viewEnd) 
+					|| (windowStart > viewEnd && windowEnd > viewEnd) ) {
 				scrollToTime(windowEnd - viewLen);
 			} else if( (windowStart < viewStart && windowEnd < viewStart)
-					|| (windowStart < viewStart && windowEnd >= viewStart)
-			) {
+					|| (windowStart < viewStart && windowEnd >= viewStart) ) {
 				scrollToTime(windowStart);
 			}
 		} else {
@@ -679,8 +675,8 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "zoom");
 		
-		builder.addItem(".", new ZoomAction(this, 1));
-		builder.addItem(".", new ZoomAction(this, -1));
+		builder.addItem(".", new ZoomAction(this, true));
+		builder.addItem(".", new ZoomAction(this, false));
 		
 		return menu;
 	}
@@ -724,8 +720,8 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "zoom");
 		
-		builder.addItem(".", new ZoomAction(this, 1));
-		builder.addItem(".", new ZoomAction(this, -1));
+		builder.addItem(".", new ZoomAction(this, true));
+		builder.addItem(".", new ZoomAction(this, false));
 		
 		contextMenu.show(me.getComponent(), me.getX(), me.getY());
 	}
