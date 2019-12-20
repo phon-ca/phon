@@ -428,8 +428,64 @@ public final class TimelineView extends EditorView {
 		tierPanel.scrollRectToVisible(rect);
 	}
 	
+	public void scrollToRecord(Record r) {
+		MediaSegment seg = r.getSegment().getGroup(0);
+		float time = seg.getStartValue() / 1000.0f;
+		float endTime = seg.getEndValue() / 1000.0f;
+		float paddingTime = 100.0f / getTimeModel().getPixelsPerSecond();
+		
+		float windowStart = Math.max(0.0f, time - paddingTime);
+		float windowEnd = Math.min(endTime + paddingTime, getTimeModel().getEndTime());
+		float windowLen = windowEnd - windowStart;
+		
+		float viewStart = getWindowStart();
+		float viewEnd = getWindowEnd();
+		float viewLen = viewEnd - viewStart;
+		
+		if(windowLen <= viewLen) {
+			if( (windowStart >= viewStart && windowEnd <= viewEnd) ) {
+				// noop
+			} else if( (windowStart >= viewStart && windowEnd > viewEnd) 
+					|| (windowStart > viewEnd && windowEnd > viewEnd)
+			) {
+				scrollToTime(windowEnd - viewLen);
+			} else if( (windowStart < viewStart && windowEnd < viewStart)
+					|| (windowStart < viewStart && windowEnd >= viewStart)
+			) {
+				scrollToTime(windowStart);
+			}
+		} else {
+			int viewWidth = getVisibleRect().width;
+			float newPxPerS = viewWidth / windowLen;
+			
+			getTimeModel().setPixelsPerSecond(newPxPerS);
+			scrollToTime(windowStart);
+		}
+		
+	}
+	
 	public void scrollRectToVisible(Rectangle rect) {
 		tierPanel.scrollRectToVisible(rect);
+	}
+	
+	public float getWindowStart() {
+		return getTimeModel().timeAtX(tierPanel.getVisibleRect().getX());
+	}
+	
+	public float getWindowEnd() {
+		return getTimeModel().timeAtX(tierPanel.getVisibleRect().getMaxX());
+	}
+
+	public double getWindowStartX() {
+		return tierPanel.getVisibleRect().getX();
+	}
+	
+	public double getWindowEndX() {
+		return tierPanel.getVisibleRect().getMaxX();
+	}
+	
+	public float getWindowLength() {
+		return getWindowEnd() - getWindowStart();
 	}
 	
 	/* Editor actions */
@@ -501,13 +557,7 @@ public final class TimelineView extends EditorView {
 		}
 		
 		if(r != null) {
-			MediaSegment seg = r.getSegment().getGroup(0);
-			float time = seg.getStartValue() / 1000.0f;
-			
-			var x = getTimeModel().xForTime(time);
-			if(!tierPanel.getVisibleRect().contains(x, 0)) {
-				scrollToTime(time);
-			}
+			scrollToRecord(r);
 		}
 	}
 	
@@ -700,16 +750,17 @@ public final class TimelineView extends EditorView {
 			SwingUtilities.invokeLater(() -> {
 				Record r = getEditor().currentRecord();
 				if(r != null) {
-					MediaSegment seg = r.getSegment().getGroup(0);
-					if(seg != null && seg.getEndValue() - seg.getStartValue() > 0) {
-						
-						Rectangle2D segRect = new Rectangle2D.Double(
-								timeModel.xForTime(seg.getStartValue()/1000.0f), 0,
-								timeModel.xForTime(seg.getEndValue()/1000.0f) - timeModel.xForTime(seg.getStartValue()/1000.0f), 1);
-						if(!segRect.intersects(recordGrid.getVisibleRect())) {
-							scrollToTime(seg.getStartValue() / 1000.0f);
-						}
-					}
+					scrollToRecord(r);
+//					MediaSegment seg = r.getSegment().getGroup(0);
+//					if(seg != null && seg.getEndValue() - seg.getStartValue() > 0) {
+//						
+//						Rectangle2D segRect = new Rectangle2D.Double(
+//								timeModel.xForTime(seg.getStartValue()/1000.0f), 0,
+//								timeModel.xForTime(seg.getEndValue()/1000.0f) - timeModel.xForTime(seg.getStartValue()/1000.0f), 1);
+//						if(!segRect.intersects(recordGrid.getVisibleRect())) {
+//							scrollToTime(seg.getStartValue() / 1000.0f);
+//						}
+//					}
 				}
 			});
 		}
