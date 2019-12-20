@@ -75,6 +75,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.SaveAction;
@@ -156,7 +157,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JToolBar toolbar;
 
 	private DropDownButton playButton;
-	private JButton exportButton;
+	private DropDownButton exportButton;
 
 	private JButton refreshButton;
 	private JButton showMoreButton;
@@ -344,8 +345,32 @@ public class SpeechAnalysisEditorView extends EditorView {
 		playButton.setFocusable(false);
 		playButton.setEnabled(false);
 
+		final JPopupMenu saveMenu = new JPopupMenu();
+		saveMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				saveMenu.removeAll();
+				setupExportMenu(new MenuBuilder(saveMenu));
+				
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				
+			}
+			
+		});
+		
 		final SaveAction exportAct = new SaveAction(getEditor(), this);
-		exportButton = new JButton(exportAct);
+		exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
+		
+		exportButton = new DropDownButton(exportAct);
 		exportButton.setFocusable(false);
 		exportButton.setEnabled(false);
 		
@@ -396,10 +421,25 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final JMenuItem playSegmentItem = new JMenuItem(playSegmentAct);
 		playSegmentItem.setEnabled( currentRecordInterval != null );
 		
-		
-		
 		builder.addItem(".", playSelectionItem);
 		builder.addItem(".", playSegmentItem);
+		
+		// TODO loop toggle
+	}
+	
+	private void setupExportMenu(MenuBuilder builder) {
+		final SaveAction exportSelectionAct = new SaveAction(getEditor(), SpeechAnalysisEditorView.this);
+		exportSelectionAct.setSaveSegment(false);
+		final JMenuItem exportSelectionItem = new JMenuItem(exportSelectionAct);
+		exportSelectionItem.setEnabled( selectionInterval != null );
+		
+		final SaveAction exportSegmentAct = new SaveAction(getEditor(), this);
+		exportSegmentAct.setSaveSegment(true);
+		final JMenuItem exportSegmentItem = new JMenuItem(exportSegmentAct);
+		exportSegmentItem.setEnabled( currentRecordInterval != null );
+		
+		builder.addItem(".", exportSelectionItem);
+		builder.addItem(".", exportSegmentItem);
 	}
 
 	/* toolbar actions */
@@ -446,6 +486,35 @@ public class SpeechAnalysisEditorView extends EditorView {
 			LogUtil.severe(e);
 			Toolkit.getDefaultToolkit().beep();
 		}		
+	}
+	
+	public void export(File file) throws IOException {
+		if(selectionInterval != null) {
+			exportSelection(file);
+		} else if(currentRecordInterval != null) {
+			exportSegment(file);
+		}
+	}
+
+	public void exportSelection(File file) throws IOException {
+		
+	}
+	
+	public void exportSegment(File file) throws IOException {
+		
+	}
+	
+	private void exportInterval(File file, float startTime, float endTime) throws IOException {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(!mediaModel.isSessionAudioAvailable()) return;
+		
+		LongSound sharedSound = mediaModel.getSharedSessionAudio();
+		if(sharedSound == null) return;
+		
+		ExportSegment exportSegment = sharedSound.getExtension(ExportSegment.class);
+		if(exportSegment == null) return;
+				
+		exportSegment.exportSegment(file, startTime, endTime);
 	}
 	
 	public boolean isPlaying() {
@@ -779,10 +848,28 @@ public class SpeechAnalysisEditorView extends EditorView {
 	@Override
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
-
 		MenuBuilder builder = new MenuBuilder(retVal);
-		setupPlaybackMenu(builder);
-		builder.addSeparator(".", "playback");
+		
+		if(selectionInterval != null) {
+			final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
+			selectAct.putValue(PhonUIAction.NAME, "Set segment");
+			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select segment for current record");
+			builder.addItem(".", selectAct);
+			
+			builder.addItem(".", new NewRecordAction(getEditor(), this));
+			builder.addSeparator(".", "selection");
+		}
+
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionAudioAvailable()) {
+			setupPlaybackMenu(builder);
+			builder.addSeparator(".", "playback");
+			setupExportMenu(builder);
+			builder.addSeparator(".", "export");
+		} else {
+			builder.addItem(".", new GenerateSessionAudioAction(getEditor()));
+			builder.addSeparator(".", "generate");
+		}
 		
 //		if(getWavDisplay().isPlaying()) {
 //			retVal.add(new StopAction(getEditor(), this));
@@ -809,10 +896,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		retVal.add(new ResetAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this, false));
-		retVal.addSeparator();
-		retVal.add(new SaveAction(getEditor(), this));
-		retVal.add(new GenerateSessionAudioAction(getEditor()));
-
+		
 		for(SpeechAnalysisTier tier:pluginTiers) {
 			tier.addMenuItems(retVal, false);
 		}
@@ -832,20 +916,54 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private JMenu createContextMenu() {
 		final JMenu menu = new JMenu();
+		MenuBuilder builder = new MenuBuilder(menu);
+		
+		if(selectionInterval != null) {
+			final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
+			selectAct.putValue(PhonUIAction.NAME, "Set segment");
+			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select segment for current record");
+			builder.addItem(".", selectAct);
+			
+			builder.addItem(".", new NewRecordAction(getEditor(), this));
+			builder.addSeparator(".", "selection");
+		}
+
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(mediaModel.isSessionAudioAvailable()) {
+			setupPlaybackMenu(builder);
+			builder.addSeparator(".", "playback");
+			setupExportMenu(builder);
+			builder.addSeparator(".", "export");
+		} else {
+			builder.addItem(".", new GenerateSessionAudioAction(getEditor()));
+			builder.addSeparator(".", "generate");
+		}
+		
+//		if(getWavDisplay().isPlaying()) {
+//			retVal.add(new StopAction(getEditor(), this));
+//		} else {
+//			retVal.add(new PlayAction(getEditor(), this));
+//			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(getWavDisplay()));
+//			retVal.add(loopItem);
 //
-//		final SelectSegmentAction selectSegAct = new SelectSegmentAction(wavDisplay);
-//		selectSegAct.putValue(Action.NAME, "Set segment for current record");
-//		selectSegAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
-//		menu.add(new JMenuItem(selectSegAct));
-//
-//		if(wavDisplay.hasSelection()) {
-//			final NewRecordAction newRecordAct = new NewRecordAction(getEditor(), this);
-//			menu.add(newRecordAct);
+//			// output device selection
+//			final JMenu mixerMenu = new JMenu("Output Device");
+//			final Info[] mixers = AudioSystem.getMixerInfo();
+//			for(Info mixerInfo:mixers) {
+//				// if we have no source lines, we can't use this device
+//				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
+//				final SelectMixerAction mixerAct = new SelectMixerAction(getWavDisplay(), mixerInfo);
+//				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
+//						getWavDisplay().getMixerInfo() == mixerInfo);
+//				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
+//			}
+//			retVal.add(mixerMenu);
 //		}
-//
-//		menu.addSeparator();
-//
-//		wavDisplay.getUI().addContextMenuItems(menu);
+//		retVal.addSeparator();
+		
+		menu.add(new ResetAction(getEditor(), this));
+		menu.add(new ZoomAction(getEditor(), this));
+		menu.add(new ZoomAction(getEditor(), this, false));
 
 		for(SpeechAnalysisTier tier:getPluginTiers()) {
 			tier.addMenuItems(menu, true);

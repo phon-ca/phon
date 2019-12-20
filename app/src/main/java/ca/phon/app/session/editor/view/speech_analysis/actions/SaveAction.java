@@ -47,6 +47,10 @@ public class SaveAction extends SpeechAnalysisEditorViewAction {
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/filesave", IconSize.SMALL);
 	
+	private boolean saveDefault = true;
+	
+	private boolean saveSegment = true;
+	
 	public SaveAction(SessionEditor editor, SpeechAnalysisEditorView view) {
 		super(editor, view);
 		
@@ -69,28 +73,25 @@ public class SaveAction extends SpeechAnalysisEditorViewAction {
 		NativeDialogs.showSaveDialog(props);
 	}
 	
-	private void exportSegment(File file) throws IOException {
-		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(!mediaModel.isSessionAudioAvailable()) return;
+	public void setSaveSegment(boolean saveSegment) {
+		this.saveDefault = false;
+		this.saveSegment = saveSegment;
 		
-		LongSound sharedSound = mediaModel.getSharedSessionAudio();
-		if(sharedSound == null) return;
-		
-		ExportSegment exportSegment = sharedSound.getExtension(ExportSegment.class);
-		if(exportSegment == null) return;
-		
-		float startTime = 0.0f;
-		float endTime = 0.0f;
-		
-		if(getView().getSelectionInterval() != null) {
-			startTime = getView().getSelectionInterval().getStartMarker().getTime();
-			endTime = getView().getSelectionInterval().getEndMarker().getTime();
-		} else if(getView().getCurrentRecordInterval() != null) {
-			startTime = getView().getCurrentRecordInterval().getStartMarker().getTime();
-			endTime = getView().getCurrentRecordInterval().getEndMarker().getTime();
+		if(saveSegment) {
+			putValue(NAME, "Save record segment...");
+		} else {
+			putValue(NAME, "Save selection...");
 		}
-		
-		exportSegment.exportSegment(file, startTime, endTime);
+	}
+	
+	private void exportSegment(File file) throws IOException {
+		if(saveDefault) {
+			getView().export(file);
+		} else if(saveSegment) {
+			getView().exportSegment(file);
+		} else {
+			getView().exportSelection(file);
+		}
 	}
 
 	private final NativeDialogListener saveListener = new NativeDialogListener() {
