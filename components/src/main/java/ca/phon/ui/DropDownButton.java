@@ -213,15 +213,14 @@ public class DropDownButton extends JButton {
 	
 	public boolean isInArrowArea(Point p) {
 		Icon icn = getIcon();
-		Rectangle iconRect = new Rectangle(0, 0, icn.getIconWidth() + getInsets().left + getInsets().right, getHeight());
-		if(icn instanceof DropDownIcon && iconRect.contains(p)) {
+		if(getVisibleRect().contains(p) && icn instanceof DropDownIcon) {
 			DropDownIcon icon = (DropDownIcon)icn;
 			
 			Rectangle arrowRect = icon.getArrowRect();
 			arrowRect.translate(getInsets().left, 0);
 			arrowRect.width += getInsets().right;
 			
-			return arrowRect.contains(p);
+			return arrowRect.getX() <= p.x;
 		} else {
 			return false;
 		}
