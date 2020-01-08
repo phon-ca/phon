@@ -69,7 +69,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private Map<Channel, double[][]> channelExtremaMap = new HashMap<>();
 
-	private Map<Channel, BufferedImage> channelImgMap = new HashMap<>();
+//	private Map<Channel, BufferedImage> channelImgMap = new HashMap<>();
 	
 	private WaveformDisplay display;
 	
@@ -77,8 +77,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private AtomicReference<SampledWorker> workerRef = new AtomicReference<>();
 	
-	/* Set to true when img cache is available */
-	private volatile boolean loaded = false; 
+//	/* Set to true when img cache is available */
+//	private volatile boolean loaded = false; 
 	
 	@Override
 	public void installUI(JComponent c) {
@@ -224,6 +224,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		return new Dimension(prefWidth, prefHeight);
 	}
 	
+	int lastStartX = -1;
+	int lastEndX = -1;
+	
 	@Override
 	public void paint(Graphics g, JComponent c) {
 		if(!(c instanceof WaveformDisplay))
@@ -234,12 +237,22 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			audioLength = display.getLongSound().length();
 		}
 		
+		int currentStartX = (int)display.getWindowStartX();
+		int currentEndX = (int)display.getWindowEndX();
+		
+		if(currentStartX != lastStartX
+				|| currentEndX != lastEndX) {
+			needsRepaint = true;
+		}
+		lastStartX = currentStartX;
+		lastEndX = currentEndX;
+		
 		int cnt = (int)Math.floor(audioLength * display.getPixelsPerSecond());
 		if(needsRepaint) {
 			needsRepaint = false;
 			
-			loaded = false;
-			channelImgMap.clear();
+//			loaded = false;
+//			channelImgMap.clear();
 			
 			SampledWorker currentWorker = workerRef.get();
 			if(currentWorker != null && !currentWorker.isDone()) {
@@ -286,19 +299,19 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				int sx = (int) Math.max(channelRect.getX(), bounds.x);
 				int ex = (int) Math.min(channelRect.getX()+channelRect.getWidth(), bounds.x + bounds.width);
 				
-				if(!loaded) {
+//				if(!loaded) {
 					// paint channel data directly
 					paintChannelData(g2, ch, false, (int)channelRect.getY(), sx, ex);
-				} else {
-					// use cache
-					BufferedImage chImg = channelImgMap.get(ch);
-					if(chImg != null) {
-						g2.drawImage(chImg, sx, (int)channelRect.getY(), ex, (int)channelRect.getMaxY(), 
-								sx, 0, ex, chImg.getHeight(), display);
-					} else {
-						paintChannelData(g2, ch, false, (int)channelRect.getY(), sx, ex);
-					}
-				}
+//				} else {
+//					// use cache
+//					BufferedImage chImg = channelImgMap.get(ch);
+//					if(chImg != null) {
+//						g2.drawImage(chImg, sx, (int)channelRect.getY(), ex, (int)channelRect.getMaxY(), 
+//								sx, 0, ex, chImg.getHeight(), display);
+//					} else {
+//						paintChannelData(g2, ch, false, (int)channelRect.getY(), sx, ex);
+//					}
+//				}
 			}
 		}
 		
@@ -399,8 +412,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 
 			// load in 5s intervals
 			float incr = 5.0f;
-			float time = display.getStartTime();
-			while(time < display.getEndTime() && !isCancelled()) {
+			float time = display.getWindowStart();
+			while(time < display.getWindowEnd() && !isCancelled()) {
 				float endTime = Math.min(time+incr, display.getEndTime());
 				
 				final Sound snd = sound.extractPart(time, endTime);
@@ -433,43 +446,43 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 
 		@Override
 		protected void done() {
-			loaded = false;
-			PaintTask paintTask = new PaintTask();
-			PhonWorker.getInstance().invokeLater(paintTask);
+//			loaded = false;
+//			PaintTask paintTask = new PaintTask();
+//			PhonWorker.getInstance().invokeLater(paintTask);
 		}
 
 	}
 
-	private class PaintTask extends PhonTask {
-
-		@Override
-		public void performTask() {
-			setStatus(TaskStatus.RUNNING);
-			
-			for(Channel ch:display.availableChannels()) {
-				BufferedImage chImg = channelImgMap.get(ch);
-				if(chImg == null) {
-					chImg = new BufferedImage(display.getWidth(), 
-							(int)getChannelRect(ch).getHeight() * 2,
-							BufferedImage.TYPE_INT_ARGB);
-					channelImgMap.put(ch, chImg);
-				}
-				Graphics2D g2 = chImg.createGraphics();
-				setupRenderingHints(g2);
-				
-				var sx = display.xForTime(display.getStartTime());
-				var ex = display.xForTime(display.getEndTime());
-				
-				paintChannelData(g2, ch, true, 0, sx, ex);
-			}
-			
-			loaded = true;
-			
-			display.repaint(display.getVisibleRect());
-			
-			setStatus(TaskStatus.FINISHED);
-		}
-		
-	}
+//	private class PaintTask extends PhonTask {
+//
+//		@Override
+//		public void performTask() {
+//			setStatus(TaskStatus.RUNNING);
+//			
+//			for(Channel ch:display.availableChannels()) {
+//				BufferedImage chImg = channelImgMap.get(ch);
+//				if(chImg == null) {
+//					chImg = new BufferedImage(display.getWidth(), 
+//							(int)getChannelRect(ch).getHeight() * 2,
+//							BufferedImage.TYPE_INT_ARGB);
+//					channelImgMap.put(ch, chImg);
+//				}
+//				Graphics2D g2 = chImg.createGraphics();
+//				setupRenderingHints(g2);
+//				
+//				var sx = display.xForTime(display.getStartTime());
+//				var ex = display.xForTime(display.getEndTime());
+//				
+//				paintChannelData(g2, ch, true, 0, sx, ex);
+//			}
+//			
+//			loaded = true;
+//			
+//			display.repaint(display.getVisibleRect());
+//			
+//			setStatus(TaskStatus.FINISHED);
+//		}
+//		
+//	}
 	
 }

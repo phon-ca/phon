@@ -112,6 +112,52 @@ public abstract class TimeComponent extends JComponent {
 		return timeModel.xForTime(time);
 	}
 	
+	/**
+	 * Return the start time in our visible rectangle
+	 * 
+	 * @return first visible time in s
+	 */
+	public float getWindowStart() {
+		return getTimeModel().timeAtX(getWindowStartX());
+	}
+	
+	/**
+	 * Returns the last time visible in our visible rectangle
+	 * 
+	 * @return final visible time in s
+	 */
+	public float getWindowEnd() {
+		return getTimeModel().timeAtX(getWindowEndX());
+	}
+
+	/**
+	 * Get x position of first visible start time
+	 * 
+	 * @return
+	 */
+	public double getWindowStartX() {
+		return Math.max(timeModel.getTimeInsets().left , getVisibleRect().getX());
+	}
+	
+	/**
+	 * Get x position of last visible time
+	 * 
+	 * @return
+	 */
+	public double getWindowEndX() {
+		return Math.min(getWidth() - timeModel.getTimeInsets().right, getVisibleRect().getMaxX());
+	}
+	
+	/**
+	 * Get visible window length in seconds
+	 * 
+	 * @return
+	 */
+	public float getWindowLength() {
+		return getWindowEnd() - getWindowStart();
+	}
+	
+	
 	public Rectangle rectForInterval(float startTime, float endTime) {
 		var startX = (int)Math.round(xForTime(startTime)) - 1;
 		var endX = (int)Math.round(xForTime(endTime)) + 1;
