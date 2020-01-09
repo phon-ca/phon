@@ -1,5 +1,9 @@
 package ca.phon.ipamap2;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,28 +46,33 @@ public class IPAGrids {
 	 * Load static IPA map data
 	 * 
 	 */
-	public IpaGrids loadGridData() {
+	public IpaGrids loadDefaultGridData() {
 		ObjectFactory factory = new ObjectFactory();
-		if(grids == null) {
-			try {
-				JAXBContext ctx = JAXBContext.newInstance(factory.getClass());
-				Unmarshaller unmarshaller = ctx.createUnmarshaller();
-//				unmarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-				grids = (IpaGrids)unmarshaller.unmarshal(
-						IPAGrids.class.getResource(GRID_FILE));
-				
-				// add generated grids
-				generateMissingGrids(grids);
-			} catch (JAXBException e) {
-				e.printStackTrace();
-				LOGGER.error(e.getMessage());
-				grids = factory.createIpaGrids();
-			}
+		try {
+			JAXBContext ctx = JAXBContext.newInstance(factory.getClass());
+			Unmarshaller unmarshaller = ctx.createUnmarshaller();
+			grids = (IpaGrids)unmarshaller.unmarshal(
+					IPAGrids.class.getResource(GRID_FILE));
+		} catch (JAXBException e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			grids = factory.createIpaGrids();
 		}
 		return grids;
 	}
 	
-	private void generateMissingGrids(IpaGrids grids) {
+	public IpaGrids loadGridData(InputStream in) throws IOException {
+		ObjectFactory factory = new ObjectFactory();
+		try {
+			JAXBContext ctx = JAXBContext.newInstance(factory.getClass());
+			Unmarshaller unmarshaller = ctx.createUnmarshaller();
+			grids = (IpaGrids)unmarshaller.unmarshal(in);
+		} catch (JAXBException e) {throw new IOException(e);
+		}
+		return grids;
+	}
+	
+	public void generateMissingGrids() {
 		// create a set of characters defined in the xml file
 		final Set<Character> supportedChars = new HashSet<Character>();
 		for(Grid g:grids.getGrid()) {
@@ -234,7 +243,7 @@ public class IPAGrids {
 		FeatureMatrix fm = FeatureMatrix.getInstance();
 		search = StringUtils.strip(search.toLowerCase());
 		if(search.length() > 0) {
-			for(Grid grid:loadGridData().getGrid()) {
+			for(Grid grid:getInternal().getGrid()) {
 				for(Cell cell:grid.getCell()) {
 	//				for(String searchTerm:searchTerms) {
 	//					searchTerm = StringUtils.strip(searchTerm).toLowerCase();
@@ -287,6 +296,10 @@ public class IPAGrids {
 		}
 		
 		return retVal;
+	}
+	
+	public IpaGrids getInternal() {
+		return this.grids;
 	}
 	
 }

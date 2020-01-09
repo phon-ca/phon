@@ -92,7 +92,12 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	 * 
 	 */
 	public void addDefaultGrids() {
-		for(var ipaGrid:grids.loadGridData().getGrid()) {
+		// load data from ipagrids.xml
+		grids.loadDefaultGridData();
+		// generate any missing information
+		grids.generateMissingGrids();
+		
+		for(var ipaGrid:grids.getInternal().getGrid()) {
 			addGrid(ipaGrid);
 		}
 	}

@@ -1,5 +1,6 @@
 package ca.phon.ipamap2;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -11,24 +12,27 @@ import ca.phon.ui.tristatecheckbox.TristateCheckBox;
 
 public class DiacriticSelector extends IPAMapSelector {
 	
+	private final static String DIACRITICS_FILE = "diacritics.xml";
+	
 	public DiacriticSelector() {
 		super();
 
-		init();
-	}
-	
-	private void init() {
-		// remove all non-diacritic sections
-		setSectionVisible("Consonants", false);
-		setSectionVisible("Clicks and Implosives", false);
-		setSectionVisible("Vowels", false);
-		setSectionVisible("Suprasegmentals", false);
-		setSectionVisible("ExtIPA", false);
 		setSectionVisible("Other Consonants", false);
 		setSectionVisible("Other Vowels", false);
 		setSectionVisible("Other Symbols", false);
+	}
+	
+	@Override
+	protected void loadGrids() {
+		ipaGrids = new IPAGrids();
+		try {
+			ipaGrids.loadGridData(DiacriticSelector.class.getResourceAsStream(DIACRITICS_FILE));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ipaGrids.generateMissingGrids();
 		
-		
+		addGrids(ipaGrids);
 	}
 	
 	public Set<Diacritic> getSelectedDiacritics() {

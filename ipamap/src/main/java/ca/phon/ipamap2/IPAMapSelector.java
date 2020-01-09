@@ -39,7 +39,7 @@ public class IPAMapSelector extends JComponent {
 	
 	private IPAMapInfoPane infoPane;
 	
-	private IPAGrids ipaGrids;
+	protected IPAGrids ipaGrids;
 	
 	private Map<String, IPAMapGrid> gridMap = new LinkedHashMap<>();
 	
@@ -47,6 +47,7 @@ public class IPAMapSelector extends JComponent {
 		super();
 		
 		init();
+		loadGrids();
 	}
 	
 	public Set<String> getSectionNames() {
@@ -134,14 +135,7 @@ public class IPAMapSelector extends JComponent {
 		selectedMap = gridTuple.getObj2();
 		selectedMap.addCellMouseListener(cellMouseListener);
 		
-		ipaGrids = new IPAGrids();
 		map = new IPAMapGridContainer();
-		
-		for(var ipaGrid:ipaGrids.loadGridData().getGrid()) {
-			var tuple = map.addGrid(ipaGrid);
-			gridMap.put(ipaGrid.getName(), tuple.getObj2());
-			addCheckBox(tuple.getObj2());
-		}
 		
 		map.setSelectionEnabled(true);
 		map.addCellSelectionListener(cellSelectionListener);
@@ -152,6 +146,21 @@ public class IPAMapSelector extends JComponent {
 		add(selectedMapContainer, BorderLayout.NORTH);
 		add(new JScrollPane(map), BorderLayout.CENTER);
 		add(infoPane, BorderLayout.SOUTH);
+	}
+	
+	protected void loadGrids() {
+		ipaGrids = new IPAGrids();
+		ipaGrids.loadDefaultGridData();
+		ipaGrids.generateMissingGrids();
+		addGrids(ipaGrids);
+	}
+	
+	protected void addGrids(IPAGrids ipaGrids) {
+		for(var ipaGrid:ipaGrids.getInternal().getGrid()) {
+			var tuple = map.addGrid(ipaGrid);
+			gridMap.put(ipaGrid.getName(), tuple.getObj2());
+			addCheckBox(tuple.getObj2());
+		}		
 	}
 	
 	public List<String> getSelected() {
