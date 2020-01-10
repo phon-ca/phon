@@ -72,6 +72,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.BrowseForMediaAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
@@ -85,6 +86,7 @@ import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -618,9 +620,26 @@ public final class TimelineView extends EditorView {
 				handler.setParticipantForMediaStart(startDialog.getSelectedParticipant());
 				handler.setSegmentationMode(startDialog.getSegmentationMode());
 				handler.getWindow().setBackwardWindowLengthMs(startDialog.getWindowLength());
+
+				// check for speech analysis view
+				if(getEditor().getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
+					int result = getEditor().showMessageDialog("Segmentation", "Having Speech Analysis view visible may cause performance issues with segmentation.", new String[] {
+							"Close Speech Analysis and Continue", "Continue without closing", "Cancel" });
+					switch(result) {
+					case 0:
+						getEditor().getViewModel().getCloseAction(SpeechAnalysisEditorView.VIEW_TITLE).actionPerformed(new ActionEvent(this, -1, "close"));
+						break;
+						
+					case 1:
+						break;
+						
+					case 2:
+					default:
+						return;
+					}
+				}
 				
 				getEditor().putExtension(SegmentationHandler.class, handler);
-				
 				handler.startSegmentation();
 			}
 		}
