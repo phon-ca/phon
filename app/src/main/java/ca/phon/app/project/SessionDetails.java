@@ -130,7 +130,7 @@ public class SessionDetails extends JPanel {
 			});
 			
 			fileLabelPanel.add(finderLabel, BorderLayout.WEST);
-		}
+		} // TODO Windows & Linux
 		
 		final JPanel detailsPanel = new JPanel(new GridBagLayout());
 		detailsPanel.setOpaque(false);
