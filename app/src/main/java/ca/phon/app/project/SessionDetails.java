@@ -77,7 +77,7 @@ public class SessionDetails extends JPanel {
 	private UpdateTask currentUpdateTask;
 	
 	public final static String SHOW_FINDER_BUTTON = SessionDetails.class.getName() + ".showFinderButton";
-	public final static boolean DEFAULT_SHOW_FINDER_BUTTON = false;
+	public final static boolean DEFAULT_SHOW_FINDER_BUTTON = true;
 	
 	private boolean showFinderButton = PrefHelper.getBoolean(SHOW_FINDER_BUTTON, DEFAULT_SHOW_FINDER_BUTTON);
 	
