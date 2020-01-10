@@ -10,6 +10,7 @@ import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
@@ -75,6 +76,10 @@ public class TimeComponentUI extends ComponentUI {
 		return new Dimension(prefWidth, prefHeight);
 	}
 	
+	public TimeComponent getTimeComponent() {
+		return this.timeComp;
+	}
+	
 	public void paintMarker(Graphics2D g2, Marker marker) {
 		if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) return;
 		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
@@ -89,8 +94,19 @@ public class TimeComponentUI extends ComponentUI {
 		g2.draw(line);
 	}
 	
-	public void paintInterval(Graphics2D g2, Interval interval) {
+	public void paintInterval(Graphics2D g2, Interval interval, boolean paintBackground) {
 		if(!timeComp.isRepaintAll() && interval.getOwner() != null && interval.getOwner() != timeComp) return;
+		
+		if(paintBackground) {
+			g2.setColor(interval.getColor());
+			
+			double xmin = timeComp.xForTime(interval.getStartMarker().getTime());
+			double xmax = timeComp.xForTime(interval.getEndMarker().getTime());
+			
+			Rectangle2D intervalRect = new Rectangle2D.Double(xmin, 0, xmax-xmin, timeComp.getHeight());
+			g2.fill(intervalRect);
+		}
+		
 		paintMarker(g2, interval.getStartMarker());
 		paintMarker(g2, interval.getEndMarker());
 	}

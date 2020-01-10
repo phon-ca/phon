@@ -305,7 +305,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 		
 		for(var interval:display.getTimeModel().getIntervals()) {
-			paintInterval(g2, interval);
+			paintInterval(g2, interval, true);
 		}
 		
 		for(var marker:display.getTimeModel().getMarkers()) {
@@ -313,17 +313,18 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 	}
 	
-	@Override
-	public void paintInterval(Graphics2D g2, Interval interval) {
-		var startX = display.xForTime(interval.getStartMarker().getTime());
-		var endX = display.xForTime(interval.getEndMarker().getTime());
-		
-		var rect = new Rectangle2D.Double(startX, 0, endX-startX, display.getHeight());
-		g2.setColor(interval.getColor());
-		g2.fill(rect);
-		
-		super.paintInterval(g2, interval);
-	}
+//	@Override
+//	public void paintInterval(Graphics2D g2, Interval interval, boolean paintBackground) {
+//		var startX = display.xForTime(interval.getStartMarker().getTime());
+//		var endX = display.xForTime(interval.getEndMarker().getTime());
+//		
+//		if(paing)
+//		var rect = new Rectangle2D.Double(startX, 0, endX-startX, display.getHeight());
+//		g2.setColor(interval.getColor());
+//		g2.fill(rect);
+//		
+//		super.paintInterval(g2, interval);
+//	}
 	
 	@Override
 	public void updateCache() {

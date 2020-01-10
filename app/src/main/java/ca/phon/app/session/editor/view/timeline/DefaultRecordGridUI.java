@@ -406,7 +406,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 				
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
-			paintInterval(g2, interval);
+			paintInterval(g2, interval, false);
 		}
 		
 		for(var marker:recordGrid.getTimeModel().getMarkers()) {
