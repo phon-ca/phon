@@ -4,7 +4,7 @@ The voice onset time (VOT) report will calculate VOT for each query result.
 
 ## Parameters
 
- * *VOT Release Tier* TextGrid tiername for the VOT release tier.  This tier must be a point tier (default 'Release').
+ * *VOT Release Tier* TextGrid tiername for the VOT release tier.  This tier must be a point tier (default 'Voicing').
 
 ## Data preparation
 
