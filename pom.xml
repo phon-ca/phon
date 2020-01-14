@@ -173,7 +173,7 @@
 		<org.codehaus.mojo.jaxb2-maven-plugin.version>2.4</org.codehaus.mojo.jaxb2-maven-plugin.version>
 		
 		<!-- jxbrowser -->
-		<com.teamdev.jxbrowser.version>6.22</com.teamdev.jxbrowser.version>
+		<com.teamdev.jxbrowser.version>6.24.2</com.teamdev.jxbrowser.version>
 		<com.teamdev.jxbrowser.license.version>6.X</com.teamdev.jxbrowser.license.version>
 	</properties>
 
