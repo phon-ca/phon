@@ -43,8 +43,9 @@ public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 		wavDisplay.setOpaque(true);
 		wavDisplay.setFont(FontPreferences.getMonospaceFont());
 		
-		wavDisplay.addMouseListener(getParentView().getMouseAdapter());
-		wavDisplay.addMouseMotionListener(getParentView().getMouseAdapter());
+		wavDisplay.addMouseListener(getParentView().getContextMenuAdapter());
+		wavDisplay.addMouseListener(getParentView().getCursorAndSelectionAdapter());
+		wavDisplay.addMouseMotionListener(getParentView().getCursorAndSelectionAdapter());
 		
 		setLayout(new BorderLayout());
 		add(wavDisplay, BorderLayout.CENTER);

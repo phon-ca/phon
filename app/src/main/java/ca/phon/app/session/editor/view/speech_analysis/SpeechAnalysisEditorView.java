@@ -223,6 +223,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		timebar.setBackground(Color.white);
 		timebar.setOpaque(true);
 		
+		timebar.addMouseListener(contextMenuAdapter);
 		timebar.addMouseListener(cursorAndSelectionAdapter);
 		timebar.addMouseMotionListener(cursorAndSelectionAdapter);
 
@@ -620,8 +621,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 	 * Listeners for tiers. Tiers should add these listeners
 	 * to inner lightweight components as applicable
 	 */
-	public MouseAdapter getMouseAdapter() {
+	public MouseAdapter getCursorAndSelectionAdapter() {
 		return this.cursorAndSelectionAdapter;
+	}
+	
+	public MouseAdapter getContextMenuAdapter() {
+		return this.contextMenuAdapter;
 	}
 	
 	/**
@@ -976,7 +981,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private void showContextMenu(MouseEvent e) {
 		final JMenu menu = createContextMenu();
-
 		menu.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
 	}
 	
@@ -1021,6 +1025,24 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 	};
 	
+	private final MouseAdapter contextMenuAdapter = new MouseAdapter() {
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.isPopupTrigger()) {
+				showContextMenu(e);
+			}
+		}
+		
+	};
+	
 	private float initialSelectionTime = -1.0f;
 	private final MouseAdapter cursorAndSelectionAdapter = new MouseAdapter() {
 
@@ -1041,7 +1063,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 			}
 			
 			if(e.isPopupTrigger()) {
-				showContextMenu(e);
 				return;
 			}
 			
@@ -1090,7 +1111,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			if(e.isPopupTrigger()) {
-				showContextMenu(e);
 				return;
 			}
 			
