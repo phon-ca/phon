@@ -169,14 +169,6 @@ public class TimeUIModel {
 		return ( getPixelsPerSecond() * (time - getStartTime()) ) + getTimeInsets().left;
 	}
 	
-//	public Marker addMarker(float time) {
-//		addMarker(time, DEFAULT_MARKER_ICON);
-//	}
-//	
-//	public Marker addMaker(float time, Icon icon) {
-//		addMarker(time, icon, "");
-//	}
-	
 	public Marker addMarker(float time, Color color) {
 		Marker marker = new Marker(time);
 		marker.color = color;
@@ -185,6 +177,7 @@ public class TimeUIModel {
 	}
 	
 	public void addMarker(Marker marker) {
+		if(marker == null) return;
 		var oldVal = pointMarkers.size();
 		pointMarkers.add(marker);
 		propSupport.firePropertyChange("markerCount", oldVal, pointMarkers.size());
@@ -192,6 +185,7 @@ public class TimeUIModel {
 	}
 	
 	public void removeMarker(Marker marker) {
+		if(marker == null) return;
 		var oldVal = pointMarkers.size();
 		pointMarkers.remove(marker);
 		propSupport.firePropertyChange("markerCount", oldVal, pointMarkers.size());
@@ -311,6 +305,12 @@ public class TimeUIModel {
 		public Marker(float startTime) {
 			super();
 			this.time = startTime;
+		}
+		
+		public Marker(float startTime, Color color) {
+			super();
+			this.time = startTime;
+			this.color = color;
 		}
 		
 		public boolean isRepaintOnTimeChange() {

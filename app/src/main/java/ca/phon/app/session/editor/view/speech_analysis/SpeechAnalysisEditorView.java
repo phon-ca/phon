@@ -136,7 +136,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	/**
 	 * Cursor
 	 */
-	private Marker cursorMarker;
+	private Marker cursorMarker = new Marker(-1.0f, UIManager.getColor(SpeechAnalysisViewColors.CURSOR_MARKER_COLOR));
 	
 	/**
 	 * Playback marker
@@ -1054,7 +1054,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			
 			if(cursorMarker != null && e.getButton() == MouseEvent.BUTTON1) {
 				timeModel.removeMarker(cursorMarker);
-				cursorMarker = null;
+				cursorMarker.setTime(-1.0f);
 			}
 			
 			if(tc.getUI().getCurrentlyDraggedMarker() != null) {
@@ -1121,11 +1121,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			int x = e.getX();
 			if(cursorMarker != null) {
 				timeModel.removeMarker(cursorMarker);
 			}
-			cursorMarker = timeModel.addMarker(timeModel.timeAtX(x), UIManager.getColor(SpeechAnalysisViewColors.CURSOR_MARKER_COLOR));
+			cursorMarker.setTime(timeModel.timeAtX(e.getX()));
+//			cursorMarker = timeModel.addMarker(timeModel.timeAtX(x), UIManager.getColor(SpeechAnalysisViewColors.CURSOR_MARKER_COLOR));
 			cursorMarker.setDraggable(false);
 		}
 
@@ -1133,7 +1133,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		public void mouseExited(MouseEvent e) {
 			if(cursorMarker != null) {
 				timeModel.removeMarker(cursorMarker);
-				cursorMarker = null;
+				cursorMarker.setTime(-1.0f);
 			}
 		}
 

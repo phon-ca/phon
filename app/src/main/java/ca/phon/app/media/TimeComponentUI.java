@@ -82,6 +82,7 @@ public class TimeComponentUI extends ComponentUI {
 	
 	public void paintMarker(Graphics2D g2, Marker marker) {
 		if(!timeComp.isRepaintAll() && marker.getOwner() != null && marker.getOwner() != timeComp) return;
+		if(marker.getTime() < 0) return;
 		final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
 		
 		final TimeUIModel timeModel = timeComp.getTimeModel();
