@@ -506,11 +506,17 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 
 	public void exportSelection(File file) throws IOException {
-		
+		if(selectionInterval != null)
+			exportInterval(file, selectionInterval);
 	}
 	
 	public void exportSegment(File file) throws IOException {
-		
+		if(currentRecordInterval != null)
+			exportInterval(file, currentRecordInterval);
+	}
+	
+	private void exportInterval(File file, Interval interval) throws IOException {
+		exportInterval(file, interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
 	}
 	
 	private void exportInterval(File file, float startTime, float endTime) throws IOException {
