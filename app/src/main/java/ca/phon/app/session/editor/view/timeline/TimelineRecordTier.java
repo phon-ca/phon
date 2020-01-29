@@ -172,12 +172,6 @@ public class TimelineRecordTier extends TimelineTier {
 		inputMap.put(splitRecordKs, splitRecordId);
 		actionMap.put(splitRecordId, splitRecordAct);
 
-//		final String endSplitId = "end_split_record";
-//		final PhonUIAction endSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", false);
-//		final KeyStroke endSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-//		inputMap.put(endSplitRecordKs, endSplitId);
-//		actionMap.put(endSplitId, endSplitRecordAct);
-
 		final String acceptSplitId = "accept_split_record";
 		final PhonUIAction acceptSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", true);
 		final KeyStroke acceptSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
@@ -808,8 +802,6 @@ public class TimelineRecordTier extends TimelineTier {
 				getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
-				
-				recordGrid.repaint(recordGrid.getVisibleRect());
 			}
 		}
 

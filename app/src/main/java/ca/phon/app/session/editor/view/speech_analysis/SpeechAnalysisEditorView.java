@@ -710,7 +710,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			currentRecordInterval.setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_BACKGROUND));
 			currentRecordInterval.getStartMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
 			currentRecordInterval.getEndMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
-			
+			currentRecordInterval.setRepaintEntireInterval(true);
 			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
 			scrollTo = displayStart;
 		}
@@ -1185,8 +1185,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 				getEditor().getUndoSupport().postEdit(segmentEdit);
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
-				
-				repaint(getVisibleRect());
 			}
 		}
 

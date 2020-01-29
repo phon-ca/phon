@@ -108,7 +108,7 @@ public class MediaPlayerEditorView extends EditorView {
 		// load media if available
 		final String mediaFilePath = getMediaFilePath();
 		if(mediaFilePath != null)
-			mediaPlayer.setMediaFile(mediaFilePath);
+			SwingUtilities.invokeLater( () -> mediaPlayer.setMediaFile(mediaFilePath) );
 	}
 
 	@Override

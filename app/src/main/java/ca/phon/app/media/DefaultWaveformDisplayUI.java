@@ -69,16 +69,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	
 	private Map<Channel, double[][]> channelExtremaMap = new HashMap<>();
 
-//	private Map<Channel, BufferedImage> channelImgMap = new HashMap<>();
-	
 	private WaveformDisplay display;
 	
 	private volatile boolean needsRepaint = true;
 	
 	private AtomicReference<SampledWorker> workerRef = new AtomicReference<>();
-	
-//	/* Set to true when img cache is available */
-//	private volatile boolean loaded = false; 
 	
 	@Override
 	public void installUI(JComponent c) {

@@ -158,7 +158,7 @@
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
-		<uk.co.caprica.vlcj.version>4.2.0</uk.co.caprica.vlcj.version>		
+		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>		
 		<!-- java.xml.bind -->
 		<jaxb.version>2.2.11</jaxb.version>
 		<javax.activation.activation.version>1.1.1</javax.activation.activation.version>
