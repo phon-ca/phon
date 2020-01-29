@@ -217,6 +217,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 		add(btmPanel, BorderLayout.SOUTH);
 
 		timeModel = new TimeUIModel();
+		timeModel.addPropertyChangeListener( (e) -> {
+			if(e.getPropertyName().equals("pixelsPerSecond")) {
+				revalidate();
+				repaint();
+			}
+		});
 		waveformTier = new SpeechAnalysisWaveformTier(this);
 
 		Timebar timebar = new Timebar(timeModel);
