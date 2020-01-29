@@ -126,6 +126,9 @@ public class DefaultTimebarUI extends TimebarUI {
 		for(int tickPos = startX; 
 				tickPos <= clipRect.x + clipRect.width && tickPos <= timebar.getWidth() - rightInset; 
 				tickPos += 10) {
+			if(tickPos > timebar.xForTime(timebar.getTimeModel().getEndTime()))
+				break;
+			
 			if( (tickPos - leftInset) % 100 == 0 ) {
 				g2.setStroke(majorTickStroke);
 				tickLine.setLine(tickPos, fm.getHeight() - 2, tickPos, fm.getHeight()- 2 + timebar.getMajorTickHeight());
