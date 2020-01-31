@@ -192,6 +192,8 @@ public final class TimelineView extends EditorView {
 		timeModel.setEndTime(0.0f);	
 		
 		timebar = new Timebar(timeModel);
+		timebar.setOpaque(true);
+		timebar.setBackground(Color.WHITE);
 		
 		tierPanel = new TierPanel(new GridBagLayout());
 		tierScrollPane = new JScrollPane(tierPanel);
