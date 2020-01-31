@@ -47,11 +47,11 @@ Previous releases can be found at https://github.com/phon-ca/phon/releases.
 
 Hedlund, Gregory & Yvan Rose. 2019. Phon 3.0 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
 
-Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, Philip O’Brien & Todd Wareham. 2006. Introducing Phon: A Software Solution for the Study of Phonological Acquisition. In David Bamman, Tatiana Magnitskaia & Colleen Zaller (eds.), 
-*Proceedings of the 30th Annual Boston University Conference on Language Development*. Somerville, MA: Cascadilla Press. 489-500.
-
 Rose, Yvan & Brian MacWhinney. 2014. The [PhonBank](http://phonbank.talkbank.org) Project: Data and Software-Assisted Methods for the Study of Phonology and Phonological Development. In Jacques Durand, Ulrike Gut & Gjert Kristoffersen (eds.), 
 *The Oxford Handbook of Corpus Phonology*. Oxford: Oxford University Press. 308-401.
+
+Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, Philip O’Brien & Todd Wareham. 2006. Introducing Phon: A Software Solution for the Study of Phonological Acquisition. In David Bamman, Tatiana Magnitskaia & Colleen Zaller (eds.), 
+*Proceedings of the 30th Annual Boston University Conference on Language Development*. Somerville, MA: Cascadilla Press. 489-500.
 
 ## Discussion group & Support
 
