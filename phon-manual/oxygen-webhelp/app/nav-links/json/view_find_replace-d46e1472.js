@@ -1,1 +1,0 @@
-define({"topics" : [{"title":"Find and Replace","shortdesc":"\n                  <p class=\"shortdesc\">Find and replace text in records within a session.</p>\n               ","id":"taskId","href":"editor\/tasks\/FindReplace.html","menu": {"hasChildren":false,},"tocID":"taskId-d46e1480","topics":[]}]});

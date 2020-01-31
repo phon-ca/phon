@@ -1,7 +1,7 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2018 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 /* Use the admonitions from the oXygen WebHelp resources. */
@@ -44,7 +44,7 @@ div.trouble>span.note__title{
 div.important>span.note__title,
 div.attention>span.note__title,
 div.notice>span.note__title{
-    background-image:url("../img/important.svg") !important;
+    background-image:url("../img/attention.svg") !important;
 }
 
 div.remember>span.note__title{
@@ -182,3 +182,81 @@ div.rate_response {margin:-14px 0 0 0; }
 .table td {
 	vertical-align: top;
 }
+
+
+
+/*
+ * ------------------------------------------------------------------
+ *  
+ * Topic content
+ * 
+ */
+.wh_topic_content .related-links:empty{
+    display:none;
+}
+
+.sectiontitle {
+    /* EXM-37168: The section title should have the same color as the rest of the content. */
+    color:inherit;
+}
+
+/*
+ * Topic titles & subtitles
+ */
+.topictitle1 {
+    font-size: 2em;
+    margin-bottom: 1em;
+    font-weight: 400;
+}
+
+.topictitle2 {
+    margin: 1.5em 0 .5em 0;
+    font-size: 1.7em;
+    font-weight: 400;
+}
+
+.topictitle3 {
+    margin: 1.3em 0 .4em 0;
+    font-size: 1.4em;
+    font-weight: 300;
+}
+
+.topictitle4 {
+    margin: 1.2em 0 .3em 0;
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+.topictitle5, .topictitle6 {
+    margin: 1.1em 0 .3em 0;
+    font-size: 1em;
+    font-weight: 300;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+@media screen {
+    .topictitle1,
+    .topictitle2,
+    .topictitle3,
+    .topictitle4,
+    .topictitle5,
+    .topictitle6 {
+        word-break: break-word;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+}
+
+.wh_child_links .olchildlinks,
+.wh_child_links .ullinks,
+.wh_child_links li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wh_child_links strong {
+    font-weight: normal;
+}
+

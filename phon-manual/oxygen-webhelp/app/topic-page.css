@@ -1,20 +1,14 @@
-@import "topic/commonltr.css?buildId=2018080803";
-
-/* Changes and comments, as side-notes. */
-@import "side-notes/p-side-notes.css?buildId=2018080803";
-
-/* Topic content styles. */
-@import "topic/topic.css?buildId=2018080803";
+@import "topic-page-print.css?buildId=2019112512";
 
 /* Default styles. */
-@import "core/webhelp.css?buildId=2018080803";
+@import "core/webhelp.css?buildId=2019112512";
 
 /* Top Menu and Publication TOC components styles. */
-@import "nav-links/nav-links.css?buildId=2018080803";
+@import "nav-links/nav-links.css?buildId=2019112512";
 
 
 /* Expand/collapse topic sections. */
-@import "core/expand.css?buildId=2018080803";
+@import "core/expand.css?buildId=2019112512";
 
 /* Tooltip styles. */
-@import "nav-links/tooltip.css?buildId=2018080803";
+@import "nav-links/tooltip.css?buildId=2019112512";

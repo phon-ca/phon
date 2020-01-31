@@ -1,1 +1,0 @@
-define({"topics" : [{"title":"Segment Media","shortdesc":"\n                  <p class=\"shortdesc\">Segment media into records.</p>\n               ","href":"editor\/tasks\/SegmentMedia.html","attributes": {"data-id":"taskId",},"menu": {"hasChildren":false,},"tocID":"taskId-d66e1442","topics":[]}]});

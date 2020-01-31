@@ -1,4 +1,4 @@
-define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
+define(["options", 'util', 'jquery', 'jquery.highlight'], function(options, util, $) {
     // Add some Bootstrap classes when document is ready
     var highlighted = false;
 
@@ -37,17 +37,22 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
             $(this).hide();
         });
 
-        // Get the image and insert it inside the modal - use its "alt" text as a caption
-        $.each( $('img.image:not([usemap])'), function (e) {
-             if(this.naturalWidth > this.width){
-                 $(this).addClass('zoom');
-             }
-         });
-        $('.zoom').click(function(){
-            $('#modal_img_large').css("display","block");
-            $("#modal-img").attr('src',$(this).attr('src') );
-            $("#caption").html( $(this).attr('alt') );
-        });
+		// WH-2209
+        var showZoomedImage = options.getBoolean("webhelp.show.full.size.image");
+        if (showZoomedImage) {
+            // Get the image and insert it inside the modal - use its "alt" text as a caption
+            $.each( $('img.image:not([usemap])'), function (e) {
+                 var parentElement = $(this).parent().get(0).tagName;
+                 if(this.naturalWidth > this.width && parentElement.toLowerCase() != 'a'){
+                     $(this).addClass('zoom');
+                 }
+             });
+            $('.zoom').click(function(){
+                $('#modal_img_large').css("display","block");
+                $("#modal-img").attr('src',$(this).attr('src') );
+                $("#caption").html( $(this).attr('alt') );
+            });
+        }
 
         // When the user clicks on (x), close the modal
         $(".modal .close").click(function(){
@@ -60,12 +65,13 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
        });
 
         // Navigational links and print
-        $('#topic_navigation_links .navprev>a').addClass("glyphicon glyphicon-arrow-left");
-        $('#topic_navigation_links .navnext>a').addClass("glyphicon glyphicon-arrow-right");
-        $('.wh_print_link button').addClass('glyphicon glyphicon-print');
+        $('#topic_navigation_links .navprev>a').addClass("oxy-icon oxy-icon-arrow-left");
+        $('#topic_navigation_links .navnext>a').addClass("oxy-icon oxy-icon-arrow-right");
+        $('.wh_print_link button').addClass('oxy-icon oxy-icon-print');
 
         // Hide sideTOC when it is empty
         var sideToc = $('#wh_publication_toc');
+        var pageToc = $('#wh_topic_toc');
         if (sideToc !== undefined) {
             var sideTocChildren = sideToc.find('*');
             if (sideTocChildren.length == 0) {
@@ -74,7 +80,7 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
                 // The topic content should span on all 12 columns
                 sideToc.removeClass('col-lg-4 col-md-4 col-sm-4 col-xs-12');
                 var topicContentParent = $('.wh_topic_content').parent();
-                if (topicContentParent !== undefined) {
+                if (topicContentParent !== undefined && pageToc == undefined) {
                     topicContentParent.removeClass(' col-lg-8 col-md-8 col-sm-8 col-xs-12 ');
                     topicContentParent.addClass(' col-lg-12 col-md-12 col-sm-12 col-xs-12 ');
                 }
@@ -266,7 +272,7 @@ function handleSideTocPosition(scrollPosition) {
         }
         if (tocHeight  <=   visibleAreaHeight) {
             var cHeight = parseInt($('.wh_content_area').height());
-            if (parseInt(minVisibleOffset - topOffset) <=  $(window).scrollTop()) {
+            if (parseInt(minVisibleOffset - topOffset) <=  $(window).scrollTop() && parseInt($(window).width()) > 767) {
                 $('.wh_content_area').css('min-height', cHeight+'px');
                 $sideToc.css("top", topOffset + "px").css("width", tocWidth + "px").css("position", "fixed").css("z-index", "999");
             } else {
@@ -282,78 +288,72 @@ function handleSideTocPosition(scrollPosition) {
 }
 
 /**
- * @description Highlight the current node in the page toc section on scroll change
+ * @description Highlight the current node in the page toc section on page scroll or clicking on Topic TOC items 
  */
 function pageTocHighlightNode(scrollPosition) {
-    var scrollPosition = scrollPosition !== undefined ? scrollPosition : 0;
+    var scrollPosition = scrollPosition !== undefined ? Math.round(scrollPosition) : 0;
     var topOffset = 150;
-
-    $.each( $('.wh_topic_content .title'), function () {
-        var currentId = $(this).parent().attr('id');
-
-        if( ($(this).offset().top - topOffset) <  $(window).scrollTop() && ( $(this).offset().top >  $(window).scrollTop()) ){
-            $('#wh_topic_toc a').removeClass('current_node');
-            $('#wh_topic_toc a[data-tocid = "'+ currentId + '"]').addClass('current_node');
-        }
-    });
+    var hash = location.hash != undefined ? location.hash : "";
+    var hashOffTop = $(hash).offset() != undefined ? $(hash).offset().top : 0;
+    var elemHashTop =  hash != "" ? Math.round(hashOffTop) : 0;
+    
+    if( hash.substr(1) != '' && elemHashTop >= scrollPosition && (elemHashTop <= (scrollPosition + topOffset)) ){
+        $('#wh_topic_toc a').removeClass('current_node');
+        $('#wh_topic_toc a[data-tocid = "'+ hash.substr(1) + '"]').addClass('current_node');
+    } else {
+        $.each( $('.wh_topic_content .title'), function (e) {
+            var currentId = $(this).parent().attr('id');
+            var elemTop = Math.round($(this).offset().top);
+    
+            if( elemTop >= scrollPosition && (elemTop <= (scrollPosition + topOffset)) ){
+                $('#wh_topic_toc a').removeClass('current_node');
+                $('#wh_topic_toc a[data-tocid = "'+ currentId + '"]').addClass('current_node');
+            }  
+        });
+    }
     return $(window).scrollTop();
 }
+
+
 
 /**
  * @description Handle the vertical position of the page toc
  */
 function handlePageTocPosition(scrollPosition) {
-    var scrollPosition = scrollPosition !== undefined ? scrollPosition : 0;
+    scrollPosition = scrollPosition !== undefined ? scrollPosition : 0;
     var $pageTOCID = $("#wh_topic_toc");
     var $pageTOC = $(".wh_topic_toc");
     var $navSection = $(".wh_tools");
     var bottomNavOffset = 0;
-    var $slideSection = $('#wh_topic_body');
     var topOffset = 33;
-    
-    if($pageTOC.length > 0){
+    var $contentBody = $(".wh_topic_content");
+
+    if ($pageTOC.length > 0) {
         pageTocHighlightNode(scrollPosition);
+        
+        var visibleAreaHeight = parseInt($(window).height()) - parseInt($(".wh_footer").outerHeight());
 
-        if ($slideSection.length > 0) {
-            var minVisibleOffset = $(window).scrollTop();
-            var tocHeight = parseInt($pageTOC.height()) + parseInt($pageTOC.css("padding-top")) + parseInt($pageTOC.css("padding-bottom")) + parseInt($pageTOC.css("margin-top")) + parseInt($pageTOC.css("margin-bottom"));
-            var tocWidth =  parseInt($pageTOCID.outerWidth()) - parseInt($pageTOCID.css("padding-left")) - parseInt($pageTOCID.css("padding-right"));
-            var tocXNav = parseInt($slideSection.offset().left) + parseInt($slideSection.width()) + parseInt($slideSection.css('padding-left')) + parseInt($slideSection.css('padding-right')) + parseInt($pageTOCID.css('padding-left')) + 1;
+        var tocHeight = parseInt($pageTOC.height()) + parseInt($pageTOC.css("padding-top")) + parseInt($pageTOC.css("padding-bottom")) + parseInt($pageTOC.css("margin-top")) + parseInt($pageTOC.css("margin-bottom"));
+        var tocWidth =  parseInt($pageTOCID.outerWidth()) - parseInt($pageTOCID.css("padding-left")) - parseInt($pageTOCID.css("padding-right"));
 
-            if (scrollPosition > $(window).scrollTop()) {
-                if ($pageTOC.offset().top < $pageTOC.parent().offset().top) {
-                    $pageTOC.css('position', 'inherit');
-                }
-            } else {
-                if (tocHeight > $(window).height()) {
-                    $pageTOC.css('position', 'inherit');
-                }
-            }
-
-            if ($navSection.length > 0) {
-                bottomNavOffset = parseInt($navSection.offset().top) + parseInt($navSection.height()) + parseInt($navSection.css("padding-top")) + parseInt($navSection.css("padding-bottom")) + parseInt($navSection.css("margin-top")) + parseInt($navSection.css("margin-bottom"));
-            }
-            if (bottomNavOffset > minVisibleOffset) {
-                minVisibleOffset = bottomNavOffset;
-            }
-            if (tocHeight < $slideSection.height()) {
-                if (parseInt(minVisibleOffset - topOffset) <= $(window).scrollTop()) {
-                    $pageTOC.css("top", "20px").css("position", "fixed").css("left", tocXNav + "px").css("width", tocWidth + "px");
-                } else {
-                    $pageTOC.removeAttr('style');
-                }
-            } else {
-                //$slideSection.css("top", "0").css("min-height", tocHeight + "px");
-            }
-
-
-            scrollPosition = $(window).scrollTop();
+        var minVisibleOffset = $(window).scrollTop();
+        if ($navSection.length > 0) {
+            bottomNavOffset = parseInt($navSection.offset().top) + parseInt($navSection.height()) + parseInt($navSection.css("padding-top")) + parseInt($navSection.css("padding-bottom")) + parseInt($navSection.css("margin-top")) + parseInt($navSection.css("margin-bottom"));
         }
-} else {
-   // console.log("PAGE TOC NOT EXISTS");
-}
+        if (bottomNavOffset > minVisibleOffset) {
+            minVisibleOffset = bottomNavOffset;
+        }
 
-return $(window).scrollTop();
+        if ((tocHeight+topOffset) < visibleAreaHeight && (bottomNavOffset-topOffset) < $(window).scrollTop() && (tocHeight+topOffset) < $contentBody.height()) {
+            if (parseInt(minVisibleOffset - topOffset) <=  $(window).scrollTop() && parseInt($(window).width()) > 767) {
+                $pageTOC.css("top", "20px").css("position", "fixed").css("width", tocWidth + "px").css("height", tocHeight + "px");
+            } else {
+                $pageTOC.removeAttr('style');
+            }
+        } else {
+            $pageTOC.removeAttr('style');
+        }
+    }
 }
 
     /**

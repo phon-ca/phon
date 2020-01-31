@@ -135,6 +135,22 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
     var resultCategoriesMapFiles = [];
 
     /**
+     * An object describing the topic information. It contains the title of the topic, the relative path to the output directory,
+     * the topic's short description.
+     *
+     * @param {string} title The topic's title.
+     * @param {string} relativePath The relative path to the output directory
+     * @param {string} shortDescription The short description of the topic.
+     *
+     * @constructor
+     */
+    function TopicInfo(title, relativePath, shortDescription) {
+        this.title = title;
+        this.relativePath = relativePath;
+        this.shortDescription = shortDescription;
+    }
+
+    /**
      * An object describing the search result. It contains a string with the search expression and a list with documents
      * where search terms were found.
      *
@@ -165,15 +181,51 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
      * @param {string} shortDescription The topic short description.
      * @param {[string]} words The array with words contained by this topic.
      * @param {int} scoring The search scoring computed for this document.
+     * @param {[TopicInfo]} breadcrumb The breadcrumb of current document (optional).
+     *
      * @constructor
      */
-    function DocumentInfo(topicID, relativePath, title, shortDescription, words, scoring) {
+    function DocumentInfo(topicID, relativePath, title, shortDescription, words, scoring, breadcrumb) {
         this.topicID = topicID;
         this.relativePath = relativePath;
         this.title = title;
         this.shortDescription = shortDescription;
         this.words = words;
         this.scoring = scoring;
+        this.breadcrumb = breadcrumb;
+    }
+
+    function performSearchDriver(searchQuery, _callback) {
+        var indexerLanguage = options.getIndexerLanguage();
+        var useKuromoji = indexerLanguage.indexOf("ja") != -1;
+
+        if (useKuromoji) {
+            require(["kuromoji"], function (kuromoji) {
+                kuromoji.builder({ dicPath: "oxygen-webhelp/lib/kuromoji/dict" }).build(function (err, tokenizer) {
+                    // tokenizer is ready
+                    var tokens = tokenizer.tokenize(searchQuery);
+
+                    var finalWordsList = [];
+                    for (var w in tokens) {
+                        var word = tokens[w].surface_form;
+                        if (word!=" ") {
+                            finalWordsList.push(word);
+                        }
+                    }
+
+                    if (finalWordsList.length) {
+                        var finalWordsString = finalWordsList.join(" ");
+
+                        _callback(performSearchInternal(finalWordsString));
+                    } else {
+                        util.debug("Empty set");
+                    }
+                });
+            })
+
+        } else {
+            _callback(performSearchInternal(searchQuery));
+        }
     }
 
     /**
@@ -200,7 +252,7 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
         }
 
         // Remove ' and " characters
-        searchQuery = searchQuery.replace(/"/g, " ").replace(/'/g, " ")
+        searchQuery = searchQuery.replace(/"/g, " ").replace(/'/g, " ");
 
         var errorMsg;
         try {
@@ -269,37 +321,28 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
             for (var i = 0; i < sRes.length; i++) {
                 var cDoc = sRes[i];
 
-                var topicInfo = index.fil[cDoc.filenb];
-
-                if (topicInfo == undefined) {
+                // Compute the topic information
+                var topicInfoString = index.fil[cDoc.filenb];
+                var topicInfo = computeTopicInfo(topicInfoString);
+                if (topicInfo == null) {
                     warn("There is no definition for topic with ID ", cDoc.filenb);
                     continue;
                 }
-
-                var pos1 = topicInfo.indexOf("@@@");
-                var pos2 = topicInfo.lastIndexOf("@@@");
-                var relPath = topicInfo.substring(0, pos1);
-
-                // EXM-27709 START
-                // Display words between '<' and '>' in title of search results.
-                var topicTitle = topicInfo.substring(pos1 + 3, pos2)
-                    .replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                // EXM-27709 END
-                var topicShortDesc = topicInfo.substring(pos2 + 3, topicInfo.length);
 
                 var wordsStrArray = [];
                 for (var k in cDoc.wordsList) {
                     wordsStrArray.push(cDoc.wordsList[k].word);
                 }
-
+                var breadcrumb = computeBreadcrumbTopicInfos(cDoc.filenb);
                 var docInfo =
                     new DocumentInfo(
                         cDoc.filenb,
-                        relPath,
-                        topicTitle,
-                        topicShortDesc,
+                        topicInfo.relativePath,
+                        topicInfo.title,
+                        topicInfo.shortDescription,
                         wordsStrArray,
-                        cDoc.scoring);
+                        cDoc.scoring,
+                        breadcrumb);
 
                 docInfos.push(docInfo);
             }
@@ -307,8 +350,69 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
         // Filter expression to cross site scripting possibility
         initialSearchExpression = filterOriginalSearchExpression(initialSearchExpression);
         var searchResult = new SearchResult(realSearchQuery, excluded, initialSearchExpression, docInfos, errorMsg);
-        console.log("search result: ", searchResult);
         return searchResult;
+    }
+
+    /**
+     * Computes the topic associated information.
+     *
+     * @param topicInfoString The topic information as string.
+     *
+     * @returns An object which contains the topic title, topic relative path and the topic short description.
+     */
+    function computeTopicInfo(topicInfoString) {
+        if (topicInfoString === undefined) {
+            return null;
+        }
+        var pos1 = topicInfoString.indexOf("@@@");
+        var pos2 = topicInfoString.lastIndexOf("@@@");
+        var relPath = topicInfoString.substring(0, pos1);
+        // EXM-27709 START
+        // Display words between '<' and '>' in title of search results.
+        var topicTitle = topicInfoString.substring(pos1 + 3, pos2)
+            .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        var topicShortDesc = topicInfoString.substring(pos2 + 3, topicInfoString.length);
+        // EXM-27709 END
+
+        return new TopicInfo(topicTitle, relPath, topicShortDesc);
+    }
+
+    /**
+     * Compute the list of topic indexes representing the path to the root for the given topic.
+     *
+     * @param topicID The index of the topic in the index.fil list.
+     *
+     * @returns {Array} The array of indexes from the root to the topic.
+     */
+    function computePath2Root(topicID) {
+        var path2Root = [];
+        var parentTopicID = index.link2parent[topicID];
+        while (parentTopicID !== undefined && parentTopicID !== -1) {
+            path2Root.unshift(parentTopicID);
+            parentTopicID = index.link2parent[parentTopicID];
+        }
+        return path2Root;
+    }
+
+    /**
+     * Computes an array of TopicInfo objects representing the breadcrumb components for the given topic.
+     *
+     * @param topicIndex The index of the topic in the index.fil list.
+     *
+     * @returns {Array} The breadcrumb components.
+     */
+    function computeBreadcrumbTopicInfos(topicIndex) {
+        var path2Root = computePath2Root(topicIndex);
+        var breadcrumbPaths = [];
+        for (var i = 0; i < path2Root.length; i++) {
+            var topicInfoString = index.fil[path2Root[i]];
+            var topicInfo = computeTopicInfo(topicInfoString);
+            if (topicInfo !== null) {
+                breadcrumbPaths.push(topicInfo);
+            }
+        }
+
+        return breadcrumbPaths;
     }
 
     /**
@@ -1640,7 +1744,7 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
     }
 
     return {
-        performSearch: performSearchInternal
+        performSearch: performSearchDriver
     }
 
 });

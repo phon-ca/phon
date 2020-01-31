@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.0.6-beta.4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_4.dmg" newVersion="3.0.6-beta.4" newMediaFileId="macos" fileSize="261341762" md5Sum="f07d96997fd694f89a64b4d4336825c9" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_2.dmg" newVersion="3.1.0-beta.2" newMediaFileId="macos" fileSize="276268186" md5Sum="17f634a8fd6ecb87bfdedb7d390d5689" sha256Sum="bebfa53b6d5bd4e60e60e971c84c2c0539f91655b20e6da91a0455c7b74836e3" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -13,6 +20,7 @@
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -295,8 +303,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_0_6-beta_4.dmg" newVersion="3.0.6-beta.4" newMediaFileId="macos" fileSize="261341762" md5Sum="f07d96997fd694f89a64b4d4336825c9" bundledJre="macosx-amd64-11.0.1" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_2.dmg" newVersion="3.1.0-beta.2" newMediaFileId="macos" fileSize="276268186" md5Sum="17f634a8fd6ecb87bfdedb7d390d5689" sha256Sum="bebfa53b6d5bd4e60e60e971c84c2c0539f91655b20e6da91a0455c7b74836e3" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -308,6 +323,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -590,8 +606,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.exe" newVersion="3.0.6-beta.4" newMediaFileId="win64" fileSize="263799064" md5Sum="916c78b3cc6fb732524b634a9a254e5d" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.exe" newVersion="3.1.0-beta.2" newMediaFileId="win64" fileSize="288045336" md5Sum="2e812bc4ce6ca7ce5f449f3b4b19fa58" sha256Sum="911183253e2486c3dda36fdadf5da11a2d2b8fc9169eda6704926ff8937233b9" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -603,6 +626,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -885,8 +909,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.exe" newVersion="3.0.6-beta.4" newMediaFileId="win64" fileSize="263799064" md5Sum="916c78b3cc6fb732524b634a9a254e5d" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.exe" newVersion="3.1.0-beta.2" newMediaFileId="win64" fileSize="288045336" md5Sum="2e812bc4ce6ca7ce5f449f3b4b19fa58" sha256Sum="911183253e2486c3dda36fdadf5da11a2d2b8fc9169eda6704926ff8937233b9" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -898,6 +929,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -1180,8 +1212,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.exe" newVersion="3.0.6-beta.4" newMediaFileId="win64" fileSize="263799064" md5Sum="916c78b3cc6fb732524b634a9a254e5d" bundledJre="windows-amd64-11.0.1" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.exe" newVersion="3.1.0-beta.2" newMediaFileId="win64" fileSize="288045336" md5Sum="2e812bc4ce6ca7ce5f449f3b4b19fa58" sha256Sum="911183253e2486c3dda36fdadf5da11a2d2b8fc9169eda6704926ff8937233b9" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -1193,6 +1232,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -1475,8 +1515,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_0_6-beta_4.zip" newVersion="3.0.6-beta.4" newMediaFileId="win64zip" fileSize="262835892" md5Sum="e212d523aab522feb2130f14e3d23a04" bundledJre="windows-amd64-11.0.1" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.zip" newVersion="3.1.0-beta.2" newMediaFileId="win64zip" fileSize="287026418" md5Sum="5fecf38c1068e2eb52db10cb6814485d" sha256Sum="cb37335dd58068859845c54cf25c7896c96a667cc28c60c6321292494db73901" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -1488,6 +1535,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -1770,8 +1818,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_0_6-beta_4.deb" newVersion="3.0.6-beta.4" newMediaFileId="linux64deb" fileSize="195047858" md5Sum="9d7f20bf20850f7409ffce27444b917c" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_1_0-beta_2.deb" newVersion="3.1.0-beta.2" newMediaFileId="linux64deb" fileSize="199744838" md5Sum="63b5388583fdadac948626bba617a61c" sha256Sum="8c4c34a0493a3a416475949ddb6012a250b139b00c7d222eba08184d0ec93ece" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -1783,6 +1838,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 
@@ -2065,8 +2121,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_0_6-beta_4.sh" newVersion="3.0.6-beta.4" newMediaFileId="linux64" fileSize="194505088" md5Sum="c527b40cb2ce386ef19640200fadc34c" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_2.sh" newVersion="3.1.0-beta.2" newMediaFileId="linux64" fileSize="199302558" md5Sum="b312bc824045a6d5d7be6b6e38670f82" sha256Sum="4ffb3fa67d7f9cc3960e54924ee69c57315efed21312b6cb40e5aedddd1f14a3" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
+
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improve waveform and timebar components. 
+
+### Other changes:
 
  * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
  * Added validation to age fields in query forms
@@ -2078,6 +2141,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed Phone Inventory analysis for IPA Actual elements
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
 
 ## Changes from 3.0.4
 

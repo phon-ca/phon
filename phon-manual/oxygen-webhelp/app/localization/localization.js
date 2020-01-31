@@ -1,7 +1,7 @@
 /*
 
     Oxygen WebHelp Plugin
-    Copyright (c) 1998-2018 Syncro Soft SRL, Romania.  All rights reserved.
+    Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
 
     */
 define(["strings"], function (strings) {
