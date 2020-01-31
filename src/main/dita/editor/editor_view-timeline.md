@@ -1,4 +1,4 @@
-# View: Timeline
+# View: Timeline (beta)
 
 The Timeline view displays record data, and optionally the waveform for the session audio, along a horizontal timeline. The primary purpose of the Timeline view is to aid with segmentation and alterations of existing record segments.
 
