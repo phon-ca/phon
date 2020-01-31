@@ -4,11 +4,11 @@ The voice onset time (VOT) report will calculate VOT for each query result.
 
 ## Parameters
 
- * *VOT Release Tier* TextGrid tiername for the VOT release tier.  This tier must be a point tier (default 'Release').
+ * *VOT Release Tier* TextGrid tiername for the VOT release tier.  This tier must be a point tier (default 'Voicing').
 
 ## Data preparation
 
-A TextGrid must be assigned to the session and tier mappings setup for the Phon tier (default 'IPA Actual') used in the query.  A point tier (default name 'Release') must exist, with a point for each interval for which VoT calculation will be performed.  The point should be have the same label as the interval to which it is related not including stress markers.
+A TextGrid must be assigned to the session and tier mappings setup for the Phon tier (default 'IPA Actual') used in the query.  A point tier (default name 'Voicing') must exist, with a point for each interval for which VoT calculation will be performed.  The point should be have the same label as the interval to which it is related not including stress markers.
 
 Example:
 
