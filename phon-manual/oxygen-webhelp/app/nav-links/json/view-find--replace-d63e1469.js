@@ -1,1 +1,1 @@
-define({"topics" : [{"title":"Find and Replace","shortdesc":"<p class=\"shortdesc\">Find and replace text in records within a session.</p>","href":"editor\/tasks\/FindReplace.html","attributes": {"data-id":"taskId",},"menu": {"hasChildren":false,},"tocID":"taskId-d63e1477","topics":[]}]});
+define({"topics" : [{"title":"Find and Replace","shortdesc":"Find and replace text in records within a session.","href":"editor\/tasks\/FindReplace.html","attributes": {"data-id":"taskId",},"menu": {"hasChildren":false,},"tocID":"taskId-d63e1477","topics":[]}]});

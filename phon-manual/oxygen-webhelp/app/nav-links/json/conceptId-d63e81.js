@@ -1,1 +1,1 @@
-define({"topics" : [{"title":"Change Workspace Folder","shortdesc":"<p class=\"shortdesc\">Change the default workspace folder.</p>","href":"welcome\/tasks\/ChangeWorkspaceFolder.html","attributes": {"data-id":"taskId",},"menu": {"hasChildren":false,},"tocID":"taskId-d63e89","topics":[]}]});
+define({"topics" : [{"title":"Change Workspace Folder","shortdesc":"Change the default workspace folder.","href":"welcome\/tasks\/ChangeWorkspaceFolder.html","attributes": {"data-id":"taskId",},"menu": {"hasChildren":false,},"tocID":"taskId-d63e89","topics":[]}]});
