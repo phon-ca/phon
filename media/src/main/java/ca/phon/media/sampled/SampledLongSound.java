@@ -10,7 +10,7 @@ import ca.phon.media.Sound;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 
-public class SampledLongSound extends LongSound implements IPluginExtensionPoint<LongSound> {
+public class SampledLongSound extends LongSound {
 	
 	private PCMSampled sampled;
 	
@@ -43,22 +43,6 @@ public class SampledLongSound extends LongSound implements IPluginExtensionPoint
 	@Override
 	public Sound extractPart(float startTime, float endTime) {
 		return new SampledSound(startTime, endTime);
-	}
-
-	@Override
-	public Class<?> getExtensionType() {
-		return LongSound.class;
-	}
-
-	@Override
-	public IPluginExtensionFactory<LongSound> getFactory() {
-		return (args) -> {
-			try {
-				return new SampledLongSound((File)args[0]);
-			} catch (IOException e) {
-				throw new IllegalArgumentException(e);
-			}
-		};
 	}
 
 	private class SampledSound implements Sound {

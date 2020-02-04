@@ -2,6 +2,8 @@ package ca.phon.media;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import ca.phon.media.sampled.SampledLongSound;
 import ca.phon.opgraph.extensions.ExtendableSupport;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.util.PrefHelper;
 
 /**
  * LongSound objects allow for access to audio stream information
@@ -20,7 +23,26 @@ import ca.phon.plugin.PluginManager;
  */
 public abstract class LongSound implements IExtendable {
 
+	public final static String PREFERRED_LONGSOUND_LOADER_PROP = 
+			LongSound.class.getName() + ".preferredLongSoundLoader";
+	
 	public static LongSound fromFile(File file) throws IOException {
+		String preferredLoader = PrefHelper.get(PREFERRED_LONGSOUND_LOADER_PROP, null);
+		if(preferredLoader != null) {
+			try {
+				Class<?> loaderClass = Class.forName(preferredLoader);
+				if(IPluginExtensionPoint.class.isAssignableFrom(loaderClass)) {
+					@SuppressWarnings("unchecked")
+					Constructor<IPluginExtensionPoint<LongSound>> ctr = (Constructor<IPluginExtensionPoint<LongSound>>)loaderClass.getConstructor();
+					
+					IPluginExtensionPoint<LongSound> longSoundExtPt = (IPluginExtensionPoint<LongSound>)ctr.newInstance();
+					return longSoundExtPt.getFactory().createObject(file);					
+				}
+			} catch(ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				throw new IOException(e);
+			}
+		}
+		
 		final List<IPluginExtensionPoint<LongSound>> soundLoaders =
 				PluginManager.getInstance().getExtensionPoints(LongSound.class);
 		if(soundLoaders.size() > 0) {
