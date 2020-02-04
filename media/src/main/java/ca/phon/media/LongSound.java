@@ -28,25 +28,14 @@ public abstract class LongSound implements IExtendable {
 	
 	public static LongSound fromFile(File file) throws IOException {
 		String preferredLoader = PrefHelper.get(PREFERRED_LONGSOUND_LOADER_PROP, null);
-		if(preferredLoader != null) {
-			try {
-				Class<?> loaderClass = Class.forName(preferredLoader);
-				if(IPluginExtensionPoint.class.isAssignableFrom(loaderClass)) {
-					@SuppressWarnings("unchecked")
-					Constructor<IPluginExtensionPoint<LongSound>> ctr = (Constructor<IPluginExtensionPoint<LongSound>>)loaderClass.getConstructor();
-					
-					IPluginExtensionPoint<LongSound> longSoundExtPt = (IPluginExtensionPoint<LongSound>)ctr.newInstance();
-					return longSoundExtPt.getFactory().createObject(file);					
-				}
-			} catch(ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				throw new IOException(e);
-			}
-		}
 		
 		final List<IPluginExtensionPoint<LongSound>> soundLoaders =
 				PluginManager.getInstance().getExtensionPoints(LongSound.class);
 		if(soundLoaders.size() > 0) {
-			IPluginExtensionPoint<LongSound> defaultLoader = soundLoaders.get(0);
+			IPluginExtensionPoint<LongSound> defaultLoader = (preferredLoader != null 
+					? soundLoaders.stream().filter( (l)-> l.getClass().getName().contentEquals(preferredLoader)).findFirst().get()
+					: soundLoaders.get(0));
+			if(defaultLoader == null) defaultLoader = soundLoaders.get(0);
 			try {
 				return defaultLoader.getFactory().createObject(file);
 			} catch (Exception e) {
