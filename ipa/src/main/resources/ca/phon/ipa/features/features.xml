@@ -159,6 +159,11 @@
         <primary_family>place</primary_family>
         <secondary_family>coronal</secondary_family>
     </feature>
+    <feature name="grooved">
+    	<synonym>gro</synonym>
+    	<primary_family>place</primary_family>
+        <secondary_family>coronal</secondary_family>
+    </feature>
     <feature name="voiceless">
         <synonym>vcl</synonym>
         <primary_family>voicing</primary_family>
@@ -666,10 +671,10 @@
         obstruent fricative oral</feature_set>
     <!--s (0x73)-->
     <feature_set char="s">consonant coronal lingual anterior alveolar voiceless continuant obstruent
-        fricative oral strident</feature_set>
+        fricative oral strident grooved</feature_set>
     <!--z (0x7a)-->
     <feature_set char="z">consonant coronal lingual anterior alveolar voiced continuant obstruent
-        fricative oral strident</feature_set>
+        fricative oral strident grooved</feature_set>
     <!--ʑ (0x291)-->
     <feature_set char="ʑ">consonant palatal laminal coronal lingual posterior distributed voiced
         continuant obstruent fricative oral strident</feature_set>
@@ -687,13 +692,13 @@
         obstruent fricative oral</feature_set>
     <!--ʃ (0x283)-->
     <feature_set char="ʃ">consonant laminal coronal lingual posterior alveopalatal distributed
-        voiceless continuant obstruent fricative oral strident</feature_set>
+        voiceless continuant obstruent fricative oral strident grooved</feature_set>
     <!--ʆ (0x286)-->
     <feature_set char="ʆ">consonant palatal coronal lingual posterior alveopalatal distributed
         voiceless continuant obstruent fricative oral strident</feature_set>
     <!--ʒ (0x292)-->
     <feature_set char="ʒ">consonant laminal coronal lingual posterior alveopalatal distributed
-        voiced continuant obstruent fricative oral strident</feature_set>
+        voiced continuant obstruent fricative oral strident grooved</feature_set>
     <!--ʓ (0x293)-->
     <feature_set char="ʓ">consonant palatal coronal lingual posterior alveopalatal distributed
         voiced continuant obstruent fricative oral strident</feature_set>
@@ -708,13 +713,13 @@
         fricative oral strident</feature_set>
     <!--ç (0xe7)-->
     <feature_set char="ç">consonant palatal coronal lingual posterior voiceless continuant obstruent
-        fricative oral strident</feature_set>
+        fricative oral strident grooved</feature_set>
     <!--ɕ (0x255)-->
     <feature_set char="ɕ">consonant palatal laminal coronal lingual posterior distributed voiceless
         continuant obstruent fricative oral strident</feature_set>
     <!--ʝ (0x29d)-->
     <feature_set char="ʝ">consonant palatal coronal lingual posterior voiced continuant obstruent
-        fricative oral strident</feature_set>
+        fricative oral strident grooved</feature_set>
     <!--ƺ (0x1ba)-->
     <feature_set char="ƺ">consonant palatal coronal lingual posterior alveopalatal distributed
         voiced continuant obstruent fricative oral strident</feature_set>
@@ -755,22 +760,22 @@
     <feature_set char="ʩ">consonant obstruent fricative nasal velopharyngeal</feature_set>
     <!--ʦ (0x2a6)-->
     <feature_set char="ʦ">consonant coronal lingual anterior alveolar voiceless obstruent affricate
-        oral strident</feature_set>
+        oral strident grooved</feature_set>
     <!--ʣ (0x2a3)-->
     <feature_set char="ʣ">consonant coronal lingual anterior alveolar voiced obstruent affricate
-        oral strident</feature_set>
+        oral strident grooved</feature_set>
     <!--ʨ (0x2a8)-->
     <feature_set char="ʨ">consonant palatal laminal coronal lingual posterior distributed voiceless
-        obstruent affricate oral strident</feature_set>
+        obstruent affricate oral strident grooved</feature_set>
     <!--ʥ (0x2a5)-->
     <feature_set char="ʥ">consonant palatal laminal coronal lingual posterior distributed voiced
-        obstruent affricate oral strident</feature_set>
+        obstruent affricate oral strident grooved</feature_set>
     <!--ʧ (0x2a7)-->
     <feature_set char="ʧ">consonant laminal coronal lingual posterior alveopalatal distributed
-        voiceless obstruent affricate oral strident</feature_set>
+        voiceless obstruent affricate oral strident grooved</feature_set>
     <!--ʤ (0x2a4)-->
     <feature_set char="ʤ">consonant laminal coronal lingual posterior alveopalatal distributed
-        voiced obstruent affricate oral strident</feature_set>
+        voiced obstruent affricate oral strident grooved</feature_set>
     <!--ƛ (0x19b)-->
     <feature_set char="ƛ">consonant coronal lingual anterior alveolar voiceless lateral obstruent
         affricate oral</feature_set>
