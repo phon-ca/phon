@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_2.dmg" newVersion="3.1.0-beta.2" newMediaFileId="macos" fileSize="276268186" md5Sum="17f634a8fd6ecb87bfdedb7d390d5689" sha256Sum="bebfa53b6d5bd4e60e60e971c84c2c0539f91655b20e6da91a0455c7b74836e3" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_3.dmg" newVersion="3.1.0-beta.3" newMediaFileId="macos" fileSize="276324346" md5Sum="237c15b97b648a2e1b1adcf3b5d08b7c" sha256Sum="2a3961d1ee8152584cac5219a4c637be9d9f5cf1365b303e915ac578b4065fc8" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -303,7 +303,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_2.dmg" newVersion="3.1.0-beta.2" newMediaFileId="macos" fileSize="276268186" md5Sum="17f634a8fd6ecb87bfdedb7d390d5689" sha256Sum="bebfa53b6d5bd4e60e60e971c84c2c0539f91655b20e6da91a0455c7b74836e3" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_3.dmg" newVersion="3.1.0-beta.3" newMediaFileId="macos" fileSize="276324346" md5Sum="237c15b97b648a2e1b1adcf3b5d08b7c" sha256Sum="2a3961d1ee8152584cac5219a4c637be9d9f5cf1365b303e915ac578b4065fc8" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -606,7 +606,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.exe" newVersion="3.1.0-beta.2" newMediaFileId="win64" fileSize="288045336" md5Sum="2e812bc4ce6ca7ce5f449f3b4b19fa58" sha256Sum="911183253e2486c3dda36fdadf5da11a2d2b8fc9169eda6704926ff8937233b9" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.exe" newVersion="3.1.0-beta.3" newMediaFileId="win64" fileSize="288051992" md5Sum="e8d5905897b4c19384650430c5aaee70" sha256Sum="e3cfdaab3d63134d6d6db08863f2d289e5edea82ad7d79ead38e852190bc5585" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -909,7 +909,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.exe" newVersion="3.1.0-beta.2" newMediaFileId="win64" fileSize="288045336" md5Sum="2e812bc4ce6ca7ce5f449f3b4b19fa58" sha256Sum="911183253e2486c3dda36fdadf5da11a2d2b8fc9169eda6704926ff8937233b9" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.exe" newVersion="3.1.0-beta.3" newMediaFileId="win64" fileSize="288051992" md5Sum="e8d5905897b4c19384650430c5aaee70" sha256Sum="e3cfdaab3d63134d6d6db08863f2d289e5edea82ad7d79ead38e852190bc5585" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -1212,7 +1212,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.exe" newVersion="3.1.0-beta.2" newMediaFileId="win64" fileSize="288045336" md5Sum="2e812bc4ce6ca7ce5f449f3b4b19fa58" sha256Sum="911183253e2486c3dda36fdadf5da11a2d2b8fc9169eda6704926ff8937233b9" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.exe" newVersion="3.1.0-beta.3" newMediaFileId="win64" fileSize="288051992" md5Sum="e8d5905897b4c19384650430c5aaee70" sha256Sum="e3cfdaab3d63134d6d6db08863f2d289e5edea82ad7d79ead38e852190bc5585" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -1515,7 +1515,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_2.zip" newVersion="3.1.0-beta.2" newMediaFileId="win64zip" fileSize="287026418" md5Sum="5fecf38c1068e2eb52db10cb6814485d" sha256Sum="cb37335dd58068859845c54cf25c7896c96a667cc28c60c6321292494db73901" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.zip" newVersion="3.1.0-beta.3" newMediaFileId="win64zip" fileSize="287032028" md5Sum="51b829605093e71c9e24f0e33e0dea68" sha256Sum="610a4fff9ca4d6c61e18c8aab8c775550f863f2c0472f765b043e86c3d8327ee" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -1818,7 +1818,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_1_0-beta_2.deb" newVersion="3.1.0-beta.2" newMediaFileId="linux64deb" fileSize="199744838" md5Sum="63b5388583fdadac948626bba617a61c" sha256Sum="8c4c34a0493a3a416475949ddb6012a250b139b00c7d222eba08184d0ec93ece" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_1_0-beta_3.deb" newVersion="3.1.0-beta.3" newMediaFileId="linux64deb" fileSize="199748888" md5Sum="73dd55375c0430f20e846952faddd4b6" sha256Sum="30258d6e8234df7d9cf5e5524214c7ee543acca3b43be5f1733b023b7a8897ff" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -2121,7 +2121,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_2.sh" newVersion="3.1.0-beta.2" newMediaFileId="linux64" fileSize="199302558" md5Sum="b312bc824045a6d5d7be6b6e38670f82" sha256Sum="4ffb3fa67d7f9cc3960e54924ee69c57315efed21312b6cb40e5aedddd1f14a3" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_3.sh" newVersion="3.1.0-beta.3" newMediaFileId="linux64" fileSize="199310155" md5Sum="a69d657d3ba16c28d2b511988b4a4668" sha256Sum="d467171006f5c04aaa08cb23ac4e24f17149171e8b3634621cfe0cec5a4cba57" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
