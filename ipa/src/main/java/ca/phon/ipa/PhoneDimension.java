@@ -27,8 +27,7 @@ import ca.phon.ipa.features.FeatureSet;
 public enum PhoneDimension {
 	PLACE(2, new String[] {
 			"labial,coronal,dorsal,guttural",
-			"labiodental,bilabial,anterior,posterior",
-			"interdental,alveolar,alveopalatal,palatal,retroflex,velar,uvular,pharyngeal,laryngeal"}
+			"labiodental,bilabial,anterior,posterior,interdental,alveolar,alveopalatal,palatal,retroflex,velar,uvular,pharyngeal,laryngeal,distributed,grooved"}
 		),
 	MANNER(2, new String[]{
 			"obstruent,approximant,consonant,vowel",
