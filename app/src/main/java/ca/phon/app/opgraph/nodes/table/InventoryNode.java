@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -229,7 +230,16 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 			Object[] rowData = new Object[colNames.size()];
 			int rowDataIdx = 0;
 			for(int i = 0; i < key.rowVals.length; i++) {
-				rowData[rowDataIdx++] = key.rowVals[i];
+				String colName = colNames.get(i);
+				Optional<ColumnInfo> colInfoOpt = settings.getColumns()
+						.stream()
+						.filter( (ci) -> ci.getName().equals(colName) )
+						.findFirst();
+				
+				rowData[rowDataIdx++] = 
+						(colInfoOpt.isPresent()
+							?	TableUtils.objToString(key.rowVals[i], colInfoOpt.get().ignoreDiacritics, colInfoOpt.get().onlyOrExcept, colInfoOpt.get().selectedDiacritics)
+							:	key.rowVals[i]);
 			}
 			final Map<GroupKey, Long> count = inventory.get(key);
 			for(GroupKey groupKey:groupKeys) {
