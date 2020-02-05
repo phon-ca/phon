@@ -17,14 +17,11 @@ package ca.phon.app.opgraph.nodes.table;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ca.phon.ipa.Diacritic;
 
-
-public class InventorySettings implements Cloneable {
+public class InventorySettings implements Cloneable, IgnoreDiacriticsSettings {
 	
 	private boolean configureAutomatically = true;
 	
@@ -190,12 +187,12 @@ public class InventorySettings implements Cloneable {
 		columns.add(info);
 	}
 	
-	public static class ColumnInfo {
+	public static class ColumnInfo implements IgnoreDiacriticsSettings {
 		String name = "";
-		boolean caseSensitive = false;
+		boolean caseSensitive = true;
 		
 		// diacritic options
-		boolean ignoreDiacritics = true;
+		boolean ignoreDiacritics = false;
 		boolean onlyOrExcept = false;
 		Collection<Diacritic> selectedDiacritics = new ArrayList<Diacritic>();
 		

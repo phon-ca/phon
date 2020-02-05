@@ -79,6 +79,28 @@
 
 	<xs:element name="queryReportNode" type="QueryReportNode" substitutionGroup="og:abstract_node"/>
 
+	<!-- Ignore Diacritics -->
+	<xs:element name="ignoreDiacritics" type="IgnoreDiacriticsType"/>
+	
+	<xs:complexType name="IgnoreDiacriticsType">
+		<xs:simpleContent>
+			<xs:annotation>
+				<xs:documentation>Should be a ';' separated list of diacritics (if any)</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="xs:string">
+				<xs:attribute name="ignore" type="xs:boolean" default="true"/>
+				<xs:attribute name="onlyOrExcept" type="onlyOrExceptType" default="except"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:simpleType name="onlyOrExceptType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="only"/>
+			<xs:enumeration value="except"/>
+		</xs:restriction>
+	</xs:simpleType>
+
 	<!-- SortNodeSettings -->
 	<xs:complexType name="SortNodeSettingsType" mixed="false">
 		<xs:annotation>
@@ -122,9 +144,16 @@
 	<xs:element name="sortBy" type="SortByType"/>
 
 	<xs:complexType name="ColumnInfo">
+		<xs:sequence>
+			<xs:element ref="ignoreDiacritics" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
 		<xs:attribute name="column" type="xs:string" use="required"/>
 		<xs:attribute name="caseSensitive" type="xs:boolean" default="false"/>
-		<xs:attribute name="ignoreDiacritics" type="xs:boolean" default="true"/>
+		<xs:attribute name="ignoreDiacritics" type="xs:boolean" default="true">
+			<xs:annotation>
+				<xs:documentation>Deprecated in Phon 3.1.0</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 
 	<xs:element name="groupBy" type="ColumnInfo"/>
@@ -156,7 +185,14 @@
 	</xs:complexType>
 
 	<xs:complexType name="AutoColumnSettingsType" mixed="false">
-		<xs:attribute name="ignoreDiacritics" type="xs:boolean" default="false"/>
+		<xs:sequence>
+			<xs:element ref="ignoreDiacritics" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="ignoreDiacritics" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation>Deprecated in Phon 3.1.0</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 		<xs:attribute name="caseSensitive" type="xs:boolean" default="true"/>
 		<xs:attribute name="includeAdditionalGroupData" type="xs:boolean" default="false"/>
 		<xs:attribute name="includeAdditionalWordData" type="xs:boolean" default="false"/>
@@ -176,9 +212,16 @@
 	</xs:simpleType>
 	
 	<xs:complexType name="GlobalParametersType" mixed="false">
+		<xs:sequence>
+			<xs:element ref="ignoreDiacritics" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
 		<xs:attribute name="caseSensitive" type="xs:boolean" use="optional"/>
-		<xs:attribute name="ignoreDiacritics" type="xs:boolean" use="optional"/>
 		<xs:attribute name="inventoryGrouping" type="inventoryGroupingType" use="optional"/>
+		<xs:attribute name="ignoreDiacritics" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>Deprecated in Phon 3.1.0</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	
 	<xs:element name="globalparameters" type="GlobalParametersType"/>

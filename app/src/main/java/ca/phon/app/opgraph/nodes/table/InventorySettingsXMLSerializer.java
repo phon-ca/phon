@@ -16,6 +16,9 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
@@ -27,6 +30,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
+import ca.phon.ipa.Diacritic;
+import ca.phon.ipa.IPAElementFactory;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.io.xml.XMLSerializer;
@@ -66,7 +71,10 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		autoConfigSettings.appendChild(autoGroupBySettings);
 		
 		final Element autoColumnSettings = doc.createElementNS(NAMESPACE, PREFIX + ":autoColumns");
-		autoColumnSettings.setAttribute("ignoreDiacritics", Boolean.toString(settings.isIgnoreDiacritics()));
+		if(settings.isIgnoreDiacritics()) {
+			writeIgnoreDiacritics(doc, autoColumnSettings, settings.isOnlyOrExcept(), settings.getSelectedDiacritics());
+		}
+		
 		autoColumnSettings.setAttribute("caseSensitive", Boolean.toString(settings.isCaseSensitive()));
 		autoColumnSettings.setAttribute("includeAdditionalGroupData", Boolean.toString(settings.isIncludeAdditionalGroupData()));
 		autoColumnSettings.setAttribute("includeAdditionalWordData", Boolean.toString(settings.isIncludeAdditionalWordData()));
@@ -96,8 +104,23 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		ele.setAttribute("column", info.getName());
 		ele.setAttribute("caseSensitive", 
 				Boolean.toString(info.isCaseSensitive()));
-		ele.setAttribute("ignoreDiacritics", 
-				Boolean.toString(info.isIgnoreDiacritics()));
+		
+		if(info.isIgnoreDiacritics()) {
+			writeIgnoreDiacritics(doc, ele, info.isOnlyOrExcept(), info.getSelectedDiacritics());
+		}
+	}
+	
+	private void writeIgnoreDiacritics(Document doc, Element ele, boolean onlyOrExcept, Collection<Diacritic> diacritics) {
+		final Element ignoreDiacriticsEle = doc.createElementNS(NAMESPACE, PREFIX + ":ignoreDiacritics");
+		ignoreDiacriticsEle.setAttribute("ignore", "true");
+		ignoreDiacriticsEle.setAttribute("onlyOrExcept", (onlyOrExcept ? "only" : "except"));
+		
+		if(diacritics.size() > 0) {
+			String selectedDiacritics = diacritics.stream().map(d -> d.toString()).collect(Collectors.joining(";"));
+			ignoreDiacriticsEle.setTextContent(selectedDiacritics);
+		}
+		
+		ele.appendChild(ignoreDiacriticsEle);
 	}
 
 	@Override
@@ -151,12 +174,47 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 				Node n = attrs.getNamedItem("column");
 				settings.setAutoGroupingColumn(n != null ? n.getNodeValue() : "");
 			} else if(childNode.getNodeName().equals(PREFIX + ":autoColumns")) {
-				settings.setIgnoreDiacritics(checkBooleanAttr(attrs, "ignoreDiacritics"));
+				if(attrs.getNamedItem("ignoreDiacritics") != null) {
+					// using deprecated flag
+					settings.setIgnoreDiacritics(checkBooleanAttr(attrs, "ignoreDiacritics"));
+					settings.setOnlyOrExcept(false);
+				}
+				
 				settings.setCaseSensitive(checkBooleanAttr(attrs, "caseSensitive"));
 				settings.setIncludeAdditionalGroupData(checkBooleanAttr(attrs, "includeAdditionalGroupData"));
 				settings.setIncludeAdditionalWordData(checkBooleanAttr(attrs, "includeAdditionalWordData"));
 				settings.setIncludeMetadata(checkBooleanAttr(attrs, "includeMetadata"));
+				
+				// look for an ignoreDiacritics child node
+				if(childNode.getChildNodes().getLength() > 0) {
+					for(int j = 0; j < childNode.getChildNodes().getLength(); j++) {
+						Node ccn = childNode.getChildNodes().item(j);
+						if(ccn.getNodeName().equals(PREFIX + ":ignoreDiacritics")) {
+							readIgnoreDiacriticsSettings(settings, ccn);
+						}
+					}
+				}
 			}
+		}
+	}
+	
+	private void readIgnoreDiacriticsSettings(IgnoreDiacriticsSettings settings, Node ignoreDiacriticsSettingsNode) {
+		NamedNodeMap attrs = ignoreDiacriticsSettingsNode.getAttributes();
+		settings.setIgnoreDiacritics(checkBooleanAttr(attrs, "ignore"));
+		if(attrs.getNamedItem("onlyOrExcept") != null) {
+			String onlyOrExceptTxt = attrs.getNamedItem("onlyOrExcept").getNodeValue();
+			settings.setOnlyOrExcept(onlyOrExceptTxt.equalsIgnoreCase("only"));
+		} else {
+			settings.setOnlyOrExcept(false);
+		}
+		
+		String textContent = ignoreDiacriticsSettingsNode.getTextContent().strip();
+		if(textContent.length() > 0) {
+			final IPAElementFactory factory = new IPAElementFactory();
+			Collection<Diacritic> selectedDiacritics = Arrays.stream(textContent.split(";"))
+				.map( txt -> factory.createDiacritic(txt.charAt(0)) )
+				.collect(Collectors.toList());
+			settings.setSelectedDiacritics(selectedDiacritics);
 		}
 	}
 	
@@ -172,9 +230,20 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 		if(csNode != null)
 			retVal.setCaseSensitive(Boolean.parseBoolean(csNode.getNodeValue()));
 
+		// deprecated option
 		final Node idNode = attrs.getNamedItem("ignoreDiacritics");
-		if(idNode != null)
+		if(idNode != null) {
 			retVal.setIgnoreDiacritics(Boolean.parseBoolean(idNode.getNodeValue()));
+			retVal.setOnlyOrExcept(false);
+		}
+		if(columnInfoNode.getChildNodes().getLength() > 0) {
+			for(int j = 0; j < columnInfoNode.getChildNodes().getLength(); j++) {
+				Node ccn = columnInfoNode.getChildNodes().item(j);
+				if(ccn.getNodeName().equals(PREFIX + ":ignoreDiacritics")) {
+					readIgnoreDiacriticsSettings(retVal, ccn);
+				}
+			}
+		}
 		
 		return retVal;
 	}

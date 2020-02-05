@@ -157,6 +157,9 @@ public class InventorySettingsPanel extends JPanel {
 			}
 		});
 		diacriticOptionsPanel = new DiacriticOptionsPanel(diacriticOptions);
+		diacriticOptionsPanel.getIgnoreDiacriticsBox().setSelected(settings.isIgnoreDiacritics());
+		diacriticOptionsPanel.getSelectionModeBox().setSelectedItem(settings.isOnlyOrExcept() ? SelectionMode.ONLY : SelectionMode.EXCEPT);
+		diacriticOptionsPanel.getDiacriticSelector().setSelectedDiacritics(settings.getSelectedDiacritics());
 		
 		caseSensitiveBox = new JCheckBox("Case sensititve");
 		caseSensitiveBox.setSelected(settings.isCaseSensitive());
@@ -378,6 +381,9 @@ public class InventorySettingsPanel extends JPanel {
 				}
 			});
 			diacriticOptionsPanel = new DiacriticOptionsPanel(diacriticOptions);
+			diacriticOptionsPanel.getIgnoreDiacriticsBox().setSelected(info.isIgnoreDiacritics());
+			diacriticOptionsPanel.getSelectionModeBox().setSelectedItem(info.isOnlyOrExcept() ? SelectionMode.ONLY : SelectionMode.EXCEPT);
+			diacriticOptionsPanel.getDiacriticSelector().setSelectedDiacritics(info.getSelectedDiacritics());
 			
 			add(diacriticOptionsPanel, gbc);
 		}
