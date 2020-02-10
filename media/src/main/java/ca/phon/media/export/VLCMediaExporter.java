@@ -16,6 +16,8 @@
 
 package ca.phon.media.export;
 
+import java.awt.Desktop;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import ca.phon.media.exceptions.PhonMediaException;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonTask;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.media.MediaRef;
+import uk.co.caprica.vlcj.media.TrackType;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
@@ -118,6 +122,8 @@ public class VLCMediaExporter extends PhonTask {
 	private final static int DEFAULT_PRESET = 0;
 	private Preset preset = null;
 	
+	private MediaPlayer player;
+	
 	private CountDownLatch latch = new CountDownLatch(1);
 	
 	/**
@@ -164,9 +170,30 @@ public class VLCMediaExporter extends PhonTask {
 		}
 	}
 	
+	@Override
+	public void shutdown() {
+		if(player != null) {
+			player.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+				
+				@Override
+				public void stopped(MediaPlayer mediaPlayer) {
+					try {
+						Desktop.getDesktop().moveToTrash(outputFile);
+					} catch (UnsupportedOperationException ex) {
+						LOGGER.error(ex.getLocalizedMessage(), ex);
+					}
+				}
+				
+			});
+			player.controls().stop();
+		}
+		latch.countDown();
+		super.shutdown();
+	}
+	
 	protected void doExport() throws PhonMediaException {
 		final MediaPlayerFactory factory = new MediaPlayerFactory();
-		final MediaPlayer player = factory.mediaPlayers().newMediaPlayer();
+		player = factory.mediaPlayers().newMediaPlayer();
 		
 		List<String> mediaOpts = new ArrayList<>();
 		final NumberFormat nf = NumberFormat.getNumberInstance();

@@ -18,14 +18,20 @@ package ca.phon.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Insets;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXLabel;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.RectanglePainter;
 
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -68,6 +74,12 @@ public class PhonTaskButton extends MultiActionButton {
 		return retVal;
 	}
 	
+	@Override
+	public Insets getInsets() {
+		Insets insets = new Insets(5, 5, 10, 10);
+		return insets;
+	}
+	
 	private void init() {
 		super.removeAll();
 
@@ -82,9 +94,8 @@ public class PhonTaskButton extends MultiActionButton {
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		busyLabel.setBusy(false);
 		
-		super.setTopLabelText(
-				"<html><div style='font-size:14;'><b>" + task.getName() + "</b></div></html>");
-		super.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+		//		super.setTopLabelText();
+//		super.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		
 		topPanel.add(busyLabel);
 		topPanel.add(Box.createHorizontalStrut(hgap));
@@ -96,7 +107,7 @@ public class PhonTaskButton extends MultiActionButton {
 		ImageIcon cancelIcn = 
 			IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		ImageIcon cancelIcnL =
-			IconManager.getInstance().getIcon("actions/button_cancel", IconSize.MEDIUM);
+			IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		
 		PhonUIAction cancelAction = new PhonUIAction(this, "onCancelTask");
 		cancelAction.putValue(Action.NAME, "Stop task");
@@ -104,6 +115,16 @@ public class PhonTaskButton extends MultiActionButton {
 		cancelAction.putValue(Action.SMALL_ICON, cancelIcn);
 		cancelAction.putValue(Action.LARGE_ICON_KEY, cancelIcnL);
 		addAction(cancelAction);
+		
+		MattePainter matte = new MattePainter(UIManager.getColor("control"));
+		RectanglePainter rectPainter = new RectanglePainter(1, 1, 1, 1);
+		rectPainter.setFillPaint(PhonGuiConstants.PHON_SHADED);
+		CompoundPainter<JXLabel> cmpPainter = new CompoundPainter<JXLabel>(matte, rectPainter);
+		super.setBackgroundPainter(cmpPainter);
+	}
+	
+	public JXBusyLabel getBusyLabel() {
+		return this.busyLabel;
 	}
 	
 	/*

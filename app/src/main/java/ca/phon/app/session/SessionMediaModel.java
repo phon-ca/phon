@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.media.LongSound;
@@ -30,9 +31,9 @@ import ca.phon.worker.PhonTask.TaskStatus;
  */
 public class SessionMediaModel {
 	
-	private final Project project;
+	private final SessionEditor editor;
 	
-	private final Session session;
+	private GenerateSessionAudioAction generateSessionAudioAction;
 	
 	private LongSound sharedAudio;
 	
@@ -42,19 +43,22 @@ public class SessionMediaModel {
 	 */
 	public final static String SESSION_AUDIO_AVAILABLE = "session_audio_available";
 	
-	public SessionMediaModel(Project project, Session session) {
+	public SessionMediaModel(SessionEditor editor) {
 		super();
 		
-		this.project = project;
-		this.session = session;
+		this.editor = editor;
 	}
 	
 	public Project getProject() {
-		return this.project;
+		return this.editor.getProject();
+	}
+	
+	public SessionEditor getEditor() {
+		return this.editor;
 	}
 	
 	public Session getSession() {
-		return this.session;
+		return this.editor.getSession();
 	}
 	
 	/**
@@ -146,6 +150,21 @@ public class SessionMediaModel {
 		} else {
 			throw new FileNotFoundException();
 		}
+	}
+	
+	/**
+	 * Return this shared action for generating session audio.
+	 * Shared access is necessary as multiple views will use
+	 * this same action and will want to watch for progress
+	 * simultaneously.
+	 * 
+	 * @return shared generate session audio action
+	 */
+	public GenerateSessionAudioAction getGenerateSessionAudioAction() {
+		if(generateSessionAudioAction == null) {
+			generateSessionAudioAction = new GenerateSessionAudioAction(editor);
+		}
+		return generateSessionAudioAction;
 	}
 	
 }

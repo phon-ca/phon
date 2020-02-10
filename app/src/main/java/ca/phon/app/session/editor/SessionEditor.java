@@ -189,7 +189,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		this.viewModelRef =
 				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
 		this.mediaModelRef = 
-				new AtomicReference<SessionMediaModel>(new SessionMediaModel(project, session));
+				new AtomicReference<SessionMediaModel>(new SessionMediaModel(this));
 
 		// check to ensure that the session has a tier view
 		if(session.getTierView() == null || session.getTierView().size() == 0) {
@@ -397,8 +397,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				
 				SessionMediaModel mediaModel = getMediaModel();
 				sessionMenu.add(new BrowseForMediaAction(SessionEditor.this));
-				GenerateSessionAudioAction genAudioAct = new GenerateSessionAudioAction(SessionEditor.this);
-				JMenuItem genAudioItem = new JMenuItem(genAudioAct);
+				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
 				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
 				sessionMenu.add(genAudioItem);
 				sessionMenu.addSeparator();

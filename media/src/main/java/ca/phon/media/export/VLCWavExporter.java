@@ -48,10 +48,12 @@ public class VLCWavExporter extends VLCMediaExporter {
 	@Override
 	protected void doExport() throws PhonMediaException {
 		super.doExport();
-		try {
-			fixHeader();
-		} catch (IOException e) {
-			throw new PhonMediaException(e);
+		if(getStatus() != TaskStatus.TERMINATED) {
+			try {
+				fixHeader();
+			} catch (IOException e) {
+				throw new PhonMediaException(e);
+			}
 		}
 	}
 	

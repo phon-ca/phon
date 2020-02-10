@@ -17,7 +17,9 @@ package ca.phon.app.session.editor.view.speech_analysis;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
@@ -72,6 +74,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.BrowseForMediaAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
@@ -83,6 +86,7 @@ import ca.phon.app.session.editor.view.speech_analysis.actions.ZoomAction;
 import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
 import ca.phon.media.PlaySegment;
+import ca.phon.media.export.VLCWavExporter;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -93,11 +97,15 @@ import ca.phon.session.SessionFactory;
 import ca.phon.session.SystemTierType;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.HidablePanel;
+import ca.phon.ui.PhonTaskButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
+import ca.phon.worker.PhonTask.TaskStatus;
 
 /**
  * Displays wavform and associated commands.
@@ -163,7 +171,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JButton showMoreButton;
 	private JButton zoomOutButton;
 
-	private JButton generateButton;
+	private PhonTaskButton generateButton = null;
 
 	private JPanel btmPanel;
 
@@ -208,7 +216,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setupToolbar();
 		
 		btmPanel = new JPanel(new VerticalLayout());
-		btmPanel.removeAll();
 
 		errorPanel = new JPanel(new VerticalLayout());
 		errorPanel.add(messageButton);
@@ -755,7 +762,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					ExportSegment exportSeg = ls.getExtension(ExportSegment.class);
 					exportButton.setEnabled( exportSeg != null );
 				}
-				messageButton.setVisible(true);
+				messageButton.setVisible(false);
 			} catch (IOException e) {
 				LogUtil.severe(e);
 			}
@@ -769,29 +776,59 @@ public class SpeechAnalysisEditorView extends EditorView {
 			final File mediaFile = MediaLocator.findMediaFile(getEditor().getProject(), session);
 			if(mediaFile != null && mediaFile.exists()) {
 				// show generate audio message
-				final GenerateSessionAudioAction generateAct = new GenerateSessionAudioAction(getEditor());
+				final GenerateSessionAudioAction generateAct = getEditor().getMediaModel().getGenerateSessionAudioAction();
 				generateAct.putValue(PhonUIAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
+				generateAct.addTaskListener(new PhonTaskListener() {
+					
+					@Override
+					public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+						if(TaskStatus.RUNNING == newStatus) {
+							final VLCWavExporter wavExportTask = (VLCWavExporter)task;
+							generateButton = new PhonTaskButton(wavExportTask);
+							generateButton.getTopLabel().setFont(generateButton.getTopLabel().getFont().deriveFont(Font.BOLD));
+							generateButton.getBusyLabel().setBusy(true);
+							generateButton.setTopLabelText("Export audio - 0%");
+							generateButton.setBottomLabelText(wavExportTask.getOutputFile().getAbsolutePath());
+							
+							errorPanel.remove(messageButton);
+							errorPanel.add(generateButton);
+						} else {
+							if(generateButton != null) {
+								errorPanel.remove(generateButton);
+							}
+							if(TaskStatus.TERMINATED == newStatus
+									|| TaskStatus.ERROR == newStatus) {
+								errorPanel.add(messageButton);
+							}
+							generateAct.removeTaskListener(this);
+						}
+					}
+					
+					@Override
+					public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+						if(PhonTask.PROGRESS_PROP.contentEquals(property)) {
+							generateButton.setTopLabelText(String.format("Export audio - %d%%", (int)Math.round(100.0*(float)newValue)));
+						}
+					}
+				});
 
-				messageButton.setTopLabelText("<html><b>No wav file available for Speech Analysis view</b></html>");
-				messageButton.setBottomLabelText("<html>Click here to extract wav from Session media.</html>");
+				messageButton.setTopLabelText("<html><b>Session audio file not available</b></html>");
+				messageButton.setBottomLabelText("<html>Click here to generate audio (.wav) file from session media.</html>");
 
 				messageButton.setDefaultAction(generateAct);
 				messageButton.addAction(generateAct);
 			} else {
 				// no media, tell user to setup media in Session Information
-				final PhonUIAction showSessionInformationAct = new PhonUIAction(getEditor().getViewModel(),
-						"showView", SessionInfoEditorView.VIEW_TITLE);
-				showSessionInformationAct.putValue(PhonUIAction.NAME, "Show Session Information view");
-				showSessionInformationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show Session Information view");
-				showSessionInformationAct.putValue(PhonUIAction.LARGE_ICON_KEY, IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+				final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());
 
-				messageButton.setDefaultAction(showSessionInformationAct);
-				messageButton.addAction(showSessionInformationAct);
+				messageButton.setDefaultAction(browseForMediaAct);
+				messageButton.addAction(browseForMediaAct);
 
-				messageButton.setTopLabelText("<html><b>Media file not found</b></html>");
-				messageButton.setBottomLabelText("<html>Click here to set media in Session Information.</html>");
+				messageButton.setTopLabelText("<html><b>Session media not available</b></html>");
+				messageButton.setBottomLabelText("<html>Click here to browse for session media.</html>");
 			}
 			messageButton.setVisible(true);
+			messageButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
 		setupTimeModel();
 	}
@@ -954,7 +991,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			setupExportMenu(builder);
 			builder.addSeparator(".", "export");
 		} else {
-			builder.addItem(".", new GenerateSessionAudioAction(getEditor()));
+			builder.addItem(".", mediaModel.getGenerateSessionAudioAction());
 			builder.addSeparator(".", "generate");
 		}
 		
