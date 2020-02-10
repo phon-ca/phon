@@ -31,6 +31,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
@@ -64,6 +65,7 @@ public class MediaSelectionField extends FileSelectionField {
 		super();
 		this.project = project;
 		textField.setPrompt("Session media location");
+		setFileFilter(FileFilter.mediaFilter);
 		PhonWorker.getInstance().invokeLater( () -> setupTextCompleter() );
 	}
 

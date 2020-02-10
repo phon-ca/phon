@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.actions;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.ImageIcon;
 
@@ -40,7 +42,7 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("misc/oscilloscope", IconSize.SMALL);
 	
-	private final static String TASK_LISTENER = "task_listener";
+	private final Collection<PhonTaskListener> customListeners = new ArrayList<>();
 	
 	public GenerateSessionAudioAction(SessionEditor editor) {
 		super(editor);
@@ -49,9 +51,33 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 		putValue(SHORT_DESCRIPTION, DESC);
 		putValue(SMALL_ICON, ICON);
 	}
+	
+	public void addTaskListener(PhonTaskListener listener) {
+		customListeners.add(listener);
+	}
+	
+	public void removeTaskListener(PhonTaskListener listener) {
+		customListeners.remove(listener);
+	}
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
+		PhonTask exportTask = generateExportAudioTask();
+		getEditor().getStatusBar().watchTask(exportTask);
+		
+		PhonWorker worker = PhonWorker.createWorker();
+		worker.setName("Generate session audio");
+		worker.setFinishWhenQueueEmpty(true);
+		worker.invokeLater(exportTask);
+		worker.start();
+	}
+	
+	/**
+	 * Provide access to the internal task for generating
+	 * session audio file.
+	 * 
+	 */
+	public PhonTask generateExportAudioTask() {
 		PhonTaskListener taskListener = new PhonTaskListener() {
 
 			@Override
@@ -75,10 +101,10 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 		};
 		
 		PhonTask exportTask = generateAudioFileTask();
-		getEditor().getStatusBar().watchTask(exportTask);
 		exportTask.addTaskListener(taskListener);
+		customListeners.forEach(exportTask::addTaskListener);
 		
-		PhonWorker.getInstance().invokeLater(exportTask);
+		return exportTask;
 	}
 	
 	/**

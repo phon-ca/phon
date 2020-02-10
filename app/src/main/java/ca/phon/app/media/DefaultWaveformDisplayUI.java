@@ -231,6 +231,8 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		float audioLength = 0.0f;
 		if(display.getLongSound() != null) {
 			audioLength = display.getLongSound().length();
+		} else {
+			return;
 		}
 		
 		int currentStartX = (int)display.getWindowStartX();
