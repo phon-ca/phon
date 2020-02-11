@@ -249,6 +249,42 @@ public class SpeechAnalysisEditorView extends EditorView {
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroller.setColumnHeaderView(timebar);
 		add(scroller, BorderLayout.CENTER);
+		
+		final GenerateSessionAudioAction generateAct = getEditor().getMediaModel().getGenerateSessionAudioAction();
+		generateAct.putValue(PhonUIAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
+		generateAct.addTaskListener(new PhonTaskListener() {
+			
+			@Override
+			public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+				if(TaskStatus.RUNNING == newStatus) {
+					final VLCWavExporter wavExportTask = (VLCWavExporter)task;
+					generateButton = new PhonTaskButton(wavExportTask);
+					generateButton.getTopLabel().setFont(generateButton.getTopLabel().getFont().deriveFont(Font.BOLD));
+					generateButton.getBusyLabel().setBusy(true);
+					generateButton.setTopLabelText("Export audio - 0%");
+					generateButton.setBottomLabelText(wavExportTask.getOutputFile().getAbsolutePath());
+					
+					errorPanel.remove(messageButton);
+					errorPanel.add(generateButton);
+				} else {
+					if(generateButton != null) {
+						errorPanel.remove(generateButton);
+					}
+					if(TaskStatus.TERMINATED == newStatus
+							|| TaskStatus.ERROR == newStatus) {
+						errorPanel.add(messageButton);
+					}
+					generateAct.removeTaskListener(this);
+				}
+			}
+			
+			@Override
+			public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+				if(PhonTask.PROGRESS_PROP.contentEquals(property)) {
+					generateButton.setTopLabelText(String.format("Export audio - %d%%", (int)Math.round(100.0*(float)newValue)));
+				}
+			}
+		});
 
 		setupInputMap();
 		setupEditorActions();
@@ -767,7 +803,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 				LogUtil.severe(e);
 			}
 		} else {
-			messageButton.setTopLabelText("<html><b>Unable to open audio file</b></html>");
+			getTimeModel().clearIntervals();
+			getTimeModel().clearMarkers();
+			waveformTier.getWaveformDisplay().setLongSound(null);
+			
 			messageButton.clearActions();
 
 			// display option to generate audio file if there is session media available
@@ -776,47 +815,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 			final File mediaFile = MediaLocator.findMediaFile(getEditor().getProject(), session);
 			if(mediaFile != null && mediaFile.exists()) {
 				// show generate audio message
-				final GenerateSessionAudioAction generateAct = getEditor().getMediaModel().getGenerateSessionAudioAction();
-				generateAct.putValue(PhonUIAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
-				generateAct.addTaskListener(new PhonTaskListener() {
-					
-					@Override
-					public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
-						if(TaskStatus.RUNNING == newStatus) {
-							final VLCWavExporter wavExportTask = (VLCWavExporter)task;
-							generateButton = new PhonTaskButton(wavExportTask);
-							generateButton.getTopLabel().setFont(generateButton.getTopLabel().getFont().deriveFont(Font.BOLD));
-							generateButton.getBusyLabel().setBusy(true);
-							generateButton.setTopLabelText("Export audio - 0%");
-							generateButton.setBottomLabelText(wavExportTask.getOutputFile().getAbsolutePath());
-							
-							errorPanel.remove(messageButton);
-							errorPanel.add(generateButton);
-						} else {
-							if(generateButton != null) {
-								errorPanel.remove(generateButton);
-							}
-							if(TaskStatus.TERMINATED == newStatus
-									|| TaskStatus.ERROR == newStatus) {
-								errorPanel.add(messageButton);
-							}
-							generateAct.removeTaskListener(this);
-						}
-					}
-					
-					@Override
-					public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
-						if(PhonTask.PROGRESS_PROP.contentEquals(property)) {
-							generateButton.setTopLabelText(String.format("Export audio - %d%%", (int)Math.round(100.0*(float)newValue)));
-						}
-					}
-				});
-
 				messageButton.setTopLabelText("<html><b>Session audio file not available</b></html>");
 				messageButton.setBottomLabelText("<html>Click here to generate audio (.wav) file from session media.</html>");
 
-				messageButton.setDefaultAction(generateAct);
-				messageButton.addAction(generateAct);
+				messageButton.setDefaultAction(mediaModel.getGenerateSessionAudioAction());
+				messageButton.addAction(mediaModel.getGenerateSessionAudioAction());
 			} else {
 				// no media, tell user to setup media in Session Information
 				final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());

@@ -107,23 +107,12 @@ public final class TimelineView extends EditorView {
 	
 	public static final String VIEW_ICON = "docking-frames/timeline";
 	
-	/**
-	 * Values for the zoom bar
-	 */
-	public static final float zoomValues[] = { 3.125f,  6.25f, 12.5f, 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
-	
-	private static final int defaultZoomIdx = 5;
-	
-//	public static enum PlaybackMarkerUpdateMode {
-//		ON_VLC_EVENT,  // only updates position when vlc event is triggered
-//		SYNCED,        // estimates time and syncs with vlc events
-//		ON_CALL	       // read time from vlc in a loop
-//	};
+//	/**
+//	 * Values for the zoom bar
+//	 */
+//	public static final float zoomValues[] = { 3.125f,  6.25f, 12.5f, 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
 //	
-//	private final static String PLAYBACK_UPDATE_MODE = "TimelineView.playbackUpdateMode";
-//	private final static PlaybackMarkerUpdateMode DEFAULT_PLAYBACK_UPDATE_MODE = PlaybackMarkerUpdateMode.SYNCED;
-//	private PlaybackMarkerUpdateMode playbackMarkerUpdateMode = PrefHelper.getEnum(PlaybackMarkerUpdateMode.class,
-//			PLAYBACK_UPDATE_MODE, DEFAULT_PLAYBACK_UPDATE_MODE);
+//	private static final int defaultZoomIdx = 5;
 	
 	private final static String PLABACK_FPS = "TimelineView.playbackFps";
 	private final float DEFAULT_PLAYBACK_FPS = 30.0f;
@@ -174,20 +163,7 @@ public final class TimelineView extends EditorView {
 		// the shared time model
 		timeModel = new TimeUIModel();
 		
-		timeModel.addPropertyChangeListener((e) -> {
-			if(e.getPropertyName().equals("pixelsPerSecond")) {
-				int zoomIdx = Arrays.binarySearch(zoomValues, (float)e.getNewValue());
-				if(zoomIdx == 0) {
-					zoomOutButton.setEnabled(false);
-				} else if (zoomIdx == zoomValues.length - 1) {
-					zoomInButton.setEnabled(false);
-				} else {
-					zoomInButton.setEnabled(true);
-					zoomOutButton.setEnabled(true);
-				}
-			}
-		});
-		timeModel.setPixelsPerSecond(zoomValues[defaultZoomIdx]);
+		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
 		timeModel.setEndTime(0.0f);	
 		
@@ -204,12 +180,10 @@ public final class TimelineView extends EditorView {
 		// wav tier
 		recordGrid = new TimelineRecordTier(this);
 		recordGrid.getRecordGrid().addMouseListener(contextMenuListener);
-//		recordGrid.getRecordGrid().addMouseWheelListener(zoomListener);
 		
 		wavTier = new TimelineWaveformTier(this);
 		wavTier.getPreferredSize();
 		wavTier.getWaveformDisplay().addMouseListener(contextMenuListener);
-//		wavTier.getWaveformDisplay().addMouseWheelListener(zoomListener);
 		
 		addTier(wavTier);
 		addTier(recordGrid);

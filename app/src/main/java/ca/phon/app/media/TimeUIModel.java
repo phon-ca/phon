@@ -196,6 +196,14 @@ public class TimeUIModel {
 		return Collections.unmodifiableCollection(this.pointMarkers);
 	}
 	
+	public void clearMarkers() {
+		var markerCount = pointMarkers.size();
+		Collection<Marker> removed = new ArrayList<>(pointMarkers);
+		pointMarkers.clear();
+		propSupport.firePropertyChange("markerCount", markerCount, pointMarkers.size());
+		removed.forEach(this::fireMarkerRemoved);
+	}
+	
 	public Interval addInterval(float startTime, float endTime) {
 		Interval interval = new Interval(startTime, endTime);
 		addInterval(interval);
