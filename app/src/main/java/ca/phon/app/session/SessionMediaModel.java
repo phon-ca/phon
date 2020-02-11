@@ -35,6 +35,8 @@ public class SessionMediaModel {
 	
 	private GenerateSessionAudioAction generateSessionAudioAction;
 	
+	private File loadedAudioFile = null;
+	
 	private LongSound sharedAudio;
 	
 	/**
@@ -131,9 +133,25 @@ public class SessionMediaModel {
 	 * @throws IOException
 	 */
 	public LongSound getSharedSessionAudio() throws IOException {
-		if(this.sharedAudio == null) {
+		if(this.sharedAudio == null || 
+				(this.loadedAudioFile != null
+					&& isSessionAudioAvailable() && !this.loadedAudioFile.equals(getSessionAudioFile())) ) {
 			this.sharedAudio = loadSessionAudio();
 		}
+		
+		if(this.sharedAudio == null) {
+			this.sharedAudio = loadSessionAudio();
+		} else {
+			if(isSessionAudioAvailable()) {
+				if(!this.loadedAudioFile.equals(getSessionAudioFile())) {
+					this.sharedAudio = loadSessionAudio();
+				}
+			} else {
+				this.sharedAudio = null;
+				this.loadedAudioFile = null;
+			}
+		}
+		
 		return this.sharedAudio;
 	}
 	
@@ -146,7 +164,9 @@ public class SessionMediaModel {
 	public LongSound loadSessionAudio() throws IOException {
 		if(isSessionAudioAvailable()) {
 			File sessionAudio = getSessionAudioFile();
-			return LongSound.fromFile(sessionAudio);
+			LongSound retVal = LongSound.fromFile(sessionAudio);
+			this.loadedAudioFile = sessionAudio;
+			return retVal;
 		} else {
 			throw new FileNotFoundException();
 		}
