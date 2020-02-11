@@ -171,12 +171,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JButton showMoreButton;
 	private JButton zoomOutButton;
 
-	private PhonTaskButton generateButton = null;
-
-	private JPanel btmPanel;
-
 	private JPanel errorPanel;
 	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
+	private PhonTaskButton generateButton = null;
 
 	private final List<SpeechAnalysisTier> pluginTiers =
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
@@ -215,13 +212,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setLayout(new BorderLayout());
 		setupToolbar();
 		
-		btmPanel = new JPanel(new VerticalLayout());
-
 		errorPanel = new JPanel(new VerticalLayout());
 		errorPanel.add(messageButton);
 
-		btmPanel.add(errorPanel);
-		add(btmPanel, BorderLayout.SOUTH);
+		add(errorPanel, BorderLayout.SOUTH);
 
 		timeModel = new TimeUIModel();
 		timeModel.addPropertyChangeListener( (e) -> {
@@ -263,18 +257,16 @@ public class SpeechAnalysisEditorView extends EditorView {
 					generateButton.getBusyLabel().setBusy(true);
 					generateButton.setTopLabelText("Export audio - 0%");
 					generateButton.setBottomLabelText(wavExportTask.getOutputFile().getAbsolutePath());
-					
-					errorPanel.remove(messageButton);
+
+					messageButton.setVisible(false);
 					errorPanel.add(generateButton);
 				} else {
 					if(generateButton != null) {
 						errorPanel.remove(generateButton);
 					}
-					if(TaskStatus.TERMINATED == newStatus
-							|| TaskStatus.ERROR == newStatus) {
-						errorPanel.add(messageButton);
+					if(TaskStatus.FINISHED != newStatus) {
+						messageButton.setVisible(true);
 					}
-					generateAct.removeTaskListener(this);
 				}
 			}
 			
@@ -810,10 +802,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			messageButton.clearActions();
 
 			// display option to generate audio file if there is session media available
-			final Session session = getEditor().getSession();
-
-			final File mediaFile = MediaLocator.findMediaFile(getEditor().getProject(), session);
-			if(mediaFile != null && mediaFile.exists()) {
+			if(mediaModel.isSessionMediaAvailable()) {
 				// show generate audio message
 				messageButton.setTopLabelText("<html><b>Session audio file not available</b></html>");
 				messageButton.setBottomLabelText("<html>Click here to generate audio (.wav) file from session media.</html>");
@@ -831,6 +820,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				messageButton.setBottomLabelText("<html>Click here to browse for session media.</html>");
 			}
 			messageButton.setVisible(true);
+			revalidate();
 			messageButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
 		setupTimeModel();

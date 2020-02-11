@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -76,13 +77,17 @@ import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
+import ca.phon.media.export.VLCWavExporter;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
+import ca.phon.session.Session;
 import ca.phon.session.SystemTierType;
 import ca.phon.ui.DropDownButton;
+import ca.phon.ui.HidablePanel;
+import ca.phon.ui.PhonTaskButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
@@ -90,7 +95,10 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
+import ca.phon.worker.PhonTask.TaskStatus;
 import groovy.swing.factory.GlueFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
@@ -106,13 +114,6 @@ public final class TimelineView extends EditorView {
 	public static final String VIEW_TITLE = "Timeline";
 	
 	public static final String VIEW_ICON = "docking-frames/timeline";
-	
-//	/**
-//	 * Values for the zoom bar
-//	 */
-//	public static final float zoomValues[] = { 3.125f,  6.25f, 12.5f, 25.0f, 50.0f, 100.0f, 200.0f, 400.0f, 800.0f, 1600.0f };
-//	
-//	private static final int defaultZoomIdx = 5;
 	
 	private final static String PLABACK_FPS = "TimelineView.playbackFps";
 	private final float DEFAULT_PLAYBACK_FPS = 30.0f;
@@ -134,6 +135,10 @@ public final class TimelineView extends EditorView {
 	
 	private JScrollPane tierScrollPane;
 	private TierPanel tierPanel;
+	
+	private JPanel errorPanel;
+	private HidablePanel messageButton = new HidablePanel("TimelineView.noAudio");
+	private PhonTaskButton generateButton = null;
 	
 	/**
 	 * Default {@link TimeUIModel} which should be
@@ -208,6 +213,45 @@ public final class TimelineView extends EditorView {
 		add(toolbar, BorderLayout.NORTH);
 		
 		add(tierScrollPane, BorderLayout.CENTER);
+		
+		errorPanel = new JPanel(new VerticalLayout());
+		errorPanel.add(messageButton);
+		
+		final GenerateSessionAudioAction generateAct = getEditor().getMediaModel().getGenerateSessionAudioAction();
+		generateAct.putValue(PhonUIAction.LARGE_ICON_KEY, generateAct.getValue(PhonUIAction.SMALL_ICON));
+		generateAct.addTaskListener(new PhonTaskListener() {
+			
+			@Override
+			public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+				if(TaskStatus.RUNNING == newStatus) {
+					final VLCWavExporter wavExportTask = (VLCWavExporter)task;
+					generateButton = new PhonTaskButton(wavExportTask);
+					generateButton.getTopLabel().setFont(generateButton.getTopLabel().getFont().deriveFont(Font.BOLD));
+					generateButton.getBusyLabel().setBusy(true);
+					generateButton.setTopLabelText("Export audio - 0%");
+					generateButton.setBottomLabelText(wavExportTask.getOutputFile().getAbsolutePath());
+					
+					messageButton.setVisible(false);
+					errorPanel.add(generateButton);
+				} else {
+					if(generateButton != null) {
+						errorPanel.remove(generateButton);
+					}
+					if(TaskStatus.FINISHED != newStatus) {
+						messageButton.setVisible(true);
+					}
+				}
+			}
+			
+			@Override
+			public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+				if(PhonTask.PROGRESS_PROP.contentEquals(property)) {
+					generateButton.setTopLabelText(String.format("Export audio - %d%%", (int)Math.round(100.0*(float)newValue)));
+				}
+			}
+		});
+
+		add(errorPanel, BorderLayout.SOUTH);
 		
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionMediaAvailable()) {
@@ -340,8 +384,34 @@ public final class TimelineView extends EditorView {
 		if(mediaModel.isSessionAudioAvailable()) {
 			loadSessionAudio();
 			wavTier.setVisible(true);
+			messageButton.setVisible(false);
 		} else {
 			wavTier.setVisible(false);
+			getTimeModel().clearIntervals();
+			getTimeModel().clearMarkers();
+			
+			messageButton.clearActions();
+
+			// display option to generate audio file if there is session media available
+			if(mediaModel.isSessionMediaAvailable()) {
+				// show generate audio message
+				messageButton.setTopLabelText("<html><b>Session audio file not available</b></html>");
+				messageButton.setBottomLabelText("<html>Click here to generate audio (.wav) file from session media.</html>");
+
+				messageButton.setDefaultAction(mediaModel.getGenerateSessionAudioAction());
+				messageButton.addAction(mediaModel.getGenerateSessionAudioAction());
+			} else {
+				// no media, tell user to setup media in Session Information
+				final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());
+
+				messageButton.setDefaultAction(browseForMediaAct);
+				messageButton.addAction(browseForMediaAct);
+
+				messageButton.setTopLabelText("<html><b>Session media not available</b></html>");
+				messageButton.setBottomLabelText("<html>Click here to browse for session media.</html>");
+			}
+			messageButton.setVisible(true);
+			messageButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
 		setupTimeModel();
 	}
