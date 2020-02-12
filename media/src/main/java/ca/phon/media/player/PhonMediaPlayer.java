@@ -29,12 +29,14 @@ import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -123,6 +125,16 @@ public class PhonMediaPlayer extends JPanel {
 	private ImageIcon volIcn;
 	private ImageIcon menuIcn;
 	
+	/* Background images */
+	private final static String NO_MEDIA_IMAGE = "no_media.png";
+	private final BufferedImage noMediaImage;
+	
+	private final static String AUDIO_ONLY_IMAGE = "audio_only.png";
+	private final BufferedImage audioOnlyImage;
+	
+	private final static String MEDIA_AVAIL_IMAGE = "media_available.png";
+	private final BufferedImage mediaAvailableImage;
+	
 	/** Menu filters */
 	private List<IMediaMenuFilter> menuFilters =
 			new ArrayList<IMediaMenuFilter>();
@@ -139,6 +151,10 @@ public class PhonMediaPlayer extends JPanel {
 	public PhonMediaPlayer() {
 		super();
 
+		noMediaImage = getNoMediaImage();
+		audioOnlyImage = getAudioFileImage();
+		mediaAvailableImage = getMediaAvailableImage();
+		
 		loadIcons();
 		init();
 	}
@@ -187,6 +203,7 @@ public class PhonMediaPlayer extends JPanel {
 		addMediaMenuFilter(new MediaMenuFilter());
 		
 		mediaPlayerCanvas = new PhonPlayerComponent();
+		mediaPlayerCanvas.setBufferedImage(noMediaImage);
 		add(mediaPlayerCanvas, BorderLayout.CENTER);
 	}
 	
@@ -375,7 +392,8 @@ public class PhonMediaPlayer extends JPanel {
 			playPauseBtn.setEnabled(false);
 			replayBtn.setEnabled(false);
 			positionSlider.setEnabled(false);
-			mediaPlayerCanvas.setBufferedImage(null);
+			
+			mediaPlayerCanvas.setBufferedImage(noMediaImage);
 			mediaPlayerCanvas.repaint();
 		} else if(VLCHelper.isLoaded()) {
 			mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
@@ -387,12 +405,39 @@ public class PhonMediaPlayer extends JPanel {
 			positionSlider.setEnabled(true);
 			
 			mediaPlayer.media().prepare(getMediaFile(), ":play-and-pause", ":no-video-title-show");
+			
 			mediaPlayer.videoSurface().set(
 					mediaPlayerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
-			
 			mediaPlayer.events().addMediaPlayerEventListener(loadListener);
 			mediaPlayer.controls().play();
 		}
+	}
+	
+	private BufferedImage getAudioFileImage() {
+		try {
+			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(AUDIO_ONLY_IMAGE));
+		} catch (IOException e) {
+			LOGGER.warn(e);
+		}
+		return null;
+	}
+	
+	private BufferedImage getNoMediaImage() {
+		try {
+			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(NO_MEDIA_IMAGE));
+		} catch (IOException e) {
+			LOGGER.warn(e);
+		}
+		return null;
+	}
+	
+	private BufferedImage getMediaAvailableImage() {
+		try {
+			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(MEDIA_AVAIL_IMAGE));
+		} catch (IOException e) {
+			LOGGER.warn(e);
+		}
+		return null;
 	}
 	
 	/*
@@ -407,7 +452,16 @@ public class PhonMediaPlayer extends JPanel {
 				mediaPlayer.events().removeMediaPlayerEventListener(loadListener);
 				
 				final int sliderMax = (int)mediaPlayer.status().length();
-				SwingUtilities.invokeLater( () -> getPositionSlider().setMaximum(sliderMax) );
+				SwingUtilities.invokeLater( () -> {
+					if(mediaPlayer.video().trackCount() == 0) {
+						mediaPlayerCanvas.setBufferedImage(audioOnlyImage);
+						mediaPlayerCanvas.repaint();
+					} else {
+						mediaPlayerCanvas.setBufferedImage(mediaAvailableImage);
+						mediaPlayerCanvas.repaint();
+					}
+					getPositionSlider().setMaximum(sliderMax);
+				});
 				
 				mediaPlayer.events().addMediaPlayerEventListener(mediaListener);
 				for(MediaPlayerEventListener listener:cachedListeners) {

@@ -89,7 +89,7 @@ public class MediaPlayerEditorView extends EditorView {
 	public static final String VIEW_TITLE = "Media Player";
 
 	private PhonMediaPlayer mediaPlayer;
-
+	
 	public MediaPlayerEditorView(SessionEditor editor) {
 		super(editor);
 
