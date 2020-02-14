@@ -55,7 +55,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.actions.AssignMediaAction;
+import ca.phon.app.session.editor.actions.UnassignMediaAction;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.undo.SessionDateEdit;
@@ -511,7 +512,8 @@ public class SessionInfoEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu menu = new JMenu();
 		
-		menu.add(new BrowseForMediaAction(getEditor()));
+		menu.add(new AssignMediaAction(getEditor()));
+		menu.add(new UnassignMediaAction(getEditor())).setEnabled(getEditor().getMediaModel().isSessionMediaAvailable());
 		menu.addSeparator();
 		
 		final Session session = getEditor().getSession();

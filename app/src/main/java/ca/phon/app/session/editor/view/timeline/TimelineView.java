@@ -70,7 +70,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
@@ -402,7 +402,7 @@ public final class TimelineView extends EditorView {
 				messageButton.addAction(mediaModel.getGenerateSessionAudioAction());
 			} else {
 				// no media, tell user to setup media in Session Information
-				final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());
+				final AssignMediaAction browseForMediaAct = new AssignMediaAction(getEditor());
 
 				messageButton.setDefaultAction(browseForMediaAct);
 				messageButton.addAction(browseForMediaAct);
@@ -550,6 +550,8 @@ public final class TimelineView extends EditorView {
 	
 	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
 	
+	private final DelegateEditorAction onMediaLoadedAct = new DelegateEditorAction(this, "onMediaLoaded");
+	
 	private void registerEditorEvents() {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
@@ -561,6 +563,8 @@ public final class TimelineView extends EditorView {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, onRecordAddedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeletedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
+		
+		getEditor().getEventManager().registerActionForEvent(MediaPlayerEditorView.MEDIA_LOADED_EVENT, onMediaLoadedAct);
 	}
 	
 	private void deregisterEditorEvents() {
@@ -574,6 +578,13 @@ public final class TimelineView extends EditorView {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_ADDED_EVT, onRecordAddedAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeletedAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
+		
+		getEditor().getEventManager().removeActionForEvent(MediaPlayerEditorView.MEDIA_LOADED_EVENT, onMediaLoadedAct);
+	}
+	
+	@RunOnEDT
+	public void onMediaLoaded(EditorEvent ee) {
+		setupTimeModel();
 	}
 	
 	@RunOnEDT
@@ -709,7 +720,7 @@ public final class TimelineView extends EditorView {
 			}
 		} else {
 			// Add browse for media action
-			builder.addItem(".", new BrowseForMediaAction(getEditor()));
+			builder.addItem(".", new AssignMediaAction(getEditor()));
 		}
 		
 		builder.addSeparator(".", "record_grid");

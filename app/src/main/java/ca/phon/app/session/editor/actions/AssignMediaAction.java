@@ -31,18 +31,18 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class BrowseForMediaAction extends SessionEditorAction {
+public class AssignMediaAction extends SessionEditorAction {
 
 	private static final long serialVersionUID = 5340838112757528304L;
 	
-	private final static String TXT = "Browse for media...";
+	private final static String TXT = "Assign media to session...";
 	
-	private final static String DESC = "Select media file for session.";
+	private final static String DESC = "Select media file for session using filesystem browser";
 	
 	private final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/film-link", IconSize.SMALL);
 
-	public BrowseForMediaAction(SessionEditor editor) {
+	public AssignMediaAction(SessionEditor editor) {
 		super(editor);
 		
 		putValue(NAME, TXT);

@@ -41,7 +41,7 @@ import org.jdesktop.swingx.JXStatusBar;
 
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.SessionMediaModel;
-import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
@@ -61,6 +61,7 @@ import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.app.session.editor.actions.SaveAsAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.actions.SortRecordsAction;
+import ca.phon.app.session.editor.actions.UnassignMediaAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
@@ -396,7 +397,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				sessionMenu.removeAll();
 				
 				SessionMediaModel mediaModel = getMediaModel();
-				sessionMenu.add(new BrowseForMediaAction(SessionEditor.this));
+				sessionMenu.add(new AssignMediaAction(SessionEditor.this));
+				sessionMenu.add(new UnassignMediaAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
 				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
 				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
 				sessionMenu.add(genAudioItem);

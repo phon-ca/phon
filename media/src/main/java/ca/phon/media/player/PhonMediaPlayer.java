@@ -70,6 +70,7 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.media.MediaRef;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
@@ -397,6 +398,7 @@ public class PhonMediaPlayer extends JPanel {
 	}
 	
 	public void loadMedia() {
+		boolean wasLoaded = (mediaPlayer != null && mediaPlayer.status().isPlayable());
 		// cleanup any existing vlc objects
 		cleanup();
 		
@@ -406,6 +408,8 @@ public class PhonMediaPlayer extends JPanel {
 			playPauseBtn.setEnabled(false);
 			replayBtn.setEnabled(false);
 			positionSlider.setEnabled(false);
+
+			firePropertyChange("mediaLoaded", wasLoaded, false);
 			
 			mediaPlayerCanvas.setBufferedImage(noMediaImage);
 			mediaPlayerCanvas.repaint();
@@ -478,10 +482,12 @@ public class PhonMediaPlayer extends JPanel {
 				SwingUtilities.invokeLater( () -> {
 					if(mediaPlayer.video().trackCount() == 0) {
 						mediaPlayerCanvas.setBufferedImage(audioOnlyImage);
+						mediaPlayerCanvas.repaint();
 					} else {
 						mediaPlayerCanvas.setBufferedImage(mediaAvailableImage);
+						mediaPlayerCanvas.repaint();
 					}
-					mediaPlayerCanvas.repaint();
+					firePropertyChange("mediaLoaded", false, true);
 					getPositionSlider().setMaximum(sliderMax);
 				});
 				

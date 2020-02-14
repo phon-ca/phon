@@ -55,7 +55,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
@@ -100,6 +100,14 @@ public class MediaPlayerEditorView extends EditorView {
 	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MediaPlayerEditorView.class.getName());
 
 	public static final String VIEW_TITLE = "Media Player";
+	
+	/** 
+	 * Custom editor event signaled when media loaded 
+	 * Event data: media file (as string)
+	 */
+	public static final String MEDIA_LOADED_EVENT = "_media_loaded_";
+	
+	public static final String MEDIA_UNLOADED_EVENT = "_media_unloaded_";
 
 	private PhonMediaPlayer mediaPlayer;
 	
@@ -117,11 +125,20 @@ public class MediaPlayerEditorView extends EditorView {
 		setLayout(new BorderLayout());
 		mediaPlayer = new PhonMediaPlayer();
 		mediaPlayer.addMediaMenuFilter(new MediaMenuFilter());
+		mediaPlayer.addPropertyChangeListener("mediaLoaded", (e) -> {
+			if((boolean)e.getNewValue()) {
+				EditorEvent ee = new EditorEvent(MEDIA_LOADED_EVENT, MediaPlayerEditorView.this, mediaPlayer.getMediaFile());
+				getEditor().getEventManager().queueEvent(ee);
+			} else {
+				EditorEvent ee = new EditorEvent(MEDIA_UNLOADED_EVENT, MediaPlayerEditorView.this);
+				getEditor().getEventManager().queueEvent(ee);
+			}
+		});
 		mediaPlayer.getMediaPlayerCanvas().setTransferHandler(new FileSelectionTransferHandler());
-
+		
 		add(mediaPlayer, BorderLayout.CENTER);
 		
-		final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());
+		final AssignMediaAction browseForMediaAct = new AssignMediaAction(getEditor());
 
 		messageButton.setDefaultAction(browseForMediaAct);
 		messageButton.addAction(browseForMediaAct);
@@ -264,44 +281,6 @@ public class MediaPlayerEditorView extends EditorView {
 	public void doCleanup(EditorEvent ee) {
 		mediaPlayer.cleanup();
 	}
-
-	/**
-	 *  Menu actions
-	 */
-//	public void onExportMedia(PhonActionEvent pae) {
-//		String mediaFilePath = getMediaFilePath();
-//		if(mediaFilePath != null) {
-//			File f = new File(mediaFilePath);
-//			String name = f.getName();
-//			int extDotIdx = name.lastIndexOf(".");
-//			String ext = "";
-//			if(extDotIdx > 0) {
-//				ext = name.substring(extDotIdx);
-//			}
-//
-//			File projFile = new File(getEditor().getProject().getLocation());
-//			File resFile = new File(projFile, "__res");
-//			File mediaResFile = new File(resFile, "media");
-//			File segmentFile = new File(mediaResFile, "segments");
-//			if(!segmentFile.exists()) {
-//				segmentFile.mkdirs();
-//			}
-//
-//			File outputFile = new File(segmentFile,
-//					getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) + ext);
-//						int fIdx = 0;
-//			while(outputFile.exists()) {
-//				outputFile = new File(segmentFile,
-//						getEditor().getSession().getName() + "_" + getEditor().getSession().getCorpus() + "_" + (getEditor().getCurrentRecordIndex()+1) +
-//						"(" + (++fIdx) + ")" + ext);
-//			}
-//
-//			final VLCMediaExporter exporter =
-//					new VLCMediaExporter(new File(mediaFilePath), outputFile, Preset.H264_HIGH);
-//			getEditor().getStatusBar().watchTask(exporter);
-//			PhonWorker.getInstance().invokeLater(exporter);
-//		}
-//	}
 
 	// popup frame for time selection
 	private JFrame timeSelectionPopup = null;

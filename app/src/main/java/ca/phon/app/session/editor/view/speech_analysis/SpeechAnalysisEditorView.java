@@ -74,7 +74,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
@@ -814,7 +814,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				messageButton.addAction(mediaModel.getGenerateSessionAudioAction());
 			} else {
 				// no media, tell user to setup media in Session Information
-				final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());
+				final AssignMediaAction browseForMediaAct = new AssignMediaAction(getEditor());
 
 				messageButton.setDefaultAction(browseForMediaAct);
 				messageButton.addAction(browseForMediaAct);
@@ -930,8 +930,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 			setupExportMenu(builder);
 			builder.addSeparator(".", "export");
 		} else {
-			builder.addItem(".", new GenerateSessionAudioAction(getEditor()));
-			builder.addSeparator(".", "generate");
+			if(mediaModel.isSessionMediaAvailable()) {
+				builder.addItem(".", new GenerateSessionAudioAction(getEditor()));
+				builder.addSeparator(".", "generate");
+			}
 		}
 		
 //		if(getWavDisplay().isPlaying()) {
