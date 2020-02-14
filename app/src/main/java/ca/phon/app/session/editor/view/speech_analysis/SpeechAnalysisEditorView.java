@@ -775,6 +775,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public void update() {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionAudioAvailable()) {
+			setTiersVisible(true);
 			try {
 				LongSound ls = mediaModel.getSharedSessionAudio();
 				if(waveformTier.getWaveformDisplay().getLongSound() != ls) {
@@ -793,6 +794,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				messageButton.setVisible(false);
 			} catch (IOException e) {
 				LogUtil.severe(e);
+				setTiersVisible(false);
 			}
 		} else {
 			getTimeModel().clearIntervals();
@@ -800,6 +802,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			waveformTier.getWaveformDisplay().setLongSound(null);
 			
 			messageButton.clearActions();
+			setTiersVisible(false);
 
 			// display option to generate audio file if there is session media available
 			if(mediaModel.isSessionMediaAvailable()) {
@@ -817,13 +820,24 @@ public class SpeechAnalysisEditorView extends EditorView {
 				messageButton.addAction(browseForMediaAct);
 
 				messageButton.setTopLabelText("<html><b>Session media not available</b></html>");
-				messageButton.setBottomLabelText("<html>Click here to browse for session media.</html>");
+				messageButton.setBottomLabelText("<html>Click here to assign media file to session.</html>");
 			}
 			messageButton.setVisible(true);
 			revalidate();
 			messageButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
 		setupTimeModel();
+	}
+	
+	private void setTiersVisible(boolean visible) {
+		waveformTier.setVisible(visible);
+		for(SpeechAnalysisTier tier:pluginTiers) {
+			tier.setVisible(tier.shouldShow() && visible);
+			if(tier.shouldShow() && visible) {
+				tier.revalidate();
+				tier.repaint();
+			}
+		}
 	}
 	
 	public void scrollToTime(float time) {

@@ -20,25 +20,30 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 
 import org.apache.logging.log4j.LogManager;
+import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.SessionMediaModel;
@@ -50,6 +55,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.BrowseForMediaAction;
+import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
 import ca.phon.app.session.editor.view.media_player.actions.PlayAdjacencySequenceAction;
@@ -68,15 +75,21 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.position.SegmentCalculator;
+import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.MsFormatter;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import uk.co.caprica.vlcj.media.MediaRef;
+import uk.co.caprica.vlcj.media.TrackType;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
 
 /**
  * Panel for embedded media player for editor.
@@ -90,6 +103,9 @@ public class MediaPlayerEditorView extends EditorView {
 
 	private PhonMediaPlayer mediaPlayer;
 	
+	private JPanel errorPanel;
+	private HidablePanel messageButton = new HidablePanel("MediaPlayerEditorView.noMedia");
+	
 	public MediaPlayerEditorView(SessionEditor editor) {
 		super(editor);
 
@@ -101,14 +117,30 @@ public class MediaPlayerEditorView extends EditorView {
 		setLayout(new BorderLayout());
 		mediaPlayer = new PhonMediaPlayer();
 		mediaPlayer.addMediaMenuFilter(new MediaMenuFilter());
+		mediaPlayer.getMediaPlayerCanvas().setTransferHandler(new FileSelectionTransferHandler());
+
 		add(mediaPlayer, BorderLayout.CENTER);
+		
+		final BrowseForMediaAction browseForMediaAct = new BrowseForMediaAction(getEditor());
+
+		messageButton.setDefaultAction(browseForMediaAct);
+		messageButton.addAction(browseForMediaAct);
+
+		messageButton.setTopLabelText("<html><b>Session media not available</b></html>");
+		messageButton.setBottomLabelText("<html>Click here to assign media file to session.</html>");
+		messageButton.setVisible(false);
+		
+		errorPanel = new JPanel(new VerticalLayout());
+		errorPanel.add(messageButton);
+
+		add(errorPanel, BorderLayout.SOUTH);
 
 		setupEditorActions();
 
 		// load media if available
 		final String mediaFilePath = getMediaFilePath();
 		if(mediaFilePath != null)
-			SwingUtilities.invokeLater( () -> mediaPlayer.setMediaFile(mediaFilePath) );
+			SwingUtilities.invokeLater( this::loadMedia );
 	}
 
 	@Override
@@ -169,6 +201,11 @@ public class MediaPlayerEditorView extends EditorView {
 
 			final File mediaFile = mediaModel.getSessionMediaFile();
 			mediaPlayer.loadMedia(mediaFile.getAbsolutePath());
+			
+			messageButton.setVisible(false);
+		} else {
+			mediaPlayer.setMediaFile(null);
+			messageButton.setVisible(true);
 		}
 	}
 
@@ -193,17 +230,7 @@ public class MediaPlayerEditorView extends EditorView {
 
 	/** Editor actions */
 	public void onMediaChanged(EditorEvent ee) {
-		if(mediaPlayer.getMediaFile() != null) {
-			mediaPlayer.stop();
-		}
-		String mediaRef = getEditor().getSession().getMediaLocation();
-		File mediaFile =
-				MediaLocator.findMediaFile(mediaRef, getEditor().getProject(), getEditor().getSession().getCorpus());
-		if(mediaFile != null)
-			mediaPlayer.setMediaFile(mediaFile.getAbsolutePath());
-		else
-			mediaPlayer.setMediaFile(null);
-		mediaPlayer.loadMedia();
+		loadMedia();
 	}
 
 	public void onRecordChanged(EditorEvent ee) {
@@ -577,4 +604,42 @@ public class MediaPlayerEditorView extends EditorView {
 
 	}
 
+	private class FileSelectionTransferHandler extends FileTransferHandler {
+
+		private static final long serialVersionUID = 6799990443658389742L;
+
+		@Override
+		public boolean importData(JComponent comp, Transferable transferable) {
+			File file = null;
+			try {
+				file = getFile(transferable);
+			} catch (IOException e) {
+				return false;
+			}
+			
+			if(file != null && FileFilter.mediaFilter.accept(file)) {
+				MediaLocationEdit mediaEdit = new MediaLocationEdit(getEditor(), file.getAbsolutePath());
+				getEditor().getUndoSupport().postEdit(mediaEdit);
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		@Override
+		public File getFile(Transferable transferable) throws IOException {
+			File retVal = super.getFile(transferable);
+			final FileFilter filter = FileFilter.mediaFilter;
+			if(filter != null && !filter.accept(retVal)) {
+				retVal = null;
+			}
+			return retVal;
+		}
+
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			return super.createTransferable(c);
+		}
+		
+	}
 }

@@ -59,9 +59,10 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 		
 		oldLocation = session.getMediaLocation();
 		
-		session.setMediaLocation(getMediaLocation());
+		String mediaLocation = (getMediaLocation() != null && getMediaLocation().strip().length() > 0 ? getMediaLocation() : null);
+		session.setMediaLocation(mediaLocation);
 		
-		queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), getMediaLocation());
+		queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), mediaLocation);
 	}
 
 }

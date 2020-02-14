@@ -408,7 +408,7 @@ public final class TimelineView extends EditorView {
 				messageButton.addAction(browseForMediaAct);
 
 				messageButton.setTopLabelText("<html><b>Session media not available</b></html>");
-				messageButton.setBottomLabelText("<html>Click here to browse for session media.</html>");
+				messageButton.setBottomLabelText("<html>Click here to assign media file to session.</html>");
 			}
 			messageButton.setVisible(true);
 			messageButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

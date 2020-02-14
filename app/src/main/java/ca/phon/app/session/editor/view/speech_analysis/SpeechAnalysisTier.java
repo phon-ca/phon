@@ -50,4 +50,13 @@ public abstract class SpeechAnalysisTier extends TimeComponent {
 	 */
 	public abstract void onRefresh();
 	
+	/**
+	 * Should this tier be displayed?
+	 * 
+	 * @return <code>true</code> if tier should be visible, <code>false</code> otherwise
+	 */
+	public boolean shouldShow() {
+		return true;
+	}
+	
 }
