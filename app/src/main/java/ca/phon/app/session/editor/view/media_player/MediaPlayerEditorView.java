@@ -147,7 +147,7 @@ public class MediaPlayerEditorView extends EditorView {
 
 		messageButton.setTopLabelText("<html><b>Session media not available</b></html>");
 		messageButton.setBottomLabelText("<html>Click here to assign media file to session.</html>");
-		messageButton.setVisible(false);
+		messageButton.setVisible(!getEditor().getMediaModel().isSessionMediaAvailable());
 		
 		errorPanel = new JPanel(new VerticalLayout());
 		errorPanel.add(messageButton);
