@@ -72,6 +72,7 @@ import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.ErrorBanner;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
@@ -172,7 +173,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JButton zoomOutButton;
 
 	private JPanel errorPanel;
-	private HidablePanel messageButton = new HidablePanel("SpeechAnalysisView.noAudio");
+	private ErrorBanner messageButton = new ErrorBanner();
 	private PhonTaskButton generateButton = null;
 
 	private final List<SpeechAnalysisTier> pluginTiers =
@@ -815,6 +816,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			} else {
 				// no media, tell user to setup media in Session Information
 				final AssignMediaAction browseForMediaAct = new AssignMediaAction(getEditor());
+				browseForMediaAct.putValue(AssignMediaAction.LARGE_ICON_KEY, browseForMediaAct.getValue(AssignMediaAction.SMALL_ICON));
 
 				messageButton.setDefaultAction(browseForMediaAct);
 				messageButton.addAction(browseForMediaAct);

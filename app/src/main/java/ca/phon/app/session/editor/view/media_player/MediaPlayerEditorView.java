@@ -53,6 +53,7 @@ import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.app.session.editor.ErrorBanner;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
@@ -112,7 +113,7 @@ public class MediaPlayerEditorView extends EditorView {
 	private PhonMediaPlayer mediaPlayer;
 	
 	private JPanel errorPanel;
-	private HidablePanel messageButton = new HidablePanel("MediaPlayerEditorView.noMedia");
+	private ErrorBanner messageButton = new ErrorBanner();
 	
 	public MediaPlayerEditorView(SessionEditor editor) {
 		super(editor);
@@ -139,7 +140,8 @@ public class MediaPlayerEditorView extends EditorView {
 		add(mediaPlayer, BorderLayout.CENTER);
 		
 		final AssignMediaAction browseForMediaAct = new AssignMediaAction(getEditor());
-
+		browseForMediaAct.putValue(AssignMediaAction.LARGE_ICON_KEY, browseForMediaAct.getValue(AssignMediaAction.SMALL_ICON));
+		
 		messageButton.setDefaultAction(browseForMediaAct);
 		messageButton.addAction(browseForMediaAct);
 
