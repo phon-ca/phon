@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_3.dmg" newVersion="3.1.0-beta.3" newMediaFileId="macos" fileSize="276324346" md5Sum="237c15b97b648a2e1b1adcf3b5d08b7c" sha256Sum="2a3961d1ee8152584cac5219a4c637be9d9f5cf1365b303e915ac578b4065fc8" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_4.dmg" newVersion="3.1.0-beta.4" newMediaFileId="macos" fileSize="276402732" md5Sum="0d24cb73a0bf051ee95adc4b4c6617c2" sha256Sum="31a7fb66ae52aee9419be4b9ed19e32d0ff8b49fb047551781736f11ae0f1dd6" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -21,6 +21,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -303,7 +308,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_3.dmg" newVersion="3.1.0-beta.3" newMediaFileId="macos" fileSize="276324346" md5Sum="237c15b97b648a2e1b1adcf3b5d08b7c" sha256Sum="2a3961d1ee8152584cac5219a4c637be9d9f5cf1365b303e915ac578b4065fc8" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_4.dmg" newVersion="3.1.0-beta.4" newMediaFileId="macos" fileSize="276402732" md5Sum="0d24cb73a0bf051ee95adc4b4c6617c2" sha256Sum="31a7fb66ae52aee9419be4b9ed19e32d0ff8b49fb047551781736f11ae0f1dd6" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -324,6 +329,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -606,7 +616,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.exe" newVersion="3.1.0-beta.3" newMediaFileId="win64" fileSize="288051992" md5Sum="e8d5905897b4c19384650430c5aaee70" sha256Sum="e3cfdaab3d63134d6d6db08863f2d289e5edea82ad7d79ead38e852190bc5585" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_4.exe" newVersion="3.1.0-beta.4" newMediaFileId="win64" fileSize="288094488" md5Sum="0e44f82d98a05426bf8e9926253ac62f" sha256Sum="6b8d171583cd7148f463c2d5ad289ae8c888d9b13808888948498312631d5c46" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -627,6 +637,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -909,7 +924,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.exe" newVersion="3.1.0-beta.3" newMediaFileId="win64" fileSize="288051992" md5Sum="e8d5905897b4c19384650430c5aaee70" sha256Sum="e3cfdaab3d63134d6d6db08863f2d289e5edea82ad7d79ead38e852190bc5585" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_4.exe" newVersion="3.1.0-beta.4" newMediaFileId="win64" fileSize="288094488" md5Sum="0e44f82d98a05426bf8e9926253ac62f" sha256Sum="6b8d171583cd7148f463c2d5ad289ae8c888d9b13808888948498312631d5c46" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -930,6 +945,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -1212,7 +1232,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.exe" newVersion="3.1.0-beta.3" newMediaFileId="win64" fileSize="288051992" md5Sum="e8d5905897b4c19384650430c5aaee70" sha256Sum="e3cfdaab3d63134d6d6db08863f2d289e5edea82ad7d79ead38e852190bc5585" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_4.exe" newVersion="3.1.0-beta.4" newMediaFileId="win64" fileSize="288094488" md5Sum="0e44f82d98a05426bf8e9926253ac62f" sha256Sum="6b8d171583cd7148f463c2d5ad289ae8c888d9b13808888948498312631d5c46" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -1233,6 +1253,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -1515,7 +1540,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_3.zip" newVersion="3.1.0-beta.3" newMediaFileId="win64zip" fileSize="287032028" md5Sum="51b829605093e71c9e24f0e33e0dea68" sha256Sum="610a4fff9ca4d6c61e18c8aab8c775550f863f2c0472f765b043e86c3d8327ee" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_4.zip" newVersion="3.1.0-beta.4" newMediaFileId="win64zip" fileSize="287076861" md5Sum="55d1cd5b72a0de27b6e86f84865fa502" sha256Sum="3a3b34a3b66299a4dc22dd85e4d8e5252a56f8cd852be04d0a5826a9f24677e1" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -1536,6 +1561,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -1818,7 +1848,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_1_0-beta_3.deb" newVersion="3.1.0-beta.3" newMediaFileId="linux64deb" fileSize="199748888" md5Sum="73dd55375c0430f20e846952faddd4b6" sha256Sum="30258d6e8234df7d9cf5e5524214c7ee543acca3b43be5f1733b023b7a8897ff" bundledJre="" archive="true" singleBundle="false">
+  <entry targetMediaFileId="linux64deb" updatableVersionMin="" updatableVersionMax="" fileName="Phon_linux_3_1_0-beta_4.deb" newVersion="3.1.0-beta.4" newMediaFileId="linux64deb" fileSize="199795336" md5Sum="5e0e5edd280e532aa43d66e2519b04c3" sha256Sum="d58528f54472a17efec7a013f80d9ea67c582de33768e07ee3a75dd81a70317d" bundledJre="" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -1839,6 +1869,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
@@ -2121,7 +2156,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_3.sh" newVersion="3.1.0-beta.3" newMediaFileId="linux64" fileSize="199310155" md5Sum="a69d657d3ba16c28d2b511988b4a4668" sha256Sum="d467171006f5c04aaa08cb23ac4e24f17149171e8b3634621cfe0cec5a4cba57" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_4.sh" newVersion="3.1.0-beta.4" newMediaFileId="linux64" fileSize="199352549" md5Sum="b7345e280ff6a48de302be82d55a14f5" sha256Sum="db6df5fc74de6e5ac06afe51ac39a213787511a4a2176b2fd46c129acee45a06" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
@@ -2142,6 +2177,11 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
  * Update libjpraat to version 6.0.52
  * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners)
 
 ## Changes from 3.0.4
 
