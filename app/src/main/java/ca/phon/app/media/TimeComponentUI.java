@@ -246,7 +246,6 @@ public class TimeComponentUI extends ComponentUI {
 					Rectangle newIntervalRect = new Rectangle(
 							Math.max(0, newStartX-1), 0, newEndX-newStartX + 2, timeComp.getHeight());
 					Rectangle clipRect = oldIntervalRect.union(newIntervalRect);
-					
 					timeComp.repaint(clipRect);
 				} else {
 					timeComp.repaint(Math.min(oldTime, newTime), Math.max(oldTime, newTime));

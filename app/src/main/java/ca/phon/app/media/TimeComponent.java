@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -16,6 +17,7 @@ import javax.swing.plaf.ComponentUI;
 
 import ca.phon.app.media.TimeUIModel.Interval;
 import ca.phon.app.media.TimeUIModel.Marker;
+import ca.phon.util.MsFormatter;
 
 /**
  * Base class for components which display information on a horizontal timeline

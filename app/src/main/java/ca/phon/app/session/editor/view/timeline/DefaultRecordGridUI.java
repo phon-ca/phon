@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.timeline;
 
+import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -12,6 +13,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -336,7 +338,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		// used to paint segment labels and actions later
 		// this ensures that warnings are shown correctly
 		visibleRecords.clear();
-				
+		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
 			
@@ -601,15 +603,15 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 		
 		if(recordGrid.getCurrentRecordIndex() == recordIndex) {
+			
+			Stroke oldStroke = g2.getStroke();
+			if(recordGrid.hasFocus()) {
+				Stroke focusStroke = new BasicStroke(1.5f);
+				g2.setStroke(focusStroke);
+			}
 			g2.setColor(Color.BLUE);
 			g2.draw(roundedRect);
-			
-			if(recordGrid.hasFocus()) {
-				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
-				gpe.setBrushColor(Color.blue);
-				gpe.setEffectWidth(5);
-				gpe.apply(g2, roundedRect, 5, 5);
-			}
+			g2.setStroke(oldStroke);
 		} else {
 			if(isRecordPressed(recordIndex)) {
 				g2.setColor(Color.GRAY);
@@ -618,10 +620,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 			g2.draw(roundedRect);
 			if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
-				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
-				gpe.setBrushColor(Color.GRAY);
-				gpe.setEffectWidth(5);
-				gpe.apply(g2, roundedRect, 5, 5);
+//				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
+//				gpe.setBrushColor(Color.GRAY);
+//				gpe.setEffectWidth(5);
+//				gpe.apply(g2, roundedRect, 5, 5);
 			}
 		}
 			
