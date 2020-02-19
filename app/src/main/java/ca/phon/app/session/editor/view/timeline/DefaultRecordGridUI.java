@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -503,19 +504,42 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Icon recordIcon = null;
 		Color recordLblColor = (recordIndex == recordGrid.getCurrentRecordIndex() ? Color.black : Color.lightGray);
 		
-		String warnings = null;
-		// check to see if record overlaps other records for speaker
-		var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
-				segmentRect.getMaxX(), segmentRect.getMaxY()));
-		AtomicBoolean overlapRef = new AtomicBoolean(false);
-		overlapEntries.map( entry -> entry.value() ).forEach( i -> {
-			if(i != recordIndex)
-				overlapRef.getAndSet(true);
-		});
+		// don't paint overlap warning if record is at 0 and has zero-length segment
+		boolean checkForOverlap = true;
+		final MediaSegment mediaSeg = r.getSegment().getGroup(0);
+		if(mediaSeg.getStartValue() == 0.0f
+				&& mediaSeg.getEndValue() - mediaSeg.getStartValue() == 0.0f) {
+			checkForOverlap = false;
+		}
 		
-		if(overlapRef.get()) {
-			warnings = "Overlapping segments";
-			recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+		String warnings = null;
+		if(checkForOverlap) {
+			// check to see if record overlaps other records for speaker
+			var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
+					segmentRect.getMaxX(), segmentRect.getMaxY()));
+			List<Integer> overlappingRecordsList = new ArrayList<Integer>();
+			List<Integer> potentialOverlaps = new ArrayList<Integer>();
+			overlapEntries.map( entry -> entry.value() ).filter( v -> v != recordIndex).forEach(potentialOverlaps::add);
+			
+			for(int rIdx:potentialOverlaps) {
+				
+				Record r2 = recordGrid.getSession().getRecord(rIdx);
+				MediaSegment seg2 = r2.getSegment().getGroup(0);
+
+				boolean isZeroAtZero = (seg2.getStartValue() == 0.0f) && (seg2.getEndValue() - seg2.getStartValue() == 0.0f);
+				boolean isContiguous = (mediaSeg.getStartValue() == seg2.getEndValue() || seg2.getStartValue() == mediaSeg.getEndValue());
+				
+				if(isZeroAtZero || isContiguous) continue;
+				
+				overlappingRecordsList.add(rIdx);
+			}
+			
+			if(overlappingRecordsList.size() > 0) {
+				warnings = "Overlapping segments ("
+						+ overlappingRecordsList.stream().map(rIdx-> String.format("#%d", rIdx+1)).collect(Collectors.joining(","))
+						+ ")";
+				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+			}
 		}
 		
 		// check to see if record is outside of media bounds			

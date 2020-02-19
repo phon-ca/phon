@@ -208,7 +208,6 @@ public class PhonMediaPlayer extends JPanel {
 		addMediaMenuFilter(new MediaMenuFilter());
 		
 		mediaPlayerCanvas = new PhonPlayerComponent();
-		mediaPlayerCanvas.setBufferedImage(noMediaImage);
 		mediaPlayerCanvas.addMouseListener(mediaPlayerCanvasMouseAdapter);
 		
 		mediaPlayerCanvas.setTransferHandler(new FileSelectionTransferHandler());
