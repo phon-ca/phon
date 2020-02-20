@@ -587,19 +587,16 @@ public final class TimelineView extends EditorView {
 	@RunOnEDT
 	public void onMediaLoaded(EditorEvent ee) {
 		setupTimeModel();
+		MediaPlayerEditorView mediaPlayerView = 
+				(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(mediaPlayerView.getPlayer().getMediaFile() != null) {
+			mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
+		}
 	}
 	
 	@RunOnEDT
 	public void onMediaChanged(EditorEvent ee) {
 		update();
-		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(mediaModel.isSessionMediaAvailable()) {
-			MediaPlayerEditorView mediaPlayerView = 
-					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
-				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
-			}
-		}
 	}
 	
 	@RunOnEDT
@@ -812,6 +809,12 @@ public final class TimelineView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
+	}
+	
+	public void repaint(long tn, float startTime, float endTime) {
+		timebar.repaint(tn, startTime, endTime);
+		getWaveformTier().getWaveformDisplay().repaint(tn, startTime, endTime);
+		getRecordTier().getRecordGrid().repaint(tn, startTime, endTime);
 	}
 	
 	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {

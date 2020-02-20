@@ -67,6 +67,8 @@ import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
+import ca.phon.session.Tier;
+import ca.phon.session.TierString;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.io.xml.v12.ObjectFactory;
 import ca.phon.ui.PhonGuiConstants;
@@ -602,30 +604,26 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			heightOffset += tierHeight;
 		}
 		
+		Stroke oldStroke = g2.getStroke();
 		if(recordGrid.getCurrentRecordIndex() == recordIndex) {
-			
-			Stroke oldStroke = g2.getStroke();
 			if(recordGrid.hasFocus()) {
-				Stroke focusStroke = new BasicStroke(1.5f);
-				g2.setStroke(focusStroke);
+				Stroke stroke = new BasicStroke(1.5f);
+				g2.setStroke(stroke);
 			}
 			g2.setColor(Color.BLUE);
 			g2.draw(roundedRect);
-			g2.setStroke(oldStroke);
 		} else {
 			if(isRecordPressed(recordIndex)) {
 				g2.setColor(Color.GRAY);
 			} else {
 				g2.setColor(Color.LIGHT_GRAY);
 			}
-			g2.draw(roundedRect);
 			if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
-//				InnerGlowPathEffect gpe = new InnerGlowPathEffect();
-//				gpe.setBrushColor(Color.GRAY);
-//				gpe.setEffectWidth(5);
-//				gpe.apply(g2, roundedRect, 5, 5);
+				g2.setColor(Color.GRAY);
 			}
+			g2.draw(roundedRect);
 		}
+		g2.setStroke(oldStroke);
 			
 		return segmentRect;
 	}
@@ -673,20 +671,23 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		renderer.setFont(font);
 		renderer.setForeground(recordGrid.getForeground());
 		
-		String labelText = r.getTier(tierName).toString();
-		renderer.setText(labelText);
+		Tier<?> tier = r.getTier(tierName);
+		if(tier != null) {
+			String labelText = tier.toString();
+			renderer.setText(labelText);
+			
+			int labelX = (int)labelRect.getX() + TEXT_MARGIN;
+			int labelY = (int)labelRect.getY();
+			int labelWidth = (int)labelRect.getWidth() - (2 * TEXT_MARGIN);
+			int labelHeight = (int)labelRect.getHeight();
+			
+			SwingUtilities.paintComponent(g2, renderer, recordGrid, 
+					labelX, labelY, labelWidth, labelHeight);
 		
-		int labelX = (int)labelRect.getX() + TEXT_MARGIN;
-		int labelY = (int)labelRect.getY();
-		int labelWidth = (int)labelRect.getWidth() - (2 * TEXT_MARGIN);
-		int labelHeight = (int)labelRect.getHeight();
-		
-		SwingUtilities.paintComponent(g2, renderer, recordGrid, 
-				labelX, labelY, labelWidth, labelHeight);
-	
-		if(labelWidth < renderer.getPreferredSize().width) {
-			messageTree = messageTree.add(labelText, 
-					Geometries.rectangle(labelRect.getX(), labelRect.getY(), labelRect.getMaxX(), labelRect.getMaxY()));
+			if(labelWidth < renderer.getPreferredSize().width) {
+				messageTree = messageTree.add(labelText, 
+						Geometries.rectangle(labelRect.getX(), labelRect.getY(), labelRect.getMaxX(), labelRect.getMaxY()));
+			}
 		}
 		
 		renderer.setBorder(oldBorder);

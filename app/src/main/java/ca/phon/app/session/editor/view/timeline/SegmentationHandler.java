@@ -140,6 +140,10 @@ public final class SegmentationHandler {
 		this.editor = editor;
 	
 		setupActions();
+		
+		window.addPropertyChangeListener("startLockMs", (e) -> {
+			
+		});
 	}
 	
 	private void setupActions() {
@@ -404,10 +408,17 @@ public final class SegmentationHandler {
 					
 					// repaint interval (with time limit)
 					long tn = (long)(1/30.0f * 1000.0f);
-					float st = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
-					float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-					timelineView.getWaveformTier().getWaveformDisplay().repaint(tn, st, et);
-					timelineView.getRecordTier().getRecordGrid().repaint(tn, st, et);
+					if(getWindow().getBackwardWindowLengthMs() == 0L) {
+						float st = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
+						float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
+						timelineView.repaint(tn, st, et);
+					} else {
+						float st = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
+						float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
+						if(st < et) {
+							timelineView.repaint(tn, st, et);
+						}
+					}
 
 					// special case: segmenting with no media
 					//  update time model as we progress
@@ -421,7 +432,6 @@ public final class SegmentationHandler {
 					// autoscroll if necessary
 					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
 					if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
-						
 						timelineView.scrollToTime(segStart/1000.0f);
 					}
 					
@@ -513,6 +523,12 @@ public final class SegmentationHandler {
 		if(intervalTimerTask != null) {
 			long playbackPosition = intervalTimerTask.currentSegmentationPosition();
 			window.setStartLockMs(playbackPosition);
+			
+			TimelineView timelineView = 
+					(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+			if(timelineView != null && window.getBackwardWindowLengthMs() == 0L) {
+				timelineView.repaint((1000/30), timelineView.getWindowStart(), playbackPosition+1 / 1000.0f);
+			}
 		}
 	}
 	
@@ -520,6 +536,7 @@ public final class SegmentationHandler {
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 		if(mediaView != null) {
+			// TODO
 		}
 	}
 	
@@ -527,6 +544,7 @@ public final class SegmentationHandler {
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 		if(mediaView != null) {
+			// TODO
 		}
 	}
 	
