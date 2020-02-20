@@ -14,7 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-import ca.phon.app.media.WaveformDisplay;
+import ca.phon.media.WaveformDisplay;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 

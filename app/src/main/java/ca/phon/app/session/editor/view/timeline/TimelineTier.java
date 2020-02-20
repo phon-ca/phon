@@ -11,9 +11,9 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import ca.phon.app.media.TimeComponent;
-import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.EditorView;
+import ca.phon.media.TimeComponent;
+import ca.phon.media.Timebar;
 import ca.phon.ui.menu.MenuBuilder;
 
 public abstract class TimelineTier extends TimeComponent {

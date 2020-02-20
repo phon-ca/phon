@@ -1,4 +1,4 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import java.awt.Color;
 import java.awt.ComponentOrientation;
@@ -15,8 +15,8 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.app.media.TimeUIModel.Interval;
-import ca.phon.app.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.util.MsFormatter;
 
 /**

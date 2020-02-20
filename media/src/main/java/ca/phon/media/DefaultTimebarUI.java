@@ -1,4 +1,4 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
-import ca.phon.app.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.util.MsFormatter;
 
 public class DefaultTimebarUI extends TimebarUI {

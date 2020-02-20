@@ -1,4 +1,4 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.media.LongSound;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.Sampled;
 

@@ -1,4 +1,4 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,9 +19,8 @@ import javax.swing.JComponent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 
-import ca.phon.app.media.TimeUIModel.Interval;
-import ca.phon.app.media.TimeUIModel.Marker;
-import groovy.transform.Synchronized;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 
 public class TimeComponentUI extends ComponentUI {
 	

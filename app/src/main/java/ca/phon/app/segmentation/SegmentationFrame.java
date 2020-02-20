@@ -13,9 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 
-import ca.phon.app.media.WaveformDisplay;
-import ca.phon.app.media.WaveformDisplayScrollPane;
 import ca.phon.media.LongSound;
+import ca.phon.media.WaveformDisplay;
+import ca.phon.media.WaveformDisplayScrollPane;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.Sampled;

@@ -2,7 +2,7 @@ package ca.phon.app.segmentation;
 
 import javax.swing.JPanel;
 
-import ca.phon.app.media.WaveformDisplay;
+import ca.phon.media.WaveformDisplay;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 

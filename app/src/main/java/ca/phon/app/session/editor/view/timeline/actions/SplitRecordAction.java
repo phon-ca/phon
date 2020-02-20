@@ -17,10 +17,10 @@ import java.util.Set;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.media.TimeUIModel;
-import ca.phon.app.media.TimeUIModel.Interval;
-import ca.phon.app.media.TimeUIModel.Marker;
 import ca.phon.app.session.editor.view.timeline.TimelineRecordTier.SplitMarker;
+import ca.phon.media.TimeUIModel;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;

@@ -39,11 +39,7 @@ import javax.swing.event.MenuEvent;
 
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.SetupProtocolHandlerMessage;
 
-import ca.phon.app.media.TimeUIModel.Interval;
-import ca.phon.app.media.TimeUIModel.Marker;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.media.TimeUIModel;
-import ca.phon.app.media.Timebar;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -62,6 +58,10 @@ import ca.phon.app.session.editor.view.session_information.actions.NewParticipan
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.app.session.editor.view.timeline.TimelineRecordTier.SplitMarker;
 import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
+import ca.phon.media.TimeUIModel;
+import ca.phon.media.Timebar;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;

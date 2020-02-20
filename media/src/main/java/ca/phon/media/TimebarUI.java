@@ -1,4 +1,4 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import javax.swing.plaf.ComponentUI;
 

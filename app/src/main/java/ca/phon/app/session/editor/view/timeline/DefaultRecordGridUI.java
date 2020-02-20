@@ -59,9 +59,9 @@ import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Geometry;
 import com.teamdev.jxbrowser.chromium.internal.ipc.message.GetTitleMessage;
 
-import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.media.TimeUIModel;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;

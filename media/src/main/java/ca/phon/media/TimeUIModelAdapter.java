@@ -1,9 +1,9 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import java.beans.PropertyChangeEvent;
 
-import ca.phon.app.media.TimeUIModel.Interval;
-import ca.phon.app.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 
 public class TimeUIModelAdapter implements TimeUIModelListener {
 

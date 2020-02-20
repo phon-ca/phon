@@ -1,4 +1,4 @@
-package ca.phon.app.media;
+package ca.phon.media;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,10 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.media.TimeUIModel.Interval;
-import ca.phon.media.LongSound;
-import ca.phon.media.Sound;
+import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.media.sampled.Channel;
 import ca.phon.media.sampled.Sampled;
 import ca.phon.util.Tuple;

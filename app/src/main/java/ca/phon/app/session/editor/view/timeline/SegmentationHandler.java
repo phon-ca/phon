@@ -18,8 +18,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.undo.CompoundEdit;
 
-import ca.phon.app.media.TimeComponent;
-import ca.phon.app.media.TimeUIModel;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
@@ -27,6 +25,8 @@ import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
+import ca.phon.media.TimeComponent;
+import ca.phon.media.TimeUIModel;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
