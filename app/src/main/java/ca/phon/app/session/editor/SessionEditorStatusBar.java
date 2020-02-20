@@ -187,18 +187,15 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		extrasPanel.setOpaque(false);
 		add(extrasPanel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 
-		JComponent pbar = new JPanel(new FormLayout("pref",
-				(OSInfo.isMacOs() ? "10px" : "pref")));
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
 		progressBar.setIndeterminate(false);
 		progressBar.setValue(0);
-		pbar.add(progressBar, (new CellConstraints()).xy(1, 1));
 
 		progressLabel = new JLabel();
 		progressLabel.setFont(FontPreferences.getSmallFont());
 
 		add(progressLabel, new JXStatusBar.Constraint(200));
-		add(pbar, new JXStatusBar.Constraint(120));
+		add(progressBar, new JXStatusBar.Constraint(120));
 		add(new JLabel(), new JXStatusBar.Constraint(5));
 	}
 

@@ -307,19 +307,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 	}
 	
-//	@Override
-//	public void paintInterval(Graphics2D g2, Interval interval, boolean paintBackground) {
-//		var startX = display.xForTime(interval.getStartMarker().getTime());
-//		var endX = display.xForTime(interval.getEndMarker().getTime());
-//		
-//		if(paing)
-//		var rect = new Rectangle2D.Double(startX, 0, endX-startX, display.getHeight());
-//		g2.setColor(interval.getColor());
-//		g2.fill(rect);
-//		
-//		super.paintInterval(g2, interval);
-//	}
-	
 	@Override
 	public void updateCache() {
 		this.needsRepaint = true;
