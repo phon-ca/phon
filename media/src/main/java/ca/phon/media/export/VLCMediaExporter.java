@@ -249,9 +249,9 @@ public class VLCMediaExporter extends PhonTask {
 			if(preset.getMediaOptions() != null)
 				retVal.addAll(Arrays.asList(preset.getMediaOptions()));
 			buffer.append(preset.getSoutOptions());
-			buffer.append(":file{dst=").append(outputFile.getAbsolutePath()).append("}");
+			buffer.append(":file{dst=\"").append(outputFile.getAbsolutePath()).append("\"}");
 		} else {
-			buffer.append("#duplicate{dst=").append(outputFile.getAbsolutePath()).append("}");
+			buffer.append("#duplicate{dst=\"").append(outputFile.getAbsolutePath()).append("\"}");
 		}
 		retVal.add(buffer.toString());
 		
