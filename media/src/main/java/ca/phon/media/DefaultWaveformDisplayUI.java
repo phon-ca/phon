@@ -333,6 +333,10 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				|| "endTime".equals(e.getPropertyName())
 				|| "pixelsPerSecond".equals(e.getPropertyName()) ) {
 			
+			if("longSound".equals(e.getPropertyName())) {
+				cachedMaxValue = 0.0;
+			}
+			
 			needsRepaint = true;
 			
 			display.revalidate();
@@ -340,7 +344,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 	};
 	
-	private double cachedMaxValue = 0;
+	private double cachedMaxValue = 0.0;
 	private double getMaxValue() {
 		return cachedMaxValue;
 	}
