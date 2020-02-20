@@ -116,7 +116,6 @@ public class PhonMediaPlayer extends JPanel {
 	private MediaPlayerFactory mediaPlayerFactory;
 	private EmbeddedMediaPlayer mediaPlayer;
 	private PhonPlayerComponent mediaPlayerCanvas;
-	//private DirectMediaPlayerComponent mediaPlayerComponent;
 	
 //	private Timer mediaTimer;
 
