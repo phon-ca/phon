@@ -230,7 +230,7 @@ public class IPAGrids {
 			cell.setW(2);
 		}
 	}
-	
+		
 	/**
 	 * Perform a search
 	 * 

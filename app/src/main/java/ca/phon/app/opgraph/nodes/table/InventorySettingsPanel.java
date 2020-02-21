@@ -324,7 +324,7 @@ public class InventorySettingsPanel extends JPanel {
 		private void init() {
 			setLayout(new GridBagLayout());
 			final GridBagConstraints gbc = new GridBagConstraints();
-			gbc.anchor = GridBagConstraints.EAST;
+			gbc.anchor = GridBagConstraints.NORTHWEST;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gbc.insets = new Insets(2, 2, 5, 2);
 

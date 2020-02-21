@@ -32,9 +32,6 @@ public class IPAMapSelector extends JComponent {
 	
 	private Grid selectedCellGrid;
 	
-	private IPAMapGridContainer selectedMapContainer;
-	private IPAMapGrid selectedMap;
-	
 	private IPAMapGridContainer map;
 	
 	private IPAMapInfoPane infoPane;
@@ -64,6 +61,10 @@ public class IPAMapSelector extends JComponent {
 		if(grid != null) {
 			grid.setVisible(visible);
 		}
+	}
+	
+	public IPAMapGridContainer getMapGridContainer() {
+		return this.map;
 	}
 	
 	public Collection<IPAMapGrid> getMapGrids() {
@@ -128,12 +129,12 @@ public class IPAMapSelector extends JComponent {
 		var objFactory = new ObjectFactory();
 		selectedCellGrid = objFactory.createGrid();
 		selectedCellGrid.setName("Selected");
-		selectedCellGrid.setCols(42);
+		selectedCellGrid.setCols(14);
 		selectedCellGrid.setRows(2);
-		selectedMapContainer = new IPAMapGridContainer();
-		var gridTuple = selectedMapContainer.addGrid(selectedCellGrid);
-		selectedMap = gridTuple.getObj2();
-		selectedMap.addCellMouseListener(cellMouseListener);
+//		selectedMapContainer = new IPAMapGridContainer();
+//		var gridTuple = selectedMapContainer.addGrid(selectedCellGrid);
+//		selectedMap = gridTuple.getObj2();
+//		selectedMap.addCellMouseListener(cellMouseListener);
 		
 		map = new IPAMapGridContainer();
 		
@@ -143,7 +144,7 @@ public class IPAMapSelector extends JComponent {
 		
 		map.addCellMouseListener(cellMouseListener);
 		
-		add(selectedMapContainer, BorderLayout.NORTH);
+//		add(selectedMapContainer, BorderLayout.NORTH);
 		add(new JScrollPane(map), BorderLayout.CENTER);
 		add(infoPane, BorderLayout.SOUTH);
 	}
@@ -163,6 +164,10 @@ public class IPAMapSelector extends JComponent {
 		}		
 	}
 	
+	public Grid getSelectedGrid() {
+		return this.selectedCellGrid;
+	}
+	
 	public List<String> getSelected() {
 		return map.getSelectedCells()
 			.stream().map( (c) -> c.getText() )
@@ -180,11 +185,17 @@ public class IPAMapSelector extends JComponent {
 			}
 		}
 		updateSelectedMap();
+		
+		firePropertyChange("selected", List.of(), getSelected());
 	}
 	
 	public void clearSelection() {
-		selectedMap.getGrid().getCell().clear();
+		var prevSelected = getSelected();
+		
+		selectedCellGrid.getCell().clear();
 		updateSelectedMap();
+		
+		firePropertyChange("selected", prevSelected, getSelected());
 	}
 	
 	public void invertSelection() {
@@ -242,9 +253,6 @@ public class IPAMapSelector extends JComponent {
 		
 		selectedCellGrid.getCell().clear();
 		gridFactory.buildGrid(selectedCellGrid, map.getSelectedCells());
-		
-		selectedMap.revalidate();
-		selectedMap.repaint();
 	}
 	
 }

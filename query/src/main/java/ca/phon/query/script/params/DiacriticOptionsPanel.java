@@ -1,5 +1,7 @@
 package ca.phon.query.script.params;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
@@ -7,14 +9,21 @@ import java.awt.event.ItemListener;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import org.jdesktop.swingx.HorizontalLayout;
+
 import ca.phon.ipamap2.DiacriticSelector;
+import ca.phon.ipamap2.IPAGrids;
+import ca.phon.ipamap2.IPAMapCellSelectionListener;
 import ca.phon.ipamap2.IPAMapGrid;
+import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
@@ -28,11 +37,12 @@ public class DiacriticOptionsPanel extends JPanel {
 	
 	private DropDownButton dropDownButton;
 	private DiacriticSelector diacriticSelector;
-	private JTextField diacriticField;
 	
 	private JComboBox<SelectionMode> modeBox;
 	
 	private DiacriticOptionsScriptParam diacriticOptionsParam;
+	
+	private IPAMapGrid selectedGridMap;
 	
 	public DiacriticOptionsPanel(DiacriticOptionsScriptParam diacriticOptionsParam) {
 		super();
@@ -49,9 +59,11 @@ public class DiacriticOptionsPanel extends JPanel {
 		gbc.gridy = 0;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
+//		setLayout(new BorderLayout());
 		
 		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
 		ignoreDiacriticsBox.setSelected(diacriticOptionsParam.isIgnoreDiacritics());
@@ -73,22 +85,9 @@ public class DiacriticOptionsPanel extends JPanel {
 		
 		++gbc.gridx;
 		final CountDownLatch latch = new CountDownLatch(1);
-		diacriticSelector = new DiacriticSelector() {
-
-			@Override
-			public void cellSelectionChanged(IPAMapGrid mapGrid, int cellIdx, boolean selected) {
-				if(latch.getCount() > 0) return;
-				if(diacriticField != null) {
-					String selectedTxt = diacriticSelector.getSelected().stream().collect(Collectors.joining(";"));
-					diacriticField.setText(selectedTxt);
-				}
-				
-				diacriticOptionsParam.setSelectedDiacritics(diacriticSelector.getSelectedDiacritics());
-			}
-		
-			
-		};
+		diacriticSelector = new DiacriticSelector();
 		diacriticSelector.setSelectedDiacritics(diacriticOptionsParam.getSelectedDiacritics());
+		
 		latch.countDown();
 		
 		PhonUIAction dropDownAct = new PhonUIAction(this, "noop");
@@ -97,20 +96,56 @@ public class DiacriticOptionsPanel extends JPanel {
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, diacriticSelector);
+		dropDownAct.putValue(PhonUIAction.NAME, "Select diacritics");
 		dropDownButton = new DropDownButton(dropDownAct);
 		dropDownButton.setOnlyPopup(true);
 		add(dropDownButton, gbc);
-		
-		++gbc.gridx;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+
 		gbc.weightx = 1.0;
-		diacriticField = new JTextField();
-		diacriticField.setFont(FontPreferences.getUIIpaFont());
-		diacriticField.setEditable(false);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		++gbc.gridx;
+		add(Box.createHorizontalGlue(), gbc);
 		
-		String selectedTxt = diacriticSelector.getSelected().stream().collect(Collectors.joining(";"));
-		diacriticField.setText(selectedTxt);
-		add(diacriticField, gbc);
+//		
+		gbc.gridx = 0;
+		++gbc.gridy;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridwidth = 3;
+		gbc.gridheight = 1;
+		
+//		JPanel topPanel = new JPanel(new HorizontalLayout());
+//		topPanel.add(ignoreDiacriticsBox);
+//		topPanel.add(modeBox);
+//		topPanel.add(dropDownButton);
+//		add(topPanel, BorderLayout.NORTH);
+		
+		IPAMapGridContainer container = new IPAMapGridContainer();
+		var selectedGrid = diacriticSelector.getSelectedGrid();
+		selectedGrid.setName("Selected");
+		var gridTuple = container.addGrid(diacriticSelector.getSelectedGrid());
+//		add(container, BorderLayout.CENTER);
+		add(container, gbc);
+		
+		diacriticSelector.getMapGridContainer().addCellSelectionListener(new IPAMapCellSelectionListener() {
+			
+			@Override
+			public void cellSelectionChanged(IPAMapGrid mapGrid, int cellIdx, boolean selected) {
+				container.revalidate();
+				gridTuple.getObj2().revalidate();
+				container.repaint();
+				
+				diacriticSelector.getMapGridContainer().repaint();
+			}
+		});
+		
+//		add(selectedMap, gbc);
+//		diacriticField = new JTextField();
+//		diacriticField.setFont(FontPreferences.getUIIpaFont());
+//		diacriticField.setEditable(false);
+//		
+//		String selectedTxt = diacriticSelector.getSelected().stream().collect(Collectors.joining(";"));
+//		diacriticField.setText(selectedTxt);
+//		add(diacriticField, gbc);
 		
 		updateButtons();
 	}
@@ -134,7 +169,6 @@ public class DiacriticOptionsPanel extends JPanel {
 	private void updateButtons() {
 		modeBox.setEnabled(ignoreDiacriticsBox.isSelected());
 		dropDownButton.setEnabled(ignoreDiacriticsBox.isSelected());
-		diacriticField.setEnabled(ignoreDiacriticsBox.isSelected());
 	}
 	
 }
