@@ -433,7 +433,8 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void setupTimeModel() {
-		float endTime = getMaxRecordTime();
+		float currentEndTime = timeModel.getEndTime();
+		float endTime = Math.max(currentEndTime, getMaxRecordTime());
 		
 		final SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionMediaAvailable()) {
