@@ -171,7 +171,12 @@ public final class TimelineView extends EditorView {
 		
 		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
-		timeModel.setEndTime(0.0f);	
+		timeModel.setEndTime(0.0f);
+		timeModel.addPropertyChangeListener("endTime", (e) -> {
+			timebar.revalidate();
+			wavTier.revalidate();
+			recordGrid.revalidate();
+		});
 		
 		timebar = new Timebar(timeModel);
 		timebar.setOpaque(true);
@@ -433,8 +438,7 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void setupTimeModel() {
-		float currentEndTime = timeModel.getEndTime();
-		float endTime = Math.max(currentEndTime, getMaxRecordTime());
+		float endTime = getMaxRecordTime();
 		
 		final SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionMediaAvailable()) {
@@ -453,7 +457,6 @@ public final class TimelineView extends EditorView {
 		}
 		
 		timeModel.setEndTime(endTime);
-		
 	}
 	
 	private void loadSessionAudio() {
@@ -665,6 +668,14 @@ public final class TimelineView extends EditorView {
 		if(handler != null) {
 			handler.stopSegmentation();
 		} else {
+			SessionMediaModel mediaModel = getEditor().getMediaModel();
+			if(!mediaModel.isSessionMediaAvailable()) {
+				getEditor().showMessageDialog("Unable to start segmentation",
+						"Please assign session media file before starting segmentation.",
+						MessageDialogProperties.okOptions);
+				return;
+			}
+			
 			SegmentationDialog startDialog = new SegmentationDialog(getEditor());
 			startDialog.setModal(true);
 			startDialog.pack();
@@ -680,8 +691,8 @@ public final class TimelineView extends EditorView {
 
 				// check for speech analysis view
 				if(getEditor().getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
-					int result = getEditor().showMessageDialog("Segmentation", "Having Speech Analysis view visible may cause performance issues with segmentation.", new String[] {
-							"Close Speech Analysis and Continue", "Continue without closing", "Cancel" });
+					int result = getEditor().showMessageDialog("Segmentation Performance", "The Speech Analysis view may cause performance issues with segmentation.", new String[] {
+							"Close Speech Analysis and continue", "Continue without closing", "Cancel" });
 					switch(result) {
 					case 0:
 						getEditor().getViewModel().getCloseAction(SpeechAnalysisEditorView.VIEW_TITLE).actionPerformed(new ActionEvent(this, -1, "close"));
