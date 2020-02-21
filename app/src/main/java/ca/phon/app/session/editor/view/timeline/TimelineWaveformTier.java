@@ -337,6 +337,22 @@ public class TimelineWaveformTier extends TimelineTier  {
 			}
 		}
 		
+		@Override
+		public void mouseClicked(MouseEvent me) {
+			if(me.getButton() == MouseEvent.BUTTON1 &&
+					me.getClickCount() == 1) {
+				// goto position in media
+				MediaPlayerEditorView mediaPlayerView = 
+						(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				if(mediaPlayerView != null) {
+					float time = getTimeModel().timeAtX(me.getX());
+					long timeMS = (long)(time * 1000.0f);
+					
+					mediaPlayerView.getPlayer().setTime(timeMS);
+				}
+			}
+		}
+		
 	};
 
 	@Override

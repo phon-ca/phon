@@ -181,6 +181,25 @@ public final class TimelineView extends EditorView {
 		timebar = new Timebar(timeModel);
 		timebar.setOpaque(true);
 		timebar.setBackground(Color.WHITE);
+		timebar.addMouseListener(new MouseInputAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 &&
+						e.getClickCount() == 1) {
+					// goto position in media
+					MediaPlayerEditorView mediaPlayerView = 
+							(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+					if(mediaPlayerView != null) {
+						float time = getTimeModel().timeAtX(e.getX());
+						long timeMS = (long)(time * 1000.0f);
+						
+						mediaPlayerView.getPlayer().setTime(timeMS);
+					}
+				}
+			}
+			
+		});
 		
 		tierPanel = new TierPanel(new GridBagLayout());
 		tierScrollPane = new JScrollPane(tierPanel);

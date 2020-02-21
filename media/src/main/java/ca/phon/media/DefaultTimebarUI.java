@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.util.MsFormatter;
@@ -72,10 +74,14 @@ public class DefaultTimebarUI extends TimebarUI {
 	
 	private void installListeners(Timebar timebar) {
 		timebar.addPropertyChangeListener(propListener);
+		timebar.addMouseListener(tooltipListener);
+		timebar.addMouseMotionListener(tooltipListener);
 	}
 
 	private void uninstallListeners(Timebar timebar) {
 		timebar.removePropertyChangeListener(propListener);
+		timebar.removeMouseListener(tooltipListener);
+		timebar.addMouseMotionListener(tooltipListener);
 	}
 	
 	@Override
@@ -182,5 +188,35 @@ public class DefaultTimebarUI extends TimebarUI {
 			markerRects.put(marker, timeRect);
 		}
 	}
+	
+	private void updateTooltip(MouseEvent me) {
+		float time = timebar.timeAtX(me.getX());
+		if(time >= 0) {
+			timebar.setToolTipText(MsFormatter.msToDisplayString((long)(time*1000.0f)));
+		} else {
+			timebar.setToolTipText(null);
+		}
+	}
+
+	private final MouseInputAdapter tooltipListener = new MouseInputAdapter() {
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			updateTooltip(e);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			timebar.setToolTipText(null);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			updateTooltip(e);
+		}
+	
+		
+		
+	};
 	
 }

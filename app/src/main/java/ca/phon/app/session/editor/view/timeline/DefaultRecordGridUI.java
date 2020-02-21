@@ -85,7 +85,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private final static int TOP_BOTTOM_MARGIN = 5;
 	
-	private final static int TEXT_MARGIN = 5;
+	private final static int TEXT_MARGIN = 6;
 	
 	private final static int TIER_GAP = 5;
 	
@@ -606,12 +606,22 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		Stroke oldStroke = g2.getStroke();
 		if(recordGrid.getCurrentRecordIndex() == recordIndex) {
-			if(recordGrid.hasFocus()) {
-				Stroke stroke = new BasicStroke(1.5f);
-				g2.setStroke(stroke);
-			}
+			Stroke stroke = new BasicStroke(1.5f);
+			g2.setStroke(stroke);
 			g2.setColor(Color.BLUE);
 			g2.draw(roundedRect);
+			
+			if(recordGrid.hasFocus()) {
+				final Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
+				g2.setStroke(dashed);
+				g2.setColor(Color.GRAY);
+				
+				RoundRectangle2D foucsRect = new RoundRectangle2D.Double(
+						roundedRect.getX() + (TEXT_MARGIN/2), roundedRect.getY() + (TEXT_MARGIN/2),
+						roundedRect.getWidth() - TEXT_MARGIN, roundedRect.getHeight() - TEXT_MARGIN,
+						roundedRect.getArcWidth(), roundedRect.getArcHeight());
+				g2.draw(foucsRect);
+			}
 		} else {
 			if(isRecordPressed(recordIndex)) {
 				g2.setColor(Color.GRAY);
