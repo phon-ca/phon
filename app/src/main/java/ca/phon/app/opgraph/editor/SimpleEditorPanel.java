@@ -466,6 +466,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		final JScrollPane documentScroller = new JScrollPane(documentTree);
 		documentScroller.setPreferredSize(new Dimension(350, 0));
+		documentScroller.setMinimumSize(new Dimension(350, 0));
 		
 		cardLayout = new CardLayout();
 		nodePanel = new JPanel(cardLayout);

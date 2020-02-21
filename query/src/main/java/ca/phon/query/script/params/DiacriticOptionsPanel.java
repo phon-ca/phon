@@ -63,7 +63,6 @@ public class DiacriticOptionsPanel extends JPanel {
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
-//		setLayout(new BorderLayout());
 		
 		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
 		ignoreDiacriticsBox.setSelected(diacriticOptionsParam.isIgnoreDiacritics());
@@ -106,24 +105,17 @@ public class DiacriticOptionsPanel extends JPanel {
 		++gbc.gridx;
 		add(Box.createHorizontalGlue(), gbc);
 		
-//		
 		gbc.gridx = 0;
 		++gbc.gridy;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.gridwidth = 3;
 		gbc.gridheight = 1;
 		
-//		JPanel topPanel = new JPanel(new HorizontalLayout());
-//		topPanel.add(ignoreDiacriticsBox);
-//		topPanel.add(modeBox);
-//		topPanel.add(dropDownButton);
-//		add(topPanel, BorderLayout.NORTH);
-		
 		IPAMapGridContainer container = new IPAMapGridContainer();
 		var selectedGrid = diacriticSelector.getSelectedGrid();
 		selectedGrid.setName("Selected");
 		var gridTuple = container.addGrid(diacriticSelector.getSelectedGrid());
-//		add(container, BorderLayout.CENTER);
+		selectedGridMap = gridTuple.getObj2();
 		add(container, gbc);
 		
 		diacriticSelector.getMapGridContainer().addCellSelectionListener(new IPAMapCellSelectionListener() {
@@ -137,15 +129,6 @@ public class DiacriticOptionsPanel extends JPanel {
 				diacriticSelector.getMapGridContainer().repaint();
 			}
 		});
-		
-//		add(selectedMap, gbc);
-//		diacriticField = new JTextField();
-//		diacriticField.setFont(FontPreferences.getUIIpaFont());
-//		diacriticField.setEditable(false);
-//		
-//		String selectedTxt = diacriticSelector.getSelected().stream().collect(Collectors.joining(";"));
-//		diacriticField.setText(selectedTxt);
-//		add(diacriticField, gbc);
 		
 		updateButtons();
 	}
@@ -169,6 +152,7 @@ public class DiacriticOptionsPanel extends JPanel {
 	private void updateButtons() {
 		modeBox.setEnabled(ignoreDiacriticsBox.isSelected());
 		dropDownButton.setEnabled(ignoreDiacriticsBox.isSelected());
+		selectedGridMap.setVisible(ignoreDiacriticsBox.isSelected());
 	}
 	
 }
