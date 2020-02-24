@@ -84,7 +84,7 @@ public class PhonMediaPlayer extends JPanel {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(PhonMediaPlayer.class.getName());
 
-	private final static int VOL_MAX = 200;
+	public final static int VOL_MAX = 200;
 
 	/** UI  components */
 	/* Play/pause button */
@@ -942,6 +942,15 @@ public class PhonMediaPlayer extends JPanel {
 			return true;
 		} else
 			return false;
+	}
+	
+	public int setVolume(int volume) {
+		if(getMediaPlayer() != null) {
+			getMediaPlayer().audio().setVolume(volume);
+			return getVolume();
+		} else {
+			return 0;
+		}
 	}
 
 	public void setTime(long arg0) {

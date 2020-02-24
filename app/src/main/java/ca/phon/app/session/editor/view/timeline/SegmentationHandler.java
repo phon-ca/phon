@@ -25,6 +25,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
 import ca.phon.media.TimeUIModel;
+import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
@@ -46,6 +47,8 @@ public final class SegmentationHandler {
 	public final static String EDITOR_SEGMENTATION_START = "_segmentation_start_";
 	
 	public final static String EDITOR_SEGMENTATION_END = "_segmentation_end_";
+	
+	private final static int VOLUME_INCR = 5;
 	
 	private final static long MIN_SEGMENT_LENGTH = 50L;
 	
@@ -534,7 +537,9 @@ public final class SegmentationHandler {
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 		if(mediaView != null) {
-			// TODO
+			int currentVolume = mediaView.getPlayer().getVolume();
+			int newVolume = Math.min(PhonMediaPlayer.VOL_MAX, currentVolume + VOLUME_INCR);
+			mediaView.getPlayer().setVolume(newVolume);
 		}
 	}
 	
@@ -542,7 +547,9 @@ public final class SegmentationHandler {
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 		if(mediaView != null) {
-			// TODO
+			int currentVolume = mediaView.getPlayer().getVolume();
+			int newVolume = Math.max(0, currentVolume - VOLUME_INCR);
+			mediaView.getPlayer().setVolume(newVolume);
 		}
 	}
 	
