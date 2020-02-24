@@ -3,14 +3,12 @@ package ca.phon.app.session.check;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
@@ -18,8 +16,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-
-import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.session.check.CheckTranscripts;
 import ca.phon.syllabifier.Syllabifier;

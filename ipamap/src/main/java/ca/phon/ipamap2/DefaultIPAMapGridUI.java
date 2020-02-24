@@ -7,20 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JToolTip;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
 import com.github.davidmoten.rtree.RTree;

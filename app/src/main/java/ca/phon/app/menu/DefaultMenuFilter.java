@@ -45,12 +45,9 @@ import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.welcome.WelcomeWindow;
-import ca.phon.app.welcome.WelcomeWindowEP;
 import ca.phon.plugin.IPluginMenuFilter;
-import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 

@@ -41,7 +41,6 @@ import ca.phon.ipadictionary.spi.IPADictionarySPI;
 import ca.phon.ipadictionary.spi.LanguageInfo;
 import ca.phon.ipadictionary.spi.Metadata;
 import ca.phon.ipadictionary.spi.NameInfo;
-import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
 import ca.phon.util.Language;

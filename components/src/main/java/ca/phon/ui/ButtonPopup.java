@@ -1,15 +1,11 @@
 package ca.phon.ui;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 

@@ -17,10 +17,8 @@ package ca.phon.app.about;
 
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 

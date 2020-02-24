@@ -1,6 +1,5 @@
 package ca.phon.media;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -10,13 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
-import javax.swing.plaf.ComponentUI;
 
 import ca.phon.media.sampled.Channel;
-import ca.phon.media.sampled.Sampled;
 
 /**
  * Basic waveform display

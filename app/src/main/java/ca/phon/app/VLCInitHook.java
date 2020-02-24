@@ -15,14 +15,9 @@
  */
 package ca.phon.app;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-
 import org.apache.logging.log4j.LogManager;
 
 import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.app.log.LogUtil;
 import ca.phon.media.VLCHelper;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;

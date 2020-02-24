@@ -11,13 +11,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JComponent;
-import javax.swing.JMenuItem;
-import javax.swing.plaf.ComponentUI;
-
 import ca.phon.media.TimeComponent;
 import ca.phon.media.TimeUIModel;
-import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.Session;

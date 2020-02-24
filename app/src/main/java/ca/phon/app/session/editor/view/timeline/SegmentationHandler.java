@@ -1,7 +1,6 @@
 package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
@@ -25,7 +24,6 @@ import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
-import ca.phon.media.TimeComponent;
 import ca.phon.media.TimeUIModel;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.MediaSegment;

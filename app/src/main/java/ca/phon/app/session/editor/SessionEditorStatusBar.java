@@ -22,11 +22,9 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -37,15 +35,11 @@ import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.ByteSize;
-import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;

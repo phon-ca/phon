@@ -45,11 +45,7 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
-import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.AbstractStringLayout;
-import org.apache.logging.log4j.core.layout.HtmlLayout;
-import org.apache.logging.log4j.core.layout.HtmlLayout.FontSize;
 import org.apache.logging.log4j.core.util.Transform;
 import org.apache.logging.log4j.util.Strings;
 

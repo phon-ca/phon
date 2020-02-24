@@ -17,7 +17,6 @@ package ca.phon.phonex;
 
 import org.apache.logging.log4j.LogManager;
 
-import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;

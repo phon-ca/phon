@@ -17,7 +17,6 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import ca.phon.app.hooks.HookableAction;

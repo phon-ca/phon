@@ -19,15 +19,12 @@ package ca.phon.session.spi;
 import java.time.LocalDate;
 import java.util.List;
 
-import ca.phon.extensions.IExtendable;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.SessionMetadata;
 import ca.phon.session.TierDescription;
-import ca.phon.session.TierDescriptions;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.Transcriber;
-import ca.phon.session.Transcribers;
 
 /**
  * service provider interface for sessions

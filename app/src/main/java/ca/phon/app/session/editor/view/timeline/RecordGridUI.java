@@ -3,8 +3,6 @@ package ca.phon.app.session.editor.view.timeline;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.plaf.ComponentUI;
-
 import ca.phon.media.TimeComponentUI;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;

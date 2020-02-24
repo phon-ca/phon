@@ -4,20 +4,15 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
-import javax.swing.JToolTip;
 import javax.swing.ListSelectionModel;
 import javax.swing.Scrollable;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.ComponentUI;
-
-import org.jdesktop.swingx.JXCollapsiblePane;
 
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;

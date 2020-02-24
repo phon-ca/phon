@@ -2,41 +2,18 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
-import org.jdesktop.swingx.VerticalLayout;
-
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.SimpleEditorPanel;
-import ca.phon.app.opgraph.nodes.RecordContainer;
-import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
 import ca.phon.app.opgraph.report.ReportEditorModelInstantiator;
 import ca.phon.app.opgraph.report.ReportLibrary;
-import ca.phon.app.opgraph.report.ReportRunner;
-import ca.phon.app.opgraph.report.ReportWizardExtension;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.project.ShadowProject;
 import ca.phon.opgraph.InputField;
@@ -47,7 +24,6 @@ import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -59,15 +35,6 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
 
 /**
  * Select query report from file or created using the Report Composer.

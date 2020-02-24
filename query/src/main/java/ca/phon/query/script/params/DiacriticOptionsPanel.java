@@ -1,33 +1,22 @@
 package ca.phon.query.script.params;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import org.jdesktop.swingx.HorizontalLayout;
-
 import ca.phon.ipamap2.DiacriticSelector;
-import ca.phon.ipamap2.IPAGrids;
 import ca.phon.ipamap2.IPAMapCellSelectionListener;
 import ca.phon.ipamap2.IPAMapGrid;
 import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

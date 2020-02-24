@@ -42,7 +42,6 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 

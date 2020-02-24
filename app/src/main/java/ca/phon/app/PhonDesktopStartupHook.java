@@ -1,9 +1,6 @@
 package ca.phon.app;
 
 import java.awt.Desktop;
-import java.awt.desktop.QuitEvent;
-import java.awt.desktop.QuitHandler;
-import java.awt.desktop.QuitResponse;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;

@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
-import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;

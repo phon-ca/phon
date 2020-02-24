@@ -16,8 +16,8 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import ca.phon.ipa.features.FeatureMatrix;

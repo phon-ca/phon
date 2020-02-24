@@ -22,7 +22,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
@@ -30,11 +29,9 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
-import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.JTextComponent;
 
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
 /**

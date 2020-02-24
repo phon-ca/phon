@@ -11,7 +11,6 @@ import javax.swing.JList;
 import org.apache.commons.lang3.StringUtils;
 
 import ca.phon.ui.PhonGuiConstants;
-import ca.phon.util.PhonConstants;
 
 /**
  *  

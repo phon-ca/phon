@@ -66,7 +66,6 @@ import ca.phon.script.params.ScriptParameters;
 import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;

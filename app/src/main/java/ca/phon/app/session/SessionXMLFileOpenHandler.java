@@ -17,7 +17,6 @@ import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;

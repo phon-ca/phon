@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.session.Comment;
-import ca.phon.session.SessionMetadata;
 import ca.phon.session.spi.SessionMetadataSPI;
 
 public class SessionMetadataImpl implements SessionMetadataSPI {

@@ -17,7 +17,6 @@
 package ca.phon.media.export;
 
 import java.awt.Desktop;
-import java.awt.HeadlessException;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -29,8 +28,6 @@ import ca.phon.media.exceptions.PhonMediaException;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonTask;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-import uk.co.caprica.vlcj.media.MediaRef;
-import uk.co.caprica.vlcj.media.TrackType;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;

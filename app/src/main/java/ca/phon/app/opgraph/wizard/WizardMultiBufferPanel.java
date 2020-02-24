@@ -19,8 +19,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -33,7 +31,6 @@ import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

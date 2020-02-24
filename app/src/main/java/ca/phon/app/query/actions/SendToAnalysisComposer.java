@@ -5,20 +5,15 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.SwingUtilities;
-
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.analysis.OpenSimpleAnalysisComposerAction;
 import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.app.opgraph.editor.SimpleEditorPanel;
 import ca.phon.app.query.QueryAndReportWizard;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.opgraph.app.commands.Hook;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
-import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

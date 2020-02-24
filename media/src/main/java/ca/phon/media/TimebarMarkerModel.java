@@ -2,7 +2,6 @@ package ca.phon.media;
 
 import java.awt.Paint;
 import java.util.Collection;
-import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.Icon;

@@ -28,7 +28,6 @@ import org.jdesktop.swingx.JXTable;
 import ca.phon.project.Project;
 import ca.phon.query.db.Query;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.Tuple;
 
 /**
  * Display a list of all available queries from any open

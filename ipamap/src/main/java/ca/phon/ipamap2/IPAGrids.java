@@ -1,7 +1,5 @@
 package ca.phon.ipamap2;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -19,7 +17,6 @@ import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
-import ca.phon.ipamap.IpaMap;
 import ca.phon.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.CellProp;

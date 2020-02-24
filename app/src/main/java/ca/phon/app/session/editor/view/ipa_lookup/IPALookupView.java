@@ -38,7 +38,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import ca.phon.app.session.EditorViewAdapter;
-import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;

@@ -2,13 +2,11 @@ package ca.phon.ipamap2;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElementFactory;
-import ca.phon.ui.tristatecheckbox.TristateCheckBox;
 
 public class DiacriticSelector extends IPAMapSelector {
 	

@@ -1,29 +1,15 @@
 package ca.phon.app.session;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.media.LongSound;
-import ca.phon.media.export.VLCWavExporter;
-import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.PhonTaskButton;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTaskListener;
-import ca.phon.worker.PhonWorker;
-import ca.phon.worker.PhonTask.TaskStatus;
 
 /**
  * Media model for a session editor.

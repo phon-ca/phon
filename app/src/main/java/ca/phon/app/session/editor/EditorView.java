@@ -16,7 +16,6 @@
 package ca.phon.app.session.editor;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
 import java.util.Set;
 
 import javax.swing.ImageIcon;

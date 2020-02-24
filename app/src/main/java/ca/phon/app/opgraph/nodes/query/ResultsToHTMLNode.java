@@ -15,13 +15,11 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -44,7 +42,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.ExcelExporter;

@@ -1,7 +1,5 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.TierListener;
-
 public interface TierSPI<T>  extends TierDescriptionSPI {
 	
 	public boolean isGrouped();

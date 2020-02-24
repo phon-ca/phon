@@ -76,7 +76,6 @@ import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.position.SegmentCalculator;
-import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dnd.FileTransferHandler;
@@ -86,11 +85,6 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import uk.co.caprica.vlcj.media.MediaRef;
-import uk.co.caprica.vlcj.media.TrackType;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
 
 /**
  * Panel for embedded media player for editor.

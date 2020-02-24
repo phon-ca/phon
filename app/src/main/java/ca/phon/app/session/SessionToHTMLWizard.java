@@ -16,71 +16,29 @@
 package ca.phon.app.session;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
-import javax.swing.table.AbstractTableModel;
 
-import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.query.OpenResultSetSelector;
-import ca.phon.app.session.SessionToHTML.SessionToHTMLSettings;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.project.Project;
-import ca.phon.query.db.ResultSet;
 import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.TierViewItem;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 

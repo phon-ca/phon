@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,7 +30,6 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +37,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 
-import org.apache.commons.io.FilenameUtils;
-
 import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.SimpleEditorExtension;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.query.QueryNodeData;

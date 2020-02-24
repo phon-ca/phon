@@ -15,16 +15,12 @@
  */
 package ca.phon.app.session;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,10 +30,7 @@ import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
-import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.CommonModuleFrameCreatedListener;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;

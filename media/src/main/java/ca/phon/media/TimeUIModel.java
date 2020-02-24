@@ -1,7 +1,6 @@
 package ca.phon.media;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,9 +10,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
-import javax.swing.Icon;
 import javax.swing.event.EventListenerList;
 
 /**

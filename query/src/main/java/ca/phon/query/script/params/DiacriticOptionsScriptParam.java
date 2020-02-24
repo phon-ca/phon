@@ -10,7 +10,6 @@ import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.script.params.ScriptParam;
-import ca.phon.session.SessionFactory;
 
 public class DiacriticOptionsScriptParam extends ScriptParam {
 

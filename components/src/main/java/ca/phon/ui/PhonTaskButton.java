@@ -21,7 +21,6 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;

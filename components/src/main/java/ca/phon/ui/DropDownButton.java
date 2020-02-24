@@ -15,7 +15,6 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
 
 /**
  * {@link JButton} with a drop-down component.

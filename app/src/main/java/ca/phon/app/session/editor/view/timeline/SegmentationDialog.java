@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -18,33 +17,22 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
 
 import org.jdesktop.swingx.VerticalLayout;
 
-import com.teamdev.jxbrowser.chromium.internal.ipc.message.GetPluginsMessage;
-
-import ca.phon.app.segmentation.SegmentationModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.timeline.SegmentationHandler.MediaStart;
 import ca.phon.app.session.editor.view.timeline.SegmentationHandler.SegmentationMode;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.Participant;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.FormatterTextField;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
 
 /**
  * Options dialog for segmentation.

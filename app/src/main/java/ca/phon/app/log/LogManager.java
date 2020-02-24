@@ -17,13 +17,9 @@ package ca.phon.app.log;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -32,17 +28,8 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.RollingFileAppender;
 import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
 import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy;
-import org.apache.logging.log4j.core.appender.rolling.RolloverStrategy;
-import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
-import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.layout.HtmlLayout;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 
-import com.jcraft.jsch.Logger;
-
-import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 
 /**

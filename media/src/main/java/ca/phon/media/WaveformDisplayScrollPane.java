@@ -1,9 +1,5 @@
 package ca.phon.media;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.beans.PropertyChangeListener;
-
 import javax.swing.JScrollPane;
 
 /**

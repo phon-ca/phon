@@ -12,27 +12,18 @@ import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
-import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.media.sampled.Channel;
-import ca.phon.media.sampled.Sampled;
 import ca.phon.util.Tuple;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
 
 /**
  * Default implementation of UI for {@link WaveformDisplay}

@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -30,15 +29,12 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.ipa.CompoundPhone;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.tree.IpaTernaryTree;
-import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.app.GraphDocument;

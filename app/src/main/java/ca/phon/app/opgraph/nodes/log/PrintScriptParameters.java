@@ -41,15 +41,7 @@ import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.BooleanScriptParam;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.MultiboolScriptParam;
-import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
-import ca.phon.script.params.SeparatorScriptParam;
-import ca.phon.script.params.StringScriptParam;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 /**
  *

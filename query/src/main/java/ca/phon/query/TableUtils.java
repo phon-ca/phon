@@ -18,7 +18,6 @@ package ca.phon.query;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;

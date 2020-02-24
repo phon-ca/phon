@@ -15,7 +15,6 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.TierDescription;
 import ca.phon.session.TierString;
 import ca.phon.session.spi.TierDescriptionSPI;
 

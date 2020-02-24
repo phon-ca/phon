@@ -2,7 +2,6 @@ package ca.phon.app.query.actions;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -15,8 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.teamdev.jxbrowser.chromium.internal.ipc.message.ShutdownMessage;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;

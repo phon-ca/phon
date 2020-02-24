@@ -8,7 +8,6 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Comment;
-import ca.phon.session.Group;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.Tier;

@@ -3,7 +3,6 @@ package ca.phon.app.opgraph.nodes.query;
 import static ca.phon.opgraph.io.xml.XMLSerializerFactory.DEFAULT_NAMESPACE;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;

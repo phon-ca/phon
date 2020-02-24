@@ -10,11 +10,9 @@ import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
 
-import ca.phon.project.Project;
 import ca.phon.query.db.QueryManager;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
-import ca.phon.query.script.QueryName;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;

@@ -10,7 +10,6 @@ import ca.phon.query.db.QueryFactory;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.db.xml.XMLQueryFactory;
-import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.Range;
 

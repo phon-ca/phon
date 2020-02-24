@@ -15,13 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import org.apache.commons.io.FilenameUtils;
-
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.LinkedMacroNodeOverrides;
 import ca.phon.opgraph.nodes.general.MacroNode;

@@ -23,11 +23,8 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.media.ExportSegment;
-import ca.phon.media.LongSound;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;

@@ -21,7 +21,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -37,7 +36,6 @@ import javax.swing.MenuElement;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpGraphLibrary;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;

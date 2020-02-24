@@ -3,8 +3,6 @@ package ca.phon.ipamap2;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

@@ -18,7 +18,6 @@ package ca.phon.app.session.editor.view.check;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -28,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JToolBar;

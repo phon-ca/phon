@@ -23,8 +23,6 @@ import javax.swing.ImageIcon;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;

@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -11,23 +10,18 @@ import javax.swing.ImageIcon;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
 import ca.phon.media.export.VLCWavExporter;
-import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.PhonTaskButton;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
+import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonTaskListener;
 import ca.phon.worker.PhonWorker;
-import ca.phon.worker.PhonTask.TaskStatus;
 
 /**
  * Generate session audio file

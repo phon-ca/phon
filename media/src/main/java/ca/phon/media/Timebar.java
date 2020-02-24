@@ -3,7 +3,6 @@ package ca.phon.media;
 import java.awt.Rectangle;
 
 import javax.swing.UIManager;
-import javax.swing.plaf.ComponentUI;
 
 import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.media.TimeUIModel.Marker;

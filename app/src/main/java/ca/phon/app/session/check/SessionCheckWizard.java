@@ -5,43 +5,20 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.jdesktop.swingx.JXBusyLabel;
-
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.JSArray;
-import com.teamdev.jxbrowser.chromium.JSObject;
-import com.teamdev.jxbrowser.chromium.JSValue;
-import com.teamdev.jxbrowser.chromium.dom.By;
-import com.teamdev.jxbrowser.chromium.dom.DOMDocument;
-import com.teamdev.jxbrowser.chromium.dom.DOMElement;
-
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.app.session.SessionSelectorActiveEditorSupport;
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
-import ca.phon.opgraph.ProcessorEvent;
 import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginManager;
 import ca.phon.project.Project;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.SessionPath;
-import ca.phon.session.check.SessionCheck;
-import ca.phon.ui.CommonModuleFrameCreatedListener;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.wizard.BreadcrumbWizardFrame;
 import ca.phon.ui.wizard.WizardStep;
 
 /**

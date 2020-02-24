@@ -16,10 +16,8 @@
 package ca.phon.app.about;
 
 import java.awt.Desktop;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 

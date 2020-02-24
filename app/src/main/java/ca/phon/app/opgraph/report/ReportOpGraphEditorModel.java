@@ -33,7 +33,6 @@ import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.library.PhonNodeLibrary;
 import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
-import ca.phon.app.opgraph.wizard.NodeWizardReportTemplate;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.QueryHistoryTableModel;
 import ca.phon.app.workspace.Workspace;

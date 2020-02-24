@@ -16,25 +16,12 @@
 package ca.phon.app.project;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.ZonedDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import ca.phon.project.LocalProject;
 import ca.phon.project.Project;
-import ca.phon.project.ProjectEvent;
-import ca.phon.project.ProjectListener;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
-import ca.phon.session.io.SessionReader;
-import ca.phon.session.io.SessionWriter;
 
 /**
  * Shadow projects are used as temporary projects with the same

@@ -35,8 +35,6 @@ import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.query.ScriptPanel;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpGraphListener;
-import ca.phon.opgraph.OpLink;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.GraphEditorModel;
 import ca.phon.opgraph.app.components.NodeSettingsPanel;

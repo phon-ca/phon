@@ -15,15 +15,12 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
-import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.media.TimeUIModel.Marker;

@@ -7,7 +7,6 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneAlignmentConstants;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;

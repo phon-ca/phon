@@ -15,7 +15,6 @@
  */
 package ca.phon.app.session.check;
 
-import java.util.Map;
 import java.util.Properties;
 
 import ca.phon.app.session.editor.SessionEditor;
@@ -24,11 +23,7 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.Rank;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
 import ca.phon.session.check.SessionCheck;
 import ca.phon.session.check.SessionValidator;
 

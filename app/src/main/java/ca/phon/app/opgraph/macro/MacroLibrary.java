@@ -21,7 +21,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -40,8 +39,6 @@ import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.resources.ClassLoaderHandler;
-import ca.phon.util.resources.ResourceHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 public class MacroLibrary {

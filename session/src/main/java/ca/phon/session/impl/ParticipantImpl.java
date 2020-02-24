@@ -17,10 +17,7 @@ package ca.phon.session.impl;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Set;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
 import ca.phon.session.Sex;
 import ca.phon.session.spi.ParticipantSPI;

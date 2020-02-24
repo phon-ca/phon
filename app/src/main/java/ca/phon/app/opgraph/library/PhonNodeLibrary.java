@@ -17,7 +17,6 @@ package ca.phon.app.opgraph.library;
 
 import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -25,15 +24,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.tools.ant.util.ClasspathUtils;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
@@ -55,22 +48,17 @@ import ca.phon.app.opgraph.nodes.table.TableScriptNodeInstantiator;
 import ca.phon.app.opgraph.report.ReportLibrary;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.components.canvas.NodeStyle;
-import ca.phon.opgraph.library.NodeData;
 import ca.phon.opgraph.library.NodeLibrary;
-import ca.phon.opgraph.library.handlers.URIHandler;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.opgraph.nodes.general.MacroNodeData;
 import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
-import ca.phon.plugin.PluginManager;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.script.BasicScript;
 import ca.phon.script.PhonScript;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import ca.phon.util.resources.ClassLoaderHandler;
 import ca.phon.util.resources.ResourceLoader;
 
 /**

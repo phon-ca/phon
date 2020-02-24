@@ -1,19 +1,7 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.lang.ref.WeakReference;
-
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.media.TimeComponent;
-import ca.phon.media.Timebar;
 import ca.phon.ui.menu.MenuBuilder;
 
 public abstract class TimelineTier extends TimeComponent {

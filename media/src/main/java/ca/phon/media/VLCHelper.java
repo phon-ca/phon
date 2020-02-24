@@ -16,21 +16,14 @@
 
 package ca.phon.media;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 
 import ca.phon.ui.nativedialogs.OSInfo;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import uk.co.caprica.vlcj.binding.LibC;
-import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.binding.RuntimeUtil;
-import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.support.Info;
-import uk.co.caprica.vlcj.support.version.LibVlcVersion;
 
 /**
  * Helper methods for using vlc4j

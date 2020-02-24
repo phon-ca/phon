@@ -1,7 +1,6 @@
 package ca.phon.ipamap2;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,38 +20,26 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.JXStatusBar;
-import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 
-import ca.phon.ipamap.IpaMap;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
-import ca.phon.ui.ipamap.io.IpaGrids;
-import ca.phon.ui.ipamap.io.ObjectFactory;
 import ca.phon.util.Tuple;
 
 /**

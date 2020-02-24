@@ -26,7 +26,6 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;

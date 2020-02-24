@@ -18,7 +18,6 @@ package ca.phon.app.session;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -34,10 +33,8 @@ import ca.phon.query.db.ReportHelper;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetRecordFilter;
-import ca.phon.query.db.ResultValue;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.session.TierViewItem;
 import ca.phon.session.filter.RecordFilter;
 
 /**

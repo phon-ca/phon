@@ -7,8 +7,6 @@ import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
 import ca.phon.media.PlaySegment;
 import ca.phon.media.Sound;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
 
 public class SampledLongSound extends LongSound {
 	

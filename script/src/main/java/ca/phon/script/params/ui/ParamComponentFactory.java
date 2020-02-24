@@ -49,7 +49,6 @@ import ca.phon.script.params.PatternScriptParam;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.SeparatorScriptParam;
 import ca.phon.script.params.StringScriptParam;
-import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.text.PatternEditor;
 import ca.phon.ui.text.PromptedTextField;
 import ca.phon.ui.text.PromptedTextField.FieldState;

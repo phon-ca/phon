@@ -15,9 +15,6 @@
  */
 package ca.phon.session.check;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -25,9 +22,6 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.Phone;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -36,7 +30,6 @@ import ca.phon.plugin.Rank;
 import ca.phon.session.Group;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;

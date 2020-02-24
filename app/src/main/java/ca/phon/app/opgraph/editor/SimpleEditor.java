@@ -22,7 +22,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;

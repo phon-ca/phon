@@ -20,21 +20,14 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 import javax.swing.ImageIcon;
-
-import com.teamdev.jxbrowser.chromium.JSValue;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.ExcelExporter;
-import ca.phon.app.log.HTMLToWorkbookWriter;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;

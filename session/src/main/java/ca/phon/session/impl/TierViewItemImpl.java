@@ -15,7 +15,6 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.TierViewItem;
 import ca.phon.session.spi.TierViewItemSPI;
 
 /**

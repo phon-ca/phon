@@ -1,13 +1,5 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Participant;
-import ca.phon.session.SessionMetadata;
-import ca.phon.session.Tier;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
-import ca.phon.session.Transcriber;
-
 public interface SessionFactorySPI {
 
 	/**

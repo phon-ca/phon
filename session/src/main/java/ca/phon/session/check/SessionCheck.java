@@ -15,16 +15,13 @@
  */
 package ca.phon.session.check;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Session;
-import ca.phon.util.Tuple;
 
 public interface SessionCheck {
 
