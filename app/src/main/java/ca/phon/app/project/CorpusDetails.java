@@ -227,7 +227,7 @@ public class CorpusDetails extends JPanel {
 			final Path projectPath = FileSystems.getDefault().getPath(project.getLocation());
 			final Path relativePath  = projectPath.relativize(corpusPath);
 			locationLabel.setText("<html><u>" + relativePath.toString() + "</u></html>");
-			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, IconSize.SMALL));
+			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, "places/folder", IconSize.SMALL));
 			locationLabel.setToolTipText(corpusAbsolutePath);
 
 			String mediaFolderURI = project.getCorpusMediaFolder(getCorpus());

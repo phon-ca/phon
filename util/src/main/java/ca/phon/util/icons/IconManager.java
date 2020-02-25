@@ -40,6 +40,7 @@ import ca.hedlund.desktopicons.DesktopIconException;
 import ca.hedlund.desktopicons.DesktopIcons;
 import ca.hedlund.desktopicons.StockIcon;
 import ca.phon.plugin.PluginManager;
+import ca.phon.util.OSInfo;
 import ca.phon.util.StackTraceInfo;
 
 /**
@@ -149,7 +150,7 @@ public class IconManager {
 	 * @return icon for given path or <code>null</code> if not found
 	 */
 	public ImageIcon getSystemIconForPath(String path, IconSize size) {
-		return getSystemIconForPath(path, null, size);
+		return getSystemIconForPath(path, "mimetypes/text-x-generic", size);
 	}
 	
 	/**
@@ -164,14 +165,18 @@ public class IconManager {
 	public ImageIcon getSystemIconForPath(String path, String backupIcon, IconSize size) {
 		ImageIcon retVal = null;
 		
-		try {
-			final Image img = DesktopIcons.getIconForPath(path, size.getWidth(), size.getHeight());
-			retVal = new ImageIcon(img);
-		} catch (DesktopIconException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
-			
-			if(backupIcon != null && backupIcon.length() > 0) {
-				retVal = getIcon(backupIcon, size);
+		if(OSInfo.isNix()) {
+			retVal = getIcon(backupIcon, size);
+		} else {
+			try {
+				final Image img = DesktopIcons.getIconForPath(path, size.getWidth(), size.getHeight());
+				retVal = new ImageIcon(img);
+			} catch (DesktopIconException e) {
+				LOGGER.warn( e.getLocalizedMessage(), e);
+				
+				if(backupIcon != null && backupIcon.length() > 0) {
+					retVal = getIcon(backupIcon, size);
+				}
 			}
 		}
 		
@@ -188,7 +193,7 @@ public class IconManager {
 	 * @return icon for given file type or <code>null</code> if not found
 	 */
 	public ImageIcon getSystemIconForFileType(String filetype, IconSize size) {
-		return getSystemIconForFileType(filetype, null, size);
+		return getSystemIconForFileType(filetype, "mimetypes/text-x-generic", size);
 	}
 	
 	/**
@@ -204,14 +209,18 @@ public class IconManager {
 	public ImageIcon getSystemIconForFileType(String filetype, String backupIcon, IconSize size) {
 		ImageIcon retVal = null;
 		
-		try {
-			final Image img = DesktopIcons.getIconForFileType(filetype, size.getWidth(), size.getHeight());
-			retVal = new ImageIcon(img);
-		} catch (DesktopIconException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
-			
-			if(backupIcon != null && backupIcon.length() > 0) {
-				retVal = getIcon(backupIcon, size);
+		if(OSInfo.isNix()) {
+			retVal = getIcon(backupIcon, size);
+		} else {
+			try {
+				final Image img = DesktopIcons.getIconForFileType(filetype, size.getWidth(), size.getHeight());
+				retVal = new ImageIcon(img);
+			} catch (DesktopIconException e) {
+				LOGGER.warn( e.getLocalizedMessage(), e);
+				
+				if(backupIcon != null && backupIcon.length() > 0) {
+					retVal = getIcon(backupIcon, size);
+				}
 			}
 		}
 		
@@ -228,7 +237,7 @@ public class IconManager {
 	 * @return icon for given file type or backup icon if not found
 	 */
 	public ImageIcon getSystemStockIcon(StockIcon stockIcon, IconSize size) {
-		return getSystemStockIcon(stockIcon, null, size);
+		return getSystemStockIcon(stockIcon, "blank", size);
 	}
 	
 	/**
@@ -244,14 +253,19 @@ public class IconManager {
 	public ImageIcon getSystemStockIcon(StockIcon stockIcon, String backupIcon, IconSize size) {
 		ImageIcon retVal = null;
 		
-		try {
-			final Image img = DesktopIcons.getStockIcon(stockIcon, size.getWidth(), size.getHeight());
-			retVal = new ImageIcon(img);
-		} catch (DesktopIconException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
-			
-			if(backupIcon != null && backupIcon.length() > 0) {
-				retVal = getIcon(backupIcon, size);
+		// Phon 3.1 - return default icons on linux
+		if(OSInfo.isNix()) {
+			retVal = getIcon(backupIcon, size);
+		} else {
+			try {
+				final Image img = DesktopIcons.getStockIcon(stockIcon, size.getWidth(), size.getHeight());
+				retVal = new ImageIcon(img);
+			} catch (DesktopIconException e) {
+				LOGGER.warn( e.getLocalizedMessage(), e);
+				
+				if(backupIcon != null && backupIcon.length() > 0) {
+					retVal = getIcon(backupIcon, size);
+				}
 			}
 		}
 		

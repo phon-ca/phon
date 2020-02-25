@@ -85,7 +85,6 @@ import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 import org.jdesktop.swingx.MultiSplitLayout;
 
-import ca.hedlund.desktopicons.GtkStockIcon;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.NativeUtilities;
 import ca.hedlund.desktopicons.StockIcon;
@@ -551,7 +550,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		corpusPanel = new TitledPanel("Corpus");
 		final ImageIcon defCorpusIcn = IconManager.getInstance().getSystemStockIcon(
 				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon :
-					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : GtkStockIcon.FOLDER), IconSize.SMALL);
+					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : null), "places/folder", IconSize.SMALL);
 		corpusPanel.setIcon(defCorpusIcn);
 
 		corpusPanel.getContentContainer().add(createCorpusButton, BorderLayout.NORTH);
@@ -578,8 +577,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		sessionDecoration.add(showCreateSessionBtn);
 
 		sessionPanel = new TitledPanel("Session");
-		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType(
-				(OSInfo.isNix() ? "text-xml" : "xml"), IconSize.SMALL));
+		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType("xml", IconSize.SMALL));
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
@@ -637,7 +635,7 @@ public class ProjectWindow extends CommonModuleFrame {
 			}
 
 		});
-		header.getBottomLabel().setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, IconSize.MEDIUM));
+		header.getBottomLabel().setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, "places/folder", IconSize.MEDIUM));
 		header.getBottomLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		add(header, BorderLayout.NORTH);
@@ -1090,7 +1088,7 @@ public class ProjectWindow extends CommonModuleFrame {
 			final String corpus = comp.getText();
 			final String corpusPath = getProject().getCorpusPath(corpus);
 
-			ImageIcon icon = IconManager.getInstance().getSystemIconForPath(corpusPath, IconSize.SMALL);
+			ImageIcon icon = IconManager.getInstance().getSystemIconForPath(corpusPath, "places/folder", IconSize.SMALL);
 
 			if(gitController.hasGitFolder() && gitController.isOpen()) {
 				try {
@@ -1138,7 +1136,7 @@ public class ProjectWindow extends CommonModuleFrame {
 				final String sessionRelPath = relPath.toString();
 
 			    ImageIcon icon =
-			    		IconManager.getInstance().getSystemIconForPath(getProject().getSessionPath(corpus, session), IconSize.SMALL);
+			    		IconManager.getInstance().getSystemIconForPath(getProject().getSessionPath(corpus, session), "mimetypes/text-x-generic", IconSize.SMALL);
 
 				if(gitController.hasGitFolder() && gitController.isOpen()) {
 					try {

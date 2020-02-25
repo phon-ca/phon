@@ -210,7 +210,7 @@ public class SessionDetails extends JPanel {
 			final String name = f.getName();
 			
 			fileLabel.setText(name);
-			fileLabel.setIcon(IconManager.getInstance().getSystemIconForPath(sessionPath, IconSize.SMALL));
+			fileLabel.setIcon(IconManager.getInstance().getSystemIconForPath(sessionPath, "mimetypes/text-x-generic", IconSize.SMALL));
 			fileLabel.setToolTipText(sessionPath);
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");

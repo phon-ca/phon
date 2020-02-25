@@ -43,7 +43,6 @@ import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
-import ca.hedlund.desktopicons.GtkStockIcon;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.NativeUtilities;
 import ca.hedlund.desktopicons.StockIcon;
@@ -267,7 +266,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		final String defaultFolderIconName = "actions/document-open";
 		final StockIcon stockIcon =
 				(NativeUtilities.isMacOs() ? MacOSStockIcon.OpenFolderIcon :
-					NativeUtilities.isLinux() ? GtkStockIcon.FOLDER_OPEN : WindowsStockIcon.FOLDEROPEN);
+					NativeUtilities.isWindows() ? WindowsStockIcon.FOLDEROPEN : null);
 
 		final ImageIcon browseIcn =
 				IconManager.getInstance().getSystemStockIcon(stockIcon, defaultFolderIconName, IconSize.SMALL);
@@ -306,7 +305,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
 		final StockIcon prefIcon =
 				OSInfo.isMacOs() ? MacOSStockIcon.ToolbarCustomizeIcon
-						: OSInfo.isNix() ? GtkStockIcon.SETTINGS : WindowsStockIcon.APPLICATION;
+						: OSInfo.isWindows() ?  WindowsStockIcon.APPLICATION : null;
 		final String defIcn = "categories/preferences";
 		ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
 		ImageIcon prefsIcnL = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.MEDIUM);
@@ -342,7 +341,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		final String folderIconName = "places/folder-video";
 		final StockIcon stockIcon =
 				(NativeUtilities.isMacOs() ? MacOSStockIcon.VoicesFolderIcon
-						: NativeUtilities.isLinux() ? GtkStockIcon.FOLDER_VIDEO : WindowsStockIcon.VIDEOFILES);
+						: NativeUtilities.isWindows() ? WindowsStockIcon.VIDEOFILES : null);
 		final ImageIcon folderIcon =
 				IconManager.getInstance().getSystemStockIcon(stockIcon, folderIconName, IconSize.MEDIUM);
 		final ImageIcon addIcon =
@@ -356,9 +355,6 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		g.drawImage(addIcon.getImage(), IconSize.MEDIUM.getWidth() - IconSize.XSMALL.getWidth(),
 				IconSize.MEDIUM.getHeight() - IconSize.XSMALL.getHeight(), this);
 		final ImageIcon newIcn = new ImageIcon(newIcnImg);
-
-//		ImageIcon videoFolderIcn = IconManager.getInstance().getIcon("places/folder-video", IconSize.SMALL);
-//		ImageIcon videoFolderIcnL = IconManager.getInstance().getIcon("places/folder-video", IconSize.MEDIUM);
 
 		String s1 = "Select Media Folders";
 		String s2 = "Set up a list of folders where media can be found";
