@@ -15,8 +15,7 @@ public class SegmentationWindow {
 	public long segmentStartLockMs = 0L;
 	
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
-	
-	
+		
 	public SegmentationWindow() {
 		super();
 	}

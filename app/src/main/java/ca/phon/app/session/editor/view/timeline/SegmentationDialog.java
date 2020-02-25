@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -62,8 +63,10 @@ public class SegmentationDialog extends JDialog {
 	private JRadioButton fromEndofParticipantButton;
 	private JComboBox<Participant> participantSelectionBox;
 
+	private JCheckBox useWindowButton;
+	private final static boolean DEFAULT_USE_WINDOW = false;
 	private final static String WINDOW_LENGTH_PROP = SegmentationDialog.class.getSimpleName() + ".segmentationWindowMS";
-	private final static long DEFAULT_WINDOW_LENGTH = 0L;
+	private final static long DEFAULT_WINDOW_LENGTH = 3000L;
 	private FormatterTextField<Long> windowLengthField;
 	
 	private JButton startButton;
@@ -124,6 +127,7 @@ public class SegmentationDialog extends JDialog {
 		fromEndOfSegmentedButton.addActionListener(enabledListener);
 		fromEndofParticipantButton.addActionListener(enabledListener);
 		
+		useWindowButton = new JCheckBox("Use segmentation window");
 		windowLengthField = new FormatterTextField<>(new Formatter<Long>() {
 			
 			@Override
@@ -137,7 +141,12 @@ public class SegmentationDialog extends JDialog {
 			}
 			
 		});
-		windowLengthField.setValue(0L);
+		useWindowButton.addActionListener((e) -> {
+			windowLengthField.setEnabled(useWindowButton.isSelected());			
+		});
+		useWindowButton.setSelected(DEFAULT_USE_WINDOW);
+		windowLengthField.setEnabled(DEFAULT_USE_WINDOW);
+		windowLengthField.setValue(DEFAULT_WINDOW_LENGTH);
 		
 		keymapInfoPane = new JEditorPane("text/html", KEYMAP_HTML);
 		keymapInfoPane.setEditable(false);
@@ -193,12 +202,12 @@ public class SegmentationDialog extends JDialog {
 		gbc.gridy++;
 		gbc.weightx = 0.0;
 		gbc.gridwidth = 1;
-		recordCreationPanel.add(new JLabel("Maximum segment length (in miliseconds):"), gbc);
+		recordCreationPanel.add(useWindowButton, gbc);
 		gbc.gridx++;
 		gbc.weightx = 1.0;
 		recordCreationPanel.add(windowLengthField, gbc);
 		gbc.insets = new Insets(5, 10, 0, 5);
-		JLabel lbl = new JLabel("<html><span style='font-size:small;'>0 = segments will be contiguous</span></html>");
+		JLabel lbl = new JLabel("<html><span style='font-size:small;'>(enter window length in ms)</span></html>");
 		gbc.gridy++;
 		recordCreationPanel.add(lbl, gbc);
 		gbc.insets = new Insets(5, 5, 0, 5);
@@ -265,7 +274,7 @@ public class SegmentationDialog extends JDialog {
 	}
 	
 	public long getWindowLength() {
-		return windowLengthField.getValue();
+		return (useWindowButton.isSelected() ? windowLengthField.getValue() : 0L);
 	}
 	
 	/**
@@ -330,7 +339,15 @@ public class SegmentationDialog extends JDialog {
 		}
 		
 		long windowLength = PrefHelper.getLong(WINDOW_LENGTH_PROP, DEFAULT_WINDOW_LENGTH);
-		windowLengthField.setValue(windowLength);
+		if(windowLength == 0L) {
+			windowLengthField.setValue(DEFAULT_WINDOW_LENGTH);
+			windowLengthField.setEnabled(false);
+			useWindowButton.setSelected(false);
+		} else {
+			windowLengthField.setValue(windowLength);
+			windowLengthField.setEnabled(true);
+			useWindowButton.setSelected(true);
+		}
 	}
 	
 	public void onOk() {

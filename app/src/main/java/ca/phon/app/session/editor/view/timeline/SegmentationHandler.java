@@ -18,6 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.undo.CompoundEdit;
 
 import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
@@ -51,6 +52,12 @@ public final class SegmentationHandler {
 	private final static int VOLUME_INCR = 5;
 	
 	private final static long MIN_SEGMENT_LENGTH = 50L;
+	
+	private final static long MIN_SEGMENT_WINDOW = 100L;
+	
+	private final static long MAX_SEGMENT_WINDOW = 10000L;
+	
+	private final static long SEGMENT_WINDOW_DELTA = 100L;
 	
 	public static enum SegmentationMode {
 		INSERT_AT_END("Insert record at end of session"),
@@ -115,6 +122,8 @@ public final class SegmentationHandler {
 	
 	private Participant participantForMediaStart = Participant.UNKNOWN;
 	
+	private long cachedSegmentWindow = 0L;
+	
 	private SegmentationWindow window = new SegmentationWindow();
 	
 	private final SessionEditor editor;
@@ -141,10 +150,6 @@ public final class SegmentationHandler {
 		this.editor = editor;
 	
 		setupActions();
-		
-		window.addPropertyChangeListener("startLockMs", (e) -> {
-			
-		});
 	}
 	
 	private void setupActions() {
@@ -164,6 +169,22 @@ public final class SegmentationHandler {
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + i, 0), speakerSegmentKey);
 		}
 		
+		// segmentation window
+		final String toggleWindowKey = "toggle_segmentation_window";
+		final PhonUIAction toggleWindowAct = new PhonUIAction(this, "onToggleSegmentationWindow");
+		actionMap.put(toggleWindowKey, toggleWindowAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), toggleWindowKey);
+		
+		final String increaseWindowKey = "increase_segmentation_window";
+		final PhonUIAction increaseWindowAct = new PhonUIAction(this, "onIncreaseSegmentationWindow");
+		actionMap.put(increaseWindowKey, increaseWindowAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), increaseWindowKey);
+		
+		final String decreaseWindowKey = "decrease_segmentation_window";
+		final PhonUIAction decreaseWindowAct = new PhonUIAction(this, "onDecreaseSegmentationWindow");
+		actionMap.put(decreaseWindowKey, decreaseWindowAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), decreaseWindowKey);
+		
 		// mark breaks
 		final String markBreakKey = "mark_break";
 		final PhonUIAction markBreakAct = new PhonUIAction(this, "onMarkBreak");
@@ -175,13 +196,13 @@ public final class SegmentationHandler {
 		final String volumeUpKey = "volume_up";
 		final PhonUIAction volumeUpAct = new PhonUIAction(this, "onVolumeUp");
 		actionMap.put(volumeUpKey, volumeUpAct);
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), volumeUpKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.SHIFT_DOWN_MASK), volumeUpKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0), volumeUpKey);
 		
 		final String volumeDownKey = "volume_down";
 		final PhonUIAction volumeDownAct = new PhonUIAction(this, "onVolumeDown");
 		actionMap.put(volumeDownKey, volumeDownAct);
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), volumeDownKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.SHIFT_DOWN_MASK), volumeDownKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DIVIDE, 0), volumeDownKey);
 		
 		final String goBack1SKey = "goback_1s";
@@ -451,6 +472,8 @@ public final class SegmentationHandler {
 	public void startSegmentation() {
 		editor.getEventManager().queueEvent(new EditorEvent(EDITOR_SEGMENTATION_START));
 		
+		cachedSegmentWindow = (window.getBackwardWindowLengthMs() > 0 ? window.getBackwardWindowLengthMs() : 3000L);
+		
 		// add event listener
 		Toolkit.getDefaultToolkit().addAWTEventListener(segmentationListener, segmentationEventMask);
 		
@@ -550,6 +573,35 @@ public final class SegmentationHandler {
 			int currentVolume = mediaView.getPlayer().getVolume();
 			int newVolume = Math.max(0, currentVolume - VOLUME_INCR);
 			mediaView.getPlayer().setVolume(newVolume);
+		}
+	}
+	
+	public void onToggleSegmentationWindow() {
+		long currentWindowLength = window.getBackwardWindowLengthMs();
+		if(currentWindowLength == 0L) {
+			window.setBackwardWindowLengthMs(cachedSegmentWindow);
+		} else {
+			cachedSegmentWindow = currentWindowLength;
+			window.setBackwardWindowLengthMs(0L);
+		}
+		EditorView view = editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+		if(view != null)
+			view.repaint();
+	}
+	
+	public void onIncreaseSegmentationWindow() {
+		long currentWindowLength = window.getBackwardWindowLengthMs();
+		if(currentWindowLength > 0L) {
+			long newWindowLength = Math.min(MAX_SEGMENT_WINDOW, currentWindowLength + SEGMENT_WINDOW_DELTA);
+			window.setBackwardWindowLengthMs(newWindowLength);
+		}
+	}
+	
+	public void onDecreaseSegmentationWindow() {
+		long currentWindowLength = window.getBackwardWindowLengthMs();
+		if(currentWindowLength > 0L) {
+			long newWindowLength = Math.max(MIN_SEGMENT_WINDOW, currentWindowLength - SEGMENT_WINDOW_DELTA);
+			window.setBackwardWindowLengthMs(newWindowLength);
 		}
 	}
 	
