@@ -1,8 +1,10 @@
 package ca.phon.app.session.editor.view.timeline;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -811,17 +813,63 @@ public class TimelineRecordTier extends TimelineTier {
 			}
 		}
 	};
+	
+	private Participant cancelParticipant = Participant.UNKNOWN;
+	
+	private float cancelStartTime = -1.0f;
+	
+	private float cancelEndTime = -1.0f;
+	
+	private int currentDraggedRecord = -1;
+
+	private float mouseDragOffset = -1.0f;
+
+	private void beingRecordDrag(int recordIndex) {
+		Toolkit.getDefaultToolkit().addAWTEventListener(cancelDragListener, AWTEvent.KEY_EVENT_MASK);
+		currentDraggedRecord = recordIndex;
+		currentRecordInterval.setValueAdjusting(true);
+	}
+	
+	private void endRecordDrag() {
+		Toolkit.getDefaultToolkit().removeAWTEventListener(cancelDragListener);
+		currentDraggedRecord = -1;
+		if (currentRecordInterval != null)
+			currentRecordInterval.setValueAdjusting(false);
+	}
+	
+	private void cancelRecordDrag() {
+		if(currentRecordInterval != null) {
+			getParentView().getEditor().currentRecord().setSpeaker(cancelParticipant);
+			currentRecordInterval.getStartMarker().setTime(cancelStartTime);
+			currentRecordInterval.getEndMarker().setTime(cancelEndTime);
+		}
+		mouseDragOffset = -1.0f;
+		endRecordDrag();
+	}
+	
+	private final AWTEventListener cancelDragListener = new AWTEventListener() {
+		
+		@Override
+		public void eventDispatched(AWTEvent event) {
+			if(event instanceof KeyEvent) {
+				KeyEvent ke = (KeyEvent)event;
+				if(ke.getID() == KeyEvent.KEY_PRESSED && 
+						ke.getKeyChar() == KeyEvent.VK_ESCAPE) {
+					cancelRecordDrag();
+					((KeyEvent) event).consume();
+				}
+			}
+		}
+	};
 
 	private final RecordMouseListener mouseListener = new RecordMouseListener();
 	
 	private class RecordMouseListener extends RecordGridMouseAdapter {
 
-		private int currentDraggedRecord = -1;
-
 		// offset (in sec) from left of interval where we are starting the drag
-		private float mouseDragOffset = 0.0f;
 		
 		volatile boolean waitForRecordChange = false;
+		
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
@@ -837,11 +885,7 @@ public class TimelineRecordTier extends TimelineTier {
 
 		@Override
 		public void recordReleased(int recordIndex, MouseEvent me) {
-			if (currentDraggedRecord >= 0) {
-				currentDraggedRecord = -1;
-				if (currentRecordInterval != null)
-					currentRecordInterval.setValueAdjusting(false);
-			}
+			endRecordDrag();
 		}
 
 		@Override
@@ -861,8 +905,13 @@ public class TimelineRecordTier extends TimelineTier {
 					// don't adjust an already changing interval
 					if (currentRecordInterval.isValueAdjusting())
 						return;
-					currentDraggedRecord = recordIndex;
-					currentRecordInterval.setValueAdjusting(true);
+					
+					if(mouseDragOffset < 0) return;
+					
+					cancelParticipant = getParentView().getEditor().currentRecord().getSpeaker();
+					cancelStartTime = currentRecordInterval.getStartMarker().getTime();
+					cancelEndTime = currentRecordInterval.getEndMarker().getTime();
+					beingRecordDrag(recordIndex);
 				}
 
 				// scroll to mouse position if outside of visible rect
