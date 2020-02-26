@@ -207,7 +207,7 @@ public class SegmentationDialog extends JDialog {
 		gbc.weightx = 1.0;
 		recordCreationPanel.add(windowLengthField, gbc);
 		gbc.insets = new Insets(5, 10, 0, 5);
-		JLabel lbl = new JLabel("<html><span style='font-size:small;'>(enter window length in ms)</span></html>");
+		JLabel lbl = new JLabel("<html><span style='font-size:small;'>(maximum segment length in milliseconds)</span></html>");
 		gbc.gridy++;
 		recordCreationPanel.add(lbl, gbc);
 		gbc.insets = new Insets(5, 5, 0, 5);
@@ -377,6 +377,9 @@ public class SegmentationDialog extends JDialog {
 		"<tr><td>New segment (unidentified)</td><td><code>Space</code> or <code>0</code> or <code>Numpad 0</code></td></tr>\n" + 
 		"<tr><td>New segment (participant 1...9)</td><td><code>1</code>...<code>9</code> or <code>Numpad 1</code>...<code>Numpad 9</code></td></tr>\n" + 
 		"<tr><td>Break (e.g., silence, noise, etc.)</td><td><code>b</code> or <code>Numpad decimal</code></td></tr>\n" + 
+		"<tr><td>Toggle segmentation window</td><td><code>W</code></td></tr>\n" + 
+		"<tr><td>Increase segmentation window (100ms)</td><td><code>Up</code></td></tr>\n" +
+		"<tr><td>Decrease segmentation window (100ms)</td><td><code>Down</code></td></tr>\n" +
 		"</tbody>\n" + 
 		"</table>\n" + 
 		"<h3>Media Controls</h3>\n" + 
@@ -385,8 +388,8 @@ public class SegmentationDialog extends JDialog {
 		"<tr><th width='50%' style='border-bottom: 1px solid black'>Action</th><th width='50%' style='border-bottom: 1px solid black'>Keystroke(s)</th></tr>\n" + 
 		"</thead>\n" + 
 		"<tbody>\n" + 
-		"<tr><td>Volume up</td><td><code>Up</code> or <code>Numpad multiply</code></td></tr>\n" + 
-		"<tr><td>Volume down</td><td><code>Down</code> or <code>Numpad divide</code></td></tr>\n" + 
+		"<tr><td>Volume up</td><td><code>Shift+Up</code> or <code>Numpad multiply</code></td></tr>\n" + 
+		"<tr><td>Volume down</td><td><code>Shift+Down</code> or <code>Numpad divide</code></td></tr>\n" + 
 		"<tr><td>Go back 1s</td><td><code>Left</code> or <code>Numpad subtract</code></td></tr>\n" + 
 		"<tr><td>Go forward 1s</td><td><code>Right</code> or <code>Numpad add</code></td></tr>\n" + 
 		"<tr><td>Go back 5s</td><td><code>Shift+Left</code> or <code>Shift+Numpad subtract</code></td></tr>\n" + 

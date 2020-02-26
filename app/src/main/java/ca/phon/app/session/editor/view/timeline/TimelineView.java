@@ -53,6 +53,7 @@ import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.TimeUIModel;
+import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.media.Timebar;
 import ca.phon.media.export.VLCWavExporter;
 import ca.phon.plugin.PluginManager;
@@ -809,6 +810,22 @@ public final class TimelineView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
+	}
+	
+	public void repaint() {
+		super.repaint();
+	}
+	
+	public void repaintVisible() {
+		timebar.repaint(timebar.getVisibleRect());
+		getWaveformTier().repaint(getWaveformTier().getVisibleRect());
+		getRecordTier().repaint(getRecordTier().getVisibleRect());
+	}
+	
+	public void repaintInterval(Interval interval) {
+		timebar.repaintInterval(interval);
+		getWaveformTier().repaintInterval(interval);
+		getRecordTier().repaintInterval(interval);
 	}
 	
 	public void repaint(long tn, float startTime, float endTime) {

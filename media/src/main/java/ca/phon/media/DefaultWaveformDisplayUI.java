@@ -12,12 +12,16 @@ import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -56,6 +60,12 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	}
 	
 	private Map<Channel, double[][]> channelExtremaMap = new HashMap<>();
+	
+	private int prevCacheWidth = -1;
+	private float prevCacheStart = -1.0f;
+	private float prevCacheEnd = -1.0f;
+	private double prevCachedMax = -1.0f;
+	private BufferedImage cachedImg = null;
 
 	private WaveformDisplay display;
 	
@@ -136,10 +146,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		g2.fill(btmArea);
 	}
 	
-	private void paintChannelData(Graphics2D g2, Channel ch, boolean cache, int channelY, double startX, double endX) {
+	private void paintChannelData(Graphics2D g2, Channel ch, int channelY, double visibleX, double startX, double endX) {
 		final RoundRectangle2D channelRect = getChannelRect(ch);
-		final double halfHeight = 
-				(cache ? channelRect.getHeight() : channelRect.getHeight() / 2.0);
+		final double halfHeight = channelRect.getHeight() / 2.0;
 		
 		float barSize = 1.0f;
 		final Stroke stroke = new BasicStroke(barSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -184,11 +193,11 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			}
 			
 			g2.setColor(topColor);
-			line.setLine(x, y+halfHeight, x, ymax);
+			line.setLine(x - visibleX, y+halfHeight, x - visibleX, ymax);
 			g2.draw(line);
 			
 			g2.setColor(btmColor);
-			line.setLine(x, y+halfHeight, x, ymin);
+			line.setLine(x - visibleX, y+halfHeight, x - visibleX, ymin);
 			g2.draw(line);
 		}
 	}
@@ -275,19 +284,49 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			g2.fill(bounds);
 		}
 		
+		int minX = display.getTimeModel().getTimeInsets().left;
+		int maxX = display.getWidth() - display.getTimeModel().getTimeInsets().right;
+		int sx = (int)Math.max(bounds.x, minX);
+		int ex = (int)Math.min(bounds.x + bounds.width, maxX);
+		Rectangle visibleRect = display.getVisibleRect();
+		
+		boolean updateCache = (prevCacheStart < 0 || prevCacheStart != display.getWindowStart()
+				|| prevCacheEnd < 0 || prevCacheEnd != display.getWindowEnd()
+				|| prevCachedMax != cachedMaxValue
+				|| prevCacheWidth != (int)visibleRect.getWidth()
+				|| cachedImg == null);
+		
 		for(Channel ch:display.availableChannels()) {
 			if(display.isChannelVisible(ch)) {
-				// paint channel border and background
 				paintChannelBackground(g2, bounds, ch);
-				paintChannelBorder(g2, bounds, ch);
-				
-				RoundRectangle2D channelRect = getChannelRect(ch);
-				int sx = (int) Math.max(channelRect.getX(), bounds.x);
-				int ex = (int) Math.min(channelRect.getX()+channelRect.getWidth(), bounds.x + bounds.width);
-				
-				paintChannelData(g2, ch, false, (int)channelRect.getY(), sx, ex);
+				paintChannelBorder(g2, bounds, ch);				
 			}
 		}
+		if(updateCache) {
+			cachedImg = new BufferedImage(visibleRect.width, display.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			Graphics2D cacheg = (Graphics2D)cachedImg.getGraphics();
+			for(Channel ch:display.availableChannels()) {
+				if(display.isChannelVisible(ch)) {
+					// paint channel border and background
+					
+					RoundRectangle2D channelRect = getChannelRect(ch);
+					paintChannelData(cacheg, ch, (int)channelRect.getY(), visibleRect.getX(), Math.max(minX, visibleRect.x), Math.min(maxX, visibleRect.getMaxX()));
+				}
+			}
+			prevCacheStart = display.getWindowStart();
+			prevCacheEnd = display.getWindowEnd();
+			prevCachedMax = cachedMaxValue;
+			prevCacheWidth = (int)visibleRect.getWidth();
+			
+			try {
+				ImageIO.write(cachedImg, "png", new File("/Users/ghedlund/Desktop/channeldata.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		g2.drawImage(cachedImg, sx, 0, ex, display.getHeight(), 
+				sx - visibleRect.x, 0, ex - visibleRect.x, cachedImg.getHeight(), display);
 		
 		for(var interval:display.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval, true);
@@ -406,6 +445,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			var startX = display.xForTime(startTime);
 			var endX = display.xForTime(endTime);
 
+			prevCacheStart = -1.0f;
 			display.repaint((int)startX, 0, (int)endX, display.getHeight());
 		}
 

@@ -122,6 +122,8 @@ public final class SegmentationHandler {
 	
 	private Participant participantForMediaStart = Participant.UNKNOWN;
 	
+	private volatile boolean repaintEntireInterval = false;
+	
 	private long cachedSegmentWindow = 0L;
 	
 	private SegmentationWindow window = new SegmentationWindow();
@@ -430,15 +432,22 @@ public final class SegmentationHandler {
 					
 					// repaint interval (with time limit)
 					long tn = (long)(1/30.0f * 1000.0f);
-					if(getWindow().getBackwardWindowLengthMs() == 0L) {
-						float st = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
-						float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-						timelineView.repaint(tn, st, et);
+					if(repaintEntireInterval) {
+						timelineView.repaint(timelineView.getVisibleRect());
+						repaintEntireInterval = false;
 					} else {
-						float st = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
-						float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-						if(st < et) {
+						if(getWindow().getBackwardWindowLengthMs() == 0L) {
+							float st = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
+							float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
 							timelineView.repaint(tn, st, et);
+						} else {
+							float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
+							float e1 = Math.max(prevStart, segmentationInterval.getEndMarker().getTime());
+							timelineView.repaint(tn, s1, e1);
+							
+							float s2 = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
+							float e2 = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
+							timelineView.repaint(tn, s2, e2);						
 						}
 					}
 
@@ -584,9 +593,7 @@ public final class SegmentationHandler {
 			cachedSegmentWindow = currentWindowLength;
 			window.setBackwardWindowLengthMs(0L);
 		}
-		EditorView view = editor.getViewModel().getView(TimelineView.VIEW_TITLE);
-		if(view != null)
-			view.repaint();
+		repaintEntireInterval = true;
 	}
 	
 	public void onIncreaseSegmentationWindow() {

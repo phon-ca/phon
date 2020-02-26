@@ -212,8 +212,6 @@ public class RecordGrid extends TimeComponent {
 		firePropertyChange("rightRecordSplit", oldVal, record);
 	}
 	
-	
-	
 	public void addRecordGridMouseListener(RecordGridMouseListener listener) {
 		listeners.add(listener);
 	}

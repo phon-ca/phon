@@ -116,7 +116,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 			
 		});
-		
+				
 		c.addPropertyChangeListener(propListener);
 		c.addMouseListener(mouseListener);
 		c.addMouseMotionListener(mouseListener);
@@ -218,13 +218,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	}
 	
 	@Override
-	public void paintOverlappingRecords(Record record) {
+	public void repaintOverlappingRecords(Record record) {
 		Rectangle2D rect = getSegmentRect(record);
-		paintOverlappingRecords(rect);
+		repaintOverlappingRecords(rect);
 	}
 	
 	@Override
-	public void paintOverlappingRecords(Rectangle2D segRect) {
+	public void repaintOverlappingRecords(Rectangle2D segRect) {
 		visibleRecords.values().parallelStream()
 			.filter( (r) -> r.intersects(segRect) )
 			.forEach( (r) -> recordGrid.repaint(r.getBounds()) );
@@ -751,9 +751,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		return hitTest(messageTree, p);
 	}
 	
-	private final RecordGridMouseAdapter mouseListener = new RecordGridMouseAdapter();
+	private final RecordGridMouseHandler mouseListener = new RecordGridMouseHandler();
 	
-	private class RecordGridMouseAdapter extends MouseInputAdapter {
+	private class RecordGridMouseHandler extends MouseInputAdapter {
 		
 		private int pressedRecordIdx = -1;
 				
