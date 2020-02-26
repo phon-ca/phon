@@ -1,11 +1,15 @@
 package ca.phon.media;
 
+import java.awt.AWTEvent;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -30,6 +34,8 @@ public class TimeComponentUI extends ComponentUI {
 	private TimeComponent timeComp;
 	
 	private final MarkerMouseListener markerListener = new MarkerMouseListener();
+	
+	private float cancelDragTime = -1.0f;
 	
 	@Override
 	public void installUI(JComponent c) {
@@ -119,7 +125,9 @@ public class TimeComponentUI extends ComponentUI {
 	 * @param marker
 	 */
 	public void beginDrag(Marker marker) {
+		Toolkit.getDefaultToolkit().addAWTEventListener(dragCancelListener, AWTEvent.KEY_EVENT_MASK);
 		currentlyDraggedMarker = marker;
+		cancelDragTime = currentlyDraggedMarker.getTime();
 		currentlyDraggedMarker.setValueAdjusting(true);
 	}
 	
@@ -159,12 +167,20 @@ public class TimeComponentUI extends ComponentUI {
 	 * 
 	 */
 	public void endDrag() {
+		Toolkit.getDefaultToolkit().removeAWTEventListener(dragCancelListener);
 		if(currentlyDraggedInterval != null)
 			currentlyDraggedInterval.setValueAdjusting(false);
 		if(currentlyDraggedMarker != null)
 			currentlyDraggedMarker.setValueAdjusting(false);
 		currentlyDraggedInterval = null;
 		currentlyDraggedMarker = null;
+	}
+	
+	public void cancelDrag() {
+		if(currentlyDraggedMarker != null && cancelDragTime >= 0) {
+			currentlyDraggedMarker.setTime(cancelDragTime);
+		}
+		endDrag();
 	}
 	
 	public Interval getCurrentlyDraggedInterval() {
@@ -174,6 +190,22 @@ public class TimeComponentUI extends ComponentUI {
 	public Marker getCurrentlyDraggedMarker() {
 		return this.currentlyDraggedMarker;
 	}
+	
+	private final AWTEventListener dragCancelListener = new AWTEventListener() {
+		
+		@Override
+		public void eventDispatched(AWTEvent event) {
+			if(event instanceof KeyEvent) {
+				KeyEvent ke = (KeyEvent)event;
+				if(ke.getID() == KeyEvent.KEY_PRESSED && 
+						ke.getKeyChar() == KeyEvent.VK_ESCAPE) {
+					cancelDrag();
+					((KeyEvent) event).consume();
+				}
+			}
+		}
+		
+	};
 	
 	private TimeUIModelListener timeModelListener = new TimeUIModelListener() {
 
