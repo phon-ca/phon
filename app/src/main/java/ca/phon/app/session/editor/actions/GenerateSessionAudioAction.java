@@ -1,12 +1,17 @@
 package ca.phon.app.session.editor.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.ImageIcon;
 
+import org.apache.commons.io.FileUtils;
+
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
@@ -16,6 +21,7 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.FileUtil;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
@@ -35,6 +41,8 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("misc/oscilloscope", IconSize.SMALL);
+	
+	private final static String ORIGINAL_FILE_SUFFIX = "-orig";
 	
 	private final Collection<PhonTaskListener> customListeners = new ArrayList<>();
 	
@@ -57,13 +65,15 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		PhonTask exportTask = generateExportAudioTask();
-		getEditor().getStatusBar().watchTask(exportTask);
-		
-		PhonWorker worker = PhonWorker.createWorker();
-		worker.setName("Generate session audio");
-		worker.setFinishWhenQueueEmpty(true);
-		worker.invokeLater(exportTask);
-		worker.start();
+		if(exportTask != null) {
+			getEditor().getStatusBar().watchTask(exportTask);
+			
+			PhonWorker worker = PhonWorker.createWorker();
+			worker.setName("Generate session audio");
+			worker.setFinishWhenQueueEmpty(true);
+			worker.invokeLater(exportTask);
+			worker.start();
+		}
 	}
 	
 	/**
@@ -95,8 +105,10 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 		};
 		
 		PhonTask exportTask = generateAudioFileTask();
-		exportTask.addTaskListener(taskListener);
-		customListeners.forEach(exportTask::addTaskListener);
+		if(exportTask != null) {
+			exportTask.addTaskListener(taskListener);
+			customListeners.forEach(exportTask::addTaskListener);
+		}
 		
 		return exportTask;
 	}
@@ -115,24 +127,29 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 				session.getMediaLocation(), getEditor().getProject(), session.getCorpus());
 			int lastDot = movFile.getName().lastIndexOf(".");
 			if(lastDot > 0) {
-				String movExt = movFile.getName().substring(lastDot);
-				if(movExt.equals(".wav")) {
-					// already a wav, do nothing!
-					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-					props.setTitle("Generate Wav");
-					props.setHeader("Failed to generate wav");
-					props.setMessage("Source file is already in wav format.");
-					props.setRunAsync(false);
-					props.setOptions(MessageDialogProperties.okOptions);
-					NativeDialogs.showMessageDialog(props);
-					return null;
-				}
-				String audioFileName =
-					movFile.getName().substring(0, movFile.getName().lastIndexOf(".")) +
-						".wav";
+				String audioFileName = movFile.getName().substring(0, lastDot) + ".wav";
 				File parentFile = movFile.getParentFile();
 				File resFile = new File(parentFile, audioFileName);
+				String movExt = movFile.getName().substring(lastDot);
+
+				if(movExt.equals(".wav")) {
+					String originalFileName = movFile.getName().substring(0, movFile.getName().lastIndexOf('.')) + 
+							ORIGINAL_FILE_SUFFIX + ".wav";
+					final File originalFile = new File(movFile.getParentFile(), originalFileName);
+					// already a wav, do nothing!
+					int selectedOption = 
+							getEditor().showMessageDialog("Re-encode wav", "Original file will be renamed " + 
+									originalFileName, MessageDialogProperties.okCancelOptions);
+					if(selectedOption == 1) {
+						return null;
+					}
+					if(!movFile.renameTo(originalFile)) {
+						LogUtil.warning("Unable to rename media to " + originalFile.getAbsolutePath());
+						return null;
+					} else {
+						movFile = originalFile;
+					}
+				}
 
 				if(resFile.exists()) {
 					// ask to overwrite
@@ -146,6 +163,8 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 					int retVal = NativeDialogs.showMessageDialog(props);
 					if(retVal != 0) return null;
 				}
+				
+				getEditor().getMediaModel().resetAudioCheck();
 
 				final VLCWavExporter exporter = new VLCWavExporter(movFile, resFile);
 				return exporter;

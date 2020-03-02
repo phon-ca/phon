@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import ca.phon.media.LongSound;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.ui.nativedialogs.OSInfo;
 
@@ -41,16 +42,15 @@ public class MediaChecker {
 		// with state other than 0 or if process takes
 		// more than 1000ms to complete (considered a hang.)
 		ProcessBuilder pb = new ProcessBuilder(fullCmd);
+		pb.redirectError(new File("/Users/ghedlund/Desktop/err.txt"));
 		try {
 			Process p = pb.start();
-			p.waitFor(1000L, TimeUnit.MILLISECONDS);
 			int exitValue = -1;
-			try {
-				exitValue = p.exitValue();
-			} catch (IllegalThreadStateException e) {
-				// try to terminate process
+			if(!p.waitFor(1000L, TimeUnit.MILLISECONDS)) {
 				p.destroyForcibly();
-			} 
+			} else {
+				exitValue = p.exitValue();
+			}
 			return (exitValue == 0);
 		} catch (IOException | InterruptedException e) {
 			return false;
@@ -64,8 +64,8 @@ public class MediaChecker {
 		}
 		
 		try {
-			PCMSampled sample = new PCMSampled(new File(args[0]));
-			System.out.println(String.format("%s %fs OK", args[0], sample.getLength()));
+			LongSound ls = LongSound.fromFile(new File(args[0]));
+			System.out.println(String.format("%s %fs OK", args[0], ls.length()));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(2);

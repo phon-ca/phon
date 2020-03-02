@@ -1,12 +1,17 @@
 package ca.phon.app.session;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
+
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.media.LongSound;
+import ca.phon.media.util.MediaChecker;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -24,6 +29,16 @@ public class SessionMediaModel {
 	private File loadedAudioFile = null;
 	
 	private LongSound sharedAudio;
+
+	private enum AudioFileStatus {
+		UNKONWN,
+		OK,
+		ERROR;
+	}
+	
+	// has the audio file been checked (so it does not cause an application crash)
+	private ReentrantLock checkLock = new ReentrantLock();
+	private AudioFileStatus audioFileStatus = AudioFileStatus.UNKONWN;
 	
 	/**
 	 * Editor action key generated when session audio file becomes available
@@ -69,6 +84,45 @@ public class SessionMediaModel {
 		return MediaLocator.findMediaFile(getProject(), getSession());
 	}
 	
+	public void resetAudioCheck() {
+		checkLock.lock();
+		audioFileStatus = AudioFileStatus.UNKONWN;
+		checkLock.unlock();
+	}
+	
+	/**
+	 * Check audio file (if exists) to see if we can load it using 
+	 * the java sound system.
+	 * 
+	 * @return
+	 */
+	public boolean checkAudioFile() {
+		if(audioFileStatus == AudioFileStatus.UNKONWN) {
+			File audioFile = getSessionAudioFile();
+			if(audioFile != null) {
+				checkLock.lock();
+				boolean fileOk = MediaChecker.checkMediaFile(audioFile.getAbsolutePath());
+				audioFileStatus = (fileOk ? AudioFileStatus.OK : AudioFileStatus.ERROR);
+				checkLock.unlock();
+				
+				if(audioFileStatus != AudioFileStatus.OK) {
+					String[] options = {"Re-encode audio", "Do nothing"};
+					int selection = editor.showMessageDialog("Unable to open audio file", 
+							"This is usually due to incompatibility with the java sound system, attempt to re-encode file?", 
+							options);
+					if(selection == 0) {
+						SwingUtilities.invokeLater(() -> { 
+							GenerateSessionAudioAction act = getGenerateSessionAudioAction();
+							act.actionPerformed(new ActionEvent(this, -1, "reencode_audio"));
+						});
+					}
+				}				
+			}
+			
+		}
+		return (audioFileStatus == AudioFileStatus.OK);
+	}
+	
 	/**
 	 * Is there an audio file (wav) available for the session?
 	 * 
@@ -77,7 +131,7 @@ public class SessionMediaModel {
 	 */
 	public boolean isSessionAudioAvailable() {
 		File sessionAudioFile = getSessionAudioFile();
-		return sessionAudioFile != null && sessionAudioFile.exists() && sessionAudioFile.canRead();
+		return sessionAudioFile != null && sessionAudioFile.exists() && sessionAudioFile.canRead() && checkAudioFile();
 	}
 	
 	/**
