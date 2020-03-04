@@ -42,7 +42,6 @@ public class MediaChecker {
 		// with state other than 0 or if process takes
 		// more than 1000ms to complete (considered a hang.)
 		ProcessBuilder pb = new ProcessBuilder(fullCmd);
-		pb.redirectError(new File("/Users/ghedlund/Desktop/err.txt"));
 		try {
 			Process p = pb.start();
 			int exitValue = -1;
