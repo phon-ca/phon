@@ -9,13 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import ca.phon.media.LongSound;
-import ca.phon.media.sampled.PCMSampled;
-import ca.phon.ui.nativedialogs.OSInfo;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.OSInfo;
 
 /**
  * Check wav media to see if it can be loaded by
@@ -24,6 +21,8 @@ import ca.phon.worker.PhonWorker;
  * 
  */
 public class MediaChecker {
+	
+	private final static long TIMEOUT = 10000L;
 	
 	public static boolean checkMediaFile(String mediaFile) {
 		String className = MediaChecker.class.getName();
@@ -48,29 +47,46 @@ public class MediaChecker {
 		// with state other than 0 or if process takes
 		// more than 2000ms to complete (considered a hang.)
 		ProcessBuilder pb = new ProcessBuilder(fullCmd);
-		pb.redirectErrorStream(true);
-		try {
-			Process p = pb.start();
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					p.destroyForcibly();
+		
+		if(ca.phon.util.OSInfo.isWindows()) {
+			pb.redirectErrorStream(true);
+			try {
+				Process p = pb.start();
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						p.destroyForcibly();
+					}
+				}, TIMEOUT);
+				
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+					String line;
+					while ((line = reader.readLine()) != null)
+					    System.err.println("mediacheck: " + line);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			}, 2000L);
-			
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-				String line;
-				while ((line = reader.readLine()) != null)
-				    System.err.println("mediacheck: " + line);
-			} catch (IOException e) {
+				timer.cancel();
+				
+				return (p.exitValue() == 0);
+			} catch (IOException | IllegalThreadStateException e) {
 				e.printStackTrace();
+				return false;
 			}
-			timer.cancel();
-			
-			return (p.exitValue() == 0);
-		} catch (IOException | IllegalThreadStateException e) {
-			return false;
+		} else {
+			try {
+				Process p = pb.start();
+				int exitValue = -1;
+				if(!p.waitFor(TIMEOUT, TimeUnit.MILLISECONDS)) {
+					p.destroyForcibly();
+				} else {
+					exitValue = p.exitValue();
+				}
+				return (exitValue == 0);
+			} catch (IOException | InterruptedException e) {
+				return false;
+			}
 		}
 	}
 
