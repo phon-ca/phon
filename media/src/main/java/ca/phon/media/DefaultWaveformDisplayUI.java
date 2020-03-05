@@ -317,13 +317,6 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 			prevCacheEnd = display.getWindowEnd();
 			prevCachedMax = cachedMaxValue;
 			prevCacheWidth = (int)visibleRect.getWidth();
-			
-			try {
-				ImageIO.write(cachedImg, "png", new File("/Users/ghedlund/Desktop/channeldata.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		g2.drawImage(cachedImg, sx, 0, ex, display.getHeight(), 
 				sx - visibleRect.x, 0, ex - visibleRect.x, cachedImg.getHeight(), display);

@@ -49,6 +49,9 @@ public class MediaChecker {
 		ProcessBuilder pb = new ProcessBuilder(fullCmd);
 		
 		if(ca.phon.util.OSInfo.isWindows()) {
+			// windows requires we read in all buffered
+			// data before it will report the process as complete
+			// this seems to keep the process alive on macOS...
 			pb.redirectErrorStream(true);
 			try {
 				Process p = pb.start();

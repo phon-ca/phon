@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipamap.io.Cell;
 import ca.phon.ui.ipamap.io.Grid;
 import ca.phon.ui.ipamap.io.ObjectFactory;
@@ -135,6 +136,7 @@ public class IPAMapSelector extends JComponent {
 //		selectedMap.addCellMouseListener(cellMouseListener);
 		
 		map = new IPAMapGridContainer();
+		map.setFont(FontPreferences.getUIIpaFont().deriveFont(18.0f));
 		
 		map.setSelectionEnabled(true);
 		map.addCellSelectionListener(cellSelectionListener);
