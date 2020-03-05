@@ -560,7 +560,7 @@ public final class SegmentationHandler {
 			TimelineView timelineView = 
 					(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 			if(timelineView != null && window.getBackwardWindowLengthMs() == 0L) {
-				timelineView.repaint((1000/30), timelineView.getWindowStart(), playbackPosition+1 / 1000.0f);
+				timelineView.repaint(timelineView.getVisibleRect());
 			}
 		}
 	}
