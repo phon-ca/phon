@@ -495,7 +495,7 @@
 		    <dependency>
 		    	<groupId>com.teamdev</groupId>
 		    	<artifactId>jxbrowser</artifactId>
-		    	<version>6.22</version>
+		    	<version>${com.teamdev.jxbrowser.version}</version>
 		    </dependency>
 		    
 		    <dependency>
