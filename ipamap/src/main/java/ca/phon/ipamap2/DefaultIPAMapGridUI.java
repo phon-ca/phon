@@ -121,7 +121,8 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	public Dimension getPreferredSize(JComponent c) {
 		Dimension cellDimension = ipaGrid.getCellRenderer().getCellDimension(ipaGrid);
 		
-		int w = (cellDimension.width * ipaGrid.getColumnCount()) 
+		// add one to column count for popup windows 
+		int w = (cellDimension.width * (ipaGrid.getColumnCount()+1)) 
 				+ ipaGrid.getInsets().left + ipaGrid.getInsets().right;
 		int h = (cellDimension.height * ipaGrid.getRowCount()) 
 				+ ipaGrid.getInsets().top + ipaGrid.getInsets().bottom;
