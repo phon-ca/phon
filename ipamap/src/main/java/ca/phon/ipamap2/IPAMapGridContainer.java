@@ -66,6 +66,8 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		grids = new IPAGrids();
 		mapGrids = new ArrayList<>();
 		
+		setFont(FontPreferences.getUIIpaFont());
+		
 		init();
 	}
 	
@@ -102,7 +104,7 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	public Tuple<JButton, IPAMapGrid> addGrid(Grid ipaGrid) {
 		IPAMapGrid mapGrid = new IPAMapGrid(ipaGrid);
 		mapGrid.addCellMouseListener(forwardingMouseListener);
-		mapGrid.setFont(FontPreferences.getUIIpaFont().deriveFont(Font.BOLD, 18.0f));
+		mapGrid.setFont(getFont());
 		mapGrid.setCellFilter(cellFilter);
 		mapGrid.setSelectionEnabled(isSelectionEnabled());
 		mapGrid.getSelectionModel().addListSelectionListener(new SelectionListener(mapGrid));

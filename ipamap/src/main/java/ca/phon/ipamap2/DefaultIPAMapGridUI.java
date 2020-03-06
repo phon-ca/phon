@@ -62,6 +62,10 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 		
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, 
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		
 		if(ipaGrid.isOpaque()) {
 			g2.setColor(ipaGrid.getBackground());
@@ -117,7 +121,8 @@ public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	public Dimension getPreferredSize(JComponent c) {
 		Dimension cellDimension = ipaGrid.getCellRenderer().getCellDimension(ipaGrid);
 		
-		int w = (cellDimension.width * ipaGrid.getColumnCount()) 
+		// add one to column count for popup windows 
+		int w = (cellDimension.width * (ipaGrid.getColumnCount()+1)) 
 				+ ipaGrid.getInsets().left + ipaGrid.getInsets().right;
 		int h = (cellDimension.height * ipaGrid.getRowCount()) 
 				+ ipaGrid.getInsets().top + ipaGrid.getInsets().bottom;

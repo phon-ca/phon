@@ -48,8 +48,8 @@ public class DiacriticOptionsPanel extends JPanel {
 		gbc.gridy = 0;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.fill = GridBagConstraints.NONE;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.VERTICAL;
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
 		

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.BorderFactory;
@@ -31,6 +32,9 @@ public class DefaultIPAMapCellRenderer implements IPAMapCellRenderer {
 	@Override
 	public void paintCell(IPAMapGrid mapGrid, Graphics2D g2, Rectangle cellRect, Cell cell, boolean isHover,
 			boolean isPressed, boolean isSelected) {
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		
 		var roundRect = new RoundRectangle2D.Double(
 				cellRect.x + mapGrid.getCellInsets().left,
 				cellRect.y + mapGrid.getCellInsets().top,
