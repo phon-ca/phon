@@ -555,6 +555,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	public Record currentRecord() {
 		final EditorDataModel dataModel = getDataModel();
+		if(dataModel == null) return null;
 		return (getCurrentRecordIndex() >= 0 && getCurrentRecordIndex() < dataModel.getRecordCount()
 				? dataModel.getRecord(getCurrentRecordIndex())
 				: null);
