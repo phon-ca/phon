@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import javax.swing.JMenu;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
@@ -41,6 +44,8 @@ import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.app.session.editor.view.timeline.actions.SplitRecordAction;
+import ca.phon.media.LongSound;
+import ca.phon.media.PlaySegment;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.media.TimeUIModel.Marker;
@@ -198,11 +203,12 @@ public class TimelineRecordTier extends TimelineTier {
 	}
 
 	public void onPlaySegment(PhonActionEvent pae) {
-		if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getParentView().getEditor().getViewModel()
-					.getView(MediaPlayerEditorView.VIEW_TITLE);
-			PlaySegmentAction playSegmentAction = new PlaySegmentAction(getParentView().getEditor(), mediaView);
-			playSegmentAction.actionPerformed(pae.getActionEvent());
+		Record r = getParentView().getEditor().currentRecord();
+		if(r != null) {
+			MediaSegment seg = r.getSegment().getGroup(0);
+			if(seg != null) {
+				getParentView().playSegment((long)seg.getStartValue(), (long)seg.getEndValue());
+			}			
 		}
 	}
 

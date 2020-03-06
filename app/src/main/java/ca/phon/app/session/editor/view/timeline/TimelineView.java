@@ -10,10 +10,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,6 +33,7 @@ import javax.swing.JToolBar;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -50,10 +54,13 @@ import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.LongSound;
+import ca.phon.media.PlaySegment;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.media.Timebar;
 import ca.phon.media.export.VLCWavExporter;
 import ca.phon.plugin.PluginManager;
@@ -122,6 +129,8 @@ public final class TimelineView extends EditorView {
 	private TimelineWaveformTier wavTier;
 	
 	private TimelineRecordTier recordGrid;
+	
+	private Marker playbackMarker;
 	
 	private PlaybackMarkerSyncListener playbackMarkerSyncListener = new PlaybackMarkerSyncListener();
 	
@@ -455,8 +464,56 @@ public final class TimelineView extends EditorView {
 			//timeModel.setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setEndTime(ls.length());
 			wavTier.getWaveformDisplay().setLongSound(ls);
+			
+			PlaySegment playSeg = ls.getExtension(PlaySegment.class);
+//			playButton.setEnabled( playSeg != null );
+			if(playSeg != null) {
+				playSeg.addPropertyChangeListener(segmentPlaybackListener);
+			}
 		} catch (IOException e) {
 			LogUtil.severe(e);
+		}
+	}
+	
+	/**
+	 * Play segment (audio) and play video in media player
+	 * view if available and the media has video tracks.
+	 * 
+	 */
+	public void playSegment(long startTime, long endTime) {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(endTime - startTime > 0) {
+			if(mediaModel.isSessionAudioAvailable()) {
+				LongSound sound = getWaveformTier().getWaveformDisplay().getLongSound();
+				if(sound != null) {
+					PlaySegment playSeg = sound.getExtension(PlaySegment.class);
+					
+					if(playSeg != null && !playSeg.isPlaying()) {
+						try {
+							playSeg.playSegment(startTime/1000.0f, endTime/1000.0f);
+						} catch (IOException e) {
+							Toolkit.getDefaultToolkit().beep();
+							LogUtil.severe(e);
+						}
+						if (getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+							MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getEditor().getViewModel()
+									.getView(MediaPlayerEditorView.VIEW_TITLE);
+							if(mediaView.getPlayer().hasVideo()) {
+								// XXX Should audio playback be synced with media start?
+								mediaView.getPlayer().playSegment(startTime, (endTime-startTime), true);
+							}
+						}
+						return;
+					}
+				}
+			}
+			
+			// if we get here attempt to play in media player view
+			if(mediaModel.isSessionMediaAvailable()) {
+				MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getEditor().getViewModel()
+						.getView(MediaPlayerEditorView.VIEW_TITLE);
+				mediaView.getPlayer().playSegment(startTime, (endTime-startTime), false);
+			}
 		}
 	}
 	
@@ -866,6 +923,37 @@ public final class TimelineView extends EditorView {
 		
 	};
 	
+	
+	private PropertyChangeListener segmentPlaybackListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			PlaySegment playSeg = (PlaySegment)evt.getSource();
+			if("playing".contentEquals(evt.getPropertyName())) {
+				if(playSeg.isPlaying()) {
+					playbackMarker = timeModel.addMarker(playSeg.getPosition(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
+					playbackMarker.setOwner(getWaveformTier().getWaveformDisplay());
+					playbackMarker.setDraggable(false);
+					
+//					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+//					playButton.setText("Stop");
+				} else {
+					if(playbackMarker != null)
+						timeModel.removeMarker(playbackMarker);
+					playbackMarker = null;
+					
+//					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+//					playButton.setText("Play");
+				}
+			} else if("position".contentEquals(evt.getPropertyName())) {
+				if(playbackMarker != null) {
+					playbackMarker.setTime((float)evt.getNewValue());
+				}
+			}
+		}
+		
+	};
+	
 	private class PlaybackMarkerSyncListener extends MediaPlayerEventAdapter {
 
 		private TimeUIModel.Marker playbackMarker;
@@ -877,6 +965,9 @@ public final class TimelineView extends EditorView {
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			if(playbackMarker == null && getEditor().getExtension(SegmentationHandler.class) == null) {
+				// only show playback marker if media player is playing audio
+				if(mediaPlayer.audio().isMute()) return;
+				
 				float currentTime = (float)TimeUIModel.roundTime(mediaPlayer.status().time() / 1000.0f);
 				
 				playbackMarker = timeModel.addMarker(currentTime, Color.darkGray);

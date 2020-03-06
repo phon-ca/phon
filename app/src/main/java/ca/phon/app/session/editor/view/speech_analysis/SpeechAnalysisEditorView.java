@@ -72,6 +72,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.PlayAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.ResetAction;
@@ -522,6 +523,16 @@ public class SpeechAnalysisEditorView extends EditorView {
 			final PlaySegment playSeg = sharedSound.getExtension(PlaySegment.class);
 			if(playSeg == null || playSeg.isPlaying()) return;
 			playSeg.playSegment(startTime, endTime);
+			
+			if (getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+				MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getEditor().getViewModel()
+						.getView(MediaPlayerEditorView.VIEW_TITLE);
+				if(mediaView != null) {
+					if(mediaView.getPlayer().hasVideo()) {
+						mediaView.getPlayer().playSegment((long)(startTime * 1000.0f), (long)((endTime-startTime)*1000.0f), true);
+					}
+				}
+			}
 		} catch (IOException e) {
 			LogUtil.severe(e);
 			Toolkit.getDefaultToolkit().beep();

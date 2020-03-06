@@ -7,6 +7,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.ActionMap;
@@ -24,6 +26,8 @@ import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
+import ca.phon.media.PlaySegment;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.media.WaveformDisplay;
@@ -35,6 +39,8 @@ import ca.phon.session.SessionFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class TimelineWaveformTier extends TimelineTier  {
 
