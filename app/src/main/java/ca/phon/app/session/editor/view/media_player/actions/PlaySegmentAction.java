@@ -43,13 +43,21 @@ public class PlaySegmentAction extends MediaPlayerAction {
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 	
+	private boolean videoOnly = false;
+	
 	public PlaySegmentAction(SessionEditor editor, MediaPlayerEditorView view) {
+		this(editor, view, false);
+	}
+	
+	public PlaySegmentAction(SessionEditor editor, MediaPlayerEditorView view, boolean videoOnly) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON, IconSize.SMALL));
+		
+		this.videoOnly = videoOnly;
 	}
 
 	@Override

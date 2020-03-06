@@ -433,6 +433,14 @@ public class PhonMediaPlayer extends JPanel {
 		}
 	}
 	
+	public boolean hasVideo() {
+		return mediaPlayer != null & mediaPlayer.status().isPlayable() ? mediaPlayer.video().trackCount() > 0 : false;
+	}
+	
+	public boolean hasAudio() {
+		return mediaPlayer != null && mediaPlayer.status().isPlayable() ? mediaPlayer.audio().trackCount() > 0 : false;
+	}
+	
 	private BufferedImage getAudioFileImage() {
 		try {
 			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(AUDIO_ONLY_IMAGE));
@@ -655,6 +663,10 @@ public class PhonMediaPlayer extends JPanel {
 	 * @param length in ms
 	 */
 	public void playSegment(long startTime, long length) {
+		playSegment(startTime, length, false);
+	}
+	
+	public void playSegment(long startTime, long length, boolean videoOnly) {
 		final MediaPlayer player = getMediaPlayer();
 		
 		if(player != null) {
@@ -662,12 +674,18 @@ public class PhonMediaPlayer extends JPanel {
 			if(segmentListener != null)
 				player.events().removeMediaPlayerEventListener(segmentListener);
 			
+			boolean unmute = false;
+			if(videoOnly) {
+				unmute = !player.audio().isMute();
+				player.audio().setMute(true);
+			}
+			
 			if(!player.status().isPlaying())
 				player.controls().play();
 			player.controls().setTime(startTime);
 			
 			if(segmentListener == null) {
-				segmentListener = new SegmentListener(endTime);
+				segmentListener = new SegmentListener(endTime, unmute);
 			} else {
 				segmentListener.setStopTime(endTime);
 			}
@@ -739,25 +757,19 @@ public class PhonMediaPlayer extends JPanel {
 
 		private volatile long stopTime = -1L;
 		private Lock stopTimeMutex = new ReentrantLock();
+		private boolean unmute = false;
 
-		public SegmentListener(long stopTime) {
+		public SegmentListener(long stopTime, boolean unmute) {
 			stopTimeMutex.lock();
 			this.stopTime = stopTime;
 			stopTimeMutex.unlock();
+			this.unmute = unmute;
 		}
 		
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
 			setStopTime(-1L);
-		}
-		
-		public long getStopTime() {
-			long retVal = 0L;
-			stopTimeMutex.lock();
-			retVal = this.stopTime;
-			stopTimeMutex.unlock();
-			return retVal;
 		}
 		
 		public void setStopTime(long stopTime) {
@@ -772,6 +784,8 @@ public class PhonMediaPlayer extends JPanel {
 			stopTimeMutex.lock();
 			if(stopTime >= 0 && newTime >= stopTime) {
 				getMediaPlayer().controls().pause();
+				if(unmute)
+					getMediaPlayer().audio().setMute(false);
 			}
 			stopTimeMutex.unlock();
 		}
