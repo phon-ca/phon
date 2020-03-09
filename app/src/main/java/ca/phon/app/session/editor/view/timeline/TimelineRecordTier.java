@@ -34,12 +34,12 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
@@ -137,7 +137,7 @@ public class TimelineRecordTier extends TimelineTier {
 		actionMap.put(deleteRecordKey, deleteRecordAction);
 
 		final String playSegmentKey = "play_segment";
-		final PhonUIAction playSegmentAction = new PhonUIAction(this, "onPlaySegment");
+		final PlaySegmentAction playSegmentAction = new PlaySegmentAction(getParentView().getEditor());
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), playSegmentKey);
 		actionMap.put(playSegmentKey, playSegmentAction);
 
@@ -199,16 +199,6 @@ public class TimelineRecordTier extends TimelineTier {
 			if (mediaView.getPlayer().isPlaying()) {
 				mediaView.getPlayer().pause();
 			}
-		}
-	}
-
-	public void onPlaySegment(PhonActionEvent pae) {
-		Record r = getParentView().getEditor().currentRecord();
-		if(r != null) {
-			MediaSegment seg = r.getSegment().getGroup(0);
-			if(seg != null) {
-				getParentView().playSegment((long)seg.getStartValue(), (long)seg.getEndValue());
-			}			
 		}
 	}
 
@@ -638,9 +628,7 @@ public class TimelineRecordTier extends TimelineTier {
 		if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
 			builder.addSeparator(".", "play_action");
 
-			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor(),
-					(MediaPlayerEditorView) getParentView().getEditor().getViewModel()
-							.getView(MediaPlayerEditorView.VIEW_TITLE));
+			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor());
 			if (includeAccel)
 				playAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
 			builder.addItem(".", playAct);

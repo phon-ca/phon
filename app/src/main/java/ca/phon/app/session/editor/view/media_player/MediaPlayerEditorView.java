@@ -54,16 +54,17 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.ErrorBanner;
+import ca.phon.app.session.editor.PlayCustomSegmentDialog;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
+import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
-import ca.phon.app.session.editor.view.media_player.actions.PlayAdjacencySequenceAction;
-import ca.phon.app.session.editor.view.media_player.actions.PlayCustomSegmentAction;
-import ca.phon.app.session.editor.view.media_player.actions.PlaySegmentAction;
-import ca.phon.app.session.editor.view.media_player.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.view.media_player.actions.TakeSnapshotAction;
 import ca.phon.app.session.editor.view.media_player.actions.ToggleAdjustVideoAction;
 import ca.phon.media.VLCHelper;
@@ -188,13 +189,6 @@ public class MediaPlayerEditorView extends EditorView {
 
 	public void onLoadMedia(PhonActionEvent pae) {
 		loadMedia();
-	}
-
-	public void onPlayCustomSegment(PhonActionEvent pae) {
-		final PlayCustomSegmentDialog dialog = new PlayCustomSegmentDialog(getEditor(), mediaPlayer);
-		dialog.setSize(new Dimension(300, 320));
-		dialog.setLocationRelativeTo(this);
-		dialog.setVisible(true);
 	}
 
 	public void onLoadMedia(EditorEvent ee) {
@@ -389,64 +383,6 @@ public class MediaPlayerEditorView extends EditorView {
 
 	}
 
-	/**
-	 * Play the media from the beginning of the current record's
-	 * segment to the end of the contiguous section for the
-	 * current speaker.
-	 */
-	public void onPlaySpeakerSegment(PhonActionEvent pae) {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
-		final Record utt = editor.currentRecord();
-
-		final Participant speaker = utt.getSpeaker();
-		if(speaker == null) return;
-
-		Record firstRecord = utt;
-		Record lastRecord = utt;
-
-		// if contiguous
-		if(pae.getData() != null && pae.getData() instanceof Boolean && ((Boolean)pae.getData()).booleanValue()) {
-			for(int rIdx = editor.getCurrentRecordIndex()-1; rIdx >= 0; rIdx--) {
-				if(session.getRecord(rIdx).getSpeaker() == speaker) {
-					firstRecord = session.getRecord(rIdx);
-				} else {
-					break;
-				}
-			}
-
-			for(int rIdx = editor.getCurrentRecordIndex()+1; rIdx < session.getRecordCount(); rIdx++) {
-				if(session.getRecord(rIdx).getSpeaker() == speaker) {
-					lastRecord = session.getRecord(rIdx);
-				} else {
-					break;
-				}
-			}
-		}
-
-		final MediaSegment firstSegment = firstRecord.getSegment().getGroup(0);
-		final MediaSegment lastSegment = lastRecord.getSegment().getGroup(0);
-
-		if(firstSegment != null && lastSegment != null) {
-			final long startTime = (long)firstSegment.getStartValue();
-			final long endTime = (long)lastSegment.getEndValue();
-			
-			mediaPlayer.playSegment(startTime, (endTime-startTime));
-		}
-
-	}
-
-	public void onPlayConvPeriod() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
-		final MediaSegment segment =
-				SegmentCalculator.conversationPeriod(session, editor.getCurrentRecordIndex());
-
-		final long len = (long)(segment.getEndValue() - segment.getStartValue());
-		if(len > 0)
-			mediaPlayer.playSegment((long)segment.getStartValue(), len);
-	}
-
 	private final static String ADJUST_VIDEO = MediaPlayerEditorView.class.getName() + ".adjustVideo";
 	/**
 	 * Toggle the option to trun on/off moving
@@ -477,11 +413,6 @@ public class MediaPlayerEditorView extends EditorView {
 		final JMenu menu = new JMenu();
 	
 		menu.add(new TakeSnapshotAction(getEditor(), this));
-		menu.addSeparator();
-		menu.add(new PlayCustomSegmentAction(getEditor(), this));
-		menu.add(new PlaySegmentAction(getEditor(), this));
-		menu.add(new PlaySpeechTurnAction(getEditor(), this));
-		menu.add(new PlayAdjacencySequenceAction(getEditor(), this));
 		menu.addSeparator();
 		final ToggleAdjustVideoAction adjustVideoAct = new ToggleAdjustVideoAction(getEditor(), MediaPlayerEditorView.this);
 		adjustVideoAct.putValue(PhonUIAction.SELECTED_KEY, isAdjustVideo());
@@ -529,27 +460,11 @@ public class MediaPlayerEditorView extends EditorView {
 		public JPopupMenu makeMenuChanges(JPopupMenu menu) {
 			JPopupMenu retVal = menu;
 
-			setupPlaytoItems(menu);
-
 			menu.addSeparator();
 
 			setupGotoItems(menu);
 
 			return retVal;
-		}
-
-		private void setupPlaytoItems(JPopupMenu menu) {
-			final JMenuItem playCustomItem = new JMenuItem(new PlayCustomSegmentAction(getEditor(), MediaPlayerEditorView.this));
-			menu.add(playCustomItem);
-
-			final JMenuItem playSegmentItem = new JMenuItem(new PlaySegmentAction(getEditor(), MediaPlayerEditorView.this));
-			menu.add(playSegmentItem);
-
-			final JMenuItem playContiguousItem = new JMenuItem(new PlaySpeechTurnAction(getEditor(), MediaPlayerEditorView.this));
-			menu.add(playContiguousItem);
-
-//			final JMenuItem playConvPeriodItem = new JMenuItem(new PlayAdjacencySequenceAction(getEditor(), MediaPlayerEditorView.this));
-//			menu.add(playConvPeriodItem);
 		}
 
 		private void setupGotoItems(JPopupMenu menu) {

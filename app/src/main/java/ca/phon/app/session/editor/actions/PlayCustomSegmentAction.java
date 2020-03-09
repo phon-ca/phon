@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.media_player.actions;
+package ca.phon.app.session.editor.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -23,36 +23,29 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.media_player.actions.MediaPlayerAction;
 import ca.phon.ui.action.PhonActionEvent;
 
-public class PlaySpeechTurnAction extends MediaPlayerAction {
+public class PlayCustomSegmentAction extends PlaySegmentAction {
 
-	private static final long serialVersionUID = -8003381993326033725L;
+	private static final long serialVersionUID = 8216764220991547294L;
 	
-	private final static String CMD_NAME = "Play current speaker turn";
+	private final static String CMD_NAME = "Play custom segment...";
 	
 	private final static String SHORT_DESC = "";
 	
 	private final static String ICON = "";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_L,
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+			KeyStroke.getKeyStroke(KeyEvent.VK_R,
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.ALT_MASK);
 
-	public PlaySpeechTurnAction(SessionEditor editor, MediaPlayerEditorView view) {
-		super(editor, view);
+	public PlayCustomSegmentAction(SessionEditor editor) {
+		super(editor, SegmentType.CUSTOM);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
-	}
-
-	@Override
-	public void hookableActionPerformed(ActionEvent e) {
-		final MediaPlayerEditorView view = getMediaPlayerView();
-		final PhonActionEvent pae = new PhonActionEvent(e);
-		pae.setData(Boolean.TRUE);
-		view.onPlaySpeakerSegment(pae);
 	}
 
 }

@@ -60,6 +60,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
+import ca.phon.app.session.SegmentPlayback;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
@@ -178,9 +179,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public SpeechAnalysisEditorView(SessionEditor editor) {
 		super(editor);
 		
+		
 		init();
 		update();
 		
+		editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(playbackListener);
 		addEditorViewListener(editorViewListener);
 	}
 
@@ -510,33 +513,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private void playInterval(float startTime, float endTime) {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(!mediaModel.isSessionAudioAvailable()) return;
-		
-		try {
-			LongSound sharedSound = mediaModel.getSharedSessionAudio();
-			if(sharedSound == null) return;
-			
-			// fix bounds if necessary
-			startTime = Math.max(0.0f, Math.min(startTime, sharedSound.length()));
-			endTime = Math.max(startTime, Math.min(endTime, sharedSound.length()));
-			
-			final PlaySegment playSeg = sharedSound.getExtension(PlaySegment.class);
-			if(playSeg == null || playSeg.isPlaying()) return;
-			playSeg.playSegment(startTime, endTime);
-			
-			if (getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-				MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getEditor().getViewModel()
-						.getView(MediaPlayerEditorView.VIEW_TITLE);
-				if(mediaView != null) {
-					if(mediaView.getPlayer().hasVideo()) {
-						mediaView.getPlayer().playSegment((long)(startTime * 1000.0f), (long)((endTime-startTime)*1000.0f), true);
-					}
-				}
-			}
-		} catch (IOException e) {
-			LogUtil.severe(e);
-			Toolkit.getDefaultToolkit().beep();
-		}		
+		mediaModel.getSegmentPlayback().playSegment(startTime, endTime);
 	}
 	
 	public void export(File file) throws IOException {
@@ -791,9 +768,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 					
 					PlaySegment playSeg = ls.getExtension(PlaySegment.class);
 					playButton.setEnabled( playSeg != null );
-					if(playSeg != null) {
-						playSeg.addPropertyChangeListener(playbackListener);
-					}
 					
 					ExportSegment exportSeg = ls.getExtension(ExportSegment.class);
 					exportButton.setEnabled( exportSeg != null );
@@ -1065,15 +1039,16 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			PlaySegment playSeg = (PlaySegment)evt.getSource();
-			if("playing".contentEquals(evt.getPropertyName())) {
-				if(playSeg.isPlaying()) {
-					playbackMarker = timeModel.addMarker(playSeg.getPosition(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
+			SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
+			if(SegmentPlayback.PLAYBACK_PROP.equals(evt.getPropertyName())) {
+				if(segmentPlayback.isPlaying()) {
+					playbackMarker = timeModel.addMarker(segmentPlayback.getTime(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
 					playbackMarker.setOwner(waveformTier.getWaveformDisplay());
 					playbackMarker.setDraggable(false);
 					
 					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 					playButton.setText("Stop");
+					
 				} else {
 					if(playbackMarker != null)
 						timeModel.removeMarker(playbackMarker);
@@ -1082,7 +1057,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 					playButton.setText("Play");
 				}
-			} else if("position".contentEquals(evt.getPropertyName())) {
+			} else if(SegmentPlayback.TIME_PROP.equals(evt.getPropertyName())) {
 				if(playbackMarker != null) {
 					playbackMarker.setTime((float)evt.getNewValue());
 				}

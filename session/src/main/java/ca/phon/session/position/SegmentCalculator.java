@@ -30,7 +30,7 @@ import ca.phon.session.Tier;
 public class SegmentCalculator {
 
 	/**
-	 * TODO description
+	 * Get contiguous speech segment for speaker at given record index.
 	 * 
 	 * @param session
 	 * @param recordIndex

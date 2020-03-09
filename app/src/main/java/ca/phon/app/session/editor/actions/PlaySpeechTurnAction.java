@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.media_player.actions;
+package ca.phon.app.session.editor.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -23,33 +23,29 @@ import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.media_player.actions.MediaPlayerAction;
+import ca.phon.ui.action.PhonActionEvent;
 
-public class PlayAdjacencySequenceAction extends MediaPlayerAction {
+public class PlaySpeechTurnAction extends PlaySegmentAction {
+
+	private static final long serialVersionUID = -8003381993326033725L;
 	
-	private static final long serialVersionUID = 5549269029686145231L;
-
-	private final static String CMD_NAME = "Play adjacency sequence";
+	private final static String CMD_NAME = "Play current speaker turn";
 	
 	private final static String SHORT_DESC = "";
 	
 	private final static String ICON = "";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_R, 
-					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
-	
-	public PlayAdjacencySequenceAction(SessionEditor editor, MediaPlayerEditorView view) {
-		super(editor, view);
+			KeyStroke.getKeyStroke(KeyEvent.VK_L,
+					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+
+	public PlaySpeechTurnAction(SessionEditor editor) {
+		super(editor, SegmentType.SPEAKER_TURN);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 		putValue(ACCELERATOR_KEY, KS);
-	}
-
-	@Override
-	public void hookableActionPerformed(ActionEvent e) {
-		final MediaPlayerEditorView view = getMediaPlayerView();
-		view.onPlayConvPeriod();
 	}
 
 }

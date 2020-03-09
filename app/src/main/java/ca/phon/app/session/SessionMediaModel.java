@@ -29,6 +29,8 @@ public class SessionMediaModel {
 	private File loadedAudioFile = null;
 	
 	private LongSound sharedAudio;
+	
+	private SegmentPlayback segmentPlayback;
 
 	private enum AudioFileStatus {
 		UNKONWN,
@@ -62,6 +64,13 @@ public class SessionMediaModel {
 	
 	public Session getSession() {
 		return this.editor.getSession();
+	}
+	
+	public SegmentPlayback getSegmentPlayback() {
+		if(segmentPlayback == null) {
+			segmentPlayback = new SegmentPlayback(getEditor());
+		}
+		return segmentPlayback;
 	}
 	
 	/**

@@ -474,49 +474,7 @@ public final class TimelineView extends EditorView {
 			LogUtil.severe(e);
 		}
 	}
-	
-	/**
-	 * Play segment (audio) and play video in media player
-	 * view if available and the media has video tracks.
-	 * 
-	 */
-	public void playSegment(long startTime, long endTime) {
-		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(endTime - startTime > 0) {
-			if(mediaModel.isSessionAudioAvailable()) {
-				LongSound sound = getWaveformTier().getWaveformDisplay().getLongSound();
-				if(sound != null) {
-					PlaySegment playSeg = sound.getExtension(PlaySegment.class);
-					
-					if(playSeg != null && !playSeg.isPlaying()) {
-						try {
-							playSeg.playSegment(startTime/1000.0f, endTime/1000.0f);
-						} catch (IOException e) {
-							Toolkit.getDefaultToolkit().beep();
-							LogUtil.severe(e);
-						}
-						if (getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-							MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getEditor().getViewModel()
-									.getView(MediaPlayerEditorView.VIEW_TITLE);
-							if(mediaView.getPlayer().hasVideo()) {
-								// XXX Should audio playback be synced with media start?
-								mediaView.getPlayer().playSegment(startTime, (endTime-startTime), true);
-							}
-						}
-						return;
-					}
-				}
-			}
-			
-			// if we get here attempt to play in media player view
-			if(mediaModel.isSessionMediaAvailable()) {
-				MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getEditor().getViewModel()
-						.getView(MediaPlayerEditorView.VIEW_TITLE);
-				mediaView.getPlayer().playSegment(startTime, (endTime-startTime), false);
-			}
-		}
-	}
-	
+		
 	public TimeUIModel getTimeModel() {
 		return this.timeModel;
 	}

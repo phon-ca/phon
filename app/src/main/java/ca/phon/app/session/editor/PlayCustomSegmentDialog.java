@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.media_player;
+package ca.phon.app.session.editor;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -40,7 +40,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
@@ -70,12 +69,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 	/**
 	 * Session editor
 	 */
-	private final WeakReference<SessionEditor> editorRef;
-	
-	/**
-	 * Media player
-	 */
-	private final WeakReference<PhonMediaPlayer> mediaPlayerRef;
+	private final SessionEditor editor;
 		
 	/**
 	 * Custom segment options
@@ -93,13 +87,14 @@ public class PlayCustomSegmentDialog extends JDialog {
 	private JButton playBtn;
 	private JButton cancelBtn;
 	
+	private boolean canceled = false;
+	
 	/**
 	 * Constructor
 	 */
-	public PlayCustomSegmentDialog(SessionEditor editor, PhonMediaPlayer player) {
+	public PlayCustomSegmentDialog(SessionEditor editor) {
 		super();
-		this.mediaPlayerRef = new WeakReference<PhonMediaPlayer>(player);
-		this.editorRef = new WeakReference<SessionEditor>(editor);
+		this.editor = editor;
 		init();
 	}
 	
@@ -110,7 +105,6 @@ public class PlayCustomSegmentDialog extends JDialog {
 		final CellConstraints cc = new CellConstraints();
 		setLayout(layout);
 		
-		final SessionEditor editor = editorRef.get();
 		final Session session = editor.getSession();
 		
 		btnGrp = new ButtonGroup();
@@ -179,17 +173,19 @@ public class PlayCustomSegmentDialog extends JDialog {
 		final MediaSegment segment = getSegment();
 		
 		final String txt = 
-				MsFormatter.msToDisplayString(new Float(segment.getStartValue()).longValue()) + 
+				MsFormatter.msToDisplayString(Float.valueOf(segment.getStartValue()).longValue()) + 
 				"-" +
-				MsFormatter.msToDisplayString(new Float(segment.getEndValue()).longValue());
+				MsFormatter.msToDisplayString(Float.valueOf(segment.getEndValue()).longValue());
 		segmentField.setText(txt);
 	}
 	
-	private MediaSegment getSegment() {
+	public MediaSegment getSegment() {
+		if(canceled) {
+			return null;
+		}
 		final SessionFactory factory = SessionFactory.newFactory();
 		MediaSegment retVal = factory.createMediaSegment();
 		
-		final SessionEditor editor = editorRef.get();
 		if(currentSegmentBtn.isSelected()) {
 			final Record utt = editor.currentRecord();
 			if(utt != null) {
@@ -229,18 +225,13 @@ public class PlayCustomSegmentDialog extends JDialog {
 	}
 	
 	public void onPlay() {
-		final PhonMediaPlayer mp = mediaPlayerRef.get();
-		if(mp != null) {
-			final MediaSegment seg = getSegment();
-		
-			mp.playSegment((long)seg.getStartValue(), (long)(seg.getEndValue() - seg.getStartValue()));
-			
-			// TODO save segment
-		}
-		onCancel();
+		canceled = false;
+		setVisible(false);
+		dispose();
 	}
 	
 	public void onCancel() {
+		canceled = true;
 		super.setVisible(false);
 		dispose();
 	}
@@ -323,7 +314,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 						if(m.group(2) == null) {
 							String idxStr = m.group(1);
 							Integer idx = Integer.parseInt(idxStr);
-							if(idx < 0 || idx > editorRef.get().getSession().getRecordCount()) {
+							if(idx < 0 || idx > editor.getSession().getRecordCount()) {
 								err = "Record out of bounds '" + idx + "'";
 								retVal = false;
 								break;
@@ -339,7 +330,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 								retVal = false;
 								break;
 							} else if(
-									first > editorRef.get().getSession().getRecordCount() || second > editorRef.get().getSession().getRecordCount()) {
+									first > editor.getSession().getRecordCount() || second > editor.getSession().getRecordCount()) {
 								err = "Range out of bounds '" + range + "'";
 								retVal = false;
 								break;

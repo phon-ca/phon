@@ -56,6 +56,10 @@ import ca.phon.app.session.editor.actions.MoveRecordToEndAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;
 import ca.phon.app.session.editor.actions.NextRecordAction;
 import ca.phon.app.session.editor.actions.PasteRecordAction;
+import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.app.session.editor.actions.SaveAsAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
@@ -392,15 +396,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			@Override
 			public void menuSelected(MenuEvent e) {
 				sessionMenu.removeAll();
-				
-				SessionMediaModel mediaModel = getMediaModel();
-				sessionMenu.add(new AssignMediaAction(SessionEditor.this));
-				sessionMenu.add(new UnassignMediaAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
-				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
-				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
-				sessionMenu.add(genAudioItem);
-				sessionMenu.addSeparator();
-				
+								
 				sessionMenu.add(new NewRecordAction(SessionEditor.this));
 				sessionMenu.add(new DuplicateRecordAction(SessionEditor.this));
 				sessionMenu.add(new DeleteRecordAction(SessionEditor.this));
@@ -461,6 +457,39 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			viewMenuListener.menuSelected(me);
 		}
 		
+		final JMenu mediaMenu = new JMenu("Media");
+		final MenuListener mediaMenuListener = new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				mediaMenu.removeAll();
+
+				SessionMediaModel mediaModel = getMediaModel();
+				mediaMenu.add(new AssignMediaAction(SessionEditor.this));
+				mediaMenu.add(new UnassignMediaAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
+				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
+				mediaMenu.add(genAudioItem);
+				mediaMenu.addSeparator();
+				
+				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+			
+		};
+		mediaMenu.addMenuListener(mediaMenuListener);
+		
+		menuBar.add(mediaMenu, 3);
 		menuBar.add(viewMenu, 3);
 		menuBar.add(sessionMenu, 3);
 	}
