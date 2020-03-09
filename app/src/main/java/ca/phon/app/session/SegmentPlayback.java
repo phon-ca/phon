@@ -108,6 +108,28 @@ public class SegmentPlayback {
 					Float.valueOf(mediaSegment.getEndValue()-mediaSegment.getStartValue()).longValue(), mediaModel.isSessionAudioAvailable());
 		}
 	}
+	
+	public void stopPlaying() {
+		if(!isPlaying()) return;
+		
+		if(getEditor().getMediaModel().isSessionAudioAvailable()) {
+			try {
+				LongSound ls = getEditor().getMediaModel().getSharedSessionAudio();
+				
+				PlaySegment playSeg = ls.getExtension(PlaySegment.class);
+				if(playSeg != null && playSeg.isPlaying())
+					playSeg.stop();
+			} catch (IOException e) {
+				LogUtil.severe(e);
+				Toolkit.getDefaultToolkit().beep();
+			}
+		} else if(getEditor().getMediaModel().isSessionMediaAvailable()
+				&& getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+			if(mediaPlayerView.getPlayer().isPlaying())
+				mediaPlayerView.getPlayer().pause();
+		}
+	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propSupport.addPropertyChangeListener(listener);

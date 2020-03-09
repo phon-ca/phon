@@ -26,6 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -42,6 +43,7 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
+import ca.phon.app.session.SegmentPlayback;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -99,6 +101,8 @@ public final class TimelineView extends EditorView {
 	
 	private JToolBar toolbar;
 	
+	private DropDownButton playButton;
+	
 	private JButton zoomOutButton;
 	
 	private JButton zoomInButton;
@@ -130,8 +134,12 @@ public final class TimelineView extends EditorView {
 	
 	private TimelineRecordTier recordGrid;
 	
-	private Marker playbackMarker;
 	
+	// playback marker for segment playback
+	private Marker segmentPlaybackMarker;
+	
+	// playback marker for media player
+	private Marker mediaPlayerPlaybackMarker;
 	private PlaybackMarkerSyncListener playbackMarkerSyncListener = new PlaybackMarkerSyncListener();
 	
 	public TimelineView(SessionEditor editor) {
@@ -140,6 +148,8 @@ public final class TimelineView extends EditorView {
 		
 		init();
 		update();
+		
+		editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(segmentPlaybackListener);
 	}
 	
 	private void init() {
@@ -310,6 +320,35 @@ public final class TimelineView extends EditorView {
 			
 		});
 		
+		final JPopupMenu playMenu = new JPopupMenu();
+		playMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				playMenu.removeAll();
+				setupPlaybackMenu(new MenuBuilder(playMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
+		
+		final PhonUIAction playAct = new PhonUIAction(this,  "playPause");
+		playAct.putValue(PhonUIAction.NAME, "Play");
+		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
+		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
+		playButton = new DropDownButton(playAct);
+		playButton.setFocusable(false);
+		playButton.setEnabled(false);
+
+		
 		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
 		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Participants");
 		speakerVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show participant visibility menu");
@@ -358,6 +397,7 @@ public final class TimelineView extends EditorView {
 //		JButton splitRecordButton = new JButton(splitRecordAct);
 		
 		toolbar.add(segmentationButton);
+		toolbar.add(playButton);
 		toolbar.addSeparator();
 		toolbar.add(speakerButton);
 		toolbar.add(tierVisiblityButton);
@@ -466,10 +506,7 @@ public final class TimelineView extends EditorView {
 			wavTier.getWaveformDisplay().setLongSound(ls);
 			
 			PlaySegment playSeg = ls.getExtension(PlaySegment.class);
-//			playButton.setEnabled( playSeg != null );
-			if(playSeg != null) {
-				playSeg.addPropertyChangeListener(segmentPlaybackListener);
-			}
+			playButton.setEnabled( playSeg != null );
 		} catch (IOException e) {
 			LogUtil.severe(e);
 		}
@@ -540,6 +577,74 @@ public final class TimelineView extends EditorView {
 	
 	public float getWindowLength() {
 		return getWindowEnd() - getWindowStart();
+	}
+	
+	private void setupPlaybackMenu(MenuBuilder builder) {
+		if(isPlaying()) {
+			final PhonUIAction stopAct = new PhonUIAction(TimelineView.this, "stopPlaying");
+			stopAct.putValue(PhonUIAction.NAME, "Stop");
+			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop playback");
+			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+			
+			builder.addItem(".", stopAct);
+			builder.addSeparator(".", "stop");
+		}
+		
+		final PhonUIAction playSelectionAct = new PhonUIAction(TimelineView.this, "playSelection");
+		playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
+		playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
+		playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		final JMenuItem playSelectionItem = new JMenuItem(playSelectionAct);
+		playSelectionItem.setEnabled( getWaveformTier().getSelection() != null );
+		
+		final PhonUIAction playSegmentAct = new PhonUIAction(TimelineView.this, "playSegment");
+		playSegmentAct.putValue(PhonUIAction.NAME, "Play record segment");
+		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
+		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		final JMenuItem playSegmentItem = new JMenuItem(playSegmentAct);
+		playSegmentItem.setEnabled( getRecordTier().currentRecordInterval() != null );
+		
+		builder.addItem(".", playSelectionItem);
+		builder.addItem(".", playSegmentItem);
+	}
+	
+	public void playPause() {
+		if(isPlaying()) {
+			stopPlaying();
+		} else if(getWaveformTier().getSelection() != null) {
+			playSelection();
+		} else if(getRecordTier().currentRecordInterval() != null) {
+			playSegment();
+		}
+	}
+	
+	public void playSelection() {
+		if(getWaveformTier().getSelection() != null)
+			playInterval(getWaveformTier().getSelection());
+	}
+	
+	public void playSegment() {
+		if(getRecordTier().currentRecordInterval() != null)
+			playInterval(getRecordTier().currentRecordInterval());
+	}
+	
+	private void playInterval(Interval interval) {
+		playInterval(interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
+	}
+	
+	private void playInterval(float startTime, float endTime) {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		mediaModel.getSegmentPlayback().playSegment(startTime, endTime);
+	}
+	
+	public boolean isPlaying() {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		return mediaModel.getSegmentPlayback().isPlaying();
+	}
+	
+	public void stopPlaying() {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		mediaModel.getSegmentPlayback().stopPlaying();
 	}
 	
 	/* Editor actions */
@@ -633,8 +738,8 @@ public final class TimelineView extends EditorView {
 		segmentationButton.setText("Stop Segmentation");
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 		
-		if(playbackMarkerSyncListener.playbackMarker != null)
-			timeModel.removeMarker(playbackMarkerSyncListener.playbackMarker);
+		if(mediaPlayerPlaybackMarker != null)
+			timeModel.removeMarker(mediaPlayerPlaybackMarker);
 	}
 	
 	@RunOnEDT
@@ -886,26 +991,33 @@ public final class TimelineView extends EditorView {
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			PlaySegment playSeg = (PlaySegment)evt.getSource();
-			if("playing".contentEquals(evt.getPropertyName())) {
-				if(playSeg.isPlaying()) {
-					playbackMarker = timeModel.addMarker(playSeg.getPosition(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
-					playbackMarker.setOwner(getWaveformTier().getWaveformDisplay());
-					playbackMarker.setDraggable(false);
+			SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
+			if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
+				if(segmentPlayback.isPlaying()) {
+					segmentPlaybackMarker = timeModel.addMarker(segmentPlayback.getTime(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
+					segmentPlaybackMarker.setOwner(getWaveformTier().getWaveformDisplay());
+					segmentPlaybackMarker.setDraggable(false);
 					
-//					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-//					playButton.setText("Stop");
+					if(mediaPlayerPlaybackMarker != null) {
+						timeModel.removeMarker(mediaPlayerPlaybackMarker);
+					}
+					
+					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+					playButton.setText("Stop");
 				} else {
-					if(playbackMarker != null)
-						timeModel.removeMarker(playbackMarker);
-					playbackMarker = null;
+					if(segmentPlaybackMarker != null)
+						timeModel.removeMarker(segmentPlaybackMarker);
+					segmentPlaybackMarker = null;
+
+					if(mediaPlayerPlaybackMarker != null)
+						timeModel.addMarker(mediaPlayerPlaybackMarker);
 					
-//					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
-//					playButton.setText("Play");
+					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+					playButton.setText("Play");
 				}
-			} else if("position".contentEquals(evt.getPropertyName())) {
-				if(playbackMarker != null) {
-					playbackMarker.setTime((float)evt.getNewValue());
+			} else if(SegmentPlayback.TIME_PROP.contentEquals(evt.getPropertyName())) {
+				if(segmentPlaybackMarker != null) {
+					segmentPlaybackMarker.setTime((float)evt.getNewValue());
 				}
 			}
 		}
@@ -914,24 +1026,22 @@ public final class TimelineView extends EditorView {
 	
 	private class PlaybackMarkerSyncListener extends MediaPlayerEventAdapter {
 
-		private TimeUIModel.Marker playbackMarker;
-		
 		private Timer playbackTimer;
 		
 		private PlaybackMarkerTask playbackMarkerTask;
 		
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
-			if(playbackMarker == null && getEditor().getExtension(SegmentationHandler.class) == null) {
+			if(mediaPlayerPlaybackMarker == null && getEditor().getExtension(SegmentationHandler.class) == null) {
 				// only show playback marker if media player is playing audio
 				if(mediaPlayer.audio().isMute()) return;
 				
 				float currentTime = (float)TimeUIModel.roundTime(mediaPlayer.status().time() / 1000.0f);
 				
-				playbackMarker = timeModel.addMarker(currentTime, Color.darkGray);
-				playbackMarker.setOwner(wavTier.getWaveformDisplay());
+				mediaPlayerPlaybackMarker = timeModel.addMarker(currentTime, Color.darkGray);
+				mediaPlayerPlaybackMarker.setOwner(wavTier.getWaveformDisplay());
 				
-				playbackMarkerTask = new PlaybackMarkerTask(playbackMarker);
+				playbackMarkerTask = new PlaybackMarkerTask(mediaPlayerPlaybackMarker);
 				playbackMarkerTask.mediaSyncTime = mediaPlayer.status().time();
 				playbackMarkerTask.startTime = System.currentTimeMillis();
 			}
@@ -939,10 +1049,10 @@ public final class TimelineView extends EditorView {
 
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
-			if(playbackMarker != null)
+			if(mediaPlayerPlaybackMarker != null)
 				SwingUtilities.invokeLater( () -> {
-					timeModel.removeMarker(playbackMarker);
-					playbackMarker = null;
+					timeModel.removeMarker(mediaPlayerPlaybackMarker);
+					mediaPlayerPlaybackMarker = null;
 					playbackTimer = null;
 					
 					if(playbackMarkerTask != null) {

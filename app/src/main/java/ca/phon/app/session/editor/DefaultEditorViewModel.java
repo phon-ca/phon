@@ -238,24 +238,11 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			public void focusGained(CDockable arg0) {
 				EditorView focusedView = getFocusedView();
 				if(focusedView != null) {
-					getEditor().setCurrentView(focusedView);
 					focusedView.onFocused();
 				}
 			}
 			
 		});
-		
-//		dockControl.addStateListener(new CDockableStateListener() {
-//			
-//			@Override
-//			public void visibilityChanged(CDockable arg0) {
-//			}
-//			
-//			@Override
-//			public void extendedModeChanged(CDockable arg0, ExtendedMode arg1) {
-//			}
-//			
-//		});
 		
 		// fix accelerators on non-mac systems
 		if(!OSInfo.isMacOs()) {

@@ -160,9 +160,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	};
 	
-	/** Menu for currently focused view */
-	private EditorView currentView = null;
-	
 	/**
 	 * Toolbar
 	 */
@@ -351,10 +348,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		super.setJMenuBar(menuBar);
 	}
 	
-	public void setCurrentView(EditorView view) {
-		this.currentView = view;
-	}
-
 	public void setupMenu(JMenuBar menuBar) {
 		// get 'File' menu reference
 		final JMenu fileMenu = menuBar.getMenu(0);

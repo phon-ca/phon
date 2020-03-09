@@ -467,8 +467,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		builder.addItem(".", playSelectionItem);
 		builder.addItem(".", playSegmentItem);
-		
-		// TODO loop toggle
 	}
 	
 	private void setupExportMenu(MenuBuilder builder) {
@@ -553,37 +551,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	public boolean isPlaying() {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(!mediaModel.isSessionAudioAvailable()) return false;
-		
-		try {
-			LongSound sharedSound = mediaModel.getSharedSessionAudio();
-			if(sharedSound == null) return false;
-			
-			final PlaySegment playSeg = sharedSound.getExtension(PlaySegment.class);
-			if(playSeg == null) return false;
-			
-			return playSeg.isPlaying();
-		} catch (IOException e) {
-			return false;
-		}
+		return mediaModel.getSegmentPlayback().isPlaying();
 	}
 	
 	public void stopPlaying() {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
-		if(!mediaModel.isSessionAudioAvailable()) return;
-		
-		try {
-			LongSound sharedSound = mediaModel.getSharedSessionAudio();
-			if(sharedSound == null) return;
-			
-			final PlaySegment playSeg = sharedSound.getExtension(PlaySegment.class);
-			if(playSeg == null) return;
-			
-			playSeg.stop();
-		} catch (IOException e) {
-			LogUtil.severe(e);
-			Toolkit.getDefaultToolkit().beep();
-		}
+		mediaModel.getSegmentPlayback().stopPlaying();
 	}
 	
 	public TimeUIModel getTimeModel() {
