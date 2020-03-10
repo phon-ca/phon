@@ -53,7 +53,14 @@ import ca.phon.app.session.editor.ErrorBanner;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
+import ca.phon.app.session.editor.actions.ExportAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.ExportCustomSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSpeechTurnAction;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
+import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
+import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
@@ -102,6 +109,7 @@ public final class TimelineView extends EditorView {
 	private JToolBar toolbar;
 	
 	private DropDownButton playButton;
+	private DropDownButton exportButton;
 	
 	private JButton zoomOutButton;
 	
@@ -340,14 +348,43 @@ public final class TimelineView extends EditorView {
 		});
 		
 		final PhonUIAction playAct = new PhonUIAction(this,  "playPause");
-		playAct.putValue(PhonUIAction.NAME, "Play");
+		playAct.putValue(PhonUIAction.NAME, "Play segment");
 		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
 		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
 		playButton = new DropDownButton(playAct);
 		playButton.setFocusable(false);
 		playButton.setEnabled(false);
-
+		
+		final JPopupMenu saveMenu = new JPopupMenu();
+		saveMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				saveMenu.removeAll();
+				setupExportMenu(new MenuBuilder(saveMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				
+			}
+			
+		});
+		
+		final PhonUIAction exportAct = new PhonUIAction(this, "onExportSelectionOrSegment");
+		exportAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
+		exportAct.putValue(PhonUIAction.NAME, "Export segment...");
+		exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
+		
+		exportButton = new DropDownButton(exportAct);
+		exportButton.setFocusable(false);
 		
 		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
 		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Participants");
@@ -397,7 +434,9 @@ public final class TimelineView extends EditorView {
 //		JButton splitRecordButton = new JButton(splitRecordAct);
 		
 		toolbar.add(segmentationButton);
+		toolbar.addSeparator();
 		toolbar.add(playButton);
+		toolbar.add(exportButton);
 		toolbar.addSeparator();
 		toolbar.add(speakerButton);
 		toolbar.add(tierVisiblityButton);
@@ -579,11 +618,56 @@ public final class TimelineView extends EditorView {
 		return getWindowEnd() - getWindowStart();
 	}
 	
+	private void setupExportMenu(MenuBuilder builder) {
+		final PhonUIAction exportSelectionAct = new PhonUIAction(this, "exportSelection");
+		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
+		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
+		
+		final PhonUIAction exportSegmentAct = new PhonUIAction(this, "exportSegment");
+		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
+		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
+		
+		builder.addItem(".", exportSelectionAct).setEnabled(getWaveformTier().getSelection() != null);
+		builder.addItem(".", exportSegmentAct).setEnabled(getRecordTier().currentRecordInterval() != null);
+		builder.addSeparator(".", "s1");
+		
+		builder.addItem(".", new ExportCustomSegmentAction(getEditor()));
+		builder.addItem(".", new ExportSpeechTurnAction(getEditor()));
+		builder.addItem(".", new ExportAdjacencySequenceAction(getEditor()));
+	}
+	
+	public void onExportSelectionOrSegment() {
+		if(getWaveformTier().getSelection() != null) {
+			exportSelection();
+		} else {
+			exportSegment();
+		}
+	}
+	
+	public void exportSelection() {
+		if(getWaveformTier().getSelection() != null)
+			exportInterval(getWaveformTier().getSelection());
+	}
+	
+	public void exportSegment() {
+		if(getRecordTier().currentRecordInterval() != null)
+			exportInterval(getRecordTier().currentRecordInterval());
+	}
+
+	public void exportInterval(Interval interval) {
+		exportInterval(interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
+	}
+	
+	public void exportInterval(float startTime, float endTime) {
+		ExportSegmentAction exportAct = new ExportSegmentAction(getEditor(), startTime, endTime);
+		exportAct.actionPerformed(new ActionEvent(this, -1, "export"));
+	}
+	
 	private void setupPlaybackMenu(MenuBuilder builder) {
 		if(isPlaying()) {
 			final PhonUIAction stopAct = new PhonUIAction(TimelineView.this, "stopPlaying");
-			stopAct.putValue(PhonUIAction.NAME, "Stop");
-			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop playback");
+			stopAct.putValue(PhonUIAction.NAME, "Stop playback");
+			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop segment playback");
 			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 			
 			builder.addItem(".", stopAct);
@@ -606,6 +690,11 @@ public final class TimelineView extends EditorView {
 		
 		builder.addItem(".", playSelectionItem);
 		builder.addItem(".", playSegmentItem);
+		builder.addSeparator(".", "s1");
+		
+		builder.addItem(".", new PlayCustomSegmentAction(getEditor()));
+		builder.addItem(".", new PlayAdjacencySequenceAction(getEditor()));
+		builder.addItem(".", new PlaySpeechTurnAction(getEditor()));
 	}
 	
 	public void playPause() {
@@ -1003,7 +1092,7 @@ public final class TimelineView extends EditorView {
 					}
 					
 					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-					playButton.setText("Stop");
+					playButton.setText("Stop playback");
 				} else {
 					if(segmentPlaybackMarker != null)
 						timeModel.removeMarker(segmentPlaybackMarker);
@@ -1013,7 +1102,7 @@ public final class TimelineView extends EditorView {
 						timeModel.addMarker(mediaPlayerPlaybackMarker);
 					
 					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
-					playButton.setText("Play");
+					playButton.setText("Play segment");
 				}
 			} else if(SegmentPlayback.TIME_PROP.contentEquals(evt.getPropertyName())) {
 				if(segmentPlaybackMarker != null) {

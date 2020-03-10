@@ -25,6 +25,7 @@ import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -163,7 +164,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private JToolBar toolbar;
 
 	private DropDownButton playButton;
-//	private DropDownButton exportButton;
+	private DropDownButton exportButton;
 
 	private JButton refreshButton;
 	private JButton showMoreButton;
@@ -381,7 +382,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		});
 		
 		final PhonUIAction playAct = new PhonUIAction(this,  "playPause");
-		playAct.putValue(PhonUIAction.NAME, "Play");
+		playAct.putValue(PhonUIAction.NAME, "Play segment");
 		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
 		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		playAct.putValue(DropDownButton.BUTTON_POPUP, playMenu);
@@ -389,34 +390,36 @@ public class SpeechAnalysisEditorView extends EditorView {
 		playButton.setFocusable(false);
 		playButton.setEnabled(false);
 
-//		final JPopupMenu saveMenu = new JPopupMenu();
-//		saveMenu.addPopupMenuListener(new PopupMenuListener() {
-//			
-//			@Override
-//			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-//				saveMenu.removeAll();
-//				setupExportMenu(new MenuBuilder(saveMenu));
-//				
-//			}
-//			
-//			@Override
-//			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-//				
-//			}
-//			
-//			@Override
-//			public void popupMenuCanceled(PopupMenuEvent e) {
-//				
-//			}
-//			
-//		});
+		final JPopupMenu saveMenu = new JPopupMenu();
+		saveMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				saveMenu.removeAll();
+				setupExportMenu(new MenuBuilder(saveMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				
+			}
+			
+		});
 		
-//		final ExportSegmentAction exportAct = new ExportSegmentAction(getEditor(), this);
-//		exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
+		final PhonUIAction exportAct = new PhonUIAction(this, "onExportSelectionOrSegment");
+		exportAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
+		exportAct.putValue(PhonUIAction.NAME, "Export segment...");
+		exportAct.putValue(DropDownButton.BUTTON_POPUP, saveMenu);
 		
-//		exportButton = new DropDownButton(exportAct);
-//		exportButton.setFocusable(false);
-//		exportButton.setEnabled(false);
+		exportButton = new DropDownButton(exportAct);
+		exportButton.setFocusable(false);
+		exportButton.setEnabled(false);
 		
 		final ResetAction refreshAct = new ResetAction(getEditor(), this);
 		refreshButton = new JButton(refreshAct);
@@ -431,7 +434,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		zoomOutButton.setFocusable(false);
 
 		toolbar.add(playButton);
-//		toolbar.add(exportButton);
+		toolbar.add(exportButton);
 		toolbar.addSeparator();
 		toolbar.add(refreshButton);
 		toolbar.add(showMoreButton);
@@ -469,21 +472,46 @@ public class SpeechAnalysisEditorView extends EditorView {
 		builder.addItem(".", playSegmentItem);
 	}
 	
-//	private void setupExportMenu(MenuBuilder builder) {
-//		final ExportSegmentAction exportSelectionAct = new ExportSegmentAction(getEditor(), SpeechAnalysisEditorView.this);
-//		exportSelectionAct.setSaveSegment(false);
-//		final JMenuItem exportSelectionItem = new JMenuItem(exportSelectionAct);
-//		exportSelectionItem.setEnabled( selectionInterval != null );
-//		
-//		final ExportSegmentAction exportSegmentAct = new ExportSegmentAction(getEditor(), this);
-//		exportSegmentAct.setSaveSegment(true);
-//		final JMenuItem exportSegmentItem = new JMenuItem(exportSegmentAct);
-//		exportSegmentItem.setEnabled( currentRecordInterval != null );
-//		
-//		builder.addItem(".", exportSelectionItem);
-//		builder.addItem(".", exportSegmentItem);
-//	}
+	private void setupExportMenu(MenuBuilder builder) {
+		final PhonUIAction exportSelectionAct = new PhonUIAction(this, "exportSelection");
+		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
+		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
+		
+		final PhonUIAction exportSegmentAct = new PhonUIAction(this, "exportSegment");
+		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
+		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
+		
+		builder.addItem(".", exportSelectionAct).setEnabled(selectionInterval != null);
+		builder.addItem(".", exportSegmentAct).setEnabled(currentRecordInterval != null);
+	}
+	
+	public void onExportSelectionOrSegment() {
+		if(selectionInterval != null) {
+			exportSelection();
+		} else {
+			exportSegment();
+		}
+	}
+	
+	public void exportSelection() {
+		if(selectionInterval != null)
+			exportInterval(selectionInterval);
+	}
+	
+	public void exportSegment() {
+		if(currentRecordInterval != null)
+			exportInterval(currentRecordInterval);
+	}
 
+	public void exportInterval(Interval interval) {
+		exportInterval(interval.getStartMarker().getTime(), interval.getEndMarker().getTime());
+	}
+	
+	public void exportInterval(float startTime, float endTime) {
+		ExportSegmentAction exportAct = new ExportSegmentAction(getEditor(), startTime, endTime);
+		exportAct.actionPerformed(new ActionEvent(this, -1, "export"));
+	}
+	
 	/* toolbar actions */
 	public void playPause() {
 		if(isPlaying()) {
@@ -708,7 +736,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playButton.setEnabled( playSeg != null );
 					
 					ExportSegment exportSeg = ls.getExtension(ExportSegment.class);
-//					exportButton.setEnabled( exportSeg != null );
+					exportButton.setEnabled( exportSeg != null );
 				}
 				messageButton.setVisible(false);
 			} catch (IOException e) {
@@ -985,7 +1013,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playbackMarker.setDraggable(false);
 					
 					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
-					playButton.setText("Stop");
+					playButton.setText("Stop playback");
 					
 				} else {
 					if(playbackMarker != null)
@@ -993,7 +1021,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					playbackMarker = null;
 					
 					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
-					playButton.setText("Play");
+					playButton.setText("Play segment");
 				}
 			} else if(SegmentPlayback.TIME_PROP.equals(evt.getPropertyName())) {
 				if(playbackMarker != null) {
