@@ -54,7 +54,7 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.ErrorBanner;
-import ca.phon.app.session.editor.PlayCustomSegmentDialog;
+import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.AssignMediaAction;

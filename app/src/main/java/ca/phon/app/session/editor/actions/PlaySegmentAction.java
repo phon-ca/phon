@@ -29,7 +29,7 @@ import javax.swing.KeyStroke;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.EditorViewModel;
-import ca.phon.app.session.editor.PlayCustomSegmentDialog;
+import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.LongSound;
@@ -108,7 +108,7 @@ public class PlaySegmentAction extends SessionEditorAction {
 			return SegmentCalculator.conversationPeriod(getEditor().getSession(), getEditor().getCurrentRecordIndex());
 		} else if(segmentType == SegmentType.CUSTOM) {
 			if(startTime < 0 || endTime < 0 || endTime - startTime <= 0) {
-				PlayCustomSegmentDialog dlg = new PlayCustomSegmentDialog(getEditor());
+				CustomSegmentDialog dlg = new CustomSegmentDialog(getEditor());
 				dlg.pack();
 				
 				dlg.setLocationRelativeTo(getEditor());

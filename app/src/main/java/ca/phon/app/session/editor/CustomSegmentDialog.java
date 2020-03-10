@@ -62,7 +62,7 @@ import ca.phon.util.icons.IconSize;
 /**
  * Dialog to play custom segments.
  */
-public class PlayCustomSegmentDialog extends JDialog {
+public class CustomSegmentDialog extends JDialog {
 
 	private static final long serialVersionUID = -1199119546046104883L;
 
@@ -92,7 +92,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 	/**
 	 * Constructor
 	 */
-	public PlayCustomSegmentDialog(SessionEditor editor) {
+	public CustomSegmentDialog(SessionEditor editor) {
 		super();
 		this.editor = editor;
 		init();
@@ -138,7 +138,7 @@ public class PlayCustomSegmentDialog extends JDialog {
 		segmentField.setEnabled(false);
 		updateSegmentTimes();
 		
-		final DialogHeader header = new DialogHeader("Play Custom Segment", "Play a custom defined segment");
+		final DialogHeader header = new DialogHeader("Custom Segment", "");
 		
 		add(header, cc.xyw(1, 1, 2));
 		add(currentSegmentBtn, cc.xyw(1, 2, 2));

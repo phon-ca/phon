@@ -46,7 +46,11 @@ import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
+import ca.phon.app.session.editor.actions.ExportAdjacencySequenceAction;
 import ca.phon.app.session.editor.actions.ExportAsHTMLAction;
+import ca.phon.app.session.editor.actions.ExportCustomSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSpeechTurnAction;
 import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.MoveRecordBackwardAction;
@@ -472,6 +476,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(enabled);
 				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(enabled);
 				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.addSeparator();
+				
+				mediaMenu.add(new ExportSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.add(new ExportCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.add(new ExportSpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.add(new ExportAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
 			}
 			
 			@Override

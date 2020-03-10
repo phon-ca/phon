@@ -24,6 +24,7 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
@@ -171,17 +172,8 @@ public class TimelineWaveformTier extends TimelineTier  {
 	/* UI Events */
 	public void onPlay(PhonActionEvent pae) {
 		if(selectionInterval != null) {
-			// play selected interval
-			if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-				MediaPlayerEditorView mediaView =
-						(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-				
-				long startTime = (int)(selectionInterval.getStartMarker().getTime() * 1000.0f);
-				long duration = ((int)(selectionInterval.getEndMarker().getTime() * 1000.0f)) - startTime;
-				mediaView.getPlayer().playSegment(startTime, duration);
-			}
-		} else {
-			// play from current position
+			PlaySegmentAction playSegAct = new PlaySegmentAction(getParentView().getEditor(), selectionInterval.getStartMarker().getTime(), selectionInterval.getEndMarker().getTime());
+			playSegAct.actionPerformed(pae.getActionEvent());
 		}
 	}
 	
