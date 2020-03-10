@@ -66,6 +66,7 @@ import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.actions.SortRecordsAction;
 import ca.phon.app.session.editor.actions.UnassignMediaAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
@@ -465,10 +466,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				mediaMenu.add(genAudioItem);
 				mediaMenu.addSeparator();
 				
-				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
-				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
-				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
-				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+				boolean enabled = (mediaModel.isSessionAudioAvailable() || 
+						(mediaModel.isSessionMediaAvailable() && getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
+				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(enabled);
 			}
 			
 			@Override

@@ -123,7 +123,8 @@ public class SegmentPlayback {
 				LogUtil.severe(e);
 				Toolkit.getDefaultToolkit().beep();
 			}
-		} else if(getEditor().getMediaModel().isSessionMediaAvailable()
+		}
+		if(getEditor().getMediaModel().isSessionMediaAvailable()
 				&& getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
 			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
 			if(mediaPlayerView.getPlayer().isPlaying())

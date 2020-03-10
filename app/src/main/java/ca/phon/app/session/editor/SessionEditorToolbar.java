@@ -18,6 +18,8 @@ package ca.phon.app.session.editor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +27,35 @@ import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
+import ca.phon.app.session.SegmentPlayback;
+import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;
+import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.timeline.SegmentLabel;
 import ca.phon.session.SessionPath;
+import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -60,12 +76,18 @@ public class SessionEditorToolbar extends JPanel {
 	
 	private NavigationPanel navigationPanel;
 	
+	private DropDownButton viewLayoutButton;
+	
+	private DropDownButton playSegmentButton;
+	
 	private SessionEditorQuickSearch quickSearch;
 	
 	public SessionEditorToolbar(SessionEditor editor) {
 		super();
 		editorRef = new WeakReference<SessionEditor>(editor);
 		init();
+		
+		editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(segmentPlaybackListener);
 	}
 	
 	public SessionEditor getEditor() {
@@ -119,22 +141,67 @@ public class SessionEditorToolbar extends JPanel {
 		gbc.insets = new Insets(2, 5, 2, 2);
 		add(btnComp, gbc);
 		
-		final PhonUIAction showViewLayoutMenuAction = new PhonUIAction(this, "onShowViewLayoutMenu");
-		showViewLayoutMenuAction.putValue(PhonUIAction.SMALL_ICON, 
-				IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL));
-		final JButton viewLayoutBtn = new JButton(showViewLayoutMenuAction);
+		JPopupMenu viewLayoutMenu = new JPopupMenu();
+		viewLayoutMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				viewLayoutMenu.removeAll();
+				getEditor().getViewModel().setupLayoutMenu(viewLayoutMenu);
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
+		
+		final ImageIcon viewLayoutIcn = IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
+		final PhonUIAction viewLayoutAct = new PhonUIAction(this, "noop");
+		viewLayoutAct.putValue(PhonUIAction.SMALL_ICON, viewLayoutIcn);
+		viewLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show view layout menu");
+		viewLayoutAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		viewLayoutAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		viewLayoutAct.putValue(DropDownButton.BUTTON_POPUP, viewLayoutMenu);
+		viewLayoutButton = new DropDownButton(viewLayoutAct);
+		viewLayoutButton.setOnlyPopup(true);
+		
 		++gbc.gridx;
-		add(viewLayoutBtn, gbc);
+		add(viewLayoutButton, gbc);
 		
-//		final PhonUIAction assessmentMenuAction = new PhonUIAction(this, "onShowAssessmentMenu");
-//		assessmentMenuAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/report", IconSize.SMALL));
-//		assessmentMenuAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show analysis menu");
-//		final JButton assessmentMenuBtn = new JButton(assessmentMenuAction);
-//		++gbc.gridx;
-//		add(assessmentMenuBtn, gbc);
+		JPopupMenu playSegmentMenu = new JPopupMenu();
+		playSegmentMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				playSegmentMenu.removeAll();
+				setupPlaySegmentMenu(new MenuBuilder(playSegmentMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
 		
-//		++gbc.gridx;
-//		add(createViewButtons(), gbc);
+		final ImageIcon playIcn = IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL);
+		final PhonUIAction playSegmentAct = new PhonUIAction(this, "playPause");
+		playSegmentAct.putValue(PhonUIAction.NAME, "Play segment");
+		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment");
+		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, playIcn);
+		playSegmentAct.putValue(DropDownButton.BUTTON_POPUP, playSegmentMenu);
+		playSegmentButton = new DropDownButton(playSegmentAct);
+		
+		++gbc.gridx;
+		add(playSegmentButton, gbc);
 
 		navigationPanel = new NavigationPanel(getEditor());
 		++gbc.gridx;
@@ -151,61 +218,59 @@ public class SessionEditorToolbar extends JPanel {
 		add(quickSearch.getSearchField(), gbc);
 	}
 	
-	public JComponent createViewButtons() {
-		final EditorViewModel viewModel = getEditor().getViewModel();
-		
-		final Map<EditorViewCategory, List<String>> viewsByCat = 
-				viewModel.getViewsByCategory();
-		int numViewBtns = 0;
-		for(EditorViewCategory viewCat:viewsByCat.keySet()) {
-			if(viewCat == EditorViewCategory.PLUGINS) continue;
-			numViewBtns += viewsByCat.get(viewCat).size();
+	public void playPause(PhonActionEvent pae) {
+		final SessionMediaModel mediaModel = getEditor().getMediaModel();
+		final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
+		if(segPlayback.isPlaying()) {
+			segPlayback.stopPlaying();
+		} else {
+			(new PlaySegmentAction(getEditor())).actionPerformed(pae.getActionEvent());
 		}
+	}
+	
+	private void setupPlaySegmentMenu(MenuBuilder builder) {
+		final SessionMediaModel mediaModel = getEditor().getMediaModel();
+		final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
 		
-		final SegmentedButtonBuilder<JToggleButton> btnBuilder = 
-				new SegmentedButtonBuilder<>(JToggleButton::new);
-		final ButtonGroup btnGrp = new ButtonGroup();
-		final List<JToggleButton> buttons = btnBuilder.createSegmentedButtons(numViewBtns, btnGrp);
-		int btnIdx = 0;
-		for(EditorViewCategory viewCat:viewsByCat.keySet()) {
-			if(viewCat == EditorViewCategory.PLUGINS) continue;
+		if(segPlayback.isPlaying()) {
+			final PhonUIAction stopAct = new PhonUIAction(segPlayback, "stopPlaying");
+			stopAct.putValue(PhonUIAction.NAME, "Stop playback");
+			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop segment playback");
+			builder.addItem(".", stopAct);
 			
-			final List<String> viewNames = viewsByCat.get(viewCat);
-			for(String viewName:viewNames) {
-				JToggleButton btn = buttons.get(btnIdx++);
-				btn.setIcon(viewModel.getViewIcon(viewName));
-				btn.setSelected(viewModel.isShowing(viewName));
-				btn.setToolTipText("Toggle " + viewName);
-			}
+			builder.addSeparator(".", "s1");
 		}
 		
-		return btnBuilder.createLayoutComponent(buttons);
-	}
-	
-	public void onShowAssessmentMenu(PhonActionEvent pae) {
-		final JButton menuBtn = (JButton)pae.getActionEvent().getSource();
-		
-		final JPopupMenu menu = new JPopupMenu();
-		final AnalysisLibrary library = new AnalysisLibrary();
-		final ArrayList<SessionPath> selectedSessions = new ArrayList<>();
-		selectedSessions.add(new SessionPath(getEditor().getSession().getCorpus(), getEditor().getSession().getName()));
-		
-		library.setupMenu(getEditor().getProject(), selectedSessions, menu);
-		menu.show(menuBtn, 0, menuBtn.getHeight());
-	}
-	
-	public void onShowViewLayoutMenu(PhonActionEvent pae) {
-		final JButton menuBtn = (JButton)pae.getActionEvent().getSource();
-		
-		final JPopupMenu menu = new JPopupMenu();
-		getEditor().getViewModel().setupLayoutMenu(menu);
-		
-		menu.show(menuBtn, 0, menuBtn.getHeight());
+		boolean enabled = (mediaModel.isSessionAudioAvailable() || 
+				(mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
+		builder.addItem(".", new PlaySegmentAction(getEditor())).setEnabled(enabled);
+		builder.addItem(".", new PlayCustomSegmentAction(getEditor())).setEnabled(enabled);
+		builder.addItem(".", new PlaySpeechTurnAction(getEditor())).setEnabled(enabled);
+		builder.addItem(".", new PlayAdjacencySequenceAction(getEditor())).setEnabled(enabled);
 	}
 	
 	@RunOnEDT
 	public void onModifiedChanged(EditorEvent ee) {
 		saveButton.setEnabled(getEditor().hasUnsavedChanges());
 	}
+
+	private final PropertyChangeListener segmentPlaybackListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			SegmentPlayback segPlayback = (SegmentPlayback)evt.getSource();
+			if(SegmentPlayback.PLAYBACK_PROP.equals(evt.getPropertyName())) {
+				if(segPlayback.isPlaying()) {
+					playSegmentButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+					playSegmentButton.setText("Stop playback");
+				} else {
+					playSegmentButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+					playSegmentButton.setText("Play segment");
+				}
+			}
+		}
+		
+	};
 	
 }
