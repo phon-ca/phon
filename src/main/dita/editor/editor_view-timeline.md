@@ -2,7 +2,7 @@
 
 The Timeline view displays record data, and optionally the waveform for the session audio, along a horizontal timeline. The primary purpose of the Timeline view is to aid with segmentation and alterations of existing record segments.
 
-// INSERT TIMELINE SCREENSHOT
+![Timeline Editor View](images/view_timeline.png "Timeline Editor View")
 
 The Timeline view has three main components:
 
@@ -74,7 +74,7 @@ The zoom out/in actions will decrease/increase horizontal resolution of the time
 
 Segmentation is the process of identifying records using the keyboard, usually while media is playing.  To enter Segmentation Mode click the ```Start Segmentation``` button in the ```Timeline``` editor view.  Before segmentation begins a dialog is displayed with options for media playback and segmentation behaviour.
 
-// INSERT START SEGMENTATION DIALOG SCREENSHOT
+![Segmentation Dialog](images/segmentation_dialog.png "Segmentation Dialog")
 
 If session media is loaded the following media playback options are available:
 
@@ -105,13 +105,16 @@ During segmentation mode all keyboard input for the application will be blocked 
 | Break (e.g., silence, noise, etc.) | ```b``` or ```Numpad decimal``` |
 | New segment (unidentified) | ```Space``` or ```0``` or ```Numpad 0``` |
 | New segment (participant 1...9) | ```1```...```9``` or ```Numpad 1```...```Numpad 9``` |
+| Toggle segmentation window | ```W``` |
+| Increase segmentation window (100ms) | ```Up``` |
+| Decrease segmentation window (1000ms) | ```Down``` |
 
 #### Media Controls
 
 | Action | Keystroke(s) |
 |---|---|
-| Volume up | ```Up``` or ```Numpad multiply``` |
-| Volume down | ```Down``` or ```Numpad divide``` |
+| Volume up | ```Shift+Up``` or ```Numpad multiply``` |
+| Volume down | ```Shift+Down``` or ```Numpad divide``` |
 | Go back 1s | ```Left``` or ```Numpad subtract``` |
 | Go forward 1s | ```Right``` or ```Numpad add``` |
 | Go back 5s | ```Shift+Left``` or ```Shift+Numpad subtract``` |
