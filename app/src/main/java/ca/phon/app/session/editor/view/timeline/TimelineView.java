@@ -65,6 +65,7 @@ import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
+import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
 import ca.phon.media.PlaySegment;
 import ca.phon.media.TimeUIModel;
@@ -385,6 +386,7 @@ public final class TimelineView extends EditorView {
 		
 		exportButton = new DropDownButton(exportAct);
 		exportButton.setFocusable(false);
+		exportButton.setEnabled(false);
 		
 		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
 		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Participants");
@@ -546,6 +548,9 @@ public final class TimelineView extends EditorView {
 			
 			PlaySegment playSeg = ls.getExtension(PlaySegment.class);
 			playButton.setEnabled( playSeg != null );
+			
+			ExportSegment exportSeg = ls.getExtension(ExportSegment.class);
+			exportButton.setEnabled( exportSeg != null );
 		} catch (IOException e) {
 			LogUtil.severe(e);
 		}
@@ -622,10 +627,12 @@ public final class TimelineView extends EditorView {
 		final PhonUIAction exportSelectionAct = new PhonUIAction(this, "exportSelection");
 		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
 		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
+		exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
 		final PhonUIAction exportSegmentAct = new PhonUIAction(this, "exportSegment");
 		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
 		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
+		exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
 		builder.addItem(".", exportSelectionAct).setEnabled(getWaveformTier().getSelection() != null);
 		builder.addItem(".", exportSegmentAct).setEnabled(getRecordTier().currentRecordInterval() != null);

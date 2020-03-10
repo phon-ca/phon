@@ -476,10 +476,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final PhonUIAction exportSelectionAct = new PhonUIAction(this, "exportSelection");
 		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
 		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
+		exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
 		final PhonUIAction exportSegmentAct = new PhonUIAction(this, "exportSegment");
 		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
 		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
+		exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
 		builder.addItem(".", exportSelectionAct).setEnabled(selectionInterval != null);
 		builder.addItem(".", exportSegmentAct).setEnabled(currentRecordInterval != null);

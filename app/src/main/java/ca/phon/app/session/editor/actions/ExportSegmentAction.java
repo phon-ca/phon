@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.log.LogUtil;
@@ -25,6 +26,8 @@ import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;
 import ca.phon.worker.PhonWorker;
 
@@ -50,13 +53,16 @@ public class ExportSegmentAction extends SessionEditorAction {
 		
 		putValue(Action.NAME, "Export segment...");
 		putValue(Action.SHORT_DESCRIPTION, "Export segment for current record");
-//		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 	}
 	
 	public ExportSegmentAction(SessionEditor editor, SegmentType segmentType) {
 		super(editor);
 		
 		this.segmentType = segmentType;
+		putValue(Action.NAME, "Export segment...");
+		putValue(Action.SHORT_DESCRIPTION, "Export segment for current record");
+		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 	}
 	
 	/**

@@ -75,6 +75,9 @@ public class PlaySegmentAction extends SessionEditorAction {
 		super(editor);
 		
 		this.segmentType = segmentType;
+		putValue(Action.NAME, "Play segment");
+		putValue(Action.SHORT_DESCRIPTION, "Play segment for current record");
+		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 	}
 	
 	/**

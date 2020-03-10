@@ -30,8 +30,6 @@ public class PlayAdjacencySequenceAction extends PlaySegmentAction {
 	
 	private final static String SHORT_DESC = "";
 	
-	private final static String ICON = "";
-	
 	private final static KeyStroke KS = 
 			KeyStroke.getKeyStroke(KeyEvent.VK_R, 
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_DOWN_MASK);
