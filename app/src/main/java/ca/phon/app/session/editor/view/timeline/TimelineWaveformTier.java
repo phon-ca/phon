@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -287,8 +288,6 @@ public class TimelineWaveformTier extends TimelineTier  {
 				}
 				
 				initialSelectionTime = getTimeModel().timeAtX(e.getX());
-				
-				// TODO change media playback position
 			}
 		}
 		
@@ -339,6 +338,11 @@ public class TimelineWaveformTier extends TimelineTier  {
 					long timeMS = (long)(time * 1000.0f);
 					
 					mediaPlayerView.getPlayer().setTime(timeMS);
+					
+					if(me.getModifiersEx() == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
+						if(!mediaPlayerView.getPlayer().isPlaying())
+							mediaPlayerView.getPlayer().play();
+					}
 				}
 			}
 		}
