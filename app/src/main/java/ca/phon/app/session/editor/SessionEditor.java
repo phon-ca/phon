@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -39,7 +40,13 @@ import javax.swing.undo.UndoableEditSupport;
 import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.JXStatusBar;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.menu.edit.PreferencesCommand;
+import ca.phon.app.prefs.EditorPrefsPanel;
 import ca.phon.app.project.ProjectFrame;
+import ca.phon.app.project.actions.SelectCorpusMediaFolder;
 import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
@@ -85,13 +92,17 @@ import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.ByteSize;
 import ca.phon.util.Language;
+import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * <p>Main UI for the application.  This window provides the interface for
@@ -482,6 +493,18 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				mediaMenu.add(new ExportCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
 				mediaMenu.add(new ExportSpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
 				mediaMenu.add(new ExportAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.addSeparator();
+				
+				final StockIcon prefIcon =
+						OSInfo.isMacOs() ? MacOSStockIcon.ToolbarCustomizeIcon
+								: OSInfo.isWindows() ?  WindowsStockIcon.APPLICATION : null;
+				final String defIcn = "categories/preferences";
+				ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
+				final PreferencesCommand prefsAct = new PreferencesCommand("Media");
+				prefsAct.putValue(PhonUIAction.NAME, "Edit media folders...");
+				prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Modify global media folders...");
+				prefsAct.putValue(PhonUIAction.SMALL_ICON, prefsIcn);
+				mediaMenu.add(prefsAct);
 			}
 			
 			@Override
