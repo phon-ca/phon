@@ -22,8 +22,10 @@ import java.util.stream.Collectors;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
@@ -78,11 +80,16 @@ public class TimelineRecordTier extends TimelineTier {
 	private int splitGroupIdx = -1;
 
 	private SplitMarker splitMarker = null;
+	
+	private JButton splitButton;
+	private JButton cancelSplitButton;
+	private JButton acceptSplitButton;
 
 	public TimelineRecordTier(TimelineView parent) {
 		super(parent);
 
 		init();
+		addToolbarButtons();
 		setupEditorEvents();
 	}
 
@@ -112,6 +119,40 @@ public class TimelineRecordTier extends TimelineTier {
 
 		setLayout(new BorderLayout());
 		add(recordGrid, BorderLayout.CENTER);
+	}
+	
+	private void addToolbarButtons() {
+		JToolBar toolbar = getParentView().getToolbar();
+		
+		toolbar.addSeparator();
+		
+		SplitRecordAction splitAct = new SplitRecordAction(getParentView());
+		splitButton = new JButton(splitAct);
+		toolbar.add(splitButton);
+		splitButton.addActionListener( (e) -> {
+			splitButton.setVisible(false);
+			cancelSplitButton.setVisible(true);
+			acceptSplitButton.setVisible(true);
+		});
+		
+		final PhonUIAction endSplitModeAct = new PhonUIAction(this, "onEndSplitRecord", false);
+		endSplitModeAct.putValue(PhonUIAction.NAME, "Exit split record");
+		endSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exit split record mode without accepting split");
+		endSplitModeAct.putValue(PhonUIAction.SMALL_ICON,
+				IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL));
+		cancelSplitButton = new JButton(endSplitModeAct);
+		cancelSplitButton.setVisible(false);
+		toolbar.add(cancelSplitButton);
+		
+		final PhonUIAction acceptSplitAct = new PhonUIAction(this, "onEndSplitRecord", true);
+		acceptSplitAct.putValue(PhonUIAction.NAME, "Accept record split");
+		acceptSplitAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
+		acceptSplitAct.putValue(PhonUIAction.SMALL_ICON,
+				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
+		acceptSplitButton = new JButton(acceptSplitAct);
+		acceptSplitButton.setVisible(false);
+		toolbar.add(acceptSplitButton);
+
 	}
 
 	public RecordGrid getRecordGrid() {
@@ -451,6 +492,10 @@ public class TimelineRecordTier extends TimelineTier {
 
 		getRecordGrid().beginSplitMode(splitRecords.getObj1(), splitRecords.getObj2());
 		getRecordGrid().repaintInterval(currentRecordInterval);
+		
+		splitButton.setVisible(false);
+		acceptSplitButton.setVisible(true);
+		cancelSplitButton.setVisible(true);
 	}
 
 	private void endSplitMode(boolean acceptSplit) {
@@ -481,6 +526,10 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 		if (currentRecordInterval != null)
 			getRecordGrid().repaintInterval(currentRecordInterval);
+		
+		splitButton.setVisible(true);
+		cancelSplitButton.setVisible(false);
+		acceptSplitButton.setVisible(false);
 	}
 
 	public void onEndSplitRecord(PhonActionEvent pae) {
