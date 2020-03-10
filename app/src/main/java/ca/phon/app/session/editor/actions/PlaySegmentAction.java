@@ -39,6 +39,8 @@ import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.position.SegmentCalculator;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.IconManager;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
@@ -65,6 +67,7 @@ public class PlaySegmentAction extends SessionEditorAction {
 		
 		putValue(Action.NAME, "Play segment");
 		putValue(Action.SHORT_DESCRIPTION, "Play segment for current record");
+		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
 	

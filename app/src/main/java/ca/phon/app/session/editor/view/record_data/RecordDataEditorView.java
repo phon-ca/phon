@@ -19,12 +19,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -33,6 +39,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
@@ -62,6 +69,8 @@ import org.jdesktop.swingx.HorizontalLayout;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import ca.phon.app.session.SessionMediaModel;
+import ca.phon.app.session.SegmentPlayback;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorAction;
 import ca.phon.app.session.editor.EditorEvent;
@@ -73,6 +82,7 @@ import ca.phon.app.session.editor.RecordNumberField;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorSelection;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.RecordExcludeEdit;
 import ca.phon.app.session.editor.undo.RecordMoveEdit;
@@ -161,6 +171,8 @@ public class RecordDataEditorView extends EditorView {
 	private JLabel currentCharLbl;
 
 	private RecordNumberField recNumField;
+	
+	private JButton playButton;
 
 	/*
 	 * Keep track of 'current' group and tier.  This is done by tracking
@@ -241,10 +253,18 @@ public class RecordDataEditorView extends EditorView {
 
 		add(statusPanel, BorderLayout.SOUTH);
 
+		final PhonUIAction playSegAct = new PhonUIAction(this, "playPause");
+		playSegAct.putValue(PhonUIAction.NAME, "Play segment");
+		playSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
+		playSegAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		playButton = new JButton(playSegAct);
+		
 		update();
 		updateStatus();
 		setupEditorActions();
 		getEditor().getSelectionModel().addSelectionModelListener(selectionListener);
+		
+		getEditor().getMediaModel().getSegmentPlayback().addPropertyChangeListener(segmentPlaybackListener);
 	}
 
 	private void setupEditorActions() {
@@ -312,11 +332,16 @@ public class RecordDataEditorView extends EditorView {
 			if(!tierItem.isVisible()) continue;
 
 			final String tierName = tierItem.getTierName();
+			
+			JPanel tierLabelComp = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+			tierLabelComp.setOpaque(false);
+			
 			final JLabel tierLabel = new JLabel(tierName);
 			tierLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 			tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			tierLabelComp.add(tierLabel);
 
-			contentPane.add(tierLabel, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
+			contentPane.add(tierLabelComp, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
 
 			final SystemTierType systemTier = SystemTierType.tierFromString(tierName);
 			TierDescription tierDesc = null;
@@ -381,10 +406,33 @@ public class RecordDataEditorView extends EditorView {
 			} else {
 				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
 				tierEditor.addTierEditorListener(tierEditorListener);
-				final Component tierComp = tierEditor.getEditorComponent();
+				Component tierComp = tierEditor.getEditorComponent();
 				if(tierFont != null)
 					tierComp.setFont(tierFont);
 				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
+				
+				if(SystemTierType.Segment.getName().contentEquals(tierName)) {
+					JPanel segmentPanel = new JPanel(new GridBagLayout());
+					segmentPanel.setOpaque(false);
+					
+					GridBagConstraints gbc = new GridBagConstraints();
+					gbc.gridx = 0;
+					gbc.gridy = 0;
+					gbc.anchor = GridBagConstraints.WEST;
+					
+					segmentPanel.add(tierComp, gbc);
+					
+					++gbc.gridx;
+					segmentPanel.add(playButton, gbc);
+
+					++gbc.gridx;
+					gbc.fill = GridBagConstraints.HORIZONTAL;
+					gbc.weightx = 1.0;
+					segmentPanel.add(Box.createHorizontalGlue(), gbc);
+					
+					tierComp = segmentPanel;
+				}
+				
 				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 
 				if(tierComp instanceof JTextComponent) {
@@ -738,6 +786,32 @@ public class RecordDataEditorView extends EditorView {
 		}
 
 	};
+	
+	public void playPause() {
+		SessionEditor editor = getEditor();
+		if(editor == null) return;
+
+		if(isPlaying()) {
+			stopPlaying();
+		} else {
+			playSegment();
+		}
+	}
+	
+	public boolean isPlaying() {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		return mediaModel.getSegmentPlayback().isPlaying();
+	}
+	
+	public void stopPlaying() {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		mediaModel.getSegmentPlayback().stopPlaying();
+	}
+	
+	public void playSegment() {
+		PlaySegmentAction playSegAct = new PlaySegmentAction(getEditor());
+		playSegAct.actionPerformed(new ActionEvent(this, -1, "play_segment"));
+	}
 
 	public void onExclude() {
 		final boolean exclude = excludeFromSearchesBox.isSelected();
@@ -894,6 +968,24 @@ public class RecordDataEditorView extends EditorView {
 	public JMenu getMenu() {
 		return new RecordDataMenu(this);
 	}
+	
+	private PropertyChangeListener segmentPlaybackListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			SegmentPlayback segPlayback = (SegmentPlayback)evt.getSource();
+			if(SegmentPlayback.PLAYBACK_PROP.equals(evt.getPropertyName())) {
+				if(segPlayback.isPlaying()) {
+					playButton.setText("Stop playback");
+					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+				} else {
+					playButton.setText("Play segment");
+					playButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+				}
+			}
+ 		}
+		
+	};
 
 	private AtomicReference<JComponent> lastFocusedRef = new AtomicReference<JComponent>();
 	private final class TierEditorComponentFocusListener implements FocusListener {
