@@ -22,7 +22,7 @@ import ca.phon.util.OSInfo;
  */
 public class MediaChecker {
 	
-	private final static long TIMEOUT = 10000L;
+	private final static long TIMEOUT = 5000L;
 	
 	public static boolean checkMediaFile(String mediaFile) {
 		String className = MediaChecker.class.getName();
