@@ -21,6 +21,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.Participant;
 import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 
@@ -43,14 +44,14 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		if(getView().getSelectionInterval() == null) return;
 		
-		final Record currentRecord = getEditor().currentRecord();
 		
 		final float startTime = getView().getSelectionInterval().getStartMarker().getTime();
 		final float endTime = getView().getSelectionInterval().getEndMarker().getTime();
 		
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Record record = factory.createRecord();
-		record.setSpeaker(currentRecord.getSpeaker());
+		final Record currentRecord = getEditor().currentRecord();
+		record.setSpeaker((currentRecord != null ? currentRecord.getSpeaker() : Participant.UNKNOWN));
 		record.addGroup();
 		
 		final MediaSegment segment = factory.createMediaSegment();
