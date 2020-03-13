@@ -97,7 +97,7 @@ public class VLCHelper {
 				String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, vlcPluginPathDefault);
 				File vlcPluginPathFile = new File(vlcPluginPath);
 				if(!vlcPluginPathFile.isAbsolute()) {
-					vlcPluginPath = workingDir + File.separator + vlcLocation;
+					vlcPluginPath = workingDir + File.separator + vlcPluginPath;
 				}
 				if(vlcPluginPath != null && !OSInfo.isWindows()) {
 					// System.getenv("VLC_PLUGIN_PATH") returns null even after the call
