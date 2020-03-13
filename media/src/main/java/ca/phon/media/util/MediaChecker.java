@@ -12,6 +12,8 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import ca.phon.media.LongSound;
+import ca.phon.media.sampled.PCMSampled;
+import ca.phon.media.sampled.SampledLongSound;
 import ca.phon.util.OSInfo;
 
 /**
@@ -102,6 +104,14 @@ public class MediaChecker {
 		try {
 			System.err.println(String.format("Opening file %s", args[0]));
 			LongSound ls = LongSound.fromFile(new File(args[0]));
+			if(ls instanceof SampledLongSound) {
+				SampledLongSound sls = (SampledLongSound)ls;
+				if(((PCMSampled)sls.getSampled()).getAudioFileFormat().getFormat().getSampleSizeInBits() != 16) {
+					System.err.println(String.format("%s invalid format", args[0]));
+					System.exit(3);
+				}
+			}
+			
 			System.err.println(String.format("%s %fs OK", args[0], ls.length()));
 		} catch (IOException e) {
 			e.printStackTrace();
