@@ -35,9 +35,9 @@ import ca.phon.worker.PhonWorker;
  */
 public class GenerateSessionAudioAction extends SessionEditorAction {
 
-	private final static String TXT = "Generate session audio";
+	private final static String TXT = "Generate/re-encode session audio";
 	
-	private final static String DESC = "Generate session audio file from media";
+	private final static String DESC = "Generate or re-encode session audio file";
 	
 	public final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("misc/oscilloscope", IconSize.SMALL);
