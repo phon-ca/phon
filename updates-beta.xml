@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.6/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_6.dmg" newVersion="3.1.0-beta.6" newMediaFileId="macos" fileSize="275862034" md5Sum="b02ecd7bfdf038fa5d15619af97a54a0" sha256Sum="0b5c043a5d26731b6a586f7ca380c7ff32d2ccea1e558c023c1ee466c50c0976" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.7/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_7.dmg" newVersion="3.1.0-beta.7" newMediaFileId="macos" fileSize="275876827" md5Sum="29a96f3d7151ea7fee2ba2b4a15926fb" sha256Sum="00c1f276fd8697d09654d22193e06e9ea53b8cdd21ef4020936572a7175fec92" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
@@ -308,9 +310,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_6.dmg" newVersion="3.1.0-beta.6" newMediaFileId="macos" fileSize="275862034" md5Sum="b02ecd7bfdf038fa5d15619af97a54a0" sha256Sum="0b5c043a5d26731b6a586f7ca380c7ff32d2ccea1e558c023c1ee466c50c0976" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_7.dmg" newVersion="3.1.0-beta.7" newMediaFileId="macos" fileSize="275876827" md5Sum="29a96f3d7151ea7fee2ba2b4a15926fb" sha256Sum="00c1f276fd8697d09654d22193e06e9ea53b8cdd21ef4020936572a7175fec92" bundledJre="macosx-amd64-11.0.1.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
@@ -616,9 +620,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_6.exe" newVersion="3.1.0-beta.6" newMediaFileId="win64" fileSize="287570776" md5Sum="df814e579441d89264bfe213e96e6c75" sha256Sum="bd0c30d6f8b09e0957d22c5636dbd876711e57802cfb6b477787eaba7b56e3dc" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_7.exe" newVersion="3.1.0-beta.7" newMediaFileId="win64" fileSize="287578968" md5Sum="1acbfe4da6a2cda9c30137e352ed3f74" sha256Sum="eee280c97b257f0dce885d56117ed563952b6373fc3b606de5b6a0a8d6fd08ea" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
@@ -924,9 +930,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_6.exe" newVersion="3.1.0-beta.6" newMediaFileId="win64" fileSize="287570776" md5Sum="df814e579441d89264bfe213e96e6c75" sha256Sum="bd0c30d6f8b09e0957d22c5636dbd876711e57802cfb6b477787eaba7b56e3dc" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_7.exe" newVersion="3.1.0-beta.7" newMediaFileId="win64" fileSize="287578968" md5Sum="1acbfe4da6a2cda9c30137e352ed3f74" sha256Sum="eee280c97b257f0dce885d56117ed563952b6373fc3b606de5b6a0a8d6fd08ea" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
@@ -1232,9 +1240,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_6.exe" newVersion="3.1.0-beta.6" newMediaFileId="win64" fileSize="287570776" md5Sum="df814e579441d89264bfe213e96e6c75" sha256Sum="bd0c30d6f8b09e0957d22c5636dbd876711e57802cfb6b477787eaba7b56e3dc" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_7.exe" newVersion="3.1.0-beta.7" newMediaFileId="win64" fileSize="287578968" md5Sum="1acbfe4da6a2cda9c30137e352ed3f74" sha256Sum="eee280c97b257f0dce885d56117ed563952b6373fc3b606de5b6a0a8d6fd08ea" bundledJre="windows-amd64-11.0.1.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
@@ -1540,9 +1550,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_6.zip" newVersion="3.1.0-beta.6" newMediaFileId="win64zip" fileSize="286547889" md5Sum="849eb6bfc90fc1c8e425fcb29f0af23f" sha256Sum="f36643c5565006577c681a9c160c1f105f77e6d2453970c0d4ebca569e84ce5d" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_7.zip" newVersion="3.1.0-beta.7" newMediaFileId="win64zip" fileSize="286555186" md5Sum="879d18430a777a1ac056ad2919c8074d" sha256Sum="279d05e42902e437f5544b8fcd8fb41037e100babefe7349a2de22ec871da40a" bundledJre="windows-amd64-11.0.1.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
@@ -1848,9 +1860,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_6.sh" newVersion="3.1.0-beta.6" newMediaFileId="linux64" fileSize="198822020" md5Sum="c9908e25085f65dc4c6ead20b606c2bb" sha256Sum="59b2852b527e9e45226eb3d4a4fd5b3f60596889ef357096858200bab5701dad" bundledJre="" archive="false" singleBundle="false">
+  <entry targetMediaFileId="linux64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_unix_3_1_0-beta_7.sh" newVersion="3.1.0-beta.7" newMediaFileId="linux64" fileSize="198830276" md5Sum="660571baaa1c9b8162c60e8308f46775" sha256Sum="8bde0b9c5b946e0ee52d3f4af543a5204bb2c501950aa56b09b7438db29bd04a" bundledJre="" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
