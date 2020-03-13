@@ -16,6 +16,8 @@
 
 package ca.phon.media;
 
+import java.io.File;
+
 import com.sun.jna.NativeLibrary;
 
 import ca.phon.ui.nativedialogs.OSInfo;
@@ -81,11 +83,22 @@ public class VLCHelper {
 					// libvlc should be in /usr/lib and already included in LD_LIBRARY_PATH
 					// on most systems
 				}
-				final String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
+				
+				String workingDir = System.getProperty("user.dir");
+				
+				String vlcLocation = PrefHelper.get(VLC_LOCATION, vlcLocationDefault);
+				File vlcLocationFile = new File(vlcLocation);
+				if(!vlcLocationFile.isAbsolute()) {
+					vlcLocation = workingDir + File.separator + vlcLocation;
+				}
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcCoreLibraryName(), vlcLocation);
 				
-				final String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, vlcPluginPathDefault);
+				String vlcPluginPath = PrefHelper.get(VLC_PLUGIN_PATH, vlcPluginPathDefault);
+				File vlcPluginPathFile = new File(vlcPluginPath);
+				if(!vlcPluginPathFile.isAbsolute()) {
+					vlcPluginPath = workingDir + File.separator + vlcLocation;
+				}
 				if(vlcPluginPath != null && !OSInfo.isWindows()) {
 					// System.getenv("VLC_PLUGIN_PATH") returns null even after the call
 					// but the setting seems to be necessary for vlcj
