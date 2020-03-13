@@ -53,6 +53,13 @@ public interface Sampled {
 	public boolean isSigned();
 	
 	/**
+	 * Is big endian
+	 * 
+	 * @return <code>true</code> if data is big endian
+	 */
+	public boolean isBigEndian();
+	
+	/**
 	 * Get value for sample
 	 * 
 	 * @param channel

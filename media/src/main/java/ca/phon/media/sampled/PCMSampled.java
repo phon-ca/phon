@@ -131,6 +131,11 @@ public class PCMSampled implements Sampled {
 	public boolean isSigned() {
 		return getAudioFileFormat().getFormat().getEncoding() == Encoding.PCM_SIGNED;
 	}
+	
+	@Override
+	public boolean isBigEndian() {
+		return getAudioFileFormat().getFormat().isBigEndian();
+	}
 
 	@Override
 	public double valueForSample(int channel, long sample) {
@@ -163,8 +168,8 @@ public class PCMSampled implements Sampled {
 		return (fileFormat.getFrameLength() / frameRate);
 	}
 	
-	protected int getSample(int byteOffset) {
-		int retVal = 0;
+	protected double getSample(int byteOffset) {
+		double retVal = 0;
 		
 		final AudioFormat format = getAudioFileFormat().getFormat();
 		if(format.getEncoding() != Encoding.PCM_SIGNED &&
@@ -175,11 +180,7 @@ public class PCMSampled implements Sampled {
 		case 8:
 			retVal = get8bitSample(byteOffset);
 			break;
-			
-		case 12:
-			retVal = get12bitSample(byteOffset);
-			break;
-			
+					
 		case 16:
 			retVal = get16bitSample(byteOffset);
 			break;
@@ -199,8 +200,8 @@ public class PCMSampled implements Sampled {
 		return retVal;
 	}
 	
-	protected int toSample(int idx, byte[] frames) {
-		int retVal = 0;
+	protected double toSample(int idx, byte[] frames) {
+		double retVal = 0;
 		
 		final AudioFormat format = getAudioFileFormat().getFormat();
 		if(format.getEncoding() != Encoding.PCM_SIGNED &&
@@ -211,11 +212,7 @@ public class PCMSampled implements Sampled {
 		case 8:
 			retVal = to8bitSample(idx, frames);
 			break;
-			
-		case 12:
-			retVal = to12bitSample(idx, frames);
-			break;
-			
+						
 		case 16:
 			retVal = to16bitSample(idx, frames);
 			break;
@@ -248,90 +245,93 @@ public class PCMSampled implements Sampled {
 		return retVal;
 	}
 	
-	protected int get8bitSample(int byteOffset) {
+	protected double get8bitSample(int byteOffset) {
 		final byte[] frame = getBytes(byteOffset, 1);
 		return to8bitSample(frame);
 	}
 	
-	protected int to8bitSample(byte[] frame) {
+	protected double to8bitSample(byte[] frame) {
 		return to8bitSample(0, frame);
 	}
 	
-	protected int to8bitSample(int idx, byte[] frames) {
-		return (frames[idx] & 0xff);
+	protected double to8bitSample(int idx, byte[] frames) {
+		return (frames[idx]) * (1.0 / 128.0);
 	}
-	
-	protected int get12bitSample(int byteOffset) {
+		
+	protected double get16bitSample(int byteOffset) {
 		byte sampleBytes[] = getBytes(byteOffset, 2);
-		return to12bitSample(sampleBytes);
+		return to16bitSample(sampleBytes);
 	}
 	
-	protected int to12bitSample(byte[] frame) {
-		return to12bitSample(0, frame);
-	}
-	
-	protected int to12bitSample(int idx, byte[] frames) {
-		byte low = frames[idx];
-		byte high = frames[idx+1];
-
-		int sample = ((high << 8) & 0x0F00) + (low & 0x00FF);
-		return sample;
-	}
-	
-	protected int get16bitSample(int byteOffset) {
-		byte sampleBytes[] = getBytes(byteOffset, 2);
-		return to16bitSamle(sampleBytes);
-	}
-	
-	protected int to16bitSamle(byte[] frame) {
+	protected double to16bitSample(byte[] frame) {
 		return to16bitSample(0, frame);
 	}
 	
-	protected int to16bitSample(int idx, byte[] frames) {
-		byte low = frames[idx];
-		byte high = frames[idx+1];
+	protected double to16bitSample(int idx, byte[] frames) {
+		byte b1 = frames[idx];
+		byte b2 = frames[idx+1];
 
-		int sample = (high << 8) + (low & 0x00ff);
-		return sample;
+		short sample = 
+			(getAudioFileFormat().getFormat().isBigEndian()
+				? (short)((b1 <<  8) | (b2))
+				: (short)((b1) | (b2 << 8))
+			);
+		return sample * (1.0 / 32768.0);
 	}
 
-	protected int get24bitSample(int byteOffset) {
+	protected double get24bitSample(int byteOffset) {
 		byte sampleBytes[] = getBytes(byteOffset, 3);
 		return to24bitSample(sampleBytes);
 	}
 	
-	protected int to24bitSample(byte[] frame) {
+	protected double to24bitSample(byte[] frame) {
 		return to24bitSample(0, frame);
 	}
 	
-	protected int to24bitSample(int idx, byte[] frames) {
-		byte low = frames[idx];
-		byte mid = frames[idx+1];
-		byte high = frames[idx+2];
-
-		int sample = (high << 16) + (mid << 8) + (low & 0x00ff);
-		return sample;
+	protected double to24bitSample(int idx, byte[] frames) {
+		byte b1 = frames[idx];
+		byte b2 = frames[idx+1];
+		byte b3 = frames[idx+2];
+		
+		int sample = 
+			(getAudioFileFormat().getFormat().isBigEndian()
+				? ((b1 << 8)
+						| ((b2 << 16))
+						| ((b3) << 24))
+					: ((b1 << 24))
+						| ((b2 << 16))
+						| ((b3 << 8)) 
+				);
+		return sample * (1.0 / 32768.0 / 65536.0);
 	}
 	
-	protected int get32bitSample(int byteOffset) {
+	protected double get32bitSample(int byteOffset) {
 		byte sampleBytes[] = getBytes(byteOffset, 4);
 		return to32bitSample(sampleBytes);
 	}
 	
-	protected int to32bitSample(byte[] frame) {
+	protected double to32bitSample(byte[] frame) {
 		return to32bitSample(0, frame);
 	}
 	
-	protected int to32bitSample(int idx, byte[] frames) {
-		byte low = frames[idx];
-		byte lowmid = frames[idx+1];
-		byte midhigh = frames[idx+2];
-		byte high = frames[idx+3];
+	protected double to32bitSample(int idx, byte[] frames) {
+		byte b1 = frames[idx];
+		byte b2 = frames[idx+1];
+		byte b3 = frames[idx+2];
+		byte b4 = frames[idx+3];
 
-		int sample = ((high << 24) & 0xFF000000)
-				+ ((midhigh << 16) & 0x00FF0000)
-				+ ((lowmid << 8) & 0x0000FF00) + (low & 0x000000FF);
-		return sample;
+		int sample = 
+			(getAudioFileFormat().getFormat().isBigEndian()
+				? ((b1)
+					| ((b2 << 8))
+					| ((b3) << 16))
+					| (b4 << 24)
+				: ((b1 << 24))
+					| ((b2 << 16))
+					| ((b3 << 8)) 
+					| (b4)
+			);
+		return sample * (1.0 / 32768.0 / 65536.0);
 	}
 	
 	protected int byteOffsetForFrame(long frame) {
