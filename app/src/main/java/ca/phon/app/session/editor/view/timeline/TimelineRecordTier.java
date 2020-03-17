@@ -828,6 +828,9 @@ public class TimelineRecordTier extends TimelineTier {
 				getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
+				
+				// XXX repaint grid - requried to fix incorrect flags and record numbers
+				recordGrid.repaint(recordGrid.getVisibleRect());
 			}
 		}
 
