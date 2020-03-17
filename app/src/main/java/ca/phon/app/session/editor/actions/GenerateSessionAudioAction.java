@@ -44,6 +44,8 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 	
 	private final static String ORIGINAL_FILE_SUFFIX = "-orig";
 	
+	private final static String WAV_EXT = ".wav";
+	
 	private final Collection<PhonTaskListener> customListeners = new ArrayList<>();
 	
 	public GenerateSessionAudioAction(SessionEditor editor) {
@@ -127,14 +129,14 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 				session.getMediaLocation(), getEditor().getProject(), session.getCorpus());
 			int lastDot = movFile.getName().lastIndexOf(".");
 			if(lastDot > 0) {
-				String audioFileName = movFile.getName().substring(0, lastDot) + ".wav";
+				String audioFileName = movFile.getName().substring(0, lastDot) + WAV_EXT;
 				File parentFile = movFile.getParentFile();
 				File resFile = new File(parentFile, audioFileName);
 				String movExt = movFile.getName().substring(lastDot);
 
-				if(movExt.equals(".wav")) {
+				if(movExt.equalsIgnoreCase(WAV_EXT)) {
 					String originalFileName = movFile.getName().substring(0, movFile.getName().lastIndexOf('.')) + 
-							ORIGINAL_FILE_SUFFIX + ".wav";
+							ORIGINAL_FILE_SUFFIX + movExt;
 					final File originalFile = new File(movFile.getParentFile(), originalFileName);
 					// already a wav, do nothing!
 					int selectedOption = 
@@ -147,6 +149,11 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 						LogUtil.warning("Unable to rename media to " + originalFile.getAbsolutePath());
 						return null;
 					} else {
+						// ensure originalFile exists
+						if(!originalFile.exists()) {
+							LogUtil.warning("Unable to move original media to " + originalFile.getAbsolutePath());
+							return null;
+						}
 						movFile = originalFile;
 					}
 				}

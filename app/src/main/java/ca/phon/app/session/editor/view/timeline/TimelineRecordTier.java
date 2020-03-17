@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;

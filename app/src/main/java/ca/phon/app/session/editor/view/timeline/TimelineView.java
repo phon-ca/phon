@@ -169,7 +169,7 @@ public final class TimelineView extends EditorView {
 		
 		timeModel.setPixelsPerSecond(100.0f);
 		timeModel.setStartTime(0.0f);
-		timeModel.setEndTime(0.0f);
+		timeModel.setEndTime(100.0f);
 		timeModel.addPropertyChangeListener("endTime", (e) -> {
 			timebar.revalidate();
 			wavTier.revalidate();
@@ -517,7 +517,7 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void setupTimeModel() {
-		float endTime = getMaxRecordTime();
+		float endTime = Math.max(10.0f, getMaxRecordTime());
 		
 		final SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionMediaAvailable()) {
