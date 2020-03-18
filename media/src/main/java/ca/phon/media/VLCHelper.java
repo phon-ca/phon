@@ -91,6 +91,9 @@ public class VLCHelper {
 				if(!vlcLocationFile.isAbsolute()) {
 					vlcLocation = workingDir + File.separator + vlcLocation;
 				}
+				if(!vlcLocationDefault.equals(vlcLocation)) {
+					LOGGER.info("VLC location:" + vlcLocation);
+				}
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcCoreLibraryName(), vlcLocation);
 				
@@ -106,6 +109,10 @@ public class VLCHelper {
 						LOGGER.warn("Unable to set VLC_PLUGIN_PATH");
 					}
 				}
+				if(!vlcPluginPathDefault.equals(vlcPluginPath)) {
+					LOGGER.info("VLC plug-in location:" + vlcPluginPath);
+				}
+
 				
 				Info info = Info.getInstance();
 				LOGGER.info(String.format("vlcj             : %s", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>"));

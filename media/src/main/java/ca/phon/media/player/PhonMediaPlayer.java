@@ -135,6 +135,9 @@ public class PhonMediaPlayer extends JPanel {
 	private final static String MEDIA_AVAIL_IMAGE = "media_available.png";
 	private final BufferedImage mediaAvailableImage;
 	
+	private final static String NO_PLAYER_IMAGE = "no_player.png";
+	private final BufferedImage noPlayerImage;
+	
 	/** Menu filters */
 	private List<IMediaMenuFilter> menuFilters =
 			new ArrayList<IMediaMenuFilter>();
@@ -154,6 +157,7 @@ public class PhonMediaPlayer extends JPanel {
 		noMediaImage = getNoMediaImage();
 		audioOnlyImage = getAudioFileImage();
 		mediaAvailableImage = getMediaAvailableImage();
+		noPlayerImage = getNoPlayerImage();
 		
 		loadIcons();
 		init();
@@ -409,26 +413,32 @@ public class PhonMediaPlayer extends JPanel {
 			
 			mediaPlayerCanvas.setToolTipText("No media");
 		} else if(VLCHelper.isLoaded()) {
-			mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
-			mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
-			if(mediaPlayer == null) return;
-			
-			playPauseBtn.setEnabled(true);
-			replayBtn.setEnabled(true);
-			positionSlider.setEnabled(true);
-			
-			if(mediaPlayer.media().prepare(getMediaFile(), ":play-and-pause", ":no-video-title-show")) {
-				mediaPlayer.videoSurface().set(
-						mediaPlayerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
-				mediaPlayer.events().addMediaPlayerEventListener(loadListener);
-				mediaPlayer.controls().play();
+			try {
+				mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
+				mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
+				if(mediaPlayer == null) return;
 				
-				mediaPlayerCanvas.setToolTipText(getMediaFile());
-			} else {
-				mediaPlayerCanvas.setBufferedImage(noMediaImage);
+				playPauseBtn.setEnabled(true);
+				replayBtn.setEnabled(true);
+				positionSlider.setEnabled(true);
+				
+				if(mediaPlayer.media().prepare(getMediaFile(), ":play-and-pause", ":no-video-title-show")) {
+					mediaPlayer.videoSurface().set(
+							mediaPlayerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
+					mediaPlayer.events().addMediaPlayerEventListener(loadListener);
+					mediaPlayer.controls().play();
+					
+					mediaPlayerCanvas.setToolTipText(getMediaFile());
+				} else {
+					mediaPlayerCanvas.setBufferedImage(noMediaImage);
+					mediaPlayerCanvas.repaint();
+					
+					mediaPlayerCanvas.setToolTipText("Unable to load media");
+				}
+			} catch (UnsatisfiedLinkError | Exception e) {
+				LOGGER.error(e.getLocalizedMessage(), e);
+				mediaPlayerCanvas.setBufferedImage(noPlayerImage);
 				mediaPlayerCanvas.repaint();
-				
-				mediaPlayerCanvas.setToolTipText("Unable to load media");
 			}
 		}
 	}
@@ -462,6 +472,15 @@ public class PhonMediaPlayer extends JPanel {
 	private BufferedImage getMediaAvailableImage() {
 		try {
 			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(MEDIA_AVAIL_IMAGE));
+		} catch (IOException e) {
+			LOGGER.warn(e);
+		}
+		return null;
+	}
+	
+	private BufferedImage getNoPlayerImage() {
+		try {
+			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(NO_PLAYER_IMAGE));
 		} catch (IOException e) {
 			LOGGER.warn(e);
 		}
