@@ -54,7 +54,7 @@ import ca.phon.util.resources.ResourceLoader;
  */
 public class QueryMenuListener implements MenuListener {
 	
-	private final static String STOCK_MENU_QUERIES[] = new String[] { "Data Tiers", "Deletions", "Epenthesis", "Phones", "Segmental Relations" };
+	private final static String STOCK_MENU_QUERIES[] = new String[] { "Data Tiers", "Deletion", "Epenthesis", "Phones", "Segmental Relations" };
 	
 	public void menuCanceled(MenuEvent e) {
 		
