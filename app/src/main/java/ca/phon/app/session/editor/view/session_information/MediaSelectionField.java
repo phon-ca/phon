@@ -15,6 +15,8 @@
  */
 package ca.phon.app.session.editor.view.session_information;
 
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -25,12 +27,19 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.FileSelectionField;
@@ -66,9 +75,34 @@ public class MediaSelectionField extends FileSelectionField {
 		this.project = project;
 		textField.setPrompt("Session media location");
 		setFileFilter(FileFilter.mediaFilter);
+		
+		setupInputMap();
+		
 		PhonWorker.getInstance().invokeLater( () -> setupTextCompleter() );
 	}
+	
+	private void setupInputMap() {
+		InputMap inputMap = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		ActionMap actionMap = getActionMap();
+		
+		KeyStroke saveKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+		String saveId = "save";
+		
+		PhonUIAction validateAndSaveSessionAct = new PhonUIAction(this, "validateAndSaveSession");
+		actionMap.put(saveId, validateAndSaveSessionAct);
+		inputMap.put(saveKs, saveId);
+		
+		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
+		setActionMap(actionMap);
+	}
 
+	public void validateAndSaveSession(PhonActionEvent pae) {
+		final File f = getSelectedFile();
+		setFile(f);
+		
+		(new SaveSessionAction(getEditor())).actionPerformed(pae.getActionEvent());
+	}
+	
 	/**
 	 *
 	 * @param rootPath
@@ -185,7 +219,7 @@ public class MediaSelectionField extends FileSelectionField {
 		final String txt = super.getText();
 		File retVal = null;
 
-		if(getTextField().getState() == FieldState.INPUT && txt.length() > 0) {
+		if(getTextField().getState() == FieldState.INPUT && txt != null && txt.length() > 0) {
 			File mediaLocatorFile = MediaLocator.findMediaFile(txt, project, getEditor().getSession().getCorpus());
 			if(mediaLocatorFile != null) {
 				retVal = mediaLocatorFile;
