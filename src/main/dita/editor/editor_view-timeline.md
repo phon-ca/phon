@@ -38,7 +38,7 @@ If the **[Media Player](./editor_view-media_player.html "Media Player")** view i
 
 ### Participants
 
-Record data is printed by participant in rows. By default all participants plus a row for ``Unidentified`` records are visible.
+Record data is printed by participant in rows. By default all participants plus a row for *Unidentified* records are visible.
 
 #### Hide/Show Participant
 
@@ -46,7 +46,7 @@ Participant visiblity can be toggled using the *Participants* menu in the toolba
 
 #### Add Participant
 
-To add a new participant to the session, click *Add Participant* in the *Participants* menu or select "Participants>Add Participant"     within the contextual menu.
+To add a new participant to the session, click *Add Participant* in the *Participants* menu or select *Participants* > *Add Participant* within the contextual menu.
 
 #### Change Participant
 
