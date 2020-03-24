@@ -26,8 +26,8 @@ public class ExportAsHTMLAction extends SessionEditorAction {
 	public ExportAsHTMLAction(SessionEditor editor) {
 		super(editor);
 		
-		putValue(SessionEditorAction.NAME, "Export as HTML...");
-		putValue(SessionEditorAction.SHORT_DESCRIPTION, "Export session as HTML");
+		putValue(SessionEditorAction.NAME, "Export session (HTML and spreadsheet)...");
+		putValue(SessionEditorAction.SHORT_DESCRIPTION, "Export session as HTML or in a spreadsheet");
 	}
 
 	@Override

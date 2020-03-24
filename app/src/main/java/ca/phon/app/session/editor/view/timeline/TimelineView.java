@@ -308,7 +308,7 @@ public final class TimelineView extends EditorView {
 		
 		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
 		segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
-		segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/segmentation", IconSize.SMALL));
 		segmentationButton = new JButton(segmentationAction);
 		
 		speakerMenu = new JPopupMenu();
@@ -841,7 +841,7 @@ public final class TimelineView extends EditorView {
 	@RunOnEDT
 	public void onSegmentationEnded(EditorEvent ee) {
 		segmentationButton.setText("Start Segmentation");
-		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/segmentation", IconSize.SMALL));
 		
 		getEditor().putExtension(SegmentationHandler.class, null);
 
@@ -951,7 +951,7 @@ public final class TimelineView extends EditorView {
 			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 		} else {
 			segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
-			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/segmentation", IconSize.SMALL));
 		}
 		builder.addItem(".", segmentationAction);
 		
@@ -993,10 +993,10 @@ public final class TimelineView extends EditorView {
 		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
 		if(getEditor().getExtension(SegmentationHandler.class) != null) {
 			segmentationAction.putValue(PhonUIAction.NAME, "Stop Segmentation");
-			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop-7", IconSize.SMALL));
 		} else {
 			segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
-			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
+			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/segmentation", IconSize.SMALL));
 		}
 		builder.addItem(".", segmentationAction);
 		

@@ -855,7 +855,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("misc/oscilloscope", IconSize.SMALL);
+		return IconManager.getInstance().getIcon("docking-frames/waveform", IconSize.SMALL);
 	}
 
 	@Override
