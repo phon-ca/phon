@@ -436,19 +436,13 @@ public final class SegmentationHandler {
 						timelineView.repaint(timelineView.getVisibleRect());
 						repaintEntireInterval = false;
 					} else {
-						if(getWindow().getBackwardWindowLengthMs() == 0L) {
-							float st = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
-							float et = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-							timelineView.repaint(tn, st, et);
-						} else {
-							float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
-							float e1 = Math.max(prevStart, segmentationInterval.getEndMarker().getTime());
-							timelineView.repaint(tn, s1, e1);
-							
-							float s2 = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
-							float e2 = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-							timelineView.repaint(tn, s2, e2);						
-						}
+						float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
+						float e1 = Math.max(prevStart, segmentationInterval.getEndMarker().getTime());
+						timelineView.repaint(tn, s1, e1);
+						
+						float s2 = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
+						float e2 = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
+						timelineView.repaint(tn, s2, e2);						
 					}
 
 					// special case: segmenting with no media
