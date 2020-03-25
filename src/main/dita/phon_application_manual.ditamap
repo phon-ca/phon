@@ -8,7 +8,7 @@
         <booklists>
             <toc/>
         </booklists>
-        <topicref href="misc/Welcome.md" format="markdown">
+        <topicref href="Welcome.md" format="markdown">
             <topicref href="misc/install.md" format="markdown"/>
             <topicref href="misc/known_issues.md" format="markdown"/>
         </topicref>
