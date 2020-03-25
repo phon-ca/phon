@@ -1,4 +1,4 @@
-# View: Media Player
+# Media Player
 
 The *Media Player* view allows for playback of session media using VLC.
 

@@ -1,4 +1,4 @@
-# View: Timeline (beta)
+# Timeline (beta)
 
 The **Timeline** view displays the waveform for the session audio (when the audio file is available) as well as associated record data for each selected participant along a horizontal timeline. The primary purpose of the **Timeline** view is to aid with segmentation and alterations of existing record segments.
 

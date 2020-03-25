@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="conceptId">
-    <title>About Editor Views</title>
+    <title>Views</title>
     <shortdesc>Information in each session is displayed in a series of small windows within the
             <wintitle>Session Editor</wintitle>, called views. There are several types of
         views:</shortdesc>

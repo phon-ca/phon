@@ -1,3 +1,3 @@
-# View: IPA Lookup
+# IPA Lookup
 
 ![../images/EditorView_IPALookup.png](../images/EditorView_IPALookup.png)

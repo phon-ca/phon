@@ -1,10 +1,12 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
-<topic id="topic-1">
-    <title>Session Editor - Keyboard Shortcuts</title>
-    <body>
-        <p>Editor keystrokes:</p>
-        <p>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="editor_keystrokes">
+    <title>Keyboard Shortcuts</title>
+    <refbody>
+        <section id="section_gmf_mxm_dlb">
+            <title>Global Keystrokes</title>
+            <p>The following table outlines editor keystrokes which are globally available.</p>
+        </section>
             <simpletable frame="all" id="simpletable_754b92cd-3648-4e44-8d14-33081058f721">
                 <sthead>
                     <stentry>Command</stentry>
@@ -89,7 +91,6 @@
                     <stentry/>
                 </strow>
             </simpletable>
-        </p>
         <p>The following keystrokes are available when a tier is focused:</p>
         <p>
             <simpletable frame="all" id="simpletable_300b6022-4f5f-43a6-8ba3-aa2f74259bb9">
@@ -141,5 +142,5 @@
                 </strow>
             </simpletable>
         </p>
-    </body>
-</topic>
+    </refbody>
+</reference>

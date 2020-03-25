@@ -68,101 +68,91 @@
             <topicref href="projman/CSVExport.xml"/>
         </topicref>
         <topichead navtitle="Session Editor">
-            <topicref href="session_editor/EditorKeystrokes.xml"/>
-            <topichead navtitle="Records">
-                <topicref href="session_editor/AddNewRecord.xml"/>
-                <topicref href="session_editor/CopyRecord.xml"/>
-                <topicref href="session_editor/DuplicateRecord.xml"/>
-                <topicref href="session_editor/CutRecord.xml"/>
-                <topicref href="session_editor/PasteRecord.xml"/>
-                <topicref href="session_editor/DeleteRecord.xml"/>
-                <topicref href="session_editor/Navigate.xml"/>
-                <topicref href="session_editor/ViewRecordList.xml"/>
-                <topicref href="session_editor/SortRecords.xml"/>
-                <topicref href="session_editor/SearchSession.xml">
-                    <topicref href="session_editor/AboutTableQuickSearch.xml"/>
+            <topicref href="session_editor/records.dita"/>
+            <topicref href="session_editor/AboutEditorViews.xml">
+                <topicref href="session_editor/editor_view-session_information.md" format="markdown">
+                    <topicref href="session_editor/EditSessionDate.xml"/>
+                    <topicref href="session_editor/LinkMedia.xml"/>
+                    <topicref href="session_editor/AboutParticipants.xml"/>
+                    <topicref href="session_editor/AddParticipant.xml"/>
+                    <topicref href="session_editor/EditParticipants.xml"/>
+                    <topicref href="session_editor/InputSessionLanguage.xml"/>
                 </topicref>
-            </topichead>
-            <topicref href="session_editor/AboutEditorViews.xml"/>
+                <topicref href="session_editor/editor_view-tier_management.md" format="markdown">
+                    <topicref href="session_editor/CreateUserDefinedTiers.xml"/>
+                    <topicref href="session_editor/RemoveUserDefinedTiers.xml"/>
+                    <topicref href="session_editor/EditTierDisplayOptions.xml"/>
+                    <topicref href="session_editor/LockUnlockTiers.xml"/>
+                </topicref>
+                <topicref href="session_editor/editor_view-record_data.md" format="markdown">
+                    <topicref href="session_editor/NewGroup.xml"/>
+                    <topicref href="session_editor/MergeGroup.xml"/>
+                    <topicref href="session_editor/SplitGroup.xml"/>
+                    <topicref href="session_editor/DeleteGroup.xml"/>
+                    <topicref href="query/ExcludeRecords.xml"/>
+                    <topicref href="session_editor/TranscribeData.xml">
+                        <topicref href="session_editor/AboutBoundariesPauses.xml"/>
+                    </topicref>
+                </topicref>
+                <topicref href="session_editor/editor_view-syllabification_and_alignment.md"
+                    format="markdown">
+                    <topicref href="session_editor/AboutSyllabification.xml"/>
+                    <topicref href="session_editor/VerifyAlignment.xml"/>
+                    <topicref href="session_editor/AboutAlignment.xml"/>
+                    <topicref href="session_editor/VerifySyllabification.xml"/>
+                </topicref>
+                <topicref href="session_editor/editor_view-ipa_validation.md" format="markdown">
+                    <topicref href="session_editor/AboutBlindTranscription.xml"/>
+                    <topicref href="session_editor/ValidateBlindTranscriptions.xml"/>
+                    <topicref href="session_editor/Auto-validate.xml"/>
+                </topicref>
+                <topicref href="session_editor/editor_view-media_player.md" format="markdown">
+                    <topicref href="session_editor/AboutMedia.xml"/>
+                    <topicref href="session_editor/OpenMedia.xml"/>
+                    <topicref href="session_editor/GoTo.xml"/>
+                    <topicref href="session_editor/MoveMediaPositionWithRecord.xml"/>
+                    <topicref href="session_editor/PlayAdjacencySequence.xml"/>
+                    <topicref href="session_editor/PlayCurrentSegment.xml"/>
+                    <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
+                    <topicref href="session_editor/PlayCustomSegment.xml"/>
+                    <topicref href="session_editor/ExportMedia.xml"/>
+                    <topicref href="session_editor/TakeSnapshot.xml"/>
+                </topicref>
+                <topicref href="session_editor/editor_view-speech_analysis.md" format="markdown">
+                    <topicref href="session_editor/ViewWaveform.xml"/>
+                    <topicref href="session_editor/AdjustSegmentTimes.xml"/>
+                    <topicref href="session_editor/ExportAudioSegment.xml"/>
+                    <topicref href="praat-plugin/spectrogram_viewer.dita">
+                        <topicref href="praat-plugin/spectrogram_settings.dita"/>
+                        <topicref href="praat-plugin/formant_listing.dita"/>
+                        <topicref href="praat-plugin/formant_settings.dita"/>
+                        <topicref href="praat-plugin/intensity_listing.dita"/>
+                        <topicref href="praat-plugin/intensity_settings.dita"/>
+                        <topicref href="praat-plugin/pitch_listing.dita"/>
+                        <topicref href="praat-plugin/pitch_settings.dita"/>
+                    </topicref>
+                    <topicref href="praat-plugin/textgrid_viewer.dita">
+                        <topicref href="praat-plugin/generate_textgrids.dita"/>
+                        <topicref href="praat-plugin/import_textgrids.dita"/>
+                        <topicref href="praat-plugin/open_textgrid_in_praat.dita"/>
+                    </topicref>
+                </topicref>
+                <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
+                <topicref href="session_editor/editor_view-ipa_lookup.md" format="markdown">
+                    <topicref href="session_editor/Auto-transcribe.xml"/>
+                    <topicref href="session_editor/AboutIPALookupConsole.xml"/>
+                </topicref>
+                <topicref href="session_editor/editor_view-find_and_replace.md" format="markdown">
+                    <topicref href="session_editor/FindReplace.xml"/>
+                </topicref>
+            </topicref>
             <topicref href="session_editor/AboutEditorLayouts.xml">
                 <topicref href="session_editor/SaveCurrentLayout.xml"/>
                 <topicref href="session_editor/DeleteSavedLayout.xml"/>
                 <topicref href="session_editor/ChangeLayout.xml"/>
             </topicref>
-            <topicref href="session_editor/editor_view-session_information.md" format="markdown">
-                <topicref href="session_editor/EditSessionDate.xml"/>
-                <topicref href="session_editor/LinkMedia.xml"/>
-                <topicref href="session_editor/AboutParticipants.xml"/>
-                <topicref href="session_editor/AddParticipant.xml"/>
-                <topicref href="session_editor/EditParticipants.xml"/>
-                <topicref href="session_editor/InputSessionLanguage.xml"/>
-            </topicref>
-            <topicref href="session_editor/editor_view-tier_management.md" format="markdown">
-                <topicref href="session_editor/CreateUserDefinedTiers.xml"/>
-                <topicref href="session_editor/RemoveUserDefinedTiers.xml"/>
-                <topicref href="session_editor/EditTierDisplayOptions.xml"/>
-                <topicref href="session_editor/LockUnlockTiers.xml"/>
-            </topicref>
-            <topicref href="session_editor/editor_view-record_data.md" format="markdown">
-                <topicref href="session_editor/NewGroup.xml"/>
-                <topicref href="session_editor/MergeGroup.xml"/>
-                <topicref href="session_editor/SplitGroup.xml"/>
-                <topicref href="session_editor/DeleteGroup.xml"/>
-                <topicref href="query/ExcludeRecords.xml"/>
-                <topicref href="session_editor/TranscribeData.xml">
-                    <topicref href="session_editor/AboutBoundariesPauses.xml"/>
-                </topicref>
-            </topicref>
-            <topicref href="session_editor/editor_view-syllabification_and_alignment.md" format="markdown">
-                <topicref href="session_editor/AboutSyllabification.xml"/>
-                <topicref href="session_editor/VerifyAlignment.xml"/>
-                <topicref href="session_editor/AboutAlignment.xml"/>
-                <topicref href="session_editor/VerifySyllabification.xml"/>
-            </topicref>
-            <topicref href="session_editor/editor_view-ipa_validation.md" format="markdown">
-                <topicref href="session_editor/AboutBlindTranscription.xml"/>
-                <topicref href="session_editor/ValidateBlindTranscriptions.xml"/>
-                <topicref href="session_editor/Auto-validate.xml"/>
-            </topicref>
-            <topicref href="session_editor/editor_view-media_player.md" format="markdown">
-                <topicref href="session_editor/AboutMedia.xml"/>
-                <topicref href="session_editor/OpenMedia.xml"/>
-                <topicref href="session_editor/GoTo.xml"/>
-                <topicref href="session_editor/MoveMediaPositionWithRecord.xml"/>
-                <topicref href="session_editor/PlayAdjacencySequence.xml"/>
-                <topicref href="session_editor/PlayCurrentSegment.xml"/>
-                <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
-                <topicref href="session_editor/PlayCustomSegment.xml"/>
-                <topicref href="session_editor/ExportMedia.xml"/>
-                <topicref href="session_editor/TakeSnapshot.xml"/>
-            </topicref>
-            <topicref href="session_editor/editor_view-speech_analysis.md" format="markdown">
-                <topicref href="session_editor/ViewWaveform.xml"/>
-                <topicref href="session_editor/AdjustSegmentTimes.xml"/>
-                <topicref href="session_editor/ExportAudioSegment.xml"/>
-                <topicref href="praat-plugin/spectrogram_viewer.dita">
-                    <topicref href="praat-plugin/spectrogram_settings.dita"/>
-                    <topicref href="praat-plugin/formant_listing.dita"/>
-                    <topicref href="praat-plugin/formant_settings.dita"/>
-                    <topicref href="praat-plugin/intensity_listing.dita"/>
-                    <topicref href="praat-plugin/intensity_settings.dita"/>
-                    <topicref href="praat-plugin/pitch_listing.dita"/>
-                    <topicref href="praat-plugin/pitch_settings.dita"/>
-                </topicref>
-                <topicref href="praat-plugin/textgrid_viewer.dita">
-                    <topicref href="praat-plugin/generate_textgrids.dita"/>
-                    <topicref href="praat-plugin/import_textgrids.dita"/>
-                    <topicref href="praat-plugin/open_textgrid_in_praat.dita"/>
-                </topicref>
-            </topicref>
-            <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
-            <topicref href="session_editor/editor_view-ipa_lookup.md" format="markdown">
-                <topicref href="session_editor/Auto-transcribe.xml"/>
-                <topicref href="session_editor/AboutIPALookupConsole.xml"/>
-            </topicref>
-            <topicref href="session_editor/editor_view-find_and_replace.md" format="markdown">
-                <topicref href="session_editor/FindReplace.xml"/>
-            </topicref>
+            <topicref href="session_editor/SearchSession.xml"/>
+            <topicref href="session_editor/EditorKeystrokes.xml"/>
         </topichead>
         <topichead navtitle="Tools">
             <topichead navtitle="IPA Map">
@@ -227,9 +217,7 @@
                 <topicref href="query/ViewResultSet.xml">
                     <topicref href="query/SaveTableAsCSV.xml"/>
                     <topicref href="query/EditTableColumns.xml"/>
-                    <topicref href="query/FilterResults.xml">
-                        <topicref href="session_editor/AboutTableQuickSearch.xml"/>
-                    </topicref>
+                    <topicref href="query/FilterResults.xml"/>
                 </topicref>
             </topicref>
             <topicref href="query/query_wizard_report_composer.md" format="markdown">

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="records">
+    <title>Records</title>
+    <body>
+        <p></p>
+    </body>
+    <topic id="record_actions">
+        <title>Actions</title>
+        <body/>
+        <topic id="add_record">
+            <title>Add New Record</title>
+            <shortdesc>Add a new record to an existing session.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Display the record after which you would like to create a new record and click
+                            the <uicontrol>New record</uicontrol> button in the top left corner of the
+                            <wintitle>Session Editor</wintitle> or choose the <menucascade>
+                                <uicontrol>Session</uicontrol>
+                                <uicontrol>New Record</uicontrol>
+                            </menucascade> (<userinput>CMD/CTRL+N</userinput>) menu item.</p>
+                        <itemgroup>This will create a new record immediately following the selected record.
+                            The new record will be visible from the <wintitle>Record Data</wintitle>
+                            view.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        <topic id="copy_record">
+            <title>Copy Record</title>
+            <shortdesc>Copy all visible <wintitle>Record Data</wintitle> information to the clipboard.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Display the record you wish to copy and choose the <menucascade>
+                            <uicontrol>Session</uicontrol>
+                            <uicontrol>Copy record</uicontrol>
+                        </menucascade> menu item (<userinput>Shift+CMD+C</userinput>).</p>
+                        <itemgroup>All visible tiers will be copied to the clipboard, with tier names and
+                            tier data separated by tabs. It can be pasted into the <wintitle>Session
+                                Editor</wintitle> as a new record, or into another window.<note>When pasted
+                                    into a word processor, you will likely be able to automatically convert the
+                                    copied record into a table. Ensure that you use tabs to separate
+                                    cells.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        <topic id="duplicate_record">
+            <title>Duplicate Record</title>
+            <shortdesc>Duplicate a record in an existing session.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Display the record which you would like to duplicate and click the
+                            <uicontrol>Duplicate record</uicontrol> button in the top left corner of the
+                            <wintitle>Session Editor</wintitle> or choose the <menucascade>
+                                <uicontrol>Session</uicontrol>
+                                <uicontrol>Duplicate record</uicontrol>
+                            </menucascade> (<userinput>CMD/CTRL+D</userinput>) menu item.</p>
+                        <itemgroup>This will create a duplicate record immediately following the original.
+                            The duplicate record will be visible from the <wintitle>Record Data</wintitle>
+                            view.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        <topic id="cut_record">
+            <title>Cut Record</title>
+            <shortdesc>Copy all visible <wintitle>Record Data</wintitle> information to the clipboard and
+                delete current record.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Dispaly the record you wish to cut and choose the <menucascade>
+                            <uicontrol>Session</uicontrol>
+                            <uicontrol>Cut record</uicontrol>
+                        </menucascade> menu item (<userinput>Shift+CMD+X</userinput>).</p>
+                        <itemgroup>All visible tiers will be copied to the clipboard, and then the record
+                            will be deleted. It can be pasted into the <wintitle>Session Editor</wintitle>
+                            as a new record, or into another window.<note>When pasted into a word processor,
+                                you will likely be able to automatically convert the copied record into a
+                                table. Ensure that you use tabs to separate cells.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        <topic id="paste_record">
+            <title>Paste Record</title>
+            <shortdesc>Paste a record from the clipboard into the <wintitle>Session
+                Editor</wintitle>.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Display the record after which you would like to paste, and choose the <menucascade>
+                            <uicontrol>Session</uicontrol>
+                            <uicontrol>Paste record</uicontrol>
+                        </menucascade> menu item (<userinput>Shift+CMD+V</userinput>).</p>
+                        <itemgroup>The record will be created in the <wintitle>Session Editor</wintitle>
+                            directly after the currently visible record.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        <topic id="delete_record">
+            <title>Delete Record</title>
+            <shortdesc>Delete a record from an existing session.</shortdesc>
+            <body>
+                <section>From the <uicontrol>Session Editor</uicontrol> window:</section>
+                <ol>
+                    <li>
+                        <p>Display the record that you would like to delete and choose the <menucascade>
+                            <uicontrol>Session</uicontrol>
+                            <uicontrol>Delete Record</uicontrol>
+                        </menucascade> (<userinput>CMD/CTRL+E</userinput>) menu item.</p>
+                        <itemgroup>A dialog will appear asking you to confirm that you would like to delete
+                            this record and informing you that this action cannot be undone.</itemgroup>
+                    </li>
+                    <li>
+                        <p>If you are unsure, click <uicontrol>No</uicontrol>. To continue and delete the
+                            record, click <uicontrol>Yes</uicontrol>.</p>
+                        <itemgroup>The record will no longer appear in the <wintitle>Record Data</wintitle>
+                            view; the next record will be displayed.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+    </topic>
+        
+    <topic id="navigate_records">
+        <title>Navigate Between Records</title>
+        <shortdesc>Navigate between records in the <wintitle>Session Editor</wintitle>
+            window.</shortdesc>
+        <body>
+            <ol id="steps_dfm_kpt_dh">
+                <li>
+                    <p>To go to the next record in your session, select the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>Next record</uicontrol>
+                    </menucascade> menu item or click the <uicontrol>right arrow</uicontrol> at the
+                        top of the <wintitle>Session Editor</wintitle>.</p>
+                    <itemgroup>Views will update to display information for the next record in your
+                        session, and the number of the currently visible record will be
+                        displayed.</itemgroup>
+                </li>
+                <li>
+                    <p>To go to the previous record in your session, select the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>Previous record</uicontrol>
+                    </menucascade> menu item or click the <uicontrol>left arrow</uicontrol>.</p>
+                </li>
+                <li>
+                    <p>To jump to the last record in your session, select the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>Last record</uicontrol>
+                    </menucascade> menu item or click the <uicontrol>right arrow with vertical
+                        line</uicontrol>.</p>
+                </li>
+                <li>
+                    <p>To jump to the first record in your session, select the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>First record</uicontrol>
+                    </menucascade> menu itme or click the <uicontrol>left arrow with vertical
+                        line</uicontrol>.</p>
+                </li>
+                <li>
+                    <p>To navigate to a specific record using its number, click on the current record
+                        number and type in the desired number.</p>
+                </li>
+            </ol>
+        </body>
+    </topic>
+    
+    <topic id="view_record_list">
+        <title>View Record List</title>
+        <shortdesc>View a list of records in a session.</shortdesc>
+        <body>
+            <section>From the <wintitle>Session Editor</wintitle> window:</section>
+            <ol>
+                <li>
+                    <p>Click the drop down menu on the left of the <uicontrol>Search</uicontrol> bar
+                        and select <uicontrol>Open Record List</uicontrol>, or click within the empty
+                        <uicontrol>Search</uicontrol> bar and press <userinput>Enter</userinput>.
+                        Alternately, you may enter a search term in the <uicontrol>Search</uicontrol>
+                        bar and open a list of only records containing that term.</p>
+                    <itemgroup>This will open the <wintitle>Record List</wintitle> view, which
+                        shows a list of the records in a session with their <i>Record #</i> and all tier
+                        information.<note>To arrange by a column, click on its header. To reorder
+                            columns, click and drag their header to the left or
+                            right.</note></itemgroup>
+                </li>
+                <li>
+                    <p>Click on any record in the list to navigate to it in the <wintitle>Session
+                        Editor</wintitle>.</p>
+                </li>
+            </ol>
+        </body>
+    </topic>
+    
+    <topic id="sort_records">
+        <title>Sort Records</title>
+        <shortdesc>Sort records in an existing session by start time.</shortdesc>
+        <body>
+            <section>From the <wintitle>Session Editor</wintitle> window:</section>
+            <ol>
+                <li>
+                    <p>Choose the <menucascade>
+                        <uicontrol>Session</uicontrol>
+                        <uicontrol>Sort records...</uicontrol>
+                    </menucascade> menu item.</p>
+                    <itemgroup>The <wintitle>Sort Records</wintitle> dialog will appear.</itemgroup>
+                </li>
+                <li><p>Click the <uicontrol>Sort by:</uicontrol> menu and select a tier by which to sort your records.
+                    For example, you may sort your records in chronological order (by choosing
+                    <uicontrol>Segment</uicontrol>), or alphabetically by their
+                    <uicontrol>Orthography</uicontrol>.</p> <itemgroup><note>You may choose up to three tiers by which to sort your records; they will be sorted by the
+                        first chosen tier, and then records with the same information in the first
+                        tier will be sorted by the next chosen tier, and so forth.</note></itemgroup></li>
+                <li><p>By default, records will be sorted in ascending order. To sort in descending order by 
+                    any tier, select <uicontrol>descending</uicontrol>.</p>
+                </li>
+                <li>
+                    <p>When you have finished selecting sort options, click <uicontrol>Ok</uicontrol>.
+                        If you do not wish to sort records at this time, click
+                        <uicontrol>Cancel</uicontrol>.</p><itemgroup>The records for the current session will be sorted by the tier(s) you have
+                            chosen.</itemgroup>
+                </li>
+            </ol>
+        </body>
+    </topic>
+</topic>

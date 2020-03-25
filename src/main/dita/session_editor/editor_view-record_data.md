@@ -1,4 +1,4 @@
-# View: Record Data
+# Record Data
 
 The record data view displays tier data for the current record.
 

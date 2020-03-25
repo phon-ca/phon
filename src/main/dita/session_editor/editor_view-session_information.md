@@ -1,4 +1,4 @@
-# View: Session Information
+# Session Information
 
 The *Session Information* displays and edits the session date, media file, participant list, and language list for the session.
 

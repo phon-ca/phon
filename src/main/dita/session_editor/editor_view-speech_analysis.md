@@ -1,4 +1,4 @@
-# View: Speech Analysis
+# Speech Analysis
 
 The *Speech Analysis* view displays the waveform, spectrogram, and *TextGrid* for the session.
 
