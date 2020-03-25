@@ -83,12 +83,7 @@
                     <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
                 </topicref>
             </topichead>
-            <topicref href="editor/concepts/AboutEditorViews.xml">
-                <topicref href="editor/tasks/MinimizeView.xml"/>
-                <topicref href="editor/tasks/RelocateView.xml"/>
-                <topicref href="editor/tasks/DockView.xml"/>
-                <topicref href="editor/tasks/UndockView.xml"/>
-            </topicref>
+            <topicref href="editor/concepts/AboutEditorViews.xml"/>
             <topicref href="editor/concepts/AboutEditorLayouts.xml">
                 <topicref href="editor/tasks/SaveCurrentLayout.xml"/>
                 <topicref href="editor/tasks/DeleteSavedLayout.xml"/>
