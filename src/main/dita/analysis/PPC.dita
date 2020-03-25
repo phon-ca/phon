@@ -74,9 +74,9 @@
                     <li>Ignore diacritics - ignore diacritics when comparing phones (default:
                         yes.)</li>
                     <li>Include PPC w/o epenthesis 'PPC (NoEpen)' (see below.)</li>
-                    <li><xref href="../query/tasks/GroupFilter.xml"/></li>
-                    <li><xref href="../query/tasks/WordFilter.xml"/></li>
-                    <li><xref href="../query/tasks/SyllableFilter.xml"/></li>
+                    <li><xref href="../query/GroupFilter.xml"/></li>
+                    <li><xref href="../query/WordFilter.xml"/></li>
+                    <li><xref href="../query/SyllableFilter.xml"/></li>
                 </ol></p>
         </body>
     </topic>

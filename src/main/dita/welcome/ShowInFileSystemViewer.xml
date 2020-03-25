@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Show Project in File System Viewer</title>
+    <shortdesc>Show a project's location using your computer's file system viewer.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Workspace</wintitle> window:</context>
+            <steps id="steps_mmr_tru_sc">
+                <step>
+                    <cmd>Mouse over the project you wish to archive in the <wintitle>Project
+                        List</wintitle> pane. </cmd>
+                    <stepresult>Two buttons will appear next to your project name; <uicontrol>Create
+                        .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
+                        file system viewer</uicontrol>.
+                        <image placement="break" scale="40"
+                            href="../images/ShowinFSV.png" id="image_wdr_vlm_sc"/></stepresult>                
+                </step>
+
+                <step>
+                    <cmd>Click <uicontrol>Show project in file system viewer</uicontrol>.
+                    Alternately, right-click (<userinput>CTRL+click</userinput>) on your project and
+                    choose <uicontrol>Show project</uicontrol> from the context menu.</cmd>
+                    <stepresult>Your computer's file system viewer will open to the folder
+                    containing your project, which will be highlighted.</stepresult>
+                </step>
+            </steps>
+    </taskbody>
+</task>

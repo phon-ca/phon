@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Participants</title>
+    <conbody>
+        <p>In the <i>Phon</i>
+            <wintitle>Session Editor</wintitle>, the Participant(s) in a session may be specified
+            and records may be associated with individual participants.</p>
+        <p>'Participant', in this case means a speaker in a research study. Often, only one target
+            speaker is listed and transcribed as a participant in a session. However, there may be
+            more than one target speaker per session, or it may be useful to have records that
+            include the utterances of interlocutors for the purpose of establishing context for the
+            target's utterances.</p>
+        <image placement="break" scale="30"
+            href="../images/AboutParticipants.png" id="image_wdr_vlm_sc"/>
+        <p>Associating an utterance with a speaker allows you to:</p>
+        <p>
+            <ul id="ul_uep_acb_vc">
+                <li>study intra-speaker speech patterns and changes</li>
+                <li>compare the patterns of multiple speakers</li>
+                <li>compile several speakers' data together to make more generalizable
+                    observations.</li>
+            </ul>
+        </p>
+        <p>Since a corpus often contains data mostly relevant to a specific participant, <i>Phon</i>
+            allows users to specify one set of participants for an entire corpus, in what is known
+            as a corpus template. See <xref href="../projman/EditCorpusTemplate.xml"/> for
+            instructions.</p>
+    </conbody>
+</concept>

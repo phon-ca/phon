@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_51v_4vv_4g">
+ <title>Phone</title> <conbody>
+  <p>Phones are the main unit of an IPA transcription. They are composed of a vowel or consonant (or
+    <i>base glyph</i>) along with optional diacritics. Diacritics are of the following types: prefix
+   (e.g., pre-nasalization), combining (e.g., devoicing), length, suffix (e.g., aspiration), and
+   tone. The following sections outline each part of a single Phone.</p>
+  <section>
+   <title>Prefix Diacritic</title>
+   <p>A prefix diacritic must appear before the base glyph.  A phone may have multiple prefix
+    diacritics.</p>
+  </section>
+  <section>
+   <title>Base Glyph</title>
+   <p>The base glyph can be any IPA vowel or consonant.</p>
+  </section>
+  <section>
+   <title>Combining Diacritic</title>
+   <p>Combining diacritics must appear directly after the base glyph; any number of combining
+    diacritics may be used.  Combining diacritics may also be added to prefix and suffix
+    diacritics.</p>
+  </section>
+  <section>
+   <title>Length</title>
+   <p>Phone length is indicated using character 0x02D0 (long) and 0x02D1 (half-long.)  Length
+    diacritics must appear after the phone to which they belong.</p>
+  </section>
+  <section>
+   <title>Suffix Diacritic</title>
+   <p>A suffix diacritic must appear after the base glyph.  A phone may have multiple suffix
+    diacritics.</p>
+  </section>
+  <section>
+   <title>Tone</title>
+   <p>Tone diacritics (such as upstep or tone numbers) must appear as the last element in a phone.</p>
+  </section>
+  <section>
+   <note>Please consult  for a list of possible IPA elements and their character types.</note>
+   <table id="table_dyv_gxz_pg">
+    <tgroup cols="2">
+     <thead>
+      <row>
+       <entry>Some Possible Phones</entry>
+       <entry>Description</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>t̪ʰ</entry>
+       <entry>Aspirated dental [t]</entry>
+      </row>
+      <row>
+       <entry>aːːː¹</entry>
+       <entry>Triple-long [a], Tone 1</entry>
+      </row>
+      <row>
+       <entry>ⁿd</entry>
+       <entry>Prenasalised [d]</entry>
+      </row>
+      <row>
+       <entry>ᵐṳ̀</entry>
+       <entry>Prenasalised, breathy voiced [u], with combining diacritic low tone</entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </section>
+  
+ </conbody>
+ <related-links>
+  <link href="../generated/ipa.xml#concept_ipa_listing"/>
+ </related-links>
+</concept>

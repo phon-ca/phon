@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Metathesis Query</title>
+    <shortdesc>Search the IPA tiers for potential cases of metathesis.</shortdesc>
+    <taskbody>
+        <context><image placement="break" scale="30"
+            href="../images/Metathesis.png" id="image_wdr_vlm_sc"/></context>
+        <steps>
+            <step>
+                <cmd>To run a query for records with metathesis, specify the following
+                    criteria:</cmd>
+            </step>
+        </steps>
+    </taskbody>
+    <task id="id_b270fc02-2f1b-49ba-be75-7456ccd79a77" conref="Metathesis.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_120d1e00-102b-49c2-9d05-e816032dc78b" conref="GroupFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_2b4997c5-5290-4ed2-abce-0ec44a577dc7" conref="ParticipantFilter.xml#taskId">
+        <title/>
+    </task>
+</task>

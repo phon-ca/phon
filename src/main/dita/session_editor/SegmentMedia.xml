@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Segment Media</title>
+    <shortdesc>Segment media into records.</shortdesc>
+    <taskbody>
+        <context>With the <wintitle>Media Player</wintitle> and <wintitle>Segmentation</wintitle>
+                views open:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Play</uicontrol> button in the <wintitle>Media
+                        Player</wintitle>.</cmd>
+                <stepresult>
+                    This will begin playback of the media file.
+                </stepresult>
+            </step>
+            <step>
+                <cmd>From the <wintitle>Segmentation</wintitle> view, create a new segment by
+                    clicking on the <uicontrol>&lt;no speaker></uicontrol> option or the appropriate
+                    participant's name in the <uicontrol>Participants</uicontrol> field. Alternately
+                    you may type <userinput>CMD/CTRL+0</userinput> for an unspecified participant,
+                    or <userinput>CMD/CTRL+1</userinput>, <userinput>CMD/CTRL+2</userinput>, etc.
+                    for a particular participant as noted to the left of his/her name in the list. </cmd>
+                <stepresult>When the default segment length is set to 3000 ms, your segment will end
+                    when you either click on the participants name or use the specified keystrokes.
+                    The segment will begin 3 seconds before that action. The media file will
+                    continue to play.<note>You may want to adjust the default segment length value
+                        depending on the nature of your study. Simply type in the desired segment
+                        length (in milliseconds) in the <uicontrol>Segment Window</uicontrol> field.
+                        A segment window of 0 will make the segment length unlimited; each segment
+                        will begin at the endpoint of the previous segment.</note><note>The
+                            <uicontrol>Current Window</uicontrol> values display the beginning and
+                        end time of your segment. The second value always represents the current
+                        playback time. The first value represents the beginning of your segment;
+                        when in blue this time also corresponds to the end of the previous segment.
+                        Clicking this value when it is blue causes the program to ignore the
+                        endpoint of the previous segment and change to a segment beginning point
+                        appropriate for the <uicontrol>Segment Window</uicontrol>
+                    value.</note></stepresult>
+            </step>
+            <step>
+                <cmd>Repeat Step 2 after each utterance until the entire media file has been
+                    segmented.</cmd>
+                <stepresult>By default, this action generates a new record in the <wintitle>Session
+                        Editor</wintitle> for each segmented media clip and places the new record
+                    after the current one.<note>You may instead choose to insert the new record at
+                        the end of the session by selecting <uicontrol>Insert record at end of
+                            session</uicontrol> from the <uicontrol>Mode</uicontrol> combo box. You
+                        may also choose to overwrite the segment for an individual record, if for
+                        example you accidentally cut off the end of an utterance. To do so, select
+                            <uicontrol>Replace segment for current record</uicontrol> from the
+                            <uicontrol>Mode</uicontrol> combo box, and create a new segment with the
+                        desired endpoint following Step 2.</note><note>To resume segmentation from a
+                        certain time, click the arrow at the bottom right of the <wintitle>Media
+                            Player</wintitle>. This will open a context menu with several options.
+                            <uicontrol>Go to...</uicontrol> allows you to input a specific time for
+                        the player to jump to, <uicontrol>Go to end of segmented media</uicontrol>
+                        brings you to the end of your last segment, and <uicontrol>Go to end of last
+                            segment for &lt;Participant></uicontrol> brings you to the end of the
+                        last segmented utterance by the specified participant.</note>
+                    <image placement="break" scale="30" href="../images/SegmentGoTo.png"
+                        id="image_wdr_vlm_sc"/></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

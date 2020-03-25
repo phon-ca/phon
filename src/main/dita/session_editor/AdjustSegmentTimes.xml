@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Adjust Segment Start and End Times</title>
+    <shortdesc>Adjust segment start and end times to refine segments.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Speech Analysis</wintitle> view:</context>
+        <steps>
+            <step>
+                <cmd>Click the <uicontrol>Play</uicontrol> button
+                        (<userinput>CMD/CTRL+Shift+R</userinput>).</cmd>
+                <stepresult>This action will replay the segment for the displayed
+                    record.</stepresult>
+            </step>
+            <step>
+                <cmd>Select a portion of the waveform for your revised segment and press
+                        <userinput>Enter</userinput>. Alternately, typeover the existing time values
+                    in the <uicontrol>Record Data</uicontrol> view with revised values and click the
+                        <uicontrol>Refresh</uicontrol> button in the top left area of the
+                        <wintitle>Speech Analysis</wintitle> view. <image placement="break"
+                        scale="40" href="../images/AdjustSegment.png" id="image_wdr_vlm_sc"
+                    /></cmd>
+                <stepresult>This action will adjust your segment start and end times.<note>To view a
+                        larger portion of the waveform, click <uicontrol>Show More</uicontrol>. This
+                        extends the displayed interval by one second on each side. To redisplay the
+                        500ms buffer, click <uicontrol>Refresh</uicontrol>.</note></stepresult>
+            </step>
+            <step>
+                <cmd>If you would like to listen to or further revise the segments, repeat steps 1
+                    and 2.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>

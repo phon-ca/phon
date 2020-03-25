@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
+<concept id="conceptId">
+    <title>About Workspace Window</title>
+    <conbody>
+        <p>The <wintitle>Workspace</wintitle> window appears upon startup of <i>Phon</i>. To open
+            this window if it has been closed, select the <menucascade>
+                <uicontrol>Workspace</uicontrol>
+                <uicontrol>Show Workspace window...</uicontrol>
+            </menucascade> menu item.</p>
+        <image placement="break" scale="40"
+            href="../images/AboutWorkspaceWindow.png" id="image_wdr_vlm_sc"/>
+        <p>From this window, you can create, open, and manage <i>Phon</i> projects. It consists of
+            four panes:</p>
+    </conbody>
+    <concept id="WorkspaceActions.xml" conref="WorkspaceActions.xml">
+        <title></title>
+    </concept>
+    <concept id="OtherActions.xml" conref="OtherActions.xml">
+        <title></title>
+    </concept>
+    <concept id="WorkspaceFolder.xml" conref="WorkspaceFolder.xml">
+        <title></title>
+    </concept>
+    <concept id="ProjectList.xml" conref="ProjectList.xml">
+        <title></title>
+    </concept>
+</concept>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Edit Corpus Template</title>
+    <shortdesc>Set default participants and tiers for all sessions to be created in a
+        corpus.</shortdesc>
+    <taskbody>
+        <context>From <wintitle>Project Manager</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Right-click (<userinput>CTRL+click</userinput>) on the corpus whose template
+                    you wish to edit and select <uicontrol>Edit corpus template...</uicontrol> from
+                    the context menu.</cmd>
+                <stepresult>A <wintitle>Session Template</wintitle> window will appear for the
+                    selected corpus, showing the <wintitle>Session Information</wintitle> and
+                        <wintitle>Tier Management</wintitle> views.</stepresult>
+            </step>
+            <step>
+                <cmd>Edit options as you see fit. Close this window when you are finished making
+                    changes.</cmd>
+                <stepresult>These settings will be applied to any sessions subsequently created
+                    within the corpus.<note>For further instructions on how to specify information
+                        in the <wintitle>Session Information</wintitle> and <wintitle>Tier
+                            Management</wintitle> views, consult <xref
+                            href="../session_editor/InputSessionLanguage.xml"/>, <xref
+                            href="../session_editor/AboutParticipants.xml"/>, <xref
+                            href="../session_editor/LinkMedia.xml"/>, <xref
+                            href="../session_editor/EditTierDisplayOptions.xml"/>, and other
+                        related pages.</note></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

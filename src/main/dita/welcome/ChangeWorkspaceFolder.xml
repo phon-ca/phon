@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Change Workspace Folder</title>
+    <shortdesc>Change the default workspace folder.</shortdesc>
+    <taskbody>
+        <context>From the <wintitle>Workspace</wintitle> window:</context>
+        <steps>
+            <step>
+                <cmd>Click the specified folder name in the <wintitle>Workspace Folder</wintitle>
+                    pane.</cmd>
+                <stepresult>A <wintitle>Browse</wintitle> window will appear.</stepresult>
+            </step>
+            <step>
+                <cmd>If desired, click <uicontrol>New Folder</uicontrol> to create a new directory
+                    in the current location. Browse to the appropriate directory and click
+                        <uicontrol>Open</uicontrol>.</cmd>
+                <stepresult>The chosen directory will be your new workspace folder.<note>To reset
+                        the workspace folder to its default location, mouse over the specified
+                            <uicontrol>Workspace Folder</uicontrol> and click the <uicontrol>Use
+                            default workspace folder</uicontrol> button on the right. </note>
+                    <image placement="break" scale="40"
+                        href="../images/WorkspaceFolderDefault.png" id="image_wdr_vlm_sc"
+                    /></stepresult>
+            </step>
+        </steps>
+    </taskbody>
+</task>

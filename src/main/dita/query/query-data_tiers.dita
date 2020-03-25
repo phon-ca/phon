@@ -9,7 +9,7 @@
             </image></div></context>
         
     </taskbody>
-    <task id="id_oq3_nzv_4cb" conref="tasks/DataTiers.xml#taskId">
+    <task id="id_oq3_nzv_4cb" conref="DataTiers.xml#taskId">
         <title/>
     </task>
 </task>

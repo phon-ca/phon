@@ -16,163 +16,163 @@
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.md" format="markdown">
             <topichead navtitle="Actions">
-                <topicref href="welcome/tasks/CreateProject.xml"/>
-                <topicref href="welcome/tasks/OpenProject.xml"/>
+                <topicref href="welcome/CreateProject.xml"/>
+                <topicref href="welcome/OpenProject.xml"/>
             </topichead>
             <topichead navtitle="Workspace">
-                <topicref href="welcome/concepts/WorkspaceFolder.xml">
-                    <topicref href="welcome/tasks/ChangeWorkspaceFolder.xml"/>
+                <topicref href="welcome/WorkspaceFolder.xml">
+                    <topicref href="welcome/ChangeWorkspaceFolder.xml"/>
                 </topicref>
-                <topicref href="welcome/concepts/ProjectList.xml">
-                    <topicref href="welcome/tasks/SortProjectList.xml"/>
-                    <topicref href="welcome/tasks/ShowInFileSystemViewer.xml"/>
-                    <topicref href="welcome/tasks/OpenProject.xml"/>
-                    <topicref href="welcome/tasks/ExtractProject.xml"/>
+                <topicref href="welcome/ProjectList.xml">
+                    <topicref href="welcome/SortProjectList.xml"/>
+                    <topicref href="welcome/ShowInFileSystemViewer.xml"/>
+                    <topicref href="welcome/OpenProject.xml"/>
+                    <topicref href="welcome/ExtractProject.xml"/>
                 </topicref>
             </topichead>
             <topicref href="welcome/recent_projects.md" format="markdown"/>
         </topicref>
-        <topicref href="prefs/tasks/EditPreferences.xml">
-            <topicref href="prefs/concepts/AboutAutosaves.xml"/>
-            <topicref href="prefs/tasks/ChangeApplicationFonts.xml"/>
-            <topicref href="prefs/tasks/ChangeDictionaryLanguage.xml"/>
-            <topicref href="prefs/tasks/ChangeSyllabifierLanguage.xml"/>
-            <topicref href="prefs/concepts/AboutMediaDirs.xml"/>
+        <topicref href="prefs/EditPreferences.xml">
+            <topicref href="prefs/AboutAutosaves.xml"/>
+            <topicref href="prefs/ChangeApplicationFonts.xml"/>
+            <topicref href="prefs/ChangeDictionaryLanguage.xml"/>
+            <topicref href="prefs/ChangeSyllabifierLanguage.xml"/>
+            <topicref href="prefs/AboutMediaDirs.xml"/>
         </topicref>
         <topicref href="projman/project_manager.md" format="markdown">
-            <topicref href="misc/concepts/AboutProjectFileStructure.xml"/>
-            <topicref href="misc/concepts/AboutProjectMediaFolders.xml"/>
-            <topicref href="projman/concepts/AboutCorpora.xml">
-                <topicref href="projman/tasks/CreateCorpus.xml"/>
-                <topicref href="projman/tasks/DuplicateCorpus.xml"/>
-                <topicref href="projman/tasks/EditCorpusTemplate.xml"/>
-                <topicref href="projman/tasks/RenameCorpus.xml"/>
-                <topicref href="projman/tasks/DeleteCorpus.xml"/>
+            <topicref href="misc/AboutProjectFileStructure.xml"/>
+            <topicref href="misc/AboutProjectMediaFolders.xml"/>
+            <topicref href="projman/AboutCorpora.xml">
+                <topicref href="projman/CreateCorpus.xml"/>
+                <topicref href="projman/DuplicateCorpus.xml"/>
+                <topicref href="projman/EditCorpusTemplate.xml"/>
+                <topicref href="projman/RenameCorpus.xml"/>
+                <topicref href="projman/DeleteCorpus.xml"/>
             </topicref>
-            <topicref href="projman/concepts/AboutSessions.xml">
-                <topicref href="projman/tasks/CreateSession.xml"/>
-                <topicref href="projman/tasks/OpenSessionDefault.xml"/>
-                <topicref href="projman/tasks/OpenSessionBlind.xml"/>
-                <topicref href="projman/tasks/DuplicateSession.xml"/>
-                <topicref href="projman/tasks/DeriveSession.xml"/>
-                <topicref href="projman/tasks/MoveSession.xml"/>
-                <topicref href="projman/tasks/RenameSession.xml"/>
-                <topicref href="projman/tasks/SaveSessionAs.xml"/>
-                <topicref href="projman/tasks/DeleteSession.xml"/>
+            <topicref href="projman/AboutSessions.xml">
+                <topicref href="projman/CreateSession.xml"/>
+                <topicref href="projman/OpenSessionDefault.xml"/>
+                <topicref href="projman/OpenSessionBlind.xml"/>
+                <topicref href="projman/DuplicateSession.xml"/>
+                <topicref href="projman/DeriveSession.xml"/>
+                <topicref href="projman/MoveSession.xml"/>
+                <topicref href="projman/RenameSession.xml"/>
+                <topicref href="projman/SaveSessionAs.xml"/>
+                <topicref href="projman/DeleteSession.xml"/>
             </topicref>
-            <topicref href="projman/tasks/CheckTranscriptions.xml"/>
-            <topicref href="projman/tasks/ResetSyllabification.xml"/>
-            <topicref href="projman/tasks/ResetPhoneAlignment.xml"/>
-            <topicref href="projman/tasks/RefreshProject.xml"/>
-            <topicref href="projman/tasks/CSVImport.xml"/>
-            <topicref href="projman/tasks/CSVExport.xml"/>
+            <topicref href="projman/CheckTranscriptions.xml"/>
+            <topicref href="projman/ResetSyllabification.xml"/>
+            <topicref href="projman/ResetPhoneAlignment.xml"/>
+            <topicref href="projman/RefreshProject.xml"/>
+            <topicref href="projman/CSVImport.xml"/>
+            <topicref href="projman/CSVExport.xml"/>
         </topicref>
         <topichead navtitle="Session Editor">
-            <topicref href="editor/concepts/EditorKeystrokes.xml"/>
+            <topicref href="session_editor/EditorKeystrokes.xml"/>
             <topichead navtitle="Records">
-                <topicref href="editor/tasks/AddNewRecord.xml"/>
-                <topicref href="editor/tasks/CopyRecord.xml"/>
-                <topicref href="editor/tasks/DuplicateRecord.xml"/>
-                <topicref href="editor/tasks/CutRecord.xml"/>
-                <topicref href="editor/tasks/PasteRecord.xml"/>
-                <topicref href="editor/tasks/DeleteRecord.xml"/>
-                <topicref href="editor/tasks/Navigate.xml"/>
-                <topicref href="editor/tasks/ViewRecordList.xml"/>
-                <topicref href="editor/tasks/SortRecords.xml"/>
-                <topicref href="editor/tasks/SearchSession.xml">
-                    <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
+                <topicref href="session_editor/AddNewRecord.xml"/>
+                <topicref href="session_editor/CopyRecord.xml"/>
+                <topicref href="session_editor/DuplicateRecord.xml"/>
+                <topicref href="session_editor/CutRecord.xml"/>
+                <topicref href="session_editor/PasteRecord.xml"/>
+                <topicref href="session_editor/DeleteRecord.xml"/>
+                <topicref href="session_editor/Navigate.xml"/>
+                <topicref href="session_editor/ViewRecordList.xml"/>
+                <topicref href="session_editor/SortRecords.xml"/>
+                <topicref href="session_editor/SearchSession.xml">
+                    <topicref href="session_editor/AboutTableQuickSearch.xml"/>
                 </topicref>
             </topichead>
-            <topicref href="editor/concepts/AboutEditorViews.xml"/>
-            <topicref href="editor/concepts/AboutEditorLayouts.xml">
-                <topicref href="editor/tasks/SaveCurrentLayout.xml"/>
-                <topicref href="editor/tasks/DeleteSavedLayout.xml"/>
-                <topicref href="editor/tasks/ChangeLayout.xml"/>
+            <topicref href="session_editor/AboutEditorViews.xml"/>
+            <topicref href="session_editor/AboutEditorLayouts.xml">
+                <topicref href="session_editor/SaveCurrentLayout.xml"/>
+                <topicref href="session_editor/DeleteSavedLayout.xml"/>
+                <topicref href="session_editor/ChangeLayout.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-session_information.md" format="markdown">
-                <topicref href="editor/tasks/EditSessionDate.xml"/>
-                <topicref href="editor/tasks/LinkMedia.xml"/>
-                <topicref href="editor/concepts/AboutParticipants.xml"/>
-                <topicref href="editor/tasks/AddParticipant.xml"/>
-                <topicref href="editor/tasks/EditParticipants.xml"/>
-                <topicref href="editor/tasks/InputSessionLanguage.xml"/>
+            <topicref href="session_editor/editor_view-session_information.md" format="markdown">
+                <topicref href="session_editor/EditSessionDate.xml"/>
+                <topicref href="session_editor/LinkMedia.xml"/>
+                <topicref href="session_editor/AboutParticipants.xml"/>
+                <topicref href="session_editor/AddParticipant.xml"/>
+                <topicref href="session_editor/EditParticipants.xml"/>
+                <topicref href="session_editor/InputSessionLanguage.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-tier_management.md" format="markdown">
-                <topicref href="editor/tasks/CreateUserDefinedTiers.xml"/>
-                <topicref href="editor/tasks/RemoveUserDefinedTiers.xml"/>
-                <topicref href="editor/tasks/EditTierDisplayOptions.xml"/>
-                <topicref href="editor/tasks/LockUnlockTiers.xml"/>
+            <topicref href="session_editor/editor_view-tier_management.md" format="markdown">
+                <topicref href="session_editor/CreateUserDefinedTiers.xml"/>
+                <topicref href="session_editor/RemoveUserDefinedTiers.xml"/>
+                <topicref href="session_editor/EditTierDisplayOptions.xml"/>
+                <topicref href="session_editor/LockUnlockTiers.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-record_data.md" format="markdown">
-                <topicref href="editor/tasks/NewGroup.xml"/>
-                <topicref href="editor/tasks/MergeGroup.xml"/>
-                <topicref href="editor/tasks/SplitGroup.xml"/>
-                <topicref href="editor/tasks/DeleteGroup.xml"/>
-                <topicref href="query/tasks/ExcludeRecords.xml"/>
-                <topicref href="editor/tasks/TranscribeData.xml">
-                    <topicref href="editor/concepts/AboutBoundariesPauses.xml"/>
+            <topicref href="session_editor/editor_view-record_data.md" format="markdown">
+                <topicref href="session_editor/NewGroup.xml"/>
+                <topicref href="session_editor/MergeGroup.xml"/>
+                <topicref href="session_editor/SplitGroup.xml"/>
+                <topicref href="session_editor/DeleteGroup.xml"/>
+                <topicref href="query/ExcludeRecords.xml"/>
+                <topicref href="session_editor/TranscribeData.xml">
+                    <topicref href="session_editor/AboutBoundariesPauses.xml"/>
                 </topicref>
             </topicref>
-            <topicref href="editor/editor_view-syllabification_and_alignment.md" format="markdown">
-                <topicref href="editor/concepts/AboutSyllabification.xml"/>
-                <topicref href="editor/tasks/VerifyAlignment.xml"/>
-                <topicref href="editor/concepts/AboutAlignment.xml"/>
-                <topicref href="editor/tasks/VerifySyllabification.xml"/>
+            <topicref href="session_editor/editor_view-syllabification_and_alignment.md" format="markdown">
+                <topicref href="session_editor/AboutSyllabification.xml"/>
+                <topicref href="session_editor/VerifyAlignment.xml"/>
+                <topicref href="session_editor/AboutAlignment.xml"/>
+                <topicref href="session_editor/VerifySyllabification.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-ipa_validation.md" format="markdown">
-                <topicref href="editor/concepts/AboutBlindTranscription.xml"/>
-                <topicref href="editor/tasks/ValidateBlindTranscriptions.xml"/>
-                <topicref href="editor/tasks/Auto-validate.xml"/>
+            <topicref href="session_editor/editor_view-ipa_validation.md" format="markdown">
+                <topicref href="session_editor/AboutBlindTranscription.xml"/>
+                <topicref href="session_editor/ValidateBlindTranscriptions.xml"/>
+                <topicref href="session_editor/Auto-validate.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-media_player.md" format="markdown">
-                <topicref href="editor/concepts/AboutMedia.xml"/>
-                <topicref href="editor/tasks/OpenMedia.xml"/>
-                <topicref href="editor/tasks/GoTo.xml"/>
-                <topicref href="editor/tasks/MoveMediaPositionWithRecord.xml"/>
-                <topicref href="editor/tasks/PlayAdjacencySequence.xml"/>
-                <topicref href="editor/tasks/PlayCurrentSegment.xml"/>
-                <topicref href="editor/tasks/PlayCurrentSpeechTurn.xml"/>
-                <topicref href="editor/tasks/PlayCustomSegment.xml"/>
-                <topicref href="editor/tasks/ExportMedia.xml"/>
-                <topicref href="editor/tasks/TakeSnapshot.xml"/>
+            <topicref href="session_editor/editor_view-media_player.md" format="markdown">
+                <topicref href="session_editor/AboutMedia.xml"/>
+                <topicref href="session_editor/OpenMedia.xml"/>
+                <topicref href="session_editor/GoTo.xml"/>
+                <topicref href="session_editor/MoveMediaPositionWithRecord.xml"/>
+                <topicref href="session_editor/PlayAdjacencySequence.xml"/>
+                <topicref href="session_editor/PlayCurrentSegment.xml"/>
+                <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
+                <topicref href="session_editor/PlayCustomSegment.xml"/>
+                <topicref href="session_editor/ExportMedia.xml"/>
+                <topicref href="session_editor/TakeSnapshot.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-speech_analysis.md" format="markdown">
-                <topicref href="editor/tasks/ViewWaveform.xml"/>
-                <topicref href="editor/tasks/AdjustSegmentTimes.xml"/>
-                <topicref href="editor/tasks/ExportAudioSegment.xml"/>
-                <topicref href="praat-plugin/concepts/spectrogram_viewer.dita">
-                    <topicref href="praat-plugin/concepts/spectrogram_settings.dita"/>
-                    <topicref href="praat-plugin/tasks/formant_listing.dita"/>
-                    <topicref href="praat-plugin/concepts/formant_settings.dita"/>
-                    <topicref href="praat-plugin/tasks/intensity_listing.dita"/>
-                    <topicref href="praat-plugin/concepts/intensity_settings.dita"/>
-                    <topicref href="praat-plugin/tasks/pitch_listing.dita"/>
-                    <topicref href="praat-plugin/concepts/pitch_settings.dita"/>
+            <topicref href="session_editor/editor_view-speech_analysis.md" format="markdown">
+                <topicref href="session_editor/ViewWaveform.xml"/>
+                <topicref href="session_editor/AdjustSegmentTimes.xml"/>
+                <topicref href="session_editor/ExportAudioSegment.xml"/>
+                <topicref href="praat-plugin/spectrogram_viewer.dita">
+                    <topicref href="praat-plugin/spectrogram_settings.dita"/>
+                    <topicref href="praat-plugin/formant_listing.dita"/>
+                    <topicref href="praat-plugin/formant_settings.dita"/>
+                    <topicref href="praat-plugin/intensity_listing.dita"/>
+                    <topicref href="praat-plugin/intensity_settings.dita"/>
+                    <topicref href="praat-plugin/pitch_listing.dita"/>
+                    <topicref href="praat-plugin/pitch_settings.dita"/>
                 </topicref>
-                <topicref href="praat-plugin/concepts/textgrid_viewer.dita">
-                    <topicref href="praat-plugin/tasks/generate_textgrids.dita"/>
-                    <topicref href="praat-plugin/tasks/import_textgrids.dita"/>
-                    <topicref href="praat-plugin/tasks/open_textgrid_in_praat.dita"/>
+                <topicref href="praat-plugin/textgrid_viewer.dita">
+                    <topicref href="praat-plugin/generate_textgrids.dita"/>
+                    <topicref href="praat-plugin/import_textgrids.dita"/>
+                    <topicref href="praat-plugin/open_textgrid_in_praat.dita"/>
                 </topicref>
             </topicref>
-            <topicref href="editor/editor_view-timeline.md" format="markdown"/>
-            <topicref href="editor/editor_view-ipa_lookup.md" format="markdown">
-                <topicref href="editor/tasks/Auto-transcribe.xml"/>
-                <topicref href="editor/concepts/AboutIPALookupConsole.xml"/>
+            <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
+            <topicref href="session_editor/editor_view-ipa_lookup.md" format="markdown">
+                <topicref href="session_editor/Auto-transcribe.xml"/>
+                <topicref href="session_editor/AboutIPALookupConsole.xml"/>
             </topicref>
-            <topicref href="editor/editor_view-find_and_replace.md" format="markdown">
-                <topicref href="editor/tasks/FindReplace.xml"/>
+            <topicref href="session_editor/editor_view-find_and_replace.md" format="markdown">
+                <topicref href="session_editor/FindReplace.xml"/>
             </topicref>
         </topichead>
         <topichead navtitle="Tools">
             <topichead navtitle="IPA Map">
-                <topicref href="ipamap/concepts/AboutIPAMap.xml"/>
-                <topicref href="ipamap/tasks/InputTextwithIPAMap.xml"/>
-                <topicref href="ipamap/tasks/CopyCharacter.xml"/>
-                <topicref href="ipamap/tasks/AddtoFavorites.xml"/>
-                <topicref href="ipamap/tasks/ScrolltoSection.xml"/>
-                <topicref href="ipamap/tasks/ResizeFontandWindow.xml"/>
-                <topicref href="ipamap/tasks/HighlightRecentlyUsed.xml"/>
+                <topicref href="ipamap/AboutIPAMap.xml"/>
+                <topicref href="ipamap/InputTextwithIPAMap.xml"/>
+                <topicref href="ipamap/CopyCharacter.xml"/>
+                <topicref href="ipamap/AddtoFavorites.xml"/>
+                <topicref href="ipamap/ScrolltoSection.xml"/>
+                <topicref href="ipamap/ResizeFontandWindow.xml"/>
+                <topicref href="ipamap/HighlightRecentlyUsed.xml"/>
             </topichead>
             <topicref href="tools/PhonShell.md" format="markdown"/>
             <topicref href="tools/LanguageCodes.md" format="markdown"/>
@@ -180,18 +180,18 @@
     </chapter>
     <chapter navtitle="IPA Transcription" audience="novice">
         <topichead navtitle="IPA Elements">
-            <topicref href="ipa/concepts/phone.dita"/>
-            <topicref href="ipa/concepts/compound_phone.dita"/>
-            <topicref href="ipa/concepts/intrawordpause.dita"/>
-            <topicref href="ipa/concepts/pause.dita"/>
-            <topicref href="ipa/concepts/stress_marker.dita"/>
-            <topicref href="ipa/concepts/syllable_boundary.dita"/>
-            <topicref href="ipa/concepts/word_boundary.dita"/>
+            <topicref href="ipa/phone.dita"/>
+            <topicref href="ipa/compound_phone.dita"/>
+            <topicref href="ipa/intrawordpause.dita"/>
+            <topicref href="ipa/pause.dita"/>
+            <topicref href="ipa/stress_marker.dita"/>
+            <topicref href="ipa/syllable_boundary.dita"/>
+            <topicref href="ipa/word_boundary.dita"/>
         </topichead>
         <topichead navtitle="Other Transcription Items">
-            <topicref href="ipa/concepts/intonation_group.dita"/>
-            <topicref href="ipa/concepts/compound_word.dita"/>
-            <topicref href="ipa/concepts/sandhi.dita"/>
+            <topicref href="ipa/intonation_group.dita"/>
+            <topicref href="ipa/compound_word.dita"/>
+            <topicref href="ipa/sandhi.dita"/>
         </topichead>
         <topicref href="generated/ipa.xml"/>
         <topicref href="generated/features.xml"/>
@@ -224,11 +224,11 @@
     <chapter navtitle="Queries" audience="intermediate">
         <topicref href="query/query_wizard.md" format="markdown">
             <topicref href="query/query_wizard_query.md" format="markdown">
-                <topicref href="query/tasks/ViewResultSet.xml">
-                    <topicref href="query/tasks/SaveTableAsCSV.xml"/>
-                    <topicref href="query/tasks/EditTableColumns.xml"/>
-                    <topicref href="query/tasks/FilterResults.xml">
-                        <topicref href="editor/concepts/AboutTableQuickSearch.xml"/>
+                <topicref href="query/ViewResultSet.xml">
+                    <topicref href="query/SaveTableAsCSV.xml"/>
+                    <topicref href="query/EditTableColumns.xml"/>
+                    <topicref href="query/FilterResults.xml">
+                        <topicref href="session_editor/AboutTableQuickSearch.xml"/>
                     </topicref>
                 </topicref>
             </topicref>
@@ -255,12 +255,12 @@
         <topicref href="query/query_phones.md" format="markdown"/>
         <topicref href="query/query_segmental_relations.md" format="markdown"/>
         <topichead navtitle="Common Query Options">
-            <topicref href="query/tasks/GroupFilter.xml"/>
-            <topicref href="query/tasks/AlignedGroupFilter.xml"/>
-            <topicref href="query/tasks/WordFilter.xml"/>
-            <topicref href="query/tasks/AlignedWordFilter.xml"/>
-            <topicref href="query/tasks/SyllableFilter.xml"/>
-            <topicref href="query/tasks/ParticipantFilter.xml"/>
+            <topicref href="query/GroupFilter.xml"/>
+            <topicref href="query/AlignedGroupFilter.xml"/>
+            <topicref href="query/WordFilter.xml"/>
+            <topicref href="query/AlignedWordFilter.xml"/>
+            <topicref href="query/SyllableFilter.xml"/>
+            <topicref href="query/ParticipantFilter.xml"/>
         </topichead>
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">

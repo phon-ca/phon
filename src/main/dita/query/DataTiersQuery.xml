@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
+<task id="taskId">
+    <title>Data Tiers Query</title>
+    <shortdesc>Search specific tiers for <uicontrol>Plain text</uicontrol>, <uicontrol>Regular
+            expression</uicontrol>, <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>.</shortdesc>
+    <taskbody>
+        
+        <context><image placement="break" scale="30"
+            href="../images/DataTiers.png" id="image_wdr_vlm_sc"/></context>
+        <steps>
+            <step>
+                <cmd>To run a data tiers query, specify the following criteria:</cmd>
+            </step>
+        </steps>
+    </taskbody>
+    <task id="id_897576f6-e742-40a4-9d6f-0d903e0735bd" conref="DataTiers.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_56401b49-fcc2-4fec-9fec-7e9910360f7b" conref="GroupFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_b2188299-4015-4517-9d48-9a27021f987c" conref="WordFilter.xml#taskId">
+        <title/>
+    </task>
+    <task id="id_c5078b81-6e12-46db-aa37-aa405f87edac" conref="ParticipantFilter.xml#taskId">
+        <title/>
+    </task>
+</task>
