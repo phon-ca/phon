@@ -84,7 +84,6 @@
                 </topicref>
             </topichead>
             <topicref href="editor/concepts/AboutEditorViews.xml">
-                <topicref href="editor/tasks/MaximizeView.xml"/>
                 <topicref href="editor/tasks/MinimizeView.xml"/>
                 <topicref href="editor/tasks/RelocateView.xml"/>
                 <topicref href="editor/tasks/DockView.xml"/>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
-<concept id="conceptId">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
     <title>About Editor Views</title>
     <shortdesc>Information in each session is displayed in a series of small windows within the
             <wintitle>Session Editor</wintitle>, called views. There are several types of
         views:</shortdesc>
-    <conbody>
+    <body>
         <ol>
             <li>Views with access/reference to the entire session:<ul id="ul_edd_xdk_rc">
                 <li><wintitle>Session Information</wintitle></li>
@@ -41,5 +41,36 @@
                 <wintitle>Session Editor</wintitle> or "undocked" as their own separate window. </p>
         <p>Views retain their currently defined size and position each time you exit
             <i>Phon</i>.</p>
-    </conbody>
-</concept>
+    </body>
+    <topic id="view_actions">
+        <title>General View Actions</title>
+        <body>
+            <p>The following actions are available to all editor views.</p>
+        </body>
+        <topic id="maximizeview">
+            <title>Maximize View</title>
+            <shortdesc>Maximize a view within the Session Editor window.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> or an undocked view:</section>
+                <ol>
+                    <li>
+                        <p>Click the maximize button near the top right corner of the view you wish to
+                            maximize, or when the view is focused, press
+                            <userinput>CTRL+M</userinput>.</p>
+                        <itemgroup>If the view was docked, it will expand to fill the <wintitle>Session
+                            Editor</wintitle> window. If the view was undocked, it will expand to fill
+                            your computer screen.
+                            <image placement="break" scale="30"
+                                href="../../images/MaximizeView.png" id="image_wdr_vlm_sc"/></itemgroup>
+                    </li>
+                    <li>
+                        <p>To restore the view to its previous size, click the restore button near the top
+                            right corner (this button looks like two windows), or press
+                            <userinput>CTRL+N</userinput> when the view is in focus.</p>
+                        <itemgroup>The view will return to its previous unmaximized position.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+    </topic>
+</topic>
