@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
-<concept id="conceptId">
-    <title>About Participants</title>
-    <conbody>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
+    <title>Participants</title>
+    <body>
         <p>In the <i>Phon</i>
             <wintitle>Session Editor</wintitle>, the Participant(s) in a session may be specified
             and records may be associated with individual participants.</p>
@@ -26,5 +26,5 @@
             allows users to specify one set of participants for an entire corpus, in what is known
             as a corpus template. See <xref href="../projman/EditCorpusTemplate.xml"/> for
             instructions.</p>
-    </conbody>
-</concept>
+    </body>
+</topic>

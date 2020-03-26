@@ -67,23 +67,13 @@
             <topicref href="projman/CSVImport.xml"/>
             <topicref href="projman/CSVExport.xml"/>
         </topicref>
-        <topichead navtitle="Session Editor">
+        <topicref href="session_editor/session_editor.md" format="markdown">
+            <topicref href="session_editor/AboutParticipants.xml"/>
             <topicref href="session_editor/records.dita"/>
+            <topicref href="session_editor/editor_media.md" format="markdown"/>
             <topicref href="session_editor/AboutEditorViews.xml">
-                <topicref href="session_editor/editor_view-session_information.md" format="markdown">
-                    <topicref href="session_editor/EditSessionDate.xml"/>
-                    <topicref href="session_editor/LinkMedia.xml"/>
-                    <topicref href="session_editor/AboutParticipants.xml"/>
-                    <topicref href="session_editor/AddParticipant.xml"/>
-                    <topicref href="session_editor/EditParticipants.xml"/>
-                    <topicref href="session_editor/InputSessionLanguage.xml"/>
-                </topicref>
-                <topicref href="session_editor/editor_view-tier_management.md" format="markdown">
-                    <topicref href="session_editor/CreateUserDefinedTiers.xml"/>
-                    <topicref href="session_editor/RemoveUserDefinedTiers.xml"/>
-                    <topicref href="session_editor/EditTierDisplayOptions.xml"/>
-                    <topicref href="session_editor/LockUnlockTiers.xml"/>
-                </topicref>
+                <topicref href="session_editor/session_information_view.dita"/>
+                <topicref href="session_editor/tier_management_view.dita"/>
                 <topicref href="session_editor/editor_view-record_data.md" format="markdown">
                     <topicref href="session_editor/NewGroup.xml"/>
                     <topicref href="session_editor/MergeGroup.xml"/>
@@ -153,7 +143,7 @@
             </topicref>
             <topicref href="session_editor/SearchSession.xml"/>
             <topicref href="session_editor/EditorKeystrokes.xml"/>
-        </topichead>
+        </topicref>
         <topichead navtitle="Tools">
             <topichead navtitle="IPA Map">
                 <topicref href="ipamap/AboutIPAMap.xml"/>

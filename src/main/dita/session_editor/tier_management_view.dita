@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="tier_management">
+    <title>Tier Management</title>
+    <body>
+        <p>The <wintitle>Tier Management</wintitle> view allows for modification and locking of
+            session tiers.</p>
+        <fig id="fig_gvd_4ts_dlb">
+            <title>Tier Management View</title>
+            <image placement="inline" href="images/tier_management_view.png"
+                id="image_hvd_4ts_dlb">
+                <alt>Tier Management View</alt>
+            </image>
+        </fig>
+    </body>
+    
+    <topic id="tier_management_actions">
+        <title>Actions</title>
+        <body/>
+        
+        <topic id="add_tier">
+            <title>Add Tier</title>
+            <shortdesc>Create a new user-defined tier.</shortdesc>
+            <body>
+                <section>From the <wintitle>Tier Management</wintitle> view:</section>
+                <ol id="steps_20a51916-28ad-4ad4-aa02-0e00b6cf00a1">
+                    <li>
+                        <p>Click on the <uicontrol>New tier</uicontrol> button in the top right corner of
+                            the view.</p>
+                        <itemgroup>This action will generate a dialog prompting you specify details about
+                            the new tier.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Enter a name for the new tier. If the new tier should be a group aligned tier,
+                            select the <uicontrol>Grouped (word-aligned)</uicontrol> check box. Select an
+                            appropriate font for the new tier, or click the <uicontrol>Use default
+                                font</uicontrol> button to choose the default editor font. Click
+                            <uicontrol>Ok</uicontrol>.</p>
+                        <itemgroup>The new tier will show up at the bottom of each record.
+                            <image placement="break" scale="30"
+                                href="../images/CreateUsertier.png" id="image_wdr_vlm_sc1"/></itemgroup>
+                    </li>
+                    <li>
+                        <p>To edit the font for a user-defined tier, select it from the list of tiers in
+                            the <wintitle>Tier Management</wintitle> view and click the <uicontrol>Edit
+                                tier...</uicontrol> button at the top right corner, or right-click on a tier
+                            and choose <uicontrol>Edit tier &lt;tier name></uicontrol>. Select the new font
+                            options and click <uicontrol>Ok</uicontrol>.</p>
+                        <itemgroup>That tier will reflect your new font choice in the <wintitle>Record
+                            Data</wintitle> view. <image placement="break" scale="50"
+                                href="../images/EditUsertier.png" id="image_wdr_vlm_sc"/>
+                            <note>To reset the tier font to the default, right-click
+                                (<userinput>CTRL+click</userinput>) on the tier and choose
+                                <uicontrol>Reset font</uicontrol> from the context
+                                menu.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="remove_tier">
+            <title>Remove Tier</title>
+            <shortdesc>Remove an existing user-defined tier.</shortdesc>
+            <body>
+                <section>From the <wintitle>Tier Management</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Select an existing user defined tier and press <userinput>Delete</userinput> or
+                            <userinput>Backspace</userinput>, or right-click on a tier and choose
+                            <uicontrol>Delete tier &lt;tier name></uicontrol>.</p>
+                        <itemgroup>This action will generate a dialog asking you to confirm that you would
+                            like to delete the tier and informing you that this action cannot be undone.
+                            <note>Default <i>Phon</i> tiers (such as <i>Orthography</i>, <i>IPA
+                                Target</i>, <i>Notes</i>, etc.) cannot be deleted. If you do not wish to
+                                use one or more of these tiers, you can make them invisible following
+                                instructions at <xref href="EditTierDisplayOptions.xml"/>.</note></itemgroup>
+                    </li>
+                    <li>
+                        <p>If you are unsure about removing the tier, click <uicontrol>Cancel</uicontrol>.
+                            If you would like to continue and remove the tier and all its contents, click
+                            <uicontrol>Ok</uicontrol>.</p>
+                        <itemgroup>The user defined tier will no longer appear in the <uicontrol>Tier
+                            Management</uicontrol> or <uicontrol>Record Data</uicontrol> views for this
+                            session. </itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="edit_tier">
+            <title>Edit Tier</title>
+            <shortdesc>Select which tiers are visible in <wintitle>Record Data</wintitle> and change the
+                order in which they appear.</shortdesc>
+            <body>
+                <section>From the <uicontrol>Tier Management</uicontrol> view:</section>
+                <ol id="steps_d01883d0-41cf-4e20-858b-657077e55935">
+                    <li>
+                        <p>Click on the check box to the left of each tier, under <i>Show Tier</i>, to
+                            select or de-select the tier for visualization.</p>
+                        <itemgroup>Selected tiers will be visible in the <wintitle>Record Data</wintitle>
+                            view, de-selected tiers will not be visible.<note>To hide or show all tiers, use
+                                the <uicontrol>Hide all tiers</uicontrol>/<uicontrol>Show all
+                                    tiers</uicontrol> button.</note></itemgroup>
+                    </li>
+                    <li>
+                        <p>Select any tier which you would like to reorder and use the green up and down
+                            arrows to the right of the tier names to change its position within the list. </p>
+                        <itemgroup>The tiers will appear in the revised order in the <uicontrol>Record
+                            Data</uicontrol> view.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Repeat Step 2 for any tiers you would like to reorder.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="lock_tier">
+            <title>Lock or Unlock Tiers</title>
+            <shortdesc>Lock or unlock tiers against editing.</shortdesc>
+            <body>
+                <section>From the <wintitle>Tier Managment</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>To lock a tier, select the check box to the left of its name under the
+                            <i>Locked</i> column. To unlock a tier, de-select the check box.</p>
+                        <itemgroup>Selected tiers will be locked against editing in the <wintitle>Record
+                            Data</wintitle> view.<note>To lock or unlock all tiers, use the
+                                <uicontrol>Lock all tiers</uicontrol>/<uicontrol>Unlock all
+                                    tiers</uicontrol> button.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+    </topic>
+</topic>

@@ -109,7 +109,9 @@ During segmentation mode all keyboard input for the application will be blocked 
 | Increase segmentation window (100ms) | ```Up``` |
 | Decrease segmentation window (1000ms) | ```Down``` |
 
-#### Media Controls
+##### Media Controls
+
+The following keystrokes for controlling media playback are avavilable when in segmentation mode:
 
 | Action | Keystroke(s) |
 |---|---|

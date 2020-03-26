@@ -3,11 +3,17 @@
 <topic id="records">
     <title>Records</title>
     <body>
-        <p></p>
+        <p>Each session consists of a series of records.  A record is, in general, a single uttrance
+            from a participant in the session.  Each record contains </p>
     </body>
     <topic id="record_actions">
         <title>Actions</title>
-        <body/>
+        <body>
+            <p>The following session-level actions are available for records.  These actions can be
+                found int the <menucascade>
+                    <uicontrol>Session</uicontrol>
+                </menucascade> window menu and in the toolbar.</p>
+        </body>
         <topic id="add_record">
             <title>Add New Record</title>
             <shortdesc>Add a new record to an existing session.</shortdesc>
