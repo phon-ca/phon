@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="ipa-validation">
+    <title>IPA Validation</title>
+    <body>
+        <p>The <wintitle>IPA Validation</wintitle> view allows for validating IPA transcriptions
+            produced using <xref href="AboutBlindTranscription.xml"/>.</p>
+    </body>
+    
+    <topic id="validate_transcriptions">
+        <title>Validate Blind Transcriptions</title>
+        <shortdesc>Validate completed blind transcriptions.</shortdesc>
+        <body>
+            <section>From the <wintitle>Project Manager</wintitle>:</section>
+            <ol>
+                <li>
+                    <p>Ensure that the <uicontrol>Blind transcription</uicontrol> check box is
+                        de-selected and double-click on the session that you would like to validate. </p>
+                    <itemgroup>This will open the <wintitle>Session Editor</wintitle> for the specific
+                        session.</itemgroup>
+                </li>
+                <li>
+                    <p>Select the <menucascade>
+                        <uicontrol>View</uicontrol>
+                        <uicontrol>IPA Validation</uicontrol>
+                    </menucascade> menu item.</p>
+                    <itemgroup>The <wintitle>IPA Validation</wintitle> view will open, with two tiers:
+                        <i>IPA Target Validation</i> and <i>IPA Actual Validation</i>. </itemgroup>
+                </li>
+                <li>
+                    <p>For each group in the tier(s) you are validating, select the most accurate
+                        transcription for that group and click <uicontrol>Set</uicontrol>. Alternately,
+                        select the most accurate transcription for all groups in a tier and click
+                        <uicontrol>Validate &lt;tier></uicontrol>.</p>
+                    <itemgroup>The chosen transcriptions will appear in the approprate tier in the
+                        <wintitle>Record Data</wintitle> view.</itemgroup>
+                </li>
+                <li>
+                    <p>From the <i>IPA Target </i>and <i>IPA Actual</i> tiers, transcriptions can be
+                        further modified as the validator sees fit, by typing or by using the
+                        <uicontrol>IPA Map</uicontrol> (<userinput>CMD/CTRL+M</userinput>).</p>
+                </li>
+                <li>
+                    <p>Repeat Steps 3 and 4 until validation has been completed for the entire
+                        session.</p>
+                </li>
+            </ol>
+        </body>
+    </topic>
+    
+    <topic id="auto_validate">
+        <title>Auto-Validate Blind Transcriptions</title>
+        <shortdesc>Automatically validate completed blind transcriptions.</shortdesc>
+        <body>
+            <section>From the <wintitle>Project Manager</wintitle>:</section>
+            <ol>
+                <li>
+                    <p>Ensure that the <uicontrol>Blind transcription</uicontrol> check box is
+                        deselected and double-click on the session that you would like to validate. </p>
+                    <itemgroup>This will open the <wintitle>Session Editor</wintitle> for the specific
+                        session.</itemgroup>
+                </li>
+                <li>
+                    <p>Open the <wintitle>IPA Validation</wintitle> view and click the <uicontrol>Auto
+                        validate</uicontrol> button at the top.</p>
+                    <itemgroup>This will open the <wintitle>Auto-validate Session</wintitle>
+                        dialog.</itemgroup>
+                </li>
+                <li>
+                    <p>In the <uicontrol>Tiers</uicontrol> field, choose whether to
+                        <uicontrol>Auto-validate IPA Target</uicontrol> and/or
+                        <uicontrol>Auto-validate IPA Actual</uicontrol> by selecting the check
+                        boxes. Also choose whether to overwrite existing data present in the selected
+                        tiers by selecting the <uicontrol>Overwrite existing data</uicontrol> check
+                        box.</p>
+                    <itemgroup>
+                        <note>By default, auto-validation will not overwrite data already present in the
+                            selected tier(s). The purpose of this is to preserve any transcription which
+                            was entered in default mode, or chosen in earlier validations.</note>
+                    </itemgroup>
+                </li>
+                <li>
+                    <p>In the <uicontrol>IPA Selection</uicontrol> field, select a preferred
+                        transcriber.</p>
+                    <itemgroup>In the event that there is more than one blind transcription for the
+                        selected tier in a single record, this transcriber's input will be chosen to
+                        fill the tier.</itemgroup>
+                </li>
+                <li>
+                    <p>In the <uicontrol>Record Selection</uicontrol> field, choose whether to
+                        validate <uicontrol>All records</uicontrol>, <uicontrol>Specific
+                            records</uicontrol>, <uicontrol>Records for participant(s)</uicontrol>, or
+                        <uicontrol>Records from search results</uicontrol>.</p>
+                    <itemgroup>
+                        <note>If you choose to validate only specific records, you will have to specify
+                            the relevant record numbers. To specify several individual record numbers,
+                            separate them with a comma and a space. To specify a range, separate the
+                            beginning and end record numbers with two periods and a space. If you choose
+                            to validate records for specific participants, you must select the
+                            participants from the list. If you choose the validate records from search
+                            results, you must select a past search from the list.</note>
+                        <image placement="break" scale="40"
+                            href="images/auto-validation.png" id="image_wdr_vlm_sc"/>
+                    </itemgroup>
+                </li>
+                <li>
+                    <p>When you have selected the appropriate validation options, click
+                        <uicontrol>Ok</uicontrol>.</p>
+                    <itemgroup>A dialog will appear asking you confirm that you want to auto-validate
+                        the selected IPA Tiers and informing you that this action is not undoable. If
+                        you are unsure, click <uicontrol>Cancel</uicontrol>. To continue with the
+                        auto-validation, click <uicontrol>Ok</uicontrol>.</itemgroup>
+                </li>
+            </ol>
+        </body>
+    </topic>
+    
+</topic>

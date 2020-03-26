@@ -68,6 +68,7 @@
             <topicref href="projman/CSVExport.xml"/>
         </topicref>
         <topicref href="session_editor/session_editor.md" format="markdown">
+            <topicref href="session_editor/AboutBlindTranscription.xml"/>
             <topicref href="session_editor/AboutParticipants.xml"/>
             <topicref href="session_editor/records.dita"/>
             <topicref href="session_editor/editor_media.md" format="markdown"/>
@@ -77,11 +78,7 @@
                 <topicref href="session_editor/record_data_view.dita" format="dita"/>
                 <topicref href="session_editor/syllabification_and_alignment_view.dita"
                     format="dita"/>
-                <topicref href="session_editor/editor_view-ipa_validation.md" format="markdown">
-                    <topicref href="session_editor/AboutBlindTranscription.xml"/>
-                    <topicref href="session_editor/ValidateBlindTranscriptions.xml"/>
-                    <topicref href="session_editor/Auto-validate.xml"/>
-                </topicref>
+                <topicref href="session_editor/ipa_validation_view.dita" format="dita"/>
                 <topicref href="session_editor/editor_view-media_player.md" format="markdown">
                     <topicref href="session_editor/AboutMedia.xml"/>
                     <topicref href="session_editor/OpenMedia.xml"/>
