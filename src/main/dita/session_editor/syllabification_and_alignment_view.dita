@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="syllabification--alignment">
+    <title>Syllabification &amp; Alignment</title>
+    <body>
+        <p>In the <wintitle>Syllabification &amp; Alignment</wintitle> view, the syllable position
+            for each phone in <i>IPA Target</i> and <i>IPA Actual</i> is displayed along with the <keyword>phone alignment</keyword>.</p>
+        <fig id="fig_gvd_4qs_dld">
+            <title>Syllabification &amp; Alignment View</title>
+            <image placement="inline" href="images/syllabification_and_alignment_view.png"
+                id="image_hvd_4qs_dld">
+                <alt>Syllabification &amp; Alignment View</alt>
+            </image>
+        </fig>
+    </body>
+        
+    <topic id="syllabification">
+        <title>Syllabification</title>
+        <body>
+            <p>A number of syllable positions are available, including appendices, onsets, nuclei and
+                    codas. Each different phone position is displayed in a distinct color.</p>
+            <p>Syllabification plays a role in <i>Phon</i> Queries; it allows a user to search for a
+                phone in a specific syllable position. For example, phonetic or phonological processes
+                which only occur in onsets may be observed by focusing specifically on consonants in
+                onset positions.</p>
+            <p><i>Phon</i> will automatically syllabify transcriptions in the <i>IPA Target</i> and
+                <i>IPA Actual</i> tiers, using any one of its built-in syllable templates (based on
+                syllable structure of the following languages):</p>
+            <p>
+                <ul id="ul_yww_cuh_vc">
+                    <li>Berber</li>
+                    <li>Catalan</li>
+                    <li>Cree</li>
+                    <li>Dutch</li>
+                    <li>English</li>
+                    <li>French</li>
+                    <li>Gurindji</li>
+                    <li>Italian</li>
+                    <li>Portuguese (European)</li>
+                    <li>Spanish</li>
+                    <li>Vietnamese</li>
+                </ul>
+            </p>
+            <p>The syllabifier language for a project can be chosen from the
+                <wintitle>Preferences</wintitle> dialog. Also, the syllabifier for an individual
+                record my be changed by right-clicking (<userinput>CTRL+click</userinput>) on that
+                record's <i>Target Syllables</i> or <i>Actual Syllables</i> in the
+                <wintitle>Syllabification &amp; Alignment</wintitle> view and choosing
+                <uicontrol>Syllabify with</uicontrol> > <uicontrol>&lt;Language name></uicontrol>
+                (the current default syllabifier is highlighted in bold in this menu).</p>
+            <note>When faced with irregular utterances or transcriptions, <i>Phon</i> may make errors in
+                syllabification. It is important to perform a visual verification of the syllabification
+                of transcriptions in your project in order to ensure that Queries including
+                syllabification information will return accurate results.</note>
+        </body>
+    
+        <topic id="modify_syllabification">
+            <title>Modify Syllabification</title>
+            <shortdesc>Check to ensure proper syllabification of <i>IPA Target</i> and <i>IPA Actual</i>
+                phones.</shortdesc>
+            <body>
+                <section>In order for the Syllabification module to work, the <i>IPA Target</i> and/or <i
+                    >IPA Actual</i> transcriptions must be completed (verified in the case of blind
+                    transcriptions) and saved. From the <wintitle>Syllabification &amp; Alignment</wintitle>
+                    view:</section>
+                <ol>
+                    <li>
+                        <p>Visually observe the syllabification for each record to determine whether
+                            phones are properly syllabified in the <i>Target Syllables</i> and/or <i>Actual
+                                Syllables</i> tier(s).</p>
+                    </li>
+                    <li>
+                        <p>Right click (<userinput>CTRL+click</userinput>) on any phone which appears to
+                            be improperly syllabified and select the proper syllable constituent from the
+                            context menu. Alternately, select the phone in question and type the character
+                            underlined in the list below for the proper syllable constituent.</p>
+                        <itemgroup>
+                            <ul>
+                                <li><u>L</u>eft Appendix</li>
+                                <li><u>O</u>nset</li>
+                                <li><u>N</u>ucleus</li>
+                                <li><u>C</u>oda</li>
+                                <li><u>R</u>ight Appendix</li>
+                                <li>O<u>E</u>HS (Onset of an Empty-Headed Syllable)</li>
+                                <li><u>A</u>mbisyllabic</li>
+                                <li><u>U</u>nknown</li>
+                            </ul>
+                            <note>When a transcription contains a sequence of two or more vowels in a row,
+                                the Toggle <u>H</u>iatus option becomes available.
+                                This allows the vowels to be either included in the same or separate
+                                nuclei.</note>
+                        </itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+    </topic>
+
+    <topic id="alignment">
+        <title>Alignment</title>
+        <body>
+            <p>Displayed in the <wintitle>Syllabification &amp; Alignment</wintitle> view, the
+                <uicontrol>Alignment</uicontrol> tier allows a comparison to be made between target
+                (model) forms of utterances and their actual (spoken) realizations.</p>
+            <p>Alignment is visualized in <i>Phon</i> as an arrangment of transcribed phones from <i>IPA
+                Actual</i> lined up underneath phones from <i>IPA Target</i>. <i>Phon</i> makes a
+                comparison between the number, order, and features of target phones and actual phones,
+                in order to determine what phonetic information may have been lost, retained, or added
+                in production.<note>To include syllabification visualization in the <i>Alignment</i>
+                    tier, select <uicontrol>Color in alignment</uicontrol> in the
+                    <wintitle>Syllabification &amp; Alignment</wintitle> view.</note></p>
+            <image placement="break" scale="30"
+                href="../images/AboutAlignment.png" id="image_wdr_vlm_sc"/>
+            <p>This comparison is important for a number of query scripts in <i>Phon</i>, such as
+                <wintitle>Phones</wintitle>, <wintitle>Metathesis</wintitle>, and
+                <wintitle>Harmony</wintitle>. These queries require information from both the <i>IPA
+                    Target</i> and <i>IPA Actual</i> tiers, and how the two tiers relate.</p>
+            <note>When faced with irregular utterances or transcriptions, <i>Phon</i> may make
+                errors in alignment. It is important to perform a visual verification of the alignment
+                of transcriptions in your project in order to ensure that queries including alignment
+                information will return accurate results.</note>
+        </body>
+        
+        <topic id="modify_alignment">
+            <title>Modify Alignment</title>
+            <shortdesc>Check to ensure proper alignment between <i>IPA Target</i> and <i>IPA Actual</i>
+                phones.</shortdesc>
+            <body>
+                <section>In order for the Alignment module to work, the <i>IPA Target</i> and/or <i>IPA
+                    Actual</i> transcriptions must be completed (verified in the case of blind
+                    transcriptions) and saved. From the <wintitle>Syllabification &amp;
+                        Alignment</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Select any phone in the <i>Alignment</i> tier which does not appear to be
+                            properly aligned.</p>
+                        <itemgroup>An outline will appear around the phone in question.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Use <userinput>OPT/ALT+left/right arrows</userinput> to move the phone into
+                            proper alignment. Alternately, click and drag a phone to re-align it.</p>
+                    </li>
+                    <li>
+                        <p>Use <userinput>OPT/ALT+up/down arrows</userinput> to alternate phone selection
+                            between Target phones and Actual phones. Repeat Step 2 until all phones are
+                            aligned to your satisfaction.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+    </topic>
+
+</topic>

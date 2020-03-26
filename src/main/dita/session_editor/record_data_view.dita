@@ -4,10 +4,10 @@
     <title>Record Data</title>
     <body>
         <p>The record data view displays tier data for the current record.</p>
-        <fig id="fig_gvd_4qs_dlb">
+        <fig id="fig_gvd_4qs_dlq">
             <title>Record Data View</title>
             <image placement="inline" href="images/record_data_view.png"
-                id="image_hvd_4qs_dlb">
+                id="image_hvd_4qs_dlq">
                 <alt>Record Data View</alt>
             </image>
         </fig>

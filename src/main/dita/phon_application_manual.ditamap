@@ -75,13 +75,8 @@
                 <topicref href="session_editor/session_information_view.dita"/>
                 <topicref href="session_editor/tier_management_view.dita"/>
                 <topicref href="session_editor/record_data_view.dita" format="dita"/>
-                <topicref href="session_editor/editor_view-syllabification_and_alignment.md"
-                    format="markdown">
-                    <topicref href="session_editor/AboutSyllabification.xml"/>
-                    <topicref href="session_editor/VerifyAlignment.xml"/>
-                    <topicref href="session_editor/AboutAlignment.xml"/>
-                    <topicref href="session_editor/VerifySyllabification.xml"/>
-                </topicref>
+                <topicref href="session_editor/syllabification_and_alignment_view.dita"
+                    format="dita"/>
                 <topicref href="session_editor/editor_view-ipa_validation.md" format="markdown">
                     <topicref href="session_editor/AboutBlindTranscription.xml"/>
                     <topicref href="session_editor/ValidateBlindTranscriptions.xml"/>
