@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="record-data">
+    <title>Record Data</title>
+    <body>
+        <p>The record data view displays tier data for the current record.</p>
+        <fig id="fig_gvd_4qs_dlb">
+            <title>Record Data View</title>
+            <image placement="inline" href="images/record_data_view.png"
+                id="image_hvd_4qs_dlb">
+                <alt>Record Data View</alt>
+            </image>
+        </fig>
+    </body>
+    
+    <topic id="record_data_actions">
+        <title>Actions</title>
+        <body/>
+    
+        
+    </topic>
+    
+</topic>
