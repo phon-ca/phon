@@ -17,6 +17,120 @@
         <title>Actions</title>
         <body/>
     
+        <topic id="new_group">
+            <title>New Group</title>
+            <shortdesc>Add a new word group to a record.</shortdesc>
+            <body>
+                <section>From the <wintitle>Record Data</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Position the cursor in the <i>Orthography</i> tier within a group.</p>
+                    </li>
+                    <li>
+                        <p>Click the <uicontrol>New record after current</uicontrol> button in the
+                            <wintitle>Record Data</wintitle> view, or select the <menucascade>
+                                <uicontrol>View</uicontrol>
+                                <uicontrol>Record Data</uicontrol>
+                                <uicontrol>New record after current</uicontrol>
+                            </menucascade> (<userinput>CMD/CTRL+G</userinput>) menu item.</p>
+                        <itemgroup>A new group will be created after the current group.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="merge_group">
+            <title>Merge Group</title>
+            <shortdesc>Merge multiple word groups into a single word group.</shortdesc>
+            <body>
+                <section>From the <wintitle>Record Data</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Position the cursor inside a group in the <i>Orthography</i> tier which you
+                            would like to merge with a following group.</p>
+                    </li>
+                    <li>
+                        <p>Click the <uicontrol>Merge group with next </uicontrol>button in the
+                            <wintitle>Record Data</wintitle> view, or select the <menucascade>
+                                <uicontrol>View</uicontrol>
+                                <uicontrol>Record Data</uicontrol>
+                                <uicontrol>Merge group with next</uicontrol>
+                            </menucascade> (<userinput>OPT/ALT+G</userinput>) menu item.</p>
+                        <itemgroup>The adjacent groups will be merged into a single group, with a space
+                            between the original contents.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="split_group">
+            <title>Split Group</title>
+            <shortdesc>Split the contents of a group.</shortdesc>
+            <body>
+                <section>From the <wintitle>Record Data</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Position the cursor inside a group in the <i>Orthography</i> tier where the
+                            group should be split (at or after a space between words).</p>
+                    </li>
+                    <li>
+                        <p>Click the <uicontrol>Split group</uicontrol> button in the <wintitle>Record
+                            Data</wintitle> view, or select the <menucascade>
+                                <uicontrol>View</uicontrol>
+                                <uicontrol>Record Data</uicontrol>
+                                <uicontrol>Split group</uicontrol>
+                            </menucascade> (<userinput>OPT/ALT+K</userinput>) menu item.</p>
+                        <itemgroup>The group data will be split into two separate groups. If only one word
+                            was present in the group, an empty preceding group will be created. Only data in
+                            the <i>Orthography</i> tier will be divided. Other grouped tiers may require
+                            manual editing. </itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="delete_group">
+            <title>Delete Group</title>
+            <shortdesc>Delete a word group.</shortdesc>
+            <body>
+                <section>From the <wintitle>Record Data</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Position the cursor inside a group in the <i>Orthography</i> tier that you wish
+                            to delete.</p>
+                    </li>
+                    <li>
+                        <p>Click the <uicontrol>Delete current group</uicontrol> button in the
+                            <wintitle>Record Data</wintitle> view, or select the <menucascade>
+                                <uicontrol>View</uicontrol>
+                                <uicontrol>Record Data</uicontrol>
+                                <uicontrol>Delete current group</uicontrol>
+                            </menucascade> (<userinput>OPT/ALT+Shift+CMD+G</userinput>) menu item.</p>
+                        <itemgroup>The selected group will be deleted, including all data in aligned
+                            groups.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="exclude_record">
+            <title>Exclude Record from Queries</title>
+            <shortdesc>Exclude selected records from queries.</shortdesc>
+            <body>
+                <section>From the <wintitle>Record Data</wintitle> view, with the record you wish to exclude
+                    focused:</section>
+                <ol id="steps_d2f_gmb_v2">
+                    <li>
+                        <p>Select the check box to the right of the speaker's name.</p>
+                        <itemgroup>When running a query, this record will be excluded from the
+                            search.<note>To include previously excluded records in a session level
+                                query, from the <uicontrol>Query</uicontrol> view, select the
+                                <uicontrol>Include excluded records</uicontrol> check
+                                box.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
         
     </topic>
     

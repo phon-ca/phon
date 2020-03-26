@@ -74,13 +74,7 @@
             <topicref href="session_editor/AboutEditorViews.xml">
                 <topicref href="session_editor/session_information_view.dita"/>
                 <topicref href="session_editor/tier_management_view.dita"/>
-                <topicref href="session_editor/record_data_view.dita" format="dita">
-                    <topicref href="session_editor/NewGroup.xml"/>
-                    <topicref href="session_editor/MergeGroup.xml"/>
-                    <topicref href="session_editor/SplitGroup.xml"/>
-                    <topicref href="session_editor/DeleteGroup.xml"/>
-                    <topicref href="query/ExcludeRecords.xml"/>
-                </topicref>
+                <topicref href="session_editor/record_data_view.dita" format="dita"/>
                 <topicref href="session_editor/editor_view-syllabification_and_alignment.md"
                     format="markdown">
                     <topicref href="session_editor/AboutSyllabification.xml"/>
