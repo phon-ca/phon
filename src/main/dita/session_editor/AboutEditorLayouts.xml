@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
-<concept id="conceptId">
-    <title>About Editor Layouts</title>
-    <conbody>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="editor_layouts">
+    <title>Editor Layouts</title>
+    <body>
         <p>The <wintitle>Session Editor</wintitle> has several built-in view layouts to assist users
             in session-related tasks.</p>
         <p>The following layouts are available:</p>
@@ -18,14 +18,13 @@
             <li><uicontrol>Segmentation</uicontrol>
                 <p>Designed to facilitate media linkage and segmentation and other tasks in new
                     sessions, this layout includes the <wintitle>Media Player</wintitle>,
-                        <wintitle>Segmentation</wintitle>, <wintitle>Waveform</wintitle>,
-                        <wintitle>Record Data</wintitle>, and <wintitle>Session
-                        Information</wintitle> views.</p></li>
+                        <wintitle>Timeline</wintitle>,  <wintitle>Record Data</wintitle>, and
+                        <wintitle>Session Information</wintitle> views.</p></li>
             <li><uicontrol>Syllabification &amp; Alignment</uicontrol>
                 <p>This layout facilitates manual verification of syllabification and alignment data
                     in a session. It includes the <wintitle>Record Data</wintitle>,
-                        <wintitle>Syllabification &amp; Alignment</wintitle>, and
-                        <wintitle>Waveform</wintitle> views.</p></li>
+                        <wintitle>Syllabification &amp; Alignment</wintitle>, and <wintitle>Speech
+                        Analysis</wintitle> views.</p></li>
             <li><uicontrol>Transcription</uicontrol>
                 <p>This layout is designed to facilitate the transcription of records. It includes
                     the <wintitle>Media Player</wintitle>, <wintitle>Waveform</wintitle>, and
@@ -48,5 +47,69 @@
                     automatically saved to <uicontrol>Previous</uicontrol> when the
                         <wintitle>Session Editor</wintitle> window is closed.</p></li>
         </ul>
-    </conbody>
-</concept>
+    </body>
+    
+    <topic id="layout_actions">
+        <title>Actions</title>
+        <body><p>The following actions are availble from the <uicontrol>View</uicontrol>
+         menu</p></body>
+        
+        <topic id="save_layout">
+            <title>Save Current Layout</title>
+            <shortdesc>Save currently visible <wintitle>Session Editor</wintitle> layout for future
+                use.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window, with views arranged in desired
+                    format:</section>
+                <ol>
+                    <li>
+                        <p>Click the <uicontrol>Select layout</uicontrol> button at the top left corner of
+                            the <wintitle>Session Editor</wintitle> window and choose <uicontrol>Save
+                                current layout...</uicontrol>, or select the <menucascade>
+                                    <uicontrol>View</uicontrol>
+                                    <uicontrol>Save current layout...</uicontrol>
+                                </menucascade> menu item.</p>
+                        <itemgroup>A window will appear prompting you to give the layout a
+                            name.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Enter a name for the layout (usually reflective of the task you would use that
+                            layout to perform). Click <uicontrol>OK</uicontrol>, or click
+                            <uicontrol>Cancel</uicontrol> if you are unsure.</p>
+                        <itemgroup>The new layout will now be available in layout menus.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="delete_layout">
+            <title>Delete Saved Layout</title>
+            <shortdesc>Delete a user-created <wintitle>Session Editor</wintitle> layout.</shortdesc>
+            <body>
+                <section>From the <wintitle>Session Editor</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Click the <uicontrol>Select layout</uicontrol> button at the top left of the
+                            <wintitle>Session Editor</wintitle> window and go to the <uicontrol>Delete
+                                layout</uicontrol> menu item, or go to the <menucascade>
+                                    <uicontrol>View</uicontrol>
+                                    <uicontrol>Delete layout</uicontrol>
+                                </menucascade> menu, and select the layout you wish to delete.</p>
+                        <itemgroup>A confirmation dialog will appear, asking whether you wish to delete the
+                            layout.</itemgroup>
+                    </li>
+                    <li>
+                        <p>If you are unsure whether you'd like to delete this layout, click
+                            <uicontrol>No</uicontrol>. Otherwise, click <uicontrol>Yes</uicontrol> to
+                            continue.</p>
+                        <itemgroup>The user-created layout will no longer appear in layout
+                            menus.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        
+        
+    </topic> 
+</topic>

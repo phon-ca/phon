@@ -109,11 +109,7 @@
                 <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
                 <topicref href="session_editor/FindReplace.xml"/>
             </topicref>
-            <topicref href="session_editor/AboutEditorLayouts.xml">
-                <topicref href="session_editor/SaveCurrentLayout.xml"/>
-                <topicref href="session_editor/DeleteSavedLayout.xml"/>
-                <topicref href="session_editor/ChangeLayout.xml"/>
-            </topicref>
+            <topicref href="session_editor/AboutEditorLayouts.xml"/>
             <topicref href="session_editor/SearchSession.xml"/>
             <topicref href="session_editor/EditorKeystrokes.xml"/>
         </topicref>
