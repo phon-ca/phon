@@ -107,9 +107,7 @@
                 </topicref>
                 <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
                 <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
-                <topicref href="session_editor/editor_view-find_and_replace.md" format="markdown">
-                    <topicref href="session_editor/FindReplace.xml"/>
-                </topicref>
+                <topicref href="session_editor/FindReplace.xml"/>
             </topicref>
             <topicref href="session_editor/AboutEditorLayouts.xml">
                 <topicref href="session_editor/SaveCurrentLayout.xml"/>
