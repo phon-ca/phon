@@ -14,24 +14,7 @@
         </topicref>
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
-        <topicref href="welcome/welcome_window.md" format="markdown">
-            <topichead navtitle="Actions">
-                <topicref href="welcome/CreateProject.xml"/>
-                <topicref href="welcome/OpenProject.xml"/>
-            </topichead>
-            <topichead navtitle="Workspace">
-                <topicref href="welcome/WorkspaceFolder.xml">
-                    <topicref href="welcome/ChangeWorkspaceFolder.xml"/>
-                </topicref>
-                <topicref href="welcome/ProjectList.xml">
-                    <topicref href="welcome/SortProjectList.xml"/>
-                    <topicref href="welcome/ShowInFileSystemViewer.xml"/>
-                    <topicref href="welcome/OpenProject.xml"/>
-                    <topicref href="welcome/ExtractProject.xml"/>
-                </topicref>
-            </topichead>
-            <topicref href="welcome/recent_projects.md" format="markdown"/>
-        </topicref>
+        <topicref href="welcome/welcome_window.dita" format="dita"/>
         <topicref href="prefs/EditPreferences.xml">
             <topicref href="prefs/AboutAutosaves.xml"/>
             <topicref href="prefs/ChangeApplicationFonts.xml"/>
