@@ -68,6 +68,27 @@
             </body>
         </topic>
         
+        <topic id="other_actions">
+            <title>Other Actions</title>
+            <body>
+                <p>The following operations are available in the <wintitle>Other Actions</wintitle> pane of
+                    the <wintitle>Workspace</wintitle> window: <ul>
+                        <li><b>Browse for Project</b>
+                            <p>Browse to open a project located outside the current workspace folder.</p>
+                        </li>
+                        <li><b>Select Media Folders</b>
+                            <p>View and edit the list of default media folders in the
+                                <wintitle>Preferences</wintitle> dialogs.</p>
+                        </li>
+                        <li><b>Edit Preferences</b>
+                            <p>View and edit <i>Phon</i> application preferences.</p>
+                        </li>
+                    </ul>
+                </p>
+            </body>
+        </topic>
+        
+        
     </topic>
     
     <topic id="workspace_folder">
@@ -174,6 +195,35 @@
                                 choose <uicontrol>Show project</uicontrol> from the context menu.</p>
                             <itemgroup>Your computer's file system viewer will open to the folder
                                 containing your project, which will be highlighted.</itemgroup>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+            <topic id="archive_project">
+                <title>Archive Project</title>
+                <shortdesc>Create a <i>.zip</i> archive of a <i>Phon</i> project in the workspace <i>backups</i>
+                    folder. This is especially useful as a method of backing up your corpus before any major
+                    change.</shortdesc>
+                <body>
+                    <section> From the <wintitle>Workspace</wintitle> window:</section>
+                    <ol id="steps_ghx_bqu_sc">
+                        <li>
+                            <p>Mouse over the project you wish to archive in the <wintitle>Project
+                                List</wintitle> pane. </p>
+                            <itemgroup>Two buttons will appear next to your project name; <uicontrol>Create
+                                .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
+                                    file system viewer</uicontrol>.
+                                <image placement="break" scale="40"
+                                    href="../images/ArchiveProject.png" id="image_wdr_vlm_sc"/></itemgroup>
+                        </li>
+                        <li>
+                            <p>Click <uicontrol>Create .zip archive of phon project...</uicontrol>.
+                                Alternately, right-click (<userinput>CTRL+click</userinput>) on your project and
+                                choose <uicontrol>Archive project</uicontrol> from the context menu.</p>
+                            <itemgroup>A <i>.zip</i> archive of your project will be created in your workspace
+                                <i>backups</i> folder, with the current date affixed to its
+                                filename.</itemgroup>
                         </li>
                     </ol>
                 </body>
