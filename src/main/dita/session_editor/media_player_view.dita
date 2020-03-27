@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="media_player">
+    <title>Media Player</title>
+    <body>
+        <p>The <i>Media Player</i> view allows for video playback of session media.</p>
+        <fig id="fig_qwy_zd1_2lb">
+            <title>Media Player View</title>
+            <image placement="inline" href="images/media_player_view.png" id="image_rwy_zd1_2lb">
+                <alt>Meida Player View</alt>
+            </image>
+        </fig>
+        
+    </body>
+    
+    <topic id="media_player_actions">
+        <title>Actions</title>
+        <body>
+            <p>Standard media controls - play/pause, position, and volume - can be found under the video.  Other actions can
+            be accessed by clicking the menu (button with triangle) button in the video player bar.</p>
+        </body>
+        
+        <topic id="goto_time">
+            <title>Go to a Specific Playback Time</title>
+            <shortdesc>Jump to a specific playback time (either user-specified, at the end of segmented
+                media, or at the end of the last segment for a certain speaker.</shortdesc>
+            <body>
+                <section>From the <wintitle>Media Player</wintitle> view:</section>
+                <ol id="steps_chq_hmj_sk">
+                    <li>
+                        <p>Click on the context menu in the bottom right corner.</p>
+                    </li>
+                    <li>
+                        <ul>
+                            <li>To go to a user-specified playback time, choose <uicontrol>Go
+                                to...</uicontrol> and type over the displayed time value.</li>
+                            <li>To go to the end of the last segment in your session, choose
+                                <uicontrol>Go to end of segmented media</uicontrol>.</li>
+                            <li>To go to the end of the last segment for a particular speaker, choose
+                                <uicontrol>Go to end of last segment for &lt;speaker
+                                    name></uicontrol>.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="take_snapshot">
+            <title>Take Snapshot of Media</title>
+            <shortdesc>Take a snapshot of linked media at the current viewpoint.</shortdesc>
+            <body>
+                <section>From the <wintitle>Media Player</wintitle> view, with media open:</section>
+                <ol>
+                    <li>
+                        <cmd>Click on the arrow to the bottom right of your media and choose the
+                            <uicontrol>Take snapshot</uicontrol> option from the context menu.</cmd>
+                        <itemgroup>A <wintitle>Save As</wintitle> window will appear.</itemgroup>
+                    </li>
+                    <li>
+                        <cmd>Choose a file name and destination directory for your snapshot and click
+                            <uicontrol>Save</uicontrol>.</cmd>
+                        <itemgroup>An image of the current frame of your media will be created in the
+                            specified location.<note>The image will have the same dimensions as the original
+                                video file; the size of the video in the <wintitle>Media Player</wintitle>
+                                view is irrelevant.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="move_media_position_with_record">
+            <title>Move Media Position with Record</title>
+            <shortdesc>Choose whether the current media position should move to align with the start of each
+                segment as you navigate between records.</shortdesc>
+            <body>
+                <section>From the <wintitle>Media Player</wintitle> view:</section>
+                <ol>
+                    <li>
+                        <p>Click the context menu in the bottom right corner and select or deselect
+                            <uicontrol>Move media position with record</uicontrol>.</p>
+                        <itemgroup>When this option is selected, the position marker on the <wintitle>Media
+                            Player</wintitle> will jump to the beginning of each record to which you
+                            navigate in the <wintitle>Session Editor</wintitle>.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+    </topic>
+    
+</topic>

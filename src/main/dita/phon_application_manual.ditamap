@@ -71,7 +71,13 @@
             <topicref href="session_editor/AboutBlindTranscription.xml"/>
             <topicref href="session_editor/AboutParticipants.xml"/>
             <topicref href="session_editor/records.dita"/>
-            <topicref href="session_editor/editor_media.md" format="markdown"/>
+            <topicref href="session_editor/editor_media.md" format="markdown">
+                <topicref href="session_editor/AboutMedia.xml"/>
+                <topicref href="session_editor/PlayAdjacencySequence.xml"/>
+                <topicref href="session_editor/PlayCurrentSegment.xml"/>
+                <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
+                <topicref href="session_editor/PlayCustomSegment.xml"/>
+            </topicref>
             <topicref href="session_editor/AboutEditorViews.xml">
                 <topicref href="session_editor/session_information_view.dita"/>
                 <topicref href="session_editor/tier_management_view.dita"/>
@@ -79,18 +85,7 @@
                 <topicref href="session_editor/syllabification_and_alignment_view.dita"
                     format="dita"/>
                 <topicref href="session_editor/ipa_validation_view.dita" format="dita"/>
-                <topicref href="session_editor/editor_view-media_player.md" format="markdown">
-                    <topicref href="session_editor/AboutMedia.xml"/>
-                    <topicref href="session_editor/OpenMedia.xml"/>
-                    <topicref href="session_editor/GoTo.xml"/>
-                    <topicref href="session_editor/MoveMediaPositionWithRecord.xml"/>
-                    <topicref href="session_editor/PlayAdjacencySequence.xml"/>
-                    <topicref href="session_editor/PlayCurrentSegment.xml"/>
-                    <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
-                    <topicref href="session_editor/PlayCustomSegment.xml"/>
-                    <topicref href="session_editor/ExportMedia.xml"/>
-                    <topicref href="session_editor/TakeSnapshot.xml"/>
-                </topicref>
+                <topicref href="session_editor/media_player_view.dita" format="dita"/>
                 <topicref href="session_editor/editor_view-speech_analysis.md" format="markdown">
                     <topicref href="session_editor/ViewWaveform.xml"/>
                     <topicref href="session_editor/AdjustSegmentTimes.xml"/>

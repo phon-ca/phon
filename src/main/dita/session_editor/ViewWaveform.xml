@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/task.dtd">
 <task id="taskId">
-    <title>Waveform</title>
+    <title>Waveform Tier</title>
     <shortdesc>View the speech analysis view for a particular segment.</shortdesc>
     <taskbody>
         <context>From the <wintitle>Session Editor</wintitle>:</context>
