@@ -16,8 +16,10 @@
     <topic id="media_player_actions">
         <title>Actions</title>
         <body>
-            <p>Standard media controls - play/pause, position, and volume - can be found under the video.  Other actions can
-            be accessed by clicking the menu (button with triangle) button in the video player bar.</p>
+            <p>Standard media controls - play/pause, position, and volume - can be found under the
+                video. Other actions can be accessed by clicking the menu (button with triangle)
+                button in the video player bar.  Clicking on the video surface will also perform the
+                play/pause action.</p>
         </body>
         
         <topic id="goto_time">
@@ -52,13 +54,13 @@
                 <section>From the <wintitle>Media Player</wintitle> view, with media open:</section>
                 <ol>
                     <li>
-                        <cmd>Click on the arrow to the bottom right of your media and choose the
-                            <uicontrol>Take snapshot</uicontrol> option from the context menu.</cmd>
+                        <p>Click on the arrow to the bottom right of your media and choose the
+                            <uicontrol>Take snapshot</uicontrol> option from the context menu.</p>
                         <itemgroup>A <wintitle>Save As</wintitle> window will appear.</itemgroup>
                     </li>
                     <li>
-                        <cmd>Choose a file name and destination directory for your snapshot and click
-                            <uicontrol>Save</uicontrol>.</cmd>
+                        <p>Choose a file name and destination directory for your snapshot and click
+                            <uicontrol>Save</uicontrol>.</p>
                         <itemgroup>An image of the current frame of your media will be created in the
                             specified location.<note>The image will have the same dimensions as the original
                                 video file; the size of the video in the <wintitle>Media Player</wintitle>

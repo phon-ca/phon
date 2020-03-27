@@ -106,10 +106,7 @@
                     </topicref>
                 </topicref>
                 <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
-                <topicref href="session_editor/editor_view-ipa_lookup.md" format="markdown">
-                    <topicref href="session_editor/Auto-transcribe.xml"/>
-                    <topicref href="session_editor/AboutIPALookupConsole.xml"/>
-                </topicref>
+                <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
                 <topicref href="session_editor/editor_view-find_and_replace.md" format="markdown">
                     <topicref href="session_editor/FindReplace.xml"/>
                 </topicref>

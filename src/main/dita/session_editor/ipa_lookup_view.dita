@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="ipa-lookup">
+    <title>IPA Lookup</title>
+    <body>
+        <image href="../images/EditorView_IPALookup.png" placement="break">
+            <alt>../images/EditorView_IPALookup.png</alt>
+        </image>
+    </body>
+    
+    <topic id="auto_transcribe">
+        <title>Auto Transcribe Session</title>
+        <shortdesc>Automatically transcribe a session using an available built-in
+            dictionary.</shortdesc>
+        <body>
+            <section>The <i>Orthography</i> tier must be filled in with words that are valid in the
+                target language.</section>
+            <section>From the <wintitle>IPA Lookup</wintitle> view:</section>
+            <ol>
+                <li>
+                    <cmd>Select the appropriate dictionary language in the <uicontrol>IPA
+                        Dictionary</uicontrol> field.</cmd>
+                    <itemgroup>IPA transcriptions filled in through automatic transcription will be
+                        selected from this dictionary.</itemgroup>
+                </li>
+                <li>
+                    <cmd>Click the <uicontrol>Auto-transcribe Session</uicontrol> button.</cmd>
+                    <itemgroup>This will open the <wintitle>Automatic Transcription</wintitle>
+                        dialog.</itemgroup>
+                </li>
+                <li>
+                    <cmd>In the <uicontrol>Tier Options</uicontrol> field, choose whether to overwrite
+                        existing transcriptions by selecting <uicontrol>Overwrite</uicontrol>. Select
+                        whether to transcribe the <uicontrol>IPA Target</uicontrol> tier and/or the
+                        <uicontrol>IPA Actual</uicontrol> tier, and choose a
+                        <uicontrol>Syllabifier</uicontrol> language.</cmd>
+                    <itemgroup>
+                        <note>The <uicontrol>Syllabifier</uicontrol> language may differ from the chosen
+                            <uicontrol>Dictionary</uicontrol> language. Choosing a
+                            <uicontrol>Syllabifier</uicontrol> language allows <i>Phon</i> to draw
+                            syllabification information in the <wintitle>Syllabification &amp;
+                                Alignment</wintitle> view.</note>
+                    </itemgroup>
+                </li>
+                <li>
+                    <cmd>In the <uicontrol>Record Selection</uicontrol> tier, choose whether to
+                        transcribe <uicontrol>All records</uicontrol>, <uicontrol>Specific
+                            records</uicontrol>, <uicontrol>Records for participant(s)</uicontrol>, or
+                        <uicontrol>Records from search results</uicontrol>.</cmd>
+                    <itemgroup>
+                        <note>If you choose to transcribe only specific records, you will have to
+                            specify the relevant record numbers. To specify several individual record
+                            numbers, separate them with a comma and a space. To specify a range,
+                            separate the beginning and end record numbers with two periods and a space.
+                            If you choose to transcribe records for specific participants, you must
+                            select the participants from the list. If you choose the transcribe records
+                            from search results, you must select a past search from the list.</note>
+                    </itemgroup>
+                </li>
+                <li>
+                    <cmd>If you are unsure, click <uicontrol>Close</uicontrol>. Otherwise, click
+                        <uicontrol>Ok</uicontrol> to perform the automatic transcription. </cmd>
+                    <itemgroup>The selected tier will be filled in with entries from the chosen
+                        built-in dictionary.</itemgroup>
+                </li>
+            </ol>
+        </body>
+    </topic>
+    
+    <topic id="ipa_lookup_console">
+        <title>IPA Lookup Console</title>
+        <body>
+            <p>The IPA Lookup Console is a function which allows users to lookup transcriptions, and to
+                create and edit IPA dictionaries in <i>Phon</i>. The window can be opened by clicking
+                the menu entry <menucascade>
+                    <uicontrol>View</uicontrol>
+                    <uicontrol>IPA Lookup</uicontrol>
+                </menucascade>, and then clicking the <uicontrol>Console</uicontrol> tab. Commands can
+                be entered into the text field located at the bottom of the window, use
+                <userinput>Enter</userinput> to run the command.</p>
+            <p>The following commands can be performed on dictionary files (include any quotation
+                marks): <ul id="ul_76df7150-696c-4d9a-886b-33f09bb9f001">
+                    <li><b>use &lt;dictionary></b>
+                        <p>Switch to the specified dictionary. This can also be done using the combo box
+                            at the top of the window.</p>
+                    </li>
+                    <li><b>create &lt;dictionary></b>
+                        <p>Create a new dictionary with the given name. You may choose to name your
+                            dictionary using an <i>ISO-639-3 Language Code</i>; for a list of these, see
+                            the <wintitle>ISO-639-3 Language Codes</wintitle> window.</p>
+                    </li>
+                    <li><b>drop &lt;dictionary></b>
+                        <p>Delete a user-created dictionary which you no longer wish to use.</p>
+                    </li>
+                    <li><b>list</b>
+                        <p>List the available dictionaries.</p>
+                    </li>
+                    <li><b>import "&lt;/full path/file>"</b>
+                        <p>Import entries from the given file into the current dictionary. The specified
+                            file should be in UTF-8 encoding with one entry per line in the format
+                            "&lt;orthography>&lt;tab>&lt;ipa>". Alternately, click the <uicontrol>Import
+                                IPA</uicontrol> button at the top of the <wintitle>IPA Lookup</wintitle>
+                            view, locate and select the file for import, and click
+                            <uicontrol>Open</uicontrol>.</p>
+                    </li>
+                    <li><b>export "&lt;/full path/file>"</b>
+                        <p>Export user-defined entries in the current dictionary to a UTF-8 encoded text
+                            file. Alternately, click the <uicontrol>Export IPA</uicontrol> button at the
+                            top of the <wintitle>IPA Lookup</wintitle> view, choose a filename and
+                            location for export, and click <uicontrol>Save</uicontrol>.</p>
+                    </li>
+                </ul></p>
+            <p>The following commands can be performed on entries (include any quotation marks): <ul
+                id="ul_76df7150-696c-4d9a-886b-33f09bb8s301">
+                <li><b>add "&lt;orthography>"="&lt;ipa></b>" <p>Add an entry into the IPA database
+                    for the currently selected dictionary.<note>Characters in &lt;orthography>
+                        should be in lower-case.</note></p>
+                </li>
+                <li><b>lookup "&lt;orthography>"</b>
+                    <p>Look up the IPA transcription for the given orthography. The command can also
+                        be executed by entering only the orthography (without quotes) in the command
+                        field.</p>
+                </li>
+                <li><b>remove "&lt;orthography>"="&lt;ipa>"</b>
+                    <p>Remove the IPA transcription for a user-added entry in the currently selected
+                        dictionary.</p>
+                </li>
+                <li><b>remove all</b>
+                    <p>Remove the IPA transcriptions for all user-added entries in the currently
+                        selected dictionary.</p>
+                </li>
+            </ul></p>
+            <p>Other commands:
+                <ul id="ul_76df7150-696c-4d9a-886b-33f09bb9f661">
+                    <li><b>help</b>
+                        <p>List all available <wintitle>Console</wintitle> commands.</p>
+                    </li>
+                </ul>
+            </p>
+        </body>
+    </topic>
+</topic>
