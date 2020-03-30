@@ -79,22 +79,9 @@
         </topichead>
     </chapter>
     <chapter navtitle="IPA Transcription" audience="novice">
-        <topicref href="ipa/transcription.dita">
-            <topicref href="ipa/phone.dita"/>
-            <topicref href="ipa/compound_phone.dita"/>
-            <topicref href="ipa/intrawordpause.dita"/>
-            <topicref href="ipa/pause.dita"/>
-            <topicref href="ipa/stress_marker.dita"/>
-            <topicref href="ipa/syllable_boundary.dita"/>
-            <topicref href="ipa/word_boundary.dita"/>
-        </topicref>
-        <topichead navtitle="Other Transcription Items">
-            <topicref href="ipa/intonation_group.dita"/>
-            <topicref href="ipa/compound_word.dita"/>
-            <topicref href="ipa/sandhi.dita"/>
-        </topichead>
-        <topicref href="generated/ipa.xml"/>
-        <topicref href="generated/features.xml"/>
+        <topicref href="ipa/transcription.dita"/>
+        <topicref href="ipa/ipa.xml"/>
+        <topicref href="ipa/features.xml"/>
     </chapter>
     <chapter navtitle="Phonex" audience="intermediate">
         <topicref href="phonex/phonex_introduction.md" format="markdown"/>

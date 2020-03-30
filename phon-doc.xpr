@@ -14,21 +14,6 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/dita/phon_application_manual.ditamap</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>PhonManual - Web</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>DITAMAP</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>src/main/xslt/ipa2dita.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -39,6 +24,21 @@
                                 <field name="scenarioTypes">
                                     <list>
                                         <String>XSL</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/dita/phon_application_manual.ditamap</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>PhonManual - Web</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>DITAMAP</String>
                                     </list>
                                 </field>
                             </scenarioAssociation>
@@ -103,7 +103,7 @@
                                     <String>${pdu}/src/main/xslt/features2dita.xsl</String>
                                 </field>
                                 <field name="inputXMLURL">
-                                    <String>file:/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/xml/ca/phon/ipa/features/features.xml</String>
+                                    <String>https://raw.githubusercontent.com/phon-ca/phon/master/ipa/src/main/resources/ca/phon/ipa/features/features.xml</String>
                                 </field>
                                 <field name="defaultScenario">
                                     <Boolean>false</Boolean>
@@ -121,7 +121,7 @@
                                     <Boolean>false</Boolean>
                                 </field>
                                 <field name="outputResource">
-                                    <String>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/features.xml</String>
+                                    <String>${pd}/src/main/dita/ipa/features.xml</String>
                                 </field>
                                 <field name="openOtherLocationInBrowser">
                                     <Boolean>false</Boolean>
@@ -186,7 +186,7 @@
                                     <String>${pdu}/src/main/xslt/ipa2dita.xsl</String>
                                 </field>
                                 <field name="inputXMLURL">
-                                    <String>file:/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/xml/ca/phon/ipa/parser/ipa.xml</String>
+                                    <String>https://raw.githubusercontent.com/phon-ca/phon/master/ipa/src/main/resources/ca/phon/ipa/parser/ipa.xml</String>
                                 </field>
                                 <field name="defaultScenario">
                                     <Boolean>false</Boolean>
@@ -204,7 +204,7 @@
                                     <Boolean>false</Boolean>
                                 </field>
                                 <field name="outputResource">
-                                    <String>/Users/ghedlund/Documents/phon/gitprojects/phon-manual/target/generated-resources/xml/xslt/ipa.xml</String>
+                                    <String>${pd}/src/main/dita/ipa/ipa.xml</String>
                                 </field>
                                 <field name="openOtherLocationInBrowser">
                                     <Boolean>false</Boolean>

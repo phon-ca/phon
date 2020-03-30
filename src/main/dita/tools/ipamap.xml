@@ -185,7 +185,7 @@
                                 single-character feature shorthands (e.g. "c" for consonant or "v" for
                                 vowel).</note>
                             <note>See <xref
-                                href="../generated/features.xml"
+                                href="../ipa/features.xml"
                                 >Listing of phonetic features</xref> for a list of all features and
                                 shorthands used in <i>Phon</i>.</note></itemgroup>
                     </li>

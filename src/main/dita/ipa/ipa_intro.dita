@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_trw_j2l_2n">
- <title>IPA Transcription in Phon</title>
- <shortdesc></shortdesc>
- <conbody>
-  <p>This document describes how IPA transcriptions are parsed within Phon.</p>
- </conbody>
-</concept>

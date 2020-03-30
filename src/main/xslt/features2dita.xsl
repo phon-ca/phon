@@ -7,39 +7,40 @@
     
     <!-- writing to an xml file -->
     <xsl:output method="xml" encoding="UTF-8"
-        doctype-public="-//OASIS//DTD DITA Concept//EN"
-        doctype-system="concept.dtd"
+        doctype-public="-//OASIS//DTD DITA Reference//EN"
+        doctype-system="reference.dtd"
         indent="yes"/>
     
     <xsl:template match="/">
-        <concept id="concept_feature_listing">
+        <reference id="feature_listing">
             <title>Listing of phonetic features</title>
-            <shortdesc>Listing of phonetic features.</shortdesc>
-            <conbody>
-                <p>The following is a listing of all the supported phonetic features.<table frame="all"
-                    id="table_mtk_bqm_3g">
-                    <title>Features</title>
-                    <tgroup cols="4">
-                        <colspec colname="c1" colnum="1" colwidth="1.0*"/>
-                        <colspec colname="c2" colnum="2" colwidth="1.0*"/>
-                        <colspec colname="c3" colnum="3" colwidth="1.0*"/>
-                        <colspec colname="c4" colnum="4" colwidth="1.0*"/>
-                        <thead>
-                            <row>
-                                <entry>Name</entry>
-                                <entry>Synonyms</entry>
-                                <entry>Primary Family</entry>
-                                <entry>Secondary Family</entry>
-                            </row>
-                        </thead>
-                        <tbody>
-                            <xsl:apply-templates select="fs:feature_matrix/fs:feature"/>
-                        </tbody>
-                    </tgroup>
-                </table>
-                </p>
-            </conbody>
-        </concept>
+            <refbody>
+                <section id="section_1">
+                  <p>The following is a listing of all the supported phonetic features.<table frame="all"
+                      id="table_mtk_bqm_3g">
+                      <title>Features</title>
+                      <tgroup cols="4">
+                          <colspec colname="c1" colnum="1" colwidth="1.0*"/>
+                          <colspec colname="c2" colnum="2" colwidth="1.0*"/>
+                          <colspec colname="c3" colnum="3" colwidth="1.0*"/>
+                          <colspec colname="c4" colnum="4" colwidth="1.0*"/>
+                          <thead>
+                              <row>
+                                  <entry>Name</entry>
+                                  <entry>Synonyms</entry>
+                                  <entry>Primary Family</entry>
+                                  <entry>Secondary Family</entry>
+                              </row>
+                          </thead>
+                          <tbody>
+                              <xsl:apply-templates select="fs:feature_matrix/fs:feature"/>
+                          </tbody>
+                      </tgroup>
+                  </table>
+                  </p>
+                </section>
+            </refbody>
+        </reference>
     </xsl:template>
     
     <xsl:template match="fs:feature">

@@ -20,43 +20,44 @@
     
     <!-- writing to an xml file -->
     <xsl:output method="xml" encoding="UTF-8"
-        doctype-public="-//OASIS//DTD DITA Concept//EN"
-        doctype-system="concept.dtd"
+        doctype-public="-//OASIS//DTD DITA Reference//EN"
+        doctype-system="reference.dtd"
         indent="yes"/>
     
     <xsl:key name="unicodeKey" match="ipa:glyph" use="@value"/>
     
     <xsl:template match="/">
-        <concept id="concept_ipa_listing">
+        <reference id="ipa_listing">
             <title>Listing of IPA Characters</title>
-            <shortdesc>Listing of IPA characters.</shortdesc>
-            <conbody>
-                <p>The following is a lising of all supported IPA characters along with the glyph unicode value, name, token type and feature set.<table frame="all"
-                    id="table_kyq_t4l_3g">
-                    <title>Supported IPA Characters</title>
-                    <tgroup cols="5">
-                        <colspec colname="c1" colnum="1" colwidth="1*"/>
-                        <colspec colname="c2" colnum="2" colwidth="1.34*"/>
-                        <colspec colname="c3" colnum="3" colwidth="2.18*"/>
-                        <colspec colname="c4" colnum="4" colwidth="3.16*"/>
-                        <colspec colname="c5" colnum="5" colwidth="6.58*"/>
-                        <thead>
-                            <row>
-                                <entry>Glyph</entry>
-                                <entry>Unicode Value</entry>
-                                <entry>Name</entry>
-                                <entry>Type</entry>
-                                <entry>Features</entry>
-                            </row>
-                        </thead>
-                        <tbody>
-                            <xsl:apply-templates select="ipa:ipa/ipa:char"/>
-                        </tbody>
-                    </tgroup>
-                </table>
-                </p>
-            </conbody>
-        </concept>
+            <refbody>
+                <section id="section_1">
+                  <p>The following is a lising of all supported IPA characters along with the glyph unicode value, name, token type and feature set.<table frame="all"
+                      id="table_kyq_t4l_3g">
+                      <title>Supported IPA Characters</title>
+                      <tgroup cols="5">
+                          <colspec colname="c1" colnum="1" colwidth="1*"/>
+                          <colspec colname="c2" colnum="2" colwidth="1.34*"/>
+                          <colspec colname="c3" colnum="3" colwidth="2.18*"/>
+                          <colspec colname="c4" colnum="4" colwidth="3.16*"/>
+                          <colspec colname="c5" colnum="5" colwidth="6.58*"/>
+                          <thead>
+                              <row>
+                                  <entry>Glyph</entry>
+                                  <entry>Unicode Value</entry>
+                                  <entry>Name</entry>
+                                  <entry>Type</entry>
+                                  <entry>Features</entry>
+                              </row>
+                          </thead>
+                          <tbody>
+                              <xsl:apply-templates select="ipa:ipa/ipa:char"/>
+                          </tbody>
+                      </tgroup>
+                  </table>
+                  </p>
+                </section>
+            </refbody>
+        </reference>
         
     </xsl:template>
     
