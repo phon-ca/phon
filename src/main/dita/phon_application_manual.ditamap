@@ -22,30 +22,10 @@
             <topicref href="prefs/syllabifier_language.xml"/>
             <topicref href="prefs/media_folders.xml"/>
         </topicref>
-        <topicref href="projman/project_manager.md" format="markdown">
-            <topicref href="misc/AboutProjectFileStructure.xml"/>
-            <topicref href="misc/AboutProjectMediaFolders.xml"/>
-            <topicref href="projman/AboutCorpora.xml">
-                <topicref href="projman/CreateCorpus.xml"/>
-                <topicref href="projman/DuplicateCorpus.xml"/>
-                <topicref href="projman/EditCorpusTemplate.xml"/>
-                <topicref href="projman/RenameCorpus.xml"/>
-                <topicref href="projman/DeleteCorpus.xml"/>
-            </topicref>
-            <topicref href="projman/AboutSessions.xml">
-                <topicref href="projman/CreateSession.xml"/>
-                <topicref href="projman/OpenSessionDefault.xml"/>
-                <topicref href="projman/OpenSessionBlind.xml"/>
-                <topicref href="projman/DuplicateSession.xml"/>
-                <topicref href="projman/DeriveSession.xml"/>
-                <topicref href="projman/MoveSession.xml"/>
-                <topicref href="projman/RenameSession.xml"/>
-                <topicref href="projman/SaveSessionAs.xml"/>
-                <topicref href="projman/DeleteSession.xml"/>
-            </topicref>
-            <topicref href="projman/CheckTranscriptions.xml"/>
-            <topicref href="projman/ResetSyllabification.xml"/>
-            <topicref href="projman/ResetPhoneAlignment.xml"/>
+        <topicref href="projman/project_manager.dita" format="dita">
+            <topicref href="projman/corpora.xml"/>
+            <topicref href="projman/sessions.xml"/>
+            <topicref href="projman/DeriveSession.xml"/>
             <topicref href="projman/RefreshProject.xml"/>
             <topicref href="projman/CSVImport.xml"/>
             <topicref href="projman/CSVExport.xml"/>

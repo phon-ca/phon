@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
+    <title>Corpora</title>
+    <body>
+        <p>Within a project, individual transcripts (or <i>sessions</i>) are organized into a series
+            of one or more <i>corpora</i>.</p>
+        <p>Each corpus typically contains a series of sessions relating to one specific participant
+            in a study. The corpus may contain as many sessions as desired for that participant,
+            spanning any length of time. This allows the user to easily search all transcripts
+            relating to one participant, by searching within the relevant corpus.</p>
+        <p>When a corpus is selected, the number of sessions and a description of that corpus is
+            displayed at the bottom of the list of corpora.</p>
+        <fig id="fig_yxz_mjw_2lb">
+            <title>Corpus List</title>
+            <image placement="inline" href="images/corpus_list.png" id="image_zxz_mjw_2lb">
+                <alt>Corpus List</alt>
+            </image>
+        </fig>
+    </body>
+    
+    <topic id="corpus_actions">
+        <title>Corpus Actions</title>
+        <body/>
+        
+        <topic id="create_corpus">
+            <title>Create Corpus</title>
+            <shortdesc>Create a new corpus in an existing project.</shortdesc>
+            <body>
+                <section>First, a project must be open.</section>
+                <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Choose the <menucascade>
+                            <uicontrol>Project</uicontrol>
+                            <uicontrol>New Corpus...</uicontrol>
+                        </menucascade> menu item.</p>
+                        <itemgroup>The <wintitle>New Corpus</wintitle> dialog will appear.
+                            <image placement="break"
+                                href="images/create_corpus.png" id="image_wdr_vlm_sc"/></itemgroup>
+                    </li>
+                    <li>
+                        <p>Enter a name (and optionally a description) for the new corpus. Click
+                            <uicontrol>Ok</uicontrol>.</p>
+                        <itemgroup>This creates a new corpus with the specified name inside the open
+                            project. An error message will appear if a corpus with that name already
+                            exists.<note>You may return to edit the description at any time by clicking
+                                on the corpus name in the <wintitle>Project Manager</wintitle> and typing a
+                                description in the field below the <i>Corpus list</i>.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="rename_corpus">
+            <title>Rename Corpus</title>
+            <shortdesc>Rename a corpus in your project.</shortdesc>
+            <body>
+                <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
+                            rename and choose <uicontrol>Rename Corpus</uicontrol> from the context
+                            menu.</p>
+                        <itemgroup>The <wintitle>Rename Corpus</wintitle> window will appear.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Follow the instructions in the <wintitle>Rename Corpus</wintitle> window. If
+                            you are unsure whether you want to rename your corpus, click
+                            <uicontrol>Cancel</uicontrol>. To continue and rename the corpus, click
+                            <uicontrol>OK</uicontrol>.</p>
+                        <itemgroup>You will return to the <wintitle>Project Manager</wintitle> window and
+                            the corpus will be renamed accordingly.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="delete_corpus">
+            <title>Delete Corpus</title>
+            <shortdesc>Delete a corpus in your project.</shortdesc>
+            <body>
+                <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
+                            delete and choose <uicontrol>Delete Corpus</uicontrol> from the context
+                            menu.</p>
+                        
+                        <itemgroup>A dialog will appear asking you to confirm whether you would like to
+                            delete this corpus and informing you that this action cannot be
+                            undone.</itemgroup>
+                    </li>
+                    <li>
+                        <p>If you are unsure, click <uicontrol>No</uicontrol>. To continue and delete the
+                            corpus, click <uicontrol>Yes</uicontrol>.</p>
+                        <itemgroup>The deleted corpus will no longer appear in the <wintitle>Project
+                            Manager</wintitle> window.</itemgroup>
+                    </li>
+                    
+                </ol>
+                
+            </body>
+        </topic>
+        
+        <topic id="duplicate_corpus">
+            <title>Duplicate Corpus</title>
+            <shortdesc>Dupliate a corpus folder in your project.</shortdesc>
+            <body>
+                <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
+                            duplicate and choose <uicontrol>Duplicate Corpus</uicontrol> from the context
+                            menu.</p>
+                        <itemgroup>The corpus folder will be duplicated with an integer suffix (e.g.,
+                            '(1)') appended.</itemgroup>
+                    </li>
+                    
+                </ol>
+                
+            </body>
+        </topic>
+        
+        <topic id="edit_corpus_template">
+            <title>Edit Corpus Template</title>
+            <shortdesc>Set default participants and tiers for all sessions to be created in a
+                corpus.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus whose template
+                            you wish to edit and select <uicontrol>Edit corpus template...</uicontrol> from
+                            the context menu.</p>
+                        <itemgroup>A <wintitle>Session Template</wintitle> window will appear for the
+                            selected corpus, showing the <wintitle>Session Information</wintitle> and
+                            <wintitle>Tier Management</wintitle> views.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Edit options as you see fit. Close this window when you are finished making
+                            changes.</p>
+                        <itemgroup>These settings will be applied to any sessions subsequently created
+                            within the corpus.<note>For further instructions on how to specify information
+                                in the <wintitle>Session Information</wintitle> and <wintitle>Tier
+                                    Management</wintitle> views, consult <xref
+                                        href="../session_editor/InputSessionLanguage.xml"/>, <xref
+                                            href="../session_editor/AboutParticipants.xml"/>, <xref
+                                                href="../session_editor/LinkMedia.xml"/>, <xref
+                                                    href="../session_editor/EditTierDisplayOptions.xml"/>, and other
+                                related pages.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+                
+    </topic>
+</topic>

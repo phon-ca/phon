@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
+    <title>Sessions</title>
+    <body>
+        <p>A session in <i>Phon</i> is a transcript of a portion of field data targeting one or more
+            participants in a project.</p>
+        <p><i>Phon</i> is designed to facilitate the transcription of media recordings (audio or
+            video) taken of participants in a study. As such, a <i>Phon</i> session usually
+            corresponds to one media recording and the transcript of this recording.</p>
+        <p>A session is organized into a series of records which correspond to individual
+            utterances.</p>
+        <p>Sessions can be viewed in the <wintitle>Project Manager</wintitle> window. When a session
+            is selected, the number of records in that session and the date it was last modified are
+            displayed at the bottom of the list of sessions.</p>
+        <fig id="fig_omd_klw_2lb">
+            <title>Session List</title>
+            <image placement="inline" href="images/session_list.png" id="image_pmd_klw_2lb">
+                <alt>Session List</alt>
+            </image>
+        </fig>
+        
+    </body>
+    
+    <topic id="session_actions">
+        <title>Session Actions</title>
+        <body/>
+        
+        <topic id="create_session">
+            <title>Create Session</title>
+            <shortdesc>Create a new session in an existing corpus.</shortdesc>
+            <body>
+                <section>A project with at least one corpus must be open.</section>
+                <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                <ol id="steps_b7a946aa-469f-4814-a629-fcf01f933f6e">
+                    <li>
+                        <p>Select the <menucascade>
+                            <uicontrol>Project</uicontrol>
+                            <uicontrol>New Session</uicontrol>
+                        </menucascade> menu item, or right-click (<userinput>CTRL+click</userinput>) in
+                            the <uicontrol>Corpus</uicontrol> list. </p>
+                        <itemgroup>The <wintitle>New Session</wintitle> dialog will appear.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Enter a name for the new session, choose the destination corpus and click
+                            <uicontrol>Ok</uicontrol>. If you require a new corpus for the new session,
+                            click the plus sign to the right of the corpus selection field and enter the new
+                            corpus information as per the description at <xref href="CreateCorpus.xml"/>,
+                            and then select this new corpus as your destination.</p>
+                        <itemgroup>The new session will be created in the specified corpus and opened for
+                            editing. An error message will appear if a session with that name already
+                            exists.<note>Each new session is created with an empty record at the
+                                beginning of it.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="open_session">
+            <title>Open Session</title>
+            <shortdesc>Open a session in the default mode.</shortdesc>
+            <body>
+                <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Ensure that the <uicontrol>Blind transcription</uicontrol> box is deselected to
+                            open a session in default mode. Click the desired corpus, and double-click on
+                            the session that you would like to transcribe.</p>
+                        <itemgroup>The selected session will open in the <wintitle>Session
+                            Editor</wintitle>.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="open_session_blind">
+            <title>Open Session: Blind Transcription</title>
+            <shortdesc>Transcribe in multi-blind mode.</shortdesc>
+            <body>
+                <section>
+                    <p>From the <wintitle>Project Manager</wintitle> window:</p>
+                </section>
+                <ol>
+                    <li>
+                        <p>Select the <uicontrol>Blind transcription</uicontrol> check box and
+                            double-click on the session that you would like to transcribe.</p>
+                        <itemgroup>This will open a dialog prompting you to indicate whether you are a new
+                            or existing transcriber. </itemgroup>
+                    </li>
+                    <li>
+                        <p></p>
+                        <ul>
+                            <li>If you are a new transcriber, choose the first option and enter your full name
+                                as well as a username. If you wish to use a password, select <uicontrol>Use
+                                    password</uicontrol> and enter your chosen password into the two fields
+                                provided (the text in both fields must match). There is no password reminder function in <i>Phon</i>. 
+                                Ensure that your password is memorable or store it in a safe location. Click <uicontrol>Ok</uicontrol> to continue.</li>
+                            <li>If you are a returning transcriber, choose the second option and select
+                                your username from the list. If you have chosen to use a password, you will
+                                be prompted to enter that password now. Do so and click
+                                <uicontrol>Ok</uicontrol>.</li>
+                        </ul>
+                        <itemgroup>This will open the <wintitle>Session Editor</wintitle> window.
+                            <note>Upon opening a session for the first time, there will be an empty
+                                record at the beginning of each session.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="rename_session">
+            <title>Rename Session</title>
+            <shortdesc>Change a session name in your project.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the session you wish to
+                            rename, and choose <uicontrol>Rename Session</uicontrol> from the context
+                            menu.</p>
+                        <itemgroup>The <wintitle>Rename Session</wintitle> window will appear.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Follow the steps in the <wintitle>Rename Session</wintitle> window and click
+                            <uicontrol>OK</uicontrol>.</p>
+                        <itemgroup>You will be returned to the <wintitle>Project Manager</wintitle> window,
+                            with the session renamed.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="delete_session">
+            <title>Delete Session</title>
+            <shortdesc>Remove a session from your project.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the session you wish to
+                            delete, and choose <uicontrol>Delete Session</uicontrol> from the context
+                            menu.</p>
+                        <itemgroup>A dialog will appear asking you to confirm that you would like to delete
+                            this session and informing you that this action cannot be undone.</itemgroup>
+                    </li>
+                    <li>
+                        <p>If you are unsure, click <uicontrol>No</uicontrol>. To continue and delete the
+                            session, click <uicontrol>Yes</uicontrol>.</p>
+                        <itemgroup>The session will no longer appear in the <wintitle>Project
+                            Manager</wintitle> window.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="duplicate_session">
+            <title>Duplicate Session</title>
+            <shortdesc>Create a copy of a session within the corpus that contains it.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the session you wish to
+                            duplicate, and choose <uicontrol>Duplicate Session</uicontrol> from the context
+                            menu.</p>
+                        <itemgroup>A duplicate of your session, with the suffix "(copy)" will appear in the
+                            <wintitle>Project Manager</wintitle>.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="move_session">
+            <title>Move Session</title>
+            <shortdesc>Move a session to a different corpus.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on the session you wish to
+                            move, choose <uicontrol>Move Session To</uicontrol> from the context menu, and
+                            click on the corpus you wish to move your session to.</p>
+                        <itemgroup>A dialog will appear asking you to confirm that you would like to delete
+                            the session from its original location. Click <uicontrol>Yes</uicontrol>. Your
+                            session will be moved to the selected corpus.<note>You may move your session to
+                                a corpus within the current project, to another open project, or to any
+                                project in your workspace folder.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+    </topic>
+</topic>
