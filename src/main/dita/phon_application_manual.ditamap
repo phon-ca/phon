@@ -73,15 +73,7 @@
             <topicref href="session_editor/EditorKeystrokes.xml"/>
         </topicref>
         <topichead navtitle="Tools">
-            <topichead navtitle="IPA Map">
-                <topicref href="ipamap/AboutIPAMap.xml"/>
-                <topicref href="ipamap/InputTextwithIPAMap.xml"/>
-                <topicref href="ipamap/CopyCharacter.xml"/>
-                <topicref href="ipamap/AddtoFavorites.xml"/>
-                <topicref href="ipamap/ScrolltoSection.xml"/>
-                <topicref href="ipamap/ResizeFontandWindow.xml"/>
-                <topicref href="ipamap/HighlightRecentlyUsed.xml"/>
-            </topichead>
+            <topicref href="tools/ipamap.xml"/>
             <topicref href="tools/PhonShell.md" format="markdown"/>
             <topicref href="tools/LanguageCodes.md" format="markdown"/>
         </topichead>

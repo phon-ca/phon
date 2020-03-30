@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
+    <title>IPA Map</title>
+    <shortdesc>About the <wintitle>IPA Map</wintitle> in <i>Phon</i>.</shortdesc>
+    <body>
+        <p><i>Phon's</i>
+            <wintitle>IPA Map</wintitle> provides an easy-to-use interface for composing phonetic
+            transcriptions. There are eight sections in the window, each with a layout which aids in
+            the lookup of phones and diacritics. These sections may be collapsed or expanded by
+            clicking on the appropriate title bar.</p>
+        <p><b><wintitle>IPA Map</wintitle> sections:</b>
+            <ul id="ul_xkl_4km_pf">
+                <li>Consonants</li>
+                <li>Clicks and Implosives</li>
+                <li>Vowels</li>
+                <li>Suprasegmentals</li>
+                <li>Contours</li>
+                <li>Diacritics</li>
+                <li>Tones</li>
+                <li>ExtIPA</li>
+            </ul></p>
+        <p>Not all characters in the <wintitle>IPA Map</wintitle> are meant to be the base glyph in
+            a phone (e.g. suprasegmentals, word boundaries, diacritics). Often, a dependent
+            character is displayed in the <wintitle>IPA Map</wintitle> with a circle to represent
+            its relation to the base glyph.</p>
+        <p>To view the <i>Name</i>, <i>Unicode</i> value, and <i>Features</i> of a character in the
+                <wintitle>IPA Map</wintitle>, mouse over the character and a
+                <wintitle>Tooltip</wintitle> window will appear.</p>
+        <fig id="fig_zdz_3fx_2lb">
+            <title>IPA Map</title>
+            <image placement="inline" href="../ipamap/images/ipamap.png" id="image_a2z_3fx_2lb">
+                <alt>IPA Map</alt>
+            </image>
+        </fig>
+        
+    </body>
+    
+    <topic id="ipamap_actions">
+        <title>Actions</title>
+        <body/>
+        
+        <topic id="use_ipa_map">
+            <title>Input Text with IPA Map</title>
+            <shortdesc>Create or modify phonetic transcriptions using the <wintitle>IPA
+                Map</wintitle>.</shortdesc>
+            <body>
+                <section>
+                    <p>The <wintitle>IPA Map</wintitle> can be used in any text-input field in
+                        <i>Phon</i>.</p>
+                </section>
+                <ol>
+                    <li>
+                        <p>Place the cursor in a text-input field and select the <menucascade>
+                            <uicontrol>Tools</uicontrol>
+                            <uicontrol>IPA Map</uicontrol>
+                        </menucascade> (<userinput>CMD/CTRL+M</userinput>) menu item.</p>
+                        <itemgroup>This will generate a window containing the <wintitle>IPA
+                            Map</wintitle>.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Click on the buttons in the <wintitle>IPA Map</wintitle> which correspond to
+                            the characters you would like to enter into the text-input field.</p>
+                        <itemgroup>The data in the text-input field will reflect your
+                            selections.<note>While the <wintitle>IPA Map</wintitle> is open, you may
+                                still proceed to type normally.</note></itemgroup>
+                    </li>
+                    <li>
+                        <p>To close the <wintitle>IPA Map</wintitle>, select the <menucascade>
+                            <uicontrol>Tools</uicontrol>
+                            <uicontrol>IPA Map</uicontrol>
+                        </menucascade> (<userinput>CMD/CTRL+M</userinput>) menu item.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="copy_character_to_clipboard">
+            <title>Copy Character</title>
+            <shortdesc>Copy a character to your computer's clipboard.</shortdesc>
+            <body>
+                <section>From the <wintitle>IPA Map</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on any character in the
+                            <wintitle>IPA Map</wintitle>. From the context menu, select either
+                            <uicontrol>Copy character</uicontrol> to copy as a plain text string,
+                            <uicontrol>Copy as HTML</uicontrol> to copy as an HTML code, or
+                            <uicontrol>Copy as Unicode HEX</uicontrol> to copy the unicode number.</p>
+                        <itemgroup>The character will be copied to your computer's clipboard in the chosen
+                            format and can then be pasted into text fields both within <i>Phon</i> and in
+                            other programs.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="add_to_favorites">
+            <title>Add Character to Favorites</title>
+            <shortdesc>Add and remove characters from <uicontrol>Favorites</uicontrol> in the <wintitle>IPA
+                Map</wintitle>.</shortdesc>
+            <body>
+                <section>From the <wintitle>IPA Map</wintitle> window:</section>
+                <ol id="steps_phc_h3t_pf">
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) on any character in the
+                            <wintitle>IPA Map</wintitle> and select <uicontrol>Add to
+                                favorites</uicontrol> from the context menu.</p>
+                        <itemgroup>The selected character will appear at the top of the <wintitle>IPA
+                            Map</wintitle> window in the <uicontrol>Favorites</uicontrol> section. The
+                            character will remain in this section until it you remove it.</itemgroup>
+                    </li>
+                    <li>
+                        <p>To remove a character from the <uicontrol>Favorites</uicontrol> section,
+                            right-click (<userinput>CTRL+click</userinput>) on it either in the
+                            <uicontrol>Favorites</uicontrol> section or in its original section, and
+                            select <uicontrol>Remove from favourites</uicontrol> from the context
+                            menu.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="resize">
+            <title>Resize Font and Window</title>
+            <shortdesc>Change the font display size and window size of the <wintitle>IPA
+                Map</wintitle>.</shortdesc>
+            <body>
+                <section>From the <wintitle>IPA Map</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) within any section in the
+                            <wintitle>IPA Map</wintitle> and move the <uicontrol>Font size</uicontrol>
+                            slider to the preferred font size.</p>
+                        <itemgroup>The characters in the <wintitle>IPA Map</wintitle> will be displayed in
+                            the selected font size; the window will resize itself accordingly.<note>The font
+                                display size in the <wintitle>IPA Map</wintitle> will not affect the size of
+                                characters when input into text fields.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="highlight_recent">
+            <title>Highlight Recently Used Characters</title>
+            <shortdesc>Highlight recently used characters in the <wintitle>IPA Map</wintitle>.</shortdesc>
+            <body>
+                <section>From the <wintitle>IPA Map</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Right-click (<userinput>CTRL+click</userinput>) within any section of the
+                            <wintitle>IPA Map</wintitle> and select <uicontrol>Highlight recently
+                                used</uicontrol> from the context menu.</p>
+                        <itemgroup>The last twenty characters entered with the <wintitle>IPA Map</wintitle>
+                            will be highlighted in yellow; the most recently used characters will be the
+                            brightest.</itemgroup>
+                    </li>
+                    <li>
+                        <p>To turn off this feature, right-click (<userinput>CTRL+click</userinput>)
+                            within any section of the <wintitle>IPA Map</wintitle> and deselect
+                            <uicontrol>Highlight recently used</uicontrol> from the context menu. </p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="search">
+            <title>Search Characters</title>
+            <shortdesc>Search for characters in the <wintitle>IPA Map</wintitle> by glyph name or features.</shortdesc>
+            <body>
+                <section>From the <wintitle>IPA Map</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Click inside the search bar in the top right corner of the window, and type a
+                            glyph name, feature, or feature shorthand. Alternately, click on the down arrow
+                            in the search bar to select either <uicontrol>Glyphs</uicontrol> or
+                            <uicontrol>Features</uicontrol> search, and then input the search
+                            term.</p>
+                        <itemgroup>A set of <uicontrol>Search Results</uicontrol> will be displayed at the
+                            top of the <wintitle>IPA Map</wintitle> window.<note>Although
+                                <uicontrol>Glyphs</uicontrol> search is the default search type, if the
+                                text input exactly matches a feature name or a 3-character feature
+                                shorthand, the <wintitle>IPA Map</wintitle> will display search results for
+                                that feature. However, this does not happen automatically when searching for
+                                single-character feature shorthands (e.g. "c" for consonant or "v" for
+                                vowel).</note>
+                            <note>See <xref
+                                href="../../../../target/generated-resources/xml/xslt/features.xml"
+                                >Listing of phonetic features</xref> for a list of all features and
+                                shorthands used in <i>Phon</i>.</note></itemgroup>
+                    </li>
+                    <li>
+                        <p>When finished with your character search, click the <uicontrol>Clear
+                            field/X</uicontrol> button to the right of the search bar.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+    </topic>
+</topic>
