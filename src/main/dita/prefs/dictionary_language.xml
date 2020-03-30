@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="taskId">
+    <title>Change Dictionary Language</title>
+    <shortdesc>Change the default <uicontrol>Dictionary Language</uicontrol> for use within
+        sessions.</shortdesc>
+    <body>
+        <section>
+            <p>From the <uicontrol>Session Editor</uicontrol> tab of the
+                    <wintitle>Preferences</wintitle> dialog:</p>
+        </section>
+        <ol id="steps_qk4_p2p_z3">
+            <li>
+                <p>Click the <uicontrol>Dictionary Language</uicontrol> combo box and select the
+                    appropriate language.</p>
+            </li>
+        </ol>
+    </body>
+</topic>

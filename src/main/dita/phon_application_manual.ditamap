@@ -15,12 +15,12 @@
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.dita" format="dita"/>
-        <topicref href="prefs/EditPreferences.xml">
-            <topicref href="prefs/AboutAutosaves.xml"/>
-            <topicref href="prefs/ChangeApplicationFonts.xml"/>
-            <topicref href="prefs/ChangeDictionaryLanguage.xml"/>
-            <topicref href="prefs/ChangeSyllabifierLanguage.xml"/>
-            <topicref href="prefs/AboutMediaDirs.xml"/>
+        <topicref href="prefs/edit_prefs.xml">
+            <topicref href="prefs/autosaves.xml"/>
+            <topicref href="prefs/change_fonts.xml"/>
+            <topicref href="prefs/dictionary_language.xml"/>
+            <topicref href="prefs/syllabifier_language.xml"/>
+            <topicref href="prefs/media_folders.xml"/>
         </topicref>
         <topicref href="projman/project_manager.md" format="markdown">
             <topicref href="misc/AboutProjectFileStructure.xml"/>

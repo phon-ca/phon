@@ -9,7 +9,7 @@
             The search order for media files is:<ol id="ol_tpb_1br_wcb">
                 <li>Corpus media folder (if assigned)</li>
                 <li>Project media folder</li>
-                <li>Global media folders (see <xref href="../prefs/AboutMediaDirs.xml"
+                <li>Global media folders (see <xref href="../prefs/media_folders.xml"
                     />)</li>
             </ol></p>
         <p>To assign project/corpus media folders, select <menucascade>

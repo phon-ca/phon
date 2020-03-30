@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/concept.dtd">
-<concept id="conceptId">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
     <title>Autosaves</title>
-    <conbody>
+    <body>
         <p>To prevent loss of data in the event of an unexpected shutdown, <i>Phon</i> has the
             option of auto-saving sessions at regular intervals. Session autosaves are named with
             the '__autosave_' prefix.</p>
@@ -16,5 +16,5 @@
             interval.</p>
         <p>To de-activate the autosave option, select <uicontrol>Never</uicontrol> as the autosave
             interval.</p>
-    </conbody>
-</concept>
+    </body>
+</topic>
