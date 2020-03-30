@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_51v_4vv_4g">
- <title>Phone</title> <conbody>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_51v_4vv_4g">
+ <title>Phone</title> <body>
   <p>Phones are the main unit of an IPA transcription. They are composed of a vowel or consonant (or
     <i>base glyph</i>) along with optional diacritics. Diacritics are of the following types: prefix
    (e.g., pre-nasalization), combining (e.g., devoicing), length, suffix (e.g., aspiration), and
@@ -67,8 +67,8 @@
    </table>
   </section>
   
- </conbody>
+ </body>
  <related-links>
   <link href="../generated/ipa.xml#concept_ipa_listing"/>
  </related-links>
-</concept>
+</topic>

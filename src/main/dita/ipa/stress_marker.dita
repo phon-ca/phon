@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_wgb_xxv_4g">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_wgb_xxv_4g">
  <title>Stress Marker</title>
- <conbody>
+ <body>
   <p>Prosodically prominant syllables may be coded for primary or secondary stress. Primary stress
    is transcribed using a superior vertical stroke (0x2C8) preceding the syllable. Secondary stress
    is transcribed using an inferior vertical stroke (0x2CC) preceding the syllable.</p>
@@ -31,5 +31,5 @@
       </tbody>
      </tgroup>
     </table>
- </conbody>
-</concept>
+ </body>
+</topic>

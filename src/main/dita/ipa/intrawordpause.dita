@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_fw1_tvv_4g">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_fw1_tvv_4g">
  <title>Pause (Intra-word)</title>
- <conbody>
+ <body>
   <p>Intra-word pauses are transcribed using a '^' symbol.</p>
   <table frame="none" id="table_d99e21ed-6c72-42dc-b7ff-f42365536be">
    <title>Intra-word pauses</title>
@@ -24,5 +24,5 @@
     </tbody>
    </tgroup>
   </table>
- </conbody>
-</concept>
+ </body>
+</topic>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_4zr_zxv_4g">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_4zr_zxv_4g">
  <title>Word Boundary</title>
- <conbody>
+ <body>
   <p>Boundaries between words are indicated via a space.</p>
   
   <table id="table_asd_gio_pg">
@@ -26,5 +26,5 @@
     </tbody>
    </tgroup>
   </table>
- </conbody>
-</concept>
+ </body>
+</topic>

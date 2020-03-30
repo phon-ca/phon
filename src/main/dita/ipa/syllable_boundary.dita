@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_2fy_yxv_4g">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_2fy_yxv_4g">
  <title>Syllable Boundary</title>
- <conbody>
+ <body>
   <p>In cases where syllable boundaries may not be obvious, they can be transcribed 
    with a period between syllables.</p>
   <table id="table_ert_gio_pg">
@@ -26,5 +26,5 @@
     </tbody>
    </tgroup>
   </table>
- </conbody>
-</concept>
+ </body>
+</topic>

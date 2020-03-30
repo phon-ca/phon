@@ -3,9 +3,12 @@
 <topic id="ipa-lookup">
     <title>IPA Lookup</title>
     <body>
-        <image href="../images/EditorView_IPALookup.png" placement="break">
-            <alt>../images/EditorView_IPALookup.png</alt>
-        </image>
+        <fig id="fig_e2g_5sx_2lb">
+            <title>IPA Lookup View</title>
+            <image placement="inline" href="images/ipa_lookup_view.png" id="image_f2g_5sx_2lb">
+                <alt>IPA Lookup View</alt>
+            </image>
+        </fig>
     </body>
     
     <topic id="auto_transcribe">
@@ -18,22 +21,22 @@
             <section>From the <wintitle>IPA Lookup</wintitle> view:</section>
             <ol>
                 <li>
-                    <cmd>Select the appropriate dictionary language in the <uicontrol>IPA
-                        Dictionary</uicontrol> field.</cmd>
+                    <p>Select the appropriate dictionary language in the <uicontrol>IPA
+                        Dictionary</uicontrol> field.</p>
                     <itemgroup>IPA transcriptions filled in through automatic transcription will be
                         selected from this dictionary.</itemgroup>
                 </li>
                 <li>
-                    <cmd>Click the <uicontrol>Auto-transcribe Session</uicontrol> button.</cmd>
+                    <p>Click the <uicontrol>Auto-transcribe Session</uicontrol> button.</p>
                     <itemgroup>This will open the <wintitle>Automatic Transcription</wintitle>
                         dialog.</itemgroup>
                 </li>
                 <li>
-                    <cmd>In the <uicontrol>Tier Options</uicontrol> field, choose whether to overwrite
+                    <p>In the <uicontrol>Tier Options</uicontrol> field, choose whether to overwrite
                         existing transcriptions by selecting <uicontrol>Overwrite</uicontrol>. Select
                         whether to transcribe the <uicontrol>IPA Target</uicontrol> tier and/or the
                         <uicontrol>IPA Actual</uicontrol> tier, and choose a
-                        <uicontrol>Syllabifier</uicontrol> language.</cmd>
+                        <uicontrol>Syllabifier</uicontrol> language.</p>
                     <itemgroup>
                         <note>The <uicontrol>Syllabifier</uicontrol> language may differ from the chosen
                             <uicontrol>Dictionary</uicontrol> language. Choosing a
@@ -43,10 +46,10 @@
                     </itemgroup>
                 </li>
                 <li>
-                    <cmd>In the <uicontrol>Record Selection</uicontrol> tier, choose whether to
+                    <p>In the <uicontrol>Record Selection</uicontrol> tier, choose whether to
                         transcribe <uicontrol>All records</uicontrol>, <uicontrol>Specific
                             records</uicontrol>, <uicontrol>Records for participant(s)</uicontrol>, or
-                        <uicontrol>Records from search results</uicontrol>.</cmd>
+                        <uicontrol>Records from search results</uicontrol>.</p>
                     <itemgroup>
                         <note>If you choose to transcribe only specific records, you will have to
                             specify the relevant record numbers. To specify several individual record
@@ -58,8 +61,8 @@
                     </itemgroup>
                 </li>
                 <li>
-                    <cmd>If you are unsure, click <uicontrol>Close</uicontrol>. Otherwise, click
-                        <uicontrol>Ok</uicontrol> to perform the automatic transcription. </cmd>
+                    <p>If you are unsure, click <uicontrol>Close</uicontrol>. Otherwise, click
+                        <uicontrol>Ok</uicontrol> to perform the automatic transcription. </p>
                     <itemgroup>The selected tier will be filled in with entries from the chosen
                         built-in dictionary.</itemgroup>
                 </li>

@@ -61,7 +61,7 @@
                         <itemgroup>The <wintitle>Project Manager</wintitle> window will appear.<note>If the
                             project was created using an earlier version of <i>Phon</i> (and is a
                             <i>.phon</i> or <i>.zip</i> file), you must extract the project before
-                            you can open it (see <xref href="ExtractProject.xml"/> for
+                            you can open it (see <xref href="../project_manager/project_manager.dita#project_structure"/> for
                             instructions).</note></itemgroup>
                     </li>
                 </ol>
@@ -138,7 +138,7 @@
             the current workspace folder. </shortdesc>
         <body>
             <p>This pane lists expanded projects (see <xref
-                href="../misc/AboutProjectFileStructure.xml"/>) with a folder icon next
+                href="../project_manager/project_manager.dita#project_structure"/>) with a folder icon next
                 to them, and compressed projects with an orange arrow next to them.</p>
             <p>Compressed projects may be expanded by clicking on them in the list, or by right-clicking
                 (<userinput>CTRL+click</userinput>) and choosing <uicontrol>Extract

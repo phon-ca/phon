@@ -144,10 +144,10 @@
                             within the corpus.<note>For further instructions on how to specify information
                                 in the <wintitle>Session Information</wintitle> and <wintitle>Tier
                                     Management</wintitle> views, consult <xref
-                                        href="../session_editor/InputSessionLanguage.xml"/>, <xref
+                                        href="../session_editor/session_information_view.dita#input_language"/>, <xref
                                             href="../session_editor/AboutParticipants.xml"/>, <xref
                                                 href="../session_editor/LinkMedia.xml"/>, <xref
-                                                    href="../session_editor/EditTierDisplayOptions.xml"/>, and other
+                                                    href="../session_editor/tier_management_view.dita"/>, and other
                                 related pages.</note></itemgroup>
                     </li>
                 </ol>

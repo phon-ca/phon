@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_fw1_tvv_4g">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_fw1_tvv_4g">
  <title>Pause (Inter-word)</title>
- <conbody>
+ <body>
   <p>Inter-word pauses in speech may be transcribed in one of three ways, depending on their
    length.</p>
   <table frame="none" id="table_d99e21ed-6c02-42dc-b7ff-f42365536be">
@@ -54,5 +54,5 @@
     </tbody>
    </tgroup>
   </table>
- </conbody>
-</concept>
+ </body>
+</topic>

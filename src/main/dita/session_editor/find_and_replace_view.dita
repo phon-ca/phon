@@ -26,13 +26,13 @@
                             Replace</wintitle> view will only show tiers visible in <wintitle>Record
                                 Data</wintitle>. To change tier visibility options, use the
                             <wintitle>Tier Management</wintitle> view (see <xref
-                                href="EditTierDisplayOptions.xml"/> for more information).</note>
+                                href="./tier_management_view.dita"/> for more information).</note>
                     </itemgroup>
                 </li>
                 <li>
-                    <cmd>Using the keyboard or the <wintitle>IPA Map</wintitle>, enter a search term
+                    <p>Using the keyboard or the <wintitle>IPA Map</wintitle>, enter a search term
                         within the square brackets in the <i>Any tier</i> field or in any visible tier.
-                        You may enter search terms in multiple tiers at once.</cmd>
+                        You may enter search terms in multiple tiers at once.</p>
                 </li>
                 <li>
                     <p>If your search term is in plain text or a regular expression, you may specify

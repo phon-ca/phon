@@ -6,7 +6,7 @@
         <section id="section_gmf_mxm_dlb">
             <title>Global Keystrokes</title>
             <p>The following table outlines editor keystrokes which are globally available.</p>
-        </section>
+        
             <simpletable frame="all" id="simpletable_754b92cd-3648-4e44-8d14-33081058f721">
                 <sthead>
                     <stentry>Command</stentry>
@@ -91,56 +91,59 @@
                     <stentry/>
                 </strow>
             </simpletable>
-        <p>The following keystrokes are available when a tier is focused:</p>
-        <p>
-            <simpletable frame="all" id="simpletable_300b6022-4f5f-43a6-8ba3-aa2f74259bb9">
-                <sthead>
-                    <stentry>Command</stentry>
-                    <stentry>Mac</stentry>
-                    <stentry>Windows</stentry>
-                    <stentry>Notes</stentry>
-                </sthead>
-                <strow>
-                    <stentry>Next Group/Tier</stentry>
-                    <stentry><userinput>Tab</userinput></stentry>
-                    <stentry><userinput>Tab</userinput></stentry>
-                    <stentry>Will move the caret to the beginning of the next group or the next
-                        tier.</stentry>
-                </strow>
-                <strow>
-                    <stentry>Previous Group/Tier</stentry>
-                    <stentry><userinput>Shift+Tab</userinput></stentry>
-                    <stentry><userinput>Shift+Tab</userinput></stentry>
-                    <stentry>Will move the caret to the beginning of the previous group or previous
-                        tier.</stentry>
-                </strow>
-                <strow>
-                    <stentry>New Group</stentry>
-                    <stentry><userinput>CMD+G</userinput></stentry>
-                    <stentry><userinput>CTRL+G</userinput></stentry>
-                    <stentry>Creates a new group after the current (or end if no current group is
-                        focused.)</stentry>
-                </strow>
-                <strow>
-                    <stentry>Merge Group</stentry>
-                    <stentry><userinput>CTRL+ALT+G</userinput></stentry>
-                    <stentry><userinput>CTRL+ALT+G</userinput></stentry>
-                    <stentry>Merges the current group with the next group.</stentry>
-                </strow>
-                <strow>
-                    <stentry>Split/New Group</stentry>
-                    <stentry><userinput>CTRL+ALT+K</userinput></stentry>
-                    <stentry><userinput>CTRL+ALT+K</userinput></stentry>
-                    <stentry>Creates a new group at the caret position.  Creates a new group at the
-                        beginning of the record if caret is at beginning of first group.</stentry>
-                </strow>
-                <strow>
-                    <stentry>Delete Group</stentry>
-                    <stentry><userinput>CMD+ALT+Shift+G</userinput></stentry>
-                    <stentry><userinput>CTRL+ALT+Shift+G</userinput></stentry>
-                    <stentry>Delete the current group.</stentry>
-                </strow>
-            </simpletable>
-        </p>
+        </section>
+        <section>
+           <p>The following keystrokes are available when a tier is focused:</p>
+           <p>
+               <simpletable frame="all" id="simpletable_300b6022-4f5f-43a6-8ba3-aa2f74259bb9">
+                   <sthead>
+                       <stentry>Command</stentry>
+                       <stentry>Mac</stentry>
+                       <stentry>Windows</stentry>
+                       <stentry>Notes</stentry>
+                   </sthead>
+                   <strow>
+                       <stentry>Next Group/Tier</stentry>
+                       <stentry><userinput>Tab</userinput></stentry>
+                       <stentry><userinput>Tab</userinput></stentry>
+                       <stentry>Will move the caret to the beginning of the next group or the next
+                           tier.</stentry>
+                   </strow>
+                   <strow>
+                       <stentry>Previous Group/Tier</stentry>
+                       <stentry><userinput>Shift+Tab</userinput></stentry>
+                       <stentry><userinput>Shift+Tab</userinput></stentry>
+                       <stentry>Will move the caret to the beginning of the previous group or previous
+                           tier.</stentry>
+                   </strow>
+                   <strow>
+                       <stentry>New Group</stentry>
+                       <stentry><userinput>CMD+G</userinput></stentry>
+                       <stentry><userinput>CTRL+G</userinput></stentry>
+                       <stentry>Creates a new group after the current (or end if no current group is
+                           focused.)</stentry>
+                   </strow>
+                   <strow>
+                       <stentry>Merge Group</stentry>
+                       <stentry><userinput>CTRL+ALT+G</userinput></stentry>
+                       <stentry><userinput>CTRL+ALT+G</userinput></stentry>
+                       <stentry>Merges the current group with the next group.</stentry>
+                   </strow>
+                   <strow>
+                       <stentry>Split/New Group</stentry>
+                       <stentry><userinput>CTRL+ALT+K</userinput></stentry>
+                       <stentry><userinput>CTRL+ALT+K</userinput></stentry>
+                       <stentry>Creates a new group at the caret position.  Creates a new group at the
+                           beginning of the record if caret is at beginning of first group.</stentry>
+                   </strow>
+                   <strow>
+                       <stentry>Delete Group</stentry>
+                       <stentry><userinput>CMD+ALT+Shift+G</userinput></stentry>
+                       <stentry><userinput>CTRL+ALT+Shift+G</userinput></stentry>
+                       <stentry>Delete the current group.</stentry>
+                   </strow>
+               </simpletable>
+           </p>
+        </section>
     </refbody>
 </reference>

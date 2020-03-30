@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_mpb_svv_4g">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="concept_mpb_svv_4g">
  <title>Compound Phone</title>
- <conbody>
+ <body>
   <p>Compound phones are the combination of two phones using a ligature symbol (either character
    0x0361 or 0x035c) between them. Each of the two phones may include prefix, combining, suffix,
    length, or tone diacritics.</p>
@@ -26,5 +26,5 @@
     </tbody>
    </tgroup>
   </table>
- </conbody>
-</concept>
+ </body>
+</topic>

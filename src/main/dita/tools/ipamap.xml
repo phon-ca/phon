@@ -29,7 +29,7 @@
                 <wintitle>Tooltip</wintitle> window will appear.</p>
         <fig id="fig_zdz_3fx_2lb">
             <title>IPA Map</title>
-            <image placement="inline" href="../ipamap/images/ipamap.png" id="image_a2z_3fx_2lb">
+            <image placement="inline" href="./images/ipamap.png" id="image_a2z_3fx_2lb">
                 <alt>IPA Map</alt>
             </image>
         </fig>
@@ -185,7 +185,7 @@
                                 single-character feature shorthands (e.g. "c" for consonant or "v" for
                                 vowel).</note>
                             <note>See <xref
-                                href="../../../../target/generated-resources/xml/xslt/features.xml"
+                                href="../generated/features.xml"
                                 >Listing of phonetic features</xref> for a list of all features and
                                 shorthands used in <i>Phon</i>.</note></itemgroup>
                     </li>

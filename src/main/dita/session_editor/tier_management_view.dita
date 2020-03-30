@@ -58,6 +58,11 @@
             </body>
         </topic>
         
+        <topic id="hide_tier">
+            <title>Hide Tier</title>
+            <body/>
+        </topic>
+        
         <topic id="remove_tier">
             <title>Remove Tier</title>
             <shortdesc>Remove an existing user-defined tier.</shortdesc>
@@ -73,7 +78,7 @@
                             <note>Default <i>Phon</i> tiers (such as <i>Orthography</i>, <i>IPA
                                 Target</i>, <i>Notes</i>, etc.) cannot be deleted. If you do not wish to
                                 use one or more of these tiers, you can make them invisible following
-                                instructions at <xref href="EditTierDisplayOptions.xml"/>.</note></itemgroup>
+                                instructions at <xref href="./tier_management_view.dita#hide_tier"/>.</note></itemgroup>
                     </li>
                     <li>
                         <p>If you are unsure about removing the tier, click <uicontrol>Cancel</uicontrol>.
