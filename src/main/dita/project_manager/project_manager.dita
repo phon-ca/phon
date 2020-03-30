@@ -385,6 +385,45 @@
                 </ol>
             </body>
         </topic>
+        
+        <topic id="copy_corpus">
+            <title>Copy Corpus</title>
+            <shortdesc>Copy a corpus to a different project.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window, with a second <wintitle>Project
+                    Manager</wintitle> window open:</section>
+                <ol>
+                    <li>
+                        <p>Select the corpora you wish to copy in the source <wintitle>Project
+                            Manager</wintitle> window.</p>
+                    </li>
+                    <li>
+                        <p>Using the mouse, drag the corpora over the corpus list of the destination
+                            <wintitle>Project Manager</wintitle> window.</p>
+                        <itemgroup>The corpus folders will be copied into the destination
+                            project.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="copy_session">
+            <title>Copy Session</title>
+            <shortdesc>Copy a session to a different corpus.</shortdesc>
+            <body>
+                <section>From <wintitle>Project Manager</wintitle> window:</section>
+                <ol>
+                    <li><p>Select the sessions you wish to copy in the <wintitle>Project Manager</wintitle> window.</p></li>
+                    <li>
+                        <p>Using the mouse, drag the sessions over the name of the destination corpus in
+                            the <wintitle>Project Manager</wintitle> window.</p>
+                        <itemgroup>The sessions files will be copied into the destination
+                            corpus.</itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
     </topic>
     
 </topic>

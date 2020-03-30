@@ -22,13 +22,9 @@
             <topicref href="prefs/syllabifier_language.xml"/>
             <topicref href="prefs/media_folders.xml"/>
         </topicref>
-        <topicref href="projman/project_manager.dita" format="dita">
-            <topicref href="projman/corpora.xml"/>
-            <topicref href="projman/sessions.xml"/>
-            <topicref href="projman/DeriveSession.xml"/>
-            <topicref href="projman/RefreshProject.xml"/>
-            <topicref href="projman/CSVImport.xml"/>
-            <topicref href="projman/CSVExport.xml"/>
+        <topicref href="project_manager/project_manager.dita" format="dita">
+            <topicref href="project_manager/corpora.xml"/>
+            <topicref href="project_manager/sessions.xml"/>
         </topicref>
         <topicref href="session_editor/session_editor.md" format="markdown">
             <topicref href="session_editor/AboutBlindTranscription.xml"/>
