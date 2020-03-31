@@ -1,4 +1,4 @@
-# Analysis: Phonological Mean Length of Utterance (PMLU)
+# Phonological Mean Length of Utterance (PMLU)
 
 The PMLU analysis calculates
 

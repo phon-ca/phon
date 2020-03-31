@@ -838,7 +838,7 @@
                                                 <null/>
                                             </field>
                                             <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp-resources/custom-css/webhelp.css</String>
+                                                <String>${pd}/src/main/dita/webhelp_resources/custom-css/webhelp.css</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <null/>
@@ -855,13 +855,36 @@
                                         </ditaParameter>
                                         <ditaParameter>
                                             <field name="name">
+                                                <String>webhelp.copyright</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>(C) 2018 The Phon Project</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>0</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <null/>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <null/>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
                                                 <String>webhelp.custom.resources</String>
                                             </field>
                                             <field name="description">
                                                 <null/>
                                             </field>
                                             <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp-resources</String>
+                                                <String>${pd}/src/main/dita/webhelp_resources</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <null/>
@@ -874,6 +897,60 @@
                                             </field>
                                             <field name="possibleValuesDescriptions">
                                                 <null/>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>webhelp.fragment.after.top_menu</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>${pd}/src/main/dita/webhelp_resources/html-fragments/download_links.html</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <String></String>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>2</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String></String>
+                                                </String-array>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <String-array>
+                                                    <String></String>
+                                                </String-array>
+                                            </field>
+                                        </ditaParameter>
+                                        <ditaParameter>
+                                            <field name="name">
+                                                <String>webhelp.fragment.head</String>
+                                            </field>
+                                            <field name="description">
+                                                <null/>
+                                            </field>
+                                            <field name="value">
+                                                <String>${pd}/src/main/dita/webhelp_resources/html-fragments/head.html</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <String></String>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>2</Integer>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String></String>
+                                                </String-array>
+                                            </field>
+                                            <field name="possibleValuesDescriptions">
+                                                <String-array>
+                                                    <String></String>
+                                                </String-array>
                                             </field>
                                         </ditaParameter>
                                         <ditaParameter>
@@ -926,83 +1003,6 @@
                                                     <String>The menu has unlimited depth.</String>
                                                     <String></String>
                                                 </String-array>
-                                            </field>
-                                        </ditaParameter>
-                                        <ditaParameter>
-                                            <field name="name">
-                                                <String>webhelp.fragment.after.top_menu</String>
-                                            </field>
-                                            <field name="description">
-                                                <null/>
-                                            </field>
-                                            <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp-resources/html-fragments/download_links.html</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <String></String>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>2</Integer>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <String-array>
-                                                    <String></String>
-                                                </String-array>
-                                            </field>
-                                            <field name="possibleValuesDescriptions">
-                                                <String-array>
-                                                    <String></String>
-                                                </String-array>
-                                            </field>
-                                        </ditaParameter>
-                                        <ditaParameter>
-                                            <field name="name">
-                                                <String>webhelp.fragment.head</String>
-                                            </field>
-                                            <field name="description">
-                                                <null/>
-                                            </field>
-                                            <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp-resources/html-fragments/head.html</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <String></String>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>2</Integer>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <String-array>
-                                                    <String></String>
-                                                </String-array>
-                                            </field>
-                                            <field name="possibleValuesDescriptions">
-                                                <String-array>
-                                                    <String></String>
-                                                </String-array>
-                                            </field>
-                                        </ditaParameter>
-                                        <ditaParameter>
-                                            <field name="name">
-                                                <String>webhelp.copyright</String>
-                                            </field>
-                                            <field name="description">
-                                                <null/>
-                                            </field>
-                                            <field name="value">
-                                                <String>(C) 2018 The Phon Project</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>0</Integer>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <null/>
-                                            </field>
-                                            <field name="possibleValuesDescriptions">
-                                                <null/>
                                             </field>
                                         </ditaParameter>
                                     </list>
@@ -1212,7 +1212,7 @@
             <file name="src/main/dita/phon_application_manual.ditamap"/>
         </folder>
         <folder path="src/main/dita/"/>
-        <folder path="src/main/dita/webhelp-resources/"/>
+        <folder path="src/main/dita/webhelp_resources/"/>
         <folder path="src/main/xslt/"/>
     </projectTree>
 </project>

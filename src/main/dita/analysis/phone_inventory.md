@@ -1,4 +1,4 @@
-# Analysis: Phone Inventory
+# Phone Inventory
 
 The Phone Inventory analysis will calculate independent phoneme inventories of the *IPA Target* and *IPA Actual* tiers in the sampled data.
 

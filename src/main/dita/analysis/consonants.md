@@ -1,4 +1,4 @@
-# Analysis: Consonants
+# Consonants
 
 ## Outline
 

@@ -147,16 +147,17 @@
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/consonants.md" format="markdown"/>
-        <topicref href="analysis/PPC.dita" format="dita"/>
-        <topicref href="analysis/Phone%20Inventory.md" format="markdown"/>
-        <topicref href="analysis/Phonological%20Processes.md" format="markdown"/>
-        <topicref href="analysis/PMLU.md" format="markdown"/>
-        <topicref href="analysis/Word%20List.md" format="markdown"/>
+        <topicref href="analysis/ppc.dita" format="dita"/>
+        <topicref href="analysis/phone_inventory.md" format="markdown"/>
+        <topicref href="analysis/phonological_processes.md" format="markdown"/>
+        <topicref href="analysis/pmlu.md" format="markdown"/>
+        <topicref href="analysis/word_list.md" format="markdown"/>
         <topichead navtitle="Specialized">
-            <topicref href="analysis/Word%20Match.md" format="markdown"/>
-            <topicref href="analysis/Multisyllabic%20Noninear%20Analysis.md" format="markdown"/>
-            <topicref href="analysis/Vocalization.md" format="markdown"/>
-            <topicref href="analysis/WAP.md" format="markdown"/>
+            <topicref href="analysis/specialized/word_match.md" format="markdown"/>
+            <topicref href="analysis/specialized/multisyllabic_noninear_analysis.md"
+                format="markdown"/>
+            <topicref href="analysis/specialized/vocalization.md" format="markdown"/>
+            <topicref href="analysis/specialized/wap.md" format="markdown"/>
         </topichead>
         <topicref href="analysis/analysis_composer.md" format="markdown"/>
     </chapter>

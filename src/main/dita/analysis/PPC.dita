@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="analysis-ppc">
-    <title>Analysis: PPC</title>
+    <title>PPC</title>
     <body>
         <p>The PPC analysis will calculate the percent phones/consonants/vowels correct in the
             sampled data.</p>

@@ -1,4 +1,4 @@
-# Analysis: Multisyllabic Nonlinear Analysis
+# Multisyllabic Nonlinear Analysis
 
 This document describes the Multisyllabic Nonlinear Analysis (MNA) report in Phon.
 

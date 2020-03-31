@@ -1,4 +1,4 @@
-# Analysis: Word-level Analysis of Polysyllables (WAP)
+# Word-level Analysis of Polysyllables (WAP)
 
 This document outlines the Word-level Analysis of Polysyllables (WAP) report
 in Phon.
