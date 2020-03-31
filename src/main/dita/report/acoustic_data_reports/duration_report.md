@@ -1,4 +1,4 @@
-# Report: Duration
+# Duration
 
 Print duration of each selected TextGrid interval.
 

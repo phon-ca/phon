@@ -1,4 +1,4 @@
-# Report: Inventory by Session
+# Inventory by Session
 
 Display an inventory of results for each sampled session. A separate table is displayed for each session.
 

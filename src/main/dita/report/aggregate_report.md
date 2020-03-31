@@ -1,4 +1,4 @@
-# Report: Aggregate
+# Aggregate
 
 Create an aggregate inventory of results.
 

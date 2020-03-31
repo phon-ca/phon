@@ -1,4 +1,4 @@
-# Report: Transcript Variability
+# Transcript Variability
 
 ## Example
 

@@ -1,4 +1,4 @@
-# Report: Spectral Moments
+# Spectral Moments
 
 Display Center of Gravity, Standard Deviation, Kurtosis, Skewness for each selected TextGrid interval.
 

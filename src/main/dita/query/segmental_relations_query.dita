@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="segmental_relations_query">
+    <title>Segmental Relations</title>
+    <body>
+        <p>Look for segmental relations within phone alignment.</p>
+        <fig id="fig_ljn_kjd_flb">
+            <title>Segmental Relations Query</title>
+            <image placement="inline" href="images/segmental_relations_query.png"
+                id="image_mjn_kjd_flb">
+                <alt>Segmental Relations Query</alt>
+            </image>
+        </fig>
+        
+    </body>
+</topic>

@@ -1,4 +1,4 @@
-# Report: Pitch
+# Pitch
 
 Display pitch values at various points within each selected TextGrid interval.
 

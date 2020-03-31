@@ -1,4 +1,4 @@
-# Report: Formants
+# Formants
 
 Display formant values at various points within each selected TextGrid interval.
 

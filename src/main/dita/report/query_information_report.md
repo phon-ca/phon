@@ -1,4 +1,4 @@
-# Report: Query Information
+# Query Information
 
 Display query name and parameters.
 

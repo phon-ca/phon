@@ -1,4 +1,4 @@
-# Report: Voice Onset Time (VOT)
+# Voice Onset Time (VOT)
 
 The Voice Onset Time (VOT) report calculates VOT for each query result. Under the setup described below:
  * Segment duration for stops is calculated from stop closure to stop release. While closure is often difficult to pinpoint in a regular spectrogram, this is inconsequential to VOT calculation given that it is based on stop release and the Voicing point tier marker:

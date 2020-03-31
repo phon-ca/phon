@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="phones_query">
+    <title>Phones</title>
+    <body>
+        <p>The <b>Phones</b> query is used to query data contained within IPA Target and IPA Actual
+            tiers.</p>
+        <fig id="fig_nc2_gjd_flb">
+            <title>Phones Query</title>
+            <image placement="inline" href="images/phones_query.png" id="image_oc2_gjd_flb">
+                <alt>Phones Query</alt>
+            </image>
+        </fig>
+    </body>
+    
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <ul>
+                <li><p>Search Tier: IPA Target or IPA Actual.</p></li>
+                <li><p>Search by: Group, Word and optionally by syllable. This options defines the
+                        search domain for the query.</p></li>
+                <li><p>Expression type: Plain text, Regular Expression, Phonex, Stress Pattern, CGV
+                        Pattern</p></li>
+                <li><p>Expression: query expression</p><ul>
+                        <li><p>Case sensitive (not applicable for phonex expressions)</p></li>
+                        <li><p>Exact match</p></li>
+                        <li><p>Allow overlapping matches (phonex only)</p></li>
+                    </ul></li>
+            </ul>
+        </body>
+        <topic id="aligned-phones">
+            <title>Aligned Phones</title>
+            <body>
+                <p>The phones aligned with the queried phones can be added to query results. If
+                    'include aligned phones' is selected the aligned results may be filtered using
+                    the <b>IPA Target Matcher</b> and <b>IPA Actual Matcher</b> expressions.</p>
+            </body>
+        </topic>
+        <topic id="other-parameters">
+            <title>Other Parameters</title>
+            <body>
+                <ul>
+                    <li><p><xref href="./query_group_options.html" format="html">Group
+                                Options</xref></p></li>
+                    <li><p><xref href="./query_word_options.html" format="html">Word
+                            Options</xref></p></li>
+                    <li><p><xref href="./query_syllable_options.html" format="html">Syllable
+                                Options</xref></p></li>
+                    <li><p><xref href="./query_participant_filter.html" format="html">Participant
+                                Filter</xref></p></li>
+                </ul>
+            </body>
+        </topic>
+    </topic>
+</topic>

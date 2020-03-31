@@ -1,4 +1,4 @@
-# Report: Intensity
+# Intensity
 
 Display intensity values (dB) at various positions within each selected TextGrid interval.
 

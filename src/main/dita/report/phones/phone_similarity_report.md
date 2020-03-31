@@ -1,4 +1,4 @@
-# Report: Phone Similarity
+# Phone Similarity
 
 Phone similarity measures how similar two phones or strings of phones are within a target-actual aligned pair based on the number of descriptive phonological matchings divided by the maximal number of potential matches.
 
