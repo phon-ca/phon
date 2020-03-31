@@ -115,6 +115,8 @@
         <topichead navtitle="Query Types">
             <topicref href="query/data_tiers_query.dita" format="dita"/>
             <topicref href="query/phones_query.dita" format="dita"/>
+            <topicref href="query/deletions_query.md" format="markdown"/>
+            <topicref href="query/epenthesis_query.md" format="markdown"/>
             <topicref href="query/segmental_relations_query.dita" format="dita"/>
             <topicref href="query/common_query_options.dita"/>
         </topichead>
