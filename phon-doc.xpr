@@ -838,7 +838,7 @@
                                                 <null/>
                                             </field>
                                             <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp_resources/custom-css/webhelp.css</String>
+                                                <String>${pd}/src/main/dita/webhelp_resources/custom_css/webhelp.css</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <null/>
@@ -858,10 +858,10 @@
                                                 <String>webhelp.copyright</String>
                                             </field>
                                             <field name="description">
-                                                <null/>
+                                                <String></String>
                                             </field>
                                             <field name="value">
-                                                <String>(C) 2018 The Phon Project</String>
+                                                <String>(C) 2020 The Phon Project</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <null/>
@@ -907,7 +907,7 @@
                                                 <null/>
                                             </field>
                                             <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp_resources/html-fragments/download_links.html</String>
+                                                <String>${pd}/src/main/dita/webhelp_resources/html_fragments/download_links.html</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <String></String>
@@ -934,7 +934,7 @@
                                                 <null/>
                                             </field>
                                             <field name="value">
-                                                <String>${pd}/src/main/dita/webhelp_resources/html-fragments/head.html</String>
+                                                <String>${pd}/src/main/dita/webhelp_resources/html_fragments/head.html</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <String></String>
@@ -961,7 +961,7 @@
                                                 <null/>
                                             </field>
                                             <field name="value">
-                                                <String>images/database-phon.png</String>
+                                                <String>images/database_phon.png</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <null/>
