@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_uwj_cnx_qp">
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="concept_uwj_cnx_qp">
  <title>Formant Settings</title>
  <shortdesc>Settings for Formant analysis.</shortdesc>
  <prolog>
   <source>http://www.fon.hum.uva.nl/praat/manual/Sound__To_Formant__burg____.html</source>
  </prolog>
- <conbody>
-  <p>Adapted from <xref
+ <refbody><section><p>Adapted from <xref
     href="http://www.fon.hum.uva.nl/praat/manual/Sound__To_Formant__burg____.html" format="html"
-    scope="external"/></p>
-  <p>The <wintitle>Formant settings</wintitle> window can be opened by choosing <uicontrol>Formant
+    scope="external"/></p><p>The <wintitle>Formant settings</wintitle> window can be opened by choosing <uicontrol>Formant
     settings...</uicontrol> from the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
-    Analysis</uicontrol> view of the <wintitle>Session Editor</wintitle> window.</p>
-  <p>
+    Analysis</uicontrol> view of the <wintitle>Session Editor</wintitle> window.</p><p>
    <dl>
     <dlentry>
      <dt><b>Time step (s)</b></dt>
@@ -67,9 +64,7 @@
             etc.).</dd>
      </dlentry>
    </dl>
-  </p>
-    <p>Settings for formant listings:</p>
-    <dl>
+  </p><p>Settings for formant listings:</p><dl>
       <dlentry>
         <dt>Include num formants</dt>
         <dd>Include number of formants column</dd>
@@ -82,6 +77,5 @@
         <dt>Include bandwidths</dt>
         <dd>Include a bandwidth column for each formant</dd>
       </dlentry>
-    </dl>
- </conbody>
-</concept>
+    </dl></section></refbody>
+</reference>

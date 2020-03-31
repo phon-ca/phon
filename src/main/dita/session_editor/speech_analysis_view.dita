@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="speech-analysis">
+    <title>Speech Analysis</title>
+    <body>
+        <p>The <i>Speech Analysis</i> view displays the waveform, spectrogram, and <i>TextGrid</i>
+            for the session.</p>
+        <fig id="fig_g3z_jgf_flb">
+            <title>Speech Analysis View</title>
+            <image placement="inline" href="images/speech_analysis_view.png" id="image_h3z_jgf_flb">
+                <alt>Speech Analysis View</alt>
+            </image>
+        </fig>
+        
+    </body>
+    
+    <topic id="waveform_tier">
+        <title>Waveform Tier</title>
+        <body>
+        </body>
+        
+        <topic id="waveform_actions">
+            <title>Waveform Actions</title>
+            <body/>
+            
+            <topic id="taskId">
+                <title>Adjust Segment Start and End Times</title>
+                <shortdesc>Adjust segment start and end times to refine segments.</shortdesc>
+                <body>
+                    <section>From the <wintitle>Speech Analysis</wintitle> view:</section>
+                    <ol>
+                        <li>
+                            <p>Click the <uicontrol>Play</uicontrol> button
+                                (<userinput>CMD/CTRL+Shift+R</userinput>).</p>
+                            <itemgroup>This action will replay the segment for the displayed
+                                record.</itemgroup>
+                        </li>
+                        <li>
+                            <p>Select a portion of the waveform for your revised segment and press
+                                <userinput>Enter</userinput>. Alternately, typeover the existing time values
+                                in the <uicontrol>Record Data</uicontrol> view with revised values and click the
+                                <uicontrol>Refresh</uicontrol> button in the top left area of the
+                                <wintitle>Speech Analysis</wintitle> view. <image placement="break" href="images/adjust_segment.png" id="image_wdr_vlm_sc"
+                                /></p>
+                            <itemgroup>This action will adjust your segment start and end times.<note>To view a
+                                larger portion of the waveform, click <uicontrol>Show More</uicontrol>. This
+                                extends the displayed interval by one second on each side. To redisplay the
+                                500ms buffer, click <uicontrol>Refresh</uicontrol>.</note></itemgroup>
+                        </li>
+                        <li>
+                            <p>If you would like to listen to or further revise the segments, repeat steps 1
+                                and 2.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+        </topic>
+    </topic>
+    
+    <topic id="spectrogram_tier">
+        <title>Spectrogram Tier</title>
+        <body>
+            <p>The Spectrogram tier for Phon allows for visualization of the segment spectrogram,
+                formants, pitch, and intensity from within Phon's Session Editor window. To display the
+                Spectrogram view choose <uicontrol>Show Spectrogram</uicontrol> from the
+                <uicontrol>Praat</uicontrol> menu in the Speech Analysis view. Options for toggling
+                the display of formant, pitch and intensity data can also be found in the
+                <uicontrol>Praat</uicontrol> menu.</p>
+        </body>
+        
+        <topic id="spectrogram_actions">
+            <title>Spectrogram Actions</title>
+            <body> </body>
+            
+            <topic id="list_formants">
+                <title>List Formants</title>
+                <shortdesc>List formant values from the <uicontrol>Speech Analysis</uicontrol>
+                    view.</shortdesc>
+                <body>
+                    <section>
+                        <p>A listing of formants can be obtained from the <uicontrol>Speech
+                            Analysis</uicontrol> view. To print a formant listing use the following
+                            procedure.</p>
+                    </section>
+                    <ol>
+                        <li>
+                            <p>(Optional) Make a selection in the <uicontrol>Speech Analysis</uicontrol>
+                                view.</p>
+                        </li>
+                        <li>
+                            <p>From the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
+                                Analysis</uicontrol> view, select <menucascade>
+                                    <uicontrol>Formant listing</uicontrol>
+                                </menucascade>.</p>
+                        </li>
+                        <li>
+                            <note>Options for formant listings can be changed through the
+                                <uicontrol>Formant settings</uicontrol> window.</note>
+                            <p>The list of formants will be displayed in a new
+                                <wintitle>Buffers</wintitle> window for the audio
+                                segment/selection.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+            <topic id="list_intensity">
+                <title>List Intensity</title>
+                <shortdesc>List intensity values from the <uicontrol>Speech Analysis</uicontrol>
+                    view.</shortdesc>
+                <body>
+                    <section>
+                        <p>A listing of intensity values can be obtained from the <uicontrol>Speech
+                            Analysis</uicontrol> view.  To print intensity values use the following
+                            procedure.</p>
+                    </section>
+                    <ol>
+                        <li>
+                            <p>(Optional) Make a selection in the <uicontrol>Speech Analysis</uicontrol>
+                                view.</p>
+                        </li>
+                        <li>
+                            <p>From the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
+                                Analysis</uicontrol> view, select <menucascade>
+                                    <uicontrol>Intensity Listing</uicontrol>
+                                </menucascade>.</p>
+                        </li>
+                        <li>
+                            <note>Options for intensity listings can be changed through the <uicontrol>Intensity
+                                settings</uicontrol> window.</note>
+                            <p>The list of formants will be displayed in a new <wintitle>Buffers</wintitle>
+                                window for the audio segment/selection.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+            <topic id="list_pitch">
+                <title>List Pitch</title>
+                <shortdesc>List pitch values from the <uicontrol>Speech Analysis</uicontrol> view.</shortdesc>
+                <body>
+                    <section>
+                        <p>A pitch listing can be obtained from the <uicontrol>Speech Analysis</uicontrol> view.
+                            To print a pitch listing use the following procedure.</p>
+                    </section>
+                    <ol>
+                        <li>
+                            <p>(Optional) Make a selection in the <uicontrol>Speech Analysis</uicontrol>
+                                view.</p>
+                        </li>
+                        <li>
+                            <p>From the <uicontrol>Praat</uicontrol> menu in the <uicontrol>Speech
+                                Analysis</uicontrol> view, select <menucascade>
+                                    <uicontrol>Pitch listing</uicontrol>
+                                </menucascade>.</p>
+                        </li>
+                        <li>
+                            <note>Options for pitch listings can be changed through the <uicontrol>Pitch
+                                settings</uicontrol> window.</note>
+                            <p>The list of pitch values will be displayed in a new
+                                <wintitle>Buffers</wintitle> window for the audio segment/selection.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+        </topic>
+    </topic>
+    
+    <topic id="textgrid_tier">
+        <title>TextGrid Tier</title>
+        <shortdesc>The TextGrid viewer in Phon displays basic TextGrid information about the TextGrid
+            assigned to the current session.</shortdesc>
+        <body>
+            <p>To display the TextGrid view, choose <uicontrol>Show TextGrid</uicontrol> from the
+                <uicontrol>Praat</uicontrol> menu in the Speech Analysis view. You can select audio segments
+                by clicking intevals in the displayed TextGrid.</p>
+        </body>
+        
+        <topic id="textgrid_tier_actions">
+            <title>TextGrid Actions</title>
+            <body/>
+            
+            <topic id="generate_textgrid">
+                <title>Generate TextGrids</title>
+                <shortdesc>Generate TextGrids from Phon records.</shortdesc>
+                <body>
+                    <section>
+                        <p>The following procedure outlines how to generated new TextGrids from Phon record
+                            data.</p>
+                    </section>
+                    <ol>
+                        <li>
+                            <note>You may also open the Generate TextGrids wizard from the <wintitle>Session
+                                Editor</wintitle> window, in which case skip step 2.</note>
+                            <p>From the <wintitle>Project Manager</wintitle> window choose <menucascade>
+                                <uicontrol>Plugins</uicontrol>
+                                <uicontrol>Generate TextGrids...</uicontrol>
+                            </menucascade> from the window menu.</p>
+                        </li>
+                        <li>
+                            <p>In the wizard window, select a single session for which TextGrids will be
+                                generated. Click <uicontrol>Next</uicontrol>.</p>
+                        </li>
+                        <li>
+                            <p>Choose the records that will be processed.  Click
+                                <uicontrol>Next</uicontrol>.</p>
+                        </li>
+                        <li>
+                            <p>Select the location for generated TextGrid files.  You can generated TextGrid
+                                data in the default project location (this is where Phon will look for TextGrid
+                                data for records) or into an external folder.  In the same screen, choose which
+                                Phon tiers will be exported in the TextGrid.  When done, click
+                                <uicontrol>Generate TextGrids</uicontrol>.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+            <topic id="import_textgrid">
+                <title>Import TextGrids</title>
+                <shortdesc>Import TextGrids as Phon records.</shortdesc>
+                <body>
+                    <section>
+                        <p>TextGrids created with Praat may be imported as Phon records.  Data from tiers in
+                            selected TextGrids will be mapped to Phon tier data.</p>
+                    </section>
+                    <ol>
+                        <li>
+                            <p>Open the Import TextGrids wizard by using the menu command <menucascade>
+                                <uicontrol>Plugins</uicontrol>
+                                <uicontrol>Import TextGrids...</uicontrol>
+                            </menucascade> from the <wintitle>Project Manager</wintitle> window.</p>
+                        </li>
+                        <li>
+                            <p>In the first step of the wizard, select a folder containing the TextGrids you
+                                wish to import using the browse button on the right-hand side of the text field.
+                                When you select the folder, a list of detected tier names from the TextGrids
+                                will be displayed in the table.</p>
+                        </li>
+                        <li>
+                            <p>For each TextGrid tier you wish to import, type the name of the Phon tier in
+                                the column titled <uicontrol>PhonTier</uicontrol>. You may assign more than one
+                                TextGrid tier to the same Phon tier. You may also assign a group marker for each
+                                imported tier. When a TextGrid interval with this marker as it's text is
+                                encountered a new group is created in the Phon record. By default, this is set
+                                to '#' as this is how Phon will generate TextGrid files. Click next.</p>
+                        </li>
+                        <li>
+                            <p>Choose which session in the project to which you wish to add the imported
+                                records or specifiy a new session name to be created.  Click next.</p>
+                        </li>
+                        <li>
+                            <p>The TextGrids will now be imported.  If any errors are encountered they will be
+                                displayed in the text area shown in the wizard.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+            <topic id="open_textgrid_in_praat">
+                <title>Open TextGrid in Praat</title>
+                <shortdesc>Open a TextGrid managed by Phon in the Praat application.</shortdesc>
+                <body>
+                    <section>
+                        <p>The TextGrid view in Phon does not provide editing support for TextGrids.  To open
+                            TextGrids from Phon in Praat use the following procedure.</p>
+                    </section>
+                    <ol>
+                        <li>
+                            <note>You will need Praat version 5.3.85 or later.  Praat must also be open.</note>
+                            <p>From the <uicontrol>Speech Analysis</uicontrol> view in the <wintitle>Session
+                                Editor</wintitle> window, choose <menucascade>
+                                    <uicontrol>Open TextGrid in Praat...</uicontrol>
+                                </menucascade> from the Praat menu. The TextGrid in Phon will fade and a button
+                                to unlock the TextGrid will be displayed.</p>
+                        </li>
+                        <li>
+                            <note>Phon uses TextGrid tier naming to map values onto Phon tiers.  Do not change
+                                the names or delete any of the tiers generated by Phon.</note>
+                            <p>In Praat, edit TextGrid intervals as you see fit.  You may also add new tiers
+                                to the TextGrid.</p>
+                        </li>
+                        <li>
+                            <p>When finished editing the TextGrid, you can send the data back to Phon by
+                                choosing <menucascade>
+                                    <uicontrol>File</uicontrol>
+                                    <uicontrol>Send back to calling program</uicontrol>
+                                </menucascade>.  The TextGrid in Phon will unlock and its contents
+                                updated.</p>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+        </topic>
+    </topic>
+    
+    
+</topic>

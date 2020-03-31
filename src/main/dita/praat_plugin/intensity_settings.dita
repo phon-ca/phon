@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_kzy_cnx_qp">
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="concept_kzy_cnx_qp">
  <title>Intensity Settings</title>
  <shortdesc>Configuring the intensity contour</shortdesc>
- <conbody>
-  <p>Adapted from <xref href="http://www.fon.hum.uva.nl/praat/manual/Sound_To_Intensity___.html"
-    format="html" scope="external"/></p>
-  <p>
+ <refbody><section><p>Adapted from <xref href="http://www.fon.hum.uva.nl/praat/manual/Sound_To_Intensity___.html"
+    format="html" scope="external"/></p><p>
    <dl>
     <dlentry>
      <dt><b>Minimum pitch (Hz)</b></dt>
@@ -27,6 +25,5 @@
       around this point, and then applying the Gaussian window.</dd>
     </dlentry>
    </dl>
-  </p>
- </conbody>
-</concept>
+  </p></section></refbody>
+</reference>

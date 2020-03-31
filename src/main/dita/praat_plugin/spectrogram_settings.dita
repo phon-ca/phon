@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="concept_tj1_2nx_qp">
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="concept_tj1_2nx_qp">
  <title>Spectrogram Settings</title>
  <shortdesc>Configuring the spectrogram.</shortdesc>
  <prolog>
    <source>http://www.fon.hum.uva.nl/praat/manual/Intro_3_2__Configuring_the_spectrogram.html</source>
  </prolog>
- <conbody>
-  <p> Adapted from <xref
+ <refbody><section><p> Adapted from <xref
         href="http://www.fon.hum.uva.nl/praat/manual/Intro_3_2__Configuring_the_spectrogram.html"
         format="html" scope="external"/><dl>
         <dlentry>
@@ -97,6 +96,5 @@
             24 dB, so that its maximum will be seen at 44 dB (thus making this frame visible). </dd>
         </dlentry>
       </dl>
-    </p>
- </conbody>
-</concept>
+    </p></section></refbody>
+</reference>

@@ -45,23 +45,15 @@
                     format="dita"/>
                 <topicref href="session_editor/ipa_validation_view.dita" format="dita"/>
                 <topicref href="session_editor/media_player_view.dita" format="dita"/>
-                <topicref href="session_editor/editor_view-speech_analysis.md" format="markdown">
-                    <topicref href="session_editor/ViewWaveform.xml"/>
-                    <topicref href="session_editor/AdjustSegmentTimes.xml"/>
-                    <topicref href="session_editor/ExportAudioSegment.xml"/>
-                    <topicref href="praat-plugin/spectrogram_viewer.dita">
-                        <topicref href="praat-plugin/spectrogram_settings.dita"/>
-                        <topicref href="praat-plugin/formant_listing.dita"/>
-                        <topicref href="praat-plugin/formant_settings.dita"/>
-                        <topicref href="praat-plugin/intensity_listing.dita"/>
-                        <topicref href="praat-plugin/intensity_settings.dita"/>
-                        <topicref href="praat-plugin/pitch_listing.dita"/>
-                        <topicref href="praat-plugin/pitch_settings.dita"/>
-                    </topicref>
-                    <topicref href="praat-plugin/textgrid_viewer.dita">
-                        <topicref href="praat-plugin/generate_textgrids.dita"/>
-                        <topicref href="praat-plugin/import_textgrids.dita"/>
-                        <topicref href="praat-plugin/open_textgrid_in_praat.dita"/>
+                <topicref href="session_editor/speech_analysis_view.dita" format="dita">
+                    <topicref href="praat_plugin/spectrogram_settings.dita"/>
+                    <topicref href="praat_plugin/formant_settings.dita"/>
+                    <topicref href="praat_plugin/intensity_settings.dita"/>
+                    <topicref href="praat_plugin/pitch_settings.dita"/>
+                    <topicref href="praat_plugin/textgrid_viewer.dita">
+                        <topicref href="praat_plugin/generate_textgrids.dita"/>
+                        <topicref href="praat_plugin/import_textgrids.dita"/>
+                        <topicref href="praat_plugin/open_textgrid_in_praat.dita"/>
                     </topicref>
                 </topicref>
                 <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
