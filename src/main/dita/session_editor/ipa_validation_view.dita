@@ -4,7 +4,7 @@
     <title>IPA Validation</title>
     <body>
         <p>The <wintitle>IPA Validation</wintitle> view allows for validating IPA transcriptions
-            produced using <xref href="AboutBlindTranscription.xml"/>.</p>
+            produced using <xref href="blind_transcription.dita"/>.</p>
     </body>
     
     <topic id="validate_transcriptions">

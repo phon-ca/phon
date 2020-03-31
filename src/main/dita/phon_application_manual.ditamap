@@ -27,8 +27,8 @@
             <topicref href="project_manager/sessions.xml"/>
         </topicref>
         <topicref href="session_editor/session_editor.md" format="markdown">
-            <topicref href="session_editor/AboutBlindTranscription.xml"/>
-            <topicref href="session_editor/AboutParticipants.xml"/>
+            <topicref href="session_editor/blind_transcription.dita"/>
+            <topicref href="session_editor/participants.dita"/>
             <topicref href="session_editor/records.dita"/>
             <topicref href="session_editor/editor_media.md" format="markdown">
                 <topicref href="session_editor/AboutMedia.xml"/>
@@ -37,7 +37,7 @@
                 <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
                 <topicref href="session_editor/PlayCustomSegment.xml"/>
             </topicref>
-            <topicref href="session_editor/AboutEditorViews.xml">
+            <topicref href="session_editor/editor_views.dita">
                 <topicref href="session_editor/session_information_view.dita"/>
                 <topicref href="session_editor/tier_management_view.dita"/>
                 <topicref href="session_editor/record_data_view.dita" format="dita"/>
@@ -50,19 +50,14 @@
                     <topicref href="praat_plugin/formant_settings.dita"/>
                     <topicref href="praat_plugin/intensity_settings.dita"/>
                     <topicref href="praat_plugin/pitch_settings.dita"/>
-                    <topicref href="praat_plugin/textgrid_viewer.dita">
-                        <topicref href="praat_plugin/generate_textgrids.dita"/>
-                        <topicref href="praat_plugin/import_textgrids.dita"/>
-                        <topicref href="praat_plugin/open_textgrid_in_praat.dita"/>
-                    </topicref>
                 </topicref>
-                <topicref href="session_editor/editor_view-timeline.md" format="markdown"/>
+                <topicref href="session_editor/timeline_view.md" format="markdown"/>
                 <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
                 <topicref href="session_editor/find_and_replace_view.dita"/>
             </topicref>
             <topicref href="session_editor/editor_layouts.dita"/>
-            <topicref href="session_editor/SearchSession.xml"/>
-            <topicref href="session_editor/EditorKeystrokes.xml"/>
+            <topicref href="session_editor/editor_search.dita"/>
+            <topicref href="session_editor/editor_keystrokes.dita"/>
         </topicref>
         <topichead navtitle="Tools">
             <topicref href="tools/ipamap.xml"/>
