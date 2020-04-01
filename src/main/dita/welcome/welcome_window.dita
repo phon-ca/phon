@@ -162,8 +162,8 @@
                                 <uicontrol>Name</uicontrol> in the <uicontrol>Sort by</uicontrol> field of
                                 the <wintitle>Project List</wintitle> pane. To sort by date modified, click
                                 <uicontrol>Modified</uicontrol>. To sort projects by their size on disk,
-                                click <uicontrol>Size</uicontrol>. <image placement="break" scale="40"
-                                    href="../images/SortProjectList.png" id="image_wdr_vlm_sc"/></p>
+                                click <uicontrol>Size</uicontrol>. <image placement="break" 
+                                    href="./images/sort_project_list.png" id="image_wdr_vlm_sc"/></p>
                             <itemgroup>Your projects will appear in the <wintitle>Project List</wintitle> pane
                                 in the order specified.<note>When sorting by name, projects that start with
                                     uppercase letters will be sorted before ones with lowercase
@@ -185,8 +185,8 @@
                             <itemgroup>Two buttons will appear next to your project name; <uicontrol>Create
                                 .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
                                     file system viewer</uicontrol>.
-                                <image placement="break" scale="40"
-                                    href="../images/ShowinFSV.png" id="image_wdr_vlm_sc"/></itemgroup>                
+                                <image placement="break" 
+                                    href="./images/show_in_filesystem.png" id="image_wdr_vlm_sc"/></itemgroup>                
                         </li>
                         
                         <li>
@@ -214,8 +214,8 @@
                             <itemgroup>Two buttons will appear next to your project name; <uicontrol>Create
                                 .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
                                     file system viewer</uicontrol>.
-                                <image placement="break" scale="40"
-                                    href="../images/ArchiveProject.png" id="image_wdr_vlm_sc"/></itemgroup>
+                                <image placement="break"
+                                    href="./images/archive_project.png" id="image_wdr_vlm_sc"/></itemgroup>
                         </li>
                         <li>
                             <p>Click <uicontrol>Create .zip archive of phon project...</uicontrol>.
@@ -241,7 +241,7 @@
                                 extract it to a directory in your workspace folder, or right-click
                                 (<userinput>CTRL+click</userinput>) on it and choose <uicontrol>Extract
                                     project</uicontrol> from the context menu. <image placement="break"
-                                        scale="40" href="../images/ExtractProject.png" id="image_wdr_vlm_sc"
+                                        href="./images/unzip_project.png" id="image_wdr_vlm_sc"
                                     /></p>
                             <itemgroup>The project will be extracted to the workspace folder, and it will
                                 appear as an expanded (regular) project in the <wintitle>Project

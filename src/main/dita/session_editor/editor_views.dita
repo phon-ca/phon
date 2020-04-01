@@ -60,8 +60,8 @@
                         <itemgroup>If the view was docked, it will expand to fill the <wintitle>Session
                             Editor</wintitle> window. If the view was undocked, it will expand to fill
                             your computer screen.
-                            <image placement="break" scale="30"
-                                href="../images/MaximizeView.png" id="image_wdr_vlm_sc"/></itemgroup>
+                            <image placement="break"
+                                href="./images/maximize_view.png" id="image_wdr_vlm_sc"/></itemgroup>
                     </li>
                     <li>
                         <p>To restore the view to its previous size, click the restore button near the top
@@ -82,8 +82,8 @@
                         <p>Click the <uicontrol>minimize/_</uicontrol> button near the top right corner of
                             the view.</p>
                         <itemgroup>A small title bar for that view will appear at an edge of the
-                            <wintitle>Session Editor</wintitle>. <image placement="break" scale="30"
-                                href="../images/MinimizeView.png" id="image_wdr_vlm_sc1"/></itemgroup>
+                            <wintitle>Session Editor</wintitle>. <image placement="break"
+                                href="./images/minimize_view.png" id="image_wdr_vlm_sc1"/></itemgroup>
                     </li>
                     <li>
                         <p>To make a minimized view temporarily reappear, click on its name or icon.</p>
@@ -116,8 +116,8 @@
                             <wintitle>Session Editor</wintitle> window.</p>
                         <itemgroup>As you drag the view, the <wintitle>Session Editor</wintitle> will show
                             the alternate position of that view. When it appears as you wish, release the
-                            mouse button. <image placement="break" scale="30"
-                                href="../images/RelocateView.png" id="image_wdr_vlm_sc"/></itemgroup>
+                            mouse button. <image placement="break"
+                                href="./images/relocate_view.png" id="image_wdr_vlm_sc"/></itemgroup>
                     </li>
                     <li>
                         <p>Two or more views may occupy the same location in the <wintitle>Session
@@ -140,8 +140,8 @@
                         <p>In the top right corner of the view, click the button that looks like a window
                             with an inward arrow (on mouseover it will say <uicontrol>Connects this panel
                                 with the frame</uicontrol>). Alternately, select the title bar of the view
-                            and press <userinput>CTRL+N</userinput>.<image placement="break" scale="40"
-                                href="../images/DockView.png" id="image_wdr_vlm_sc"/></p>
+                            and press <userinput>CTRL+N</userinput>.<image placement="break"
+                                href="./images/dock_view.png" id="image_wdr_vlm_sc"/></p>
                         <itemgroup>The view will reappear in the <wintitle>Session Editor</wintitle> window
                             in its previous docked position.<note> You may also click and drag the view's
                                 title bar to return it to the <wintitle>Session Editor</wintitle> window in
@@ -162,8 +162,8 @@
                         <p>In the top right corner of the view, click the button that looks like a window
                             with an outward arrow (on mouseover it will say <uicontrol>Disconnects this
                                 panel from the frame</uicontrol>). Alternately, select the title bar of the
-                            view and press <userinput>CTRL+E</userinput>.<image placement="break" scale="30"
-                                href="../images/UndockView.png" id="image_wdr_vlm_sc"/></p>
+                            view and press <userinput>CTRL+E</userinput>.<image placement="break"
+                                href="./images/undock_view.png" id="image_wdr_vlm_sc"/></p>
                         <itemgroup>The view will appear as a separate window in front of the
                             <wintitle>Session Editor</wintitle>.</itemgroup>
                     </li>

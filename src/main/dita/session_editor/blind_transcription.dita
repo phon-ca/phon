@@ -15,7 +15,7 @@
         <p>
             <ul id="ul_eii_kfb_vc">
                 <li>Two users perform separate blind transcriptions of all records in one session
-                    (see <xref href="../projman/OpenSessionBlind.xml"/> for instructions).</li>
+                    (see <xref href="../project_manager/sessions.dita#open_session_blind"/> for instructions).</li>
                 <li>A team of two different users review both sets of blind transcriptions together,
                     while listening to each record.</li>
                 <li>For each record, this team does one of three things:<ul id="ul_jym_egb_vc">

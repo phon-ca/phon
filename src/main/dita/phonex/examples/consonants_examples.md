@@ -32,7 +32,7 @@ Examples:
 | ```{consonant, -stop}``` | All consonants which are not stops |
 
 Many feature names also have shorthand equivalents.  A listing of all feature names supported by phone along with their synomyms can be found 
-[here.](../../generated/features.xml)
+[here.](../../ipa/features.dita#feature_listing)
 
 Examples:
 

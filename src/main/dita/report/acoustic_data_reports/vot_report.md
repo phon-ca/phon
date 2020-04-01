@@ -15,7 +15,7 @@ A TextGrid must be assigned to the session and tier mappings setup for the Phon 
 
 Example:
 
-![VOT Voicing Tier Example](../images/Example-VOTTierSetup.png)
+![VOT Voicing Tier Example](./images/vot_tier_setup.png)
 
 ## VOT Calculation
 

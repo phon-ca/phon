@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="timeline">
+    <title>Timeline</title>
+    <body>
+        <p>The <b>Timeline</b> view displays the waveform for the session audio (when the audio file
+            is available) as well as associated record data for each selected participant along a
+            horizontal timeline. The primary purpose of the <b>Timeline</b> view is to aid with
+            segmentation and alterations of existing record segments.</p>
+        <fig>
+            <title>Timeline Editor View</title>
+            <image href="images/view_timeline.png">
+                <alt>Timeline Editor View</alt>
+            </image>
+        </fig>
+        <p>The <b>Timeline</b> view has three main components:</p>
+        <ol>
+            <li><p>The timebar</p><p>The timebar is displayed at the top of the <b>Timeline</b> view
+                    and extends across the entire width of the view panel. Ticks are drawn every
+                    10px with a major tick at every 100px. Time values are printed at every 2nd
+                    major tick.</p></li>
+            <li><p>The waveform</p><p>The waveform is displayed if session audio is available. If
+                    session audio is not available, a prompt to address the issue is displayed at
+                    the bottom of the view.</p></li>
+            <li><p>The record grid</p><p>Records are displayed in dedicated rows for each speaker
+                    selected (from the <i>Participants</i> menu of the Timeline's toolbar); for each
+                    record, the data tiers selected (from the <i>Tiers</i> menu) are visible. The
+                    current record is highlighted with a blue border, also with the record number
+                    printed in black. Record segments may be adjusted via mouse interaction by
+                    either dragging the record segment along the timeline; or by adjusting the
+                    start/end values using displayed markers (dotted lines). Records for any given
+                    participant can also be assigned to different participants by dragging the
+                    relevant record to a different row.</p></li>
+        </ol>
+    </body>
+    <topic id="actions">
+        <title>Actions</title>
+        <body/>
+        <topic id="play-segment">
+            <title>Play segment</title>
+            <body>
+                <p>To play the segment of the current record or selection press
+                        <codeph>space</codeph> (when not in segmentation mode) or use the menu in
+                    the toolbar or contextual menu.</p>
+            </body>
+        </topic>
+        <topic id="adjust-segment-times">
+            <title>Adjust segment times</title>
+            <body>
+                <p>Segment start and end times may be adjusted individually using the boundary
+                    markers (dotted lines) corresponding to the beginning and end of records. The
+                    start and end markers are always visible for the current record and are
+                    displayed when hovering over the end points of other record segments. Records
+                    may also be dragged horizontally along the timeline to adjust both start and end
+                    times simultaneously.</p>
+            </body>
+        </topic>
+        <topic id="delete-record">
+            <title>Delete record</title>
+            <body>
+                <p>To delete the current record select <i>Delete record</i> from the contextual menu
+                    or press <codeph>Delete</codeph> on the keyboard (after selecting the record to
+                    be deleted.)</p>
+            </body>
+        </topic>
+        <topic id="media-player-position">
+            <title>Media Player Position</title>
+            <body>
+                <p>If the <b><xref href="./editor_view-media_player.html" format="html">Media
+                            Player</xref></b> view is open, playback position can be changed by
+                    clicking on the waveform tier. If <codeph>CMD/CTRL</codeph> is held when
+                    clicking, playback will begin at the position marked by the click (if the media
+                    is not playing already).</p>
+            </body>
+        </topic>
+        <topic id="participants">
+            <title>Participants</title>
+            <body>
+                <p>Record data is printed by participant in rows. By default all participants plus a
+                    row for <i>Unidentified</i> records are visible.</p>
+            </body>
+            <topic id="hideshow-participant">
+                <title>Hide/Show Participant</title>
+                <body>
+                    <p>Participant visiblity can be toggled using the <i>Participants</i> menu in
+                        the toolbar or option within the contextual menu.</p>
+                </body>
+            </topic>
+            <topic id="add-participant">
+                <title>Add Participant</title>
+                <body>
+                    <p>To add a new participant to the session, click <i>Add Participant</i> in the
+                            <i>Participants</i> menu or select <i>Participants</i> &gt; <i>Add
+                            Participant</i> within the contextual menu.</p>
+                </body>
+            </topic>
+            <topic id="change-participant">
+                <title>Change Participant</title>
+                <body>
+                    <p>Participant assignment for a record may be altered using the mouse by
+                        dragging the record segment up and down across the different rows of the
+                        record grid. You may also use <codeph>CMD</codeph>/<codeph>CTRL</codeph> +
+                            <codeph>1</codeph>...<codeph>9</codeph> to assign a different
+                        participant using the keyboard. Participant number is determined by position
+                        in the list of currently visible participants.
+                            <codeph>CMD</codeph>/<codeph>CTRL</codeph> + <codeph>0</codeph> will set
+                        the record participant as "Unidentified".</p>
+                </body>
+            </topic>
+        </topic>
+        <topic id="hideshow-tier">
+            <title>Hide/Show Tier</title>
+            <body>
+                <p>By default the <i>Orthography</i> and <i>Segment</i> tiers are shown in the
+                    record grid. Tier visibility may be toggled using the <i>Tiers</i> menu or
+                    similar option in the contextual menu.</p>
+            </body>
+        </topic>
+        <topic id="zoom-outin">
+            <title>Zoom Out/In</title>
+            <body>
+                <p>The zoom out/in actions will decrease/increase the horizontal resolution of the
+                    waveform within the timeline. These actions are available in the toolbar and
+                    contextual menus.</p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="special-modes">
+        <title>Special Modes</title>
+        <body/>
+        <topic id="segmentation">
+            <title>Segmentation</title>
+            <body>
+                <p>Segmentation is the process of assigning segment times for records using the
+                    keyboard, usually while media is playing. To enter the Segmentation Mode, click
+                    the <i>Start Segmentation</i> button in the toolbar. Before segmentation begins,
+                    a dialog is displayed with options for media playback and segmentation
+                    behaviour. The <b><xref href="./editor_view-media_player.html" format="html"
+                            >Media Player</xref></b> view must be loaded within the Session Editor's
+                    interface.</p>
+                <fig>
+                    <title>Segmentation Dialog</title>
+                    <image href="images/segmentation_dialog.png">
+                        <alt>Segmentation Dialog</alt>
+                    </image>
+                </fig>
+                <p>If session media is loaded the following media playback options are
+                    available:</p>
+                <ol>
+                    <li><p>Play media from beginning.</p></li>
+                    <li><p>Play media from current position (in media player view.) This is the
+                            default option.</p></li>
+                    <li><p>Play media from end of last record (by media time.)</p></li>
+                    <li><p>Play media from end of last record for participant (with participant
+                            selection.)</p></li>
+                </ol>
+                <p>Playback start position will determine where segmentation begins in the
+                        <b>Timeline</b>. If no media is available segmentation will always begin at
+                        <codeph>000:00.000</codeph>.</p>
+                <p>There are two modes available for segmentation:</p>
+                <ol>
+                    <li><p>Insert new record at end of session</p><p>Use this option when segmenting
+                            a new media file or continuing segmentation.</p></li>
+                    <li><p>Replace segment for current record</p><p>Use this option when
+                            re-segmenting an already-segmented record or set of records. Uopn user
+                            action (e.g. typing a given participant number or <codeph>1</codeph>,
+                            the current record is assigned the new segment time and participant
+                            (when relevant). Once all records segments have been overwritten using
+                            this mode, new records will be inserted at end of the session.</p></li>
+                </ol>
+            </body>
+            <topic id="segmentation-window">
+                <title>Segmentation Window</title>
+                <body>
+                    <p>While segmentation mode is active, a yellow segment will be painted in the
+                            <b>Timeline</b> view. When a new record is identified using the
+                            <codeph>Space</codeph> or <codeph>1</codeph>...<codeph>9</codeph> or
+                            <codeph>Numpad 1</codeph>...<codeph>Numpad 9</codeph> keys the segment
+                        identified by yellow will become the media segment for the new record.</p>
+                    <p>If <i>Use segmentation window</i> is not selected, segments will have no set
+                        limit in length; the beginning time of the segment is constrained by the end
+                        time of the preceding segment. If <i>Use segmentation window</i> is
+                        selected, segment duration will be limited to a time value indicated in
+                        milliseconds (default is 3000ms or 3 seconds.)</p>
+                    <fig>
+                        <title>Segmentation Window</title>
+                        <image href="images/timeline_segmentation.png">
+                            <alt>Segmentation Window</alt>
+                        </image>
+                    </fig>
+                </body>
+            </topic>
+            <topic id="segmentation-controls">
+                <title>Segmentation Controls</title>
+                <body>
+                    <p>During segmentation mode all keyboard input for the application will be
+                        blocked except the following keystrokes:</p>
+                    <table>
+                        <tgroup cols="2">
+                            <colspec colname="col1"/>
+                            <colspec colname="col2"/>
+                            <thead>
+                                <row>
+                                    <entry>Action</entry>
+                                    <entry>Keystroke(s)</entry>
+                                </row>
+                            </thead>
+                            <tbody>
+                                <row>
+                                    <entry>Stop segmentation</entry>
+                                    <entry><codeph>Esc</codeph></entry>
+                                </row>
+                                <row>
+                                    <entry>Break (e.g., silence, noise, etc.)</entry>
+                                    <entry><codeph>b</codeph> or <codeph>Numpad
+                                        decimal</codeph></entry>
+                                </row>
+                                <row>
+                                    <entry>New segment (unidentified)</entry>
+                                    <entry><codeph>Space</codeph> or <codeph>0</codeph> or
+                                            <codeph>Numpad 0</codeph></entry>
+                                </row>
+                                <row>
+                                    <entry>New segment (participant 1...9)</entry>
+                                    <entry><codeph>1</codeph>...<codeph>9</codeph> or <codeph>Numpad
+                                            1</codeph>...<codeph>Numpad 9</codeph></entry>
+                                </row>
+                                <row>
+                                    <entry>Toggle segmentation window</entry>
+                                    <entry><codeph>W</codeph></entry>
+                                </row>
+                                <row>
+                                    <entry>Increase segmentation window (100ms)</entry>
+                                    <entry><codeph>Up</codeph></entry>
+                                </row>
+                                <row>
+                                    <entry>Decrease segmentation window (1000ms)</entry>
+                                    <entry><codeph>Down</codeph></entry>
+                                </row>
+                            </tbody>
+                        </tgroup>
+                    </table>
+                </body>
+                <topic id="media-controls">
+                    <title>Media Controls</title>
+                    <body>
+                        <p>The following keystrokes for controlling media playback are avavilable
+                            when in segmentation mode:</p>
+                        <table>
+                            <tgroup cols="2">
+                                <colspec colname="col1"/>
+                                <colspec colname="col2"/>
+                                <thead>
+                                    <row>
+                                        <entry>Action</entry>
+                                        <entry>Keystroke(s)</entry>
+                                    </row>
+                                </thead>
+                                <tbody>
+                                    <row>
+                                        <entry>Volume up</entry>
+                                        <entry><codeph>Shift+Up</codeph> or <codeph>Numpad
+                                                multiply</codeph></entry>
+                                    </row>
+                                    <row>
+                                        <entry>Volume down</entry>
+                                        <entry><codeph>Shift+Down</codeph> or <codeph>Numpad
+                                                divide</codeph></entry>
+                                    </row>
+                                    <row>
+                                        <entry>Go back 1s</entry>
+                                        <entry><codeph>Left</codeph> or <codeph>Numpad
+                                                subtract</codeph></entry>
+                                    </row>
+                                    <row>
+                                        <entry>Go forward 1s</entry>
+                                        <entry><codeph>Right</codeph> or <codeph>Numpad
+                                            add</codeph></entry>
+                                    </row>
+                                    <row>
+                                        <entry>Go back 5s</entry>
+                                        <entry><codeph>Shift+Left</codeph> or <codeph>Shift+Numpad
+                                                subtract</codeph></entry>
+                                    </row>
+                                    <row>
+                                        <entry>Go forward 5s</entry>
+                                        <entry><codeph>Shift+Right</codeph> or <codeph>Shift+Numpad
+                                                add</codeph></entry>
+                                    </row>
+                                </tbody>
+                            </tgroup>
+                        </table>
+                    </body>
+                </topic>
+            </topic>
+        </topic>
+        <topic id="split-record">
+            <title>Split Record</title>
+            <body>
+                <p>Records segments may be split using the record grid. To enter split mode, select
+                    the segment to ne split, press the <codeph>S</codeph> key, press the "Split
+                    Record" button in the toolbar, or select <i>Split record</i> from the contextual
+                    menu. A new marker will appear in the middle of the current record segment. This
+                    new marker can be dragged to adjust the position of the record split. Press
+                        <codeph>Enter</codeph> to accept the record split as shown and create the
+                    new record. Split mode can be exited using the <codeph>Escape</codeph> key and
+                    will also exit if the current editor record is switched or the current record
+                    segment is modified.</p>
+                <fig>
+                    <title>Split Record</title>
+                    <image href="images/timeline_split_record.png">
+                        <alt>Split Record</alt>
+                    </image>
+                </fig>
+                <p>Record data may be split by word group number by using the
+                        <codeph>0</codeph>...<codeph>9</codeph> keys on the keyboard.
+                        <codeph>0</codeph> will move all record data into the new record while
+                        <codeph>1</codeph>...<codeph>9</codeph> will split data after group 1, 2,
+                    etc,. Split position can be set using the context menu as well.</p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="warnings">
+        <title>Warnings</title>
+        <body>
+            <p>The following warnings will be indicated in the <b>Timeline</b> view:</p>
+            <ol>
+                <li><p>Overlaping segments</p></li>
+                <li><p>Segments exceeding media time</p></li>
+            </ol>
+            <p>Warnings are indicated by a red flag shown next to the record numbers where warnings
+                exist. Details about the warning will be shown in a tooltip displayed when hovering
+                over the flag icon.</p>
+            <fig>
+                <title>Overlapping Segments</title>
+                <image href="images/timeline_overlapping_records.png">
+                    <alt>Overlapping Segments</alt>
+                </image>
+            </fig>
+        </body>
+    </topic>
+</topic>

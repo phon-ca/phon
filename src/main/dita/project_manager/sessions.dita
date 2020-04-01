@@ -45,7 +45,7 @@
                         <p>Enter a name for the new session, choose the destination corpus and click
                             <uicontrol>Ok</uicontrol>. If you require a new corpus for the new session,
                             click the plus sign to the right of the corpus selection field and enter the new
-                            corpus information as per the description at <xref href="../projman/CreateCorpus.xml"/>,
+                            corpus information as per the description at <xref href="../project_manager/corpora.dita#create_corpus"/>,
                             and then select this new corpus as your destination.</p>
                         <itemgroup>The new session will be created in the specified corpus and opened for
                             editing. An error message will appear if a session with that name already

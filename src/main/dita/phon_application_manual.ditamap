@@ -8,35 +8,29 @@
         <booklists>
             <toc/>
         </booklists>
-        <topicref href="Welcome.md" format="markdown">
-            <topicref href="misc/install.md" format="markdown"/>
-            <topicref href="misc/known_issues.md" format="markdown"/>
+        <topicref href="getting_started.md" format="markdown">
+            <topicref href="install.md" format="markdown"/>
+            <topicref href="known_issues.md" format="markdown"/>
         </topicref>
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.dita" format="dita"/>
-        <topicref href="prefs/edit_prefs.xml">
-            <topicref href="prefs/autosaves.xml"/>
-            <topicref href="prefs/change_fonts.xml"/>
-            <topicref href="prefs/dictionary_language.xml"/>
-            <topicref href="prefs/syllabifier_language.xml"/>
-            <topicref href="prefs/media_folders.xml"/>
+        <topicref href="prefs/edit_prefs.dita">
+            <topicref href="prefs/autosaves.dita"/>
+            <topicref href="prefs/change_fonts.dita"/>
+            <topicref href="prefs/dictionary_language.dita"/>
+            <topicref href="prefs/syllabifier_language.dita"/>
+            <topicref href="prefs/media_folders.dita"/>
         </topicref>
         <topicref href="project_manager/project_manager.dita" format="dita">
-            <topicref href="project_manager/corpora.xml"/>
-            <topicref href="project_manager/sessions.xml"/>
+            <topicref href="project_manager/corpora.dita"/>
+            <topicref href="project_manager/sessions.dita"/>
         </topicref>
         <topicref href="session_editor/session_editor.md" format="markdown">
             <topicref href="session_editor/blind_transcription.dita"/>
             <topicref href="session_editor/participants.dita"/>
             <topicref href="session_editor/records.dita"/>
-            <topicref href="session_editor/editor_media.md" format="markdown">
-                <topicref href="session_editor/AboutMedia.xml"/>
-                <topicref href="session_editor/PlayAdjacencySequence.xml"/>
-                <topicref href="session_editor/PlayCurrentSegment.xml"/>
-                <topicref href="session_editor/PlayCurrentSpeechTurn.xml"/>
-                <topicref href="session_editor/PlayCustomSegment.xml"/>
-            </topicref>
+            <topicref href="session_editor/editor_media.dita" format="dita"/>
             <topicref href="session_editor/editor_views.dita">
                 <topicref href="session_editor/session_information_view.dita"/>
                 <topicref href="session_editor/tier_management_view.dita"/>
@@ -51,7 +45,7 @@
                     <topicref href="praat_plugin/intensity_settings.dita"/>
                     <topicref href="praat_plugin/pitch_settings.dita"/>
                 </topicref>
-                <topicref href="session_editor/timeline_view.md" format="markdown"/>
+                <topicref href="session_editor/timeline_view.dita" format="dita"/>
                 <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
                 <topicref href="session_editor/find_and_replace_view.dita"/>
             </topicref>
@@ -60,15 +54,15 @@
             <topicref href="session_editor/editor_keystrokes.dita"/>
         </topicref>
         <topichead navtitle="Tools">
-            <topicref href="tools/ipamap.xml"/>
+            <topicref href="tools/ipamap.dita"/>
             <topicref href="tools/phonshell.md" format="markdown"/>
             <topicref href="tools/iso_langauge_codes.md" format="markdown"/>
         </topichead>
     </chapter>
     <chapter navtitle="IPA Transcription" audience="novice">
         <topicref href="ipa/transcription.dita"/>
-        <topicref href="ipa/ipa.xml"/>
-        <topicref href="ipa/features.xml"/>
+        <topicref href="ipa/ipa.dita"/>
+        <topicref href="ipa/features.dita"/>
     </chapter>
     <chapter navtitle="Phonex" audience="intermediate">
         <topicref href="phonex/phonex_introduction.md" format="markdown"/>
@@ -107,7 +101,7 @@
             <topicref href="query/segmental_relations_query.dita" format="dita"/>
             <topicref href="query/common_query_options.dita"/>
         </topichead>
-        <topichead navtitle="Query Reports">
+        <topichead navtitle="Stock Reports">
             <topicref href="report/query_information_report.md" format="markdown"/>
             <topicref href="report/aggregate_report.md" format="markdown"/>
             <topicref href="report/inventory_by_session_report.md" format="markdown"/>

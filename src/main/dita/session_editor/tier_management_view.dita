@@ -37,8 +37,8 @@
                                 font</uicontrol> button to choose the default editor font. Click
                             <uicontrol>Ok</uicontrol>.</p>
                         <itemgroup>The new tier will show up at the bottom of each record.
-                            <image placement="break" scale="30"
-                                href="../images/CreateUsertier.png" id="image_wdr_vlm_sc1"/></itemgroup>
+                            <image placement="break"
+                                href="./images/add_tier.png" id="image_wdr_vlm_sc1"/></itemgroup>
                     </li>
                     <li>
                         <p>To edit the font for a user-defined tier, select it from the list of tiers in
@@ -47,8 +47,8 @@
                             and choose <uicontrol>Edit tier &lt;tier name></uicontrol>. Select the new font
                             options and click <uicontrol>Ok</uicontrol>.</p>
                         <itemgroup>That tier will reflect your new font choice in the <wintitle>Record
-                            Data</wintitle> view. <image placement="break" scale="50"
-                                href="../images/EditUsertier.png" id="image_wdr_vlm_sc"/>
+                            Data</wintitle> view. <image placement="break"
+                                href="./images/edit_tier.png" id="image_wdr_vlm_sc"/>
                             <note>To reset the tier font to the default, right-click
                                 (<userinput>CTRL+click</userinput>) on the tier and choose
                                 <uicontrol>Reset font</uicontrol> from the context

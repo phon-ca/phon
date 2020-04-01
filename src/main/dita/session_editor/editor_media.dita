@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="media">
+    <title>Media</title>
+    <body>
+        <p>Sessions in <i>Phon</i> usually consist of a media recording (either audio or video)
+            coupled with transcriptions of utterances from the recording and separated into
+            records. Each record can be associated via a process called
+            segmentation to the time in the recording during which the utterance occurred.</p>
+        <p>To facilitate the segmentation and transcription of media files, <i>Phon</i> has a
+            built-in media player. This player is available in the <wintitle>Media Player</wintitle>
+            view. To use the media player, you must first have a media file assigned to your session.</p>
+        <p>TODO - session audio</p>
+        
+        <note>Phon current only supports 16bit PCM wav files.</note>
+        <note>If the session media file is already in wav format a second file is not required
+            for session audio.</note>
+    </body>
+
+    <topic id="media_actions">
+        <title>Media Actions</title>
+        <body>
+            <p>The following actions are available from the Media window menu when the Session
+                Editor is focused.</p>
+        </body>
+        <topic id="assign_media">
+            <title>Assign media</title>
+            <body/>
+        </topic>
+        <topic id="unassign_media">
+            <title>Unassign media</title>
+            <body/>
+        </topic>
+        <topic id="genereate_session_audio">
+            <title>Genereate session audio</title>
+            <body/>
+        </topic>
+        <topic id="segment_playback">
+            <title>Segment playback</title>
+            <body/>
+        </topic>
+        <topic id="segment_export">
+            <title>Segment export</title>
+            <body/>
+        </topic>
+        <topic id="select_media_folders">
+            <title>Select media folders</title>
+            <body/>
+        </topic>
+    </topic>
+</topic>

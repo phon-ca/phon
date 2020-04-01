@@ -11,8 +11,8 @@
             more than one target speaker per session, or it may be useful to have records that
             include the utterances of interlocutors for the purpose of establishing context for the
             target's utterances.</p>
-        <image placement="break" scale="30"
-            href="../images/AboutParticipants.png" id="image_wdr_vlm_sc"/>
+        <image placement="break"
+            href="./images/participants.png" id="image_wdr_vlm_sc"/>
         <p>Associating an utterance with a speaker allows you to:</p>
         <p>
             <ul id="ul_uep_acb_vc">
@@ -24,7 +24,7 @@
         </p>
         <p>Since a corpus often contains data mostly relevant to a specific participant, <i>Phon</i>
             allows users to specify one set of participants for an entire corpus, in what is known
-            as a corpus template. See <xref href="../projman/EditCorpusTemplate.xml"/> for
+            as a corpus template. See <xref href="../project_manager/corpora.dita#edit_corpus_template"/> for
             instructions.</p>
     </body>
 </topic>

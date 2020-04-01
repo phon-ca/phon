@@ -2,7 +2,7 @@
 
 ## Outline
 
- * <Participant>
+ * Participant
    * Aggregate
    * Singletons
       * Aggregate

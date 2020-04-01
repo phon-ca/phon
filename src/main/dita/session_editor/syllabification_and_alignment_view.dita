@@ -109,8 +109,8 @@
                 in production.<note>To include syllabification visualization in the <i>Alignment</i>
                     tier, select <uicontrol>Color in alignment</uicontrol> in the
                     <wintitle>Syllabification &amp; Alignment</wintitle> view.</note></p>
-            <image placement="break" scale="30"
-                href="../images/AboutAlignment.png" id="image_wdr_vlm_sc"/>
+            <image placement="break"
+                href="./images/alignment.png" id="image_wdr_vlm_sc"/>
             <p>This comparison is important for a number of query scripts in <i>Phon</i>, such as
                 <wintitle>Phones</wintitle>, <wintitle>Metathesis</wintitle>, and
                 <wintitle>Harmony</wintitle>. These queries require information from both the <i>IPA

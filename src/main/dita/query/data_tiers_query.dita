@@ -41,9 +41,9 @@
             </ol>
         </body>
         <related-links>
-            <link href="GroupFilter.xml#taskId"/>
-            <link href="WordFilter.xml#taskId"/>
-            <link href="ParticipantFilter.xml#taskId"/>
+            <link href="./common_query_options.dita#group_options"/>
+            <link href="./common_query_options.dita#word_options"/>
+            <link href="./common_query_options.dita#participant_filter"/>
         </related-links>
     </topic>
     

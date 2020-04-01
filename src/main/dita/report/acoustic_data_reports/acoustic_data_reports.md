@@ -12,6 +12,6 @@ All acoustic data reports require identification of one or more intervals in the
     * TextGrid mappings must exist between the specified tier and a TextGrid tier
     * This is the default option with the tier name set as ```IPA Actual```
  
-![../images/IntervalSelection.png](../images/IntervalSelection.png)
+![../images/IntervalSelection.png](./images/interval_selection.png)
 
 If an interval cannot be selected for a query result, no information will be printed in the report.

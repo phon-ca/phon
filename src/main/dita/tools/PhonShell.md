@@ -2,7 +2,7 @@
 
 *PhonShell* is a plug-in introduced with *Phon 2.0* which provides a scripting environment for *Phon*.  *PhonShell* is available from the *Tools* windows menu. The *PhonShell* console is associated to the window from which it was opened and will be closed when the parent window is closed.
 
-![../images/PhonShell.png](../images/PhonShell.png)
+![../images/PhonShell.png](./images/phonshell.png)
 
 ## Usage
 
