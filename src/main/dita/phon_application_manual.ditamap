@@ -91,7 +91,7 @@
     </chapter>
     <chapter navtitle="Queries" audience="intermediate">
         <topicref href="query/query_and_report_wizard.dita" format="dita">
-            <topicref href="query/view_result_set.xml"/>
+            <topicref href="query/view_result_set.dita"/>
         </topicref>
         <topichead navtitle="Query Types">
             <topicref href="query/data_tiers_query.dita" format="dita"/>
