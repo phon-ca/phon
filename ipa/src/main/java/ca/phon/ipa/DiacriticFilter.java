@@ -89,10 +89,26 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
 	public void visitCompoundPhone(CompoundPhone phone) {
 		visitPhone(phone.getFirstPhone());
 		visitPhone(phone.getSecondPhone());
-		visitPhone(phone);
+		
+		Diacritic[] prefix = Arrays.stream(phone.getPrefixDiacritics())
+				.filter( this::keepDiacritic )
+				.collect(Collectors.toList())
+				.toArray(new Diacritic[0]);
+		Diacritic[] combining = Arrays.stream(phone.getCombiningDiacritics())
+				.filter( this::keepDiacritic )
+				.collect(Collectors.toList())
+				.toArray(new Diacritic[0]);
+		Diacritic[] suffix = Arrays.stream(phone.getSuffixDiacritics())
+				.filter(this::keepDiacritic)
+				.collect(Collectors.toList())
+				.toArray(new Diacritic[0]);
 		
 		builder.makeCompoundPhone(phone.getLigature());
-		factory.copySyllabification(phone, builder.last());
+		CompoundPhone cp = (CompoundPhone)builder.last();
+		cp.setPrefixDiacritics(prefix);
+		cp.setSuffixDiacritics(suffix);
+		cp.setCombiningDiacritics(combining);
+		factory.copySyllabification(phone, cp);
 	}
 	
 }
