@@ -43,21 +43,27 @@ public class PunctuationFilter extends VisitorAdapter<IPAElement> {
 
 	@Override
 	public void fallbackVisit(IPAElement obj) {
+		builder.append(obj);
 	}
 	
 	@Visits
-	public void visitPause(Pause pause) {
-		builder.append(pause);
+	public void visitStressMarker(StressMarker stressMarker) {
+		// don't add
 	}
 	
 	@Visits
-	public void visitBasicPhone(Phone phone) {
-		builder.append(phone);
+	public void visitSyllableBoundaryMarker(SyllableBoundary boundary) {
+		// don't add
 	}
 	
 	@Visits
-	public void visitCompoundPhone(CompoundPhone phone) {
-		builder.append(phone);
+	public void visitSandhi(Sandhi sandhi) {
+		// don't add
+	}
+	
+	@Visits
+	public void visitCompoundWordMarker(CompoundWordMarker wordMarker) {
+		// don't add
 	}
 	
 	@Visits
@@ -66,12 +72,8 @@ public class PunctuationFilter extends VisitorAdapter<IPAElement> {
 			builder.appendWordBoundary();
 	}
 	
-	@Visits
-	public void visitAlignmentMarker(AlignmentMarker marker) {
-		builder.append((new IPAElementFactory()).createAlignmentMarker());
-	}
-	
 	public IPATranscript getIPATranscript() {
 		return builder.toIPATranscript();
 	}
+	
 }

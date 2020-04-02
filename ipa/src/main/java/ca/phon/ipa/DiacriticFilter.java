@@ -87,8 +87,10 @@ public class DiacriticFilter extends VisitorAdapter<IPAElement> {
 	
 	@Visits
 	public void visitCompoundPhone(CompoundPhone phone) {
-		visit(phone.getFirstPhone());
-		visit(phone.getSecondPhone());
+		visitPhone(phone.getFirstPhone());
+		visitPhone(phone.getSecondPhone());
+		visitPhone(phone);
+		
 		builder.makeCompoundPhone(phone.getLigature());
 		factory.copySyllabification(phone, builder.last());
 	}
