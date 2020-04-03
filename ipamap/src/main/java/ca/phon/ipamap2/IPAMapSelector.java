@@ -2,6 +2,7 @@ package ca.phon.ipamap2;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -206,7 +207,13 @@ public class IPAMapSelector extends JComponent {
 	 * Called when cell selected has changed.
 	 */
 	public void cellSelectionChanged(IPAMapGrid mapGrid, int cellIdx, boolean selected) {
-		// override where necessary
+		ArrayList<String> prevSelected = new ArrayList<>(getSelected());
+		if(selected)
+			prevSelected.remove(mapGrid.getGrid().getCell().get(cellIdx).getText());
+		else
+			prevSelected.add(mapGrid.getGrid().getCell().get(cellIdx).getText());
+		
+		firePropertyChange("selected", prevSelected, getSelected());
 	}
 	
 	private IPAMapCellSelectionListener cellSelectionListener = new IPAMapCellSelectionListener() {

@@ -20,6 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.Action;
@@ -160,7 +162,7 @@ public class InventorySettingsPanel extends JPanel {
 		diacriticOptionsPanel.getIgnoreDiacriticsBox().setSelected(settings.isIgnoreDiacritics());
 		diacriticOptionsPanel.getSelectionModeBox().setSelectedItem(settings.isOnlyOrExcept() ? SelectionMode.ONLY : SelectionMode.EXCEPT);
 		diacriticOptionsPanel.getDiacriticSelector().setSelectedDiacritics(settings.getSelectedDiacritics());
-		
+
 		caseSensitiveBox = new JCheckBox("Case sensititve");
 		caseSensitiveBox.setSelected(settings.isCaseSensitive());
 		caseSensitiveBox.addActionListener( (e) -> settings.setCaseSensitive(caseSensitiveBox.isSelected()) );

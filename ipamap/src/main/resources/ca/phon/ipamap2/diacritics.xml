@@ -17,6 +17,22 @@
 -->
 <ipaGrids xmlns="http://phon.ling.mun.ca/ns/ipamap">
 
+	<!-- Length -->
+	<grid cols="4" rows="2" name="Length">
+		<cell y="0" x="0" h="2" w="2">
+            <text>ː</text>
+            <property name="Name">Length mark</property>
+            <property name="Description">Long</property>
+            <property name="Unicode">0x2d0</property>
+        </cell>
+        <cell y="0" x="2" h="2" w="2">
+            <text>ˑ</text>
+            <property name="Name">Half-length mark</property>
+            <property name="Description">Half-long</property>
+            <property name="Unicode">0x2d1</property>
+        </cell>
+	</grid>
+
     <!--Contours-->
     <grid cols="22" rows="4" name="Contours">
         <cell y="0" x="0" h="2" w="2">
