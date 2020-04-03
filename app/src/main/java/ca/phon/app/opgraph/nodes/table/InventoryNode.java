@@ -294,7 +294,7 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 					IPATranscript val = ((IPATranscript)rowData[ic]).removePunctuation();
 					val = (settings.getColumns().get(ic).onlyOrExcept
 							? val.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics)
-							: val.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics));
+							: val.stripDiacriticsExcept(settings.getColumns().get(ic).selectedDiacritics));
 					rowData[ic] = val;
 				}
 			}

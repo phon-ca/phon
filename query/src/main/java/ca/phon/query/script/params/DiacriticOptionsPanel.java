@@ -75,6 +75,9 @@ public class DiacriticOptionsPanel extends JPanel {
 		final CountDownLatch latch = new CountDownLatch(1);
 		diacriticSelector = new DiacriticSelector();
 		diacriticSelector.setSelectedDiacritics(diacriticOptionsParam.getSelectedDiacritics());
+		diacriticSelector.addPropertyChangeListener("selected", (e) -> {
+			diacriticOptionsParam.setSelectedDiacritics(diacriticSelector.getSelectedDiacritics());
+		});
 		
 		latch.countDown();
 		
@@ -117,6 +120,7 @@ public class DiacriticOptionsPanel extends JPanel {
 				
 				diacriticSelector.getMapGridContainer().repaint();
 			}
+			
 		});
 		
 		updateButtons();

@@ -91,7 +91,7 @@ public class IPAElementFactory {
 	public Phone createPhone(Diacritic[] prefix, Character basePhone, Diacritic[] combining, Diacritic[] suffix) {
 		return new Phone(prefix, basePhone, combining, suffix);
 	}
-	
+		
 	public Phone clonePhone(Phone p) {
 		if(p instanceof CompoundPhone)
 			return cloneCompoundPhone((CompoundPhone)p);
