@@ -15,6 +15,7 @@
  */
 package ca.phon.app;
 
+import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -53,6 +55,7 @@ public class ThemeHook implements PhonStartupHook,
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					// don't change theme on mac
 					if (OSInfo.isMacOs()) {
+						setupMacosCustomizations();
 						return;
 						// code below used when changing theme on mac to keep
 						// system window menu
@@ -95,6 +98,21 @@ public class ThemeHook implements PhonStartupHook,
 
 	}
 
+	// macos system colors
+	final static private Color MACOS_GRAPHITE = new Color(109, 109, 109);
+	final static private Color MACOS_BLUE = new Color(7, 73, 217);
+	
+	private void setupMacosCustomizations() {
+		// check list selection colours, change breadcrumb selection color to MACOS_BLUE if 
+		// user selection is not 'blue' or 'graphite' in system preferences
+		
+		Color listSelectionBackground = UIManager.getColor("List.selectionBackground");
+		if( !MACOS_BLUE.equals(listSelectionBackground) && !MACOS_GRAPHITE.equals(listSelectionBackground) ) {
+			UIManager.getDefaults().put("List.selectionBackground", MACOS_BLUE);
+			UIManager.getDefaults().put("Tree.selectionBackground", MACOS_BLUE);
+		}
+	}
+	
 	@Override
 	public Class<?> getExtensionType() {
 		return PhonStartupHook.class;
