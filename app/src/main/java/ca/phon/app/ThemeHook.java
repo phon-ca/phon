@@ -26,6 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
@@ -70,7 +71,7 @@ public class ThemeHook implements PhonStartupHook,
 					try {
 						 String uiClassName = PrefHelper.get(
 								PhonProperties.UI_THEME,
-								OSInfo.isNix() ? SubstanceLookAndFeel.class.getName() :
+								OSInfo.isNix() ? null : 
 										UIManager.getSystemLookAndFeelClassName()
 								);
 						if(uiClassName != null) {
