@@ -219,7 +219,8 @@ public class MediaSelectionField extends FileSelectionField {
 		final String txt = super.getText();
 		File retVal = null;
 
-		if(getTextField().getState() == FieldState.INPUT && txt != null && txt.length() > 0) {
+		if(getTextField().getState() == FieldState.INPUT && txt != null && txt.length() > 0
+				&& getEditor().getSession() != null) {
 			File mediaLocatorFile = MediaLocator.findMediaFile(txt, project, getEditor().getSession().getCorpus());
 			if(mediaLocatorFile != null) {
 				retVal = mediaLocatorFile;

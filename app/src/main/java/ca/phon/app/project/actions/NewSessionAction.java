@@ -17,11 +17,16 @@ package ca.phon.app.project.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import ca.phon.app.project.NewSessionDialog;
 import ca.phon.app.project.ProjectWindow;
+import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.session.Session;
 
 public class NewSessionAction extends ProjectWindowAction {
 	
@@ -79,8 +84,19 @@ public class NewSessionAction extends ProjectWindowAction {
 		
 		// create session
 		try {
-			proj.createSessionFromTemplate(corpusName, sessionName);
+			Session createdSession = proj.createSessionFromTemplate(corpusName, sessionName);
 			sessionCreated = true;
+			
+			// setup media if available
+			File mediaFile = MediaLocator.findMediaFile(sessionName, proj, corpusName);
+			if(mediaFile != null && mediaFile.exists() && mediaFile.canRead()) {
+				createdSession.setMediaLocation(mediaFile.getName());
+				
+				UUID wl = proj.getSessionWriteLock(createdSession);
+				proj.saveSession(createdSession, wl);
+				proj.releaseSessionWriteLock(createdSession, wl);
+			}
+			
 			getWindow().refreshProject();
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();

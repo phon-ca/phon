@@ -183,63 +183,75 @@ public class MediaLocator {
 
 		 if(filename == null) return retVal;
 
-		 // do we already have an absolute path
-		 final File mediaFile = new File(filename);
-		 if(mediaFile.isAbsolute()) {
-			 retVal = mediaFile;
+		 // if filename does not have an extension, go through the list
+		 // of supported extensions and return the first found (if any)
+		 int extIdx = filename.lastIndexOf('.');
+		 if(extIdx < 0) {
+			 FileFilter mediaFileFilter = FileFilter.mediaFilter;
+			 for(String ext:mediaFileFilter.getAllExtensions()) {
+				 String filenameToCheck = filename + "." + ext;
+				 retVal = findMediaFile(filenameToCheck, project, corpus);
+				 if(retVal != null) break;
+			 }
 		 } else {
-			 /*
-			  * Look for media in the following location order:
-			  *
-			  * <media folder>/<project>/<corpus>/<file>
-			  * <media folder>/<project>/<file>
-			  * <media folder>/<corpus>/<file>
-			  * <media folder>/<file>
-			  */
-			 final List<String> checkList = new ArrayList<String>();
-			 if(project != null && corpus != null) {
-				 checkList.add(project.getName() +
-						 File.separator + corpus + File.separator + filename);
-			 }
-			 if(project != null) {
-				 checkList.add(project.getName() +
-						 File.separator + filename);
-			 }
-			 if(corpus != null) {
-				 checkList.add(corpus + File.separator + filename);
-			 }
-			 checkList.add(File.separator + filename);
-
-			 // check project media folder, corpus media folder then global include paths
-			 final List<String> mediaPaths =
-					 new ArrayList<String>();
-			 if(project != null) {
-				 String projectMediaPath = project.getProjectMediaFolder();
-				 if(!(new File(projectMediaPath)).isAbsolute()) {
-					 projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
+			 // do we already have an absolute path
+			 final File mediaFile = new File(filename);
+			 if(mediaFile.isAbsolute()) {
+				 retVal = mediaFile;
+			 } else {
+				 /*
+				  * Look for media in the following location order:
+				  *
+				  * <media folder>/<project>/<corpus>/<file>
+				  * <media folder>/<project>/<file>
+				  * <media folder>/<corpus>/<file>
+				  * <media folder>/<file>
+				  */
+				 final List<String> checkList = new ArrayList<String>();
+				 if(project != null && corpus != null) {
+					 checkList.add(project.getName() +
+							 File.separator + corpus + File.separator + filename);
 				 }
-				 mediaPaths.add(projectMediaPath);
-				 if(corpus != null && !project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
-					 String corpusMediaPath = project.getCorpusMediaFolder(corpus);
-					 if(!(new File(corpusMediaPath)).isAbsolute()) {
-						 corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
+				 if(project != null) {
+					 checkList.add(project.getName() +
+							 File.separator + filename);
+				 }
+				 if(corpus != null) {
+					 checkList.add(corpus + File.separator + filename);
+				 }
+				 checkList.add(File.separator + filename);
+	
+				 // check project media folder, corpus media folder then global include paths
+				 final List<String> mediaPaths =
+						 new ArrayList<String>();
+				 if(project != null) {
+					 String projectMediaPath = project.getProjectMediaFolder();
+					 if(!(new File(projectMediaPath)).isAbsolute()) {
+						 projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
 					 }
-					 mediaPaths.add(corpusMediaPath);
-				 }
-			 }
-			 mediaPaths.addAll(getMediaIncludePaths());
-
-			 // look in rest of search paths
-			 for(String path:mediaPaths) {
-				 for(String checkName:checkList) {
-					 final File checkFile = new File(path, checkName);
-					 if(checkFile.exists()) {
-						 retVal = checkFile;
-						 break;
+					 mediaPaths.add(projectMediaPath);
+					 if(corpus != null && !project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
+						 String corpusMediaPath = project.getCorpusMediaFolder(corpus);
+						 if(!(new File(corpusMediaPath)).isAbsolute()) {
+							 corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
+						 }
+						 mediaPaths.add(corpusMediaPath);
 					 }
 				 }
+				 mediaPaths.addAll(getMediaIncludePaths());
+	
+				 // look in rest of search paths
+				 for(String path:mediaPaths) {
+					 for(String checkName:checkList) {
+						 final File checkFile = new File(path, checkName);
+						 if(checkFile.exists()) {
+							 retVal = checkFile;
+							 break;
+						 }
+					 }
+				 }
+	
 			 }
-
 		 }
 
 		 return retVal;
