@@ -25,6 +25,7 @@ import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginException;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.OSInfo;
 
 @PhonPlugin
 public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
@@ -34,6 +35,9 @@ public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonS
 	@Override
 	public void startup() throws PluginException {
 		LOGGER.info("Initializing VLC library");
+		
+		// disable VLC check for now
+		if(OSInfo.isNix()) return;
 		
 		if(!VLCHelper.checkNativeLibrary(false)) {
 			final MessageDialogProperties props = new MessageDialogProperties();
