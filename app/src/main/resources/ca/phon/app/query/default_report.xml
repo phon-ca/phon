@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
     <graph id="root">
-        <node id="539677e9" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="130d5de0" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -14,7 +14,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <node id="38d99d7b" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="1308ec38" name="Query ID" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -27,7 +27,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <node id="148812dd" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+        <node id="3795f62b" name="Selected Results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
                     <oga:property key="contextKey">
@@ -40,7 +40,7 @@
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <ogcn:macro id="6ca1cced" name="Aggregate" type="ca.phon.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="2eb38d34" name="Aggregate" type="ca.phon.opgraph.nodes.general.MacroNode">
             <ogcn:uri>classpath:report/Aggregate.xml</ogcn:uri>
             <ogcn:published_input field="obj" name="project" ref="5354ffb7"/>
             <ogcn:published_input field="obj" name="queryId" ref="61300356"/>
@@ -52,7 +52,7 @@
                             <opqry:inventoryoptions>
                                 <opqry:automaticConfiguration configureAutomatically="true">
                                     <opqry:autoGrouping column="Session" grouping="true"/>
-                                    <opqry:autoColumns caseSensitive="true" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="false"/>
+                                    <opqry:autoColumns caseSensitive="true" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="false"/>
                                 </opqry:automaticConfiguration>
                             </opqry:inventoryoptions>
                             <oga:settings/>
@@ -72,17 +72,39 @@
                 <oga:meta x="400" y="50"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="7eab95f2" name="Inventory by Participant" type="ca.phon.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="18d15cac" name="Inventory by Participant" type="ca.phon.opgraph.nodes.general.MacroNode">
             <ogcn:uri>classpath:report/Inventory%20by%20Participant.xml</ogcn:uri>
             <ogcn:published_input field="obj" name="project" ref="4d6972a5"/>
             <ogcn:published_input field="obj" name="queryId" ref="522511c7"/>
             <ogcn:published_input field="obj" name="selectedResults" ref="548323d1"/>
             <extensions>
-                <ogcn:overrides/>
+                <ogcn:overrides>
+                    <node id="28b05cfff2364781" name="Inventory Options" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                        <extensions>
+                            <opqry:inventoryoptions>
+                                <opqry:automaticConfiguration configureAutomatically="true">
+                                    <opqry:autoGrouping column="Age" grouping="true"/>
+                                    <opqry:autoColumns caseSensitive="true" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                </opqry:automaticConfiguration>
+                            </opqry:inventoryoptions>
+                            <oga:settings/>
+                            <oga:meta x="405" y="187"/>
+                        </extensions>
+                    </node>
+                    <node id="ac233b6fd60e4c91" name="Sort Settings" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                        <extensions>
+                            <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
+                                <opqry:sortBy column="" order="ascending" type="plain"/>
+                            </opqry:sortoptions>
+                            <oga:settings/>
+                            <oga:meta x="631" y="187"/>
+                        </extensions>
+                    </node>
+                </ogcn:overrides>
                 <oga:meta x="400" y="200"/>
             </extensions>
         </ogcn:macro>
-        <ogcn:macro id="2b23d33b" name="Table" type="ca.phon.opgraph.nodes.general.MacroNode">
+        <ogcn:macro id="6aa8a2bd" name="Table" type="ca.phon.opgraph.nodes.general.MacroNode">
             <ogcn:uri>classpath:report/Table%20(all%20results%20in%20one%20table).xml</ogcn:uri>
             <ogcn:published_input field="obj" name="project" ref="5897d31c5e1642ec"/>
             <ogcn:published_input field="obj" name="queryId" ref="27a0c0b98e1245d6"/>
@@ -112,28 +134,28 @@ Result]]>
                 <oga:meta x="400" y="350"/>
             </extensions>
         </ogcn:macro>
-        <node id="7122c66e" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
+        <node id="4e0e0883" type="class:ca.phon.app.opgraph.nodes.query.QueryHistoryNode">
             <extensions>
                 <oga:meta x="0" y="0"/>
             </extensions>
         </node>
-        <link dest="7122c66e" destField="project" source="539677e9" sourceField="obj"/>
-        <link dest="7122c66e" destField="queryId" source="38d99d7b" sourceField="obj"/>
-        <link dest="7122c66e" destField="selectedResults" source="148812dd" sourceField="obj"/>
+        <link dest="4e0e0883" destField="project" source="130d5de0" sourceField="obj"/>
+        <link dest="4e0e0883" destField="queryId" source="1308ec38" sourceField="obj"/>
+        <link dest="4e0e0883" destField="selectedResults" source="3795f62b" sourceField="obj"/>
         <extensions>
-            <opqry:simplecomposer>
-                <opqry:node ref="6ca1cced"/>
-                <opqry:node ref="7eab95f2"/>
-                <opqry:node ref="2b23d33b"/>
-            </opqry:simplecomposer>
             <opqry:nodewizard type="ca.phon.app.opgraph.report.ReportWizardExtension">
                 <opqry:info format="html" title="default_report">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:optionalNode enabled="true" ref="6ca1cced"/>
-                <opqry:optionalNode enabled="true" ref="7eab95f2"/>
-                <opqry:optionalNode enabled="true" ref="2b23d33b"/>
+                <opqry:optionalNode enabled="true" ref="2eb38d34"/>
+                <opqry:optionalNode enabled="true" ref="18d15cac"/>
+                <opqry:optionalNode enabled="true" ref="6aa8a2bd"/>
             </opqry:nodewizard>
+            <opqry:simplecomposer>
+                <opqry:node ref="2eb38d34"/>
+                <opqry:node ref="18d15cac"/>
+                <opqry:node ref="6aa8a2bd"/>
+            </opqry:simplecomposer>
             <nes:settings type="ca.phon.app.opgraph.report.ReportOpGraphEditorModel"/>
         </extensions>
     </graph>
