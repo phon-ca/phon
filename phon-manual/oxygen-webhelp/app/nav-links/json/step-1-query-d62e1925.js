@@ -1,1 +1,0 @@
-define({"topics" : [{"title":"View Result Set","shortdesc":"View a <em class=\"ph i\">Result Set</em> from a query.","href":"query\/tasks\/ViewResultSet.html","attributes": {"data-id":"taskId",},"menu": {"hasChildren":false,},"tocID":"taskId-d62e1933","next":"taskId-d62e1933",}]});

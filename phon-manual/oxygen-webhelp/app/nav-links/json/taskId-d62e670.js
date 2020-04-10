@@ -1,1 +1,0 @@
-define({"topics" : [{"title":"About Table Quick Search","href":"editor\/concepts\/AboutTableQuickSearch.html","attributes": {"data-id":"conceptId",},"menu": {"hasChildren":false,},"tocID":"conceptId-d62e681","topics":[]}]});
