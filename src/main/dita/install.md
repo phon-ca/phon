@@ -14,24 +14,6 @@ Download required fronts from https://www.phon.ca/downloads/ipafonts.zip.
 
  * Download the newest ```Phon_macos_<version>.dmg``` file from the [releases](https://github.com/phon-ca/phon/releases) page.  After opening the disk image, drag Phon into your Applications folder.
 
-## Ubuntu (16.04/18.04)
+## Linux
 
- * Install Java 11
-```
-sudo add-apt-repository ppa:linuxuprising/java
-sudo apt update
-sudo apt install oracle-java11-installer
-```
- * Install VLC
-```
-sudo apt install vlc
-```
- * Install Phon
-Download the newest .deb from the [releases](https://github.com/phon-ca/phon/releases) page and install using dpkg.
-```
-sudo dpkg -i Phon_linux_<version>.deb
-```
-To uninstall Phon:
-```
-sudo dpkg --remove phon
-```
+A Linux version of Phon is unavailable right now.

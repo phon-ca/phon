@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="records">
-    <title>Records (TODO)</title>
+    <title>Records</title>
     <body>
         <p>Each session consists of a series of records. A record is, in general, a single uttrance
             from a participant in the session.</p>
     </body>
     
     <topic id="record_tiers">
-        <title>Tiers (TODO: Groups, Aligned Words)</title>
+        <title>Tiers</title>
         <body>
             <p>The following built-in tiers are available in every record:<sl>
                     <sli><keyword>Orthography</keyword></sli>
@@ -22,7 +22,7 @@
         </body>
         
         <topic id="orthography_tier">
-            <title><keyword>Orthography</keyword> (TODO: Syntax for Ommisions, etc.)</title>
+            <title><keyword>Orthography</keyword></title>
             <body>
                 <p>The <keyword>Orthography</keyword> tier encodes the spoken utterance, usually in
                     the language of the speaker.</p>

@@ -3,34 +3,34 @@
 <topic id="timeline">
     <title>Timeline</title>
     <body>
-        <p>The <b>Timeline</b> view displays the waveform for the session audio (when the audio file
-            is available) as well as associated record data for each selected participant along a
-            horizontal timeline. The primary purpose of the <b>Timeline</b> view is to aid with
-            segmentation and alterations of existing record segments.</p>
+        <p>The <wintitle>Timeline</wintitle> view displays the waveform for the session audio (when
+            the audio file is available) as well as associated record data for each selected
+            participant along a horizontal timeline. The primary purpose of the
+                <wintitle>Timeline</wintitle> view is to aid with segmentation and alterations of
+            existing record segments.</p>
         <fig>
             <title>Timeline Editor View</title>
             <image href="images/view_timeline.png">
                 <alt>Timeline Editor View</alt>
             </image>
         </fig>
-        <p>The <b>Timeline</b> view has three main components:</p>
+        <p>The <wintitle>Timeline</wintitle> view has three main components:</p>
         <ol>
-            <li><p>The timebar</p><p>The timebar is displayed at the top of the <b>Timeline</b> view
-                    and extends across the entire width of the view panel. Ticks are drawn every
-                    10px with a major tick at every 100px. Time values are printed at every 2nd
-                    major tick.</p></li>
-            <li><p>The waveform</p><p>The waveform is displayed if session audio is available. If
+            <li><p>The <uicontrol>timebar</uicontrol></p><p>The timebar is displayed at the top of the <wintitle>Timeline</wintitle> view and extends across
+                    the entire width of the view panel. Ticks are drawn every 10px with a major tick
+                    at every 100px. Time values are printed at every 2nd major tick.</p></li>
+            <li><p>The <uicontrol>waveform</uicontrol></p><p>The waveform is displayed if session audio is available. If
                     session audio is not available, a prompt to address the issue is displayed at
                     the bottom of the view.</p></li>
-            <li><p>The record grid</p><p>Records are displayed in dedicated rows for each speaker
-                    selected (from the <i>Participants</i> menu of the Timeline's toolbar); for each
-                    record, the data tiers selected (from the <i>Tiers</i> menu) are visible. The
-                    current record is highlighted with a blue border, also with the record number
-                    printed in black. Record segments may be adjusted via mouse interaction by
-                    either dragging the record segment along the timeline; or by adjusting the
-                    start/end values using displayed markers (dotted lines). Records for any given
-                    participant can also be assigned to different participants by dragging the
-                    relevant record to a different row.</p></li>
+            <li><p>The <uicontrol>record grid</uicontrol></p><p>Records are displayed in dedicated rows for each speaker selected (from the
+                        <uicontrol>Participants</uicontrol> menu of the toolbar); for each record,
+                    the data tiers selected (from the <uicontrol>Tiers</uicontrol> menu) are
+                    visible. The current record is highlighted with a blue border, also with the
+                    record number printed in black. Record segments may be adjusted via mouse
+                    interaction by either dragging the record segment along the timeline; or by
+                    adjusting the start/end values using displayed markers (dotted lines). Records
+                    for any given participant can also be assigned to different participants by
+                    dragging the relevant record to a different row.</p></li>
         </ol>
     </body>
     <topic id="actions">
@@ -40,7 +40,7 @@
             <title>Play segment</title>
             <body>
                 <p>To play the segment of the current record or selection press
-                        <codeph>space</codeph> (when not in segmentation mode) or use the menu in
+                        <userinput>space</userinput> (when not in segmentation mode) or use the menu in
                     the toolbar or contextual menu.</p>
             </body>
         </topic>
@@ -58,40 +58,45 @@
         <topic id="delete-record">
             <title>Delete record</title>
             <body>
-                <p>To delete the current record select <i>Delete record</i> from the contextual menu
-                    or press <codeph>Delete</codeph> on the keyboard (after selecting the record to
-                    be deleted.)</p>
+                <p>To delete the current record select <uicontrol>Delete record</uicontrol> from the
+                    contextual menu or press <userinput>Delete</userinput> on the keyboard (after
+                    selecting the record to be deleted.)</p>
             </body>
         </topic>
         <topic id="media-player-position">
             <title>Media Player Position</title>
             <body>
-                <p>If the <b><xref href="./editor_view-media_player.html" format="html">Media
-                            Player</xref></b> view is open, playback position can be changed by
-                    clicking on the waveform tier. If <codeph>CMD/CTRL</codeph> is held when
-                    clicking, playback will begin at the position marked by the click (if the media
-                    is not playing already).</p>
+                <p>If the <xref href="media_player_view.dita"><wintitle>Media
+                        Player</wintitle></xref> view is open, playback position can be changed by
+                    clicking on the waveform tier. If
+                        <userinput>CMD/CTRL</userinput> is held when clicking,
+                    playback will begin at the position marked by the click (if the media is not
+                    playing already).</p>
             </body>
         </topic>
         <topic id="participants">
             <title>Participants</title>
             <body>
                 <p>Record data is printed by participant in rows. By default all participants plus a
-                    row for <i>Unidentified</i> records are visible.</p>
+                    row for <keyword>Unidentified</keyword> records are visible.</p>
             </body>
             <topic id="hideshow-participant">
                 <title>Hide/Show Participant</title>
                 <body>
-                    <p>Participant visiblity can be toggled using the <i>Participants</i> menu in
-                        the toolbar or option within the contextual menu.</p>
+                    <p>Participant visiblity can be toggled using the
+                            <uicontrol>Participants</uicontrol> menu in the toolbar or option within
+                        the contextual menu.</p>
                 </body>
             </topic>
             <topic id="add-participant">
                 <title>Add Participant</title>
                 <body>
-                    <p>To add a new participant to the session, click <i>Add Participant</i> in the
-                            <i>Participants</i> menu or select <i>Participants</i> &gt; <i>Add
-                            Participant</i> within the contextual menu.</p>
+                    <p>To add a new participant to the session, click <uicontrol>Add
+                            Participant</uicontrol> in the <uicontrol>Participants</uicontrol> menu
+                        or select <menucascade>
+                            <uicontrol>Participants</uicontrol>
+                            <uicontrol>Add Participant</uicontrol>
+                        </menucascade> within the contextual menu.</p>
                 </body>
             </topic>
             <topic id="change-participant">
@@ -99,12 +104,11 @@
                 <body>
                     <p>Participant assignment for a record may be altered using the mouse by
                         dragging the record segment up and down across the different rows of the
-                        record grid. You may also use <codeph>CMD</codeph>/<codeph>CTRL</codeph> +
-                            <codeph>1</codeph>...<codeph>9</codeph> to assign a different
-                        participant using the keyboard. Participant number is determined by position
-                        in the list of currently visible participants.
-                            <codeph>CMD</codeph>/<codeph>CTRL</codeph> + <codeph>0</codeph> will set
-                        the record participant as "Unidentified".</p>
+                        record grid. You may also use <userinput>CMD/CTRL + 1..9</userinput> to
+                        assign a different participant using the keyboard. Participant number is
+                        determined by position in the list of currently visible participants.
+                            <userinput>CMD/CTRL + 0</userinput>will set the record participant as
+                            <keyword>Unidentified</keyword>.</p>
                 </body>
             </topic>
         </topic>
