@@ -80,7 +80,7 @@
                     comparisons between executed queries for individual sessions. Result sets may be
                     viewed by double-clicking the result set in the tree or in the Query Results
                     view. Results will be displayed in a table along with the associated session.
-                    For more information see <xref href="./view_result_set.xml">View Result
+                    For more information see <xref href="./view_result_set.dita#view_result_set">View Result
                         Set</xref>.</p>
             </body>
         </topic>
