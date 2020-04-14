@@ -19,7 +19,6 @@
         
         <topic id="create_project">
             <title>Create Project</title>
-            <shortdesc>Create a new <i>Phon</i> project.</shortdesc>
             <body>
                 <section>
                     <p>From the <wintitle>Workspace</wintitle> window:</p>
@@ -46,7 +45,6 @@
         
         <topic id="open_project">
             <title>Open Project</title>
-            <shortdesc>Open an existing <i>Phon</i> project.</shortdesc>
             <body>
                 <section>From the <wintitle>Workspace</wintitle> window:</section>
                 <ol>
@@ -105,28 +103,29 @@
         
         <topic id="change_workspace_folder">
             <title>Change Workspace Folder</title>
-            <shortdesc>Change the default workspace folder.</shortdesc>
             <body>
                 <section>From the <wintitle>Workspace</wintitle> window:</section>
-                <ol>
+                <ul>
                     <li>
                         <p>Click the specified folder name in the <wintitle>Workspace Folder</wintitle>
                             pane.</p>
-                        <itemgroup>A <wintitle>Browse</wintitle> window will appear.</itemgroup>
+                        <itemgroup>A popup menu will appear.  In the first section of the menu a list of previously used workspace
+                        folders is listed to assist with quickly switching workspaces.</itemgroup>
                     </li>
                     <li>
-                        <p>If desired, click <uicontrol>New Folder</uicontrol> to create a new directory
-                            in the current location. Browse to the appropriate directory and click
-                            <uicontrol>Open</uicontrol>.</p>
-                        <itemgroup>The chosen directory will be your new workspace folder.<note>To reset
-                            the workspace folder to its default location, mouse over the specified
-                            <uicontrol>Workspace Folder</uicontrol> and click the <uicontrol>Use
-                                default workspace folder</uicontrol> button on the right. </note>
-                            <image placement="break" scale="40"
-                                href="images/workspace_folder.png" id="image_wdr_vlm_sc"
-                            /></itemgroup>
+                        <p>Other menu items allow for showing the workspace folder - in Finder (on
+                            macOS) or Explorer (Windows), selecting the workspace folder, and
+                            clearing the workspace folder history.</p>
                     </li>
-                </ol>
+                </ul>
+                <fig id="fig_ywj_kvb_jlb">
+                    <title>Workspace Folder</title>
+                    <image placement="inline" href="images/workspace_folder.png"
+                        id="image_zwj_kvb_jlb">
+                        <alt>Workspace Folder</alt>
+                    </image>
+                </fig>
+                
             </body>
         </topic>
         
@@ -134,16 +133,15 @@
     
     <topic id="project_list">
         <title>Project List</title>
-        <shortdesc> The <wintitle>Project List</wintitle> pane displays the projects that are located in
-            the current workspace folder. </shortdesc>
         <body>
+            <p> The <wintitle>Project List</wintitle> pane displays the projects that are located in
+                the current workspace folder. </p>
             <p>This pane lists expanded projects (see <xref
                 href="../project_manager/project_manager.dita#project_structure"/>) with a folder icon next
                 to them, and compressed projects with an orange arrow next to them.</p>
             <p>Compressed projects may be expanded by clicking on them in the list, or by right-clicking
                 (<userinput>CTRL+click</userinput>) and choosing <uicontrol>Extract
-                    project</uicontrol> from the context menu. <image placement="break" scale="40"
-                        href="images/project_list.png" id="image_wdr_vlm_sc"/></p>
+                    project</uicontrol> from the context menu.</p>
         </body>
         
         <topic id="project_list_actions">
@@ -152,9 +150,9 @@
             
             <topic id="sort_project_list">
                 <title>Sort Project List</title>
-                <shortdesc>Sort the <wintitle>Project List</wintitle> in the <wintitle>Workspace</wintitle>
-                    window by name, date modified, or size.</shortdesc>
                 <body>
+                    <p>Sort the <wintitle>Project List</wintitle> in the <wintitle>Workspace</wintitle>
+                        window by name, date modified, or size.</p>
                     <section> From the <wintitle>Workspace</wintitle> window:</section>
                     <ol>
                         <li>
@@ -162,8 +160,7 @@
                                 <uicontrol>Name</uicontrol> in the <uicontrol>Sort by</uicontrol> field of
                                 the <wintitle>Project List</wintitle> pane. To sort by date modified, click
                                 <uicontrol>Modified</uicontrol>. To sort projects by their size on disk,
-                                click <uicontrol>Size</uicontrol>. <image placement="break" 
-                                    href="./images/sort_project_list.png" id="image_wdr_vlm_sc"/></p>
+                                click <uicontrol>Size</uicontrol>.</p>
                             <itemgroup>Your projects will appear in the <wintitle>Project List</wintitle> pane
                                 in the order specified.<note>When sorting by name, projects that start with
                                     uppercase letters will be sorted before ones with lowercase
@@ -175,8 +172,8 @@
             
             <topic id="show_project_in_fs">
                 <title>Show Project in File System Viewer</title>
-                <shortdesc>Show a project's location using your computer's file system viewer.</shortdesc>
                 <body>
+                    <p>Show a project's location using your computer's file system viewer.</p>
                     <section>From the <wintitle>Workspace</wintitle> window:</section>
                     <ol id="steps_mmr_tru_sc">
                         <li>
@@ -184,9 +181,7 @@
                                 List</wintitle> pane. </p>
                             <itemgroup>Two buttons will appear next to your project name; <uicontrol>Create
                                 .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
-                                    file system viewer</uicontrol>.
-                                <image placement="break" 
-                                    href="./images/show_in_filesystem.png" id="image_wdr_vlm_sc"/></itemgroup>                
+                                    file system viewer</uicontrol>.</itemgroup>                
                         </li>
                         
                         <li>
@@ -202,10 +197,10 @@
             
             <topic id="archive_project">
                 <title>Archive Project</title>
-                <shortdesc>Create a <i>.zip</i> archive of a <i>Phon</i> project in the workspace <i>backups</i>
-                    folder. This is especially useful as a method of backing up your corpus before any major
-                    change.</shortdesc>
                 <body>
+                    <p>Create a <i>.zip</i> archive of a <i>Phon</i> project in the workspace <i>backups</i>
+                        folder. This is especially useful as a method of backing up your corpus before any major
+                        change.</p>
                     <section> From the <wintitle>Workspace</wintitle> window:</section>
                     <ol id="steps_ghx_bqu_sc">
                         <li>
@@ -214,8 +209,7 @@
                             <itemgroup>Two buttons will appear next to your project name; <uicontrol>Create
                                 .zip archive of phon project...</uicontrol> and <uicontrol>Show project in
                                     file system viewer</uicontrol>.
-                                <image placement="break"
-                                    href="./images/archive_project.png" id="image_wdr_vlm_sc"/></itemgroup>
+                            </itemgroup>
                         </li>
                         <li>
                             <p>Click <uicontrol>Create .zip archive of phon project...</uicontrol>.
@@ -231,18 +225,16 @@
             
             <topic id="extract_project">
                 <title>Extract Project</title>
-                <shortdesc>Expand an old <i>.phon</i> or <i>.zip</i> project for use with the current version of
-                    <i>Phon</i>.</shortdesc>
                 <body>
+                    <p>Expand an old <i>.phon</i> or <i>.zip</i> project for use with the current version of
+                        <i>Phon</i>.</p>
                     <section>From the <wintitle>Workspace</wintitle> window:</section>
                     <ol>
                         <li>
                             <p>Click on a compressed project in the <wintitle>Project List</wintitle> pane to
                                 extract it to a directory in your workspace folder, or right-click
                                 (<userinput>CTRL+click</userinput>) on it and choose <uicontrol>Extract
-                                    project</uicontrol> from the context menu. <image placement="break"
-                                        href="./images/unzip_project.png" id="image_wdr_vlm_sc"
-                                    /></p>
+                                    project</uicontrol> from the context menu.</p>
                             <itemgroup>The project will be extracted to the workspace folder, and it will
                                 appear as an expanded (regular) project in the <wintitle>Project
                                     List</wintitle>. The original compressed project will be moved to the
@@ -265,9 +257,10 @@
         <topic id="recent_projects">
             <title>Recent Projects</title>
             <body>
-                <p>A second project list is displayed below the Workspace section of the <i>Welcome</i>
-                    window which displays a list of recently opened projects. A button to clear the recent
-                    project history is shown in the top-left portion of the list.</p>
+                <p>A second project list is displayed below the Workspace section of the
+                        <i>Welcome</i> window which displays a list of recently opened projects. A
+                    button to clear the recent project history is shown in the top-right portion of
+                    the list.</p>
             </body>
         </topic>
     </topic>

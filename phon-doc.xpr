@@ -10,6 +10,10 @@
                         <Boolean>true</Boolean>
                     </entry>
                     <entry>
+                        <String>keys.context</String>
+                        <String>${pdu}/src/main/dita/phon_application_manual.ditamap</String>
+                    </entry>
+                    <entry>
                         <String>scenario.associations</String>
                         <scenarioAssociation-array>
                             <scenarioAssociation>
@@ -18,13 +22,11 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>Phon Manual (PDF)</String>
                                         <String>PhonManual - Web</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
                                     <list>
-                                        <String>DITAMAP</String>
                                         <String>DITAMAP</String>
                                     </list>
                                 </field>

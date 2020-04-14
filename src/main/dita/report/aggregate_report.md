@@ -2,6 +2,10 @@
 
 Create an aggregate inventory of results.
 
+## Parameters
+
+
+
 ## Example
 
 Each session sampled in the query will have a column in the inventory table.
