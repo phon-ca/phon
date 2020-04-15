@@ -4,12 +4,7 @@
    <appContext helpID="installing-phon" path="install.html"/>
    <appContext helpID="known-issues" path="known_issues.html"/>
    <appContext helpID="welcome_window" path="welcome/welcome_window.html"/>
-   <appContext helpID="edit_preferences" path="prefs/edit_prefs.html"/>
-   <appContext helpID="conceptId" path="prefs/autosaves.html"/>
-   <appContext helpID="taskId" path="prefs/change_fonts.html"/>
-   <appContext helpID="taskId" path="prefs/dictionary_language.html"/>
-   <appContext helpID="taskId" path="prefs/syllabifier_language.html"/>
-   <appContext helpID="conceptId" path="prefs/media_folders.html"/>
+   <appContext helpID="preferences" path="prefs/preferences.html"/>
    <appContext helpID="project_manager" path="project_manager/project_manager.html"/>
    <appContext helpID="conceptId" path="project_manager/corpora.html"/>
    <appContext helpID="conceptId" path="project_manager/sessions.html"/>

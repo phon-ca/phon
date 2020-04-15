@@ -1,1 +1,0 @@
-define({"topics" : [{"title":"Corpora","href":"project_manager\/corpora.html","attributes": {"data-id":"conceptId",},"menu": {"hasChildren":false,},"tocID":"conceptId-d63e128","topics":[]},{"title":"Sessions","href":"project_manager\/sessions.html","attributes": {"data-id":"conceptId",},"menu": {"hasChildren":false,},"tocID":"conceptId-d63e136","topics":[]}]});
