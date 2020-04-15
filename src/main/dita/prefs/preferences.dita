@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="preferences">
+    <title>Preferences</title>
+    <body>
+        <p>Application preferences may be accessed using the window menu, <menucascade>
+                <uicontrol>File</uicontrol>
+                <uicontrol>Edit Preferences</uicontrol>
+            </menucascade>, or by clicking the button on the <xref
+                href="../welcome/welcome_window.dita#welcome_window">Welcome window</xref>.</p>
+    </body>
+    <topic id="general">
+        <title>General</title>
+        <body>
+            <fig>
+                <title>General Preferences</title>
+                <image href="./images/general.png">
+                    <alt>General Preferences</alt>
+                </image>
+            </fig>
+            <p>If check for updates is enabled, Phon will automatically check for and download
+                updates. A message will be displayed on the <xref
+                    href="../welcome/welcome_window.dita#welcome_window">Welcome window</xref> if an
+                update is available for installation.</p>
+            <p>Some messages in Phon have an 'X' in the upper-right corner allowing the messages to
+                be dismissed. Clicking the 'Reset information messages' button will reset the
+                visibility of these messages.</p>
+        </body>
+    </topic>
+    <topic id="session-editor">
+        <title>Session Editor</title>
+        <body>
+            <fig>
+                <title>Session Editor Prefernces</title>
+                <image href="./images/session_editor.png">
+                    <alt>Session Editor Preferences</alt>
+                </image>
+            </fig>
+        </body>
+        
+        <topic id="changed_dictionary_language">
+            <title>Change Dictionary Language</title>
+            <shortdesc>Change the default <uicontrol>Dictionary Language</uicontrol> for use within
+                sessions.</shortdesc>
+            <body>
+                <section>
+                    <p>From the <uicontrol>Session Editor</uicontrol> tab of the
+                        <wintitle>Preferences</wintitle> dialog:</p>
+                </section>
+                <ol id="steps_qk4_p2p_z3">
+                    <li>
+                        <p>Click the <uicontrol>Dictionary Language</uicontrol> combo box and select the
+                            appropriate language.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+
+        <topic id="change_syllabifier_langauge">
+            <title>Change Syllabifier Language</title>
+            <shortdesc>Change the default <uicontrol>Syllabifier Language</uicontrol> for use within
+                sessions.</shortdesc>
+            <body>
+                <section>
+                    <p>From the <uicontrol>Session Editor</uicontrol> tab of the
+                        <wintitle>Preferences</wintitle> dialog:</p>
+                </section>
+                <ol id="steps_qk4_p2p_z3">
+                    <li>
+                        <p>Click the <uicontrol>Syllabifier Language</uicontrol> combo box and select the
+                            appropriate language.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+                
+        <topic id="session_autosaves">
+            <title>Autosaves</title>
+            <body>
+                <p>To prevent loss of data in the event of an unexpected shutdown, <i>Phon</i> has the
+                    option of auto-saving sessions at regular intervals. Session autosaves are named with
+                    the '__autosave_' prefix.</p>
+                <p>If an unexpected shutdown occurs and the user was unable to save changes to a session,
+                    the next time an auto-saved session is opened <i>Phon</i> will prompt the user to open
+                    the session in either its last user-saved state, or its last auto-saved state.</p>
+                <p>To use the auto-saved session as the main session file, open it and then save it.</p>
+                <p>To change the interval between autosaves, open the <wintitle>Preferences</wintitle>
+                    dialog. In the <wintitle>Session Editor</wintitle> tab, click on the menu in the
+                    <uicontrol>Autosave Sessions</uicontrol> field and choose the desired time
+                    interval.</p>
+                <p>To de-activate the autosave option, select <uicontrol>Never</uicontrol> as the autosave
+                    interval.</p>
+            </body>
+        </topic>
+        
+    </topic>
+    <topic id="media">
+        <title>Media</title>
+        <body>
+            <fig>
+                <title>Media Preferences</title>
+                <image href="./images/media.png">
+                    <alt>Media Preferences</alt>
+                </image>
+            </fig>
+        </body>
+        
+        <topic id="media_folders">
+            <title>Media Folders</title>
+            <body>
+                <p>A list of global <i>Media Folders</i> can be set using the <uicontrol>Media</uicontrol>
+                    tab of the <wintitle>Preferences</wintitle> dialog. <i>Phon</i> will look at each of
+                    these folders (in the order in whicy they appear) for media files.</p>
+                <image placement="break" 
+                    href="images/media.png" id="image_wdr_vlm_sc"/>
+                <p>The media folders can be internally structured to match <i>Phon's</i> project/corpus
+                    layout. <i>Phon</i> will search the following locations for media (where &lt;media> is
+                    the media folder defined in <wintitle>Preferences</wintitle>, &lt;project> is the
+                    project name, &lt;corpus> is the corpus name, and &lt;session> is the session name): <ul
+                        id="ul_zng_rtg_sh">
+                        <li>&lt;media>/&lt;project>/&lt;corpus>/&lt;session>.[aif;avi;mov;mpg;mp4;wav;mp3;m4a;...]</li>
+                        <li>&lt;media>/&lt;project>/&lt;session>.[...]</li>
+                        <li>&lt;media>/&lt;corpus>/&lt;session>.[...]</li>
+                        <li>&lt;media>/&lt;session>.[...]</li>
+                    </ul></p>
+                <p>If the <uicontrol>Media</uicontrol> field in the <wintitle>Session Information</wintitle>
+                    view of the <wintitle>Session Editor</wintitle> has been manually changed:<ul
+                        id="ul_dtj_y5g_sh">
+                        <li>if the path is absolute (or fully-specified), the above rules are ignored and
+                            the media file is loaded from the specified path</li>
+                        <li>if the path is relative, the value of '&lt;session>' above is replaced by the
+                            value in the media field.</li>
+                    </ul>
+                </p>
+            </body>
+        </topic>
+        
+    </topic>
+    <topic id="query">
+        <title>Query</title>
+        <body>
+            <fig>
+                <title>Query Preferences</title>
+                <image href="./images/query.png">
+                    <alt>Query Preferences</alt>
+                </image>
+            </fig>
+        </body>
+        
+        <topic id="history">
+            <title>History</title>
+            <body>
+                <p>Query parameters are saved on each query execution. By default query parameters from the last execution are loaded when
+                the query wizard is displayed.  Use the check box to change this behaviour.  You can also select to have the query history
+                cleared when closing the query wizard in this section.</p>
+            </body>
+        </topic>
+        
+        <topic id="report">
+            <title>Report</title>
+            <body>
+                <p>If available the previous query report will be loaded when opening the query wizard.  To change this behaviour use the
+                provided radio buttons.</p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="fonts">
+        <title>Fonts</title>
+        <body>
+            <fig>
+                <title>Font Preferences</title>
+                <image href="./images/fonts.png">
+                    <alt>Font Preferences</alt>
+                </image>
+            </fig>
+        </body>
+        
+        <topic id="change_fonts">
+            <title>Change Application Fonts</title>
+            <shortdesc>Change tier fonts and/or user interface (UI) fonts.</shortdesc>
+            <body>
+                <section>
+                    <p>From the <uicontrol>Fonts</uicontrol> tab of the <wintitle>Preferences</wintitle>
+                        dialog:</p>
+                </section>
+                <ol>
+                    <li>
+                        <p>Click the font listed underneath each UI element to change it.</p>
+                        <itemgroup>The <wintitle>Choose font</wintitle> dialog will appear.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Choose the desired <uicontrol>Font</uicontrol> and <uicontrol>Size</uicontrol>,
+                            select <uicontrol>Bold</uicontrol> and/or <uicontrol>Italic</uicontrol> if
+                            required, then click <uicontrol>Ok</uicontrol>.</p>
+                        <itemgroup>The font displayed in <wintitle>Session Editor</wintitle> will reflect
+                            your choices.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Adjust size for all UI fonts using the slider.</p>
+                        <itemgroup>
+                            <note>To reset default options for a UI element, mouse over that element and
+                                click the <uicontrol>Reset to default</uicontrol> button which appears on
+                                the right.</note>
+                        </itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+                
+        <topic id="ipa_fonts">
+            <title>IPA Fonts</title>
+            <body>
+                <p>On first execution Phon will assign a font for IPA display. The font will be
+                    automatically selected from the following, ordered, list:</p>
+                <ul>
+                    <li><p>Charis SIL <xref href="https://software.sil.org/charis/" format="html" scope="external"/></p></li>
+                    <li>
+                        <p>Charis SIL Compact <xref href="https://software.sil.org/charis/"
+                                format="html" scope="external"/></p>
+                    </li>
+                    <li>
+                        <p>Arial Unicode MS</p>
+                    </li>
+                    <li>
+                        <p>Arial</p>
+                    </li>
+                    <li>
+                        <p>Doulos SIL <xref href="https://software.sil.org/doulos/" format="html"
+                                scope="external"/></p>
+                    </li>
+                    <li>
+                        <p>Gentium <xref href="https://software.sil.org/gentium/" format="html"
+                                scope="external"/></p>
+                    </li>
+                    <li>
+                        <p>Lucida Grande</p>
+                    </li>
+                    <li>
+                        <p>Tahoma</p>
+                    </li>
+                </ul>
+            </body>
+        </topic>
+    </topic>
+</topic>

@@ -15,13 +15,7 @@
     </frontmatter>
     <chapter navtitle="User Interface" audience="novice">
         <topicref href="welcome/welcome_window.dita" format="dita"/>
-        <topicref href="prefs/edit_prefs.dita">
-            <topicref href="prefs/autosaves.dita"/>
-            <topicref href="prefs/change_fonts.dita"/>
-            <topicref href="prefs/dictionary_language.dita"/>
-            <topicref href="prefs/syllabifier_language.dita"/>
-            <topicref href="prefs/media_folders.dita"/>
-        </topicref>
+        <topicref href="prefs/preferences.dita" format="dita"/>
         <topicref href="project_manager/project_manager.dita" format="dita">
             <topicref href="project_manager/corpora.dita"/>
             <topicref href="project_manager/sessions.dita"/>
