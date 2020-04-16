@@ -259,7 +259,7 @@ WAP Tables are produced for each production and contains information supporting 
 *Word Level Breakdown* categories:
 
  * **Word** (whole word accuracy). Did the Actual IPA match the Target IPA?
- * **# Syllables** (word length correct [correct number of syllables]). Did the Actual number of syllables match the Target number of syllables?
+ * **# Syllables** (word length correct - correct number of syllables). Did the Actual number of syllables match the Target number of syllables?
  * **Stress** (lexical stress correct). Did the Actual stress pattern match the Target stress pattern?
  * **CGV Shape** (target and actual CV shape with syllable stress, boundaries, and length included). Did the Actual CGV shape match the Target CGV shape?
  * **# Transitions** (syllable transitions correct). Did the Actual number of transitions (total number of syllables – 1) match the target number of transitions?
@@ -312,7 +312,7 @@ Example:
     - **Correct** The phone was correct (IPA Target matched IPA Actual for target phone).
     - **Substitution** The phone was substituted (IPA Target did not match IPA actual; target phone was substituted for a different phone in IPA Actual).
     - **Distortion** The phone was distorted (IPA Target did not match IPA actual; diacritic/ did not match between IPA Target and IPA Actual).
-    - **Epenthesis** The phone was added (IPA Target did not match IPA actual; phone in IPA Actual was added to an empty word position [∅] of IPA Target).
+    - **Epenthesis** The phone was added (IPA Target did not match IPA actual; phone in IPA Actual was added to an empty word position '∅' of IPA Target).
     - **Deletion** The phone was deleted (IPA Target did not match IPA actual; phone in IPA Target deleted in IPA Actual creating an empty segment in IPA Actual [∅]).
     
 Example:
