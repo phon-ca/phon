@@ -111,8 +111,6 @@
                 <p>A list of global <i>Media Folders</i> can be set using the <uicontrol>Media</uicontrol>
                     tab of the <wintitle>Preferences</wintitle> dialog. <i>Phon</i> will look at each of
                     these folders (in the order in whicy they appear) for media files.</p>
-                <image placement="break" 
-                    href="images/media.png" id="image_wdr_vlm_sc"/>
                 <p>The media folders can be internally structured to match <i>Phon's</i> project/corpus
                     layout. <i>Phon</i> will search the following locations for media (where &lt;media> is
                     the media folder defined in <wintitle>Preferences</wintitle>, &lt;project> is the
