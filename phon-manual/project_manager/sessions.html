@@ -20,6 +20,9 @@ $(document).ready( function () {
 	scriptEle.setAttribute("type", "text/javascript");
 	
 	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
 });
 </script><link rel="stylesheet" type="text/css" href="../webhelp.css" /></head>
 
@@ -103,11 +106,11 @@ $(document).ready( function () {
                         <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
     <h1 class="title topictitle1" id="ariaid-title1">Sessions</h1>
     <div class="body">
-        <p class="p">A session in <em class="ph i">Phon</em> is a transcript of a portion of field data targeting one or more
+        <p class="p">A session in Phon is a transcript of a portion of field data targeting one or more
             participants in a project.</p>
-        <p class="p"><em class="ph i">Phon</em> is designed to facilitate the transcription of media recordings (audio or
-            video) taken of participants in a study. As such, a <em class="ph i">Phon</em> session usually
-            corresponds to one media recording and the transcript of this recording.</p>
+        <p class="p">Phon is designed to facilitate the transcription of media recordings (audio or video)
+            taken of participants in a study. As such, a Phon session usually corresponds to one
+            media recording and the transcript of this recording.</p>
         <p class="p">A session is organized into a series of records which correspond to individual
             utterances.</p>
         <p class="p">Sessions can be viewed in the <span class="keyword wintitle">Project Manager</span> window. When a session
@@ -134,7 +137,10 @@ $(document).ready( function () {
                     <li class="li">
                         <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">New Session</span></span> menu item, or right-click (<kbd class="ph userinput">CTRL+click</kbd>) in
                             the <span class="ph uicontrol">Corpus</span> list. </p>
-                        The <span class="keyword wintitle">New Session</span> dialog will appear.
+                        The <span class="keyword wintitle">New Session</span> dialog will appear.<figure class="fig fignone" id="create_session__fig_gw4_lvx_jlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Create Session</figcaption>
+                                
+                                <br /><img class="image" id="create_session__image_hw4_lvx_jlb" src="images/create_session.png" alt="Create Session" /><br />
+                            </figure>
                     </li>
                     <li class="li">
                         <p class="p">Enter a name for the new session, choose the destination corpus and click
@@ -148,6 +154,15 @@ $(document).ready( function () {
                                 beginning of it.</div>
                     </li>
                 </ol>
+                <div class="p">You may also create a new session quickly by clicking the '+' icon in the corpus
+                    list titlebar and typing just the name of the new session in the text field
+                    displayed. Pressing <kbd class="ph userinput">Enter</kbd> or clicking the '+' button to
+                    the right of the text field will create the new session in the selected corpus.
+                    Session creation can be canceled by pressing <kbd class="ph userinput">Escape</kbd> or
+                    clicking the 'X' icon in the session list.<figure class="fig fignone" id="create_session__fig_ddv_svx_jlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 3</span>: </span>Create Session (Quick)</figcaption>
+                        
+                        <br /><img class="image" id="create_session__image_edv_svx_jlb" src="images/create_session_quick.png" alt="Create Session (Quick)" /><br />
+                    </figure></div>
             </div>
         </article>
         
@@ -158,9 +173,9 @@ $(document).ready( function () {
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
-                        <p class="p">Ensure that the <span class="ph uicontrol">Blind transcription</span> box is deselected to
-                            open a session in default mode. Click the desired corpus, and double-click on
-                            the session that you would like to transcribe.</p>
+                        <p class="p">Ensure that the <span class="ph uicontrol">Blind transcription</span> box is
+                            deselected to open a session in default mode. Click the desired corpus,
+                            and double-click on the session that you would like to open.</p>
                         The selected session will open in the <span class="keyword wintitle">Session
                             Editor</span>.
                     </li>
@@ -185,11 +200,13 @@ $(document).ready( function () {
                     <li class="li">
                         <p class="p"></p>
                         <ul class="ul">
-                            <li class="li">If you are a new transcriber, choose the first option and enter your full name
-                                as well as a username. If you wish to use a password, select <span class="ph uicontrol">Use
-                                    password</span> and enter your chosen password into the two fields
-                                provided (the text in both fields must match). There is no password reminder function in <em class="ph i">Phon</em>. 
-                                Ensure that your password is memorable or store it in a safe location. Click <span class="ph uicontrol">Ok</span> to continue.</li>
+                            <li class="li">If you are a new transcriber, choose the first option and enter your
+                                full name as well as a username. If you wish to use a password,
+                                select <span class="ph uicontrol">Use password</span> and enter your chosen
+                                password into the two fields provided (the text in both fields must
+                                match). There is no password reminder function in Phon. Ensure that
+                                your password is memorable or store it in a safe location. Click
+                                    <span class="ph uicontrol">Ok</span> to continue.</li>
                             <li class="li">If you are a returning transcriber, choose the second option and select
                                 your username from the list. If you have chosen to use a password, you will
                                 be prompted to enter that password now. Do so and click

@@ -20,6 +20,9 @@ $(document).ready( function () {
 	scriptEle.setAttribute("type", "text/javascript");
 	
 	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
 });
 </script><link rel="stylesheet" type="text/css" href="../webhelp.css" /></head>
 
@@ -119,10 +122,10 @@ $(document).ready( function () {
                 visibility of these messages.</p>
         </div>
     </article>
-    <article class="topic nested1" aria-labelledby="ariaid-title3" id="session-editor">
+    <article class="topic nested1" aria-labelledby="ariaid-title3" id="session_editor">
         <h2 class="title topictitle2" id="ariaid-title3">Session Editor</h2>
         <div class="body">
-            <figure class="fig fignone"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Session Editor Prefernces</figcaption>
+            <figure class="fig fignone"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Session Editor Preferences</figcaption>
                 
                 <img class="image" src="images/session_editor.png" alt="Session Editor Preferences" />
             </figure>
@@ -199,7 +202,6 @@ $(document).ready( function () {
                 <p class="p">A list of global <em class="ph i">Media Folders</em> can be set using the <span class="ph uicontrol">Media</span>
                     tab of the <span class="keyword wintitle">Preferences</span> dialog. <em class="ph i">Phon</em> will look at each of
                     these folders (in the order in whicy they appear) for media files.</p>
-                <br /><img class="image" id="media_folders__image_wdr_vlm_sc" src="images/media.png" /><br />
                 <div class="p">The media folders can be internally structured to match <em class="ph i">Phon's</em> project/corpus
                     layout. <em class="ph i">Phon</em> will search the following locations for media (where &lt;media&gt; is
                     the media folder defined in <span class="keyword wintitle">Preferences</span>, &lt;project&gt; is the
@@ -328,7 +330,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#general" data-tocid="general">General</a></li><li class="topic-item"><a href="#session-editor" data-tocid="session-editor">Session Editor</a><ul><li class="topic-item"><a href="#changed_dictionary_language" data-tocid="changed_dictionary_language">Change Dictionary Language</a></li><li class="topic-item"><a href="#change_syllabifier_langauge" data-tocid="change_syllabifier_langauge">Change Syllabifier Language</a></li><li class="topic-item"><a href="#session_autosaves" data-tocid="session_autosaves">Autosaves</a></li></ul></li><li class="topic-item"><a href="#media" data-tocid="media">Media</a><ul><li class="topic-item"><a href="#media_folders" data-tocid="media_folders">Media Folders</a></li></ul></li><li class="topic-item"><a href="#query" data-tocid="query">Query</a><ul><li class="topic-item"><a href="#history" data-tocid="history">History</a></li><li class="topic-item"><a href="#report" data-tocid="report">Report</a></li></ul></li><li class="topic-item"><a href="#fonts" data-tocid="fonts">Fonts</a><ul><li class="topic-item"><a href="#change_fonts" data-tocid="change_fonts">Change Application Fonts</a></li><li class="topic-item"><a href="#ipa_fonts" data-tocid="ipa_fonts">IPA Fonts</a></li></ul></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#general" data-tocid="general">General</a></li><li class="topic-item"><a href="#session_editor" data-tocid="session_editor">Session Editor</a><ul><li class="topic-item"><a href="#changed_dictionary_language" data-tocid="changed_dictionary_language">Change Dictionary Language</a></li><li class="topic-item"><a href="#change_syllabifier_langauge" data-tocid="change_syllabifier_langauge">Change Syllabifier Language</a></li><li class="topic-item"><a href="#session_autosaves" data-tocid="session_autosaves">Autosaves</a></li></ul></li><li class="topic-item"><a href="#media" data-tocid="media">Media</a><ul><li class="topic-item"><a href="#media_folders" data-tocid="media_folders">Media Folders</a></li></ul></li><li class="topic-item"><a href="#query" data-tocid="query">Query</a><ul><li class="topic-item"><a href="#history" data-tocid="history">History</a></li><li class="topic-item"><a href="#report" data-tocid="report">Report</a></li></ul></li><li class="topic-item"><a href="#fonts" data-tocid="fonts">Fonts</a><ul><li class="topic-item"><a href="#change_fonts" data-tocid="change_fonts">Change Application Fonts</a></li><li class="topic-item"><a href="#ipa_fonts" data-tocid="ipa_fonts">IPA Fonts</a></li></ul></li></ul></div>
                         </nav>
                     
                 </div>

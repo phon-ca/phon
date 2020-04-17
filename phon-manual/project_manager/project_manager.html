@@ -2,7 +2,7 @@
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" xml:lang="en" lang="en" whc:version="21.1">
-    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="description" content="The Project Manager window is displayed when you open a project from the Welcome window or by using the File -&gt; Open menu item. Figure 1 : Project Manager Phon projects are stored on a hard drive as ..." /><meta charset="UTF-8" /><meta name="copyright" content="(C) Copyright 2020" /><meta name="DC.rights.owner" content="(C) Copyright 2020" /><meta name="DC.type" content="topic" /><meta name="DC.relation" scheme="URI" content="../project_manager/corpora.html" /><meta name="DC.relation" scheme="URI" content="../project_manager/sessions.html" /><meta name="DC.format" content="HTML5" /><meta name="DC.identifier" content="project_manager" /><title>Project Manager</title><!--  Generated with Oxygen version 21.1, build number 2019112512.  --><meta name="wh-path2root" content="../" /><meta name="wh-toc-id" content="project_manager-d63e59" /><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" /><link rel="stylesheet" href="../oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" /><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic-page.css?buildId=2019112512" /><script type="text/javascript" src="../oxygen-webhelp/lib/jquery/jquery-3.4.1.min.js"><!----></script><script data-main="../oxygen-webhelp/app/topic-page.js" src="../oxygen-webhelp/lib/requirejs/require.js"></script><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/oxygen.css?buildId=2019112512" /><script type="text/javascript">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="description" content="The Project Manager window is displayed when you open a project from the Welcome window or by using the File &gt; Open project... menu item. Figure 1 : Project Manager Phon projects are stored on a hard ..." /><meta charset="UTF-8" /><meta name="copyright" content="(C) Copyright 2020" /><meta name="DC.rights.owner" content="(C) Copyright 2020" /><meta name="DC.type" content="topic" /><meta name="DC.relation" scheme="URI" content="../project_manager/corpora.html" /><meta name="DC.relation" scheme="URI" content="../project_manager/sessions.html" /><meta name="DC.format" content="HTML5" /><meta name="DC.identifier" content="project_manager" /><title>Project Manager</title><!--  Generated with Oxygen version 21.1, build number 2019112512.  --><meta name="wh-path2root" content="../" /><meta name="wh-toc-id" content="project_manager-d63e59" /><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" /><link rel="stylesheet" href="../oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" /><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic-page.css?buildId=2019112512" /><script type="text/javascript" src="../oxygen-webhelp/lib/jquery/jquery-3.4.1.min.js"><!----></script><script data-main="../oxygen-webhelp/app/topic-page.js" src="../oxygen-webhelp/lib/requirejs/require.js"></script><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/oxygen.css?buildId=2019112512" /><script type="text/javascript">
 $(document).ready( function () {
 	// add custom js to head element
 	var headEle = document.getElementsByTagName("head")[0];
@@ -20,6 +20,9 @@ $(document).ready( function () {
 	scriptEle.setAttribute("type", "text/javascript");
 	
 	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
 });
 </script><link rel="stylesheet" type="text/css" href="../webhelp.css" /></head>
 
@@ -102,9 +105,8 @@ $(document).ready( function () {
                         <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
     <h1 class="title topictitle1" id="ariaid-title1">Project Manager</h1>
     <div class="body">
-        <p class="p">The <em class="ph i">Project Manager</em> window is displayed when you open a project from the
-                <em class="ph i">Welcome</em> window or by using the <code class="ph codeph">File -&gt; Open</code> menu
-            item.</p>
+        <p class="p">The <span class="keyword wintitle">Project Manager</span> window is displayed when you open a project from
+            the <span class="keyword wintitle">Welcome</span> window or by using the <span class="ph menucascade"><span class="ph uicontrol">File</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Open project...</span></span> menu item.</p>
         <figure class="fig fignone" id="project_manager__fig_ibj_fbw_2lb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 1</span>: </span>Project Manager</figcaption>
             
             <img class="image" id="project_manager__image_jbj_fbw_2lb" src="images/project_manager.png" alt="Project Manager" />
@@ -115,33 +117,36 @@ $(document).ready( function () {
     <article class="topic nested1" aria-labelledby="ariaid-title2" id="project_structure">
         <h2 class="title topictitle2" id="ariaid-title2">Project File Structure</h2>
         <div class="body">
-            <p class="p"><em class="ph i">Phon</em> projects are stored on a hard drive as directories.</p>
+            <p class="p">Phon projects are stored on a hard drive as directories.  This folder is displayed at
+                the top of the <span class="keyword wintitle">Project Manager</span> window (clicking the folder path
+                will open Finder (macOS) or Explorer (windows) with the project folder
+                selected.)</p>
             <p class="p">The directory for each project will contain the following:</p>
             <ul class="ul" id="project_structure__ul_dpz_jzj_rc">
-                <li class="li">A <em class="ph i">project.xml</em> file which contains the information <em class="ph i">Phon</em> requires for
-                    the project.</li>
-                <li class="li">A series of folders which correspond to each of the project's <em class="ph i">corpora</em>
-                    (usually a collection of transcribed sessions for a specific target speaker).<ul class="ul" id="project_structure__ul_zkz_wak_rc">
-                        <li class="li">Within each corpus folder are a series of xml files corresponding to each
-                            session. The xml files which are named beginning with '~' are session
-                            autosaves, created in order to prevent loss of data in the event of an
-                            unexpected shutdown.</li>
+                <li class="li">A <span class="ph filepath">project.xml</span> file which contains the information Phon
+                    requires for the project.</li>
+                <li class="li">A series of folders which correspond to each of the project's
+                        <span class="keyword">corpora</span> (usually a collection of transcribed sessions for
+                    a specific target speaker). Project corpora are displayed in the left-hand list
+                    of the window.<ul class="ul" id="project_structure__ul_zkz_wak_rc">
+                        <li class="li">Within each corpus folder are a series of xml files corresponding to
+                            each session. The xml files which are named beginning with '~' are
+                            session autosaves, created in order to prevent loss of data in the event
+                            of an unexpected shutdown.</li>
                     </ul></li>
             </ul>
             <p class="p">The directory for each project may also contain the following:</p>
             <ul class="ul">
-                <li class="li">A project resources folder called '<em class="ph i">__res</em>', which is a system directory
-                    created by <em class="ph i">Phon</em> to contain useful components for the project. This folder may
-                    contain: <ul class="ul" id="project_structure__ul_vxt_xak_rc">
-                        <li class="li">A media folder, which is the default location for the media for the project
-                            and may contain media segments exported from <em class="ph i">Phon</em>.</li>
+                <li class="li">A project resources folder called '<span class="ph filepath">__res</span>', which is a
+                    system directory created by Phon to contain useful components for the project.
+                    This folder may contain: <ul class="ul" id="project_structure__ul_vxt_xak_rc">
+                        <li class="li">A media folder, which is the default location for the media for the
+                            project and may contain media segments exported from Phon.</li>
                     </ul></li>
-                <li class="li">A folder to contain saved query results, called '<em class="ph i">__search</em>'.</li>
             </ul>
-            <div class="p"><div class="note note note_note"><span class="note__title">Note:</span> Projects created using earlier versions of <em class="ph i">Phon</em> may exist as <em class="ph i">.phon</em> files. These
-                projects will need to be extracted (i.e. expanded to directories using the
-                <span class="keyword wintitle">Workspace</span> window) to be used with the current version of
-                <em class="ph i">Phon</em>.</div></div>
+            <div class="p"><div class="note note note_note"><span class="note__title">Note:</span> Projects created using earlier versions of Phon may exist as <em class="ph i">.phon</em> files. These
+                    projects will need to be extracted (i.e. expanded to directories using the <a class="xref" href="../welcome/welcome_window.html">Welcome Window</a>) to be used with the current version
+                    of Phon.</div></div>
         </div>
     </article>
     
@@ -163,7 +168,10 @@ $(document).ready( function () {
     
     <article class="topic nested1" aria-labelledby="ariaid-title4" id="project_actions">
         <h2 class="title topictitle2" id="ariaid-title4">Project Actions</h2>
-        <div class="body"></div>
+        <div class="body">
+            <p class="p">The following actions are available from the <span class="ph uicontrol">Project</span> window
+                menu when the <span class="keyword wintitle">Project Mangaer</span> window is focused.</p>
+        </div>
         
         <article class="topic nested2" aria-labelledby="ariaid-title5" id="check_transcriptions">
             <h3 class="title topictitle3" id="ariaid-title5">Check Transcriptions</h3>
@@ -182,12 +190,13 @@ $(document).ready( function () {
                     <li class="li">
                         <p class="p">Select the project, corpora, or sessions whose transcriptions you wish to
                             check, and click <span class="ph uicontrol">Next</span>.</p>
-                        <em class="ph i">Phon</em> will check each selected session, and any phone
-                            transcription errors will be printed in red, with their corpus, session, record
-                            number, and tier (<em class="ph i">IPA Target</em> or <em class="ph i">IPA Actual</em>).<div class="note note note_note"><span class="note__title">Note:</span> To resolve a
-                                reported error, return to the <span class="keyword wintitle">Project Manager</span> window
-                                and open the session in which the error occurred, then navigate to the
-                                relevant record and visually check its IPA tiers.</div>
+                        Phon will check each selected session, and any phone
+                            transcription errors will be printed in red, with their corpus, session,
+                            record number, and tier (<span class="keyword">IPA Target</span> or <span class="keyword">IPA
+                                Actual</span>).<div class="note note note_note"><span class="note__title">Note:</span> To resolve a reported error, return to the
+                                    <span class="keyword wintitle">Project Manager</span> window and open the session
+                                in which the error occurred, then navigate to the relevant record
+                                and visually check its IPA tiers.</div>
                     </li>
                 </ol>
             </div>
@@ -196,9 +205,10 @@ $(document).ready( function () {
         <article class="topic nested2" aria-labelledby="ariaid-title6" id="reset_syllabification">
             <h3 class="title topictitle3" id="ariaid-title6">Reset Syllabification</h3>
             
-            <div class="body"><p class="shortdesc">In the event of display issues in <em class="ph i">Target Syllables</em> or <em class="ph i">Actual Syllables</em>
-                in the <span class="keyword wintitle">Syllabification &amp; Alignment</span> view, it may be necessary to
-                reset the syllabification of <em class="ph i">IPA Target</em> and <em class="ph i">IPA Actual</em>
+            <div class="body"><p class="shortdesc">In the event of display issues in <span class="keyword">Target Syllables</span> or
+                    <span class="keyword">Actual Syllables</span> in the <span class="keyword wintitle">Syllabification &amp;
+                    Alignment</span> view, it may be necessary to reset the syllabification of
+                    <span class="keyword">IPA Target</span> and <span class="keyword">IPA Actual</span>
                 transcriptions.</p>
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
@@ -219,11 +229,10 @@ $(document).ready( function () {
                     <li class="li">
                         <p class="p">Select the project, or the corpora or sessions whose syllabification you wish
                             to reset, and click <span class="ph uicontrol">Next</span>.</p>
-                        <em class="ph i">Phon</em> will re-perform the syllabification for each selected
-                            session using the <em class="ph i">Syllabifier Language</em> chosen in the
-                            <span class="keyword wintitle">Preferences</span> dialog. <div class="note note note_note"><span class="note__title">Note:</span> After resetting
-                                syllabification or alignment, it will be necessary to visually verify these
-                                tiers.</div>
+                        Phon will re-perform the syllabification for each selected
+                            session using the syllabifier language chosen in the <a class="xref" href="../prefs/preferences.html">Preferences</a> dialog. <div class="note note note_note"><span class="note__title">Note:</span> After resetting
+                                syllabification or alignment, it will be necessary to visually
+                                verify these tiers.</div>
                     </li>
                 </ol>
             </div>
@@ -232,9 +241,10 @@ $(document).ready( function () {
         <article class="topic nested2" aria-labelledby="ariaid-title7" id="reset_alignment">
             <h3 class="title topictitle3" id="ariaid-title7">Reset Phone Alignment</h3>
             
-            <div class="body"><p class="shortdesc">In the event of display issues in the <em class="ph i">Alignment</em> tier of the
-                <span class="keyword wintitle">Syllabification &amp; Alignment</span> view, it may be necessary to reset
-                the phone alignment of <em class="ph i">IPA Target</em> and <em class="ph i">IPA Actual</em> transcriptions.</p>
+            <div class="body"><p class="shortdesc">In the event of display issues in the <span class="keyword">Alignment</span> tier of
+                the <span class="keyword wintitle">Syllabification &amp; Alignment</span> view, it may be necessary
+                to reset the phone alignment of <span class="keyword">IPA Target</span> and <span class="keyword">IPA
+                    Actual</span> transcriptions.</p>
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
@@ -248,9 +258,9 @@ $(document).ready( function () {
                     <li class="li">
                         <p class="p">Select the project, corpora, or sessions whose alignment you wish to reset, and
                             click <span class="ph uicontrol">Next</span>.</p>
-                        <em class="ph i">Phon</em> will re-perform the alignment for each selected session.
-                            <div class="note note note_note"><span class="note__title">Note:</span> After resetting syllabification or alignment, it will be necessary to
-                                visually verify these tiers.</div>
+                        Phon will re-perform the alignment for each selected session.
+                                <div class="note note note_note"><span class="note__title">Note:</span> After resetting syllabification or alignment, it will be
+                                necessary to visually verify these tiers.</div>
                     </li>
                 </ol>
             </div>
@@ -294,10 +304,8 @@ $(document).ready( function () {
                             past search from the list.</div>
                     </li>
                     <li class="li">
-                        <p class="p">Once the <em class="ph i">Session Merger shutdown</em> alert appears, click
-                            <span class="ph uicontrol">Close</span>.</p>
-                        The newly derived session will appear in the specified
-                            <span class="ph uicontrol">Corpus</span> in the <span class="keyword wintitle">Project Manager</span>. 
+                        The newly derived session will appear in the specified corpus in
+                            the <span class="keyword wintitle">Project Manager</span>. 
                     </li>
                 </ol>
             </div>
@@ -328,7 +336,7 @@ $(document).ready( function () {
                     <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
-                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Plugins</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Import from CSV...</span></span> menu item.</p>
+                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Tools</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Import from CSV...</span></span> menu item.</p>
                         This action will generate a <span class="ph uicontrol">CSV Import</span>
                             window.
                     </li>
@@ -373,11 +381,11 @@ $(document).ready( function () {
                             syllabifier and the <span class="ph uicontrol">Transcription filter</span> to convert the
                             <em class="ph i">IPA Target</em> and/or <em class="ph i">IPA Actual</em> tiers from YAPA, SAMPA, IPAPhon
                             or IPAKiel. Click the <span class="ph uicontrol">Next</span> button.</p>
-                        This action will activate the import.<div class="note note note_note"><span class="note__title">Note:</span> If the column name in the CSV
-                            file is the same as a <em class="ph i">Phon</em> default tier name, the CSV column will be
-                            automatically mapped to the appropriate tier in <em class="ph i">Phon</em>.</div><div class="note note note_note"><span class="note__title">Note:</span> If
-                                mapping a CSV column to the <em class="ph i">Segment</em> tier in <em class="ph i">Phon</em>, segments
-                                times must be listed in mmm:ss.uuu format
+                        This action will activate the import.<div class="note note note_note"><span class="note__title">Note:</span> If the column name in
+                                the CSV file is the same as a Phon default tier name, the CSV column
+                                will be automatically mapped to the appropriate tier in
+                                Phon.</div><div class="note note note_note"><span class="note__title">Note:</span> If mapping a CSV column to the <em class="ph i">Segment</em> tier
+                                in Phon, segments times must be listed in mmm:ss.uuu format
                                 (minutes:seconds:milliseconds).</div>
                     </li>
                     <li class="li">
@@ -385,8 +393,9 @@ $(document).ready( function () {
                             <span class="keyword wintitle">CSV Import</span> window, click the
                             <span class="ph uicontrol">Close</span> button.</p>
                         This action will return the user to the <span class="keyword wintitle">Project
-                            Manager</span> window with the newly imported corpus. Each row from your
-                            CSV file will become one record in <em class="ph i">Phon</em> with the tiers as specified. 
+                                Manager</span> window with the newly imported corpus. Each row
+                            from your CSV file will become one record in Phon with the tiers as
+                            specified. 
                     </li>
                 </ol>
                 <section class="section">
@@ -411,7 +420,7 @@ $(document).ready( function () {
                 </section>
                 <ol class="ol" id="csv_export__steps_3fbd2bb6-677b-4d56-b099-694f006388f9">
                     <li class="li">
-                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Plugins</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Export to CSV...</span></span> menu item.</p>
+                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Tools</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Export to CSV...</span></span> menu item.</p>
                         This action will generate a <span class="ph uicontrol">CSV Export</span>
                             window.
                     </li>
@@ -449,9 +458,9 @@ $(document).ready( function () {
                         <p class="p">Once the <em class="ph i">Export complete</em> alert appears at the bottom of the
                             <span class="ph uicontrol">CSV Export</span> window, click the
                             <span class="ph uicontrol">Close</span> button. </p>
-                        Session files for all corpora in the exported project will appear in the
-                            chosen directory with the format <em class="ph i">Corpus name-Session
-                                name.csv</em>.
+                        Session files for all corpora in the exported project will appear
+                            in the chosen directory with the format <span class="ph filepath">Corpus name-Session
+                                name.csv</span>.
                     </li>
                 </ol>
             </div>

@@ -20,6 +20,9 @@ $(document).ready( function () {
 	scriptEle.setAttribute("type", "text/javascript");
 	
 	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
 });
 </script><link rel="stylesheet" type="text/css" href="../webhelp.css" /></head>
 
@@ -103,14 +106,16 @@ $(document).ready( function () {
                         <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
     <h1 class="title topictitle1" id="ariaid-title1">Corpora</h1>
     <div class="body">
-        <p class="p">Within a project, individual transcripts (or <em class="ph i">sessions</em>) are organized into a series
-            of one or more <em class="ph i">corpora</em>.</p>
+        <p class="p">Within a project, individual transcripts (or <span class="keyword">sessions</span>) are organized
+            into a series of one or more <span class="keyword">corpora</span>.</p>
         <p class="p">Each corpus typically contains a series of sessions relating to one specific participant
             in a study. The corpus may contain as many sessions as desired for that participant,
             spanning any length of time. This allows the user to easily search all transcripts
             relating to one participant, by searching within the relevant corpus.</p>
-        <p class="p">When a corpus is selected, the number of sessions and a description of that corpus is
-            displayed at the bottom of the list of corpora.</p>
+        <p class="p">When a corpus is selected the corpus folder and media folder for the corpus are displayed
+            with as links below the corpus list. Clickin these links will open the respective
+            folders in Finder (macOS) or Explorer (windows). The number of sessions and a
+            description of that corpus is also displayed.</p>
         <figure class="fig fignone" id="conceptId__fig_yxz_mjw_2lb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 1</span>: </span>Corpus List</figcaption>
             
             <img class="image" id="conceptId__image_zxz_mjw_2lb" src="images/corpus_list.png" alt="Corpus List" />
@@ -138,11 +143,21 @@ $(document).ready( function () {
                             <span class="ph uicontrol">Ok</span>.</p>
                         This creates a new corpus with the specified name inside the open
                             project. An error message will appear if a corpus with that name already
-                            exists.<div class="note note note_note"><span class="note__title">Note:</span> You may return to edit the description at any time by clicking
-                                on the corpus name in the <span class="keyword wintitle">Project Manager</span> and typing a
-                                description in the field below the <em class="ph i">Corpus list</em>.</div>
+                                exists.<div class="note note note_note"><span class="note__title">Note:</span> You may return to edit the description at any time by
+                                clicking on the corpus name in the <span class="keyword wintitle">Project
+                                    Manager</span> and typing a description in the field below
+                                the corpus list.</div>
                     </li>
                 </ol>
+                <div class="p">You may also create a new corpus quickly by clicking the '+' icon in the corpus
+                    list titlebar and typing just the name of the new corpus in the text field
+                    displayed. Pressing <kbd class="ph userinput">Enter</kbd> or clicking the '+' button to
+                    the right of the text field will create the new corpus. Corpus creation can be
+                    canceled by pressing <kbd class="ph userinput">Escape</kbd> or clicking the 'X' icon in
+                    the corpus list.<figure class="fig fignone" id="create_corpus__fig_jqw_dvx_jlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Create Corpus (Quick)</figcaption>
+                        
+                        <br /><img class="image" id="create_corpus__image_kqw_dvx_jlb" src="images/create_corpus_quick.png" alt="Create Corpus (Quick)" /><br />
+                    </figure></div>
             </div>
         </article>
         
@@ -153,9 +168,7 @@ $(document).ready( function () {
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
-                        <p class="p">Right-click (<kbd class="ph userinput">CTRL+click</kbd>) on the corpus you wish to
-                            rename and choose <span class="ph uicontrol">Rename Corpus</span> from the context
-                            menu.</p>
+                        <p class="p">Select <span class="ph uicontrol">Rename Corpus</span> from the contextual menu.</p>
                         The <span class="keyword wintitle">Rename Corpus</span> window will appear.
                     </li>
                     <li class="li">
@@ -177,9 +190,7 @@ $(document).ready( function () {
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
-                        <p class="p">Right-click (<kbd class="ph userinput">CTRL+click</kbd>) on the corpus you wish to
-                            delete and choose <span class="ph uicontrol">Delete Corpus</span> from the context
-                            menu.</p>
+                        <p class="p">Select <span class="ph uicontrol">Delete Corpus</span> from the contextual menu.</p>
                         
                         A dialog will appear asking you to confirm whether you would like to
                             delete this corpus and informing you that this action cannot be
@@ -204,8 +215,7 @@ $(document).ready( function () {
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
-                        <p class="p">Right-click (<kbd class="ph userinput">CTRL+click</kbd>) on the corpus you wish to
-                            duplicate and choose <span class="ph uicontrol">Duplicate Corpus</span> from the context
+                        <p class="p">Select <span class="ph uicontrol">Duplicate Corpus</span> from the contextual
                             menu.</p>
                         The corpus folder will be duplicated with an integer suffix (e.g.,
                             '(1)') appended.
@@ -224,9 +234,8 @@ $(document).ready( function () {
                 <section class="section">From <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
                     <li class="li">
-                        <p class="p">Right-click (<kbd class="ph userinput">CTRL+click</kbd>) on the corpus whose template
-                            you wish to edit and select <span class="ph uicontrol">Edit corpus template...</span> from
-                            the context menu.</p>
+                        <p class="p">Select <span class="ph uicontrol">Edit corpus template...</span> from the contextual
+                            menu.</p>
                         A <span class="keyword wintitle">Session Template</span> window will appear for the
                             selected corpus, showing the <span class="keyword wintitle">Session Information</span> and
                             <span class="keyword wintitle">Tier Management</span> views.
