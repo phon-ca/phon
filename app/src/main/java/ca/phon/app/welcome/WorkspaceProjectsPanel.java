@@ -25,6 +25,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 import javax.swing.Action;
@@ -69,27 +71,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 	public WorkspaceProjectsPanel() {
 		super();
 
-		final Preferences prefs = PrefHelper.getUserPreferences();
-		prefs.addPreferenceChangeListener(
-			evt -> {
-				if(evt.getKey().equals(Workspace.WORKSPACE_FOLDER)) {
-					final Runnable onEdt = new Runnable() {
-
-						@Override
-						public void run() {
-							projectList.setFolder(Workspace.userWorkspaceFolder());
-							workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
-							refresh();
-						}
-					};
-					if(SwingUtilities.isEventDispatchThread())
-						onEdt.run();
-					else
-						SwingUtilities.invokeLater(onEdt);
-				}
-
-			}
-		);
 
 		init();
 	}
@@ -103,21 +84,21 @@ public class WorkspaceProjectsPanel extends JPanel {
 
 		workspaceBtn = new MultiActionButton();
 		workspaceBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		workspaceBtn.getBottomLabel().setForeground(Color.decode("#666666"));
 		BgPainter bgPainter = new BgPainter();
 
 		PhonUIAction selectHistoryAct =
 				new PhonUIAction(this, "onShowHistory");
 		selectHistoryAct.putValue(Action.NAME, "Select workspace");
-		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Select workspace folder from history");
+		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Change workspace folder...");
 
 		ImageIcon workspaceIcnL =
 				IconManager.getInstance().getSystemIconForPath(
 						Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.MEDIUM);
 
-		workspaceBtn.setTopLabelText(WorkspaceTextStyler.toHeaderText("Select Workspace Folder"));
+		workspaceBtn.setTopLabelText(WorkspaceTextStyler.toHeaderText("Workspace Folder"));
 		workspaceBtn.getTopLabel().setIcon(workspaceIcnL);
 		workspaceBtn.getTopLabel().setFont(FontPreferences.getTitleFont());
-		workspaceBtn.setBottomLabelText(Workspace.userWorkspaceFolder().getAbsolutePath());
 		workspaceBtn.setBackgroundPainter(bgPainter);
 		workspaceBtn.addMouseListener(bgPainter);
 		workspaceBtn.addAction(createShowWorkspaceAction());
@@ -131,9 +112,31 @@ public class WorkspaceProjectsPanel extends JPanel {
 		contentPanel.add(workspaceBtn, BorderLayout.SOUTH);
 
 		projectList = new FolderProjectList();
+		
+		final Preferences prefs = PrefHelper.getUserPreferences();
+		prefs.addPreferenceChangeListener(
+			evt -> {
+				if(evt.getKey().equals(Workspace.WORKSPACE_FOLDER)) {
+					final Runnable onEdt = WorkspaceProjectsPanel.this::update;
+					if(SwingUtilities.isEventDispatchThread())
+						onEdt.run();
+					else
+						SwingUtilities.invokeLater(onEdt);
+				}
+				
+			}
+		);
+		update();
 
 		add(contentPanel, BorderLayout.NORTH);
 		add(projectList, BorderLayout.CENTER);
+	}
+	
+	public void update() {
+		File workspaceFolder = Workspace.userWorkspaceFolder();
+		projectList.setFolder(workspaceFolder);	
+		workspaceBtn.setBottomLabelText(workspaceFolder.getAbsolutePath() + " (click to change)");	
+		refresh();
 	}
 
 	public void onShowHistory(PhonActionEvent pae) {
@@ -241,16 +244,11 @@ public class WorkspaceProjectsPanel extends JPanel {
 
 	public void onSelectFolder(File workspaceFolder) {
 		Workspace.setUserWorkspaceFolder(workspaceFolder);
-		projectList.setFolder(workspaceFolder);
-		workspaceBtn.setBottomLabelText(workspaceFolder.getAbsolutePath());
 	}
 
 	public void onResetWorkspace(PhonActionEvent pae) {
 		final File defaultWorkspace = Workspace.defaultWorkspaceFolder();
 		Workspace.setUserWorkspaceFolder(defaultWorkspace);
-
-		projectList.setFolder(defaultWorkspace);
-		workspaceBtn.setBottomLabelText(defaultWorkspace.getAbsolutePath());
 	}
 
 	/**
