@@ -3,14 +3,16 @@
 <topic id="conceptId">
     <title>Corpora</title>
     <body>
-        <p>Within a project, individual transcripts (or <i>sessions</i>) are organized into a series
-            of one or more <i>corpora</i>.</p>
+        <p>Within a project, individual transcripts (or <keyword>sessions</keyword>) are organized
+            into a series of one or more <keyword>corpora</keyword>.</p>
         <p>Each corpus typically contains a series of sessions relating to one specific participant
             in a study. The corpus may contain as many sessions as desired for that participant,
             spanning any length of time. This allows the user to easily search all transcripts
             relating to one participant, by searching within the relevant corpus.</p>
-        <p>When a corpus is selected, the number of sessions and a description of that corpus is
-            displayed at the bottom of the list of corpora.</p>
+        <p>When a corpus is selected the corpus folder and media folder for the corpus are displayed
+            with as links below the corpus list. Clickin these links will open the respective
+            folders in Finder (macOS) or Explorer (windows). The number of sessions and a
+            description of that corpus is also displayed.</p>
         <fig id="fig_yxz_mjw_2lb">
             <title>Corpus List</title>
             <image placement="inline" href="images/corpus_list.png" id="image_zxz_mjw_2lb">
@@ -44,11 +46,24 @@
                             <uicontrol>Ok</uicontrol>.</p>
                         <itemgroup>This creates a new corpus with the specified name inside the open
                             project. An error message will appear if a corpus with that name already
-                            exists.<note>You may return to edit the description at any time by clicking
-                                on the corpus name in the <wintitle>Project Manager</wintitle> and typing a
-                                description in the field below the <i>Corpus list</i>.</note></itemgroup>
+                                exists.<note>You may return to edit the description at any time by
+                                clicking on the corpus name in the <wintitle>Project
+                                    Manager</wintitle> and typing a description in the field below
+                                the corpus list.</note></itemgroup>
                     </li>
                 </ol>
+                <p>You may also create a new corpus quickly by clicking the '+' icon in the corpus
+                    list titlebar and typing just the name of the new corpus in the text field
+                    displayed. Pressing <userinput>Enter</userinput> or clicking the '+' button to
+                    the right of the text field will create the new corpus. Corpus creation can be
+                    canceled by pressing <userinput>Escape</userinput> or clicking the 'X' icon in
+                    the corpus list.<fig id="fig_jqw_dvx_jlb">
+                        <title>Create Corpus (Quick)</title>
+                        <image placement="break" href="images/create_corpus_quick.png"
+                            id="image_kqw_dvx_jlb">
+                            <alt>Create Corpus (Quick)</alt>
+                        </image>
+                    </fig></p>
             </body>
         </topic>
         
@@ -59,9 +74,7 @@
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
-                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
-                            rename and choose <uicontrol>Rename Corpus</uicontrol> from the context
-                            menu.</p>
+                        <p>Select <uicontrol>Rename Corpus</uicontrol> from the contextual menu.</p>
                         <itemgroup>The <wintitle>Rename Corpus</wintitle> window will appear.</itemgroup>
                     </li>
                     <li>
@@ -83,9 +96,7 @@
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
-                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
-                            delete and choose <uicontrol>Delete Corpus</uicontrol> from the context
-                            menu.</p>
+                        <p>Select <uicontrol>Delete Corpus</uicontrol> from the contextual menu.</p>
                         
                         <itemgroup>A dialog will appear asking you to confirm whether you would like to
                             delete this corpus and informing you that this action cannot be
@@ -110,8 +121,7 @@
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
-                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus you wish to
-                            duplicate and choose <uicontrol>Duplicate Corpus</uicontrol> from the context
+                        <p>Select <uicontrol>Duplicate Corpus</uicontrol> from the contextual
                             menu.</p>
                         <itemgroup>The corpus folder will be duplicated with an integer suffix (e.g.,
                             '(1)') appended.</itemgroup>
@@ -130,9 +140,8 @@
                 <section>From <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
-                        <p>Right-click (<userinput>CTRL+click</userinput>) on the corpus whose template
-                            you wish to edit and select <uicontrol>Edit corpus template...</uicontrol> from
-                            the context menu.</p>
+                        <p>Select <uicontrol>Edit corpus template...</uicontrol> from the contextual
+                            menu.</p>
                         <itemgroup>A <wintitle>Session Template</wintitle> window will appear for the
                             selected corpus, showing the <wintitle>Session Information</wintitle> and
                             <wintitle>Tier Management</wintitle> views.</itemgroup>

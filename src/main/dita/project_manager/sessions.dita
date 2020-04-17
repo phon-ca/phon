@@ -3,11 +3,11 @@
 <topic id="conceptId">
     <title>Sessions</title>
     <body>
-        <p>A session in <i>Phon</i> is a transcript of a portion of field data targeting one or more
+        <p>A session in Phon is a transcript of a portion of field data targeting one or more
             participants in a project.</p>
-        <p><i>Phon</i> is designed to facilitate the transcription of media recordings (audio or
-            video) taken of participants in a study. As such, a <i>Phon</i> session usually
-            corresponds to one media recording and the transcript of this recording.</p>
+        <p>Phon is designed to facilitate the transcription of media recordings (audio or video)
+            taken of participants in a study. As such, a Phon session usually corresponds to one
+            media recording and the transcript of this recording.</p>
         <p>A session is organized into a series of records which correspond to individual
             utterances.</p>
         <p>Sessions can be viewed in the <wintitle>Project Manager</wintitle> window. When a session
@@ -39,7 +39,14 @@
                             <uicontrol>New Session</uicontrol>
                         </menucascade> menu item, or right-click (<userinput>CTRL+click</userinput>) in
                             the <uicontrol>Corpus</uicontrol> list. </p>
-                        <itemgroup>The <wintitle>New Session</wintitle> dialog will appear.</itemgroup>
+                        <itemgroup>The <wintitle>New Session</wintitle> dialog will appear.<fig
+                                id="fig_gw4_lvx_jlb">
+                                <title>Create Session</title>
+                                <image placement="break" href="images/create_session.png"
+                                    id="image_hw4_lvx_jlb">
+                                    <alt>Create Session</alt>
+                                </image>
+                            </fig></itemgroup>
                     </li>
                     <li>
                         <p>Enter a name for the new session, choose the destination corpus and click
@@ -53,6 +60,18 @@
                                 beginning of it.</note></itemgroup>
                     </li>
                 </ol>
+                <p>You may also create a new session quickly by clicking the '+' icon in the corpus
+                    list titlebar and typing just the name of the new session in the text field
+                    displayed. Pressing <userinput>Enter</userinput> or clicking the '+' button to
+                    the right of the text field will create the new session in the selected corpus.
+                    Session creation can be canceled by pressing <userinput>Escape</userinput> or
+                    clicking the 'X' icon in the session list.<fig id="fig_ddv_svx_jlb">
+                        <title>Create Session (Quick)</title>
+                        <image placement="break" href="images/create_session_quick.png"
+                            id="image_edv_svx_jlb">
+                            <alt>Create Session (Quick)</alt>
+                        </image>
+                    </fig></p>
             </body>
         </topic>
         
@@ -63,9 +82,9 @@
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
-                        <p>Ensure that the <uicontrol>Blind transcription</uicontrol> box is deselected to
-                            open a session in default mode. Click the desired corpus, and double-click on
-                            the session that you would like to transcribe.</p>
+                        <p>Ensure that the <uicontrol>Blind transcription</uicontrol> box is
+                            deselected to open a session in default mode. Click the desired corpus,
+                            and double-click on the session that you would like to open.</p>
                         <itemgroup>The selected session will open in the <wintitle>Session
                             Editor</wintitle>.</itemgroup>
                     </li>
@@ -90,11 +109,13 @@
                     <li>
                         <p></p>
                         <ul>
-                            <li>If you are a new transcriber, choose the first option and enter your full name
-                                as well as a username. If you wish to use a password, select <uicontrol>Use
-                                    password</uicontrol> and enter your chosen password into the two fields
-                                provided (the text in both fields must match). There is no password reminder function in <i>Phon</i>. 
-                                Ensure that your password is memorable or store it in a safe location. Click <uicontrol>Ok</uicontrol> to continue.</li>
+                            <li>If you are a new transcriber, choose the first option and enter your
+                                full name as well as a username. If you wish to use a password,
+                                select <uicontrol>Use password</uicontrol> and enter your chosen
+                                password into the two fields provided (the text in both fields must
+                                match). There is no password reminder function in Phon. Ensure that
+                                your password is memorable or store it in a safe location. Click
+                                    <uicontrol>Ok</uicontrol> to continue.</li>
                             <li>If you are a returning transcriber, choose the second option and select
                                 your username from the list. If you have chosen to use a password, you will
                                 be prompted to enter that password now. Do so and click

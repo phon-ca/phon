@@ -3,9 +3,11 @@
 <topic id="project_manager">
     <title>Project Manager</title>
     <body>
-        <p>The <i>Project Manager</i> window is displayed when you open a project from the
-                <i>Welcome</i> window or by using the <codeph>File -&gt; Open</codeph> menu
-            item.</p>
+        <p>The <wintitle>Project Manager</wintitle> window is displayed when you open a project from
+            the <wintitle>Welcome</wintitle> window or by using the <menucascade>
+                <uicontrol>File</uicontrol>
+                <uicontrol>Open project...</uicontrol>
+            </menucascade> menu item.</p>
         <fig id="fig_ibj_fbw_2lb">
             <title>Project Manager</title>
             <image placement="inline" href="images/project_manager.png" id="image_jbj_fbw_2lb">
@@ -18,34 +20,37 @@
     <topic id="project_structure">
         <title>Project File Structure</title>
         <body>
-            <p><i>Phon</i> projects are stored on a hard drive as directories.</p>
+            <p>Phon projects are stored on a hard drive as directories.  This folder is displayed at
+                the top of the <wintitle>Project Manager</wintitle> window (clicking the folder path
+                will open Finder (macOS) or Explorer (windows) with the project folder
+                selected.)</p>
             <p>The directory for each project will contain the following:</p>
             <ul id="ul_dpz_jzj_rc">
-                <li>A <i>project.xml</i> file which contains the information <i>Phon</i> requires for
-                    the project.</li>
-                <li>A series of folders which correspond to each of the project's <i>corpora</i>
-                    (usually a collection of transcribed sessions for a specific target speaker).<ul
-                        id="ul_zkz_wak_rc">
-                        <li>Within each corpus folder are a series of xml files corresponding to each
-                            session. The xml files which are named beginning with '~' are session
-                            autosaves, created in order to prevent loss of data in the event of an
-                            unexpected shutdown.</li>
+                <li>A <filepath>project.xml</filepath> file which contains the information Phon
+                    requires for the project.</li>
+                <li>A series of folders which correspond to each of the project's
+                        <keyword>corpora</keyword> (usually a collection of transcribed sessions for
+                    a specific target speaker). Project corpora are displayed in the left-hand list
+                    of the window.<ul id="ul_zkz_wak_rc">
+                        <li>Within each corpus folder are a series of xml files corresponding to
+                            each session. The xml files which are named beginning with '~' are
+                            session autosaves, created in order to prevent loss of data in the event
+                            of an unexpected shutdown.</li>
                     </ul></li>
             </ul>
             <p>The directory for each project may also contain the following:</p>
             <ul>
-                <li>A project resources folder called '<i>__res</i>', which is a system directory
-                    created by <i>Phon</i> to contain useful components for the project. This folder may
-                    contain: <ul id="ul_vxt_xak_rc">
-                        <li>A media folder, which is the default location for the media for the project
-                            and may contain media segments exported from <i>Phon</i>.</li>
+                <li>A project resources folder called '<filepath>__res</filepath>', which is a
+                    system directory created by Phon to contain useful components for the project.
+                    This folder may contain: <ul id="ul_vxt_xak_rc">
+                        <li>A media folder, which is the default location for the media for the
+                            project and may contain media segments exported from Phon.</li>
                     </ul></li>
-                <li>A folder to contain saved query results, called '<i>__search</i>'.</li>
             </ul>
-            <p><note>Projects created using earlier versions of <i>Phon</i> may exist as <i>.phon</i> files. These
-                projects will need to be extracted (i.e. expanded to directories using the
-                <wintitle>Workspace</wintitle> window) to be used with the current version of
-                <i>Phon</i>.</note></p>
+            <p><note>Projects created using earlier versions of Phon may exist as <i>.phon</i> files. These
+                    projects will need to be extracted (i.e. expanded to directories using the <xref
+                        href="../welcome/welcome_window.dita"/>) to be used with the current version
+                    of Phon.</note></p>
         </body>
     </topic>
     
@@ -71,7 +76,10 @@
     
     <topic id="project_actions">
         <title>Project Actions</title>
-        <body/>
+        <body>
+            <p>The following actions are available from the <uicontrol>Project</uicontrol> window
+                menu when the <wintitle>Project Mangaer</wintitle> window is focused.</p>
+        </body>
         
         <topic id="check_transcriptions">
             <title>Check Transcriptions</title>
@@ -93,12 +101,13 @@
                     <li>
                         <p>Select the project, corpora, or sessions whose transcriptions you wish to
                             check, and click <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup><i>Phon</i> will check each selected session, and any phone
-                            transcription errors will be printed in red, with their corpus, session, record
-                            number, and tier (<i>IPA Target</i> or <i>IPA Actual</i>).<note>To resolve a
-                                reported error, return to the <wintitle>Project Manager</wintitle> window
-                                and open the session in which the error occurred, then navigate to the
-                                relevant record and visually check its IPA tiers.</note></itemgroup>
+                        <itemgroup>Phon will check each selected session, and any phone
+                            transcription errors will be printed in red, with their corpus, session,
+                            record number, and tier (<keyword>IPA Target</keyword> or <keyword>IPA
+                                Actual</keyword>).<note>To resolve a reported error, return to the
+                                    <wintitle>Project Manager</wintitle> window and open the session
+                                in which the error occurred, then navigate to the relevant record
+                                and visually check its IPA tiers.</note></itemgroup>
                     </li>
                 </ol>
             </body>
@@ -106,9 +115,10 @@
         
         <topic id="reset_syllabification">
             <title>Reset Syllabification</title>
-            <shortdesc>In the event of display issues in <i>Target Syllables</i> or <i>Actual Syllables</i>
-                in the <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary to
-                reset the syllabification of <i>IPA Target</i> and <i>IPA Actual</i>
+            <shortdesc>In the event of display issues in <keyword>Target Syllables</keyword> or
+                    <keyword>Actual Syllables</keyword> in the <wintitle>Syllabification &amp;
+                    Alignment</wintitle> view, it may be necessary to reset the syllabification of
+                    <keyword>IPA Target</keyword> and <keyword>IPA Actual</keyword>
                 transcriptions.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
@@ -133,11 +143,11 @@
                     <li>
                         <p>Select the project, or the corpora or sessions whose syllabification you wish
                             to reset, and click <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup><i>Phon</i> will re-perform the syllabification for each selected
-                            session using the <i>Syllabifier Language</i> chosen in the
-                            <wintitle>Preferences</wintitle> dialog. <note>After resetting
-                                syllabification or alignment, it will be necessary to visually verify these
-                                tiers.</note></itemgroup>
+                        <itemgroup>Phon will re-perform the syllabification for each selected
+                            session using the syllabifier language chosen in the <xref
+                                href="../prefs/preferences.dita"/> dialog. <note>After resetting
+                                syllabification or alignment, it will be necessary to visually
+                                verify these tiers.</note></itemgroup>
                     </li>
                 </ol>
             </body>
@@ -145,9 +155,10 @@
         
         <topic id="reset_alignment">
             <title>Reset Phone Alignment</title>
-            <shortdesc>In the event of display issues in the <i>Alignment</i> tier of the
-                <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary to reset
-                the phone alignment of <i>IPA Target</i> and <i>IPA Actual</i> transcriptions.</shortdesc>
+            <shortdesc>In the event of display issues in the <keyword>Alignment</keyword> tier of
+                the <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary
+                to reset the phone alignment of <keyword>IPA Target</keyword> and <keyword>IPA
+                    Actual</keyword> transcriptions.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
@@ -165,9 +176,9 @@
                     <li>
                         <p>Select the project, corpora, or sessions whose alignment you wish to reset, and
                             click <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup><i>Phon</i> will re-perform the alignment for each selected session.
-                            <note>After resetting syllabification or alignment, it will be necessary to
-                                visually verify these tiers.</note></itemgroup>
+                        <itemgroup>Phon will re-perform the alignment for each selected session.
+                                <note>After resetting syllabification or alignment, it will be
+                                necessary to visually verify these tiers.</note></itemgroup>
                     </li>
                 </ol>
             </body>
@@ -215,10 +226,8 @@
                             past search from the list.</note></itemgroup>
                     </li>
                     <li>
-                        <p>Once the <i>Session Merger shutdown</i> alert appears, click
-                            <uicontrol>Close</uicontrol>.</p>
-                        <itemgroup>The newly derived session will appear in the specified
-                            <uicontrol>Corpus</uicontrol> in the <wintitle>Project Manager</wintitle>. </itemgroup>
+                        <itemgroup>The newly derived session will appear in the specified corpus in
+                            the <wintitle>Project Manager</wintitle>. </itemgroup>
                     </li>
                 </ol>
             </body>
@@ -252,9 +261,9 @@
                 <ol>
                     <li>
                         <p>Select the <menucascade>
-                            <uicontrol>Plugins</uicontrol>
-                            <uicontrol>Import from CSV...</uicontrol>
-                        </menucascade> menu item.</p>
+                                <uicontrol>Tools</uicontrol>
+                                <uicontrol>Import from CSV...</uicontrol>
+                            </menucascade> menu item.</p>
                         <itemgroup>This action will generate a <uicontrol>CSV Import</uicontrol>
                             window.</itemgroup>
                     </li>
@@ -299,11 +308,11 @@
                             syllabifier and the <uicontrol>Transcription filter</uicontrol> to convert the
                             <i>IPA Target</i> and/or <i>IPA Actual</i> tiers from YAPA, SAMPA, IPAPhon
                             or IPAKiel. Click the <uicontrol>Next</uicontrol> button.</p>
-                        <itemgroup>This action will activate the import.<note>If the column name in the CSV
-                            file is the same as a <i>Phon</i> default tier name, the CSV column will be
-                            automatically mapped to the appropriate tier in <i>Phon</i>.</note><note>If
-                                mapping a CSV column to the <i>Segment</i> tier in <i>Phon</i>, segments
-                                times must be listed in mmm:ss.uuu format
+                        <itemgroup>This action will activate the import.<note>If the column name in
+                                the CSV file is the same as a Phon default tier name, the CSV column
+                                will be automatically mapped to the appropriate tier in
+                                Phon.</note><note>If mapping a CSV column to the <i>Segment</i> tier
+                                in Phon, segments times must be listed in mmm:ss.uuu format
                                 (minutes:seconds:milliseconds).</note></itemgroup>
                     </li>
                     <li>
@@ -311,8 +320,9 @@
                             <wintitle>CSV Import</wintitle> window, click the
                             <uicontrol>Close</uicontrol> button.</p>
                         <itemgroup>This action will return the user to the <wintitle>Project
-                            Manager</wintitle> window with the newly imported corpus. Each row from your
-                            CSV file will become one record in <i>Phon</i> with the tiers as specified. </itemgroup>
+                                Manager</wintitle> window with the newly imported corpus. Each row
+                            from your CSV file will become one record in Phon with the tiers as
+                            specified. </itemgroup>
                     </li>
                 </ol>
                 <section>
@@ -338,9 +348,9 @@
                 <ol id="steps_3fbd2bb6-677b-4d56-b099-694f006388f9">
                     <li>
                         <p>Select the <menucascade>
-                            <uicontrol>Plugins</uicontrol>
-                            <uicontrol>Export to CSV...</uicontrol>
-                        </menucascade> menu item.</p>
+                                <uicontrol>Tools</uicontrol>
+                                <uicontrol>Export to CSV...</uicontrol>
+                            </menucascade> menu item.</p>
                         <itemgroup>This action will generate a <uicontrol>CSV Export</uicontrol>
                             window.</itemgroup>
                     </li>
@@ -378,9 +388,9 @@
                         <p>Once the <i>Export complete</i> alert appears at the bottom of the
                             <uicontrol>CSV Export</uicontrol> window, click the
                             <uicontrol>Close</uicontrol> button. </p>
-                        <itemgroup>Session files for all corpora in the exported project will appear in the
-                            chosen directory with the format <i>Corpus name-Session
-                                name.csv</i>.</itemgroup>
+                        <itemgroup>Session files for all corpora in the exported project will appear
+                            in the chosen directory with the format <filepath>Corpus name-Session
+                                name.csv</filepath>.</itemgroup>
                     </li>
                 </ol>
             </body>
