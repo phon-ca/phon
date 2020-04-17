@@ -93,7 +93,7 @@ The *Word Level Accuracy* table displays counts of whole word analyses in the fi
 *Word Level Accuracy* dimensions and definitions:
 
  * **Word**  (whole word accuracy). The total number of words that were produced correctly, incorrectly, and the percentage of words produced correctly. 
- * **# Syllables** (word length correct [correct number of syllables]). The total number of words that were produced with the correct number of syllables; an incorrect number of syllables; and the percentage of words with correct length. 
+ * **# Syllables** (word length correct - correct number of syllables). The total number of words that were produced with the correct number of syllables; an incorrect number of syllables; and the percentage of words with correct length. 
  * **Stress** (lexical stress correct). The total number of words that were produced with the correct lexical stress (all syllables produced with the correct stress); number produced with incorrect lexical stress; and the percentage of words with the correct lexical stress. 
  * **CGV Shape** (target and actual CV shape with syllable stress, boundaries, and length included). The total number of words that were produced with the correct CGV shape (regardless of the accuracy of the segments); number produced with incorrect CGV shape; and the percentage of words with correct CGV shape.
  * **# Transitions** (syllable transitions correct): The total number of syllable transitions produced in the sample (total number of syllables – 1 for each word produced); the total number of segregated syllable transitions (number of intra-word pauses in target and actual); and the percentage of correct syllable transitions (correct transitions / segregated transitions + correct transitions*100).
@@ -313,7 +313,7 @@ Example:
     - **Substitution** The phone was substituted (IPA Target did not match IPA actual; target phone was substituted for a different phone in IPA Actual).
     - **Distortion** The phone was distorted (IPA Target did not match IPA actual; diacritic/ did not match between IPA Target and IPA Actual).
     - **Epenthesis** The phone was added (IPA Target did not match IPA actual; phone in IPA Actual was added to an empty word position '∅' of IPA Target).
-    - **Deletion** The phone was deleted (IPA Target did not match IPA actual; phone in IPA Target deleted in IPA Actual creating an empty segment in IPA Actual [∅]).
+    - **Deletion** The phone was deleted (IPA Target did not match IPA actual; phone in IPA Target deleted in IPA Actual creating an empty segment in IPA Actual '∅').
     
 Example:
 
