@@ -63,61 +63,22 @@ public class MediaChecker {
 		
 		// Fail if process exits 
 		// with state other than 0 or if process takes
-		// more than 2000ms to complete (considered a hang.)
+		// more than timeout to complete (considered a hang.)
 		ProcessBuilder pb = new ProcessBuilder(fullCmd);
 		try {
-			pb.start();
+			Process p = pb.start();
+			
+			// create process streams or some oses (windows) will deadlock
+			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			reader.close();
+			
 			latch.await(timeout, TimeUnit.MILLISECONDS);
 			
-			return handler.status == MediaCheckStatus.OK;
 		} catch (InterruptedException | IOException e) {
 			return  false;
 		}
 		
-//		if(ca.phon.util.OSInfo.isWindows()) {
-//			// windows requires we read in all buffered
-//			// data before it will report the process as complete
-//			// this seems to keep the process alive on macOS...
-//			pb.redirectErrorStream(true);
-//			try {
-//				Process p = pb.start();
-////				Timer timer = new Timer();
-////				timer.schedule(new TimerTask() {
-////					@Override
-////					public void run() {
-////						p.destroyForcibly();
-////					}
-////				}, TIMEOUT);
-//				
-//				try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-//					String line;
-//					while ((line = reader.readLine()) != null)
-//					    System.err.println("mediacheck: " + line);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-////				timer.cancel();
-//				
-//				return (p.exitValue() == 0);
-//			} catch (IOException | IllegalThreadStateException e) {
-//				e.printStackTrace();
-//				return false;
-//			}
-//		} else {
-////			try {
-//				Process p = pb.start();
-////				int exitValue = -1;
-////				if(!p.waitFor(TIMEOUT, TimeUnit.MILLISECONDS)) {
-////					p.destroyForcibly();
-////				} else {
-////					exitValue = p.exitValue();
-////				}
-////				return (exitValue == 0);
-////			} catch (IOException | InterruptedException e) {
-////				return false;
-////			}
-//		}
-		
+		return handler.status == MediaCheckStatus.OK;
 	}
 	
 	private static class CheckHandler implements MediaCheckHandler {
