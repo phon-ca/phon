@@ -20,6 +20,7 @@ import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.SampledLongSound;
 import ca.phon.media.util.MediaCheckHandler.MediaCheckStatus;
 import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
 
 /**
  * Check wav media to see if it can be loaded by
@@ -29,9 +30,12 @@ import ca.phon.util.OSInfo;
  */
 public class MediaChecker {
 	
-	private final static long TIMEOUT = 5000L;
+	public final static String TIMEOUT = MediaChecker.class.getName() + ".timeout";
+	private final static int DEFAULT_TIMEOUT = 5000;
 		
 	public static boolean checkMediaFile(String mediaFile) {
+		int timeout = PrefHelper.getInt(TIMEOUT, DEFAULT_TIMEOUT);
+		
 		String className = MediaChecker.class.getName();
 		
 		final String javaHome = System.getProperty("java.home");
@@ -63,7 +67,7 @@ public class MediaChecker {
 		ProcessBuilder pb = new ProcessBuilder(fullCmd);
 		try {
 			pb.start();
-			latch.await(TIMEOUT, TimeUnit.MILLISECONDS);
+			latch.await(timeout, TimeUnit.MILLISECONDS);
 			
 			return handler.status == MediaCheckStatus.OK;
 		} catch (InterruptedException | IOException e) {
