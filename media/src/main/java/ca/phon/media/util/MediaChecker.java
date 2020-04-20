@@ -15,6 +15,8 @@ import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.core.util.FileWatcher;
+
 import ca.phon.media.LongSound;
 import ca.phon.media.sampled.PCMSampled;
 import ca.phon.media.sampled.SampledLongSound;
@@ -81,6 +83,7 @@ public class MediaChecker {
 		return handler.status == MediaCheckStatus.OK;
 	}
 	
+	
 	private static class CheckHandler implements MediaCheckHandler {
 		MediaCheckStatus status = MediaCheckStatus.NEEDS_REENCODE;
 		String msg = "";
@@ -121,14 +124,13 @@ public class MediaChecker {
 						throw new IOException(String.format("%s invalid format", args[0]));
 					}
 				}
+				writer.println("OK");
 			} catch (IOException e) {
 				writer.println("ERROR " + e.getLocalizedMessage());
+			} finally {
+				writer.close();
+				in.close();
 			}
-			
-			writer.println("OK");
-			
-			writer.close();
-			in.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
