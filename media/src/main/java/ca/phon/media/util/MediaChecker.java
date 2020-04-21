@@ -2,11 +2,13 @@ package ca.phon.media.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +16,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.apache.commons.io.monitor.FileAlterationListener;
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.logging.log4j.core.util.FileWatcher;
 
 import ca.phon.media.LongSound;
@@ -47,77 +55,100 @@ public class MediaChecker {
 		final String libPath = System.getProperty("java.library.path");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
-		final CheckHandler handler = new CheckHandler(latch);
-		MediaCheckTcpServer server = new MediaCheckTcpServer(mediaFile);
-		server.setMediaCheckHandler(handler);
-		server.startServer();
 		
-		List<String> fullCmd = new ArrayList<String>();
-		String[] cmd = {
-				javaBin,
-				"-cp", cp,
-				"-Djava.library.path=" + libPath
-		};
-		fullCmd.addAll(Arrays.asList(cmd));
-		fullCmd.add(className);
-		fullCmd.add(""+server.getPort());
-		
-		
-		// Fail if process exits 
-		// with state other than 0 or if process takes
-		// more than timeout to complete (considered a hang.)
-		ProcessBuilder pb = new ProcessBuilder(fullCmd);
+		final Logger LOGGER = Logger.getLogger(className);
 		try {
-			Process p = pb.start();
+			File tmpFile = File.createTempFile("phon", "MediaCheck");
+			final CheckHandler handler = new CheckHandler(tmpFile, latch);
+			File directory = tmpFile.getParentFile();
+			FileAlterationObserver observer = new FileAlterationObserver(directory);
+			observer.addListener(handler);
+			FileAlterationMonitor monitor = new FileAlterationMonitor(100, observer);
+			monitor.start();
 			
-			// create process streams or some oses (windows) will deadlock
-			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			reader.close();
+			List<String> fullCmd = new ArrayList<String>();
+			String[] cmd = {
+					javaBin,
+					"-cp", cp,
+					"-Djava.library.path=" + libPath
+			};
+			fullCmd.addAll(Arrays.asList(cmd));
+			fullCmd.add(className);
+			fullCmd.add(mediaFile);
+			fullCmd.add(tmpFile.getAbsolutePath());
+						
+			// Fail if process exits 
+			// with state other than 0 or if process takes
+			// more than timeout to complete (considered a hang.)
+			ProcessBuilder pb = new ProcessBuilder(fullCmd);
+			try {
+				LOGGER.log(Level.INFO, "(MediaCheck) checking " + mediaFile);
+				Process p = pb.start();
+				
+				// create process streams or some oses (windows) will deadlock
+				BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				reader.close();
+				
+				latch.await(timeout, TimeUnit.MILLISECONDS);
+				LOGGER.log((handler.status == MediaCheckStatus.OK ? Level.INFO : Level.SEVERE), "(MediaCheck) " + handler.msg);
+			} catch (InterruptedException | IOException e) {
+				LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
+				return  false;
+			}
+			monitor.stop();
 			
-			latch.await(timeout, TimeUnit.MILLISECONDS);
-			
-		} catch (InterruptedException | IOException e) {
-			return  false;
+			return handler.status == MediaCheckStatus.OK;
+		} catch (Exception e1) {
+			Logger.getLogger(className).severe(e1.getLocalizedMessage());
 		}
 		
-		return handler.status == MediaCheckStatus.OK;
+		return false;
 	}
 	
-	
-	private static class CheckHandler implements MediaCheckHandler {
+	private static class CheckHandler extends FileAlterationListenerAdaptor {
 		MediaCheckStatus status = MediaCheckStatus.NEEDS_REENCODE;
 		String msg = "";
 		
+		File tmpFile;
 		CountDownLatch latch;
 		
-		public CheckHandler(CountDownLatch latch) {
+		public CheckHandler(File tmpFile, CountDownLatch latch) {
+			this.tmpFile = tmpFile;
 			this.latch = latch;
 		}
 		
 		@Override
-		public void mediaCheckComplete(MediaCheckStatus status, String msg) {
-			this.status = status;
-			this.msg = msg;
-			latch.countDown();
+		public void onFileChange(File file) {
+			if(file.equals(tmpFile)) {
+				try {
+					String content = Files.readString(tmpFile.toPath());
+					// the first message will not have content
+					if(content.trim().length() > 0) {
+						status = (content.startsWith("OK") ? MediaCheckStatus.OK : MediaCheckStatus.NEEDS_REENCODE);
+						msg = content;
+						latch.countDown();
+					}
+				} catch (IOException e) {
+					status = MediaCheckStatus.ERROR;
+					msg = e.toString();
+					latch.countDown();
+				}
+			}
 		}
 		
 	}
 
 	public static void main(String[] args) {
-		if(args.length != 1) {
-			System.err.println("Usage 'java ca.phon.media.MediaChecker <port>'");
+		if(args.length != 2) {
+			System.err.println("Usage 'java ca.phon.media.MediaChecker <mediafile> <outputfile>'");
 			System.exit(1);
 		}
 		
-		Integer port = Integer.parseInt(args[0]);
-		try (Socket socket = new Socket(InetAddress.getLocalHost(), port)) {
-			PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			
-			String filename = in.readLine();
-			 
+		String mediafile = args[0];
+		String outputfile = args[1];
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(new File(outputfile), true), true)) {
 			try {
-				LongSound ls = LongSound.fromFile(new File(filename));
+				LongSound ls = LongSound.fromFile(new File(mediafile));
 				if(ls instanceof SampledLongSound) {
 					SampledLongSound sls = (SampledLongSound)ls;
 					if(((PCMSampled)sls.getSampled()).getAudioFileFormat().getFormat().getSampleSizeInBits() != 16) {
@@ -127,9 +158,6 @@ public class MediaChecker {
 				writer.println("OK");
 			} catch (IOException e) {
 				writer.println("ERROR " + e.getLocalizedMessage());
-			} finally {
-				writer.close();
-				in.close();
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
