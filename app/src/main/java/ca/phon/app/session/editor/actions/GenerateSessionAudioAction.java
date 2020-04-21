@@ -12,9 +12,9 @@ import javax.swing.ImageIcon;
 import org.apache.commons.io.FileUtils;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.media.export.VLCWavExporter;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.session.Session;

@@ -47,7 +47,6 @@ import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.prefs.EditorPrefsPanel;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.project.actions.SelectCorpusMediaFolder;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.CopyRecordAction;
 import ca.phon.app.session.editor.actions.CutRecordAction;

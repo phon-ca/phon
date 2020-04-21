@@ -1,4 +1,4 @@
-package ca.phon.app.session;
+package ca.phon.app.session.editor;
 
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
@@ -8,8 +8,6 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorViewModel;
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.LongSound;

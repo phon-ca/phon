@@ -42,9 +42,9 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.logging.log4j.LogManager;
 
-import ca.phon.app.session.SegmentPlayback;
-import ca.phon.app.session.SessionMediaModel;
+import ca.phon.app.session.editor.SegmentPlayback;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;

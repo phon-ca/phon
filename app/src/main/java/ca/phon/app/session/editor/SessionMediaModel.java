@@ -1,4 +1,4 @@
-package ca.phon.app.session;
+package ca.phon.app.session.editor;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaChecker;

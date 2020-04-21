@@ -46,7 +46,6 @@ import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
 import ca.phon.app.session.EditorViewAdapter;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.DockPosition;
 import ca.phon.app.session.editor.EditorAction;
@@ -57,6 +56,7 @@ import ca.phon.app.session.editor.ErrorBanner;
 import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
 import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;

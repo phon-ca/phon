@@ -27,10 +27,10 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.EditorViewModel;
 import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.LongSound;
 import ca.phon.media.PlaySegment;

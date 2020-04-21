@@ -38,8 +38,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.app.session.SegmentPlayback;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.DuplicateRecordAction;
 import ca.phon.app.session.editor.actions.NewRecordAction;

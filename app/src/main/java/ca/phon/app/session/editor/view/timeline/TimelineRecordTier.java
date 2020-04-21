@@ -31,11 +31,11 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.SessionMediaModel;
 import ca.phon.app.session.editor.DelegateEditorAction;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
