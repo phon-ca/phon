@@ -114,15 +114,17 @@ public class SessionMediaModel {
 				checkLock.unlock();
 				
 				if(audioFileStatus != AudioFileStatus.OK) {
-					String[] options = {"Re-encode audio", "Do nothing"};
-					int selection = editor.showMessageDialog("Unable to open audio file", 
-							"This is usually due to incompatibility with the java sound system, attempt to re-encode file?", 
+					String[] options = {"Re-encode audio", "Do nothing", "Load anyway (may crash/freeze)"};
+					int selection = editor.showMessageDialog("Audio File Encoding", 
+							"There may be a problem with Phon opening this file.", 
 							options);
 					if(selection == 0) {
 						SwingUtilities.invokeLater(() -> { 
 							GenerateSessionAudioAction act = getGenerateSessionAudioAction();
 							act.actionPerformed(new ActionEvent(this, -1, "reencode_audio"));
 						});
+					} else if(selection == 2) {
+						audioFileStatus = AudioFileStatus.OK;
 					}
 				}				
 			}
