@@ -105,7 +105,14 @@ public class DesktopProject extends LocalProject {
 
 				if(makePathsRelative) {
 					if(projectFolder.getRoot().equals(currentPath.getRoot())) {
-						currentPath = projectFolder.relativize(currentPath);
+						Path relativePath = projectFolder.relativize(currentPath);
+						if(relativePath.toString().length() > currentPath.toString().length()
+								&& relativePath.toString().contains(currentPath.toString())) {
+							// no nothing
+							currentPath = currentPath.toRealPath();
+						} else {
+							currentPath = relativePath;
+						}
 					} else {
 						currentPath = currentPath.toRealPath();
 					}
@@ -125,12 +132,19 @@ public class DesktopProject extends LocalProject {
 						currentValue = getLocation() + File.separator + currentValue;
 					}
 
-					final Path projectFolder = Paths.get(getLocation());
+					final Path corpusFolder = Paths.get(getLocation());
 					Path currentPath = Paths.get(currentValue);
 
 					if(makePathsRelative) {
-						if(projectFolder.getRoot().equals(currentPath.getRoot())) {
-							currentPath = projectFolder.relativize(currentPath);
+						if(corpusFolder.getRoot().equals(currentPath.getRoot())) {
+							Path relativePath = corpusFolder.relativize(currentPath);
+							if(relativePath.toString().length() > currentPath.toString().length()
+									&& relativePath.toString().contains(currentPath.toString())) {
+								// no nothing
+								currentPath = currentPath.toRealPath();
+							} else {
+								currentPath = relativePath;
+							}
 						} else {
 							currentPath = currentPath.toRealPath();
 						}
