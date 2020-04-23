@@ -33,13 +33,23 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
+import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -105,17 +115,12 @@ public class CorpusDetails extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent me) {
-				if(corpus != null && Desktop.isDesktopSupported()) {
-					String corpusPath = project.getCorpusMediaFolder(corpus);
-					File corpusFile = new File(corpusPath);
-					if(!corpusFile.isAbsolute()) {
-						corpusPath = project.getLocation() + File.separator + corpusPath;
-					}
-					try {
-						Desktop.getDesktop().open(new File(corpusPath));
-					} catch (IOException e) {
-						LogUtil.severe(e);
-						Toolkit.getDefaultToolkit().beep();
+				if(corpus != null) {
+					ProjectWindow parentWindow = (ProjectWindow)SwingUtilities.getAncestorOfClass(ProjectWindow.class, CorpusDetails.this);
+					if(parentWindow != null) {
+						JPopupMenu popupMenu = new JPopupMenu();
+						parentWindow.setupCorpusFolderMenu(corpus, new MenuBuilder(popupMenu));
+						popupMenu.show(mediaFolderLabel, 0, mediaFolderLabel.getHeight());
 					}
 				}
 			}
@@ -204,6 +209,42 @@ public class CorpusDetails extends JPanel {
 		update();
 	}
 
+	private void updateCorpusMediaLabel() {
+		if(corpus == null || !project.getCorpora().contains(corpus)) {
+			mediaFolderLabel.setText("");
+			mediaFolderLabel.setToolTipText("");
+			mediaFolderLabel.setIcon(null);
+		} else {
+			File corpusMediaFolder = new File(project.getCorpusMediaFolder(corpus));
+			File absoluteCorpusMediaFolder = corpusMediaFolder.isAbsolute() ? corpusMediaFolder : new File(project.getLocation(), project.getCorpusMediaFolder(corpus));
+			
+			StockIcon stockIcon = 
+					(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER );
+			ImageIcon stockFolderIcon = IconManager.getInstance().getSystemStockIcon(stockIcon, "places/folder", IconSize.SMALL);
+			ImageIcon folderIcon = absoluteCorpusMediaFolder.exists()
+					? IconManager.getInstance().getSystemIconForPath(absoluteCorpusMediaFolder.getAbsolutePath(), "places/folder", IconSize.SMALL) 
+					: stockFolderIcon;
+					
+			DropDownIcon dropDownIcon = new DropDownIcon(folderIcon, -5, SwingConstants.BOTTOM);
+					
+			mediaFolderLabel.setIcon(dropDownIcon);
+			if(!project.hasCustomCorpusMediaFolder(corpus)) {
+				mediaFolderLabel.setText("(same as project - click to select)");
+				mediaFolderLabel.setToolTipText("Corpus media folder is same as project media folder, click to change");
+				mediaFolderLabel.setForeground(Color.blue);
+			} else {
+				mediaFolderLabel.setText(project.getCorpusMediaFolder(corpus));
+				if(absoluteCorpusMediaFolder.exists()) {
+					mediaFolderLabel.setForeground(Color.blue);
+					mediaFolderLabel.setToolTipText("Click to change project media folder");
+				} else {
+					mediaFolderLabel.setForeground(Color.red);
+					mediaFolderLabel.setToolTipText("Media folder not found, click to create or select new project media folder");
+				}
+			}
+		}
+	}
+	
 	void update() {
 		if(corpus == null || !project.getCorpora().contains(corpus)) {
 			// clear
@@ -216,9 +257,7 @@ public class CorpusDetails extends JPanel {
 			locationLabel.setIcon(null);
 			locationLabel.setToolTipText("");
 
-			mediaFolderLabel.setText("");
-			mediaFolderLabel.setToolTipText("");
-			mediaFolderLabel.setIcon(null);
+			
 		} else {
 			numSessionsLabel.setText("" + project.getCorpusSessions(corpus).size());
 
@@ -226,34 +265,17 @@ public class CorpusDetails extends JPanel {
 			final Path corpusPath = FileSystems.getDefault().getPath(corpusAbsolutePath);
 			final Path projectPath = FileSystems.getDefault().getPath(project.getLocation());
 			final Path relativePath  = projectPath.relativize(corpusPath);
-			locationLabel.setText("<html><u>" + relativePath.toString() + "</u></html>");
+			locationLabel.setText(relativePath.toString());
+			locationLabel.setForeground(Color.blue);
+			locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, "places/folder", IconSize.SMALL));
 			locationLabel.setToolTipText(corpusAbsolutePath);
-
-			String mediaFolderURI = project.getCorpusMediaFolder(getCorpus());
-			File file = new File(mediaFolderURI);
-			if(!file.isAbsolute()) {
-				mediaFolderURI = project.getLocation() + File.separator + mediaFolderURI;
-				file = new File(mediaFolderURI);
-			}
-
-			if(file.exists() && file.isDirectory()) {
-				try {
-					final File canonicalFile = file.getCanonicalFile();
-					mediaFolderLabel.setToolTipText(canonicalFile.getAbsolutePath());
-					mediaFolderLabel.setText("<html><u>" + canonicalFile.getName() + "</u></html>");
-					mediaFolderLabel.setIcon(IconManager.getInstance().getSystemIconForPath(file.getCanonicalPath(), IconSize.SMALL));
-				} catch (IOException e) {}
-			} else {
-				mediaFolderLabel.setText("");
-				mediaFolderLabel.setToolTipText("");
-				mediaFolderLabel.setIcon(null);
-			}
 
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));
 			corpusDescriptionArea.setEnabled(true);
 			corpusDescriptionArea.setCaretPosition(0);
 		}
+		updateCorpusMediaLabel();
 	}
 
 }

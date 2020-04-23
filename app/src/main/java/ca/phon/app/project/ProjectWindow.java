@@ -749,9 +749,11 @@ public class ProjectWindow extends CommonModuleFrame {
 		setupProjectMediaFolderMenu(builder);
 		builder.addSeparator(".", "project_media_folder");
 		
-		setupCorpusFolderMenu(getSelectedCorpus(), builder);
-		builder.addSeparator(".", "corpus_media_folders");
-
+		if(getSelectedCorpora() != null) {
+			setupCorpusFolderMenu(getSelectedCorpus(), builder);
+			builder.addSeparator(".", "corpus_media_folders");
+		}
+		
 		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
 		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
 		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions...");
@@ -874,39 +876,51 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 	}
 	
-	private void setupCorpusFolderMenu(String corpus, MenuBuilder builder) {
-		if(corpus != null) {
-			String corpusMediaPath = getProject().getCorpusMediaFolder(corpus);
-			if(corpusMediaPath == null) return;
-			
-			File corpusMediaFolder = new File(corpusMediaPath);
-			File absoluteCorpusMediaFolder = corpusMediaFolder.isAbsolute() ? corpusMediaFolder : new File(getProject().getLocation(), corpusMediaPath);
-			
-			if(!absoluteCorpusMediaFolder.exists()) {
-				final PhonUIAction createCorpusFolderAct = new PhonUIAction(absoluteCorpusMediaFolder, "mkdirs");
-				createCorpusFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomCorpusMediaFolder(corpus) ? "Create media folder" : "Create default media folder"));
-				createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
-				final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
-				createCorpusFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
-				builder.addItem(".", createCorpusFolderItem);
-			} else {
-				final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
-				showProjectFolderAct.putValue(PhonUIAction.NAME, "Show corpus media folder");
-				showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
-				JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
-				showProjectFolderItem.setEnabled(absoluteCorpusMediaFolder.exists());
-				builder.addItem(".", showProjectFolderItem);
-			}
+	void setupCorpusFolderMenu(String corpus, MenuBuilder builder) {
+		if(corpus == null) return;
+		
+		String corpusMediaPath = getProject().getCorpusMediaFolder(corpus);
+		if(corpusMediaPath == null) return;
+		
+		File corpusMediaFolder = new File(corpusMediaPath);
+		File absoluteCorpusMediaFolder = corpusMediaFolder.isAbsolute() ? corpusMediaFolder : new File(getProject().getLocation(), corpusMediaPath);
+		
+		if(!absoluteCorpusMediaFolder.exists()) {
+			final PhonUIAction createCorpusFolderAct = new PhonUIAction(absoluteCorpusMediaFolder, "mkdirs");
+			createCorpusFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomCorpusMediaFolder(corpus) ? "Create media folder" : "Create default media folder"));
+			createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
+			final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
+			createCorpusFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+			builder.addItem(".", createCorpusFolderItem);
+		} else {
+			final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
+			showProjectFolderAct.putValue(PhonUIAction.NAME, "Show corpus media folder");
+			showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
+			JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
+			showProjectFolderItem.setEnabled(absoluteCorpusMediaFolder.exists());
+			builder.addItem(".", showProjectFolderItem);
 		}
 		
 		final SelectCorpusMediaFolder selectFolderAct = new SelectCorpusMediaFolder(this);
 		builder.addItem(".", selectFolderAct).setEnabled(corpus != null);
 		
-		if(corpus != null && getProject().hasCustomCorpusMediaFolder(corpus)) {
+		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
 			final PhonUIAction resetCorpusFolderAct = new PhonUIAction(this, "onResetCorpusMediaFolder", corpus);
 			resetCorpusFolderAct.putValue(PhonUIAction.NAME, "Reset corpus media folder");
 			resetCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset corpus media folder (use project media folder)");
 			builder.addItem(".", resetCorpusFolderAct);
+			
+			if(corpusMediaFolder.isAbsolute()) {
+				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeCorpusMediaFolderRelative", corpus);
+				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make corpus media folder relative to project");
+				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder path relative to project folder");
+				builder.addItem(".", makeRelativeAct);
+			} else {
+				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeCorpusMediaFolderAbsolute", corpus);
+				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make corpus media folder absolute");
+				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder an absolute filename");
+				builder.addItem(".", makeAbsoluteAct);
+			}
 		}
 	}
 	
@@ -929,6 +943,29 @@ public class ProjectWindow extends CommonModuleFrame {
 			retVal = path.toString();
 		}
 		return retVal;
+	}
+	
+	public void onMakeCorpusMediaFolderRelative(String corpus) {
+		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
+			String relativeProjectMediaFolder = makeRelativetoProject(getProject().getCorpusMediaFolder(corpus));
+			getProject().setCorpusMediaFolder(corpus, relativeProjectMediaFolder);
+		}
+	}
+	
+	public void onMakeCorpusMediaFolderAbsolute(String corpus) {
+		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
+			String currentValue = getProject().getCorpusMediaFolder(corpus);
+			File file = new File(currentValue);
+			if(!file.isAbsolute()) {
+				File absoluteFile = new File(getProject().getLocation(), currentValue);
+				try {
+					Path absolutePath = absoluteFile.toPath().toRealPath();
+					getProject().setCorpusMediaFolder(corpus, absolutePath.toString());
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
+			}
+		}
 	}
 	
 	public void onMakeProjectMediaFolderRelative() {
@@ -1295,9 +1332,10 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		contextMenu.addSeparator();
 
-		contextMenu.add(new SelectProjectMediaFolder(this));
+		setupProjectMediaFolderMenu(new MenuBuilder(contextMenu));
 		if(corpora.size() > 0) {
-			contextMenu.add(new SelectCorpusMediaFolder(this));
+			contextMenu.addSeparator();
+			setupCorpusFolderMenu(getSelectedCorpus(), new MenuBuilder(contextMenu));
 		}
 
 		contextMenu.show(corpusList, clickPoint.x, clickPoint.y);
