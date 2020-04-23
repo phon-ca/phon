@@ -16,6 +16,7 @@
 package ca.phon.app.project;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -75,12 +76,7 @@ public class SessionDetails extends JPanel {
 	private SpeakerTableModel speakerTableModel;
 	
 	private UpdateTask currentUpdateTask;
-	
-	public final static String SHOW_FINDER_BUTTON = SessionDetails.class.getName() + ".showFinderButton";
-	public final static boolean DEFAULT_SHOW_FINDER_BUTTON = true;
-	
-	private boolean showFinderButton = PrefHelper.getBoolean(SHOW_FINDER_BUTTON, DEFAULT_SHOW_FINDER_BUTTON);
-	
+		
 	public SessionDetails(Project project) {
 		super();
 		
@@ -94,25 +90,11 @@ public class SessionDetails extends JPanel {
 		setLayout(new BorderLayout());
 		
 		fileLabel = new JLabel();
-		
-		modifiedLabel = new JLabel();
-		
-		recordsLabel = new JLabel();
-		
-		final JPanel fileLabelPanel = new JPanel(new BorderLayout());
-		fileLabelPanel.setOpaque(false);
-		fileLabelPanel.add(fileLabel, BorderLayout.CENTER);
-		if(OSInfo.isMacOs() && showFinderButton) {
-			final ImageIcon finderIcn = 
-					IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
-			final JLabel finderLabel = new JLabel(finderIcn);
-			finderLabel.setToolTipText("Select file in Finder");
-			finderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		fileLabel.addMouseListener(new MouseInputAdapter() {
 			
-			finderLabel.addMouseListener(new MouseInputAdapter() {
-				
-				@Override
-				public void mouseClicked(MouseEvent me) {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(OSInfo.isMacOs()) {
 					final String sessionPath = project.getSessionPath(corpus, session);
 					final StringBuffer buffer = new StringBuffer();
 					buffer.append("tell application \"Finder\" to (activate) & ");
@@ -126,11 +108,17 @@ public class SessionDetails extends JPanel {
 						LogUtil.severe(e);
 					}
 				}
-				
-			});
+			}
 			
-			fileLabelPanel.add(finderLabel, BorderLayout.WEST);
-		} // TODO Windows & Linux
+		});
+		if(OSInfo.isMacOs()) {
+			fileLabel.setForeground(Color.blue);
+			fileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
+		
+		modifiedLabel = new JLabel();
+		
+		recordsLabel = new JLabel();
 		
 		final JPanel detailsPanel = new JPanel(new GridBagLayout());
 		detailsPanel.setOpaque(false);
@@ -147,7 +135,7 @@ public class SessionDetails extends JPanel {
 		++gbc.gridx;
 		gbc.weightx = 1.0;
 		gbc.insets = new Insets(0, 5, 0, 0);
-		detailsPanel.add(fileLabelPanel, gbc);
+		detailsPanel.add(fileLabel, gbc);
 		
 		++gbc.gridy;
 		gbc.gridx = 0;
