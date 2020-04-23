@@ -143,6 +143,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.toast.ToastFactory;
@@ -180,8 +181,11 @@ public class ProjectWindow extends CommonModuleFrame {
 	private JList<String> sessionList;
 	private SessionListModel sessionModel;
 	private SessionDetails sessionDetails;
+	private DropDownButton openSessionButton;
 
+	@Deprecated
 	public static final String BLIND_MODE_PROPERTY = ProjectWindow.class.getName() + ".blindMode";
+	@Deprecated
 	public static final boolean DEFAULT_BLIND_MODE = false;
 	public boolean blindMode =
 			PrefHelper.getBoolean(BLIND_MODE_PROPERTY, DEFAULT_BLIND_MODE);
@@ -265,10 +269,12 @@ public class ProjectWindow extends CommonModuleFrame {
 		return new SessionPath(getSelectedCorpus(), getSelectedSessionName());
 	}
 
+	@Deprecated
 	public boolean isBlindMode() {
 		return this.blindMode;
 	}
 
+	@Deprecated
 	public void setBlindMode(boolean blindMode) {
 		this.blindMode = blindMode;
 		PrefHelper.getUserPreferences().putBoolean(BLIND_MODE_PROPERTY, blindMode);
@@ -419,6 +425,7 @@ public class ProjectWindow extends CommonModuleFrame {
 					session = null;
 
 				sessionDetails.setSession(corpus, session);
+				openSessionButton.setEnabled(session != null);
 			}
 		});
 		sessionList.addMouseListener(new MouseInputAdapter() {
@@ -540,16 +547,37 @@ public class ProjectWindow extends CommonModuleFrame {
 		blindModeBox.setMargin(new Insets(0, 0, 0, 0));
 		blindModeBox.setSelected(this.blindMode);
 		blindModeBox.addActionListener( (e) -> setBlindMode(blindModeBox.isSelected()) );
-
+		blindModeBox.setVisible(false);
+		
 		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
 		sessionDecoration.setOpaque(false);
 		sessionDecoration.add(showCreateSessionBtn);
+		
+		final OpenSessionAction openSessionButtonAct = new OpenSessionAction(this);
+		final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
+		openBlindModeAct.putValue(PhonUIAction.NAME, "Open session as transcriber... (blind mode)");
+		openBlindModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session as a blind transcriber");
+		
+		final JPopupMenu openSessionMenu = new JPopupMenu();
+		openSessionMenu.add(openSessionButtonAct);
+		openSessionMenu.add(openBlindModeAct);
+		
+		openSessionButtonAct.putValue(DropDownButton.BUTTON_POPUP, openSessionMenu);
+		openSessionButtonAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		openSessionButtonAct.putValue(DropDownButton.ARROW_ICON_GAP, 3);
+		
+		openSessionButton = new DropDownButton(openSessionButtonAct);
+		openSessionButton.setOnlyPopup(true);
+		openSessionButton.setEnabled(false);
+		JComponent buttonBar = ButtonBarBuilder.buildOkBar(openSessionButton);
+		buttonBar.setBackground(Color.white);
 
 		sessionPanel = new TitledPanel("Session");
 		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType("xml", IconSize.SMALL));
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
+		sessionPanel.getContentContainer().add(buttonBar, BorderLayout.SOUTH);
 
 		final JXCollapsiblePane bottomPanel = new JXCollapsiblePane(Direction.UP);
 		bottomPanel.setLayout(new GridLayout(1, 2));

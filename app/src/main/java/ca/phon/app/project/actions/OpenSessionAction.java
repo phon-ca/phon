@@ -19,10 +19,14 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
+
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.session.SessionPath;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class OpenSessionAction extends ProjectWindowAction {
 	
@@ -33,18 +37,31 @@ public class OpenSessionAction extends ProjectWindowAction {
 	private String corpus = null;
 	private String sessionName = null;
 	
+	private boolean blindMode = false;
+	
 	public OpenSessionAction(ProjectWindow projectWindow) {
 		this(projectWindow, null, null);
 	}
 	
+	public OpenSessionAction(ProjectWindow projectWindow, boolean blindMode) {
+		this(projectWindow, null, null, blindMode);
+	}
+	
 	public OpenSessionAction(ProjectWindow projectWindow, String corpus, String sessionName) {
+		this(projectWindow, corpus, sessionName, false);
+	}
+	
+	public OpenSessionAction(ProjectWindow projectWindow, String corpus, String sessionName, boolean blindMode) {
 		super(projectWindow);
 		
 		this.corpus = corpus;
 		this.sessionName = sessionName;
-		
-		putValue(NAME, "Open Session...");
+		this.blindMode = blindMode;
+
+		ImageIcon icn = IconManager.getInstance().getSystemIconForFileType("xml", "mimetypes/text-xml", IconSize.SMALL);
+		putValue(NAME, "Open session");
 		putValue(SHORT_DESCRIPTION, "Open session in a new editor window");
+		putValue(SMALL_ICON, icn);
 	}
 	
 
@@ -58,7 +75,7 @@ public class OpenSessionAction extends ProjectWindowAction {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getWindow().getProject());
 		initInfo.put("sessionName", new SessionPath(corpus, sessionName).toString());
-		initInfo.put("blindmode", getWindow().isBlindMode());
+		initInfo.put("blindmode", blindMode);
 		
 		try {
 			PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
