@@ -16,6 +16,8 @@
 package ca.phon.app.session.editor.view.session_information;
 
 import java.awt.Toolkit;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -24,8 +26,12 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -66,10 +72,6 @@ public class MediaSelectionField extends FileSelectionField {
 
 	private final DefaultTextCompleterModel completerModel = new DefaultTextCompleterModel();
 
-	public MediaSelectionField() {
-		this(null);
-	}
-
 	public MediaSelectionField(Project project) {
 		super();
 		this.project = project;
@@ -77,8 +79,12 @@ public class MediaSelectionField extends FileSelectionField {
 		setFileFilter(FileFilter.mediaFilter);
 		
 		setupInputMap();
-		
-		PhonWorker.getInstance().invokeLater( () -> setupTextCompleter() );
+				
+		PhonWorker textCompleterThread = PhonWorker.createWorker();
+		textCompleterThread.setName("Media TextCompleter");
+		textCompleterThread.setFinishWhenQueueEmpty(true);
+		textCompleterThread.invokeLater( () -> setupTextCompleter() );
+		textCompleterThread.start();
 	}
 	
 	private void setupInputMap() {
@@ -140,9 +146,11 @@ public class MediaSelectionField extends FileSelectionField {
 		}
 	}
 
+	/** Only create one text completer for a project */
 	private void setupTextCompleter() {
 		final List<String> mediaIncludePaths = ( project != null ?
 				MediaLocator.getMediaIncludePaths(project, getEditor().getSession().getCorpus()) : MediaLocator.getMediaIncludePaths());
+		
 		for(String path:mediaIncludePaths) {
 			final Path mediaFolder = Paths.get(path);
 			if(!Files.exists(mediaFolder)) continue;
