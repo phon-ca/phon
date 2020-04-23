@@ -93,6 +93,9 @@ import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
+
+import com.jcraft.jsch.Logger;
+
 import org.jdesktop.swingx.MultiSplitLayout;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
@@ -744,9 +747,10 @@ public class ProjectWindow extends CommonModuleFrame {
 		builder.addSeparator(".", "newcmds");
 
 		setupProjectMediaFolderMenu(builder);
-//		projectMenu.add(new SelectCorpusMediaFolder(this));
-
-		builder.addSeparator(".", "media_folders");
+		builder.addSeparator(".", "project_media_folder");
+		
+		setupCorpusFolderMenu(getSelectedCorpus(), builder);
+		builder.addSeparator(".", "corpus_media_folders");
 
 		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
 		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
@@ -855,6 +859,98 @@ public class ProjectWindow extends CommonModuleFrame {
 			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Reset project media folder");
 			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset project media folder (__res/media)");
 			builder.addItem(".", resetProjectFolderAct);
+			
+			if(projectMediaFolder.isAbsolute()) {
+				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeProjectMediaFolderRelative");
+				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make project media folder relative to project");
+				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder path relative to project folder");
+				builder.addItem(".", makeRelativeAct);
+			} else {
+				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeProjectMediaFolderAbsolute");
+				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make project media folder absolute");
+				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder an absolute filename");
+				builder.addItem(".", makeAbsoluteAct);
+			}
+		}
+	}
+	
+	private void setupCorpusFolderMenu(String corpus, MenuBuilder builder) {
+		if(corpus != null) {
+			String corpusMediaPath = getProject().getCorpusMediaFolder(corpus);
+			if(corpusMediaPath == null) return;
+			
+			File corpusMediaFolder = new File(corpusMediaPath);
+			File absoluteCorpusMediaFolder = corpusMediaFolder.isAbsolute() ? corpusMediaFolder : new File(getProject().getLocation(), corpusMediaPath);
+			
+			if(!absoluteCorpusMediaFolder.exists()) {
+				final PhonUIAction createCorpusFolderAct = new PhonUIAction(absoluteCorpusMediaFolder, "mkdirs");
+				createCorpusFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomCorpusMediaFolder(corpus) ? "Create media folder" : "Create default media folder"));
+				createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
+				final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
+				createCorpusFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+				builder.addItem(".", createCorpusFolderItem);
+			} else {
+				final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
+				showProjectFolderAct.putValue(PhonUIAction.NAME, "Show corpus media folder");
+				showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
+				JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
+				showProjectFolderItem.setEnabled(absoluteCorpusMediaFolder.exists());
+				builder.addItem(".", showProjectFolderItem);
+			}
+		}
+		
+		final SelectCorpusMediaFolder selectFolderAct = new SelectCorpusMediaFolder(this);
+		builder.addItem(".", selectFolderAct).setEnabled(corpus != null);
+		
+		if(corpus != null && getProject().hasCustomCorpusMediaFolder(corpus)) {
+			final PhonUIAction resetCorpusFolderAct = new PhonUIAction(this, "onResetCorpusMediaFolder", corpus);
+			resetCorpusFolderAct.putValue(PhonUIAction.NAME, "Reset corpus media folder");
+			resetCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset corpus media folder (use project media folder)");
+			builder.addItem(".", resetCorpusFolderAct);
+		}
+	}
+	
+	private String makeRelativetoProject(String filename) {
+		File file = new File(filename);
+		String retVal = filename;
+		if(file.isAbsolute()) {
+			File projectFolder = new File(getProject().getLocation());
+			Path projectPath = projectFolder.toPath();
+			Path path = file.toPath();
+			if(projectPath.getRoot().equals(path.getRoot())) {				
+				path = projectPath.relativize(path);
+			} else {
+				try {
+					path = path.toRealPath();
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
+			}
+			retVal = path.toString();
+		}
+		return retVal;
+	}
+	
+	public void onMakeProjectMediaFolderRelative() {
+		if(getProject().hasCustomProjectMediaFolder()) {
+			String relativeProjectMediaFolder = makeRelativetoProject(getProject().getProjectMediaFolder());
+			getProject().setProjectMediaFolder(relativeProjectMediaFolder);
+		}
+	}
+	
+	public void onMakeProjectMediaFolderAbsolute() {
+		if(getProject().hasCustomProjectMediaFolder()) {
+			String currentValue = getProject().getProjectMediaFolder();
+			File file = new File(currentValue);
+			if(!file.isAbsolute()) {
+				File absoluteFile = new File(getProject().getLocation(), currentValue);
+				try {
+					Path absolutePath = absoluteFile.toPath().toRealPath();
+					getProject().setProjectMediaFolder(absolutePath.toString());
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
+			}
 		}
 	}
 	
@@ -862,6 +958,10 @@ public class ProjectWindow extends CommonModuleFrame {
 		getProject().setProjectMediaFolder(null);
 	}
 
+	public void onResetCorpusMediaFolder(PhonActionEvent pae) {
+		getProject().setCorpusMediaFolder(pae.getData().toString(), null);
+	}
+	
 	public void onOpenSelectedSession(PhonActionEvent pae) {
 		final PhonWorker worker = PhonWorker.createWorker();
 		busyLabel.setBusy(true);

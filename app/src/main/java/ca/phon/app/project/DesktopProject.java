@@ -86,78 +86,78 @@ public class DesktopProject extends LocalProject {
 		fireProjectStructureChanged(pe);
 	}
 
-	@Override
-	protected void saveProperties() throws IOException {
-		final Properties props = getExtension(Properties.class);
-		if(props != null) {
-			// adjust media paths as required by application settings
-			final boolean makePathsRelative = PrefHelper.getBoolean(PhonProperties.MEDIA_PATHS_RELATIVE, PhonProperties.DEFAULT_MEDIA_PATHS_RELATIVE);
-
-			if(props.containsKey(LocalProject.PROJECT_MEDIAFOLDER_PROP)) {
-				String currentValue = props.getProperty(LocalProject.PROJECT_MEDIAFOLDER_PROP);
-				File currentFile = new File(currentValue);
-				if(!currentFile.isAbsolute()) {
-					currentValue = getLocation() + File.separator + currentValue;
-				}
-
-				final Path projectFolder = Paths.get(getLocation());
-				Path currentPath = Paths.get(currentValue);
-
-				if(makePathsRelative) {
-					if(projectFolder.getRoot().equals(currentPath.getRoot())) {
-						Path relativePath = projectFolder.relativize(currentPath);
-						if(relativePath.toString().length() > currentPath.toString().length()
-								&& relativePath.toString().contains(currentPath.toString())) {
-							// no nothing
-							currentPath = currentPath.toRealPath();
-						} else {
-							currentPath = relativePath;
-						}
-					} else {
-						currentPath = currentPath.toRealPath();
-					}
-				} else {
-					currentPath = currentPath.toRealPath();
-				}
-				props.setProperty(PROJECT_MEDIAFOLDER_PROP, currentPath.toString());
-			}
-
-			for(String corpus:getCorpora()) {
-				final String corpusProp = LocalProject.CORPUS_MEDIAFOLDER_PROP + "." + corpus;
-				if(props.containsKey(corpusProp)) {
-					String currentValue = props.getProperty(corpusProp);
-					File currentFile = new File(currentValue);
-					// make current value absolute
-					if(!currentFile.isAbsolute()) {
-						currentValue = getLocation() + File.separator + currentValue;
-					}
-
-					final Path corpusFolder = Paths.get(getLocation());
-					Path currentPath = Paths.get(currentValue);
-
-					if(makePathsRelative) {
-						if(corpusFolder.getRoot().equals(currentPath.getRoot())) {
-							Path relativePath = corpusFolder.relativize(currentPath);
-							if(relativePath.toString().length() > currentPath.toString().length()
-									&& relativePath.toString().contains(currentPath.toString())) {
-								// no nothing
-								currentPath = currentPath.toRealPath();
-							} else {
-								currentPath = relativePath;
-							}
-						} else {
-							currentPath = currentPath.toRealPath();
-						}
-					} else {
-						currentPath = currentPath.toRealPath();
-					}
-					props.setProperty(corpusProp, currentPath.toString());
-				}
-			}
-		}
-
-		super.saveProperties();
-	}
+//	@Override
+//	protected void saveProperties() throws IOException {
+//		final Properties props = getExtension(Properties.class);
+//		if(props != null) {
+//			// adjust media paths as required by application settings
+//			final boolean makePathsRelative = PrefHelper.getBoolean(PhonProperties.MEDIA_PATHS_RELATIVE, PhonProperties.DEFAULT_MEDIA_PATHS_RELATIVE);
+//
+//			if(props.containsKey(LocalProject.PROJECT_MEDIAFOLDER_PROP)) {
+//				String currentValue = props.getProperty(LocalProject.PROJECT_MEDIAFOLDER_PROP);
+//				File currentFile = new File(currentValue);
+//				if(!currentFile.isAbsolute()) {
+//					currentValue = getLocation() + File.separator + currentValue;
+//				}
+//
+//				final Path projectFolder = Paths.get(getLocation());
+//				Path currentPath = Paths.get(currentValue);
+//
+//				if(makePathsRelative) {
+//					if(projectFolder.getRoot().equals(currentPath.getRoot())) {
+//						Path relativePath = projectFolder.relativize(currentPath);
+//						if(relativePath.toString().length() > currentPath.toString().length()
+//								&& relativePath.toString().contains(currentPath.toString())) {
+//							// no nothing
+//							currentPath = currentPath.toRealPath();
+//						} else {
+//							currentPath = relativePath;
+//						}
+//					} else {
+//						currentPath = currentPath.toRealPath();
+//					}
+//				} else {
+//					currentPath = currentPath.toRealPath();
+//				}
+//				props.setProperty(PROJECT_MEDIAFOLDER_PROP, currentPath.toString());
+//			}
+//
+//			for(String corpus:getCorpora()) {
+//				final String corpusProp = LocalProject.CORPUS_MEDIAFOLDER_PROP + "." + corpus;
+//				if(props.containsKey(corpusProp)) {
+//					String currentValue = props.getProperty(corpusProp);
+//					File currentFile = new File(currentValue);
+//					// make current value absolute
+//					if(!currentFile.isAbsolute()) {
+//						currentValue = getLocation() + File.separator + currentValue;
+//					}
+//
+//					final Path corpusFolder = Paths.get(getLocation());
+//					Path currentPath = Paths.get(currentValue);
+//
+//					if(makePathsRelative) {
+//						if(corpusFolder.getRoot().equals(currentPath.getRoot())) {
+//							Path relativePath = corpusFolder.relativize(currentPath);
+//							if(relativePath.toString().length() > currentPath.toString().length()
+//									&& relativePath.toString().contains(currentPath.toString())) {
+//								// no nothing
+//								currentPath = currentPath.toRealPath();
+//							} else {
+//								currentPath = relativePath;
+//							}
+//						} else {
+//							currentPath = currentPath.toRealPath();
+//						}
+//					} else {
+//						currentPath = currentPath.toRealPath();
+//					}
+//					props.setProperty(corpusProp, currentPath.toString());
+//				}
+//			}
+//		}
+//
+//		super.saveProperties();
+//	}
 
 	private void moveToTrash(File[] files) throws IOException {
 		if(Desktop.isDesktopSupported()) {

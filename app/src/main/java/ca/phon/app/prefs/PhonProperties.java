@@ -45,9 +45,14 @@ public class PhonProperties {
 
 	/**
 	 * Store media paths relative to project
+	 * 
+	 * @deprecated since 3.1
 	 */
 	public final static String MEDIA_PATHS_RELATIVE = "ca.phon.project.mediaPathsRelative";
 
+	/**
+	 * @deprecated since 3.1
+	 */
 	public final static Boolean DEFAULT_MEDIA_PATHS_RELATIVE = Boolean.TRUE;
 
 	/**
