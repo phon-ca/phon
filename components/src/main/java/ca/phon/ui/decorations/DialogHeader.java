@@ -17,6 +17,7 @@ package ca.phon.ui.decorations;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Composite;
 import java.awt.Font;
 import java.awt.GradientPaint;
@@ -111,6 +112,21 @@ public class DialogHeader extends JPanel {
 	
 	public JLabel getBottomLabel() {
 		return this.bottomLabel;
+	}
+	
+	public void replaceBottomLabel(Component comp) {
+		remove(bottomLabel);
+		
+		final GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(0, PADDING * 2, PADDING, PADDING);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		add(comp, gbc);
+		
+		revalidate();	
 	}
 	
 	@Override
