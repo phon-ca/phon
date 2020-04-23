@@ -18,9 +18,11 @@ package ca.phon.app.project;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -107,14 +109,19 @@ public class SessionDetails extends JPanel {
 					} catch (IOException e) {
 						LogUtil.severe(e);
 					}
+				} else if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(new File(project.getSessionPath(corpus, session)));
+					} catch (IOException e) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.severe(e);
+					}
 				}
 			}
 			
 		});
-		if(OSInfo.isMacOs()) {
-			fileLabel.setForeground(Color.blue);
-			fileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		}
+		fileLabel.setForeground(Color.blue);
+		fileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		modifiedLabel = new JLabel();
 		
