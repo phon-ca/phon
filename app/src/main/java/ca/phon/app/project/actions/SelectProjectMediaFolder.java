@@ -31,7 +31,7 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 
 	private final static String TXT = "Select project media folder...";
 
-	private final static String DESC = "Select project media folder.";
+	private final static String DESC = "Select project media folder";
 
 	public SelectProjectMediaFolder(ProjectWindow projectWindow) {
 		super(projectWindow);
@@ -42,32 +42,7 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final Project project = getWindow()	.getProject();
-
-		final String defaultMediaFolder = project.getResourceLocation() + File.separator + "media";
-		if(project.getProjectMediaFolder().equals(defaultMediaFolder)) {
-			browseForMediaFolder();
-		} else {
-			final MessageDialogProperties props = new MessageDialogProperties();
-			props.setParentWindow(getWindow());
-			props.setRunAsync(true);
-			final String[] options = {"Cancel", "Reset to default (__res/media)", "Browse for folder..."};
-			props.setOptions(options);
-			props.setDefaultOption(options[0]);
-			props.setMessage("Select media folder for project");
-			props.setHeader("Select media folder");
-			props.setListener( (e) -> {
-				int result = e.getDialogResult();
-				if(result == 0) {
-					return;
-				} else if(result == 1) {
-					PhonWorker.getInstance().invokeLater( () -> project.setProjectMediaFolder(null) );
-				} else if(result == 2) {
-					SwingUtilities.invokeLater( this::browseForMediaFolder );
-				}
-			});
-			NativeDialogs.showMessageDialog(props);
-		}
+		browseForMediaFolder();
 	}
 
 	private void browseForMediaFolder() {

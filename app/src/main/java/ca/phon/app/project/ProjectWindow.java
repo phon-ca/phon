@@ -22,6 +22,8 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
@@ -34,6 +36,9 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +48,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -63,16 +69,20 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -115,17 +125,22 @@ import ca.phon.app.session.check.SessionCheckEP;
 import ca.phon.app.welcome.WorkspaceTextStyler;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectEvent;
+import ca.phon.project.ProjectEvent.ProjectEventType;
 import ca.phon.project.ProjectListener;
 import ca.phon.project.ProjectPath;
 import ca.phon.project.ProjectRefresh;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OSInfo;
@@ -142,7 +157,11 @@ import ca.phon.worker.PhonWorker;
 public class ProjectWindow extends CommonModuleFrame {
 
 	private static final long serialVersionUID = -4771564010497815447L;
-
+	
+	private JPanel projectInfoPanel;
+	private JLabel projectFolderLabel;
+	private JLabel projectMediaFolderLabel;
+	
 	/** The corpus list */
 	private TitledPanel corpusPanel;
 	private MultiActionButton createCorpusButton;
@@ -164,9 +183,6 @@ public class ProjectWindow extends CommonModuleFrame {
 	public boolean blindMode =
 			PrefHelper.getBoolean(BLIND_MODE_PROPERTY, DEFAULT_BLIND_MODE);
 	private JCheckBox blindModeBox;
-
-//	/** Label for messages */
-//	private StatusPanel msgPanel;
 
 	private JXStatusBar statusBar;
 	private JXBusyLabel busyLabel;
@@ -289,75 +305,23 @@ public class ProjectWindow extends CommonModuleFrame {
 			menu.add(projectMenu, projectMenuIndex);
 		}
 
-		// refresh lists
-		final RefreshAction refreshItem = new RefreshAction(this);
-		projectMenu.add(refreshItem);
-		projectMenu.addSeparator();
-
-		// create corpus item
-		final NewCorpusAction newCorpusItem = new NewCorpusAction(this);
-		projectMenu.add(newCorpusItem);
-
-		//		 create corpus item
-		final NewSessionAction newSessionItem = new NewSessionAction(this);
-		projectMenu.add(newSessionItem);
-
-		projectMenu.addSeparator();
-
-		projectMenu.add(new SelectProjectMediaFolder(this));
-		projectMenu.add(new SelectCorpusMediaFolder(this));
-
-		projectMenu.addSeparator();
-
-		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
-		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
-		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions...");
-		checkSessionsAct.putValue(PluginAction.SHORT_DESCRIPTION, "Check sessions for warnings");
-		projectMenu.add(checkSessionsAct);
-
-		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
-		projectMenu.add(anonymizeParticipantInfoItem);
-		
-		// merge/split sessions
-		final DeriveSessionAction deriveItem = new DeriveSessionAction(this);
-		projectMenu.add(deriveItem);
-
-		final JMenu teamMenu = new JMenu("Team");
-		teamMenu.addMenuListener(new MenuListener() {
-
+		projectMenu.addMenuListener(new MenuListener() {
+			
 			@Override
 			public void menuSelected(MenuEvent e) {
-				teamMenu.removeAll();
-				if(getProject() != null) {
-					final ProjectGitController gitController = new ProjectGitController(getProject());
-					if(gitController.hasGitFolder()) {
-						teamMenu.add(new CommitAction(ProjectWindow.this));
-
-						teamMenu.addSeparator();
-
-						teamMenu.add(new PullAction(ProjectWindow.this));
-						teamMenu.add(new PushAction(ProjectWindow.this));
-
-					} else {
-						final InitAction initRepoAct =
-								new InitAction(ProjectWindow.this);
-						teamMenu.add(initRepoAct);
-					}
-				}
+				projectMenu.removeAll();
+				setupProjectMenu(new MenuBuilder(projectMenu));
 			}
-
+			
 			@Override
 			public void menuDeselected(MenuEvent e) {
-
 			}
-
+			
 			@Override
 			public void menuCanceled(MenuEvent e) {
-
 			}
+			
 		});
-		projectMenu.addSeparator();
-		projectMenu.add(teamMenu);
 	}
 
 	private void init() {
@@ -365,7 +329,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		setLayout(new BorderLayout());
 
 		final ProjectDataTransferHandler transferHandler = new ProjectDataTransferHandler(this);
-
+		
+		setupProjectInformationPanel();
+		
 		/* Create components */
 		createCorpusButton = createCorpusButton();
 		createCorpusButton.setVisible(false);
@@ -592,6 +558,7 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		final JXMultiSplitPane multiSplitPane = new JXMultiSplitPane();
 		final String multiSplitLayout = "(COLUMN "
+//				+ "(LEAF weight=0.0 name=project)" 
 				+ "(ROW weight=1.0 (LEAF weight=0.5 name=corpus) (LEAF weight=0.5 name=session) ) "
 				+ "(LEAF weight=0.0 name=details))";
 		final MultiSplitLayout.Node rootLayoutNode = MultiSplitLayout.parseModel(multiSplitLayout);
@@ -601,10 +568,11 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		multiSplitPane.setModel(rootLayoutNode);
 		multiSplitPane.setDividerSize(2);
+//		multiSplitPane.add(projectInfoPanel, "project");
 		multiSplitPane.add(corpusPanel, "corpus");
 		multiSplitPane.add(sessionPanel, "session");
 		multiSplitPane.add(detailsPanel, "details");
-
+		
 		statusBar = new JXStatusBar();
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		statusBar.add(busyLabel, new JXStatusBar.Constraint(16));
@@ -616,28 +584,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		String projectName = null;
 		projectName = getProject().getName();
 
-		DialogHeader header = new DialogHeader(projectName,
-				"<html><u style='color: rgb(0, 90, 140);'>" + StringUtils.abbreviate(projectLoadPath, 80) + "</u></html>");
-		header.getBottomLabel().setToolTipText(projectLoadPath);
-		header.getBottomLabel().setForeground(Color.blue);
-		header.getBottomLabel().addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().open(new File(projectLoadPath));
-					} catch (IOException e) {
-						LogUtil.warning(e);
-						Toolkit.getDefaultToolkit().beep();
-					}
-				}
-			}
-
-		});
-		header.getBottomLabel().setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, "places/folder", IconSize.MEDIUM));
-		header.getBottomLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
+		DialogHeader header = new DialogHeader(projectName,"");
+		header.replaceBottomLabel(projectInfoPanel);
+		
 		add(header, BorderLayout.NORTH);
 		add(multiSplitPane, BorderLayout.CENTER);
 		add(statusBar, BorderLayout.SOUTH);
@@ -653,6 +602,264 @@ public class ProjectWindow extends CommonModuleFrame {
 				corpusList.requestFocusInWindow();
 			});
 		}
+	}
+	
+	private void setupProjectInformationPanel() {
+		projectInfoPanel = new JPanel(new GridBagLayout());
+		projectInfoPanel.setOpaque(false);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0.0;
+		gbc.weighty = 0.0;
+		gbc.insets = new Insets(0, 0, 0, 5);
+		
+		projectInfoPanel.add(new JLabel("Project folder:"), gbc);
+		++gbc.gridx;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		projectFolderLabel = new JLabel(projectLoadPath);
+		projectFolderLabel.setForeground(Color.blue);
+		projectFolderLabel.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().open(new File(projectLoadPath));
+					} catch (IOException e) {
+						LogUtil.warning(e);
+						Toolkit.getDefaultToolkit().beep();
+					}
+				}
+			}
+
+		});
+		
+		projectFolderLabel.setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, "places/folder", IconSize.SMALL));
+		projectFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		projectInfoPanel.add(projectFolderLabel, gbc);
+		
+		++gbc.gridy;
+		gbc.gridx = 0;
+		gbc.weightx = 0.0;
+		gbc.fill = GridBagConstraints.NONE;
+		
+		final JPopupMenu projectMediaFolderMenu = new JPopupMenu();
+		projectMediaFolderMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				projectMediaFolderMenu.removeAll();
+				setupProjectMediaFolderMenu(new MenuBuilder(projectMediaFolderMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				
+			}
+			
+		});
+		
+		projectInfoPanel.add(new JLabel("Project media folder:"), gbc);
+		projectMediaFolderLabel = new JLabel();
+		updateProjectMediaLabel();
+		projectMediaFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		projectMediaFolderLabel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				projectMediaFolderMenu.show(projectMediaFolderLabel, 0, projectMediaFolderLabel.getHeight());
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+			
+		});
+		
+		
+		
+		++gbc.gridx;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		projectInfoPanel.add(projectMediaFolderLabel, gbc);
+		
+		getProject().addProjectListener(new ProjectListener() {
+			
+			@Override
+			public void projectWriteLocksChanged(ProjectEvent pe) {
+				
+			}
+			
+			@Override
+			public void projectStructureChanged(ProjectEvent pe) {
+				
+			}
+			
+			@Override
+			public void projectDataChanged(ProjectEvent pe) {
+				if(pe.getEventType() == ProjectEventType.PROJECT_MEDIAFOLDER_CHANGED) {
+					updateProjectMediaLabel();
+				}
+			}
+		});
+	}
+	
+	private void setupProjectMenu(MenuBuilder builder) {
+		// refresh lists
+		final RefreshAction refreshItem = new RefreshAction(this);
+		builder.addItem(".", refreshItem);
+		builder.addSeparator(".", "refresh");
+
+		// create corpus item
+		final NewCorpusAction newCorpusItem = new NewCorpusAction(this);
+		builder.addItem(".", newCorpusItem);
+
+		//		 create corpus item
+		final NewSessionAction newSessionItem = new NewSessionAction(this);
+		builder.addItem(".", newSessionItem);
+
+		builder.addSeparator(".", "newcmds");
+
+		setupProjectMediaFolderMenu(builder);
+//		projectMenu.add(new SelectCorpusMediaFolder(this));
+
+		builder.addSeparator(".", "media_folders");
+
+		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
+		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
+		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions...");
+		checkSessionsAct.putValue(PluginAction.SHORT_DESCRIPTION, "Check sessions for warnings");
+		builder.addItem(".", checkSessionsAct);
+
+		final AnonymizeAction anonymizeParticipantInfoItem = new AnonymizeAction(this);
+		builder.addItem(".", anonymizeParticipantInfoItem);
+		
+		// merge/split sessions
+		final DeriveSessionAction deriveItem = new DeriveSessionAction(this);
+		builder.addItem(".", deriveItem);
+
+		builder.addSeparator(".", "team");
+		final JMenu teamMenu = builder.addMenu(".", "Team");
+		teamMenu.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				teamMenu.removeAll();
+				if(getProject() != null) {
+					final ProjectGitController gitController = new ProjectGitController(getProject());
+					if(gitController.hasGitFolder()) {
+						teamMenu.add(new CommitAction(ProjectWindow.this));
+
+						teamMenu.addSeparator();
+
+						teamMenu.add(new PullAction(ProjectWindow.this));
+						teamMenu.add(new PushAction(ProjectWindow.this));
+
+					} else {
+						final InitAction initRepoAct =
+								new InitAction(ProjectWindow.this);
+						teamMenu.add(initRepoAct);
+					}
+				}
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+
+			}
+		});
+	}
+	
+	private void updateProjectMediaLabel() {
+		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
+		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
+		
+		StockIcon stockIcon = 
+				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER );
+		ImageIcon stockFolderIcon = IconManager.getInstance().getSystemStockIcon(stockIcon, "places/folder", IconSize.SMALL);
+		ImageIcon folderIcon = absoluteProjectMediaFolder.exists()
+				? IconManager.getInstance().getSystemIconForPath(absoluteProjectMediaFolder.getAbsolutePath(), "places/folder", IconSize.SMALL) 
+				: stockFolderIcon;
+				
+		DropDownIcon dropDownIcon = new DropDownIcon(folderIcon, -5, SwingConstants.BOTTOM);
+				
+		projectMediaFolderLabel.setIcon(dropDownIcon);
+		if(!getProject().hasCustomProjectMediaFolder() && !absoluteProjectMediaFolder.exists()) {
+			projectMediaFolderLabel.setText("(click to select)");
+			projectMediaFolderLabel.setForeground(Color.blue);
+		} else {
+			projectMediaFolderLabel.setText(getProject().getProjectMediaFolder());
+			if(absoluteProjectMediaFolder.exists()) {
+				projectMediaFolderLabel.setForeground(Color.blue);
+				projectMediaFolderLabel.setToolTipText("Click to change project media folder");
+			} else {
+				projectMediaFolderLabel.setForeground(Color.red);
+				projectMediaFolderLabel.setToolTipText("Media folder not found, click to create or select new project media folder");
+			}
+		}
+	}
+	
+	private void setupProjectMediaFolderMenu(MenuBuilder builder) {
+		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
+		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
+		
+		if(!absoluteProjectMediaFolder.exists()) {
+			final PhonUIAction createProjectFolderAct = new PhonUIAction(absoluteProjectMediaFolder, "mkdirs");
+			createProjectFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomProjectMediaFolder() ? "Create media folder" : "Create default media folder"));
+			createProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
+			final JMenuItem createProjectFolderItem = new JMenuItem(createProjectFolderAct);
+			createProjectFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+			builder.addItem(".", createProjectFolderItem);
+		} else {
+			final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteProjectMediaFolder);
+			showProjectFolderAct.putValue(PhonUIAction.NAME, "Show project media folder");
+			showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
+			JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
+			showProjectFolderItem.setEnabled(absoluteProjectMediaFolder.exists());
+			builder.addItem(".", showProjectFolderItem);
+		}
+		
+		final SelectProjectMediaFolder selectFolderAct = new SelectProjectMediaFolder(this);
+		builder.addItem(".", selectFolderAct);
+		
+		if(getProject().hasCustomProjectMediaFolder()) {
+			final PhonUIAction resetProjectFolderAct = new PhonUIAction(this, "onResetProjectMediaFolder");
+			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Reset project media folder");
+			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset project media folder (__res/media)");
+			builder.addItem(".", resetProjectFolderAct);
+		}
+	}
+	
+	public void onResetProjectMediaFolder(PhonActionEvent pae) {
+		getProject().setProjectMediaFolder(null);
 	}
 
 	public void onOpenSelectedSession(PhonActionEvent pae) {
@@ -1072,8 +1279,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		final ProjectRefresh impl = project.getExtension(ProjectRefresh.class);
 		if(impl != null) {
 			impl.refresh();
-			updateLists();
 		}
+		updateLists();
+		updateProjectMediaLabel();
 	}
 
 	private class CorpusListCellRenderer extends DefaultListCellRenderer {

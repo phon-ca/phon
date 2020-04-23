@@ -124,7 +124,7 @@ public class ProjectEvent {
 		return retVal;
 	}
 
-	public static ProjectEvent newProjectMediaFolderChangedEVent(String oldFolder, String newFolder) {
+	public static ProjectEvent newProjectMediaFolderChangedEvent(String oldFolder, String newFolder) {
 		final ProjectEvent retVal = new ProjectEvent(ProjectEventType.PROJECT_MEDIAFOLDER_CHANGED);
 		retVal.setProperty(ProjectEventProp.OLD_MEDIAFOLDER, oldFolder);
 		retVal.setProperty(ProjectEventProp.NEW_MEDIAFOLDER, newFolder);

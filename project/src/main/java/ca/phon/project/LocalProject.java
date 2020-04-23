@@ -114,6 +114,8 @@ public class LocalProject implements Project, ProjectRefresh {
 	public final static String CORPUS_MEDIAFOLDER_PROP = "corpus.mediaFolder";
 
 	private final static String sessionTemplateFile = "__sessiontemplate.xml";
+	
+	private final static String PROJECT_RES_FOLDER = "__res";
 
 	/**
 	 * Session write locks
@@ -511,12 +513,17 @@ public class LocalProject implements Project, ProjectRefresh {
 		ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
 		fireProjectDataChanged(pe);
 	}
+	
+	@Override
+	public boolean hasCustomProjectMediaFolder() {
+		final Properties props = getExtension(Properties.class);
+		return (props.getProperty(PROJECT_MEDIAFOLDER_PROP) != null);
+	}
 
 	@Override
 	public String getProjectMediaFolder() {
 		final Properties props = getExtension(Properties.class);
-		String retVal = props.getProperty(PROJECT_MEDIAFOLDER_PROP,
-				getResourceLocation() + File.separator + "media");
+		String retVal = props.getProperty(PROJECT_MEDIAFOLDER_PROP, PROJECT_RES_FOLDER + File.separator + "media");
 		return retVal;
 	}
 
@@ -536,10 +543,17 @@ public class LocalProject implements Project, ProjectRefresh {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
 
-		ProjectEvent pe = ProjectEvent.newProjectMediaFolderChangedEVent(old, mediaFolder);
+		ProjectEvent pe = ProjectEvent.newProjectMediaFolderChangedEvent(old, mediaFolder);
 		fireProjectDataChanged(pe);
 	}
 
+	@Override
+	public boolean hasCustomCorpusMediaFolder(String corpus) {
+		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
+		final Properties props = getExtension(Properties.class);
+		return (props.getProperty(propName) != null);
+	}
+	
 	@Override
 	public String getCorpusMediaFolder(String corpus) {
 		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
@@ -1247,7 +1261,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public String getResourceLocation() {
 		String retVal = this.resourceLocation;
 		if(retVal == null) {
-			retVal = (new File(getLocation(), "__res")).getAbsolutePath();
+			retVal = (new File(getLocation(), PROJECT_RES_FOLDER)).getAbsolutePath();
 		}
 		return retVal;
 	}

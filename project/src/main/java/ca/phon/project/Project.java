@@ -159,6 +159,14 @@ public interface Project extends IExtendable {
 	public void setCorpusDescription(String corpus, String description);
 
 	/**
+	 * Has a custom project media folder been assigned
+	 * 
+	 * @return <code>true</code> if project folder has been customized
+	 * 
+	 */
+	public boolean hasCustomProjectMediaFolder();
+	
+	/**
 	 * Get media folder for the project.
 	 *
 	 */
@@ -172,6 +180,15 @@ public interface Project extends IExtendable {
 	 */
 	public void setProjectMediaFolder(String mediaFolder);
 
+	/**
+	 * Has a custom corpus media folder been assigned
+	 * 
+	 * @param corpus
+	 * @return <code>true</code> if a custom media folder is assigned for the
+	 * given corpus
+	 */
+	public boolean hasCustomCorpusMediaFolder(String corpus);
+	
 	/**
 	 * Get the media folder for the specified corpus.
 	 *
