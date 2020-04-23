@@ -549,10 +549,6 @@ public class ProjectWindow extends CommonModuleFrame {
 		blindModeBox.addActionListener( (e) -> setBlindMode(blindModeBox.isSelected()) );
 		blindModeBox.setVisible(false);
 		
-		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
-		sessionDecoration.setOpaque(false);
-		sessionDecoration.add(showCreateSessionBtn);
-		
 		final OpenSessionAction openSessionButtonAct = new OpenSessionAction(this);
 		final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
 		openBlindModeAct.putValue(PhonUIAction.NAME, "Open session as transcriber... (blind mode)");
@@ -569,15 +565,17 @@ public class ProjectWindow extends CommonModuleFrame {
 		openSessionButton = new DropDownButton(openSessionButtonAct);
 		openSessionButton.setOnlyPopup(true);
 		openSessionButton.setEnabled(false);
-		JComponent buttonBar = ButtonBarBuilder.buildOkBar(openSessionButton);
-		buttonBar.setBackground(Color.white);
+
+		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
+		sessionDecoration.setOpaque(false);
+		sessionDecoration.add(openSessionButton);
+		sessionDecoration.add(showCreateSessionBtn);
 
 		sessionPanel = new TitledPanel("Session");
 		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType("xml", IconSize.SMALL));
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
-		sessionPanel.getContentContainer().add(buttonBar, BorderLayout.SOUTH);
 
 		final JXCollapsiblePane bottomPanel = new JXCollapsiblePane(Direction.UP);
 		bottomPanel.setLayout(new GridLayout(1, 2));
@@ -1383,7 +1381,12 @@ public class ProjectWindow extends CommonModuleFrame {
 			// open item
 			JMenuItem openItem = new JMenuItem(new OpenSessionAction(this));
 			contextMenu.add(openItem);
-
+			
+			final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
+			openBlindModeAct.putValue(PhonUIAction.NAME, "Open session as transcriber... (blind mode)");
+			openBlindModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session as a blind transcriber");
+			contextMenu.add(openBlindModeAct);
+			
 			contextMenu.addSeparator();
 		}
 
