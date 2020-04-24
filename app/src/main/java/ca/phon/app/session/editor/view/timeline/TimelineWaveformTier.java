@@ -244,10 +244,10 @@ public class TimelineWaveformTier extends TimelineTier  {
 		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
 		
 		final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getParentView().getEditor(), currentRecord.getSegment(), 0, m);
+		segEdit.setFireHardChangeOnUndo(true);
 		getParentView().getEditor().getUndoSupport().postEdit(segEdit);
 		
 		clearSelection();
-		getParentView().getRecordTier().setupRecord(currentRecord);
 	}
 	
 	/* Editor Events */
