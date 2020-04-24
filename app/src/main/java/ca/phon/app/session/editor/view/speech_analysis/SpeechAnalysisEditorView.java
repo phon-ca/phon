@@ -935,8 +935,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		if(selectionInterval != null) {
 			final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
-			selectAct.putValue(PhonUIAction.NAME, "Set segment");
-			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select segment for current record");
+			selectAct.putValue(PhonUIAction.NAME, "Assign segment");
+			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
 			builder.addItem(".", selectAct);
 			
 			builder.addItem(".", new NewRecordAction(getEditor(), this));
@@ -947,34 +947,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 		if(mediaModel.isSessionAudioAvailable()) {
 			setupPlaybackMenu(builder);
 			builder.addSeparator(".", "playback");
-//			setupExportMenu(builder);
 			builder.addSeparator(".", "export");
 		} else {
 			builder.addItem(".", mediaModel.getGenerateSessionAudioAction());
 			builder.addSeparator(".", "generate");
 		}
-		
-//		if(getWavDisplay().isPlaying()) {
-//			retVal.add(new StopAction(getEditor(), this));
-//		} else {
-//			retVal.add(new PlayAction(getEditor(), this));
-//			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(getWavDisplay()));
-//			retVal.add(loopItem);
-//
-//			// output device selection
-//			final JMenu mixerMenu = new JMenu("Output Device");
-//			final Info[] mixers = AudioSystem.getMixerInfo();
-//			for(Info mixerInfo:mixers) {
-//				// if we have no source lines, we can't use this device
-//				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
-//				final SelectMixerAction mixerAct = new SelectMixerAction(getWavDisplay(), mixerInfo);
-//				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
-//						getWavDisplay().getMixerInfo() == mixerInfo);
-//				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
-//			}
-//			retVal.add(mixerMenu);
-//		}
-//		retVal.addSeparator();
 		
 		menu.add(new ResetAction(getEditor(), this));
 		menu.add(new ZoomAction(getEditor(), this));

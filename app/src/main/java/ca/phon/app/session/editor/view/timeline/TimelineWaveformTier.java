@@ -17,6 +17,7 @@ import javax.swing.FocusManager;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 
@@ -27,6 +28,7 @@ import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
 import ca.phon.media.PlaySegment;
@@ -141,6 +143,13 @@ public class TimelineWaveformTier extends TimelineTier  {
 			
 			builder.addSeparator(".", "play_actions");
 			
+			if(getParentView().getEditor().getSession().getRecordCount() > 0) {
+				final PhonUIAction assignSegmentAction = new PhonUIAction(this, "onAssignSegment");
+				assignSegmentAction.putValue(PhonUIAction.NAME, "Assign segment");
+				assignSegmentAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
+				builder.addItem(".", assignSegmentAction);
+			}
+			
 			List<Participant> speakerList = getParentView().getRecordTier().getSpeakerList();
 			for(int i = 0; i < speakerList.size(); i++) {
 				final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i);
@@ -221,6 +230,24 @@ public class TimelineWaveformTier extends TimelineTier  {
 		editor.getUndoSupport().postEdit(edit);
 		
 		clearSelection();
+	}
+	
+	public void onAssignSegment(PhonActionEvent pae) {
+		if(selectionInterval == null) return;
+		
+		Record currentRecord = getParentView().getEditor().currentRecord();
+		if(currentRecord == null) return;
+		
+		final SessionFactory factory = SessionFactory.newFactory();
+		MediaSegment m = factory.createMediaSegment();
+		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
+		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
+		
+		final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getParentView().getEditor(), currentRecord.getSegment(), 0, m);
+		getParentView().getEditor().getUndoSupport().postEdit(segEdit);
+		
+		clearSelection();
+		getParentView().getRecordTier().setupRecord(currentRecord);
 	}
 	
 	/* Editor Events */
