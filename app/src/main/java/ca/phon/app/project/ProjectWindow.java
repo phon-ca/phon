@@ -553,6 +553,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		blindModeBox.setOpaque(false);
 		blindModeBox.setMargin(new Insets(0, 0, 0, 0));
 		blindModeBox.setSelected(this.blindMode);
+		blindModeBox.setToolTipText("When selected default action will be to open session as transcriber (blind mode)");
 		blindModeBox.addActionListener( (e) -> setBlindMode(blindModeBox.isSelected()) );
 		blindModeBox.setForeground(Color.white);
 		
@@ -671,6 +672,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		gbc.weightx = 1.0;
 		projectFolderLabel = new JLabel(projectLoadPath);
 		projectFolderLabel.setForeground(Color.blue);
+		projectFolderLabel.setToolTipText("Click to show project folder");
 		projectFolderLabel.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -1408,7 +1410,11 @@ public class ProjectWindow extends CommonModuleFrame {
 		builder.addSeparator(".", "s1");
 
 		// open item
-		JMenuItem openItem = new JMenuItem(new OpenSessionAction(this, false));
+		OpenSessionAction openAct = new OpenSessionAction(this, false);
+		if(builder.getRoot() instanceof JPopupMenu && !isBlindMode()) {
+			openAct.putValue(OpenSessionAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+		}
+		JMenuItem openItem = new JMenuItem(openAct);
 		if(isBlindMode()) {
 			openItem.setText(openItem.getText() + " (not blind mode)");
 		}
@@ -1418,6 +1424,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
 		openBlindModeAct.putValue(PhonUIAction.NAME, "Open session as transcriber... (blind mode)");
 		openBlindModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session as a blind transcriber");
+		if(builder.getRoot() instanceof JPopupMenu && isBlindMode()) {
+			openBlindModeAct.putValue(OpenSessionAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+		}
 		builder.addItem(".", openBlindModeAct).setEnabled(enabled);
 		
 		builder.addSeparator(".", "s2");

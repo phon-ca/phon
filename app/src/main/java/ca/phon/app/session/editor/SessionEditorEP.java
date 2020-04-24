@@ -210,7 +210,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			final TranscriberSelectionDialog tsd = new TranscriberSelectionDialog(session);
 			tsd.setModal(true);
 			tsd.setSize(new Dimension(400, 350));
-			tsd.setLocationByPlatform(true);
+			tsd.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 			tsd.setVisible(true);
 
 			// bail if dialog was canceled
