@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.12/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_12.dmg" newVersion="3.1.0-beta.12" newMediaFileId="macos" fileSize="278626871" md5Sum="189302e2e6ec1beb1d9d8e39932f4cd3" sha256Sum="3ce4786a2fa3a32ca418067a91c95f9161d4fb6fadf760b85703e9171bec0a4f" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.13/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_13.dmg" newVersion="3.1.0-beta.13" newMediaFileId="macos" fileSize="278726700" md5Sum="83db467aee7dc293368708ae2ab1ee51" sha256Sum="ff29b6a45794df6ae9b3b2d89c2f25f459469b29d088af31e6e4024841b44608" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Improved media loading and unloading in Session Editor
@@ -310,7 +310,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_12.dmg" newVersion="3.1.0-beta.12" newMediaFileId="macos" fileSize="278626871" md5Sum="189302e2e6ec1beb1d9d8e39932f4cd3" sha256Sum="3ce4786a2fa3a32ca418067a91c95f9161d4fb6fadf760b85703e9171bec0a4f" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_13.dmg" newVersion="3.1.0-beta.13" newMediaFileId="macos" fileSize="278726700" md5Sum="83db467aee7dc293368708ae2ab1ee51" sha256Sum="ff29b6a45794df6ae9b3b2d89c2f25f459469b29d088af31e6e4024841b44608" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Improved media loading and unloading in Session Editor
@@ -620,7 +620,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_12.exe" newVersion="3.1.0-beta.12" newMediaFileId="win64" fileSize="288248072" md5Sum="0475e600d23aa819470237f2017dff86" sha256Sum="3e3e39fc2af96678a0841bfb1f24d3da691918e1b0a870fc44c8594ef296d5df" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_13.exe" newVersion="3.1.0-beta.13" newMediaFileId="win64" fileSize="288359176" md5Sum="14b42a7132c4d3f4bed9ebd3fb6fd7b3" sha256Sum="e4f3e478b413e927aaa9f5f7079e60342a860038393331993846e58f50a031cb" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved media loading and unloading in Session Editor
@@ -930,7 +930,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_12.exe" newVersion="3.1.0-beta.12" newMediaFileId="win64" fileSize="288248072" md5Sum="0475e600d23aa819470237f2017dff86" sha256Sum="3e3e39fc2af96678a0841bfb1f24d3da691918e1b0a870fc44c8594ef296d5df" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_13.exe" newVersion="3.1.0-beta.13" newMediaFileId="win64" fileSize="288359176" md5Sum="14b42a7132c4d3f4bed9ebd3fb6fd7b3" sha256Sum="e4f3e478b413e927aaa9f5f7079e60342a860038393331993846e58f50a031cb" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved media loading and unloading in Session Editor
@@ -1240,7 +1240,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_12.exe" newVersion="3.1.0-beta.12" newMediaFileId="win64" fileSize="288248072" md5Sum="0475e600d23aa819470237f2017dff86" sha256Sum="3e3e39fc2af96678a0841bfb1f24d3da691918e1b0a870fc44c8594ef296d5df" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_13.exe" newVersion="3.1.0-beta.13" newMediaFileId="win64" fileSize="288359176" md5Sum="14b42a7132c4d3f4bed9ebd3fb6fd7b3" sha256Sum="e4f3e478b413e927aaa9f5f7079e60342a860038393331993846e58f50a031cb" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved media loading and unloading in Session Editor
@@ -1550,7 +1550,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_12.zip" newVersion="3.1.0-beta.12" newMediaFileId="win64zip" fileSize="287341971" md5Sum="960e6c84c00755daf0047c1372a49445" sha256Sum="6262b2268e5cca45d8f73633d9186fffebbeece6d0986e9910c6181bba09168d" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_13.zip" newVersion="3.1.0-beta.13" newMediaFileId="win64zip" fileSize="287453017" md5Sum="9cf6d51371c056b0cc0fdeaabe38f4f8" sha256Sum="51d6cee911657d42212f422d8567f18445b92e91e87c7bc202153b7f2af2e209" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved media loading and unloading in Session Editor
