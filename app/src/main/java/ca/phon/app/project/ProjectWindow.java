@@ -181,11 +181,8 @@ public class ProjectWindow extends CommonModuleFrame {
 	private JList<String> sessionList;
 	private SessionListModel sessionModel;
 	private SessionDetails sessionDetails;
-	private DropDownButton openSessionButton;
 
-	@Deprecated
 	public static final String BLIND_MODE_PROPERTY = ProjectWindow.class.getName() + ".blindMode";
-	@Deprecated
 	public static final boolean DEFAULT_BLIND_MODE = false;
 	public boolean blindMode =
 			PrefHelper.getBoolean(BLIND_MODE_PROPERTY, DEFAULT_BLIND_MODE);
@@ -269,12 +266,10 @@ public class ProjectWindow extends CommonModuleFrame {
 		return new SessionPath(getSelectedCorpus(), getSelectedSessionName());
 	}
 
-	@Deprecated
 	public boolean isBlindMode() {
 		return this.blindMode;
 	}
 
-	@Deprecated
 	public void setBlindMode(boolean blindMode) {
 		this.blindMode = blindMode;
 		PrefHelper.getUserPreferences().putBoolean(BLIND_MODE_PROPERTY, blindMode);
@@ -425,7 +420,6 @@ public class ProjectWindow extends CommonModuleFrame {
 					session = null;
 
 				sessionDetails.setSession(corpus, session);
-				openSessionButton.setEnabled(session != null);
 			}
 		});
 		sessionList.addMouseListener(new MouseInputAdapter() {
@@ -448,7 +442,7 @@ public class ProjectWindow extends CommonModuleFrame {
 
 					PhonWorker.getInstance().invokeLater(() -> {
 						final ActionEvent ae = new ActionEvent(sessionList, -1, "openSession");
-						(new OpenSessionAction(ProjectWindow.this, corpus, session)).actionPerformed(ae);
+						(new OpenSessionAction(ProjectWindow.this, corpus, session, isBlindMode())).actionPerformed(ae);
 
 						SwingUtilities.invokeLater( () -> {
 							statusLabel.setText("");
@@ -527,8 +521,21 @@ public class ProjectWindow extends CommonModuleFrame {
 		final ImageIcon defCorpusIcn = IconManager.getInstance().getSystemStockIcon(
 				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon :
 					OSInfo.isWindows() ? WindowsStockIcon.FOLDER : null), "places/folder", IconSize.SMALL);
-		corpusPanel.setIcon(defCorpusIcn);
+		DropDownIcon corpusDdIcn = new DropDownIcon(defCorpusIcn, 0, SwingConstants.BOTTOM);
+		corpusPanel.setIcon(corpusDdIcn);
+		corpusPanel.getTitleLabel().addMouseListener(new MouseInputAdapter() {
 
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JPopupMenu ctxMenu = new JPopupMenu();
+				setupCorpusListContextMenu(new MenuBuilder(ctxMenu));
+				ctxMenu.show(corpusPanel.getTitleLabel(), 0, corpusPanel.getTitleLabel().getHeight());
+			}
+			
+		});
+		corpusPanel.getTitleLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		corpusPanel.getTitleLabel().setToolTipText("Click for corpus contextual menu");
+			
 		corpusPanel.getContentContainer().add(createCorpusButton, BorderLayout.NORTH);
 		corpusPanel.getContentContainer().add(corpusScroller, BorderLayout.CENTER);
 		corpusPanel.setRightDecoration(showCreateCorpusBtn);
@@ -547,7 +554,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		blindModeBox.setMargin(new Insets(0, 0, 0, 0));
 		blindModeBox.setSelected(this.blindMode);
 		blindModeBox.addActionListener( (e) -> setBlindMode(blindModeBox.isSelected()) );
-		blindModeBox.setVisible(false);
+		blindModeBox.setForeground(Color.white);
 		
 		final OpenSessionAction openSessionButtonAct = new OpenSessionAction(this);
 		final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
@@ -562,20 +569,31 @@ public class ProjectWindow extends CommonModuleFrame {
 		openSessionButtonAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		openSessionButtonAct.putValue(DropDownButton.ARROW_ICON_GAP, 3);
 		
-		openSessionButton = new DropDownButton(openSessionButtonAct);
-		openSessionButton.setOnlyPopup(true);
-		openSessionButton.setEnabled(false);
-
 		final JPanel sessionDecoration = new JPanel(new HorizontalLayout());
 		sessionDecoration.setOpaque(false);
-		sessionDecoration.add(openSessionButton);
+		sessionDecoration.add(blindModeBox);
 		sessionDecoration.add(showCreateSessionBtn);
 
 		sessionPanel = new TitledPanel("Session");
-		sessionPanel.setIcon(IconManager.getInstance().getSystemIconForFileType("xml", IconSize.SMALL));
+		ImageIcon xmlIcn = IconManager.getInstance().getSystemIconForFileType("xml", "mimetypes/text-xml", IconSize.SMALL);
+		DropDownIcon xmlDdIcn = new DropDownIcon(xmlIcn, 0, SwingConstants.BOTTOM);
+		sessionPanel.setIcon(xmlDdIcn);
 		sessionPanel.setRightDecoration(sessionDecoration);
 		sessionPanel.getContentContainer().add(createSessionButton, BorderLayout.NORTH);
 		sessionPanel.getContentContainer().add(sessionScroller, BorderLayout.CENTER);
+		sessionPanel.getTitleLabel().addMouseListener(new MouseInputAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// show context menu
+				JPopupMenu ctxMenu = new JPopupMenu();
+				setupSessionListContextMenu(new MenuBuilder(ctxMenu));
+				ctxMenu.show(sessionPanel.getTitleLabel(), 0, sessionPanel.getTitleLabel().getHeight());
+			}
+			
+		});
+		sessionPanel.getTitleLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		sessionPanel.getTitleLabel().setToolTipText("Click for session list contextual menu");
 
 		final JXCollapsiblePane bottomPanel = new JXCollapsiblePane(Direction.UP);
 		bottomPanel.setLayout(new GridLayout(1, 2));
@@ -608,7 +626,7 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		statusLabel = new JLabel();
 		statusBar.add(statusLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
-		statusBar.add(blindModeBox, new JXStatusBar.Constraint(ResizeBehavior.FIXED));
+//		statusBar.add(blindModeBox, new JXStatusBar.Constraint(ResizeBehavior.FIXED));
 
 		String projectName = null;
 		projectName = getProject().getName();
@@ -762,24 +780,14 @@ public class ProjectWindow extends CommonModuleFrame {
 		builder.addItem(".", refreshItem);
 		builder.addSeparator(".", "refresh");
 
-		// create corpus item
-		final NewCorpusAction newCorpusItem = new NewCorpusAction(this);
-		builder.addItem(".", newCorpusItem);
-
-		//		 create corpus item
-		final NewSessionAction newSessionItem = new NewSessionAction(this);
-		builder.addItem(".", newSessionItem);
+		JMenu corpusMenu = builder.addMenu(".", "Corpus");
+		setupCorpusListContextMenu(new MenuBuilder(corpusMenu));
+		
+		JMenu sessionMenu = builder.addMenu(".", "Session");
+		setupSessionListContextMenu(new MenuBuilder(sessionMenu));
 
 		builder.addSeparator(".", "newcmds");
-
-		setupProjectMediaFolderMenu(builder);
-		builder.addSeparator(".", "project_media_folder");
-		
-		if(getSelectedCorpora() != null) {
-			setupCorpusFolderMenu(getSelectedCorpus(), builder);
-			builder.addSeparator(".", "corpus_media_folders");
-		}
-		
+				
 		final PluginAction checkSessionsAct = new PluginAction(SessionCheckEP.EP_NAME);
 		checkSessionsAct.putArg(EntryPointArgs.PROJECT_OBJECT, getProject());
 		checkSessionsAct.putValue(PluginAction.NAME, "Check sessions...");
@@ -792,6 +800,11 @@ public class ProjectWindow extends CommonModuleFrame {
 		// merge/split sessions
 		final DeriveSessionAction deriveItem = new DeriveSessionAction(this);
 		builder.addItem(".", deriveItem);
+		
+		builder.addSeparator(".", "project_actions");
+		
+		setupProjectMediaFolderMenu(builder);
+		builder.addSeparator(".", "project_media_folder");
 
 		builder.addSeparator(".", "team");
 		final JMenu teamMenu = builder.addMenu(".", "Team");
@@ -903,9 +916,9 @@ public class ProjectWindow extends CommonModuleFrame {
 	}
 	
 	void setupCorpusFolderMenu(String corpus, MenuBuilder builder) {
-		if(corpus == null) return;
+		boolean enabled = (corpus != null);
 		
-		String corpusMediaPath = getProject().getCorpusMediaFolder(corpus);
+		String corpusMediaPath = (enabled ? getProject().getCorpusMediaFolder(corpus) : getProject().getProjectMediaFolder());
 		if(corpusMediaPath == null) return;
 		
 		File corpusMediaFolder = new File(corpusMediaPath);
@@ -917,35 +930,36 @@ public class ProjectWindow extends CommonModuleFrame {
 			createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
 			final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
 			createCorpusFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+			createCorpusFolderItem.setEnabled(enabled);
 			builder.addItem(".", createCorpusFolderItem);
 		} else {
 			final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
 			showProjectFolderAct.putValue(PhonUIAction.NAME, "Show corpus media folder");
 			showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
 			JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
-			showProjectFolderItem.setEnabled(absoluteCorpusMediaFolder.exists());
+			showProjectFolderItem.setEnabled(enabled && absoluteCorpusMediaFolder.exists());
 			builder.addItem(".", showProjectFolderItem);
 		}
 		
 		final SelectCorpusMediaFolder selectFolderAct = new SelectCorpusMediaFolder(this);
-		builder.addItem(".", selectFolderAct).setEnabled(corpus != null);
+		builder.addItem(".", selectFolderAct).setEnabled(enabled);
 		
 		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
 			final PhonUIAction resetCorpusFolderAct = new PhonUIAction(this, "onResetCorpusMediaFolder", corpus);
 			resetCorpusFolderAct.putValue(PhonUIAction.NAME, "Reset corpus media folder");
 			resetCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset corpus media folder (use project media folder)");
-			builder.addItem(".", resetCorpusFolderAct);
+			builder.addItem(".", resetCorpusFolderAct).setEnabled(enabled);
 			
 			if(corpusMediaFolder.isAbsolute()) {
 				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeCorpusMediaFolderRelative", corpus);
 				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make corpus media folder relative to project");
 				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder path relative to project folder");
-				builder.addItem(".", makeRelativeAct);
+				builder.addItem(".", makeRelativeAct).setEnabled(enabled);
 			} else {
 				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeCorpusMediaFolderAbsolute", corpus);
 				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make corpus media folder absolute");
 				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder an absolute filename");
-				builder.addItem(".", makeAbsoluteAct);
+				builder.addItem(".", makeAbsoluteAct).setEnabled(enabled);
 			}
 		}
 	}
@@ -1043,7 +1057,7 @@ public class ProjectWindow extends CommonModuleFrame {
 
 			worker.invokeLater(() -> {
 				final ActionEvent ae = new ActionEvent(sessionList, -1, "openSession");
-				(new OpenSessionAction(ProjectWindow.this, corpus, session)).actionPerformed(ae);
+				(new OpenSessionAction(ProjectWindow.this, corpus, session, isBlindMode())).actionPerformed(ae);
 			});
 		}
 
@@ -1320,51 +1334,51 @@ public class ProjectWindow extends CommonModuleFrame {
 	 * @param clickPoint
 	 */
 	private void showCorpusListContextMenu(Point clickPoint) {
-		List<String> corpora = getSelectedCorpora();
-
 		JPopupMenu contextMenu = new JPopupMenu();
+		setupCorpusListContextMenu(new MenuBuilder(contextMenu));
 
-		if(corpora.size() == 1) {
-			// new session item
-			JMenuItem newSessionItem = new JMenuItem(new NewSessionAction(this));
-			contextMenu.add(newSessionItem);
-
-			contextMenu.addSeparator();
-
-			JMenuItem templateItem = new JMenuItem(new OpenCorpusTemplateAction(this));
-			contextMenu.add(templateItem);
-
-			contextMenu.addSeparator();
-		}
+		contextMenu.show(corpusList, clickPoint.x, clickPoint.y);
+	}
+	
+	private void setupCorpusListContextMenu(MenuBuilder builder) {
+		List<String> corpora = getSelectedCorpora();
+		
+		PhonUIAction createNewCorpusAct =
+				new PhonUIAction(this, "onShowCreateCorpusButton");
+		createNewCorpusAct.putValue(Action.NAME, "New corpus...");
+		createNewCorpusAct.putValue(Action.SHORT_DESCRIPTION, "Create a new corpus");
+		createNewCorpusAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
+		builder.addItem(".", createNewCorpusAct);
+		
+		final boolean enabled = corpora.size() > 0;
+		builder.addSeparator(".", "s1");
 
 		JMenuItem dupItem = new JMenuItem(new DuplicateCorpusAction(this));
+		dupItem.setEnabled(enabled);
 		if(corpora.size() > 1) {
 			dupItem.setText("Duplicate Corpora");
 		}
-		contextMenu.add(dupItem);
+		builder.addItem(".", dupItem);
 
-		if(corpora.size() == 1) {
-			// rename
 			JMenuItem renameItem = new JMenuItem(new RenameCorpusAction(this));
-			contextMenu.add(renameItem);
-		}
+			renameItem.setEnabled(enabled);
+			builder.addItem(".", renameItem);
 
 		// delete
 		JMenuItem deleteItem = new JMenuItem(new DeleteCorpusAction(this));
+		deleteItem.setEnabled(enabled);
 		if(corpora.size() > 1) {
 			deleteItem.setText("Delete Corpora");
 		}
-		contextMenu.add(deleteItem);
-
-		contextMenu.addSeparator();
-
-		setupProjectMediaFolderMenu(new MenuBuilder(contextMenu));
-		if(corpora.size() > 0) {
-			contextMenu.addSeparator();
-			setupCorpusFolderMenu(getSelectedCorpus(), new MenuBuilder(contextMenu));
-		}
-
-		contextMenu.show(corpusList, clickPoint.x, clickPoint.y);
+		builder.addItem(".", deleteItem);
+		
+		builder.addSeparator(".", "s4");
+		setupCorpusFolderMenu(getSelectedCorpus(), builder);
+		
+		builder.addSeparator(".", "s3");
+		JMenuItem templateItem = new JMenuItem(new OpenCorpusTemplateAction(this));
+		templateItem.setEnabled(enabled);
+		builder.addItem(".", templateItem);				
 	}
 
 	/**
@@ -1373,49 +1387,60 @@ public class ProjectWindow extends CommonModuleFrame {
 	 * @param clickPoint
 	 */
 	private void showSessionListContextMenu(Point clickPoint) {
-		List<String> selectedSessions = getSelectedSessionNames();
-
 		JPopupMenu contextMenu = new JPopupMenu();
+		setupSessionListContextMenu(new MenuBuilder(contextMenu));
 
-		if(selectedSessions.size() == 1) {
-			// open item
-			JMenuItem openItem = new JMenuItem(new OpenSessionAction(this));
-			contextMenu.add(openItem);
-			
-			final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
-			openBlindModeAct.putValue(PhonUIAction.NAME, "Open session as transcriber... (blind mode)");
-			openBlindModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session as a blind transcriber");
-			contextMenu.add(openBlindModeAct);
-			
-			contextMenu.addSeparator();
+		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
+	}
+	
+	private void setupSessionListContextMenu(MenuBuilder builder) {
+		// add 'new session item'
+		PhonUIAction createNewSessionAct =
+				new PhonUIAction(this, "onShowCreateSessionButton");
+		createNewSessionAct.putValue(Action.NAME, "New session...");
+		createNewSessionAct.putValue(Action.SHORT_DESCRIPTION, "Create new session in selected corpus");
+		createNewSessionAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
+		builder.addItem(".", createNewSessionAct).setEnabled(getSelectedCorpus() != null);
+		
+		List<String> selectedSessions = getSelectedSessionNames();
+		boolean enabled = selectedSessions.size() > 0;
+		
+		builder.addSeparator(".", "s1");
+
+		// open item
+		JMenuItem openItem = new JMenuItem(new OpenSessionAction(this, false));
+		if(isBlindMode()) {
+			openItem.setText(openItem.getText() + " (not blind mode)");
 		}
+		openItem.setEnabled(enabled);
+		builder.addItem(".", openItem);
+		
+		final OpenSessionAction openBlindModeAct = new OpenSessionAction(this, true);
+		openBlindModeAct.putValue(PhonUIAction.NAME, "Open session as transcriber... (blind mode)");
+		openBlindModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session as a blind transcriber");
+		builder.addItem(".", openBlindModeAct).setEnabled(enabled);
+		
+		builder.addSeparator(".", "s2");
 
 		// rename item
 		JMenuItem duplicateItem = new JMenuItem(new DuplicateSessionAction(this));
+		duplicateItem.setEnabled(enabled);
 		if(selectedSessions.size() > 1) {
 			duplicateItem.setText("Duplicate Sessions");
 		}
-		contextMenu.add(duplicateItem);
+		builder.addItem(".", duplicateItem);
 
-		if(selectedSessions.size() == 1) {
-			JMenuItem renameItem = new JMenuItem(new RenameSessionAction(this));
-			contextMenu.add(renameItem);
-		}
+		JMenuItem renameItem = new JMenuItem(new RenameSessionAction(this));
+		renameItem.setEnabled(enabled);
+		builder.addItem(".", renameItem);
 
 		// delete item
 		JMenuItem deleteItem = new JMenuItem(new DeleteSessionAction(this));
+		deleteItem.setEnabled(enabled);
 		if(selectedSessions.size() > 1) {
 			deleteItem.setText("Delete Sessions");
 		}
-		contextMenu.add(deleteItem);
-
-
-		contextMenu.addSeparator();
-
-		contextMenu.add(new SelectProjectMediaFolder(this));
-		contextMenu.add(new SelectCorpusMediaFolder(this));
-
-		contextMenu.show(sessionList, clickPoint.x, clickPoint.y);
+		builder.addItem(".", deleteItem);
 	}
 
 	@Override

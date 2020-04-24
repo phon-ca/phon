@@ -231,7 +231,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
 
 			final ProjectType projectData = getProjectData();
-			// HACK to ensure compatibility with Phon 1.6.2
+			
 			projectData.setAppid("1.5");
 			projectData.setVersion("1.5");
 
