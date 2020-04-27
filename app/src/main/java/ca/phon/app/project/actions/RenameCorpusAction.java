@@ -58,7 +58,7 @@ public class RenameCorpusAction extends ProjectWindowAction {
 			if (newCorpusName == null || newCorpusName.length() == 0) {
 				showMessage(
 					"Rename Corpus",
-					"You must specify a non-empty corpus name!");
+					"Please enter corpus name");
 				return;
 			}
 	

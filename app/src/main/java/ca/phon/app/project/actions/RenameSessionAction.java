@@ -64,7 +64,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 			final String newSessionName = dialog.getNewSessionName();
 			
 			if (newSessionName == null || newSessionName.length() == 0) {
-				showMessage("Rename Session", "You must specify a non-empty session name.");
+				showMessage("Rename Session", "Please enter session name.");
 				return;
 			}
 

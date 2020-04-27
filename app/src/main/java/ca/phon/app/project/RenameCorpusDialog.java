@@ -82,6 +82,7 @@ public class RenameCorpusDialog extends JDialog {
 		setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 		initializePanel();
 		cmbCorpus.setSelectedItem(corpus);
+		txtName.setText(corpus);
 	}
 
 	/**
