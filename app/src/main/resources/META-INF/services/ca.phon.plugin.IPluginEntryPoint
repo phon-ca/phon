@@ -26,7 +26,7 @@ ca.phon.app.session.check.SessionCheckEP
 # Query Editor
 ca.phon.app.query.QueryAndReportWizardEP
 # Session template
-ca.phon.app.corpus.CorpusTemplateEP
+ca.phon.app.corpus.SessionTemplateEP
 # About Phon
 ca.phon.app.about.AboutEP
 # Log Viewer

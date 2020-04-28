@@ -112,7 +112,7 @@ import ca.phon.app.project.actions.DuplicateCorpusAction;
 import ca.phon.app.project.actions.DuplicateSessionAction;
 import ca.phon.app.project.actions.NewCorpusAction;
 import ca.phon.app.project.actions.NewSessionAction;
-import ca.phon.app.project.actions.OpenCorpusTemplateAction;
+import ca.phon.app.project.actions.OpenSessionTemplateAction;
 import ca.phon.app.project.actions.OpenSessionAction;
 import ca.phon.app.project.actions.RefreshAction;
 import ca.phon.app.project.actions.RenameCorpusAction;
@@ -1385,13 +1385,13 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 		builder.addItem(".", deleteItem);
 		
+		builder.addSeparator(".", "s3");
+		JMenuItem templateItem = new JMenuItem(new OpenSessionTemplateAction(this));
+		templateItem.setEnabled(enabled);
+		builder.addItem(".", templateItem);
+		
 		builder.addSeparator(".", "s4");
 		setupCorpusFolderMenu(getSelectedCorpus(), builder);
-		
-		builder.addSeparator(".", "s3");
-		JMenuItem templateItem = new JMenuItem(new OpenCorpusTemplateAction(this));
-		templateItem.setEnabled(enabled);
-		builder.addItem(".", templateItem);				
 	}
 
 	/**

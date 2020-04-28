@@ -19,26 +19,26 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.HashMap;
 
-import ca.phon.app.corpus.CorpusTemplateEP;
+import ca.phon.app.corpus.SessionTemplateEP;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.toast.ToastFactory;
 
-public class OpenCorpusTemplateAction extends ProjectWindowAction {
+public class OpenSessionTemplateAction extends ProjectWindowAction {
 
 	private static final long serialVersionUID = 6335879665708654561L;
 	
 	private String corpus;
 	
-	public OpenCorpusTemplateAction(ProjectWindow projectWindow) {
+	public OpenSessionTemplateAction(ProjectWindow projectWindow) {
 		this(projectWindow, null);
 	}
 
-	public OpenCorpusTemplateAction(ProjectWindow projectWindow, String corpus) {
+	public OpenSessionTemplateAction(ProjectWindow projectWindow, String corpus) {
 		super(projectWindow);
 		this.corpus = corpus;
-		putValue(NAME, "Open corpus template...");
+		putValue(NAME, "Open session template...");
 		putValue(SHORT_DESCRIPTION, "Open template for sesssion in the selected corpus");
 	}
 
@@ -55,7 +55,7 @@ public class OpenCorpusTemplateAction extends ProjectWindowAction {
 		initInfo.put("project", getWindow().getProject());
 		initInfo.put("corpusName", corpus);
 		
-		PluginEntryPointRunner.executePluginInBackground(CorpusTemplateEP.EP_NAME, initInfo);
+		PluginEntryPointRunner.executePluginInBackground(SessionTemplateEP.EP_NAME, initInfo);
 	}
 
 }

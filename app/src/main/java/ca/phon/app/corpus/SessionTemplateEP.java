@@ -34,9 +34,9 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.TierViewItem;
 
 @PhonPlugin
-public class CorpusTemplateEP extends SessionEditorEP {
+public class SessionTemplateEP extends SessionEditorEP {
 
-	public final static String EP_NAME = "CorpusTemplate";
+	public final static String EP_NAME = "SessionTemplate";
 	
 	@Override
 	public String getName() {

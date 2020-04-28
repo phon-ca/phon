@@ -935,7 +935,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		if(selectionInterval != null) {
 			final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
-			selectAct.putValue(PhonUIAction.NAME, "Assign segment");
+			selectAct.putValue(PhonUIAction.NAME, "Assign segment to record");
 			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
 			builder.addItem(".", selectAct);
 			
