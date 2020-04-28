@@ -145,7 +145,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 			
 			if(getParentView().getEditor().getSession().getRecordCount() > 0) {
 				final PhonUIAction assignSegmentAction = new PhonUIAction(this, "onAssignSegment");
-				assignSegmentAction.putValue(PhonUIAction.NAME, "Assign segment");
+				assignSegmentAction.putValue(PhonUIAction.NAME, "Assign segment to record");
 				assignSegmentAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
 				builder.addItem(".", assignSegmentAction);
 			}
