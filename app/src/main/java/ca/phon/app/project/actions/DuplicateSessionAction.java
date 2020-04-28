@@ -45,7 +45,7 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 	public DuplicateSessionAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
-		putValue(NAME, "Duplicate Session");
+		putValue(NAME, "Duplicate session");
 		putValue(SHORT_DESCRIPTION, "Duplicate selected session(s)");
 	}
 

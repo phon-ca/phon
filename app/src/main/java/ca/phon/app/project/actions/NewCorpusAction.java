@@ -46,7 +46,7 @@ public class NewCorpusAction extends ProjectWindowAction {
 		this.corpusName = corpusName;
 		this.description = description;
 		
-		putValue(NAME, "New Corpus...");
+		putValue(NAME, "New corpus...");
 		putValue(SHORT_DESCRIPTION, "Add corpus to project");
 	}
 

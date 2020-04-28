@@ -27,7 +27,7 @@ public class AnonymizeAction extends ProjectWindowAction {
 	public AnonymizeAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
-		putValue(NAME, "Anonymize Participant Information...");
+		putValue(NAME, "Anonymize participant information...");
 		putValue(SHORT_DESCRIPTION, "Anonymize participant information for project");
 	}
 

@@ -45,7 +45,7 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 	public DuplicateCorpusAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 
-		putValue(NAME, "Duplicate Corpus");
+		putValue(NAME, "Duplicate corpus");
 		putValue(SHORT_DESCRIPTION, "Duplicate selected corpus/corpora");
 	}
 

@@ -37,7 +37,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 	public RenameSessionAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
-		putValue(NAME, "Rename Session");
+		putValue(NAME, "Rename session");
 		putValue(SHORT_DESCRIPTION, "Rename selected session");
 	}
 

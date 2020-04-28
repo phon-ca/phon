@@ -35,7 +35,7 @@ public class RenameCorpusAction extends ProjectWindowAction {
 	public RenameCorpusAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 	
-		putValue(NAME, "Rename Corpus...");
+		putValue(NAME, "Rename corpus...");
 		putValue(SHORT_DESCRIPTION, "Rename selected corpus");
 	}
 

@@ -29,7 +29,7 @@ import ca.phon.worker.PhonWorker;
 
 public class SelectCorpusMediaFolder extends ProjectWindowAction {
 
-	private final static String TXT = "Select corpus media folder...";
+	private final static String TXT = "Select media folder...";
 
 	private final static String DESC = "Select corpus media folder.";
 

@@ -29,6 +29,8 @@ public class DropDownIcon implements Icon {
 	
 	private Icon arrowIcn;
 	
+	private boolean arrowPainted = true;
+	
 	public final static int DEFAULT_ICON_POSITION = SwingConstants.CENTER;
 	/**
 	 * One of: SwingConstants.TOP/CENTER/BOTTOM
@@ -81,6 +83,14 @@ public class DropDownIcon implements Icon {
 		}
 		return null;
 	}
+	
+	public void setArrowPainted(boolean painted) {
+		this.arrowPainted = painted;
+	}
+	
+	public boolean isArrowPainted() {
+		return this.arrowPainted;
+	}
 
 	public int getGap() {
 		return gap;
@@ -126,7 +136,8 @@ public class DropDownIcon implements Icon {
 			arrowY = y+(h-arrowIcn.getIconHeight())/2;
 		}
 		
-		arrowIcn.paintIcon(c, g, x+getGap()+icn.getIconWidth(), arrowY);
+		if(isArrowPainted())
+			arrowIcn.paintIcon(c, g, x+getGap()+icn.getIconWidth(), arrowY);
 		
 		if(paintRollover) {
 			Color brighter = UIManager.getColor( "controlHighlight" ); 

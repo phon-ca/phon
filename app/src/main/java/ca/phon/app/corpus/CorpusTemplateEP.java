@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
@@ -33,7 +34,7 @@ import ca.phon.session.SystemTierType;
 import ca.phon.session.TierViewItem;
 
 @PhonPlugin
-public class CorpusTemplateEP implements IPluginEntryPoint {
+public class CorpusTemplateEP extends SessionEditorEP {
 
 	public final static String EP_NAME = "CorpusTemplate";
 	
@@ -55,7 +56,7 @@ public class CorpusTemplateEP implements IPluginEntryPoint {
 			final SessionFactory factory = SessionFactory.newFactory();
 			template = factory.createSession();
 			template.setCorpus(corpus);
-			template.setName(EP_NAME);
+			template.setName("__sessiontemplate");
 			
 			final Record r = factory.createRecord();
 			r.addGroup();
@@ -70,21 +71,8 @@ public class CorpusTemplateEP implements IPluginEntryPoint {
 			template.setTierView(tierView);
 		}
 		
-		final Session session = template;
-		final Runnable onEDT = new Runnable() {
-			
-			@Override
-			public void run() {
-				final CorpusTemplateEditor editor = new CorpusTemplateEditor(project, session);
-				editor.pack();
-				editor.setVisible(true);
-			}
-			
-		};
-		if(SwingUtilities.isEventDispatchThread())
-			onEDT.run();
-		else
-			SwingUtilities.invokeLater(onEDT);
+		args.put(EntryPointArgs.SESSION_OBJECT, template);
+		super.pluginStart(args);
 	}
 
 }

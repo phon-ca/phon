@@ -689,7 +689,10 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		});
 		
-		projectFolderLabel.setIcon(IconManager.getInstance().getSystemIconForPath(projectLoadPath, "places/folder", IconSize.SMALL));
+		ImageIcon folderIcn = IconManager.getInstance().getSystemIconForPath(projectLoadPath, "places/folder", IconSize.SMALL);
+		DropDownIcon folderDdIcn = new DropDownIcon(folderIcn, 0, SwingConstants.BOTTOM);
+		folderDdIcn.setArrowPainted(false);
+		projectFolderLabel.setIcon(folderDdIcn);
 		projectFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		projectInfoPanel.add(projectFolderLabel, gbc);
 		
@@ -719,7 +722,7 @@ public class ProjectWindow extends CommonModuleFrame {
 			
 		});
 		
-		projectInfoPanel.add(new JLabel("Project media folder:"), gbc);
+		projectInfoPanel.add(new JLabel("Media folder:"), gbc);
 		projectMediaFolderLabel = new JLabel();
 		updateProjectMediaLabel();
 		projectMediaFolderLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -856,7 +859,7 @@ public class ProjectWindow extends CommonModuleFrame {
 				? IconManager.getInstance().getSystemIconForPath(absoluteProjectMediaFolder.getAbsolutePath(), "places/folder", IconSize.SMALL) 
 				: stockFolderIcon;
 				
-		DropDownIcon dropDownIcon = new DropDownIcon(folderIcon, -5, SwingConstants.BOTTOM);
+		DropDownIcon dropDownIcon = new DropDownIcon(folderIcon, 0, SwingConstants.BOTTOM);
 				
 		projectMediaFolderLabel.setIcon(dropDownIcon);
 		if(!getProject().hasCustomProjectMediaFolder() && !absoluteProjectMediaFolder.exists()) {
@@ -878,41 +881,43 @@ public class ProjectWindow extends CommonModuleFrame {
 		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
 		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
 		
+		final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteProjectMediaFolder);
+		showProjectFolderAct.putValue(PhonUIAction.NAME, "Show media folder");
+		showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open file system browser with project media folder selected");
+		JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
+		showProjectFolderItem.setEnabled(absoluteProjectMediaFolder.exists());
+		builder.addItem(".", showProjectFolderItem);
+		
+		builder.addSeparator(".", "s1");
+		
 		final SelectProjectMediaFolder selectFolderAct = new SelectProjectMediaFolder(this);
 		builder.addItem(".", selectFolderAct);
 		
 		if(getProject().hasCustomProjectMediaFolder()) {
 			final PhonUIAction resetProjectFolderAct = new PhonUIAction(this, "onResetProjectMediaFolder");
-			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Reset project media folder");
-			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset project media folder (__res/media)");
+			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Clear media folder selection");
+			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear media folder selection");
 			builder.addItem(".", resetProjectFolderAct);
-		}
-		
-		if(!absoluteProjectMediaFolder.exists()) {
-			final PhonUIAction createProjectFolderAct = new PhonUIAction(absoluteProjectMediaFolder, "mkdirs");
-			createProjectFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomProjectMediaFolder() ? "Create media folder" : "Create default media folder"));
-			createProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
-			final JMenuItem createProjectFolderItem = new JMenuItem(createProjectFolderAct);
-			createProjectFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
-			builder.addItem(".", createProjectFolderItem);
-		} else {
-			final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteProjectMediaFolder);
-			showProjectFolderAct.putValue(PhonUIAction.NAME, "Show project media folder");
-			showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
-			JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
-			showProjectFolderItem.setEnabled(absoluteProjectMediaFolder.exists());
-			builder.addItem(".", showProjectFolderItem);
+			
+			if(!absoluteProjectMediaFolder.exists()) {
+				final PhonUIAction createProjectFolderAct = new PhonUIAction(absoluteProjectMediaFolder, "mkdirs");
+				createProjectFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomProjectMediaFolder() ? "Create media folder" : "Create default media folder"));
+				createProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
+				final JMenuItem createProjectFolderItem = new JMenuItem(createProjectFolderAct);
+				createProjectFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+				builder.addItem(".", createProjectFolderItem);
+			}
 		}
 		
 		if(getProject().hasCustomProjectMediaFolder()) {
 			if(projectMediaFolder.isAbsolute()) {
 				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeProjectMediaFolderRelative");
-				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make project media folder relative to project");
-				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder path relative to project folder");
+				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make media folder path relative to project");
+				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make media folder path relative to project folder");
 				builder.addItem(".", makeRelativeAct);
 			} else {
 				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeProjectMediaFolderAbsolute");
-				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make project media folder absolute");
+				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make media folder path absolute");
 				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder an absolute filename");
 				builder.addItem(".", makeAbsoluteAct);
 			}
@@ -928,43 +933,44 @@ public class ProjectWindow extends CommonModuleFrame {
 		File corpusMediaFolder = new File(corpusMediaPath);
 		File absoluteCorpusMediaFolder = corpusMediaFolder.isAbsolute() ? corpusMediaFolder : new File(getProject().getLocation(), corpusMediaPath);
 		
+		final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
+		showProjectFolderAct.putValue(PhonUIAction.NAME, "Show media folder");
+		showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open file system browser with project media folder selected");
+		JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
+		showProjectFolderItem.setEnabled(enabled && absoluteCorpusMediaFolder.exists());
+		builder.addItem(".", showProjectFolderItem);
+		
+		builder.addSeparator(".", "s1");
+		
 		final SelectCorpusMediaFolder selectFolderAct = new SelectCorpusMediaFolder(this);
 		builder.addItem(".", selectFolderAct).setEnabled(enabled);
 		
 		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
 			final PhonUIAction resetCorpusFolderAct = new PhonUIAction(this, "onResetCorpusMediaFolder", corpus);
-			resetCorpusFolderAct.putValue(PhonUIAction.NAME, "Reset corpus media folder");
-			resetCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset corpus media folder (use project media folder)");
+			resetCorpusFolderAct.putValue(PhonUIAction.NAME, "Clear media folder selection");
+			resetCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear corpus media folder selection (use project media folder)");
 			builder.addItem(".", resetCorpusFolderAct).setEnabled(enabled);
+			
+			if(!absoluteCorpusMediaFolder.exists()) {
+				final PhonUIAction createCorpusFolderAct = new PhonUIAction(absoluteCorpusMediaFolder, "mkdirs");
+				createCorpusFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomCorpusMediaFolder(corpus) ? "Create media folder" : "Create default media folder"));
+				createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
+				final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
+				createCorpusFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+				createCorpusFolderItem.setEnabled(enabled);
+				builder.addItem(".", createCorpusFolderItem);
+			}
 		}
-		
-		if(!absoluteCorpusMediaFolder.exists()) {
-			final PhonUIAction createCorpusFolderAct = new PhonUIAction(absoluteCorpusMediaFolder, "mkdirs");
-			createCorpusFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomCorpusMediaFolder(corpus) ? "Create media folder" : "Create default media folder"));
-			createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
-			final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
-			createCorpusFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
-			createCorpusFolderItem.setEnabled(enabled);
-			builder.addItem(".", createCorpusFolderItem);
-		} else {
-			final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
-			showProjectFolderAct.putValue(PhonUIAction.NAME, "Show corpus media folder");
-			showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open files system browser with project media folder selected");
-			JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
-			showProjectFolderItem.setEnabled(enabled && absoluteCorpusMediaFolder.exists());
-			builder.addItem(".", showProjectFolderItem);
-		}
-		
 		
 		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
 			if(corpusMediaFolder.isAbsolute()) {
 				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeCorpusMediaFolderRelative", corpus);
-				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make corpus media folder relative to project");
+				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make media folder path relative to project");
 				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder path relative to project folder");
 				builder.addItem(".", makeRelativeAct).setEnabled(enabled);
 			} else {
 				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeCorpusMediaFolderAbsolute", corpus);
-				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make corpus media folder absolute");
+				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make media folder path absolute");
 				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder an absolute filename");
 				builder.addItem(".", makeAbsoluteAct).setEnabled(enabled);
 			}

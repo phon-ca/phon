@@ -29,7 +29,7 @@ import ca.phon.worker.PhonWorker;
 
 public class SelectProjectMediaFolder extends ProjectWindowAction {
 
-	private final static String TXT = "Select project media folder...";
+	private final static String TXT = "Select media folder...";
 
 	private final static String DESC = "Select project media folder";
 
@@ -47,8 +47,6 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 
 	private void browseForMediaFolder() {
 		final Project project = getWindow()	.getProject();
-		final String corpus = getWindow().getSelectedCorpus();
-		if(corpus == null) return;
 
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(getWindow());
@@ -56,7 +54,7 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 		props.setCanChooseDirectories(true);
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
-		final String currentPath = project.getCorpusMediaFolder(corpus);
+		final String currentPath = project.getProjectMediaFolder();
 		if(currentPath != null) {
 			File currentFolder = new File(currentPath);
 			if(!currentFolder.isAbsolute()) {

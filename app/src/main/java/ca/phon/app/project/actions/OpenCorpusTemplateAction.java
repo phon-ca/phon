@@ -16,8 +16,11 @@
 package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.HashMap;
 
+import ca.phon.app.corpus.CorpusTemplateEP;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.toast.ToastFactory;
@@ -35,7 +38,7 @@ public class OpenCorpusTemplateAction extends ProjectWindowAction {
 	public OpenCorpusTemplateAction(ProjectWindow projectWindow, String corpus) {
 		super(projectWindow);
 		this.corpus = corpus;
-		putValue(NAME, "Open Corpus Template...");
+		putValue(NAME, "Open corpus template...");
 		putValue(SHORT_DESCRIPTION, "Open template for sesssion in the selected corpus");
 	}
 
@@ -51,8 +54,8 @@ public class OpenCorpusTemplateAction extends ProjectWindowAction {
 		HashMap<String, Object> initInfo = new HashMap<String, Object>();
 		initInfo.put("project", getWindow().getProject());
 		initInfo.put("corpusName", corpus);
-
-		PluginEntryPointRunner.executePluginInBackground("CorpusTemplate", initInfo);
+		
+		PluginEntryPointRunner.executePluginInBackground(CorpusTemplateEP.EP_NAME, initInfo);
 	}
 
 }

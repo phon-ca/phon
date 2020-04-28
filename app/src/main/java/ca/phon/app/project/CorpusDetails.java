@@ -140,7 +140,7 @@ public class CorpusDetails extends JPanel {
 		gbc.weighty = 0.0;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.WEST;
-		folderPanel.add(new JLabel("Folder:"), gbc);
+		folderPanel.add(new JLabel("Corpus folder:"), gbc);
 		++gbc.gridx;
 		gbc.weightx = 1.0;
 		gbc.insets = new Insets(0, 5, 0, 0);
@@ -225,11 +225,11 @@ public class CorpusDetails extends JPanel {
 					? IconManager.getInstance().getSystemIconForPath(absoluteCorpusMediaFolder.getAbsolutePath(), "places/folder", IconSize.SMALL) 
 					: stockFolderIcon;
 					
-			DropDownIcon dropDownIcon = new DropDownIcon(folderIcon, -5, SwingConstants.BOTTOM);
+			DropDownIcon dropDownIcon = new DropDownIcon(folderIcon, 0, SwingConstants.BOTTOM);
 					
 			mediaFolderLabel.setIcon(dropDownIcon);
 			if(!project.hasCustomCorpusMediaFolder(corpus)) {
-				mediaFolderLabel.setText("(same as project - click to select)");
+				mediaFolderLabel.setText("(same as project - click to change)");
 				mediaFolderLabel.setToolTipText("Corpus media folder is same as project media folder, click to change");
 				mediaFolderLabel.setForeground(Color.blue);
 			} else {
@@ -268,7 +268,11 @@ public class CorpusDetails extends JPanel {
 			locationLabel.setText(relativePath.toString());
 			locationLabel.setForeground(Color.blue);
 			locationLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			locationLabel.setIcon(IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, "places/folder", IconSize.SMALL));
+			
+			ImageIcon folderIcn = IconManager.getInstance().getSystemIconForPath(corpusAbsolutePath, "places/folder", IconSize.SMALL);
+			DropDownIcon folderDdIcn = new DropDownIcon(folderIcn, 0, SwingConstants.BOTTOM);
+			folderDdIcn.setArrowPainted(false);
+			locationLabel.setIcon(folderDdIcn);
 			locationLabel.setToolTipText(corpusAbsolutePath);
 
 			corpusDescriptionArea.setText(project.getCorpusDescription(corpus));

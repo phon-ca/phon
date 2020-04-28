@@ -27,7 +27,7 @@ public class DeriveSessionAction extends ProjectWindowAction {
 	public DeriveSessionAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
-		putValue(NAME, "Derive Session...");
+		putValue(NAME, "Derive session...");
 		putValue(SHORT_DESCRIPTION, "Create a new session from existing data");
 	}
 
