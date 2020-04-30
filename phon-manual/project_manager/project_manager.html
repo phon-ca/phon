@@ -160,23 +160,45 @@ $(document).ready( function () {
                     <li class="li">Project media folder</li>
                     <li class="li">Global media folders (see <a class="xref" href="../prefs/preferences.html#media_folders">Media Folders</a>)</li>
                 </ol></div>
-            <p class="p">To assign project media folders, select <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Select media folder...</span></span> from the <span class="keyword wintitle">Project Manager</span> window.  A similar menu
+            <p class="p">To assign project media folders, select <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Select media folder...</span></span> from the <span class="keyword wintitle">Project Manager</span> window. A similar menu
                 item is available for corpus media folders under the <span class="ph uicontrol">Corpus</span>
-                submenu.  Actions for controlling media folders are also available from popup menus
-                accessed by clicking on the media folder labels at the top of the window and in the
-                corpus details section.</p>
+                submenu. Actions for controlling media folder selection are available from popup
+                menus accessed by clicking on the media folder labels at the top of the window and
+                in the corpus details section.</p>
+            <figure class="fig fignone" id="project_media_folders__fig_d1f_1hp_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Media Folder Menu</figcaption>
+                
+                <br /><img class="image" id="project_media_folders__image_e1f_1hp_nlb" src="images/media_folder_menu.png" alt="Media Folder Menu" /><br />
+            </figure>
+        </div>
+    </article>
+    <article class="topic nested1" aria-labelledby="ariaid-title4" id="topic_pjd_chp_nlb">
+        <h2 class="title topictitle2" id="ariaid-title4">Relative Paths</h2>
+        <div class="body">
+            <p class="p"><span class="keyword">Absolute paths</span> are full paths to files/folders while
+                    <span class="keyword">relative paths</span> are portions of a full path. On macOS absolute
+                paths begin with a forward slash and on windows absolute paths begin with the drive
+                letter.</p>
+            <p class="p">Using relative paths for media folders can make sharing projects easier. By
+                specifiying a common folder setup between project files and media folders for all
+                people - e.g., using <span class="ph filepath">~/Documents/PhonWorkspace</span> for project
+                files and <span class="ph filepath">~/Documents/PhonMedia</span> for media files - other users
+                will not need to modify their individual media folder selections.</p>
+            <figure class="fig fignone" id="topic_pjd_chp_nlb__fig_zww_k3p_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 3</span>: </span>Relative Media Folder Path</figcaption>
+                
+                <br /><img class="image" id="topic_pjd_chp_nlb__image_axw_k3p_nlb" src="images/relative_media_folder_path.png" alt="Relative Media Folder Path" /><br />
+            </figure>
         </div>
     </article>
     
-    <article class="topic nested1" aria-labelledby="ariaid-title4" id="project_actions">
-        <h2 class="title topictitle2" id="ariaid-title4">Project Actions</h2>
+    <article class="topic nested1" aria-labelledby="ariaid-title5" id="project_actions">
+        <h2 class="title topictitle2" id="ariaid-title5">Project Actions</h2>
         <div class="body">
             <p class="p">The following actions are available from the <span class="ph uicontrol">Project</span> window
                 menu when the <span class="keyword wintitle">Project Mangaer</span> window is focused.</p>
         </div>
         
-        <article class="topic nested2" aria-labelledby="ariaid-title5" id="check_transcriptions">
-            <h3 class="title topictitle3" id="ariaid-title5">Check sessions</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title6" id="check_transcriptions">
+            <h3 class="title topictitle3" id="ariaid-title6">Check sessions</h3>
             <div class="body">
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
                 <ol class="ol">
@@ -197,14 +219,14 @@ $(document).ready( function () {
                                 and visually check its IPA tiers.</div>
                     </li>
                 </ol>
-                <figure class="fig fignone" id="check_transcriptions__fig_cbt_r5n_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Check Sessions</figcaption>
+                <figure class="fig fignone" id="check_transcriptions__fig_cbt_r5n_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 4</span>: </span>Check Sessions</figcaption>
                     
                     <br /><img class="image" id="check_transcriptions__image_dbt_r5n_nlb" src="images/check_sessions.png" alt="Check Sessions" /><br />
                 </figure>
             </div>
             
-            <article class="topic nested3" aria-labelledby="ariaid-title6" id="reset_syllabification">
-                <h4 class="title topictitle4" id="ariaid-title6">Reset Syllabification</h4>
+            <article class="topic nested3" aria-labelledby="ariaid-title7" id="reset_syllabification">
+                <h4 class="title topictitle4" id="ariaid-title7">Reset Syllabification</h4>
                 
                 <div class="body"><p class="shortdesc">In the event of display issues in <span class="keyword">Target Syllables</span> or
                     <span class="keyword">Actual Syllables</span> in the <span class="keyword wintitle">Syllabification &amp;
@@ -237,8 +259,8 @@ $(document).ready( function () {
                 </div>
             </article>
             
-            <article class="topic nested3" aria-labelledby="ariaid-title7" id="reset_alignment">
-                <h4 class="title topictitle4" id="ariaid-title7">Reset Phone Alignment</h4>
+            <article class="topic nested3" aria-labelledby="ariaid-title8" id="reset_alignment">
+                <h4 class="title topictitle4" id="ariaid-title8">Reset Phone Alignment</h4>
                 
                 <div class="body"><p class="shortdesc">In the event of display issues in the <span class="keyword">Alignment</span> tier of
                     the <span class="keyword wintitle">Syllabification &amp; Alignment</span> view, it may be necessary
@@ -269,8 +291,8 @@ $(document).ready( function () {
         
         
         
-        <article class="topic nested2" aria-labelledby="ariaid-title8" id="derive_session">
-            <h3 class="title topictitle3" id="ariaid-title8">Derive Session</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title9" id="derive_session">
+            <h3 class="title topictitle3" id="ariaid-title9">Derive Session</h3>
             
             <div class="body"><p class="shortdesc">Derive a new session using records from existing sessions.</p>
                 <section class="section">
@@ -314,8 +336,8 @@ $(document).ready( function () {
             </div>
         </article>
         
-        <article class="topic nested2" aria-labelledby="ariaid-title9" id="refresh_project">
-            <h3 class="title topictitle3" id="ariaid-title9">Refresh Project</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title10" id="refresh_project">
+            <h3 class="title topictitle3" id="ariaid-title10">Refresh Project</h3>
             
             <div class="body"><p class="shortdesc">Refresh <span class="keyword wintitle">Project Manager</span> window to reflect changes.</p>
                 <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
@@ -327,8 +349,8 @@ $(document).ready( function () {
             </div>
         </article>
         
-        <article class="topic nested2" aria-labelledby="ariaid-title10" id="csv_import">
-            <h3 class="title topictitle3" id="ariaid-title10">Import from CSV file(s)</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title11" id="csv_import">
+            <h3 class="title topictitle3" id="ariaid-title11">Import from CSV file(s)</h3>
             
             <div class="body"><p class="shortdesc">Import a folder of CSV (comma-separated values) files into <em class="ph i">Phon</em> as
                 sessions.</p>
@@ -412,8 +434,8 @@ $(document).ready( function () {
             </div>
         </article>
         
-        <article class="topic nested2" aria-labelledby="ariaid-title11" id="csv_export">
-            <h3 class="title topictitle3" id="ariaid-title11">Export to CSV file(s)</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title12" id="csv_export">
+            <h3 class="title topictitle3" id="ariaid-title12">Export to CSV file(s)</h3>
             
             <div class="body"><p class="shortdesc">Export <em class="ph i">Phon</em> sessions as CSV (comma-separated values) files.</p>
                 <section class="section">
@@ -469,8 +491,8 @@ $(document).ready( function () {
             </div>
         </article>
         
-        <article class="topic nested2" aria-labelledby="ariaid-title12" id="copy_corpus">
-            <h3 class="title topictitle3" id="ariaid-title12">Copy Corpus</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title13" id="copy_corpus">
+            <h3 class="title topictitle3" id="ariaid-title13">Copy Corpus</h3>
             
             <div class="body"><p class="shortdesc">Copy a corpus to a different project.</p>
                 <section class="section">From <span class="keyword wintitle">Project Manager</span> window, with a second <span class="keyword wintitle">Project
@@ -490,8 +512,8 @@ $(document).ready( function () {
             </div>
         </article>
         
-        <article class="topic nested2" aria-labelledby="ariaid-title13" id="copy_session">
-            <h3 class="title topictitle3" id="ariaid-title13">Copy Session</h3>
+        <article class="topic nested2" aria-labelledby="ariaid-title14" id="copy_session">
+            <h3 class="title topictitle3" id="ariaid-title14">Copy Session</h3>
             
             <div class="body"><p class="shortdesc">Copy a session to a different corpus.</p>
                 <section class="section">From <span class="keyword wintitle">Project Manager</span> window:</section>
@@ -517,7 +539,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#project_structure" data-tocid="project_structure">Project File Structure</a></li><li class="topic-item"><a href="#project_media_folders" data-tocid="project_media_folders">Project Media Folders</a></li><li class="topic-item"><a href="#project_actions" data-tocid="project_actions">Project Actions</a><ul><li class="topic-item"><a href="#check_transcriptions" data-tocid="check_transcriptions">Check sessions</a><ul><li class="topic-item"><a href="#reset_syllabification" data-tocid="reset_syllabification">Reset Syllabification</a></li><li class="topic-item"><a href="#reset_alignment" data-tocid="reset_alignment">Reset Phone Alignment</a></li></ul></li><li class="topic-item"><a href="#derive_session" data-tocid="derive_session">Derive Session</a></li><li class="topic-item"><a href="#refresh_project" data-tocid="refresh_project">Refresh Project</a></li><li class="topic-item"><a href="#csv_import" data-tocid="csv_import">Import from CSV file(s)</a></li><li class="topic-item"><a href="#csv_export" data-tocid="csv_export">Export to CSV file(s)</a></li><li class="topic-item"><a href="#copy_corpus" data-tocid="copy_corpus">Copy Corpus</a></li><li class="topic-item"><a href="#copy_session" data-tocid="copy_session">Copy Session</a></li></ul></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#project_structure" data-tocid="project_structure">Project File Structure</a></li><li class="topic-item"><a href="#project_media_folders" data-tocid="project_media_folders">Project Media Folders</a></li><li class="topic-item"><a href="#topic_pjd_chp_nlb" data-tocid="topic_pjd_chp_nlb">Relative Paths</a></li><li class="topic-item"><a href="#project_actions" data-tocid="project_actions">Project Actions</a><ul><li class="topic-item"><a href="#check_transcriptions" data-tocid="check_transcriptions">Check sessions</a><ul><li class="topic-item"><a href="#reset_syllabification" data-tocid="reset_syllabification">Reset Syllabification</a></li><li class="topic-item"><a href="#reset_alignment" data-tocid="reset_alignment">Reset Phone Alignment</a></li></ul></li><li class="topic-item"><a href="#derive_session" data-tocid="derive_session">Derive Session</a></li><li class="topic-item"><a href="#refresh_project" data-tocid="refresh_project">Refresh Project</a></li><li class="topic-item"><a href="#csv_import" data-tocid="csv_import">Import from CSV file(s)</a></li><li class="topic-item"><a href="#csv_export" data-tocid="csv_export">Export to CSV file(s)</a></li><li class="topic-item"><a href="#copy_corpus" data-tocid="copy_corpus">Copy Corpus</a></li><li class="topic-item"><a href="#copy_session" data-tocid="copy_session">Copy Session</a></li></ul></li></ul></div>
                         </nav>
                     
                 </div>
