@@ -101,6 +101,7 @@
                path="report/acoustic_data_reports/spectral_moments_report.html"/>
    <appContext helpID="voice-onset-time-vot"
                path="report/acoustic_data_reports/vot_report.html"/>
+   <appContext helpID="built-in-analyses" path="analysis/analyses.html"/>
    <appContext helpID="consonants" path="analysis/consonants.html"/>
    <appContext helpID="analysis-ppc" path="analysis/ppc.html"/>
    <appContext helpID="phone-inventory" path="analysis/phone_inventory.html"/>
