@@ -116,7 +116,7 @@
             </body>
         </topic>
         
-        <topic id="edit_corpus_template">
+        <topic id="open_session_template">
             <title>Open session template</title>
             <shortdesc>Set default participants and tiers for all sessions to be created in a
                 corpus.</shortdesc>

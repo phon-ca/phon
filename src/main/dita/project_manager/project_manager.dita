@@ -68,11 +68,38 @@
             <p>To assign project media folders, select <menucascade>
                     <uicontrol>Project</uicontrol>
                     <uicontrol>Select media folder...</uicontrol>
-                </menucascade> from the <wintitle>Project Manager</wintitle> window.  A similar menu
+                </menucascade> from the <wintitle>Project Manager</wintitle> window. A similar menu
                 item is available for corpus media folders under the <uicontrol>Corpus</uicontrol>
-                submenu.  Actions for controlling media folders are also available from popup menus
-                accessed by clicking on the media folder labels at the top of the window and in the
-                corpus details section.</p>
+                submenu. Actions for controlling media folder selection are available from popup
+                menus accessed by clicking on the media folder labels at the top of the window and
+                in the corpus details section.</p>
+            <fig id="fig_d1f_1hp_nlb">
+                <title>Media Folder Menu</title>
+                <image placement="break" href="images/media_folder_menu.png" id="image_e1f_1hp_nlb">
+                    <alt>Media Folder Menu</alt>
+                </image>
+            </fig>
+        </body>
+    </topic>
+    <topic id="topic_pjd_chp_nlb">
+        <title>Relative Paths</title>
+        <body>
+            <p><keyword>Absolute paths</keyword> are full paths to files/folders while
+                    <keyword>relative paths</keyword> are poritions of a full path. On macOS
+                absolute paths begin with a forward slash and on windows absolute paths begin with
+                the drive letter.</p>
+            <p>Using relative paths can make sharing projects easier. By specifiying a common folder
+                setup between project files and media folders for all people - e.g., using
+                    <filepath>~/Documents/PhonWorkspace</filepath> for project files and
+                    <filepath>~/Documents/PhonMedia</filepath> for media files - other users will
+                not need to modify their individual media folder selections.</p>
+            <fig id="fig_zww_k3p_nlb">
+                <title>Relative Media Folder Path</title>
+                <image placement="break" href="images/relative_media_folder_path.png"
+                    id="image_axw_k3p_nlb">
+                    <alt>Relative Media Folder Path</alt>
+                </image>
+            </fig>
         </body>
     </topic>
     

@@ -48,6 +48,11 @@
                             <alt>Create Session (Quick)</alt>
                         </image>
                     </fig></p>
+                <p>If a <filepath>__sessiontemplate.xml</filepath> session file exists in a corpus
+                    folder new sessions will be created with the contents of the template file. To
+                    edit the session template for a corpus choose <xref
+                        href="corpora.dita#open_session_template"/> from the corpus contextual
+                    menu.</p>
             </body>
         </topic>
         
