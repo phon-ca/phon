@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="conceptId">
-    <title>Corpora</title>
+    <title>Corpus List</title>
     <body>
         <p>Within a project, individual transcripts (or <keyword>sessions</keyword>) are organized
             into a series of one or more <keyword>corpora</keyword>.</p>
@@ -23,43 +23,27 @@
     
     <topic id="corpus_actions">
         <title>Corpus Actions</title>
-        <body/>
+        <body>
+            <p>The following actions are availble from <uicontrol>Project</uicontrol> window menu
+                and the corpus list contextual menu.  You may access the corpus contextual menu by
+                    <userinput>right-clicking </userinput>(or <userinput>CMD+click</userinput> on
+                macOS) inside the corpus list control or by clicking the
+                    <uicontrol>Corpus</uicontrol> title label in the <wintitle>Project
+                    Manager</wintitle> window.</p>
+        </body>
         
         <topic id="create_corpus">
-            <title>Create Corpus</title>
-            <shortdesc>Create a new corpus in an existing project.</shortdesc>
+            <title>New corpus</title>
             <body>
-                <section>First, a project must be open.</section>
-                <section>From the <wintitle>Project Manager</wintitle> window:</section>
-                <ol>
-                    <li>
-                        <p>Choose the <menucascade>
-                            <uicontrol>Project</uicontrol>
-                            <uicontrol>New Corpus...</uicontrol>
-                        </menucascade> menu item.</p>
-                        <itemgroup>The <wintitle>New Corpus</wintitle> dialog will appear.
-                            <image placement="break"
-                                href="images/create_corpus.png" id="image_wdr_vlm_sc"/></itemgroup>
-                    </li>
-                    <li>
-                        <p>Enter a name (and optionally a description) for the new corpus. Click
-                            <uicontrol>Ok</uicontrol>.</p>
-                        <itemgroup>This creates a new corpus with the specified name inside the open
-                            project. An error message will appear if a corpus with that name already
-                                exists.<note>You may return to edit the description at any time by
-                                clicking on the corpus name in the <wintitle>Project
-                                    Manager</wintitle> and typing a description in the field below
-                                the corpus list.</note></itemgroup>
-                    </li>
-                </ol>
-                <p>You may also create a new corpus quickly by clicking the '+' icon in the corpus
+                <p>You may create a new corpus by clicking the '+' icon in the corpus
                     list titlebar and typing just the name of the new corpus in the text field
-                    displayed. Pressing <userinput>Enter</userinput> or clicking the '+' button to
+                    displayed. Menu items for creating a new corpus can be found in the <uicontrol>Project</uicontrol>
+                    window menu and corpus list context menu.  Pressing <userinput>Enter</userinput> or clicking the '+' button to
                     the right of the text field will create the new corpus. Corpus creation can be
                     canceled by pressing <userinput>Escape</userinput> or clicking the 'X' icon in
                     the corpus list.<fig id="fig_jqw_dvx_jlb">
                         <title>Create Corpus (Quick)</title>
-                        <image placement="break" href="images/create_corpus_quick.png"
+                        <image placement="break" href="images/create_corpus.png"
                             id="image_kqw_dvx_jlb">
                             <alt>Create Corpus (Quick)</alt>
                         </image>
@@ -68,7 +52,7 @@
         </topic>
         
         <topic id="rename_corpus">
-            <title>Rename Corpus</title>
+            <title>Rename corpus</title>
             <shortdesc>Rename a corpus in your project.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
@@ -90,7 +74,7 @@
         </topic>
         
         <topic id="delete_corpus">
-            <title>Delete Corpus</title>
+            <title>Delete corpus</title>
             <shortdesc>Delete a corpus in your project.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
@@ -115,7 +99,7 @@
         </topic>
         
         <topic id="duplicate_corpus">
-            <title>Duplicate Corpus</title>
+            <title>Duplicate corpus</title>
             <shortdesc>Dupliate a corpus folder in your project.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
@@ -133,7 +117,7 @@
         </topic>
         
         <topic id="edit_corpus_template">
-            <title>Edit Corpus Template</title>
+            <title>Open session template</title>
             <shortdesc>Set default participants and tiers for all sessions to be created in a
                 corpus.</shortdesc>
             <body>

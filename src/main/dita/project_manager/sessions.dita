@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="conceptId">
-    <title>Sessions</title>
+    <title>Session List</title>
     <body>
         <p>A session in Phon is a transcript of a portion of field data targeting one or more
             participants in a project.</p>
@@ -24,50 +24,26 @@
     
     <topic id="session_actions">
         <title>Session Actions</title>
-        <body/>
+        <body>
+            <p>The following actions are availble from <uicontrol>Project</uicontrol> window menu
+                and the session list contextual menu. You may access the session contextual menu by
+                    <userinput>right-clicking </userinput>(or <userinput>CMD+click</userinput> on
+                macOS) inside the corpus list control or by clicking the
+                    <uicontrol>Session</uicontrol> title label in the <wintitle>Project
+                    Manager</wintitle> window.</p>
+        </body>
         
         <topic id="create_session">
-            <title>Create Session</title>
-            <shortdesc>Create a new session in an existing corpus.</shortdesc>
+            <title>New session</title>
             <body>
-                <section>A project with at least one corpus must be open.</section>
-                <section>From the <wintitle>Project Manager</wintitle> window:</section>
-                <ol id="steps_b7a946aa-469f-4814-a629-fcf01f933f6e">
-                    <li>
-                        <p>Select the <menucascade>
-                            <uicontrol>Project</uicontrol>
-                            <uicontrol>New Session</uicontrol>
-                        </menucascade> menu item, or right-click (<userinput>CTRL+click</userinput>) in
-                            the <uicontrol>Corpus</uicontrol> list. </p>
-                        <itemgroup>The <wintitle>New Session</wintitle> dialog will appear.<fig
-                                id="fig_gw4_lvx_jlb">
-                                <title>Create Session</title>
-                                <image placement="break" href="images/create_session.png"
-                                    id="image_hw4_lvx_jlb">
-                                    <alt>Create Session</alt>
-                                </image>
-                            </fig></itemgroup>
-                    </li>
-                    <li>
-                        <p>Enter a name for the new session, choose the destination corpus and click
-                            <uicontrol>Ok</uicontrol>. If you require a new corpus for the new session,
-                            click the plus sign to the right of the corpus selection field and enter the new
-                            corpus information as per the description at <xref href="../project_manager/corpora.dita#create_corpus"/>,
-                            and then select this new corpus as your destination.</p>
-                        <itemgroup>The new session will be created in the specified corpus and opened for
-                            editing. An error message will appear if a session with that name already
-                            exists.<note>Each new session is created with an empty record at the
-                                beginning of it.</note></itemgroup>
-                    </li>
-                </ol>
-                <p>You may also create a new session quickly by clicking the '+' icon in the corpus
+                <p>You may create a new session by clicking the '+' icon in the corpus
                     list titlebar and typing just the name of the new session in the text field
                     displayed. Pressing <userinput>Enter</userinput> or clicking the '+' button to
                     the right of the text field will create the new session in the selected corpus.
                     Session creation can be canceled by pressing <userinput>Escape</userinput> or
                     clicking the 'X' icon in the session list.<fig id="fig_ddv_svx_jlb">
                         <title>Create Session (Quick)</title>
-                        <image placement="break" href="images/create_session_quick.png"
+                        <image placement="break" href="images/create_session.png"
                             id="image_edv_svx_jlb">
                             <alt>Create Session (Quick)</alt>
                         </image>
@@ -76,7 +52,7 @@
         </topic>
         
         <topic id="open_session">
-            <title>Open Session</title>
+            <title>Open session</title>
             <shortdesc>Open a session in the default mode.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
@@ -93,7 +69,7 @@
         </topic>
         
         <topic id="open_session_blind">
-            <title>Open Session: Blind Transcription</title>
+            <title>Open session as transcriber (blind mode)</title>
             <shortdesc>Transcribe in multi-blind mode.</shortdesc>
             <body>
                 <section>
@@ -130,7 +106,7 @@
         </topic>
         
         <topic id="rename_session">
-            <title>Rename Session</title>
+            <title>Rename session</title>
             <shortdesc>Change a session name in your project.</shortdesc>
             <body>
                 <section>From <wintitle>Project Manager</wintitle> window:</section>
@@ -152,7 +128,7 @@
         </topic>
         
         <topic id="delete_session">
-            <title>Delete Session</title>
+            <title>Delete session</title>
             <shortdesc>Remove a session from your project.</shortdesc>
             <body>
                 <section>From <wintitle>Project Manager</wintitle> window:</section>
@@ -175,7 +151,7 @@
         </topic>
         
         <topic id="duplicate_session">
-            <title>Duplicate Session</title>
+            <title>Duplicate session</title>
             <shortdesc>Create a copy of a session within the corpus that contains it.</shortdesc>
             <body>
                 <section>From <wintitle>Project Manager</wintitle> window:</section>
@@ -192,7 +168,7 @@
         </topic>
         
         <topic id="move_session">
-            <title>Move Session</title>
+            <title>Move session</title>
             <shortdesc>Move a session to a different corpus.</shortdesc>
             <body>
                 <section>From <wintitle>Project Manager</wintitle> window:</section>

@@ -57,20 +57,22 @@
     <topic id="project_media_folders">
         <title>Project Media Folders</title>
         <body>
-            <p>A media folder may be assigned for a project and for each individual corpus in a project.
-                The default media folder for a project is <filepath>__res/media</filepath> inside the
-                project folder. The default media folder for a corpus will be the project media folder.
-                The search order for media files is:<ol id="ol_tpb_1br_wcb">
+            <p>A media folder may be assigned for a project and for each individual corpus in a
+                project. The default media folder for a corpus will be the project media folder. The
+                search order for media files is:<ol id="ol_tpb_1br_wcb">
                     <li>Corpus media folder (if assigned)</li>
                     <li>Project media folder</li>
-                    <li>Global media folders (see <xref href="../prefs/preferences.dita#media_folders"
-                    />)</li>
+                    <li>Global media folders (see <xref
+                            href="../prefs/preferences.dita#media_folders"/>)</li>
                 </ol></p>
-            <p>To assign project/corpus media folders, select <menucascade>
-                <uicontrol>Project</uicontrol>
-                <uicontrol>Select project/corpus media folder...</uicontrol>
-            </menucascade> from the <wintitle>Project Manager</wintitle> window. Context menu items
-                are also availble in the corpus and session list components.</p>
+            <p>To assign project media folders, select <menucascade>
+                    <uicontrol>Project</uicontrol>
+                    <uicontrol>Select media folder...</uicontrol>
+                </menucascade> from the <wintitle>Project Manager</wintitle> window.  A similar menu
+                item is available for corpus media folders under the <uicontrol>Corpus</uicontrol>
+                submenu.  Actions for controlling media folders are also available from popup menus
+                accessed by clicking on the media folder labels at the top of the window and in the
+                corpus details section.</p>
         </body>
     </topic>
     
@@ -82,21 +84,17 @@
         </body>
         
         <topic id="check_transcriptions">
-            <title>Check Transcriptions</title>
-            <shortdesc>Check sessions for phone transcription errors.</shortdesc>
+            <title>Check sessions</title>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
                         <p>Select the <menucascade>
-                            <uicontrol>Project</uicontrol>
-                            <uicontrol>Check Transcriptions...</uicontrol>
-                        </menucascade> menu item.</p>
-                        <itemgroup>This will open the <wintitle>Check Transcriptions</wintitle>
+                                <uicontrol>Project</uicontrol>
+                                <uicontrol>Check sessions...</uicontrol>
+                            </menucascade> menu item.</p>
+                        <itemgroup>This will open the <wintitle>Check sessions</wintitle>
                             window.</itemgroup>
-                    </li>
-                    <li>
-                        <p>Select the <uicontrol>Check IPA Tiers</uicontrol> option.</p>
                     </li>
                     <li>
                         <p>Select the project, corpora, or sessions whose transcriptions you wish to
@@ -110,79 +108,86 @@
                                 and visually check its IPA tiers.</note></itemgroup>
                     </li>
                 </ol>
+                <fig id="fig_cbt_r5n_nlb">
+                    <title>Check Sessions</title>
+                    <image placement="break" href="images/check_sessions.png" id="image_dbt_r5n_nlb">
+                        <alt>Check Sessions</alt>
+                    </image>
+                </fig>
             </body>
-        </topic>
-        
-        <topic id="reset_syllabification">
-            <title>Reset Syllabification</title>
-            <shortdesc>In the event of display issues in <keyword>Target Syllables</keyword> or
+            
+            <topic id="reset_syllabification">
+                <title>Reset Syllabification</title>
+                <shortdesc>In the event of display issues in <keyword>Target Syllables</keyword> or
                     <keyword>Actual Syllables</keyword> in the <wintitle>Syllabification &amp;
-                    Alignment</wintitle> view, it may be necessary to reset the syllabification of
+                        Alignment</wintitle> view, it may be necessary to reset the syllabification of
                     <keyword>IPA Target</keyword> and <keyword>IPA Actual</keyword>
-                transcriptions.</shortdesc>
-            <body>
-                <section>From the <wintitle>Project Manager</wintitle> window:</section>
-                <ol>
-                    <li>
-                        <p>Select the <menucascade>
-                            <uicontrol>Project</uicontrol>
-                            <uicontrol>Check Transcriptions...</uicontrol>
-                        </menucascade> menu item.</p>
-                        <itemgroup>This will open the <wintitle>Check Transcriptions</wintitle>
-                            window.</itemgroup>
-                    </li>
-                    <li>
-                        <p>Select the <uicontrol>Reset syllabification</uicontrol> option. To reset phone
-                            alignment as well, select the <uicontrol>also reset phone alignment</uicontrol>
-                            check box.</p>
-                    </li>
-                    <li>
-                        <p>Choose an appropriate syllabifier by selecting it from the drop-down
-                            menu.</p>
-                    </li>
-                    <li>
-                        <p>Select the project, or the corpora or sessions whose syllabification you wish
-                            to reset, and click <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup>Phon will re-perform the syllabification for each selected
-                            session using the syllabifier language chosen in the <xref
-                                href="../prefs/preferences.dita"/> dialog. <note>After resetting
-                                syllabification or alignment, it will be necessary to visually
-                                verify these tiers.</note></itemgroup>
-                    </li>
-                </ol>
-            </body>
+                    transcriptions.</shortdesc>
+                <body>
+                    <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                    <ol>
+                        <li>
+                            <p>Select the <menucascade>
+                                    <uicontrol>Project</uicontrol>
+                                    <uicontrol>Check sessions...</uicontrol>
+                                </menucascade> menu item.</p>
+                            <itemgroup>This will open the <wintitle>Check Sessions</wintitle>
+                                window.</itemgroup>
+                        </li>
+                        <li>
+                            <p>Select the <uicontrol>Reset syllabification</uicontrol> option.</p>
+                        </li>
+                        <li>
+                            <p>Choose an appropriate syllabifier language by selecting it from the
+                                drop-down menu.</p>
+                        </li>
+                        <li>
+                            <p>Select the project, or the corpora or sessions whose syllabification you wish
+                                to reset, and click <uicontrol>Next</uicontrol>.</p>
+                            <itemgroup>Phon will re-perform the syllabification for each selected
+                                session using the syllabifier language chosen in the <xref
+                                    href="../prefs/preferences.dita"/> dialog. <note>After resetting
+                                        syllabification or alignment, it will be necessary to visually
+                                        verify these tiers.</note></itemgroup>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
+            <topic id="reset_alignment">
+                <title>Reset Phone Alignment</title>
+                <shortdesc>In the event of display issues in the <keyword>Alignment</keyword> tier of
+                    the <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary
+                    to reset the phone alignment of <keyword>IPA Target</keyword> and <keyword>IPA
+                        Actual</keyword> transcriptions.</shortdesc>
+                <body>
+                    <section>From the <wintitle>Project Manager</wintitle> window:</section>
+                    <ol>
+                        <li>
+                            <p>Select the <menucascade>
+                                    <uicontrol>Project</uicontrol>
+                                    <uicontrol>Check sessions...</uicontrol>
+                                </menucascade> menu item.</p>
+                            <itemgroup>This will open the <wintitle>Check Sessions</wintitle>
+                                window.</itemgroup>
+                        </li>
+                        <li>
+                            <p>Select the <uicontrol>Reset phone alignment</uicontrol> option.</p>
+                        </li>
+                        <li>
+                            <p>Select the project, corpora, or sessions whose alignment you wish to reset, and
+                                click <uicontrol>Next</uicontrol>.</p>
+                            <itemgroup>Phon will re-perform the alignment for each selected session.
+                                <note>After resetting syllabification or alignment, it will be
+                                    necessary to visually verify these tiers.</note></itemgroup>
+                        </li>
+                    </ol>
+                </body>
+            </topic>
+            
         </topic>
         
-        <topic id="reset_alignment">
-            <title>Reset Phone Alignment</title>
-            <shortdesc>In the event of display issues in the <keyword>Alignment</keyword> tier of
-                the <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary
-                to reset the phone alignment of <keyword>IPA Target</keyword> and <keyword>IPA
-                    Actual</keyword> transcriptions.</shortdesc>
-            <body>
-                <section>From the <wintitle>Project Manager</wintitle> window:</section>
-                <ol>
-                    <li>
-                        <p>Select the <menucascade>
-                            <uicontrol>Project</uicontrol>
-                            <uicontrol>Check Transcriptions...</uicontrol>
-                        </menucascade> menu item.</p>
-                        <itemgroup>This will open the <wintitle>Check Transcriptions</wintitle>
-                            window.</itemgroup>
-                    </li>
-                    <li>
-                        <p>Select the <uicontrol>Reset phone alignment</uicontrol> option.</p>
-                    </li>
-                    <li>
-                        <p>Select the project, corpora, or sessions whose alignment you wish to reset, and
-                            click <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup>Phon will re-perform the alignment for each selected session.
-                                <note>After resetting syllabification or alignment, it will be
-                                necessary to visually verify these tiers.</note></itemgroup>
-                    </li>
-                </ol>
-            </body>
-        </topic>
+        
         
         <topic id="derive_session">
             <title>Derive Session</title>
