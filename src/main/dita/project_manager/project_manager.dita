@@ -85,14 +85,14 @@
         <title>Relative Paths</title>
         <body>
             <p><keyword>Absolute paths</keyword> are full paths to files/folders while
-                    <keyword>relative paths</keyword> are poritions of a full path. On macOS
-                absolute paths begin with a forward slash and on windows absolute paths begin with
-                the drive letter.</p>
-            <p>Using relative paths can make sharing projects easier. By specifiying a common folder
-                setup between project files and media folders for all people - e.g., using
-                    <filepath>~/Documents/PhonWorkspace</filepath> for project files and
-                    <filepath>~/Documents/PhonMedia</filepath> for media files - other users will
-                not need to modify their individual media folder selections.</p>
+                    <keyword>relative paths</keyword> are portions of a full path. On macOS absolute
+                paths begin with a forward slash and on windows absolute paths begin with the drive
+                letter.</p>
+            <p>Using relative paths for media folders can make sharing projects easier. By
+                specifiying a common folder setup between project files and media folders for all
+                people - e.g., using <filepath>~/Documents/PhonWorkspace</filepath> for project
+                files and <filepath>~/Documents/PhonMedia</filepath> for media files - other users
+                will not need to modify their individual media folder selections.</p>
             <fig id="fig_zww_k3p_nlb">
                 <title>Relative Media Folder Path</title>
                 <image placement="break" href="images/relative_media_folder_path.png"
