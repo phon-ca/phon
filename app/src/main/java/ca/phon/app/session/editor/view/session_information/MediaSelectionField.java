@@ -39,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
@@ -79,12 +80,28 @@ public class MediaSelectionField extends FileSelectionField {
 		setFileFilter(FileFilter.mediaFilter);
 		
 		setupInputMap();
+		
+		getTextField().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
 				
-		PhonWorker textCompleterThread = PhonWorker.createWorker();
-		textCompleterThread.setName("Media TextCompleter");
-		textCompleterThread.setFinishWhenQueueEmpty(true);
-		textCompleterThread.invokeLater( () -> setupTextCompleter() );
-		textCompleterThread.start();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				getTextField().removeFocusListener(this);
+				
+				PhonWorker textCompleterThread = PhonWorker.createWorker();
+				textCompleterThread.setName("Media TextCompleter");
+				textCompleterThread.setFinishWhenQueueEmpty(true);
+				textCompleterThread.invokeLater( () -> {
+					setupTextCompleter();
+				});
+				textCompleterThread.start();
+			}
+			
+		});
 	}
 	
 	private void setupInputMap() {

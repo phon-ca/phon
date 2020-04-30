@@ -19,6 +19,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -190,6 +192,19 @@ public class SessionInfoEditorView extends EditorView {
 		mediaLocationField.setEditor(getEditor());
 		mediaLocationField.getTextField().setColumns(10);
 		mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
+		mediaLocationField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				System.out.println("Focus");
+			}
+			
+		});
 		
 		participantTable = new JXTable();
 		participantTable.setVisibleRowCount(3);
