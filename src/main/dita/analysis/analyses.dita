@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="built-in-analyses">
+    <title>Built-in Analyses</title>
+    <body>
+        <p>Analyses built into Phon offer ready access to general results about different aspects of
+            phonological behaviours at a click. Currently-supported analyses include:</p>
+        <ul>
+            <li><p>Consonants: a series of analyses on phonological patterns affecting consonants
+                    and consonant clusters within words, based on systematic comparisons between IPA
+                    Target and IPA Actual pairs of transcribed forms.</p></li>
+            <li><p>PPC (Percentage of Phones Correct): Series of algorithms to extract percentages
+                    of consonants and vowels correct (e.g. Shriberg et al., 1997; Shriberg &amp;
+                    Kwiatkowski, 1982), including at the level of consonant clusters.</p></li>
+            <li><p>Phone Inventory: List of phones in IPA Target and IPA Actual tiers with their
+                    frequency counts</p></li>
+            <li><p>PMLU (Phonological Mean Length of Utterance): Algorithm to calculate phonological
+                    complexity originally developed by Ingram (2002), with an alternate version
+                    proposed by Arias &amp; Lleó (2013).</p></li>
+            <li><p>Word Inventory: List of words in the Orthography tier with their frequency
+                    counts</p></li>
+            <li><p>Phonological processes: Algorithms to detect general phonological processes such
+                    as velar fronting, fricative stopping, liquid gliding, or consonant
+                    deletion.</p></li>
+            <li><p>Specialized analyses: More narrowly specialized analyses of multisyllabic word
+                    productions (Multisyllabic Non-linear Analysis, Mason 2015; Word-level Analysis
+                    of Polysyllables, Masso 2016), the Word Match analysis (Bernhardt XXXX) and the
+                    Vocalization analysis (Velleman XXXX).</p></li>
+        </ul>
+        <p>The key difference between the query and reporting methods described in Query &amp;
+            Report wizard and built-in analyses is that the latter combine analysis methods and
+            reports at once. Running an analysis follows a three-step logic, as Phon guides the user
+            through the steps laid out in the breadcrumb on top of the interface.  </p>
+        <p>As with query and reporting, the user can save the report as a standalone HTML file or
+            exported them in text-only (CSV) and Excel formats.</p>
+        <example><title>Example (PPC analysis)</title>
+            <ol>
+                <li><p>Select Sessions and Participants</p>
+                    <fig id="fig_uts_x34_nlb">
+                        <title>Select Sessions and Participants</title>
+                        <image placement="break" href="images/wizard_step1.png" id="image_vts_x34_nlb">
+                            <alt>Select Sessions and Participants</alt>
+                        </image>
+                    </fig></li>
+                <li><p>Analysis Parameters</p>
+                    <fig id="fig_iwh_1j4_nlb">
+                        <title>Analysis Parameters</title>
+                        <image placement="break" href="images/wizard_step2.png" id="image_jwh_1j4_nlb">
+                            <alt>Analysis Parameters</alt>
+                        </image>
+                    </fig></li>
+                <li><p>Analysis Results</p>
+                    <fig id="fig_v21_lj4_nlb">
+                        <title>Analysis Results</title>
+                        <image placement="break" href="images/wizard_step3.png" id="image_w21_lj4_nlb">
+                            <alt>Analysis Results</alt>
+                        </image>
+                    </fig></li>
+            </ol></example>
+        
+    </body>
+</topic>

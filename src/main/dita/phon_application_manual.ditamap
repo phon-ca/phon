@@ -121,6 +121,7 @@
         </topichead>
     </chapter>
     <chapter navtitle="Analyses" audience="intermediate">
+        <topicref href="analysis/analyses.dita" format="dita"/>
         <topicref href="analysis/consonants.md" format="markdown"/>
         <topicref href="analysis/ppc.dita" format="dita"/>
         <topicref href="analysis/phone_inventory.md" format="markdown"/>
