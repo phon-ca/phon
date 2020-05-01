@@ -61,7 +61,7 @@ $(document).ready( function () {
                 <div id="wh_download_links">
     <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
     <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.0.5">Phon 3.0.5</a>
-    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.0-beta.13">Phon 3.1.0-beta.13</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.0-beta.14">Phon 3.1.0-beta.14</a>
     <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
 </div>
             </div>
@@ -106,49 +106,102 @@ $(document).ready( function () {
                         <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
     <h1 class="title topictitle1" id="ariaid-title1">Media</h1>
     <div class="body">
-        <p class="p">Sessions in <em class="ph i">Phon</em> usually consist of a media recording (either audio or video)
-            coupled with transcriptions of utterances from the recording and separated into
-            records. Each record can be associated via a process called
-            segmentation to the time in the recording during which the utterance occurred.</p>
-        <p class="p">To facilitate the segmentation and transcription of media files, <em class="ph i">Phon</em> has a
-            built-in media player. This player is available in the <span class="keyword wintitle">Media Player</span>
-            view. To use the media player, you must first have a media file assigned to your session.</p>
-        <p class="p">TODO - session audio</p>
+        <p class="p">Sessions in Phon usually consist of a media recording (either audio or video) coupled
+            with transcriptions of utterances from the recording and separated into records. Each
+            record can be associated via a process called <a class="xref" href="timeline_view.html#segmentation">segmentation</a> to the
+            time in the recording during which the utterance occurred.</p>
+        <p class="p">To facilitate the segmentation and transcription of media files, Phon has a built-in
+            media player. This player is available in the <a class="xref" href="media_player_view.html">Media Player</a>
+            view.</p>
+        <p class="p">For accurate segment identification and playback the application requires that a wav file
+        with the same name as the original media file exists. This file is referred to as <span class="keyword">session audio</span> 
+        while the original media file is referred to as <span class="keyword">session media</span>. When the <span class="keyword">session media</span> file
+        is already in wav format these two terms refer to the same file.</p>
         
-        <div class="note note note_note"><span class="note__title">Note:</span> Phon current only supports 16bit PCM wav files.</div>
-        <div class="note note note_note"><span class="note__title">Note:</span> If the session media file is already in wav format a second file is not required
-            for session audio.</div>
+        <div class="note note note_note"><span class="note__title">Note:</span> Only 16-bit PCM wav files are supported for <span class="keyword">session audio</span>.</div>
     </div>
 
-    <article class="topic nested1" aria-labelledby="ariaid-title2" id="media_actions">
-        <h2 class="title topictitle2" id="ariaid-title2">Media Actions</h2>
+    <article class="topic nested1" aria-labelledby="ariaid-title2" id="segment_playback">
+        <h2 class="title topictitle2" id="ariaid-title2">Segment playback and export</h2>
         <div class="body">
-            <p class="p">The following actions are available from the Media window menu when the Session
-                Editor is focused.</p>
+            <p class="p">Segment playback is available when a <span class="keyword">session audio</span> is available or when a
+            <span class="keyword">session media</span> file is available and the <span class="keyword wintitle">Media Player</span> view is open.
+            Segment playback actions are available from the session editor toolbar and the <span class="ph uicontrol">Media</span>
+            window menu.</p>
+            <div class="p">The following segment playback actions are available:
+            <ul class="ul">
+                <li class="li"><span class="ph uicontrol">Play segment</span>
+                        <kbd class="ph userinput">CMD/CTRL+R</kbd> - play segment of currently selected
+                        record.</li>
+                    <li class="li"><span class="ph uicontrol">Play custom segment...</span>
+                        <kbd class="ph userinput">CMD/CTRL+Alt+R</kbd> - play a custom segment.</li>
+                    <li class="li"><span class="ph uicontrol">Play current speech turn</span>
+                        <kbd class="ph userinput">CMD/CTRL+L</kbd> - play all consequitive segments for the
+                        current speaker starting with the current record</li>
+                    <li class="li"><span class="ph uicontrol">Play adjacency sequence</span>
+                        <kbd class="ph userinput">CMD/CTRL+Shift+R</kbd> - play all consequitive segments for
+                        the current speaker and then the next speaker</li>
+            </ul></div>
+            <p class="p">Actions to export segments (audio only) which mirror segment playback options are
+                also available in the <span class="ph uicontrol">Media</span> menu.</p>
+            <p class="p">Segment playback from the <a class="xref" href="timeline_view.html">Timeline</a> and <a class="xref" href="speech_analysis_view.html">Speech Analysis</a> views is also possible. In these views
+                playback will be either the selected segment of the waveform or the current record
+                segment and can be performed by pressing <kbd class="ph userinput">space</kbd> when the view
+                is focused.</p>
         </div>
-        <article class="topic nested2" aria-labelledby="ariaid-title3" id="assign_media">
-            <h3 class="title topictitle3" id="ariaid-title3">Assign media</h3>
-            <div class="body"></div>
+    </article>
+
+    <article class="topic nested1" aria-labelledby="ariaid-title3" id="media_actions">
+        <h2 class="title topictitle2" id="ariaid-title3">Media Actions</h2>
+        <div class="body">
+            <p class="p">The following actions are available from the <span class="ph uicontrol">Media</span> window menu
+                when the <span class="keyword wintitle">Session Editor</span> is focused.</p>
+        </div>
+        <article class="topic nested2" aria-labelledby="ariaid-title4" id="assign_media">
+            <h3 class="title topictitle3" id="ariaid-title4">Assign media</h3>
+            <div class="body">
+                <div class="p">There are several method for assigning media to the session.<ul class="ul" id="assign_media__ul_kvf_gy5_nlb">
+                        <li class="li">
+                            <p class="p">Use the <span class="ph menucascade"><span class="ph uicontrol">Media</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Assign media to session...</span></span> menu command</p>
+                        </li>
+                        <li class="li">Click the banner which appears in the <a class="xref" href="media_player_view.html">Media Player</a>, <a class="xref" href="timeline_view.html">Timeline</a>, or <a class="xref" href="speech_analysis_view.html">Speech Analysis</a> views when session media is not
+                                available<br /><img class="image" id="assign_media__image_yr4_2z5_nlb" src="images/no_media_banner.png" /><br /></li>
+                        <li class="li">You may also type the relative path (relative the <a class="xref" href="../project_manager/project_manager.html#project_media_folders">Project Media Folders</a> or global <a class="xref" href="../prefs/preferences.html#media_folders">Media Folders</a>) to
+                            the media directly in the <span class="ph uicontrol">Media</span> text field in the
+                                <a class="xref" href="session_information_view.html">Session Information</a> view.<br /><img class="image" id="assign_media__image_b52_zz5_nlb" src="images/session_information_media.png" /><br /></li>
+                    </ul></div>
+            </div>
         </article>
-        <article class="topic nested2" aria-labelledby="ariaid-title4" id="unassign_media">
-            <h3 class="title topictitle3" id="ariaid-title4">Unassign media</h3>
-            <div class="body"></div>
+        <article class="topic nested2" aria-labelledby="ariaid-title5" id="unassign_media">
+            <h3 class="title topictitle3" id="ariaid-title5">Unassign media</h3>
+            <div class="body">
+                <p class="p">This will clear media file assignment for the session.  Deleting the value shown
+                    in the <span class="ph uicontrol">Media</span> text field of the <a class="xref" href="session_information_view.html">Session Information</a> view will also unassign
+                        <span class="keyword">session media</span>.</p>
+            </div>
         </article>
-        <article class="topic nested2" aria-labelledby="ariaid-title5" id="genereate_session_audio">
-            <h3 class="title topictitle3" id="ariaid-title5">Genereate session audio</h3>
-            <div class="body"></div>
+        <article class="topic nested2" aria-labelledby="ariaid-title6" id="genereate_session_audio">
+            <h3 class="title topictitle3" id="ariaid-title6">Generate/re-encode session audio</h3>
+            <div class="body">
+                <p class="p">If <span class="keyword">session media</span> is available but no complimentary wav file
+                    cannot be found - or the wav file cannot be read - the following banner will be
+                    displayed in the <a class="xref" href="timeline_view.html">Timeline</a> and <a class="xref" href="speech_analysis_view.html">Speech Analysis</a> views. Clicking the banner will begin the
+                    encoding process and progress will be displayed in the banner. Once the encoding
+                    process is complete the new wav file will be opened. This command is also
+                    available in the <span class="ph uicontrol">Media</span> window menu.</p>
+                <figure class="fig fignone" id="genereate_session_audio__fig_nph_tz5_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 1</span>: </span>Generate Session Audio Banner</figcaption>
+                    
+                    <br /><img class="image" id="genereate_session_audio__image_oph_tz5_nlb" src="images/no_audio_banner.png" alt="Generate Session Audio Banner" /><br />
+                </figure>
+                <div class="note note note_note"><span class="note__title">Note:</span> Phon will require write access to the media folder to generate/re-encode
+                        <span class="keyword">session audio</span>.</div>
+            </div>
         </article>
-        <article class="topic nested2" aria-labelledby="ariaid-title6" id="segment_playback">
-            <h3 class="title topictitle3" id="ariaid-title6">Segment playback</h3>
-            <div class="body"></div>
-        </article>
-        <article class="topic nested2" aria-labelledby="ariaid-title7" id="segment_export">
-            <h3 class="title topictitle3" id="ariaid-title7">Segment export</h3>
-            <div class="body"></div>
-        </article>
-        <article class="topic nested2" aria-labelledby="ariaid-title8" id="select_media_folders">
-            <h3 class="title topictitle3" id="ariaid-title8">Select media folders</h3>
-            <div class="body"></div>
+        <article class="topic nested2" aria-labelledby="ariaid-title7" id="select_media_folders">
+            <h3 class="title topictitle3" id="ariaid-title7">Select media folders</h3>
+            <div class="body">
+                <p class="p">This is a direct link to the <a class="xref" href="../prefs/preferences.html#media_folders">Media Folders</a> tab in application preferences dialog.</p>
+            </div>
         </article>
     </article>
 </article></main></div>
@@ -159,7 +212,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#media_actions" data-tocid="media_actions">Media Actions</a><ul><li class="topic-item"><a href="#assign_media" data-tocid="assign_media">Assign media</a></li><li class="topic-item"><a href="#unassign_media" data-tocid="unassign_media">Unassign media</a></li><li class="topic-item"><a href="#genereate_session_audio" data-tocid="genereate_session_audio">Genereate session audio</a></li><li class="topic-item"><a href="#segment_playback" data-tocid="segment_playback">Segment playback</a></li><li class="topic-item"><a href="#segment_export" data-tocid="segment_export">Segment export</a></li><li class="topic-item"><a href="#select_media_folders" data-tocid="select_media_folders">Select media folders</a></li></ul></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#segment_playback" data-tocid="segment_playback">Segment playback and export</a></li><li class="topic-item"><a href="#media_actions" data-tocid="media_actions">Media Actions</a><ul><li class="topic-item"><a href="#assign_media" data-tocid="assign_media">Assign media</a></li><li class="topic-item"><a href="#unassign_media" data-tocid="unassign_media">Unassign media</a></li><li class="topic-item"><a href="#genereate_session_audio" data-tocid="genereate_session_audio">Generate/re-encode session audio</a></li><li class="topic-item"><a href="#select_media_folders" data-tocid="select_media_folders">Select media folders</a></li></ul></li></ul></div>
                         </nav>
                     
                 </div>
