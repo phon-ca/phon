@@ -3,49 +3,121 @@
 <topic id="media">
     <title>Media</title>
     <body>
-        <p>Sessions in <i>Phon</i> usually consist of a media recording (either audio or video)
-            coupled with transcriptions of utterances from the recording and separated into
-            records. Each record can be associated via a process called
-            segmentation to the time in the recording during which the utterance occurred.</p>
-        <p>To facilitate the segmentation and transcription of media files, <i>Phon</i> has a
-            built-in media player. This player is available in the <wintitle>Media Player</wintitle>
-            view. To use the media player, you must first have a media file assigned to your session.</p>
-        <p>TODO - session audio</p>
+        <p>Sessions in Phon usually consist of a media recording (either audio or video) coupled
+            with transcriptions of utterances from the recording and separated into records. Each
+            record can be associated via a process called <xref href="timeline_view.dita#segmentation">segmentation</xref> to the
+            time in the recording during which the utterance occurred.</p>
+        <p>To facilitate the segmentation and transcription of media files, Phon has a built-in
+            media player. This player is available in the <xref href="media_player_view.dita"/>
+            view.</p>
+        <p>For accurate segment identification and playback the application requires that a wav file
+        with the same name as the original media file exists. This file is referred to as <keyword>session audio</keyword> 
+        while the original media file is referred to as <keyword>session media</keyword>. When the <keyword>session media</keyword> file
+        is already in wav format these two terms refer to the same file.</p>
         
-        <note>Phon current only supports 16bit PCM wav files.</note>
-        <note>If the session media file is already in wav format a second file is not required
-            for session audio.</note>
+        <note>Only 16-bit PCM wav files are supported for <keyword>session audio</keyword>.</note>
     </body>
+
+    <topic id="segment_playback">
+        <title>Segment playback and export</title>
+        <body>
+            <p>Segment playback is available when a <keyword>session audio</keyword> is available or when a
+            <keyword>session media</keyword> file is available and the <wintitle>Media Player</wintitle> view is open.
+            Segment playback actions are available from the session editor toolbar and the <uicontrol>Media</uicontrol>
+            window menu.</p>
+            <p>The following segment playback actions are available:
+            <ul>
+                <li><uicontrol>Play segment</uicontrol>
+                        <userinput>CMD/CTRL+R</userinput> - play segment of currently selected
+                        record.</li>
+                    <li><uicontrol>Play custom segment...</uicontrol>
+                        <userinput>CMD/CTRL+Alt+R</userinput> - play a custom segment.</li>
+                    <li><uicontrol>Play current speech turn</uicontrol>
+                        <userinput>CMD/CTRL+L</userinput> - play all consequitive segments for the
+                        current speaker starting with the current record</li>
+                    <li><uicontrol>Play adjacency sequence</uicontrol>
+                        <userinput>CMD/CTRL+Shift+R</userinput> - play all consequitive segments for
+                        the current speaker and then the next speaker</li>
+            </ul></p>
+            <p>Actions to export segments (audio only) which mirror segment playback options are
+                also available in the <uicontrol>Media</uicontrol> menu.</p>
+            <p>Segment playback from the <xref href="timeline_view.dita"/> and <xref
+                    href="speech_analysis_view.dita"/> views is also possible. In these views
+                playback will be either the selected segment of the waveform or the current record
+                segment and can be performed by pressing <userinput>space</userinput> when the view
+                is focused.</p>
+        </body>
+    </topic>
 
     <topic id="media_actions">
         <title>Media Actions</title>
         <body>
-            <p>The following actions are available from the Media window menu when the Session
-                Editor is focused.</p>
+            <p>The following actions are available from the <uicontrol>Media</uicontrol> window menu
+                when the <wintitle>Session Editor</wintitle> is focused.</p>
         </body>
         <topic id="assign_media">
             <title>Assign media</title>
-            <body/>
+            <body>
+                <p>There are several method for assigning media to the session.<ul
+                        id="ul_kvf_gy5_nlb">
+                        <li>
+                            <p>Use the <menucascade>
+                                    <uicontrol>Media</uicontrol>
+                                    <uicontrol>Assign media to session...</uicontrol>
+                                </menucascade> menu command</p>
+                        </li>
+                        <li>Click the banner which appears in the <xref
+                                href="media_player_view.dita">Media Player</xref>, <xref
+                                href="timeline_view.dita"/>, or <xref
+                                href="speech_analysis_view.dita"/> views when session media is not
+                                available<image placement="break" href="images/no_media_banner.png"
+                                id="image_yr4_2z5_nlb"/></li>
+                        <li>You may also type the relative path (relative the <xref
+                                href="../project_manager/project_manager.dita#project_media_folders"
+                            /> or global <xref href="../prefs/preferences.dita#media_folders"/>) to
+                            the media directly in the <uicontrol>Media</uicontrol> text field in the
+                                <xref href="session_information_view.dita"/> view.<image
+                                placement="break" href="images/session_information_media.png"
+                                id="image_b52_zz5_nlb"/></li>
+                    </ul></p>
+            </body>
         </topic>
         <topic id="unassign_media">
             <title>Unassign media</title>
-            <body/>
+            <body>
+                <p>This will clear media file assignment for the session.  Deleting the value shown
+                    in the <uicontrol>Media</uicontrol> text field of the <xref
+                        href="session_information_view.dita"/> view will also unassign
+                        <keyword>session media</keyword>.</p>
+            </body>
         </topic>
         <topic id="genereate_session_audio">
-            <title>Genereate session audio</title>
-            <body/>
-        </topic>
-        <topic id="segment_playback">
-            <title>Segment playback</title>
-            <body/>
-        </topic>
-        <topic id="segment_export">
-            <title>Segment export</title>
-            <body/>
+            <title>Generate/re-encode session audio</title>
+            <body>
+                <p>If <keyword>session media</keyword> is available but no complimentary wav file
+                    cannot be found - or the wav file cannot be read - the following banner will be
+                    displayed in the <xref href="timeline_view.dita"/> and <xref
+                        href="speech_analysis_view.dita"/> views. Clicking the banner will begin the
+                    encoding process and progress will be displayed in the banner. Once the encoding
+                    process is complete the new wav file will be opened. This command is also
+                    available in the <uicontrol>Media</uicontrol> window menu.</p>
+                <fig id="fig_nph_tz5_nlb">
+                    <title>Generate Session Audio Banner</title>
+                    <image placement="break" href="images/no_audio_banner.png"
+                        id="image_oph_tz5_nlb">
+                        <alt>Generate Session Audio Banner</alt>
+                    </image>
+                </fig>
+                <note>Phon will require write access to the media folder to generate/re-encode
+                        <keyword>session audio</keyword>.</note>
+            </body>
         </topic>
         <topic id="select_media_folders">
             <title>Select media folders</title>
-            <body/>
+            <body>
+                <p>This is a direct link to the <xref href="../prefs/preferences.dita#media_folders"
+                    /> tab in application preferences dialog.</p>
+            </body>
         </topic>
     </topic>
 </topic>
