@@ -20,7 +20,7 @@
             <topicref href="project_manager/corpora.dita"/>
             <topicref href="project_manager/sessions.dita"/>
         </topicref>
-        <topicref href="session_editor/session_editor.md" format="markdown">
+        <topicref href="session_editor/session_editor.dita" format="dita">
             <topicref href="session_editor/blind_transcription.dita"/>
             <topicref href="session_editor/participants.dita"/>
             <topicref href="session_editor/records.dita"/>

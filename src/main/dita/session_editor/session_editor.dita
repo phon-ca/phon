@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="session-editor">
+    <title>Session Editor</title>
+    <body>
+        <p>The <wintitle>Session Editor</wintitle> is the main UI for modifying and viewing session
+            transcripts. As shown in the screenshot below the editor is composed of various <xref
+                href="editor_views.dita">views</xref>. Each view is responsible for providing a
+            specific set of functions within the editor window.</p>
+        <fig>
+            <title>Session Editor</title>
+            <image href="./images/session_editor.png" keyref="session_editor_screenshot">
+                <alt>Session Editor</alt>
+            </image>
+        </fig>
+    </body>
+</topic>

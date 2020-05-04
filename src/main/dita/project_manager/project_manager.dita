@@ -14,13 +14,11 @@
                 <alt>Project Manager</alt>
             </image>
         </fig>
-        
     </body>
-    
     <topic id="project_structure">
         <title>Project File Structure</title>
         <body>
-            <p>Phon projects are stored on a hard drive as directories.  This folder is displayed at
+            <p>Phon projects are stored on a hard drive as directories. This folder is displayed at
                 the top of the <wintitle>Project Manager</wintitle> window (clicking the folder path
                 will open Finder (macOS) or Explorer (windows) with the project folder
                 selected.)</p>
@@ -47,13 +45,14 @@
                             project and may contain media segments exported from Phon.</li>
                     </ul></li>
             </ul>
-            <p><note>Projects created using earlier versions of Phon may exist as <i>.phon</i> files. These
-                    projects will need to be extracted (i.e. expanded to directories using the <xref
-                        href="../welcome/welcome_window.dita"/>) to be used with the current version
-                    of Phon.</note></p>
+            <p>
+                <note>Projects created using earlier versions of Phon may exist as <i>.phon</i>
+                    files. These projects will need to be extracted (i.e. expanded to directories
+                    using the <xref href="../welcome/welcome_window.dita"/>) to be used with the
+                    current version of Phon.</note>
+            </p>
         </body>
     </topic>
-    
     <topic id="project_media_folders">
         <title>Project Media Folders</title>
         <body>
@@ -102,14 +101,12 @@
             </fig>
         </body>
     </topic>
-    
     <topic id="project_actions">
         <title>Project Actions</title>
         <body>
             <p>The following actions are available from the <uicontrol>Project</uicontrol> window
                 menu when the <wintitle>Project Mangaer</wintitle> window is focused.</p>
         </body>
-        
         <topic id="check_transcriptions">
             <title>Check sessions</title>
             <body>
@@ -142,13 +139,12 @@
                     </image>
                 </fig>
             </body>
-            
             <topic id="reset_syllabification">
                 <title>Reset Syllabification</title>
                 <shortdesc>In the event of display issues in <keyword>Target Syllables</keyword> or
-                    <keyword>Actual Syllables</keyword> in the <wintitle>Syllabification &amp;
-                        Alignment</wintitle> view, it may be necessary to reset the syllabification of
-                    <keyword>IPA Target</keyword> and <keyword>IPA Actual</keyword>
+                        <keyword>Actual Syllables</keyword> in the <wintitle>Syllabification &amp;
+                        Alignment</wintitle> view, it may be necessary to reset the syllabification
+                    of <keyword>IPA Target</keyword> and <keyword>IPA Actual</keyword>
                     transcriptions.</shortdesc>
                 <body>
                     <section>From the <wintitle>Project Manager</wintitle> window:</section>
@@ -169,24 +165,23 @@
                                 drop-down menu.</p>
                         </li>
                         <li>
-                            <p>Select the project, or the corpora or sessions whose syllabification you wish
-                                to reset, and click <uicontrol>Next</uicontrol>.</p>
+                            <p>Select the project, or the corpora or sessions whose syllabification
+                                you wish to reset, and click <uicontrol>Next</uicontrol>.</p>
                             <itemgroup>Phon will re-perform the syllabification for each selected
                                 session using the syllabifier language chosen in the <xref
                                     href="../prefs/preferences.dita"/> dialog. <note>After resetting
-                                        syllabification or alignment, it will be necessary to visually
-                                        verify these tiers.</note></itemgroup>
+                                    syllabification or alignment, it will be necessary to visually
+                                    verify these tiers.</note></itemgroup>
                         </li>
                     </ol>
                 </body>
             </topic>
-            
             <topic id="reset_alignment">
                 <title>Reset Phone Alignment</title>
-                <shortdesc>In the event of display issues in the <keyword>Alignment</keyword> tier of
-                    the <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be necessary
-                    to reset the phone alignment of <keyword>IPA Target</keyword> and <keyword>IPA
-                        Actual</keyword> transcriptions.</shortdesc>
+                <shortdesc>In the event of display issues in the <keyword>Alignment</keyword> tier
+                    of the <wintitle>Syllabification &amp; Alignment</wintitle> view, it may be
+                    necessary to reset the phone alignment of <keyword>IPA Target</keyword> and
+                        <keyword>IPA Actual</keyword> transcriptions.</shortdesc>
                 <body>
                     <section>From the <wintitle>Project Manager</wintitle> window:</section>
                     <ol>
@@ -202,20 +197,16 @@
                             <p>Select the <uicontrol>Reset phone alignment</uicontrol> option.</p>
                         </li>
                         <li>
-                            <p>Select the project, corpora, or sessions whose alignment you wish to reset, and
-                                click <uicontrol>Next</uicontrol>.</p>
+                            <p>Select the project, corpora, or sessions whose alignment you wish to
+                                reset, and click <uicontrol>Next</uicontrol>.</p>
                             <itemgroup>Phon will re-perform the alignment for each selected session.
-                                <note>After resetting syllabification or alignment, it will be
+                                    <note>After resetting syllabification or alignment, it will be
                                     necessary to visually verify these tiers.</note></itemgroup>
                         </li>
                     </ol>
                 </body>
             </topic>
-            
         </topic>
-        
-        
-        
         <topic id="derive_session">
             <title>Derive Session</title>
             <shortdesc>Derive a new session using records from existing sessions.</shortdesc>
@@ -226,36 +217,40 @@
                 <ol>
                     <li>
                         <p>Choose the <menucascade>
-                            <uicontrol>Project</uicontrol>
-                            <uicontrol>Derive Session...</uicontrol>
-                        </menucascade> menu item.</p>
-                        <itemgroup>A <wintitle>Merge Sessions</wintitle> dialog will appear.</itemgroup>
+                                <uicontrol>Project</uicontrol>
+                                <uicontrol>Derive Session...</uicontrol>
+                            </menucascade> menu item.</p>
+                        <itemgroup>A <wintitle>Merge Sessions</wintitle> dialog will
+                            appear.</itemgroup>
                     </li>
                     <li>
-                        <p>Enter a <uicontrol>Session name</uicontrol> and Destination <uicontrol
-                            >Corpus</uicontrol> in the provided fields. Select one or more of the
-                            sessions for the split or merge and click <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup>The second page of the <wintitle>Merge Sessions</wintitle> dialog will
-                            appear.<note>If you chose only one session, the selected records will be put
-                                into the new session. If you select more than one session, the selected
-                                records will be merged into a new session.</note></itemgroup>
+                        <p>Enter a <uicontrol>Session name</uicontrol> and Destination
+                                <uicontrol>Corpus</uicontrol> in the provided fields. Select one or
+                            more of the sessions for the split or merge and click
+                                <uicontrol>Next</uicontrol>.</p>
+                        <itemgroup>The second page of the <wintitle>Merge Sessions</wintitle> dialog
+                            will appear.<note>If you chose only one session, the selected records
+                                will be put into the new session. If you select more than one
+                                session, the selected records will be merged into a new
+                                session.</note></itemgroup>
                     </li>
                     <li>
-                        <p>Select a session from the <uicontrol>Session</uicontrol> list at the left and
-                            choose whether to merge or split <uicontrol>All records</uicontrol>, a subset of
-                            <uicontrol>Specific records</uicontrol>, <uicontrol>Records for
-                                participant(s)</uicontrol> or <uicontrol>Records from Search
-                                    results</uicontrol>. Repeat this process for all sessions in the
-                            <uicontrol>Session</uicontrol> list. Click
-                            <uicontrol>Next</uicontrol>.</p>
-                        <itemgroup>This will begin the merging of the selected records/sessions.<note>If
-                            you choose to merge only specific records, you will have to specify the
-                            relevant record numbers. To specify several individual records, separate
-                            them with a comma and a space. To specify a range, separate the beginning
-                            and end record numbers with two periods and a space. If you choose to merge
-                            records for specific participants, you must select the participants from the
-                            list. If you choose to merge records from search results, you must select a
-                            past search from the list.</note></itemgroup>
+                        <p>Select a session from the <uicontrol>Session</uicontrol> list at the left
+                            and choose whether to merge or split <uicontrol>All records</uicontrol>,
+                            a subset of <uicontrol>Specific records</uicontrol>, <uicontrol>Records
+                                for participant(s)</uicontrol> or <uicontrol>Records from Search
+                                results</uicontrol>. Repeat this process for all sessions in the
+                                <uicontrol>Session</uicontrol> list. Click
+                                <uicontrol>Next</uicontrol>.</p>
+                        <itemgroup>This will begin the merging of the selected
+                                records/sessions.<note>If you choose to merge only specific records,
+                                you will have to specify the relevant record numbers. To specify
+                                several individual records, separate them with a comma and a space.
+                                To specify a range, separate the beginning and end record numbers
+                                with two periods and a space. If you choose to merge records for
+                                specific participants, you must select the participants from the
+                                list. If you choose to merge records from search results, you must
+                                select a past search from the list.</note></itemgroup>
                     </li>
                     <li>
                         <itemgroup>The newly derived session will appear in the specified corpus in
@@ -264,32 +259,33 @@
                 </ol>
             </body>
         </topic>
-        
         <topic id="refresh_project">
             <title>Refresh Project</title>
-            <shortdesc>Refresh <wintitle>Project Manager</wintitle> window to reflect changes.</shortdesc>
+            <shortdesc>Refresh <wintitle>Project Manager</wintitle> window to reflect
+                changes.</shortdesc>
             <body>
                 <section>From the <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
                     <li>
                         <p>Choose the <menucascade>
-                            <uicontrol>Project</uicontrol><uicontrol>Refresh</uicontrol>
-                        </menucascade> menu item or press <userinput>F5</userinput>.</p>
+                                <uicontrol>Project</uicontrol>
+                                <uicontrol>Refresh</uicontrol>
+                            </menucascade> menu item or press <userinput>F5</userinput>.</p>
                     </li>
                 </ol>
             </body>
         </topic>
-        
         <topic id="csv_import">
             <title>Import from CSV file(s)</title>
             <shortdesc>Import a folder of CSV (comma-separated values) files into <i>Phon</i> as
                 sessions.</shortdesc>
             <body>
-                <section><p>The CSV import module can import a folder of CSV files with identical column
-                    formats into <i>Phon</i>. Where possible, CSV column labels should match <i>Phon</i>
-                    default tiers. <i>Phon</i> can automatically extract session date information from a
-                    CSV file if its name reflects its session date, in YYYY-MM-DD format.</p>From the
-                    <wintitle>Project Manager</wintitle> window:</section>
+                <section><p>The CSV import module can import a folder of CSV files with identical
+                        column formats into <i>Phon</i>. Where possible, CSV column labels should
+                        match <i>Phon</i> default tiers. <i>Phon</i> can automatically extract
+                        session date information from a CSV file if its name reflects its session
+                        date, in YYYY-MM-DD format.</p>From the <wintitle>Project Manager</wintitle>
+                    window:</section>
                 <ol>
                     <li>
                         <p>Select the <menucascade>
@@ -301,45 +297,47 @@
                     </li>
                     <li>
                         <p>Click the <uicontrol>Browse</uicontrol> button to the right of the
-                            <uicontrol>Folder</uicontrol> field and locate the directory containing the
-                            CSV files for import. Also, ensure you select the proper <uicontrol>File
-                                encoding</uicontrol> option from the drop-down menu. Click the
-                            <uicontrol>Next</uicontrol> button.</p>
+                                <uicontrol>Folder</uicontrol> field and locate the directory
+                            containing the CSV files for import. Also, ensure you select the proper
+                                <uicontrol>File encoding</uicontrol> option from the drop-down menu.
+                            Click the <uicontrol>Next</uicontrol> button.</p>
                         <itemgroup>This action will prompt you to select files for import and the
                             destination corpus.</itemgroup>
                     </li>
                     <li>
-                        <p>Enter a corpus name in the <uicontrol>Destination Corpus</uicontrol> field and
-                            using the check boxes, select the files for import into that corpus. For each
-                            file, edit <uicontrol>Session Name</uicontrol> and <uicontrol>Session
-                                Date</uicontrol> as desired by double-clicking on either of them. Click the
-                            <uicontrol>Next</uicontrol> button.</p>
-                        <itemgroup>This will prompt you to set up the participants for that corpus: any
-                            participant information entered here will appear in all imported sessions for
-                            that corpus.</itemgroup>
+                        <p>Enter a corpus name in the <uicontrol>Destination Corpus</uicontrol>
+                            field and using the check boxes, select the files for import into that
+                            corpus. For each file, edit <uicontrol>Session Name</uicontrol> and
+                                <uicontrol>Session Date</uicontrol> as desired by double-clicking on
+                            either of them. Click the <uicontrol>Next</uicontrol> button.</p>
+                        <itemgroup>This will prompt you to set up the participants for that corpus:
+                            any participant information entered here will appear in all imported
+                            sessions for that corpus.</itemgroup>
                     </li>
                     <li>
-                        <p>Click the <uicontrol>Add Participant/+</uicontrol> button at the right of the
-                            window. Enter participant name, sex, date of birth, language and other pertinent
-                            information in the appropriate fields and click <uicontrol>Ok</uicontrol>. To
-                            delete a participant from the import, highlight the participant in the table and
-                            use the <userinput>Delete/Backspace</userinput> key. Then click the
-                            <uicontrol>Next</uicontrol> button.</p>
+                        <p>Click the <uicontrol>Add Participant/+</uicontrol> button at the right of
+                            the window. Enter participant name, sex, date of birth, language and
+                            other pertinent information in the appropriate fields and click
+                                <uicontrol>Ok</uicontrol>. To delete a participant from the import,
+                            highlight the participant in the table and use the
+                                <userinput>Delete/Backspace</userinput> key. Then click the
+                                <uicontrol>Next</uicontrol> button.</p>
                         <itemgroup/>
                     </li>
                     <li>
-                        <p>Set up column mapping such that each CSV column header has been assigned a tier
-                            name in <i>Phon</i>. To do this, highlight an item in the <uicontrol>CSV
-                                column</uicontrol> on the left, then use the drop down menu on the right to
-                            select the appropriate <i>Phon</i>
+                        <p>Set up column mapping such that each CSV column header has been assigned
+                            a tier name in <i>Phon</i>. To do this, highlight an item in the
+                                <uicontrol>CSV column</uicontrol> on the left, then use the drop
+                            down menu on the right to select the appropriate <i>Phon</i>
                             <uicontrol>Tier</uicontrol> or enter a new tier into <uicontrol>Tier
                                 Name</uicontrol> field. You may also select the <uicontrol>Don't
-                                    Import</uicontrol> menu item for columns that are repetitive or unnecessary.
-                            In the <uicontrol>Options</uicontrol> section, you may use the
-                            <uicontrol>Syllabifier</uicontrol> drop down menu to specify the correct
-                            syllabifier and the <uicontrol>Transcription filter</uicontrol> to convert the
-                            <i>IPA Target</i> and/or <i>IPA Actual</i> tiers from YAPA, SAMPA, IPAPhon
-                            or IPAKiel. Click the <uicontrol>Next</uicontrol> button.</p>
+                                Import</uicontrol> menu item for columns that are repetitive or
+                            unnecessary. In the <uicontrol>Options</uicontrol> section, you may use
+                            the <uicontrol>Syllabifier</uicontrol> drop down menu to specify the
+                            correct syllabifier and the <uicontrol>Transcription filter</uicontrol>
+                            to convert the <i>IPA Target</i> and/or <i>IPA Actual</i> tiers from
+                            YAPA, SAMPA, IPAPhon or IPAKiel. Click the <uicontrol>Next</uicontrol>
+                            button.</p>
                         <itemgroup>This action will activate the import.<note>If the column name in
                                 the CSV file is the same as a Phon default tier name, the CSV column
                                 will be automatically mapped to the appropriate tier in
@@ -349,8 +347,8 @@
                     </li>
                     <li>
                         <p>Once the <i>Import finished</i> alert appears at the bottom of the
-                            <wintitle>CSV Import</wintitle> window, click the
-                            <uicontrol>Close</uicontrol> button.</p>
+                                <wintitle>CSV Import</wintitle> window, click the
+                                <uicontrol>Close</uicontrol> button.</p>
                         <itemgroup>This action will return the user to the <wintitle>Project
                                 Manager</wintitle> window with the newly imported corpus. Each row
                             from your CSV file will become one record in Phon with the tiers as
@@ -358,23 +356,23 @@
                     </li>
                 </ol>
                 <section>
-                    <p>After import, each CSV file should become a new session in Phon. The number of
-                        records in the session should match the number of rows in the CSV file (minus the
-                        header.) A file named <i>importsettings.xml</i> is also created in the source
-                        folder. If this file is present when the directory is selected in Step 1 the
-                        previous import settings are loaded (except for Syllabifier and Filter
-                        settings).</p>
+                    <p>After import, each CSV file should become a new session in Phon. The number
+                        of records in the session should match the number of rows in the CSV file
+                        (minus the header.) A file named <i>importsettings.xml</i> is also created
+                        in the source folder. If this file is present when the directory is selected
+                        in Step 1 the previous import settings are loaded (except for Syllabifier
+                        and Filter settings).</p>
                 </section>
             </body>
         </topic>
-        
         <topic id="csv_export">
             <title>Export to CSV file(s)</title>
-            <shortdesc>Export <i>Phon</i> sessions as CSV (comma-separated values) files.</shortdesc>
+            <shortdesc>Export <i>Phon</i> sessions as CSV (comma-separated values)
+                files.</shortdesc>
             <body>
                 <section>
-                    <p>The CSV export module can export Phon sessions into a specified folder as UTF-8
-                        encoded CSV files.</p>
+                    <p>The CSV export module can export Phon sessions into a specified folder as
+                        UTF-8 encoded CSV files.</p>
                     <p>From the <uicontrol>Project Manager</uicontrol> window:</p>
                 </section>
                 <ol id="steps_3fbd2bb6-677b-4d56-b099-694f006388f9">
@@ -387,39 +385,42 @@
                             window.</itemgroup>
                     </li>
                     <li>
-                        <p>To select the destination folder for the export, click the <uicontrol>Browse
-                            for folder...</uicontrol> button to the right of the <uicontrol>Destination
-                                folder</uicontrol> field, locate the desired folder and click
-                            <uicontrol>Open</uicontrol>. Select the sessions you would like to export
-                            using the check boxes at the left of the <uicontrol>Sessions</uicontrol> list.
-                            Click the <uicontrol>Next</uicontrol> button.</p>
+                        <p>To select the destination folder for the export, click the
+                                <uicontrol>Browse for folder...</uicontrol> button to the right of
+                            the <uicontrol>Destination folder</uicontrol> field, locate the desired
+                            folder and click <uicontrol>Open</uicontrol>. Select the sessions you
+                            would like to export using the check boxes at the left of the
+                                <uicontrol>Sessions</uicontrol> list. Click the
+                                <uicontrol>Next</uicontrol> button.</p>
                         <itemgroup>This action will prompt you to set up columns for the
                             export.</itemgroup>
                     </li>
                     <li>
-                        <p> To add a column to the export, type its name in the provided field and press
-                            <userinput>Enter</userinput> or click <uicontrol>Add column/+</uicontrol>.
-                            To remove a tier from the list, select it and click the <uicontrol>Remove
-                                Column/-</uicontrol> button. To export a tier which is not available in the
-                            existing list, type <b>"</b><userinput>Tier:&lt;tier name></userinput><b>"</b>
-                            in the provided field and click the <uicontrol>Add Column/+</uicontrol> or press
-                            <userinput>Enter</userinput>. Click on any tier name in the list and use the
-                            <uicontrol>up/down arrow</uicontrol> buttons to change the column ordering.
-                            Click the <uicontrol>Next</uicontrol> button.</p>
+                        <p> To add a column to the export, type its name in the provided field and
+                            press <userinput>Enter</userinput> or click <uicontrol>Add
+                                column/+</uicontrol>. To remove a tier from the list, select it and
+                            click the <uicontrol>Remove Column/-</uicontrol> button. To export a
+                            tier which is not available in the existing list, type
+                                <b>"</b><userinput>Tier:&lt;tier name></userinput><b>"</b> in the
+                            provided field and click the <uicontrol>Add Column/+</uicontrol> or
+                            press <userinput>Enter</userinput>. Click on any tier name in the list
+                            and use the <uicontrol>up/down arrow</uicontrol> buttons to change the
+                            column ordering. Click the <uicontrol>Next</uicontrol> button.</p>
                         <itemgroup/>
-                        <itemgroup>This action will activate the export.<note>The default column list for
-                            export includes: Session Name, Record #, and all default <i>Phon</i> tiers.
-                            The default can be restored by using the <uicontrol>Reset to
-                                default</uicontrol> button on the bottom right corner of the column
-                            list. This list of columns is saved after export and re-loaded the next time
-                            CSV export is opened.</note><note>To export blind user transcriptions, add
-                                the tier "<userinput>IPA [Target|Actual] (&lt;username>)</userinput>" (e.g.
+                        <itemgroup>This action will activate the export.<note>The default column
+                                list for export includes: Session Name, Record #, and all default
+                                    <i>Phon</i> tiers. The default can be restored by using the
+                                    <uicontrol>Reset to default</uicontrol> button on the bottom
+                                right corner of the column list. This list of columns is saved after
+                                export and re-loaded the next time CSV export is
+                                opened.</note><note>To export blind user transcriptions, add the
+                                tier <codeph>IPA [Target|Actual] (&lt;username>)</codeph> (e.g.
                                 Tier:IPA Target (JSmith)).</note></itemgroup>
                     </li>
                     <li>
                         <p>Once the <i>Export complete</i> alert appears at the bottom of the
-                            <uicontrol>CSV Export</uicontrol> window, click the
-                            <uicontrol>Close</uicontrol> button. </p>
+                                <uicontrol>CSV Export</uicontrol> window, click the
+                                <uicontrol>Close</uicontrol> button. </p>
                         <itemgroup>Session files for all corpora in the exported project will appear
                             in the chosen directory with the format <filepath>Corpus name-Session
                                 name.csv</filepath>.</itemgroup>
@@ -427,45 +428,44 @@
                 </ol>
             </body>
         </topic>
-        
         <topic id="copy_corpus">
             <title>Copy Corpus</title>
             <shortdesc>Copy a corpus to a different project.</shortdesc>
             <body>
-                <section>From <wintitle>Project Manager</wintitle> window, with a second <wintitle>Project
-                    Manager</wintitle> window open:</section>
+                <section>From <wintitle>Project Manager</wintitle> window, with a second
+                        <wintitle>Project Manager</wintitle> window open:</section>
                 <ol>
                     <li>
                         <p>Select the corpora you wish to copy in the source <wintitle>Project
-                            Manager</wintitle> window.</p>
+                                Manager</wintitle> window.</p>
                     </li>
                     <li>
                         <p>Using the mouse, drag the corpora over the corpus list of the destination
-                            <wintitle>Project Manager</wintitle> window.</p>
+                                <wintitle>Project Manager</wintitle> window.</p>
                         <itemgroup>The corpus folders will be copied into the destination
                             project.</itemgroup>
                     </li>
                 </ol>
             </body>
         </topic>
-        
         <topic id="copy_session">
             <title>Copy Session</title>
             <shortdesc>Copy a session to a different corpus.</shortdesc>
             <body>
                 <section>From <wintitle>Project Manager</wintitle> window:</section>
                 <ol>
-                    <li><p>Select the sessions you wish to copy in the <wintitle>Project Manager</wintitle> window.</p></li>
                     <li>
-                        <p>Using the mouse, drag the sessions over the name of the destination corpus in
-                            the <wintitle>Project Manager</wintitle> window.</p>
+                        <p>Select the sessions you wish to copy in the <wintitle>Project
+                                Manager</wintitle> window.</p>
+                    </li>
+                    <li>
+                        <p>Using the mouse, drag the sessions over the name of the destination
+                            corpus in the <wintitle>Project Manager</wintitle> window.</p>
                         <itemgroup>The sessions files will be copied into the destination
                             corpus.</itemgroup>
                     </li>
                 </ol>
             </body>
         </topic>
-        
     </topic>
-    
 </topic>
