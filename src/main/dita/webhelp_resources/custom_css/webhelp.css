@@ -113,6 +113,10 @@
   border-bottom-right-radius: 2px;
 }
 
+.userinput {
+    background: #005A8C;
+}
+
 .keyword {
     font-style: italic;
 }

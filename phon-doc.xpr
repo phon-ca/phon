@@ -22,11 +22,13 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
+                                        <String>Phon Manual (PDF)</String>
                                         <String>PhonManual - Web</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
                                     <list>
+                                        <String>DITAMAP</String>
                                         <String>DITAMAP</String>
                                     </list>
                                 </field>
@@ -258,7 +260,7 @@
                                     <String>${cfd}</String>
                                 </field>
                                 <field name="outputDir">
-                                    <String>${pd}/src/main/dita/webhelp-resources</String>
+                                    <String>${pd}/src/main/dita/webhelp_resources</String>
                                 </field>
                                 <field name="tempDir">
                                     <String>${pd}/target</String>
