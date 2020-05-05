@@ -62,10 +62,11 @@ public class TableUtils {
 		if(o1 == null && o2 != null) return 1;
 		else if(o1 == null && o2 == o1) return 0;
 		
-		final Class<?> type = o1.getClass();
-		@SuppressWarnings("unchecked")
-		final Formatter<Object> formatter = 
-				(Formatter<Object>)FormatterFactory.createFormatter(type);
+		Formatter<Object> formatter = null;
+		if(o1.getClass() == o2.getClass()) {
+			final Class<?> type = o1.getClass();
+			formatter = (Formatter<Object>)FormatterFactory.createFormatter(type);
+		}
 		
 		String o1Txt = (formatter != null ? formatter.format(o1) : o1.toString());
 		String o2Txt = (formatter != null ? formatter.format(o2) : o2.toString());
