@@ -124,10 +124,10 @@ $(document).ready( function () {
     <article class="topic nested1" aria-labelledby="ariaid-title2" id="segment_playback">
         <h2 class="title topictitle2" id="ariaid-title2">Segment playback and export</h2>
         <div class="body">
-            <p class="p">Segment playback is available when a <span class="keyword">session audio</span> is available or when a
-            <span class="keyword">session media</span> file is available and the <span class="keyword wintitle">Media Player</span> view is open.
-            Segment playback actions are available from the session editor toolbar and the <span class="ph uicontrol">Media</span>
-            window menu.</p>
+            <p class="p">Segment playback is available when a <span class="keyword">session audio</span> is available or
+                when a <span class="keyword">session media</span> file is available and the <a class="xref" href="media_player_view.html">Media Player</a> view is open. Segment playback actions are
+                available from the session editor toolbar and the <span class="ph uicontrol">Media</span>
+                window menu.</p>
             <div class="p">The following segment playback actions are available:
             <ul class="ul">
                 <li class="li"><span class="ph uicontrol">Play segment</span>
@@ -183,18 +183,25 @@ $(document).ready( function () {
         <article class="topic nested2" aria-labelledby="ariaid-title6" id="genereate_session_audio">
             <h3 class="title topictitle3" id="ariaid-title6">Generate/re-encode session audio</h3>
             <div class="body">
-                <p class="p">If <span class="keyword">session media</span> is available but no complimentary wav file
-                    cannot be found - or the wav file cannot be read - the following banner will be
-                    displayed in the <a class="xref" href="timeline_view.html">Timeline</a> and <a class="xref" href="speech_analysis_view.html">Speech Analysis</a> views. Clicking the banner will begin the
-                    encoding process and progress will be displayed in the banner. Once the encoding
-                    process is complete the new wav file will be opened. This command is also
-                    available in the <span class="ph uicontrol">Media</span> window menu.</p>
+                <p class="p">If <span class="keyword">session media</span> is available but a complimentary wav file
+                    cannot be found the following banner will be displayed in the <a class="xref" href="timeline_view.html">Timeline</a> and <a class="xref" href="speech_analysis_view.html">Speech Analysis</a>
+                    views. Clicking the banner will begin the encoding process and progress will be
+                    displayed in the banner. Once the encoding process is complete the new wav file
+                    will be opened. This command is also available in the
+                        <span class="ph uicontrol">Media</span> window menu.</p>
                 <figure class="fig fignone" id="genereate_session_audio__fig_nph_tz5_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 1</span>: </span>Generate Session Audio Banner</figcaption>
                     
                     <br /><img class="image" id="genereate_session_audio__image_oph_tz5_nlb" src="images/no_audio_banner.png" alt="Generate Session Audio Banner" /><br />
                 </figure>
                 <div class="note note note_note"><span class="note__title">Note:</span> Phon will require write access to the media folder to generate/re-encode
                         <span class="keyword">session audio</span>.</div>
+                <p class="p">If Phon detects that it is unable to read the <span class="keyword">session audio</span>
+                    file you will be prompted to re-encode the file. If you choose to re-encode the
+                    wav file the original audio file will be renamed with a
+                        <span class="ph filepath">-orig</span> suffix in the filename. If the prompt continues
+                    to be displayed after the re-encode process you may choose to <span class="ph uicontrol">Do
+                        nothing</span> which will leave <span class="keyword">session audio</span>
+                    unloaded.</p>
             </div>
         </article>
         <article class="topic nested2" aria-labelledby="ariaid-title7" id="select_media_folders">
