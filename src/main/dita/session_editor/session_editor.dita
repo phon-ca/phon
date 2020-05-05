@@ -9,7 +9,7 @@
             specific set of functions within the editor window.</p>
         <fig>
             <title>Session Editor</title>
-            <image href="./images/session_editor.png" keyref="session_editor_screenshot">
+            <image href="./images/session_editor.png">
                 <alt>Session Editor</alt>
             </image>
         </fig>

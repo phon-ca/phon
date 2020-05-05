@@ -21,10 +21,11 @@
     <topic id="segment_playback">
         <title>Segment playback and export</title>
         <body>
-            <p>Segment playback is available when a <keyword>session audio</keyword> is available or when a
-            <keyword>session media</keyword> file is available and the <wintitle>Media Player</wintitle> view is open.
-            Segment playback actions are available from the session editor toolbar and the <uicontrol>Media</uicontrol>
-            window menu.</p>
+            <p>Segment playback is available when a <keyword>session audio</keyword> is available or
+                when a <keyword>session media</keyword> file is available and the <xref
+                    href="media_player_view.dita"/> view is open. Segment playback actions are
+                available from the session editor toolbar and the <uicontrol>Media</uicontrol>
+                window menu.</p>
             <p>The following segment playback actions are available:
             <ul>
                 <li><uicontrol>Play segment</uicontrol>
@@ -94,13 +95,13 @@
         <topic id="genereate_session_audio">
             <title>Generate/re-encode session audio</title>
             <body>
-                <p>If <keyword>session media</keyword> is available but no complimentary wav file
-                    cannot be found - or the wav file cannot be read - the following banner will be
-                    displayed in the <xref href="timeline_view.dita"/> and <xref
-                        href="speech_analysis_view.dita"/> views. Clicking the banner will begin the
-                    encoding process and progress will be displayed in the banner. Once the encoding
-                    process is complete the new wav file will be opened. This command is also
-                    available in the <uicontrol>Media</uicontrol> window menu.</p>
+                <p>If <keyword>session media</keyword> is available but a complimentary wav file
+                    cannot be found the following banner will be displayed in the <xref
+                        href="timeline_view.dita"/> and <xref href="speech_analysis_view.dita"/>
+                    views. Clicking the banner will begin the encoding process and progress will be
+                    displayed in the banner. Once the encoding process is complete the new wav file
+                    will be opened. This command is also available in the
+                        <uicontrol>Media</uicontrol> window menu.</p>
                 <fig id="fig_nph_tz5_nlb">
                     <title>Generate Session Audio Banner</title>
                     <image placement="break" href="images/no_audio_banner.png"
@@ -110,6 +111,13 @@
                 </fig>
                 <note>Phon will require write access to the media folder to generate/re-encode
                         <keyword>session audio</keyword>.</note>
+                <p>If Phon detects that it is unable to read the <keyword>session audio</keyword>
+                    file you will be prompted to re-encode the file. If you choose to re-encode the
+                    wav file the original audio file will be renamed with a
+                        <filepath>-orig</filepath> suffix in the filename. If the prompt continues
+                    to be displayed after the re-encode process you may choose to <uicontrol>Do
+                        nothing</uicontrol> which will leave <keyword>session audio</keyword>
+                    unloaded.</p>
             </body>
         </topic>
         <topic id="select_media_folders">
