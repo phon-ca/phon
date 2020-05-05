@@ -14,6 +14,7 @@ import ca.phon.media.util.MediaChecker;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
+import ca.phon.util.PrefHelper;
 
 /**
  * Media model for a session editor.
@@ -37,9 +38,13 @@ public class SessionMediaModel {
 		ERROR;
 	}
 	
+	public static final String PERFORM_MEDIA_CHECK_PROP = SessionMediaModel.class.getName() + ".performMediaCheck";
+	public static final boolean DEFAULT_PERFORM_MEDIA_CHECK = true;
+	private boolean performMediaCheck = PrefHelper.getBoolean(PERFORM_MEDIA_CHECK_PROP, DEFAULT_PERFORM_MEDIA_CHECK);
+	
 	// has the audio file been checked (so it does not cause an application crash)
 	private ReentrantLock checkLock = new ReentrantLock();
-	private AudioFileStatus audioFileStatus = AudioFileStatus.UNKONWN;
+	private AudioFileStatus audioFileStatus = (performMediaCheck ? AudioFileStatus.UNKONWN : AudioFileStatus.OK);
 	
 	/**
 	 * Editor action key generated when session audio file becomes available

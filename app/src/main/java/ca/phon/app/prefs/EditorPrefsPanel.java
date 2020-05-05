@@ -42,6 +42,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
@@ -67,6 +68,8 @@ public class EditorPrefsPanel extends PrefsPanel {
 	private final Integer[] autosaveTimes = { 0, 5, 10, 15, 20, 30 }; // minutes
 
 	private JCheckBox backupWhenSaveBox;
+	
+	private JCheckBox performMediaCheckBox;
 
 	public EditorPrefsPanel() {
 		super("Session Editor");
@@ -138,22 +141,33 @@ public class EditorPrefsPanel extends PrefsPanel {
 				"backups.zip when saving sessions.");
 		backupAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SessionEditor.BACKUP_WHEN_SAVING, true));
 		backupWhenSaveBox = new JCheckBox(backupAct);
-
+		
+		final PhonUIAction mediaCheckAct = new PhonUIAction(this, "toggleMediaCheck");
+		mediaCheckAct.putValue(PhonUIAction.NAME, "Check file when loading session audio");
+		mediaCheckAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Check audio file before loading to avoid crashes/freezing.  Turn off if problematic.");
+		mediaCheckAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SessionMediaModel.PERFORM_MEDIA_CHECK_PROP, SessionMediaModel.DEFAULT_PERFORM_MEDIA_CHECK));
+		performMediaCheckBox = new JCheckBox(mediaCheckAct);
+		
 		JPanel jpanel5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		jpanel5.add(backupWhenSaveBox);
 		jpanel5.setBorder(BorderFactory.createTitledBorder("Backup Sessions"));
 
+		JPanel jpanel6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		jpanel6.add(performMediaCheckBox);
+		jpanel6.setBorder(BorderFactory.createTitledBorder("Media"));
+		
 		JPanel innerPanel = new JPanel();
 		FormLayout layout = new FormLayout(
 				"fill:pref:grow",
-				"pref, pref, pref, pref, pref");
+				"pref, pref, pref, pref, pref, pref");
 		innerPanel.setLayout(layout);
 
 		innerPanel.add(jpanel1, cc.xy(1,1));
 		innerPanel.add(jpanel2, cc.xy(1,2));
 		innerPanel.add(jpanel4, cc.xy(1, 4));
 		innerPanel.add(jpanel5, cc.xy(1, 5));
+		innerPanel.add(jpanel6, cc.xy(1, 6));
 
 		setLayout(new BorderLayout());
 		JScrollPane innerScroller = new JScrollPane(innerPanel);
@@ -162,6 +176,10 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 	public void toggleBackupWhenSave() {
 		PrefHelper.getUserPreferences().putBoolean(SessionEditor.BACKUP_WHEN_SAVING, backupWhenSaveBox.isSelected());
+	}
+	
+	public void toggleMediaCheck() {
+		PrefHelper.getUserPreferences().putBoolean(SessionMediaModel.PERFORM_MEDIA_CHECK_PROP, performMediaCheckBox.isSelected());
 	}
 
 	private class AutosaveTimeRenderer extends DefaultListCellRenderer {
