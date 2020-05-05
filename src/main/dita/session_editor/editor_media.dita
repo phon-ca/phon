@@ -59,7 +59,7 @@
         <topic id="assign_media">
             <title>Assign media</title>
             <body>
-                <p>There are several method for assigning media to the session.<ul
+                <p>There are several methods for assigning media to the session.<ul
                         id="ul_kvf_gy5_nlb">
                         <li>
                             <p>Use the <menucascade>
@@ -73,10 +73,9 @@
                                 href="speech_analysis_view.dita"/> views when session media is not
                                 available<image placement="break" href="images/no_media_banner.png"
                                 id="image_yr4_2z5_nlb"/></li>
-                        <li>You may also type the relative path (relative the <xref
+                        <li>You may also type the relative path - relative to the <xref
                                 href="../project_manager/project_manager.dita#project_media_folders"
-                            /> or global <xref href="../prefs/preferences.dita#media_folders"/>) to
-                            the media directly in the <uicontrol>Media</uicontrol> text field in the
+                            >project, corpus</xref> or <xref href="../prefs/preferences.dita#media_folders">global</xref> media folders- directly in the <uicontrol>Media</uicontrol> text field in the
                                 <xref href="session_information_view.dita"/> view.<image
                                 placement="break" href="images/session_information_media.png"
                                 id="image_b52_zz5_nlb"/></li>
