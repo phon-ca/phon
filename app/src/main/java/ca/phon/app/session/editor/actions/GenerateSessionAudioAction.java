@@ -90,6 +90,8 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 			public void statusChanged(PhonTask task, TaskStatus oldStatus,
 					TaskStatus newStatus) {
 				if(newStatus == TaskStatus.FINISHED) {
+					getEditor().getMediaModel().resetAudioCheck();
+
 					if(getEditor().getMediaModel().isSessionAudioAvailable()) {
 						// tell the editor session audio is now available
 						EditorEvent ee = new EditorEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, GenerateSessionAudioAction.this, 
@@ -171,8 +173,6 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 					if(retVal != 0) return null;
 				}
 				
-				getEditor().getMediaModel().resetAudioCheck();
-
 				final VLCWavExporter exporter = new VLCWavExporter(movFile, resFile);
 				return exporter;
 			}

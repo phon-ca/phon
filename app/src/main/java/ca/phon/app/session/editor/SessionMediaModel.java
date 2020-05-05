@@ -119,7 +119,7 @@ public class SessionMediaModel {
 							"There may be a problem with Phon opening this file.", 
 							options);
 					if(selection == 0) {
-						SwingUtilities.invokeLater(() -> { 
+						SwingUtilities.invokeLater(() -> {
 							GenerateSessionAudioAction act = getGenerateSessionAudioAction();
 							act.actionPerformed(new ActionEvent(this, -1, "reencode_audio"));
 						});
@@ -128,7 +128,6 @@ public class SessionMediaModel {
 					}
 				}				
 			}
-			
 		}
 		return (audioFileStatus == AudioFileStatus.OK);
 	}
