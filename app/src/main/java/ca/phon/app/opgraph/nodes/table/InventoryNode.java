@@ -16,7 +16,9 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -264,6 +266,13 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 					retVal.add(new GroupKey(table.getValueAt(rowIdx, grouping), settings.getGroupBy().caseSensitive, 
 							settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().onlyOrExcept, settings.getGroupBy().selectedDiacritics));
 				}
+			}
+			
+			if(!"Session".equals(settings.getGroupBy().name)) {
+				List<GroupKey> temp = new ArrayList<>(retVal);
+				Collections.sort(temp, (g1, g2) -> TableUtils.compare(g1, g2, settings.getGroupBy().caseSensitive, 
+							settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().onlyOrExcept, settings.getGroupBy().selectedDiacritics));
+				retVal = new LinkedHashSet<>(temp);
 			}
 		} else {
 			retVal.add(new GroupKey("Total", true, false, false, new HashSet<>()));

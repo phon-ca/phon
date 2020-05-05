@@ -24,6 +24,7 @@ import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ui.painter.CmpPainter;
 
 public class TableUtils {
 	
@@ -54,6 +55,32 @@ public class TableUtils {
 		}
 		
 		return (caseSensitive ? o1Txt.equals(o2Txt) : o1Txt.equalsIgnoreCase(o2Txt));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static int compare(Object o1, Object o2, boolean caseSensitive, boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		if(o1 == null && o2 != null) return 1;
+		else if(o1 == null && o2 == o1) return 0;
+		
+		final Class<?> type = o1.getClass();
+		@SuppressWarnings("unchecked")
+		final Formatter<Object> formatter = 
+				(Formatter<Object>)FormatterFactory.createFormatter(type);
+		
+		String o1Txt = (formatter != null ? formatter.format(o1) : o1.toString());
+		String o2Txt = (formatter != null ? formatter.format(o2) : o2.toString());
+		
+		if(ignoreDiacritics && o1 instanceof IPATranscript && o2 instanceof IPATranscript) {
+			try {
+				final IPATranscript ipa = IPATranscript.parseIPATranscript(o1Txt);
+				o1Txt = objToString(ipa, ignoreDiacritics, onlyOrExcept, selectedDiacritics);
+				
+				final IPATranscript ipa2 = IPATranscript.parseIPATranscript(o2Txt);
+				o2Txt =  objToString(ipa2, ignoreDiacritics, onlyOrExcept, selectedDiacritics);
+			} catch (ParseException e) {}
+		}
+		
+		return o1Txt.compareTo(o2Txt);
 	}
 	
 	public static String objToString(Object val, boolean ignoreDiacritics) {
