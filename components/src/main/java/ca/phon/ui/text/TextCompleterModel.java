@@ -67,5 +67,7 @@ public interface TextCompleterModel<T> {
 	 * @return new text
 	 */
 	public String completeText(String text, String completion);
+	
+	public boolean containsCompletion(String completion);
 
 }

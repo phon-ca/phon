@@ -83,5 +83,9 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 	public String getDisplayText(String completion) {
 		return getData(completion);
 	}
+	
+	public boolean containsCompletion(String completion) {
+		return (getData(completion) != null);
+	}
 
 }

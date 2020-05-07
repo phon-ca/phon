@@ -133,8 +133,10 @@ public class MediaSelectionField extends FileSelectionField {
 	 */
 	protected void addTextCompletion(Path path) {
 		final String name = path.normalize().toString();
-		completerModel.addCompletion(path.getFileName().toString(), name);
-		completerModel.addCompletion(name, name);
+		
+		if(!completerModel.containsCompletion(name)) {
+			completerModel.addCompletion(name, name);
+		}
 	}
 
 	private void scanPath(Path mediaPath, boolean recursive) {
