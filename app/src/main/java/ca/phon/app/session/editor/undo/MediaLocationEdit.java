@@ -47,11 +47,14 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
-		session.setMediaLocation(getOldLocation());
-		
-		getEditor().getMediaModel().resetAudioCheck();
-		
-		queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, editor.getUndoSupport(), getOldLocation());
+		if(session.getMediaLocation() == null && getOldLocation() != null
+				|| session.getMediaLocation() != null && getOldLocation() == null
+				|| session.getMediaLocation() != null && !session.getMediaLocation().equals(getOldLocation())
+				|| getOldLocation() != null && !getOldLocation().equals(session.getMediaLocation())) {
+			session.setMediaLocation(getOldLocation());
+			getEditor().getMediaModel().resetAudioCheck();
+			queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), getOldLocation());
+		}
 	}
 
 	@Override
@@ -62,13 +65,16 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 		if(session == null) return;
 		
 		oldLocation = session.getMediaLocation();
-		
 		String mediaLocation = (getMediaLocation() != null && getMediaLocation().strip().length() > 0 ? getMediaLocation() : null);
-		session.setMediaLocation(mediaLocation);
 		
-		getEditor().getMediaModel().resetAudioCheck();
-		
-		queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), mediaLocation);
+		if(oldLocation == null && mediaLocation != null
+				|| oldLocation != null && mediaLocation == null
+				|| oldLocation != null && !oldLocation.equals(mediaLocation)
+				|| mediaLocation != null && !mediaLocation.equals(oldLocation)) {
+			session.setMediaLocation(mediaLocation);
+			getEditor().getMediaModel().resetAudioCheck();
+			queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), mediaLocation);
+		}
 	}
 
 }

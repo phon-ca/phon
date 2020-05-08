@@ -15,6 +15,10 @@ import ca.phon.media.util.MediaChecker;
 import ca.phon.media.util.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PrefHelper;
 
 /**
@@ -130,19 +134,29 @@ public class SessionMediaModel {
 				checkLock.unlock();
 				
 				if(audioFileStatus != AudioFileStatus.OK) {
-					String[] options = {"Re-encode audio", "Do nothing", "Load anyway (may crash/freeze)"};
-					int selection = editor.showMessageDialog("Audio File Encoding", 
-							"There may be a problem with Phon opening this file.", 
-							options);
-					if(selection == 0) {
-						SwingUtilities.invokeLater(() -> {
-							GenerateSessionAudioAction act = getGenerateSessionAudioAction();
-							act.actionPerformed(new ActionEvent(this, -1, "reencode_audio"));
-						});
-					} else if(selection == 2) {
-						audioFileStatus = AudioFileStatus.OK;
-					}
-				}				
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setParentWindow(getEditor());
+					String[] options = {"Re-encode audio", "Do nothing"};
+					props.setOptions(options);
+					props.setHeader("Audio File Encoding");
+					props.setMessage("There may be a problem with Phon opening this file.");
+					props.setRunAsync(true);
+					props.setListener(new NativeDialogListener() {
+						
+						@Override
+						public void nativeDialogEvent(NativeDialogEvent event) {
+							if(event.getDialogResult() == 0) {
+								SwingUtilities.invokeLater(() -> {
+									GenerateSessionAudioAction act = getGenerateSessionAudioAction();
+									act.actionPerformed(new ActionEvent(this, -1, "reencode_audio"));
+								});
+							}
+						}
+						
+					});
+					
+					NativeDialogs.showMessageDialog(props);
+				}
 			}
 		}
 		return (audioFileStatus == AudioFileStatus.OK);
