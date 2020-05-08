@@ -41,7 +41,7 @@ import ca.phon.util.PrefHelper;
 public class MediaChecker {
 	
 	public final static String TIMEOUT = MediaChecker.class.getName() + ".timeout";
-	private final static int DEFAULT_TIMEOUT = 10000;
+	private final static int DEFAULT_TIMEOUT = 15000;
 		
 	public static boolean checkMediaFile(String mediaFile) {
 		int timeout = PrefHelper.getInt(TIMEOUT, DEFAULT_TIMEOUT);
