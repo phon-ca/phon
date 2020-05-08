@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.14/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_14.dmg" newVersion="3.1.0-beta.14" newMediaFileId="macos" fileSize="278734089" md5Sum="55de391889841e22f46cdcf5156df0ae" sha256Sum="76b54bf40ca8400cb6d8da6fc178cc881e8252e59a88ef5a108a2468c519dfe5" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.15/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_15.dmg" newVersion="3.1.0-beta.15" newMediaFileId="macos" fileSize="278735328" md5Sum="9e3d85b06f87d7a5b7f82f3151f927b2" sha256Sum="045af3933641ec373a5743d4a13b91e46d88dad4359d3fd10bb114c4c459aa56" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -313,7 +313,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_14.dmg" newVersion="3.1.0-beta.14" newMediaFileId="macos" fileSize="278734089" md5Sum="55de391889841e22f46cdcf5156df0ae" sha256Sum="76b54bf40ca8400cb6d8da6fc178cc881e8252e59a88ef5a108a2468c519dfe5" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_15.dmg" newVersion="3.1.0-beta.15" newMediaFileId="macos" fileSize="278735328" md5Sum="9e3d85b06f87d7a5b7f82f3151f927b2" sha256Sum="045af3933641ec373a5743d4a13b91e46d88dad4359d3fd10bb114c4c459aa56" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -626,7 +626,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_14.exe" newVersion="3.1.0-beta.14" newMediaFileId="win64" fileSize="288359688" md5Sum="3bf0308a30b847a4ece343ae14f776fd" sha256Sum="7d3433af244cc8340177454f8aa69bcf0b352c76295a2a23c2452caa1c322af2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.exe" newVersion="3.1.0-beta.15" newMediaFileId="win64" fileSize="288362760" md5Sum="8ccd59d98fc85c32ca835113038f51f9" sha256Sum="bd2c516b58d0c956465eddcbb9846dcef7a66a7111601b3981a818965a8c43c5" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -939,7 +939,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_14.exe" newVersion="3.1.0-beta.14" newMediaFileId="win64" fileSize="288359688" md5Sum="3bf0308a30b847a4ece343ae14f776fd" sha256Sum="7d3433af244cc8340177454f8aa69bcf0b352c76295a2a23c2452caa1c322af2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.exe" newVersion="3.1.0-beta.15" newMediaFileId="win64" fileSize="288362760" md5Sum="8ccd59d98fc85c32ca835113038f51f9" sha256Sum="bd2c516b58d0c956465eddcbb9846dcef7a66a7111601b3981a818965a8c43c5" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -1252,7 +1252,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_14.exe" newVersion="3.1.0-beta.14" newMediaFileId="win64" fileSize="288359688" md5Sum="3bf0308a30b847a4ece343ae14f776fd" sha256Sum="7d3433af244cc8340177454f8aa69bcf0b352c76295a2a23c2452caa1c322af2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.exe" newVersion="3.1.0-beta.15" newMediaFileId="win64" fileSize="288362760" md5Sum="8ccd59d98fc85c32ca835113038f51f9" sha256Sum="bd2c516b58d0c956465eddcbb9846dcef7a66a7111601b3981a818965a8c43c5" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -1565,7 +1565,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_14.zip" newVersion="3.1.0-beta.14" newMediaFileId="win64zip" fileSize="287453158" md5Sum="e3120e75e1934ee99078b8d840031db8" sha256Sum="97c58a62b8e26977243b37f50dfce5796a37f41c677674357c67431326ce9549" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.zip" newVersion="3.1.0-beta.15" newMediaFileId="win64zip" fileSize="287455898" md5Sum="a0de192b2d0cd1002152066e45165a0f" sha256Sum="aa0277d77953ff8bcaeb0cea2099ae2bc9f9d3cdfc449cc87f89481825307547" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
