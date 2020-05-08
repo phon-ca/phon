@@ -103,7 +103,6 @@ public class SessionMediaModel {
 	}
 	
 	public void resetAudioCheck() {
-		LogUtil.info("Resetting audio check");
 		checkLock.lock();
 		audioFileStatus = AudioFileStatus.UNKONWN;
 		checkLock.unlock();
@@ -120,15 +119,6 @@ public class SessionMediaModel {
 			File audioFile = getSessionAudioFile();
 			if(audioFile != null) {
 				checkLock.lock();
-				
-				
-				LogUtil.info("Starting media check");
-				Exception e = new Exception();
-				for(var ste:e.getStackTrace()) {
-					if(ste.getClassName().startsWith("ca.phon.app.session.editor")) {
-						LogUtil.info(ste + "");
-					}
-				}
 				boolean fileOk = MediaChecker.checkMediaFile(audioFile.getAbsolutePath());
 				audioFileStatus = (fileOk ? AudioFileStatus.OK : AudioFileStatus.ERROR);
 				checkLock.unlock();
