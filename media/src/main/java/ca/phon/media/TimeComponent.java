@@ -155,8 +155,8 @@ public abstract class TimeComponent extends JComponent {
 	
 	
 	public Rectangle rectForInterval(float startTime, float endTime) {
-		var startX = (int)Math.round(xForTime(startTime)) - 1;
-		var endX = (int)Math.round(xForTime(endTime)) + 1;
+		var startX = (int)Math.floor(xForTime(startTime)) - 1;
+		var endX = (int)Math.ceil(xForTime(endTime)) + 1;
 		
 		var clipRect = new Rectangle(startX, 0, endX-startX, getHeight());
 		

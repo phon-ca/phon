@@ -431,18 +431,22 @@ public final class SegmentationHandler {
 							(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 					
 					// repaint interval (with time limit)
-					long tn = (long)(1/30.0f * 1000.0f);
+					long tn = (long)(1/60.0f * 1000.0f);
 					if(repaintEntireInterval) {
-						timelineView.repaint(timelineView.getVisibleRect());
+						timelineView.getWaveformTier().repaint(timelineView.getVisibleRect());
 						repaintEntireInterval = false;
 					} else {
 						float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
-						float e1 = Math.max(prevStart, segmentationInterval.getEndMarker().getTime());
-						timelineView.repaint(tn, s1, e1);
+						float e1 = Math.max(prevStart, segmentationInterval.getStartMarker().getTime());
+						if(e1-s1 > 0.0f) {
+							timelineView.getWaveformTier().repaint(tn,s1, e1);
+						}
 						
 						float s2 = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
 						float e2 = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-						timelineView.repaint(tn, s2, e2);						
+						if(e2-s2 > 0.0f) {
+							timelineView.getWaveformTier().repaint(tn,s2, e2);
+						}
 					}
 
 					// special case: segmenting with no media
@@ -484,6 +488,7 @@ public final class SegmentationHandler {
 				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 		if(timelineView != null) {
 			segmentationInterval = timelineView.getTimeModel().addInterval(0.0f, 0.0f);
+			segmentationInterval.setOwner(timelineView.getWaveformTier().getWaveformDisplay());
 			segmentationInterval.setRepaintOnTimeChange(false);
 			segmentationInterval.setColor(UIManager.getColor(TimelineViewColors.SEGMENTATION_INTERVAL_BACKGROUND));
 		}
