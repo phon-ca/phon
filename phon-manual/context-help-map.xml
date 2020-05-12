@@ -75,11 +75,11 @@
    <appContext helpID="aggregate" path="report/aggregate_report.html"/>
    <appContext helpID="inventory-by-session"
                path="report/inventory_by_session_report.html"/>
-   <appContext helpID="inventory-by-participant"
+   <appContext helpID="inventory-by-session"
                path="report/inventory_by_participant_report.html"/>
    <appContext helpID="table-all-results-in-one-table" path="report/table.html"/>
    <appContext helpID="table-by-session" path="report/table_by_session_report.html"/>
-   <appContext helpID="table-by-participant"
+   <appContext helpID="table-by-session"
                path="report/table_by_participant_report.html"/>
    <appContext helpID="listing-by-session-with-optional-tier-data"
                path="report/listing_by_session_report.html"/>
