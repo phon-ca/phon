@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 
 import ca.hedlund.tst.TernaryTree;
@@ -32,6 +33,8 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 	private TernaryTree<String> tree = new TernaryTree<>();
 	
 	private boolean caseSensitive = false;
+	
+	private boolean includeIndexEntries = false;
 	
 	public void addCompletion(String completion) {
 		if(!caseSensitive) completion = completion.toLowerCase();
@@ -55,6 +58,14 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 		tree.clear();
 	}
 
+	public boolean isIncludeIndexEntries() {
+		return includeIndexEntries;
+	}
+
+	public void setIncludeIndexEntries(boolean includeIndexEntries) {
+		this.includeIndexEntries = includeIndexEntries;
+	}
+
 	@Override
 	public List<String> getCompletions(String text) {
 		if(!caseSensitive) text = text.toLowerCase();
@@ -65,6 +76,17 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 			retVal.add(entry.getKey());
 		}
 		Collections.sort(retVal);
+		
+		if(isIncludeIndexEntries()) {
+			final List<String> otherCompletions = new ArrayList<>();
+			final Set<Entry<String, String>> infixEntries = tree.entriesForKeysContaining(text);
+			for(Entry<String, String> entry:infixEntries) {
+				if(!retVal.contains(entry.getKey()))
+					otherCompletions.add(entry.getKey());
+			}
+			Collections.sort(otherCompletions);
+			retVal.addAll(otherCompletions);
+		}
 		return retVal;
 	}
 

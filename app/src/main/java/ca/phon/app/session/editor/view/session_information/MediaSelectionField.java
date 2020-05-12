@@ -81,6 +81,7 @@ public class MediaSelectionField extends FileSelectionField {
 		
 		setupInputMap();
 		
+		completerModel.setIncludeIndexEntries(true);
 		getTextField().addFocusListener(new FocusListener() {
 			
 			@Override
