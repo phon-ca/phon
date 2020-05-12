@@ -1,3 +1,0 @@
-# Inventory by Participant
-
-Text

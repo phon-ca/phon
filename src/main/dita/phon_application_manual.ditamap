@@ -96,14 +96,14 @@
             <topicref href="query/common_query_options.dita"/>
         </topichead>
         <topichead navtitle="Stock Reports">
-            <topicref href="report/query_information_report.md" format="markdown"/>
-            <topicref href="report/aggregate_report.md" format="markdown"/>
-            <topicref href="report/inventory_by_session_report.md" format="markdown"/>
-            <topicref href="report/inventory_by_participant_report.md" format="markdown"/>
-            <topicref href="report/table.md" format="markdown"/>
-            <topicref href="report/table_by_session_report.md" format="markdown"/>
+            <topicref href="report/query_information_report.dita" format="dita"/>
+            <topicref href="report/aggregate_report.dita" format="dita"/>
+            <topicref href="report/inventory_by_session_report.dita" format="dita"/>
+            <topicref href="report/inventory_by_participant_report.dita"/>
+            <topicref href="report/table.dita" format="dita"/>
+            <topicref href="report/table_by_session_report.dita" format="dita"/>
             <topicref href="report/table_by_participant_report.md" format="markdown"/>
-            <topicref href="report/listing_by_session_report.md" format="markdown"/>
+            <topicref href="report/listing_by_session_report.dita" format="dita"/>
             <topichead navtitle="Phones">
                 <topicref href="report/phones/phone_accuracy_report.md" format="markdown"/>
                 <topicref href="report/phones/phone_similarity_report.md" format="markdown"/>

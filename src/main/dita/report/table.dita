@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="table-all-results-in-one-table">
+    <title>Table (all results in one table)</title>
+    <body>
+        <p>Print all results - one result per row - from all session in one table. Any tiers
+            specified in the 'Aligned Group', 'Aligned Word', 'Add aligned group', and 'Add aligned
+            word' fields of the query will also be listed in the table.</p>
+    </body>
+    <topic id="settings">
+        <title>Settings</title>
+        <body>
+            <fig>
+                <title>Table Settings</title>
+                <image href="./images/table_settings.png">
+                    <alt>Table Settings</alt>
+                </image>
+            </fig>
+        </body>
+    </topic>
+</topic>

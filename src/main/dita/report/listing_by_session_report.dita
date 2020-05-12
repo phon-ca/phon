@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="listing-by-session-with-optional-tier-data">
+    <title>Listing by Session (with optional tier data)</title>
+    <body>
+        <p>Similar to Table by Session, except each result is expanded into individual tables with
+            one tier or metadata value per row.</p>
+    </body>
+    <topic id="settings">
+        <title>Settings</title>
+        <body>
+            <fig>
+                <title>Listing by Session Settings</title>
+                <image href="./images/listing_by_session_settings.png">
+                    <alt>Listing by Session Settings</alt>
+                </image>
+            </fig>
+        </body>
+    </topic>
+</topic>

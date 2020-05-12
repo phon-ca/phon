@@ -94,8 +94,8 @@
         <topic id="genereate_session_audio">
             <title>Generate/re-encode session audio</title>
             <body>
-                <p>If <keyword>session media</keyword> is available but a complimentary wav file
-                    cannot be found the following banner will be displayed in the <xref
+                <p>If <keyword>session media</keyword> is available but a matching wav file cannot
+                    be found the following banner will be displayed in the <xref
                         href="timeline_view.dita"/> and <xref href="speech_analysis_view.dita"/>
                     views. Clicking the banner will begin the encoding process and progress will be
                     displayed in the banner. Once the encoding process is complete the new wav file
