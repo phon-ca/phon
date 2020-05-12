@@ -24,7 +24,6 @@ import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ui.painter.CmpPainter;
 
 public class TableUtils {
 	

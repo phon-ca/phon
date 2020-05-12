@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.SwingUtilities;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaChecker;

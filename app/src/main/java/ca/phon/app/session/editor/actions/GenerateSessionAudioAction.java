@@ -1,15 +1,11 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.ImageIcon;
-
-import org.apache.commons.io.FileUtils;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
@@ -21,7 +17,6 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.FileUtil;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;

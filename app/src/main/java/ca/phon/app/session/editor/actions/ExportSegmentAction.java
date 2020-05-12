@@ -1,20 +1,15 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionMediaModel;
-import ca.phon.app.session.editor.actions.PlaySegmentAction.SegmentType;
 import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
 import ca.phon.session.MediaSegment;

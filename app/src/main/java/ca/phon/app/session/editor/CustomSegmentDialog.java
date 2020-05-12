@@ -19,7 +19,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +39,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import ca.phon.media.player.PhonMediaPlayer;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.Session;

@@ -16,15 +16,11 @@
 package ca.phon.app.session.editor.actions;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.media_player.actions.MediaPlayerAction;
-import ca.phon.ui.action.PhonActionEvent;
 
 public class PlayCustomSegmentAction extends PlaySegmentAction {
 

@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,7 +44,6 @@ import javax.swing.table.AbstractTableModel;
 
 import org.jdesktop.swingx.JXTable;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.project.ParticipantHistory;
@@ -56,7 +54,6 @@ import ca.phon.project.ProjectListener;
 import ca.phon.session.Participant;
 import ca.phon.session.SessionPath;
 import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonTask;

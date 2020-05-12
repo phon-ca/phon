@@ -16,11 +16,9 @@
 package ca.phon.app.project.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.util.HashMap;
 
 import ca.phon.app.corpus.SessionTemplateEP;
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.ui.toast.ToastFactory;

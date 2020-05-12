@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import ca.phon.app.project.NewSessionDialog;
 import ca.phon.app.project.ProjectWindow;

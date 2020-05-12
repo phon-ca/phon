@@ -25,11 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel;
-
 import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;

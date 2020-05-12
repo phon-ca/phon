@@ -15,34 +15,22 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorViewModel;
 import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionMediaModel;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.media.LongSound;
-import ca.phon.media.PlaySegment;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.position.SegmentCalculator;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.util.icons.IconSize;
 import ca.phon.util.icons.IconManager;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Action for playing current segment in media player.

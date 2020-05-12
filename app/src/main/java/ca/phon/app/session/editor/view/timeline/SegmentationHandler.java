@@ -18,7 +18,6 @@ import javax.swing.UIManager;
 import javax.swing.undo.CompoundEdit;
 
 import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
