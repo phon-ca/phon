@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0-beta.15/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_15.dmg" newVersion="3.1.0-beta.15" newMediaFileId="macos" fileSize="278735328" md5Sum="9e3d85b06f87d7a5b7f82f3151f927b2" sha256Sum="045af3933641ec373a5743d4a13b91e46d88dad4359d3fd10bb114c4c459aa56" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0.dmg" newVersion="3.1.0" newMediaFileId="macos" fileSize="278735307" md5Sum="b5ec9f74ce287938f27e6d55f4f9fb7f" sha256Sum="2b7ea070787a394a05589ec2cbfefde78005fb0465c0fa2c538f2e93512d3597" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -10,7 +10,8 @@
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
- * Updated 'Speech Analysis' view with improved waveform and timebar components. * Diacritic selection has been added to all query reports and anlyses which use the 'ignore diacritics' option.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
  * Improved method of setting up global overrides in query and report wizard
 
 ### Other changes:
@@ -29,7 +30,7 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Added status background images for media player
  * Can now click media player to toggle play/pause
  * Drag and drop files onto media player to assign media to session
- * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
  * Improved media prompts (banners) in session editor
 
 ## Changes from 3.0.4
@@ -313,7 +314,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0-beta_15.dmg" newVersion="3.1.0-beta.15" newMediaFileId="macos" fileSize="278735328" md5Sum="9e3d85b06f87d7a5b7f82f3151f927b2" sha256Sum="045af3933641ec373a5743d4a13b91e46d88dad4359d3fd10bb114c4c459aa56" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0.dmg" newVersion="3.1.0" newMediaFileId="macos" fileSize="278735307" md5Sum="b5ec9f74ce287938f27e6d55f4f9fb7f" sha256Sum="2b7ea070787a394a05589ec2cbfefde78005fb0465c0fa2c538f2e93512d3597" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -323,7 +324,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
- * Updated 'Speech Analysis' view with improved waveform and timebar components. * Diacritic selection has been added to all query reports and anlyses which use the 'ignore diacritics' option.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
  * Improved method of setting up global overrides in query and report wizard
 
 ### Other changes:
@@ -342,7 +344,7 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Added status background images for media player
  * Can now click media player to toggle play/pause
  * Drag and drop files onto media player to assign media to session
- * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
  * Improved media prompts (banners) in session editor
 
 ## Changes from 3.0.4
@@ -626,7 +628,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.exe" newVersion="3.1.0-beta.15" newMediaFileId="win64" fileSize="288362760" md5Sum="8ccd59d98fc85c32ca835113038f51f9" sha256Sum="bd2c516b58d0c956465eddcbb9846dcef7a66a7111601b3981a818965a8c43c5" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -636,7 +638,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
- * Updated 'Speech Analysis' view with improved waveform and timebar components. * Diacritic selection has been added to all query reports and anlyses which use the 'ignore diacritics' option.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
  * Improved method of setting up global overrides in query and report wizard
 
 ### Other changes:
@@ -655,7 +658,7 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Added status background images for media player
  * Can now click media player to toggle play/pause
  * Drag and drop files onto media player to assign media to session
- * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
  * Improved media prompts (banners) in session editor
 
 ## Changes from 3.0.4
@@ -939,7 +942,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.exe" newVersion="3.1.0-beta.15" newMediaFileId="win64" fileSize="288362760" md5Sum="8ccd59d98fc85c32ca835113038f51f9" sha256Sum="bd2c516b58d0c956465eddcbb9846dcef7a66a7111601b3981a818965a8c43c5" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -949,7 +952,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
- * Updated 'Speech Analysis' view with improved waveform and timebar components. * Diacritic selection has been added to all query reports and anlyses which use the 'ignore diacritics' option.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
  * Improved method of setting up global overrides in query and report wizard
 
 ### Other changes:
@@ -968,7 +972,7 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Added status background images for media player
  * Can now click media player to toggle play/pause
  * Drag and drop files onto media player to assign media to session
- * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
  * Improved media prompts (banners) in session editor
 
 ## Changes from 3.0.4
@@ -1252,7 +1256,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.exe" newVersion="3.1.0-beta.15" newMediaFileId="win64" fileSize="288362760" md5Sum="8ccd59d98fc85c32ca835113038f51f9" sha256Sum="bd2c516b58d0c956465eddcbb9846dcef7a66a7111601b3981a818965a8c43c5" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -1262,7 +1266,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
- * Updated 'Speech Analysis' view with improved waveform and timebar components. * Diacritic selection has been added to all query reports and anlyses which use the 'ignore diacritics' option.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
  * Improved method of setting up global overrides in query and report wizard
 
 ### Other changes:
@@ -1281,7 +1286,7 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Added status background images for media player
  * Can now click media player to toggle play/pause
  * Drag and drop files onto media player to assign media to session
- * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
  * Improved media prompts (banners) in session editor
 
 ## Changes from 3.0.4
@@ -1565,7 +1570,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0-beta_15.zip" newVersion="3.1.0-beta.15" newMediaFileId="win64zip" fileSize="287455898" md5Sum="a0de192b2d0cd1002152066e45165a0f" sha256Sum="aa0277d77953ff8bcaeb0cea2099ae2bc9f9d3cdfc449cc87f89481825307547" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.zip" newVersion="3.1.0" newMediaFileId="win64zip" fileSize="287446050" md5Sum="1627ec112cfab8af0794d5033aa107fb" sha256Sum="6b933faa6444327cfdb9dc1ac95c513406f9d05f48e6f280b2309366882995e6" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
@@ -1575,7 +1580,8 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
  * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
 Segmentation functions as well as allowing easy manipulation of record segment times.
- * Updated 'Speech Analysis' view with improved waveform and timebar components. * Diacritic selection has been added to all query reports and anlyses which use the 'ignore diacritics' option.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
  * Improved method of setting up global overrides in query and report wizard
 
 ### Other changes:
@@ -1594,7 +1600,7 @@ Segmentation functions as well as allowing easy manipulation of record segment t
  * Added status background images for media player
  * Can now click media player to toggle play/pause
  * Drag and drop files onto media player to assign media to session
- * Added menu items for assigning media, unassigning media, and generating session audio file to Session menu in editor
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
  * Improved media prompts (banners) in session editor
 
 ## Changes from 3.0.4
