@@ -432,7 +432,7 @@ public final class SegmentationHandler {
 					// repaint interval (with time limit)
 					long tn = (long)(1/60.0f * 1000.0f);
 					if(repaintEntireInterval) {
-						timelineView.getWaveformTier().repaint(timelineView.getVisibleRect());
+						timelineView.getWaveformTier().getWaveformDisplay().repaint();
 						repaintEntireInterval = false;
 					} else {
 						float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
