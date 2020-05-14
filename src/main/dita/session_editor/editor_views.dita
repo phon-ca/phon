@@ -8,25 +8,24 @@
     <body>
         <ol>
             <li>Views with access/reference to the entire session:<ul id="ul_edd_xdk_rc">
-                <li><wintitle>Session Information</wintitle></li>
-                <li><wintitle>Tier Management</wintitle></li>
+                <li><xref href="session_information_view.dita"/></li>
+                <li><xref href="tier_management_view.dita"/></li>
             </ul></li>
             <li>Views with information relating to individual records:<ul id="ul_mjk_bek_rc">
-                <li><wintitle>Record Data</wintitle></li>
-                <li><wintitle>Syllabification &amp; Alignment</wintitle></li>
-                <li><wintitle>IPA Validation</wintitle></li>
+                <li><xref href="record_data_view.dita"/></li>
+                <li><xref href="syllabification_and_alignment_view.dita"/></li>
+                <li><xref href="ipa_validation_view.dita"/></li>
             </ul></li>
             <li>Views with media functions:<ul id="ul_mrf_itk_rc">
-                <li><wintitle>Media Player</wintitle></li>
-                    <li><wintitle>Speech Analysis</wintitle> (formally
-                            <uicontrol>Waveform</uicontrol>)</li>
-                <li><wintitle>Segmentation</wintitle></li>
+                <li><xref href="media_player_view.dita"/></li>
+                    <li><xref href="speech_analysis_view.dita"/></li>
+                <li><xref href="timeline_view.dita"/></li>
             </ul></li>
             <li>Views that allow you to search for text within a session:<ul id="ul_mrf_bek_rc">
-                <li><wintitle>Find &amp; Replace</wintitle></li>
+                <li><xref href="find_and_replace_view.dita"/></li>
             </ul></li>
             <li>Utility views which help with IPA transcription:<ul id="ul_xqc_gek_rc">
-                    <li><wintitle>IPA Lookup</wintitle></li>
+                    <li><xref href="ipa_lookup_view.dita"/></li>
                 </ul></li>
         </ol>
         <p> To open a view, select it from the <uicontrol>View</uicontrol> menu. Functions for open
