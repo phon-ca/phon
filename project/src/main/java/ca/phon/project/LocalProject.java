@@ -24,8 +24,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -64,6 +70,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.logging.log4j.core.util.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -100,11 +107,13 @@ public class LocalProject implements Project, ProjectRefresh {
 	 *
 	 */
 	private final File projectFolder;
+	
+	private Properties properties;
 
 	/**
-	 * project.xml data
+	 * @deprecated since 3.1.1
 	 */
-	private ProjectType projectData;
+	@Deprecated
 	public final static String PROJECT_XML_FILE = "project.xml";
 
 	public final static String PROJECT_PROPERTIES_FILE = ".properties";
@@ -112,10 +121,16 @@ public class LocalProject implements Project, ProjectRefresh {
 	public final static String PROJECT_MEDIAFOLDER_PROP = "project.mediaFolder";
 
 	public final static String CORPUS_MEDIAFOLDER_PROP = "corpus.mediaFolder";
+	
+	public final static String PROJECT_NAME_PROP = "project.name";
+	
+	public final static String PROJECT_UUID_PROP = "project.uuid";
 
 	private final static String sessionTemplateFile = "__sessiontemplate.xml";
 	
 	private final static String PROJECT_RES_FOLDER = "__res";
+	
+	private final static String CORPUS_DESC_FILE = "__description";
 
 	/**
 	 * Session write locks
@@ -142,36 +157,22 @@ public class LocalProject implements Project, ProjectRefresh {
 		super();
 		this.projectFolder = projectFolder;
 
+		// Properties are loaded here if found
 		extSupport.initExtensions();
 
-		// load project data
-		try {
-			projectData = loadProjectData();
-		} catch (ProjectConfigurationException e) {
-			projectData = (new ObjectFactory()).createProjectType();
-			projectData.setName(projectFolder.getName());
-		}
-		final List<CorpusType> corpora = scanProjectFolder();
-
-		projectData.getCorpus().clear();
-		projectData.getCorpus().addAll(corpora);
-
+		loadProperties();
+		// if not found, create new properties
 		if(!getExtensions().contains(Properties.class)) {
 			putExtension(Properties.class, new Properties());
 		}
+		properties = getExtension(Properties.class);
+		
+		checkProperties();
+		
 		putExtension(ProjectRefresh.class, this);
 	}
-
-	/**
-	 * Load project data from the project.xml file.
-	 * If not found, empty project data is created.
-	 *
-	 * @return projectData
-	 */
-	private synchronized ProjectType loadProjectData() throws ProjectConfigurationException {
-		final ObjectFactory factory = new ObjectFactory();
-
-		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
+	
+	private void loadProperties() {
 		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
 
 		if(propsFile.exists()) {
@@ -184,7 +185,68 @@ public class LocalProject implements Project, ProjectRefresh {
 			}
 			putExtension(Properties.class, props);
 		}
+	}
+	
+	/**
+	 * Check project setup and copy information from project.xml file if exists
+	 */
+	private void checkProperties() {
+		ProjectType pt = null;
+		try {
+			pt = loadProjectData();
+		} catch(ProjectConfigurationException e) {
+			LOGGER.warn(e);
+		}
+		
+		if(!properties.contains(PROJECT_UUID_PROP)) {
+			if(pt != null) {
+				properties.put(PROJECT_UUID_PROP, pt.getUuid());
+			} else {
+				properties.put(PROJECT_UUID_PROP, UUID.randomUUID().toString());
+			}
+			
+			// if UUID not found we likely need to upgrade this project
+			// copy corpus descriptions if necessary
+			for(String corpus:getCorpora()) {
+				final File corpusFolder = getCorpusFolder(corpus);
+				final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
+				
+				for(CorpusType ct:pt.getCorpus()) {
+					if(ct.getName().equals(corpus)) {
+						if(ct.getDescription() != null 
+								&& ct.getDescription().trim().length() > 0
+								&& !corpusInfoFile.exists()) {
+							try (PrintWriter out = new PrintWriter(corpusInfoFile)) {
+								out.write(ct.getDescription());
+								out.flush();
+							} catch (IOException e) {
+								LOGGER.warn(e);
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		if(!properties.contains(PROJECT_NAME_PROP)) {
+			if(pt != null) {
+				properties.put(PROJECT_NAME_PROP, pt.getName());
+			} else {
+				properties.put(PROJECT_NAME_PROP, projectFolder.getName());
+			}
+		}
+	}
 
+	/**
+	 * Load project data from the project.xml file.
+	 * If not found, empty project data is created.
+	 *
+	 * @return projectData
+	 * 
+	 * @deprecated
+	 */
+	private ProjectType loadProjectData() throws ProjectConfigurationException {
+		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
 		if(dataFile.exists()) {
 			try {
 				final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
@@ -205,12 +267,7 @@ public class LocalProject implements Project, ProjectRefresh {
 				throw new ProjectConfigurationException(e);
 			}
 		} else {
-			// create new project element
-			final ProjectType retVal = factory.createProjectType();
-			final UUID projectUUID = UUID.randomUUID();
-			retVal.setName(getFolder().getName());
-			retVal.setUuid(projectUUID.toString());
-			return retVal;
+			return null;
 		}
 	}
 
@@ -219,28 +276,8 @@ public class LocalProject implements Project, ProjectRefresh {
 	 *
 	 * @throws IOException
 	 */
-	protected synchronized void saveProjectData()
+	protected void saveProjectData()
 		throws IOException {
-		final ObjectFactory factory = new ObjectFactory();
-		try {
-			final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
-			final Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-			final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
-
-			final ProjectType projectData = getProjectData();
-			
-			projectData.setAppid("1.5");
-			projectData.setVersion("1.5");
-
-			final JAXBElement<ProjectType> projectDataEle = factory.createProject(getProjectData());
-			marshaller.marshal(projectDataEle, dataFile);
-		} catch (JAXBException e) {
-			throw new IOException(e);
-		}
-
 		saveProperties();
 	}
 
@@ -253,112 +290,71 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 	}
 
-	/**
-	 * Scan the project folder and build the list of corpora/sessions
-	 * available.  Local projects will always take the current list of
-	 * corpora/sessions directly from the storage device.
-	 *
-	 * @return list of corprora xml objects
-	 */
-	private List<CorpusType> scanProjectFolder() {
-		final ObjectFactory factory = new ObjectFactory();
-		final List<CorpusType> retVal = new ArrayList<CorpusType>();
-
-		for(File f:getFolder().listFiles()) {
-			if(f.isDirectory()
-					&& !f.getName().startsWith("~")
-					&& !f.getName().endsWith("~")
-					&& !f.getName().startsWith("__")
-					&& !f.getName().startsWith(".")
-					&& !f.isHidden()) {
-				final String corpusName = f.getName();
-				CorpusType ct = getCorpusInfo(corpusName);
-				if(ct == null) {
-					ct = factory.createCorpusType();
-					ct.setName(corpusName);
-					ct.setDescription("");
-				}
-
-				final List<SessionType> toRemove = new ArrayList<SessionType>(ct.getSession());
-				// look for all xml files inside corpus folder
-				for(File xmlFile:f.listFiles()) {
-					if((xmlFile.getName().endsWith(".xml")
-							|| xmlFile.getName().endsWith(".cha"))
-							&& !xmlFile.getName().startsWith("~")
-							&& !xmlFile.getName().endsWith("~")
-							&& !xmlFile.getName().startsWith("__")
-							&& !xmlFile.getName().startsWith(".")
-							&& !xmlFile.isHidden()) {
-						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
-
-						SessionType sessionType = null;
-						for(SessionType st:ct.getSession()) {
-							if(st.getName().equals(sessionName)) {
-								sessionType = st;
-								break;
-							}
-						}
-
-						if(sessionType == null) {
-							sessionType = factory.createSessionType();
-							sessionType.setName(sessionName);
-							ct.getSession().add(sessionType);
-						} else {
-							toRemove.remove(sessionType);
-						}
-					}
-				}
-				for(SessionType st:toRemove) {
-					ct.getSession().remove(st);
-				}
-
-				retVal.add(ct);
-			}
-		}
-
-		return retVal;
-	}
-
-	/**
-	 * Get the current corpus xml object from project data.
-	 *
-	 * @param corpus
-	 * @return the corpus xml object or <code>null</code> if
-	 *  not found
-	 */
-	protected CorpusType getCorpusInfo(String corpus) {
-		final ProjectType projectData = getProjectData();
-		for(CorpusType ct:projectData.getCorpus()) {
-			if(ct.getName().equals(corpus)) {
-				return ct;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Get the current session xml object from project data.
-	 *
-	 * @param corpus
-	 * @param session
-	 * @return the session xml object or <code>null</code> if
-	 *  not found
-	 */
-	protected SessionType getSessionInfo(String corpus, String session) {
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			for(SessionType st:ct.getSession()) {
-				if(st.getName().equals(session)) {
-					return st;
-				}
-			}
-		}
-		return null;
-	}
-
-	protected ProjectType getProjectData() {
-		return this.projectData;
-	}
+//	/**
+//	 * Scan the project folder and build the list of corpora/sessions
+//	 * available.  Local projects will always take the current list of
+//	 * corpora/sessions directly from the storage device.
+//	 *
+//	 * @return list of corprora xml objects
+//	 */
+//	private List<CorpusType> scanProjectFolder() {
+//		final ObjectFactory factory = new ObjectFactory();
+//		final List<CorpusType> retVal = new ArrayList<CorpusType>();
+//
+//		for(File f:getFolder().listFiles()) {
+//			if(f.isDirectory()
+//					&& !f.getName().startsWith("~")
+//					&& !f.getName().endsWith("~")
+//					&& !f.getName().startsWith("__")
+//					&& !f.getName().startsWith(".")
+//					&& !f.isHidden()) {
+//				final String corpusName = f.getName();
+//				CorpusType ct = getCorpusInfo(corpusName);
+//				if(ct == null) {
+//					ct = factory.createCorpusType();
+//					ct.setName(corpusName);
+//					ct.setDescription("");
+//				}
+//
+//				final List<SessionType> toRemove = new ArrayList<SessionType>(ct.getSession());
+//				// look for all xml files inside corpus folder
+//				for(File xmlFile:f.listFiles()) {
+//					if((xmlFile.getName().endsWith(".xml")
+//							|| xmlFile.getName().endsWith(".cha"))
+//							&& !xmlFile.getName().startsWith("~")
+//							&& !xmlFile.getName().endsWith("~")
+//							&& !xmlFile.getName().startsWith("__")
+//							&& !xmlFile.getName().startsWith(".")
+//							&& !xmlFile.isHidden()) {
+//						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
+//
+//						SessionType sessionType = null;
+//						for(SessionType st:ct.getSession()) {
+//							if(st.getName().equals(sessionName)) {
+//								sessionType = st;
+//								break;
+//							}
+//						}
+//
+//						if(sessionType == null) {
+//							sessionType = factory.createSessionType();
+//							sessionType.setName(sessionName);
+//							ct.getSession().add(sessionType);
+//						} else {
+//							toRemove.remove(sessionType);
+//						}
+//					}
+//				}
+//				for(SessionType st:toRemove) {
+//					ct.getSession().remove(st);
+//				}
+//
+//				retVal.add(ct);
+//			}
+//		}
+//
+//		return retVal;
+//	}
 
 	private File getFolder() {
 		return this.projectFolder;
@@ -366,13 +362,13 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public String getName() {
-		return projectData.getName();
+		return properties.getProperty(PROJECT_NAME_PROP, getFolder().getName());
 	}
 
 	@Override
 	public void setName(String name) {
 		final String oldName = getName();
-		projectData.setName(name);
+		properties.put(PROJECT_NAME_PROP, name);
 
 		final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
 		fireProjectDataChanged(event);
@@ -380,14 +376,14 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public UUID getUUID() {
-		final UUID uuid = UUID.fromString(getProjectData().getUuid());
+		final UUID uuid = UUID.fromString(properties.getProperty(PROJECT_UUID_PROP));
 		return uuid;
 	}
 
 	@Override
 	public void setUUID(UUID uuid) {
 		final UUID oldUUID = getUUID();
-		projectData.setUuid(uuid.toString());
+		properties.put(PROJECT_UUID_PROP, uuid.toString());
 
 		final ProjectEvent event = ProjectEvent.newUUIDChangedEvent(oldUUID.toString(), uuid.toString());
 		fireProjectDataChanged(event);
@@ -397,10 +393,26 @@ public class LocalProject implements Project, ProjectRefresh {
 	public List<String> getCorpora() {
 		final List<String> corpusList = new ArrayList<String>();
 
-		for(CorpusType ct:getProjectData().getCorpus()) {
-			corpusList.add(ct.getName());
+		Path projectPath = getFolder().toPath();
+		try(DirectoryStream<Path> stream = Files.newDirectoryStream(projectPath)) {
+			for(Path path:stream) {
+				if(Files.isDirectory(path)) {
+					if(!Files.isHidden(path)) {
+						String folderName = path.getFileName().toString();
+						if(!folderName.startsWith("~")
+								&& !folderName.endsWith("~")
+								&& !folderName.startsWith("__")) {
+							corpusList.add(folderName);
+						}	
+					}
+				}
+			}
+			
+			Collections.sort(corpusList);
+		} catch (IOException e) {
+			LOGGER.error(e);
 		}
-
+		
 		return corpusList;
 	}
 
@@ -414,17 +426,6 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(!corpusFolder.mkdirs()) {
 			throw new IOException("Unable to create corpus folder.");
 		}
-
-		final ObjectFactory factory = new ObjectFactory();
-		CorpusType ct = getCorpusInfo(name);
-		if(ct == null) {
-			ct = factory.createCorpusType();
-			ct.setName(name);
-			getProjectData().getCorpus().add(ct);
-		}
-		ct.setDescription(description);
-
-		saveProjectData();
 
 		final ProjectEvent pe = ProjectEvent.newCorpusAddedEvent(name);
 		fireProjectStructureChanged(pe);
@@ -444,12 +445,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(!corpusMediaFolder.equals(getProjectMediaFolder())) {
 			setCorpusMediaFolder(newName, corpusMediaFolder);
 		}
-
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			ct.setName(newName);
-		}
-
+		
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
 		pe = ProjectEvent.newCorpusAddedEvent(newName);
@@ -474,40 +470,38 @@ public class LocalProject implements Project, ProjectRefresh {
 
 		setCorpusMediaFolder(corpus, null);
 
-		// remove entry from project data
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			getProjectData().getCorpus().remove(ct);
-		}
-
-		saveProjectData();
-
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
 	}
 
 	@Override
 	public String getCorpusDescription(String corpus) {
-		final CorpusType ct = getCorpusInfo(corpus);
-		return (ct == null ? "" : ct.getDescription());
+		final File corpusFolder = getCorpusFolder(corpus);
+		final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
+		
+		String retVal = "";
+		if(corpusInfoFile.exists()) {
+			try {
+				retVal = Files.readString(corpusInfoFile.toPath());
+			} catch (IOException e) {
+				LOGGER.error(e);
+			}
+		}
+		
+		return retVal;
 	}
 
 	@Override
 	public void setCorpusDescription(String corpus, String description) {
-		CorpusType ct = getCorpusInfo(corpus);
-		String old = null;
-		if(ct == null) {
-			old = "";
-			ct = (new ObjectFactory()).createCorpusType();
-			ct.setName(corpus);
-			getProjectData().getCorpus().add(ct);
-		}
-		ct.setDescription(description);
-
+		String old = getCorpusDescription(corpus);
+		
+		final File corpusFolder = getCorpusFolder(corpus);
+		final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
+		
 		try {
-			saveProjectData();
+			Files.write(corpusInfoFile.toPath(), description.getBytes("UTF-8"));
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LOGGER.error(e);
 		}
 
 		ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
@@ -586,12 +580,31 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public List<String> getCorpusSessions(String corpus) {
 		final List<String> retVal = new ArrayList<String>();
-
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			for(SessionType st:ct.getSession()) {
-				retVal.add(st.getName());
+		
+		Set<String> validexts = getSessionExtensions();
+		
+		final File corpusFolder = getCorpusFolder(corpus);
+		try(DirectoryStream<Path> stream = Files.newDirectoryStream(corpusFolder.toPath())) {
+			for(Path path:stream) {
+				if(!Files.isDirectory(path) && !Files.isHidden(path)) {
+					String filename = path.getFileName().toString();
+					if(!filename.startsWith("~")
+							&& !filename.endsWith("~")
+							&& !filename.startsWith("__")) {
+						int lastDot = filename.lastIndexOf('.');
+						if(lastDot > 0) {
+							String ext = filename.substring(lastDot+1);
+							if(validexts.contains(ext)) {
+								retVal.add(filename.substring(0, lastDot));
+							}
+						}
+					}
+				}
 			}
+			
+			Collections.sort(retVal);
+		} catch (IOException e) {
+			LOGGER.error(e);
 		}
 
 		return retVal;
@@ -599,34 +612,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	private File getCorpusFolder(String corpus) {
 		File retVal = new File(getFolder(), corpus);
-
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null && ct.getLoc() != null) {
-			try {
-				final URI uri = new URI(ct.getLoc());
-				if(uri.isAbsolute()) {
-					retVal = new File(uri);
-				} else {
-					retVal = new File(getFolder(), uri.getPath());
-				}
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
-
 		return retVal;
-	}
-
-	private void setCorpusFolder(String corpus, File folder) {
-		CorpusType ct = getCorpusInfo(corpus);
-		if(ct == null) {
-			ct = (new ObjectFactory()).createCorpusType();
-			ct.setName(corpus);
-			ct.setDescription("");
-
-			projectData.getCorpus().add(ct);
-		}
-		ct.setLoc(folder.toURI().toString());
 	}
 
 	private Set<String> getSessionExtensions() {
@@ -649,22 +635,6 @@ public class LocalProject implements Project, ProjectRefresh {
 					.filter( File::exists )
 					.findFirst();
 		File retVal = optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
-
-		// check to see if session file path has been defined in xml
-		final SessionType st = getSessionInfo(corpus,  session);
-		if(st != null && st.getLoc() != null) {
-			try {
-				final URI uri = new URI(st.getLoc());
-
-				if(uri.isAbsolute()) {
-					retVal = new File(uri);
-				} else {
-					retVal = new File(getCorpusFolder(corpus), uri.getPath());
-				}
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
 
 		return retVal;
 	}
@@ -843,16 +813,6 @@ public class LocalProject implements Project, ProjectRefresh {
 		fOut.close();
 
 		if(created && !sessionName.startsWith("__") && !sessionName.startsWith("~")) {
-			final ObjectFactory xmlFactory = new ObjectFactory();
-			final SessionType st = xmlFactory.createSessionType();
-			st.setName(sessionName);
-			final CorpusType ct = getCorpusInfo(corpus);
-			if(ct != null) {
-				ct.getSession().add(st);
-			}
-
-			saveProjectData();
-
 			final ProjectEvent pe = ProjectEvent.newSessionAddedEvent(corpus, sessionName);
 			fireProjectStructureChanged(pe);
 		}
@@ -881,16 +841,6 @@ public class LocalProject implements Project, ProjectRefresh {
 		if(!sessionFile.delete()) {
 			throw new IOException("Unable to delete " + sessionFile.getAbsolutePath() + ".");
 		}
-
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			final SessionType st = getSessionInfo(corpus, session);
-			if(st != null) {
-				ct.getSession().remove(st);
-			}
-		}
-
-		saveProjectData();
 
 		final ProjectEvent pe = ProjectEvent.newSessionRemovedEvent(corpus, session);
 		fireProjectStructureChanged(pe);
@@ -1146,7 +1096,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public String getVersion() {
-		return projectData.getVersion();
+		return VersionInfo.getInstance().getVersion();
 	}
 
 	@Override
@@ -1162,7 +1112,8 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public void setCorpusPath(String corpus, String path) {
-		setCorpusFolder(corpus, new File(path));
+		throw new UnsupportedOperationException();
+//		setCorpusFolder(corpus, new File(path));
 	}
 
 	@Override
@@ -1240,16 +1191,6 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public void refresh() {
-		final List<CorpusType> corpora = scanProjectFolder();
-
-		projectData.getCorpus().clear();
-		projectData.getCorpus().addAll(corpora);
-
-		try {
-			saveProjectData();
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		}
 	}
 
 	@Override

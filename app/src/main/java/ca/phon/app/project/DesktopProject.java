@@ -47,14 +47,6 @@ public class DesktopProject extends LocalProject {
 		final File[] toTrash = new File[] { new File(corpusPath) };
 		moveToTrash(toTrash);
 
-		// remove entry from project data
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			getProjectData().getCorpus().remove(ct);
-		}
-
-		saveProjectData();
-
 		ProjectEvent pe = ProjectEvent.newCorpusRemovedEvent(corpus);
 		fireProjectStructureChanged(pe);
 	}
@@ -66,16 +58,6 @@ public class DesktopProject extends LocalProject {
 
 		final File[] toTrash = new File[] { new File(sessionPath) };
 		moveToTrash(toTrash);
-
-		final CorpusType ct = getCorpusInfo(corpus);
-		if(ct != null) {
-			final SessionType st = getSessionInfo(corpus, session);
-			if(st != null) {
-				ct.getSession().remove(st);
-			}
-		}
-
-		saveProjectData();
 
 		final ProjectEvent pe = ProjectEvent.newSessionRemovedEvent(corpus, session);
 		fireProjectStructureChanged(pe);
