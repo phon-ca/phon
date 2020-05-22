@@ -156,7 +156,7 @@
 		<org.jsoup.jsoup.version>1.11.2</org.jsoup.jsoup.version>
 		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.14.0</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
-		<org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
+		<org.mozilla.rhino.version>1.7.12</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
 		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>		
 		<!-- java.xml.bind -->
