@@ -1041,8 +1041,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		processor.reset();
 		setupOptionals(processor.getContext());
 		setupGlobalOptions(processor.getContext());
-		// TODO
-//		globalOptionsPanel.savePreferences();
+		
 		processor.addProcessorListener(processorListener);
 
 		reportStartTime = System.currentTimeMillis();

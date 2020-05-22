@@ -53,6 +53,7 @@ import ca.phon.app.opgraph.editor.actions.debug.StartAction;
 import ca.phon.app.opgraph.editor.actions.debug.StepAction;
 import ca.phon.app.opgraph.editor.actions.debug.StepIntoAction;
 import ca.phon.app.opgraph.editor.actions.debug.StepOutOfAction;
+import ca.phon.app.opgraph.editor.actions.debug.StepToAction;
 import ca.phon.app.opgraph.editor.actions.debug.StopAction;
 import ca.phon.app.opgraph.editor.actions.file.NewAction;
 import ca.phon.app.opgraph.editor.actions.file.OpenAction;
@@ -441,6 +442,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addItem("Debug", new StepAction(this));
 		menuBuilder.addItem("Debug", new StepIntoAction(this));
 		menuBuilder.addItem("Debug", new StepOutOfAction(this));
+		menuBuilder.addItem("Debug", new StepToAction(this));
 	}
 
 	protected void setupDefaultPerspective() {
