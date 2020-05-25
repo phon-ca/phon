@@ -340,6 +340,7 @@
 				<groupId>org.mozilla</groupId>
 				<artifactId>rhino</artifactId>
 				<version>${org.mozilla.rhino.version}</version>
+				<classifier>full</classifier>
 			</dependency>
 
 			<dependency>

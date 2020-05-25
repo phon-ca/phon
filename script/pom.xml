@@ -39,6 +39,7 @@
 		<dependency>
 			<groupId>org.mozilla</groupId>
 			<artifactId>rhino</artifactId>
+			<classifier>full</classifier>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -43,7 +43,7 @@ import ca.phon.script.params.ScriptParameters;
  *
  */
 public class PhonScriptContext {
-
+	
 	/*
 	 * Script prefix - this is added to all scripts in the background
 	 * in order to ensure that everything is contained in a compilable
@@ -56,6 +56,8 @@ public class PhonScriptContext {
 	 * as properties in the wrapped object.
 	 */
 	private final static WrapFactory wrapFactory = new ExtendableWrapFactory();
+	
+	private ContextFactory contextFactory;
 
 	private PrintStream stdOutStream;
 
@@ -76,13 +78,20 @@ public class PhonScriptContext {
 	public PrintStream getStdErr() {
 		return (this.stdErrStream == null ? System.err : this.stdErrStream);
 	}
+	
+	public ContextFactory getContextFactory() {
+		if(contextFactory == null) {
+			contextFactory = ContextFactory.getGlobal();
+		}
+		return contextFactory;
+	}
 
 	/**
 	 * Enter and return a new script context.  Every call
 	 * to this method should have a matching call to {#link {@link #exit()}
 	 */
 	public Context enter() {
-		final ContextFactory factory = ContextFactory.getGlobal();
+		final ContextFactory factory = getContextFactory();
 
 		final Context retVal = factory.enterContext();
 		retVal.setWrapFactory(wrapFactory);
@@ -261,6 +270,10 @@ public class PhonScriptContext {
 	public synchronized Scriptable getEvaluatedScope()
 		throws PhonScriptException {
 		return getEvaluatedScope(null);
+	}
+	
+	public synchronized void resetEvaulatedScope() {
+		this.evaluatedScope = null;
 	}
 
 	/**

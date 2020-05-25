@@ -36,9 +36,15 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.tools.debugger.Main;
+
+import com.teamdev.jxbrowser.chromium.internal.ipc.message.GetTitleMessage;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
@@ -203,9 +209,11 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
+		boolean isStepInto = (context.containsKey("__stepInto") ? Boolean.valueOf(context.get("__stepInto").toString()) : false);
+		
 		final PhonScript phonScript = getScript();
 		PhonScriptContext ctx = phonScript.getContext();
-
+		
 		ScriptParameters scriptParams = new ScriptParameters();
 		try {
 			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
@@ -246,21 +254,67 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		if(scriptPanel != null && !scriptPanel.checkParams()) {
 			throw new ProcessingException(null, "Invalid settings");
 		}
-
-		try {
-			final Scriptable scope = ctx.getEvaluatedScope();
-			ctx.installParams(scope);
-
-			if(ctx.hasFunction(scope, "run", 1)) {
-				ctx.callFunction(scope, "run", context);
+		
+		// call debugger if stepping into a javascript node
+		if(isStepInto) {
+			try {
+				org.mozilla.javascript.tools.debugger.Main debugger = Main.mainEmbedded(getName());
+				debugger.setBreakOnEnter(true);
+				debugger.setBreakOnExceptions(true);
+				
+				final ScriptParameters params = ctx.getScriptParameters(ctx.getEvaluatedScope());
+				
+				// we need to reset the context to activate debugging
+				script.resetContext();
+				ctx = script.getContext();
+				
+				final Context jsctx = ctx.enter();
+				final ScriptableObject debugScope = jsctx.initStandardObjects();
+				jsctx.setOptimizationLevel(-1);
+				debugger.attachTo(jsctx.getFactory());
+				debugger.setScope(debugScope);
+				ctx.exit();
+				
+				final Scriptable runScope = ctx.getEvaluatedScope(debugScope);
+				final ScriptParameters newParams = ctx.getScriptParameters(runScope);
+				ScriptParameters.copyParams(params, newParams);
+				
+				debugger.setExitAction(new Runnable() {
+					
+					@Override
+					public void run() {
+						debugger.detach();
+						debugger.setVisible(false);
+					}
+					
+				});
+				// break on entering main query script
+				debugger.doBreak();
+				debugger.setSize(500, 600);
+				debugger.setVisible(true);
+				
+				if(ctx.hasFunction(runScope, "run", 1)) {
+					ctx.callFunction(runScope, "run", context);
+				}
+			} catch (PhonScriptException e) {
+				LogUtil.severe(e);
 			}
-		} catch (PhonScriptException e) {
-			LogUtil.severe( e.getLocalizedMessage(), e);
-			throw new ProcessingException(null, e.getLocalizedMessage(), e);
+		} else {
+			try {
+				final Scriptable scope = ctx.getEvaluatedScope();
+				ctx.installParams(scope);
+	
+				if(ctx.hasFunction(scope, "run", 1)) {
+					ctx.callFunction(scope, "run", context);
+				}
+			} catch (PhonScriptException e) {
+				LogUtil.severe( e.getLocalizedMessage(), e);
+				throw new ProcessingException(null, e.getLocalizedMessage(), e);
+			}
+	
+			context.put(scriptOutputField, getScript());
+			context.put(paramsOutputField, allParams);
 		}
-
-		context.put(scriptOutputField, getScript());
-		context.put(paramsOutputField, allParams);
 	}
 
 	public PhonScript getScript() {
