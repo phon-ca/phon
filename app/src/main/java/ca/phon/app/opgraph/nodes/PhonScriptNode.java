@@ -203,8 +203,6 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
-		boolean isStepInto = (context.containsKey("__stepInto") ? Boolean.valueOf(context.get("__isStepInto").toString()) : false);
-		
 		final PhonScript phonScript = getScript();
 		PhonScriptContext ctx = phonScript.getContext();
 
