@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -82,10 +83,6 @@ public final class ExtensionSupport implements IExtendable {
 
 	private final static Map<Class<?>, List<ExtensionProvider>> _extMap =
 			Collections.synchronizedMap(new HashMap<Class<?>, List<ExtensionProvider>>());
-
-	private static <T extends IExtendable> void initExtensions(Class<T> type, T obj) {
-
-	}
 
 	/**
 	 * extensions
@@ -179,5 +176,22 @@ public final class ExtensionSupport implements IExtendable {
 		}
 		return retVal;
 	}
-
+	
+	/**
+	 * Static utility method for returning an extension wrapped in a 
+	 * {@link java.util.Optional}
+	 * 
+	 * @param extendable
+	 * @param cap
+	 * 
+	 * @return optional of requested extension
+	 */
+	public static <T> Optional<T> getOptionalExtension(IExtendable extendable, Class<T> cap) {
+		if(extendable.getExtension(cap) != null) {
+			return Optional.of(extendable.getExtension(cap));
+		} else {
+			return Optional.empty();
+		}
+	}
+	
 }
