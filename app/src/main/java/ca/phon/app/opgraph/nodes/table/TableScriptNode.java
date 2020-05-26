@@ -42,7 +42,10 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import org.apache.commons.io.FilenameUtils;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.tools.debugger.Main;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
@@ -394,10 +397,12 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
+		boolean isStepInto = (context.containsKey("__stepInto") ? Boolean.valueOf(context.get("__stepInto").toString()) : false);
+		
 		final DefaultTableDataSource table = (DefaultTableDataSource)context.get(tableInput);
 
 		final PhonScript phonScript = getScript();
-		final PhonScriptContext ctx = phonScript.getContext();
+		PhonScriptContext ctx = phonScript.getContext();
 
 		ScriptParameters scriptParams = new ScriptParameters();
 		try {
@@ -435,15 +440,58 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 			throw new ProcessingException(null, getName() + " (" + getId() + "): " + "Invalid settings");
 		}
 
-		try {
-			final Scriptable scope = ctx.getEvaluatedScope();
-			ctx.installParams(scope);
-
-			ctx.callFunction(scope, "tableOp", context, table);
-		} catch (PhonScriptException e) {
-			throw new ProcessingException(null, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+		if(isStepInto) {
+			try {
+				org.mozilla.javascript.tools.debugger.Main debugger = Main.mainEmbedded(getName());
+				debugger.setBreakOnEnter(true);
+				debugger.setBreakOnExceptions(true);
+				
+				final ScriptParameters params = ctx.getScriptParameters(ctx.getEvaluatedScope());
+				
+				// we need to reset the context to activate debugging
+				script.resetContext();
+				ctx = script.getContext();
+				
+				final Context jsctx = ctx.enter();
+				final ScriptableObject debugScope = jsctx.initStandardObjects();
+				jsctx.setOptimizationLevel(-1);
+				debugger.attachTo(jsctx.getFactory());
+				debugger.setScope(debugScope);
+				ctx.exit();
+				
+				final Scriptable runScope = ctx.getEvaluatedScope(debugScope);
+				final ScriptParameters newParams = ctx.getScriptParameters(runScope);
+				ScriptParameters.copyParams(params, newParams);
+				
+				debugger.setExitAction(new Runnable() {
+					
+					@Override
+					public void run() {
+						debugger.detach();
+						debugger.setVisible(false);
+					}
+					
+				});
+				// break on entering main query script
+				debugger.doBreak();
+				debugger.setSize(500, 600);
+				debugger.setVisible(true);
+				
+				ctx.installParams(runScope);
+				ctx.callFunction(runScope, "tableOp", context, table);
+			} catch (PhonScriptException e) {
+				LogUtil.severe(e);
+			}
+		} else {
+			try {
+				final Scriptable scope = ctx.getEvaluatedScope();
+				ctx.installParams(scope);
+	
+				ctx.callFunction(scope, "tableOp", context, table);
+			} catch (PhonScriptException e) {
+				throw new ProcessingException(null, getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+			}
 		}
-
 		context.put(tableOutput, table);
 		context.put(paramsOutputField, allParams);
 	}

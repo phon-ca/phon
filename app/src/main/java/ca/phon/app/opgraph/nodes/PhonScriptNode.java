@@ -312,9 +312,9 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 				throw new ProcessingException(null, e.getLocalizedMessage(), e);
 			}
 	
-			context.put(scriptOutputField, getScript());
-			context.put(paramsOutputField, allParams);
 		}
+		context.put(scriptOutputField, getScript());
+		context.put(paramsOutputField, allParams);
 	}
 
 	public PhonScript getScript() {
