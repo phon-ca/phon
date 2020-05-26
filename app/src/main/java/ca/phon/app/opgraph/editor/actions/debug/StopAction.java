@@ -17,15 +17,18 @@ package ca.phon.app.opgraph.editor.actions.debug;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Optional;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.extensions.ExtensionSupport;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 public class StopAction extends OpgraphEditorAction {
 
@@ -56,6 +59,12 @@ public class StopAction extends OpgraphEditorAction {
 			document.setProcessingContext(null);
 			document.updateDebugState(null);
 			getEditor().getModel().getCanvas().updateDebugState(null);
+		}
+		
+		Optional<PhonWorker> workerOpt = ExtensionSupport.getOptionalExtension(getEditor(), PhonWorker.class);
+		if(workerOpt.isPresent()) {
+			workerOpt.get().shutdown();
+			getEditor().removeExtension(PhonWorker.class);
 		}
 	}
 

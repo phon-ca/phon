@@ -15,7 +15,7 @@ import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.worker.PhonWorker;
 
-public class StepToAction extends OpgraphEditorAction {
+public class StepToAction extends OpgraphDebugAction {
 
 	private OpNode stepToNode = null;
 	
@@ -39,51 +39,19 @@ public class StepToAction extends OpgraphEditorAction {
 		final GraphDocument document = getEditor().getModel().getDocument();
 		final OpNode node = (stepToNode != null ? stepToNode : getEditor().getModel().getCanvas().getSelectionModel().getSelectedNode());
 		Runnable inBg = () -> {
-			if(document != null) {
-				final Processor context = 
-						(document.getProcessingContext() == null ? new Processor(document.getRootGraph()) : document.getProcessingContext());
-				document.setProcessingContext(context);
-				context.addProcessorListener( (pe) -> {
+			if(document != null && node != null) {
+				final Processor context = getProcessor(document);
+				if(context.hasNext() && context.getGraph().contains(node)) {
+					context.stepToNode(node);
+					
 					SwingUtilities.invokeLater( () -> {
-					if(pe.getType() == ProcessorEvent.Type.BEGIN_NODE) {
-						getEditor().getStatusBar().getProgressBar().setIndeterminate(true);
-						getEditor().getStatusBar().getProgressLabel().setText(pe.getNode().getName());
-					} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
-						getEditor().getStatusBar().getProgressBar().setIndeterminate(false);
-					} else if(pe.getType() == ProcessorEvent.Type.COMPLETE) {
-						getEditor().getStatusBar().getProgressBar().setIndeterminate(false);
-						getEditor().getStatusBar().getProgressLabel().setText("");
-						(new StopAction(getEditor())).actionPerformed(arg0);
-					}
+						document.updateDebugState(context);
+						getEditor().getModel().getCanvas().updateDebugState(context);
 					});
-				});
-				
-				context.getContext().setDebug(true);
-				getEditor().getModel().setupContext(context.getContext());
-				
-//				final WizardExtension wizardExt = document.getRootGraph().getExtension(WizardExtension.class);
-//				if(wizardExt != null) {
-//					final NodeWizard nodeWizard = wizardExt.createWizard(context);
-//					nodeWizard.pack();
-//					nodeWizard.setSize(1024, 768);
-//					nodeWizard.setVisible(true);
-//				} else {
-					if(context.hasNext()) {
-						try {
-							context.stepToNode(node);
-							//SwingUtilities.invokeLater( () -> document.updateDebugState(context) );
-						} catch (ProcessingException pe) {
-							document.updateDebugState(
-									(pe.getContext() != null ? pe.getContext() : context));
-							// bring Debug view to front
-							getEditor().showView("Debug");
-						} 
-					}
 				}
-//			}
+			}
 		};
-		if(node != null) 
-			PhonWorker.getInstance().invokeLater(inBg);
+		getOpgraphThread().invokeLater(inBg);
 	}
 
 }

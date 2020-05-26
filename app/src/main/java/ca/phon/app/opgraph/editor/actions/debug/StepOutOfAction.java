@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
@@ -29,7 +30,7 @@ import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
-public class StepOutOfAction extends OpgraphEditorAction {
+public class StepOutOfAction extends OpgraphDebugAction {
 
 	private static final long serialVersionUID = 770626929405993471L;
 
@@ -55,22 +56,20 @@ public class StepOutOfAction extends OpgraphEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent arg0) {
 		final GraphDocument document = getEditor().getModel().getDocument();
-		if(document != null) {
-			Processor context = document.getProcessingContext();
-			if(context == null) {
-				context = new Processor(document.getGraph());
-				document.setProcessingContext(context);
-				
-				context.getContext().setDebug(true);
-				getEditor().getModel().setupContext(context.getContext());
+		final Runnable inBg = () -> {
+			if(document != null) {
+				final Processor context = getProcessor(document);
+				if(context.hasNext()) {
+					context.stepOutOf();
+					
+					SwingUtilities.invokeLater( () -> {
+						document.updateDebugState(context);
+						getEditor().getModel().getCanvas().updateDebugState(context);
+					});
+				}
 			}
-
-			if(context.hasNext()) {
-				context.stepOutOf();
-				document.updateDebugState(context);
-				getEditor().getModel().getCanvas().updateDebugState(context);
-			}
-		}
+		};
+		getOpgraphThread().invokeLater(inBg);
 	}
 
 }
