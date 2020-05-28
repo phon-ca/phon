@@ -39,7 +39,7 @@ public class SampledLongSound extends LongSound {
 	}
 
 	@Override
-	public Sound extractPart(float startTime, float endTime) {
+	public synchronized Sound extractPart(float startTime, float endTime) {
 		return new SampledSound(startTime, endTime);
 	}
 

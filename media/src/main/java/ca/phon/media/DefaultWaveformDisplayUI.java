@@ -405,7 +405,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		protected Tuple<Float, Float> doInBackground() throws Exception {
 			final LongSound sound = display.getLongSound();
 
-			float incr = 5.0f;
+			float incr = 10.0f;
 			float time = display.getWindowStart();
 			while(time < display.getWindowEnd() && !isCancelled()) {
 				float endTime = Math.min(time+incr, display.getEndTime());
