@@ -11,6 +11,7 @@ import ca.phon.audio.AudioFile;
 import ca.phon.audio.AudioFileEncoding;
 import ca.phon.audio.AudioFileType;
 import ca.phon.audio.AudioFiles;
+import ca.phon.audio.InvalidHeaderException;
 import ca.phon.audio.UnsupportedFormatException;
 import junit.framework.Assert;
 
@@ -18,7 +19,7 @@ import junit.framework.Assert;
 public class TestAiffFiles {
 	
 	@Test
-	public void voidTestAiffFile() throws IOException, UnsupportedFormatException {
+	public void voidTestAiffFile() throws IOException, UnsupportedFormatException, InvalidHeaderException {
 		String filepath = "/Users/ghedlund/Documents/phon/gitprojects/phon/media/src/test/resources/M1F1-int16-AFsp.aif";
 		AudioFile audioFile = AudioFiles.openAudioFile(new File(filepath));
 		
