@@ -1,6 +1,6 @@
 package ca.phon.audio;
 
-public class UnsupportedFormatException extends Exception {
+public class UnsupportedFormatException extends AudioIOException {
 
 	private static final long serialVersionUID = -6035936792592208704L;
 

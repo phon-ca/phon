@@ -8,6 +8,13 @@ import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+/**
+ * An audio file. For a list of supported file types see {@link AudioFileType}.
+ * For a list of supported encodings see {@link AudioFileEncoding}
+ * 
+ * This class is heavily based on code from the Praat open-source
+ * software program - melder/melder_audiofiles.cpp.
+ */
 public final class AudioFile {
 
 	static int ulaw2linear[] = { -32124, -31100, -30076, -29052, -28028, -27004, -25980, -24956, -23932, -22908, -21884,
@@ -43,6 +50,13 @@ public final class AudioFile {
 			120, 104, 24, 8, 56, 40, 216, 200, 248, 232, 152, 136, 184, 168, 1376, 1312, 1504, 1440, 1120, 1056, 1248,
 			1184, 1888, 1824, 2016, 1952, 1632, 1568, 1760, 1696, 688, 656, 752, 720, 560, 528, 624, 592, 944, 912,
 			1008, 976, 816, 784, 880, 848 };
+	
+	private final static int WAVE_FORMAT_PCM = 0x0001;
+	private final static int WAVE_FORMAT_IEEE_FLOAT = 0x0003;
+	private final static int WAVE_FORMAT_ALAW = 0x0006;
+	private final static int WAVE_FORMAT_MULAW = 0x0007;
+	private final static int WAVE_FORMAT_DVI_ADPCM = 0x0011;
+	private final static int WAVE_FORMAT_EXTENSIBLE = 0xFFFE;
 
 	private File file;
 	
@@ -63,7 +77,7 @@ public final class AudioFile {
 	/**
 	 * Constructor
 	 */
-	AudioFile(File file) throws IOException, UnsupportedFormatException {
+	AudioFile(File file) throws IOException, InvalidHeaderException, UnsupportedFormatException {
 		super();
 
 		this.file = file;
@@ -71,7 +85,7 @@ public final class AudioFile {
 		audioFileType = checkFile();
 	}
 
-	private AudioFileType checkFile() throws IOException, UnsupportedFormatException {
+	private AudioFileType checkFile() throws IOException, InvalidHeaderException, UnsupportedFormatException {
 		byte[] data = new byte[16];
 		if(raf.read(data) < 16) throw new UnsupportedFormatException("File too short");
 		raf.seek(0L);
@@ -85,7 +99,156 @@ public final class AudioFile {
 		throw new UnsupportedFormatException("Unsupported file type");
 	}
 	
-	private void checkAiffFile() throws IOException, UnsupportedFormatException {
+	private void checkWavFile() throws IOException, InvalidHeaderException, UnsupportedFormatException {
+		byte[] data = new byte[14];
+		byte[] chunkId = new byte[4];
+		
+		boolean formatChunkPresent = false;
+		boolean dataChunkPresent = false;
+		
+		int numberOfBitsPerSamplePoint = -1;
+		int dataChunkSize = 0xffffffff;
+		
+		int bytesRead = raf.read(data, 0, 4);
+		if(bytesRead < 4) throw new InvalidHeaderException("File too small: no RIFF statement");
+		String riff = new String(data, 0, 4);
+		if(!riff.equals("RIFF")) throw new InvalidHeaderException("Not a WAV file (RIFF statement expected)");
+		
+		bytesRead = raf.read(data, 0, 4);
+		if(bytesRead < 4) throw new InvalidHeaderException("File too small: no size of RIFF chunk.");
+		bytesRead = raf.read(data, 0, 4);
+		if(bytesRead < 4) throw new InvalidHeaderException("File too small: no file type info (expected WAVE statement).");
+		
+		String fileTypeInfo = new String(data, 0, 4);
+		if(!fileTypeInfo.equals("WAVE") && !fileTypeInfo.equals("CDDA")) {
+			throw new InvalidHeaderException("Not a WAVE or CD audio file (wrong file type info).");
+		}
+		
+		/* Search for format and data chunks */
+		while(raf.read(chunkId) == 4) {
+			int chunkSize = readIntLE(raf);
+			String chunk = new String(chunkId);
+			if(chunk.equals("fmt ")) {
+				short winEncoding = readShortLE(raf);
+				formatChunkPresent = true;
+				numberOfChannels = readShortLE(raf);
+				if(numberOfChannels < 0) throw new InvalidHeaderException("Too few sound channels (" + numberOfChannels + ")");
+				sampleRate = (double) readIntLE(raf);
+				if(sampleRate < 0.0) throw new InvalidHeaderException("Wrong sampling freq (" + sampleRate + ")");
+				// read unused data
+				readIntLE(raf); // avgBytesPerSec
+				readShortLE(raf); // blockAlign
+				numberOfBitsPerSamplePoint = readShortLE(raf);
+				
+				if(numberOfBitsPerSamplePoint == 0) {
+					numberOfBitsPerSamplePoint = 16; // default
+				} else if(numberOfBitsPerSamplePoint < 4) {
+					throw new InvalidHeaderException("Too few bits per sample (" + numberOfBitsPerSamplePoint + ")");
+				} else if(numberOfBitsPerSamplePoint > 64) {
+					throw new InvalidHeaderException("Too many bits per sample (" + numberOfBitsPerSamplePoint + "); max is 32");
+				}
+				
+				switch(Short.toUnsignedInt(winEncoding)) {
+				case WAVE_FORMAT_PCM:
+					audioFileEncoding =
+						numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_LITTLE_ENDIAN :
+						numberOfBitsPerSamplePoint > 16 ? AudioFileEncoding.LINEAR_24_LITTLE_ENDIAN :
+						numberOfBitsPerSamplePoint > 8 ? AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN :
+						AudioFileEncoding.LINEAR_8_UNSIGNED;
+					break;
+					
+				case WAVE_FORMAT_IEEE_FLOAT:
+					audioFileEncoding = 
+						numberOfBitsPerSamplePoint == 64 ? AudioFileEncoding.IEEE_FLOAT_64_LITTLE_ENDIAN :
+							AudioFileEncoding.IEEE_FLOAT_32_LITTLE_ENDIAN;
+					break;
+				
+				case WAVE_FORMAT_ALAW:
+					audioFileEncoding = AudioFileEncoding.ALAW;
+					break;
+					
+				case WAVE_FORMAT_MULAW:
+					audioFileEncoding = AudioFileEncoding.MULAW;
+					break;
+					
+				case WAVE_FORMAT_DVI_ADPCM:
+					throw new UnsupportedFormatException("Unsupported encoding: DVI ADPCM");
+
+				case WAVE_FORMAT_EXTENSIBLE: {
+					if(chunkSize < 40) throw new InvalidHeaderException("Not enough format data in extensible WAV format");
+					readShortLE(raf); // extensionSize
+					readShortLE(raf); // validBitsPreSample
+					readIntLE(raf); // channelMask
+					short winEncoding2 = readShortLE(raf);
+					switch(Short.toUnsignedInt(winEncoding2)) {
+					case WAVE_FORMAT_PCM:
+						audioFileEncoding =
+							numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_LITTLE_ENDIAN :
+							numberOfBitsPerSamplePoint > 16 ? AudioFileEncoding.LINEAR_24_LITTLE_ENDIAN :
+							numberOfBitsPerSamplePoint > 8 ? AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN :
+							AudioFileEncoding.LINEAR_8_UNSIGNED;
+						break;
+						
+					case WAVE_FORMAT_IEEE_FLOAT:
+						audioFileEncoding = 
+							numberOfBitsPerSamplePoint == 64 ? AudioFileEncoding.IEEE_FLOAT_64_LITTLE_ENDIAN :
+								AudioFileEncoding.IEEE_FLOAT_32_LITTLE_ENDIAN;
+						break;
+					
+					case WAVE_FORMAT_ALAW:
+						audioFileEncoding = AudioFileEncoding.ALAW;
+						break;
+						
+					case WAVE_FORMAT_MULAW:
+						audioFileEncoding = AudioFileEncoding.MULAW;
+						break;
+						
+					case WAVE_FORMAT_DVI_ADPCM:
+						throw new UnsupportedFormatException("Unsupported encoding: DVI ADPCM");
+					
+					default:
+						throw new InvalidHeaderException("Unsupported windows audio encoding " + Integer.toString(winEncoding, 8));
+					}
+					bytesRead = raf.read(data, 0, 14);
+					if(bytesRead < 14) throw new InvalidHeaderException("File too small: no SubFormat data");
+					continue;
+				}
+					
+				default:
+					throw new InvalidHeaderException("Unsupported windows audio encoding " + Integer.toString(winEncoding, 8));
+				}
+				if(chunkSize % 2 == 1) ++chunkSize;
+				for(int i = 17; i <= chunkSize; i++) {
+					bytesRead = raf.read(data, 0, 1);
+					if(bytesRead < 1) throw new InvalidHeaderException("File too small: expected " + chunkSize + " bytes in fmt chunk, but found " + i);
+				}
+			} else if(chunk.equals("data")) {
+				dataChunkPresent = true;
+				dataChunkSize = chunkSize;
+				dataOffset = raf.getFilePointer();
+				if(chunkSize % 2 == 1) ++chunkSize;
+				if(chunkSize > Integer.MAX_VALUE - 100) { // incorrect data chunk (sometimes -44); assume that the data run till the end of the file
+					long fileLength = raf.length();
+					chunkSize = (int)(fileLength - dataOffset);
+					dataChunkSize = chunkSize;
+				}
+				if(formatChunkPresent) break;
+			} else {
+				if(chunkSize % 2 == 1) ++chunkSize;
+				for(int i = 1; i <= chunkSize; i++) {
+					bytesRead = raf.read(data, 0, 1);
+					if(bytesRead < 1) 
+						throw new InvalidHeaderException("File too small: expected " + chunkSize + " bytes, but found " + i);
+				}
+			}
+		} // end while
+		
+		if(!formatChunkPresent) throw new InvalidHeaderException("Found no format chunk");
+		if(!dataChunkPresent) throw new InvalidHeaderException("Found no data chunk");
+		numberOfSamples = dataChunkSize / numberOfChannels / ((numberOfBitsPerSamplePoint + 7) / 8);
+	}
+	
+	private void checkAiffFile() throws IOException, InvalidHeaderException, UnsupportedFormatException {
 		byte[] data  = new byte[4];
 		byte[] chunkID = new byte[4];
 		
@@ -97,18 +260,18 @@ public final class AudioFile {
 		/* Read header of AIFF(-C) file: 12 bytes. */
 
 		int bytesRead = raf.read(data, 0, 4);
-		if(bytesRead != 4) throw new UnsupportedFormatException("File too small: no FORM statement.");
-		if(!(new String(data, 0, 4)).contentEquals("FORM")) throw new UnsupportedFormatException("Not an AIFF or AIFC file (FORM statement expected.)");
+		if(bytesRead != 4) throw new InvalidHeaderException("File too small: no FORM statement.");
+		if(!(new String(data, 0, 4)).contentEquals("FORM")) throw new InvalidHeaderException("Not an AIFF or AIFC file (FORM statement expected.)");
 				
 		bytesRead = raf.read(data, 0, 4);
-		if(bytesRead != 4) throw new UnsupportedFormatException("File too small: no size of FORM chunk.");
+		if(bytesRead != 4) throw new InvalidHeaderException("File too small: no size of FORM chunk.");
 		
 		bytesRead = raf.read(data, 0, 4);
-		if(bytesRead != 4) throw new UnsupportedFormatException("File too small: no file type info (expected AIFF or AIFC).");
+		if(bytesRead != 4) throw new InvalidHeaderException("File too small: no file type info (expected AIFF or AIFC).");
 		
 		String type = new String(data, 0, 4);
 		if(!type.equalsIgnoreCase("AIFF") && !type.equalsIgnoreCase("AIFC"))
-			throw new UnsupportedFormatException("Not an AIFF or AIFC file (wrong file type info).");
+			throw new InvalidHeaderException("Not an AIFF or AIFC file (wrong file type info).");
 		if (type.equalsIgnoreCase("AIFF")) isAifc = false;
 		
 		/* Search for Common Chunk and Data Chunk. */
@@ -133,13 +296,13 @@ public final class AudioFile {
 			if(chunk.equals("COMM")) {
 				commonChunkPresent = true;
 				numberOfChannels = raf.readShort();
-				if(numberOfChannels < 1) throw new UnsupportedFormatException("Too few sound channels (" + numberOfChannels + ")");
+				if(numberOfChannels < 1) throw new InvalidHeaderException("Too few sound channels (" + numberOfChannels + ")");
 				
 				numberOfSamples = raf.readInt();
-				if(numberOfSamples <= 0) throw new UnsupportedFormatException("Too few samples (" + numberOfSamples + ")");
+				if(numberOfSamples <= 0) throw new InvalidHeaderException("Too few samples (" + numberOfSamples + ")");
 				
 				numberOfBitsPerSamplePoint = raf.readShort();
-				if(numberOfBitsPerSamplePoint > 32) throw new UnsupportedFormatException("Too many bits per sample (" + numberOfBitsPerSamplePoint + ")");
+				if(numberOfBitsPerSamplePoint > 32) throw new InvalidHeaderException("Too many bits per sample (" + numberOfBitsPerSamplePoint + ")");
 				
 				audioFileEncoding =
 					numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_BIG_ENDIAN :
@@ -148,13 +311,13 @@ public final class AudioFile {
 					AudioFileEncoding.LINEAR_8_SIGNED;
 					
 				sampleRate = readLongDouble(raf);
-				if(sampleRate <= 0.0) throw new UnsupportedFormatException("Wrong sample rate");
+				if(sampleRate <= 0.0) throw new InvalidHeaderException("Wrong sample rate");
 				if(isAifc) {
 					/*
 					 * Read compression info
 					 */
 					bytesRead = raf.read(data, 0, 4);
-					if(bytesRead < 4) throw new UnsupportedFormatException("File too small: no compression info.");
+					if(bytesRead < 4) throw new InvalidHeaderException("File too small: no compression info.");
 					
 					String ctype = new String(data, 0, 4);
 					if (! ctype.equals("NONE") && ! ctype.equals("sowt") ) {
@@ -171,7 +334,7 @@ public final class AudioFile {
 					 */
 					for (int i = 23; i <= chunkSize; i ++)
 						if (raf.read(data, 0, 1) < 1)
-							throw new UnsupportedFormatException("File too small: expected chunk of " + chunkSize + " bytes, but found " + (i + 22) + ".");
+							throw new InvalidHeaderException("File too small: expected chunk of " + chunkSize + " bytes, but found " + (i + 22) + ".");
 				}
 			} else if(chunk.equals("SSND")) {
 				dataChunkPresent = true;
@@ -180,13 +343,13 @@ public final class AudioFile {
 			} else {
 				for(int i = 1; i <= chunkSize; i++) {
 					if(raf.read(data, 0, 1) < 1) 
-						throw new UnsupportedFormatException("File too small: expected chunk of " + chunkSize + " bytes, but found " + i + ".");
+						throw new InvalidHeaderException("File too small: expected chunk of " + chunkSize + " bytes, but found " + i + ".");
 				}
 			}
 		}
 		
-		if(!commonChunkPresent) throw new UnsupportedFormatException("Found no common chunk.");
-		if(!dataChunkPresent) throw new UnsupportedFormatException("Found no data chunk.");
+		if(!commonChunkPresent) throw new InvalidHeaderException("Found no common chunk.");
+		if(!dataChunkPresent) throw new InvalidHeaderException("Found no data chunk.");
 	}
 
 	public File getFile() {
@@ -214,6 +377,26 @@ public final class AudioFile {
 	}
 
 	/* Read functions */
+	private short readShortLE(RandomAccessFile raf) throws IOException {
+		return 0;
+	}
+	
+	private int readIntLE(RandomAccessFile raf) throws IOException {
+		return 0;
+	}
+	
+	private long readLongLE(RandomAccessFile raf) throws IOException {
+		return 0L;
+	}
+	
+	private float readFloatLE(RandomAccessFile raf) throws IOException {
+		return 0.0f;
+	}
+	
+	private double readDoubleLE(RandomAccessFile raf) throws IOException {
+		return 0.0;
+	}
+	
 	private double readLongDouble(RandomAccessFile raf) throws IOException {
 		byte[] bytes = new byte[10];
 		if(raf.read(bytes) != 10) throw new IOException("Could not read 10 bytes");

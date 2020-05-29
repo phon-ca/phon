@@ -5,7 +5,18 @@ package ca.phon.audio;
  *
  */
 public enum AudioFileType {
-	AIFF,
-	AIFC,
-	WAV;
+	AIFF(".aiff", ".aif"),
+	AIFC(".aifc", ".aic"),
+	WAV(".wav");
+	
+	String[] extensions;
+	
+	private AudioFileType(String ... exts) {
+		this.extensions = exts;
+	}
+	
+	public String[] getExtensions() {
+		return this.extensions;
+	}
+	
 }
