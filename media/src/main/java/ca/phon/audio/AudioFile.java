@@ -91,9 +91,16 @@ public final class AudioFile {
 		raf.seek(0L);
 		
 		String ft = new String(data, 0, 4);
-		if(ft.equals("FORM")) {
+		String ft2 = new String(data, 8, 4);
+		if(ft.equals("FORM") && ft2.equals("AIFF")) {
 			checkAiffFile();
 			return AudioFileType.AIFF;
+		} else if(ft.equals("FORM") && ft2.equals("AIFC")) {
+			checkAiffFile();
+			return AudioFileType.AIFC;
+		} else if(ft.equals("RIFF") && (ft2.equals("WAVE") || ft2.equals("CDDA"))) {
+			checkWavFile();
+			return AudioFileType.WAV;
 		}
 		
 		throw new UnsupportedFormatException("Unsupported file type");
@@ -378,23 +385,24 @@ public final class AudioFile {
 
 	/* Read functions */
 	private short readShortLE(RandomAccessFile raf) throws IOException {
-		return 0;
+		byte[] bytes = new byte[2];
+		int bytesRead = raf.read(bytes);
+		if(bytesRead < 2) throw new IOException("Could not read 2 bytes");
+		
+		return (short)(
+				(Byte.toUnsignedInt(bytes[1]) << 8) |
+				(Byte.toUnsignedInt(bytes[0])));
 	}
 	
 	private int readIntLE(RandomAccessFile raf) throws IOException {
-		return 0;
-	}
-	
-	private long readLongLE(RandomAccessFile raf) throws IOException {
-		return 0L;
-	}
-	
-	private float readFloatLE(RandomAccessFile raf) throws IOException {
-		return 0.0f;
-	}
-	
-	private double readDoubleLE(RandomAccessFile raf) throws IOException {
-		return 0.0;
+		byte[] bytes = new byte[4];
+		int bytesRead = raf.read(bytes);
+		if(bytesRead < 4) throw new IOException("Could not read 4 bytes");
+		
+		return  (Byte.toUnsignedInt(bytes[3]) << 24) |
+				(Byte.toUnsignedInt(bytes[2]) << 16) |
+				(Byte.toUnsignedInt(bytes[1]) << 8) | 
+				(Byte.toUnsignedInt(bytes[0]));
 	}
 	
 	private double readLongDouble(RandomAccessFile raf) throws IOException {
