@@ -309,7 +309,7 @@ public final class AudioFile {
 				if(numberOfSamples <= 0) throw new InvalidHeaderException("Too few samples (" + numberOfSamples + ")");
 				
 				numberOfBitsPerSamplePoint = raf.readShort();
-				if(numberOfBitsPerSamplePoint > 32) throw new InvalidHeaderException("Too many bits per sample (" + numberOfBitsPerSamplePoint + ")");
+				if(numberOfBitsPerSamplePoint > 64) throw new InvalidHeaderException("Too many bits per sample (" + numberOfBitsPerSamplePoint + ")");
 				
 				audioFileEncoding =
 					numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_BIG_ENDIAN :
@@ -327,15 +327,27 @@ public final class AudioFile {
 					if(bytesRead < 4) throw new InvalidHeaderException("File too small: no compression info.");
 					
 					String ctype = new String(data, 0, 4);
-					if (! ctype.equals("NONE") && ! ctype.equals("sowt") ) {
-						throw new UnsupportedFormatException("Cannot read compressed AIFC files (compression type " + data + ").");
+					if (! ctype.equalsIgnoreCase("NONE") && ! ctype.equalsIgnoreCase("sowt") 
+							&& !ctype.equalsIgnoreCase("ALAW") && !ctype.equalsIgnoreCase("ULAW")
+							&& !ctype.equalsIgnoreCase("fl32") && !ctype.equalsIgnoreCase("fl64") ) {
+						throw new UnsupportedFormatException("Cannot compressed AIFC file with compression type " + ctype);
 					}
-					if (ctype.equals("sowt"))
+					if (ctype.equalsIgnoreCase("sowt")) {
 						audioFileEncoding =
 							numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_LITTLE_ENDIAN :
 							numberOfBitsPerSamplePoint > 16 ? AudioFileEncoding.LINEAR_24_LITTLE_ENDIAN :
 							numberOfBitsPerSamplePoint > 8 ? AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN :
 							AudioFileEncoding.LINEAR_8_SIGNED;
+					} else if(ctype.equalsIgnoreCase("ALAW")) {
+						audioFileEncoding = AudioFileEncoding.ALAW;
+					} else if(ctype.equalsIgnoreCase("ULAW")) {
+						audioFileEncoding = AudioFileEncoding.MULAW;
+					} else if(ctype.equalsIgnoreCase("fl32")) {
+						audioFileEncoding = AudioFileEncoding.IEEE_FLOAT_32_BIG_ENDIAN;
+					} else if(ctype.equalsIgnoreCase("fl64")) {
+						audioFileEncoding = AudioFileEncoding.IEEE_FLOAT_64_BIG_ENDIAN;
+					}
+					
 					/*
 					 * Read rest of compression info.
 					 */
