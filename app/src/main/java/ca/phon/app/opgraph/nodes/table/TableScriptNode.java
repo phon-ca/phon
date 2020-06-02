@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -125,6 +126,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 
 	// UI
 	private JComponent settingsComponent;
+	private JCheckBox debugBox;
 	private ScriptPanel scriptPanel;
 
 	public TableScriptNode() {
@@ -272,6 +274,11 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		retVal.add(scriptScroller, BorderLayout.CENTER);
 
 		if(shouldShowEditor()) {
+			debugBox = new JCheckBox("Debug");
+			debugBox.setSelected(false);
+			debugBox.setToolTipText("Show debugger when executing this node");
+
+			
 			final JComponent editor = ScriptEditorFactory.createEditorComponentForScript(getScript());
 			final Action act = new AbstractAction() {
 				@Override
@@ -298,7 +305,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 					}
 				}
 			});
-			retVal.add(ButtonBarBuilder.buildOkBar(showEditorBtn), BorderLayout.SOUTH);
+			retVal.add(ButtonBarBuilder.buildOkCancelBar(showEditorBtn, debugBox), BorderLayout.SOUTH);
 		}
 		
 		return retVal;
@@ -440,10 +447,10 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 			throw new ProcessingException(null, getName() + " (" + getId() + "): " + "Invalid settings");
 		}
 
-		if(isStepInto) {
+		if(isStepInto || (debugBox != null && debugBox.isSelected())) {
 			try {
 				org.mozilla.javascript.tools.debugger.Main debugger = Main.mainEmbedded(getName());
-				debugger.setBreakOnEnter(true);
+				debugger.setBreakOnEnter(false);
 				debugger.setBreakOnExceptions(true);
 				
 				final ScriptParameters params = ctx.getScriptParameters(ctx.getEvaluatedScope());

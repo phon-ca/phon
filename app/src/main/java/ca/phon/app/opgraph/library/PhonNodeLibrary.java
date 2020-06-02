@@ -195,10 +195,9 @@ public class PhonNodeLibrary {
 
 		final NodeStyle scriptStyle = new NodeStyle(NodeStyle.DEFAULT);
 		scriptStyle.NodeIcon = IconManager.getInstance().getIcon("mimetypes/text-x-script", IconSize.SMALL);
-		scriptStyle.NodeBorderColor = new Color(100, 155, 100);
-		scriptStyle.NodeBackgroundColor = new Color(250, 250, 100, 200);
-		scriptStyle.NodeNameTopColor = new Color(220, 220, 100, 255);
-		scriptStyle.NodeNameBottomColor = new Color(175, 175, 50, 255);
+		scriptStyle.NodeBackgroundColor = new Color(125, 183, 255, 200);
+		scriptStyle.NodeNameTopColor = new Color(125, 183, 255, 255);
+		scriptStyle.NodeNameBottomColor = new Color(100, 142, 237, 255);
 		
 		final NodeStyle tableStyle = new NodeStyle(NodeStyle.DEFAULT);
 		tableStyle.NodeIcon = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
