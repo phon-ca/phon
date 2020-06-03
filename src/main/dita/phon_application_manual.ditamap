@@ -130,7 +130,7 @@
         <topicref href="analysis/word_list.md" format="markdown"/>
         <topichead navtitle="Specialized">
             <topicref href="analysis/specialized/word_match.md" format="markdown"/>
-            <topicref href="analysis/specialized/multisyllabic_noninear_analysis.md"
+            <topicref href="analysis/specialized/multisyllabic_nonlinear_analysis.md"
                 format="markdown"/>
             <topicref href="analysis/specialized/vocalization.md" format="markdown"/>
             <topicref href="analysis/specialized/wap.md" format="markdown"/>
