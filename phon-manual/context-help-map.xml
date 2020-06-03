@@ -112,7 +112,7 @@
    <appContext helpID="word-list" path="analysis/word_list.html"/>
    <appContext helpID="word-match" path="analysis/specialized/word_match.html"/>
    <appContext helpID="multisyllabic-nonlinear-analysis"
-               path="analysis/specialized/multisyllabic_noninear_analysis.html"/>
+               path="analysis/specialized/multisyllabic_nonlinear_analysis.html"/>
    <appContext helpID="vocalization" path="analysis/specialized/vocalization.html"/>
    <appContext helpID="word-level-analysis-of-polysyllables-wap"
                path="analysis/specialized/wap.html"/>
