@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import ca.phon.audio.Sampled;
 import ca.phon.media.ExportSegment;
 
 public class SampledExportSegment extends ExportSegment {

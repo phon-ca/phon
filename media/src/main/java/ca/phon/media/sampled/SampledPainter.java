@@ -25,6 +25,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import ca.phon.audio.Sampled;
 import ca.phon.ui.painter.BufferedPainter;
 
 public class SampledPainter extends BufferedPainter<Sampled> {

@@ -1,9 +1,8 @@
-package ca.phon.media.sampled;
+package ca.phon.media;
 
 import java.io.File;
 import java.io.IOException;
 
-import ca.phon.media.LongSound;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;

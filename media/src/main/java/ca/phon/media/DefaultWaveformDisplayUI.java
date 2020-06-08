@@ -23,7 +23,6 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
-import ca.phon.media.sampled.Channel;
 import ca.phon.util.Tuple;
 
 /**

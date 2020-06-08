@@ -1,16 +1,14 @@
-package ca.phon.media.sampled;
+package ca.phon.media;
 
 import java.io.File;
 import java.io.IOException;
 
 import ca.phon.audio.AudioFile;
+import ca.phon.audio.AudioFileSampled;
 import ca.phon.audio.AudioFiles;
 import ca.phon.audio.InvalidHeaderException;
+import ca.phon.audio.Sampled;
 import ca.phon.audio.UnsupportedFormatException;
-import ca.phon.media.ExportSegment;
-import ca.phon.media.LongSound;
-import ca.phon.media.PlaySegment;
-import ca.phon.media.Sound;
 
 public class SampledLongSound extends LongSound {
 	

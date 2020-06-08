@@ -3,6 +3,7 @@ package ca.phon.media.sampled;
 import java.io.File;
 import java.io.IOException;
 
+import ca.phon.audio.Sampled;
 import ca.phon.plugin.PluginManager;
 
 /**

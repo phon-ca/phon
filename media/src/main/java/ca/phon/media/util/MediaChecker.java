@@ -20,8 +20,8 @@ import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 
 import ca.phon.media.LongSound;
+import ca.phon.media.SampledLongSound;
 import ca.phon.media.sampled.PCMSampled;
-import ca.phon.media.sampled.SampledLongSound;
 import ca.phon.media.util.MediaCheckHandler.MediaCheckStatus;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;

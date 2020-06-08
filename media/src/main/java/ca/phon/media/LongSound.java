@@ -7,7 +7,6 @@ import java.util.Set;
 
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.media.sampled.SampledLongSound;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.util.PrefHelper;

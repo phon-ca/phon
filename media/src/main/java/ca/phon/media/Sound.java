@@ -1,7 +1,5 @@
 package ca.phon.media;
 
-import ca.phon.media.sampled.Channel;
-
 public interface Sound {
 	
 	/**

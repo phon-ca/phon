@@ -19,6 +19,7 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Mixer.Info;
 import javax.swing.SwingWorker;
 
+import ca.phon.audio.Sampled;
 import ca.phon.media.PlaySegment;
 
 public class SampledPlaySegment extends PlaySegment {

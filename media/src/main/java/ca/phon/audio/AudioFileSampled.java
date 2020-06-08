@@ -1,8 +1,6 @@
-package ca.phon.media.sampled;
+package ca.phon.audio;
 
 import java.io.IOException;
-
-import ca.phon.audio.AudioFile;
 
 public class AudioFileSampled implements Sampled {
 

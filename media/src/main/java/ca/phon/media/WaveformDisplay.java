@@ -11,8 +11,6 @@ import java.util.Map;
 
 import javax.swing.Scrollable;
 
-import ca.phon.media.sampled.Channel;
-
 /**
  * Basic waveform display
  *
