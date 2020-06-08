@@ -39,27 +39,6 @@ public interface Sampled {
 	public float getSampleRate();
 	
 	/**
-	 * Get sample size (in bits)
-	 * 
-	 * @return sample size
-	 */
-	public int getSampleSize();
-	
-	/**
-	 * Is data signed or unsigned
-	 * 
-	 * @return is data signed
-	 */
-	public boolean isSigned();
-	
-	/**
-	 * Is big endian
-	 * 
-	 * @return <code>true</code> if data is big endian
-	 */
-	public boolean isBigEndian();
-	
-	/**
 	 * Get value for sample
 	 * 
 	 * @param channel
@@ -145,6 +124,10 @@ public interface Sampled {
 	 */
 	public double minimumValue(int channel, long firstSample, long lastSample);
 	
+	public double[][] getWindowExtrema(long firstSample, long lastSample);
+	
+	public double[][] getWindowExtrema(float startTime, float endTime);
+	
 	/**
 	 * Get the miminum and maximum values for the specified sample range
 	 * 
@@ -189,16 +172,6 @@ public interface Sampled {
 	 * @param extrema an array of double[2] where the
 	 *  data will be stored
 	 */
-	public void getWindowExtrema(int channle, float startTime, float endTime, double[] extrema);
-	
-	/**
-	 * Return the raw byte data for the given time range
-	 * 
-	 * @param startTime
-	 * @param length
-	 * 
-	 * @return raw bytes
-	 */
-	public byte[] getBytes(float startTime, float endTime);
+	public void getWindowExtrema(int channel, float startTime, float endTime, double[] extrema);
 		
 }

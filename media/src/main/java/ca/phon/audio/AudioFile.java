@@ -1,12 +1,20 @@
 package ca.phon.audio;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.BufferUnderflowException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel.MapMode;
 import java.util.Arrays;
 import java.util.logging.Logger;
+
+import org.apache.logging.log4j.core.time.PreciseClock;
 
 /**
  * An audio file. For a list of supported file types see {@link AudioFileType}.
@@ -15,7 +23,7 @@ import java.util.logging.Logger;
  * This class is heavily based on code from the Praat open-source
  * software program - melder/melder_audiofiles.cpp.
  */
-public final class AudioFile {
+public final class AudioFile implements Closeable {
 
 	static int ulaw2linear[] = { -32124, -31100, -30076, -29052, -28028, -27004, -25980, -24956, -23932, -22908, -21884,
 			-20860, -19836, -18812, -17788, -16764, -15996, -15484, -14972, -14460, -13948, -13436, -12924, -12412,
@@ -61,6 +69,9 @@ public final class AudioFile {
 	private File file;
 	
 	private RandomAccessFile raf;
+	
+	// file as memory mapped buffer
+	private MappedByteBuffer mappedBuffer;
 
 	private long dataOffset = -1;
 	
@@ -68,7 +79,7 @@ public final class AudioFile {
 	
 	private double sampleRate = 0.0;
 	
-	private int numberOfSamples = 0;
+	private long numberOfSamples = 0;
 
 	private AudioFileType audioFileType;
 
@@ -83,8 +94,14 @@ public final class AudioFile {
 		this.file = file;
 		raf = new RandomAccessFile(file, "r");
 		audioFileType = checkFile();
+		mappedBuffer = raf.getChannel().map(MapMode.READ_ONLY, dataOffset, raf.getChannel().size() - dataOffset);
 	}
-
+	
+	@Override
+	public void close() throws IOException {
+		raf.close();
+	}
+	
 	private AudioFileType checkFile() throws IOException, InvalidHeaderException, UnsupportedFormatException {
 		byte[] data = new byte[16];
 		if(raf.read(data) < 16) throw new UnsupportedFormatException("File too short");
@@ -105,7 +122,7 @@ public final class AudioFile {
 		
 		throw new UnsupportedFormatException("Unsupported file type");
 	}
-	
+
 	private void checkWavFile() throws IOException, InvalidHeaderException, UnsupportedFormatException {
 		byte[] data = new byte[14];
 		byte[] chunkId = new byte[4];
@@ -383,7 +400,7 @@ public final class AudioFile {
 		return sampleRate;
 	}
 
-	public int getNumberOfSamples() {
+	public long getNumberOfSamples() {
 		return numberOfSamples;
 	}
 
@@ -394,46 +411,416 @@ public final class AudioFile {
 	public AudioFileEncoding getAudioFileEncoding() {
 		return audioFileEncoding;
 	}
-
+	
+	public long sampleIndexForTime(float time) {
+		final double frameRate = getSampleRate();
+		final long sampleIdx = Math.round(frameRate * time);
+		return sampleIdx;
+	}
+	
+	public float timeForSampleIndex(long sample) {
+		final double frameRate = getSampleRate();
+		final float time = 
+				BigDecimal.valueOf(sample / frameRate).setScale(3, RoundingMode.HALF_UP).floatValue();
+		return time;
+	}
+	
+	public float getLength() {
+		return (float)(getNumberOfSamples() / getSampleRate());
+	}
+	
+	public synchronized void seekToTime(float time) {
+		long sample = sampleIndexForTime(time);
+		seekToSample(sample);
+	}
+	
+	public synchronized void seekToSample(long sample) {
+		long byteIdx = sample * getFrameSize();
+		mappedBuffer.position((int)byteIdx);
+	}
+	
+	/**
+	 * Read buffer[0].length samples
+	 * from buffer.length channels starting
+	 * from the current position
+	 * 
+	 * @param buffer
+	 */
+	public synchronized void readSamples(double[][] buffer) throws IOException {
+		if(buffer.length == 0) // no samples to read
+			return;
+		if(buffer[0] == null)
+			throw new IOException(new NullPointerException("buffer[0]"));
+		readSamples(buffer, 0, buffer[0].length);
+	}
+	
+	/**
+	 * Read length samples from buffer.length channels
+	 * Data will be inserted into buffer[channel] starting at offset
+	 * 
+	 * @param buffer
+	 * @param offset
+	 * @param length
+	 * 
+	 * @returns number of samples read
+	 */
+	public synchronized int readSamples(double[][] buffer, int offset, int length) throws IOException {
+		int numChannels = buffer.length;
+		int numSamples = length;
+		
+		int samplesRead = 0;
+				
+		switch(getAudioFileEncoding()) {
+		case LINEAR_8_SIGNED: {
+			try {
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						byte value = mappedBuffer.get();
+						buffer[ichan][isamp] = (float)(value * (1.0f/128.0f));
+					}
+					++samplesRead;
+				}
+			} catch (ArrayIndexOutOfBoundsException | BufferUnderflowException e) {
+				throw new IOException(e);
+			}
+		} break; // LINEAR_8_SIGNED
+			
+		case LINEAR_8_UNSIGNED: {
+			try {
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						byte value = mappedBuffer.get();
+						buffer[ichan][isamp] = (float)(Byte.toUnsignedInt(value) * (1.0f / 128.0f) - 1.0f);
+					}
+					++samplesRead;
+				}
+			} catch (ArrayIndexOutOfBoundsException | BufferUnderflowException e) {
+				throw new IOException(e);
+			}
+		} break; // LINEAR_8_UNSIGNED
+		
+		case LINEAR_16_LITTLE_ENDIAN:
+		case LINEAR_16_BIG_ENDIAN:
+		case LINEAR_24_LITTLE_ENDIAN:
+		case LINEAR_24_BIG_ENDIAN:
+		case LINEAR_32_LITTLE_ENDIAN:
+		case LINEAR_32_BIG_ENDIAN: {
+			int numberOfBytes = (int)(
+					getNumberOfChannels() * numSamples * getAudioFileEncoding().getBytesPerSample());
+			int frameSize = getFrameSize();
+			
+			byte[] buf = new byte[numberOfBytes];
+			mappedBuffer.get(buf);
+			
+			switch(getAudioFileEncoding()) {
+			case LINEAR_16_BIG_ENDIAN: 
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						int byteOffset = (isamp * frameSize) + (ichan * getAudioFileEncoding().getBytesPerSample());
+						byte b1 = buf[byteOffset];
+						byte b2 = buf[byteOffset+1];						
+						short value = 
+							(short)(
+								(((int)b1 & 0xff) << 8) |
+								((int)b2 & 0xff));
+						buffer[ichan][isamp + offset] = value * (1.0f / 32768.0f);
+					}
+					++samplesRead;
+				} break;
+			
+			
+			case LINEAR_16_LITTLE_ENDIAN:
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						int byteOffset = (isamp * frameSize) + (ichan * getAudioFileEncoding().getBytesPerSample());
+						byte b1 = buf[byteOffset];
+						byte b2 = buf[byteOffset+1];						
+						short value = 
+							(short)(
+								(((int)b2 & 0xff) << 8) |
+								((int)b1 & 0xff));
+						buffer[ichan][isamp + offset] = value * (1.0f / 32768.0f);
+					}
+					++samplesRead;
+				} break;
+				
+			case LINEAR_24_BIG_ENDIAN:
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						int byteOffset = (isamp * frameSize) + (ichan * getAudioFileEncoding().getBytesPerSample());
+						byte b1 = buf[byteOffset];
+						byte b2 = buf[byteOffset+1];
+						byte b3 = buf[byteOffset+2];
+						int unsignedValue = 
+								(int)(
+									(((int)b1 & 0xff) << 16)
+								|	(((int)b2 & 0xff) << 8)
+								|	((int)b3 & 0xff)
+								);
+						if( ((int)b1 & 0x80) != 0) unsignedValue |= 0xff000000; // extend sign
+						buffer[ichan][isamp + offset] =  unsignedValue * (1.0f / 8388608.0f);
+					}
+					++samplesRead;
+				} break;
+				
+			case LINEAR_24_LITTLE_ENDIAN:
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						int byteOffset = (isamp * frameSize) + (ichan * getAudioFileEncoding().getBytesPerSample());
+						byte b1 = buf[byteOffset];
+						byte b2 = buf[byteOffset+1];
+						byte b3 = buf[byteOffset+2];
+						int unsignedValue = 
+								(int)(
+									(((int)b3 & 0xff) << 16)
+								|	(((int)b2 & 0xff) << 8)
+								|	((int)b1 & 0xff)
+								);
+						if(((int)b3 & 0x80) != 0) unsignedValue |= 0xff000000; // extend sign
+						buffer[ichan][isamp + offset] =  unsignedValue * (1.0f / 8388608.0f);
+					}
+					++samplesRead;
+				}
+				break;
+				
+			case LINEAR_32_BIG_ENDIAN:
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						int byteOffset = (isamp * frameSize) + (ichan * getAudioFileEncoding().getBytesPerSample());
+						byte b1 = buf[byteOffset];
+						byte b2 = buf[byteOffset+1];
+						byte b3 = buf[byteOffset+2];
+						byte b4 = buf[byteOffset+3];
+						int unsignedValue = 
+								(int)(
+								    (((int)b1 & 0xff) << 24)
+								|	(((int)b2 & 0xff) << 16)
+								|	(((int)b3 & 0xff) << 8)
+								|	((int)b4 & 0xff)
+								);
+						buffer[ichan][isamp + offset] =  unsignedValue * (1.0f / 32768.0f / 65536.0f);
+					}
+					++samplesRead;
+				}
+				break;
+				
+			case LINEAR_32_LITTLE_ENDIAN:
+				for(int isamp = 0; isamp < numSamples; isamp++) {
+					for(int ichan = 0; ichan < numChannels; ichan++) {
+						int byteOffset = (isamp * frameSize) + (ichan * getAudioFileEncoding().getBytesPerSample());
+						byte b1 = buf[byteOffset];
+						byte b2 = buf[byteOffset+1];
+						byte b3 = buf[byteOffset+2];
+						byte b4 = buf[byteOffset+3];
+						int unsignedValue = 
+								(int)(
+								    (((int)b4 & 0xff) << 24)
+								|	(((int)b3 & 0xff) << 16)
+								|	(((int)b2 & 0xff) << 8)
+								|	((int)b1 & 0xff)
+								);
+						buffer[ichan][isamp + offset] =  unsignedValue * (1.0f / 32768.0f / 65536.0f);
+					}
+					++samplesRead;
+				}
+				break;
+				
+			default:
+				break;
+			}
+			
+		} break; // 16, 24, 32-bit
+		
+		case IEEE_FLOAT_32_BIG_ENDIAN:
+			for(int isamp = 0; isamp < numSamples; isamp++) {
+				for(int ichan = 0; ichan < numChannels; ichan++) {
+					buffer[ichan][isamp] = mappedBuffer.getFloat();
+				}
+				++samplesRead;
+			}
+			break;
+		
+		case IEEE_FLOAT_32_LITTLE_ENDIAN:
+			for(int isamp = 0; isamp < numSamples; isamp++) {
+				byte[] buf = new byte[4];
+				for(int ichan = 0; ichan < numChannels; ichan++) {
+					mappedBuffer.get(buf);
+					buffer[ichan][isamp] = readFloatLE(buf, 0);
+				}
+				++samplesRead;
+			}
+			break;
+			
+		case IEEE_FLOAT_64_BIG_ENDIAN:
+			for(int isamp = 0; isamp < numSamples; isamp++) {
+				for(int ichan = 0; ichan < numChannels; ichan++) {
+					buffer[ichan][isamp] = mappedBuffer.getDouble();
+				}
+				++ samplesRead;
+			}
+			break;
+			
+		case IEEE_FLOAT_64_LITTLE_ENDIAN:
+			for(int isamp = 0; isamp < numSamples; isamp++) {
+				byte[] buf = new byte[8];
+				for(int ichan = 0; ichan < numChannels; ichan++) {
+					mappedBuffer.get(buf);
+					buffer[ichan][isamp] = readDoubleLE(buf, 0);
+				}
+				++samplesRead;
+			}
+			break;
+			
+		case MULAW:
+			for(int isamp = 0; isamp < numSamples; isamp++) {
+				for(int ichan = 0; ichan < numChannels; ichan++) {
+					int idx = Byte.toUnsignedInt(mappedBuffer.get());
+					buffer[ichan][isamp] = ulaw2linear[idx] * (1.0 / 32768.0);
+				}
+				++samplesRead;
+			}
+			break;
+			
+		case ALAW:
+			for(int isamp = 0; isamp < numSamples; isamp++) {
+				for(int ichan = 0; ichan < numChannels; ichan++) {
+					int idx = Byte.toUnsignedInt(mappedBuffer.get());
+					buffer[ichan][isamp] = alaw2linear[idx] * (1.0 / 32768.0);
+				}
+				++samplesRead;
+			}
+			break;
+			
+		default:
+			throw new IOException(new UnsupportedFormatException());
+		} // switch
+		
+		return samplesRead;
+	}
+	
+	public int getFrameSize() {
+		return (getNumberOfChannels() * getAudioFileEncoding().getBytesPerSample());
+	}
+		
 	/* Read functions */
 	private short readShortLE(RandomAccessFile raf) throws IOException {
-		byte[] bytes = new byte[2];
-		int bytesRead = raf.read(bytes);
-		if(bytesRead < 2) throw new IOException("Could not read 2 bytes");
+		byte[] buffer = new byte[2];
+		if(raf.read(buffer) < 2) throw new BufferUnderflowException();
+		return readShortLE(buffer, 0);
+	}
+	
+	private short readShortLE(byte[] data, int offset) throws BufferUnderflowException {
+		if(data.length < offset + 2) throw new BufferUnderflowException();
 		
 		return (short)(
-				(Byte.toUnsignedInt(bytes[1]) << 8) |
-				(Byte.toUnsignedInt(bytes[0])));
+				(((long)data[offset + 1] & 0xff) << 8)
+				| ((long)data[offset] & 0xff));
 	}
 	
 	private int readIntLE(RandomAccessFile raf) throws IOException {
-		byte[] bytes = new byte[4];
-		int bytesRead = raf.read(bytes);
-		if(bytesRead < 4) throw new IOException("Could not read 4 bytes");
+		byte[] buffer = new byte[4];
+		if(raf.read(buffer) < 4) throw new BufferUnderflowException();
+		return readIntLE(buffer, 0);
+	}
+	
+	private int readIntLE(byte[] data, int offset) throws BufferUnderflowException {
+		if(data.length < offset + 4) throw new BufferUnderflowException();
 		
-		return  (Byte.toUnsignedInt(bytes[3]) << 24) |
-				(Byte.toUnsignedInt(bytes[2]) << 16) |
-				(Byte.toUnsignedInt(bytes[1]) << 8) | 
-				(Byte.toUnsignedInt(bytes[0]));
+		return	(int)(
+				(((long)data[3] & 0xff) << 24)
+				| (((long)data[2] & 0xff) << 16) 
+				| (((long)data[1] & 0xff) << 8)
+				| ((long)data[0] & 0xff));
+	}
+		
+	private float readFloatLE(RandomAccessFile raf) throws IOException {
+		byte[] buffer = new byte[4];
+		if(raf.read(buffer) < 4) throw new BufferUnderflowException();
+		return readFloatLE(buffer, 0);
+	}
+		
+	private float readFloatLE(byte[] data, int offset) throws BufferUnderflowException {
+		int exp = (int)(
+				(((long)data[offset+3] & 0x0000007F) << 1)
+				| (((long)data[offset+2] & 0x00000080) >> 7));
+		int mantissa = (int)(
+				(((long)data[offset+2] & 0x0000007F) << 16)
+				| (((long)data[offset+1] & 0xFF) << 8)
+				| (((long)data[offset] & 0xFF)));
+		float x = 0.0f;
+		if(exp == 0) {
+			if(mantissa == 0) 
+				x = 0.0f;
+			else
+				x = Math.scalb(mantissa, exp - 149);
+		} else if(exp == 0x000000FF) {
+			return Float.NaN;
+		} else {
+			x = Math.scalb(mantissa, exp - 149);
+		}
+		return (data[offset + 3] & 0x80) != 0 ? - x : x;		
+	}
+	
+	private double readDoubleLE(RandomAccessFile raf) throws IOException {
+		byte[] buffer = new byte[8];
+		if(raf.read(buffer) < 8) throw new BufferUnderflowException();
+		return readDoubleLE(buffer, 0);
+	}
+	
+	private double readDoubleLE(byte[] data, int offset) throws BufferUnderflowException {
+		if(data.length < offset + 8) throw new BufferUnderflowException();
+		
+		int exp = (int)(
+				(((long)data[offset+7] & 0x0000007F) << 4)
+				| (((long)data[offset+6] & 0x000000F0) >> 4));
+		long highMantissa = 
+				(((long)data[offset+6] & 0x0F) << 16)
+				| (((long)data[offset+5] & 0xFF) << 8)
+				| (((long)data[offset+4] & 0xFF));
+		long lowMantissa = 
+				(((long)data[offset+3] & 0xFF) << 24)
+				| (((long)data[offset+2] & 0xFF) << 16)
+				| (((long)data[offset+1] & 0xFF) << 8)
+				| (((long)data[offset] & 0xFF));
+		
+		double x = Double.NaN;
+		if(exp == 0) {
+			if(highMantissa == 0 && lowMantissa == 0) x = 0.0;
+			else {
+				x = Math.scalb(highMantissa, exp - 1042);
+				x += Math.scalb(lowMantissa, exp - 1074);
+			}
+		} else if(exp == 0x000007FF) {
+			x = Double.NaN;
+		} else {
+			x = Math.scalb(highMantissa | 0x00100000, exp - 1043);
+			x += Math.scalb(lowMantissa, exp - 1075);
+		}
+		return (data[offset+7] & 0x80) != 0 ? - x : x;
 	}
 	
 	private double readLongDouble(RandomAccessFile raf) throws IOException {
-		byte[] bytes = new byte[10];
-		if(raf.read(bytes) != 10) throw new IOException("Could not read 10 bytes");
+		byte[] buffer = new byte[10];
+		if(raf.read(buffer) < 10) throw new BufferUnderflowException();
+		return readLongDouble(buffer, 0);
+	}
+	
+	private double readLongDouble(byte[] data, int offset) throws BufferUnderflowException {
+		if(data.length < offset + 10) throw new BufferUnderflowException();
 		
-		int exp = (((int)bytes[0] & 0x7F) << 8) | bytes[1];
+		int exp = (((int)data[offset] & 0x7F) << 8) | data[offset + 1];
 		// using longs to avoid issues with signing
-		long highMantissa = 
-			((long)bytes[2] & 0xFF) << 24 |
-			((long)bytes[3] & 0xFF) << 16 | 
-			((long)bytes[4] & 0xFF) << 8 |
-			((long)bytes[5] & 0xFF);
+		long highMantissa = (long)(
+			((long)data[offset + 2] & 0xFF) << 24 |
+			((long)data[offset + 3] & 0xFF) << 16 | 
+			((long)data[offset + 4] & 0xFF) << 8 |
+			((long)data[offset + 5] & 0xFF));
 		highMantissa = (highMantissa & 0xFFFFFFFF);
-		long lowMantissa = 
-			((long)bytes[6] & 0xFF) << 24 |
-			((long)bytes[7] & 0xFF) << 16 | 
-			((long)bytes[8] & 0xFF) << 8 |
-			((long)bytes[9] & 0xFF);
+		long lowMantissa = (long)(
+			((long)data[offset + 6] & 0xFF) << 24 |
+			((long)data[offset + 7] & 0xFF) << 16 | 
+			((long)data[offset + 8] & 0xFF) << 8 |
+			((long)data[offset + 9] & 0xFF));
 		
 		double x = Double.NaN;
 		if(exp == 0 && highMantissa == 0 && lowMantissa == 0) x = 0.0;
@@ -443,6 +830,23 @@ public final class AudioFile {
 			x = Math.scalb(highMantissa, exp - 31);
 			x += Math.scalb(lowMantissa, exp - 63);
 		}
-		return (bytes[0] & 0x80) == 0x80 ? - x : x;
+		return (data[offset + 0] & 0x80) != 0 ? - x : x;
+	}
+
+	public static void main(String[] args) {
+		byte[] buf = { -127, 0x00, 0x01, -1 };
+		
+		long unsignedValue = 0L;
+		unsignedValue |=
+				(long)(Byte.toUnsignedInt(buf[0])) << 24;
+		unsignedValue |=
+				 Byte.toUnsignedInt(buf[1]) << 16
+				| Byte.toUnsignedInt(buf[2]) << 8
+				| Byte.toUnsignedInt(buf[3]);
+		System.out.println(Long.toString(unsignedValue));
+		System.out.println((((long)buf[0]) & 0xff)
+				+ "");
+		
+		System.out.println(Integer.toString((int)unsignedValue));
 	}
 }

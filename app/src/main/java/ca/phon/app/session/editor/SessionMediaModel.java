@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.SwingUtilities;
@@ -186,11 +187,27 @@ public class SessionMediaModel {
 			File parentFile = selectedMedia.getParentFile();
 			audioFile = new File(parentFile, mediaName + ".wav");
 
-			if(!audioFile.exists()) {
-				audioFile = null;
+			boolean foundFile = false;
+			for(String ext:getAudioFileExtensions()) {
+				audioFile = new File(parentFile, mediaName + ext);
+				if(audioFile.exists()) {
+					foundFile = true;
+					break;
+				}
 			}
+			if(!foundFile)
+				audioFile = null;
 		}
 		return audioFile;
+	}
+	
+	/**
+	 * Return a list of valid audio file extensions (including the '.')
+	 * 
+	 * @return list of valid audio file extensions
+	 */
+	public List<String> getAudioFileExtensions() {
+		return List.of(".wav", ".WAV", ".aif", ".AIF", ".aiff", ".AIFF", ".aifc", ".AIFC");
 	}
 	
 	/**

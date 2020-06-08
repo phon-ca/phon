@@ -123,21 +123,6 @@ public class PCMSampled implements Sampled {
 	}
 	
 	@Override
-	public int getSampleSize() {
-		return getAudioFileFormat().getFormat().getSampleSizeInBits();
-	}
-	
-	@Override
-	public boolean isSigned() {
-		return getAudioFileFormat().getFormat().getEncoding() == Encoding.PCM_SIGNED;
-	}
-	
-	@Override
-	public boolean isBigEndian() {
-		return getAudioFileFormat().getFormat().isBigEndian();
-	}
-
-	@Override
 	public double valueForSample(int channel, long sample) {
 		final int bytesPerSample = getAudioFileFormat().getFormat().getFrameSize() / 
 				getAudioFileFormat().getFormat().getChannels();
@@ -404,13 +389,13 @@ public class PCMSampled implements Sampled {
 		return retVal;
 	}
 	
-	@Override
-	public byte[] getBytes(float startTime, float endTime) {
-		long startIdx = sampleForTime(startTime);
-		long endIdx = sampleForTime(endTime);
-		
-		return getBytes(startIdx, endIdx);
-	}
+//	@Override
+//	public byte[] getBytes(float startTime, float endTime) {
+//		long startIdx = sampleForTime(startTime);
+//		long endIdx = sampleForTime(endTime);
+//		
+//		return getBytes(startIdx, endIdx);
+//	}
 	
 	public byte[] getBytes(long firstSample, long lastSample) {
 		int offset = byteOffsetForFrame(firstSample);

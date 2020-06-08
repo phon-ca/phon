@@ -366,29 +366,33 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		return y;
 	}
 	
-	private void loadWaveformData(Sound snd, Channel ch, float startTime, float endTime) {
-		final RoundRectangle2D channelRect = getChannelRect(ch);
+	private void loadWaveformData(Sound snd, float startTime, float endTime) {
+		final RoundRectangle2D channelRect = getChannelRect(Channel.LEFT);
 		final double width = channelRect.getWidth();
 		final float secondsPerPixel = (float)(display.getLongSound().length() / width);
 		
 		float barSize = 1.0f;
 		
 		float time = 0.0f;
-		
 		double startX = display.xForTime(startTime);
 		double endX = display.xForTime(endTime);
 		
 		for(double x = startX; x < endX; x += barSize) {
 			time = (float)(x * secondsPerPixel);
 			
-			double[][] chExtrema = channelExtremaMap.get(ch);
+			synchronized (display.getLongSound()) {
+				double[][] allExtrema = snd.getWindowExtrema(time, time + secondsPerPixel);
 			
-			int idx = (int)(x - display.getChannelInsets().left);
-			double[] extrema = snd.getWindowExtrema(ch, time, time + secondsPerPixel);
-			chExtrema[0][idx] = extrema[0];
-			chExtrema[1][idx] = extrema[1];
-			
-			cachedMaxValue = Math.max(cachedMaxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
+				for(Channel ch:display.availableChannels()) {
+					double[][] chExtrema = channelExtremaMap.get(ch);
+					
+					int idx = (int)(x - display.getChannelInsets().left);
+					double[] extrema = allExtrema[ch.channelNumber()];
+					chExtrema[0][idx] = extrema[0];
+					chExtrema[1][idx] = extrema[1];
+					cachedMaxValue = Math.max(cachedMaxValue, Math.max(Math.abs(extrema[0]), Math.abs(extrema[1])));
+				}			
+			}
 		}
 	}
 	
@@ -412,11 +416,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				
 				final Sound snd = sound.extractPart(time, endTime);
 				
-				for(Channel ch:display.availableChannels()) {
-					if(!display.isChannelVisible(ch)) continue;
-					
-					loadWaveformData(snd, ch, time, endTime);
-				}
+				loadWaveformData(snd, time, endTime);
 				publish(new Tuple<>(time, endTime));
 				time = endTime;
 			}

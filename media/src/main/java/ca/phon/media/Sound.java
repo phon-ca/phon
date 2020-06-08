@@ -31,6 +31,6 @@ public interface Sound {
 	 * 
 	 * @return min/max values for specified range
 	 */
-	public double[] getWindowExtrema(Channel channel, float startTime, float endTime);
+	public double[][] getWindowExtrema(float startTime, float endTime);
 
 }

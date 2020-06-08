@@ -3,6 +3,10 @@ package ca.phon.media.sampled;
 import java.io.File;
 import java.io.IOException;
 
+import ca.phon.audio.AudioFile;
+import ca.phon.audio.AudioFiles;
+import ca.phon.audio.InvalidHeaderException;
+import ca.phon.audio.UnsupportedFormatException;
 import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
 import ca.phon.media.PlaySegment;
@@ -10,7 +14,7 @@ import ca.phon.media.Sound;
 
 public class SampledLongSound extends LongSound {
 	
-	private PCMSampled sampled;
+	private Sampled sampled;
 	
 	private File file;
 	
@@ -18,10 +22,18 @@ public class SampledLongSound extends LongSound {
 		super(file);
 		this.file = file;
 		
-		this.sampled = new PCMSampled(file);
+		AudioFile audioFile;
+		try {
+			audioFile = AudioFiles.openAudioFile(file);
+			this.sampled = new AudioFileSampled(audioFile);
+		} catch (UnsupportedFormatException | InvalidHeaderException e) {
+			throw new IOException(e);
+		}
 		
-		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
-		putExtension(ExportSegment.class, new SampledExportSegment(sampled));
+//		this.sampled = new PCMSampled(file);
+		
+//		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
+//		putExtension(ExportSegment.class, new SampledExportSegment(sampled));
 	}
 	
 	public Sampled getSampled() {
@@ -75,8 +87,8 @@ public class SampledLongSound extends LongSound {
 		}
 
 		@Override
-		public double[] getWindowExtrema(Channel channel, float startTime, float endTime) {
-			return sampled.getWindowExtrema(channel.channelNumber(), startTime, endTime);
+		public double[][] getWindowExtrema(float startTime, float endTime) {
+			return sampled.getWindowExtrema(startTime, endTime);
 		}
 		
 	}

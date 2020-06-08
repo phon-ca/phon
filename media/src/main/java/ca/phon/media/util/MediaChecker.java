@@ -144,12 +144,6 @@ public class MediaChecker {
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(new File(outputfile), true), true)) {
 			try {
 				LongSound ls = LongSound.fromFile(new File(mediafile));
-				if(ls instanceof SampledLongSound) {
-					SampledLongSound sls = (SampledLongSound)ls;
-					if(((PCMSampled)sls.getSampled()).getAudioFileFormat().getFormat().getSampleSizeInBits() != 16) {
-						throw new IOException(String.format("%s invalid format", args[0]));
-					}
-				}
 				writer.println("OK");
 			} catch (IOException e) {
 				writer.println("ERROR " + e.getLocalizedMessage());
