@@ -92,7 +92,7 @@ public class AudioIO {
 			checkWavHeaders(is, info);
 			
 			// fix data chunk size if necessary
-			if(info.getDataChunkSize() > Integer.MAX_VALUE - 100) { // incorrect data chunk (sometimes -44); assume that the data run till the end of the file
+			if(info.getDataChunkSize() <= 0) { // incorrect data chunk (sometimes -44); assume that the data run till the end of the file
 				long fileLength = file.length();
 				long chunkSize = (fileLength - info.getDataOffset());
 				info.setDataChunkSize(chunkSize);
@@ -653,6 +653,13 @@ public class AudioIO {
 		default:
 			throw new UnsupportedFormatException();
 		}
+	}
+	
+	public static byte[] encodeFrame(double[] samples, AudioFileEncoding encoding) throws UnsupportedFormatException, BufferUnderflowException {
+		int frameSize = samples.length * encoding.getBytesPerSample();
+		byte[] retVal = new byte[frameSize];
+		encodeFrame(samples, encoding, retVal, 0);
+		return retVal;
 	}
 	
 	/**
