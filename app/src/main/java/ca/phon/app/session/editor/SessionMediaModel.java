@@ -12,10 +12,12 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
+import ca.phon.audio.AudioIO;
+import ca.phon.audio.AudioIOException;
 import ca.phon.media.LongSound;
-import ca.phon.media.util.MediaChecker;
-import ca.phon.media.util.MediaLocator;
+import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -122,7 +124,14 @@ public class SessionMediaModel {
 			File audioFile = getSessionAudioFile();
 			if(audioFile != null) {
 				checkLock.lock();
-				boolean fileOk = MediaChecker.checkMediaFile(audioFile.getAbsolutePath());
+				boolean fileOk = false;
+				String err = "";
+				try {
+					AudioIO.checkHeaders(audioFile);
+				} catch (AudioIOException | IOException e) {
+					LogUtil.warning(e);
+					err = e.getLocalizedMessage();
+				}
 				audioFileStatus = (fileOk ? AudioFileStatus.OK : AudioFileStatus.ERROR);
 				checkLock.unlock();
 				
@@ -131,8 +140,8 @@ public class SessionMediaModel {
 					props.setParentWindow(getEditor());
 					String[] options = {"Re-encode audio", "Do nothing"};
 					props.setOptions(options);
-					props.setHeader("Audio File Encoding");
-					props.setMessage("There may be a problem with Phon opening this file.");
+					props.setHeader("Audio File Error");
+					props.setMessage("There was an issue reading this audio file: " + err);
 					props.setRunAsync(true);
 					props.setListener(new NativeDialogListener() {
 						

@@ -20,8 +20,6 @@ import org.apache.logging.log4j.core.time.PreciseClock;
  * An audio file. For a list of supported file types see {@link AudioFileType}.
  * For a list of supported encodings see {@link AudioFileEncoding}
  * 
- * This class is heavily based on code from the Praat open-source
- * software program - melder/melder_audiofiles.cpp.
  */
 public final class AudioFile implements AutoCloseable, Closeable {
 

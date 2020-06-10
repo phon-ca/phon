@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import ca.phon.app.project.NewSessionDialog;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.media.util.MediaLocator;
+import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 

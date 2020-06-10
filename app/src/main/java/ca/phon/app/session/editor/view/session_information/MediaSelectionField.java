@@ -38,7 +38,7 @@ import javax.swing.SwingUtilities;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.media.util.MediaLocator;
+import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;

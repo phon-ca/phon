@@ -69,7 +69,7 @@ import ca.phon.app.session.editor.view.session_information.actions.AssignUnident
 import ca.phon.app.session.editor.view.session_information.actions.DeleteParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.EditParticipantAction;
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
-import ca.phon.media.util.MediaLocator;
+import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
