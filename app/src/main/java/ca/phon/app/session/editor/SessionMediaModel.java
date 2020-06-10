@@ -128,6 +128,7 @@ public class SessionMediaModel {
 				String err = "";
 				try {
 					AudioIO.checkHeaders(audioFile);
+					fileOk = true;
 				} catch (AudioIOException | IOException e) {
 					LogUtil.warning(e);
 					err = e.getLocalizedMessage();
