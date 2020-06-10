@@ -28,10 +28,8 @@ public class SampledLongSound extends LongSound {
 			throw new IOException(e);
 		}
 		
-//		this.sampled = new PCMSampled(file);
-		
 		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
-//		putExtension(ExportSegment.class, new SampledExportSegment(sampled));
+		putExtension(ExportSegment.class, new SampledExportSegment(sampled, audioFile.getAudioFileType(), audioFile.getAudioFileEncoding()));
 	}
 	
 	public Sampled getSampled() {

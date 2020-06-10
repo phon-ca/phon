@@ -7,22 +7,10 @@ public class AudioFileSampled implements Sampled {
 
 	private final AudioFile audioFile;
 	
-	private float startTime = 0.0f;
-	
-	private float endTime = 0.0f;
-	
 	public AudioFileSampled(AudioFile audioFile) {
 		this.audioFile = audioFile;
-		this.startTime = 0.0f;
-		this.endTime = audioFile.getLength();
 	}
-	
-	public AudioFileSampled(AudioFile audioFile, float startTime, float endTime) {
-		this.audioFile = audioFile;
-		this.startTime = startTime;
-		this.endTime = endTime;
-	}
-	
+		
 	@Override
 	public int getNumberOfChannels() {
 		return audioFile.getNumberOfChannels();
@@ -66,12 +54,12 @@ public class AudioFileSampled implements Sampled {
 
 	@Override
 	public float getStartTime() {
-		return startTime;
+		return 0.0f;
 	}
 
 	@Override
 	public float getEndTime() {
-		return endTime;
+		return (float)(getNumberOfSamples() / getSampleRate());
 	}
 
 	@Override
@@ -93,8 +81,7 @@ public class AudioFileSampled implements Sampled {
 
 	@Override
 	public double minimumValue(int channel, int firstSample, int lastSample) {
-		double[] extrema = getWindowExtrema(channel, startTime, endTime);
-		return extrema[0];
+		return 0.0;
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 
+import ca.phon.audio.AudioFileEncoding;
+import ca.phon.audio.AudioFileType;
 import ca.phon.extensions.Extension;
 
 /**
@@ -75,5 +77,9 @@ public abstract class ExportSegment {
 	 * @throws IOException
 	 */
 	public abstract void exportSegment(File file, float startTime, float endTime) throws IOException;
+	
+	public abstract AudioFileType getFileType();
+	
+	public abstract AudioFileEncoding getEncoding();
 		
 }

@@ -2,12 +2,17 @@ package ca.phon.audio;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.math.BigDecimal;
 import java.nio.BufferUnderflowException;
+import java.util.Arrays;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.FilenameUtils;
 
 public class AudioIO {
 	
@@ -17,6 +22,8 @@ public class AudioIO {
 	private final static int WAVE_FORMAT_MULAW = 0x0007;
 	private final static int WAVE_FORMAT_DVI_ADPCM = 0x0011;
 	private final static int WAVE_FORMAT_EXTENSIBLE = 0xFFFE;
+	
+	private final static byte[] WAVE_SUBFORMAT_DATA = { 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, (byte)(0x80), 0x00, 0x00, (byte)0xAA, 0x00, 0x38, (byte)0x9b, 0x71 };
 	
 	private static int ulaw2linear[] = { -32124, -31100, -30076, -29052, -28028, -27004, -25980, -24956, -23932, -22908, -21884,
 			-20860, -19836, -18812, -17788, -16764, -15996, -15484, -14972, -14460, -13948, -13436, -12924, -12412,
@@ -420,7 +427,86 @@ public class AudioIO {
 		if(!commonChunkPresent) throw new InvalidHeaderException("Found no common chunk.");
 		if(!dataChunkPresent) throw new InvalidHeaderException("Found no data chunk.");
 	}
+	
+	private static AudioFileType typeFromFilename(File file) throws UnsupportedFormatException {
+		String ext = FilenameUtils.getExtension(file.getName());
+		if(ext == null || ext.length() == 0) throw new UnsupportedFormatException("Unable to determine file type - no extension given");
+		
+		for(AudioFileType type:AudioFileType.values()) {
+			int idx = Arrays.binarySearch(type.getExtensions(), ext);
+			if(idx >= 0)
+				return type;
+		}
+		throw new UnsupportedFormatException("Unable to determine file type from extension: " + ext);
+	}
+	public static void writeSamplesToFile(Sampled samples, int firstSample, int numSamples, AudioFileEncoding encoding, File file) throws IOException, AudioIOException {
+		writeSamplesToFile(samples, firstSample, numSamples, typeFromFilename(file), encoding, file);
+	}
+	
+	public static void writeSamplesToFile(Sampled samples, int firstSample, int numSamples, AudioFileType fileType, AudioFileEncoding encoding, File file) throws IOException, AudioIOException {
+		FileOutputStream fout = new FileOutputStream(file);
+		writeHeaders(samples, numSamples, fileType, encoding, fout);
+		writeSamples(samples, firstSample, numSamples, encoding, fout);
+		
+		fout.flush();
+		fout.close();
+	}
+	
+	private static void writeHeaders(Sampled samples, int numSamples, AudioFileType fileType, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		switch(fileType) {
+		case WAV:
+			writeWavHeaders(samples, numSamples, encoding, os);
+			break;
+			
+		default:
+			throw new UnsupportedFormatException();
+		}
+	}
+	
+	private static void writeWavHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		boolean needsExtensibleFormat = 
+				encoding.getBitsPerSample() > 16 ||
+				samples.getNumberOfChannels() > 2 ||
+				encoding.getBitsPerSample() != encoding.getBytesPerSample() * 8;
+		int formatSize = needsExtensibleFormat ? 40 : 16;
+		long dataSize = numSamples * samples.getNumberOfChannels() * encoding.getBytesPerSample();
+		
+		byte[] bytes = "RIFF".getBytes();
+		os.write(bytes);
+		long sizeOfRiffChunk = 4 + (12 + formatSize) + (4 + dataSize);
+		writeIntLE((int)sizeOfRiffChunk, os);
+		
+		bytes = "WAVE".getBytes();
+		os.write(bytes);
+		bytes = "fmt ".getBytes();
+		os.write(bytes);
+		writeIntLE(formatSize, os);
+		writeShortLE(needsExtensibleFormat ? (short)WAVE_FORMAT_EXTENSIBLE : (short)WAVE_FORMAT_PCM , os);
+		writeShortLE((short)samples.getNumberOfChannels(), os);
+		writeIntLE((int)samples.getSampleRate(), os);
+		writeIntLE((int)(samples.getSampleRate() * encoding.getBytesPerSample() * samples.getNumberOfChannels()), os);  // avg bytes per sec
+		writeShortLE((short)(encoding.getBytesPerSample() * samples.getNumberOfChannels()), os); // block alignment
+		writeShortLE((short)(encoding.getBytesPerSample() * 8), os); // padded bits per sample
+		if(needsExtensibleFormat) {
+			writeShortLE((short)(22), os); // ext size
+			writeShortLE((short)encoding.getBitsPerSample(), os);
+			writeIntLE(0, os); // speaker position mark
+			writeIntLE(WAVE_FORMAT_PCM, os);
+			os.write(WAVE_SUBFORMAT_DATA);
+		}
+		os.write("data".getBytes());
+		writeIntLE((int)dataSize, os);
+	}
 
+	public static int writeSamples(Sampled samples, int firstSample, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, AudioIOException {
+		int numBytesRequired = samples.getNumberOfChannels() * numSamples * encoding.getBytesPerSample();
+		int frameSize = samples.getNumberOfChannels() * encoding.getBytesPerSample();
+		byte[] buffer = new byte[numBytesRequired];
+		int samplesWritten = writeSamples(samples, firstSample, numSamples, encoding, buffer, 0);
+		os.write(buffer, 0, samplesWritten * frameSize);
+		return samplesWritten;
+	}
+	
 	/**
 	 * Write numSamples from Sampled starting at firstSample
 	 * into the buffer starting at offset
@@ -1054,7 +1140,7 @@ public class AudioIO {
 			((long)data[offset + 7] & 0xFF) << 16 | 
 			((long)data[offset + 8] & 0xFF) << 8 |
 			((long)data[offset + 9] & 0xFF));
-		
+				
 		double x = Double.NaN;
 		if(exp == 0 && highMantissa == 0 && lowMantissa == 0) x = 0.0;
 		else if(exp == 0x00007FFF) return Double.NaN;
@@ -1192,7 +1278,7 @@ public class AudioIO {
 	}
 	
 	static void putDouble(double value, byte[] buffer, int offset) throws BufferUnderflowException {
-		if(buffer.length < offset + 4) throw new BufferUnderflowException();
+		if(buffer.length < offset + 8) throw new BufferUnderflowException();
 		
 		long bits = Double.doubleToRawLongBits(value);
 		buffer[offset] = (byte)((bits >> 56) & 0xff);
@@ -1212,7 +1298,7 @@ public class AudioIO {
 	}
 	
 	static void putDoubleLE(double value, byte[] buffer, int offset) throws BufferUnderflowException {
-		if(buffer.length < offset + 4) throw new BufferUnderflowException();
+		if(buffer.length < offset + 8) throw new BufferUnderflowException();
 		
 		long bits = Double.doubleToRawLongBits(value);
 		buffer[offset+7] = (byte)((bits >> 56) & 0xff);
@@ -1223,6 +1309,35 @@ public class AudioIO {
 		buffer[offset+2] = (byte)((bits >> 16) & 0xff);
 		buffer[offset+1] = (byte)((bits >> 8) & 0xff);
 		buffer[offset] = (byte)(bits & 0xff);
+	}
+	
+	static void writeLongDouble(double value, OutputStream os) throws IOException {
+		byte[] bytes = new byte[10];
+		putDoubleLE(value, bytes, 0);
+		os.write(bytes);
+	}
+	
+	static void putLongDouble(double value, byte[] buffer, int offset) throws BufferUnderflowException {
+		if(buffer.length < offset + 10) throw new BufferUnderflowException();
+		
+		long bits = Double.doubleToRawLongBits(value);
+		
+		int exp = (int)(((long)bits >> 52) & 0x07ff);
+		byte sign = (byte)(((long)bits >> 63) & 0x01);
+		exp |= (sign << 15);
+		
+		long fraction = (long)(bits & 0x000FFFFFFFFFFFFFL);
+		
+		buffer[offset+9] = (byte)((exp >> 8) | 0xff);
+		buffer[offset+8] = (byte)(exp | 0xff);
+		buffer[offset+7] = (byte)((fraction >> 56) & 0xff);
+		buffer[offset+6] = (byte)((fraction >> 48) & 0xff);
+		buffer[offset+5] = (byte)((fraction >> 40) & 0xff);
+		buffer[offset+4] = (byte)((fraction >> 32) & 0xff);
+		buffer[offset+3] = (byte)((fraction >> 24) & 0xff);
+		buffer[offset+2] = (byte)((fraction >> 16) & 0xff);
+		buffer[offset+1] = (byte)((fraction >> 8) & 0xff);
+		buffer[offset] = (byte)(fraction & 0xff);
 	}
 	
 }

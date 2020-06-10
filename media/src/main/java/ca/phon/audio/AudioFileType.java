@@ -5,9 +5,9 @@ package ca.phon.audio;
  *
  */
 public enum AudioFileType {
-	AIFF(".aiff", ".aif"),
-	AIFC(".aifc", ".aic"),
-	WAV(".wav");
+	AIFF("aiff", "aif"),
+	AIFC("aifc", "aic"),
+	WAV("wav");
 	
 	String[] extensions;
 	
