@@ -95,7 +95,7 @@ public class TestAudioFileHeaders {
 		Assert.assertNotNull(audioFileURL);
 		
 		try {
-			AudioFile audioFile = AudioFiles.openAudioFile(new File(audioFileURL.toURI()));
+			AudioFile audioFile = AudioIO.openAudioFile(new File(audioFileURL.toURI()));
 			
 			Assert.assertEquals(this.audioFileType, audioFile.getAudioFileType());
 			Assert.assertEquals(this.audioFileEncoding, audioFile.getAudioFileEncoding());

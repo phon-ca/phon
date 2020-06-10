@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import ca.phon.audio.AudioFile;
 import ca.phon.audio.AudioFileSampled;
-import ca.phon.audio.AudioFiles;
+import ca.phon.audio.AudioIO;
 import ca.phon.audio.InvalidHeaderException;
 import ca.phon.audio.Sampled;
 import ca.phon.audio.UnsupportedFormatException;
@@ -22,7 +22,7 @@ public class SampledLongSound extends LongSound {
 		
 		AudioFile audioFile;
 		try {
-			audioFile = AudioFiles.openAudioFile(file);
+			audioFile = AudioIO.openAudioFile(file);
 			this.sampled = new AudioFileSampled(audioFile);
 		} catch (UnsupportedFormatException | InvalidHeaderException e) {
 			throw new IOException(e);
@@ -30,7 +30,7 @@ public class SampledLongSound extends LongSound {
 		
 //		this.sampled = new PCMSampled(file);
 		
-//		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
+		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
 //		putExtension(ExportSegment.class, new SampledExportSegment(sampled));
 	}
 	

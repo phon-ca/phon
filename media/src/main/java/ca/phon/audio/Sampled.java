@@ -15,6 +15,8 @@
  */
 package ca.phon.audio;
 
+import java.io.IOException;
+
 public interface Sampled {
 	
 	/**
@@ -29,7 +31,7 @@ public interface Sampled {
 	 * 
 	 * @return number of samples
 	 */
-	public long getNumberOfSamples();
+	public int getNumberOfSamples();
 	
 	/**
 	 * Get sample rate.
@@ -44,7 +46,7 @@ public interface Sampled {
 	 * @param channel
 	 * @param sample index
 	 */
-	public double valueForSample(int channel, long sample);
+	public double valueForSample(int channel, int sample);
 	
 	/**
 	 * Convert a time value to a sample index
@@ -53,7 +55,7 @@ public interface Sampled {
 	 * 
 	 * @return sample index or -1 if time is outside Sampled data range
 	 */
-	public long sampleForTime(float time);
+	public int sampleForTime(float time);
 	
 	/**
 	 * Get value for specified time
@@ -100,7 +102,7 @@ public interface Sampled {
 	 * 
 	 * @return maximum value for specified range
 	 */
-	public double maximumValue(int channel, long firstSample, long lastSample);
+	public double maximumValue(int channel, int firstSample, int lastSample);
 	
 	/**
 	 * Get the maximum value for the specified time range
@@ -122,9 +124,11 @@ public interface Sampled {
 	 * 
 	 * @return minimum value for specified range
 	 */
-	public double minimumValue(int channel, long firstSample, long lastSample);
+	public double minimumValue(int channel, int firstSample, int lastSample);
 	
-	public double[][] getWindowExtrema(long firstSample, long lastSample);
+	public int loadSampleData(double[][] buffer, int offset, int firstSample, int numSamples);
+	
+	public double[][] getWindowExtrema(int firstSample, int lastSample);
 	
 	public double[][] getWindowExtrema(float startTime, float endTime);
 	
@@ -138,7 +142,7 @@ public interface Sampled {
 	 * 
 	 * @return min/max values for range
 	 */
-	public double[] getWindowExtrema(int channel, long firstSample, long lastSample);
+	public double[] getWindowExtrema(int channel, int firstSample, int lastSample);
 	
 	/**
 	 * Get min/max values for specified window
@@ -148,7 +152,7 @@ public interface Sampled {
 	 * @param ladSample
 	 * @param extrema
 	 */
-	public void getWindowExtrema(int channel, long firstSample, long lastSample, double[] extrema);
+	public void getWindowExtrema(int channel, int firstSample, int lastSample, double[] extrema);
 	
 	
 	/**

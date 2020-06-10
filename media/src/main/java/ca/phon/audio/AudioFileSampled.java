@@ -1,6 +1,7 @@
 package ca.phon.audio;
 
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 
 public class AudioFileSampled implements Sampled {
 
@@ -28,8 +29,8 @@ public class AudioFileSampled implements Sampled {
 	}
 
 	@Override
-	public long getNumberOfSamples() {
-		return audioFile.getNumberOfSamples();
+	public int getNumberOfSamples() {
+		return (int)audioFile.getNumberOfSamples();
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class AudioFileSampled implements Sampled {
 	}
 
 	@Override
-	public double valueForSample(int channel, long sample) {
+	public double valueForSample(int channel, int sample) {
 		double[][] buffer = new double[getNumberOfChannels()][];
 		for(int i = 0; i < getNumberOfChannels(); i++) {
 			buffer[i] = new double[1];
@@ -54,7 +55,7 @@ public class AudioFileSampled implements Sampled {
 	}
 
 	@Override
-	public long sampleForTime(float time) {
+	public int sampleForTime(float time) {
 		return audioFile.sampleIndexForTime(time);
 	}
 
@@ -79,7 +80,7 @@ public class AudioFileSampled implements Sampled {
 	}
 
 	@Override
-	public double maximumValue(int channel, long firstSample, long lastSample) {
+	public double maximumValue(int channel, int firstSample, int lastSample) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -91,20 +92,20 @@ public class AudioFileSampled implements Sampled {
 	}
 
 	@Override
-	public double minimumValue(int channel, long firstSample, long lastSample) {
+	public double minimumValue(int channel, int firstSample, int lastSample) {
 		double[] extrema = getWindowExtrema(channel, startTime, endTime);
 		return extrema[0];
 	}
 
 	@Override
-	public double[] getWindowExtrema(int channel, long firstSample, long lastSample) {
+	public double[] getWindowExtrema(int channel, int firstSample, int lastSample) {
 		double[] retVal = new double[2];
 		getWindowExtrema(channel, firstSample, lastSample, retVal);
 		return retVal;
 	}
 
 	@Override
-	public void getWindowExtrema(int channel, long firstSample, long lastSample, double[] extrema) {
+	public void getWindowExtrema(int channel, int firstSample, int lastSample, double[] extrema) {
 		int numSamples = (int)(lastSample - firstSample);
 		if(numSamples < 0) throw new ArrayIndexOutOfBoundsException();
 		
@@ -130,7 +131,7 @@ public class AudioFileSampled implements Sampled {
 	}
 	
 	@Override
-	public double[][] getWindowExtrema(long firstSample, long lastSample) {
+	public double[][] getWindowExtrema(int firstSample, int lastSample) {
 		int numSamples = (int)(lastSample - firstSample);
 		double[][] retVal = new double[getNumberOfChannels()][];
 		for(int i = 0; i < getNumberOfChannels(); i++) {
@@ -142,17 +143,12 @@ public class AudioFileSampled implements Sampled {
 			data[i] = new double[numSamples];
 		}
 		
-		try {
-			audioFile.seekToSample(firstSample);
-			audioFile.readSamples(data, 0, numSamples);
-			
-			for(int isamp = 0; isamp < numSamples; isamp++) {
-				for(int ichan = 0; ichan < getNumberOfChannels(); ichan++) {
-					retVal[ichan][0] = Math.min(retVal[ichan][0], data[ichan][isamp]);
-					retVal[ichan][1] = Math.max(retVal[ichan][1], data[ichan][isamp]);
-				}
+		loadSampleData(data, 0, firstSample, numSamples);
+		for(int isamp = 0; isamp < numSamples; isamp++) {
+			for(int ichan = 0; ichan < getNumberOfChannels(); ichan++) {
+				retVal[ichan][0] = Math.min(retVal[ichan][0], data[ichan][isamp]);
+				retVal[ichan][1] = Math.max(retVal[ichan][1], data[ichan][isamp]);
 			}
-		} catch (IOException e) {
 		}
 		
 		return retVal;
@@ -166,6 +162,16 @@ public class AudioFileSampled implements Sampled {
 	@Override
 	public void getWindowExtrema(int channel, float startTime, float endTime, double[] extrema) {
 		getWindowExtrema(channel, sampleForTime(startTime), sampleForTime(endTime), extrema);
+	}
+
+	@Override
+	public int loadSampleData(double[][] buffer, int offset, int firstSample, int numSamples)  {
+		try {
+			audioFile.seekToSample(firstSample);
+			return audioFile.readSamples(buffer, offset, numSamples);
+		} catch (IOException e) {
+			return 0;
+		}
 	}
 
 }

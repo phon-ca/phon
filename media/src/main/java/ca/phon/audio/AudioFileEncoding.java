@@ -45,4 +45,37 @@ public enum AudioFileEncoding {
 		return bytesPerSample;
 	}
 	
+	public int getBitsPerSample() {
+		switch(this) {
+		case MULAW:
+		case ALAW:
+		case LINEAR_8_SIGNED:
+		case LINEAR_8_UNSIGNED:
+			return 8;
+			
+		case LINEAR_12_BIG_ENDIAN:
+		case LINEAR_12_LITTLE_ENDIAN:
+			return 12;
+			
+		case LINEAR_16_BIG_ENDIAN:
+		case LINEAR_16_LITTLE_ENDIAN:
+			return 16;
+			
+		case LINEAR_24_LITTLE_ENDIAN:
+		case LINEAR_24_BIG_ENDIAN:
+			return 24;
+			
+		case LINEAR_32_BIG_ENDIAN:
+		case LINEAR_32_LITTLE_ENDIAN:
+		case IEEE_FLOAT_32_BIG_ENDIAN:
+		case IEEE_FLOAT_32_LITTLE_ENDIAN:
+			return 32;
+			
+		case IEEE_FLOAT_64_BIG_ENDIAN:
+		case IEEE_FLOAT_64_LITTLE_ENDIAN:
+			return 64;
+		}
+		return 0;
+	}
+	
 }

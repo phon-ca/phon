@@ -1,4 +1,4 @@
-package ca.phon.media.sampled;
+package ca.phon.media;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -19,8 +20,10 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Mixer.Info;
 import javax.swing.SwingWorker;
 
+import ca.phon.audio.AudioFileEncoding;
+import ca.phon.audio.AudioIO;
+import ca.phon.audio.AudioIOException;
 import ca.phon.audio.Sampled;
-import ca.phon.media.PlaySegment;
 
 public class SampledPlaySegment extends PlaySegment {
 	
@@ -49,9 +52,8 @@ public class SampledPlaySegment extends PlaySegment {
 	}
 	
 	public AudioFormat getAudioFormat() {
-		final AudioFormat format = new AudioFormat(getSampled().getSampleRate(), 
-				getSampled().getSampleSize(), getSampled().getNumberOfChannels(), 
-				getSampled().isSigned(), false);
+		final AudioFormat format = new AudioFormat(Encoding.PCM_SIGNED, sampled.getSampleRate(),
+				AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN.getBitsPerSample(), sampled.getNumberOfChannels(), sampled.getNumberOfChannels() * AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN.getBytesPerSample(), sampled.getSampleRate(), false);
 		return format;
 	}
 	
@@ -109,7 +111,19 @@ public class SampledPlaySegment extends PlaySegment {
 		if(isPlaying()) return;
 		
 		AudioFormat format = getAudioFormat();
-		final byte[] audioData = getSampled().getBytes(startTime, endTime);
+		
+		int firstSample = sampled.sampleForTime(startTime);
+		int lastSample = sampled.sampleForTime(endTime);
+		int numSamples = lastSample - firstSample;
+		
+		int numBytesRequired = numSamples * format.getFrameSize();
+		byte[] audioData = new byte[numBytesRequired];
+		try {
+			AudioIO.writeSamples(sampled, firstSample, numSamples, AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN, audioData, 0);
+		} catch (AudioIOException e1) {
+			throw new IOException(e1);
+		}
+		
 		AudioInputStream ais = new AudioInputStream(new ByteArrayInputStream(audioData), format, audioData.length);
 		try {
 			final boolean canPlayFormat = canPlayAudioFormat(getMixerInfo(), format);

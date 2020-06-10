@@ -9,6 +9,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
 import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.media.LongSound;
 import ca.phon.media.util.MediaChecker;
@@ -184,19 +187,24 @@ public class SessionMediaModel {
 			MediaLocator.findMediaFile(getSession().getMediaLocation(), getProject(), getSession().getCorpus());
 
 		if(selectedMedia != null) {
-			File parentFile = selectedMedia.getParentFile();
-			audioFile = new File(parentFile, mediaName + ".wav");
-
-			boolean foundFile = false;
-			for(String ext:getAudioFileExtensions()) {
-				audioFile = new File(parentFile, mediaName + ext);
-				if(audioFile.exists()) {
-					foundFile = true;
-					break;
+			String ext = FilenameUtils.getExtension(selectedMedia.getName());
+			
+			if(getAudioFileExtensions().contains("." + ext)) {
+				return selectedMedia;
+			} else {
+				File parentFile = selectedMedia.getParentFile();
+	
+				boolean foundFile = false;
+				for(String ex:getAudioFileExtensions()) {
+					audioFile = new File(parentFile, mediaName + ex);
+					if(audioFile.exists()) {
+						foundFile = true;
+						break;
+					}
 				}
+				if(!foundFile)
+					audioFile = null;
 			}
-			if(!foundFile)
-				audioFile = null;
 		}
 		return audioFile;
 	}
@@ -207,7 +215,7 @@ public class SessionMediaModel {
 	 * @return list of valid audio file extensions
 	 */
 	public List<String> getAudioFileExtensions() {
-		return List.of(".wav", ".WAV", ".aif", ".AIF", ".aiff", ".AIFF", ".aifc", ".AIFC");
+		return List.of(".aif", ".AIF", ".aiff", ".AIFF", ".aifc", ".AIFC", ".wav", ".WAV");
 	}
 	
 	/**
