@@ -141,7 +141,8 @@ public class SessionMediaModel {
 					String[] options = {"Re-encode audio", "Do nothing"};
 					props.setOptions(options);
 					props.setHeader("Audio File Error");
-					props.setMessage("There was an issue reading this audio file: " + err);
+					props.setMessage("There was an issue reading this audio file." +
+					 (err.length() > 0 ? " The reported issue was " + err : " See log for more details."));
 					props.setRunAsync(true);
 					props.setListener(new NativeDialogListener() {
 						
