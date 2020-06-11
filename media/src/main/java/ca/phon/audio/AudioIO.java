@@ -491,7 +491,7 @@ public class AudioIO {
 			writeShortLE((short)(22), os); // ext size
 			writeShortLE((short)encoding.getBitsPerSample(), os);
 			writeIntLE(0, os); // speaker position mark
-			writeIntLE(WAVE_FORMAT_PCM, os);
+			writeShortLE((short)WAVE_FORMAT_PCM, os);
 			os.write(WAVE_SUBFORMAT_DATA);
 		}
 		os.write("data".getBytes());

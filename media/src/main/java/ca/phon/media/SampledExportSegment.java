@@ -23,7 +23,7 @@ public class SampledExportSegment extends ExportSegment {
 		super();
 		
 		this.samples = samples;
-		this.fileType = fileType;
+		this.fileType = type;
 		this.encoding = encoding;
 	}
 	
@@ -32,7 +32,7 @@ public class SampledExportSegment extends ExportSegment {
 		try {
 			AudioIO.writeSamplesToFile(samples, samples.sampleForTime(startTime),
 					samples.sampleForTime(endTime) - samples.sampleForTime(startTime),
-					AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN, file);
+					fileType, encoding, file);
 		} catch (AudioIOException e) {
 			throw new IOException(e);
 		}

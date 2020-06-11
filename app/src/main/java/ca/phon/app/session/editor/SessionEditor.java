@@ -71,6 +71,7 @@ import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.actions.PreviousRecordAction;
 import ca.phon.app.session.editor.actions.SaveAsAction;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
+import ca.phon.app.session.editor.actions.ShowMediaInfoAction;
 import ca.phon.app.session.editor.actions.SortRecordsAction;
 import ca.phon.app.session.editor.actions.UnassignMediaAction;
 import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
@@ -476,6 +477,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
 				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
 				mediaMenu.add(genAudioItem);
+				mediaMenu.add(new ShowMediaInfoAction(SessionEditor.this));
 				mediaMenu.addSeparator();
 				
 				boolean enabled = (mediaModel.isSessionAudioAvailable() || 
