@@ -43,6 +43,10 @@ public class ExportSegmentAction extends SessionEditorAction {
 	
 	private String outputPath = null;
 
+	private final FileFilter wavFilter = FileFilter.wavFilter;
+	private final FileFilter aifFilter = 
+			new FileFilter("Aif files (*.aif;*.aiff;*.aifc)", "aif;aiff;aifc");
+	
 	public ExportSegmentAction(SessionEditor editor) {
 		this(editor, SegmentType.CURRENT_RECORD);
 		
@@ -131,6 +135,34 @@ public class ExportSegmentAction extends SessionEditorAction {
 	public void setOutputPath(String outputPath) {
 		this.outputPath = outputPath;
 	}
+	
+	private ExportSegment getExportSegment() throws IOException {
+		SessionMediaModel mediaModel = getEditor().getMediaModel();
+		if(!mediaModel.isSessionAudioAvailable()) return null;
+		
+		LongSound sharedSound = mediaModel.getSharedSessionAudio();
+		if(sharedSound == null) return null;
+		
+		ExportSegment exportSegment = sharedSound.getExtension(ExportSegment.class);
+		return exportSegment;
+	}
+	
+	private FileFilter getFileFilter() {
+		try {
+			ExportSegment exportSegment = getExportSegment();
+			if(exportSegment != null) {
+				switch(exportSegment.getFileType()) {
+				case WAV:
+					return wavFilter;
+					
+				case AIFF:
+				case AIFC:
+					return aifFilter;
+				}
+			}
+		} catch (IOException e) {}
+		return wavFilter;
+	}
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
@@ -138,7 +170,7 @@ public class ExportSegmentAction extends SessionEditorAction {
 			SaveDialogProperties saveProps = new SaveDialogProperties();
 			saveProps.setParentWindow(getEditor());
 			saveProps.setCanCreateDirectories(true);
-			saveProps.setFileFilter(FileFilter.wavFilter);
+			saveProps.setFileFilter(getFileFilter());
 			saveProps.setMessage("Export audio");
 			saveProps.setTitle("Export audio segment");
 			saveProps.setRunAsync(true);
@@ -178,17 +210,13 @@ public class ExportSegmentAction extends SessionEditorAction {
 			
 			MediaSegment mediaSegment = getMediaSegment();
 			if(mediaSegment != null) {
-				SessionMediaModel mediaModel = getEditor().getMediaModel();
-				if(!mediaModel.isSessionAudioAvailable()) return;
-				
-				try {
-					LongSound sharedSound = mediaModel.getSharedSessionAudio();
-					if(sharedSound == null) return;
-					
-					ExportSegment exportSegment = sharedSound.getExtension(ExportSegment.class);
-					if(exportSegment == null) return;
-							
+				try {					
+					ExportSegment exportSegment = getExportSegment();
+					if(exportSegment == null) throw new IOException("Export segment extension not found");
 					exportSegment.exportSegment(outputFile, mediaSegment.getStartValue() / 1000.0f, mediaSegment.getEndValue() / 1000.0f);
+					
+					// TODO report done
+					
 				} catch (IOException e) {
 					LogUtil.severe(e);
 					super.err = e;

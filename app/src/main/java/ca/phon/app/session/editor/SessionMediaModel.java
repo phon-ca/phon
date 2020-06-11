@@ -200,7 +200,7 @@ public class SessionMediaModel {
 		if(selectedMedia != null) {
 			String ext = FilenameUtils.getExtension(selectedMedia.getName());
 			
-			if(getAudioFileExtensions().contains("." + ext)) {
+			if(getAudioFileExtensions().contains(ext)) {
 				return selectedMedia;
 			} else {
 				File parentFile = selectedMedia.getParentFile();
@@ -221,12 +221,12 @@ public class SessionMediaModel {
 	}
 	
 	/**
-	 * Return a list of valid audio file extensions (including the '.')
+	 * Return a list of valid audio file extensions (excluding the '.')
 	 * 
 	 * @return list of valid audio file extensions
 	 */
 	public List<String> getAudioFileExtensions() {
-		return List.of(".aif", ".AIF", ".aiff", ".AIFF", ".aifc", ".AIFC", ".wav", ".WAV");
+		return List.of("aif", "AIF", "aiff", "AIFF", "aifc", "AIFC", "wav", "WAV");
 	}
 	
 	/**
