@@ -207,7 +207,7 @@ public class SessionMediaModel {
 	
 				boolean foundFile = false;
 				for(String ex:getAudioFileExtensions()) {
-					audioFile = new File(parentFile, mediaName + ex);
+					audioFile = new File(parentFile, mediaName + "." + ex);
 					if(audioFile.exists()) {
 						foundFile = true;
 						break;

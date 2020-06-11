@@ -365,7 +365,7 @@ public class PhonMediaPlayer extends JPanel {
 	 * @return the current VLC media player - this
 	 * value can change during playback (e.g., looping)
 	 */
-	private MediaPlayer getMediaPlayer() {
+	public MediaPlayer getMediaPlayer() {
 		return mediaPlayer;
 	}
 
