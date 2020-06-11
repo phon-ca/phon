@@ -94,9 +94,13 @@ public class AudioIO {
 		} else if(ft.equals("FORM") && ft2.equals("AIFC")) {
 			info.setFileType(AudioFileType.AIFC);
 			checkAiffHeaders(is, info);
-		} else if(ft.equals("RIFF") && (ft2.equals("WAVE") || ft2.equals("CDDA"))) {
+		} else if((ft.equals("RIFF") || ft.equals("RIFX")) && (ft2.equals("WAVE") || ft2.equals("CDDA"))) {
 			info.setFileType(AudioFileType.WAV);
-			checkWavHeaders(is, info);
+			
+			if(ft.equals("RIFF"))
+				checkRiffHeaders(is, info);
+			else
+				checkRifxHeaders(is, info);
 			
 			// fix data chunk size if necessary
 			if(info.getDataChunkSize() <= 0) { // incorrect data chunk (sometimes -44); assume that the data run till the end of the file
@@ -117,7 +121,7 @@ public class AudioIO {
 		return info;
 	}
 
-	private static void checkWavHeaders(InputStream is, AudioFileInfo /*out*/ info) throws IOException, InvalidHeaderException, UnsupportedFormatException {
+	private static void checkRiffHeaders(InputStream is, AudioFileInfo /*out*/ info) throws IOException, InvalidHeaderException, UnsupportedFormatException {
 		byte[] data = new byte[14];
 		byte[] chunkId = new byte[4];
 		
@@ -229,6 +233,176 @@ public class AudioIO {
 						audioFileEncoding = 
 							numberOfBitsPerSamplePoint == 64 ? AudioFileEncoding.IEEE_FLOAT_64_LITTLE_ENDIAN :
 								AudioFileEncoding.IEEE_FLOAT_32_LITTLE_ENDIAN;
+						break;
+					
+					case WAVE_FORMAT_ALAW:
+						audioFileEncoding = AudioFileEncoding.ALAW;
+						break;
+						
+					case WAVE_FORMAT_MULAW:
+						audioFileEncoding = AudioFileEncoding.MULAW;
+						break;
+						
+					case WAVE_FORMAT_DVI_ADPCM:
+						throw new UnsupportedFormatException("Unsupported encoding: DVI ADPCM");
+					
+					default:
+						throw new InvalidHeaderException("Unsupported windows audio encoding " + Integer.toString(winEncoding, 8));
+					}
+					
+					bytesRead = is.read(data, 0, 14);
+					totalBytesRead += bytesRead;
+					if(bytesRead < 14) throw new InvalidHeaderException("File too small: no SubFormat data");
+					continue;
+				}
+					
+				default:
+					throw new InvalidHeaderException("Unsupported windows audio encoding " + Integer.toString(winEncoding, 8));
+				}
+				
+				if(chunkSize % 2 == 1) ++chunkSize;
+				for(int i = 17; i <= chunkSize; i++) {
+					bytesRead = is.read(data, 0, 1);
+					totalBytesRead += bytesRead;
+					if(bytesRead < 1) throw new InvalidHeaderException("File too small: expected " + chunkSize + " bytes in fmt chunk, but found " + i);
+				}
+			} else if(chunk.equals("data")) {
+				dataChunkPresent = true;
+				int dataOffset = totalBytesRead;
+				info.setDataOffset(dataOffset);
+
+				if(chunkSize % 2 == 1) ++chunkSize;
+				info.setDataChunkSize(chunkSize);
+				
+				if(formatChunkPresent) break;
+			} else {
+				if(chunkSize % 2 == 1) ++chunkSize;
+				for(int i = 1; i <= chunkSize; i++) {
+					bytesRead = is.read(data, 0, 1);
+					totalBytesRead += bytesRead;
+					if(bytesRead < 1) 
+						throw new InvalidHeaderException("File too small: expected " + chunkSize + " bytes, but found " + i);
+				}
+			}
+		} // end while
+		
+		info.setEncoding(audioFileEncoding);
+		if(!formatChunkPresent) throw new InvalidHeaderException("Found no format chunk");
+		if(!dataChunkPresent) throw new InvalidHeaderException("Found no data chunk");
+	}
+	
+	private static void checkRifxHeaders(InputStream is, AudioFileInfo /*out*/ info) throws IOException, InvalidHeaderException, UnsupportedFormatException {
+		byte[] data = new byte[14];
+		byte[] chunkId = new byte[4];
+		
+		AudioFileEncoding audioFileEncoding = AudioFileEncoding.EXTENDED;
+		boolean formatChunkPresent = false;
+		boolean dataChunkPresent = false;
+		
+		int totalBytesRead = 0;
+		int numberOfBitsPerSamplePoint = -1;
+		
+		int bytesRead = is.read(data, 0, 4);
+		totalBytesRead += bytesRead;
+		if(bytesRead < 4) throw new InvalidHeaderException("File too small: no RIFX statement");
+		String riff = new String(data, 0, 4);
+		if(!riff.equals("RIFX")) throw new InvalidHeaderException("Not a WAV file (RIFX statement expected)");
+		
+		bytesRead = is.read(data, 0, 4);
+		totalBytesRead += bytesRead;
+		if(bytesRead < 4) throw new InvalidHeaderException("File too small: no size of RIFX chunk.");
+		bytesRead = is.read(data, 0, 4);
+		totalBytesRead += bytesRead;
+		if(bytesRead < 4) throw new InvalidHeaderException("File too small: no file type info (expected WAVE statement).");
+		
+		String fileTypeInfo = new String(data, 0, 4);
+		if(!fileTypeInfo.equals("WAVE") && !fileTypeInfo.equals("CDDA")) {
+			throw new InvalidHeaderException("Not a WAVE or CD audio file (wrong file type info).");
+		}
+		
+		/* Search for format and data chunks */
+		while(is.read(chunkId) == 4) {
+			totalBytesRead += 4;
+			int chunkSize = AudioIO.readInt(is);
+			totalBytesRead += 4;
+			String chunk = new String(chunkId);
+			if(chunk.equals("fmt ")) {
+				short winEncoding = readShort(is);
+				totalBytesRead += 2;
+				formatChunkPresent = true;
+				int numberOfChannels = readShort(is);		
+				totalBytesRead += 2;
+				if(numberOfChannels < 0) throw new InvalidHeaderException("Too few sound channels (" + numberOfChannels + ")");
+				info.setNumberOfChannels(numberOfChannels);
+				double sampleRate = (double) readInt(is);
+				totalBytesRead += 4;
+				if(sampleRate < 0.0) throw new InvalidHeaderException("Wrong sampling freq (" + sampleRate + ")");
+				info.setSampleRate((float)sampleRate);
+				// read unused data
+				readInt(is); // avgBytesPerSec
+				totalBytesRead += 4;
+				readShort(is); // blockAlign
+				totalBytesRead += 2;
+				numberOfBitsPerSamplePoint = readShort(is);
+				totalBytesRead += 2;
+				
+				if(numberOfBitsPerSamplePoint == 0) {
+					numberOfBitsPerSamplePoint = 16; // default
+				} else if(numberOfBitsPerSamplePoint < 4) {
+					throw new InvalidHeaderException("Too few bits per sample (" + numberOfBitsPerSamplePoint + ")");
+				} else if(numberOfBitsPerSamplePoint > 64) {
+					throw new InvalidHeaderException("Too many bits per sample (" + numberOfBitsPerSamplePoint + "); max is 32");
+				}
+				
+				switch(Short.toUnsignedInt(winEncoding)) {
+				case WAVE_FORMAT_PCM:
+					audioFileEncoding =
+						numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_BIG_ENDIAN :
+						numberOfBitsPerSamplePoint > 16 ? AudioFileEncoding.LINEAR_24_BIG_ENDIAN :
+						numberOfBitsPerSamplePoint > 8 ? AudioFileEncoding.LINEAR_16_BIG_ENDIAN :
+						AudioFileEncoding.LINEAR_8_UNSIGNED;
+					break;
+					
+				case WAVE_FORMAT_IEEE_FLOAT:
+					audioFileEncoding = 
+						numberOfBitsPerSamplePoint == 64 ? AudioFileEncoding.IEEE_FLOAT_64_BIG_ENDIAN :
+							AudioFileEncoding.IEEE_FLOAT_32_BIG_ENDIAN;
+					break;
+				
+				case WAVE_FORMAT_ALAW:
+					audioFileEncoding = AudioFileEncoding.ALAW;
+					break;
+					
+				case WAVE_FORMAT_MULAW:
+					audioFileEncoding = AudioFileEncoding.MULAW;
+					break;
+					
+				case WAVE_FORMAT_DVI_ADPCM:
+					throw new UnsupportedFormatException("Unsupported encoding: DVI ADPCM");
+
+				case WAVE_FORMAT_EXTENSIBLE: {
+					if(chunkSize < 40) throw new InvalidHeaderException("Not enough format data in extensible WAV format");
+					readShort(is); // extensionSize
+					totalBytesRead += 2;
+					readShort(is); // validBitsPreSample
+					totalBytesRead += 2;
+					readInt(is); // channelMask
+					totalBytesRead += 4;
+					short winEncoding2 = readShort(is);
+					totalBytesRead += 2;
+					switch(Short.toUnsignedInt(winEncoding2)) {
+					case WAVE_FORMAT_PCM:
+						audioFileEncoding =
+							numberOfBitsPerSamplePoint > 24 ? AudioFileEncoding.LINEAR_32_BIG_ENDIAN :
+							numberOfBitsPerSamplePoint > 16 ? AudioFileEncoding.LINEAR_24_BIG_ENDIAN :
+							numberOfBitsPerSamplePoint > 8 ? AudioFileEncoding.LINEAR_16_BIG_ENDIAN :
+							AudioFileEncoding.LINEAR_8_UNSIGNED;
+						break;
+						
+					case WAVE_FORMAT_IEEE_FLOAT:
+						audioFileEncoding = 
+							numberOfBitsPerSamplePoint == 64 ? AudioFileEncoding.IEEE_FLOAT_64_BIG_ENDIAN :
+								AudioFileEncoding.IEEE_FLOAT_32_BIG_ENDIAN;
 						break;
 					
 					case WAVE_FORMAT_ALAW:
@@ -455,7 +629,18 @@ public class AudioIO {
 	private static void writeHeaders(Sampled samples, int numSamples, AudioFileType fileType, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
 		switch(fileType) {
 		case WAV:
-			writeWavHeaders(samples, numSamples, encoding, os);
+			if(encoding.getBytesPerSample() > 1 && encoding.isBigEndian())
+				writeRifxHeaders(samples, numSamples, encoding, os);
+			else
+				writeRiffHeaders(samples, numSamples, encoding, os);
+			break;
+			
+		case AIFF:
+			writeAiffHeaders(samples, numSamples, encoding, os);
+			break;
+			
+		case AIFC:
+			writeAifcHeaders(samples, numSamples, encoding, os);
 			break;
 			
 		default:
@@ -463,7 +648,9 @@ public class AudioIO {
 		}
 	}
 	
-	private static void writeWavHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+	private static void writeRiffHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		if(encoding.getBytesPerSample() > 1 && encoding.isBigEndian()) throw new UnsupportedFormatException("RIFF requires little endian encoding");
+		
 		boolean needsExtensibleFormat = 
 				encoding.getBitsPerSample() > 16 ||
 				samples.getNumberOfChannels() > 2 ||
@@ -497,7 +684,52 @@ public class AudioIO {
 		os.write("data".getBytes());
 		writeIntLE((int)dataSize, os);
 	}
+	
+	private static void writeRifxHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		if(encoding.getBytesPerSample() > 1 && !encoding.isBigEndian()) throw new UnsupportedFormatException("RIFX requires big endian encoding");
+		
+		boolean needsExtensibleFormat = 
+				encoding.getBitsPerSample() > 16 ||
+				samples.getNumberOfChannels() > 2 ||
+				encoding.getBitsPerSample() != encoding.getBytesPerSample() * 8;
+		int formatSize = needsExtensibleFormat ? 40 : 16;
+		long dataSize = numSamples * samples.getNumberOfChannels() * encoding.getBytesPerSample();
+		
+		byte[] bytes = "RIFX".getBytes();
+		os.write(bytes);
+		long sizeOfRiffChunk = 4 + (12 + formatSize) + (4 + dataSize);
+		writeInt((int)sizeOfRiffChunk, os);
+		
+		bytes = "WAVE".getBytes();
+		os.write(bytes);
+		bytes = "fmt ".getBytes();
+		os.write(bytes);
+		writeInt(formatSize, os);
+		writeShort(needsExtensibleFormat ? (short)WAVE_FORMAT_EXTENSIBLE : (short)WAVE_FORMAT_PCM , os);
+		writeShort((short)samples.getNumberOfChannels(), os);
+		writeInt((int)samples.getSampleRate(), os);
+		writeInt((int)(samples.getSampleRate() * encoding.getBytesPerSample() * samples.getNumberOfChannels()), os);  // avg bytes per sec
+		writeShort((short)(encoding.getBytesPerSample() * samples.getNumberOfChannels()), os); // block alignment
+		writeShort((short)(encoding.getBytesPerSample() * 8), os); // padded bits per sample
+		if(needsExtensibleFormat) {
+			writeShort((short)(22), os); // ext size
+			writeShort((short)encoding.getBitsPerSample(), os);
+			writeInt(0, os); // speaker position mark
+			writeShort((short)WAVE_FORMAT_PCM, os);
+			os.write(WAVE_SUBFORMAT_DATA);
+		}
+		os.write("data".getBytes());
+		writeInt((int)dataSize, os);
+	}
 
+	private static void writeAiffHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		
+	}
+	
+	private static void writeAifcHeaders(Sampled smaples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		
+	}
+	
 	public static int writeSamples(Sampled samples, int firstSample, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, AudioIOException {
 		int numBytesRequired = samples.getNumberOfChannels() * numSamples * encoding.getBytesPerSample();
 		int frameSize = samples.getNumberOfChannels() * encoding.getBytesPerSample();
