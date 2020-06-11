@@ -60,7 +60,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	private int prevCacheWidth = -1;
 	private float prevCacheStart = -1.0f;
 	private float prevCacheEnd = -1.0f;
-	private double prevCachedMax = -1.0f;
+	private double prevCachedMax = 1.0;
 	private BufferedImage cachedImg = null;
 
 	private WaveformDisplay display;
@@ -339,9 +339,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				|| "endTime".equals(e.getPropertyName())
 				|| "pixelsPerSecond".equals(e.getPropertyName()) ) {
 			
-			if("longSound".equals(e.getPropertyName())) {
-				cachedMaxValue = 0.0;
-			}
+//			if("longSound".equals(e.getPropertyName())) {
+//				cachedMaxValue = 0.0;
+//			}
 			
 			needsRepaint = true;
 			
@@ -350,7 +350,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 	};
 	
-	private double cachedMaxValue = 0.0;
+	private double cachedMaxValue = 1.0;
 	private double getMaxValue() {
 		return cachedMaxValue;
 	}
