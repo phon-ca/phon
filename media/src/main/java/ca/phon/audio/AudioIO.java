@@ -10,6 +10,7 @@ import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.nio.BufferUnderflowException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
@@ -636,11 +637,12 @@ public class AudioIO {
 			break;
 			
 		case AIFF:
-			writeAiffHeaders(samples, numSamples, encoding, os);
-			break;
-			
 		case AIFC:
-			writeAifcHeaders(samples, numSamples, encoding, os);
+			if(encoding.getBytesPerSample() > 1 && encoding.isBigEndian()) {
+				writeAiffHeaders(samples, numSamples, encoding, os);
+			} else {
+				writeAifcHeaders(samples, numSamples, encoding, os);
+			}
 			break;
 			
 		default:
@@ -678,7 +680,22 @@ public class AudioIO {
 			writeShortLE((short)(22), os); // ext size
 			writeShortLE((short)encoding.getBitsPerSample(), os);
 			writeIntLE(0, os); // speaker position mark
-			writeShortLE((short)WAVE_FORMAT_PCM, os);
+			switch(encoding) {
+			case LINEAR_12_LITTLE_ENDIAN:
+			case LINEAR_16_LITTLE_ENDIAN:
+			case LINEAR_24_LITTLE_ENDIAN:
+			case LINEAR_32_LITTLE_ENDIAN:
+				writeShortLE((short)WAVE_FORMAT_PCM, os);
+				break;
+				
+			case IEEE_FLOAT_32_LITTLE_ENDIAN:
+			case IEEE_FLOAT_64_LITTLE_ENDIAN:
+				writeShortLE((short)WAVE_FORMAT_IEEE_FLOAT, os);
+				break;
+				
+			default:
+				throw new UnsupportedFormatException("Cannot write RIFF files with encoding " + encoding);
+			}
 			os.write(WAVE_SUBFORMAT_DATA);
 		}
 		os.write("data".getBytes());
@@ -715,7 +732,22 @@ public class AudioIO {
 			writeShort((short)(22), os); // ext size
 			writeShort((short)encoding.getBitsPerSample(), os);
 			writeInt(0, os); // speaker position mark
-			writeShort((short)WAVE_FORMAT_PCM, os);
+			switch(encoding) {
+			case LINEAR_12_BIG_ENDIAN:
+			case LINEAR_16_BIG_ENDIAN:
+			case LINEAR_24_BIG_ENDIAN:
+			case LINEAR_32_BIG_ENDIAN:
+				writeShort((short)WAVE_FORMAT_PCM, os);
+				break;
+				
+			case IEEE_FLOAT_32_BIG_ENDIAN:
+			case IEEE_FLOAT_64_BIG_ENDIAN:
+				writeShort((short)WAVE_FORMAT_IEEE_FLOAT, os);
+				break;
+				
+			default:
+				throw new UnsupportedFormatException("Cannot write RIFX files with encoding " + encoding);
+			}
 			os.write(WAVE_SUBFORMAT_DATA);
 		}
 		os.write("data".getBytes());
@@ -723,11 +755,89 @@ public class AudioIO {
 	}
 
 	private static void writeAiffHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
-		
+		if(!encoding.isBigEndian()) {
+			writeAifcHeaders(samples, numSamples, encoding, os);
+		} else {
+			int dataSize = numSamples * encoding.getBytesPerSample() * samples.getNumberOfChannels();
+			
+			os.write("FORM".getBytes());
+			writeInt(4 + (8 + 4) + (8 + 18) + (8 + 8 + dataSize), os); // size of FORM
+			os.write("AIFF".getBytes());
+			
+			/* format version (8+4) */
+			os.write("FVER".getBytes());
+			writeInt(4, os);
+			writeInt(0xA2805140, os); // time of version
+			
+			/* common chunk (8+18) */
+			os.write("COMM".getBytes());
+			writeInt(18, os);
+			writeShort((short)samples.getNumberOfChannels(), os);
+			writeInt(numSamples, os);
+			writeShort((short)encoding.getBitsPerSample(), os);
+			writeLongDouble(samples.getSampleRate(), os);
+			
+			/* data chunk */
+			os.write("SSND".getBytes());
+			writeInt(dataSize + 8, os);
+			writeInt(0, os); // offset
+			writeInt(0, os); // block size
+		}
 	}
 	
-	private static void writeAifcHeaders(Sampled smaples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+	private static void writeAifcHeaders(Sampled samples, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
+		int dataSize = numSamples * encoding.getBytesPerSample() * samples.getNumberOfChannels();
 		
+		String ctype = "NONE";
+		switch(encoding) {
+		case LINEAR_12_BIG_ENDIAN:
+		case LINEAR_16_BIG_ENDIAN:
+		case LINEAR_24_BIG_ENDIAN:
+		case LINEAR_32_BIG_ENDIAN:
+			break;
+		
+		case LINEAR_12_LITTLE_ENDIAN:
+		case LINEAR_16_LITTLE_ENDIAN:
+		case LINEAR_24_LITTLE_ENDIAN:
+		case LINEAR_32_LITTLE_ENDIAN:
+			ctype = "sowt";
+			break;
+			
+		case IEEE_FLOAT_32_BIG_ENDIAN:
+			os.write("fl32".getBytes());
+			break;
+			
+		case IEEE_FLOAT_64_BIG_ENDIAN:
+			os.write("fl64".getBytes());
+			break;
+			
+		default:
+			throw new UnsupportedFormatException("Cannot write AIFC files with encoding " + encoding);
+		}
+		
+		int sizeOfComm = 24;
+		
+		os.write("FORM".getBytes());
+		writeInt(4 + (8 + 4) + (8 + sizeOfComm) + (8 + 8 + dataSize), os);
+		os.write("AIFC".getBytes());
+		
+		os.write("FVER".getBytes());
+		writeInt(4, os);
+		writeInt(0xA2805140, os);
+		
+		os.write("COMM".getBytes());
+		writeInt(sizeOfComm, os);
+		writeShort((short)samples.getNumberOfChannels(), os);
+		writeInt(numSamples, os);
+		writeShort((short)encoding.getBitsPerSample(), os);
+		writeLongDouble(samples.getSampleRate(), os);
+		os.write(ctype.getBytes());
+		writeShort((short)0, os);
+		
+		os.write("SSND".getBytes());
+		writeInt(8 + dataSize, os);
+		writeInt(0, os);
+		writeInt(0, os);
 	}
 	
 	public static int writeSamples(Sampled samples, int firstSample, int numSamples, AudioFileEncoding encoding, OutputStream os) throws IOException, AudioIOException {
@@ -1545,31 +1655,35 @@ public class AudioIO {
 	
 	static void writeLongDouble(double value, OutputStream os) throws IOException {
 		byte[] bytes = new byte[10];
-		putDoubleLE(value, bytes, 0);
+		putLongDouble(value, bytes, 0);
 		os.write(bytes);
 	}
 	
 	static void putLongDouble(double value, byte[] buffer, int offset) throws BufferUnderflowException {
 		if(buffer.length < offset + 10) throw new BufferUnderflowException();
 		
-		long bits = Double.doubleToRawLongBits(value);
+		long bits = Double.doubleToLongBits(value);
 		
-		int exp = (int)(((long)bits >> 52) & 0x07ff);
+		int exp = (int)(((long)bits >> 52) & 0x07ff) - 1023;
+		exp += 16383;
+		
 		byte sign = (byte)(((long)bits >> 63) & 0x01);
 		exp |= (sign << 15);
+				
+		long fraction = (long)(bits & 0x000FFFFFFFFFFFFFL) << 11; 
+		fraction |= 0x8000000000000000L;
 		
-		long fraction = (long)(bits & 0x000FFFFFFFFFFFFFL);
+		buffer[offset] = (byte)((exp >> 8) & 0xff);
+		buffer[offset+1] = (byte)(exp & 0xff);
 		
-		buffer[offset+9] = (byte)((exp >> 8) | 0xff);
-		buffer[offset+8] = (byte)(exp | 0xff);
-		buffer[offset+7] = (byte)((fraction >> 56) & 0xff);
-		buffer[offset+6] = (byte)((fraction >> 48) & 0xff);
-		buffer[offset+5] = (byte)((fraction >> 40) & 0xff);
-		buffer[offset+4] = (byte)((fraction >> 32) & 0xff);
-		buffer[offset+3] = (byte)((fraction >> 24) & 0xff);
-		buffer[offset+2] = (byte)((fraction >> 16) & 0xff);
-		buffer[offset+1] = (byte)((fraction >> 8) & 0xff);
-		buffer[offset] = (byte)(fraction & 0xff);
+		buffer[offset+2] = (byte)((fraction >> 56) & 0xff);
+		buffer[offset+3] = (byte)((fraction >> 48) & 0xff);
+		buffer[offset+4] = (byte)((fraction >> 40) & 0xff);
+		buffer[offset+5] = (byte)((fraction >> 32) & 0xff);
+		buffer[offset+6] = (byte)((fraction >> 24) & 0xff);
+		buffer[offset+7] = (byte)((fraction >> 16) & 0xff);
+		buffer[offset+8] = (byte)((fraction >> 8) & 0xff);
+		buffer[offset+9] = (byte)(fraction & 0xff);
 	}
 	
 }

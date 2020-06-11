@@ -40,7 +40,7 @@ public enum AudioFileEncoding {
 				(this == IEEE_FLOAT_32_BIG_ENDIAN) ||
 				(this == IEEE_FLOAT_64_BIG_ENDIAN);
 	}
-	
+		
 	public int getBytesPerSample() {
 		return bytesPerSample;
 	}
@@ -74,6 +74,9 @@ public enum AudioFileEncoding {
 		case IEEE_FLOAT_64_BIG_ENDIAN:
 		case IEEE_FLOAT_64_LITTLE_ENDIAN:
 			return 64;
+			
+		default:
+			break;
 		}
 		return 0;
 	}
