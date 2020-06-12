@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0.dmg" newVersion="3.1.0" newMediaFileId="macos" fileSize="278735307" md5Sum="b5ec9f74ce287938f27e6d55f4f9fb7f" sha256Sum="2b7ea070787a394a05589ec2cbfefde78005fb0465c0fa2c538f2e93512d3597" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.5
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.1-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1-beta_1.dmg" newVersion="3.1.1-beta.1" newMediaFileId="macos" fileSize="278788658" md5Sum="14388d16ae352cb07fe4fe54ca2c5069" sha256Sum="a022c544a175203fed55867949f68c861b51a6baa0a856b717c79a66f262186f" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor 
+ * Updated Multisyllabic Nonliear Analysis
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -314,8 +324,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0.dmg" newVersion="3.1.0" newMediaFileId="macos" fileSize="278735307" md5Sum="b5ec9f74ce287938f27e6d55f4f9fb7f" sha256Sum="2b7ea070787a394a05589ec2cbfefde78005fb0465c0fa2c538f2e93512d3597" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1-beta_1.dmg" newVersion="3.1.1-beta.1" newMediaFileId="macos" fileSize="278788658" md5Sum="14388d16ae352cb07fe4fe54ca2c5069" sha256Sum="a022c544a175203fed55867949f68c861b51a6baa0a856b717c79a66f262186f" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor 
+ * Updated Multisyllabic Nonliear Analysis
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -628,8 +648,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.exe" newVersion="3.1.1-beta.1" newMediaFileId="win64" fileSize="288428296" md5Sum="a2ced42d6af17a1b45f8b535cf2cff41" sha256Sum="720f70645e60fae7679981700fb4953e7cd54e3665c0044b0300bd1919c66545" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor 
+ * Updated Multisyllabic Nonliear Analysis
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -942,8 +972,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.exe" newVersion="3.1.1-beta.1" newMediaFileId="win64" fileSize="288428296" md5Sum="a2ced42d6af17a1b45f8b535cf2cff41" sha256Sum="720f70645e60fae7679981700fb4953e7cd54e3665c0044b0300bd1919c66545" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor 
+ * Updated Multisyllabic Nonliear Analysis
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -1256,8 +1296,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.exe" newVersion="3.1.1-beta.1" newMediaFileId="win64" fileSize="288428296" md5Sum="a2ced42d6af17a1b45f8b535cf2cff41" sha256Sum="720f70645e60fae7679981700fb4953e7cd54e3665c0044b0300bd1919c66545" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor 
+ * Updated Multisyllabic Nonliear Analysis
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -1570,8 +1620,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.zip" newVersion="3.1.0" newMediaFileId="win64zip" fileSize="287446050" md5Sum="1627ec112cfab8af0794d5033aa107fb" sha256Sum="6b933faa6444327cfdb9dc1ac95c513406f9d05f48e6f280b2309366882995e6" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.zip" newVersion="3.1.1-beta.1" newMediaFileId="win64zip" fileSize="287521925" md5Sum="6c525b63c7791444d4ab29e9554b1a14" sha256Sum="7b7dd9d38ac58a220b8b3235b40d7b9eceeb8c9898190dccbffc8bfd4ec78bb2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor 
+ * Updated Multisyllabic Nonliear Analysis
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
