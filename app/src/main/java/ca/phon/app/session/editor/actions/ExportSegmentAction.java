@@ -216,13 +216,17 @@ public class ExportSegmentAction extends SessionEditorAction {
 					if(exportSegment == null) throw new IOException("Export segment extension not found");
 					exportSegment.exportSegment(outputFile, mediaSegment.getStartValue() / 1000.0f, mediaSegment.getEndValue() / 1000.0f);
 					
+					LogUtil.info("Export segment complete: " + outputFile + " " + outputFile.length() + "B");
 					SwingUtilities.invokeLater( () -> {
-						getEditor().getStatusBar().getStatusLabel().setText("Export segment completed");
+						getEditor().showOkDialog("Export segment", "Export segment complete: " + outputFile + " " + outputFile.length() + "B");
 					});
 				} catch (IOException e) {
 					LogUtil.severe(e);
 					super.err = e;
 					setStatus(TaskStatus.ERROR);
+					SwingUtilities.invokeLater( () -> {
+						getEditor().showOkDialog("Export segment failed", "Export segment failed: " + e.getLocalizedMessage());
+					});
 					return;
 				}
 			}
