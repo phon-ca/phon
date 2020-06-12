@@ -477,7 +477,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
 				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
 				mediaMenu.add(genAudioItem);
-				mediaMenu.add(new ShowMediaInfoAction(SessionEditor.this));
+				mediaMenu.add(new ShowMediaInfoAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());;
 				mediaMenu.addSeparator();
 				
 				boolean enabled = (mediaModel.isSessionAudioAvailable() || 
