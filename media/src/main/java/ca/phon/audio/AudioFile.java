@@ -18,7 +18,7 @@ import org.apache.logging.log4j.core.time.PreciseClock;
 
 /**
  * An audio file. For a list of supported file types see {@link AudioFileType}.
- * For a list of supported encodings see {@link AudioFileEncoding}
+ * For a list of supported encodings see {@link AudioFileEncoding}.
  * 
  */
 public final class AudioFile implements AutoCloseable, Closeable {
@@ -116,6 +116,10 @@ public final class AudioFile implements AutoCloseable, Closeable {
 		return (float)(getNumberOfSamples() / getSampleRate());
 	}
 	
+	public int getFrameSize() {
+		return (getNumberOfChannels() * getAudioFileEncoding().getBytesPerSample());
+	}
+	
 	public synchronized void seekToTime(float time) {
 		long sample = sampleIndexForTime(time);
 		seekToSample(sample);
@@ -124,10 +128,6 @@ public final class AudioFile implements AutoCloseable, Closeable {
 	public synchronized void seekToSample(long sample) {
 		long byteIdx = sample * getFrameSize();
 		mappedBuffer.position((int)byteIdx);
-	}
-	
-	public int getFrameSize() {
-		return (getNumberOfChannels() * getAudioFileEncoding().getBytesPerSample());
 	}
 	
 	/**

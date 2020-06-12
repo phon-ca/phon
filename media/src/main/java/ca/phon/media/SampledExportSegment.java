@@ -3,16 +3,23 @@ package ca.phon.media;
 import java.io.File;
 import java.io.IOException;
 
-import ca.phon.audio.AudioFile;
 import ca.phon.audio.AudioFileEncoding;
-import ca.phon.audio.AudioFileSampled;
 import ca.phon.audio.AudioFileType;
 import ca.phon.audio.AudioIO;
 import ca.phon.audio.AudioIOException;
 import ca.phon.audio.Sampled;
 
+/**
+ * Save a segment of sampled audio to given file using fileType and encoding
+ * provided during construction. If an encoding which is not supported
+ * is selected for the given fileType it is adjusted to default 16bit
+ * encodings for the given fileType.
+ */
 public class SampledExportSegment extends ExportSegment {
 
+	private final static AudioFileEncoding DEFAULT_WAV_ENCODING = AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN;
+	private final static AudioFileEncoding DEFAULT_AIFF_ENCODING = AudioFileEncoding.LINEAR_16_BIG_ENDIAN;
+	
 	private Sampled samples;
 	
 	private AudioFileType fileType;
@@ -24,7 +31,34 @@ public class SampledExportSegment extends ExportSegment {
 		
 		this.samples = samples;
 		this.fileType = type;
-		this.encoding = encoding;
+		this.encoding = checkEncoding(encoding);
+	}
+	
+	private AudioFileEncoding checkEncoding(AudioFileEncoding encoding) {
+		switch(encoding) {
+		// use default if any of these
+		case ALAW:
+		case MULAW:
+		case EXTENDED:
+			switch(fileType) {
+			case WAV:
+				encoding = DEFAULT_WAV_ENCODING;
+				break;
+				
+			case AIFC:
+			case AIFF:
+				encoding = DEFAULT_AIFF_ENCODING;
+				break;
+				
+			default:
+				break;
+			}
+		
+		default:
+			break;
+		}
+		
+		return encoding;
 	}
 	
 	@Override

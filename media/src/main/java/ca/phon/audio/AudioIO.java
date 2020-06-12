@@ -6,15 +6,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.math.BigDecimal;
 import java.nio.BufferUnderflowException;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 
+/**
+ * Methods for reading and writing sample data.
+ */
 public class AudioIO {
 	
 	private final static int WAVE_FORMAT_PCM = 0x0001;
@@ -896,6 +896,20 @@ public class AudioIO {
 		return retVal;
 	}
 	
+	/**
+	 * Decode a single frame of channel interleaved audio data from <code>buffer</code> at <code>offset</code> using <code>encoding</code>.
+	 * Samples will be written into <code>samples</code> starting at <code>sampleOffset</code>.
+	 * 
+	 * @param buffer
+	 * @param offset
+	 * @param encoding
+	 * @param numberOfChannels
+	 * @param samples
+	 * @param sampleOffset
+	 * 
+	 * @throws BufferUnderflowException if <code>buffer</code> or <code>samples</code> is not large enough
+	 * @throws UnsupportedFormatException if unable to decode samples which using <code>encoding</code>
+	 */
 	public static void decodeFrame(byte[] buffer, int offset, AudioFileEncoding encoding, int numberOfChannels, double[] samples, int sampleOffset) 
 			throws BufferUnderflowException, UnsupportedFormatException {
 		int frameSize = encoding.getBytesPerSample() * numberOfChannels;
@@ -1662,17 +1676,26 @@ public class AudioIO {
 	static void putLongDouble(double value, byte[] buffer, int offset) throws BufferUnderflowException {
 		if(buffer.length < offset + 10) throw new BufferUnderflowException();
 		
+		/*
+		 * This methods will attempt to convert a 64-bit floating point
+		 * number to an 80-bit number using some bit magic.
+		 */
+		
 		long bits = Double.doubleToLongBits(value);
 		
+		// convert exponent
 		int exp = (int)(((long)bits >> 52) & 0x07ff) - 1023;
 		exp += 16383;
 		
+		// grab sign and add to exp
 		byte sign = (byte)(((long)bits >> 63) & 0x01);
 		exp |= (sign << 15);
 				
+		// update fraction portion and set integer bit
 		long fraction = (long)(bits & 0x000FFFFFFFFFFFFFL) << 11; 
 		fraction |= 0x8000000000000000L;
 		
+		// big endian
 		buffer[offset] = (byte)((exp >> 8) & 0xff);
 		buffer[offset+1] = (byte)(exp & 0xff);
 		

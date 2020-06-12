@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.CustomSegmentDialog;
@@ -215,8 +216,9 @@ public class ExportSegmentAction extends SessionEditorAction {
 					if(exportSegment == null) throw new IOException("Export segment extension not found");
 					exportSegment.exportSegment(outputFile, mediaSegment.getStartValue() / 1000.0f, mediaSegment.getEndValue() / 1000.0f);
 					
-					// TODO report done
-					
+					SwingUtilities.invokeLater( () -> {
+						getEditor().getStatusBar().getStatusLabel().setText("Export segment completed");
+					});
 				} catch (IOException e) {
 					LogUtil.severe(e);
 					super.err = e;
