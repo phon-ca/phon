@@ -687,6 +687,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				|| "tierInsets".equals(e.getPropertyName())
 				|| "pixelsPerSecond".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
+			recordGrid.repaint();
 		} else if("currentRecordIndex".equals(e.getPropertyName())) {
 			recordGrid.repaint(recordGrid.getVisibleRect());
 		}

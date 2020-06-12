@@ -1081,7 +1081,6 @@ public final class TimelineView extends EditorView {
 		
 	};
 	
-	
 	private PropertyChangeListener segmentPlaybackListener = new PropertyChangeListener() {
 		
 		@Override
