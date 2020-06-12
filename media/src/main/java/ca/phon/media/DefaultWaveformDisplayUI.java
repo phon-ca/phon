@@ -339,9 +339,9 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				|| "endTime".equals(e.getPropertyName())
 				|| "pixelsPerSecond".equals(e.getPropertyName()) ) {
 			
-//			if("longSound".equals(e.getPropertyName())) {
-//				cachedMaxValue = 0.0;
-//			}
+			if("longSound".equals(e.getPropertyName())) {
+				cachedImg = null;
+			}
 			
 			needsRepaint = true;
 			
