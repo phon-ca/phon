@@ -23,7 +23,14 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RunOnEDT;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.ExportAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.ExportCustomSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSegmentAction;
+import ca.phon.app.session.editor.actions.ExportSpeechTurnAction;
+import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
+import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
 import ca.phon.app.session.editor.undo.AddRecordEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
@@ -38,6 +45,8 @@ import ca.phon.session.SessionFactory;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 public class TimelineWaveformTier extends TimelineTier  {
 
@@ -127,18 +136,26 @@ public class TimelineWaveformTier extends TimelineTier  {
 	@Override
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
 		if(selectionInterval != null) {
-			final PhonUIAction playAction = new PhonUIAction(this, "onPlay");
-			playAction.putValue(PhonUIAction.NAME, "Play selection");
-			playAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
+			final PhonUIAction playSelectionAct = new PhonUIAction(getParentView(), "playSelection");
+			playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
+			playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
+			playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 			if(includeAccel)
-				playAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-			builder.addItem(".", playAction);
+				playSelectionAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
+			builder.addItem(".", playSelectionAct);
 			
-			builder.addSeparator(".", "play_actions");
+			final PhonUIAction exportSelectionAct = new PhonUIAction(getParentView(), "exportSelection");
+			exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
+			exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
+			exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+			
+			builder.addItem(".", exportSelectionAct);
+			
+			builder.addSeparator(".", "play_and_export_selection");
 			
 			if(getParentView().getEditor().getSession().getRecordCount() > 0) {
 				final PhonUIAction assignSegmentAction = new PhonUIAction(this, "onAssignSegment");
-				assignSegmentAction.putValue(PhonUIAction.NAME, "Assign segment to record");
+				assignSegmentAction.putValue(PhonUIAction.NAME, "Assign selection to current record");
 				assignSegmentAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
 				builder.addItem(".", assignSegmentAction);
 			}
@@ -164,6 +181,18 @@ public class TimelineWaveformTier extends TimelineTier  {
 			
 			builder.addSeparator(".", "record_creation");
 		}
+		
+		builder.addItem(".", new PlaySegmentAction(getParentView().getEditor()));
+		builder.addItem(".", new PlayCustomSegmentAction(getParentView().getEditor()));
+		builder.addItem(".", new PlaySpeechTurnAction(getParentView().getEditor()));
+		builder.addItem(".", new PlayAdjacencySequenceAction(getParentView().getEditor()));
+		builder.addSeparator(".", "global_play_actions");
+		
+		builder.addItem(".", new ExportSegmentAction(getParentView().getEditor()));
+		builder.addItem(".", new ExportCustomSegmentAction(getParentView().getEditor()));
+		builder.addItem(".", new ExportSpeechTurnAction(getParentView().getEditor()));
+		builder.addItem(".", new ExportAdjacencySequenceAction(getParentView().getEditor()));
+		builder.addSeparator(".", "global_export_actions");
 		
 		final PhonUIAction toggleVisiblityAct = new PhonUIAction(this, "toggleVisible");
 		toggleVisiblityAct.putValue(PhonUIAction.NAME, 

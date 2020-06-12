@@ -53,7 +53,7 @@ public class PlaySegmentAction extends SessionEditorAction {
 	public PlaySegmentAction(SessionEditor editor) {
 		this(editor, SegmentType.CURRENT_RECORD);
 		
-		putValue(Action.NAME, "Play segment");
+		putValue(Action.NAME, "Play current record segment");
 		putValue(Action.SHORT_DESCRIPTION, "Play segment for current record");
 		putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
