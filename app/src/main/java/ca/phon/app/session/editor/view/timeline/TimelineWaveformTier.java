@@ -182,17 +182,19 @@ public class TimelineWaveformTier extends TimelineTier  {
 			builder.addSeparator(".", "record_creation");
 		}
 		
-		builder.addItem(".", new PlaySegmentAction(getParentView().getEditor()));
-		builder.addItem(".", new PlayCustomSegmentAction(getParentView().getEditor()));
-		builder.addItem(".", new PlaySpeechTurnAction(getParentView().getEditor()));
-		builder.addItem(".", new PlayAdjacencySequenceAction(getParentView().getEditor()));
-		builder.addSeparator(".", "global_play_actions");
-		
-		builder.addItem(".", new ExportSegmentAction(getParentView().getEditor()));
-		builder.addItem(".", new ExportCustomSegmentAction(getParentView().getEditor()));
-		builder.addItem(".", new ExportSpeechTurnAction(getParentView().getEditor()));
-		builder.addItem(".", new ExportAdjacencySequenceAction(getParentView().getEditor()));
-		builder.addSeparator(".", "global_export_actions");
+		if(wavDisplay.getLongSound() != null) {
+			builder.addItem(".", new PlaySegmentAction(getParentView().getEditor()));
+			builder.addItem(".", new PlayCustomSegmentAction(getParentView().getEditor()));
+			builder.addItem(".", new PlaySpeechTurnAction(getParentView().getEditor()));
+			builder.addItem(".", new PlayAdjacencySequenceAction(getParentView().getEditor()));
+			builder.addSeparator(".", "global_play_actions");
+			
+			builder.addItem(".", new ExportSegmentAction(getParentView().getEditor()));
+			builder.addItem(".", new ExportCustomSegmentAction(getParentView().getEditor()));
+			builder.addItem(".", new ExportSpeechTurnAction(getParentView().getEditor()));
+			builder.addItem(".", new ExportAdjacencySequenceAction(getParentView().getEditor()));
+			builder.addSeparator(".", "global_export_actions");
+		}
 		
 		final PhonUIAction toggleVisiblityAct = new PhonUIAction(this, "toggleVisible");
 		toggleVisiblityAct.putValue(PhonUIAction.NAME, 

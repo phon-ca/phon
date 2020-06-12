@@ -668,15 +668,6 @@ public class TimelineRecordTier extends TimelineTier {
 
 			++speakerNum;
 		}
-
-		if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			builder.addSeparator(".", "play_action");
-
-			PlaySegmentAction playAct = new PlaySegmentAction(getParentView().getEditor());
-			if (includeAccel)
-				playAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-			builder.addItem(".", playAct);
-		}
 	}
 
 	private void setupSplitModeMenu(MenuBuilder builder, boolean includeAccel) {

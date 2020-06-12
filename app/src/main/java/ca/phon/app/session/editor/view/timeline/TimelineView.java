@@ -977,15 +977,9 @@ public final class TimelineView extends EditorView {
 		
 		MenuBuilder builder = new MenuBuilder(contextMenu);
 		
-		if(me.getComponent() == recordGrid.getRecordGrid()) {
-			recordGrid.setupContextMenu(builder, true);
-//			builder.addSeparator(".", "wav_actions");
-//			wavTier.setupContextMenu(me, builder);
-		} else {
-			wavTier.setupContextMenu(builder, true);
-//			builder.addSeparator(".", "record_actions");
-//			recordGrid.setupContextMenu(me, builder);
-		}
+		wavTier.setupContextMenu(builder, true);
+		builder.addSeparator(".", "wav");
+		recordGrid.setupContextMenu(builder, true);
 		
 		builder.addSeparator(".", "segmentation");
 		
