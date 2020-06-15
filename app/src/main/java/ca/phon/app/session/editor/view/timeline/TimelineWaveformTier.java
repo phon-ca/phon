@@ -14,6 +14,7 @@ import javax.swing.ActionMap;
 import javax.swing.FocusManager;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
@@ -160,24 +161,26 @@ public class TimelineWaveformTier extends TimelineTier  {
 				builder.addItem(".", assignSegmentAction);
 			}
 			
+			JMenu newRecordMenu = builder.addMenu(".", "New record from selection");
+			MenuBuilder newRecordBuilder = new MenuBuilder(newRecordMenu);
 			List<Participant> speakerList = getParentView().getRecordTier().getSpeakerList();
 			for(int i = 0; i < speakerList.size(); i++) {
-				final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i);
+				final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i+1);
 				recordCreationAct.putValue(PhonUIAction.NAME, speakerList.get(i) + "");
 				recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + speakerList.get(i));
 				final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_1 + i, 0);
 				if(includeAccel) {
 					recordCreationAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
 				}
-				builder.addItem("./New record from selection/", recordCreationAct);
+				newRecordBuilder.addItem(".", recordCreationAct);
 			}
 			if(speakerList.size() > 1) {
-				builder.addSeparator("./New record from selection/", "record_creation_user");
+				newRecordBuilder.addSeparator(".", "record_creation_user");
 			}
 			final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", 0);
 			recordCreationAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN + "");
 			recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + Participant.UNKNOWN);
-			builder.addItem("./New record from selection/", recordCreationAct);
+			newRecordBuilder.addItem(".", recordCreationAct);
 			
 			builder.addSeparator(".", "record_creation");
 		}

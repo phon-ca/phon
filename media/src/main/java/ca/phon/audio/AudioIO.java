@@ -13,7 +13,9 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * Methods for reading and writing sample data.
+ * Methods for reading and writing audio sample data.
+ * 
+ * 
  */
 public class AudioIO {
 	
