@@ -225,11 +225,6 @@ public class MediaLocator {
 				 final List<String> mediaPaths =
 						 new ArrayList<String>();
 				 if(project != null) {
-					 String projectMediaPath = project.getProjectMediaFolder();
-					 if(!(new File(projectMediaPath)).isAbsolute()) {
-						 projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
-					 }
-					 mediaPaths.add(projectMediaPath);
 					 if(corpus != null && !project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
 						 String corpusMediaPath = project.getCorpusMediaFolder(corpus);
 						 if(!(new File(corpusMediaPath)).isAbsolute()) {
@@ -237,6 +232,11 @@ public class MediaLocator {
 						 }
 						 mediaPaths.add(corpusMediaPath);
 					 }
+					 String projectMediaPath = project.getProjectMediaFolder();
+					 if(!(new File(projectMediaPath)).isAbsolute()) {
+						 projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
+					 }
+					 mediaPaths.add(projectMediaPath);
 				 }
 				 mediaPaths.addAll(getMediaIncludePaths());
 	
