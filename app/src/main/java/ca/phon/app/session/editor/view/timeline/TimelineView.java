@@ -505,11 +505,13 @@ public final class TimelineView extends EditorView {
 		float retVal = 0.0f;
 		
 		for(Record r:getEditor().getSession().getRecords()) {
-			MediaSegment segment = r.getSegment().getGroup(0);
-			if(segment != null) {
-				float segEnd = (float)(segment.getEndValue() / 1000.0f);
-				retVal = Math.max(segEnd, retVal);
-			}
+//			if(r.getSegment() != null && r.getSegment().numberOfGroups() > 0) {
+				MediaSegment segment = r.getSegment().getGroup(0);
+				if(segment != null) {
+					float segEnd = (float)(segment.getEndValue() / 1000.0f);
+					retVal = Math.max(segEnd, retVal);
+				}
+//			}
 		}
 		
 		return retVal;
