@@ -20,6 +20,10 @@ import org.apache.logging.log4j.core.time.PreciseClock;
  * An audio file. For a list of supported file types see {@link AudioFileType}.
  * For a list of supported encodings see {@link AudioFileEncoding}.
  * 
+ * This class encapsulates a memory mapped audio file and should be closed when
+ * no longer needed.  Use {@link AudioIO#openAudioFile(File)} to create a new
+ * AudioFile object from a file on disk.
+ * 
  */
 public final class AudioFile implements AutoCloseable, Closeable {
 
