@@ -40,9 +40,10 @@ public class CopyEP implements IPluginEntryPoint {
 	private void begin() {
 		// copy text from the component with keyboard focus
 		Component keyboardComp = 
-			KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
+			KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+		if(keyboardComp == null) return;
 		
-		if(keyboardComp != null && keyboardComp instanceof JTextComponent) {
+		if(keyboardComp instanceof JTextComponent) {
 			JTextComponent textComp = (JTextComponent)keyboardComp;
 			textComp.copy();
 		} else {

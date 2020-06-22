@@ -39,11 +39,11 @@ public class CutEP implements IPluginEntryPoint {
 	}
 	
 	private void begin() {
-		//		 copy text from the component with keyboard focus
 		Component keyboardComp = 
 			KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner();
+		if(keyboardComp == null) return;
 		
-		if(keyboardComp != null && keyboardComp instanceof JTextComponent) {
+		if(keyboardComp instanceof JTextComponent) {
 			JTextComponent textComp = (JTextComponent)keyboardComp;
 			textComp.cut();
 		} else {
