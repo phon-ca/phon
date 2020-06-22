@@ -27,6 +27,7 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.EmptyQueueException;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Queue;
+import ca.phon.util.Tuple;
 
 /**
  * Helper methods for locating and handling paths for media files.
@@ -77,10 +78,7 @@ public class MediaLocator {
 
 		if(project != null) {
 			String projectMediaPath = project.getProjectMediaFolder();
-			final File projectMediaFolder = new File(projectMediaPath);
-			if(!projectMediaFolder.isAbsolute())
-				projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
-			retVal.add(projectMediaPath);
+			
 			if(corpus != null) {
 				String corpusMediaPath = project.getCorpusMediaFolder(corpus);
 				final File corpusMediaFolder = new File(corpusMediaPath);
@@ -89,6 +87,11 @@ public class MediaLocator {
 				if(!corpusMediaPath.equals(projectMediaPath))
 					retVal.add(corpusMediaPath);
 			}
+			
+			final File projectMediaFolder = new File(projectMediaPath);
+			if(!projectMediaFolder.isAbsolute())
+				projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
+			retVal.add(projectMediaPath);
 		}
 
 		// add global paths
@@ -179,7 +182,19 @@ public class MediaLocator {
 	 * @return the file object for the file or null if not found
 	 */
 	 public static File findMediaFile(String filename, Project project, String corpus) {
-		 File retVal = null;
+		 Tuple<File, File> pathTuple = findMediaFileRelative(filename, project, corpus);
+		 if(pathTuple == null) return null;
+		 else {
+			 if(pathTuple.getObj1() == null) {
+				 return pathTuple.getObj2();
+			 } else {
+				 return new File(pathTuple.getObj1(), pathTuple.getObj2().getPath());
+			 }
+		 }
+	 }
+	 
+	 public static Tuple<File, File> findMediaFileRelative(String filename, Project project, String corpus) {
+		 Tuple<File, File> retVal = null;
 
 		 if(filename == null) return retVal;
 
@@ -190,70 +205,44 @@ public class MediaLocator {
 			 FileFilter mediaFileFilter = FileFilter.mediaFilter;
 			 for(String ext:mediaFileFilter.getAllExtensions()) {
 				 String filenameToCheck = filename + "." + ext;
-				 retVal = findMediaFile(filenameToCheck, project, corpus);
+				 retVal = findMediaFileRelative(filenameToCheck, project, corpus);
 				 if(retVal != null) break;
 			 }
 		 } else {
 			 // do we already have an absolute path
 			 final File mediaFile = new File(filename);
 			 if(mediaFile.isAbsolute()) {
-				 retVal = mediaFile;
+				 retVal = new Tuple<>(null, mediaFile);
 			 } else {
-				 /*
-				  * Look for media in the following location order:
-				  *
-				  * <media folder>/<project>/<corpus>/<file>
-				  * <media folder>/<project>/<file>
-				  * <media folder>/<corpus>/<file>
-				  * <media folder>/<file>
-				  */
 				 final List<String> checkList = new ArrayList<String>();
-				 if(project != null && corpus != null) {
-					 checkList.add(project.getName() +
-							 File.separator + corpus + File.separator + filename);
-				 }
-				 if(project != null) {
-					 checkList.add(project.getName() +
-							 File.separator + filename);
-				 }
-				 if(corpus != null) {
-					 checkList.add(corpus + File.separator + filename);
-				 }
-				 checkList.add(File.separator + filename);
+				 /*
+				  * In previous version of Phon we added additional 
+				  * search folders
+				  */
+//				 if(corpus != null) {
+//					 checkList.add(corpus + File.separator + filename);
+//				 }
+				 checkList.add(filename);
 	
 				 // check project media folder, corpus media folder then global include paths
-				 final List<String> mediaPaths =
-						 new ArrayList<String>();
-				 if(project != null) {
-					 if(corpus != null && !project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
-						 String corpusMediaPath = project.getCorpusMediaFolder(corpus);
-						 if(!(new File(corpusMediaPath)).isAbsolute()) {
-							 corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
-						 }
-						 mediaPaths.add(corpusMediaPath);
-					 }
-					 String projectMediaPath = project.getProjectMediaFolder();
-					 if(!(new File(projectMediaPath)).isAbsolute()) {
-						 projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
-					 }
-					 mediaPaths.add(projectMediaPath);
-				 }
-				 mediaPaths.addAll(getMediaIncludePaths());
+				 final List<String> mediaPaths = getMediaIncludePaths(project, corpus);
 	
 				 // look in rest of search paths
 				 for(String path:mediaPaths) {
+					 File parentPath = new File(path);
 					 for(String checkName:checkList) {
 						 final File checkFile = new File(path, checkName);
 						 if(checkFile.exists()) {
-							 retVal = checkFile;
+							 retVal = new Tuple<>(parentPath, new File(checkName));
 							 break;
 						 }
 					 }
+					 if(retVal != null) break;
 				 }
-	
 			 }
 		 }
 
 		 return retVal;
 	 }
+	 
 }

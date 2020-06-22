@@ -47,6 +47,7 @@ import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.FileSelectionField;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.text.TextCompleter;
+import ca.phon.util.Tuple;
 import ca.phon.worker.PhonWorker;
 
 /**
@@ -204,19 +205,6 @@ public class MediaSelectionField extends FileSelectionField {
 			textField.setState(FieldState.INPUT);
 
 			String txt = f.getPath();
-
-			for(String includePath:MediaLocator.getMediaIncludePaths(getProject(), getEditor().getSession().getCorpus())) {
-				final Path path = Paths.get(includePath);
-				Path mediaPath = f.toPath();
-
-				if(mediaPath.startsWith(path)) {
-					mediaPath = path.relativize(mediaPath).normalize();
-					final String relativePath = mediaPath.toString();
-					txt = relativePath;
-					break;
-				}
-			}
-
 			textField.setText(txt);
 		}
 		super.firePropertyChange(FILE_PROP, lastSelectedFile, f);
@@ -244,9 +232,9 @@ public class MediaSelectionField extends FileSelectionField {
 
 		if(getTextField().getState() == FieldState.INPUT && txt != null && txt.length() > 0
 				&& getEditor().getSession() != null) {
-			File mediaLocatorFile = MediaLocator.findMediaFile(txt, project, getEditor().getSession().getCorpus());
-			if(mediaLocatorFile != null) {
-				retVal = mediaLocatorFile;
+			Tuple<File, File> pathTuple = MediaLocator.findMediaFileRelative(txt, project, getEditor().getSession().getCorpus());
+			if(pathTuple != null) {
+				retVal = pathTuple.getObj2();
 			} else {
 				retVal = new File(txt);
 			}

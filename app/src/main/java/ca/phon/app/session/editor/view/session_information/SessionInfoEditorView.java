@@ -201,7 +201,6 @@ public class SessionInfoEditorView extends EditorView {
 			
 			@Override
 			public void focusGained(FocusEvent e) {
-				System.out.println("Focus");
 			}
 			
 		});
@@ -371,21 +370,14 @@ public class SessionInfoEditorView extends EditorView {
 			dateField.setValueIsAdjusting(false);
 		}
 		
-		final File mediaFile = MediaLocator.findMediaFile(project,  session);
-		if(mediaFile != null) {
+		if(session.getMediaLocation() != null &&
+				StringUtils.strip(session.getMediaLocation()).length() > 0) {
+			mediaLocationField.getTextField().setState(FieldState.INPUT);
 			mediaLocationField.removePropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
-			mediaLocationField.setFile(mediaFile);
+			mediaLocationField.setFile(new File(session.getMediaLocation()));
 			mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		} else {
-			if(session.getMediaLocation() != null &&
-					StringUtils.strip(session.getMediaLocation()).length() > 0) {
-				mediaLocationField.getTextField().setState(FieldState.INPUT);
-				mediaLocationField.removePropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
-				mediaLocationField.setFile(new File(session.getMediaLocation()));
-				mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
-			} else {
-				mediaLocationField.getTextField().setState(FieldState.PROMPT);
-			}
+			mediaLocationField.getTextField().setState(FieldState.PROMPT);
 		}
 		
 		languageField.getDocument().removeDocumentListener(languageFieldListener);

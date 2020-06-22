@@ -1594,9 +1594,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		 * Ensure proper project names.
 		 *
 		 * Project name must start with a letter, and can be followed
-		 * by at most 30 letters, numbers, underscores, dashes.
+		 * by at most 256 letters, numbers, underscores, dashes.
 		 */
-		private String projectRegex = "[a-zA-Z0-9][- a-zA-Z_0-9]{0,29}";
+		private String projectRegex = "[a-zA-Z0-9][- a-zA-Z_0-9]{0,256}";
 
 		@Override
 		public void insertString(int offs, String str, AttributeSet a)
@@ -1611,5 +1611,4 @@ public class ProjectWindow extends CommonModuleFrame {
 			}
 		}
 	}
-
 }

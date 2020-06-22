@@ -26,6 +26,7 @@ import ca.phon.app.project.ProjectWindow;
 import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
+import ca.phon.util.Tuple;
 
 public class NewSessionAction extends ProjectWindowAction {
 	
@@ -87,9 +88,9 @@ public class NewSessionAction extends ProjectWindowAction {
 			sessionCreated = true;
 			
 			// setup media if available
-			File mediaFile = MediaLocator.findMediaFile(sessionName, proj, corpusName);
-			if(mediaFile != null && mediaFile.exists() && mediaFile.canRead()) {
-				createdSession.setMediaLocation(mediaFile.getName());
+			Tuple<File, File> pathTuple = MediaLocator.findMediaFileRelative(sessionName, proj, corpusName);
+			if(pathTuple != null) {
+				createdSession.setMediaLocation(pathTuple.getObj2().getPath());
 				
 				UUID wl = proj.getSessionWriteLock(createdSession);
 				proj.saveSession(createdSession, wl);
