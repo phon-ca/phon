@@ -75,6 +75,14 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 		completionWindow = new JWindow();
 		completionWindow.add(listScroller);
 	}
+	
+	public TextCompleterModel<?> getModel() {
+		return this.model;
+	}
+	
+	public void setModel(TextCompleterModel<?> model) {
+		this.model = model;
+	}
 
 	public boolean isUseDataForCompletion() {
 		return this.useDataForCompletion;
@@ -121,6 +129,10 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 		return completionWindow;
 	}
 
+	public List<String> getCompletions() {
+		return this.completions;
+	}
+	
 	public JList<String> getCompletionLiist() {
 		return this.completionList;
 	}

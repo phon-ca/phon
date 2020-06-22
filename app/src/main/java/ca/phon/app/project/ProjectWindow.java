@@ -41,10 +41,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.Action;
@@ -69,6 +73,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.MouseInputAdapter;
@@ -78,6 +83,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -118,6 +124,8 @@ import ca.phon.app.project.git.actions.PullAction;
 import ca.phon.app.project.git.actions.PushAction;
 import ca.phon.app.session.check.SessionCheckEP;
 import ca.phon.app.welcome.WorkspaceTextStyler;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.media.MediaLocator;
 import ca.phon.plugin.PluginAction;
 import ca.phon.project.Project;
 import ca.phon.project.ProjectEvent;
@@ -137,9 +145,15 @@ import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.text.AbstractTextCompleterModel;
+import ca.phon.ui.text.DefaultTextCompleterModel;
+import ca.phon.ui.text.TextCompleter;
+import ca.phon.ui.text.TextCompleterModel;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
@@ -169,6 +183,7 @@ public class ProjectWindow extends CommonModuleFrame {
 	private TitledPanel sessionPanel;
 	private MultiActionButton createSessionButton;
 	private JTextField sessionNameField;
+	private SessionNameTextCompleter sessionNameCompleter;
 	private JList<String> sessionList;
 	private SessionListModel sessionModel;
 	private SessionDetails sessionDetails;
@@ -1237,6 +1252,56 @@ public class ProjectWindow extends CommonModuleFrame {
 		sessionPanel.getContentContainer().revalidate();
 	}
 
+	private void addTextCompletion(Path path) {
+		String name = path.getFileName().toString();
+		name = FilenameUtils.removeExtension(name);
+		
+		if(!sessionNameCompleter.getModel().containsCompletion(name)) {
+			((DefaultTextCompleterModel)sessionNameCompleter.getModel()).addCompletion(name, name + ";" + path.normalize().toString());
+		}
+	}
+
+	private void scanPath(Path mediaPath, boolean recursive) {
+		scanPath(mediaPath, mediaPath, true);
+	}
+
+	private void scanPath(Path rootPath, Path path, boolean recursive) {
+		try(DirectoryStream<Path> dirStream = Files.newDirectoryStream(path)) {
+			final Iterator<Path> childItr = dirStream.iterator();
+			while(childItr.hasNext()) {
+				final Path child = childItr.next();
+
+				if(Files.isHidden(child)) continue;
+				final File file = child.toFile();
+				if(!FileFilter.mediaFilter.accept(file)) continue;
+
+				if(Files.isDirectory(child) && recursive) {
+					scanPath(rootPath, child, recursive);
+				} else {
+					final Path pathToAdd = rootPath.relativize(child);
+					addTextCompletion(pathToAdd);
+				}
+			}
+		} catch (IOException e) {
+			LogUtil.severe(e);
+		}
+	}
+	
+	private void setupTextCompleter(String corpus) {
+		final List<String> mediaIncludePaths = MediaLocator.getMediaIncludePaths(getProject(), corpus);
+		
+		sessionNameCompleter.getModel().clearCompletions();
+		((DefaultTextCompleterModel)sessionNameCompleter.getModel()).setIncludeInfixEntries(true);
+		
+		for(String path:mediaIncludePaths) {
+			final Path mediaFolder = Paths.get(path);
+			if(!Files.exists(mediaFolder)) continue;
+
+			scanPath(mediaFolder, true);
+		}
+		
+	}
+	
 	private MultiActionButton createSessionButton() {
 		MultiActionButton retVal = new MultiActionButton();
 
@@ -1270,6 +1335,23 @@ public class ProjectWindow extends CommonModuleFrame {
 		sessionNameField = new JTextField();
 		sessionNameField.setDocument(new NameDocument());
 		sessionNameField.setText("Session Name");
+		sessionNameField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				setupTextCompleter(getSelectedCorpus());
+			}
+			
+		});
+
+		sessionNameCompleter = new SessionNameTextCompleter();
+		sessionNameCompleter.install(sessionNameField);
+		
 		sessionNamePanel.add(sessionNameField, BorderLayout.CENTER);
 
 		ActionMap actionMap = retVal.getActionMap();
@@ -1488,7 +1570,30 @@ public class ProjectWindow extends CommonModuleFrame {
 		updateLists();
 		updateProjectMediaLabel();
 	}
+	
+	
+	private class SessionNameTextCompleter extends TextCompleter {
+		
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getValueIsAdjusting()) return;
+			final int selectedIdx = getCompletionLiist().getSelectedIndex();
+			if(selectedIdx >= 0 && selectedIdx < getCompletions().size()) {
+				getCompletionLiist().ensureIndexIsVisible(selectedIdx);
+				
+				String data = FormatterUtil.format(getModel().getData(getCompletions().get(selectedIdx)));
+				String pieces[] = data.split(";");
+				
+				final String completion = pieces[0].trim();
+				String text = getTextComponent().getText();
+				final String replacementText = getModel().completeText(text, completion);
 
+				SwingUtilities.invokeLater( () -> { getTextComponent().setText(replacementText); } );
+			}			
+		}
+		
+	}
+	
 	private class CorpusListCellRenderer extends DefaultListCellRenderer {
 
 		@Override
@@ -1590,13 +1695,6 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 
 	public class NameDocument extends PlainDocument {
-		/**
-		 * Ensure proper project names.
-		 *
-		 * Project name must start with a letter, and can be followed
-		 * by at most 256 letters, numbers, underscores, dashes.
-		 */
-		private String projectRegex = "[a-zA-Z0-9][- a-zA-Z_0-9]{0,256}";
 
 		@Override
 		public void insertString(int offs, String str, AttributeSet a)
@@ -1606,8 +1704,13 @@ public class ProjectWindow extends CommonModuleFrame {
 			String p2 = super.getText(offs, getLength()-offs);
 			String val = p1 + str + p2;
 
-			if(val.matches(projectRegex)) {
-				super.insertString(offs, str, a);
+			if(!val.contains("/") && !val.contains("\\")) {
+				File testFile = new File(val);
+				try {
+					testFile.getCanonicalPath();
+					super.insertString(offs, str, a);
+				} catch (IOException e) {
+				}
 			}
 		}
 	}

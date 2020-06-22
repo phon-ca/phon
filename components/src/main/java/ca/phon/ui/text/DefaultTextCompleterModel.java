@@ -57,12 +57,12 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 		tree.clear();
 	}
 
-	public boolean isIncludeIndexEntries() {
+	public boolean isIncludeInfixEntries() {
 		return includeIndexEntries;
 	}
 
-	public void setIncludeIndexEntries(boolean includeIndexEntries) {
-		this.includeIndexEntries = includeIndexEntries;
+	public void setIncludeInfixEntries(boolean includeInfixEntries) {
+		this.includeIndexEntries = includeInfixEntries;
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class DefaultTextCompleterModel implements TextCompleterModel<String> {
 		}
 		Collections.sort(retVal);
 		
-		if(isIncludeIndexEntries()) {
+		if(isIncludeInfixEntries()) {
 			final List<String> otherCompletions = new ArrayList<>();
 			final Set<Entry<String, String>> infixEntries = tree.entriesForKeysContaining(text);
 			for(Entry<String, String> entry:infixEntries) {
