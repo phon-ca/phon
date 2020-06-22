@@ -1682,7 +1682,6 @@ public class AudioIO {
 		 * This methods will attempt to convert a 64-bit floating point
 		 * number to an 80-bit number using some bit magic.
 		 */
-		
 		long bits = Double.doubleToLongBits(value);
 		
 		// convert exponent
