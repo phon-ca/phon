@@ -39,6 +39,8 @@ public class NewSessionAction extends ProjectWindowAction {
 	private String sessionName;
 	
 	private boolean sessionCreated = false;
+	
+	private String sessionMedia = null;
 
 	public NewSessionAction(ProjectWindow projectWindow) {
 		this(projectWindow, null, null);
@@ -56,6 +58,10 @@ public class NewSessionAction extends ProjectWindowAction {
 		
 		putValue(NAME, "New Session...");
 		putValue(SHORT_DESCRIPTION, "Add new session to project");
+	}
+	
+	public void setSessionMedia(String media) {
+		this.sessionMedia = media;
 	}
 
 	@Override
@@ -87,10 +93,9 @@ public class NewSessionAction extends ProjectWindowAction {
 			Session createdSession = proj.createSessionFromTemplate(corpusName, sessionName);
 			sessionCreated = true;
 			
-			// setup media if available
-			Tuple<File, File> pathTuple = MediaLocator.findMediaFileRelative(sessionName, proj, corpusName);
-			if(pathTuple != null) {
-				createdSession.setMediaLocation(pathTuple.getObj2().getPath());
+//			// setup media if available
+			if(sessionMedia != null) {
+				createdSession.setMediaLocation(sessionMedia);
 				
 				UUID wl = proj.getSessionWriteLock(createdSession);
 				proj.saveSession(createdSession, wl);

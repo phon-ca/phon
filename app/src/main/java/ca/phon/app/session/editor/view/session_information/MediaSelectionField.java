@@ -132,7 +132,7 @@ public class MediaSelectionField extends FileSelectionField {
 		final String name = path.normalize().toString();
 		
 		if(!completerModel.containsCompletion(name)) {
-			completerModel.addCompletion(name, name);
+			completerModel.addCompletion(name);
 		}
 	}
 
@@ -176,7 +176,6 @@ public class MediaSelectionField extends FileSelectionField {
 		SwingUtilities.invokeLater( () -> {
 			final TextCompleter completer = new TextCompleter(completerModel);
 			// completion should not be in lower-case
-			completer.setUseDataForCompletion(true);
 			completer.install(getTextField());
 		});
 	}

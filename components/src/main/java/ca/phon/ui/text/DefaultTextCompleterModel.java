@@ -15,98 +15,18 @@
  */
 package ca.phon.ui.text;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import ca.hedlund.tst.TernaryTree;
-
 /**
  * Default model which will replace the entire string with a given completion.
  *
  */
-public class DefaultTextCompleterModel implements TextCompleterModel<String> {
+public class DefaultTextCompleterModel extends TreeTextCompleterModel<Object> {
 	
-	private TernaryTree<String> tree = new TernaryTree<>();
-	
-	private boolean caseSensitive = false;
-	
-	private boolean includeIndexEntries = false;
-	
+	public DefaultTextCompleterModel() {
+		super();
+	}
+
 	public void addCompletion(String completion) {
-		if(!caseSensitive) completion = completion.toLowerCase();
-		addCompletion(completion, completion);
-	}
-
-	@Override
-	public void addCompletion(String completion, String display) {
-		if(!caseSensitive) completion = completion.toLowerCase();
-		tree.put(completion, display);
-	}
-
-	@Override
-	public void removeCompletion(String completion) {
-		if(!caseSensitive) completion = completion.toLowerCase();
-		tree.remove(completion);
-	}
-
-	@Override
-	public void clearCompletions() {
-		tree.clear();
-	}
-
-	public boolean isIncludeInfixEntries() {
-		return includeIndexEntries;
-	}
-
-	public void setIncludeInfixEntries(boolean includeInfixEntries) {
-		this.includeIndexEntries = includeInfixEntries;
-	}
-
-	@Override
-	public List<String> getCompletions(String text) {
-		if(!caseSensitive) text = text.toLowerCase();
-		final Set<Entry<String, String>> entries = tree.entriesWithPrefix(text);
-		
-		final List<String> retVal = new ArrayList<>(entries.size());
-		for(Entry<String, String> entry:entries) {
-			retVal.add(entry.getKey());
-		}
-		Collections.sort(retVal);
-		
-		if(isIncludeInfixEntries()) {
-			final List<String> otherCompletions = new ArrayList<>();
-			final Set<Entry<String, String>> infixEntries = tree.entriesForKeysContaining(text);
-			for(Entry<String, String> entry:infixEntries) {
-				if(!retVal.contains(entry.getKey()))
-					otherCompletions.add(entry.getKey());
-			}
-			Collections.sort(otherCompletions);
-			retVal.addAll(otherCompletions);
-		}
-		return retVal;
-	}
-
-	@Override
-	public String completeText(String text, String completion) {
-		return completion;
-	}
-
-	@Override
-	public String getData(String completion) {
-		if(!caseSensitive) completion = completion.toLowerCase();
-		return tree.get(completion);
-	}
-
-	@Override
-	public String getDisplayText(String completion) {
-		return getData(completion);
+		super.addCompletion(completion, null);
 	}
 	
-	public boolean containsCompletion(String completion) {
-		return (getData(completion) != null);
-	}
-
 }

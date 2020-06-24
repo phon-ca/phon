@@ -63,7 +63,7 @@ public class TierNameField extends PromptedTextField {
 			completer.setUseDataForCompletion(true);
 			completer.install(this);
 		}
-		Arrays.stream(SystemTierType.values()).forEach( (tier) -> completerModel.addCompletion( tier.getName(), tier.getName() ) );
+		Arrays.stream(SystemTierType.values()).forEach( (tier) -> completerModel.addCompletion( tier.getName() ) );
 
 		if(getProject() != null) {
 			// TODO setup tier names

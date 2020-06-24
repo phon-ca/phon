@@ -63,7 +63,7 @@ public class CorpusNameField extends PromptedTextField {
 			completer.install(this);
 		}
 		if(getProject() != null) {
-			getProject().getCorpora().forEach( (corpus) -> completerModel.addCompletion(corpus, corpus) );
+			getProject().getCorpora().forEach( (corpus) -> completerModel.addCompletion(corpus) );
 		}
 	}
 

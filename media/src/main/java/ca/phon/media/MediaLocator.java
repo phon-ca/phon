@@ -86,6 +86,10 @@ public class MediaLocator {
 					corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
 				if(!corpusMediaPath.equals(projectMediaPath))
 					retVal.add(corpusMediaPath);
+				
+				String defaultCorpusMediaPath = projectMediaPath + File.separator + corpus;
+				if(!projectMediaPath.equals(defaultCorpusMediaPath) && !corpusMediaPath.equals(defaultCorpusMediaPath))
+					retVal.add(defaultCorpusMediaPath);
 			}
 			
 			final File projectMediaFolder = new File(projectMediaPath);
@@ -95,7 +99,11 @@ public class MediaLocator {
 		}
 
 		// add global paths
-		retVal.addAll(getMediaIncludePaths());
+		for(String mediaPath:getMediaIncludePaths()) {
+			if(corpus != null)
+				retVal.add(mediaPath + File.separator + corpus);
+			retVal.add(mediaPath);
+		}
 
 		return retVal;
 	}
@@ -215,13 +223,6 @@ public class MediaLocator {
 				 retVal = new Tuple<>(null, mediaFile);
 			 } else {
 				 final List<String> checkList = new ArrayList<String>();
-				 /*
-				  * In previous version of Phon we added additional 
-				  * search folders
-				  */
-//				 if(corpus != null) {
-//					 checkList.add(corpus + File.separator + filename);
-//				 }
 				 checkList.add(filename);
 	
 				 // check project media folder, corpus media folder then global include paths

@@ -73,6 +73,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -146,7 +148,7 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.text.AbstractTextCompleterModel;
+import ca.phon.ui.text.TreeTextCompleterModel;
 import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.TextCompleter;
 import ca.phon.ui.text.TextCompleterModel;
@@ -1334,6 +1336,27 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		sessionNameField = new JTextField();
 		sessionNameField.setDocument(new NameDocument());
+		sessionNameField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if(sessionNameCompleter != null) {
+					sessionNameCompleter.selectedMedia = null;
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if(sessionNameCompleter != null) {
+					sessionNameCompleter.selectedMedia = null;
+				}
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+			}
+		});
 		sessionNameField.setText("Session Name");
 		sessionNameField.addFocusListener(new FocusListener() {
 			
@@ -1404,6 +1427,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 
 		final NewSessionAction newSessionAct = new NewSessionAction(this, getSelectedCorpus(), sessionName);
+		newSessionAct.setSessionMedia(sessionNameCompleter.selectedMedia);
 		newSessionAct.actionPerformed(pae.getActionEvent());
 		if(newSessionAct.isSessionCreated()) {
 			onHideCreateSessionButton();
@@ -1571,8 +1595,9 @@ public class ProjectWindow extends CommonModuleFrame {
 		updateProjectMediaLabel();
 	}
 	
-	
 	private class SessionNameTextCompleter extends TextCompleter {
+		
+		private String selectedMedia = null;
 		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -1582,13 +1607,13 @@ public class ProjectWindow extends CommonModuleFrame {
 				getCompletionLiist().ensureIndexIsVisible(selectedIdx);
 				
 				String data = FormatterUtil.format(getModel().getData(getCompletions().get(selectedIdx)));
-				String pieces[] = data.split(";");
+				final String pieces[] = data.split(";");
 				
 				final String completion = pieces[0].trim();
 				String text = getTextComponent().getText();
 				final String replacementText = getModel().completeText(text, completion);
-
-				SwingUtilities.invokeLater( () -> { getTextComponent().setText(replacementText); } );
+				
+				SwingUtilities.invokeLater( () -> { getTextComponent().setText(replacementText); selectedMedia = pieces[1].trim(); } );
 			}			
 		}
 		

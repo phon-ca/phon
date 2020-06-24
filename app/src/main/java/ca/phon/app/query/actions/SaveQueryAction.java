@@ -112,7 +112,7 @@ public class SaveQueryAction extends HookableAction {
 			stockQueries.getNamedParamSets().forEach( (ps) -> textCompleterModel.addCompletion(ps.getName(), ps.getName()) );
 			queryHistory.getNamedParamSets().forEach( (ps) -> textCompleterModel.addCompletion(ps.getName(), ps.getName()) );
 			TextCompleter tc = new TextCompleter(textCompleterModel);
-			tc.setUseDataForCompletion(true);
+//			tc.setUseDataForCompletion(true);
 			tc.install(queryNameField);
 			
 			gbc.gridy++;
