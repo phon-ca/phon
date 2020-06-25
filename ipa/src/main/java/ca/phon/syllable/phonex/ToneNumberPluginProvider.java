@@ -40,7 +40,7 @@ public class ToneNumberPluginProvider implements PluginProvider {
 		if(args.size() == 0)
 			throw new IllegalArgumentException("Not enough arguments");
 
-		Pattern tonePattern = Pattern.compile("(not\\s?)?([0-9][ 0-9]+(\\|[0-9][ 0-9]+)*)");
+		Pattern tonePattern = Pattern.compile("(not\\s?)?([0-9][ 0-9]*(\\|[0-9][ 0-9]+)*)");
 		Matcher matcher = tonePattern.matcher(args.get(0));
 		
 		if(matcher.matches()) {
@@ -49,7 +49,7 @@ public class ToneNumberPluginProvider implements PluginProvider {
 			for(String tone:tones) {
 				toneList.add(tone.strip());
 			}
-			return new ToneMatcher(toneList, "not".equals(matcher.group(1).strip()) );
+			return new ToneMatcher(toneList, (matcher.group(1) != null && "not".equals(matcher.group(1).strip())) );
 		} else {
 			throw new IllegalArgumentException("Invalid syntax");
 		}

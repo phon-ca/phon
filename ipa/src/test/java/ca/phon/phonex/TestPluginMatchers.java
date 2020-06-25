@@ -200,32 +200,31 @@ public class TestPluginMatchers extends PhonexTest {
 
 		final IPATranscript tone1 = ipa.subsection(0, 3);
 		final IPATranscript tone2 = ipa.subsection(6, ipa.length());
-		final IPATranscript[] allTones = {
-				tone1, tone2
-		};
+//		final IPATranscript[] allTones = {
+//				tone1, tone2
+//		};
 
 		// tone1
-		PhonexPattern pattern = PhonexPattern.compile(".:tone(\"1\")+");
+		PhonexPattern pattern = PhonexPattern.compile(".:tn(\"1\")+");
 		PhonexMatcher matcher = pattern.matcher(ipa);
 		Assert.assertEquals(true, matcher.find());
 		Assert.assertEquals(tone1, new IPATranscript(matcher.group()));
 
 		// tone5
-		pattern = PhonexPattern.compile(".:tone(\"5\")+");
+		pattern = PhonexPattern.compile(".:tn(\"5\")+");
 		matcher = pattern.matcher(ipa);
 		Assert.assertEquals(true, matcher.find());
 		Assert.assertEquals(tone2, new IPATranscript(matcher.group()));
 
-		// any tone
-		pattern = PhonexPattern.compile(".:tone(\"*\")+");
-		matcher = pattern.matcher(ipa);
-
-		int numFound = 0;
-		while(matcher.find()) {
-			Assert.assertEquals(true, numFound < allTones.length);
-			Assert.assertEquals(allTones[numFound++], new IPATranscript(matcher.group()));
-		}
-		Assert.assertEquals(allTones.length, numFound);
+//		pattern = PhonexPattern.compile(".:tn(\"not 1\")+");
+//		matcher = pattern.matcher(ipa);
+//
+//		int numFound = 0;
+//		while(matcher.find()) {
+//			Assert.assertEquals(true, numFound < allTones.length);
+//			Assert.assertEquals(allTones[numFound++], new IPATranscript(matcher.group()));
+//		}
+//		Assert.assertEquals(allTones.length, numFound);
 	}
 	
 	@Test
