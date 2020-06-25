@@ -385,7 +385,7 @@ public class IPAElementFactory {
 		retInfo.setConstituentType(syllInfo.getConstituentType());
 		retInfo.setDiphthongMember(syllInfo.isDiphthongMember());
 		retInfo.setStress(syllInfo.getStress());
-		retInfo.setToneFeatures(syllInfo.getToneFeatures());
+		retInfo.setToneNumber(syllInfo.getToneNumber());
 	}
 	
 }

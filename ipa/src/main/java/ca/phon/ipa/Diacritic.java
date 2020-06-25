@@ -110,8 +110,8 @@ public class Diacritic extends IPAElement {
 			retVal = DiacriticType.PREFIX;
 		} else if(tt == IPATokenType.SUFFIX_DIACRITIC) {
 			retVal = DiacriticType.SUFFIX;
-		} else if(tt == IPATokenType.TONE) {
-			retVal = DiacriticType.TONE;
+		} else if(tt == IPATokenType.TONE_NUMBER) {
+			retVal = DiacriticType.TONE_NUMBER;
 		} else if(tt == IPATokenType.COMBINING_DIACRITIC) {
 			retVal = DiacriticType.COMBINING;
 		} else if(tt == IPATokenType.LONG || tt == IPATokenType.HALF_LONG) {

@@ -1197,16 +1197,10 @@
     <feature_set char="⁹">diacritic tone9</feature_set>
     <!--˭ (0x2ed)-->
     <feature_set char="˭">diacritic unaspirated</feature_set>
-    <!--↑ (0x2191)-->
-    <feature_set char="↑">diacritic egressive</feature_set>
-    <!--↓ (0x2193)-->
-    <feature_set char="↓">diacritic ingressive</feature_set>
+    
     <!--↔ (0x2194)-->
     <feature_set char="↔">diacritic</feature_set>
-    <!--↗ (0x2197)-->
-    <feature_set char="↗">diacritic toneglobalrise</feature_set>
-    <!--↘ (0x2198)-->
-    <feature_set char="↘">diacritic toneglobalfall</feature_set>
+        
     <!--ꜛ (0xa71b)-->
     <feature_set char="ꜛ">diacritic toneupstep</feature_set>
     <!--ꜜ (0xa71c)-->

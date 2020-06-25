@@ -332,39 +332,39 @@
     </char>
     <char value="&#x00b9;">
         <name>Superscript One (Number 1)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x00b2;">
         <name>Superscript Two (Number 2)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x00b3;">
         <name>Superscript Three (Number 3)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x2074;">
         <name>Superscript Four (Number 4)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x2075;">
         <name>Superscript Five (Number 5)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x2076;">
         <name>Superscript Six (Number 6)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x2077;">
         <name>Superscript Seven (Number 7)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x2078;">
         <name>Superscript Eight (Number 8)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x2079;">
         <name>Superscript Nine (Number 9)</name>
-        <token>TONE</token>
+        <token>TONE_NUMBER</token>
     </char>
     <char value="&#x00e6;">
         <name>Latin Letter Small AE</name>
@@ -1222,30 +1222,6 @@
         <name>Vertical Line</name>
         <token>MINOR_GROUP</token>
     </char>
-    <char value="&#x2191;">
-        <name>Upwards Arrow</name>
-        <token>TONE</token>
-    </char>
-    <char value="&#x2193;">
-        <name>Downwards Arrow</name>
-        <token>TONE</token>
-    </char>
-    <char value="&#x2197;">
-        <name>Northeast Arrow</name>
-        <token>TONE</token>
-    </char>
-    <char value="&#x2198;">
-        <name>Southeast Arrow</name>
-        <token>TONE</token>
-    </char>
-    <char value="&#xa71b;">
-    	<name>Up Arrow</name>
-    	<token>TONE</token>
-    </char>
-    <char value="&#xa71c;">
-    	<name>Down Arrow</name>
-    	<token>TONE</token>
-    </char>
     <char value="&#x0335;">
         <name>Combining Short Stroke Overlay - Affix Diacritic Role Switcher</name>
         <token>ROLE_REVERSAL</token>
@@ -1308,29 +1284,31 @@
         <name>Combining Grave-Acute-Grave</name>
         <token>COMBINING_DIACRITIC</token>
     </char>
-    <char value="&#x2191;">
+    
+    <!-- <char value="&#x2191;">
         <name>Upwards Arrow</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x2193;">
         <name>Downwards Arrow</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x2197;">
         <name>North-East arrow</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x2198;">
         <name>South-East Arrow</name>
-        <token>TONE</token>
-    </char>
+        <token>COMBINING_DIACRITIC</token>
+    </char> -->
+    
     <char value="&#xa71b;">
         <name>Modifier Letter Raised Up Arrow</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#xa71c;">
         <name>Modifier Letter Raised Down Arrow</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02c2;">
         <name>Modifier Letter Left Arrowhead</name>
@@ -1350,31 +1328,31 @@
     </char>
     <char value="&#x02c6;">
         <name>Modifier Letter Circumflex Accent</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02c7;">
         <name>Caron</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02c9;">
         <name>Modifier Letter Macron</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02ca;">
         <name>Modifier Letter Acute Accent</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02cb;">
         <name>Modifier Letter Grave Accent</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02d4;">
         <name>Modifier Letter Up Tack</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02d5;">
         <name>Modifier Letter Down Tack</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02d6;">
         <name>Modifier Letter Plus Sign</name>
@@ -1418,43 +1396,43 @@
     </char>
     <char value="&#x02f5;">
         <name>Modifier Letter Middle Double Grave Accent</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02f6;">
         <name>Modifier Letter Middle Double Acute Accent</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02f8;">
         <name>Modifier Letter Raised Colon</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02f9;">
         <name>Modifier Letter Begin High Tone</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02fa;">
         <name>Modifier Letter End High Tone</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02fb;">
         <name>Modifier Letter Begin Low Tone</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02fc;">
         <name>Modifier Letter End Low Tone</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02fd;">
         <name>Modifier Letter Shelf</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02fe;">
         <name>Modifier Letter Open Shelf</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x02ff;">
         <name>Modifier Letter Low Left Arrow</name>
-        <token>TONE</token>
+        <token>COMBINING_DIACRITIC</token>
     </char>
     <char value="&#x1dbb;">
         <name>Modifier Letter Small Z</name>

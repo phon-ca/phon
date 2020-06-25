@@ -15,11 +15,15 @@
  */
 package ca.phon.syllable;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;
+import ca.phon.ipa.Diacritic;
+import ca.phon.ipa.DiacriticFilter;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.Phone;
 import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.StressType;
 import ca.phon.ipa.features.FeatureSet;
@@ -47,7 +51,7 @@ public class SyllabificationInfo {
 	public static void setupSyllabificationInfo(IPATranscript ipa) {
 		if(ipa.getExtension(InfoFlag.class) == null) {
 			setupStressInfo(ipa);
-			setupToneInfo(ipa);
+			setupToneNumber(ipa);
 			InfoFlag flag = new InfoFlag();
 			flag.complete = true;
 			ipa.putExtension(InfoFlag.class, flag);
@@ -67,22 +71,46 @@ public class SyllabificationInfo {
 		});
 	}
 	
-	private static void setupToneInfo(IPATranscript ipa) {
-		final FeatureSet allToneFeatures = FeatureSet.fromArray(new String[] { "tone1", "tone2",
-				"tone3", "tone4", "tone5", "tone6", "tone7", "tone8", "tone9" });
+	private static void setupToneNumber(IPATranscript ipa) {
 		ipa.syllables().parallelStream().forEach( (syll) -> {
-			FeatureSet toneFeatures = new FeatureSet();
+			StringBuffer buf = new StringBuffer();
 			for(IPAElement ele:syll) {
-				toneFeatures = FeatureSet.union(toneFeatures,
-						FeatureSet.intersect(allToneFeatures, ele.getFeatureSet()));
+				Diacritic[] toneNumberEles = (ele instanceof Phone ? ((Phone)ele).getToneNumberDiacritics() : new Diacritic[0]);
+				Arrays.stream(toneNumberEles).forEach( dia -> buf.append(diacriticToToneNumber(dia)) );
 			}
-			if(toneFeatures.size() > 0) {
+			if(buf.length() > 0) {
 				for(IPAElement ele:syll) {
 					final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
-					info.setToneFeatures(toneFeatures);
+					info.setToneNumber(buf.toString());
 				}
 			}
 		});
+	}
+	
+	private static String diacriticToToneNumber(Diacritic dia) {
+		if(dia.getFeatureSet().hasFeature("tone0")) {
+			return "0";
+		} else if(dia.getFeatureSet().hasFeature("tone1")) {
+			return "1";
+		} else if(dia.getFeatureSet().hasFeature("tone2")) {
+			return "2";
+		} else if(dia.getFeatureSet().hasFeature("tone3")) {
+			return "3";
+		} else if(dia.getFeatureSet().hasFeature("tone4")) {
+			return "4";
+		} else if(dia.getFeatureSet().hasFeature("tone5")) {
+			return "5";
+		} else if(dia.getFeatureSet().hasFeature("tone6")) {
+			return "6";
+		} else if(dia.getFeatureSet().hasFeature("tone7")) {
+			return "7";
+		} else if(dia.getFeatureSet().hasFeature("tone8")) {
+			return "8";
+		} else if(dia.getFeatureSet().hasFeature("tone9")) {
+			return "9";
+		} else {
+			return "";
+		}
 	}
 	
 	private static class InfoFlag  {
@@ -124,7 +152,7 @@ public class SyllabificationInfo {
 	/**
 	 * Tone features for syllable
 	 */
-	private FeatureSet toneFeatures = new FeatureSet();
+	private String toneNumber = "";
 	
 	/**
 	 * weak reference to parent
@@ -173,12 +201,16 @@ public class SyllabificationInfo {
 		getPhone().firePropertyChange(PHONE_SCTYPE, oldType, this.scType);
 	}
 	
-	public FeatureSet getToneFeatures() {
-		return this.toneFeatures;
+	public String getToneNumber() {
+		return this.toneNumber;
 	}
 	
-	public void setToneFeatures(FeatureSet toneFeatures) {
-		this.toneFeatures = toneFeatures;
+	public void setToneNumber(String toneNumber) {
+		if(toneNumber.matches("[0-9](\\s?[0-9])*")) {
+			this.toneNumber = toneNumber;
+		} else {
+			throw new IllegalArgumentException(toneNumber);
+		}
 	}
 	
 	/**

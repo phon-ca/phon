@@ -16,9 +16,16 @@
 package ca.phon.app.project;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.LocalProject;
 import ca.phon.project.Project;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -33,6 +40,8 @@ import ca.phon.project.exceptions.ProjectConfigurationException;
 public final class ShadowProject extends LocalProject {
 	
 	private final Project project;
+	
+	private Map<String, String> corpusPathMap = new HashMap<String, String>();
 		
 	/**
 	 * Create a new shadow project.
@@ -48,6 +57,13 @@ public final class ShadowProject extends LocalProject {
 		File shadowFolder = new File(tmpProjectFolder);
 		if(!shadowFolder.exists()) {
 			shadowFolder.mkdirs();
+		}
+		
+		Properties props = project.getExtension(Properties.class);
+		try(FileOutputStream fout = new FileOutputStream(new File(shadowFolder, ".properties"))) {
+			props.store(fout, "");
+		} catch (IOException e) {
+			LogUtil.severe(e);
 		}
 		
 		final ShadowProject retVal = new ShadowProject(shadowFolder, project);
@@ -82,6 +98,20 @@ public final class ShadowProject extends LocalProject {
 		return mediaFolder.getAbsolutePath();
 	}
 
+	@Override
+	public String getCorpusPath(String corpus) {
+		if(corpusPathMap.containsKey(corpus)) {
+			return corpusPathMap.get(corpus);
+		} else {
+			return super.getCorpusPath(corpus);
+		}
+	}
+
+	@Override
+	public void setCorpusPath(String corpus, String path) {
+		corpusPathMap.put(corpus, path);
+	}
+
 	/*
 	 * Delegates
 	 */
@@ -90,7 +120,10 @@ public final class ShadowProject extends LocalProject {
 	}
 	
 	public List<String> getCorpora() {
-		return project.getCorpora();
+		if(project != null)
+			return project.getCorpora();
+		else 
+			return new ArrayList<String>();
 	}
 	
 }

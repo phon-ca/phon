@@ -1596,7 +1596,7 @@
             <property name="Description">Velopharyngeal frication</property>
             <property name="Unicode">0x34c</property>
         </cell>
-        <cell y="10" x="26" h="2" w="2">
+        <!-- <cell y="10" x="26" h="2" w="2">
             <text>↓</text>
             <property name="Name">Downwards arrow</property>
             <property name="Description">Ingressive</property>
@@ -1607,7 +1607,7 @@
             <property name="Name">Upwards arrow</property>
             <property name="Description">Egressive</property>
             <property name="Unicode">0x2191</property>
-        </cell>
+        </cell> -->
         <cell y="10" x="30" h="2" w="2">
             <text>◌ˬ</text>
             <property name="Name">Subscript wedge</property>

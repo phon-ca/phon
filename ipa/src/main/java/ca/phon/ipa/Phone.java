@@ -216,10 +216,10 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	 * 
 	 * @return tone diacritics
 	 */
-	public Diacritic[] getToneDiacritics() {
+	public Diacritic[] getToneNumberDiacritics() {
 		final List<Diacritic> retVal = new ArrayList<Diacritic>();
 		for(Diacritic dia:getSuffixDiacritics()) {
-			if(dia.getType() == DiacriticType.TONE) {
+			if(dia.getType() == DiacriticType.TONE_NUMBER) {
 				retVal.add(dia);
 			}
 		}

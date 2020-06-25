@@ -218,7 +218,7 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 		destInfo.setConstituentType(info.getConstituentType());
 		destInfo.setDiphthongMember(info.isDiphthongMember());
 		destInfo.setStress(info.getStress());
-		destInfo.setToneFeatures(info.getToneFeatures());
+		destInfo.setToneNumber(info.getToneNumber());
 		dest.putExtension(SyllabificationInfo.class, destInfo);
 	}
 	

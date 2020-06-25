@@ -44,7 +44,7 @@ public enum IPATokenType {
     SECONDARY_STRESS("Secondary Stress"),
     SPACE("Space"),
     SUFFIX_DIACRITIC("Suffix Diacritic"),
-    TONE("Tone"),
+    TONE_NUMBER("Tone Number"),
     VOWEL("Vowel"),
     COLON("Colon"),
     SCTYPE("Syllable ConstituentType"),

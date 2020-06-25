@@ -15,6 +15,8 @@
  */
 package ca.phon.syllable.phonex;
 
+import java.util.List;
+
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.phonex.PhoneMatcher;
@@ -26,10 +28,13 @@ import ca.phon.syllable.SyllabificationInfo;
  */
 public class ToneMatcher implements PhoneMatcher {
 	
-	private FeatureSet toneFeatures;
+	private boolean isNot = false;
 	
-	public ToneMatcher(FeatureSet features) {
-		this.toneFeatures = features;
+	private List<String> toneNumbers;
+	
+	public ToneMatcher(List<String> toneNumbers, boolean isNot) {
+		this.toneNumbers = toneNumbers;
+		this.isNot = isNot;
 	}
 
 	@Override
@@ -38,8 +43,8 @@ public class ToneMatcher implements PhoneMatcher {
 		
 		final SyllabificationInfo info = p.getExtension(SyllabificationInfo.class);
 		if(info != null) {
-			FeatureSet intersection = FeatureSet.intersect(toneFeatures, info.getToneFeatures());
-			retVal = (intersection.size() > 0);
+			boolean contains = toneNumbers.contains(info.getToneNumber());
+			retVal = (isNot ? !contains : contains);
 		}
 		
 		return retVal;
@@ -47,9 +52,7 @@ public class ToneMatcher implements PhoneMatcher {
 
 	@Override
 	public boolean matchesAnything() {
-		final FeatureSet allToneFeatures = FeatureSet.fromArray(new String[] { "tone1", "tone2",
-				"tone3", "tone4", "tone5", "tone6", "tone7", "tone8", "tone9" });
-		return toneFeatures.equals(allToneFeatures);
+		return false;
 	}
 
 }

@@ -393,12 +393,12 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		}
 		
 		// tone diacritics
-		final Set<Character> tSet = tokens.getCharactersForType(IPATokenType.TONE);
-		tSet.removeAll(supportedChars);
-		if(tSet.size() > 0) {
-			final Grid tGrid = generateGrid(tSet, "Other Tone Diacritics", "\u25cc", "", w, h, maxX);
-			grids.getGrid().add(tGrid);
-		}
+//		final Set<Character> tSet = tokens.getCharactersForType(IPATokenType.TONE);
+//		tSet.removeAll(supportedChars);
+//		if(tSet.size() > 0) {
+//			final Grid tGrid = generateGrid(tSet, "Other Tone Diacritics", "\u25cc", "", w, h, maxX);
+//			grids.getGrid().add(tGrid);
+//		}
 		
 		// everything else...
 		final Set<Character> everything = new HashSet<Character>(tokens.getCharacterSet());
@@ -406,7 +406,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		everything.removeAll(cSet);
 		everything.removeAll(vSet);
 		everything.removeAll(pdSet);
-		everything.removeAll(tSet);
+//		everything.removeAll(tSet);
 		everything.removeAll(sdSet);
 		everything.removeAll(cdSet);
 		

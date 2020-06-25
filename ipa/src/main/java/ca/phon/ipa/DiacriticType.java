@@ -19,6 +19,6 @@ public enum DiacriticType {
 	PREFIX,
 	SUFFIX,
 	COMBINING,
-	TONE,
+	TONE_NUMBER,
 	LENGTH;
 }
