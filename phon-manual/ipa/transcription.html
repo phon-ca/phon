@@ -63,7 +63,7 @@ $(document).ready( function () {
     <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
     -->
     <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.1.0">Phon 3.1.0</a>
-    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.1-beta.1">Phon 3.1.1-beta.1</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.1-beta.3">Phon 3.1.1-beta.3</a>
     <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
 </div>
             </div>
@@ -109,14 +109,17 @@ $(document).ready( function () {
     <div class="body">
         <p class="p">Phonetic transcriptions - data entered into <span class="keyword">IPA Targetr</span> and
                 <span class="keyword">IPA Actual</span> tiers - are parsed into discreet units, or
-                <span class="keyword">IPA elements</span>.  Each <span class="keyword">IPA element</span> constitutes
-            either a timing unit or annotation within the transcription.  The following <span class="keyword">IPA
-                Elements</span> are identified by <span class="keyword">Phon</span>.</p>
+                <span class="keyword">IPA elements</span>. Each <span class="keyword">IPA element</span> constitutes
+            either a timing unit or annotation within the transcription. The following <span class="keyword">IPA
+                Elements</span> are identified by <span class="keyword">Phon</span>. All characters
+            available in Phon may be accessed using the <a class="xref" href="../tools/ipamap.html" title="About the IPA Map in Phon.">IPA Map</a>.</p>
     </div>
     
     <article class="topic nested1" aria-labelledby="ariaid-title2" id="ipa_elements">
         <h2 class="title topictitle2" id="ariaid-title2">IPA Elements</h2>
-        <div class="body"></div>
+        <div class="body">
+            <p class="p"></p>
+        </div>
         
         <article class="topic nested2" aria-labelledby="ariaid-title3" id="phone">
             <h3 class="title topictitle3" id="ariaid-title3">Phone</h3> <div class="body">
@@ -124,61 +127,41 @@ $(document).ready( function () {
                     <em class="ph i">base glyph</em>) along with optional diacritics. Diacritics are of the following types: prefix
                     (e.g., pre-nasalization), combining (e.g., devoicing), length, suffix (e.g., aspiration), and
                     tone. The following sections outline each part of a single Phone.</p>
-                <section class="section"><h4 class="title sectiontitle">Prefix Diacritic</h4>
+                <section class="section" id="phone__prefix_diacritic"><h4 class="title sectiontitle">Prefix Diacritic</h4>
                     
                     <p class="p">A prefix diacritic must appear before the base glyph.  A phone may have multiple prefix
                         diacritics.</p>
                 </section>
-                <section class="section"><h4 class="title sectiontitle">Base Glyph</h4>
+                <section class="section" id="phone__base_phone"><h4 class="title sectiontitle">Base Glyph</h4>
                     
                     <p class="p">The base glyph can be any IPA vowel or consonant.</p>
                 </section>
-                <section class="section"><h4 class="title sectiontitle">Combining Diacritic</h4>
+                <section class="section" id="phone__combining_diacritic"><h4 class="title sectiontitle">Combining Diacritic</h4>
                     
-                    <p class="p">Combining diacritics must appear directly after the base glyph; any number of combining
-                        diacritics may be used.  Combining diacritics may also be added to prefix and suffix
-                        diacritics.</p>
+                    <div class="p">Combining diacritics must appear directly after the base glyph; any number of
+                        combining diacritics may be used. Combining diacritics may also be added to
+                        prefix and suffix diacritics.<div class="note note note_note"><span class="note__title">Note:</span> Some combining diacritic options may
+                            cause rendering issues depending on the selected IPA font.</div></div>
                 </section>
-                <section class="section"><h4 class="title sectiontitle">Length</h4>
+                <section class="section" id="phone__phone_length"><h4 class="title sectiontitle">Length</h4>
                     
                     <p class="p">Phone length is indicated using character 0x02D0 (long) and 0x02D1 (half-long.)  Length
                         diacritics must appear after the phone to which they belong.</p>
                 </section>
-                <section class="section"><h4 class="title sectiontitle">Suffix Diacritic</h4>
+                <section class="section" id="phone__suffix_diacritic"><h4 class="title sectiontitle">Suffix Diacritic</h4>
                     
                     <p class="p">A suffix diacritic must appear after the base glyph.  A phone may have multiple suffix
                         diacritics.</p>
                 </section>
-                <section class="section"><h4 class="title sectiontitle">Tone</h4>
+                <section class="section" id="phone__tone_number"><h4 class="title sectiontitle">Tone Number</h4>
                     
-                    <p class="p">Tone diacritics (such as upstep or tone numbers) must appear as the last element in a phone.</p>
+                    <p class="p">Tone number is specified using superscript numbers and must appear as the
+                        last element in a phone.  Tone number applies to all elements inside of a
+                        syllable unit and may be appear on any element within the syllable. If tone
+                        number appears on more than one element a space is added to the tone number
+                        indicating the break (for query and reporting purposes.)</p>
                 </section>
-                <section class="section">
-                    <div class="note note note_note"><span class="note__title">Note:</span> Please consult  for a list of possible IPA elements and their character types.</div>
-                    <table class="table" id="phone__table_dyv_gxz_pg"><caption></caption><colgroup><col /><col /></colgroup><thead class="thead">
-                                <tr>
-                                    <th class="entry" id="phone__table_dyv_gxz_pg__entry__1">Some Possible Phones</th>
-                                    <th class="entry" id="phone__table_dyv_gxz_pg__entry__2">Description</th>
-                                </tr>
-                            </thead><tbody class="tbody">
-                                <tr>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__1 ">t̪ʰ</td>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__2 ">Aspirated dental [t]</td>
-                                </tr>
-                                <tr>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__1 ">aːːː¹</td>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__2 ">Triple-long [a], Tone 1</td>
-                                </tr>
-                                <tr>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__1 ">ⁿd</td>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__2 ">Prenasalised [d]</td>
-                                </tr>
-                                <tr>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__1 ">ᵐṳ̀</td>
-                                    <td class="entry" headers="phone__table_dyv_gxz_pg__entry__2 ">Prenasalised, breathy voiced [u], with combining diacritic low tone</td>
-                                </tr>
-                            </tbody></table>
-                </section>
+                <div class="example">ba²¹⁴  has tone number '214'<p class="p">b²a¹⁴ has tone number '2 14'</p></div>
                 
             </div>
             
@@ -431,7 +414,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#ipa_elements" data-tocid="ipa_elements">IPA Elements</a><ul><li class="topic-item"><a href="#phone" data-tocid="phone">Phone</a></li><li class="topic-item"><a href="#compound_phone" data-tocid="compound_phone">Compound Phone</a></li><li class="topic-item"><a href="#stress_marker" data-tocid="stress_marker">Stress Marker</a></li><li class="topic-item"><a href="#syllable_boundary" data-tocid="syllable_boundary">Syllable Boundary</a></li><li class="topic-item"><a href="#word_boundary" data-tocid="word_boundary">Word Boundary</a></li><li class="topic-item"><a href="#intra-word_pause" data-tocid="intra-word_pause">Pause (Intra-word)</a></li><li class="topic-item"><a href="#inter-word_pause" data-tocid="inter-word_pause">Pause (Inter-word)</a></li></ul></li><li class="topic-item"><a href="#other_transcription_items" data-tocid="other_transcription_items">Other Transcription Items</a><ul><li class="topic-item"><a href="#intonation_group" data-tocid="intonation_group">Intonation Group</a></li><li class="topic-item"><a href="#compound_word" data-tocid="compound_word">Compound Word</a></li><li class="topic-item"><a href="#sandhi" data-tocid="sandhi">Sandhi</a></li></ul></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#ipa_elements" data-tocid="ipa_elements">IPA Elements</a><ul><li class="topic-item"><a href="#phone" data-tocid="phone">Phone</a><ul><li class="section-item"><div class="section-title"><a href="#phone__prefix_diacritic" data-tocid="phone__prefix_diacritic">Prefix Diacritic</a></div></li><li class="section-item"><div class="section-title"><a href="#phone__base_phone" data-tocid="phone__base_phone">Base Glyph</a></div></li><li class="section-item"><div class="section-title"><a href="#phone__combining_diacritic" data-tocid="phone__combining_diacritic">Combining Diacritic</a></div></li><li class="section-item"><div class="section-title"><a href="#phone__phone_length" data-tocid="phone__phone_length">Length</a></div></li><li class="section-item"><div class="section-title"><a href="#phone__suffix_diacritic" data-tocid="phone__suffix_diacritic">Suffix Diacritic</a></div></li><li class="section-item"><div class="section-title"><a href="#phone__tone_number" data-tocid="phone__tone_number">Tone Number</a></div></li></ul></li><li class="topic-item"><a href="#compound_phone" data-tocid="compound_phone">Compound Phone</a></li><li class="topic-item"><a href="#stress_marker" data-tocid="stress_marker">Stress Marker</a></li><li class="topic-item"><a href="#syllable_boundary" data-tocid="syllable_boundary">Syllable Boundary</a></li><li class="topic-item"><a href="#word_boundary" data-tocid="word_boundary">Word Boundary</a></li><li class="topic-item"><a href="#intra-word_pause" data-tocid="intra-word_pause">Pause (Intra-word)</a></li><li class="topic-item"><a href="#inter-word_pause" data-tocid="inter-word_pause">Pause (Inter-word)</a></li></ul></li><li class="topic-item"><a href="#other_transcription_items" data-tocid="other_transcription_items">Other Transcription Items</a><ul><li class="topic-item"><a href="#intonation_group" data-tocid="intonation_group">Intonation Group</a></li><li class="topic-item"><a href="#compound_word" data-tocid="compound_word">Compound Word</a></li><li class="topic-item"><a href="#sandhi" data-tocid="sandhi">Sandhi</a></li></ul></li></ul></div>
                         </nav>
                     
                 </div>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.1-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1-beta_1.dmg" newVersion="3.1.1-beta.1" newMediaFileId="macos" fileSize="278788658" md5Sum="14388d16ae352cb07fe4fe54ca2c5069" sha256Sum="a022c544a175203fed55867949f68c861b51a6baa0a856b717c79a66f262186f" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.1-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1-beta_3.dmg" newVersion="3.1.1-beta.3" newMediaFileId="macos" fileSize="278934465" md5Sum="af275d29df22af0037976560ae38d385" sha256Sum="869fddd3335ff7586c5c037c7e8769ccd483721ead879d526700da37b69c5b0b" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -10,6 +10,12 @@
    - 32/64 bit float
  * Added 'Show media information' command to 'Media' menu of the session editor 
  * Updated Multisyllabic Nonliear Analysis
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Improved support for tone numbers
+ * Removed 'tone' phonex plug-in
+ * Added new 'tn (tone number)' phonex plugin allowing matching (or not matching) a list of provided tone numbers.
+ * project.xml file for projects is no longer needed or created in future projects.
 
 ## Changes from 3.0.5
 
@@ -324,7 +330,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1-beta_1.dmg" newVersion="3.1.1-beta.1" newMediaFileId="macos" fileSize="278788658" md5Sum="14388d16ae352cb07fe4fe54ca2c5069" sha256Sum="a022c544a175203fed55867949f68c861b51a6baa0a856b717c79a66f262186f" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1-beta_3.dmg" newVersion="3.1.1-beta.3" newMediaFileId="macos" fileSize="278934465" md5Sum="af275d29df22af0037976560ae38d385" sha256Sum="869fddd3335ff7586c5c037c7e8769ccd483721ead879d526700da37b69c5b0b" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -334,6 +340,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - 32/64 bit float
  * Added 'Show media information' command to 'Media' menu of the session editor 
  * Updated Multisyllabic Nonliear Analysis
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Improved support for tone numbers
+ * Removed 'tone' phonex plug-in
+ * Added new 'tn (tone number)' phonex plugin allowing matching (or not matching) a list of provided tone numbers.
+ * project.xml file for projects is no longer needed or created in future projects.
 
 ## Changes from 3.0.5
 
@@ -648,7 +660,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.exe" newVersion="3.1.1-beta.1" newMediaFileId="win64" fileSize="288428296" md5Sum="a2ced42d6af17a1b45f8b535cf2cff41" sha256Sum="720f70645e60fae7679981700fb4953e7cd54e3665c0044b0300bd1919c66545" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_3.exe" newVersion="3.1.1-beta.3" newMediaFileId="win64" fileSize="288550664" md5Sum="3ddd19c41b2b0660b5cd505423073810" sha256Sum="3a6886b428aeaa41f72f2ae860c0edb3fd7ff827f94300ce748da78aad41fc40" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -658,6 +670,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - 32/64 bit float
  * Added 'Show media information' command to 'Media' menu of the session editor 
  * Updated Multisyllabic Nonliear Analysis
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Improved support for tone numbers
+ * Removed 'tone' phonex plug-in
+ * Added new 'tn (tone number)' phonex plugin allowing matching (or not matching) a list of provided tone numbers.
+ * project.xml file for projects is no longer needed or created in future projects.
 
 ## Changes from 3.0.5
 
@@ -972,7 +990,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.exe" newVersion="3.1.1-beta.1" newMediaFileId="win64" fileSize="288428296" md5Sum="a2ced42d6af17a1b45f8b535cf2cff41" sha256Sum="720f70645e60fae7679981700fb4953e7cd54e3665c0044b0300bd1919c66545" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_3.exe" newVersion="3.1.1-beta.3" newMediaFileId="win64" fileSize="288550664" md5Sum="3ddd19c41b2b0660b5cd505423073810" sha256Sum="3a6886b428aeaa41f72f2ae860c0edb3fd7ff827f94300ce748da78aad41fc40" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -982,6 +1000,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - 32/64 bit float
  * Added 'Show media information' command to 'Media' menu of the session editor 
  * Updated Multisyllabic Nonliear Analysis
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Improved support for tone numbers
+ * Removed 'tone' phonex plug-in
+ * Added new 'tn (tone number)' phonex plugin allowing matching (or not matching) a list of provided tone numbers.
+ * project.xml file for projects is no longer needed or created in future projects.
 
 ## Changes from 3.0.5
 
@@ -1296,7 +1320,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.exe" newVersion="3.1.1-beta.1" newMediaFileId="win64" fileSize="288428296" md5Sum="a2ced42d6af17a1b45f8b535cf2cff41" sha256Sum="720f70645e60fae7679981700fb4953e7cd54e3665c0044b0300bd1919c66545" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_3.exe" newVersion="3.1.1-beta.3" newMediaFileId="win64" fileSize="288550664" md5Sum="3ddd19c41b2b0660b5cd505423073810" sha256Sum="3a6886b428aeaa41f72f2ae860c0edb3fd7ff827f94300ce748da78aad41fc40" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -1306,6 +1330,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - 32/64 bit float
  * Added 'Show media information' command to 'Media' menu of the session editor 
  * Updated Multisyllabic Nonliear Analysis
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Improved support for tone numbers
+ * Removed 'tone' phonex plug-in
+ * Added new 'tn (tone number)' phonex plugin allowing matching (or not matching) a list of provided tone numbers.
+ * project.xml file for projects is no longer needed or created in future projects.
 
 ## Changes from 3.0.5
 
@@ -1620,7 +1650,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_1.zip" newVersion="3.1.1-beta.1" newMediaFileId="win64zip" fileSize="287521925" md5Sum="6c525b63c7791444d4ab29e9554b1a14" sha256Sum="7b7dd9d38ac58a220b8b3235b40d7b9eceeb8c9898190dccbffc8bfd4ec78bb2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1-beta_3.zip" newVersion="3.1.1-beta.3" newMediaFileId="win64zip" fileSize="287644066" md5Sum="a930c5d010693bc0bc450e6fb665ff57" sha256Sum="b5464ad41a3bc3f348128e4d630f13a5a916461af796f1f366c526794d4dffd2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -1630,6 +1660,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
    - 32/64 bit float
  * Added 'Show media information' command to 'Media' menu of the session editor 
  * Updated Multisyllabic Nonliear Analysis
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Improved support for tone numbers
+ * Removed 'tone' phonex plug-in
+ * Added new 'tn (tone number)' phonex plugin allowing matching (or not matching) a list of provided tone numbers.
+ * project.xml file for projects is no longer needed or created in future projects.
 
 ## Changes from 3.0.5
 
