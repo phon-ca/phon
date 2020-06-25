@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_djv_zhg_dn">
- <title>tone</title>
- <shortdesc>Description of the <codeph>tone</codeph> supplementary matcher.</shortdesc>
+ <title>tn (tone number)</title>
+ <shortdesc>Description of the <codeph>tn</codeph> supplementary matcher.</shortdesc>
  <conbody>
-  <p>The <codeph>tone</codeph> supplementary matcher queries the detected tone of the phone. The
-      superscript number diacritics for tone apply to all elements of a syllable.  One argument is
-      accepted denoting the allowed tones accepted, with multiple allowed values separated by a '|'.
-      The numbers 1-9 may be used to identifiy tone type with '*' being any tone.</p>
-   <example><p>Search for a cluster of phones with tone 1
-    <codeblock>.:tone("1")+</codeblock></p>
+  <p>The <codeph>tn</codeph> supplementary matcher queries the tone number of the phone. One
+   argument is accepted denoting the allowed tones accepted, with multiple allowed values separated
+   by a '|'. The numbers 0-9 are used to indicate tone number. If the list of tone numbers is
+   preceeded by the word 'not' then the meaning is negated.</p>
+   <example><p>Search for a vowel with tone 214 <codeblock>\v:tone("214")</codeblock></p>
    </example>
+  <example><p>Search for vowels which do not have tone number 214 or 51<codeblock>\v:tone("not 214|51")</codeblock></p>
+  </example>
  </conbody>
+ <related-links>
+  <link href="../ipa/transcription.dita#phone/tone_number"/>
+ </related-links>
 </concept>
