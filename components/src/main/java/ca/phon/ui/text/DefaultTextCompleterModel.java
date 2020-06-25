@@ -16,7 +16,7 @@
 package ca.phon.ui.text;
 
 /**
- * Default model which will replace the entire string with a given completion.
+ * Default model which is only concerned with keys
  *
  */
 public class DefaultTextCompleterModel extends TreeTextCompleterModel<Object> {
@@ -26,7 +26,7 @@ public class DefaultTextCompleterModel extends TreeTextCompleterModel<Object> {
 	}
 
 	public void addCompletion(String completion) {
-		super.addCompletion(completion, null);
+		super.addCompletion(completion, new String());
 	}
 	
 }

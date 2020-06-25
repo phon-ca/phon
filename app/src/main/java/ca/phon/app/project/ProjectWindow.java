@@ -148,18 +148,16 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.text.TreeTextCompleterModel;
 import ca.phon.ui.text.DefaultTextCompleterModel;
 import ca.phon.ui.text.TextCompleter;
 import ca.phon.ui.text.TextCompleterModel;
+import ca.phon.ui.text.TreeTextCompleterModel;
 import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import ca.phon.worker.PhonWorker;
-
 
 /**
  * The project window.
@@ -186,6 +184,7 @@ public class ProjectWindow extends CommonModuleFrame {
 	private MultiActionButton createSessionButton;
 	private JTextField sessionNameField;
 	private SessionNameTextCompleter sessionNameCompleter;
+	private TreeTextCompleterModel<String> sessionNameCompleterModel;
 	private JList<String> sessionList;
 	private SessionListModel sessionModel;
 	private SessionDetails sessionDetails;
@@ -296,7 +295,10 @@ public class ProjectWindow extends CommonModuleFrame {
 		return new Dimension(700, 500);
 	}
 
-
+	public TextCompleterModel<String> getCompleterModel() {
+		return this.sessionNameCompleterModel;
+	}
+	
 	@Override
 	public void setJMenuBar(JMenuBar menu) {
 		super.setJMenuBar(menu);
@@ -1257,9 +1259,9 @@ public class ProjectWindow extends CommonModuleFrame {
 	private void addTextCompletion(Path path) {
 		String name = path.getFileName().toString();
 		name = FilenameUtils.removeExtension(name);
-		
+				
 		if(!sessionNameCompleter.getModel().containsCompletion(name)) {
-			((DefaultTextCompleterModel)sessionNameCompleter.getModel()).addCompletion(name, name + ";" + path.normalize().toString());
+			sessionNameCompleterModel.addCompletion(name, path.normalize().toString());
 		}
 	}
 
@@ -1292,8 +1294,8 @@ public class ProjectWindow extends CommonModuleFrame {
 	private void setupTextCompleter(String corpus) {
 		final List<String> mediaIncludePaths = MediaLocator.getMediaIncludePaths(getProject(), corpus);
 		
-		sessionNameCompleter.getModel().clearCompletions();
-		((DefaultTextCompleterModel)sessionNameCompleter.getModel()).setIncludeInfixEntries(true);
+		sessionNameCompleterModel.clearCompletions();
+		sessionNameCompleterModel.setIncludeInfixEntries(true);
 		
 		for(String path:mediaIncludePaths) {
 			final Path mediaFolder = Paths.get(path);
@@ -1372,7 +1374,8 @@ public class ProjectWindow extends CommonModuleFrame {
 			
 		});
 
-		sessionNameCompleter = new SessionNameTextCompleter();
+		sessionNameCompleterModel = new TreeTextCompleterModel<String>();
+		sessionNameCompleter = new SessionNameTextCompleter(sessionNameCompleterModel);
 		sessionNameCompleter.install(sessionNameField);
 		
 		sessionNamePanel.add(sessionNameField, BorderLayout.CENTER);
@@ -1599,6 +1602,10 @@ public class ProjectWindow extends CommonModuleFrame {
 		
 		private String selectedMedia = null;
 		
+		public SessionNameTextCompleter(TextCompleterModel<?> model) {
+			super(model);
+		}
+		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getValueIsAdjusting()) return;
@@ -1606,14 +1613,13 @@ public class ProjectWindow extends CommonModuleFrame {
 			if(selectedIdx >= 0 && selectedIdx < getCompletions().size()) {
 				getCompletionLiist().ensureIndexIsVisible(selectedIdx);
 				
-				String data = FormatterUtil.format(getModel().getData(getCompletions().get(selectedIdx)));
-				final String pieces[] = data.split(";");
+				String completion = getCompletions().get(selectedIdx);
+				String data = sessionNameCompleterModel.getData(completion);
 				
-				final String completion = pieces[0].trim();
 				String text = getTextComponent().getText();
 				final String replacementText = getModel().completeText(text, completion);
 				
-				SwingUtilities.invokeLater( () -> { getTextComponent().setText(replacementText); selectedMedia = pieces[1].trim(); } );
+				SwingUtilities.invokeLater( () -> { getTextComponent().setText(replacementText); selectedMedia = data; } );
 			}			
 		}
 		
