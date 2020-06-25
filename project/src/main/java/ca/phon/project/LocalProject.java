@@ -611,7 +611,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	private File getCorpusFolder(String corpus) {
-		File retVal = new File(getFolder(), corpus);
+		File retVal = new File(getCorpusPath(corpus));
 		return retVal;
 	}
 
@@ -1106,8 +1106,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	@Override
 	public String getCorpusPath(String corpus) {
-		final File corpusFolder = getCorpusFolder(corpus);
-		return (corpusFolder == null ? corpus : corpusFolder.getAbsolutePath());
+		return new File(getFolder(), corpus).getAbsolutePath();
 	}
 
 	@Override
