@@ -330,6 +330,10 @@
         <name>Inverted Exclamation Mark</name>
         <token>CONSONANT</token>
     </char>
+    <char value="&#x2070;">
+    	<name>Superscript Zero (Number 0)</name>
+    	<token>TONE_NUMBER</token>
+    </char>
     <char value="&#x00b9;">
         <name>Superscript One (Number 1)</name>
         <token>TONE_NUMBER</token>

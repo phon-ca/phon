@@ -1303,6 +1303,12 @@
             <property name="Description">Tone number 9</property>
             <property name="Unicode">0x2079</property>
         </cell>
+        <cell y="2" x="22" h="2" w="2">
+            <text>◌⁰</text>
+            <property name="Name">Tone 0</property>
+            <property name="Description">Tone number 0</property>
+            <property name="Unicode">0x2070</property>
+        </cell>
     </grid>
 
     <!--ExtIPA-->

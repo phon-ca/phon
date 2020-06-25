@@ -412,6 +412,9 @@
     <feature name="toneextralow">
         <primary_family>diacritic</primary_family>
     </feature>
+    <feature name="tone0">
+    	<primary_family>diacritic</primary_family>
+    </feature>
     <feature name="tone1">
         <primary_family>diacritic</primary_family>
     </feature>
@@ -1177,6 +1180,8 @@
     <feature_set char="˼">diacritic tonelow</feature_set>
     <!--̚ (0x31a)-->
     <feature_set char="̚">diacritic unreleased</feature_set>
+    <!--⁰ (0x2070)-->
+    <feature_set char="⁰">diacritic tone0</feature_set>
     <!--¹ (0xb9)-->
     <feature_set char="¹">diacritic tone1</feature_set>
     <!--² (0xb2)-->
