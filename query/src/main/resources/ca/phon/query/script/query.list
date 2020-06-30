@@ -4,4 +4,5 @@ ca/phon/query/script/Epenthesis.xml
 ca/phon/query/script/Phones.js
 ca/phon/query/script/PMLU.js
 ca/phon/query/script/PPC.js
+ca/phon/query/script/PTNC.js
 ca/phon/query/script/Segmental Relations.js
