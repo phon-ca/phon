@@ -39,6 +39,7 @@ tokens {
 	QUANTIFIER;
 	SCTYPE;
 	STRESS;
+  SYLLABLE_BOUNDS;
 }
 
 @header {
@@ -142,8 +143,8 @@ matcher
 	->	^(MATCHER base_matcher plugin_matcher* quantifier?)
 	|	back_reference plugin_matcher* quantifier?
 	->	^(back_reference plugin_matcher* quantifier?)
-  | syllable_matcher plugin_matcher* quantifier?
-  ->  ^(syllable_matcher plugin_matcher* quantifier?)
+  | syllable_matcher syllable_bounds? plugin_matcher* quantifier?
+  ->  ^(syllable_matcher syllable_bounds? plugin_matcher* quantifier?)
 	;
 
 base_matcher
@@ -155,6 +156,15 @@ base_matcher
 syllable_matcher
   : SYLLABLE_CHAR
   ;
+
+syllable_bounds
+  	:	FORWARDSLASH x=sctype SYLLABLE_BOUNDS_TO y=sctype FORWARDSLASH
+  	->	^(SYLLABLE_BOUNDS $x $y)
+  	|	FORWARDSLASH x=sctype SYLLABLE_BOUNDS_TO FORWARDSLASH
+  	->	^(SYLLABLE_BOUNDS $x SCTYPE["U"])
+  	|	FORWARDSLASH SYLLABLE_BOUNDS_TO x=sctype FORWARDSLASH
+  	->	^(SYLLABLE_BOUNDS SCTYPE["U"] $x)
+  	;
 
 compound_phone_matcher
 	:	m1=single_phone_matcher '_' m2=single_phone_matcher
@@ -415,6 +425,14 @@ BOUND_START
 BOUND_END
 	:	'>'
 	;
+
+SYLLABLE_BOUND_MARKER
+  : '_'
+  ;
+
+SYLLABLE_BOUNDS_TO
+  : '..'
+  ;
 
 COMMENT
 	:	'/*' .* '*/'

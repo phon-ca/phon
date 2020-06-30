@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import ca.phon.fsa.*;
 import ca.phon.syllable.phonex.*;
 import ca.phon.syllable.*;
+import ca.phon.util.Tuple;
 
 import ca.phon.ipa.*;
 import ca.phon.ipa.features.*;
@@ -294,14 +295,19 @@ scope {
 		else
 			$baseexpr::fsaStack.peek().appendBackReference(groupIndex, q, pMatchers);
 	}
-  | ^(syllable_matcher (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
+  | ^(syllable_matcher sm=syllable_bounds? (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
   {
     PhoneMatcher pMatchers[] = filterPluginMatchers($matcher::pluginMatchers);
 
+    Tuple<SyllableConstituentType, SyllableConstituentType> syllableRange = null;
+    if(sm != null) {
+      syllableRange = new Tuple<>($sm.startSctype, $sm.endSctype);
+    }
+
     if(q == null)
-      $baseexpr::fsaStack.peek().appendTransition(new SyllableTransition(pMatchers));
+      $baseexpr::fsaStack.peek().appendTransition(new SyllableTransition(pMatchers, syllableRange));
     else
-      $baseexpr::fsaStack.peek().appendTransition(new SyllableTransition(pMatchers), q);
+      $baseexpr::fsaStack.peek().appendTransition(new SyllableTransition(pMatchers, syllableRange), q);
   }
 	;
 
@@ -314,9 +320,17 @@ base_matcher returns [PhoneMatcher value]
 	{	$value = cp;	}
 	;
 
-syllable_matcher
+syllable_matcher returns [SyllableConstituentType startSctype, SyllableConstituentType endSctype]
   : SYLLABLE_CHAR
   ;
+
+syllable_bounds returns [SyllableConstituentType startSctype, SyllableConstituentType endSctype]
+  	:  ^(SYLLABLE_BOUNDS x=sctype y=sctype)
+    {
+      $startSctype = $x.value;
+      $endSctype = $y.value;
+    }
+  	;
 
 compound_matcher returns [PhoneMatcher value]
 	:	^(COMPOUND_MATCHER m1=single_phone_matcher m2=single_phone_matcher)

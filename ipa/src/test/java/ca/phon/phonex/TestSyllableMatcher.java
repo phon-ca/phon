@@ -15,8 +15,6 @@ public class TestSyllableMatcher extends PhonexTest {
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final String phonex = "(\u03c3+)";
-		PhonexPattern.compile(phonex);
-		
 		final IPATranscript[][] answers = {
 				{ ipa.subsection(0, 7) },
 		};
@@ -30,10 +28,21 @@ public class TestSyllableMatcher extends PhonexTest {
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
 		final String phonex = "(σ+(?=' 'σ+)*)";
-		PhonexPattern.compile(phonex);
-		
 		final IPATranscript[][] answers = {
 				{ ipa.subsection(0, 7) },
+		};
+		
+		testGroups(ipa, phonex, answers);
+	}
+	
+	@Test
+	public void testSyllableRange() throws Exception {
+		final String text = "b:oa:Nn:Cd:Oa:Nk:Oa:N";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+		
+		final String phonex = "(σ/O..N/+)";
+		final IPATranscript[][] answers = {
+				{ ipa.subsection(0, 2) }, { ipa.subsection(3, 7) },
 		};
 		
 		testGroups(ipa, phonex, answers);
