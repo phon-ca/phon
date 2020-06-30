@@ -134,6 +134,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	public IPATranscript(IPAElement ... phones) {
 		super();
 		this.transcription = phones;
+		
 		extSupport.initExtensions();
 	}
 
