@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -65,12 +65,12 @@ private boolean reverseExpr = false;
 }
 
 @lexer::members {
-	
+
 @Override
 public void reportError(RecognitionException e) {
 	throw new PhonexPatternException(e.line, e.charPositionInLine, e);
-}	
-	
+}
+
 }
 
 /**
@@ -142,6 +142,8 @@ matcher
 	->	^(MATCHER base_matcher plugin_matcher* quantifier?)
 	|	back_reference plugin_matcher* quantifier?
 	->	^(back_reference plugin_matcher* quantifier?)
+  | syllable_matcher plugin_matcher* quantifier?
+  ->  ^(syllable_matcher plugin_matcher* quantifier?)
 	;
 
 base_matcher
@@ -149,6 +151,10 @@ base_matcher
 	|	single_phone_matcher
 	|	compound_phone_matcher
 	;
+
+syllable_matcher
+  : SYLLABLE_CHAR
+  ;
 
 compound_phone_matcher
 	:	m1=single_phone_matcher '_' m2=single_phone_matcher
@@ -409,7 +415,7 @@ BOUND_START
 BOUND_END
 	:	'>'
 	;
-	
+
 COMMENT
 	:	'/*' .* '*/'
 	{$channel=HIDDEN;}
@@ -427,7 +433,8 @@ EOL_COMMENT
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
-	|	'\u00e6'..'\u03df'
+	|	'\u00e6'..'\u03c2'
+  | '\u03c4'..'\u03df'
 	|	'\u2194'
 	;
 
@@ -457,6 +464,10 @@ STRING
 HEX_CHAR
 	:	BACKSLASH 'u' NUMBER NUMBER NUMBER NUMBER
 	;
+
+SYLLABLE_CHAR
+  : '\u03C3'
+  ;
 
 fragment
 ESC_SEQ

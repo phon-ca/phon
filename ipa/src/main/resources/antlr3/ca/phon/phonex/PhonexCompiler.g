@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -55,12 +55,12 @@ public int getFlags() {
 
 public PhoneMatcher[] filterPluginMatchers(List<PhoneMatcher> pluginMatchers) {
 	// only keep one of each of these matchers
-	Map<Class<? extends CombinableMatcher>, CombinableMatcher> combinableMatchers = new HashMap<>(); 
+	Map<Class<? extends CombinableMatcher>, CombinableMatcher> combinableMatchers = new HashMap<>();
 
 	List<PhoneMatcher> pMatchers = new ArrayList<>();
 	for(int i = 0; i < pluginMatchers.size(); i++) {
 		PhoneMatcher pMatcher = pluginMatchers.get(i);
-	
+
 		if(pMatcher instanceof CombinableMatcher) {
 			CombinableMatcher cm = combinableMatchers.get(pMatcher.getClass());
 			if(cm != null) {
@@ -74,7 +74,7 @@ public PhoneMatcher[] filterPluginMatchers(List<PhoneMatcher> pluginMatchers) {
 			pMatchers.add(pMatcher);
 		}
 	}
-	
+
 	return pMatchers.toArray(new PhoneMatcher[0]);
 }
 
@@ -87,7 +87,7 @@ expr returns [PhonexFSA fsa]
 	:	^(EXPR e=baseexpr flags?)
 	{
 		$fsa = $e.fsa;
-		
+
 		// if initial state is final, follow empty transitions and make those states final as well
 		for(String finalState:$fsa.getFinalStates()) {
 			for(FSATransition<IPAElement> transition:$fsa.getTransitionsForState(finalState)) {
@@ -96,7 +96,7 @@ expr returns [PhonexFSA fsa]
 				}
 			}
 		}
-		
+
 	}
 	;
 
@@ -120,7 +120,7 @@ scope {
 		}
 	}
 	;
-	
+
 baseexpr returns [PhonexFSA fsa]
 scope {
 	PhonexFSA primaryFSA;
@@ -132,7 +132,7 @@ scope {
 	$baseexpr::primaryFSA = new PhonexFSA();
 	$baseexpr::fsaStack = new Stack<>();
 	$baseexpr::fsaStack.push($baseexpr::primaryFSA);
-	
+
 	$baseexpr::groupIndex = 0;
 	$baseexpr::groupStack = new Stack<>();
 	if(baseexpr_stack.size() > 1) {
@@ -144,8 +144,8 @@ scope {
 	}
 }
 @after {
-	
-}	
+
+}
 	: ^(BASEEXPR exprele+)
 	{
 		$fsa = $baseexpr::primaryFSA;
@@ -167,10 +167,10 @@ scope {
 @init {
 	boolean nonCapturing = (input.LA(3) == NON_CAPTURING_GROUP);
 	$baseexpr::fsaStack.push(new PhonexFSA());
-	
+
 	$baseexpr::groupStack.push($baseexpr::groupIndex);
 	if(!nonCapturing) $baseexpr::groupIndex++;
-	
+
 	$group::orList = new ArrayList<>();
 }
 	:	^(GROUP NON_CAPTURING_GROUP? (e=baseexpr {$group::orList.add($e.fsa);})+ q=quantifier?)
@@ -183,7 +183,7 @@ scope {
 		// and add it to the fsa now on top
 		// of the stack
 		PhonexFSA grpFsa = $baseexpr::fsaStack.pop();
-		
+
 		if($group::orList.size() > 1) {
 			grpFsa = new PhonexFSA();
 			grpFsa.appendOredGroups(groupIndex, $group::orList);
@@ -238,7 +238,7 @@ scope {
 			if(maxGroupCount >= $baseexpr::groupIndex) {
 				$baseexpr::groupIndex = maxGroupCount+1;
 			}
-			
+
 			// copy all named groups
 			for(PhonexFSA fsa:$group::orList) {
 				for(String gn:fsa.getGroupNames()) {
@@ -294,6 +294,15 @@ scope {
 		else
 			$baseexpr::fsaStack.peek().appendBackReference(groupIndex, q, pMatchers);
 	}
+  | ^(syllable_matcher (pluginMatcher=plugin_matcher {$matcher::pluginMatchers.add($pluginMatcher.value);})* q=quantifier?)
+  {
+    PhoneMatcher pMatchers[] = filterPluginMatchers($matcher::pluginMatchers);
+
+    if(q == null)
+      $baseexpr::fsaStack.peek().appendTransition(new SyllableTransition(pMatchers));
+    else
+      $baseexpr::fsaStack.peek().appendTransition(new SyllableTransition(pMatchers), q);
+  }
 	;
 
 base_matcher returns [PhoneMatcher value]
@@ -304,6 +313,10 @@ base_matcher returns [PhoneMatcher value]
 	|	cp=compound_matcher
 	{	$value = cp;	}
 	;
+
+syllable_matcher
+  : SYLLABLE_CHAR
+  ;
 
 compound_matcher returns [PhoneMatcher value]
 	:	^(COMPOUND_MATCHER m1=single_phone_matcher m2=single_phone_matcher)
@@ -359,7 +372,7 @@ scope {
 		if(pluginProvider != null) {
 			List<String> argList = new ArrayList<String>();
 			if($argument_list.args != null) argList = $argument_list.args;
-			
+
 			try {
 				$value = pluginProvider.createMatcher(argList);
 			} catch (Exception createEx) {
@@ -443,14 +456,14 @@ scope {
 @init {
 	$back_reference::isRelative = false;
 }
-	:	^(BACK_REF (MINUS {$back_reference::isRelative = true;})?) 
+	:	^(BACK_REF (MINUS {$back_reference::isRelative = true;})?)
 	{
 		if($back_reference::isRelative) {
 			$groupNumber = $baseexpr::groupIndex - Integer.parseInt($BACK_REF.text);
 		} else {
 			$groupNumber = Integer.parseInt($BACK_REF.text);
 		}
-		
+
 		// test group number
 		if($groupNumber >= $baseexpr::groupIndex || $groupNumber < 1) {
 			throw new PhonexPatternException($BACK_REF.line, $BACK_REF.getCharPositionInLine(), "Invalid group number " + $groupNumber);
@@ -713,4 +726,3 @@ boundary_matchers returns [PhoneMatcher value]
 		}
 	}
 	;
-

@@ -213,6 +213,36 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		}
 	}
 	
+	public void appendTransition(PhonexTransition trans, Quantifier quantifier) {
+		switch(quantifier.getType()) {
+		case ZERO_OR_MORE:
+			makeZeroOrMore(trans);
+			break;
+			
+		case ZERO_OR_ONE:
+			makeZeroOrOne(trans);
+			break;
+			
+		case ONE_OR_MORE:
+			makeOneOrMore(trans);
+			break;
+			
+		case BOUNDED:
+			makeBounded(quantifier.getxBound(), quantifier.getyBound(), trans);
+			break;
+			
+		default:
+			break;
+		}
+		
+		// apply transition type to final states
+		for(String finalState:getFinalStates()) {
+			for(FSATransition<IPAElement> fTrans:getTransitionsForState(finalState)) {
+				fTrans.setType(quantifier.getTransitionType());
+			}
+		}
+	}
+	
 	/**
 	 * Convienence method for appending matchers.
 	 * Same as <code>appendMatcher(matcher, null)</code>
@@ -399,6 +429,25 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		}
 	}
 	
+	private void makeZeroOrMore(PhonexTransition transition) {
+		appendTransition(transition);
+		
+		// for each final state, find the transitions to it and
+		// make the first state final as well
+		for(String finalState:getFinalStates()) {
+			for(FSATransition<IPAElement> trans:getTransitionsToState(finalState)) {
+				addFinalState(trans.getFirstState());
+			}
+			
+			// setup loop-back transitions on final states
+			// for the given matcher
+			PhonexTransition ct = (PhonexTransition)transition.clone();
+			ct.setFirstState(finalState);
+			ct.setToState(finalState);
+			addTransition(ct);
+		}
+	}
+	
 	private void makeZeroOrMore(int groupIndex, PhoneMatcher ... secondaryMatchers) {
 		appendBackReference(groupIndex, secondaryMatchers);
 		
@@ -427,6 +476,18 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	 */
 	private void makeZeroOrOne(PhoneMatcher matcher, PhoneMatcher ... secondaryMatchers) {
 		appendMatcher(matcher, secondaryMatchers);
+		
+		// for each final state, find the transitions to it and
+		// make the first state final as well
+		for(String finalState:getFinalStates()) {
+			for(FSATransition<IPAElement> trans:getTransitionsToState(finalState)) {
+				addFinalState(trans.getFirstState());
+			}
+		}
+	}
+	
+	private void makeZeroOrOne(PhonexTransition transition) {
+		appendTransition(transition);
 		
 		// for each final state, find the transitions to it and
 		// make the first state final as well
@@ -466,6 +527,19 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 			transition.setFirstState(finalState);
 			transition.setToState(finalState);
 			addTransition(transition);
+		}
+	}
+	
+	private void makeOneOrMore(PhonexTransition transition) {
+		appendTransition(transition);
+		
+		// for each final state, make a 
+		// new loop transition
+		for(String finalState:getFinalStates()) {
+			PhonexTransition ct = (PhonexTransition)transition.clone();
+			ct.setFirstState(finalState);
+			ct.setToState(finalState);
+			addTransition(ct);
 		}
 	}
 	
@@ -517,6 +591,35 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 			}
 			for(int i = xbound; i < ybound; i++) {
 				appendMatcher(matcher, new Quantifier(QuantifierType.ZERO_OR_ONE), secondaryMatchers);
+			}
+		}
+	}
+	
+	public void makeBounded(int xbound, int ybound, PhonexTransition transition) {
+		// case <int>
+		if(xbound > 0 && ybound < 0) {
+			for(int i = 0; i < xbound; i++) {
+				appendTransition(transition);
+			}
+		// case <int,>
+		} else if(xbound > 0 && ybound == 0) {
+			for(int i = 0; i < xbound-1; i++) {
+				appendTransition(transition);
+			}
+			appendTransition(transition, new Quantifier(QuantifierType.ONE_OR_MORE));
+		// case <,int>
+		} else if(xbound == 0 && ybound > 0) {
+			for(int i = 0; i < ybound; i++) {
+				appendTransition(transition, new Quantifier(QuantifierType.ZERO_OR_ONE));
+			}
+		// case <int,int>
+		} else if(xbound > 0 && ybound > 0) {
+//			PhonexFSA toAdd = new PhonexFSA();
+			for(int i = 0; i < xbound; i++) {
+				appendTransition(transition);
+			}
+			for(int i = xbound; i < ybound; i++) {
+				appendTransition(transition, new Quantifier(QuantifierType.ZERO_OR_ONE));
 			}
 		}
 	}

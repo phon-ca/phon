@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -53,7 +53,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 }
 
 @lexer::members {
-	
+
 public void reportError(RecognitionException e) {
 	throw new PhonexPatternException(e.line, e.charPositionInLine, e);
 }
@@ -72,11 +72,11 @@ rule
 FLAGS
 	: FORWARDSLASH ('o'|'O')
 	;
-	
+
 IDENTIFIER
 	: LETTER (LETTER | NUMBER)*
 	;
-	
+
 ESCAPED_PHONE_CLASS
 	:	BACKSLASH ('c'|'v'|'g'|'p'|'P'|'w'|'W'|'s')
 	;
@@ -148,7 +148,7 @@ COLON
 	:	':'
 	;
 
-	
+
 //TRIANGULAR_COLON
 //	:	'\u02d0'
 //	;
@@ -161,7 +161,7 @@ COMMA
 	:	','
 	;
 
-	
+
 FORWARDSLASH
 	:	'/'
 	;
@@ -202,7 +202,7 @@ LOOK_BEHIND_GROUP
 LOOK_AHEAD_GROUP
 	:	'?>'
 	;
-	
+
 GROUP_NAME
 	:	IDENTIFIER EQUALS
 	;
@@ -214,7 +214,7 @@ BOUND_START
 BOUND_END
 	:	'>'
 	;
-	
+
 COMMENT_START
 	:	'/*'
 	;
@@ -222,7 +222,7 @@ COMMENT_START
 COMMENT_END
 	:	'*/'
 	;
-	
+
 EOL_COMMENT_START
 	:	FORWARDSLASH FORWARDSLASH
 	;
@@ -235,7 +235,8 @@ fragment
 LETTER
 	:	'a'..'z'
 	|	'A'..'Z'
-	|	'\u00e6'..'\u03df'
+  |	'\u00e6'..'\u03c2'
+  | '\u03c4'..'\u03df'
 	|	'\u2194'
 	;
 
@@ -265,22 +266,26 @@ STRING
 HEX_CHAR
 	:	BACKSLASH 'u' NUMBER NUMBER NUMBER NUMBER
 	;
-		
+
 SCTYPE
 	: COLON MINUS? ( 'A' | 'a' | 'L' | 'l' | 'O' | 'o' | 'N' | 'n' | 'D' | 'd' | 'C' | 'c' | 'R' | 'r' | 'E' | 'e' )
 	;
-	
+
 PLUGIN
 	: COLON ( 'sctype' | 'stress' | 'mdc' | 'diacritic' | 'tone' | 'comb' | 'prefix' | 'suffix' )
 	;
-	
+
 STRESS_TYPE
 	: EXC MINUS? ('1' | '2' | 'A' | 'a' | 'U' | 'u')
 	;
-	
+
 BACKREF
 	: BACKSLASH MINUS? INT
 	;
+
+SYLLABLE_CHAR
+  : '\u03C3'
+  ;
 
 fragment
 ESC_SEQ

@@ -206,7 +206,7 @@ public class SyllabificationInfo {
 	}
 	
 	public void setToneNumber(String toneNumber) {
-		if(toneNumber.matches("[0-9](\\s?[0-9])*")) {
+		if(toneNumber.matches("[0-9]*")) {
 			this.toneNumber = toneNumber;
 		} else {
 			throw new IllegalArgumentException(toneNumber);
