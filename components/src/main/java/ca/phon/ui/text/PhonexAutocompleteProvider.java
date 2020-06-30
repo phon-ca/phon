@@ -49,6 +49,7 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 	private final static int PHONE_CLASS_RELEVANCE = 200;
 	private final static String[] PHONE_CLASSES = {
 		".", "Anything",
+		"\u03c3", "Syllable (or remainder of)",
 		"\\c", "Any consonant",
 		"\\v", "Any vowel",
 		"\\s", "Stress (primary or secondary)",
@@ -94,6 +95,7 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 	
 	private final static int GROUP_TEMPLATE_RELEVANCE = 100;
 	private final static String[] GROUP_TEMPLATES = {
+		"\u03c3/${start}..${end}/", "\u03c3/", "\u03c3/sctype..sctype/ - syllable or remainder with range",
 		"{${cursor}}", "{", "{} - feature set",
 		"(${cursor})", "(", "() - group",
 		"(${name}=${cursor})", "(=", "(${name}=) - named group",
