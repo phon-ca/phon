@@ -147,7 +147,7 @@
 		<commons-io.version>2.6</commons-io.version>
 		<org.apache.commons.commons-collections4.version>4.1</org.apache.commons.commons-collections4.version>
 		<org.apache.derby.derby.version>10.10.2.0</org.apache.derby.derby.version>
-		<org.apache.logging.log4j.version>2.11.1</org.apache.logging.log4j.version>
+		<org.apache.logging.log4j.version>2.13.3</org.apache.logging.log4j.version>
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
 		<org.codehaus.groovy.groovy-all.version>2.5.9</org.codehaus.groovy.groovy-all.version>
