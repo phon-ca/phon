@@ -287,6 +287,10 @@ SYLLABLE_CHAR
   : '\u03C3'
   ;
 
+SYLLABLE_BOUNDS_TO
+  :   '..'
+  ;
+
 fragment
 ESC_SEQ
     :   BACKSLASH ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
