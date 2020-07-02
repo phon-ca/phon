@@ -158,7 +158,9 @@ syllable_matcher
   ;
 
 syllable_bounds
-  	:	FORWARDSLASH x=sctype SYLLABLE_BOUNDS_TO y=sctype FORWARDSLASH
+  	: FORWARDSLASH x=sctype FORWARDSLASH
+    ->  ^(SYLLABLE_BOUNDS $x $x)
+    |	FORWARDSLASH x=sctype SYLLABLE_BOUNDS_TO y=sctype FORWARDSLASH
   	->	^(SYLLABLE_BOUNDS $x $y)
   	|	FORWARDSLASH x=sctype SYLLABLE_BOUNDS_TO FORWARDSLASH
   	->	^(SYLLABLE_BOUNDS $x SCTYPE["U"])

@@ -40,12 +40,17 @@ public class TestSyllableMatcher extends PhonexTest {
 		final String text = "b:oa:Nn:Cd:Oa:Nk:Oa:N";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 		
-		final String phonex = "(σ/O..N/+)";
-		final IPATranscript[][] answers = {
+		String phonex = "(σ/O..N/+)";
+		IPATranscript[][] answers = {
 				{ ipa.subsection(0, 2) }, { ipa.subsection(3, 7) },
 		};
-		
 		testGroups(ipa, phonex, answers);
+		
+		String phonex2 = "(σ/N/)";
+		IPATranscript[][] answers2 = {
+				{ ipa.subsection(1, 2) }, { ipa.subsection(4, 5) }, { ipa.subsection(6, 7) },
+		};
+		testGroups(ipa, phonex2, answers2);
 	}
 	
 }

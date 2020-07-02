@@ -95,7 +95,7 @@ public class PhonexAutocompleteProvider extends DefaultCompletionProvider {
 	
 	private final static int GROUP_TEMPLATE_RELEVANCE = 100;
 	private final static String[] GROUP_TEMPLATES = {
-		"\u03c3/${start}..${end}/", "\u03c3/", "\u03c3/sctype..sctype/ - syllable or remainder with range",
+		"\u03c3/${start}..${end}/", "\u03c3/", "\u03c3/sctype..sctype/ - syllable range",
 		"{${cursor}}", "{", "{} - feature set",
 		"(${cursor})", "(", "() - group",
 		"(${name}=${cursor})", "(=", "(${name}=) - named group",
