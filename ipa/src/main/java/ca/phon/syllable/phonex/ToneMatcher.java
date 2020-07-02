@@ -28,6 +28,8 @@ import ca.phon.syllable.SyllabificationInfo;
  */
 public class ToneMatcher implements PhoneMatcher {
 	
+	public static final String NO_TONE = "-";
+	
 	private boolean isNot = false;
 	
 	private List<String> toneNumbers;
@@ -43,8 +45,14 @@ public class ToneMatcher implements PhoneMatcher {
 		
 		final SyllabificationInfo info = p.getExtension(SyllabificationInfo.class);
 		if(info != null) {
-			boolean contains = toneNumbers.contains(info.getToneNumber());
-			retVal = (isNot ? !contains : contains);
+			String tn = info.getToneNumber();
+			if(tn.length() > 0) {
+				boolean contains = toneNumbers.contains(info.getToneNumber());
+				retVal = (isNot ? !contains : contains);				
+			} else {
+				boolean contains = toneNumbers.contains(NO_TONE);
+				retVal = (isNot ? !contains : contains);
+			}
 		}
 		
 		return retVal;

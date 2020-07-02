@@ -40,14 +40,23 @@ public class ToneNumberPluginProvider implements PluginProvider {
 		if(args.size() == 0)
 			throw new IllegalArgumentException("Not enough arguments");
 
-		Pattern tonePattern = Pattern.compile("(not\\s?)?([0-9][ 0-9]*(\\|[0-9][ 0-9]+)*)");
+		Pattern tonePattern = Pattern.compile("(not\\s?)?([\\-0-9][ 0-9]*(\\|[\\-0-9][ 0-9]+)*)");
 		Matcher matcher = tonePattern.matcher(args.get(0));
 		
 		if(matcher.matches()) {
 			String[] tones = matcher.group(2).split("\\|");
 			List<String> toneList = new ArrayList<String>();
 			for(String tone:tones) {
-				toneList.add(tone.strip());
+				if(ToneMatcher.NO_TONE.contentEquals(tone)) {
+					toneList.add(tone);
+				} else {
+					try {
+						Integer.parseInt(tone);
+						toneList.add(tone.strip());
+					} catch (NumberFormatException e) {
+						throw new IllegalArgumentException(e);
+					}
+				}
 			}
 			return new ToneMatcher(toneList, (matcher.group(1) != null && "not".equals(matcher.group(1).strip())) );
 		} else {
