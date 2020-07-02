@@ -26,7 +26,7 @@ import ca.phon.syllable.SyllabificationInfo;
  * Matcher for tone information in {@link SyllabificationInfo}
  *
  */
-public class ToneMatcher implements PhoneMatcher {
+public class ToneNumberMatcher implements PhoneMatcher {
 	
 	public static final String NO_TONE = "-";
 	
@@ -34,7 +34,7 @@ public class ToneMatcher implements PhoneMatcher {
 	
 	private List<String> toneNumbers;
 	
-	public ToneMatcher(List<String> toneNumbers, boolean isNot) {
+	public ToneNumberMatcher(List<String> toneNumbers, boolean isNot) {
 		this.toneNumbers = toneNumbers;
 		this.isNot = isNot;
 	}

@@ -16,12 +16,10 @@
 package ca.phon.syllable.phonex;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.phon.ipa.features.FeatureSet;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexPlugin;
 import ca.phon.phonex.PluginProvider;
@@ -47,7 +45,7 @@ public class ToneNumberPluginProvider implements PluginProvider {
 			String[] tones = matcher.group(2).split("\\|");
 			List<String> toneList = new ArrayList<String>();
 			for(String tone:tones) {
-				if(ToneMatcher.NO_TONE.contentEquals(tone)) {
+				if(ToneNumberMatcher.NO_TONE.contentEquals(tone)) {
 					toneList.add(tone);
 				} else {
 					try {
@@ -58,7 +56,7 @@ public class ToneNumberPluginProvider implements PluginProvider {
 					}
 				}
 			}
-			return new ToneMatcher(toneList, (matcher.group(1) != null && "not".equals(matcher.group(1).strip())) );
+			return new ToneNumberMatcher(toneList, (matcher.group(1) != null && "not".equals(matcher.group(1).strip())) );
 		} else {
 			throw new IllegalArgumentException("Invalid syntax");
 		}
