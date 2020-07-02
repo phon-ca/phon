@@ -62,9 +62,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -335,9 +338,13 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	}
 	
 	private static void generateMissingGrids(IpaGrids grids) {
+		Optional<Grid> toneGrid = Optional.empty();
 		// create a set of characters defined in the xml file
 		final Set<Character> supportedChars = new HashSet<Character>();
 		for(Grid g:grids.getGrid()) {
+			if(g.getName().equals("Tones")) {
+				toneGrid = Optional.of(g);
+			}
 			for(Cell c:g.getCell()) {
 					String cellData = c.getText();
 					cellData = cellData.replaceAll("\\u25cc", "");
@@ -368,8 +375,50 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			grids.getGrid().add(vGrid);
 		}
 		
+		// tone diacritics
+		Set<Character> tSet = new LinkedHashSet<Character>();
+		if(toneGrid.isPresent()) {
+			final ObjectFactory factory = new ObjectFactory();
+			FeatureMatrix fm = FeatureMatrix.getInstance();
+			tSet = tokens.getCharacterSet()
+					.stream()
+					.filter( (c) -> {
+						if(supportedChars.contains(c)) return false;
+						
+						for(String feature:fm.getFeatureSet(c).getFeatures()) {
+							if(feature.startsWith("tone")) return true;
+						}
+						return false;
+					})
+					.collect(Collectors.toSet());
+			
+			int x = 14;
+			int y = 0;
+			List<Character> tchars = new ArrayList<Character>(tSet);
+			tchars.sort(Character::compareTo);
+			for(Character ch:tchars) {
+				final Cell cell = factory.createCell();
+				cell.setX(x);
+				cell.setY(y);
+				cell.setW(w);
+				cell.setH(h);
+				cell.setText("\u25cc" + ch);
+				
+				toneGrid.get().getCell().add(cell);
+				
+				x += w;
+				if(x >= 38) {
+					x = 14;
+					y += h;
+				}
+			}
+			
+			toneGrid.get().setRows(y+h);
+		}
+		
 		// prefix diacritics
 		final Set<Character> pdSet = tokens.getCharactersForType(IPATokenType.PREFIX_DIACRITIC);
+		pdSet.removeAll(tSet);
 		pdSet.removeAll(supportedChars);
 		if(pdSet.size() > 0) {
 			final Grid pdGrid = generateGrid(pdSet, "Other Prefix Diacritics", "", "\u25cc", w, h, maxX);
@@ -379,6 +428,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		// suffix diacritics
 		final Set<Character> sdSet = tokens.getCharactersForType(IPATokenType.SUFFIX_DIACRITIC);
 		sdSet.removeAll(supportedChars);
+		sdSet.removeAll(tSet);
 		if(sdSet.size() > 0) {
 			final Grid sdGrid = generateGrid(sdSet, "Other Suffix Diacritics", "\u25cc", "", w, h, maxX);
 			grids.getGrid().add(sdGrid);
@@ -386,19 +436,14 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 		// combining diacritics
 		final Set<Character> cdSet = tokens.getCharactersForType(IPATokenType.COMBINING_DIACRITIC);
+		cdSet.removeAll(tSet);
 		cdSet.removeAll(supportedChars);
 		if(cdSet.size() > 0) {
 			final Grid cdGrid = generateGrid(cdSet, "Other Combining Diacritics", "\u25cc", "", w, h, maxX);
 			grids.getGrid().add(cdGrid);
 		}
 		
-		// tone diacritics
-//		final Set<Character> tSet = tokens.getCharactersForType(IPATokenType.TONE);
-//		tSet.removeAll(supportedChars);
-//		if(tSet.size() > 0) {
-//			final Grid tGrid = generateGrid(tSet, "Other Tone Diacritics", "\u25cc", "", w, h, maxX);
-//			grids.getGrid().add(tGrid);
-//		}
+		
 		
 		// everything else...
 		final Set<Character> everything = new HashSet<Character>(tokens.getCharacterSet());
@@ -406,7 +451,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		everything.removeAll(cSet);
 		everything.removeAll(vSet);
 		everything.removeAll(pdSet);
-//		everything.removeAll(tSet);
+		everything.removeAll(tSet);
 		everything.removeAll(sdSet);
 		everything.removeAll(cdSet);
 		
