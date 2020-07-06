@@ -1,0 +1,1 @@
+define({"topics" : [{"title":"View Result Set","shortdesc":"View a <em class=\"ph i\">Result Set</em> from a query.","href":"query\/view_result_set.html","attributes": {"data-id":"view_result_set",},"menu": {"hasChildren":false,},"tocID":"view_result_set-d63e557","topics":[]}]});

@@ -1,0 +1,132 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" whc:version="21.1" lang="en" dir="ltr">
+
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="wh-path2root" content="" /><title>Phon</title>
+        
+        
+                
+        <script type="text/javascript" src="./oxygen-webhelp/app/core/redirect.js"></script>
+
+        <link rel="stylesheet" href="./oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" />
+
+        <!-- Latest compiled and minified Bootstrap CSS -->
+        <link rel="stylesheet" type="text/css" href="./oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" />
+        
+        <!-- Template default styles  -->
+        <link rel="stylesheet" type="text/css" href="./oxygen-webhelp/app/main-page.css?buildId=2019112512" />
+
+        
+        <script type="text/javascript" src="./oxygen-webhelp/lib/jquery/jquery-3.4.1.min.js"></script>
+
+        <script data-main="./oxygen-webhelp/app/main-page.js" src="./oxygen-webhelp/lib/requirejs/require.js"></script>
+        
+        <!-- Skin resources -->
+        <link rel="stylesheet" type="text/css" href="oxygen-webhelp/template/oxygen.css?buildId=2019112512" />
+        <!-- EXM-36950 - Expand the args.hdf parameter here -->
+        
+        <script type="text/javascript">
+$(document).ready( function () {
+	// add custom js to head element
+	var headEle = document.getElementsByTagName("head")[0];
+	
+	var origin = window.location.origin;
+	var pathname = window.location.pathname;
+	
+	var manualRootIdx = (origin == "file://" 
+		? pathname.lastIndexOf("webhelp-responsive") + ("webhelp-responsive").length 
+		: pathname.lastIndexOf("phon-manual") + ("phon-manual").length );
+	var customJSUrl = origin + "/" + pathname.substring(0, manualRootIdx) + "/js/custom_js.js";
+	
+	var scriptEle = document.createElement("script");
+	scriptEle.setAttribute("src", customJSUrl);
+	scriptEle.setAttribute("type", "text/javascript");
+	
+	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
+});
+</script>
+    <link rel="stylesheet" type="text/css" href="webhelp.css" data-css-role="args.css"><!----></link></head>
+    <body class="wh_main_page">
+        <a href="#content" class="sr-only sr-only-focusable">Jump to main content</a>
+        <!-- EXM-36950 - Expand the args.hdr parameter here -->
+        
+        
+        
+        <header class="navbar navbar-default wh_header" whc:version="21.1">
+    <div class="container-fluid">
+        <div class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <!--
+                            This component will be generated when the next parameters are specified in the transformation scenario:
+                            'webhelp.logo.image' and 'webhelp.logo.image.target.url'.
+                            See: http://oxygenxml.com/doc/versions/17.1/ug-editor/#topics/dita_webhelp_output.html.
+                    -->
+                    <a href="index.html" class=" wh_logo d-none d-sm-block "><img src="images/database_phon.png" alt="  Phon  " /></a>
+                    <div class=" wh_publication_title "><a href="index.html"><span xmlns="" class="booktitle">  <span class="ph mainbooktitle">Phon</span>  </span></a></div>
+                    
+                </div>
+                
+                <!-- The menu button for mobile devices is copied in the output only when the 'webhelp.show.top.menu' parameter is set to 'yes' -->
+                <button type="button" data-target="#wh_top_menu_and_indexterms_link" id="wh_menu_mobile_button" data-toggle="collapse" class="navbar-toggler collapsed wh_toggle_button" aria-expanded="false" aria-label="Toggle menu" aria-controls="wh_top_menu_and_indexterms_link">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                <nav class=" wh_top_menu "><ul xmlns:xhtml="http://www.w3.org/1999/xhtml" role="menubar" aria-label="Menu"><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="getting-started-d63e17-mi" data-tocid="getting-started-d63e17" data-state="not-ready" class=" topicref " data-id="getting-started"><span class="title"><a href="getting_started.html">Getting Started</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e42-mi" data-tocid="tocId-d63e42" data-state="not-ready" class=" topicref "><span class="title"><a href="welcome/welcome_window.html">User Interface</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e323-mi" data-tocid="tocId-d63e323" data-state="not-ready" class=" topicref "><span class="title"><a href="ipa/transcription.html">IPA Transcription</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e349-mi" data-tocid="tocId-d63e349" data-state="not-ready" class=" topicref "><span class="title"><a href="phonex/phonex_introduction.html">Phonex</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e548-mi" data-tocid="tocId-d63e548" data-state="not-ready" class=" topicref "><span class="title"><a href="query/query_and_report_wizard.html">Queries</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e767-mi" data-tocid="tocId-d63e767" data-state="not-ready" class=" topicref "><span class="title"><a href="analysis/analyses.html">Analyses</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e866-mi" data-tocid="tocId-d63e866" data-state="not-ready" class=" topicref "><span class="title"><a href="chat/phontalk.html">CHAT Support</a></span></span></li></ul></nav>
+                
+                <div id="wh_download_links">
+    <!--
+    <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
+    -->
+    <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.1.1">Phon 3.1.1</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.1-beta.5">Phon 3.1.1-beta.5</a>
+    <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
+</div>
+            </div>
+        </div>
+    </div>
+</header>        
+        
+        <!-- Search form -->
+        <div class=" wh_search_input navbar-form wh_main_page_search " role="form">
+          
+          <div class="wh_welcome"></div>          
+          <form id="searchForm" method="get" role="search" action="search.html"><div><input type="search" placeholder="Search " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="Search query" required="required" /><button type="submit" class="wh_search_button" aria-label="Search"><span>Search</span></button></div></form>
+          
+        </div>
+        <div class="wh_content_area " id="content">
+            
+            <!-- This is the placeholder for the main page tiles. -->
+            <div class="container-fluid wh_content_flex_container">
+                <!-- This is the placeholder for the main page tiles. -->
+                
+                <!--
+                    This is the placeholder for the main page entries
+                    presented in a tree-like fashion.
+                -->
+                <div class=" wh_main_page_toc "><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="getting-started-d63e17-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="getting-started-d63e17-entries" tabindex="0"><span class="topicref"><a href="getting_started.html" data-id="getting-started">Getting Started</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="getting-started-d63e17-entries" role="region" aria-labelledby="getting-started-d63e17-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="install.html" data-id="installing-phon">Installing Phon</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="known_issues.html" data-id="known-issues">Known Issues</a></span></div></div><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="tocId-d63e42-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="tocId-d63e42-entries" tabindex="0"><span class="topicref"><a href="welcome/welcome_window.html">User Interface</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="tocId-d63e42-entries" role="region" aria-labelledby="tocId-d63e42-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="welcome/welcome_window.html" data-id="welcome_window">Welcome Window</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="prefs/preferences.html" data-id="preferences">Preferences</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="project_manager/project_manager.html" data-id="project_manager">Project Manager</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="session_editor/session_editor.html" data-id="session-editor">Session Editor</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="tools/ipamap.html">Tools</a></span></div></div><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="tocId-d63e323-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="tocId-d63e323-entries" tabindex="0"><span class="topicref"><a href="ipa/transcription.html">IPA Transcription</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="tocId-d63e323-entries" role="region" aria-labelledby="tocId-d63e323-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="ipa/transcription.html" data-id="transcription">Parsing IPA Transcriptions</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="ipa/ipa.html" data-id="ipa_listing">Listing of IPA Characters</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="ipa/features.html" data-id="feature_listing">Listing of phonetic features</a></span></div></div><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="tocId-d63e349-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="tocId-d63e349-entries" tabindex="0"><span class="topicref"><a href="phonex/phonex_introduction.html">Phonex</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="tocId-d63e349-entries" role="region" aria-labelledby="tocId-d63e349-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="phonex/phonex_introduction.html" data-id="introduction">Introduction</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="phonex/phone_matchers.html">Language Reference</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="phonex/examples/consonants_examples.html">Examples</a></span></div></div><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="tocId-d63e548-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="tocId-d63e548-entries" tabindex="0"><span class="topicref"><a href="query/query_and_report_wizard.html">Queries</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="tocId-d63e548-entries" role="region" aria-labelledby="tocId-d63e548-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="query/query_and_report_wizard.html" data-id="query_and_report_wizard">Query and Report Wizard</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="query/data_tiers_query.html">Query Types</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="report/query_information_report.html">Stock Reports</a></span></div></div><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="tocId-d63e767-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="tocId-d63e767-entries" tabindex="0"><span class="topicref"><a href="analysis/analyses.html">Analyses</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="tocId-d63e767-entries" role="region" aria-labelledby="tocId-d63e767-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/analyses.html" data-id="built-in-analyses">Built-in Analyses</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/consonants.html" data-id="consonants">Consonants</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/ppc.html" data-id="analysis-ppc">PPC</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/phone_inventory.html" data-id="phone-inventory">Phone Inventory</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/phonological_processes.html" data-id="phonological-processes">Phonological Processes</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/pmlu.html" data-id="phonological-mean-length-of-utterance-pmlu">Phonological Mean Length of Utterance (PMLU)</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/word_list.html" data-id="word-list">Word List</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/specialized/word_match.html">Specialized</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="analysis/analysis_composer.html" data-id="custom-analysis-using-composer-simple">Custom Analysis using Composer (simple)</a></span></div></div><div class=" wh_main_page_toc_accordion_header "><span role="heading" aria-level="1" id="tocId-d63e866-heading"><span role="button" aria-expanded="false" class="header-button" aria-controls="tocId-d63e866-entries" tabindex="0"><span class="topicref"><a href="chat/phontalk.html">CHAT Support</a></span></span></span></div><div class=" wh_main_page_toc_accordion_entries " id="tocId-d63e866-entries" role="region" aria-labelledby="tocId-d63e866-heading"><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="chat/phontalk.html" data-id="phontalk">PhonTalk</a></span></div><div class=" wh_main_page_toc_entry "><span class="topicref"><a href="chat/main_line.html" data-id="chat-main-line">CHAT Main Line</a></span></div></div></div>
+                
+            </div>
+        </div>
+        
+        <footer class="navbar navbar-default wh_footer" whc:version="21.1">
+  <div class=" footer-container mx-auto ">
+    
+            Generated by <a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank">
+            &lt;oXygen/&gt; XML WebHelp
+            </a>
+        
+  </div>
+</footer>
+        
+        
+    </body>
+</html>

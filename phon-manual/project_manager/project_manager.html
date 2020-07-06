@@ -1,0 +1,574 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" xml:lang="en" lang="en" whc:version="21.1">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="description" content="The Project Manager window is displayed when you open a project from the Welcome window or by using the File &gt; Open project... menu item. Figure 1 : Project Manager Phon projects are stored on a hard ..." /><meta charset="UTF-8" /><meta name="copyright" content="(C) Copyright 2020" /><meta name="DC.rights.owner" content="(C) Copyright 2020" /><meta name="DC.type" content="topic" /><meta name="DC.relation" scheme="URI" content="../project_manager/corpora.html" /><meta name="DC.relation" scheme="URI" content="../project_manager/sessions.html" /><meta name="DC.format" content="HTML5" /><meta name="DC.identifier" content="project_manager" /><title>Project Manager</title><!--  Generated with Oxygen version 21.1, build number 2019112512.  --><meta name="wh-path2root" content="../" /><meta name="wh-toc-id" content="project_manager-d63e59" /><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" /><link rel="stylesheet" href="../oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" /><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic-page.css?buildId=2019112512" /><script type="text/javascript" src="../oxygen-webhelp/lib/jquery/jquery-3.4.1.min.js"><!----></script><script data-main="../oxygen-webhelp/app/topic-page.js" src="../oxygen-webhelp/lib/requirejs/require.js"></script><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/oxygen.css?buildId=2019112512" /><script type="text/javascript">
+$(document).ready( function () {
+	// add custom js to head element
+	var headEle = document.getElementsByTagName("head")[0];
+	
+	var origin = window.location.origin;
+	var pathname = window.location.pathname;
+	
+	var manualRootIdx = (origin == "file://" 
+		? pathname.lastIndexOf("webhelp-responsive") + ("webhelp-responsive").length 
+		: pathname.lastIndexOf("phon-manual") + ("phon-manual").length );
+	var customJSUrl = origin + "/" + pathname.substring(0, manualRootIdx) + "/js/custom_js.js";
+	
+	var scriptEle = document.createElement("script");
+	scriptEle.setAttribute("src", customJSUrl);
+	scriptEle.setAttribute("type", "text/javascript");
+	
+	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
+});
+</script><link rel="stylesheet" type="text/css" href="../webhelp.css" /></head>
+
+    <body id="project_manager" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">Jump to main content</a>
+        <!-- EXM-36950 - Expand the args.hdr parameter here -->
+        
+        
+        
+        <header class="navbar navbar-default wh_header" whc:version="21.1">
+    <div class="container-fluid">
+        <div class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <!--
+                            This component will be generated when the next parameters are specified in the transformation scenario:
+                            'webhelp.logo.image' and 'webhelp.logo.image.target.url'.
+                            See: http://oxygenxml.com/doc/versions/17.1/ug-editor/#topics/dita_webhelp_output.html.
+                    -->
+                    <a href="../index.html" class=" wh_logo d-none d-sm-block "><img src="../images/database_phon.png" alt="  Phon  " /></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">Phon</span>  </span></a></div>
+                    
+                </div>
+                
+                <!-- The menu button for mobile devices is copied in the output only when the 'webhelp.show.top.menu' parameter is set to 'yes' -->
+                <button type="button" data-target="#wh_top_menu_and_indexterms_link" id="wh_menu_mobile_button" data-toggle="collapse" class="navbar-toggler collapsed wh_toggle_button" aria-expanded="false" aria-label="Toggle menu" aria-controls="wh_top_menu_and_indexterms_link">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                <nav class=" wh_top_menu "><ul xmlns:xhtml="http://www.w3.org/1999/xhtml" role="menubar" aria-label="Menu"><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="getting-started-d63e17-mi" data-tocid="getting-started-d63e17" data-state="not-ready" class=" topicref " data-id="getting-started"><span class="title"><a href="../getting_started.html">Getting Started</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e42-mi" data-tocid="tocId-d63e42" data-state="not-ready" class=" topicref "><span class="title"><a href="../welcome/welcome_window.html">User Interface</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e323-mi" data-tocid="tocId-d63e323" data-state="not-ready" class=" topicref "><span class="title"><a href="../ipa/transcription.html">IPA Transcription</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e349-mi" data-tocid="tocId-d63e349" data-state="not-ready" class=" topicref "><span class="title"><a href="../phonex/phonex_introduction.html">Phonex</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e548-mi" data-tocid="tocId-d63e548" data-state="not-ready" class=" topicref "><span class="title"><a href="../query/query_and_report_wizard.html">Queries</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e767-mi" data-tocid="tocId-d63e767" data-state="not-ready" class=" topicref "><span class="title"><a href="../analysis/analyses.html">Analyses</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d63e866-mi" data-tocid="tocId-d63e866" data-state="not-ready" class=" topicref "><span class="title"><a href="../chat/phontalk.html">CHAT Support</a></span></span></li></ul></nav>
+                
+                <div id="wh_download_links">
+    <!--
+    <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
+    -->
+    <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.1.1">Phon 3.1.1</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.1-beta.5">Phon 3.1.1-beta.5</a>
+    <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
+</div>
+            </div>
+        </div>
+    </div>
+</header>
+        
+        <div class=" wh_search_input "><form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="Search " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="Search query" required="required" /><button type="submit" class="wh_search_button" aria-label="Search"><span>Search</span></button></div></form></div>
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md">
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol xmlns:html="http://www.w3.org/1999/xhtml" class="d-print-none"><li><span class="home"><a href="../index.html"><span>Home</span></a></span></li><li><span class="topicref"><span class="title"><a href="../welcome/welcome_window.html">User Interface</a></span></span></li><li class="active"><span class="topicref" data-id="project_manager"><span class="title"><a href="../project_manager/project_manager.html">Project Manager</a></span></span></li></ol></div>
+
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="Toggle search highlights" title="Toggle search highlights"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="Collapse sections" title="Collapse sections"></button>
+                        <div class=" wh_navigation_links "><span id="topic_navigation_links" class="navheader"></span></div>
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="Print this page" aria-label="Print this page"></button></div>
+                        
+                        <!-- Expand/Collapse publishing TOC 
+                             The menu button for mobile devices is copied in the output only when the publication TOC is available
+                        -->
+                        <button type="button" data-target="#wh_publication_toc" id="wh_toc_button" data-toggle="collapse" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav role="navigation" id="wh_publication_toc" class="collapse col-lg-3 col-md-3 col-sm-12 d-md-block">
+                            <div class=" wh_publication_toc " data-tooltip-position="right"><ul role="tree" aria-label="Table of Contents"><span class="expand-button-action-labels"><span id="button-expand-action" aria-label="Expand"></span><span id="button-collapse-action" aria-label="Collapse"></span><span id="button-pending-action" aria-label="Pending"></span></span><li role="treeitem" aria-expanded="true"><span data-tocid="tocId-d63e42" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d63e42-link" class="wh-expand-btn"></span><span class="title"><a href="../welcome/welcome_window.html" id="tocId-d63e42-link">User Interface</a></span></span><ul role="group" class="navbar-nav nav-list"><span class="expand-button-action-labels"><span id="button-expand-action" aria-label="Expand"></span><span id="button-collapse-action" aria-label="Collapse"></span><span id="button-pending-action" aria-label="Pending"></span></span><li role="treeitem"><span data-tocid="welcome_window-d63e43" class="topicref" data-id="welcome_window" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../welcome/welcome_window.html" id="welcome_window-d63e43-link">Welcome Window</a></span></span></li><li role="treeitem"><span data-tocid="preferences-d63e51" class="topicref" data-id="preferences" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../prefs/preferences.html" id="preferences-d63e51-link">Preferences</a></span></span></li><li role="treeitem" aria-expanded="true" class="active"><span data-tocid="project_manager-d63e59" class="topicref" data-id="project_manager" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action project_manager-d63e59-link" class="wh-expand-btn"></span><span class="title"><a href="../project_manager/project_manager.html" id="project_manager-d63e59-link">Project Manager</a></span></span><ul role="group" class="navbar-nav nav-list"><span class="expand-button-action-labels"><span id="button-expand-action" aria-label="Expand"></span><span id="button-collapse-action" aria-label="Collapse"></span><span id="button-pending-action" aria-label="Pending"></span></span><li role="treeitem"><span data-tocid="conceptId-d63e67" class="topicref" data-id="conceptId" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../project_manager/corpora.html" id="conceptId-d63e67-link">Corpus List</a></span></span></li><li role="treeitem"><span data-tocid="conceptId-d63e75" class="topicref" data-id="conceptId" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../project_manager/sessions.html" id="conceptId-d63e75-link">Session List</a></span></span></li></ul></li><li role="treeitem" aria-expanded="false"><span data-tocid="session-editor-d63e83" class="topicref" data-id="session-editor" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action session-editor-d63e83-link" class="wh-expand-btn"></span><span class="title"><a href="../session_editor/session_editor.html" id="session-editor-d63e83-link">Session Editor</a></span></span></li><li role="treeitem" aria-expanded="false"><span data-tocid="tocId-d63e288" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d63e288-link" class="wh-expand-btn"></span><span class="title"><a href="../tools/ipamap.html" id="tocId-d63e288-link">Tools</a></span></span></li></ul></li></ul></div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
+    <h1 class="title topictitle1" id="ariaid-title1">Project Manager</h1>
+    <div class="body">
+        <p class="p">The <span class="keyword wintitle">Project Manager</span> window is displayed when you open a project from
+            the <span class="keyword wintitle">Welcome</span> window or by using the <span class="ph menucascade"><span class="ph uicontrol">File</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Open project...</span></span> menu item.</p>
+        <figure class="fig fignone" id="project_manager__fig_ibj_fbw_2lb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 1</span>: </span>Project Manager</figcaption>
+            
+            <img class="image" id="project_manager__image_jbj_fbw_2lb" src="images/project_manager.png" alt="Project Manager" />
+        </figure>
+    </div>
+    <article class="topic nested1" aria-labelledby="ariaid-title2" id="project_structure">
+        <h2 class="title topictitle2" id="ariaid-title2">Project File Structure</h2>
+        <div class="body">
+            <p class="p">Phon projects are stored on a hard drive as directories. This folder is displayed at
+                the top of the <span class="keyword wintitle">Project Manager</span> window (clicking the folder path
+                will open Finder (macOS) or Explorer (windows) with the project folder
+                selected.)</p>
+            <p class="p">The directory for each project will contain the following:</p>
+            <ul class="ul" id="project_structure__ul_dpz_jzj_rc">
+                <li class="li">A <span class="ph filepath">project.xml</span> file which contains the information Phon
+                    requires for the project.</li>
+                <li class="li">A series of folders which correspond to each of the project's
+                        <span class="keyword">corpora</span> (usually a collection of transcribed sessions for
+                    a specific target speaker). Project corpora are displayed in the left-hand list
+                    of the window.<ul class="ul" id="project_structure__ul_zkz_wak_rc">
+                        <li class="li">Within each corpus folder are a series of xml files corresponding to
+                            each session. The xml files which are named beginning with '~' are
+                            session autosaves, created in order to prevent loss of data in the event
+                            of an unexpected shutdown.</li>
+                    </ul></li>
+            </ul>
+            <p class="p">The directory for each project may also contain the following:</p>
+            <ul class="ul">
+                <li class="li">A project resources folder called '<span class="ph filepath">__res</span>', which is a
+                    system directory created by Phon to contain useful components for the project.
+                    This folder may contain: <ul class="ul" id="project_structure__ul_vxt_xak_rc">
+                        <li class="li">A media folder, which is the default location for the media for the
+                            project and may contain media segments exported from Phon.</li>
+                    </ul></li>
+            </ul>
+            <div class="p">
+                <div class="note note note_note"><span class="note__title">Note:</span> Projects created using earlier versions of Phon may exist as
+                        <span class="ph filepath">.phon</span> files. These projects will need to be extracted
+                    (i.e. expanded to directories using the <a class="xref" href="../welcome/welcome_window.html">Welcome Window</a>) to be used with the current version
+                    of Phon.</div>
+            </div>
+        </div>
+    </article>
+    <article class="topic nested1" aria-labelledby="ariaid-title3" id="project_media_folders">
+        <h2 class="title topictitle2" id="ariaid-title3">Project Media Folders</h2>
+        <div class="body">
+            <div class="p">A media folder may be assigned for a project and for each individual corpus in a
+                project. The default media folder for a corpus will be the project media folder. The
+                search order for media files is:<ol class="ol" id="project_media_folders__ol_tpb_1br_wcb">
+                    <li class="li">Corpus media folder (if assigned)</li>
+                    <li class="li">Project media folder</li>
+                    <li class="li">Global media folders (see <a class="xref" href="../prefs/preferences.html#media_folders">Media Folders</a>)</li>
+                </ol></div>
+            <p class="p">To assign project media folders, select <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Select media folder...</span></span> from the <span class="keyword wintitle">Project Manager</span> window. A similar menu
+                item is available for corpus media folders under the <span class="ph uicontrol">Corpus</span>
+                submenu. Actions for controlling media folder selection are available from popup
+                menus accessed by clicking on the media folder labels at the top of the window and
+                in the corpus details section.</p>
+            <figure class="fig fignone" id="project_media_folders__fig_d1f_1hp_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 2</span>: </span>Media Folder Menu</figcaption>
+                
+                <br /><img class="image" id="project_media_folders__image_e1f_1hp_nlb" src="images/media_folder_menu.png" alt="Media Folder Menu" /><br />
+            </figure>
+        </div>
+    </article>
+    <article class="topic nested1" aria-labelledby="ariaid-title4" id="topic_pjd_chp_nlb">
+        <h2 class="title topictitle2" id="ariaid-title4">Relative Paths</h2>
+        <div class="body">
+            <p class="p"><span class="keyword">Absolute paths</span> are full paths to files/folders while
+                    <span class="keyword">relative paths</span> are portions of a full path. On macOS absolute
+                paths begin with a forward slash and on windows absolute paths begin with the drive
+                letter.</p>
+            <p class="p">Using relative paths for media folders can make sharing projects easier. By
+                specifiying a common folder setup between project files and media folders for all
+                people - e.g., using <span class="ph filepath">~/Documents/PhonWorkspace</span> for project
+                files and <span class="ph filepath">~/Documents/PhonMedia</span> for media files - other users
+                will not need to modify their individual media folder selections.</p>
+            <figure class="fig fignone" id="topic_pjd_chp_nlb__fig_zww_k3p_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 3</span>: </span>Relative Media Folder Path</figcaption>
+                
+                <br /><img class="image" id="topic_pjd_chp_nlb__image_axw_k3p_nlb" src="images/relative_media_folder_path.png" alt="Relative Media Folder Path" /><br />
+            </figure>
+        </div>
+    </article>
+    <article class="topic nested1" aria-labelledby="ariaid-title5" id="project_actions">
+        <h2 class="title topictitle2" id="ariaid-title5">Project Actions</h2>
+        <div class="body">
+            <p class="p">The following actions are available from the <span class="ph uicontrol">Project</span> window
+                menu when the <span class="keyword wintitle">Project Mangaer</span> window is focused.</p>
+        </div>
+        <article class="topic nested2" aria-labelledby="ariaid-title6" id="check_transcriptions">
+            <h3 class="title topictitle3" id="ariaid-title6">Check sessions</h3>
+            <div class="body">
+                <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
+                <ol class="ol">
+                    <li class="li">
+                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Check sessions...</span></span> menu item.</p>
+                        This will open the <span class="keyword wintitle">Check sessions</span>
+                            window.
+                    </li>
+                    <li class="li">
+                        <p class="p">Select the project, corpora, or sessions whose transcriptions you wish to
+                            check, and click <span class="ph uicontrol">Next</span>.</p>
+                        Phon will check each selected session, and any phone
+                            transcription errors will be printed in red, with their corpus, session,
+                            record number, and tier (<span class="keyword">IPA Target</span> or <span class="keyword">IPA
+                                Actual</span>).<div class="note note note_note"><span class="note__title">Note:</span> To resolve a reported error, return to the
+                                    <span class="keyword wintitle">Project Manager</span> window and open the session
+                                in which the error occurred, then navigate to the relevant record
+                                and visually check its IPA tiers.</div>
+                    </li>
+                </ol>
+                <figure class="fig fignone" id="check_transcriptions__fig_cbt_r5n_nlb"><figcaption class="figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 4</span>: </span>Check Sessions</figcaption>
+                    
+                    <br /><img class="image" id="check_transcriptions__image_dbt_r5n_nlb" src="images/check_sessions.png" alt="Check Sessions" /><br />
+                </figure>
+            </div>
+            <article class="topic nested3" aria-labelledby="ariaid-title7" id="reset_syllabification">
+                <h4 class="title topictitle4" id="ariaid-title7">Reset Syllabification</h4>
+                
+                <div class="body"><p class="shortdesc">In the event of display issues in <span class="keyword">Target Syllables</span> or
+                        <span class="keyword">Actual Syllables</span> in the <span class="keyword wintitle">Syllabification &amp;
+                        Alignment</span> view, it may be necessary to reset the syllabification
+                    of <span class="keyword">IPA Target</span> and <span class="keyword">IPA Actual</span>
+                    transcriptions.</p>
+                    <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
+                    <ol class="ol">
+                        <li class="li">
+                            <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Check sessions...</span></span> menu item.</p>
+                            This will open the <span class="keyword wintitle">Check Sessions</span>
+                                window.
+                        </li>
+                        <li class="li">
+                            <p class="p">Select the <span class="ph uicontrol">Reset syllabification</span> option.</p>
+                        </li>
+                        <li class="li">
+                            <p class="p">Choose an appropriate syllabifier language by selecting it from the
+                                drop-down menu.</p>
+                        </li>
+                        <li class="li">
+                            <p class="p">Select the project, or the corpora or sessions whose syllabification
+                                you wish to reset, and click <span class="ph uicontrol">Next</span>.</p>
+                            Phon will re-perform the syllabification for each selected
+                                session using the syllabifier language chosen in the <a class="xref" href="../prefs/preferences.html">Preferences</a> dialog. <div class="note note note_note"><span class="note__title">Note:</span> After resetting
+                                    syllabification or alignment, it will be necessary to visually
+                                    verify these tiers.</div>
+                        </li>
+                    </ol>
+                </div>
+            </article>
+            <article class="topic nested3" aria-labelledby="ariaid-title8" id="reset_alignment">
+                <h4 class="title topictitle4" id="ariaid-title8">Reset Phone Alignment</h4>
+                
+                <div class="body"><p class="shortdesc">In the event of display issues in the <span class="keyword">Alignment</span> tier
+                    of the <span class="keyword wintitle">Syllabification &amp; Alignment</span> view, it may be
+                    necessary to reset the phone alignment of <span class="keyword">IPA Target</span> and
+                        <span class="keyword">IPA Actual</span> transcriptions.</p>
+                    <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
+                    <ol class="ol">
+                        <li class="li">
+                            <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Check sessions...</span></span> menu item.</p>
+                            This will open the <span class="keyword wintitle">Check Sessions</span>
+                                window.
+                        </li>
+                        <li class="li">
+                            <p class="p">Select the <span class="ph uicontrol">Reset phone alignment</span> option.</p>
+                        </li>
+                        <li class="li">
+                            <p class="p">Select the project, corpora, or sessions whose alignment you wish to
+                                reset, and click <span class="ph uicontrol">Next</span>.</p>
+                            Phon will re-perform the alignment for each selected session.
+                                    <div class="note note note_note"><span class="note__title">Note:</span> After resetting syllabification or alignment, it will be
+                                    necessary to visually verify these tiers.</div>
+                        </li>
+                    </ol>
+                </div>
+            </article>
+        </article>
+        <article class="topic nested2" aria-labelledby="ariaid-title9" id="derive_session">
+            <h3 class="title topictitle3" id="ariaid-title9">Derive Session</h3>
+            
+            <div class="body"><p class="shortdesc">Derive a new session using records from existing sessions.</p>
+                <section class="section">
+                    <p class="p">From the <span class="keyword wintitle">Project Manager</span> window:</p>
+                </section>
+                <ol class="ol">
+                    <li class="li">
+                        <p class="p">Choose the <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Derive Session...</span></span> menu item.</p>
+                        A <span class="keyword wintitle">Merge Sessions</span> dialog will
+                            appear.
+                    </li>
+                    <li class="li">
+                        <p class="p">Enter a <span class="ph uicontrol">Session name</span> and Destination
+                                <span class="ph uicontrol">Corpus</span> in the provided fields. Select one or
+                            more of the sessions for the split or merge and click
+                                <span class="ph uicontrol">Next</span>.</p>
+                        The second page of the <span class="keyword wintitle">Merge Sessions</span> dialog
+                            will appear.<div class="note note note_note"><span class="note__title">Note:</span> If you chose only one session, the selected records
+                                will be put into the new session. If you select more than one
+                                session, the selected records will be merged into a new
+                                session.</div>
+                    </li>
+                    <li class="li">
+                        <p class="p">Select a session from the <span class="ph uicontrol">Session</span> list at the left
+                            and choose whether to merge or split <span class="ph uicontrol">All records</span>,
+                            a subset of <span class="ph uicontrol">Specific records</span>, <span class="ph uicontrol">Records
+                                for participant(s)</span> or <span class="ph uicontrol">Records from Search
+                                results</span>. Repeat this process for all sessions in the
+                                <span class="ph uicontrol">Session</span> list. Click
+                                <span class="ph uicontrol">Next</span>.</p>
+                        This will begin the merging of the selected
+                                records/sessions.<div class="note note note_note"><span class="note__title">Note:</span> If you choose to merge only specific records,
+                                you will have to specify the relevant record numbers. To specify
+                                several individual records, separate them with a comma and a space.
+                                To specify a range, separate the beginning and end record numbers
+                                with two periods and a space. If you choose to merge records for
+                                specific participants, you must select the participants from the
+                                list. If you choose to merge records from search results, you must
+                                select a past search from the list.</div>
+                    </li>
+                    <li class="li">
+                        The newly derived session will appear in the specified corpus in
+                            the <span class="keyword wintitle">Project Manager</span>. 
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="topic nested2" aria-labelledby="ariaid-title10" id="refresh_project">
+            <h3 class="title topictitle3" id="ariaid-title10">Refresh Project</h3>
+            
+            <div class="body"><p class="shortdesc">Refresh <span class="keyword wintitle">Project Manager</span> window to reflect
+                changes.</p>
+                <section class="section">From the <span class="keyword wintitle">Project Manager</span> window:</section>
+                <ol class="ol">
+                    <li class="li">
+                        <p class="p">Choose the <span class="ph menucascade"><span class="ph uicontrol">Project</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Refresh</span></span> menu item or press <kbd class="ph userinput">F5</kbd>.</p>
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="topic nested2" aria-labelledby="ariaid-title11" id="csv_import">
+            <h3 class="title topictitle3" id="ariaid-title11">Import from CSV file(s)</h3>
+            
+            <div class="body"><p class="shortdesc">Import a folder of CSV (comma-separated values) files into Phon as
+                sessions.</p>
+                <section class="section"><p class="p">The CSV import module can import a folder of CSV files with identical
+                        column formats into Phon. Where possible, CSV column labels should match
+                        Phon default tiers. Phon can automatically extract session date information
+                        from a CSV file if its name reflects its session date, in YYYY-MM-DD
+                        format.</p>From the <span class="keyword wintitle">Project Manager</span> window:</section>
+                <ol class="ol">
+                    <li class="li">
+                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Tools</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Import from CSV...</span></span> menu item.</p>
+                        This action will generate a <span class="ph uicontrol">CSV Import</span>
+                            window.
+                    </li>
+                    <li class="li">
+                        <p class="p">Click the <span class="ph uicontrol">Browse</span> button to the right of the
+                                <span class="ph uicontrol">Folder</span> field and locate the directory
+                            containing the CSV files for import. Also, ensure you select the proper
+                                <span class="ph uicontrol">File encoding</span> option from the drop-down menu.
+                            Click the <span class="ph uicontrol">Next</span> button.</p>
+                        This action will prompt you to select files for import and the
+                            destination corpus.
+                    </li>
+                    <li class="li">
+                        <p class="p">Enter a corpus name in the <span class="ph uicontrol">Destination Corpus</span>
+                            field and using the check boxes, select the files for import into that
+                            corpus. For each file, edit <span class="ph uicontrol">Session Name</span> and
+                                <span class="ph uicontrol">Session Date</span> as desired by double-clicking on
+                            either of them. Click the <span class="ph uicontrol">Next</span> button.</p>
+                        This will prompt you to set up the participants for that corpus:
+                            any participant information entered here will appear in all imported
+                            sessions for that corpus.
+                    </li>
+                    <li class="li">
+                        <p class="p">Click the <span class="ph uicontrol">Add Participant/+</span> button at the right of
+                            the window. Enter participant name, sex, date of birth, language and
+                            other pertinent information in the appropriate fields and click
+                                <span class="ph uicontrol">Ok</span>. To delete a participant from the import,
+                            highlight the participant in the table and use the
+                                <kbd class="ph userinput">Delete/Backspace</kbd> key. Then click the
+                                <span class="ph uicontrol">Next</span> button.</p>
+                        
+                    </li>
+                    <li class="li">
+                        <p class="p">Set up column mapping such that each CSV column header has been assigned
+                            a tier name in Phon. To do this, highlight an item in the <span class="ph uicontrol">CSV
+                                column</span> on the left, then use the drop down menu on the
+                            right to select the appropriate Phon <span class="ph uicontrol">Tier</span> or
+                            enter a new tier into <span class="ph uicontrol">Tier Name</span> field. You may
+                            also select the <span class="ph uicontrol">Don't Import</span> menu item for
+                            columns that are repetitive or unnecessary. In the
+                                <span class="ph uicontrol">Options</span> section, you may use the
+                                <span class="ph uicontrol">Syllabifier</span> drop down menu to specify the
+                            correct syllabifier and the <span class="ph uicontrol">Transcription filter</span>
+                            to convert the <em class="ph i">IPA Target</em> and/or <em class="ph i">IPA Actual</em> tiers from
+                            YAPA, SAMPA, IPAPhon or IPAKiel. Click the <span class="ph uicontrol">Next</span>
+                            button.</p>
+                        This action will activate the import.<div class="note note note_note"><span class="note__title">Note:</span> If the column name in
+                                the CSV file is the same as a Phon default tier name, the CSV column
+                                will be automatically mapped to the appropriate tier in
+                                Phon.</div><div class="note note note_note"><span class="note__title">Note:</span> If mapping a CSV column to the <em class="ph i">Segment</em> tier
+                                in Phon, segments times must be listed in mmm:ss.uuu format
+                                (minutes:seconds:milliseconds).</div>
+                    </li>
+                    <li class="li">
+                        <p class="p">Once the <em class="ph i">Import finished</em> alert appears at the bottom of the
+                                <span class="keyword wintitle">CSV Import</span> window, click the
+                                <span class="ph uicontrol">Close</span> button.</p>
+                        This action will return the user to the <span class="keyword wintitle">Project
+                                Manager</span> window with the newly imported corpus. Each row
+                            from your CSV file will become one record in Phon with the tiers as
+                            specified. 
+                    </li>
+                </ol>
+                <section class="section">
+                    <p class="p">After import, each CSV file should become a new session in Phon. The number
+                        of records in the session should match the number of rows in the CSV file
+                        (minus the header.) A file named <span class="ph filepath">importsettings.xml</span> is
+                        also created in the source folder. If this file is present when the
+                        directory is selected in Step 1 the previous import settings are loaded
+                        (except for Syllabifier and Filter settings).</p>
+                </section>
+            </div>
+        </article>
+        <article class="topic nested2" aria-labelledby="ariaid-title12" id="csv_export">
+            <h3 class="title topictitle3" id="ariaid-title12">Export to CSV file(s)</h3>
+            
+            <div class="body"><p class="shortdesc">Export Phon sessions as CSV (comma-separated values) files.</p>
+                <section class="section">
+                    <p class="p">The CSV export module can export Phon sessions into a specified folder as
+                        UTF-8 encoded CSV files.</p>
+                    <p class="p">From the <span class="ph uicontrol">Project Manager</span> window:</p>
+                </section>
+                <ol class="ol" id="csv_export__steps_3fbd2bb6-677b-4d56-b099-694f006388f9">
+                    <li class="li">
+                        <p class="p">Select the <span class="ph menucascade"><span class="ph uicontrol">Tools</span><abbr title="and then"> &gt; </abbr><span class="ph uicontrol">Export to CSV...</span></span> menu item.</p>
+                        This action will generate a <span class="ph uicontrol">CSV Export</span>
+                            window.
+                    </li>
+                    <li class="li">
+                        <p class="p">To select the destination folder for the export, click the
+                                <span class="ph uicontrol">Browse for folder...</span> button to the right of
+                            the <span class="ph uicontrol">Destination folder</span> field, locate the desired
+                            folder and click <span class="ph uicontrol">Open</span>. Select the sessions you
+                            would like to export using the check boxes at the left of the
+                                <span class="ph uicontrol">Sessions</span> list. Click the
+                                <span class="ph uicontrol">Next</span> button.</p>
+                        This action will prompt you to set up columns for the
+                            export.
+                    </li>
+                    <li class="li">
+                        <p class="p"> To add a column to the export, type its name in the provided field and
+                            press <kbd class="ph userinput">Enter</kbd> or click <span class="ph uicontrol">Add
+                                column/+</span>. To remove a tier from the list, select it and
+                            click the <span class="ph uicontrol">Remove Column/-</span> button. To export a
+                            tier which is not available in the existing list, type
+                                <code class="ph codeph">Tier:&lt;tier name&gt;</code> in the provided field and click
+                            the <span class="ph uicontrol">Add Column/+</span> or press
+                                <kbd class="ph userinput">Enter</kbd>. Click on any tier name in the list and
+                            use the <span class="ph uicontrol">up/down arrow</span> buttons to change the
+                            column ordering. Click the <span class="ph uicontrol">Next</span> button.</p>
+                        
+                         This action will activate the export.<div class="note note note_note"><span class="note__title">Note:</span> The default column
+                                list for export includes: Session Name, Record #, and all default
+                                Phon tiers. The default can be restored by using the
+                                    <span class="ph uicontrol">Reset to default</span> button on the bottom
+                                right corner of the column list. This list of columns is saved after
+                                export and re-loaded the next time CSV export is
+                                opened.</div><div class="note note note_note"><span class="note__title">Note:</span> To export blind user transcriptions, add the
+                                tier <code class="ph codeph">IPA [Target|Actual] (&lt;username&gt;)</code> (e.g.
+                                Tier:IPA Target (JSmith)).</div>
+                    </li>
+                    <li class="li">
+                        <p class="p">Once the <em class="ph i">Export complete</em> alert appears at the bottom of the
+                                <span class="ph uicontrol">CSV Export</span> window, click the
+                                <span class="ph uicontrol">Close</span> button. </p>
+                        Session files for all corpora in the exported project will appear
+                            in the chosen directory with the format <span class="ph filepath">Corpus name-Session
+                                name.csv</span>.
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="topic nested2" aria-labelledby="ariaid-title13" id="copy_corpus">
+            <h3 class="title topictitle3" id="ariaid-title13">Copy Corpus</h3>
+            
+            <div class="body"><p class="shortdesc">Copy a corpus to a different project.</p>
+                <section class="section">From <span class="keyword wintitle">Project Manager</span> window, with a second
+                        <span class="keyword wintitle">Project Manager</span> window open:</section>
+                <ol class="ol">
+                    <li class="li">
+                        <p class="p">Select the corpora you wish to copy in the source <span class="keyword wintitle">Project
+                                Manager</span> window.</p>
+                    </li>
+                    <li class="li">
+                        <p class="p">Using the mouse, drag the corpora over the corpus list of the destination
+                                <span class="keyword wintitle">Project Manager</span> window.</p>
+                        The corpus folders will be copied into the destination
+                            project.
+                    </li>
+                </ol>
+            </div>
+        </article>
+        <article class="topic nested2" aria-labelledby="ariaid-title14" id="copy_session">
+            <h3 class="title topictitle3" id="ariaid-title14">Copy Session</h3>
+            
+            <div class="body"><p class="shortdesc">Copy a session to a different corpus.</p>
+                <section class="section">From <span class="keyword wintitle">Project Manager</span> window:</section>
+                <ol class="ol">
+                    <li class="li">
+                        <p class="p">Select the sessions you wish to copy in the <span class="keyword wintitle">Project
+                                Manager</span> window.</p>
+                    </li>
+                    <li class="li">
+                        <p class="p">Using the mouse, drag the sessions over the name of the destination
+                            corpus in the <span class="keyword wintitle">Project Manager</span> window.</p>
+                        The sessions files will be copied into the destination
+                            corpus.
+                    </li>
+                </ol>
+            </div>
+        </article>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#project_structure" data-tocid="project_structure">Project File Structure</a></li><li class="topic-item"><a href="#project_media_folders" data-tocid="project_media_folders">Project Media Folders</a></li><li class="topic-item"><a href="#topic_pjd_chp_nlb" data-tocid="topic_pjd_chp_nlb">Relative Paths</a></li><li class="topic-item"><a href="#project_actions" data-tocid="project_actions">Project Actions</a><ul><li class="topic-item"><a href="#check_transcriptions" data-tocid="check_transcriptions">Check sessions</a><ul><li class="topic-item"><a href="#reset_syllabification" data-tocid="reset_syllabification">Reset Syllabification</a></li><li class="topic-item"><a href="#reset_alignment" data-tocid="reset_alignment">Reset Phone Alignment</a></li></ul></li><li class="topic-item"><a href="#derive_session" data-tocid="derive_session">Derive Session</a></li><li class="topic-item"><a href="#refresh_project" data-tocid="refresh_project">Refresh Project</a></li><li class="topic-item"><a href="#csv_import" data-tocid="csv_import">Import from CSV file(s)</a></li><li class="topic-item"><a href="#csv_export" data-tocid="csv_export">Export to CSV file(s)</a></li><li class="topic-item"><a href="#copy_corpus" data-tocid="copy_corpus">Copy Corpus</a></li><li class="topic-item"><a href="#copy_session" data-tocid="copy_session">Copy Session</a></li></ul></li></ul></div>
+                        </nav>
+                    
+                </div>
+            </div>
+        </div> 
+        <footer class="navbar navbar-default wh_footer" whc:version="21.1">
+  <div class=" footer-container mx-auto ">
+    
+            Generated by <a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank">
+            &lt;oXygen/&gt; XML WebHelp
+            </a>
+        
+  </div>
+</footer>
+        
+        <div id="go2top">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <!-- The modal container for images -->
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <!-- Modal Content (The Image) -->
+            <img class="modal-content" id="modal-img" />
+            <!-- Modal Caption (Image Text) -->
+            <div id="caption"></div>
+        </div>
+        
+        
+    </body>
+</html>

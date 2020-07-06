@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Restriction" width="18" height="18" viewBox="0 0 18 18" version="1.1" sodipodi:docname="restriction.svg" inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata id="metadata9698">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1920" inkscape:window-height="1137" id="namedview9696" showgrid="false" inkscape:zoom="37.083822" inkscape:cx="12.074993" inkscape:cy="7.4237165" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="Restriction" />
+  <defs id="defs9692">
+    <style id="style9690">
+      .cls-1 {
+        fill: #6f4a02;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Shape" class="cls-1" d="M9,18a9,9,0,1,1,9-9A9,9,0,0,1,9,18Zm0-2A6.973,6.973,0,0,0,14.591,4.823L4.823,14.591A6.942,6.942,0,0,0,9,16ZM2,9a6.941,6.941,0,0,0,1.412,4.177l9.768-9.768A6.973,6.973,0,0,0,2,9Z" style="fill:#e42828" />
+</svg>
