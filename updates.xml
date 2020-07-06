@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0.dmg" newVersion="3.1.0" newMediaFileId="macos" fileSize="278735307" md5Sum="b5ec9f74ce287938f27e6d55f4f9fb7f" sha256Sum="2b7ea070787a394a05589ec2cbfefde78005fb0465c0fa2c538f2e93512d3597" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.5
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1.dmg" newVersion="3.1.1" newMediaFileId="macos" fileSize="278950497" md5Sum="6eeae9456599e16f87cbae9942d7c452" sha256Sum="24043626a2b439a77c3f11b2164f6b0eada16d36572ceb1810c2ec1206808557" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -314,8 +332,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_0.dmg" newVersion="3.1.0" newMediaFileId="macos" fileSize="278735307" md5Sum="b5ec9f74ce287938f27e6d55f4f9fb7f" sha256Sum="2b7ea070787a394a05589ec2cbfefde78005fb0465c0fa2c538f2e93512d3597" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1.dmg" newVersion="3.1.1" newMediaFileId="macos" fileSize="278950497" md5Sum="6eeae9456599e16f87cbae9942d7c452" sha256Sum="24043626a2b439a77c3f11b2164f6b0eada16d36572ceb1810c2ec1206808557" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -628,8 +664,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.exe" newVersion="3.1.1" newMediaFileId="win64" fileSize="288567560" md5Sum="74b9e82d0fa12f07828e8d90188db85f" sha256Sum="ce393d5e32939e7156b605495563ef8a6ec68a51b76c0dd329f000ba1373d62b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -942,8 +996,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.exe" newVersion="3.1.1" newMediaFileId="win64" fileSize="288567560" md5Sum="74b9e82d0fa12f07828e8d90188db85f" sha256Sum="ce393d5e32939e7156b605495563ef8a6ec68a51b76c0dd329f000ba1373d62b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -1256,8 +1328,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.exe" newVersion="3.1.0" newMediaFileId="win64" fileSize="288361736" md5Sum="e85057a719e152c59b163b997d37e7a2" sha256Sum="379486894a342a83bfeae756b98a82edf4fb72249b3892603f38e7e4860d47c0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.exe" newVersion="3.1.1" newMediaFileId="win64" fileSize="288567560" md5Sum="74b9e82d0fa12f07828e8d90188db85f" sha256Sum="ce393d5e32939e7156b605495563ef8a6ec68a51b76c0dd329f000ba1373d62b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
@@ -1570,8 +1660,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_0.zip" newVersion="3.1.0" newMediaFileId="win64zip" fileSize="287446050" md5Sum="1627ec112cfab8af0794d5033aa107fb" sha256Sum="6b933faa6444327cfdb9dc1ac95c513406f9d05f48e6f280b2309366882995e6" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.0.5
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.zip" newVersion="3.1.1" newMediaFileId="win64zip" fileSize="287652111" md5Sum="46d20f3526765091c0b97da60c2655da" sha256Sum="4234251859b028ed01ff6e7601c3fb187270041db13c20d5bcc168beca13668b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
 
  * Improved method of opening sessions in blind mode
  * Improved method of viewing and selecting project/corpus media folders
