@@ -76,6 +76,7 @@ public class SimpleFSA<T> {
 			Object[] transList = 
 				transitions.toArray();
 			for(Object obj:transList) {
+				@SuppressWarnings("unchecked")
 				FSATransition<T> currentTransition = (FSATransition<T>)obj;
 				if(currentTransition.getFirstState().equals(stateName) ||
 						currentTransition.getToState().equals(stateName))
@@ -220,7 +221,7 @@ public class SimpleFSA<T> {
 		cachedState.setLookBehindOffset(machineState.getLookBehindOffset());
 		
 		// keep track of possible path choices using a stack
-		Stack<DecisionTracker> decisions = new Stack<DecisionTracker>();
+		Stack<DecisionTracker<T>> decisions = new Stack<DecisionTracker<T>>();
 		
 		while(machineState.getRunningState() == FSAState.RunningState.Running) {
 			FSATransition<T> toFollow = delta(machineState, decisions);
@@ -310,7 +311,7 @@ public class SimpleFSA<T> {
 	 * @return the next machine state.  If no transition can be followed,
 	 * or we have reached the end of input <CODE>null</CODE> is returned.
 	 */
-	protected FSATransition<T> delta(FSAState<T> machineState, Stack<DecisionTracker> decisions) {
+	public FSATransition<T> delta(FSAState<T> machineState, Stack<DecisionTracker<T>> decisions) {
 		FSATransition<T> retVal = null;
 		
 		// end of input
@@ -348,7 +349,7 @@ public class SimpleFSA<T> {
 		// if more than one path is possible, add the
 		// other choices to our decision stack.
 		if(!possessive && possiblePaths.size() > 1) {
-			DecisionTracker tracker = new DecisionTracker();
+			DecisionTracker<T> tracker = new DecisionTracker<T>();
 			tracker.choices = possiblePaths;
 			tracker.choiceIndex = 0;
 			tracker.tapeIndex = machineState.getTapeIndex();
@@ -372,11 +373,11 @@ public class SimpleFSA<T> {
 	 * @return the next state of the machine or <CODE>null</CODE> if no
 	 * path choices exist on the decision stack.
 	 */
-	protected FSATransition<T> backtrack(FSAState<T> machineState, Stack<DecisionTracker> decisions) {
+	protected FSATransition<T> backtrack(FSAState<T> machineState, Stack<DecisionTracker<T>> decisions) {
 		FSATransition<T> retVal = null;
 		
 		while(!decisions.isEmpty()) {
-			DecisionTracker lastDecision = decisions.pop();
+			DecisionTracker<T> lastDecision = decisions.pop();
 			
 			int nextChoice = lastDecision.choiceIndex+1;
 			// no more paths to choose from, try previous decision 
@@ -485,11 +486,12 @@ public class SimpleFSA<T> {
 
 	}
 	
-	private class DecisionTracker {
+	public static class DecisionTracker<T> {
 		public int tapeIndex;
 		public List<FSATransition<T>> choices;
 		public int choiceIndex;
 		public int[] groupStarts;
 		public int[] groupLengths;
 	}
+	
 }
