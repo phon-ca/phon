@@ -198,12 +198,13 @@ public class LocalProject implements Project, ProjectRefresh {
 			LOGGER.warn(e);
 		}
 		
+		boolean modified = false;
 		if(!properties.contains(PROJECT_UUID_PROP)) {
 			if(pt != null) {
 				if(pt.getUuid() != null)
 					properties.put(PROJECT_UUID_PROP, pt.getUuid());
 				else
-					properties.put(PROJECT_UUID_PROP, UUID.randomUUID());
+					properties.put(PROJECT_UUID_PROP, UUID.randomUUID().toString());
 				
 				// if UUID not found we likely need to upgrade this project
 				// copy corpus descriptions if necessary
@@ -230,13 +231,21 @@ public class LocalProject implements Project, ProjectRefresh {
 			} else {
 				properties.put(PROJECT_UUID_PROP, UUID.randomUUID().toString());
 			}
-			
+			modified = true;
 		}
 		if(!properties.contains(PROJECT_NAME_PROP)) {
 			if(pt != null) {
 				properties.put(PROJECT_NAME_PROP, pt.getName());
 			} else {
 				properties.put(PROJECT_NAME_PROP, projectFolder.getName());
+			}
+			modified = true;
+		}
+		if(modified) {
+			try {
+				saveProperties();
+			} catch (IOException e) {
+				LOGGER.error(e);
 			}
 		}
 	}
