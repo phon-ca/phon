@@ -145,6 +145,8 @@ public class SyllabificationDisplay extends JComponent {
 					new SyllabificationChangeData(realPhonexIndex, p.getScType());
 			SyllabificationChangeData newData =
 					new SyllabificationChangeData(realPhonexIndex, scType);
+			
+			p.setScType(scType);
 
 			super.firePropertyChange(SYLLABIFICATION_PROP_ID, oldData, newData);
 		}

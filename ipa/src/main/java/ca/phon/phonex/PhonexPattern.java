@@ -158,7 +158,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 *
 	 * @return the complied fsa
 	 */
-	PhonexFSA getFsa() {
+	public PhonexFSA getFsa() {
 		return this.fsa;
 	}
 
