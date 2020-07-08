@@ -200,33 +200,37 @@ public class LocalProject implements Project, ProjectRefresh {
 		
 		if(!properties.contains(PROJECT_UUID_PROP)) {
 			if(pt != null) {
-				properties.put(PROJECT_UUID_PROP, pt.getUuid());
+				if(pt.getUuid() != null)
+					properties.put(PROJECT_UUID_PROP, pt.getUuid());
+				else
+					properties.put(PROJECT_UUID_PROP, UUID.randomUUID());
+				
+				// if UUID not found we likely need to upgrade this project
+				// copy corpus descriptions if necessary
+				for(String corpus:getCorpora()) {
+					final File corpusFolder = getCorpusFolder(corpus);
+					final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
+					
+					for(CorpusType ct:pt.getCorpus()) {
+						if(ct.getName().equals(corpus)) {
+							if(ct.getDescription() != null 
+									&& ct.getDescription().trim().length() > 0
+									&& !corpusInfoFile.exists()) {
+								try (PrintWriter out = new PrintWriter(corpusInfoFile)) {
+									out.write(ct.getDescription());
+									out.flush();
+								} catch (IOException e) {
+									LOGGER.warn(e);
+								}
+							}
+							break;
+						}
+					}
+				}
 			} else {
 				properties.put(PROJECT_UUID_PROP, UUID.randomUUID().toString());
 			}
 			
-			// if UUID not found we likely need to upgrade this project
-			// copy corpus descriptions if necessary
-			for(String corpus:getCorpora()) {
-				final File corpusFolder = getCorpusFolder(corpus);
-				final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
-				
-				for(CorpusType ct:pt.getCorpus()) {
-					if(ct.getName().equals(corpus)) {
-						if(ct.getDescription() != null 
-								&& ct.getDescription().trim().length() > 0
-								&& !corpusInfoFile.exists()) {
-							try (PrintWriter out = new PrintWriter(corpusInfoFile)) {
-								out.write(ct.getDescription());
-								out.flush();
-							} catch (IOException e) {
-								LOGGER.warn(e);
-							}
-						}
-						break;
-					}
-				}
-			}
 		}
 		if(!properties.contains(PROJECT_NAME_PROP)) {
 			if(pt != null) {
