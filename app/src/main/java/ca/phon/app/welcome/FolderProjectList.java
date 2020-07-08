@@ -199,12 +199,14 @@ public class FolderProjectList extends JPanel {
 		projectButtons.clear();
 		if(projectFolder == null || projectFolder.listFiles() == null) return;
 		for(File f:projectFolder.listFiles()) {
-			if(f.isDirectory()) {
+			if(f.isDirectory()
+					&& !f.isHidden()
+					&& !f.getName().startsWith("~")
+					&& !f.getName().endsWith("~")
+					&& !f.getName().startsWith("__")
+					&& !f.getName().equals("backups")) {
 				// check for a project.xml file
-				File projXML = new File(f, "project.xml");
-				if(projXML.exists()) {
-					projectButtons.add(getProjectButton(f));
-				}
+				projectButtons.add(getProjectButton(f));
 			} else if(f.isFile()) {
 				if(f.getName().endsWith(".phon") || f.getName().endsWith(".zip")) {
 					projectButtons.add(getProjectButton(f));

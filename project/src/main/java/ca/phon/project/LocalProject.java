@@ -166,7 +166,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			putExtension(Properties.class, new Properties());
 		}
 		properties = getExtension(Properties.class);
-		
 		checkProperties();
 		
 		putExtension(ProjectRefresh.class, this);
@@ -199,7 +198,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		}
 		
 		boolean modified = false;
-		if(!properties.contains(PROJECT_UUID_PROP)) {
+		if(!properties.containsKey(PROJECT_UUID_PROP)) {
 			if(pt != null) {
 				if(pt.getUuid() != null)
 					properties.put(PROJECT_UUID_PROP, pt.getUuid());
@@ -233,7 +232,7 @@ public class LocalProject implements Project, ProjectRefresh {
 			}
 			modified = true;
 		}
-		if(!properties.contains(PROJECT_NAME_PROP)) {
+		if(!properties.containsKey(PROJECT_NAME_PROP)) {
 			if(pt != null) {
 				properties.put(PROJECT_NAME_PROP, pt.getName());
 			} else {
