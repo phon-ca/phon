@@ -159,6 +159,8 @@
 		<org.mozilla.rhino.version>1.7.12</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
 		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>		
+		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
+		
 		<!-- java.xml.bind -->
 		<jaxb.version>2.2.11</jaxb.version>
 		<javax.activation.activation.version>1.1.1</javax.activation.activation.version>
@@ -419,6 +421,12 @@
 			  <groupId>com.github.davidmoten</groupId>
 			  <artifactId>rtree</artifactId>
 			  <version>${com.github.davidmoten.rtree.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>guru.nidi</groupId>
+			    <artifactId>graphviz-java</artifactId>
+			    <version>${guru.nidi.graphviz-java.version}</version>
 			</dependency>
 			
 			<!-- log4j 2 -->
