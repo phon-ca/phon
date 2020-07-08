@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1.dmg" newVersion="3.1.1" newMediaFileId="macos" fileSize="278950497" md5Sum="6eeae9456599e16f87cbae9942d7c452" sha256Sum="24043626a2b439a77c3f11b2164f6b0eada16d36572ceb1810c2ec1206808557" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_2.dmg" newVersion="3.1.2" newMediaFileId="macos" fileSize="286106577" md5Sum="8451b712be75bbd7f4519215d482820c" sha256Sum="9e2d4c8ae540ee313152defde1876162a78629d84690d495615e7adae222db80" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -332,7 +332,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_1.dmg" newVersion="3.1.1" newMediaFileId="macos" fileSize="278950497" md5Sum="6eeae9456599e16f87cbae9942d7c452" sha256Sum="24043626a2b439a77c3f11b2164f6b0eada16d36572ceb1810c2ec1206808557" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_2.dmg" newVersion="3.1.2" newMediaFileId="macos" fileSize="286106577" md5Sum="8451b712be75bbd7f4519215d482820c" sha256Sum="9e2d4c8ae540ee313152defde1876162a78629d84690d495615e7adae222db80" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -664,7 +664,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.exe" newVersion="3.1.1" newMediaFileId="win64" fileSize="288567560" md5Sum="74b9e82d0fa12f07828e8d90188db85f" sha256Sum="ce393d5e32939e7156b605495563ef8a6ec68a51b76c0dd329f000ba1373d62b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.exe" newVersion="3.1.2" newMediaFileId="win64" fileSize="295712008" md5Sum="3817ca58813c2ef316ddad3847613f09" sha256Sum="0bf709f6dff0e40c144f9bce19d8852d8252e4ea7fb348425a3573c40165b8a8" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -996,7 +996,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.exe" newVersion="3.1.1" newMediaFileId="win64" fileSize="288567560" md5Sum="74b9e82d0fa12f07828e8d90188db85f" sha256Sum="ce393d5e32939e7156b605495563ef8a6ec68a51b76c0dd329f000ba1373d62b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.exe" newVersion="3.1.2" newMediaFileId="win64" fileSize="295712008" md5Sum="3817ca58813c2ef316ddad3847613f09" sha256Sum="0bf709f6dff0e40c144f9bce19d8852d8252e4ea7fb348425a3573c40165b8a8" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -1328,7 +1328,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.exe" newVersion="3.1.1" newMediaFileId="win64" fileSize="288567560" md5Sum="74b9e82d0fa12f07828e8d90188db85f" sha256Sum="ce393d5e32939e7156b605495563ef8a6ec68a51b76c0dd329f000ba1373d62b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.exe" newVersion="3.1.2" newMediaFileId="win64" fileSize="295712008" md5Sum="3817ca58813c2ef316ddad3847613f09" sha256Sum="0bf709f6dff0e40c144f9bce19d8852d8252e4ea7fb348425a3573c40165b8a8" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
@@ -1660,7 +1660,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_1.zip" newVersion="3.1.1" newMediaFileId="win64zip" fileSize="287652111" md5Sum="46d20f3526765091c0b97da60c2655da" sha256Sum="4234251859b028ed01ff6e7601c3fb187270041db13c20d5bcc168beca13668b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.zip" newVersion="3.1.2" newMediaFileId="win64zip" fileSize="294794789" md5Sum="f0e13f53fae404f44f17dacd4c41e258" sha256Sum="4de45566262b04bc12de42917c0d5ea2b863aaa7f99dd1884a11cb1568a9f37d" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
