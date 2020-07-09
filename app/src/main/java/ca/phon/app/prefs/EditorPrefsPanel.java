@@ -43,6 +43,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionMediaModel;
+import ca.phon.app.syllabifier.SyllabifierComboBox;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
@@ -62,7 +63,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 	 * UI
 	 */
 	private JComboBox<Language> cmbDictionaryLanguage;
-	private JComboBox<Syllabifier> cmbSyllabifierLanguage;
+	private SyllabifierComboBox cmbSyllabifierLanguage;
 
 	private JComboBox<Integer> autosaveBox;
 	private final Integer[] autosaveTimes = { 0, 5, 10, 15, 20, 30 }; // minutes
@@ -98,25 +99,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 		jpanel1.setBorder(new TitledBorder("Dictionary Language"));
 		jpanel1.add(cmbDictionaryLanguage);
 
-		final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
-
-		final Language syllLangPref = syllabifierLibrary.defaultSyllabifierLanguage();
-
-		Syllabifier defSyllabifier = null;
-		final Iterator<Syllabifier> syllabifiers = syllabifierLibrary.availableSyllabifiers();
-		List<Syllabifier> sortedSyllabifiers = new ArrayList<Syllabifier>();
-		while(syllabifiers.hasNext()) {
-			final Syllabifier syllabifier = syllabifiers.next();
-			if(syllabifier.getLanguage().equals(syllLangPref))
-				defSyllabifier = syllabifier;
-			sortedSyllabifiers.add(syllabifier);
-		}
-		Collections.sort(sortedSyllabifiers, new SyllabifierComparator());
-
-		cmbSyllabifierLanguage = new JComboBox<>(sortedSyllabifiers.toArray(new Syllabifier[0]));
-		cmbSyllabifierLanguage.setRenderer(new SyllabifierCellRenderer());
-		if(defSyllabifier != null)
-			cmbSyllabifierLanguage.setSelectedItem(defSyllabifier);
+		cmbSyllabifierLanguage = new SyllabifierComboBox();
 		cmbSyllabifierLanguage.addItemListener(new SyllabifierLanguageListener());
 
 		JPanel jpanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -223,7 +206,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 			PrefHelper.getUserPreferences().put(PhonProperties.IPADICTIONARY_LANGUAGE, dictLanguage.toString());
 		}
 	}
-
+	
 	private class SyllabifierLanguageListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
@@ -259,35 +242,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 			if(value != null) {
 				final Language lang = (Language)value;
 				final String text = lang.getPrimaryLanguage().getName() + " (" + lang.toString() + ")";
-				retVal.setText(text);
-			}
-
-			return retVal;
-		}
-
-	}
-
-	private class SyllabifierComparator implements Comparator<Syllabifier> {
-
-		@Override
-		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.toString().toLowerCase().compareTo(o2.toString().toLowerCase());
-		}
-
-	}
-
-	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent(JList list,
-				Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
-					cellHasFocus);
-
-			if(value != null) {
-				final Syllabifier syllabifier = (Syllabifier)value;
-				final String text = syllabifier.getName() + " (" + syllabifier.getLanguage().toString() + ")";
 				retVal.setText(text);
 			}
 
