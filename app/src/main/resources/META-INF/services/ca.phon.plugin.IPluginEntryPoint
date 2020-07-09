@@ -37,4 +37,5 @@ ca.phon.app.opgraph.editor.OpgraphEditorEP
 ca.phon.app.opgraph.analysis.AnalysisComposerEP
 # Report Composer
 ca.phon.app.opgraph.report.ReportComposerEP
-
+# Phonex Debugger
+ca.phon.app.phonex.PhonexDebuggerEP
