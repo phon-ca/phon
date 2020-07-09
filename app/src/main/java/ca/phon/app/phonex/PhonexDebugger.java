@@ -11,31 +11,33 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
+import org.jdesktop.swingx.treetable.TreeTableNode;
 
+import ca.phon.app.syllabifier.SyllabifierComboBox;
 import ca.phon.fsa.FSAState;
+import ca.phon.fsa.FSAState.RunningState;
 import ca.phon.fsa.FSATransition;
 import ca.phon.fsa.SimpleFSADebugContext;
-import ca.phon.fsa.FSAState.RunningState;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -43,11 +45,9 @@ import ca.phon.phonex.PhonexFSA;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.PatternEditor;
 import ca.phon.ui.text.PatternEditor.SyntaxStyle;
 import guru.nidi.graphviz.engine.Format;
@@ -68,10 +68,14 @@ public class PhonexDebugger extends JComponent {
 	private JButton stopButton;
 	
 	private JTextField transcriptionField;
+	private SyllabifierComboBox syllabifierBox;
 	
+	private JTabbedPane tabPane;
 	private GroupDataTableModel groupDataTableModel;
 	private JTable groupDataTable;
 
+	private JXTreeTable detailsTable;
+	
 	private SyllabificationDisplay ipaDisplay;
 	
 	private JScrollPane graphScroller;
@@ -137,9 +141,14 @@ public class PhonexDebugger extends JComponent {
 			}
 			
 		});
+		
+		syllabifierBox = new SyllabifierComboBox();
 
 		groupDataTableModel = new GroupDataTableModel();
 		groupDataTable = new JTable(groupDataTableModel);
+		
+		detailsTable = new JXTreeTable();
+		updateDetailsTreeTable();
 		
 		matchButton = new JButton(new MatchAction(this));
 		findButton = new JButton(new FindAction(this));
@@ -154,11 +163,17 @@ public class PhonexDebugger extends JComponent {
 		
 		ipaDisplay = new SyllabificationDisplay();
 		
-		JPanel debugPanel = new JPanel(new VerticalLayout());
+		debugPanel = new JPanel(new VerticalLayout());
+		debugPanel.setBorder(BorderFactory.createTitledBorder("Debug"));
 		debugPanel.add(transcriptionField);
+		debugPanel.add(syllabifierBox);
 		debugPanel.add(ipaDisplay);
 		debugPanel.add(buttonPanel);
-		debugPanel.add(new JScrollPane(groupDataTable));
+		
+		tabPane = new JTabbedPane();
+		tabPane.addTab("Group Data", new JScrollPane(groupDataTable));
+		tabPane.addTab("Details", new JScrollPane(detailsTable));
+		debugPanel.add(tabPane);
 		
 		JPanel westPanel = new JPanel(new BorderLayout());
 		westPanel.add(scroller, BorderLayout.CENTER);
@@ -179,7 +194,10 @@ public class PhonexDebugger extends JComponent {
 	private void updateSyllabificationView() {
 		try {
 			IPATranscript transcript = IPATranscript.parseIPATranscript(transcriptionField.getText());
-			// TODO syllabify
+			Syllabifier syllabifier = (Syllabifier)syllabifierBox.getSelectedItem();
+			if(syllabifier != null) {
+				syllabifier.syllabify(transcript.toList());
+			}
 			ipaDisplay.setTranscript(transcript);
 		} catch (ParseException e) {
 			ipaDisplay.setTranscript(null);
@@ -225,6 +243,8 @@ public class PhonexDebugger extends JComponent {
 		debugCtx.reset(ipaDisplay.getTranscript().toList().toArray(new IPAElement[0]));
 		
 		groupDataTableModel.fireTableDataChanged();
+		
+		updateDetailsTreeTable();
 		// TODO update display....
 	}
 	
@@ -262,6 +282,8 @@ public class PhonexDebugger extends JComponent {
 		debugCtx.getMachineState().setTapeIndex(instances.get(currentInstance));
 		
 		groupDataTableModel.fireTableDataChanged();
+		
+		updateDetailsTreeTable();
 		// TODO update display....
 	}
 	
@@ -277,6 +299,8 @@ public class PhonexDebugger extends JComponent {
 		}
 		groupDataTableModel.fireTableDataChanged();
 		
+		updateDetailsTreeTable();
+		
 		// TODO Update other items
 	}
 	
@@ -291,6 +315,126 @@ public class PhonexDebugger extends JComponent {
 		transcriptionField.setEnabled(true);
 		phonexEntry.setEnabled(true);
 		ipaDisplay.setEnabled(true);
+	}
+	
+	private void updateDetailsTreeTable() {
+		TreeTableNode rootNode = createDetailsTree();
+		DefaultTreeTableModel model = new DefaultTreeTableModel(rootNode);
+		model.setColumnIdentifiers(List.of("Name", "Value"));
+		detailsTable.setTreeTableModel(model);
+	}
+	
+	private TreeTableNode createDetailsTree() {
+		if(debugCtx != null) {
+			DetailsTreeTableNode root = new DetailsTreeTableNode("Debug Context");
+		
+			// add machine state
+			DetailsTreeTableNode machineStateNode = new DetailsTreeTableNode("Machine state");
+			setupMachineStateNode(machineStateNode, debugCtx.getMachineState());
+			root.add(machineStateNode);
+			
+			// add cached state
+			DetailsTreeTableNode cachedStateNode = new DetailsTreeTableNode("Cached state");
+			if(debugCtx.getCachedState() != null) {
+				setupMachineStateNode(cachedStateNode, debugCtx.getCachedState());
+			}
+			root.add(cachedStateNode);
+			
+			// add decision tree
+			
+			return root;
+		} else {
+			return new DefaultMutableTreeTableNode("No active debug context");
+		}
+	}
+	
+	private void setupMachineStateNode(DetailsTreeTableNode root, FSAState<IPAElement> machineState) {
+		DetailsTreeTableNode tapeNode = new DetailsTreeTableNode("Tape");
+		tapeNode.detailsValue = Arrays.toString(machineState.getTape());
+		for(int i = 0; i < machineState.getTape().length; i++) {
+			DetailsTreeTableNode tapeEleNode = new DetailsTreeTableNode(String.format("[%d]", i));
+			tapeEleNode.detailsValue = machineState.getTape()[i];
+			tapeNode.add(tapeEleNode);
+		}
+		root.add(tapeNode);
+		
+		DetailsTreeTableNode tapeIndexNode = new DetailsTreeTableNode("Tape index");
+		tapeIndexNode.detailsValue = machineState.getTapeIndex();
+		root.add(tapeIndexNode);
+		
+		DetailsTreeTableNode runningState = new DetailsTreeTableNode("Execution state");
+		runningState.setValueAt(machineState.getRunningState(), 1);
+		root.add(runningState);
+		
+		DetailsTreeTableNode currentStateNode = new DetailsTreeTableNode("Current node");
+		currentStateNode.setValueAt(machineState.getCurrentState(), 1);
+		root.add(currentStateNode);
+		
+		DetailsTreeTableNode lookBehindOffset = new DetailsTreeTableNode("Look-behind offset");
+		lookBehindOffset.setValueAt(machineState.getLookBehindOffset(), 1);
+		root.add(lookBehindOffset);
+		
+		DetailsTreeTableNode lookAheadOffset = new DetailsTreeTableNode("Look-ahead offset");
+		lookAheadOffset.setValueAt(machineState.getLookAheadOffset(), 1);
+		root.add(lookAheadOffset);
+		
+		DetailsTreeTableNode groupNode = new DetailsTreeTableNode("Groups");
+		groupNode.setValueAt(machineState.numberOfGroups(), 1);
+		for(int i = 0; i <= machineState.numberOfGroups(); i++) {
+			DetailsTreeTableNode gNode = new DetailsTreeTableNode(String.format("[%d]", i));
+			gNode.setValueAt(Arrays.toString(machineState.getGroup(i)), 1);
+			groupNode.add(gNode);
+		}
+		root.add(groupNode);
+	}
+	
+	private class DetailsTreeTableNode extends AbstractMutableTreeTableNode {
+		
+		private Object detailsValue;
+		
+		public DetailsTreeTableNode() {
+			this("");
+		}
+		
+		public DetailsTreeTableNode(Object userObj) {
+			super(userObj, true);
+		}
+		
+		@Override
+		public Object getValueAt(int column) {
+			switch(column) {
+			case 0:
+				return getUserObject();
+				
+			case 1:
+				return detailsValue;
+				
+			default:
+				return getUserObject();
+			}
+		}
+
+		@Override
+		public void setValueAt(Object value, int col) {
+			switch(col) {
+			case 0:
+				setUserObject(value);
+				break;
+				
+			case 1:
+				detailsValue = value;
+				break;
+			
+			default:
+				setUserObject(value);
+			}
+		}
+		
+		@Override
+		public int getColumnCount() {
+			return 2;
+		}
+		
 	}
 	
 	private class GroupDataTableModel extends AbstractTableModel {
