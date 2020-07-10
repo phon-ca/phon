@@ -158,6 +158,7 @@
 
 	<xs:element name="groupBy" type="ColumnInfo"/>
 	<xs:element name="column" type="ColumnInfo"/>
+	<xs:element name="sumColumns" type="ColumnListType"/>
 
 	<xs:complexType name="InventoryOptionsType">
 		<xs:complexContent mixed="false">
@@ -166,6 +167,7 @@
 					<xs:element ref="automaticConfiguration" minOccurs="0" maxOccurs="1"/>
 					<xs:element ref="groupBy" minOccurs="0" maxOccurs="1"/>
 					<xs:element ref="column" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="sumColumns" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -285,6 +287,13 @@
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="columnName" type="xs:string"/>
+	<xs:complexType name="ColumnListType" mixed="false">
+		<xs:sequence>
+			<xs:element ref="columnName" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 	</xs:complexType>
 
 	<xs:element name="node" type="NodeRefType"/>

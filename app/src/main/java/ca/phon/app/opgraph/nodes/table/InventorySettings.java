@@ -51,10 +51,13 @@ public class InventorySettings implements Cloneable, IgnoreDiacriticsSettings {
 	
 	private List<ColumnInfo> columns;
 	
+	private List<String> sumColumns;
+	
 	public InventorySettings() {
 		super();
 		
 		columns = new ArrayList<>();
+		sumColumns = new ArrayList<>();
 	}
 	
 	public boolean isAutoGrouping() {
@@ -187,6 +190,26 @@ public class InventorySettings implements Cloneable, IgnoreDiacriticsSettings {
 		columns.add(info);
 	}
 	
+	public List<String> getSumColumns() {
+		return this.sumColumns;
+	}
+	
+	public void clearSumColumns() {
+		this.sumColumns.clear();
+	}
+	
+	public boolean removeSumColumn(String col) {
+		return this.sumColumns.remove(col);
+	}
+	
+	public String removeSumColumn(int col) {
+		return this.sumColumns.remove(col);
+	}
+	
+	public void addSumColumn(String sumColumn) {
+		this.sumColumns.add(sumColumn);
+	}
+	
 	public static class ColumnInfo implements IgnoreDiacriticsSettings {
 		String name = "";
 		boolean caseSensitive = true;
@@ -266,6 +289,8 @@ public class InventorySettings implements Cloneable, IgnoreDiacriticsSettings {
 			colInfo.name = columnInfo.name;
 			retVal.addColumn(colInfo);
 		}
+		
+		retVal.sumColumns.addAll(this.sumColumns);
 		
 		return retVal;
 	}

@@ -21,6 +21,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -32,6 +34,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -79,6 +82,7 @@ public class InventorySettingsPanel extends JPanel {
 	private ColumnPanel groupByPanel;
 	private JButton addColumnButton;
 	private JPanel columnPanel;
+	private PromptedTextField sumColumnField;
 
 	// model
 	private InventorySettings settings;
@@ -194,13 +198,46 @@ public class InventorySettingsPanel extends JPanel {
 		onAddAction.putValue(Action.SMALL_ICON, icon);
 		addColumnButton = new JButton(onAddAction);
 		
+		sumColumnField = new PromptedTextField("Enter column names separated by a ',')");
+		sumColumnField.setBorder(BorderFactory.createTitledBorder("Sum Columns"));
+		
 		updateManualConfig();
+		sumColumnField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateSumColumns();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateSumColumns();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+			}
+			
+		});
 		
 		setLayout(new BorderLayout());
 		add(autoConfigPanel, BorderLayout.NORTH);
 		add(manualConfigPanel, BorderLayout.CENTER);
 	}
 
+	public void updateSumColumns() {
+		String[] cols = sumColumnField.getText().split(",");
+		List<String> sumCols = new ArrayList<>();
+		for(String col:cols) {
+			if(col.strip().length() > 0) {
+				sumCols.add(col);
+			}
+		}
+		settings.clearSumColumns();
+		sumCols.forEach(settings::addSumColumn);
+	}
+	
 	public void updateManualConfig() {
 		ColumnInfo groupBy = settings.getGroupBy();
 		if(groupBy == null) {
@@ -223,16 +260,20 @@ public class InventorySettingsPanel extends JPanel {
 			}
 			columnPanel.add(panel);
 		}
-
+		
+		String sumColumns = settings.getSumColumns().stream().collect(Collectors.joining(","));
+		sumColumnField.setText(sumColumns);
+		
 		final JPanel btmPanel = new JPanel(new BorderLayout());
 		btmPanel.setBorder(BorderFactory.createTitledBorder("Columns"));
 		btmPanel.add(columnPanel, BorderLayout.CENTER);
 		btmPanel.add(ButtonBarBuilder.buildOkBar(addColumnButton), BorderLayout.SOUTH);
-
+		
 		manualConfigPanel.getContentContainer().removeAll();
 		manualConfigPanel.getContentContainer().setLayout(new BorderLayout());
 		manualConfigPanel.getContentContainer().add(groupByPanel, BorderLayout.NORTH);
 		manualConfigPanel.getContentContainer().add(btmPanel, BorderLayout.CENTER);
+		manualConfigPanel.getContentContainer().add(sumColumnField, BorderLayout.SOUTH);
 	}
 
 	private JComponent createSeparator(ColumnPanel colPanel) {

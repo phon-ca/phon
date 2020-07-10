@@ -221,14 +221,16 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 
 		Set<GroupKey> groupKeys = collectGroupKeys(settings, inputTable);
 
-		Map<InventoryRowData, Map<GroupKey, Long>> inventory =
-				generateInventory(settings, groupKeys, inputTable);
+		Inventory inventory = generateInventory(settings, groupKeys, inputTable);
+		var aggregate = inventory.aggregate;
+		var columnSums = inventory.columnSums;
 
 		final List<String> colNames = settings.getColumns().stream().map( (col) -> col.name ).collect(Collectors.toList());
 		colNames.removeIf( colname -> inputTable.getColumnIndex(colname) < 0 );
 		groupKeys.forEach( key -> colNames.add(key.toString()) );
+		settings.getSumColumns().forEach(colNames::add);
 
-		for(InventoryRowData key:inventory.keySet()) {
+		for(InventoryRowData key:aggregate.keySet()) {
 			Object[] rowData = new Object[colNames.size()];
 			int rowDataIdx = 0;
 			for(int i = 0; i < key.rowVals.length; i++) {
@@ -243,9 +245,13 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 							?	TableUtils.objToString(key.rowVals[i], colInfoOpt.get().ignoreDiacritics, colInfoOpt.get().onlyOrExcept, colInfoOpt.get().selectedDiacritics)
 							:	key.rowVals[i]);
 			}
-			final Map<GroupKey, Long> count = inventory.get(key);
+			final Map<GroupKey, Long> count = aggregate.get(key);
 			for(GroupKey groupKey:groupKeys) {
 				rowData[rowDataIdx++] = count.get(groupKey);
+			}
+			
+			for(String colName:settings.getSumColumns()) {
+				rowData[rowDataIdx++] = columnSums.get(key).get(colName);
 			}
 
 			outputTable.addRow(rowData);
@@ -281,8 +287,9 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		return retVal;
 	}
 
-	private Map<InventoryRowData, Map<GroupKey, Long>> generateInventory(InventorySettings settings, Set<GroupKey> groupKeys, TableDataSource table) {
-		Map<InventoryRowData, Map<GroupKey, Long>> retVal = new LinkedHashMap<>();
+	private Inventory generateInventory(InventorySettings settings, Set<GroupKey> groupKeys, TableDataSource table) {
+		Map<InventoryRowData, Map<GroupKey, Long>> aggregate = new LinkedHashMap<>();
+		Map<InventoryRowData, Map<String, Number>> columnSums = new LinkedHashMap<>();
 
 		int groupingCol = getColumnIndex(table, settings.getGroupBy().name);
 		final List<String> columns = settings.getColumns().stream().map( (col) -> col.name ).collect(Collectors.toList());
@@ -307,23 +314,76 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 					rowData[ic] = val;
 				}
 			}
-
+			
 			final GroupKey groupKey = new GroupKey(grouping, settings.getGroupBy().caseSensitive, 
 					settings.getGroupBy().ignoreDiacritics, settings.getGroupBy().onlyOrExcept, settings.getGroupBy().selectedDiacritics);
 			final InventoryRowData key = new InventoryRowData(settings, rowData);
-			Map<GroupKey, Long> counts = retVal.get(key);
+			Map<GroupKey, Long> counts = aggregate.get(key);
 			if(counts == null) {
 				counts = new LinkedHashMap<>();
 				for(GroupKey gk:groupKeys) counts.put(gk, 0L);
-				retVal.put(key, counts);
+				aggregate.put(key, counts);
 			}
 			long count = counts.get(groupKey);
 			counts.put(groupKey, ++count);
+			
+			Map<String, Number> sums = columnSums.get(key);
+			if(sums == null) {
+				sums = new LinkedHashMap<String, Number>();
+				for(String colName:settings.getSumColumns()) sums.put(colName, Integer.valueOf(0));
+				columnSums.put(key, sums);
+			}
+			for(String sumColumn:settings.getSumColumns()) {
+				int colIdx = table.getColumnIndex(sumColumn);
+				if(colIdx < 0) continue;
+				
+				Object rowValue = table.getValueAt(row, colIdx);
+				Number rowNum = Integer.valueOf(0);
+				
+				if(rowValue != null) {
+					if(rowValue instanceof Number) {
+						rowNum = (Number)rowValue;
+					}
+					String rowValueText = rowValue.toString();
+					try {
+						rowNum = Integer.parseInt(rowValueText);
+					} catch (NumberFormatException e1) {
+						try {
+							rowNum = Double.parseDouble(rowValueText);
+						} catch (NumberFormatException e2) {}
+					}
+				}
+				
+				Number currentValue = sums.get(sumColumn);
+				
+				// keep as integer if possible...
+				if(currentValue instanceof Integer 
+						&& rowValue instanceof Integer) {
+					int sum = currentValue.intValue() + rowNum.intValue();
+					sums.put(sumColumn, sum);
+				} else {
+					// switch to doubles
+					double sum = currentValue.doubleValue() + rowNum.doubleValue();
+					sums.put(sumColumn, sum);
+				}
+			}
 		}
 
+		Inventory retVal = new Inventory();
+		retVal.aggregate = aggregate;
+		retVal.columnSums = columnSums;
+		
 		return retVal;
 	}
 
+	private class Inventory {
+		
+		Map<InventoryRowData, Map<GroupKey, Long>> aggregate;
+		
+		Map<InventoryRowData, Map<String, Number>> columnSums;
+		
+	}
+	
 	private class GroupKey implements Comparable<GroupKey> {
 		Object key;
 
@@ -374,6 +434,8 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		Object[] rowVals;
 		
 		InventorySettings settings;
+		
+		Map<String, Number> columnSums;
 
 		public InventoryRowData(InventorySettings settings, Object[] vals) {
 			this.settings = settings;

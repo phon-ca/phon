@@ -97,6 +97,17 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 			writeColumnInfo(doc, colele, info);
 			settingsEle.appendChild(colele);
 		}
+		
+		if(settings.getSumColumns().size() > 0) {
+			Element sumColumnsEle = doc.createElementNS(NAMESPACE, PREFIX + ":sumColumns");
+			settingsEle.appendChild(sumColumnsEle);
+			for(String colName:settings.getSumColumns()) {
+				Element columnEle = doc.createElementNS(NAMESPACE, PREFIX + ":columnName");
+				columnEle.setTextContent(colName);
+				sumColumnsEle.appendChild(columnEle);
+			}
+		}
+		
 		parentElem.appendChild(settingsEle);
 	}
 	
@@ -139,6 +150,14 @@ public class InventorySettingsXMLSerializer implements XMLSerializer {
 				retVal.setGroupBy(readColumnInfo(childNode));
 			} else if(childNode.getNodeName().equals(PREFIX + ":column")) {
 				retVal.getColumns().add(readColumnInfo(childNode));
+			} else if(childNode.getNodeName().equals(PREFIX + ":sumColumns")) {
+				NodeList sumColumnNodes = childNode.getChildNodes();
+				for(int j = 0; j < sumColumnNodes.getLength(); j++) {
+					Node cNode = sumColumnNodes.item(j);
+					if(cNode.getNodeName().equals(PREFIX + ":columnName")) {
+						retVal.addSumColumn(cNode.getTextContent().strip());
+					}
+				}
 			} else if(childNode.getNodeName().equals(PREFIX + ":automaticConfiguration")) {
 				hasAutoConfig = true;
 				readAutoConfigSettings(retVal, childNode);
