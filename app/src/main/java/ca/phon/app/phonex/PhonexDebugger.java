@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -37,6 +38,7 @@ import ca.phon.app.syllabifier.SyllabifierComboBox;
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSAState.RunningState;
 import ca.phon.fsa.FSATransition;
+import ca.phon.fsa.SimpleFSA;
 import ca.phon.fsa.SimpleFSADebugContext;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -50,10 +52,13 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.text.PatternEditor;
 import ca.phon.ui.text.PatternEditor.SyntaxStyle;
+import guru.nidi.graphviz.attribute.Color;
+import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.engine.Renderer;
 import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.model.MutableNode;
 import guru.nidi.graphviz.parse.Parser;
 
 public class PhonexDebugger extends JComponent {
@@ -83,6 +88,7 @@ public class PhonexDebugger extends JComponent {
 	
 	private PhonexPattern pattern;
 	private SimpleFSADebugContext<IPAElement> debugCtx;
+	private FSATransition<IPAElement> lastTransition = null;
 	// used during find operation
 	private int currentInstance = -1;
 	private List<Integer> instances = new ArrayList<>();
@@ -207,19 +213,87 @@ public class PhonexDebugger extends JComponent {
 	private void updatePattern() {
 		try {
 			pattern = PhonexPattern.compile(phonexEntry.getText());
-			PhonexFSA fsa = pattern.getFsa();
-			
-			MutableGraph g = new Parser().read(fsa.getDotText());
-			Renderer r = Graphviz.fromGraph(g).render(Format.PNG);
-			ImageIcon icn = new ImageIcon(r.toImage());
-			graphLbl.setIcon(icn);
-		} catch (PhonexPatternException | IOException e) {
+			updateGraph();
+		} catch (PhonexPatternException e) {
 			graphLbl.setIcon(null);
 		}
 		
 		debugCtx = null;
 		
 		groupDataTableModel.fireTableDataChanged();
+	}
+	
+	private void updateGraph() {
+		if(pattern == null) {
+			return;
+		}
+		PhonexFSA fsa = pattern.getFsa();
+		try {
+			MutableGraph g = new Parser().read(getDotText(fsa));
+			g.nodeAttrs().add(Color.WHITE.fill());	
+			Renderer r = Graphviz.fromGraph(g).render(Format.PNG);
+			ImageIcon icn = new ImageIcon(r.toImage());
+			graphLbl.setIcon(icn);
+		} catch (IOException e) {
+			graphLbl.setIcon(null);
+		}
+	}
+	
+	private String getDotText(SimpleFSA<IPAElement> fsa) {
+		if(debugCtx != null) {
+			Color stateColor = Color.BLUE;
+			switch(debugCtx.getMachineState().getRunningState()) {
+			case Running:
+				break;
+				
+			case Halted:
+				stateColor = Color.INDIANRED;
+				break;
+				
+			case EndOfInput:
+				stateColor = (fsa.isFinalState(debugCtx.getMachineState().getCurrentState())
+						? Color.SPRINGGREEN
+								: Color.INDIANRED);
+				break;
+			}
+			String highlightedState = debugCtx.getMachineState().getCurrentState();
+			Color transitionColor = stateColor;
+		
+			String retVal = "digraph G {\n";
+			
+			for(String state:fsa.getStates()) {
+				String stateDesc = "\t" + state + " [color=\"" + (state.equals(highlightedState) ? stateColor.value : "black") + "\""
+						+ ",shape=\"" + (fsa.isFinalState(state) ? "doublecircle" : "circle") + "\""
+						+ (state.equals(highlightedState) ? ",style=\"bold\"" : "")
+						+ "]\n";
+				retVal += stateDesc;
+			}
+			
+			for(FSATransition<IPAElement> transition:fsa.getTransitions()) {
+				retVal += "edge [color=\"" + (transition == lastTransition ? transitionColor.value : "black") + "\""
+						+ "];\n";
+				String transLbl = new String();
+				for(int initGrp:transition.getInitGroups()) {
+					transLbl += (transLbl.length() == 0 ? "[" : ",") + "+" + initGrp;
+				}
+				for(int grpIdx:transition.getMatcherGroups()) {
+					transLbl += (transLbl.length() == 0 ? "[" : ",") + grpIdx;
+				}
+				transLbl += (transLbl.length() > 0 ? "]":"");
+				transLbl = transition.getImage() + (transLbl.length() > 0 ? " " + transLbl : "");
+				String transDesc = "\t" + transition.getFirstState() + " -> " +
+					transition.getToState() + " ["
+							+ "fontcolor=\"" + (transition == lastTransition ? transitionColor.value : "black") + "\"," 		
+					+ "label=\"" + transLbl + "\""
+							+ "];\n";
+				retVal += transDesc;
+			}
+			
+			retVal += "}\n";
+			return retVal;
+		} else {
+			return fsa.getDotText();
+		}
 	}
 	
 	/* Actions */
@@ -245,6 +319,7 @@ public class PhonexDebugger extends JComponent {
 		groupDataTableModel.fireTableDataChanged();
 		
 		updateDetailsTreeTable();
+		updateGraph();
 		// TODO update display....
 	}
 	
@@ -284,6 +359,7 @@ public class PhonexDebugger extends JComponent {
 		groupDataTableModel.fireTableDataChanged();
 		
 		updateDetailsTreeTable();
+		updateGraph();
 		// TODO update display....
 	}
 	
@@ -293,14 +369,14 @@ public class PhonexDebugger extends JComponent {
 			return;
 		}
 		
-		FSATransition<IPAElement> transition = debugCtx.step();
-		if(transition == null) {
+		lastTransition = debugCtx.step();
+		if(lastTransition == null) {
 			onStop();
 		}
 		groupDataTableModel.fireTableDataChanged();
 		
 		updateDetailsTreeTable();
-		
+		updateGraph();
 		// TODO Update other items
 	}
 	
@@ -322,6 +398,7 @@ public class PhonexDebugger extends JComponent {
 		DefaultTreeTableModel model = new DefaultTreeTableModel(rootNode);
 		model.setColumnIdentifiers(List.of("Name", "Value"));
 		detailsTable.setTreeTableModel(model);
+		detailsTable.expandAll();
 	}
 	
 	private TreeTableNode createDetailsTree() {
