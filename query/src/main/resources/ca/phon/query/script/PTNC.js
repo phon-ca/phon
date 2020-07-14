@@ -234,6 +234,11 @@ function query_record(recordIndex, record) {
 
 			var pcVal = (pc.target > 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted + pc.epen)): 0) * 100;
 			result.metadata.put("PTNC", nf.format(pcVal));
+			
+			for (var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+				result.addResultValue(alignedResults[alignedResultIdx]);
+			}
+			result.metadata.putAll(alignedMetadata);
 
 			results.addResult(result);
 		}
