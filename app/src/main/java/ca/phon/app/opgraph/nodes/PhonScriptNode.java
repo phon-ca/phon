@@ -373,6 +373,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 					try {
 						getScript().resetContext();
 						scriptPanel.updateParams();
+						reloadFields();
 					} catch (PhonScriptException e1) {
 						Toolkit.getDefaultToolkit().beep();
 						LogUtil.severe(e1);

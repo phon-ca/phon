@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * PTNC Library functions for query scripts
+ * PNTC Library functions for query scripts
  */
 importPackage(Packages.ca.phon.ipa.features)
 importClass(Packages.ca.phon.query.script.params.DiacriticOptionsScriptParam)
@@ -27,9 +27,9 @@ importClass(Packages.ca.phon.ipa.alignment.SyllableAligner)
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
 
-exports.PTNC = {
+exports.PNTC = {
 	/**
-	 * Perform PTNC (percent tone numbers correct) calculation for an aligned pair of
+	 * Perform PNTC (percent number tones correct) calculation for an aligned pair of
 	 * IPA values
 	 *
 	 * @param word
@@ -37,7 +37,7 @@ exports.PTNC = {
 	 * @param ignoreDiacritics
 	 *
 	 */
-	calc_ptnc: function (group) {
+	calc_pntc: function (group) {
 		var numTarget = 0;
 		var numDeleted = 0;
 		var syllDeleted = 0;
@@ -100,7 +100,7 @@ exports.PTNC = {
 	
 };
 
-exports.PTNCOptions = function (id, aligned) {
+exports.PNTCOptions = function (id, aligned) {
 
 	this.param_setup = function (params) {
 	};

@@ -6,8 +6,8 @@ var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var PTNC = require("lib/PTNC").PTNC;
-var PTNCOptions = require("lib/PTNC").PTNCOptions;
+var PNTC = require("lib/PNTC").PNTC;
+var PNTCOptions = require("lib/PNTC").PNTCOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
@@ -16,7 +16,7 @@ var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
  * Setup params
  *******************************/
 var filters = {
-	"ptnc": new PTNCOptions("filters.ptnc"),
+	"pntc": new PNTCOptions("filters.pntc"),
 	"searchBy": new SearchByOptions("filters.searchBy"),
 	"group": new GroupFilter("filters.group"),
 	"groupTiers": new TierList("filters.groupTiers"),
@@ -32,7 +32,7 @@ var filters = {
 
 function setup_params(params) {
 
-	filters.ptnc.param_setup(params);
+	filters.pntc.param_setup(params);
 	var insertIdx = params.size();
 
 	filters.group.param_setup(params);
@@ -190,7 +190,7 @@ function query_record(recordIndex, record) {
 			var alignedResults = toSearch[j][1];
 			var alignedMetadata = toSearch[j][2];
 
-			var pc = PTNC.calc_ptnc(obj);
+			var pc = PNTC.calc_pntc(obj);
 			if(pc.target == 0) continue;
 
 			var ipaT = (obj.IPATarget != null ? obj.IPATarget: new IPATranscript());
@@ -232,8 +232,8 @@ function query_record(recordIndex, record) {
 			result.metadata.put("# Substituted", pc.substituted + "");
 			result.metadata.put("# Deleted", pc.deleted + "");
 
-			var pcVal = (pc.target > 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted + pc.epen)): 0) * 100;
-			result.metadata.put("PTNC", nf.format(pcVal));
+			var pcVal = (pc.target > 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted)): 0) * 100;
+			result.metadata.put("PNTC", nf.format(pcVal));
 			
 			for (var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
 				result.addResultValue(alignedResults[alignedResultIdx]);

@@ -34,9 +34,12 @@ import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 
+import com.sun.source.util.TreePath;
+
 import ca.phon.app.syllabifier.SyllabifierComboBox;
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSAState.RunningState;
+import ca.phon.fsa.SimpleFSA.DecisionTracker;
 import ca.phon.fsa.FSATransition;
 import ca.phon.fsa.SimpleFSA;
 import ca.phon.fsa.SimpleFSADebugContext;
@@ -270,7 +273,7 @@ public class PhonexDebugger extends JComponent {
 			}
 			
 			for(FSATransition<IPAElement> transition:fsa.getTransitions()) {
-				retVal += "edge [color=\"" + (transition == lastTransition ? transitionColor.value : "black") + "\""
+				retVal += "edge [color=\"" + (debugCtx.getTransitions().contains(transition) ? transitionColor.value : "black") + "\""
 						+ "];\n";
 				String transLbl = new String();
 				for(int initGrp:transition.getInitGroups()) {
@@ -283,7 +286,7 @@ public class PhonexDebugger extends JComponent {
 				transLbl = transition.getImage() + (transLbl.length() > 0 ? " " + transLbl : "");
 				String transDesc = "\t" + transition.getFirstState() + " -> " +
 					transition.getToState() + " ["
-							+ "fontcolor=\"" + (transition == lastTransition ? transitionColor.value : "black") + "\"," 		
+							+ "fontcolor=\"" + (debugCtx.getTransitions().contains(transition) ? transitionColor.value : "black") + "\"," 		
 					+ "label=\"" + transLbl + "\""
 							+ "];\n";
 				retVal += transDesc;
@@ -397,8 +400,8 @@ public class PhonexDebugger extends JComponent {
 		TreeTableNode rootNode = createDetailsTree();
 		DefaultTreeTableModel model = new DefaultTreeTableModel(rootNode);
 		model.setColumnIdentifiers(List.of("Name", "Value"));
+		
 		detailsTable.setTreeTableModel(model);
-		detailsTable.expandAll();
 	}
 	
 	private TreeTableNode createDetailsTree() {
@@ -406,23 +409,39 @@ public class PhonexDebugger extends JComponent {
 			DetailsTreeTableNode root = new DetailsTreeTableNode("Debug Context");
 		
 			// add machine state
-			DetailsTreeTableNode machineStateNode = new DetailsTreeTableNode("Machine state");
-			setupMachineStateNode(machineStateNode, debugCtx.getMachineState());
-			root.add(machineStateNode);
+			setupMachineStateNode(root, debugCtx.getMachineState());
 			
-			// add cached state
-			DetailsTreeTableNode cachedStateNode = new DetailsTreeTableNode("Cached state");
-			if(debugCtx.getCachedState() != null) {
-				setupMachineStateNode(cachedStateNode, debugCtx.getCachedState());
+			if(debugCtx.getCachedState().getRunningState() == RunningState.EndOfInput && 
+					debugCtx.getCachedState().getTapeIndex() >= debugCtx.getMachineState().getTapeIndex()) {
+				DetailsTreeTableNode longestMatchNode = new DetailsTreeTableNode("Cached match");
+				setupMachineStateNode(longestMatchNode, debugCtx.getCachedState());
+				longestMatchNode.setValueAt(Arrays.toString(debugCtx.getCachedState().getGroup(0)), 1);
+				root.add(longestMatchNode);
 			}
-			root.add(cachedStateNode);
 			
-			// add decision tree
+			DetailsTreeTableNode decisionsNode = new DetailsTreeTableNode("Decision Stack");
+			decisionsNode.setValueAt(debugCtx.getDecisionStack().size(), 1);
+			for(int i = 0; i < debugCtx.getDecisionStack().size(); i++) {
+				DecisionTracker<IPAElement> dt = debugCtx.getDecisionStack().get(i);
+				DetailsTreeTableNode decisionNode = new DetailsTreeTableNode(String.format("[%d]", i));
+				setupDecisionTrackerNode(decisionNode, dt);
+				decisionsNode.add(decisionNode);
+			}
+			if(debugCtx.getDecisionStack().size() > 0)
+				root.add(decisionsNode);
 			
 			return root;
 		} else {
 			return new DefaultMutableTreeTableNode("No active debug context");
 		}
+	}
+	
+	private void setupDecisionTrackerNode(DetailsTreeTableNode root, DecisionTracker<IPAElement> decision) {
+		root.setValueAt(decision.choices.get(decision.choiceIndex), 1);
+		
+		DetailsTreeTableNode tapeIndexNode = new DetailsTreeTableNode("Tape index");
+		tapeIndexNode.setValueAt(decision.tapeIndex, 1);
+		root.add(tapeIndexNode);
 	}
 	
 	private void setupMachineStateNode(DetailsTreeTableNode root, FSAState<IPAElement> machineState) {
@@ -434,6 +453,10 @@ public class PhonexDebugger extends JComponent {
 			tapeNode.add(tapeEleNode);
 		}
 		root.add(tapeNode);
+		
+		DetailsTreeTableNode tapeLengthNode = new DetailsTreeTableNode("Tape length");
+		tapeLengthNode.setValueAt(machineState.getTape().length, 1);
+		root.add(tapeLengthNode);
 		
 		DetailsTreeTableNode tapeIndexNode = new DetailsTreeTableNode("Tape index");
 		tapeIndexNode.detailsValue = machineState.getTapeIndex();

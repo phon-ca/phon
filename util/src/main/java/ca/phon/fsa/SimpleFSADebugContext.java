@@ -1,6 +1,8 @@
 package ca.phon.fsa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 import ca.phon.fsa.FSAState.RunningState;
@@ -18,8 +20,14 @@ public class SimpleFSADebugContext<T> {
 	/** Current state */
 	private FSAState<T> machineState;
 	
+	/** Transition list */
+	private List<FSATransition<T>> transitions = new ArrayList<>();
+	
 	/** Cached state */
 	private FSAState<T> cachedState;
+	
+	/** Transition list for cached state */
+	private List<FSATransition<T>> cachedTransitions = new ArrayList<>();
 	
 	/** Decision stack */
 	private Stack<DecisionTracker<T>> decisions;
@@ -38,8 +46,16 @@ public class SimpleFSADebugContext<T> {
 		return this.machineState;
 	}
 	
+	public List<FSATransition<T>> getTransitions() {
+		return this.transitions;
+	}
+	
 	public FSAState<T> getCachedState() {
 		return this.cachedState;
+	}
+	
+	public List<FSATransition<T>> getCachedTransitions() {
+		return this.cachedTransitions;
 	}
 	
 	public Stack<DecisionTracker<T>> getDecisionStack() {
@@ -97,9 +113,23 @@ public class SimpleFSADebugContext<T> {
 								Arrays.copyOf(machineState.getGroupLengths(), machineState.numberOfGroups()));
 						cachedState.setLookAheadOffset(machineState.getLookAheadOffset());
 						cachedState.setLookBehindOffset(machineState.getLookBehindOffset());
+						
+						cachedTransitions.clear();
+						cachedTransitions.addAll(transitions);
+					}
+				}
+				FSATransition<T> lastDecision = (decisions.size() > 0 ? decisions.peek().choices.get(decisions.peek().choiceIndex) : null);
+				if(lastDecision != null) {
+					int lastIdx = transitions.indexOf(lastDecision);
+					if(lastIdx >= 0) {
+						List<FSATransition<T>> backtrackedTransitions = new ArrayList<FSATransition<T>>();
+						for(int i = 0; i < lastIdx; i++) backtrackedTransitions.add(transitions.get(i));
+						transitions.clear();
+						transitions.addAll(backtrackedTransitions);
 					}
 				}
 				toFollow = fsa.backtrack(machineState, decisions);
+				
 				
 				if(toFollow != null 
 						&& toFollow.getType() == TransitionType.RELUCTANT
@@ -135,6 +165,8 @@ public class SimpleFSADebugContext<T> {
 			return null;
 		}
 		
+		if(toFollow != null)
+			transitions.add(toFollow);
 		return toFollow;
 	}
 	
