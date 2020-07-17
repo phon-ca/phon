@@ -414,7 +414,7 @@ public class PhonMediaPlayer extends JPanel {
 			mediaPlayerCanvas.setToolTipText("No media");
 		} else if(VLCHelper.isLoaded()) {
 			try {
-				mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
+				mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access", "--no-plugins-cache");
 				mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
 				if(mediaPlayer == null) return;
 				
