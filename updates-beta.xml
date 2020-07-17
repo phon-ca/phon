@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_2.dmg" newVersion="3.1.2" newMediaFileId="macos" fileSize="286106577" md5Sum="8451b712be75bbd7f4519215d482820c" sha256Sum="9e2d4c8ae540ee313152defde1876162a78629d84690d495615e7adae222db80" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.1.0
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_1.dmg" newVersion="3.1.3-beta.1" newMediaFileId="macos" fileSize="286357557" md5Sum="c01df09ef75c8f5ae1e31a83ddb83ae1" sha256Sum="c8996fd8d5199e01af5ca2fddd2c6b00acd72e133a4d8672a004748b3c02c1a7" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.2
+
+ * Added PNTC analysis
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sub columns' setting to manual inverntory options
+
+## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
    - Alaw
@@ -332,8 +338,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_2.dmg" newVersion="3.1.2" newMediaFileId="macos" fileSize="286106577" md5Sum="8451b712be75bbd7f4519215d482820c" sha256Sum="9e2d4c8ae540ee313152defde1876162a78629d84690d495615e7adae222db80" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.1.0
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_1.dmg" newVersion="3.1.3-beta.1" newMediaFileId="macos" fileSize="286357557" md5Sum="c01df09ef75c8f5ae1e31a83ddb83ae1" sha256Sum="c8996fd8d5199e01af5ca2fddd2c6b00acd72e133a4d8672a004748b3c02c1a7" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.2
+
+ * Added PNTC analysis
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sub columns' setting to manual inverntory options
+
+## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
    - Alaw
@@ -664,8 +676,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.exe" newVersion="3.1.2" newMediaFileId="win64" fileSize="295712008" md5Sum="3817ca58813c2ef316ddad3847613f09" sha256Sum="0bf709f6dff0e40c144f9bce19d8852d8252e4ea7fb348425a3573c40165b8a8" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.0
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.exe" newVersion="3.1.3-beta.1" newMediaFileId="win64" fileSize="295987976" md5Sum="983d2a7d4ef49683c2d53dacc5666855" sha256Sum="5d00587f9c0da6ec10bd2c2b9368dba9c85a0ffe8d9aeff71de84e320bc0c5b9" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.2
+
+ * Added PNTC analysis
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sub columns' setting to manual inverntory options
+
+## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
    - Alaw
@@ -996,8 +1014,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.exe" newVersion="3.1.2" newMediaFileId="win64" fileSize="295712008" md5Sum="3817ca58813c2ef316ddad3847613f09" sha256Sum="0bf709f6dff0e40c144f9bce19d8852d8252e4ea7fb348425a3573c40165b8a8" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.0
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.exe" newVersion="3.1.3-beta.1" newMediaFileId="win64" fileSize="295987976" md5Sum="983d2a7d4ef49683c2d53dacc5666855" sha256Sum="5d00587f9c0da6ec10bd2c2b9368dba9c85a0ffe8d9aeff71de84e320bc0c5b9" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.2
+
+ * Added PNTC analysis
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sub columns' setting to manual inverntory options
+
+## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
    - Alaw
@@ -1328,8 +1352,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.exe" newVersion="3.1.2" newMediaFileId="win64" fileSize="295712008" md5Sum="3817ca58813c2ef316ddad3847613f09" sha256Sum="0bf709f6dff0e40c144f9bce19d8852d8252e4ea7fb348425a3573c40165b8a8" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.0
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.exe" newVersion="3.1.3-beta.1" newMediaFileId="win64" fileSize="295987976" md5Sum="983d2a7d4ef49683c2d53dacc5666855" sha256Sum="5d00587f9c0da6ec10bd2c2b9368dba9c85a0ffe8d9aeff71de84e320bc0c5b9" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.2
+
+ * Added PNTC analysis
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sub columns' setting to manual inverntory options
+
+## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
    - Alaw
@@ -1660,8 +1690,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_2.zip" newVersion="3.1.2" newMediaFileId="win64zip" fileSize="294794789" md5Sum="f0e13f53fae404f44f17dacd4c41e258" sha256Sum="4de45566262b04bc12de42917c0d5ea2b863aaa7f99dd1884a11cb1568a9f37d" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.1.0
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.zip" newVersion="3.1.3-beta.1" newMediaFileId="win64zip" fileSize="295080890" md5Sum="7919f026ac1d391482bb86f89e204e7e" sha256Sum="ecbae23abcf942e85f7645230754194bc95701713b0612b0896f38d01394ed93" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.1.2
+
+ * Added PNTC analysis
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sub columns' setting to manual inverntory options
+
+## Changes from 3.1.0
 
  * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
    - Alaw
