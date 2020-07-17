@@ -393,10 +393,10 @@ public class SimpleFSA<T> {
 			machineState.setTapeIndex(lastDecision.tapeIndex);
 			machineState.setGroups(lastDecision.groupStarts, lastDecision.groupLengths);
 			
-//			if(machineState.getTapeIndex() == machineState.getTape().length-1)
-//				machineState.setRunningState(RunningState.EndOfInput);
-//			else
-//				machineState.setRunningState(RunningState.Running);
+			// calling toFollow here ensures that variable length matches have
+			// internal variables setup appropriately 
+			// TODO not ideal this value should be saved along with the decision state
+			retVal.follow(machineState);
 			
 			// if we have not exhausted all choices, push
 			// the updated decision back onto the stack
