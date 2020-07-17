@@ -413,6 +413,7 @@ public class LocalProject implements Project, ProjectRefresh {
 						String folderName = path.getFileName().toString();
 						if(!folderName.startsWith("~")
 								&& !folderName.endsWith("~")
+								&& !folderName.startsWith(".")
 								&& !folderName.startsWith("__")) {
 							corpusList.add(folderName);
 						}	
