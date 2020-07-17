@@ -6,6 +6,7 @@ import java.util.List;
 
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.OffsetType;
+import ca.phon.fsa.TransitionType;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.phonex.EndOfInputTransition;
@@ -288,7 +289,33 @@ public class SyllableTransition extends PhonexTransition {
 
 	@Override
 	public String getImage() {
-		return "\u03C3";
+		String retVal = "\u03c3";
+		if(syllableRange != null) {
+			retVal += "/";
+			if(syllableRange.getObj1() != null &&
+					syllableRange.getObj1() == syllableRange.getObj2()) {
+				retVal += syllableRange.getObj1().getIdChar();
+			} else {
+				if(syllableRange.getObj1() != null) {
+					retVal += syllableRange.getObj1().getIdChar();
+				}
+				retVal += "..";
+				if(syllableRange.getObj2() != null) {
+					retVal += syllableRange.getObj2().getIdChar();
+				}
+			}
+			retVal += "/";
+		}
+		for(PhoneMatcher pm:super.getSecondaryMatchers()) {
+			retVal += ":" + pm.toString();
+		}
+		if(getType() != TransitionType.NORMAL) {
+			retVal += " (" + getType() + ")";
+		}
+		if(getOffsetType() != OffsetType.NORMAL) {
+			retVal += " (" + getOffsetType() + ")";
+		}
+		return retVal;
 	}
 
 	@Override
@@ -303,6 +330,8 @@ public class SyllableTransition extends PhonexTransition {
 		retVal.syllableRange = (syllableRange != null ? new Tuple<>(syllableRange.getObj1(), syllableRange.getObj2()) : null);
 		retVal.setFirstState(getFirstState());
 		retVal.setToState(getToState());
+		retVal.getInitGroups().addAll(getInitGroups());
+		retVal.getMatcherGroups().addAll(getMatcherGroups());
 		return retVal;
 	}
 
