@@ -161,6 +161,7 @@ public class SortNodeSettingsPanel extends JPanel {
 			sortByPanel.remove(scPanel.getSeparator());
 		settings.getSorting().remove(scPanel.getSortColumn());
 		sortByPanel.revalidate();
+		repaint();
 	}
 
 	public SortNodeSettings getSettings() {

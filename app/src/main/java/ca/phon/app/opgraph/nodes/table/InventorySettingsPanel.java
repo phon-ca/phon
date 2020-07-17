@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
@@ -198,8 +199,11 @@ public class InventorySettingsPanel extends JPanel {
 		onAddAction.putValue(Action.SMALL_ICON, icon);
 		addColumnButton = new JButton(onAddAction);
 		
+		JPanel sumColumnsPanel = new JPanel();
+		sumColumnsPanel.setLayout(new VerticalLayout());
+		sumColumnsPanel.setBorder(BorderFactory.createTitledBorder("Sum Columns"));
+		sumColumnsPanel.add(new JLabel("Sum the values of the columns specified below for each row key"));
 		sumColumnField = new PromptedTextField("Enter column names separated by a ',')");
-		sumColumnField.setBorder(BorderFactory.createTitledBorder("Sum Columns"));
 		
 		updateManualConfig();
 		sumColumnField.getDocument().addDocumentListener(new DocumentListener() {
@@ -220,6 +224,8 @@ public class InventorySettingsPanel extends JPanel {
 			}
 			
 		});
+		sumColumnsPanel.add(sumColumnField);
+		manualConfigPanel.getContentContainer().add(sumColumnsPanel, BorderLayout.SOUTH);
 		
 		setLayout(new BorderLayout());
 		add(autoConfigPanel, BorderLayout.NORTH);
@@ -231,7 +237,7 @@ public class InventorySettingsPanel extends JPanel {
 		List<String> sumCols = new ArrayList<>();
 		for(String col:cols) {
 			if(col.strip().length() > 0) {
-				sumCols.add(col);
+				sumCols.add(col.strip());
 			}
 		}
 		settings.clearSumColumns();
@@ -261,7 +267,7 @@ public class InventorySettingsPanel extends JPanel {
 			columnPanel.add(panel);
 		}
 		
-		String sumColumns = settings.getSumColumns().stream().collect(Collectors.joining(","));
+		String sumColumns = settings.getSumColumns().stream().collect(Collectors.joining(", "));
 		sumColumnField.setText(sumColumns);
 		
 		final JPanel btmPanel = new JPanel(new BorderLayout());
@@ -273,7 +279,6 @@ public class InventorySettingsPanel extends JPanel {
 		manualConfigPanel.getContentContainer().setLayout(new BorderLayout());
 		manualConfigPanel.getContentContainer().add(groupByPanel, BorderLayout.NORTH);
 		manualConfigPanel.getContentContainer().add(btmPanel, BorderLayout.CENTER);
-		manualConfigPanel.getContentContainer().add(sumColumnField, BorderLayout.SOUTH);
 	}
 
 	private JComponent createSeparator(ColumnPanel colPanel) {
