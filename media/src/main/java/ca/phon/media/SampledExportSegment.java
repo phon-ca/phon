@@ -40,20 +40,13 @@ public class SampledExportSegment extends ExportSegment {
 		case ALAW:
 		case MULAW:
 		case EXTENDED:
-			switch(fileType) {
-			case WAV:
+			if(fileType == AudioFileType.WAV) {
 				encoding = DEFAULT_WAV_ENCODING;
-				break;
-				
-			case AIFC:
-			case AIFF:
+			} else if(fileType == AudioFileType.AIFC || fileType == AudioFileType.AIFF) {
 				encoding = DEFAULT_AIFF_ENCODING;
-				break;
-				
-			default:
-				break;
 			}
-		
+			break;
+			
 		default:
 			break;
 		}

@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * Methods for reading and writing audio sample data.
- * 
+ *
+ * Methods for reading and writing uncompressed audio sample data.
  * 
  */
 public class AudioIO {
@@ -609,7 +609,7 @@ public class AudioIO {
 		String ext = FilenameUtils.getExtension(file.getName());
 		if(ext == null || ext.length() == 0) throw new UnsupportedFormatException("Unable to determine file type - no extension given");
 		
-		for(AudioFileType type:AudioFileType.values()) {
+		for(AudioFileType type:AudioFileType.getSupportedFileTypes()) {
 			int idx = Arrays.binarySearch(type.getExtensions(), ext);
 			if(idx >= 0)
 				return type;
@@ -630,24 +630,18 @@ public class AudioIO {
 	}
 	
 	private static void writeHeaders(Sampled samples, int numSamples, AudioFileType fileType, AudioFileEncoding encoding, OutputStream os) throws IOException, UnsupportedFormatException {
-		switch(fileType) {
-		case WAV:
+		if(fileType == AudioFileType.WAV) {
 			if(encoding.getBytesPerSample() > 1 && encoding.isBigEndian())
 				writeRifxHeaders(samples, numSamples, encoding, os);
 			else
 				writeRiffHeaders(samples, numSamples, encoding, os);
-			break;
-			
-		case AIFF:
-		case AIFC:
+		} else if(fileType == AudioFileType.AIFF || fileType == AudioFileType.AIFC) {
 			if(encoding.getBytesPerSample() > 1 && encoding.isBigEndian()) {
 				writeAiffHeaders(samples, numSamples, encoding, os);
 			} else {
 				writeAifcHeaders(samples, numSamples, encoding, os);
 			}
-			break;
-			
-		default:
+		} else {
 			throw new UnsupportedFormatException();
 		}
 	}

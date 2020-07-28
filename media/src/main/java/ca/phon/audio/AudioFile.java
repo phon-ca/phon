@@ -28,10 +28,8 @@ import org.apache.logging.log4j.core.time.PreciseClock;
 public final class AudioFile implements AutoCloseable, Closeable {
 
 	private File file;
-	
-	private RandomAccessFile raf;
-	
-	// file as memory mapped buffer
+
+	private RandomAccessFile raf;	
 	private MappedByteBuffer mappedBuffer;
 
 	private long dataOffset = -1;

@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.actions;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
@@ -11,6 +13,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.CustomSegmentDialog;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionMediaModel;
+import ca.phon.audio.AudioFileType;
 import ca.phon.media.ExportSegment;
 import ca.phon.media.LongSound;
 import ca.phon.session.MediaSegment;
@@ -152,13 +155,15 @@ public class ExportSegmentAction extends SessionEditorAction {
 		try {
 			ExportSegment exportSegment = getExportSegment();
 			if(exportSegment != null) {
-				switch(exportSegment.getFileType()) {
-				case WAV:
+				if(exportSegment.getFileType() == AudioFileType.WAV) {
 					return wavFilter;
-					
-				case AIFF:
-				case AIFC:
+				} else if(exportSegment.getFileType() == AudioFileType.AIFC
+						|| exportSegment.getFileType() == AudioFileType.AIFF) {
 					return aifFilter;
+				} else {
+					FileFilter filter = new FileFilter(exportSegment.getFileType().getName(), 
+							Arrays.asList(exportSegment.getFileType().getExtensions()).stream().collect(Collectors.joining(";")));
+					return filter;
 				}
 			}
 		} catch (IOException e) {}
