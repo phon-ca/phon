@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,10 +36,12 @@ import ca.phon.cvseq.CVSeqPattern;
 import ca.phon.cvseq.CVSeqType;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.features.IPAElementComparator;
 import ca.phon.ipa.parser.IPALexer;
 import ca.phon.ipa.parser.IPAParser;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.phonex.FeatureSetMatcher;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexMatcher;
 import ca.phon.phonex.PhonexPattern;
@@ -780,15 +783,34 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 * @param symbolMap
 	 * @param includeStress include stress marker elements
 	 * @param includeSyllableBoundaries keep syllable boundaries (i.e., '.') elements
-	 * @param includeLengthDiacritics keep length diacritics on elements
+	 * @param includeDiacritics keep diacritics on elements
 	 */
 	public IPATranscript cover(List<PhoneMatcher> matchers, Map<PhoneMatcher, Character> symbolMap, boolean includeStress,
-			boolean includeSyllableBoundaries, boolean includeLengthDiacritics) {
-		final CoverVisitor visitor = new CoverVisitor(matchers, symbolMap, includeStress, includeSyllableBoundaries, includeLengthDiacritics);
+			boolean includeSyllableBoundaries, boolean includeDiacritics) {
+		final CoverVisitor visitor = new CoverVisitor(matchers, symbolMap, includeStress, includeSyllableBoundaries, includeDiacritics);
 		accept(visitor);
 		return visitor.getIPATranscript();
 	}
 	
+	/**
+	 * Cover IPATranscript using provided cover characters.
+	 * 
+	 * @param consonantCover
+	 * @param vowelCover
+	 * 
+	 * @param ch
+	 * @return
+	 */
+	public IPATranscript cover(Character consonantCover, Character vowelCover) {
+		PhoneMatcher consonantMatcher = new FeatureSetMatcher(FeatureSet.fromArray(new String[]{"consonant"}));
+		PhoneMatcher vowelMatcher = new FeatureSetMatcher(FeatureSet.fromArray(new String[]{"vowel"}));
+		
+		Map<PhoneMatcher, Character> coverMap = new LinkedHashMap<PhoneMatcher, Character>();
+		coverMap.put(consonantMatcher, consonantCover);
+		coverMap.put(vowelMatcher, vowelCover);
+		
+		return cover(List.of(consonantMatcher, vowelMatcher), coverMap, true, true, true);
+	}
 
 	@Override
 	public Set<Class<?>> getExtensions() {

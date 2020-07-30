@@ -114,6 +114,10 @@
         <name>Full Stop</name>
         <token>PERIOD</token>
     </char>
+    <char value="&#x25cc;">
+    	<name>Dotted circle</name>
+    	<token>COVER_SYMBOL</token>
+    </char>
     <char value="&#x0041;">
         <name>Latin Capital Letter A</name>
         <token>COVER_SYMBOL</token>

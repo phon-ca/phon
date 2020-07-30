@@ -59,7 +59,7 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	
 	private boolean insertImplicitSyllableBoundaries = false;
 	
-	private boolean includeLength = true;
+	private boolean includeDiacritics = true;
 
 	public CoverVisitor(String symbolMap) {
 		this(symbolMap, true, true, false, true);
@@ -75,16 +75,16 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	 * @param symbolMap
 	 * @param includeStress
 	 * @param includeSyllableBoundaries
-	 * @param includeLength
+	 * @param ioncludeDiacritics
 	 */
 	public CoverVisitor(String symbolMap, boolean includeStress, boolean includeSyllableBoundaries,
-			boolean insertImplicitSyllableBoundaries, boolean includeLength) {
+			boolean insertImplicitSyllableBoundaries, boolean includeDiacritics) {
 		super();
 		
 		this.includeStress = includeStress;
 		this.includeSyllableBoundaries = includeSyllableBoundaries;
 		this.insertImplicitSyllableBoundaries = insertImplicitSyllableBoundaries;
-		this.includeLength = includeLength;
+		this.includeDiacritics = includeDiacritics;
 
 		this.symbolMap = parseSymbolMap(symbolMap);
 		this.matchers = new ArrayList<>(this.symbolMap.keySet());
@@ -93,7 +93,7 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	private Map<PhoneMatcher, Character> parseSymbolMap(String symbolMap) {
 		final Map<PhoneMatcher, Character> retVal = new LinkedHashMap<>();
 		
-		final String regex = "(([A-Z]|stress|syllableBoundaries|implicitBoundaries|length))\\s?=\\s?([^;]+)";
+		final String regex = "(([A-Z]|stress|syllableBoundaries|implicitBoundaries|diacritics))\\s?=\\s?([^;]+)";
 		final Pattern pattern = Pattern.compile(regex);
 		final Matcher matcher = pattern.matcher(symbolMap);
 		
@@ -130,9 +130,9 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 				} else if(g1.matches("implicitBoundaries")) {
 					Boolean insertImplicitBoundaries = Boolean.parseBoolean(g2);
 					setInsertImplicitSyllableBoundaries(insertImplicitBoundaries);
-				} else if(g1.matches("length")) {
-					Boolean includeLength = Boolean.parseBoolean(g2);
-					setIncludeLength(includeLength);
+				} else if(g1.matches("diacritics")) {
+					Boolean includeDiacritics = Boolean.parseBoolean(g2);
+					setIncludeDiacritics(includeDiacritics);
 				}
 			}
 		}
@@ -145,14 +145,14 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	}
 	
 	public CoverVisitor(List<PhoneMatcher> matchers, Map<PhoneMatcher, Character> symbolMap,
-			boolean includeStress, boolean includeSyllableBoundaries, boolean includeLength) {
+			boolean includeStress, boolean includeSyllableBoundaries, boolean includeDiacritics) {
 		super();
 		
 		this.matchers = matchers;
 		this.symbolMap = symbolMap;
 		this.includeStress = includeStress;
 		this.includeSyllableBoundaries = includeSyllableBoundaries;
-		this.includeLength = includeLength;
+		this.includeDiacritics = includeDiacritics;
 	}
 	
 	@Override
@@ -203,12 +203,12 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 		this.insertImplicitSyllableBoundaries = insertImplicitSyllableBoundaries;
 	}
 
-	public boolean isIncludeLength() {
-		return includeLength;
+	public boolean isIncludeDiacritics() {
+		return includeDiacritics;
 	}
 
-	public void setIncludeLength(boolean includeLength) {
-		this.includeLength = includeLength;
+	public void setIncludeDiacritics(boolean includeDiacritics) {
+		this.includeDiacritics = includeDiacritics;
 	}
 
 	private void copySyllabificationInfo(IPAElement ele, IPAElement dest) {
@@ -234,13 +234,14 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 		}
 		
 		final Phone newPhone = factory.createPhone(baseChar);
-		newPhone.setFeatureSet(p.getFeatureSet());
+		if(includeDiacritics) {
+			newPhone.setFeatureSet(p.getFeatureSet());
+			newPhone.setPrefixDiacritics(p.getPrefixDiacritics());
+			newPhone.setCombiningDiacritics(p.getCombiningDiacritics());
+			newPhone.setSuffixDiacritics(p.getSuffixDiacritics());
+		}
 		copySyllabificationInfo(p, newPhone);
 				
-		if(includeLength) {
-			newPhone.setSuffixDiacritics(p.getLengthDiacritics());
-		}
-		
 		return newPhone;
 	}
 	

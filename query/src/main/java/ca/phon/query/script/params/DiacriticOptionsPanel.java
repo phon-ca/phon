@@ -2,6 +2,7 @@ package ca.phon.query.script.params;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Box;
@@ -32,6 +33,10 @@ public class DiacriticOptionsPanel extends JPanel {
 	private DiacriticOptionsScriptParam diacriticOptionsParam;
 	
 	private IPAMapGrid selectedGridMap;
+	
+	public DiacriticOptionsPanel() {
+		this(new DiacriticOptionsScriptParam("", "", false, List.of()));
+	}
 	
 	public DiacriticOptionsPanel(DiacriticOptionsScriptParam diacriticOptionsParam) {
 		super();

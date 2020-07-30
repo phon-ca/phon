@@ -54,6 +54,8 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.query.script.params.DiacriticOptionsPanel;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
 import ca.phon.session.Group;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -85,6 +87,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 	/* UI */
 	private JPanel settingsPanel;
+	private DiacriticOptionsPanel diacriticOptionsPanel;
 	private JCheckBox includeSessionInfoBox;
 	private JCheckBox includeSpeakerInfoBox;
 	private JCheckBox includeTierInfoBox;
@@ -315,6 +318,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	private JPanel createSettingsPanel() {
 		JPanel retVal = new JPanel();
 
+		diacriticOptionsPanel = new DiacriticOptionsPanel();
 		includeSessionInfoBox = new JCheckBox("Include session name and date", true);
 		includeSpeakerInfoBox = new JCheckBox("Include speaker name and age", true);
 		includeTierInfoBox = new JCheckBox("Include record number, tier, group and text range", true);
