@@ -811,6 +811,10 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		
 		return cover(List.of(consonantMatcher, vowelMatcher), coverMap, true, true, true);
 	}
+	
+	public IPATranscript cover(String consonantCover, String vowelCover) {
+		return cover(consonantCover.charAt(0), vowelCover.charAt(0));
+	}
 
 	@Override
 	public Set<Class<?>> getExtensions() {
