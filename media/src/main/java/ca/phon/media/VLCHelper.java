@@ -25,6 +25,7 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PrefHelper;
 import uk.co.caprica.vlcj.binding.LibC;
 import uk.co.caprica.vlcj.binding.RuntimeUtil;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.support.Info;
 
 /**
@@ -115,28 +116,26 @@ public class VLCHelper {
 
 				
 				Info info = Info.getInstance();
-				LOGGER.info(String.format("vlcj             : %s", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>"));
-				LOGGER.info(String.format("os               : %s", val(info.os())));
-				LOGGER.info(String.format("java             : %s", val(info.javaVersion())));
-				LOGGER.info(String.format("java.home        : %s", val(info.javaHome())));
-				LOGGER.info(String.format("jna.library.path : %s", val(info.jnaLibraryPath())));
-				LOGGER.info(String.format("java.library.path: %s", val(info.javaLibraryPath())));
-				LOGGER.info(String.format("PATH             : %s", val(info.path())));
-				LOGGER.info(String.format("VLC_PLUGIN_PATH  : %s", vlcPluginPath));
+				LOGGER.info(String.format("vlcj\t\t\t\t: %s", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>"));
+				LOGGER.info(String.format("os\t\t\t\t: %s", val(info.os())));
+				LOGGER.info(String.format("java\t\t\t\t: %s", val(info.javaVersion())));
+				LOGGER.info(String.format("java.home\t\t\t: %s", val(info.javaHome())));
+				LOGGER.info(String.format("jna.library.path\t\t\t: %s", val(info.jnaLibraryPath())));
+				LOGGER.info(String.format("java.library.path\t\t: %s", val(info.javaLibraryPath())));
+				LOGGER.info(String.format("PATH\t\t\t\t: %s", val(info.path())));
+				LOGGER.info(String.format("VLC_PLUGIN_PATH\t\t\t: %s", vlcPluginPath));
 
 		        if (RuntimeUtil.isNix()) {
-		        	LOGGER.info(String.format("LD_LIBRARY_PATH  : %s", val(info.ldLibraryPath())));
+		        	LOGGER.info(String.format("LD_LIBRARY_PATH\t\t\t: %s", val(info.ldLibraryPath())));
 		        } else if (RuntimeUtil.isMac()) {
-		        	LOGGER.info(String.format("DYLD_LIBRARY_PATH          : %s", val(info.dyldLibraryPath())));
-		        	LOGGER.info(String.format("DYLD_FALLBACK_LIBRARY_PATH : %s", val(info.dyldFallbackLibraryPath())));
+		        	LOGGER.info(String.format("DYLD_LIBRARY_PATH\t\t: %s", val(info.dyldLibraryPath())));
+		        	LOGGER.info(String.format("DYLD_FALLBACK_LIBRARY_PATH\t: %s", val(info.dyldFallbackLibraryPath())));
 		        }
 		        
-		        // XXX This seems not to work as expected
-		        // attempt to load native libraries for vlc
-//		        NativeLibrary vlcLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcLibraryName());
-//		        NativeLibrary vlccoreLib = NativeLibrary.getInstance(RuntimeUtil.getLibVlcCoreLibraryName());
 		        
-				
+	        	MediaPlayerFactory factory = new MediaPlayerFactory();
+	        	LOGGER.info(String.format("VLC Version\t\t\t: %s", factory.application().version()));
+	        	
 				isLoaded = true;
 			} catch (UnsatisfiedLinkError e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
