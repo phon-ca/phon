@@ -71,10 +71,9 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="29ac654b" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2018-07-16T14:01:47.095-02:30" name="Data Tiers" uuid="ab022220-57dd-465c-84c8-52efe893fe5c">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-04T08:34:28.687-02:30" name="Data Tiers" uuid="48987e0a-9075-4229-b417-282dc1ae03b3">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
-                    <param id="filters.alignedWord.patternFilter.allowOverlap">false</param>
                     <param id="filters.alignedWord.patternFilter.caseSensitive">false</param>
                     <param id="filters.alignedWord.patternFilter.exactMatch">true</param>
                     <param id="filters.alignedWord.patternFilter.filter">.+</param>
@@ -95,7 +94,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="2f5a76e38b4b4c38" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="743f90b2">
+            <graph id="5097153b">
                 <node id="cdfe6b17a1ca4b4d" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -179,7 +178,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="61208600" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="15feabd0">
+            <graph id="53f2b709">
                 <node id="282a70f9" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -194,7 +193,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="55aaa72dc82b4f91" name="Create Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="d3e9adc">
+                    <graph id="54fcddc3">
                         <node id="2346342eeb134cfe" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -290,9 +289,6 @@ function tableOp(context, table) {
                             </oga:property>
                             <oga:property key="filters.column.filterType">
                                 <![CDATA[Plain text]]>
-                            </oga:property>
-                            <oga:property key="filters.column.allowOverlap">
-                                <![CDATA[false]]>
                             </oga:property>
                             <oga:property key="filters.column.exactMatch">
                                 <![CDATA[true]]>
@@ -422,7 +418,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="607a331e" name="Vocalizations" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="cb995eb">
+                    <graph id="45cd50e4">
                         <node id="28737cd4" name="speaker" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -567,7 +563,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="bbf482c5a66541f7" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="42e26c3f">
+                            <graph id="3de5256e">
                                 <node id="5642bea05e5c4b06" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -595,6 +591,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <node id="4df6ff3399a848c7" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                    <input name="table" optional="false"/>
                                     <output name="exists" type="java.lang.Boolean">does table exist</output>
                                     <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource">table if exists, undefined otherwise</output>
                                     <extensions>
@@ -635,7 +632,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="350c5a14" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="5852d169">
+                            <graph id="ef5f279">
                                 <node id="60a76f15" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -787,7 +784,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="5aee518f" name="Vocalization Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="247dba64">
+                                    <graph id="604e7189">
                                         <node id="c81dda4" name="result total" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -849,7 +846,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="71606628" name="All Vocalizations" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="a5b63d0">
+                                            <graph id="6193cf3b">
                                                 <node id="4413c5e1" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -939,6 +936,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <node id="5d862a89" name="Add #Voc/Session" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="totalsTable" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -988,7 +986,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="5c298b00" name="Listing" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="2a59f282">
+                                            <graph id="40de8724">
                                                 <node id="77fcdc08" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1044,7 +1042,7 @@ Actual Syllabification (Word)]]>
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="39f91ef7" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="633ed19f">
+                                            <graph id="2de7543c">
                                                 <node id="4ceebc1" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1076,7 +1074,7 @@ Actual Syllabification (Word)]]>
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="3fd5be49" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7c713369">
+                                                    <graph id="262e5b5e">
                                                         <node id="4582b1f9" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1260,9 +1258,11 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Initial C" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Initial C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="965" y="336"/>
@@ -1339,7 +1339,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="37993d4121c64985" name="Initial Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="27262b90">
+                                                    <graph id="774334cb">
                                                         <node id="1fe296e468a143cc" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1513,10 +1513,14 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Initial C" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Initial C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="738" y="336"/>
@@ -1627,6 +1631,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="38a662c4" name="Add Row to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -1670,7 +1675,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9bee85a827324705" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="73febac4">
+                                            <graph id="2b702a62">
                                                 <node id="be648f920a40a0" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1702,7 +1707,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="47ab9f734c8d4a3b" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="3b195179">
+                                                    <graph id="7b31a4da">
                                                         <node id="390d058f9a044b28" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1767,9 +1772,6 @@ function tableOp(context, table) {
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.filterType">
                                                                         <![CDATA[Regular expression]]>
-                                                                    </oga:property>
-                                                                    <oga:property key="filters.column.allowOverlap">
-                                                                        <![CDATA[false]]>
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.exactMatch">
                                                                         <![CDATA[true]]>
@@ -1885,9 +1887,11 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Final C" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Final C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="719" y="313"/>
@@ -1974,7 +1978,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="a2bb4201f25d43e2" name="Final Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="247eb71d">
+                                                    <graph id="1a68b10a">
                                                         <node id="36f52067ce1f4419" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2039,9 +2043,6 @@ function tableOp(context, table) {
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.filterType">
                                                                         <![CDATA[Regular expression]]>
-                                                                    </oga:property>
-                                                                    <oga:property key="filters.column.allowOverlap">
-                                                                        <![CDATA[false]]>
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.exactMatch">
                                                                         <![CDATA[true]]>
@@ -2157,10 +2158,14 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Final C" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Final C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="737" y="15"/>
@@ -2269,6 +2274,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="84fb765a142d40cd" name="Add Row to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -2312,7 +2318,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9dee81f2bd624468" name="Vowels" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="73d477b4">
+                                            <graph id="3493e045">
                                                 <node id="4286091421414cd3" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2396,7 +2402,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="b22af37adc0e4a9b" name="Vowels (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="4a70902e">
+                                                    <graph id="38aac876">
                                                         <node id="598e44aa449b4309" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2422,9 +2428,11 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Vowel" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Vowel">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -2509,7 +2517,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="65bf101fb2f14ead" name="Vowels (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="3f0c35a5">
+                                                    <graph id="30323182">
                                                         <node id="76e8171f93824e4d" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2535,10 +2543,14 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Vowel" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Vowel">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="244" y="15"/>
@@ -2739,6 +2751,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="6abedfe79ca14089" name="Add Row to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -2783,7 +2796,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="35376622" name="Syllable Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="24a154f8">
+                                            <graph id="18014371">
                                                 <node id="47c22615" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2865,7 +2878,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="3c1623ed" name="Syllable Strucutre (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="43e8b378">
+                                                    <graph id="7661ed69">
                                                         <node id="77c929c0" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2891,9 +2904,9 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="241" y="24"/>
@@ -2978,7 +2991,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="304f07bd533d4538" name="Syllable Strucutre (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1d768b0c">
+                                                    <graph id="78e23c99">
                                                         <node id="4c22960fe18b4e7c" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3004,10 +3017,12 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -3208,6 +3223,8 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="480e7fca23084a07" name="Add to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
+                                                    <input name="numVocs" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -3293,7 +3310,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="fbb7c1ceae774d2a" name="Vocalization Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="12d1bc1">
+                                            <graph id="6573ea6e">
                                                 <node id="db2fcf7cec6341e0" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -3366,7 +3383,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="d6dcaea1e62046f7" name="Structures (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5f580d40">
+                                                    <graph id="40f5c01">
                                                         <node id="7d0ef2fe71254e04" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3392,9 +3409,9 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="244" y="15"/>
@@ -3468,7 +3485,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="458fd744de5a4a6a" name="Structures (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1caef911">
+                                                    <graph id="7c12646f">
                                                         <node id="b1a785f5231a4cf2" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3494,10 +3511,12 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -3698,6 +3717,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="eec3ffcea7204cf7" name="Add to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -3770,7 +3790,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="6a6f4dc4" name="Harmony" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="7d8066b1">
+                                            <graph id="529fb97d">
                                                 <node id="f95439174b664eb4" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -4020,7 +4040,7 @@ Actual Syllabification (Word)]]>
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c3a5d71d15704c6f" name="Mean Babble Level" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="5bc10dfe">
+                                            <graph id="4ce9e391">
                                                 <node id="f2b0e896f7884dea" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -4159,7 +4179,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="e59f22e93c0416a" name="Mean Babble Level (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="780cbacb">
+                                                    <graph id="3aadd95b">
                                                         <node id="536cd64980e047a7" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4185,9 +4205,11 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Mean Babble Level" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Mean Babble Level">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -4261,7 +4283,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="455c63934e7b460c" name="Mean Babble Level (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="37594d8e">
+                                                    <graph id="13481946">
                                                         <node id="c5954c4c2e8242f3" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4287,10 +4309,14 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Mean Babble Level" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Mean Babble Level">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -4487,10 +4513,12 @@ function tableOp(context, table) {
                                                     <ogcn:published_input field="obj" name="table" ref="c5954c4c2e8242f3"/>
                                                     <ogcn:published_input field="obj" name="reportNode" ref="a5797fec9e54a41"/>
                                                     <extensions>
-                                                        <oga:meta x="540" y="166"/>
+                                                        <oga:meta x="540" y="165"/>
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="b12705f4c9c84206" name="Add to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
+                                                    <input name="numVocs" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -4505,10 +4533,10 @@ function tableOp(context, table) {
 
 	var total = 0.0;
 	for(var row = 0; row < inventory.rowCount; row++) {
-		var mbl = inventory.getValueAt(row, 0);
+		var mbl = java.lang.Float.parseFloat(inventory.getValueAt(row, 0));
 		var cnt = inventory.getValueAt(row, 1);
 
-		total += (mbl.floatValue() * cnt.intValue());
+		total += (mbl * cnt.intValue());
 	}
 	var meanBabbleLevel = total / numVocs;
 	
@@ -4541,7 +4569,7 @@ function tableOp(context, table) {
                                             <ogcn:published_input field="obj" name="summaryTable" ref="748fd15f9a984590"/>
                                             <ogcn:published_input field="obj" name="reportNode" ref="9ecbaafe9f794505"/>
                                             <extensions>
-                                                <oga:meta x="275" y="512"/>
+                                                <oga:meta x="276" y="512"/>
                                             </extensions>
                                         </ogcn:macro>
                                         <link dest="71606628" destField="tableMap" source="7cbf1d09" sourceField="obj"/>
@@ -4629,7 +4657,7 @@ function tableOp(context, table) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7606c46e4d4a488e" name="Words" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="48d58304">
+                    <graph id="7851daab">
                         <node id="d3b316447a5c4962" name="speaker" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -4774,7 +4802,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="93c060eb54fd4e81" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="63e8bed4">
+                            <graph id="5e8aa9ab">
                                 <node id="a0a0f6b9f24a4042" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -4802,6 +4830,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <node id="d7268e9ac02b40ff" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                    <input name="table" optional="false"/>
                                     <output name="exists" type="java.lang.Boolean">does table exist</output>
                                     <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource">table if exists, undefined otherwise</output>
                                     <extensions>
@@ -4842,7 +4871,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="14e8ff33cbaf43c9" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="2af8c0c0">
+                            <graph id="3ee17820">
                                 <node id="6893103afc764a97" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -4994,7 +5023,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="413ec086002946e0" name="Word Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="70e98db9">
+                                    <graph id="60865083">
                                         <node id="c35f1e7dd60f4a94" name="result total" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5056,7 +5085,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="eb12aa21e53e480b" name="All Words" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="64fb1c94">
+                                            <graph id="3dc60aa0">
                                                 <node id="46c5466ef64340f0" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -5146,6 +5175,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <node id="cc983c7b1d124871" name="Add #Words/Session" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="totalsTable" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -5195,7 +5225,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9d52041deaa7490c" name="Listing" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="ed12022">
+                                            <graph id="1bb08555">
                                                 <node id="902aa7ca97474ef5" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -5251,7 +5281,7 @@ Actual Syllabification (Word)]]>
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="23e91cc1e09845ca" name="Token Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="7fe2524">
+                                            <graph id="6db2b24e">
                                                 <node id="63f5b25f9a474360" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -5321,6 +5351,8 @@ Actual Syllabification (Word)]]>
                                                     </extensions>
                                                 </node>
                                                 <node id="33680c89" name="Add to Summary" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                                    <input name="summaryTable" optional="false"/>
+                                                    <input name="tokensTable" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -5368,7 +5400,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="7c813837d09b4c64" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="8fab6e4">
+                                            <graph id="2a2615d6">
                                                 <node id="1861d700377f4f8e" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -5400,7 +5432,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="ab04aeb51d214f65" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6a127cd9">
+                                                    <graph id="1e3fbd92">
                                                         <node id="58f8b0f649784346" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -5584,9 +5616,11 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Initial C" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Initial C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="965" y="336"/>
@@ -5663,7 +5697,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="e263bbc7e9744876" name="Initial Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1a7c3566">
+                                                    <graph id="344b4bb6">
                                                         <node id="94d2f28bfb3465c" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -5837,10 +5871,14 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Initial C" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Initial C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="738" y="336"/>
@@ -5951,6 +5989,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="4954e0f3d7a742cc" name="Add Row to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -5994,7 +6033,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="d7b8cae633634373" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="29d9ca1">
+                                            <graph id="7f49e9a">
                                                 <node id="1f5d33ecef304cb0" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -6026,7 +6065,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="ba234bc06044493" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7fb4baea">
+                                                    <graph id="449273aa">
                                                         <node id="399d28dd46dd4335" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6091,9 +6130,6 @@ function tableOp(context, table) {
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.filterType">
                                                                         <![CDATA[Regular expression]]>
-                                                                    </oga:property>
-                                                                    <oga:property key="filters.column.allowOverlap">
-                                                                        <![CDATA[false]]>
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.exactMatch">
                                                                         <![CDATA[true]]>
@@ -6209,9 +6245,11 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Final C" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Final C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="719" y="313"/>
@@ -6298,7 +6336,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="d6559a0ea6734630" name="Final Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6e2f3879">
+                                                    <graph id="124b94b5">
                                                         <node id="be83489dc8d04f0b" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6363,9 +6401,6 @@ function tableOp(context, table) {
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.filterType">
                                                                         <![CDATA[Regular expression]]>
-                                                                    </oga:property>
-                                                                    <oga:property key="filters.column.allowOverlap">
-                                                                        <![CDATA[false]]>
                                                                     </oga:property>
                                                                     <oga:property key="filters.column.exactMatch">
                                                                         <![CDATA[true]]>
@@ -6481,10 +6516,14 @@ function filterRow(table, row, col) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Final C" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Final C">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="737" y="15"/>
@@ -6593,6 +6632,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="1671acd81a254deb" name="Add Row to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -6636,7 +6676,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="a58b0709ae354b92" name="Vowels" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="4867bead">
+                                            <graph id="57e9247e">
                                                 <node id="83fd1073eaf34354" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -6720,7 +6760,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="fa2f01608ff54e43" name="Vowels (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="31c74cb2">
+                                                    <graph id="2db45437">
                                                         <node id="978caefd74a04abd" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6746,9 +6786,11 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Vowel" ignoreDiacritics="true"/>
+                                                                    <opqry:column caseSensitive="false" column="Vowel">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -6833,7 +6875,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="8f91ec051e594212" name="Vowels (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="54ee0359">
+                                                    <graph id="56de8c3">
                                                         <node id="b0c8ebc086c147a4" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6859,10 +6901,14 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Vowel" ignoreDiacritics="true"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Vowel">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:column>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="244" y="15"/>
@@ -7063,6 +7109,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="3c51e8c8b9014440" name="Add Row to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -7107,7 +7154,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="38af73dc0adf4dbc" name="Syllable Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="51c7a82b">
+                                            <graph id="30d0a4e3">
                                                 <node id="6cbdc9ae160241af" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -7189,7 +7236,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="e5c3213a94e2487d" name="Syllable Strucutre (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="58153198">
+                                                    <graph id="56e8b382">
                                                         <node id="21f28ba9a66e48da" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7215,9 +7262,9 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="241" y="24"/>
@@ -7302,7 +7349,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="2a0c491e6e9247e4" name="Syllable Strucutre (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="1965ed48">
+                                                    <graph id="2655a154">
                                                         <node id="bed0c00554744209" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7328,10 +7375,12 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -7532,6 +7581,8 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="3432fc0393324f61" name="Add to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
+                                                    <input name="numVocs" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -7617,7 +7668,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9cf64e0a651444ff" name="Vocalization Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="4cbcc271">
+                                            <graph id="4b2de56">
                                                 <node id="cdea75731ca84205" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -7690,7 +7741,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="97817053cb3e4baa" name="Structures (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="64068c15">
+                                                    <graph id="3786d063">
                                                         <node id="f13d51c9362b4b66" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7704,7 +7755,6 @@ function tableOp(context, table) {
                                                         <node id="d57e5441621a4329" name="Report Node" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
-                                                                    <oga:property key="contextKey"/>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                                                         <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
                                                                     </oga:property>
@@ -7717,9 +7767,9 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="244" y="15"/>
@@ -7793,7 +7843,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="df4a061e176c42e1" name="Structures (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5312a488">
+                                                    <graph id="4ed818b5">
                                                         <node id="f63a9528a9de439f" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7819,10 +7869,12 @@ function tableOp(context, table) {
                                                                 <opqry:inventoryoptions>
                                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                                     </opqry:automaticConfiguration>
-                                                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                                                    <opqry:column caseSensitive="false" column="Structure" ignoreDiacritics="false"/>
+                                                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                                    </opqry:groupBy>
+                                                                    <opqry:column caseSensitive="false" column="Structure"/>
                                                                 </opqry:inventoryoptions>
                                                                 <oga:settings/>
                                                                 <oga:meta x="242" y="15"/>
@@ -8023,6 +8075,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <node id="cdaafb1fa8e2466d" name="Add to Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
+                                                    <input name="inventory" optional="false"/>
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="__script">
@@ -8095,7 +8148,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c73c9bae46474e4d" name="Harmony" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="7f69849a">
+                                            <graph id="4452c9e5">
                                                 <node id="e9a2cc1a1d8f4df9" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -8471,7 +8524,7 @@ Actual Syllabification (Word)]]>
                         <![CDATA[java.util.ArrayList]]>
                     </oga:property>
                 </oga:settings>
-                <oga:meta x="786" y="16"/>
+                <oga:meta x="785" y="14"/>
             </extensions>
         </ogcn:macro>
         <link dest="29ac654b" destField="project" source="55f4fba4" sourceField="obj"/>
@@ -8490,8 +8543,6 @@ Actual Syllabification (Word)]]>
                 <opqry:info format="html" title="Vocalization">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:report-template name="Report Prefix"/>
-                <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
         </extensions>
