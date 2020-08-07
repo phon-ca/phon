@@ -244,7 +244,7 @@ function run(context) {
             </extensions>
         </node>
         <opqry:queryNode id="230571e9" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2019-06-07T06:04:16.735-02:30" name="Query Node" uuid="8ea125d9-9978-493c-bc4d-53ac0ec69f79">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-07T07:42:51.884-02:30" name="Query Node" uuid="46d63296-6637-4d0c-b13c-97751b47f304">
                 <script>
                     <source>/*
 params =
@@ -609,7 +609,7 @@ function query_record(recordIndex, record) {
             </extensions>
         </opqry:queryNode>
         <opqry:queryNode id="34c3c8ef8e8547ce" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2019-06-07T06:04:16.758-02:30" name="Query Node" uuid="e267d306-a8ed-45b9-8d56-530baed37a56">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-07T07:42:51.903-02:30" name="Query Node" uuid="ab338d1e-1806-48aa-8b77-1d11dd96f406">
                 <script>
                     <source>/*
 params =
@@ -975,7 +975,7 @@ function query_record(recordIndex, record) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="d4e5e1df1bf7410b" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="bb01600">
+            <graph id="15073627">
                 <node id="d4c390a1e5434491" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -1325,7 +1325,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="737b3ce1" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="25525f09">
+            <graph id="1816ff9e">
                 <node id="57d85ddb" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1373,7 +1373,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="ed7ad328cc134c2b" name="Create Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4372763a">
+                    <graph id="7ade9e3f">
                         <node id="e608a68c057340f5" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1458,7 +1458,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="2513d879596a40c8" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="65f31d22">
+                    <graph id="62dd191c">
                         <node id="15ad0ef235824211" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1550,7 +1550,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="f7b580dcd80049d7" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="52dea4c1">
+                    <graph id="77d8ac43">
                         <node id="a59f33a7a0e54a94" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1668,7 +1668,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="4a1ba1f0" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="505941be">
+                    <graph id="1d1b1ce1">
                         <node id="37d2f72f" name="IPA Target Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1747,10 +1747,14 @@ function run(context) {
                                 <opqry:inventoryoptions>
                                     <opqry:automaticConfiguration configureAutomatically="false">
                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                     </opqry:automaticConfiguration>
-                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                    <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="true"/>
+                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                    </opqry:groupBy>
+                                    <opqry:column caseSensitive="false" column="IPA Target">
+                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                    </opqry:column>
                                 </opqry:inventoryoptions>
                                 <oga:settings/>
                                 <oga:meta x="434" y="129"/>
@@ -1761,10 +1765,14 @@ function run(context) {
                                 <opqry:inventoryoptions>
                                     <opqry:automaticConfiguration configureAutomatically="false">
                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                     </opqry:automaticConfiguration>
-                                    <opqry:groupBy caseSensitive="false" column="Session" ignoreDiacritics="true"/>
-                                    <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
+                                    <opqry:groupBy caseSensitive="false" column="Session">
+                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                    </opqry:groupBy>
+                                    <opqry:column caseSensitive="false" column="IPA Actual">
+                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                    </opqry:column>
                                 </opqry:inventoryoptions>
                                 <oga:settings/>
                                 <oga:meta x="435" y="254"/>
@@ -2004,16 +2012,16 @@ function tableOp(context, table) {
                         </node>
                         <node id="dc7c7aee5bd44dd5" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                             <extensions>
-                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
+                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
-                                <oga:meta x="645" y="127"/>
+                                <oga:meta x="650" y="133"/>
                             </extensions>
                         </node>
                         <node id="26a258bf1bf4454" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                             <extensions>
-                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
+                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
                                 </opqry:sortoptions>
                                 <oga:settings/>
@@ -2057,7 +2065,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="153d8dd0" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="794fa22f">
+                            <graph id="235ca2dd">
                                 <node id="63a39ca2" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -2135,7 +2143,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="5200f04eaf4b41b8" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4bed8fd3">
+                                    <graph id="5df0ed48">
                                         <node id="cd727de3e6764379" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2224,7 +2232,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="2e806ecc316b48cf" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="1ab7f41d">
+                                    <graph id="7931948e">
                                         <node id="7f2a0eb56dd84111" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2318,7 +2326,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="79c23a8b" name="If Speaker has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="5f697702">
+                                    <graph id="314344a3">
                                         <node id="7f0afc8c" name="IPA Target Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2384,9 +2392,11 @@ function run(context) {
                                                 <opqry:inventoryoptions>
                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                     </opqry:automaticConfiguration>
-                                                    <opqry:column caseSensitive="false" column="IPA Target" ignoreDiacritics="true"/>
+                                                    <opqry:column caseSensitive="false" column="IPA Target">
+                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                    </opqry:column>
                                                 </opqry:inventoryoptions>
                                                 <oga:settings/>
                                                 <oga:meta x="365" y="99"/>
@@ -2397,9 +2407,11 @@ function run(context) {
                                                 <opqry:inventoryoptions>
                                                     <opqry:automaticConfiguration configureAutomatically="false">
                                                         <opqry:autoGrouping column="Age" grouping="true"/>
-                                                        <opqry:autoColumns caseSensitive="false" ignoreDiacritics="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
+                                                        <opqry:autoColumns caseSensitive="false" includeAdditionalGroupData="false" includeAdditionalWordData="false" includeMetadata="true"/>
                                                     </opqry:automaticConfiguration>
-                                                    <opqry:column caseSensitive="false" column="IPA Actual" ignoreDiacritics="true"/>
+                                                    <opqry:column caseSensitive="false" column="IPA Actual">
+                                                        <opqry:ignoreDiacritics ignore="true" onlyOrExcept="except"/>
+                                                    </opqry:column>
                                                 </opqry:inventoryoptions>
                                                 <oga:settings/>
                                                 <oga:meta x="365" y="231"/>
@@ -2693,7 +2705,7 @@ function filterRow(table, row, col) {
                                         </node>
                                         <node id="5a8b5160" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                                             <extensions>
-                                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="true">
+                                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
                                                     <opqry:sortBy column="Phone" order="ascending" type="ipa"/>
                                                 </opqry:sortoptions>
                                                 <oga:settings/>
@@ -2834,7 +2846,6 @@ function tableOp(context, table) {
                         <link dest="153d8dd0" destField="ipaActualTableMap" source="c28535f22344300" sourceField="tableMap"/>
                         <link dest="153d8dd0" destField="speaker" source="6440bd3329664caa" sourceField="obj"/>
                         <link dest="153d8dd0" destField="summaryTable" source="c8ff0dae984a4ddb" sourceField="obj"/>
-                        <link dest="dc7c7aee5bd44dd5" destField="table" source="41e09b53d3be45f9" sourceField="table"/>
                         <link dest="41e09b53d3be45f9" destField="table" source="37d2f72f" sourceField="obj"/>
                         <link dest="26a258bf1bf4454" destField="table" source="c226d4ebdadc4810" sourceField="table"/>
                         <link dest="c226d4ebdadc4810" destField="table" source="31a55968" sourceField="obj"/>
@@ -2849,6 +2860,7 @@ function tableOp(context, table) {
                         <link dest="646e8104067d49ab" destField="obj" source="6440bd3329664caa" sourceField="obj"/>
                         <link dest="c6adbd9781a24f72" destField="obj" source="6440bd3329664caa" sourceField="obj"/>
                         <link dest="1817421b" destField="parent" source="16e33d770ac24d15" sourceField="obj"/>
+                        <link dest="dc7c7aee5bd44dd5" destField="table" source="41e09b53d3be45f9" sourceField="table"/>
                         <extensions>
                             <oga:notes>
                                 <oga:note color="0xffff96" height="1437" title="Inputs" width="333" x="24" y="19"/>
@@ -2865,7 +2877,7 @@ function tableOp(context, table) {
                     <ogcn:published_input field="obj" name="aggregateNode" ref="8d2876242b8a4bec"/>
                     <ogcn:published_output field="collection" name="collection" ref="153d8dd0"/>
                     <extensions>
-                        <oga:meta x="973" y="294"/>
+                        <oga:meta x="966" y="298"/>
                     </extensions>
                 </ogcn:macro>
                 <node id="4ef17a0e" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
