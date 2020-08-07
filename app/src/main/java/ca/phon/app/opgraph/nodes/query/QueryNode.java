@@ -33,6 +33,7 @@ import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -116,7 +117,7 @@ public class QueryNode extends OpNode implements NodeSettings {
 			"Parameters used for query, including those entered using the settings dialog", true, Map.class);
 	
 	private PropertyChangeSupport propSupport;
-
+	
 	public QueryNode() {
 		this(new QueryScript(""));
 	}

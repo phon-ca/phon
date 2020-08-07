@@ -120,7 +120,7 @@ public class SimpleFSADebugContext<T> {
 				}
 				FSATransition<T> lastDecision = (decisions.size() > 0 ? decisions.peek().choices.get(decisions.peek().choiceIndex) : null);
 				if(lastDecision != null) {
-					int lastIdx = transitions.indexOf(lastDecision);
+					int lastIdx = transitions.lastIndexOf(lastDecision);
 					if(lastIdx >= 0) {
 						List<FSATransition<T>> backtrackedTransitions = new ArrayList<FSATransition<T>>();
 						for(int i = 0; i < lastIdx; i++) backtrackedTransitions.add(transitions.get(i));

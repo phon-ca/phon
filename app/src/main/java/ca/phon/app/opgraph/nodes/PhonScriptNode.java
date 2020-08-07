@@ -19,6 +19,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,18 +36,19 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
+import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.debugger.Main;
-
-import com.teamdev.jxbrowser.chromium.internal.ipc.message.GetTitleMessage;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
@@ -59,6 +61,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.OpNodeInfo;
 import ca.phon.opgraph.OutputField;
 import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.canvas.CanvasContextMenuExtension;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.script.InputFields;
@@ -74,6 +77,8 @@ import ca.phon.script.params.ScriptParameters;
 import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
@@ -85,7 +90,7 @@ import ca.phon.util.icons.IconSize;
 		description="Generic script node with optional parameter setup.",
 		showInLibrary=true
 )
-public class PhonScriptNode extends OpNode implements NodeSettings {
+public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContextMenuExtension {
 
 	private PhonScript script;
 	
@@ -125,6 +130,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		reloadFields();
 
 		putExtension(NodeSettings.class, this);
+		putExtension(CanvasContextMenuExtension.class, this);
 	}
 
 	private void reloadFields() {
@@ -259,7 +265,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		}
 		
 		// call debugger if stepping into a javascript node
-		if(isStepInto || debugBox != null && debugBox.isSelected()) {
+		if(isStepInto || (debugBox != null && debugBox.isSelected())) {
 			try {
 				org.mozilla.javascript.tools.debugger.Main debugger = Main.mainEmbedded(getName());
 				debugger.setBreakOnEnter(false);
@@ -469,4 +475,54 @@ public class PhonScriptNode extends OpNode implements NodeSettings {
 		}
 	}
 
+	/* CanvasMenuExtension */
+	@Override
+	public void addContextMenuItems(JPopupMenu menu, GraphDocument document, MouseEvent me) {
+		// add edit script item
+		final PhonUIAction showEditorAct = new PhonUIAction(this, "showEditScriptWindow");
+		showEditorAct.putValue(PhonUIAction.NAME, "Edit script...");
+		showEditorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit script editor in new window.");
+		final JMenuItem showEditorItem = new JMenuItem(showEditorAct);
+		menu.add(showEditorItem);
+	}
+	
+	public void showEditScriptWindow() {
+		final CommonModuleFrame cmf = new CommonModuleFrame("Edit Script : " + getName());
+		
+		// create editor
+		final RTextArea editor = ScriptEditorFactory.createEditorForScript(getScript(), false);
+		final RTextScrollPane scrollPane = new RTextScrollPane(editor);
+		
+		final PhonUIAction editOkAct = new PhonUIAction(this, "onCloseScript", editor);
+		editOkAct.putValue(PhonUIAction.NAME, "Ok");
+		editOkAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Finish editing and update script");
+		final JButton okBtn = new JButton(editOkAct);
+		okBtn.addActionListener( (e) -> {
+			getScript().setLength(0);
+			getScript().insert(0, editor.getText());
+			reloadFields();
+			
+			cmf.close();
+		});
+		
+		final PhonUIAction editCancelAct = new PhonUIAction(this, "onCloseScript");
+		editCancelAct.putValue(PhonUIAction.NAME, "Cancel");
+		editCancelAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cancel editing");
+		final JButton cancelBtn = new JButton(editCancelAct);
+		cancelBtn.addActionListener( (e) -> {
+			cmf.close();
+		});
+		
+		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(okBtn, cancelBtn);
+		
+		cmf.setLayout(new BorderLayout());
+		cmf.add(scrollPane, BorderLayout.CENTER);
+		cmf.add(buttonBar, BorderLayout.SOUTH);
+		cmf.pack();
+		cmf.setVisible(true);
+	}
+	
+	public void onCloseScript(PhonActionEvent pae) {
+	}
+	
 }

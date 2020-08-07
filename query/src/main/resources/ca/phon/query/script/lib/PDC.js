@@ -31,9 +31,9 @@ exports.PDC = {
 	 * Perform PDC (aligned) calculation for an aligned pair of
 	 * IPA values
 	 *
-	 * @param word
-	 * @param features
-	 * @param ignoreDiacritics
+	 * @param group - group data
+	 * @param filter - phone filter
+	 * @param diacriticOptions
 	 *
 	 * @return {
 			target: numTarget,
@@ -41,7 +41,15 @@ exports.PDC = {
 			correct: numCorrect,
 			substituted: numSubstituted,
 			deleted: numDeleted,
-			epen: numEpenthesized
+			epen: numEpenthesized,
+			expanded_results: [{
+				target: targetPhoneIndex,
+				actual: actualPhoneIndex,
+				correct: correct,
+				substituted: substituted,
+				deleted: deleted,
+				epen: epen
+			}]
 		};
 	 */
 	calc_pdc: function (group, filter, diacriticOptions) {
@@ -61,6 +69,7 @@ exports.PDC = {
 		alignment.setTopAlignment(groupAlignment.getTopAlignment());
 		alignment.setBottomAlignment(groupAlignment.getBottomAlignment());
 
+		var expanded_results = new Array();
 		// check target side
 		var targetResults = filter.find_pattern(targetGroup);
 		for(var i = 0; i < targetResults.length; i++) {
@@ -72,7 +81,12 @@ exports.PDC = {
 				if(phone.getPrefixDiacritics().length > 0 ||
 					phone.getSuffixDiacritics().length > 0 ||
 					phone.getCombiningDiacritics().length > 0) {
-					++numTarget;						
+					++numTarget;
+	
+					var wasCorrect = false;
+					var wasSub = false;
+					var wasDel = false;
+					
 					var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
 					if (alignedData.size() > 0) {
 						var actualPhone = alignedData.get(0);
@@ -87,19 +101,41 @@ exports.PDC = {
 									: actualPhone.toString());
 	
 							if (targetPhoneString == actualPhoneString) {
-								numCorrect++;
+								wasCorrect = true;
 							} else {
 								if(actualPhoneString.length() > 0)
-									numSubstituted++;
+									wasSub = true;
 								else
-									numDeleted++;
+									wasDel = true;
 							}
 						} else {
-							numDeleted++;
+							wasDel = true;
 						}
+						
+						var expandedResult = {
+							target: (phone != null ? targetGroup.indexOf(phone) : -1),
+							actual: (actualPhone != null ? actualGroup.indexOf(actualPhone) : -1),
+							correct: (wasCorrect == true ? 1 : 0),
+							substituted: (wasSub == true ? 1 : 0),
+							deleted: (wasDel == true ? 1 : 0),
+							epen: 0
+						};
+						expanded_results.push(expandedResult);
 					} else {
-						numDeleted++;
+						wasDel = true;
+						var expandedResult = {
+							target: (phone != null ? targetGroup.indexOf(phone) : -1),
+							actual: -1,
+							correct: 0,
+							substituted: 0,
+							deleted: 1,
+							epen: 0
+						};
+						expanded_results.push(expandedResult);
 					}
+					if(wasCorrect) ++numCorrect;
+					if(wasSub) ++numSubstitued;
+					if(wasDel) ++numDeleted;
 				}
 			}
 		}
@@ -116,8 +152,19 @@ exports.PDC = {
 					phone.getCombiningDiacritics().length > 0) {
 					numActual++;
 					var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
-					if(alignedData.size() == 0)
+					if(alignedData.size() == 0) { 
 						numEpenthesized++;
+						
+						var expandedResult = {
+							target: -1,
+							actual: (phone != null ? actualGroup.indexOf(phone) : -1),
+							correct: 0,
+							substituted: 0,
+							deleted: 0,
+							epen: 1
+						};
+						expanded_results.push(expandedResult);
+					}
 				}
 			}
 		}
@@ -128,7 +175,8 @@ exports.PDC = {
 			correct: numCorrect,
 			substituted: numSubstituted,
 			deleted: numDeleted,
-			epen: numEpenthesized
+			epen: numEpenthesized,
+			expanded_results: expanded_results
 		};
 		return retVal;
 	},

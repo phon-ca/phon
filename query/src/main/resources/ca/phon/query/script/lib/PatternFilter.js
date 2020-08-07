@@ -30,6 +30,8 @@
  * applicable to ipa tier values
  */
 
+importPackage(Packages.ca.phon.phonex)
+
 var HelpText = require("lib/PhonScriptConstants").HelpText;
 
 exports.PatternType = {

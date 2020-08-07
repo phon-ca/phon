@@ -82,6 +82,7 @@ function begin_search(s) {
 	session = s;
 }
 
+var expandedResults = new java.util.ArrayList();
 var searchTier = "IPA Target";
 function query_record(recordIndex, record) {
 	var nf = java.text.NumberFormat.getNumberInstance();

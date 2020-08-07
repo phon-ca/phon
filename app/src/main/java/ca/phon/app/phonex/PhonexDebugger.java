@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -34,8 +33,6 @@ import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 
-import com.sun.source.util.TreePath;
-
 import ca.phon.app.syllabifier.SyllabifierComboBox;
 import ca.phon.fsa.FSAState;
 import ca.phon.fsa.FSAState.RunningState;
@@ -56,12 +53,10 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.text.PatternEditor;
 import ca.phon.ui.text.PatternEditor.SyntaxStyle;
 import guru.nidi.graphviz.attribute.Color;
-import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.engine.Renderer;
 import guru.nidi.graphviz.model.MutableGraph;
-import guru.nidi.graphviz.model.MutableNode;
 import guru.nidi.graphviz.parse.Parser;
 
 public class PhonexDebugger extends JComponent {
@@ -421,7 +416,7 @@ public class PhonexDebugger extends JComponent {
 			
 			DetailsTreeTableNode decisionsNode = new DetailsTreeTableNode("Decision Stack");
 			decisionsNode.setValueAt(debugCtx.getDecisionStack().size(), 1);
-			for(int i = 0; i < debugCtx.getDecisionStack().size(); i++) {
+			for(int i = debugCtx.getDecisionStack().size()-1; i >= 0; i--) {
 				DecisionTracker<IPAElement> dt = debugCtx.getDecisionStack().get(i);
 				DetailsTreeTableNode decisionNode = new DetailsTreeTableNode(String.format("[%d]", i));
 				setupDecisionTrackerNode(decisionNode, dt);
@@ -437,11 +432,26 @@ public class PhonexDebugger extends JComponent {
 	}
 	
 	private void setupDecisionTrackerNode(DetailsTreeTableNode root, DecisionTracker<IPAElement> decision) {
-		root.setValueAt(decision.choices.get(decision.choiceIndex), 1);
+		root.setValueAt(decision.choices.get(decision.choiceIndex).getImage(), 1);
+		
+		DetailsTreeTableNode stateNode = new DetailsTreeTableNode("State");
+		stateNode.setValueAt(decision.choices.get(0).getFirstState(), 1);
+		root.add(stateNode);
 		
 		DetailsTreeTableNode tapeIndexNode = new DetailsTreeTableNode("Tape index");
 		tapeIndexNode.setValueAt(decision.tapeIndex, 1);
 		root.add(tapeIndexNode);
+		
+		DetailsTreeTableNode choicesNode = new DetailsTreeTableNode("Choices");
+		choicesNode.setValueAt(decision.choices.size(), 1);
+		for(FSATransition<IPAElement> choice:decision.choices) {
+			DetailsTreeTableNode choiceNode = new DetailsTreeTableNode(choice.getImage());
+			if(decision.choices.get(decision.choiceIndex) == choice) {
+				choiceNode.setValueAt("\u2713", 1);
+			}
+			choicesNode.add(choiceNode);
+		}
+		root.add(choicesNode);
 	}
 	
 	private void setupMachineStateNode(DetailsTreeTableNode root, FSAState<IPAElement> machineState) {
@@ -469,6 +479,12 @@ public class PhonexDebugger extends JComponent {
 		DetailsTreeTableNode currentStateNode = new DetailsTreeTableNode("Current node");
 		currentStateNode.setValueAt(machineState.getCurrentState(), 1);
 		root.add(currentStateNode);
+		
+		DetailsTreeTableNode lastTransitionNode = new DetailsTreeTableNode("Last transition");
+		if(lastTransition != null) {
+			lastTransitionNode.setValueAt(String.format("%s -- %s -> %s", lastTransition.getFirstState(), lastTransition.getImage(), lastTransition.getToState()), 1);
+		}
+		root.add(lastTransitionNode);
 		
 		DetailsTreeTableNode lookBehindOffset = new DetailsTreeTableNode("Look-behind offset");
 		lookBehindOffset.setValueAt(machineState.getLookBehindOffset(), 1);

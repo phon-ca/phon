@@ -356,7 +356,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	public Properties getSettings() {
 		Properties retVal = new Properties();
 
-		retVal.put("stripDiacritics", diacriticOptionsPanel.getIgnoreDiacriticsBox().isSelected());
+//		retVal.put("stripDiacritics", diacriticOptionsPanel.getIgnoreDiacriticsBox().isSelected());
 		
 		retVal.put("includeSessionInfo", isIncludeSessionInfo());
 		retVal.put("includeSpeakerInfo", isIncludeSpeakerInfo());

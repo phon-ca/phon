@@ -16,18 +16,32 @@ public class ScriptEditorFactory {
 	 * Create editor for the given script.
 	 * 
 	 * @param script
+	 * @param editScriptDirectly - if <code>true</code> changes made in editor will automatically
+	 *  apply to text of given script object.  If <code>false</code> script object will need to 
+	 *  be updated when user manually
 	 * @return new editor
 	 */
-	public static RSyntaxTextArea createEditorForScript(PhonScript script) {
+	public static RSyntaxTextArea createEditorForScript(PhonScript script, boolean editScriptDirectly) {
 		RSyntaxTextArea scriptEditor = new RSyntaxTextArea();
 		scriptEditor.setText(script.getScript());
 		scriptEditor.setColumns(80);
 		scriptEditor.setRows(40);
 		scriptEditor.setCaretPosition(0);
 		scriptEditor.setSyntaxEditingStyle("text/javascript");
-		scriptEditor.getDocument().addDocumentListener(new ScriptDocumentListener(script));
+		if(editScriptDirectly)
+			scriptEditor.getDocument().addDocumentListener(new ScriptDocumentListener(script));
 	
 		return scriptEditor;
+	}
+	
+	/**
+	 * Create editor for the given script.
+	 * 
+	 * @param script
+	 * @return new editor
+	 */
+	public static RSyntaxTextArea createEditorForScript(PhonScript script) {
+		return createEditorForScript(script, true);
 	}
 	
 	/**
@@ -37,7 +51,17 @@ public class ScriptEditorFactory {
 	 * @return
 	 */
 	public static RTextScrollPane createEditorComponentForScript(PhonScript script) {
-		return new RTextScrollPane(createEditorForScript(script));
+		return createEditorComponentForScript(script, true);
+	}
+	
+	/**
+	 * Create editor for script including appropriate scroll pane.
+	 * 
+	 * @param script
+	 * @return
+	 */
+	public static RTextScrollPane createEditorComponentForScript(PhonScript script, boolean editScriptDirectly) {
+		return new RTextScrollPane(createEditorForScript(script), editScriptDirectly);
 	}
 	
 	private static class ScriptDocumentListener implements DocumentListener {
