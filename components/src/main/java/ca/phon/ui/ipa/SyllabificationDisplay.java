@@ -68,8 +68,7 @@ public class SyllabificationDisplay extends JComponent {
 		return uiClassId;
 	}
 
-	@Override
-	protected void setUI(ComponentUI newUI) {
+	public void setUI(SyllabificationDisplayUI newUI) {
 		super.setUI(newUI);
 	}
 

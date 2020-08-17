@@ -29,7 +29,6 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -69,7 +68,6 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	private static final String TOGGLE_HIATUS = "_TOGGLE_HIATUS_";
 	private static final String SET_SCTYPE_PREFIX = "_SET_SCTYPE_";
 	private static final String BACKSPACE = "_backspace_";
-	private static final String RESET_SYLLABIFICATION = "_RESET_SYLLABIFIACTION_";
 
 	private static final int insetSize = 2;
 	private Insets phoneBoxInsets = new Insets(insetSize, insetSize, insetSize,
@@ -211,11 +209,6 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		int pIdx = display.getFocusedPhone();
 		display.setSyllabificationAtIndex(pIdx,
 				(SyllableConstituentType) pae.getData());
-	}
-
-	public void resyllabify(PhonActionEvent pae) {
-		String syllabifierName = pae.getData().toString();
-//		display.resyllabifiy(syllabifierName);
 	}
 
 	/**
@@ -553,39 +546,22 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 		return retVal;
 	}
-
-	private Dimension getPhoneSize() {
-		int widthPerPhone = phoneBoxInsets.right + phoneBoxInsets.left
+	
+	@Override
+	public Rectangle rectForPhone(int pidx) {
+		int pX = display.getInsets().left + insetSize;
+		int pY = display.getInsets().top + insetSize;
+		int pW = phoneBoxInsets.left + phoneBoxInsets.right
 				+ phoneBoxSize.width;
-		int height = phoneBoxInsets.top + phoneBoxInsets.bottom
+		int pH = phoneBoxInsets.top + phoneBoxInsets.bottom
 				+ phoneBoxSize.height;
-		return new Dimension(widthPerPhone, height);
+		
+		Rectangle phoneRect = new Rectangle(pX, pY, pW, pH);
+		phoneRect.translate(pidx * pW, 0);
+		return phoneRect;
 	}
 
-	private Shape getSyllableStartShape() {
-		final Dimension phoneSize = getPhoneSize();
-		final Rectangle rect = new Rectangle(0, 0, phoneSize.width,
-				phoneSize.height);
-
-		return rect;
-	}
-
-	private Shape getSyllableMedianShape() {
-		final Dimension phoneSize = getPhoneSize();
-		final Rectangle rect = new Rectangle(0, 0, phoneSize.width,
-				phoneSize.height);
-
-		return rect;
-	}
-
-	private Shape getSyllableFinalShape() {
-		final Dimension phoneSize = getPhoneSize();
-		final Rectangle rect = new Rectangle(0, 0, phoneSize.width,
-				phoneSize.height);
-
-		return rect;
-	}
-
+	@Override
 	public int locationToPhoneIndex(Point p) {
 		int widthPerPhone = phoneBoxInsets.right + phoneBoxInsets.left
 				+ phoneBoxSize.width;

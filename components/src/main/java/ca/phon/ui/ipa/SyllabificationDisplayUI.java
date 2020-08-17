@@ -16,6 +16,7 @@
 
 package ca.phon.ui.ipa;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
@@ -26,4 +27,8 @@ import javax.swing.plaf.ComponentUI;
  */
 public abstract class SyllabificationDisplayUI extends ComponentUI {
 
+	public abstract int locationToPhoneIndex(Point p);
+	
+	public abstract Rectangle rectForPhone(int pidx);
+	
 }

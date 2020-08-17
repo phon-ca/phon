@@ -79,7 +79,7 @@ public class PhonexDebugger extends JComponent {
 
 	private JXTreeTable detailsTable;
 	
-	private SyllabificationDisplay ipaDisplay;
+	private DebuggerSyllabificationDisplay ipaDisplay;
 	
 	private JScrollPane graphScroller;
 	private JLabel graphLbl;
@@ -165,13 +165,13 @@ public class PhonexDebugger extends JComponent {
 		buttonPanel.add(stepButton);
 		buttonPanel.add(stopButton);
 		
-		ipaDisplay = new SyllabificationDisplay();
+		ipaDisplay = new DebuggerSyllabificationDisplay();
+		ipaDisplay.setUI(new DebuggerSyllabificationUI(ipaDisplay));
 		
 		debugPanel = new JPanel(new VerticalLayout());
 		debugPanel.setBorder(BorderFactory.createTitledBorder("Debug"));
 		debugPanel.add(transcriptionField);
 		debugPanel.add(syllabifierBox);
-		debugPanel.add(ipaDisplay);
 		debugPanel.add(buttonPanel);
 		
 		tabPane = new JTabbedPane();
@@ -190,6 +190,7 @@ public class PhonexDebugger extends JComponent {
 		graphScroller = new JScrollPane(graphLbl);
 		
 		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(ipaDisplay, BorderLayout.NORTH);
 		centerPanel.add(graphScroller, BorderLayout.CENTER);
 		
 		add(centerPanel, BorderLayout.CENTER);
@@ -310,6 +311,7 @@ public class PhonexDebugger extends JComponent {
 		transcriptionField.setEnabled(false);
 		phonexEntry.setEnabled(false);
 		ipaDisplay.setEnabled(false);
+		ipaDisplay.setDebugIndex(0);
 		
 		debugCtx = new SimpleFSADebugContext<IPAElement>(pattern.getFsa());
 		debugCtx.reset(ipaDisplay.getTranscript().toList().toArray(new IPAElement[0]));
@@ -358,7 +360,6 @@ public class PhonexDebugger extends JComponent {
 		
 		updateDetailsTreeTable();
 		updateGraph();
-		// TODO update display....
 	}
 	
 	public void onStep() {
@@ -369,13 +370,15 @@ public class PhonexDebugger extends JComponent {
 		
 		lastTransition = debugCtx.step();
 		if(lastTransition == null) {
+			ipaDisplay.setDebugIndex(-1);
 			onStop();
 		}
 		groupDataTableModel.fireTableDataChanged();
 		
+		ipaDisplay.setDebugIndex(debugCtx.getMachineState().getTapeIndex());
+		
 		updateDetailsTreeTable();
 		updateGraph();
-		// TODO Update other items
 	}
 	
 	public void onStop() {
@@ -389,6 +392,7 @@ public class PhonexDebugger extends JComponent {
 		transcriptionField.setEnabled(true);
 		phonexEntry.setEnabled(true);
 		ipaDisplay.setEnabled(true);
+		ipaDisplay.setDebugIndex(-1);
 	}
 	
 	private void updateDetailsTreeTable() {
