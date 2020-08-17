@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query" xmlns:qry="http://phon.ling.mun.ca/ns/query">
+    <graph id="root">
+        <node id="cd7bd3146bd74bb3" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_project]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[ca.phon.project.Project]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="20" y="60"/>
+            </extensions>
+        </node>
+        <node id="637e33845d18473d" name="Selected Sessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_selectedSessions]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.util.ArrayList]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="20" y="341"/>
+            </extensions>
+        </node>
+        <node id="b43d581b08844824" name="Selected Participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey">
+                        <![CDATA[_selectedParticipants]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
+                        <![CDATA[java.util.ArrayList]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="20" y="442"/>
+            </extensions>
+        </node>
+        <node id="f563662586134d9a" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="filters.searchBy.searchBy">
+                        <![CDATA[Word]]>
+                    </oga:property>
+                    <oga:property key="reportTitle">
+                        <![CDATA[Percent Diacritics Correct (PDC)]]>
+                    </oga:property>
+                    <oga:property key="__script">
+                        <![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var TierList = require("lib/TierList").TierList;
+var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+var PDC = require("lib/PDC").PDC;
+var PDCOptions = require("lib/PDC").PDCOptions;
+var ResultType = require("lib/PhonScriptConstants").ResultType;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
+
+/********************************
+ * Setup params
+ *******************************/
+var filters = {
+	"pdc": new PDCOptions("filters.pdc"),
+	"searchBy": new SearchByOptions("filters.searchBy"),
+	"group": new GroupFilter("filters.group"),
+	"groupTiers": new TierList("filters.groupTiers"),
+	"groupPattern": new PatternFilter("filters.groupPattern"),
+	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"word": new WordFilter("filters.word"),
+	"wordTiers": new TierList("filters.wordTiers"),
+	"wordPattern": new PatternFilter("filters.wordPattern"),
+	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
+	"syllable": new SyllableFilter("filters.syllable"),
+	"speaker": new ParticipantFilter("filters.speaker")
+};
+
+var reportTitleParamInfo = {
+	"id": "reportTitle",
+	"title": "Report Title",
+	"def": "Report",
+	"prompt": "Enter report title"
+};
+var reportTitleParam;
+var reportTitle = reportTitleParamInfo.def;
+
+function setup_params(params) {
+	reportTitleParam = new StringScriptParam(
+			reportTitleParamInfo.id,
+			reportTitleParamInfo.title,
+			reportTitleParamInfo.def);
+     reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
+	params.add(reportTitleParam);
+
+	filters.pdc.param_setup(params);
+	var insertIdx = params.size();
+
+	filters.group.param_setup(params);
+	filters.groupPattern.param_setup(params);
+
+	var sep = new LabelScriptParam("", "<html><b>Add Aligned Groups</b></html>");
+	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
+	params.add(sep2);
+	filters.alignedGroup.param_setup(params);
+
+	filters.word.searchByWordEnabled = true;
+	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+
+	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
+	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+
+	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
+	params.add(wordsep2);
+	filters.alignedWord.param_setup(params);
+	var searchByWordListener = new java.beans.PropertyChangeListener {
+		propertyChange: function (e) {
+			var enabled = e.source.getValue(e.source.paramId);
+			filters.wordPattern.setEnabled(enabled);
+			filters.alignedWord.setEnabled(enabled);
+		}
+	};
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
+	filters.wordPattern.setEnabled(enabled);
+	filters.alignedWord.setEnabled(enabled);
+
+	filters.syllable.param_setup(params);
+
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+
+	filters.speaker.param_setup(params);
+}
+]]>
+                    </oga:property>
+                    <oga:property key="filters.pdc.pattern.filter">
+                        <![CDATA[.]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="21" y="624"/>
+            </extensions>
+        </node>
+        <opqry:queryNode id="2da2c46d" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-17T11:03:08.339-02:30" name="Phones" uuid="8e59115b-272a-4d83-9d7a-0a2d6fb381f3">
+                <script>
+                    <url ref="Phones" rel="stock"/>
+                    <param id="filters.actualResultFilter.filterType">Phonex</param>
+                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
+                    <param id="filters.groupPattern.filterType">Plain text</param>
+                    <param id="filters.primary.filter">.+</param>
+                    <param id="filters.primary.filterType">Phonex</param>
+                    <param id="filters.searchBy.searchBy">Word</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
+                    <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
+                    <param id="filters.syllable.syllableType">Any syllable</param>
+                    <param id="filters.targetResultFilter.filterType">Phonex</param>
+                    <param id="filters.wordPattern.filterType">Plain text</param>
+                    <param id="searchTier">IPA Target</param>
+                </script>
+            </qry:query>
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="416" y="114"/>
+            </extensions>
+        </opqry:queryNode>
+        <ogcn:macro id="1bedded791b945f4" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="4a3023dc">
+                <node id="f5a56a7a058b447a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.classMember">
+                                <![CDATA[<init>(java.lang.String)]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ConstructorNode.declaredClass">
+                                <![CDATA[java.lang.String]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="15" y="15">
+                            <oga:default for="arg1" type="java.lang.String">reportTitle</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <node id="2919ac8b24ce4ecd" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
+                                <![CDATA[get(java.lang.Object)]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                <![CDATA[java.util.Map]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="215" y="15"/>
+                    </extensions>
+                </node>
+                <node id="90cade761f48de" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
+                                <![CDATA[toString()]]>
+                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
+                                <![CDATA[java.lang.Object]]>
+                            </oga:property>
+                        </oga:settings>
+                        <oga:meta x="392" y="15"/>
+                    </extensions>
+                </node>
+                <link dest="2919ac8b24ce4ecd" destField="arg1" source="f5a56a7a058b447a" sourceField="value"/>
+                <link dest="90cade761f48de" destField="obj" source="2919ac8b24ce4ecd" sourceField="value"/>
+            </graph>
+            <ogcn:published_input field="obj" name="parameters" ref="2919ac8b24ce4ecd"/>
+            <ogcn:published_output field="value" name="reportTitle" ref="90cade761f48de"/>
+            <extensions>
+                <oga:meta x="258" y="624"/>
+            </extensions>
+        </ogcn:macro>
+        <node id="4715d771" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="includeSessionInfo">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="includeSpeakerInfo">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="includeMetadata">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="includeTierInfo">
+                        <![CDATA[true]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="674" y="148"/>
+            </extensions>
+        </node>
+        <node id="8d628415d9d646f8" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="491" y="624"/>
+            </extensions>
+        </node>
+        <node id="d8627d70b89e4950" name="PDC" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <input name="table" optional="false"/>
+            <output name="pdc" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+            <output name="resultsByPhone" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script">
+                        <![CDATA[var PDC = require("lib/PDC").PDC;
+var PDCOptions = require("lib/PDC").PDCOptions;
+
+var filters = {
+	"pdc": new PDCOptions("filters.pdc")
+};
+
+function init(inputs, outputs) {
+	inputs.add("table", "", false,  false);
+	
+	outputs.add("pdc", "", false, DefaultTableDataSource);
+	outputs.add("resultsByPhone", "", false, DefaultTableDataSource);
+}
+
+function setup_params(params) {
+	filters.pdc.param_setup(params);
+}
+
+function setupColumns(table, inputTable) {
+	var col = 0;
+
+	for(var ic = 0; ic < inputTable.columnCount; ic++) {
+		table.setColumnTitle(col++, inputTable.getColumnTitle(ic));
+	}
+
+	table.setColumnTitle(col++, "# Target");
+	table.setColumnTitle(col++, "# Actual");
+	table.setColumnTitle(col++, "# Correct");
+	table.setColumnTitle(col++, "# Deleted");
+	table.setColumnTitle(col++, "# Substituted");
+	table.setColumnTitle(col++, "# Epenthesized");
+}
+
+function copyRow(inputTable, rowIdx) {
+	var row = new Array();
+	var col = 0;
+	for(var cidx = 0; cidx < inputTable.columnCount; cidx++) {
+		row[col++] = inputTable.getValueAt(rowIdx, cidx);
+	}
+	return row;
+}
+
+function run(context) {
+	var table = context.get("table");
+
+	var pdc = new DefaultTableDataSource();
+	var resultsByPhone = new DefaultTableDataSource();
+	
+	// setup pdc columns
+	setupColumns(pdc, table);
+	
+	var expCol = 0;
+	resultsByPhone.setColumnTitle(expCol++, "Session");
+	resultsByPhone.setColumnTitle(expCol++, "Date");
+	resultsByPhone.setColumnTitle(expCol++, "Speaker");
+	resultsByPhone.setColumnTitle(expCol++, "Age");
+	resultsByPhone.setColumnTitle(expCol++, "Record #");
+	resultsByPhone.setColumnTitle(expCol++, "Group #");
+	resultsByPhone.setColumnTitle(expCol++, "IPA Target");
+	resultsByPhone.setColumnTitle(expCol++, "IPA Actual");
+	resultsByPhone.setColumnTitle(expCol++, "# Correct");
+	resultsByPhone.setColumnTitle(expCol++, "# Deleted");
+	resultsByPhone.setColumnTitle(expCol++, "# Substituted");
+	resultsByPhone.setColumnTitle(expCol++, "# Epenthesized");
+
+	for(var row = 0; row < table.rowCount; row++) {
+		var ipaT = table.getValueAt(row, "IPA Target");
+		var ipaA = table.getValueAt(row, "IPA Actual");
+		var alignment = table.getValueAt(row, "Alignment");
+
+		if(ipaT == null || ipaA == null || alignment == null) continue;
+		if(alignment.length() == 0) continue;
+
+		var phoneMap = PhoneMap.fromString(ipaT.audiblePhones(), 
+			ipaA.audiblePhones(), alignment);
+
+		var group = {
+			getIPATarget: function() { return ipaT; },
+			getIPAActual: function() { return ipaA; },
+			getPhoneAlignment: function() { return phoneMap; }
+		};
+
+		var pdcData = PDC.calc_pdc(group, filters.pdc.pattern, filters.pdc.diacriticOptions);
+
+		var pdcRow = copyRow(table, row);
+		pdcRow.push(pdcData.target);
+		pdcRow.push(pdcData.actual);
+		pdcRow.push(pdcData.correct);
+		pdcRow.push(pdcData.substituted);
+		pdcRow.push(pdcData.deleted);
+		pdcRow.push(pdcData.epen);
+		pdc.addRow(pdcRow);
+
+		for(var i = 0; i < pdcData.expanded_results.length; i++) {
+			var expResult = pdcData.expanded_results[i];
+			var expRow = new Array();
+			expCol = 0;
+			expRow[expCol++] = table.getValueAt(row, "Session");
+			expRow[expCol++] = table.getValueAt(row, "Date");
+			expRow[expCol++] = table.getValueAt(row, "Speaker");
+			expRow[expCol++] = table.getValueAt(row, "Age");
+			expRow[expCol++] = table.getValueAt(row, "Record #");
+			expRow[expCol++] = table.getValueAt(row, "Group #");
+			expRow[expCol++] = (expResult.target >= 0 ? ipaT.elementAt(expResult.target) : new IPATranscript());
+			expRow[expCol++] = (expResult.actual >= 0 ? ipaA.elementAt(expResult.actual) : new IPATranscript());
+			expRow[expCol++] = expResult.correct;
+			expRow[expCol++] = expResult.deleted;
+			expRow[expCol++] = expResult.substituted;
+			expRow[expCol++] = expResult.epen;
+
+			resultsByPhone.addRow(expRow);
+		}
+	}
+
+	context.put("pdc", pdc);
+	context.put("resultsByPhone", resultsByPhone);
+}]]>
+                    </oga:property>
+                    <oga:property key="filters.pdc.pattern.filter">
+                        <![CDATA[.]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="1052" y="165"/>
+            </extensions>
+        </node>
+        <node id="5ffc523d" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                </oga:settings>
+                <oga:meta x="1079" y="589">
+                    <oga:default for="sectionName" type="java.lang.String">PDC</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <node id="c2fc51f" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
+                        <![CDATA[true]]>
+                    </oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                </oga:settings>
+                <oga:meta x="1086" y="757">
+                    <oga:default for="sectionName" type="java.lang.String">Results By Phone</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <link dest="1bedded791b945f4" destField="parameters" source="f563662586134d9a" sourceField="parameters"/>
+        <link dest="8d628415d9d646f8" destField="reportName" source="1bedded791b945f4" sourceField="reportTitle"/>
+        <link dest="4715d771" destField="project" source="2da2c46d" sourceField="project"/>
+        <link dest="4715d771" destField="results" source="2da2c46d" sourceField="results"/>
+        <link dest="2da2c46d" destField="project" source="cd7bd3146bd74bb3" sourceField="obj"/>
+        <link dest="2da2c46d" destField="sessions" source="637e33845d18473d" sourceField="obj"/>
+        <link dest="d8627d70b89e4950" destField="parameters" source="f563662586134d9a" sourceField="parameters"/>
+        <link dest="2da2c46d" destField="parameters" source="f563662586134d9a" sourceField="parameters"/>
+        <link dest="d8627d70b89e4950" destField="table" source="4715d771" sourceField="table"/>
+        <link dest="5ffc523d" destField="table" source="d8627d70b89e4950" sourceField="pdc"/>
+        <link dest="5ffc523d" destField="parent" source="8d628415d9d646f8" sourceField="root"/>
+        <link dest="c2fc51f" destField="parent" source="5ffc523d" sourceField="parent"/>
+        <link dest="c2fc51f" destField="table" source="d8627d70b89e4950" sourceField="resultsByPhone"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
+                <opqry:info format="html" title="PDC">
+                    <opqry:message/>
+                </opqry:info>
+                <opqry:node ref="f563662586134d9a" showAsStep="true">
+                    <opqry:info format="html" title="Parameters">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
+            </opqry:nodewizard>
+            <oga:notes>
+                <oga:note color="0xffff96" height="537" title="Analysis Inputs" width="379" x="10" y="10">These inputs are provided to all analyses.</oga:note>
+                <oga:note color="0xffc864" height="198" title="Start Report" width="734" x="10" y="560">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
+                <oga:note color="0x9696ff" height="538" title="Query" width="531" x="400" y="10">Execute a Phones query using options setup in Parameters node</oga:note>
+                <oga:note color="0x96ff96" height="532" title="Percent Diacritics Correct (PDC)" width="550" x="938" y="15">This node executes the PDC analysis and outputs 2 tables. The 'pdc' table is a copy of the input table with PDC calculation columns added. The 'resultsByPhone' table is a table of each analyized phone - the analysis includes a filter for deciding which phones are included in the analysis.</oga:note>
+            </oga:notes>
+            <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+        </extensions>
+    </graph>
+</opgraph>
