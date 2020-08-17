@@ -182,7 +182,6 @@
 	<modules>
 		<module>util</module>
 		<module>xml</module>
-		<module>design-patterns</module>
 		<module>ipa</module>
 		<module>ipadictionary</module>
 		<module>ipamap</module>

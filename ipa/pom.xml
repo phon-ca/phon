@@ -23,11 +23,6 @@
 			<artifactId>antlr</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>phon-design-patterns</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>ca.phon.opgraph</groupId>
 			<artifactId>opgraph-common-nodes</artifactId>
 		</dependency>

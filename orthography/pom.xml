@@ -20,7 +20,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>phon-design-patterns</artifactId>
+      <artifactId>phon-util</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
