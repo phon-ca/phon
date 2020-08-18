@@ -134,7 +134,7 @@ exports.PDC = {
 						expanded_results.push(expandedResult);
 					}
 					if(wasCorrect) ++numCorrect;
-					if(wasSub) ++numSubstitued;
+					if(wasSub) ++numSubstituted;
 					if(wasDel) ++numDeleted;
 				}
 			}
