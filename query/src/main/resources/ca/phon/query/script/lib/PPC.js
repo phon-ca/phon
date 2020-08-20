@@ -35,10 +35,20 @@ exports.PPC = {
 	 * @param ignoreDiacritics
 	 *
 	 * @return {
-	target: numTarget,
-	correct: numCorrect,
-	deleted: numDeleted,
-	epen: numEpenthesized
+		target: numTarget,
+		correct: numCorrect,
+		substituted: numSubstituted,
+		deleted: numDeleted,
+		epen: numEpenthesized
+		expanded_results: array of expanded results set based on filter
+		{
+			target: targetIdx,
+			actual: actualIdx,
+			correct: (1|0),
+			substituted: (1|0),
+			deleted: (1|0),
+			epen: (1|0)
+		}
 	};
 	 */
 	calc_ppc_aligned: function (group, filter, diacriticOptions) {
@@ -53,6 +63,7 @@ exports.PPC = {
 		var actualGroup = (group.getIPAActual() == null ? new IPATranscript(): group.getIPAActual());
 		var alignment = group.getPhoneAlignment();
 
+		var expanded_results = new Array();
 		// check target side
 		var targetResults = filter.find_pattern(targetGroup);
 		for(var i = 0; i < targetResults.length; i++) {
@@ -63,6 +74,11 @@ exports.PPC = {
 			for(var j = 0; j < audiblePhones.length(); j++) {
 				var phone = audiblePhones.elementAt(j);
 				var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
+				
+				var wasCorrect = false;
+				var wasSub = false;
+				var wasDeleted = false;
+				
 				if (alignedData.size() > 0) {
 					var actualPhone = alignedData.get(0);
 					if (actualPhone != null) {
@@ -76,16 +92,43 @@ exports.PPC = {
 								: actualPhone.toString());
 
 						if (targetPhoneString == actualPhoneString) {
-							numCorrect++;
+							wasCorrect = true;
 						} else {
-							numSubstituted++;
+							wasSub = true;
 						}
 					} else {
-						numDeleted++;
+						wasDeleted = true;
 					}
+					
+					var expandedResult = {
+						target: (phone != null ? targetGroup.indexOf(phone) : -1),
+						actual: (actualPhone != null ? actualGroup.indexOf(actualPhone) : -1),
+						correct: (wasCorrect == true ? 1 : 0),
+						substituted: (wasSub == true ? 1 : 0),
+						deleted: (wasDeleted == true ? 1 : 0),
+						epen: 0
+					};
+					expanded_results.push(expandedResult);
 				} else {
-					numDeleted++;
+					wasDeleted = true;
+					var expandedResult = {
+						target: (phone != null ? targetGroup.indexOf(phone) : -1),
+						actual: -1,
+						correct: 0,
+						substituted: 0,
+						deleted: 1,
+						epen: 0
+					};
+					expanded_results.push(expandedResult);
 				}
+				
+				if(wasCorrect == true)
+					numCorrect++;
+				if(wasSub == true)
+					numSubstituted++;
+				if(wasDeleted == true)
+					numDeleted++;
+				
 			}
 		}
 
@@ -98,8 +141,19 @@ exports.PPC = {
 			for(var j = 0; j < audiblePhones.length(); j++) {
 				var phone = audiblePhones.elementAt(j);
 				var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
-				if(alignedData.size() == 0)
+				if(alignedData.size() == 0) {
 					numEpenthesized++;
+
+					var expandedResult = {
+						target: -1,
+						actual: (phone != null ? actualGroup.indexOf(phone) : -1),
+						correct: 0,
+						substituted: 0,
+						deleted: 0,
+						epen: 1
+					};
+					expanded_results.push(expandedResult);
+				}
 			}
 		}
 
@@ -109,7 +163,8 @@ exports.PPC = {
 			correct: numCorrect,
 			substituted: numSubstituted,
 			deleted: numDeleted,
-			epen: numEpenthesized
+			epen: numEpenthesized,
+			expanded_results: expanded_results
 		};
 		return retVal;
 	},
