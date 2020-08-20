@@ -70,6 +70,7 @@ public class QueryScript extends LazyQueryScript {
 			
 			script.addPackageImport("Packages.ca.phon.orthography");
 			script.addPackageImport("Packages.ca.phon.ipa");
+			script.addPackageImport("Packages.ca.phon.ipa.alignment");
 			script.addPackageImport("Packages.ca.phon.ipa.features");
 			script.addPackageImport("Packages.ca.phon.phonex");
 			script.addPackageImport("Packages.ca.phon.syllable");
