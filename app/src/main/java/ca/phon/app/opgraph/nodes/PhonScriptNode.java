@@ -302,6 +302,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 				debugger.setSize(500, 600);
 				debugger.setVisible(true);
 				
+				ctx.installParams(runScope);
 				if(ctx.hasFunction(runScope, "run", 1)) {
 					ctx.callFunction(runScope, "run", context);
 				}
