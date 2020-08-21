@@ -39,6 +39,9 @@ import org.jdesktop.swingx.JXTitledSeparator;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNode;
@@ -222,19 +225,55 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							if(formatter == null) {
 								formatter = (Formatter<Object>)FormatterFactory.createFormatter(tierValue.getClass());
 							}
-							final String tierTxt =
-									(formatter != null ? formatter.format(tierValue) : tierValue.toString());
-
-							String resultTxt =
-									(rv.getRange().getStart() >= 0 && rv.getRange().getEnd() >= rv.getRange().getFirst() ?
-									tierTxt.substring( rv.getRange().getStart(), rv.getRange().getEnd() ) : "");
-
-							if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
-								resultTxt = "\u2205";
+							
+							boolean defaultOutput = true;
+							// attempt to carry over as much data as possible from
+							// the IPA transcript. 
+							if(tierValue instanceof IPATranscript) {
+								IPATranscript origIPA = (IPATranscript)tierValue;
+								
+								// attempt to use result value to find phone indicies
+								IPATranscriptBuilder builder = new IPATranscriptBuilder();
+								int startidx = -1;
+								int endidx = -1;
+								for(int pidx = 0; pidx < origIPA.length(); pidx++) {
+									IPAElement ele = origIPA.elementAt(pidx);
+									int stringIdx = origIPA.stringIndexOfElement(pidx);
+									int endEleIdx = stringIdx + ele.toString().length();
+								
+									if(rv.getRange().getStart() >= stringIdx) {
+										startidx = pidx;
+									} 
+									if(rv.getRange().getEnd() == endEleIdx) {
+										endidx = pidx;
+									}
+								}
+								
+								// take only whole elements
+								if(startidx >= 0 && endidx >= startidx) {
+									IPATranscript subVal = origIPA.subsection(startidx, endidx+1);
+									// TODO diacritic options
+									
+									buffer.append(subVal.toString(true));
+									defaultOutput = false;
+								}
 							}
 
-							if(buffer.length() > 0) buffer.append("..");
-							buffer.append(resultTxt);
+							if(defaultOutput) {
+								final String tierTxt =
+										(formatter != null ? formatter.format(tierValue) : tierValue.toString());
+	
+								String resultTxt =
+										(rv.getRange().getStart() >= 0 && rv.getRange().getEnd() >= rv.getRange().getFirst() ?
+										tierTxt.substring( rv.getRange().getStart(), rv.getRange().getEnd() ) : "");
+	
+								if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
+									resultTxt = "\u2205";
+								}
+								
+								if(buffer.length() > 0) buffer.append("..");
+								buffer.append(resultTxt);
+							}
 						}
 						resultVal = buffer.toString();
 						if(formatter != null) {
