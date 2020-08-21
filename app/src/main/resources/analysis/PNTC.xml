@@ -76,8 +76,8 @@ function run(context) {
                     <oga:property key="filters.searchBy.searchBy">
                         <![CDATA[Word]]>
                     </oga:property>
-                    <oga:property key="reportTitle">
-                        <![CDATA[Percent Number Tones Correct (PNTC)]]>
+                    <oga:property key="filters.group.sectionHeader.collapsed">
+                        <![CDATA[false]]>
                     </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
@@ -176,66 +176,36 @@ function setup_params(params) {
                 <oga:meta x="20" y="662"/>
             </extensions>
         </node>
-        <node id="4c88d38e" name="Add Required Tiers" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-            <input name="paramMap" optional="false"/>
-            <output name="paramMap" type="java.util.Map"/>
-            <output name="groupSuffix" type="java.lang.String"/>
-            <output name="bySyllable" type="java.lang.Boolean"/>
+        <opqry:queryNode id="6662b0cb" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-21T12:39:59.198-02:30" name="Phones" uuid="206c39b1-6259-4090-b851-7b37cb092255">
+                <script>
+                    <url ref="Phones" rel="stock"/>
+                    <param id="filters.actualResultFilter.filterType">Phonex</param>
+                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
+                    <param id="filters.group.sectionHeader.collapsed">false</param>
+                    <param id="filters.groupPattern.filterType">Plain text</param>
+                    <param id="filters.primary.filter">.+</param>
+                    <param id="filters.primary.filterType">Phonex</param>
+                    <param id="filters.searchBy.searchBy">Word</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
+                    <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
+                    <param id="filters.syllable.syllableType">Any syllable</param>
+                    <param id="filters.targetResultFilter.filterType">Phonex</param>
+                    <param id="filters.wordPattern.filterType">Plain text</param>
+                    <param id="searchTier">IPA Target</param>
+                </script>
+            </qry:query>
             <extensions>
-                <oga:settings>
-                    <oga:property key="__script">
-                        <![CDATA[function init(inputs, outputs) {
-	inputs.add("paramMap", "", false, false);
-
-	outputs.add("paramMap", "", false, java.util.Map);
-	outputs.add("groupSuffix", "", false, java.lang.String);
-	outputs.add("bySyllable", "", false, java.lang.Boolean);
-}
-
-function run(context) {
-	var params = context.get("paramMap");
-
-	var searchBy = params.get("filters.searchBy.searchBy");
-	var paramName = "filters.groupTiers.tiers";
-	var groupSuffix = " (Group)";
-	if(searchBy == "Word") {
-		paramName = "filters.wordTiers.tiers";
-		groupSuffix = " (Word)";
-	}
-	var val = params.get(paramName);
-
-	if(val == null) {
-		val = new java.lang.String();
-	}
-	var buffer = new java.lang.StringBuffer();
-	buffer.append(val);
-
-	if(!buffer.toString().contains("Target Syllabification")) {
-		buffer.append((buffer.length() > 0 ? ", " : "") + 
-			"Target Syllabification");
-	}
-	if(!buffer.toString().contains("Actual Syllabification")) {
-		buffer.append((buffer.length() > 0 ? ", " : "") + 
-			"Actual Syllabification");
-	}
-	if(!buffer.toString().contains("Alignment")) {
-		buffer.append((buffer.length() > 0 ? ", " : "") +
-			"Alignment");
-	}
-
-	params.put(paramName, buffer.toString());
-
-	context.put("groupSuffix", groupSuffix);
-	context.put("bySyllable", params.get("filters.syllable.searchBySyllable"));
-}
-]]>
-                    </oga:property>
-                </oga:settings>
-                <oga:meta x="451" y="354"/>
+                <oga:settings/>
+                <oga:meta x="447" y="139"/>
             </extensions>
-        </node>
+        </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="10e1dc2a">
+            <graph id="3159181e">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -286,23 +256,6 @@ function run(context) {
                 <oga:meta x="257" y="662"/>
             </extensions>
         </ogcn:macro>
-        <opqry:queryNode id="511cd23" name="Query : PNTC" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-19T11:11:54.279-02:30" name="PNTC" uuid="4f049dc6-b335-4474-b419-edbc4e4358be">
-                <script>
-                    <url ref="PNTC" rel="stock"/>
-                </script>
-            </qry:query>
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="445" y="126"/>
-            </extensions>
-        </opqry:queryNode>
-        <node id="ad540f2c84c343cc" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="502" y="662"/>
-            </extensions>
-        </node>
         <node id="4d1cdaa729e34875" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
@@ -320,6 +273,155 @@ function run(context) {
                     </oga:property>
                 </oga:settings>
                 <oga:meta x="712" y="119"/>
+            </extensions>
+        </node>
+        <node id="ad540f2c84c343cc" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="502" y="662"/>
+            </extensions>
+        </node>
+        <node id="d16cfa45b97548d0" name="PNTC" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <input name="table" optional="false"/>
+            <output name="pntc" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+            <output name="resultsBySyll" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script">
+                        <![CDATA[importPackage(Packages.ca.phon.ipa.alignment)
+
+var PNTC = require("lib/PNTC").PNTC;
+var PNTCOptions = require("lib/PNTC").PNTCOptions;
+
+var filters = {
+	"pntc": new PNTCOptions("filters.pntc")
+};
+
+function init(inputs, outputs) {
+	inputs.add("table", "", false,  false);
+	
+	outputs.add("pntc", "", false, DefaultTableDataSource);
+	outputs.add("resultsBySyll", "", false, DefaultTableDataSource);
+}
+
+function setup_params(params) {
+	filters.pntc.param_setup(params);
+}
+
+function setupColumns(table, inputTable) {
+	var col = 0;
+
+	for(var ic = 0; ic < inputTable.columnCount; ic++) {
+		table.setColumnTitle(col++, inputTable.getColumnTitle(ic));
+	}
+
+	table.setColumnTitle(col++, "# Target");
+	table.setColumnTitle(col++, "# Actual");
+	table.setColumnTitle(col++, "Syllables Deleted");
+	table.setColumnTitle(col++, "Syllables Epenthesized");
+	table.setColumnTitle(col++, "# Correct");
+	table.setColumnTitle(col++, "# Substituted");
+	table.setColumnTitle(col++, "# Deleted");
+}
+
+function copyRow(inputTable, rowIdx) {
+	var row = new Array();
+	var col = 0;
+	for(var cidx = 0; cidx < inputTable.columnCount; cidx++) {
+		row[col++] = inputTable.getValueAt(rowIdx, cidx);
+	}
+	return row;
+}
+
+function run(context) {
+	var table = context.get("table");
+
+	var pntc = new DefaultTableDataSource();
+	var resultsBySyll = new DefaultTableDataSource();
+	
+	// setup pdc columns
+	setupColumns(pntc, table);
+	
+	var expCol = 0;
+	resultsBySyll.setColumnTitle(expCol++, "Session");
+	resultsBySyll.setColumnTitle(expCol++, "Date");
+	resultsBySyll.setColumnTitle(expCol++, "Speaker");
+	resultsBySyll.setColumnTitle(expCol++, "Age");
+	resultsBySyll.setColumnTitle(expCol++, "Record #");
+	resultsBySyll.setColumnTitle(expCol++, "Group #");
+	resultsBySyll.setColumnTitle(expCol++, "IPA Target");
+	resultsBySyll.setColumnTitle(expCol++, "Target Tone");
+	resultsBySyll.setColumnTitle(expCol++, "IPA Actual");
+	resultsBySyll.setColumnTitle(expCol++, "Actual Tone");
+	resultsBySyll.setColumnTitle(expCol++, "Syllable deleted");
+	resultsBySyll.setColumnTitle(expCol++, "Syllable epenthesized");
+	resultsBySyll.setColumnTitle(expCol++, "# Correct");
+	resultsBySyll.setColumnTitle(expCol++, "# Substituted");
+	resultsBySyll.setColumnTitle(expCol++, "# Deleted");
+
+	for(var row = 0; row < table.rowCount; row++) {
+		var ipaT = table.getValueAt(row, "IPA Target");
+		var ipaA = table.getValueAt(row, "IPA Actual");
+		var alignment = table.getValueAt(row, "Alignment");
+
+		if(ipaT == null || ipaA == null || alignment == null) continue;
+		if(alignment.length() == 0) continue;
+
+		var phoneMap = PhoneMap.fromString(ipaT.audiblePhones(), 
+			ipaA.audiblePhones(), alignment);
+
+		var group = {
+			getIPATarget: function() { return ipaT; },
+			getIPAActual: function() { return ipaA; },
+			getPhoneAlignment: function() { return phoneMap; }
+		};
+
+		var pntcData = PNTC.calc_pntc(group);
+
+		var pntcRow = copyRow(table, row);
+		pntcRow.push(pntcData.target);
+		pntcRow.push(pntcData.actual);
+		pntcRow.push(pntcData.syllDeleted);
+		pntcRow.push(pntcData.epen);
+		pntcRow.push(pntcData.correct);
+		pntcRow.push(pntcData.substituted);
+		pntcRow.push(pntcData.deleted);
+		pntc.addRow(pntcRow);
+
+		for(var i = 0; i < pntcData.expanded_results.length; i++) {
+			var expResult = pntcData.expanded_results[i];
+			var expRow = new Array();
+			expCol = 0;
+			expRow[expCol++] = table.getValueAt(row, "Session");
+			expRow[expCol++] = table.getValueAt(row, "Date");
+			expRow[expCol++] = table.getValueAt(row, "Speaker");
+			expRow[expCol++] = table.getValueAt(row, "Age");
+			expRow[expCol++] = table.getValueAt(row, "Record #");
+			expRow[expCol++] = table.getValueAt(row, "Group #");
+			expRow[expCol++] = expResult.target;
+			expRow[expCol++] = (expResult.target != null && expResult.target.length() > 0 
+				? expResult.target.elementAt(0).getExtension(SyllabificationInfo).toneNumber
+				: "");
+			expRow[expCol++] = expResult.actual;
+			expRow[expCol++] = (expResult.actual != null && expResult.actual.length() > 0 
+				? expResult.actual.elementAt(0).getExtension(SyllabificationInfo).toneNumber
+				: "");
+			expRow[expCol++] = expResult.syllDeleted;
+			expRow[expCol++] = expResult.epen;
+			expRow[expCol++] = expResult.correct;
+			expRow[expCol++] = expResult.substituted;
+			expRow[expCol++] = expResult.deleted;
+			
+			resultsBySyll.addRow(expRow);
+		}
+	}
+
+	context.put("pntc", pntc);
+	context.put("resultsBySyll", resultsBySyll);
+}]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="715" y="306"/>
             </extensions>
         </node>
         <node id="16390602" name="Summary Section Header" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
@@ -342,125 +444,6 @@ function run(context) {
                     </oga:property>
                 </oga:settings>
                 <oga:meta x="1118" y="147"/>
-            </extensions>
-        </node>
-        <node id="5bf1378b" name="Shape Data" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-            <input name="table" optional="false"/>
-            <input name="groupSuffix" optional="false"/>
-            <input name="bySyllable" optional="false"/>
-            <output name="sylltable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
-            <extensions>
-                <oga:settings>
-                    <oga:property key="__script">
-                        <![CDATA[importPackage(Packages.ca.phon.ipa.alignment)
-importClass(Packages.ca.phon.syllable.SyllabificationInfo)
-
-function init(inputs, outputs) {
-	inputs.add("table", "", false, false);
-	inputs.add("groupSuffix", "", false, false);
-	inputs.add("bySyllable", "", false, false);
-
-	outputs.add("sylltable", "", false, DefaultTableDataSource);
-}
-
-function run(context) {
-	var table = context.get("table");
-	var groupSuffix = context.get("groupSuffix");
-	var bySyllable = context.get("bySyllable");
-
-	var sylltable = new DefaultTableDataSource();
-	context.put("sylltable", sylltable);
-
-	var col = 0;
-	sylltable.setColumnTitle(col++, "Session");
-	sylltable.setColumnTitle(col++, "Speaker");
-	sylltable.setColumnTitle(col++, "Age");
-	sylltable.setColumnTitle(col++, "IPA Target");
-	sylltable.setColumnTitle(col++, "IPA Actual");
-	sylltable.setColumnTitle(col++, "# Target");
-	sylltable.setColumnTitle(col++, "# Actual");
-	sylltable.setColumnTitle(col++, "Syllables deleted");
-	sylltable.setColumnTitle(col++, "Syllables epenthesized");
-	sylltable.setColumnTitle(col++, "# Correct");
-	sylltable.setColumnTitle(col++, "# Substituted");
-	sylltable.setColumnTitle(col++, "# Deleted");
-	sylltable.setColumnTitle(col++, "Target Tone");
-	sylltable.setColumnTitle(col++, "Actual Tone");
-	
-	var syllableAligner = new SyllableAligner();
-
-	for(var row = 0; row < table.rowCount; row++) {
-		var targetData = table.getValueAt(row, "Target Syllabification" + groupSuffix);
-		var actualData = table.getValueAt(row, "Actual Syllabification" + groupSuffix);
-		var alignmentData = table.getValueAt(row, "Alignment" + groupSuffix);
-
-		var ipaT = IPATranscript.parseIPATranscript(targetData);
-		SyllabificationInfo.setupSyllabificationInfo(ipaT);
-		var ipaA = IPATranscript.parseIPATranscript(actualData);
-		SyllabificationInfo.setupSyllabificationInfo(ipaA);
-		var alignment = PhoneMap.fromString(ipaT, ipaA, alignmentData);
-		var syllAlignment = syllableAligner.calculateSyllableAlignment(ipaT, ipaA, alignment);
-
-		if(bySyllable == false) {
-			for(var alignIdx = 0; alignIdx < syllAlignment.alignmentLength; alignIdx++) {
-				var alignedEles = syllAlignment.getAlignedElements(alignIdx);
-
-				var targetSyll = alignedEles.get(0);
-				var targetToneNumber = (targetSyll != null && targetSyll.length() > 0 ? 
-					targetSyll.elementAt(0).getExtension(SyllabificationInfo).toneNumber : new java.lang.String());
-				var actualSyll = alignedEles.get(1);
-				var actualToneNumber = (actualSyll != null && actualSyll.length() > 0 ? 
-					actualSyll.elementAt(0).getExtension(SyllabificationInfo).toneNumber : new java.lang.String());
-				
-				// create row
-				var rowData = [];
-				col = 0;
-				rowData[col++] = table.getValueAt(row, "Session");
-				rowData[col++] = table.getValueAt(row, "Speaker");
-				rowData[col++] = table.getValueAt(row, "Age");
-				rowData[col++] = targetSyll;
-				rowData[col++] = actualSyll;
-				rowData[col++] = (targetSyll == null ? 0 : 1);
-				rowData[col++] = (actualSyll == null ? 0 : 1);
-				rowData[col++] = (actualSyll == null ? 1 : 0);
-				rowData[col++] = (targetSyll == null ? 1 : 0);
-				rowData[col++] = (targetToneNumber.equals(actualToneNumber) ? 1 : 0);
-				rowData[col++] = (targetToneNumber.length() > 0 && actualToneNumber.length() > 0 && !targetToneNumber.equals(actualToneNumber) ? 1 : 0);
-				rowData[col++] = (targetToneNumber.length() > 0 && actualToneNumber.length() == 0 ? 1 : 0);
-				rowData[col++] = targetToneNumber;
-				rowData[col++] = actualToneNumber;
-				sylltable.addRow(rowData);
-			}
-		} else {
-			var targetToneNumber = (ipaT != null && ipaT.length() > 0 ? 
-				ipaT.elementAt(0).getExtension(SyllabificationInfo).toneNumber : new java.lang.String());
-			var actualToneNumber = (ipaA != null && ipaA.length() > 0 ? 
-				ipaA.elementAt(0).getExtension(SyllabificationInfo).toneNumber : new java.lang.String());
-
-			var rowData = [];
-			col = 0;
-			rowData[col++] = table.getValueAt(row, "Session");
-			rowData[col++] = table.getValueAt(row, "Speaker");
-			rowData[col++] = table.getValueAt(row, "Age");
-			rowData[col++] = table.getValueAt(row, "IPA Target");
-			rowData[col++] = table.getValueAt(row, "IPA Actual");
-			rowData[col++] = table.getValueAt(row, "# Target");
-			rowData[col++] = table.getValueAt(row, "# Actual");
-			rowData[col++] = table.getValueAt(row, "Syllables deleted");
-			rowData[col++] = table.getValueAt(row, "Syllables epenthesized");
-			rowData[col++] = table.getValueAt(row, "# Correct");
-			rowData[col++] = table.getValueAt(row, "# Substituted");
-			rowData[col++] = table.getValueAt(row, "# Deleted");
-			rowData[col++] = targetToneNumber;
-			rowData[col++] = actualToneNumber;
-			sylltable.addRow(rowData);
-		}
-	}
-}
-]]>
-                    </oga:property>
-                </oga:settings>
-                <oga:meta x="724" y="381"/>
             </extensions>
         </node>
         <node id="e610bf8b98aa4f44" name="Split Table" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -519,7 +502,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="74d6979e" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="46303272">
+            <graph id="216a6a61">
                 <node id="c1f475d" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -536,7 +519,6 @@ function run(context) {
                 <node id="bcac3bee051f447b" name="Word Table Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[java.util.Map]]>
                             </oga:property>
@@ -555,7 +537,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="66021052a34740c5" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="418735b9">
+                    <graph id="1ce0369f">
                         <node id="64dae43e16a54dff" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -582,7 +564,6 @@ function run(context) {
                 <node id="80f2c53fd6f44d3d" name="Summary Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
                             </oga:property>
@@ -606,7 +587,6 @@ function run(context) {
                 <node id="886e857" name="Global Summary Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
                                 <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
                             </oga:property>
@@ -615,7 +595,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="c2c1479d9c984a12" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="35e40ab5">
+                    <graph id="5cd36ebc">
                         <node id="161f5953d3ad467d" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -684,7 +664,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="46dba1c4" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="macro46dba1c4">
+                    <graph id="5729c62a">
                         <node id="217caf4d" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -751,7 +731,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="4c64b990d45249bf" name="Get Table For Speaker (Syll)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="1adb567e">
+                            <graph id="5a90f6cc">
                                 <node id="74a8f842467f4bcc" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1409,10 +1389,6 @@ function run(context) {
         </node>
         <link dest="7486fc0611ca4abb" destField="parameters" source="41c2d52c05f54592" sourceField="parameters"/>
         <link dest="ad540f2c84c343cc" destField="reportName" source="7486fc0611ca4abb" sourceField="reportTitle"/>
-        <link dest="74498387" destField="table" source="4d1cdaa729e34875" sourceField="table"/>
-        <link dest="511cd23" destField="project" source="7328a40688194f0f" sourceField="obj"/>
-        <link dest="511cd23" destField="sessions" source="23502a3bdf76403f" sourceField="obj"/>
-        <link dest="4d1cdaa729e34875" destField="project" source="511cd23" sourceField="project"/>
         <link dest="74d6979e" destField="collection" source="6933cb7db3c14099" sourceField="obj"/>
         <link dest="74d6979e" destField="wordTableMap" source="74498387" sourceField="tableMap"/>
         <link dest="74d6979e" destField="syllTableMap" source="e610bf8b98aa4f44" sourceField="tableMap"/>
@@ -1430,15 +1406,16 @@ function run(context) {
         <link dest="4243819a" destField="table" source="fae6aaad3ecc48ce" sourceField="table"/>
         <link dest="114dba02" destField="table" source="4243819a" sourceField="table"/>
         <link dest="74d6979e" destField="collection1" source="ad540f2c84c343cc" sourceField="root"/>
-        <link dest="5bf1378b" destField="table" source="4d1cdaa729e34875" sourceField="table"/>
-        <link dest="511cd23" destField="parameters" source="4c88d38e" sourceField="paramMap"/>
-        <link dest="4c88d38e" destField="paramMap" source="41c2d52c05f54592" sourceField="parameters"/>
-        <link dest="e610bf8b98aa4f44" destField="table" source="5bf1378b" sourceField="sylltable"/>
-        <link dest="8c69a6a9b71d496c" destField="table" source="5bf1378b" sourceField="sylltable"/>
-        <link dest="b8bf243401de41c5" destField="table" source="5bf1378b" sourceField="sylltable"/>
-        <link dest="5bf1378b" destField="groupSuffix" source="4c88d38e" sourceField="groupSuffix"/>
-        <link dest="5bf1378b" destField="bySyllable" source="4c88d38e" sourceField="bySyllable"/>
-        <link dest="4d1cdaa729e34875" destField="results" source="511cd23" sourceField="results"/>
+        <link dest="d16cfa45b97548d0" destField="table" source="4d1cdaa729e34875" sourceField="table"/>
+        <link dest="74498387" destField="table" source="d16cfa45b97548d0" sourceField="pntc"/>
+        <link dest="e610bf8b98aa4f44" destField="table" source="d16cfa45b97548d0" sourceField="resultsBySyll"/>
+        <link dest="6662b0cb" destField="project" source="7328a40688194f0f" sourceField="obj"/>
+        <link dest="6662b0cb" destField="sessions" source="23502a3bdf76403f" sourceField="obj"/>
+        <link dest="6662b0cb" destField="parameters" source="41c2d52c05f54592" sourceField="parameters"/>
+        <link dest="4d1cdaa729e34875" destField="project" source="6662b0cb" sourceField="project"/>
+        <link dest="4d1cdaa729e34875" destField="results" source="6662b0cb" sourceField="results"/>
+        <link dest="8c69a6a9b71d496c" destField="table" source="d16cfa45b97548d0" sourceField="resultsBySyll"/>
+        <link dest="b8bf243401de41c5" destField="table" source="d16cfa45b97548d0" sourceField="resultsBySyll"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="PNTC">

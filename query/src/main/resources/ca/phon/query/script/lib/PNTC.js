@@ -45,6 +45,7 @@ exports.PNTC = {
 		var numSubstituted = 0;
 		var numEpenthesized = 0;
 		var numCorrect = 0;
+		var expanded_results = new Array();
 
 		var targetGroup = (group.getIPATarget() == null ? new IPATranscript(): group.getIPATarget());
 		SyllabificationInfo.setupSyllabificationInfo(targetGroup);
@@ -62,11 +63,17 @@ exports.PNTC = {
 			var targetSyll = alignedSylls.get(0);
 			var actualSyll = alignedSylls.get(1);
 			
+			var wasCorrect = false;
+			var wasSub = false;
+			var wasDeleted = false;
+			var wasEpen = false;
+			var wasSyllDeleted = false;
+			
 			if(targetSyll == null) {
-				numEpenthesized++;
+				wasEpen = true;
 			} else if(actualSyll == null) {
-				numDeleted++;
-				syllDeleted++;
+				wasDeleted = true;
+				wasSyllDeleted = true;
 			} else {
 				var targetScInfo = targetSyll.elementAt(0).getExtension(SyllabificationInfo);
 				var targetToneNumber = (targetScInfo != null ? targetScInfo.toneNumber : "");
@@ -75,15 +82,37 @@ exports.PNTC = {
 				var actualToneNumber = (actualScInfo != null ? actualScInfo.toneNumber : "");
 				
 				if(targetToneNumber == actualToneNumber) {
-					numCorrect++;
+					wasCorrect = true;
 				} else {
 					if(targetToneNumber.length() > 0 && actualToneNumber.length() == 0) {
-						numDeleted++;
+						wasDeleted = true;
 					} else {
-						numSubstituted++;
+						wasSub = true;
 					}
 				}
 			}
+			
+			var expandedResult = {
+				target: targetSyll,
+				actual: actualSyll,
+				syllDeleted: (wasSyllDeleted == true ? 1 : 0),
+				correct: (wasCorrect == true ? 1 : 0),
+				substituted: (wasSub == true ? 1 : 0),
+				deleted: (wasDeleted == true ? 1 : 0),
+				epen: (wasEpen == true ? 1 : 0)
+			};
+			expanded_results.push(expandedResult);
+			
+			if(wasCorrect == true) 
+				++numCorrect;
+			if(wasSub == true)
+				++numSubstituted;
+			if(wasDeleted == true) 
+				++numDeleted;
+			if(wasSyllDeleted == true)
+				++syllDeleted;
+			if(wasEpen == true)
+				++numEpenthesized;
 		}
 
 		var retVal = {
@@ -93,7 +122,8 @@ exports.PNTC = {
 			substituted: numSubstituted,
 			deleted: numDeleted,
 			syllDeleted: syllDeleted,
-			epen: numEpenthesized
+			epen: numEpenthesized,
+			expanded_results: expanded_results
 		};
 		return retVal;
 	}
