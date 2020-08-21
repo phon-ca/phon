@@ -55,8 +55,8 @@ function run(context) {
 	table.setColumnTitle(col++, "Speaker");
 	table.setColumnTitle(col++, "# Target");
 	table.setColumnTitle(col++, "# Actual");
-	table.setColumnTitle(col++, "Syllables deleted");
-	table.setColumnTitle(col++, "Syllables epenthesized");
+	table.setColumnTitle(col++, "Syllables Deleted");
+	table.setColumnTitle(col++, "Syllables Epenthesized");
 	table.setColumnTitle(col++, "# Correct");
 	table.setColumnTitle(col++, "# Substituted");
 	table.setColumnTitle(col++, "# Deleted");
@@ -177,7 +177,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="6662b0cb" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-21T12:39:59.198-02:30" name="Phones" uuid="206c39b1-6259-4090-b851-7b37cb092255">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-21T12:51:41.987-02:30" name="Phones" uuid="27ceb8cb-d85c-4a67-bff8-bfc81cf1acb0">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -205,7 +205,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3159181e">
+            <graph id="7c0fa11d">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -421,7 +421,7 @@ function run(context) {
 }]]>
                     </oga:property>
                 </oga:settings>
-                <oga:meta x="715" y="306"/>
+                <oga:meta x="715" y="307"/>
             </extensions>
         </node>
         <node id="16390602" name="Summary Section Header" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
@@ -502,7 +502,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="74d6979e" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="216a6a61">
+            <graph id="50b0c063">
                 <node id="c1f475d" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -537,7 +537,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="66021052a34740c5" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="1ce0369f">
+                    <graph id="656246d6">
                         <node id="64dae43e16a54dff" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -595,7 +595,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="c2c1479d9c984a12" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="5cd36ebc">
+                    <graph id="243b77c6">
                         <node id="161f5953d3ad467d" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -664,7 +664,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="46dba1c4" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="5729c62a">
+                    <graph id="2b51e550">
                         <node id="217caf4d" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -731,7 +731,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="4c64b990d45249bf" name="Get Table For Speaker (Syll)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="5a90f6cc">
+                            <graph id="2ed5e844">
                                 <node id="74a8f842467f4bcc" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -813,8 +813,8 @@ function run(context) {
                                     <opqry:sumColumns>
                                         <opqry:columnName># Target</opqry:columnName>
                                         <opqry:columnName># Actual</opqry:columnName>
-                                        <opqry:columnName>Syllables deleted</opqry:columnName>
-                                        <opqry:columnName>Syllables epenthesized</opqry:columnName>
+                                        <opqry:columnName>Syllables Deleted</opqry:columnName>
+                                        <opqry:columnName>Syllables Epenthesized</opqry:columnName>
                                         <opqry:columnName># Correct</opqry:columnName>
                                         <opqry:columnName># Substituted</opqry:columnName>
                                         <opqry:columnName># Deleted</opqry:columnName>
@@ -870,14 +870,14 @@ function run(context) {
                                     <oga:property key="columns">
                                         <![CDATA[# Target
 # Actual
-Syllables deleted
-Syllables epenthesized
+Syllables Deleted
+Syllables Epenthesized
 # Correct
 # Substituted
 # Deleted]]>
                                     </oga:property>
                                 </oga:settings>
-                                <oga:meta x="604" y="807"/>
+                                <oga:meta x="604" y="806"/>
                             </extensions>
                         </node>
                         <node id="eee2eebc8dbe4012" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
@@ -1034,8 +1034,8 @@ function run(context) {
 	rowData[col++] = speaker;
 	rowData[col++] = speakerSummary.getValueAt(speakerRow, "# Target");
 	rowData[col++] = speakerSummary.getValueAt(speakerRow, "# Actual");
-	rowData[col++] = speakerSummary.getValueAt(speakerRow, "Syllables deleted");
-	rowData[col++] = speakerSummary.getValueAt(speakerRow, "Syllables epenthesized");
+	rowData[col++] = speakerSummary.getValueAt(speakerRow, "Syllables Deleted");
+	rowData[col++] = speakerSummary.getValueAt(speakerRow, "Syllables Epenthesized");
 	rowData[col++] = speakerSummary.getValueAt(speakerRow, "# Correct");
 	rowData[col++] = speakerSummary.getValueAt(speakerRow, "# Substituted");
 	rowData[col++] = speakerSummary.getValueAt(speakerRow, "# Deleted");
@@ -1045,7 +1045,7 @@ function run(context) {
 ]]>
                                     </oga:property>
                                 </oga:settings>
-                                <oga:meta x="1238" y="985"/>
+                                <oga:meta x="1238" y="986"/>
                             </extensions>
                         </node>
                         <node id="ad9fb81f2a2949a4" name="IPA Patterns" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -1305,8 +1305,8 @@ function run(context) {
                     <oga:property key="columns">
                         <![CDATA[# Target
 # Actual
-Syllables deleted
-Syllables epenthesized
+Syllables Deleted
+Syllables Epenthesized
 # Correct
 # Substituted
 # Deleted]]>
