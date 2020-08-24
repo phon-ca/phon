@@ -45,6 +45,9 @@ import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.features.FeatureMatrix;
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNode;
@@ -327,7 +330,13 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 								// take only whole elements
 								if(startidx >= 0 && endidx >= startidx) {
 									IPATranscript subVal = origIPA.subsection(startidx, endidx+1);
-									// TODO diacritic options
+									
+									if(ignoreDiacritics) {
+										if(onlyOrExcept)
+											subVal = subVal.stripDiacritics(selectedDiacritics);
+										else
+											subVal = subVal.stripDiacriticsExcept(selectedDiacritics);
+									}
 									
 									buffer.append(subVal.toString(true));
 									defaultOutput = false;
@@ -345,7 +354,10 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 								if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
 									resultTxt = "\u2205";
 								}
-								// TODO diacritic options
+								
+								if(ignoreDiacritics) {
+									stripDiacriticsFromText(buffer, onlyOrExcept, selectedDiacritics);
+								}
 								
 								if(buffer.length() > 0) buffer.append("..");
 								buffer.append(resultTxt);
@@ -380,6 +392,32 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		}
 
 		return retVal;
+	}
+	
+	private void stripDiacriticsFromText(StringBuffer buffer, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		for(int i = buffer.length() -1; i >= 0; i--) {
+			char ch = buffer.charAt(i);
+			if(!keepCharacter(ch, onlyOrExcept, selectedDiacritics)) {
+				buffer.delete(i, i);
+			}
+		}
+	}
+	
+	private boolean keepCharacter(char ch, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		FeatureMatrix fm = FeatureMatrix.getInstance();
+		Collection<Character> dias = fm.getCharactersWithFeature("diacritic");
+		
+		if(dias.contains(ch)) {
+			boolean inSet = selectedDiacritics.stream().filter( d -> d.getCharacter() == ch ).findFirst().isPresent();
+			
+			if(onlyOrExcept) {
+				return !inSet;
+			} else {
+				return inSet;
+			}
+		} else {
+			return true;
+		}
 	}
 
 	public boolean isIncludeSessionInfo() {
