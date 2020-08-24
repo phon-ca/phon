@@ -177,7 +177,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="6662b0cb" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-21T12:51:41.987-02:30" name="Phones" uuid="27ceb8cb-d85c-4a67-bff8-bfc81cf1acb0">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-24T09:58:52.657-02:30" name="Phones" uuid="8f4b1eeb-384d-42b4-a2b3-806e1f66bfd5">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -421,7 +421,7 @@ function run(context) {
 }]]>
                     </oga:property>
                 </oga:settings>
-                <oga:meta x="715" y="307"/>
+                <oga:meta x="725" y="400"/>
             </extensions>
         </node>
         <node id="16390602" name="Summary Section Header" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">

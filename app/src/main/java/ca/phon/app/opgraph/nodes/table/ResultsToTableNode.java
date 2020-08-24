@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
@@ -37,8 +38,10 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXTitledSeparator;
 
+import ca.phon.app.opgraph.GlobalParameter;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
+import ca.phon.ipa.Diacritic;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -59,6 +62,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.query.script.params.DiacriticOptionsPanel;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.session.Group;
 import ca.phon.session.Participant;
 import ca.phon.session.Record;
@@ -72,10 +76,26 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultsToTableNode.class.getName());
 
+	// required inputs
 	private final InputField projectInput = new InputField("project", "Project", false, true, Project.class);
 
 	private final InputField resultSetsInput = new InputField("results", "Query results", false, true, ResultSet[].class);
 
+	// optional inputs
+	private final InputField includeSessionInfoInput = new InputField("includeSessionInfo", "Include session info columns: Name, Date", true, true, Boolean.class);
+	
+	private final InputField includeSpeakerInfoInput = new InputField("includeSpeakerInfo", "Include speaker info columns: Speaker, Age",  true, true, Boolean.class);
+	
+	private final InputField includeTierInfoInput = new InputField("includeTierInfo", "Include tier info columns: Record #, Group #, Tier, Range",  true, true, Boolean.class);
+	
+	private final InputField includeMetadataInput = new InputField("includeMetadata", "Include metadata columns such as aligned group and word tiers",  true, true, Boolean.class);
+	
+	private final InputField ignoreDiacriticsInput = new InputField("ignoreDiacritics", "Ignore diacritics",  true, true, Boolean.class);
+	
+	private final InputField onlyOrExceptInput = new InputField("onlyOrExcept", "If true (only) selected diacritics will be ignored, if false operation will be 'except'",  true, true, Boolean.class);
+	
+	private final InputField selectedDiacriticsInput = new InputField("selectedDiacritics", "Selected diacriitcs to ignore",  true, true, Collection.class);
+	
 	private final OutputField tableOutput = new OutputField("table", "Result sets as table", true, TableDataSource.class);
 
 	/* Settings */
@@ -87,6 +107,13 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 	/** Include metadata columns */
 	private boolean includeMetadata;
+	
+	/** Diacritic options */
+	private boolean isIgnoreDiacritics = false;
+	
+	private boolean isOnlyOrExcept = false;
+	
+	private Collection<Diacritic> selectedDiacritics = new ArrayList<>();
 
 	/* UI */
 	private JPanel settingsPanel;
@@ -101,6 +128,15 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 		putField(projectInput);
 		putField(resultSetsInput);
+		
+		putField(includeSessionInfoInput);
+		putField(includeSpeakerInfoInput);
+		putField(includeTierInfoInput);
+		putField(includeMetadataInput);
+		putField(ignoreDiacriticsInput);
+		putField(onlyOrExceptInput);
+		putField(selectedDiacriticsInput);
+		
 		putField(tableOutput);
 
 		putExtension(NodeSettings.class, this);
@@ -110,27 +146,66 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	public void operate(OpContext context) throws ProcessingException {
 		final ResultSet[] resultSets = (ResultSet[])context.get(resultSetsInput);
 		final Project project = (Project)context.get(projectInput);
-
-		context.put(tableOutput, resultsToTable(project, resultSets));
+		
+		boolean includeSessionInfo = context.get(includeSessionInfoInput) != null 
+				?	(boolean)context.get(includeSessionInfoInput)
+				:	isIncludeSessionInfo();
+				
+		boolean includeSpeakerInfo = context.get(includeSpeakerInfoInput) != null
+				?	(boolean)context.get(includeSpeakerInfoInput)
+				:	isIncludeSpeakerInfo();
+				
+		boolean includeTierInfo = context.get(includeTierInfoInput) != null
+				?	(boolean)context.get(includeTierInfoInput)
+				:	isIncludeTierInfo();
+				
+		boolean includeMetadata = context.get(includeMetadataInput) != null
+				?	(boolean)context.get(includeMetadataInput)
+				:	isIncludeMetadata();
+				
+		boolean ignoreDiacritics = context.get(GlobalParameter.IGNORE_DIACRITICS.getParamId()) != null
+				?	(boolean)context.get(GlobalParameter.IGNORE_DIACRITICS.getParamId())
+				:	context.get(ignoreDiacriticsInput) != null
+					?	(boolean)context.get(ignoreDiacriticsInput)
+					:	isIgnoreDiacritics();
+		
+		boolean onlyOrExcept = context.get(GlobalParameter.ONLY_OR_EXCEPT.getParamId()) != null
+				?	(boolean)context.get(GlobalParameter.ONLY_OR_EXCEPT.getParamId())
+				:	context.get(onlyOrExceptInput) != null
+					?	(boolean)context.get(onlyOrExceptInput)
+					:	isOnlyOrExcept();
+					
+		@SuppressWarnings("unchecked")
+		Collection<Diacritic> selectedDiacritics = context.get(GlobalParameter.SELECTED_DIACRITICS.getParamId()) != null
+				?	(Collection<Diacritic>)context.get(GlobalParameter.SELECTED_DIACRITICS.getParamId())
+				:	context.get(selectedDiacriticsInput) != null
+					?	(Collection<Diacritic>)context.get(selectedDiacriticsInput)
+					:	getSelectedDiacritics();
+		
+		TableDataSource table = resultsToTable(project, resultSets, includeSessionInfo, includeSpeakerInfo, includeTierInfo, 
+				includeMetadata, ignoreDiacritics, onlyOrExcept, selectedDiacritics);
+		context.put(tableOutput, table);
 	}
 
 	@SuppressWarnings("unchecked")
-	private TableDataSource resultsToTable(Project project, ResultSet[] results) {
+	private TableDataSource resultsToTable(Project project, ResultSet[] results, boolean includeSessionInfo,
+			boolean includeSpeakerInfo, boolean includeTierInfo, boolean includeMetadata, 
+			boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
 		final DefaultTableDataSource retVal = new DefaultTableDataSource();
 
 		List<String> columnNames = new ArrayList<>();
-
-		if(isIncludeSessionInfo()) {
+		
+		if(includeSessionInfo) {
 			columnNames.add("Session");
 			columnNames.add("Date");
 		}
 
-		if(isIncludeSpeakerInfo()) {
+		if(includeSpeakerInfo) {
 			columnNames.add("Speaker");
 			columnNames.add("Age");
 		}
 
-		if(isIncludeTierInfo()) {
+		if(includeTierInfo) {
 			columnNames.add("Record #");
 			columnNames.add("Group #");
 			columnNames.add("Tier");
@@ -155,7 +230,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			});
 
 		Set<String> metadataKeys = new LinkedHashSet<>();
-		if(isIncludeMetadata()) {
+		if(includeMetadata) {
 			for(ResultSet rs:results) {
 				metadataKeys.addAll(Arrays.asList(rs.getMetadataKeys()));
 			}
@@ -169,12 +244,12 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 					List<Object> rowData = new ArrayList<>();
 					final Record record = session.getRecord(result.getRecordIndex());
 
-					if(isIncludeSessionInfo()) {
+					if(includeSessionInfo) {
 						rowData.add(new SessionPath(rs.getCorpus(), rs.getSession()));
 						rowData.add(session.getDate());
 					}
 
-					if(isIncludeSpeakerInfo()) {
+					if(includeSpeakerInfo) {
 						final Participant speaker = record.getSpeaker();
 						if(speaker != null) {
 							rowData.add(speaker);
@@ -192,7 +267,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 					}
 
-					if(isIncludeTierInfo()) {
+					if(includeTierInfo) {
 						rowData.add(result.getRecordIndex()+1);
 						rowData.add(result.getResultValue(0).getGroupIndex()+1);
 						rowData.add(ReportHelper.createReportString(tierNames.toArray(new String[0]), result.getSchema()));
@@ -270,6 +345,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 								if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
 									resultTxt = "\u2205";
 								}
+								// TODO diacritic options
 								
 								if(buffer.length() > 0) buffer.append("..");
 								buffer.append(resultTxt);
@@ -286,7 +362,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 						rowData.add(resultVal);
 					}
 
-					if(isIncludeMetadata()) {
+					if(includeMetadata) {
 						for(String metakey:metadataKeys) {
 							rowData.add(result.getMetadata().get(metakey));
 						}
@@ -345,7 +421,33 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		if(this.includeMetadataBox != null)
 			this.includeMetadataBox.setSelected(includeMetadata);
 	}
-
+	
+	public boolean isIgnoreDiacritics() {
+		if(diacriticOptionsPanel != null) {
+			return diacriticOptionsPanel.getDiacriticOptions().isIgnoreDiacritics();
+		} else {
+			return isIgnoreDiacritics;
+		}
+	}
+	
+	public boolean isOnlyOrExcept() {
+		if(diacriticOptionsPanel != null) {
+			boolean retVal = diacriticOptionsPanel.getDiacriticOptions().getSelectionMode() == SelectionMode.ONLY ? 
+					true : false;
+			return retVal;
+		} else {
+			return isOnlyOrExcept;
+		}
+	}
+	
+	public Collection<Diacritic> getSelectedDiacritics() {
+		if(diacriticOptionsPanel != null) {
+			return diacriticOptionsPanel.getDiacriticOptions().getSelectedDiacritics();
+		} else {
+			return selectedDiacritics;
+		}
+	}
+	
 	@Override
 	public Component getComponent(GraphDocument document) {
 		if(settingsPanel == null) {
@@ -357,7 +459,12 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	private JPanel createSettingsPanel() {
 		JPanel retVal = new JPanel();
 
-		diacriticOptionsPanel = new DiacriticOptionsPanel();
+		DiacriticOptionsScriptParam param = new DiacriticOptionsScriptParam("", "", isIgnoreDiacritics, selectedDiacritics);
+		param.setIgnoreDiacritics(isIgnoreDiacritics);
+		param.setSelectionMode(isOnlyOrExcept ? SelectionMode.ONLY : SelectionMode.EXCEPT);
+		param.setSelectedDiacritics(selectedDiacritics);
+		
+		diacriticOptionsPanel = new DiacriticOptionsPanel(param);
 		includeSessionInfoBox = new JCheckBox("Include session name and date", true);
 		includeSpeakerInfoBox = new JCheckBox("Include speaker name and age", true);
 		includeTierInfoBox = new JCheckBox("Include record number, tier, group and text range", true);
@@ -375,6 +482,8 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		retVal.setLayout(layout);
 
 		retVal.add(new JXTitledSeparator("Column options"), gbc);
+		++gbc.gridy;
+		retVal.add(diacriticOptionsPanel, gbc);
 		++gbc.gridy;
 		retVal.add(includeSessionInfoBox, gbc);
 		++gbc.gridy;
