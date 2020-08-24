@@ -176,8 +176,10 @@ public class IPAMapSelector extends JComponent {
 	}
 	
 	public void setSelected(Collection<String> selected) {
-		clearSelection();
+		selectedCellGrid.getCell().clear();
+		
 		for(var ipaGrid:gridMap.values()) {
+			ipaGrid.getSelectionModel().clearSelection();
 			for(int i = 0; i < ipaGrid.getGrid().getCell().size(); i++) {
 				Cell c = ipaGrid.getGrid().getCell().get(i);
 				if(selected.contains(c.getText()) || selected.contains(c.getText().replaceAll("\u25cc", ""))) {

@@ -245,6 +245,16 @@ exports.PPCOptions = function (id, aligned) {
 	this.clusterTypeParameter;
 	this.clusterType = { index:clusterTypeParamInfo.def, toString: function() { return clusterTypeParamInfo.choices[clusterTypeParamInfo.def]; } };
 
+	var ignoreDistortedDiacriticParamInfo = {
+		"id": id +(".ignoreDistortedDiacritic"),
+		"title": "Ignore distorted diacritic (\u25cc\u033e)",
+		"desc": "Productions marked as 'distorted' will be considered correct",
+		"def": false
+	};
+	var ignoreDistoredDiacriticParam;
+	this.ignoreDistortedDiacriticParameter;
+	this.ignoreDistortedDiacritic = ignoreDistortedDiacriticParamInfo.def;
+
 	var diacriticOptionsParamInfo = {
 		"id": id +(".diacriticOptions"),
 		"desc": "Diacritic Options",
@@ -311,13 +321,34 @@ exports.PPCOptions = function (id, aligned) {
 		});
 		this.clusterTypeParameter = clusterTypeParam;
 	    params.add(clusterTypeParam);
-			
+	
 		diacriticOptionsParam = new DiacriticOptionsScriptParam(
 			diacriticOptionsParamInfo.id,
 			diacriticOptionsParamInfo.desc,
 			diacriticOptionsParamInfo.def,
 			diacriticOptionsParamInfo.retainDia
 		);
+		
+		ignoreDistortedDiacriticParam = new BooleanScriptParam(
+			ignoreDistortedDiacriticParamInfo.id,
+			ignoreDistortedDiacriticParamInfo.desc,
+			ignoreDistortedDiacriticParamInfo.title,
+			ignoreDistortedDiacriticParamInfo.def);
+		this.ignoreDistortedDiacriticParameter = ignoreDistortedDiacriticParam;
+		ignoreDistortedDiacriticParam.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				if(e.getNewValue() == true) {
+					diacriticOptionsParam.setIgnoreDiacritics(true);
+					diacriticOptionsParam.setSelectionMode(Packages.ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode.ONLY);
+					diacriticOptionsParam.setSelectedDiacritics(java.util.List.of((new IPAElementFactory()).createDiacritic(FeatureMatrix.getInstance().getCharactersWithFeature("distorted").get(0))));
+					diacriticOptionsParam.setEnabled(false);
+				} else {
+					diacriticOptionsParam.setIgnoreDiacritics(false);
+					diacriticOptionsParam.clearSelectedDiacritics();
+					diacriticOptionsParam.setEnabled(true);
+				}
+			}
+		});
 		
 		includePPCNoEpenParam = new BooleanScriptParam(
 			includePPCNoEpenParamInfo.id,
@@ -371,6 +402,7 @@ exports.PPCOptions = function (id, aligned) {
 			}
 		});
 
+		params.add(ignoreDistortedDiacriticParam);
 		params.add(diacriticOptionsParam);
 		params.add(includePPCNoEpenParam);
 	};

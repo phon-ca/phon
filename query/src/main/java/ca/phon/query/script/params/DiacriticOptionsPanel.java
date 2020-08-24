@@ -2,6 +2,9 @@ package ca.phon.query.script.params;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -10,12 +13,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeListener;
 
 import ca.phon.ipamap2.DiacriticSelector;
 import ca.phon.ipamap2.IPAMapCellSelectionListener;
 import ca.phon.ipamap2.IPAMapGrid;
 import ca.phon.ipamap2.IPAMapGridContainer;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
+import ca.phon.script.params.ScriptParam;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
@@ -61,9 +66,17 @@ public class DiacriticOptionsPanel extends JPanel {
 		ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
 		ignoreDiacriticsBox.setSelected(diacriticOptionsParam.isIgnoreDiacritics());
 		ignoreDiacriticsBox.setToolTipText("Select to ignore diacritics");
-		ignoreDiacriticsBox.addChangeListener( (e) -> {
+		ignoreDiacriticsBox.addChangeListener((e) -> {
 			updateButtons();
+		});
+		final ChangeListener ignoreDiacriticsChangeListener = (e) -> {
 			diacriticOptionsParam.setIgnoreDiacritics(ignoreDiacriticsBox.isSelected());
+		};
+		ignoreDiacriticsBox.addChangeListener(ignoreDiacriticsChangeListener);
+		diacriticOptionsParam.addPropertyChangeListener(diacriticOptionsParam.getIgnoreDiacriticsParamId(), (e) -> {
+			ignoreDiacriticsBox.removeChangeListener(ignoreDiacriticsChangeListener);
+			ignoreDiacriticsBox.setSelected(diacriticOptionsParam.isIgnoreDiacritics());
+			ignoreDiacriticsBox.addChangeListener(ignoreDiacriticsChangeListener);
 		});
 		add(ignoreDiacriticsBox, gbc);
 		
@@ -71,8 +84,14 @@ public class DiacriticOptionsPanel extends JPanel {
 		modeBox = new JComboBox<>(SelectionMode.values());
 		modeBox.setToolTipText("Diacritic selection mode");
 		modeBox.setSelectedItem(diacriticOptionsParam.getSelectionMode());
-		modeBox.addItemListener( (e) -> {
+		final ItemListener modeListener = (e) -> {
 			diacriticOptionsParam.setSelectionMode((SelectionMode)modeBox.getSelectedItem());
+		};
+		modeBox.addItemListener(modeListener);
+		diacriticOptionsParam.addPropertyChangeListener(diacriticOptionsParam.getSelectionModeParamId(), (e) -> {
+			modeBox.removeItemListener(modeListener);
+			modeBox.setSelectedItem(diacriticOptionsParam.getSelectionMode());
+			modeBox.addItemListener(modeListener);
 		});
 		add(modeBox, gbc);
 		
@@ -80,8 +99,14 @@ public class DiacriticOptionsPanel extends JPanel {
 		final CountDownLatch latch = new CountDownLatch(1);
 		diacriticSelector = new DiacriticSelector();
 		diacriticSelector.setSelectedDiacritics(diacriticOptionsParam.getSelectedDiacritics());
-		diacriticSelector.addPropertyChangeListener("selected", (e) -> {
+		final PropertyChangeListener diacriticListener = (e) -> {
 			diacriticOptionsParam.setSelectedDiacritics(diacriticSelector.getSelectedDiacritics());
+		};
+		diacriticSelector.addPropertyChangeListener("selected", diacriticListener);
+		diacriticOptionsParam.addPropertyChangeListener(diacriticOptionsParam.getSelectedDiacriticsParamId(), (e) -> {
+			diacriticSelector.removePropertyChangeListener("selected", diacriticListener);
+			diacriticSelector.setSelectedDiacritics(diacriticOptionsParam.getSelectedDiacritics());
+			diacriticSelector.addPropertyChangeListener("selected", diacriticListener);
 		});
 		
 		latch.countDown();
@@ -114,6 +139,13 @@ public class DiacriticOptionsPanel extends JPanel {
 		var gridTuple = container.addGrid(diacriticSelector.getSelectedGrid());
 		selectedGridMap = gridTuple.getObj2();
 		add(container, gbc);
+		
+		diacriticOptionsParam.addPropertyChangeListener(ScriptParam.ENABLED_PROP, (e) -> {
+			ignoreDiacriticsBox.setEnabled(diacriticOptionsParam.isEnabled());
+			dropDownButton.setEnabled(diacriticOptionsParam.isEnabled());
+			modeBox.setEnabled(diacriticOptionsParam.isEnabled());
+			selectedGridMap.setEnabled(diacriticOptionsParam.isEnabled());
+		});
 		
 		diacriticSelector.getMapGridContainer().addCellSelectionListener(new IPAMapCellSelectionListener() {
 			

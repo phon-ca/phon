@@ -114,6 +114,10 @@ public class DiacriticOptionsScriptParam extends ScriptParam {
 		return (Collection<Diacritic>)super.getValue(getSelectedDiacriticsParamId());
 	}
 	
+	public void clearSelectedDiacritics() {
+		setValue(getSelectedDiacriticsParamId(), new ArrayList<Diacritic>());
+	}
+	
 	public void setSelectedDiacritics(Collection<Diacritic> selectedDiacritics) {
 		setValue(getSelectedDiacriticsParamId(), selectedDiacritics);
 	}
