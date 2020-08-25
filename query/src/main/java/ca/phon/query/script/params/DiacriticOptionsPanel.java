@@ -142,9 +142,9 @@ public class DiacriticOptionsPanel extends JPanel {
 		
 		diacriticOptionsParam.addPropertyChangeListener(ScriptParam.ENABLED_PROP, (e) -> {
 			ignoreDiacriticsBox.setEnabled(diacriticOptionsParam.isEnabled());
-			dropDownButton.setEnabled(diacriticOptionsParam.isEnabled());
-			modeBox.setEnabled(diacriticOptionsParam.isEnabled());
-			selectedGridMap.setEnabled(diacriticOptionsParam.isEnabled());
+			dropDownButton.setEnabled(diacriticOptionsParam.isEnabled() && ignoreDiacriticsBox.isSelected());
+			modeBox.setEnabled(diacriticOptionsParam.isEnabled() && ignoreDiacriticsBox.isSelected());
+			selectedGridMap.setEnabled(diacriticOptionsParam.isEnabled() && ignoreDiacriticsBox.isSelected());
 		});
 		
 		diacriticSelector.getMapGridContainer().addCellSelectionListener(new IPAMapCellSelectionListener() {
