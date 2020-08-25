@@ -208,8 +208,37 @@ exports.PDCOptions = function (id, aligned) {
 	};
 	var diacriticOptionsParam;
 	this.diacriticOptions = {};
+	
+	var pdcTypeParamInfo = {
+		"id": id + ".pdcType",
+		"title": "Report type:",
+		"choices": ["All phones",
+					"Consonants",
+					"Vowels",
+					"Other (custom)"],
+		"colnames": ["PDC", "PDC", "PDC", "PDC"],
+		"phonex": [ "\\w",
+					"\\c",
+					"\\v" ],
+		"def": 0,
+		"cols": 1,
+		"type": "radiobutton"
+	};
+	var pdcTypeParam;
+	this.pdcTypeParameter;
+	this.pdcType = { index:pdcTypeParamInfo.def, toString: function() { return pdcTypeParamInfo.choices[pdcTypeParamInfo.def]; } };
 			
-	this.param_setup = function (params) {	
+	this.param_setup = function (params) {
+		pdcTypeParam = new EnumScriptParam(
+			pdcTypeParamInfo.id,
+			pdcTypeParamInfo.title,
+			pdcTypeParamInfo.def,
+			pdcTypeParamInfo.choices,
+			pdcTypeParamInfo.type,
+			pdcTypeParamInfo.cols);
+		this.pdcTypeParameter = pdcTypeParam;
+		params.add(pdcTypeParam);
+		
 		var patternParams = new java.util.ArrayList();
 		this.pattern.setSelectedPatternType(PatternType.PHONEX);
 		this.pattern.param_setup(patternParams);
@@ -224,6 +253,22 @@ exports.PDCOptions = function (id, aligned) {
 			diacriticOptionsParamInfo.retainDia
 		);		
 		params.add(diacriticOptionsParam);
+		
+		var patternFilter = this.pattern;
+		patternFilter.setVisible(pdcTypeParamInfo.def == 3);
+		patternFilter.setPattern(pdcTypeParamInfo.phonex[pdcTypeParamInfo.def]);
+		pdcTypeParam.addPropertyChangeListener(pdcTypeParamInfo.id, new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				var idx = e.source.getValue(e.source.paramId).index;
+
+				if(idx < 3) {
+    				patternFilter.setVisible(false);
+					patternFilter.setPattern(pdcTypeParamInfo.phonex[idx]);
+				} else {
+					patternFilter.setVisible(true);
+				}
+			}
+		});
 	};
 
 };
