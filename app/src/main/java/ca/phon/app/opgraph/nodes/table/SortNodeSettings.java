@@ -61,6 +61,8 @@ public class SortNodeSettings implements Cloneable {
 	private boolean configureAutomatically = true;
 	
 	private SortOrder autoSortOrder = SortOrder.ASCENDING;
+	
+	private boolean likeOnTop = false;
 
 	private final List<SortColumn> sorting = new ArrayList<>();
 	
@@ -76,6 +78,14 @@ public class SortNodeSettings implements Cloneable {
 	
 	public void setConfigureAutomatically(boolean configureAutomatically) {
 		this.configureAutomatically = configureAutomatically;
+	}
+	
+	public boolean isLikeOnTop() {
+		return this.likeOnTop;
+	}
+	
+	public void setLikeOnTop(boolean likeOnTop) {
+		this.likeOnTop = likeOnTop;
 	}
 	
 	public SortOrder getAutoSortOrder() {
@@ -152,6 +162,7 @@ public class SortNodeSettings implements Cloneable {
 		
 		settings.setAutoSortOrder(getAutoSortOrder());
 		settings.setConfigureAutomatically(isConfigureAutomatically());
+		settings.setLikeOnTop(isLikeOnTop());
 		settings.sorting.clear();
 		
 		for(SortColumn sc:this.sorting) {

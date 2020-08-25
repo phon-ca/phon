@@ -60,6 +60,9 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 		
 		settingsEle.setAttribute("configureAutomatically", Boolean.toString(settings.isConfigureAutomatically()));
 		settingsEle.setAttribute("autoSortOrder", settings.getAutoSortOrder().toString().toLowerCase());
+		if(settings.isLikeOnTop()) {
+			settingsEle.setAttribute("likeOnTop", Boolean.toString(settings.isLikeOnTop()));
+		}
 		
 		for(SortColumn sc:settings.getSorting()) {
 			final Element scEle = doc.createElementNS(NAMESPACE, PREFIX + ":sortBy");
@@ -95,6 +98,11 @@ public class SortNodeSettingsXMLSerializer implements XMLSerializer {
 		Node autoSortOrderNode = attrs.getNamedItem("autoSortOrder");
 		if(autoSortOrderNode != null) {
 			retVal.setAutoSortOrder(SortOrder.fromString(autoSortOrderNode.getNodeValue()));
+		}
+		
+		Node likeOnTopNode = attrs.getNamedItem("likeOnTop");
+		if(likeOnTopNode != null) {
+			retVal.setLikeOnTop(Boolean.parseBoolean(likeOnTopNode.getNodeValue()));
 		}
 		
 		NodeList childNodes = elem.getChildNodes();

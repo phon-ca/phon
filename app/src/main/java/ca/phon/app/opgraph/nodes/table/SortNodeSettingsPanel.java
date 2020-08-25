@@ -70,6 +70,8 @@ public class SortNodeSettingsPanel extends JPanel {
 	private JPanel sortByPanel;
 	private JButton addSortButton;
 	
+	private JCheckBox likeOnTopBox;
+	
 	public SortNodeSettingsPanel(SortNodeSettings settings) {
 		super();
 		this.settings = settings;
@@ -79,6 +81,10 @@ public class SortNodeSettingsPanel extends JPanel {
 	
 	private void init() {
 		configTypeGroup = new ButtonGroup();
+		
+		likeOnTopBox = new JCheckBox("Keep like on top");
+		likeOnTopBox.setSelected(settings.isLikeOnTop());
+		likeOnTopBox.addActionListener( (e) -> settings.setLikeOnTop(likeOnTopBox.isSelected()) );
 		
 		// auto config options
 		autoConfigBtn = new JRadioButton("Automatic Configuration");
@@ -128,6 +134,7 @@ public class SortNodeSettingsPanel extends JPanel {
 		setLayout(new BorderLayout());
 		add(autoConfigPanel, BorderLayout.NORTH);
 		add(manualConfigPanel, BorderLayout.CENTER);
+		add(likeOnTopBox, BorderLayout.SOUTH);
 	}
 	
 	public void updateManualConfig() {

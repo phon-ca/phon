@@ -113,6 +113,11 @@
 				</xs:sequence>
 				<xs:attribute name="configureAutomatically" type="xs:boolean" use="optional"/>
 				<xs:attribute name="autoSortOrder" type="sortOrderType" use="optional"/>
+				<xs:attribute name="likeOnTop" type="xs:boolean" default="false" use="optional">
+					<xs:annotation>
+						<xs:documentation>If true the column set which has matching values will be placed at the beginning of the sorted rows.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

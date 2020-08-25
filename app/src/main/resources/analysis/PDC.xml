@@ -75,14 +75,11 @@ function run(context) {
                     <oga:property key="filters.searchBy.searchBy">
                         <![CDATA[Word]]>
                     </oga:property>
-                    <oga:property key="filters.pdc.diacriticOptions.selectionMode">
-                        <![CDATA[Except]]>
-                    </oga:property>
                     <oga:property key="reportTitle">
                         <![CDATA[Percent Diacritics Correct (PDC)]]>
                     </oga:property>
-                    <oga:property key="filters.pdc.diacriticOptions.selectedDiacritics">
-                        <![CDATA[[]]]>
+                    <oga:property key="filters.pdc.pdcType">
+                        <![CDATA[All phones]]>
                     </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
@@ -180,17 +177,14 @@ function setup_params(params) {
 ]]>
                     </oga:property>
                     <oga:property key="filters.pdc.pattern.filter">
-                        <![CDATA[.]]>
-                    </oga:property>
-                    <oga:property key="filters.pdc.diacriticOptions.ignoreDiacritics">
-                        <![CDATA[false]]>
+                        <![CDATA[\w]]>
                     </oga:property>
                 </oga:settings>
                 <oga:meta x="31" y="647"/>
             </extensions>
         </node>
         <opqry:queryNode id="2da2c46d" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-20T09:06:02.858-02:30" name="Phones" uuid="2e8dd629-c101-4dfd-91fd-e10ca698a375">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-08-25T10:51:52.805-02:30" name="Phones" uuid="1accb479-c6f7-40e4-ac9d-6a8aee1ee662">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -217,7 +211,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="1bedded791b945f4" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="12446530">
+            <graph id="124f4ec">
                 <node id="f5a56a7a058b447a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -302,8 +296,11 @@ function setup_params(params) {
                     <oga:property key="filters.pdc.diacriticOptions.selectionMode">
                         <![CDATA[Except]]>
                     </oga:property>
+                    <oga:property key="filters.pdc.pdcType">
+                        <![CDATA[Vowels]]>
+                    </oga:property>
                     <oga:property key="filters.pdc.diacriticOptions.selectedDiacritics">
-                        <![CDATA[[]]]>
+                        <![CDATA[[˼, ˉ, ᷉, ˥, ˨, ˋ, ̀, ᷄, ꜛ, ̌, ̏, ˇ, ꜝ, ́, ᷈, ̂, ̄, ̖, ˧, ˻, ᷅, ˆ, ꜜ, ˩, ̋, ˶, ˦, ˹, ˵, ꜞ, ˺, ˊ]]]>
                     </oga:property>
                     <oga:property key="__script">
                         <![CDATA[var PDC = require("lib/PDC").PDC;
@@ -425,10 +422,10 @@ function run(context) {
 }]]>
                     </oga:property>
                     <oga:property key="filters.pdc.pattern.filter">
-                        <![CDATA[.]]>
+                        <![CDATA[\v]]>
                     </oga:property>
                     <oga:property key="filters.pdc.diacriticOptions.ignoreDiacritics">
-                        <![CDATA[false]]>
+                        <![CDATA[true]]>
                     </oga:property>
                 </oga:settings>
                 <oga:meta x="964" y="117"/>
@@ -493,7 +490,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="f9fd055c90654b22" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="322078e7">
+            <graph id="2c6febc1">
                 <node id="57f04d2e84334bd8" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -528,7 +525,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="69c0908eef1c42be" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="181a2716">
+                    <graph id="ac13ab9">
                         <node id="96a8c2831e384405" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -586,7 +583,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="994eefb360114580" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="401dae55">
+                    <graph id="5aad2476">
                         <node id="84594c8d414c4400" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -655,7 +652,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="309e320" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="18acb03b">
+                    <graph id="59650eda">
                         <node id="3b922b61" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -761,7 +758,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="970cecc1b9a742d6" name="Get Table For Speaker (By Phone)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="5913dea7">
+                            <graph id="523042ab">
                                 <node id="5c25ef265d71459f" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -941,7 +938,7 @@ function run(context) {
                         </node>
                         <node id="21b4b1b3047b472d" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                             <extensions>
-                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
+                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false" likeOnTop="true">
                                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
                                 </opqry:sortoptions>
@@ -1098,7 +1095,7 @@ function run(context) {
         </ogcn:macro>
         <node id="6c87effba68a4ea9" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
             <extensions>
-                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
+                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false" likeOnTop="true">
                     <opqry:sortBy column="IPA Target" order="ascending" type="ipa"/>
                     <opqry:sortBy column="IPA Actual" order="ascending" type="ipa"/>
                 </opqry:sortoptions>
