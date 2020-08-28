@@ -45,6 +45,7 @@ import java.util.function.Consumer;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -63,6 +64,7 @@ import org.jdesktop.swingx.JXTable;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.BrowserType;
 import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.ZoomService;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent.Level;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -144,6 +146,9 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	private JPanel htmlPanel;
 	private JSplitPane htmlSplitPane;
+	private JButton zoomInBtn;
+	private JButton zoomOutBtn;
+	private JButton zoomResetBtn;
 	
 	public final static String SHOWING_BUFFER_PROP = BufferPanel.class.getName() + ".showingBuffer";
 
@@ -364,6 +369,24 @@ public class BufferPanel extends JPanel implements IExtendable {
 		currentView = htmlPanel;
 		cardLayout.show(contentPanel, HTML_VIEW_ID);
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
+	}
+	
+	public void onZoomIn() {
+		if(!isShowingHtml() || browser == null) return;
+		browser.zoomIn();
+		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
+	}
+	
+	public void onZoomOut() {
+		if(!isShowingHtml() || browser == null) return;
+		browser.zoomOut();
+		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
+	}
+	
+	public void onZoomReset() {
+		if(!isShowingHtml()) return;
+		browser.zoomReset();
+		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
 	}
 	
 	public boolean isShowingHtmlDebug() {

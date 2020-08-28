@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import java.awt.AWTEventMulticaster;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,6 +28,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -281,7 +283,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 		});
 		
-		
 		if(PrefHelper.getBoolean("phon.debug", false)) {
 			final JMenu bufferMenu = builder.addMenu(".@Report", "Buffer");
 			bufferMenu.addMenuListener(new MenuListener() {
@@ -323,6 +324,23 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				builder.addItem(".", reloadAct);
 				builder.addSeparator(".", "debug_sep");
 			}
+			
+			final PhonUIAction zoomInAct = new PhonUIAction(this, "onZoomIn");
+			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
+			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
+			builder.addItem(".", zoomInAct);
+			
+			final PhonUIAction zoomOutAct = new PhonUIAction(this, "onZoomOut");
+			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
+			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
+			builder.addItem(".", zoomOutAct);
+			
+			final PhonUIAction resetZoomAct = new PhonUIAction(this, "onZoomReset");
+			resetZoomAct.putValue(PhonUIAction.NAME, "Reset zoom");
+			resetZoomAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level");
+			builder.addItem(".", resetZoomAct);
+			
+			builder.addSeparator(".", "zoom_actions");
 			
 			if(Desktop.isDesktopSupported() && hasReport) {
 				// bug on macos using Browser.getURL() for some reason when opening window menu
@@ -504,6 +522,24 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
 		builder.addSeparator(".", "_export");
 		builder.addItem(".", printReportAct).setEnabled(hasReport);
+	}
+	
+	public void onZoomIn() {
+		if(reportBufferAvailable()) {
+			bufferPanel.getCurrentBuffer().onZoomIn();
+		}
+	}
+	
+	public void onZoomOut() {
+		if(reportBufferAvailable()) {
+			bufferPanel.getCurrentBuffer().onZoomOut();
+		}
+	}
+	
+	public void onZoomReset() {
+		if(reportBufferAvailable()) {
+			bufferPanel.getCurrentBuffer().onZoomReset();
+		}
 	}
 	
 	private void setupReportTreeMenu(MenuBuilder builder, ReportTree reportTree) {
@@ -1158,7 +1194,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 								++idx;
 							}
 							
-							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
+							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));							
 						}
 						
 						@Override
@@ -1689,6 +1725,23 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selection to clipboard");
 			builder.addItem(".", copyAct);
 			builder.addSeparator(".", "editor_commands");
+			
+			final PhonUIAction zoomInAct = new PhonUIAction(params.getBrowser(), "zoomIn");
+			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
+			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
+			builder.addItem(".", zoomInAct);
+			
+			final PhonUIAction zoomOutAct = new PhonUIAction(params.getBrowser(), "zoomOut");
+			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
+			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
+			builder.addItem(".", zoomOutAct);
+			
+			final PhonUIAction zoomResetAct = new PhonUIAction(params.getBrowser(), "zoomReset");
+			zoomResetAct.putValue(PhonUIAction.NAME, "Reset zoom");
+			zoomResetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level to default");
+			builder.addItem(".", zoomResetAct);
+			
+			builder.addSeparator(".", "zoom_actions");
 			
 			setupReportMenu(builder);
 			
