@@ -862,10 +862,10 @@
     <feature_set char="ʁ">consonant dorsal uvular lingual voiced rhotic continuant obstruent
         fricative oral</feature_set>
     <!--w (0x77)-->
-    <feature_set char="w">consonant glide labial bilabial dorsal velar lingual voiced approximant
+    <feature_set char="w">consonant glide labial bilabial voiced approximant
         continuant sonorant oral</feature_set>
     <!--ʍ (0x28d)-->
-    <feature_set char="ʍ">consonant labial bilabial dorsal velar lingual voiceless continuant
+    <feature_set char="ʍ">consonant labial bilabial voiceless continuant
         obstruent fricative oral</feature_set>
     <!--ʋ (0x28b)-->
     <feature_set char="ʋ">consonant glide labial voiced approximant continuant sonorant
