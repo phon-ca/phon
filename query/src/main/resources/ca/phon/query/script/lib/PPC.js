@@ -51,7 +51,7 @@ exports.PPC = {
 		}
 	};
 	 */
-	calc_ppc_aligned: function (group, filter, diacriticOptions) {
+	calc_ppc_aligned: function (group, filter, diacriticOptions, distortedIsCorrect) {
 		var numTarget = 0;
 		var numDeleted = 0;
 		var numActual = 0;
@@ -82,19 +82,24 @@ exports.PPC = {
 				if (alignedData.size() > 0) {
 					var actualPhone = alignedData.get(0);
 					if (actualPhone != null) {
-						var targetPhoneString =
-							(diacriticOptions.ignoreDiacritics == true 
-								? this.strip_diacritics(new IPATranscript([phone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
-								: phone.toString());
-						var actualPhoneString =
-							(diacriticOptions.ignoreDiacritics == true 
-								? this.strip_diacritics(new IPATranscript([actualPhone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
-								: actualPhone.toString());
-
-						if (targetPhoneString == actualPhoneString) {
+						if(distortedIsCorrect && 
+							(phone.featureSet.hasFeature("distorted") || actualPhone.featureSet.hasFeature("distorted"))) {
 							wasCorrect = true;
-						} else {
-							wasSub = true;
+						} else {					
+							var targetPhoneString =
+								(diacriticOptions.ignoreDiacritics == true 
+									? this.strip_diacritics(new IPATranscript([phone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
+									: phone.toString());
+							var actualPhoneString =
+								(diacriticOptions.ignoreDiacritics == true 
+									? this.strip_diacritics(new IPATranscript([actualPhone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
+									: actualPhone.toString());
+	
+							if (targetPhoneString == actualPhoneString) {
+								wasCorrect = true;
+							} else {
+								wasSub = true;
+							}
 						}
 					} else {
 						wasDeleted = true;
@@ -191,11 +196,11 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
-		"choices": ["Percent Consonants Correct",
-					"Percent Singleton Consonants Correct",
-					"Percent Cluster Consonants Correct",
+		"choices": ["Percent Phones Correct",
+					"Percent Consonants Correct",
 					"Percent Vowels Correct",
-					"Percent Phones Correct",
+					"Percent Singleton Consonants Correct",
+					"Percent Cluster Consonants Correct",					
 					"Percent Correct (custom)"],
 		"colnames": ["PPC", "PPC", "PPC", "PPC", "PPC", "PPC"],
 		"phonex": [ "\\c",
@@ -247,8 +252,8 @@ exports.PPCOptions = function (id, aligned) {
 
 	var ignoreDistortedDiacriticParamInfo = {
 		"id": id +(".ignoreDistortedDiacritic"),
-		"title": "Ignore distorted diacritic (\u25cc\u033e)",
-		"desc": "Productions marked as 'distorted' will be considered correct",
+		"title": "PPC-r",
+		"desc": "Phones marked as 'distorted' (\u25cc\u033e) will be considered correct",
 		"def": false
 	};
 	var ignoreDistoredDiacriticParam;
@@ -335,20 +340,6 @@ exports.PPCOptions = function (id, aligned) {
 			ignoreDistortedDiacriticParamInfo.title,
 			ignoreDistortedDiacriticParamInfo.def);
 		this.ignoreDistortedDiacriticParameter = ignoreDistortedDiacriticParam;
-		ignoreDistortedDiacriticParam.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-			propertyChange: function(e) {
-				if(e.getNewValue() == true) {
-					diacriticOptionsParam.setIgnoreDiacritics(true);
-					diacriticOptionsParam.setSelectionMode(Packages.ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode.ONLY);
-					diacriticOptionsParam.setSelectedDiacritics(java.util.List.of((new IPAElementFactory()).createDiacritic(FeatureMatrix.getInstance().getCharactersWithFeature("distorted").get(0))));
-					diacriticOptionsParam.setEnabled(false);
-				} else {
-					diacriticOptionsParam.setIgnoreDiacritics(false);
-					diacriticOptionsParam.clearSelectedDiacritics();
-					diacriticOptionsParam.setEnabled(true);
-				}
-			}
-		});
 		
 		includePPCNoEpenParam = new BooleanScriptParam(
 			includePPCNoEpenParamInfo.id,
@@ -373,9 +364,9 @@ exports.PPCOptions = function (id, aligned) {
 
 				if(idx < 5) {
     				patternFilter.setVisible(false);
-				    if(idx == 1) {
+				    if(idx == 3) {
 				        patternFilter.setPattern(singletonTypeParamInfo.phonex[singletonTypeParam.getValue(singletonTypeParam.paramId).index]);
-				    } else if(idx == 2) {
+				    } else if(idx == 4) {
 				        patternFilter.setPattern(clusterTypeParamInfo.phonex[clusterTypeParam.getValue(clusterTypeParam.paramId).index]);
 				    } else {
     					patternFilter.setPattern(ppcTypeParamInfo.phonex[idx]);
@@ -385,12 +376,12 @@ exports.PPCOptions = function (id, aligned) {
 				}
 
 			    switch(idx) {
-			    case 1:
+			    case 3:
 			        singletonTypeParam.setVisible(true);
 			        clusterTypeParam.setVisible(false);
 			        break;
 
-			    case 2:
+			    case 4:
 			        singletonTypeParam.setVisible(false);
 			        clusterTypeParam.setVisible(true);
 			        break;

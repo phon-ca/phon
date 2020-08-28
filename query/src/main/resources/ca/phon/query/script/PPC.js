@@ -190,7 +190,7 @@ function query_record(recordIndex, record) {
 			var alignedResults = toSearch[j][1];
 			var alignedMetadata = toSearch[j][2];
 
-			var pc = PPC.calc_ppc_aligned(obj, filters.ppc.pattern, filters.ppc.diacriticOptions);
+			var pc = PPC.calc_ppc_aligned(obj, filters.ppc.pattern, filters.ppc.diacriticOptions, filters.ppc.ignoreDistortedDiacritic);
 			if(pc.target == 0) continue;
 
 			var ipaT = (obj.IPATarget != null ? obj.IPATarget: new IPATranscript());
