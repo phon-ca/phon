@@ -1729,11 +1729,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			final PhonUIAction zoomInAct = new PhonUIAction(params.getBrowser(), "zoomIn");
 			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
 			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
+			zoomInAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 			builder.addItem(".", zoomInAct);
 			
 			final PhonUIAction zoomOutAct = new PhonUIAction(params.getBrowser(), "zoomOut");
 			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
 			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
+			zoomOutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 			builder.addItem(".", zoomOutAct);
 			
 			final PhonUIAction zoomResetAct = new PhonUIAction(params.getBrowser(), "zoomReset");

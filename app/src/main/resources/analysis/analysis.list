@@ -1,5 +1,7 @@
 # General
 analysis/Consonants.xml
+analysis/Percent Diacritics Correct.xml
+analysis/Percent Number Tones Correct.xml
 analysis/Percent Phones Correct.xml
 analysis/PDC.xml
 analysis/PNTC.xml

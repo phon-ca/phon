@@ -64,7 +64,6 @@ import org.jdesktop.swingx.JXTable;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.BrowserType;
 import com.teamdev.jxbrowser.chromium.JSValue;
-import com.teamdev.jxbrowser.chromium.ZoomService;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent.Level;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -442,6 +441,19 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 		currentView = logBuffer;
 		add(contentPanel, BorderLayout.CENTER);
+		
+		ActionMap am = getActionMap();
+		InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		final PhonUIAction zoomInAct = new PhonUIAction(this, "onZoomIn");
+		am.put("zoomIn", zoomInAct);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomIn");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomIn");
+		
+		final PhonUIAction zoomOutAct = new PhonUIAction(this, "onZoomOut");
+		am.put("zoomOut", zoomOutAct);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomOut");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomOut");
 	}
 
 	public String getBufferName() {
