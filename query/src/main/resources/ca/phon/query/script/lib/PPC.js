@@ -82,7 +82,7 @@ exports.PPC = {
 				if (alignedData.size() > 0) {
 					var actualPhone = alignedData.get(0);
 					if (actualPhone != null) {
-						if(distortedIsCorrect && 
+						if(distortedIsCorrect == true && 
 							(phone.featureSet.hasFeature("distorted") || actualPhone.featureSet.hasFeature("distorted"))) {
 							wasCorrect = true;
 						} else {					
