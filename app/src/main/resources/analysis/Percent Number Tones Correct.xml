@@ -177,7 +177,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="6662b0cb" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-01T10:20:32.634-02:30" name="Phones" uuid="ae3c5e96-691a-4e86-83cf-cf4f098399d9">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-01T13:03:03.995-02:30" name="Phones" uuid="87816754-7d44-4822-b7d7-a0703d65e92f">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -204,7 +204,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="396727e9">
+            <graph id="11b02bac">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -501,7 +501,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="74d6979e" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="18a9e873">
+            <graph id="1f72a73e">
                 <node id="c1f475d" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -536,7 +536,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="66021052a34740c5" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6f92a956">
+                    <graph id="5f4a4b2f">
                         <node id="64dae43e16a54dff" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -594,7 +594,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="c2c1479d9c984a12" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="3e5282b4">
+                    <graph id="7ce88568">
                         <node id="161f5953d3ad467d" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -664,7 +664,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="46dba1c4" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="41209c96">
+                    <graph id="33eeece">
                         <node id="217caf4d" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -731,7 +731,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="4c64b990d45249bf" name="Get Table For Speaker (Syll)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="3577ec71">
+                            <graph id="7bf5fa73">
                                 <node id="74a8f842467f4bcc" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1331,6 +1331,8 @@ function run(context) {
 		if(correct + sub + del > 0) {
 			var pntc = (correct) / (correct + sub + del);
 			table.setValueAt(row, table.columnCount - 1, java.lang.Float.valueOf(pntc * 100.0));
+		} else {
+			table.setValueAt(row, table.columnCount - 1, java.lang.Float.valueOf(0.0));
 		}
 	}
 }
