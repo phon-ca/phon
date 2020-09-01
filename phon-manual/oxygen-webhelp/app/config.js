@@ -59,7 +59,7 @@ define(function() {
          ********************************************************/
 
         // JQuery
-        "jquery" : "../lib/jquery/jquery-3.4.1.min",
+        "jquery" : "../lib/jquery/jquery-3.5.1.min",
         // JQuery UI
         "jquery.ui" : "../lib/jquery-ui/jquery-ui.min",
         // JQuery Highlight

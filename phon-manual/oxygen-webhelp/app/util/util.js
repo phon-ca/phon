@@ -30,6 +30,24 @@ define(["parseuri"], function(parseUri){
             } catch (e) {
                 this.debug(e);
             }
+        },
+
+        isLocal : function () {
+            this.debug("isLocal()");
+            var whLocation = "";
+
+            try {
+                whLocation = window.location;
+                var p = parseUri(whLocation);
+
+                if (p.protocol == "http" || p.protocol == "https") {
+                    return false;
+                }
+            } catch (e) {
+                this.debug(e);
+            }
+
+            return true;
         }
     }
 });

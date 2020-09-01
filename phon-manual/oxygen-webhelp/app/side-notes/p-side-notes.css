@@ -1,7 +1,7 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2020 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 /*
@@ -257,9 +257,7 @@ Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
     	text-decoration: none;
         font-weight: normal;
         font-style: normal;
-    	
     }
-
 
     /*
      * This is the link to the floated comment.
@@ -466,6 +464,19 @@ oxy-insert   	 oxy-comment,
     .oxy-range-end:before {
         content:'}';
         font-weight:bold;
+    }
+    
+    oxy-range-start[is-changebar]:before(100),
+    .oxy-range-start[is-changebar]:before(100) {
+        content: "";
+        display:-oxy-changebar-start;
+        -oxy-changebar-color: gray;
+        -oxy-changebar-width: 1.5pt;
+    }
+    oxy-range-end[is-changebar]:before(100),
+    .oxy-range-end[is-changebar]:before(100) {
+        content: "";
+    	display:-oxy-changebar-end;
     }
 
     /* Remove the link from the HTML output, we already have a link from the footnote marker to the call. */

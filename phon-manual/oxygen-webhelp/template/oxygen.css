@@ -12,25 +12,25 @@
  *  
  */
 @font-face {
-    font-family: 'Roboto';
+    font-family: Roboto;
     font-style: normal;
     font-weight: 100;
     src: url(resources/fonts/Roboto-Thin.ttf);
 }
 @font-face {
-    font-family: 'Roboto';
+    font-family: Roboto;
     font-style: normal;
     font-weight: 300;
     src: url(resources/fonts/Roboto-Light.ttf);
 }
 @font-face {
-    font-family: 'Roboto';
+    font-family: Roboto;
     font-style: normal;
     font-weight: 400;
     src: url(resources/fonts/Roboto-Regular.ttf);
 }
 @font-face {
-    font-family: 'Roboto';
+    font-family: Roboto;
     font-style: normal;
     font-weight: 700;
     src: url(resources/fonts/Roboto-Bold.ttf);
@@ -41,7 +41,7 @@ html, body {
 }
 
 body{
-    font-family: 'Roboto', sans-serif;
+    font-family: Roboto, sans-serif;
 }
 
     /*
@@ -417,7 +417,10 @@ Example:
     line-height: 1.1em;
 }
 
-.topictitle3{
+.topictitle3,
+.topictitle4,
+.topictitle5,
+.topictitle6 {
     font-weight: 400;
 }
 
@@ -445,12 +448,11 @@ Example:
 .related-links a,
 .related-links a:visited {
     color: #5185cb;
-    padding-bottom: .3em;
     display:inline-block;
 }
 
 .filepath {
-    color: #c7254e !important;
+    color: #c7254e;
 }
 
 /*

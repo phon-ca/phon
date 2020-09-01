@@ -134,6 +134,12 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
      */
     var resultCategoriesMapFiles = [];
 
+    var localNote =
+        '<div class="alert alert-warning alert-dismissible fade show" role="alert">'
+        + '<strong>WARNING!</strong> Due to security reasons, the Japanese Morphological Analyzer (Kuromoji) '
+        + 'is disabled while browsing WebHelp output locally. <a href="#" style="font-size: 0.9em"> [ Read more ]</a>'
+        + '</div>';
+
     /**
      * An object describing the topic information. It contains the title of the topic, the relative path to the output directory,
      * the topic's short description.
@@ -197,7 +203,14 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
 
     function performSearchDriver(searchQuery, _callback) {
         var indexerLanguage = options.getIndexerLanguage();
-        var useKuromoji = indexerLanguage.indexOf("ja") != -1;
+        var useKuromoji = indexerLanguage.indexOf("ja") != -1 && options.getBoolean('webhelp.enable.search.kuromoji.js')
+                && !util.isLocal();
+
+        if (indexerLanguage.indexOf("ja") != -1 && util.isLocal() && options.getBoolean('webhelp.enable.search.kuromoji.js')) {
+            var note = $('<div/>').addClass('col-xs-12 col-sm-12 col-md-12 col-lg-12')
+                .html(localNote);
+            $('#searchResults').before(note);
+        }
 
         if (useKuromoji) {
             require(["kuromoji"], function (kuromoji) {

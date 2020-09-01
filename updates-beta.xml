@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_1.dmg" newVersion="3.1.3-beta.1" newMediaFileId="macos" fileSize="286357557" md5Sum="c01df09ef75c8f5ae1e31a83ddb83ae1" sha256Sum="c8996fd8d5199e01af5ca2fddd2c6b00acd72e133a4d8672a004748b3c02c1a7" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_3.dmg" newVersion="3.1.3-beta.3" newMediaFileId="macos" fileSize="286392563" md5Sum="a67895f8af770329cc6cfc7400ac9fa3" sha256Sum="c4217ef35b2738c60adcdf82ef75fb110a01b1cd50fa8637294702dbee053430" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.2
 
- * Added PNTC analysis
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
- * Added new 'Sub columns' setting to manual inverntory options
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
 
 ## Changes from 3.1.0
 
@@ -338,12 +343,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_1.dmg" newVersion="3.1.3-beta.1" newMediaFileId="macos" fileSize="286357557" md5Sum="c01df09ef75c8f5ae1e31a83ddb83ae1" sha256Sum="c8996fd8d5199e01af5ca2fddd2c6b00acd72e133a4d8672a004748b3c02c1a7" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_3.dmg" newVersion="3.1.3-beta.3" newMediaFileId="macos" fileSize="286392563" md5Sum="a67895f8af770329cc6cfc7400ac9fa3" sha256Sum="c4217ef35b2738c60adcdf82ef75fb110a01b1cd50fa8637294702dbee053430" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.2
 
- * Added PNTC analysis
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
- * Added new 'Sub columns' setting to manual inverntory options
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
 
 ## Changes from 3.1.0
 
@@ -676,12 +686,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.exe" newVersion="3.1.3-beta.1" newMediaFileId="win64" fileSize="295987976" md5Sum="983d2a7d4ef49683c2d53dacc5666855" sha256Sum="5d00587f9c0da6ec10bd2c2b9368dba9c85a0ffe8d9aeff71de84e320bc0c5b9" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_3.exe" newVersion="3.1.3-beta.3" newMediaFileId="win64" fileSize="296014088" md5Sum="600de2b6efffcd5f2c4ff1296e258859" sha256Sum="9f98150d29b35ef487557a2e45bd48e103219fc35601b7fbfbeae01723103bf0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
- * Added PNTC analysis
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
- * Added new 'Sub columns' setting to manual inverntory options
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
 
 ## Changes from 3.1.0
 
@@ -1014,12 +1029,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.exe" newVersion="3.1.3-beta.1" newMediaFileId="win64" fileSize="295987976" md5Sum="983d2a7d4ef49683c2d53dacc5666855" sha256Sum="5d00587f9c0da6ec10bd2c2b9368dba9c85a0ffe8d9aeff71de84e320bc0c5b9" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_3.exe" newVersion="3.1.3-beta.3" newMediaFileId="win64" fileSize="296014088" md5Sum="600de2b6efffcd5f2c4ff1296e258859" sha256Sum="9f98150d29b35ef487557a2e45bd48e103219fc35601b7fbfbeae01723103bf0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
- * Added PNTC analysis
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
- * Added new 'Sub columns' setting to manual inverntory options
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
 
 ## Changes from 3.1.0
 
@@ -1352,12 +1372,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.exe" newVersion="3.1.3-beta.1" newMediaFileId="win64" fileSize="295987976" md5Sum="983d2a7d4ef49683c2d53dacc5666855" sha256Sum="5d00587f9c0da6ec10bd2c2b9368dba9c85a0ffe8d9aeff71de84e320bc0c5b9" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_3.exe" newVersion="3.1.3-beta.3" newMediaFileId="win64" fileSize="296014088" md5Sum="600de2b6efffcd5f2c4ff1296e258859" sha256Sum="9f98150d29b35ef487557a2e45bd48e103219fc35601b7fbfbeae01723103bf0" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
- * Added PNTC analysis
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
- * Added new 'Sub columns' setting to manual inverntory options
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
 
 ## Changes from 3.1.0
 
@@ -1690,12 +1715,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_1.zip" newVersion="3.1.3-beta.1" newMediaFileId="win64zip" fileSize="295080890" md5Sum="7919f026ac1d391482bb86f89e204e7e" sha256Sum="ecbae23abcf942e85f7645230754194bc95701713b0612b0896f38d01394ed93" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_3.zip" newVersion="3.1.3-beta.3" newMediaFileId="win64zip" fileSize="295106564" md5Sum="bb8997eaf0513e0d1856561c11c3c47e" sha256Sum="c821a8d2ee9945d02014553248da23966bc68241d8b0085ee6956dbef860c307" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
- * Added PNTC analysis
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
- * Added new 'Sub columns' setting to manual inverntory options
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
 
 ## Changes from 3.1.0
 

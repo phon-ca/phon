@@ -320,6 +320,12 @@ div.imagejustify {
   margin-top: 1em;
 }
 
+.indexterm {
+  background-color: #fdf;
+  border: 1pt #000 solid;
+  margin: 1pt;
+}
+
 /* Most link groups are created with <div>. Ensure they have space before and after. */
 .ullinks {
   list-style-type: none;

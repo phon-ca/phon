@@ -1,7 +1,7 @@
-@import "fonts.css?buildId=2019112512";
-@import "icons.css?buildId=2019112512";
-@import "../indexterms/indexterms.css?buildId=2019112512";
-@import "webhelp-dot3x.css?buildId=2019112512";
+@import "fonts.css?buildId=2020061014";
+@import "icons.css?buildId=2020061014";
+@import "../indexterms/indexterms.css?buildId=2020061014";
+@import "webhelp-dot3x.css?buildId=2020061014";
 
 .container-fluid {
     margin-right: auto;
@@ -201,7 +201,7 @@ li.hide-after, li.hide-before{display:none}
 .table>thead:first-child>tr:first-child>th {
     /*
        WH-1947 In order for the default alignment to apply as it is defined
-       in elements-styles.css we need not to override it from this very specific rule.
+       in elements.css we need not to override it from this very specific rule.
     */
     /*  vertical-align:inherit ;*/
     border-color:inherit;
@@ -1436,11 +1436,6 @@ ui-menu-item > .ui-state-active{
     border-radius:0 7px 0 0px;
 }
 
-code{
-    background-color: #e7e7e7;
-    color: #222222;
-}
-
 .copyTooltip::before{
     content: " Copy ";
     line-height: 2em;
@@ -1508,8 +1503,13 @@ div.edit-link-container {
  */ 
  
  @media screen {
- 	.fig--title-label-number {
+ 	.fig--title-label-number,
+ 	.fig--title-label-punctuation {
  		display:none;
+ 	}
+ 	
+ 	.fig--title-label:after {
+ 		content:": ";
  	}
  }
  

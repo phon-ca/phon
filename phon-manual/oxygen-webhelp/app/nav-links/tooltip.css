@@ -8,7 +8,7 @@
 .wh-tooltip-container .wh-tooltip,
 .wh_breadcrumb .topicref .wh-tooltip,
 .wh_publication_toc .topicref .wh-tooltip {
-    display: flex;
+    display: block;
     align-items: baseline;
     visibility: hidden;
     background-color: #444;
@@ -70,7 +70,7 @@
 	}
 	
 	[data-tooltip-position="hidden"] .wh-tooltip {
-	    display:none;
+	    display:none !important;
 	}
 }
 

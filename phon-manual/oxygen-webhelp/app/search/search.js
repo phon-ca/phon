@@ -2,7 +2,7 @@ define(['util', 'options', 'nwSearchFnt', 'searchHistoryItems', 'localization', 
 
     /*
     	Oxygen WebHelp Plugin
-    	Copyright (c) 1998-2019 Syncro Soft SRL, Romania.  All rights reserved.
+    	Copyright (c) 1998-2020 Syncro Soft SRL, Romania.  All rights reserved.
     */
 
     var txt_browser_not_supported = "Your browser is not supported. Use of Mozilla Firefox is recommended.";
