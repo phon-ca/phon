@@ -203,11 +203,12 @@ exports.PPCOptions = function (id, aligned) {
 					"Percent Cluster Consonants Correct",					
 					"Percent Correct (custom)"],
 		"colnames": ["PPC", "PPC", "PPC", "PPC", "PPC", "PPC"],
-		"phonex": [ "\\c",
-					"see singletonTypeParamInfo",
-					"see clusterTypeParamInfo",
+		"phonex": [ "\\w",
+					"\\c",
 					"\\v",
-					"\\w" ],
+					"see singletonTypeParamInfo",
+					"see clusterTypeParamInfo"
+				  ],
 		"def": 0,
 		"cols": 1,
 		"type": "radiobutton"
