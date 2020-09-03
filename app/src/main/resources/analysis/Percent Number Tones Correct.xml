@@ -177,7 +177,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="6662b0cb" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-01T13:03:03.995-02:30" name="Phones" uuid="87816754-7d44-4822-b7d7-a0703d65e92f">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-03T17:34:45.749-02:30" name="Phones" uuid="63026537-2a25-4201-8c8b-899117feb507">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -204,7 +204,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="11b02bac">
+            <graph id="281aabff">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -255,6 +255,53 @@ function setup_params(params) {
                 <oga:meta x="257" y="662"/>
             </extensions>
         </ogcn:macro>
+        <node id="bf49a282c8f84d90" name="Get Listing Title" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <output name="title" type="java.lang.String"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="filters.syllable.otherSyllTypePattern.filterType">
+                        <![CDATA[Plain text]]>
+                    </oga:property>
+                    <oga:property key="filters.syllable.syllableType">
+                        <![CDATA[Any syllable]]>
+                    </oga:property>
+                    <oga:property key="__script">
+                        <![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var WordFilter = require("lib/WordFilter").WordFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+
+var filters = {
+	"group": new GroupFilter("filters.group"),
+	"word": new WordFilter("filters.word"),
+	"syllable": new SyllableFilter("filters.syllable")
+};
+
+function init(intput, outputs) {
+	outputs.add("title", "", false, java.lang.String);
+}
+
+function setup_params(params) {
+	filters.group.param_setup(params);
+	filters.word.param_setup(params);
+	filters.syllable.param_setup(params);
+}
+
+function run(context) {
+	var title = "PNTC by ";
+	var domain = "Group";
+
+	if(filters.word.isUseFilter()) {
+		domain = "Word";
+	}
+
+	context.put("title", title + domain);
+}
+]]>
+                    </oga:property>
+                </oga:settings>
+                <oga:meta x="366" y="887"/>
+            </extensions>
+        </node>
         <node id="4d1cdaa729e34875" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
@@ -321,6 +368,7 @@ function setupColumns(table, inputTable) {
 	table.setColumnTitle(col++, "# Correct");
 	table.setColumnTitle(col++, "# Substituted");
 	table.setColumnTitle(col++, "# Deleted");
+	table.setColumnTitle(col++, "PNTC");
 }
 
 function copyRow(inputTable, rowIdx) {
@@ -385,6 +433,17 @@ function run(context) {
 		pntcRow.push(pntcData.correct);
 		pntcRow.push(pntcData.substituted);
 		pntcRow.push(pntcData.deleted);
+
+		if(pntcData.correct + pntcData.substituted 
+		  + pntcData.deleted + pntcData.epen > 0) {
+			var pntcVal = (pntcData.correct) /
+				(pntcData.correct + pntcData.substituted 
+		 			 + pntcData.deleted + pntcData.epen);
+		 	pntcRow.push(java.lang.Float.valueOf(pntcVal * 100.0));
+		} else {
+			pntcRow.push(java.lang.Float.valueOf(0.0));
+		}
+		
 		pntc.addRow(pntcRow);
 
 		for(var i = 0; i < pntcData.expanded_results.length; i++) {
@@ -501,7 +560,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="74d6979e" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="1f72a73e">
+            <graph id="768ea834">
                 <node id="c1f475d" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -536,7 +595,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="66021052a34740c5" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="5f4a4b2f">
+                    <graph id="7f9cc20a">
                         <node id="64dae43e16a54dff" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -594,7 +653,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="c2c1479d9c984a12" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="7ce88568">
+                    <graph id="3cd3dac6">
                         <node id="161f5953d3ad467d" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -664,7 +723,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="46dba1c4" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="33eeece">
+                    <graph id="4be8c8a5">
                         <node id="217caf4d" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -731,7 +790,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="4c64b990d45249bf" name="Get Table For Speaker (Syll)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="7bf5fa73">
+                            <graph id="3a6f1473">
                                 <node id="74a8f842467f4bcc" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1413,6 +1472,8 @@ function run(context) {
         <link dest="58d4dda" destField="table" source="d16cfa45b97548d0" sourceField="pntc"/>
         <link dest="58d4dda" destField="enabled" source="74d6979e" sourceField="finished"/>
         <link dest="58d4dda" destField="parent" source="ad540f2c84c343cc" sourceField="root"/>
+        <link dest="bf49a282c8f84d90" destField="parameters" source="41c2d52c05f54592" sourceField="parameters"/>
+        <link dest="58d4dda" destField="sectionName" source="bf49a282c8f84d90" sourceField="title"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Percent Number Tones Correct">
@@ -1426,9 +1487,9 @@ function run(context) {
             </opqry:nodewizard>
             <oga:notes>
                 <oga:note color="0xffff96" height="576" title="Analysis Inputs" width="382" x="10" y="10">These inputs are provided to all analyses.</oga:note>
-                <oga:note color="0xffc864" height="198" title="Start Report" width="734" x="10" y="597">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
+                <oga:note color="0xffc864" height="508" title="Start Report" width="715" x="10" y="597">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
                 <oga:note color="0x9696ff" height="581" title="Query" width="580" x="404" y="6"/>
-                <oga:note color="0xffc864" height="706" title="Summary Report" width="1006" x="748" y="597"/>
+                <oga:note color="0xffc864" height="928" title="Summary Report" width="1026" x="748" y="597"/>
                 <oga:note color="0x96ff96" height="579" title="Analysis by Participant" width="759" x="992" y="11"/>
             </oga:notes>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>

@@ -202,7 +202,6 @@ exports.PPCOptions = function (id, aligned) {
 					"Percent Singleton Consonants Correct",
 					"Percent Cluster Consonants Correct",					
 					"Percent Correct (custom)"],
-		"colnames": ["PPC", "PPC", "PPC", "PPC", "PPC", "PPC"],
 		"phonex": [ "\\w",
 					"\\c",
 					"\\v",
@@ -278,10 +277,6 @@ exports.PPCOptions = function (id, aligned) {
 	};
 	var includePPCNoEpenParam;
 	this.includePPCNoEpen = includePPCNoEpenParamInfo.def;
-
-	this.getColumnName = function () {
-		return ppcTypeParamInfo.colnames[ppcTypeParam.getValue(ppcTypeParamInfo.id).index];
-	};
 
 	this.param_setup = function (params) {
 		ppcTypeParam = new EnumScriptParam(
