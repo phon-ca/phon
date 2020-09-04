@@ -164,6 +164,23 @@ exports.PDC = {
 							epen: 1
 						};
 						expanded_results.push(expandedResult);
+					} else {
+						var targetPhone = alignedData.get(0);
+						if(targetPhone.getPrefixDiacritics().length == 0 &&
+							targetPhone.getSuffixDiacritics().length == 0 &&
+							targetPhone.getCombiningDiacritics().length == 0) {
+							numSubstituted++;
+							
+							var expandedResult = {
+								target: targetGroup.indexOf(targetPhone),
+								actual: (phone != null ? actualGroup.indexOf(phone) : -1),
+								correct: 0,
+								substituted: 1,
+								deleted: 0,
+								epen: 0
+							};
+							expanded_results.push(expandedResult);
+						}
 					}
 				}
 			}
