@@ -26,6 +26,7 @@ public enum CommentEnum {
 	Number,
 	RecordingQuality,
 	Transcription,
+	Types,
 	Blank,
 	T,
 	Generic,
