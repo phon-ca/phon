@@ -196,17 +196,23 @@ exports.PPCOptions = function (id, aligned) {
 	var ppcTypeParamInfo = {
 		"id": id + ".ppcType",
 		"title": "Report type:",
-		"choices": ["Percent Phones Correct",
-					"Percent Consonants Correct",
-					"Percent Vowels Correct",
-					"Percent Singleton Consonants Correct",
-					"Percent Cluster Consonants Correct",					
-					"Percent Correct (custom)"],
+		"choices": ["Percent phones correct",
+					"Percent consonants correct",
+					"Percent vowels correct",
+					"Percent singleton consonants correct",
+					"Percent cluster consonants correct",
+					"Percent onset consonants correct",
+					"Percent coda consonants correct",
+					"Percent nucleus phones correct",
+					"Percent correct (custom)"],
 		"phonex": [ "\\w",
 					"\\c",
 					"\\v",
-					"see singletonTypeParamInfo",
-					"see clusterTypeParamInfo"
+					"(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$",
+					"see clusterTypeParamInfo",
+					"see onsetTypeParamInfo",
+					"see codaTypeParamInfo",
+					"see nucleusTypeParamInfo"
 				  ],
 		"def": 0,
 		"cols": 1,
@@ -216,22 +222,59 @@ exports.PPCOptions = function (id, aligned) {
 	this.ppcTypeParameter;
 	this.ppcType = { index:ppcTypeParamInfo.def, toString: function() { return ppcTypeParamInfo.choices[ppcTypeParamInfo.def]; } };
 
-	var singletonTypeParamInfo = {
-	    "id": id + ".singletonType",
-		"title": "Singleton type:",
-		"choices": ["All singleton consonants",
+	var onsetTypeParamInfo = {
+	    "id": id + ".onsetType",
+		"title": "Onset type:",
+		"choices": ["All onsets",
 					"Singleton onsets",
-					"Singleton codas"],
-		"phonex": [ "(?<^\\s?)(\\c)$ || (?<^\\s?)(\\c)(?>\\v) || (?<\\v\\s?)(\\c)(?>\\s?\\v) || (?<\\v)(\\c)$",
-		            "(?<^\\s?)(\\c:sctype(\"Onset|OEHS\"))$ || (?<\\S)(\\c:O)(?>\\v)",
-		            "(?<^\\s?)(\\c:C)$ || (?<\\v)(\\c:C)(?>\\S)" ],
+					"Cluster onsets"],
+		"phonex": [ "\\c:O:L:E:A",
+					"(?<\\S)(\\c:O:E:A)(?>.:N)",
+					"(?<\\S)(\\c:L:O<2,>)(?>.:N)"
+				  ],
 		"def": 0,
 		"cols": 0,
 		"type": "radiobutton"
 	};
-	var singletonTypeParam;
-	this.singletonTypeParameter;
-	this.singletonType = { index:singletonTypeParamInfo.def, toString: function() { return singletonTypeParamInfo.choices[singletonTypeParamInfo.def]; } };
+	var onsetTypeParam;
+	this.onsetTypeParameter;
+	this.onsetType = { index:onsetTypeParamInfo.def, toString: function() { return onsetTypeParamInfo.choices[onsetTypeParamInfo.def]; } };
+	
+	var codaTypeParamInfo = {
+	    "id": id + ".codaType",
+		"title": "Coda type:",
+		"choices": ["All codas",
+					"Singleton codas",
+					"Cluster codas"],
+		"phonex": [ "\\c:C:R:A",
+					"(?<.:N)(\\c:C:A)(?>\\S)",
+					"(?<.:N)(\\c:C:R<2,>)(?>\\S)"
+				  ],
+		"def": 0,
+		"cols": 0,
+		"type": "radiobutton"
+	};
+	var codaTypeParam;
+	this.codaTypeParameter;
+	this.codaType = { index:codaTypeParamInfo.def, toString: function() { return codaTypeParamInfo.choices[codaTypeParamInfo.def]; } };
+	
+	var nucleusTypeParamInfo = {
+	    "id": id + ".nucleusType",
+		"title": "Nucleus type:",
+		"choices": ["All nuclei",
+					"Monophthong phones",
+					"Diphthong,triphthong,... phones"],
+		"phonex": [ "\\w:N",
+					"(?<\\S\\c:L:O:A*)(\\w:N)(?>\\c:C:R:A*\\S)",
+					"(?<\\S\\c:L:O:A*)(\\w:N<2,>)(?>\\c:C:R:A*\\S)"
+				  ],
+		"def": 0,
+		"cols": 0,
+		"type": "radiobutton"
+	};
+	var nucleusTypeParam;
+	this.nucleusTypeParameter;
+	this.nucleusType = { index:nucleusTypeParamInfo.def, toString: function() { return nucleusTypeParamInfo.choices[nucleusTypeParamInfo.def]; } };
 
 	var clusterTypeParamInfo = {
 	    "id": id + ".clusterType",
@@ -288,23 +331,57 @@ exports.PPCOptions = function (id, aligned) {
 			ppcTypeParamInfo.cols);
 		this.ppcTypeParameter = ppcTypeParam;
 		params.add(ppcTypeParam);
-
-		singletonTypeParam = new EnumScriptParam(
-		    singletonTypeParamInfo.id,
-		    singletonTypeParamInfo.title,
-		    singletonTypeParamInfo.def,
-		    singletonTypeParamInfo.choices,
-		    singletonTypeParamInfo.type,
-		    singletonTypeParamInfo.cols);
-		singletonTypeParam.setVisible(false);
-		singletonTypeParam.addPropertyChangeListener(singletonTypeParamInfo.id, new java.beans.PropertyChangeListener() {
+		
+		onsetTypeParam = new EnumScriptParam(
+		    onsetTypeParamInfo.id,
+		    onsetTypeParamInfo.title,
+		    onsetTypeParamInfo.def,
+		    onsetTypeParamInfo.choices,
+		    onsetTypeParamInfo.type,
+		    onsetTypeParamInfo.cols);
+		onsetTypeParam.setVisible(false);
+		onsetTypeParam.addPropertyChangeListener(onsetTypeParamInfo.id, new java.beans.PropertyChangeListener() {
 			propertyChange: function(e) {
 				var idx = e.source.getValue(e.source.paramId).index;
-                patternFilter.setPattern(singletonTypeParamInfo.phonex[idx]);
+                patternFilter.setPattern(onsetTypeParamInfo.phonex[idx]);
 			}
 		});
-		this.singletonTypeParameters = singletonTypeParam;
-		params.add(singletonTypeParam);
+		this.onsetTypeParameter = onsetTypeParam;
+	    params.add(onsetTypeParam);
+	    
+	    codaTypeParam = new EnumScriptParam(
+		    codaTypeParamInfo.id,
+		    codaTypeParamInfo.title,
+		    codaTypeParamInfo.def,
+		    codaTypeParamInfo.choices,
+		    codaTypeParamInfo.type,
+		    codaTypeParamInfo.cols);
+		codaTypeParam.setVisible(false);
+		codaTypeParam.addPropertyChangeListener(codaTypeParamInfo.id, new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				var idx = e.source.getValue(e.source.paramId).index;
+                patternFilter.setPattern(codaTypeParamInfo.phonex[idx]);
+			}
+		});
+		this.codaTypeParameter = codaTypeParam;
+	    params.add(codaTypeParam);
+	    
+	    nucleusTypeParam = new EnumScriptParam(
+		    nucleusTypeParamInfo.id,
+		    nucleusTypeParamInfo.title,
+		    nucleusTypeParamInfo.def,
+		    nucleusTypeParamInfo.choices,
+		    nucleusTypeParamInfo.type,
+		    nucleusTypeParamInfo.cols);
+		nucleusTypeParam.setVisible(false);
+		nucleusTypeParam.addPropertyChangeListener(nucleusTypeParamInfo.id, new java.beans.PropertyChangeListener() {
+			propertyChange: function(e) {
+				var idx = e.source.getValue(e.source.paramId).index;
+                patternFilter.setPattern(nucleusTypeParamInfo.phonex[idx]);
+			}
+		});
+		this.nucleusTypeParameter = nucleusTypeParam;
+	    params.add(nucleusTypeParam);
 
 		clusterTypeParam = new EnumScriptParam(
 		    clusterTypeParamInfo.id,
@@ -358,34 +435,27 @@ exports.PPCOptions = function (id, aligned) {
 			propertyChange: function(e) {
 				var idx = e.source.getValue(e.source.paramId).index;
 
-				if(idx < 5) {
+				if(idx < 8) {
     				patternFilter.setVisible(false);
-				    if(idx == 3) {
-				        patternFilter.setPattern(singletonTypeParamInfo.phonex[singletonTypeParam.getValue(singletonTypeParam.paramId).index]);
-				    } else if(idx == 4) {
+				    if(idx == 4) {
 				        patternFilter.setPattern(clusterTypeParamInfo.phonex[clusterTypeParam.getValue(clusterTypeParam.paramId).index]);
+				    } else if(idx == 5) {
+				   		patternFilter.setPattern(onsetTypeParamInfo.phonex[onsetTypeParam.getValue(onsetTypeParam.paramId).index]);
+				   	} else if(idx == 6) {
+				   		patternFilter.setPattern(codaTypeParamInfo.phonex[codaTypeParam.getValue(codaTypeParam.paramId).index]);
+				   	} else if(idx == 7) {
+				   		patternFilter.setPattern(nucleusTypeParamInfo.phonex[nucleusTypeParam.getValue(nucleusTypeParam.paramId).index]);
 				    } else {
     					patternFilter.setPattern(ppcTypeParamInfo.phonex[idx]);
 					}
 				} else {
 					patternFilter.setVisible(true);
 				}
-
-			    switch(idx) {
-			    case 3:
-			        singletonTypeParam.setVisible(true);
-			        clusterTypeParam.setVisible(false);
-			        break;
-
-			    case 4:
-			        singletonTypeParam.setVisible(false);
-			        clusterTypeParam.setVisible(true);
-			        break;
-
-			    default:
-			        singletonTypeParam.setVisible(false);
-			        clusterTypeParam.setVisible(false);
-			    };
+				
+				clusterTypeParam.setVisible(idx == 4);
+				onsetTypeParam.setVisible(idx == 5);
+				codaTypeParam.setVisible(idx == 6);
+				nucleusTypeParam.setVisible(idx == 7);
 			}
 		});
 
