@@ -32,6 +32,7 @@ public enum ParticipantRole {
 	GRANDMOTHER("Grandmother", "GRM"),
 	RELATIVE("Relative", "REL"),
 	PARTICIPANT("Participant", "PAR"),
+	THERAPIST("Therapist", "THE"),
 	INFORMANT("Informant", "INF"),
 	SUBJECT("Subject", "SUB"),
 	INVESTIGATOR("Investigator", "INV"),
@@ -106,8 +107,6 @@ public enum ParticipantRole {
 	SHOWGUEST("ShowGuest", "SHG"),
 	@Deprecated
 	SHOWHOST("ShowHost", "SHO"),
-	@Deprecated
-	THERAPIST("Therapist", "THE"),
 	@Deprecated
 	TOY("Toy", "TOY"),
 	@Deprecated
