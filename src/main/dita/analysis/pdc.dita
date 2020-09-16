@@ -50,7 +50,19 @@
     <topic id="parameters">
         <title>Parameters</title>
         <body>
+            <p>The PPC report can be restricted to different sets of phones.  The following
+                pre-defined report types are available<ol id="ol_xkz_fql_1nb">
+                    <li>All phones</li>
+                    <li>Consonants</li>
+                    <li>Vowels</li>
+                    <li>Other (custom)</li>
+                </ol>When 'Other (custom)' is selected a custom <xref href="../phonex/intro.dita"
+                    >Phonex</xref> expression may be entered to create a custom phone set. See <xref
+                    href="../phonex/examples/phones.md" format="md">Example Phones Queries</xref>
+                for some useful examples.</p>
             <p>Other parameters:<ol id="ol_qkx_cqy_mjb">
+                    <li>Ignore diacritics - ignore diacritics when comparing phones (default:
+                        no)</li>
                     <li><xref href="../query/common_query_options.dita#group_options"/></li>
                     <li><xref href="../query/common_query_options.dita#word_options"/></li>
                     <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
@@ -61,7 +73,7 @@
         <title>PDC Calculation</title>
         <body>
             <p>PDC is calculated using the following equation:</p>
-            <p><foreign outputclass="embed-latex"> \begin{align} PPC &amp;= \frac{correct}{(correct
+            <p><foreign outputclass="embed-latex"> \begin{align} PDC &amp;= \frac{correct}{(correct
                     + incorrect)} \times 100 \\ &amp;= \frac{correct}{(correct + deletions +
                     substitutions + epenthesis)} \times 100 \end{align}</foreign></p>
         </body>

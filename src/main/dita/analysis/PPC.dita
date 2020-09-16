@@ -10,7 +10,9 @@
         <title>Report Outline</title>
         <body>
             <p>An example table of contents is displayed below. Bold level elements are section
-                headers while italic items are one of the tables listed above.</p>
+                headers while italic items are one of the tables listed above. Click <xref
+                    href="./examples/ppc_example.html" format="html" scope="external">here</xref> to
+                see an example report.</p>
             <ul>
                 <li><p><b>Percent Phones Correct (PPC)</b></p><ul>
                         <li>
@@ -51,38 +53,38 @@
             <p>The PPC report can be restricted to different sets of phones. Several pre-defined
                 sets have been defined and are available by using the radio buttons displayed in the
                 PPC form (see below.) The following pre-defined report types are available:<ol>
-                    <li>Percent Phones Correct - all phones.</li>
-                    <li>Percent Consonants Correct - all consonants (i.e., PCC)</li>
-                    <li>Percent Vowels Correct</li>
-                    <li>Percent Singleton Consonants Correct - singleton consonants.</li>
-                    <li>Percent Cluster Consonants Correct - cluster consonants. There are three
+                    <li>Percent phones correct - all phones.</li>
+                    <li>Percent consonants correct - all consonants (i.e., PCC)</li>
+                    <li>Percent vowels correct</li>
+                    <li>Percent singleton consonants correct - singleton consonants.</li>
+                    <li>Percent cluster consonants correct - cluster consonants. There are three
                         report sub-types available when this option is selected:<ol
                             id="ol_lfj_zny_mjb">
                             <li>All clusters</li>
                             <li>Tautosyllabic clusters</li>
                             <li>Heterosyllabic clusters</li>
                         </ol></li>
-                    <li>Percent Onset Consonants Correct.  There are three report sub-types
-                        available when this option is selected:<ol id="ol_bn1_kqk_1nb">
+                    <li>Percent onset consonants correct. There are three report sub-types available
+                        when this option is selected:<ol id="ol_bn1_kqk_1nb">
                             <li>All onsets</li>
                             <li>Singleton onsets</li>
                             <li>Cluster onsets</li>
                         </ol></li>
-                    <li>Percent Coda Consonants Correct. There are three report sub-types available
+                    <li>Percent coda consonants correct. There are three report sub-types available
                         when this option is selected:<ol id="ol_fyd_mqk_1nb">
                             <li>All codas</li>
                             <li>Singleton codas</li>
                             <li>Cluster codas</li>
                         </ol></li>
-                    <li>Percent Nucleus Phones Correct. There are three report sub-types available
+                    <li>Percent nucleus phones correct. There are three report sub-types available
                         when this option is selected:<ol id="ol_hsh_4qk_1nb">
                             <li>All nuclei</li>
                             <li>Monophthongs</li>
                             <li>Diphthongs, triphthongs, ...</li>
                         </ol></li>
-                    <li>Percent Correct (custom)</li>
+                    <li>Percent correct (custom)</li>
                 </ol></p>
-            <p>When 'Percent Correct (custom)' is selected a custom <xref
+            <p>When 'Percent correct (custom)' is selected a custom <xref
                     href="../phonex/intro.dita">Phonex</xref> expression may be entered to create a
                 custom phone set. See <xref href="../phonex/examples/phones.md" format="md">Example
                     Phones Queries</xref> for some useful examples.</p>
