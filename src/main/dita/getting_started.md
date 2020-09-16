@@ -26,10 +26,10 @@ Finally, Phon 3 comes with multiple improvements in the areas of workspace/proje
  * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.1.2/Phon_macos_3_1_2.dmg)
  * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.1.2/Phon_windows-x64_3_1_2.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.1.2/Phon_windows-x64_3_1_2.zip) 
 
-### Phon 3.1.3-beta.4
+### Phon 3.1.3-beta.5
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.1.3-beta.4/Phon_macos_3_1_3-beta_4.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.1.3-beta.4/Phon_windows-x64_3_1_3-beta_4.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.1.3-beta.4/Phon_windows-x64_3_1_3-beta_4.zip) 
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.1.3-beta.5/Phon_macos_3_1_3-beta_5.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.1.3-beta.5/Phon_windows-x64_3_1_3-beta_5.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.1.3-beta.5/Phon_windows-x64_3_1_3-beta_5.zip) 
 
 ## Other Information 
 
@@ -39,7 +39,7 @@ Finally, Phon 3 comes with multiple improvements in the areas of workspace/proje
 
 ## Citing Phon
 
-Hedlund, Gregory & Yvan Rose. 2019. Phon 3.0 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
+Hedlund, Gregory & Yvan Rose. 2020. Phon 3.1 \[Computer Software\]. Retrieved from ​[https://phon.ca](https://phon.ca).
 
 Rose, Yvan & Brian MacWhinney. 2014. The [PhonBank](http://phonbank.talkbank.org) Project: Data and Software-Assisted Methods for the Study of Phonology and Phonological Development. In Jacques Durand, Ulrike Gut & Gjert Kristoffersen (eds.), 
 *The Oxford Handbook of Corpus Phonology*. Oxford: Oxford University Press. 308-401.

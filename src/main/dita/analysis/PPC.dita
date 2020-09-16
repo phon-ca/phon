@@ -54,19 +54,31 @@
                     <li>Percent Phones Correct - all phones.</li>
                     <li>Percent Consonants Correct - all consonants (i.e., PCC)</li>
                     <li>Percent Vowels Correct</li>
-                    <li>Percent Singleton Consonants Correct - singleton consonants. There are three
-                        report sub-types available when this option is selected:<ol
-                            id="ol_tvk_3ny_mjb">
-                            <li>All singletone consonants</li>
-                            <li>Singleton onsets</li>
-                            <li>Singleton codas</li>
-                        </ol></li>
+                    <li>Percent Singleton Consonants Correct - singleton consonants.</li>
                     <li>Percent Cluster Consonants Correct - cluster consonants. There are three
                         report sub-types available when this option is selected:<ol
                             id="ol_lfj_zny_mjb">
                             <li>All clusters</li>
                             <li>Tautosyllabic clusters</li>
                             <li>Heterosyllabic clusters</li>
+                        </ol></li>
+                    <li>Percent Onset Consonants Correct.  There are three report sub-types
+                        available when this option is selected:<ol id="ol_bn1_kqk_1nb">
+                            <li>All onsets</li>
+                            <li>Singleton onsets</li>
+                            <li>Cluster onsets</li>
+                        </ol></li>
+                    <li>Percent Coda Consonants Correct. There are three report sub-types available
+                        when this option is selected:<ol id="ol_fyd_mqk_1nb">
+                            <li>All codas</li>
+                            <li>Singleton codas</li>
+                            <li>Cluster codas</li>
+                        </ol></li>
+                    <li>Percent Nucleus Phones Correct. There are three report sub-types available
+                        when this option is selected:<ol id="ol_hsh_4qk_1nb">
+                            <li>All nuclei</li>
+                            <li>Monophthongs</li>
+                            <li>Diphthongs, triphthongs, ...</li>
                         </ol></li>
                     <li>Percent Correct (custom)</li>
                 </ol></p>
