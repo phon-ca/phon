@@ -101,7 +101,9 @@ import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
+import ca.phon.app.opgraph.nodes.ScriptNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
+import ca.phon.app.opgraph.nodes.table.TableScriptNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
 import ca.phon.extensions.ExtensionSupport;
@@ -2088,10 +2090,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 					final Component nodeSettingsPanel = nodeSettings.getComponent(getModel().getDocument());
 					if(nodeSettingsPanel != null) {
-						if(nodeSettingsPanel instanceof QueryNode.QueryNodeSettingsPanel) {
+						if(node instanceof ScriptNode) {
 							if(node.getName().equals("Parameters")) {
 								// add listener to 'reportTitle' param if it exists
-								final PhonScript script = ((QueryNode.QueryNodeSettingsPanel)nodeSettingsPanel).getScriptPanel().getScript();
+								final PhonScript script = ((ScriptNode)node).getScript();
 								try {
 									final ScriptParameters params = script.getContext().getScriptParameters(script.getContext().getEvaluatedScope());
 									

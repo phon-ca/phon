@@ -90,7 +90,7 @@ import ca.phon.util.icons.IconSize;
 		description="Generic script node with optional parameter setup.",
 		showInLibrary=true
 )
-public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContextMenuExtension {
+public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContextMenuExtension, ScriptNode {
 
 	private PhonScript script;
 	
@@ -327,6 +327,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 		context.put(paramsOutputField, allParams);
 	}
 
+	@Override
 	public PhonScript getScript() {
 		return this.script;
 	}

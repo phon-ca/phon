@@ -43,6 +43,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.nodes.RecordContainer;
 import ca.phon.app.opgraph.nodes.RecordContainerTypeValidator;
+import ca.phon.app.opgraph.nodes.ScriptNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.QueryHistoryAndNameToolbar;
 import ca.phon.app.query.ScriptEditorFactory;
@@ -65,6 +66,7 @@ import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptContext;
 import ca.phon.query.script.QueryTask;
+import ca.phon.script.PhonScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
@@ -86,7 +88,7 @@ import ca.phon.worker.PhonTaskListener;
 	description="Query script node",
 	showInLibrary=true
 )
-public class QueryNode extends OpNode implements NodeSettings {
+public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 
 	private QueryScript queryScript;
 	
@@ -302,6 +304,11 @@ public class QueryNode extends OpNode implements NodeSettings {
 		opCtx.put(queryField, query);
 		opCtx.put(paramsOutputField, allParams);
 		opCtx.put(scriptOutputField, queryScript);
+	}
+	
+	@Override
+	public PhonScript getScript() {
+		return getQueryScript();
 	}
 
 	public QueryScript getQueryScript() {
