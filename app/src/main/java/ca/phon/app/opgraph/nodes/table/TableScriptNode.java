@@ -50,6 +50,7 @@ import org.mozilla.javascript.tools.debugger.Main;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.nodes.ScriptNode;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.query.ScriptEditorFactory;
 import ca.phon.app.query.ScriptPanel;
@@ -88,7 +89,7 @@ import ca.phon.util.resources.ResourceLoader;
  *
  */
 @OpNodeInfo(category="Table", description="Custom script for table input", name="Table Script", showInLibrary=true)
-public class TableScriptNode extends TableOpNode implements NodeSettings {
+public class TableScriptNode extends TableOpNode implements NodeSettings, ScriptNode {
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TableScriptNode.class.getName());
 
@@ -149,6 +150,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 
+	@Override
 	public PhonScript getScript() {
 		return this.script;
 	}
