@@ -76,7 +76,7 @@ $(document).ready( function () {
     <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
     -->
     <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.1.2">Phon 3.1.2</a>
-    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.3-beta.4">Phon 3.1.3-beta.4</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.3-beta.5">Phon 3.1.3-beta.5</a>
     <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
 </div>
             </div>
@@ -127,7 +127,8 @@ $(document).ready( function () {
         <h2 class="- topic/title title topictitle2" id="ariaid-title2">Report Outline</h2>
         <div class="- topic/body body">
             <p class="- topic/p p">An example table of contents is displayed below. Bold level elements are section
-                headers while italic items are one of the tables listed above.</p>
+                headers while italic items are one of the tables listed above. Click <a class="- topic/xref xref" href="./examples/ppc_example.html" target="_blank">here</a> to
+                see an example report.</p>
             <ul class="- topic/ul ul">
                 <li class="- topic/li li"><p class="- topic/p p"><strong class="+ topic/ph hi-d/b ph b">Percent Phones Correct (PPC)</strong></p><ul class="- topic/ul ul">
                         <li class="- topic/li li">
@@ -168,24 +169,37 @@ $(document).ready( function () {
             <div class="- topic/p p">The PPC report can be restricted to different sets of phones. Several pre-defined
                 sets have been defined and are available by using the radio buttons displayed in the
                 PPC form (see below.) The following pre-defined report types are available:<ol class="- topic/ol ol">
-                    <li class="- topic/li li">Percent Phones Correct - all phones.</li>
-                    <li class="- topic/li li">Percent Consonants Correct - all consonants (i.e., PCC)</li>
-                    <li class="- topic/li li">Percent Vowels Correct</li>
-                    <li class="- topic/li li">Percent Singleton Consonants Correct - singleton consonants. There are three
-                        report sub-types available when this option is selected:<ol class="- topic/ol ol" type="a" id="parameters__ol_tvk_3ny_mjb">
-                            <li class="- topic/li li">All singletone consonants</li>
-                            <li class="- topic/li li">Singleton onsets</li>
-                            <li class="- topic/li li">Singleton codas</li>
-                        </ol></li>
-                    <li class="- topic/li li">Percent Cluster Consonants Correct - cluster consonants. There are three
+                    <li class="- topic/li li">Percent phones correct - all phones.</li>
+                    <li class="- topic/li li">Percent consonants correct - all consonants (i.e., PCC)</li>
+                    <li class="- topic/li li">Percent vowels correct</li>
+                    <li class="- topic/li li">Percent singleton consonants correct - singleton consonants.</li>
+                    <li class="- topic/li li">Percent cluster consonants correct - cluster consonants. There are three
                         report sub-types available when this option is selected:<ol class="- topic/ol ol" type="a" id="parameters__ol_lfj_zny_mjb">
                             <li class="- topic/li li">All clusters</li>
                             <li class="- topic/li li">Tautosyllabic clusters</li>
                             <li class="- topic/li li">Heterosyllabic clusters</li>
                         </ol></li>
-                    <li class="- topic/li li">Percent Correct (custom)</li>
+                    <li class="- topic/li li">Percent onset consonants correct. There are three report sub-types available
+                        when this option is selected:<ol class="- topic/ol ol" type="a" id="parameters__ol_bn1_kqk_1nb">
+                            <li class="- topic/li li">All onsets</li>
+                            <li class="- topic/li li">Singleton onsets</li>
+                            <li class="- topic/li li">Cluster onsets</li>
+                        </ol></li>
+                    <li class="- topic/li li">Percent coda consonants correct. There are three report sub-types available
+                        when this option is selected:<ol class="- topic/ol ol" type="a" id="parameters__ol_fyd_mqk_1nb">
+                            <li class="- topic/li li">All codas</li>
+                            <li class="- topic/li li">Singleton codas</li>
+                            <li class="- topic/li li">Cluster codas</li>
+                        </ol></li>
+                    <li class="- topic/li li">Percent nucleus phones correct. There are three report sub-types available
+                        when this option is selected:<ol class="- topic/ol ol" type="a" id="parameters__ol_hsh_4qk_1nb">
+                            <li class="- topic/li li">All nuclei</li>
+                            <li class="- topic/li li">Monophthongs</li>
+                            <li class="- topic/li li">Diphthongs, triphthongs, ...</li>
+                        </ol></li>
+                    <li class="- topic/li li">Percent correct (custom)</li>
                 </ol></div>
-            <p class="- topic/p p">When 'Percent Correct (custom)' is selected a custom <a class="- topic/xref xref" href="../phonex/intro.html">Phonex</a> expression may be entered to create a
+            <p class="- topic/p p">When 'Percent correct (custom)' is selected a custom <a class="- topic/xref xref" href="../phonex/intro.html">Phonex</a> expression may be entered to create a
                 custom phone set. See <a class="- topic/xref xref" href="../phonex/examples/phones.html">Example
                     Phones Queries</a> for some useful examples.</p>
             <div class="- topic/p p">Other parameters:<ol class="- topic/ol ol" id="parameters__ol_qkx_cqy_mjb">

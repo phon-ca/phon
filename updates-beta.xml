@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3-beta.4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_4.dmg" newVersion="3.1.3-beta.4" newMediaFileId="macos" fileSize="286393667" md5Sum="1c89435eaafec6afc1d4e48325564309" sha256Sum="45df2976a8cbf60dc9479236eb1b3346c96712b690fbe32a4185e4bb14dc9677" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3-beta.5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_5.dmg" newVersion="3.1.3-beta.5" newMediaFileId="macos" fileSize="286394266" md5Sum="df49a3dc60d19ca12683e4634334bc8e" sha256Sum="6b825e022cc3591a07d9d55dfbe5ab310b867b3b30799d1f558ea132e03512f4" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
  * Added Percent Diacritics Correct (PDC) analysis
  * Added Percent Number Tones Correct (PNTC) analysis
  * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
  * Added new 'Sum columns' setting to manual inventory options
  * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
 
 ## Changes from 3.1.0
 
@@ -343,17 +345,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_4.dmg" newVersion="3.1.3-beta.4" newMediaFileId="macos" fileSize="286393667" md5Sum="1c89435eaafec6afc1d4e48325564309" sha256Sum="45df2976a8cbf60dc9479236eb1b3346c96712b690fbe32a4185e4bb14dc9677" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_5.dmg" newVersion="3.1.3-beta.5" newMediaFileId="macos" fileSize="286394266" md5Sum="df49a3dc60d19ca12683e4634334bc8e" sha256Sum="6b825e022cc3591a07d9d55dfbe5ab310b867b3b30799d1f558ea132e03512f4" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
  * Added Percent Diacritics Correct (PDC) analysis
  * Added Percent Number Tones Correct (PNTC) analysis
  * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
  * Added new 'Sum columns' setting to manual inventory options
  * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
 
 ## Changes from 3.1.0
 
@@ -686,17 +690,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_4.exe" newVersion="3.1.3-beta.4" newMediaFileId="win64" fileSize="296015112" md5Sum="043c0f54314889f5155872e670f56a1d" sha256Sum="1de62555bcf67e0c31d37edecffea0eefb8f7870d76f789e6024e692672dfe46" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.exe" newVersion="3.1.3-beta.5" newMediaFileId="win64" fileSize="296015624" md5Sum="110b79fa95534bdde76516609e7ec33b" sha256Sum="51770f39fa929c1ffd065b03348b12f7b8ed30f5d970cc127bca9167f1fa2680" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
  * Added Percent Diacritics Correct (PDC) analysis
  * Added Percent Number Tones Correct (PNTC) analysis
  * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
  * Added new 'Sum columns' setting to manual inventory options
  * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
 
 ## Changes from 3.1.0
 
@@ -1029,17 +1035,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_4.exe" newVersion="3.1.3-beta.4" newMediaFileId="win64" fileSize="296015112" md5Sum="043c0f54314889f5155872e670f56a1d" sha256Sum="1de62555bcf67e0c31d37edecffea0eefb8f7870d76f789e6024e692672dfe46" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.exe" newVersion="3.1.3-beta.5" newMediaFileId="win64" fileSize="296015624" md5Sum="110b79fa95534bdde76516609e7ec33b" sha256Sum="51770f39fa929c1ffd065b03348b12f7b8ed30f5d970cc127bca9167f1fa2680" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
  * Added Percent Diacritics Correct (PDC) analysis
  * Added Percent Number Tones Correct (PNTC) analysis
  * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
  * Added new 'Sum columns' setting to manual inventory options
  * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
 
 ## Changes from 3.1.0
 
@@ -1372,17 +1380,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_4.exe" newVersion="3.1.3-beta.4" newMediaFileId="win64" fileSize="296015112" md5Sum="043c0f54314889f5155872e670f56a1d" sha256Sum="1de62555bcf67e0c31d37edecffea0eefb8f7870d76f789e6024e692672dfe46" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.exe" newVersion="3.1.3-beta.5" newMediaFileId="win64" fileSize="296015624" md5Sum="110b79fa95534bdde76516609e7ec33b" sha256Sum="51770f39fa929c1ffd065b03348b12f7b8ed30f5d970cc127bca9167f1fa2680" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
  * Added Percent Diacritics Correct (PDC) analysis
  * Added Percent Number Tones Correct (PNTC) analysis
  * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
  * Added new 'Sum columns' setting to manual inventory options
  * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
 
 ## Changes from 3.1.0
 
@@ -1715,17 +1725,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_4.zip" newVersion="3.1.3-beta.4" newMediaFileId="win64zip" fileSize="295107929" md5Sum="3a532d04cf92bc0705d8a3c41d72dfb7" sha256Sum="05cb8f1c7ed4ffbf3407aa3e915eca91ee0bb943332c110f3f60f774a97c5e09" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.zip" newVersion="3.1.3-beta.5" newMediaFileId="win64zip" fileSize="295107952" md5Sum="c034575559e60f42c78d36c804daa430" sha256Sum="4a0aa6a11d45106b11f32b1ddd1ace14e0cf300a03f53ae9a274d71d44335bd2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
  * Added Percent Diacritics Correct (PDC) analysis
  * Added Percent Number Tones Correct (PNTC) analysis
  * Added zoom commands to HTNL report preview
  * Fixed issue with new phonex syllable matcher and backtracking expressions
  * Added new 'Sum columns' setting to manual inventory options
  * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
 
 ## Changes from 3.1.0
 
