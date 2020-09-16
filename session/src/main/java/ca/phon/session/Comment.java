@@ -50,19 +50,21 @@ public final class Comment extends ExtendableObject {
 	}
 	
 	/**
-	 * Get the type.
+	 * Get the tag for the comment.
 	 * @return CommentEnum
 	 */
-	public CommentEnum getType() {
-		return commentImpl.getType();
+	public String getTag() {
+		return commentImpl.getTag();
 	}
 	
 	/**
-	 * Set the type.
+	 * Set the tag for the comment, cannot be <code>null</code>
 	 * @param type
+	 * 
+	 * @throws NullPointerException if tag is <code>null</code>
 	 */
-	public void setType(CommentEnum type) {
-		commentImpl.setType(type);
+	public void setTag(String tag) {
+		commentImpl.setTag(tag);
 	}
 
 }

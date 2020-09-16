@@ -45,7 +45,6 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Comment;
-import ca.phon.session.CommentEnum;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Participant;
 import ca.phon.session.ParticipantRole;
@@ -337,7 +336,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 
 	// copy comment data
 	private CommentType copyComment(ObjectFactory factory, Comment com) {
-		final CommentEnum type = com.getType();
+		final String tag = com.getTag();
 		final String value = com.getValue();
 
 		final CommentType retVal = factory.createCommentType();
@@ -347,7 +346,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 					factory.createSegment(copySegment(factory, (MediaSegment)com.getExtension(MediaSegment.class)))
 			);
 		}
-		retVal.setType(type.toString());
+		retVal.setType(tag);
 		return retVal;
 	}
 

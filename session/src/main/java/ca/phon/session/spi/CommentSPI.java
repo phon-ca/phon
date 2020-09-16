@@ -1,7 +1,5 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.CommentEnum;
-
 public interface CommentSPI {
 	
 	/** 
@@ -17,15 +15,15 @@ public interface CommentSPI {
 	public void setValue(String comment);
 	
 	/**
-	 * Get the type.
-	 * @return CommentEnum
+	 * Get the tag.
+	 * @return tag for the comment
 	 */
-	public CommentEnum getType();
+	public String getTag();
 	
 	/**
-	 * Set the type.
+	 * Set the tag (cannot be <code>null</code>).
 	 * @param type
 	 */
-	public void setType(CommentEnum type);
+	public void setTag(String tag);
 
 }

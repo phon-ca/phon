@@ -193,18 +193,18 @@ public final class SessionFactory extends ExtendableObject {
 	/**
 	 * Create comment
 	 * 
-	 * @param type
+	 * @param tar
 	 * @param value
 	 * 
 	 * @return new comment
 	 */
-	public Comment createComment(CommentEnum type, String value) {
-		return createComment(type, value, null);
+	public Comment createComment(String tag, String value) {
+		return createComment(tag, value, null);
 	}
 	
-	public Comment createComment(CommentEnum type, String value, MediaSegment segment) {
+	public Comment createComment(String tag, String value, MediaSegment segment) {
 		final Comment retVal = createComment();
-		retVal.setType(type);
+		retVal.setTag(tag);
 		retVal.setValue(value);
 		if(segment != null) retVal.putExtension(MediaSegment.class, segment);
 		return retVal;
@@ -212,7 +212,7 @@ public final class SessionFactory extends ExtendableObject {
 	
 	public Comment cloneComment(Comment comment) {
 		final Comment retVal = createComment();
-		retVal.setType(comment.getType());
+		retVal.setTag(comment.getTag());
 		retVal.setValue(comment.getValue());
 		return retVal;
 	}

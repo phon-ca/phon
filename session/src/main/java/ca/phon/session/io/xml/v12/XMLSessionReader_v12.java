@@ -61,7 +61,6 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Comment;
-import ca.phon.session.CommentEnum;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
 import ca.phon.session.Participant;
@@ -345,7 +344,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 	// copy comment data
 	private Comment copyComment(SessionFactory factory, CommentType ct) {
-		final CommentEnum type = CommentEnum.fromString(ct.getType());
+		final String tag = ct.getType();
 		final StringBuffer buffer = new StringBuffer();
 		MediaSegment segment = null;
 		for(Object obj:ct.getContent()) {
@@ -357,7 +356,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 				buffer.append(obj.toString());
 			}
 		}
-		return factory.createComment(type, buffer.toString(), segment);
+		return factory.createComment(tag, buffer.toString(), segment);
 	}
 
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {

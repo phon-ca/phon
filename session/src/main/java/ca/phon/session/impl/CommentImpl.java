@@ -15,7 +15,6 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.CommentEnum;
 import ca.phon.session.spi.CommentSPI;
 
 /**
@@ -26,16 +25,16 @@ public class CommentImpl implements CommentSPI {
 	
 	private String value;
 	
-	private CommentEnum type;
+	private String tag;
 	
 	CommentImpl() {
 		super();
 	}
 	
-	CommentImpl(String value, CommentEnum type) {
+	CommentImpl(String tag, String value) {
 		super();
 		this.value = value;
-		this.type = type;
+		this.tag = tag;
 	}
 	
 	@Override
@@ -49,13 +48,15 @@ public class CommentImpl implements CommentSPI {
 	}
 
 	@Override
-	public CommentEnum getType() {
-		return (type == null ? CommentEnum.Generic : type);
+	public String getTag() {
+		return (tag == null ? "comment" : tag);
 	}
 
 	@Override
-	public void setType(CommentEnum type) {
-		this.type = type;
+	public void setTag(String tag) {
+		if(tag == null)
+			throw new NullPointerException("tag");
+		this.tag = tag;
 	}
 	
 }
