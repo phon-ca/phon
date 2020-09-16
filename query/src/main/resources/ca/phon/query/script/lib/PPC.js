@@ -216,7 +216,7 @@ exports.PPCOptions = function (id, aligned) {
 				  ],
 		"def": 0,
 		"cols": 1,
-		"type": "radiobutton"
+		"type": "combobox"
 	};
 	var ppcTypeParam;
 	this.ppcTypeParameter;
