@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3-beta.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_5.dmg" newVersion="3.1.3-beta.5" newMediaFileId="macos" fileSize="286394266" md5Sum="df49a3dc60d19ca12683e4634334bc8e" sha256Sum="6b825e022cc3591a07d9d55dfbe5ab310b867b3b30799d1f558ea132e03512f4" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3.dmg" newVersion="3.1.3" newMediaFileId="macos" fileSize="286389819" md5Sum="4e7f6d744a317ca4cb446905c2e8cea7" sha256Sum="e62aa6ee05084261d1d552d77479ff218f8277f542046ad9a4ff9061f1542592" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
@@ -345,7 +345,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3-beta_5.dmg" newVersion="3.1.3-beta.5" newMediaFileId="macos" fileSize="286394266" md5Sum="df49a3dc60d19ca12683e4634334bc8e" sha256Sum="6b825e022cc3591a07d9d55dfbe5ab310b867b3b30799d1f558ea132e03512f4" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3.dmg" newVersion="3.1.3" newMediaFileId="macos" fileSize="286389819" md5Sum="4e7f6d744a317ca4cb446905c2e8cea7" sha256Sum="e62aa6ee05084261d1d552d77479ff218f8277f542046ad9a4ff9061f1542592" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
@@ -690,7 +690,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.exe" newVersion="3.1.3-beta.5" newMediaFileId="win64" fileSize="296015624" md5Sum="110b79fa95534bdde76516609e7ec33b" sha256Sum="51770f39fa929c1ffd065b03348b12f7b8ed30f5d970cc127bca9167f1fa2680" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.exe" newVersion="3.1.3" newMediaFileId="win64" fileSize="296013576" md5Sum="7238d9eb1c00d7dfef842f903ba18c0a" sha256Sum="3546354770a9df1e49f40912d336a5b51e5a5692ba286e0bf1679a2f87f6b08a" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
@@ -1035,7 +1035,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.exe" newVersion="3.1.3-beta.5" newMediaFileId="win64" fileSize="296015624" md5Sum="110b79fa95534bdde76516609e7ec33b" sha256Sum="51770f39fa929c1ffd065b03348b12f7b8ed30f5d970cc127bca9167f1fa2680" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.exe" newVersion="3.1.3" newMediaFileId="win64" fileSize="296013576" md5Sum="7238d9eb1c00d7dfef842f903ba18c0a" sha256Sum="3546354770a9df1e49f40912d336a5b51e5a5692ba286e0bf1679a2f87f6b08a" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
@@ -1380,7 +1380,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.exe" newVersion="3.1.3-beta.5" newMediaFileId="win64" fileSize="296015624" md5Sum="110b79fa95534bdde76516609e7ec33b" sha256Sum="51770f39fa929c1ffd065b03348b12f7b8ed30f5d970cc127bca9167f1fa2680" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.exe" newVersion="3.1.3" newMediaFileId="win64" fileSize="296013576" md5Sum="7238d9eb1c00d7dfef842f903ba18c0a" sha256Sum="3546354770a9df1e49f40912d336a5b51e5a5692ba286e0bf1679a2f87f6b08a" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
@@ -1725,7 +1725,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3-beta_5.zip" newVersion="3.1.3-beta.5" newMediaFileId="win64zip" fileSize="295107952" md5Sum="c034575559e60f42c78d36c804daa430" sha256Sum="4a0aa6a11d45106b11f32b1ddd1ace14e0cf300a03f53ae9a274d71d44335bd2" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.zip" newVersion="3.1.3" newMediaFileId="win64zip" fileSize="295097917" md5Sum="09d15706d9536675a9f859054c9e90b9" sha256Sum="ac84bdb1acac1f32f09e2e6d69c0fd8fffb5ff9b327e828db3872ecc2bed816b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
