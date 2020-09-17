@@ -177,7 +177,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="2da2c46d" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-04T09:18:06.242-02:30" name="Phones" uuid="c9800d47-de5e-4143-b91b-dfd4bb4eb0fb">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-17T11:28:33.677-02:30" name="Phones" uuid="104388ad-c47e-4758-8008-c9d1e910a61b">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -204,7 +204,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="1bedded791b945f4" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="35f97fd3">
+            <graph id="26fa5414">
                 <node id="f5a56a7a058b447a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -535,7 +535,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="f9fd055c90654b22" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="7b19bdfa">
+            <graph id="51a26c44">
                 <node id="57f04d2e84334bd8" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -570,7 +570,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="69c0908eef1c42be" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="3dbe084">
+                    <graph id="2767271c">
                         <node id="96a8c2831e384405" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -628,7 +628,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="994eefb360114580" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="23e06409">
+                    <graph id="39e9a726">
                         <node id="84594c8d414c4400" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -698,7 +698,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="309e320" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="57e2fa22">
+                    <graph id="7b8e0c7c">
                         <node id="3b922b61" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -804,7 +804,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="970cecc1b9a742d6" name="Get Table For Speaker (By Phone)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="7446c581">
+                            <graph id="443e96e5">
                                 <node id="5c25ef265d71459f" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -924,7 +924,7 @@ function getRowValue(table, row) {
                                         <opqry:columnName># Correct</opqry:columnName>
                                         <opqry:columnName># Substituted</opqry:columnName>
                                         <opqry:columnName># Deleted</opqry:columnName>
-                                        <opqry:columnName># Epenethesized</opqry:columnName>
+                                        <opqry:columnName># Epenthesized</opqry:columnName>
                                     </opqry:sumColumns>
                                 </opqry:inventoryoptions>
                                 <oga:settings/>

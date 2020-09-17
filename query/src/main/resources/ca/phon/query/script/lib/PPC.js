@@ -262,8 +262,8 @@ exports.PPCOptions = function (id, aligned) {
 	    "id": id + ".nucleusType",
 		"title": "Nucleus type:",
 		"choices": ["All nuclei",
-					"Monophthong phones",
-					"Diphthong,triphthong,... phones"],
+					"Monophthongs",
+					"Complex vocoids"],
 		"phonex": [ "\\w:N",
 					"(?<\\S\\c:L:O:A*)(\\w:N)(?>\\c:C:R:A*\\S)",
 					"(?<\\S\\c:L:O:A*)(\\w:N<2,>)(?>\\c:C:R:A*\\S)"
