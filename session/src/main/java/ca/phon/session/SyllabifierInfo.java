@@ -68,7 +68,7 @@ public class SyllabifierInfo {
 		final Pattern commentPattern = Pattern.compile(COMMENT_PATTERN);
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment comment = session.getMetadata().getComment(i);
-			if(comment.getType() == CommentEnum.Generic) {
+			if(comment.getTag().equals("Generic")) {
 				final String commentValue = comment.getValue();
 				final Matcher matcher = commentPattern.matcher(commentValue);
 				if(matcher.matches()) {
@@ -90,7 +90,7 @@ public class SyllabifierInfo {
 		final List<Integer> toRemove = new ArrayList<Integer>();
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment comment = session.getMetadata().getComment(i);
-			if(comment.getType() == CommentEnum.Generic) {
+			if(comment.getTag().equals("Generic")) {
 				final String commentValue = comment.getValue();
 				final Matcher matcher = commentPattern.matcher(commentValue);
 				if(matcher.matches()) {
@@ -119,7 +119,7 @@ public class SyllabifierInfo {
 		for(String tierName:set) {
 			if(tierName == null) break;
 			final Comment c = 
-					factory.createComment(CommentEnum.Generic, String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName));
+					factory.createComment("Generic", String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName));
 			session.getMetadata().addComment(c);
 		}
 		
