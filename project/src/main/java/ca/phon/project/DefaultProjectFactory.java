@@ -91,25 +91,7 @@ public class DefaultProjectFactory implements ProjectFactory {
 						projectFolder.getAbsolutePath() + ".");
 			}
 		}
-		
-		// create the new project.xml file
-		final ObjectFactory factory = new ObjectFactory();
-		final ProjectType projectType = factory.createProjectType();
-		projectType.setName(projectName);
-		projectType.setUuid(UUID.randomUUID().toString());
-		
-		final File projectFile = new File(projectFolder, "project.xml");
-		
-		try {
-			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
-			final Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			marshaller.marshal(factory.createProject(projectType), projectFile);
-		} catch (JAXBException ex) {
-			throw new IOException(ex);
-		}
-		
+				
 		try {
 			return openProject(projectFolder);
 		} catch (ProjectConfigurationException pe) {

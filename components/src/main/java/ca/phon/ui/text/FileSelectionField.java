@@ -131,6 +131,10 @@ public class FileSelectionField extends JPanel {
 			setFile(f);
 		});
 	}
+	
+	public JButton getBrowseButton() {
+		return this.browseButton;
+	}
 
 	/**
 	 * Return the selected file/folder
