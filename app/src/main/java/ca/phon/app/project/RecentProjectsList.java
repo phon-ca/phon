@@ -124,11 +124,10 @@ public class RecentProjectsList extends JPanel {
 		PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
 		
 		final String defaultIconName = "actions/document-open";
-		ImageIcon openIcn = 
-			IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.SMALL);
-		ImageIcon openIcnL =
-			IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.MEDIUM);
-		
+		ImageIcon openIcn = (projectFolder.exists() ? IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.SMALL)
+				: IconManager.getInstance().getIcon("blank", IconSize.SMALL));
+		ImageIcon openIcnL = (projectFolder.exists() ? IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.MEDIUM)
+				: IconManager.getInstance().getIcon("blank", IconSize.SMALL));
 		openAction.putValue(Action.NAME, "Open project");
 		openAction.putValue(Action.SHORT_DESCRIPTION, "Open: " + projectFolder.getAbsolutePath());
 		openAction.putValue(Action.SMALL_ICON, openIcn);

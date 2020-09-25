@@ -74,7 +74,7 @@ import ca.phon.xml.annotation.XMLSerial;
 		version="1.2",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon 1.4-2.2"
+		name="Phon 1.4-current"
 )
 @Rank(0)
 public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {

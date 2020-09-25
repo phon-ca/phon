@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -51,6 +53,7 @@ import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
+import ca.phon.project.Project;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -108,6 +111,30 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	public static List<CommonModuleFrame> getOpenWindows() {
 		return openFrames;
 	}
+	
+	/**
+	 * Return a map of projects and open windows for
+	 * each project.
+	 * 
+	 * @return project window map
+	 */
+	public static Map<Project, List<CommonModuleFrame>> getProjectWindows() {
+		final Map<Project, List<CommonModuleFrame>> projectWindows = 
+				new LinkedHashMap<>();
+		final List<CommonModuleFrame> strayWindows = new ArrayList<>();
+		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+			final Project project = cmf.getExtension(Project.class);
+			if(project != null) {
+				List<CommonModuleFrame> windows = projectWindows.get(project);
+				if(windows == null) {
+					windows = new ArrayList<>();
+					projectWindows.put(project, windows);
+				}
+				windows.add(cmf);
+			}
+		}
+		return projectWindows;
+	}
 
 	private static void removeWindow(CommonModuleFrame f) {
 		if(openFrames.contains(f))
@@ -159,7 +186,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	 */
 	public CommonModuleFrame(String title) {
 		super(title);
-
+		
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		// assign the title
