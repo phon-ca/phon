@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3.dmg" newVersion="3.1.3" newMediaFileId="macos" fileSize="286389819" md5Sum="4e7f6d744a317ca4cb446905c2e8cea7" sha256Sum="e62aa6ee05084261d1d552d77479ff218f8277f542046ad9a4ff9061f1542592" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.1.2
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.4-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_1.dmg" newVersion="3.1.4-beta.1" newMediaFileId="macos" fileSize="286365115" md5Sum="a161d2eb7ee7cfcc1310ab0657338608" sha256Sum="aa5d55b1109fa21560bcfa444ded599c3e8d9e106ca7d8570799284df870e99c" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.3
+
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+
+## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
@@ -345,8 +351,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_3.dmg" newVersion="3.1.3" newMediaFileId="macos" fileSize="286389819" md5Sum="4e7f6d744a317ca4cb446905c2e8cea7" sha256Sum="e62aa6ee05084261d1d552d77479ff218f8277f542046ad9a4ff9061f1542592" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.1.2
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_1.dmg" newVersion="3.1.4-beta.1" newMediaFileId="macos" fileSize="286365115" md5Sum="a161d2eb7ee7cfcc1310ab0657338608" sha256Sum="aa5d55b1109fa21560bcfa444ded599c3e8d9e106ca7d8570799284df870e99c" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.1.3
+
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+
+## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
@@ -690,8 +702,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.exe" newVersion="3.1.3" newMediaFileId="win64" fileSize="296013576" md5Sum="7238d9eb1c00d7dfef842f903ba18c0a" sha256Sum="3546354770a9df1e49f40912d336a5b51e5a5692ba286e0bf1679a2f87f6b08a" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.2
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.exe" newVersion="3.1.4-beta.1" newMediaFileId="win64" fileSize="296008968" md5Sum="8b0e03df162a8ec668839400df1b5fb4" sha256Sum="820a7274060cb1b77c216968fe544a971a5f283c5d9564ad58cd8682c10912d3" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.3
+
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+
+## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
@@ -1035,8 +1053,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.exe" newVersion="3.1.3" newMediaFileId="win64" fileSize="296013576" md5Sum="7238d9eb1c00d7dfef842f903ba18c0a" sha256Sum="3546354770a9df1e49f40912d336a5b51e5a5692ba286e0bf1679a2f87f6b08a" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.2
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.exe" newVersion="3.1.4-beta.1" newMediaFileId="win64" fileSize="296008968" md5Sum="8b0e03df162a8ec668839400df1b5fb4" sha256Sum="820a7274060cb1b77c216968fe544a971a5f283c5d9564ad58cd8682c10912d3" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.3
+
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+
+## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
@@ -1380,8 +1404,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.exe" newVersion="3.1.3" newMediaFileId="win64" fileSize="296013576" md5Sum="7238d9eb1c00d7dfef842f903ba18c0a" sha256Sum="3546354770a9df1e49f40912d336a5b51e5a5692ba286e0bf1679a2f87f6b08a" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.2
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.exe" newVersion="3.1.4-beta.1" newMediaFileId="win64" fileSize="296008968" md5Sum="8b0e03df162a8ec668839400df1b5fb4" sha256Sum="820a7274060cb1b77c216968fe544a971a5f283c5d9564ad58cd8682c10912d3" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.1.3
+
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+
+## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
@@ -1725,8 +1755,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_3.zip" newVersion="3.1.3" newMediaFileId="win64zip" fileSize="295097917" md5Sum="09d15706d9536675a9f859054c9e90b9" sha256Sum="ac84bdb1acac1f32f09e2e6d69c0fd8fffb5ff9b327e828db3872ecc2bed816b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.1.2
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.zip" newVersion="3.1.4-beta.1" newMediaFileId="win64zip" fileSize="295101866" md5Sum="21f2aa30bcfa24876141b840f55395ef" sha256Sum="28c7c727f7671ba4f3a4118d1bdd11174c63713be3b4fd029c42e93056e9adb6" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.1.3
+
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+
+## Changes from 3.1.2
 
  * Changed name of PPC analysis to Percent Phones Correct
  * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)

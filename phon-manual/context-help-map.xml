@@ -120,5 +120,7 @@
    <appContext helpID="custom-analysis-using-composer-simple"
                path="analysis/analysis_composer.html"/>
    <appContext helpID="phontalk" path="chat/phontalk.html"/>
+   <appContext helpID="import-project" path="chat/import_project.html"/>
+   <appContext helpID="export-project" path="chat/export_project.html"/>
    <appContext helpID="chat-main-line" path="chat/main_line.html"/>
 </map>
