@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="phontalk">
+    <title>PhonTalk</title>
+    <body>
+        <p>PhonTalk is a plug-in for the Phon application. As for Phon 3.1.4, PhonTalk is included
+            with Phon and includes the following features:</p>
+        <ul>
+            <li><p><xref href="import_project.dita"/> wizard</p></li>
+            <li><p><xref href="export_project.dita"/> wizard</p></li>
+            <li>Ability to open CHAT (.cha) and TalkBank (.xml) files as Phon sessions. CHAT and
+                TalkBank files may be included in Phon corpus folders without need for conversion.
+                When saving the session an option will be presented to the user to save in Phon
+                format or in the original format.</li>
+            <li>Abililty to save Phon sessions as CHAT (.cha) or TalkBank (.xml) files using the <menucascade>
+                    <uicontrol>File</uicontrol>
+                    <uicontrol>Save as</uicontrol>
+                </menucascade> menu in the session editor.</li>
+        </ul>
+        <p>Source code can be found at <xref href="https://github.com/phon-ca/phontalk"
+                format="html" scope="external"/>.</p>
+        <p>To report an issue, please go to <xref href="https://github.com/phon-ca/phontalk/issues"
+                format="html" scope="external"/>.</p>
+    </body>
+</topic>

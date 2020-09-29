@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="export_project">
+    <title>Export Project</title>
+    <body>
+        <p>Export a Phon project to a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
+        <p>The <uicontrol>Export Project</uicontrol> wizard is available from the
+                <uicontrol>File</uicontrol> menu in Phon.</p>
+    </body>
+    <topic id="example">
+        <title>Example</title>
+        <body>
+            <p>For this example we will export the CLPF Project created using the steps found at
+                    <xref href="import_project.dita"/>.</p>
+            <p>Open Phon, choose <menucascade>
+                    <uicontrol>File</uicontrol>
+                    <uicontrol>Export Project</uicontrol>
+                </menucascade> from the window menu:
+            <image href="./images/export_project_step1a.png" placement="break">
+                <alt>./images/export_project_step1a.png</alt>
+            </image></p>
+            <p>Select the project folder for export in the first field - you may type the filename
+                or use the browse button. If the project is open, this will already be selected. The
+                folder name will be <filepath>/Volumes/PhonBank/CLPF</filepath> in our example.
+                After selecting the project folder a list of available files for export will be
+                displayed in the file selection tree. <image
+                    href="./images/export_project_step1b.png" placement="break">
+                    <alt>./images/export_project_step1b.png</alt>
+                </image></p>
+            <p>Enter the folder where the project will be exported in the output folder field. In
+                the example below we use the folder <filepath>/Volumes/Data/PhonBank-CHAT
+                    Export</filepath>. The project name will be included as the first item in the
+                export path for all files.</p>
+            <p>Select files for export using the checkboxes in the file selection tree. Be default
+                all files will be selected and all Phon session files will be detected and selected
+                for conversion. All other files will be copied into the export folder.</p>
+            <p>Click the <uicontrol>Next</uicontrol> button at the top of the wizard to view the
+                Options step. In this step you may choose to export Phon sessions as CHAT (.cha) or
+                TalkBank (.xml) format. <image href="./images/export_project_step2.png"
+                    placement="break">
+                    <alt>./images/export_project_step2.png</alt>
+                </image></p>
+            <p>Click the <uicontrol>Next</uicontrol> button again to move to the export step. All
+                selected files will appear in the table on the left and a log will appear on the
+                right side of the window. The export process may take some time. The export may be
+                canceled at any time using the <uicontrol>Stop</uicontrol> button at the top of the
+                window. <image href="./images/export_project_step3a.png" placement="break">
+                    <alt>./images/export_project_step3a.png</alt>
+                </image></p>
+            <p>When the export has been completed options to <uicontrol>Open folder</uicontrol>,
+                    <uicontrol>Run again</uicontrol> and <uicontrol>Close window</uicontrol> are
+                displayed. <image href="./images/export_project_step3b.png" placement="break">
+                    <alt>./images/export_project_step3b.png</alt>
+                </image></p>
+        </body>
+    </topic>
+</topic>
