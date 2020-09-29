@@ -116,12 +116,12 @@ $(document).ready( function () {
                         </nav>
                     
                     
-                    <div class="col-lg-9 col-md-9 col-sm-12" id="wh_topic_body">
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
                         <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
     <h1 class="- topic/title title topictitle1" id="ariaid-title1">Export Project</h1>
     <div class="- topic/body body">
         <p class="- topic/p p">Export a Phon project to a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
-        <p class="- topic/p p">The <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Export Project</span> wizard is available from the
+        <p class="- topic/p p">The <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Export Project</span> wizard is available from the
                 <span class="+ topic/ph ui-d/uicontrol ph uicontrol">File</span> menu in Phon.</p>
     </div>
     <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="example">
@@ -129,15 +129,20 @@ $(document).ready( function () {
         <div class="- topic/body body">
             <p class="- topic/p p">For this example we will export the CLPF Project created using the steps found at
                     <a class="- topic/xref xref" href="import_project.html">Import Project</a>.</p>
-            <div class="- topic/p p">Open Phon, choose <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">File</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Export Project</span></span> from the window menu:
-            <br /><img class="- topic/image image" src="images/export_project_step1a.png" alt="./images/export_project_step1a.png" /><br /></div>
-            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">Select files</h3>
+            <p class="- topic/p p">Open Phon, choose <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">File</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Export Project</span></span> from the window menu:</p>
+                <figure class="- topic/fig fig fignone" id="example__fig_export_project">
+                    <br /><img class="- topic/image image" id="example__image_mml_wlb_2nb" src="images/export_project_step1a.png" /><br />
+                </figure>
+            <section class="- topic/section section" id="example__select_files"><h3 class="- topic/title title sectiontitle">Select files</h3>
                 
-                <div class="- topic/p p">Select the project folder for export in the first field - you may type the filename
+                <p class="- topic/p p">Select the project folder for export in the first field - you may type the filename
                     or use the browse button. If the project is open, this will already be selected. The
                     folder name will be <span class="+ topic/ph sw-d/filepath ph filepath">/Volumes/PhonBank/CLPF</span> in our example.
                     After selecting the project folder a list of available files for export will be
-                    displayed in the file selection tree. <br /><img class="- topic/image image" src="images/export_project_step1b.png" alt="./images/export_project_step1b.png" /><br /></div>
+                    displayed in the file selection tree. </p>
+                <figure class="- topic/fig fig fignone" id="example__fig_export_project_step1">
+                    <br /><img class="- topic/image image" id="example__image_mml_wlb_2bb" src="images/export_project_step1b.png" /><br />
+                </figure>
                 <p class="- topic/p p">Enter the folder where the project will be exported in the output folder field. In
                     the example below we use the folder <span class="+ topic/ph sw-d/filepath ph filepath">/Volumes/Data/PhonBank-CHAT
                         Export</span>. The project name will be included as the first item in the
@@ -146,22 +151,31 @@ $(document).ready( function () {
                     all files will be selected and all Phon session files will be detected and selected
                     for conversion. All other files will be copied into the export folder.</p>
             </section>
-            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">Options</h3>
+            <section class="- topic/section section" id="example__options"><h3 class="- topic/title title sectiontitle">Options</h3>
                 
-                <div class="- topic/p p">Click the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Next</span> button at the top of the wizard to view the
+                <p class="- topic/p p">Click the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Next</span> button at the top of the wizard to view the
                     Options step. In this step you may choose to export Phon sessions as CHAT (.cha) or
-                    TalkBank (.xml) format. <br /><img class="- topic/image image" src="images/export_project_step2.png" alt="./images/export_project_step2.png" /><br /></div>
+                    TalkBank (.xml) format.</p>
+                <figure class="- topic/fig fig fignone" id="example__fig_export_project_step2">
+                    <br /><img class="- topic/image image" id="example__image_mml_wlb_2db" src="images/export_project_step2.png" /><br />
+                </figure>
             </section>
-            <section class="- topic/section section"><h3 class="- topic/title title sectiontitle">Export</h3>
+            <section class="- topic/section section" id="example__export"><h3 class="- topic/title title sectiontitle">Export</h3>
                 
-            <div class="- topic/p p">Click the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Next</span> button again to move to the export step. All
+            <p class="- topic/p p">Click the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Next</span> button again to move to the export step. All
                 selected files will appear in the table on the left and a log will appear on the
                 right side of the window. The export process may take some time. The export may be
                 canceled at any time using the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Stop</span> button at the top of the
-                window. <br /><img class="- topic/image image" src="images/export_project_step3a.png" alt="./images/export_project_step3a.png" /><br /></div>
-            <div class="- topic/p p">When the export has been completed options to <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Open folder</span>,
+                window.</p>
+                <figure class="- topic/fig fig fignone" id="example__fig_export_project_step3">
+                    <br /><img class="- topic/image image" id="example__image_mml_wlb_3nb" src="images/export_project_step3a.png" /><br />
+                </figure>
+            <p class="- topic/p p">When the export has been completed options to <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Open folder</span>,
                     <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Run again</span> and <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Close window</span> are
-                displayed. <br /><img class="- topic/image image" src="images/export_project_step3b.png" alt="./images/export_project_step3b.png" /><br /></div>
+                displayed.</p>
+                <figure class="- topic/fig fig fignone" id="example__fig_export_project_complete">
+                    <br /><img class="- topic/image image" id="example__image_mml_wlb_3hb" src="images/export_project_step3b.png" /><br />
+                </figure>
             </section>
         </div>
     </article>
@@ -171,6 +185,10 @@ $(document).ready( function () {
                         
                         
                     </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#example" data-tocid="example">Example</a><ul><li class="section-item"><div class="section-title"><a href="#example__select_files" data-tocid="example__select_files">Select files</a></div></li><li class="section-item"><div class="section-title"><a href="#example__options" data-tocid="example__options">Options</a></div></li><li class="section-item"><div class="section-title"><a href="#example__export" data-tocid="example__export">Export</a></div></li></ul></li></ul></div>
+                        </nav>
                     
                 </div>
             </div>
