@@ -3,7 +3,7 @@
 <topic id="phontalk">
     <title>PhonTalk</title>
     <body>
-        <p>PhonTalk is a plug-in for the Phon application. As for Phon 3.1.4, PhonTalk is included
+        <p>PhonTalk is a plug-in for the Phon application. As of Phon 3.1.4, PhonTalk is included
             with Phon and includes the following features:</p>
         <ul>
             <li><p><xref href="import_project.dita"/> wizard</p></li>

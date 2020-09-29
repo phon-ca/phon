@@ -7,7 +7,7 @@ Query for consonants using the base glyph.
 Examples:
 
 | Phonex | Meaning |
-|--|--|
+|---|---|
 | ```b``` | Any consonant with 'b' as the base glyph |
 | ```d``` | Any consonant with 'd' as the base glyph |
 
@@ -18,7 +18,7 @@ Query using feature names. Features names are placed between braces (i.e., '{', 
 Examples:
 
 | Phonex | Meaning |
-|--|--|
+|---|---|
 | ```{consonant}``` | Any consonant |
 | ```{fricative}``` | Any fricative |
 
@@ -27,7 +27,7 @@ Multiple feature name may be provided, separated by commas.  If a paticular feat
 Examples:
 
 | Phonex | Meaning | 
-|--|--|
+|---|---|
 | ```{fricative, voiced}``` | Voiced fricatives |
 | ```{consonant, -stop}``` | All consonants which are not stops |
 

@@ -51,7 +51,7 @@ Rose, Yvan, Brian MacWhinney, Rodrigue Byrne, Gregory Hedlund, Keith Maddocks, P
 
 We encourage you to subscribe to the discussion group for helpful information and technical support. Please click on the following link to request membership to the [PhonBank](http://phonbank.talkbank.org) (or other TalkBank-related) discussion group: 
 
- * http://talkbank.org/share/email.html
+ * [](http://talkbank.org/share/email.html)
     * No Google mail (gmail) account is required to subscribe
     * Group’s email address (for message posting): phon@googlegroups.com
 
@@ -61,16 +61,16 @@ __Funding__: Current development of Phon and [PhonBank](http://phonbank.talkbank
 
 __Dictionaries__: Built-in dictionaries of pronounced forms were obtained from generous organizations and people, to whom we are indebted:
 
- * Catalan: Universitat Politècnica de Catalunya (http://www.upc.es/)
- * Dutch (Flemish): Fonilex Database (http://bach.arts.kuleuven.be/fonilex/)
- * English (British): Cambridge University Engineering Department,Cambridge,UK (http://svr-www.eng.cam.ac.uk/comp.speech/Section1/Lexical/beep.html)
- * English (North American): CMU Pronouncing Dictionary (Speech at CMU) (http://www.speech.cs.cmu.edu/speech/)
- * French: Lexique Database (http://www.lexique.org/)
- * German: Universität Bonn (http://www.sk.uni-bonn.de/forschung/phonetik/sprachsynthese/bomp)
- * Icelandic: The Icelandic Centre for Language Technology (http://www.tungutaekni.is/materials/e001.html)
- * Italian: ISTC-SPFD CNR, Istituto di Scienze e Tecnologie della Cognizione (http://www2.pd.istc.cnr.it/FESTIVAL/home/default.htm)
- * Norwegian: Norwegian Computational Lexicon (NorKompLeks), Institutt for språk og litteratur, Norges teknisk-naturvitenskapelige universitet (https://www.ntnu.no/isl)
- * Spanish (Spain): Universitat Politècnica de Catalunya (http://www.upc.es/)
- * Spanish (Latin America): Scott Sadowsky (http://sadowsky.cl/)
+ * Catalan: Universitat Politècnica de Catalunya [](http://www.upc.es/)
+ * Dutch (Flemish): Fonilex Database [](http://bach.arts.kuleuven.be/fonilex/)
+ * English (British): Cambridge University Engineering Department,Cambridge,UK [](http://svr-www.eng.cam.ac.uk/comp.speech/Section1/Lexical/beep.html)
+ * English (North American): CMU Pronouncing Dictionary (Speech at CMU) [](http://www.speech.cs.cmu.edu/speech/)
+ * French: Lexique Database [](http://www.lexique.org/)
+ * German: Universität Bonn [](http://www.sk.uni-bonn.de/forschung/phonetik/sprachsynthese/bomp)
+ * Icelandic: The Icelandic Centre for Language Technology [](http://www.tungutaekni.is/materials/e001.html)
+ * Italian: ISTC-SPFD CNR, Istituto di Scienze e Tecnologie della Cognizione [](http://www2.pd.istc.cnr.it/FESTIVAL/home/default.htm)
+ * Norwegian: Norwegian Computational Lexicon (NorKompLeks), Institutt for språk og litteratur, Norges teknisk-naturvitenskapelige universitet [](https://www.ntnu.no/isl)
+ * Spanish (Spain): Universitat Politècnica de Catalunya [](http://www.upc.es/)
+ * Spanish (Latin America): Scott Sadowsky [](http://sadowsky.cl/)
 
 __Special thanks__: While it is impossible to name everyone who ended up being involved in one way or another in this project, we owe special thanks to a wonderful group of early adopters and beta testers, students and researchers alike, without whom it would have been much more difficult to produce the current software program. We are also grateful to Paul Boersma for this tremendous collaboration toward the interactions between Praat and related functions within  Phon 2.
