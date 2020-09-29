@@ -19,27 +19,35 @@
             <image href="./images/export_project_step1a.png" placement="break">
                 <alt>./images/export_project_step1a.png</alt>
             </image></p>
-            <p>Select the project folder for export in the first field - you may type the filename
-                or use the browse button. If the project is open, this will already be selected. The
-                folder name will be <filepath>/Volumes/PhonBank/CLPF</filepath> in our example.
-                After selecting the project folder a list of available files for export will be
-                displayed in the file selection tree. <image
-                    href="./images/export_project_step1b.png" placement="break">
-                    <alt>./images/export_project_step1b.png</alt>
-                </image></p>
-            <p>Enter the folder where the project will be exported in the output folder field. In
-                the example below we use the folder <filepath>/Volumes/Data/PhonBank-CHAT
-                    Export</filepath>. The project name will be included as the first item in the
-                export path for all files.</p>
-            <p>Select files for export using the checkboxes in the file selection tree. Be default
-                all files will be selected and all Phon session files will be detected and selected
-                for conversion. All other files will be copied into the export folder.</p>
-            <p>Click the <uicontrol>Next</uicontrol> button at the top of the wizard to view the
-                Options step. In this step you may choose to export Phon sessions as CHAT (.cha) or
-                TalkBank (.xml) format. <image href="./images/export_project_step2.png"
-                    placement="break">
-                    <alt>./images/export_project_step2.png</alt>
-                </image></p>
+            <section>
+                <title>Select files</title>
+                <p>Select the project folder for export in the first field - you may type the filename
+                    or use the browse button. If the project is open, this will already be selected. The
+                    folder name will be <filepath>/Volumes/PhonBank/CLPF</filepath> in our example.
+                    After selecting the project folder a list of available files for export will be
+                    displayed in the file selection tree. <image
+                        href="./images/export_project_step1b.png" placement="break">
+                        <alt>./images/export_project_step1b.png</alt>
+                    </image></p>
+                <p>Enter the folder where the project will be exported in the output folder field. In
+                    the example below we use the folder <filepath>/Volumes/Data/PhonBank-CHAT
+                        Export</filepath>. The project name will be included as the first item in the
+                    export path for all files.</p>
+                <p>Select files for export using the checkboxes in the file selection tree. Be default
+                    all files will be selected and all Phon session files will be detected and selected
+                    for conversion. All other files will be copied into the export folder.</p>
+            </section>
+            <section>
+                <title>Options</title>
+                <p>Click the <uicontrol>Next</uicontrol> button at the top of the wizard to view the
+                    Options step. In this step you may choose to export Phon sessions as CHAT (.cha) or
+                    TalkBank (.xml) format. <image href="./images/export_project_step2.png"
+                        placement="break">
+                        <alt>./images/export_project_step2.png</alt>
+                    </image></p>
+            </section>
+            <section>
+                <title>Export</title>
             <p>Click the <uicontrol>Next</uicontrol> button again to move to the export step. All
                 selected files will appear in the table on the left and a log will appear on the
                 right side of the window. The export process may take some time. The export may be
@@ -52,6 +60,7 @@
                 displayed. <image href="./images/export_project_step3b.png" placement="break">
                     <alt>./images/export_project_step3b.png</alt>
                 </image></p>
+            </section>
         </body>
     </topic>
 </topic>
