@@ -122,5 +122,5 @@
    <appContext helpID="phontalk" path="chat/phontalk.html"/>
    <appContext helpID="import_project" path="chat/import_project.html"/>
    <appContext helpID="export_project" path="chat/export_project.html"/>
-   <appContext helpID="chat-main-line" path="chat/main_line.html"/>
+   <appContext helpID="chat-_main_line" path="chat/main_line.html"/>
 </map>
