@@ -23,25 +23,29 @@
                     href="https://phonbank.talkbank.org/data/Dutch/CLPF.zip" format="zip"
                     scope="external">CHAT data</xref> link and then extract the .zip file after
                 downloading. For our example we will extract the downloaded CLPF.zip file into a
-                folder named <filepath>/Volumes/PhonBank-CHAT</filepath>.</p>
+                folder named <filepath>/Volumes/Data/PhonBank-CHAT</filepath>.</p>
             <p>Open Phon, choose <menucascade>
                     <uicontrol>File</uicontrol>
                     <uicontrol>Import Project</uicontrol>
-                </menucascade> from the window menu: <image
-                    href="./images/import_project_step1a.png" placement="break">
-                    <alt>./images/import_project_step1a.png</alt>
-                </image></p>
+                </menucascade> from the window menu:</p>
+            <fig id="fig_import_project">
+                <image placement="break" href="images/import_project_step1a.png"
+                    id="image_mml_wlb_2nb">
+                </image>
+            </fig>
             <section>
                 <title>Select files</title>
-                <p>Enter the folder for import in the first field - you may type the filename or use the
-                    browse button. The folder name will be
-                        <filepath>/Volumes/PhonBank-CHAT/CLPF</filepath> in our example. After selecting
-                    the import folder the <uicontrol>Project name</uicontrol> field will automatically
-                    be filled using the name of the selected import folder. A list of available files
-                    for import will be displayed in the file selection tree.<image
-                        href="./images/import_project_step1b.png" placement="break">
-                        <alt>./images/import_project_step1b.png</alt>
-                    </image></p>
+                <p>Enter the folder for import in the first field - you may type the filename or use
+                    the browse button. The folder name will be
+                        <filepath>/Volumes/Data/PhonBank-CHAT/CLPF</filepath> in our example. After
+                    selecting the import folder the <uicontrol>Project name</uicontrol> field will
+                    automatically be filled using the name of the selected import folder. A list of
+                    available files for import will be displayed in the file selection tree.</p>
+                  <fig id="fig_import_project_step1">
+                      <image placement="break" href="images/import_project_step1b.png"
+                          id="image_mml_wlb_2bb">
+                      </image>
+                  </fig>
                 <p>Enter the folder where the new project will be created in the export folder field. By
                     default this will be set to your workspace folder. In the example below we use the
                     folder <filepath>/Volumes/Data/PhonBank</filepath>. The project folder will include
@@ -56,10 +60,12 @@
                 <title>Options</title>
                 <p>Click the <uicontrol>Next</uicontrol> button at the top of the wizard to view the
                     Options step. In this step you may choose to syllabifiy and align any phonetic
-                    transcriptions found in the CHAT files for import. <image
-                        href="./images/import_project_step2.png" placement="break">
-                        <alt>./images/import_project_step2.png</alt>
-                    </image></p>
+                    transcriptions found in the CHAT files for import. </p>
+                <fig id="fig_import_project_step2">
+                    <image placement="break" href="images/import_project_step2.png"
+                        id="image_mml_wlb_2xb">
+                    </image>
+                </fig>
             </section>
             <section>
                 <title>Import</title>
@@ -67,14 +73,20 @@
                     selected files will appear in the table on the left and a log will appear on the
                     right side of the window. The import process may take some time. The import may be
                     canceled at any time using the <uicontrol>Stop</uicontrol> button at the top of the
-                    window. <image href="./images/import_project_step3a.png" placement="break">
-                        <alt>./images/import_project_step3a.png</alt>
-                    </image></p>
+                    window. </p>
+                    <fig id="fig_import_project_step3">
+                        <image placement="break" href="images/import_project_step3a.png"
+                            id="image_mml_wlb_3nb">
+                        </image>
+                    </fig>
                 <p>When the import has been completed options to <uicontrol>Open project</uicontrol>,
                         <uicontrol>Run again</uicontrol> and <uicontrol>Close window</uicontrol> are
-                    displayed. <image href="./images/import_project_step3b.png" placement="break">
-                        <alt>./images/import_project_step3b.png</alt>
-                    </image></p>
+                    displayed. </p>
+                <fig id="fig_import_project_complete">
+                    <image placement="break" href="images/import_project_step3b.png"
+                        id="image_mml_wlb_34b">
+                    </image>
+                </fig>
             </section>
             <p>To export this project back to CHAT or TalkBank format follow the instructions at
                     <xref href="export_project.dita"/>.</p>
