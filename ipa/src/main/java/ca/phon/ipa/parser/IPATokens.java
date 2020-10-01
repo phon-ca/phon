@@ -32,6 +32,7 @@ import javax.xml.bind.Unmarshaller;
 
 import ca.phon.ipa.xml.CharType;
 import ca.phon.ipa.xml.IpaType;
+import ca.phon.ipa.xml.ObjectFactory;
 
 /**
  * Maps individual glyphs to their IPA token type.
@@ -130,7 +131,7 @@ public final class IPATokens {
 			
 			try {
 				// read in xml token file
-				final JAXBContext context = JAXBContext.newInstance("ca.phon.ipa.xml");
+				final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 				final Unmarshaller unmarshaller = context.createUnmarshaller();
 				
 				final JAXBElement<?> ipaEle = 

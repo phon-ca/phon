@@ -8,10 +8,13 @@ import java.util.UUID;
 
 import javax.xml.stream.events.StartElement;
 
+import org.apache.commons.io.FilenameUtils;
+
 import ca.phon.app.actions.XMLOpenHandler;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProject;
+import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -24,7 +27,12 @@ import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionReader;
 import ca.phon.ui.CommonModuleFrame;
 
-public class SessionXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {
+/**
+ * Open session files in Phon format. If no project is detected a temorary
+ * project is created for the session editor.
+ * 
+ */
+public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -78,10 +86,10 @@ public class SessionXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 			return;
 		}
 		
-		SessionInputFactory factory = new SessionInputFactory();
-		SessionReader reader = factory.createReaderForFile(file);
-		Session session = reader.readSession(new FileInputStream(file));
-		session.setCorpus(file.getParentFile().getName());
+		Session session = openSession(file);
+		if(session.getName() == null || session.getName().trim().length() == 0) {
+			session.setName(FilenameUtils.removeExtension(file.getName()));
+		}
 		
 		Project project = findProjectForFile(file);
 		if(project == null) {
@@ -94,7 +102,15 @@ public class SessionXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 		PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
 	}
 	
-	private Project createTempProjectForFile(File file) {
+	protected Session openSession(File file) throws IOException {
+		SessionInputFactory factory = new SessionInputFactory();
+		SessionReader reader = factory.createReaderForFile(file);
+		Session session = reader.readSession(new FileInputStream(file));
+		session.setCorpus(file.getParentFile().getName());
+		return session;
+	}
+	
+	protected Project createTempProjectForFile(File file) {
 		File tmpFolder = new File(System.getProperty("java.io.tmpdir"));
 		File projectFolder = new File(tmpFolder, UUID.randomUUID().toString());
 		projectFolder.mkdirs();
@@ -113,7 +129,7 @@ public class SessionXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 		return null;
 	}
 	
-	private Project findProjectForFile(File file) {
+	protected Project findProjectForFile(File file) {
 		File corpusFolder = file.getParentFile();
 		File projectFolder = corpusFolder.getParentFile();
 		
@@ -128,15 +144,11 @@ public class SessionXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 			}
 		}
 		
-		File projectFile = new File(projectFolder, "project.xml");
-		if(projectFile.exists()) {
-			try {
-				return new DesktopProject(projectFolder);
-			} catch (ProjectConfigurationException e) {
-				return null;
-			}
+		try {
+			return (new DesktopProjectFactory()).openProject(projectFolder);
+		} catch (IOException | ProjectConfigurationException e) {
+			return null;
 		}
-		return null;
 	}
 
 }

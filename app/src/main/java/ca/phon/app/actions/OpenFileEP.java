@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FilenameUtils;
+
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.IPluginEntryPoint;
@@ -73,15 +75,19 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 	}
 	
 	public void openFile(File file) {
-		List<IPluginExtensionPoint<OpenFileHandler>> fileHandlers = PluginManager.getInstance().getExtensionPoints(OpenFileHandler.class);
+		List<IPluginExtensionPoint<OpenFileHandler>> fileHandlers = 
+				PluginManager.getInstance().getExtensionPoints(OpenFileHandler.class);
 		for(var extPt:fileHandlers) {
 			OpenFileHandler handler = extPt.getFactory().createObject();
 			
-			boolean canOpen = false;
-			try {
-				canOpen = handler.canOpen(file);
-			} catch (IOException e) {
-				// ignore
+			String fileExt = FilenameUtils.getExtension(file.getName());
+			boolean canOpen = handler.supportedExtensions().contains(fileExt);
+			if(canOpen) {
+				try {
+					canOpen = handler.canOpen(file);
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
 			}
 			if(canOpen) {
 				try {
