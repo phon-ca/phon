@@ -125,6 +125,7 @@
         <topicref href="analysis/consonants.dita" format="dita"/>
         <topicref href="analysis/pdc.dita"/>
         <topicref href="analysis/ppc.dita" format="dita"/>
+        <topicref href="analysis/pntc.dita"/>
         <topicref href="analysis/phone_inventory.md" format="markdown"/>
         <topicref href="analysis/phonological_processes.md" format="markdown"/>
         <topicref href="analysis/pmlu.md" format="markdown"/>
