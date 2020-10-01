@@ -31,6 +31,7 @@ import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.ExitCommand;
 import ca.phon.app.menu.file.NewProjectCommand;
 import ca.phon.app.menu.file.OpenProjectCommand;
+import ca.phon.app.menu.file.RecentFilesMenuListener;
 import ca.phon.app.menu.file.RecentProjectsMenuListener;
 import ca.phon.app.menu.file.ShowApplicationDataFolderCommand;
 import ca.phon.app.menu.help.HelpCommand;
@@ -58,7 +59,7 @@ import ca.phon.util.PrefHelper;
 public class DefaultMenuFilter implements IPluginMenuFilter {
 
 	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DefaultMenuFilter.class.getName());
-
+	
 	@Override
 	public void filterWindowMenu(Window owner, JMenuBar menu) {
 		addFileMenu(owner, menu);
@@ -78,16 +79,22 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		final MenuBuilder builder = new MenuBuilder(menu);
 		final JMenu fileMenu = builder.addMenu(".@^", "File");
 		
+		fileMenu.add(new OpenFileEP());
+		JMenu recentFilesMenu = new JMenu("Recent files");
+		recentFilesMenu.addMenuListener(new RecentFilesMenuListener());
+		fileMenu.add(recentFilesMenu);
+		
+		fileMenu.addSeparator();
+		
 		fileMenu.add(new NewProjectCommand());
-		if(PrefHelper.getBoolean("phon.debug", false))
-			fileMenu.add(new OpenFileEP());
+		
 		fileMenu.add(new OpenProjectCommand());
-
 		final JMenu recentProjectsMenu = new JMenu("Recent Projects");
 		recentProjectsMenu.addMenuListener(new RecentProjectsMenuListener());
 		fileMenu.add(recentProjectsMenu);
 		
 		fileMenu.addSeparator();
+		
 		
 		fileMenu.add(new ShowApplicationDataFolderCommand());
 

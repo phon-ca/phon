@@ -1,5 +1,7 @@
 #Welcome
 ca.phon.app.welcome.WelcomeWindowEP
+# OpenFile
+ca.phon.app.actions.OpenFileEP
 # OpenProject
 ca.phon.app.project.OpenProjectEP
 # Exit

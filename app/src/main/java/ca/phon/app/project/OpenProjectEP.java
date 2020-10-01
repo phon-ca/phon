@@ -39,8 +39,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenProjectEP.class.getName());
 	
 	public static final String EP_NAME = "OpenProject";
-	
-	private String projectpath;
+
+	private Project project;
 	
 	@Override
 	public String getName() {
@@ -51,17 +51,9 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	public OpenProjectEP() {
 		super();
 	}
-	
-	public void setProjectPath(String projectPath) {
-		this.projectpath = projectPath;
-	}
-	
-	public String getProjectPath() {
-		return projectpath;
-	}
-	
+			
 	public void loadProject() {
-		if(projectpath == null || projectpath.length() == 0)
+		if(project == null)
 			return;
 		loadLocalProject();
 	}
@@ -80,11 +72,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
     	props.setParentWindow(CommonModuleFrame.getCurrentFrame());
     	
     	try{
-			File myFile = new File(projectpath);
+			File myFile = new File(project.getLocation());
 			
 			// file does not exist, return
 			if(!myFile.exists()) {
-				props.setMessage("Could not find a project at '" + projectpath + "'");
+				props.setMessage("Could not find a project at '" + project.getLocation() + "'");
 				NativeDialogs.showMessageDialog(props);
 				return false;
 			}
@@ -93,7 +85,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 				if(!(cmf instanceof ProjectWindow)) continue;
 				final Project pfe = cmf.getExtension(Project.class);
-				if(pfe != null && pfe.getLocation().equals(projectpath)) {
+				if(pfe != null && pfe.getLocation().equals(project.getLocation())) {
 					cmf.toFront();
 					cmf.requestFocus();
 					return true;
@@ -112,13 +104,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 					return true; // file was actually found, so return true
 			}
 			
-			final ProjectFactory factory = new DesktopProjectFactory();
-			
-			
-			final Project proj = factory.openProject(myFile);
-			
 			// check project version and see if an update is needed
-			if(proj.getVersion().equals("unk")) {
+			if(project.getVersion().equals("unk")) {
 				String msgTitle = "Convert Project?";
 				String msg = "This project needs to be upgraded for use in this version of Phon."
 					+ " Click 'Yes' to convert this project.";
@@ -134,7 +121,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				return true;
 			}
 			
-			final ProjectWindow pwindow = new ProjectWindow(proj, proj.getLocation());
+			final ProjectWindow pwindow = new ProjectWindow(project, project.getLocation());
     		pwindow.pack();
     		pwindow.setSize(800, 600);
     		pwindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
@@ -157,7 +144,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		if(GraphicsEnvironment.isHeadless()) return;
 		
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
-		this.projectpath = (String)epArgs.get(EntryPointArgs.PROJECT_LOCATION);
+		this.project = epArgs.getProject();
 		
 		if(SwingUtilities.isEventDispatchThread()) {
 			openProject.run();

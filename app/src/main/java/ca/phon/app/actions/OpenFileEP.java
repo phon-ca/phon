@@ -18,6 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -29,14 +30,18 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
 public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 
-	public static String EP_NAME = "Open";
+	public static String EP_NAME = "OpenFile";
 	
 	public static String DESC = "Open file on disk...";
+	
+	public static String INPUT_FILE = OpenFileEP.class.getName() + ".inputFile";
+	
+	private File inputFile;
 	
 	public OpenFileEP() {
 		super();
 		
-		putValue(NAME, EP_NAME + "...");
+		putValue(NAME, "Open file...");
 		putValue(SHORT_DESCRIPTION, DESC);
 		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 	}
@@ -48,8 +53,16 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 
 	@Override
 	public void pluginStart(Map<String, Object> args) {
+		var inputFileObj = args.get(INPUT_FILE);
+		if(inputFileObj != null) {
+			if(inputFileObj instanceof File) {
+				inputFile = (File)inputFileObj;
+			} else {
+				inputFile = new File(inputFileObj.toString());
+			}
+		}
 		SwingUtilities.invokeLater( () -> {
-			ActionEvent ae = new ActionEvent(null, 0, EP_NAME);
+			ActionEvent ae = new ActionEvent(OpenFileEP.this, 0, EP_NAME);
 			hookableActionPerformed(ae);
 		});
 	}
@@ -92,6 +105,11 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 			if(canOpen) {
 				try {
 					handler.openFile(file);
+					
+					OpenFileHistory history = new OpenFileHistory();
+					history.addToHistory(file);
+					history.saveHistory();
+					
 					break;
 				} catch (IOException e) {
 					Toolkit.getDefaultToolkit().beep();
@@ -103,17 +121,21 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		OpenDialogProperties props = new OpenDialogProperties();
-		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-		props.setAllowMultipleSelection(false);
-		props.setCanChooseDirectories(false);
-		props.setCanCreateDirectories(false);
-		props.setCanChooseFiles(true);
-		props.setFileFilter(createFileFilter());
-		props.setRunAsync(true);
-		props.setListener(this::dialogFinished);
-		
-		NativeDialogs.showOpenDialog(props);
+		if(inputFile == null) {
+			OpenDialogProperties props = new OpenDialogProperties();
+			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+			props.setAllowMultipleSelection(false);
+			props.setCanChooseDirectories(false);
+			props.setCanCreateDirectories(false);
+			props.setCanChooseFiles(true);
+			props.setFileFilter(createFileFilter());
+			props.setRunAsync(true);
+			props.setListener(this::dialogFinished);
+			
+			NativeDialogs.showOpenDialog(props);
+		} else {
+			openFile(inputFile);
+		}
 	}
 
 }

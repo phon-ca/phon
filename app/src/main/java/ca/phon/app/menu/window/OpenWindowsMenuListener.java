@@ -15,6 +15,7 @@
  */
 package ca.phon.app.menu.window;
 
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -27,11 +28,18 @@ import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.OpenProjectEP;
+import ca.phon.app.project.ProjectWindow;
 import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.app.welcome.WelcomeWindowEP;
 import ca.phon.plugin.PluginAction;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 
 /**
@@ -84,12 +92,21 @@ public class OpenWindowsMenuListener implements MenuListener {
 		
 		for(Project project:projectWindows.keySet()) {
 			final JMenu projectMenu = new JMenu(project.getName());
+			boolean projectWindowAvail = false;
 			for(CommonModuleFrame projectWindow:projectWindows.get(project)) {
+				if(projectWindow instanceof ProjectWindow)
+					projectWindowAvail = true;
 				final PhonUIAction showWindowAct = new PhonUIAction(projectWindow, "toFront");
 				showWindowAct.putValue(PhonUIAction.NAME, projectWindow.getTitle());
 				showWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Bring window to front");
 				final JMenuItem projectWindowItem = new JMenuItem(showWindowAct);
 				projectMenu.add(projectWindowItem);
+			}
+			if(!projectWindowAvail) {
+				PhonUIAction showProjectWindowAct = new PhonUIAction(OpenWindowsMenuListener.class, "openProjectWindow", project);
+				showProjectWindowAct.putValue(PhonUIAction.NAME, "Show project window");
+				showProjectWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show project window");
+				menu.add(showProjectWindowAct);
 			}
 			menu.add(projectMenu);
 		}
@@ -112,6 +129,19 @@ public class OpenWindowsMenuListener implements MenuListener {
 		// generic close item
 		final JMenuItem closeItem = new JMenuItem(new CloseWindowCommand(owner.get()));
 		menu.add(closeItem);
+	}
+	
+	public static void openProjectWindow(PhonActionEvent pae) {
+		Project project = (Project)pae.getData();
+		
+		EntryPointArgs args = new EntryPointArgs();
+		args.put(EntryPointArgs.PROJECT_OBJECT, project);
+		try {
+			PluginEntryPointRunner.executePlugin(OpenProjectEP.EP_NAME, args);
+		} catch (PluginException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(e);
+		}
 	}
 
 }

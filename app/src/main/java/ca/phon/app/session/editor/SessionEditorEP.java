@@ -37,11 +37,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import ca.phon.app.autosave.Autosaves;
+import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
+import ca.phon.project.LocalProject;
 import ca.phon.project.Project;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
@@ -293,6 +295,14 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			editor.getStatusBar().getProgressBar().setIndeterminate(false);
 			editor.getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_FINISHED_LOADING));
 		});
+		
+		// add to open file history
+		if(project instanceof LocalProject) {
+			LocalProject lp = (LocalProject)project;
+			OpenFileHistory fileHistory = new OpenFileHistory();
+			fileHistory.addToHistory(lp.getSessionFile(session.getCorpus(), session.getName()));
+			fileHistory.saveHistory();
+		}
 
 		return editor;
 	}

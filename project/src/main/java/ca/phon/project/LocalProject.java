@@ -623,7 +623,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		return retVal;
 	}
 
-	private File getCorpusFolder(String corpus) {
+	public File getCorpusFolder(String corpus) {
 		File retVal = new File(getCorpusPath(corpus));
 		return retVal;
 	}
@@ -639,7 +639,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		return retVal;
 	}
 
-	private File getSessionFile(String corpus, String session) {
+	public File getSessionFile(String corpus, String session) {
 		final List<File> potentialFiles =
 				getSessionExtensions().stream()
 					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
