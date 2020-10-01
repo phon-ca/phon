@@ -53,11 +53,10 @@
                     <title>Tone Number</title>
                     <p>Tone number is specified using superscript numbers and must appear as the
                         last element in a phone.  Tone number applies to all elements inside of a
-                        syllable unit and may be appear on any element within the syllable. If tone
-                        number appears on more than one element a space is added to the tone number
-                        indicating the break (for query and reporting purposes.)</p>
+                        syllable unit and may be appear on any element within the syllable. (If tone
+                        number diacritics appear on more than one element the numbers are concatonated.)</p>
                 </section>
-                <example>ba²¹⁴  has tone number '214'<p>b²a¹⁴ has tone number '2 14'</p></example>
+                <example>ba²¹⁴  has tone number '214'<p>b²a¹⁴ has tone number '214'</p></example>
                 
             </body>
             <related-links>
