@@ -24,6 +24,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
@@ -114,6 +115,11 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 				} catch (IOException e) {
 					Toolkit.getDefaultToolkit().beep();
 					LogUtil.severe(e);
+					
+					if(CommonModuleFrame.getCurrentFrame() != null) {
+						CommonModuleFrame.getCurrentFrame()
+							.showMessageDialog("Open file failed", e.getLocalizedMessage(), MessageDialogProperties.okOptions);
+					}
 				}
 			}
 		}
