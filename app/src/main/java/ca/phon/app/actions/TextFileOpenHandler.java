@@ -31,7 +31,7 @@ public class TextFileOpenHandler implements OpenFileHandler, IPluginExtensionPoi
 		BufferWindow bufferWindow = BufferWindow.getBufferWindow();
 		
 		BufferPanel bp = bufferWindow.createBuffer(file.getName());
-		bp.getLogBuffer().setText(FileUtils.readFileToString(file));
+		bp.getLogBuffer().setText(FileUtils.readFileToString(file, "UTF-8"));
 		
 		if(!bufferWindow.isVisible()) {
 			bufferWindow.showWindow();

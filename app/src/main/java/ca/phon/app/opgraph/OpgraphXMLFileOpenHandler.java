@@ -75,9 +75,10 @@ public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 			
 			// check for simple editor extension
 			SimpleEditorExtension simpleEditorExt = graph.getExtension(SimpleEditorExtension.class);
+			Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
 			
-			if(simpleEditorExt != null) {
-				openSimpleEditor(file, graph);
+			if(simpleEditorExt != null && project != null) {
+				openSimpleEditor(project, file, graph);
 			} else {
 				openEditor(file, graph);
 			}
@@ -86,9 +87,9 @@ public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 		}
 	}
 
-	private void openSimpleEditor(File file, OpGraph graph) {
+	private void openSimpleEditor(Project project, File file, OpGraph graph) {
 		EntryPointArgs args = new EntryPointArgs();
-		Project project = CommonModuleFrame.getCurrentFrame().getExtension(Project.class);
+		
 		args.put(EntryPointArgs.PROJECT_OBJECT, project);
 		
 		final WizardExtension wizardType = graph.getExtension(WizardExtension.class);
