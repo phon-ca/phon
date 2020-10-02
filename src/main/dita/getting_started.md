@@ -26,14 +26,14 @@ Finally, Phon 3 comes with multiple improvements in the areas of workspace/proje
  * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.1.3/Phon_macos_3_1_3.dmg)
  * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.1.3/Phon_windows-x64_3_1_3.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.1.3/Phon_windows-x64_3_1_3.zip) 
 
-### Phon 3.1.4-beta.1
+### Phon 3.1.4-beta.2
 
- * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.1.4-beta.1/Phon_macos_3_1_4-beta_1.dmg)
- * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.1.4-beta.1/Phon_windows-x64_3_1_4-beta_1.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.1.4-beta.1/Phon_windows-x64_3_1_4-beta_1.zip) 
+ * [macOS 10.9+ (dmg)](https://github.com/phon-ca/phon/releases/download/3.1.4-beta.2/Phon_macos_3_1_4-beta_2.dmg)
+ * [Windows (64-bit) (installer)](https://github.com/phon-ca/phon/releases/download/3.1.4-beta.2/Phon_windows-x64_3_1_4-beta_2.exe) | [Windows (64 bit) (zip)](https://github.com/phon-ca/phon/releases/download/3.1.4-beta.2/Phon_windows-x64_3_1_4-beta_2.zip) 
 
 ## Other Information 
 
- * __[Brief introduction](https://www.youtube.com/watch?v=-WqNmthlfW0)__ to some of the new functions in Phon 2
+ * __[Tutorial Videos](https://phonbank.talkbank.org/tutorials.html)__
  * __[Demo Project](https://github.com/phon-ca/PhonDemoProject/archive/1.zip)__
     - [README for Demo Project](https://github.com/phon-ca/PhonDemoProject)
 
