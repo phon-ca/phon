@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.4-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_1.dmg" newVersion="3.1.4-beta.1" newMediaFileId="macos" fileSize="286365115" md5Sum="a161d2eb7ee7cfcc1310ab0657338608" sha256Sum="aa5d55b1109fa21560bcfa444ded599c3e8d9e106ca7d8570799284df870e99c" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.4-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_2.dmg" newVersion="3.1.4-beta.2" newMediaFileId="macos" fileSize="286396519" md5Sum="efbcf5b2eabb511d7df57b96ee8ae210" sha256Sum="8f97190b334b6517ba87dab6ed5ae71959df665f7288b0f2373cbdf94206badc" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
  * Fixed an issue with the input fields of the Find &amp; Replace view
  * Updated PhonTalk, added new Import Project and Export Project commands to the
 File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
@@ -351,9 +361,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_1.dmg" newVersion="3.1.4-beta.1" newMediaFileId="macos" fileSize="286365115" md5Sum="a161d2eb7ee7cfcc1310ab0657338608" sha256Sum="aa5d55b1109fa21560bcfa444ded599c3e8d9e106ca7d8570799284df870e99c" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_2.dmg" newVersion="3.1.4-beta.2" newMediaFileId="macos" fileSize="286396519" md5Sum="efbcf5b2eabb511d7df57b96ee8ae210" sha256Sum="8f97190b334b6517ba87dab6ed5ae71959df665f7288b0f2373cbdf94206badc" bundledJre="macos-amd64-11.0.7.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
  * Fixed an issue with the input fields of the Find &amp; Replace view
  * Updated PhonTalk, added new Import Project and Export Project commands to the
 File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
@@ -702,9 +722,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.exe" newVersion="3.1.4-beta.1" newMediaFileId="win64" fileSize="296008968" md5Sum="8b0e03df162a8ec668839400df1b5fb4" sha256Sum="820a7274060cb1b77c216968fe544a971a5f283c5d9564ad58cd8682c10912d3" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_2.exe" newVersion="3.1.4-beta.2" newMediaFileId="win64" fileSize="296022280" md5Sum="7d8bf5f60d40ffe40e11d6529c561701" sha256Sum="50a3441a0166987472be73e56d66f97a095595780132dd7a36f0514cf79d1f2f" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
  * Fixed an issue with the input fields of the Find &amp; Replace view
  * Updated PhonTalk, added new Import Project and Export Project commands to the
 File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
@@ -1053,9 +1083,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.exe" newVersion="3.1.4-beta.1" newMediaFileId="win64" fileSize="296008968" md5Sum="8b0e03df162a8ec668839400df1b5fb4" sha256Sum="820a7274060cb1b77c216968fe544a971a5f283c5d9564ad58cd8682c10912d3" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_2.exe" newVersion="3.1.4-beta.2" newMediaFileId="win64" fileSize="296022280" md5Sum="7d8bf5f60d40ffe40e11d6529c561701" sha256Sum="50a3441a0166987472be73e56d66f97a095595780132dd7a36f0514cf79d1f2f" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
  * Fixed an issue with the input fields of the Find &amp; Replace view
  * Updated PhonTalk, added new Import Project and Export Project commands to the
 File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
@@ -1404,9 +1444,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.exe" newVersion="3.1.4-beta.1" newMediaFileId="win64" fileSize="296008968" md5Sum="8b0e03df162a8ec668839400df1b5fb4" sha256Sum="820a7274060cb1b77c216968fe544a971a5f283c5d9564ad58cd8682c10912d3" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_2.exe" newVersion="3.1.4-beta.2" newMediaFileId="win64" fileSize="296022280" md5Sum="7d8bf5f60d40ffe40e11d6529c561701" sha256Sum="50a3441a0166987472be73e56d66f97a095595780132dd7a36f0514cf79d1f2f" bundledJre="windows-amd64-11.0.7.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
  * Fixed an issue with the input fields of the Find &amp; Replace view
  * Updated PhonTalk, added new Import Project and Export Project commands to the
 File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
@@ -1755,9 +1805,19 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_1.zip" newVersion="3.1.4-beta.1" newMediaFileId="win64zip" fileSize="295101866" md5Sum="21f2aa30bcfa24876141b840f55395ef" sha256Sum="28c7c727f7671ba4f3a4118d1bdd11174c63713be3b4fd029c42e93056e9adb6" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_2.zip" newVersion="3.1.4-beta.2" newMediaFileId="win64zip" fileSize="295115243" md5Sum="a17be4d7a753e31e059e9f031c73a0d1" sha256Sum="f90e481f0e3f6ce8fba51241a5fa5c40859a93d7ac1dbfe6a2cecb2a6836079b" bundledJre="windows-amd64-11.0.7.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
  * Fixed an issue with the input fields of the Find &amp; Replace view
  * Updated PhonTalk, added new Import Project and Export Project commands to the
 File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
