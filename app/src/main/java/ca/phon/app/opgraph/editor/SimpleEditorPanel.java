@@ -99,6 +99,7 @@ import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.nodes.ScriptNode;
@@ -927,10 +928,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				this.model = modelInstantiator.createModel(graph);
 				resetAndUpdate();
 				
-				setCurrentFile(fileList.get(0));
+				setCurrentFile(selectedFile);
 				getModel().getDocument().markAsUnmodified();
 				getModel().getDocument().getUndoManager().discardAllEdits();
 				setModified(false);
+				
+				OpenFileHistory openFileHistory = new OpenFileHistory();
+				openFileHistory.addToHistory(selectedFile);
 			} catch (IOException e) {
 				LogUtil.warning(e);
 				Toolkit.getDefaultToolkit().beep();
@@ -1080,6 +1084,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		OpgraphIO.write(getModel().getDocument().getRootGraph(), getCurrentFile());
 		setModified(false);
+		
+		final OpenFileHistory openFileHistory = new OpenFileHistory();
+		openFileHistory.addToHistory(getCurrentFile());
 		
 		return true;
 	}

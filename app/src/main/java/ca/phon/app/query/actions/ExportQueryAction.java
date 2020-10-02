@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptLibrary;
 import ca.phon.ui.CommonModuleFrame;
@@ -78,6 +79,9 @@ public class ExportQueryAction extends HookableAction {
 		String saveAs = evt.getDialogData().toString();
 		try {
 			QueryScriptLibrary.saveScriptToFile(queryScript, saveAs);
+			
+			final OpenFileHistory openFileHistory = new OpenFileHistory();
+			openFileHistory.addToHistory(new File(saveAs));
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			LogUtil.severe(e);

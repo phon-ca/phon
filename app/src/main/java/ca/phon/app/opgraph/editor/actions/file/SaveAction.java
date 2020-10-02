@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
+import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.ui.toast.ToastFactory;
@@ -64,6 +65,9 @@ public class SaveAction extends OpgraphEditorAction {
 			if(getEditor().getCurrentFile() != null) {
 				final RecentFiles recentFiles = new RecentFiles(OpgraphEditor.RECENT_DOCS_PROP);
 				recentFiles.addToHistory(getEditor().getCurrentFile());
+				
+				OpenFileHistory openFileHistory = new OpenFileHistory();
+				openFileHistory.addToHistory(getEditor().getCurrentFile());
 			}
 		} catch (IOException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);

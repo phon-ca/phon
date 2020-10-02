@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.KeyStroke;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
@@ -147,6 +148,9 @@ public class OpenAction extends OpgraphEditorAction {
 		// add to recent documents list
 		final RecentFiles recentFiles = new RecentFiles(OpgraphEditor.RECENT_DOCS_PROP);
 		recentFiles.addToHistory(file);
+		
+		OpenFileHistory openFileHistory = new OpenFileHistory();
+		openFileHistory.addToHistory(file);
 	}
 
 }
