@@ -110,6 +110,10 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		this.graph.addGraphListener(graphListener);
 	}
 	
+	public NodeWizard createWizard() {
+		return new NodeWizard("Node Wizard");
+	}
+	
 	public NodeWizard createWizard(Processor processor) {
 		return new NodeWizard("Node Wizard", processor, graph);
 	}

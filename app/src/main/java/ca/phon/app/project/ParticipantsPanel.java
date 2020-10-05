@@ -73,10 +73,7 @@ public class ParticipantsPanel extends JPanel {
 	public ParticipantsPanel(Project project) {
 		super();
 
-		this.project = project;
-		if(project != null) {
-			this.cache = project.getExtension(ParticipantCache.class);
-		}
+		setProject(project);
 
 		init();
 	}
@@ -116,14 +113,23 @@ public class ParticipantsPanel extends JPanel {
 
 		++gbc.gridx;
 		add(participantPanel, gbc);
+		
+		if(this.project != null) {
+			this.cache = project.getExtension(ParticipantCache.class);
+			sessionSelector.setProject(project);
+			sessionSelector.getModel().addTreeModelListener(treeModelListener);
+			sessionSelector.revalidate();
+		}
 	}
 
 	public void setProject(Project project) {
 		this.project = project;
-		this.cache = project.getExtension(ParticipantCache.class);
-		sessionSelector.setProject(project);
-		sessionSelector.getModel().addTreeModelListener(treeModelListener);
-		sessionSelector.revalidate();
+		if(this.project != null) {
+			this.cache = project.getExtension(ParticipantCache.class);
+			sessionSelector.setProject(project);
+			sessionSelector.getModel().addTreeModelListener(treeModelListener);
+			sessionSelector.revalidate();
+		}
 	}
 
 	public Project getProject() {

@@ -15,16 +15,22 @@
  */
 package ca.phon.app.opgraph.analysis;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.Processor;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -32,6 +38,8 @@ import ca.phon.ui.CommonModuleFrame;
 
 public class AnalysisRunner implements Runnable {
 
+	private URL graphURL;
+	
 	private OpGraph graph;
 
 	private Project project;
@@ -41,6 +49,15 @@ public class AnalysisRunner implements Runnable {
 	private NodeWizard wizard;
 
 	private boolean showWizard = true;
+	
+	public AnalysisRunner(URL graphURL, Project project, 
+			List<SessionPath> selectedSessions, boolean showWizard) {
+		super();
+		this.graphURL = graphURL;
+		this.project = project;
+		this.selectedSessions = selectedSessions;
+		this.showWizard = showWizard;
+	}
 
 	public AnalysisRunner(OpGraph graph, Project project) {
 		this(graph, project, new ArrayList<>(), true);
@@ -91,33 +108,85 @@ public class AnalysisRunner implements Runnable {
 		this.showWizard = showWizard;
 	}
 
+	private OpGraph loadAnalysis() throws IOException {
+		return OpgraphIO.read(graphURL.openStream());
+	}
+	
 	@Override
 	public void run() {
-		run(getGraph(), getProject(), getSelectedSessions(), isShowWizard());
+		run(getProject(), getSelectedSessions(), isShowWizard());
 	}
 
-	public void run(OpGraph graph, Project project, List<SessionPath> selectedSessions, boolean showWizard)
+	public void run(Project project, List<SessionPath> selectedSessions, boolean showWizard)
 		throws ProcessingException {
-		final Processor processor = new Processor(graph);
-		final OpContext ctx = processor.getContext();
-		ctx.put("_window", CommonModuleFrame.getCurrentFrame());
-		ctx.put("_project", project);
-		ctx.put("_selectedSessions", selectedSessions);
 
-		final WizardExtension wizardExt = graph.getExtension(WizardExtension.class);
-		if(wizardExt != null && showWizard) {
-			SwingUtilities.invokeLater( () -> {
-				final NodeWizard wizard = wizardExt.createWizard(processor);
-//				wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
+		if(showWizard) {
+			SwingUtilities.invokeLater(() -> {
+				AnalysisWizard wizard = new AnalysisWizard("Analysis", project);
+				AnalysisWizardWorker worker = new AnalysisWizardWorker(wizard);
 				wizard.pack();
 				wizard.setSize(1024, 768);
 				wizard.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
 				wizard.setVisible(true);
-
-				wizard.gotoStep(0);
+				
+				worker.execute();
 			});
 		} else {
+			if(graph == null && graphURL != null) {
+				try {
+					graph = loadAnalysis();
+				} catch (IOException e) {
+					throw new ProcessingException(null, e);
+				}
+			}
+			final Processor processor = new Processor(graph);
+			final OpContext ctx = processor.getContext();
+			ctx.put("_window", CommonModuleFrame.getCurrentFrame());
+			ctx.put("_project", project);
+			ctx.put("_selectedSessions", selectedSessions);
 			processor.stepAll();
 		}
 	}
+	
+	private class AnalysisWizardWorker extends SwingWorker<OpGraph, Object> {
+
+		NodeWizard wizard;
+		
+		public AnalysisWizardWorker(NodeWizard wizard) {
+			this.wizard = wizard;
+		}
+		
+		@Override
+		protected OpGraph doInBackground() throws Exception {
+			if(getGraph() == null && graphURL != null) {
+				wizard.loadGraph(graphURL);
+			} else {
+				wizard.loadGraph(getGraph());
+			}
+			
+			return wizard.getGraph();
+		}
+
+		@Override
+		protected void done() {
+			try {
+				OpGraph graph = get();
+				WizardExtension ext = graph.getExtension(WizardExtension.class);
+				if(ext != null)
+					wizard.setWindowName("Analysis : " + (ext.getWizardTitle() != null ? ext.getWizardTitle() : "Unknown" ));
+				
+				final Processor processor = wizard.getProcessor();
+				final OpContext ctx = processor.getContext();
+				ctx.put("_window", CommonModuleFrame.getCurrentFrame());
+				ctx.put("_project", project);
+				ctx.put("_selectedSessions", selectedSessions);
+				
+				wizard.gotoStep(0);
+			} catch (InterruptedException | ExecutionException e) {
+				LogUtil.warning(e);
+			}			
+		}
+
+	}	
+	
 }

@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
@@ -108,7 +109,7 @@ public class BreadcrumbWizardFrame extends WizardFrame {
 		breadCrumbViewer.repaint();
 	}
 	
-	protected void setBounds(JButton btn) {
+	protected void setBounds(JComponent btn) {
 		final Rectangle bounds =
 				new Rectangle((int)(breadCrumbViewer.getBreadcrumbViewerUI().getPreferredSize().width-btn.getInsets().left/2-1),
 						0, (int)btn.getPreferredSize().width, breadCrumbViewer.getHeight());

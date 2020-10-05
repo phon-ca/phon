@@ -26,10 +26,9 @@ public class AnalysisWizardExtension extends WizardExtension {
 	public AnalysisWizardExtension(OpGraph graph) {
 		super(graph);
 	}
-
+	
 	@Override
 	public NodeWizard createWizard(Processor processor) {
-		
 		return new AnalysisWizard(
 				"Analysis : " + (getWizardTitle() != null ? getWizardTitle() : "Unknown"), processor, super.getGraph());
 	}

@@ -140,6 +140,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.ProcessorEvent;
 import ca.phon.opgraph.ProcessorListener;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
@@ -217,6 +218,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private WizardMultiBufferPanel bufferPanel;
 
+	private JXBusyLabel loadingLabel;
 	private JXBusyLabel busyLabel;
 
 	private JLabel statusLabel;
@@ -266,6 +268,21 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		init();
 		setupWizardSteps();
 		inInit = false;
+	}
+	
+	public void loadGraph(OpGraph graph) {
+		this.graph = graph;
+		processor = new Processor(graph);
+		
+		SwingUtilities.invokeLater( () -> {
+			setupWizardSteps();
+			updateBreadcrumbButtons();
+		});
+	}
+	
+	public void loadGraph(URL graphURL) throws IOException {
+		OpGraph graph = OpgraphIO.read(graphURL.openStream());
+		loadGraph(graph);
 	}
 	
 	@Override
@@ -732,14 +749,16 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		topPanel.add(overridesButton, gbc);
 		
 		add(topPanel, BorderLayout.NORTH);
+		
+		loadingLabel = new JXBusyLabel(new Dimension(20, 20));
 	}
 	
-	private void setupWizardSteps() {
+	protected void setupWizardSteps() {
 		final WizardExtension nodeWizardList =
 				(graph.getExtensionClasses().contains(WizardExtension.class)
 				? graph.getExtension(WizardExtension.class)
 				: new WizardExtension(getGraph()));
-		int stepIdx = 0;
+		int stepIdx = numberOfSteps();
 
 		if(nodeWizardList.getWizardMessage() != null
 				&& nodeWizardList.getWizardMessage().length() > 0) {
@@ -835,6 +854,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			breadCrumbViewer.remove(btnStop);
 		if(btnRunAgain != null)
 			breadCrumbViewer.remove(btnRunAgain);
+		if(loadingLabel != null)
+			breadCrumbViewer.remove(loadingLabel);
 	
 		if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
 			if(running) {
@@ -865,11 +886,28 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			setBounds(nextButton);
 			endBtn = nextButton;
 		}
+		
+		if(numberOfSteps() == 0 || getCurrentStepIndex() < 0
+				|| getCurrentStep().getNextStep() < 0) {
+			nextButton.setVisible(false);
+		} else {
+			nextButton.setVisible(true);
+		}
 
 		if(getCurrentStep() != reportDataStep)
 			getRootPane().setDefaultButton(endBtn);
 		else
 			getRootPane().setDefaultButton(null);
+		
+		if(loadingLabel != null) {
+			if(graph == null) {
+				breadCrumbViewer.add(loadingLabel);
+				setBounds(loadingLabel);
+				loadingLabel.setBusy(true);
+			} else {
+				loadingLabel.setBusy(false);
+			}
+		}
 
 		breadCrumbViewer.revalidate();
 		breadCrumbViewer.scrollRectToVisible(endBtn.getBounds());

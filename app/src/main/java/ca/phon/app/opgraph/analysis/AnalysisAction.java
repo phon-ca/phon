@@ -68,33 +68,9 @@ public class AnalysisAction extends HookableAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final AnalysisWorker worker = new AnalysisWorker();
-		worker.execute();
-	}
-
-	private OpGraph loadAnalysis() throws IOException {
-		return OpgraphIO.read(analysisURL.openStream());
-	}
-
-	private class AnalysisWorker extends SwingWorker<OpGraph, Object> {
-
-		@Override
-		protected OpGraph doInBackground() throws Exception {
-			final OpGraph graph = loadAnalysis();
-			return graph;
-		}
-
-		@Override
-		protected void done() {
-			try {
-				final AnalysisRunner analysisRunner =
-						new AnalysisRunner(get(), project, selectedSessions, true);
-				PhonWorker.getInstance().invokeLater(analysisRunner);
-			} catch (ExecutionException | InterruptedException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
-		}
-
+		final AnalysisRunner analysisRunner =
+				new AnalysisRunner(analysisURL, project, selectedSessions, true);
+		PhonWorker.getInstance().invokeLater(analysisRunner);
 	}
 
 }

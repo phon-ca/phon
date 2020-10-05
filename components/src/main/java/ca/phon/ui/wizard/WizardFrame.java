@@ -296,7 +296,7 @@ public class WizardFrame extends CommonModuleFrame {
 		else
 			btnNext.setEnabled(false);
 		
-		if(currentStep == (new ArrayList<>(steps.keySet()).get(numberOfSteps()-1)))
+		if(steps.size() > 0 && currentStep == (new ArrayList<>(steps.keySet()).get(numberOfSteps()-1)))
 			btnFinish.setEnabled(true);
 		else
 			btnFinish.setEnabled(false);
