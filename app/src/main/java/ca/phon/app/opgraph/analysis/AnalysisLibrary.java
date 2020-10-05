@@ -182,7 +182,6 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				}
 
 				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
-				act.setShowWizard(selectedSessions.size() == 0);
 				String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
 				
 				userActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
@@ -231,7 +230,6 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				}
 
 				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
-				act.setShowWizard(selectedSessions.size() == 0);
 				String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
 				analysisActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {

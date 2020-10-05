@@ -46,8 +46,6 @@ public class AnalysisAction extends HookableAction {
 
 	private URL analysisURL;
 
-	private boolean showWizard = true;
-
 	public AnalysisAction(Project project, URL analysisURL) {
 		this(project, new ArrayList<>(), analysisURL);
 	}
@@ -66,14 +64,6 @@ public class AnalysisAction extends HookableAction {
 		final File asFile = new File(name);
 		putValue(NAME, asFile.getName() + "...");
 		putValue(SHORT_DESCRIPTION, analysisURL.getPath());
-	}
-
-	public boolean isShowWizard() {
-		return showWizard;
-	}
-
-	public void setShowWizard(boolean showWizard) {
-		this.showWizard = showWizard;
 	}
 
 	@Override
@@ -98,7 +88,7 @@ public class AnalysisAction extends HookableAction {
 		protected void done() {
 			try {
 				final AnalysisRunner analysisRunner =
-						new AnalysisRunner(get(), project, selectedSessions, showWizard);
+						new AnalysisRunner(get(), project, selectedSessions, true);
 				PhonWorker.getInstance().invokeLater(analysisRunner);
 			} catch (ExecutionException | InterruptedException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);

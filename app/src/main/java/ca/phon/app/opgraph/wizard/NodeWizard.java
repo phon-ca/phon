@@ -249,6 +249,14 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private final WebViewInterface webViewInterface = new WebViewInterface();
 
+	public NodeWizard(String title) {
+		super(title);
+		setWindowName(title);
+		
+		init();
+		inInit = false;
+	}
+	
 	public NodeWizard(String title, Processor processor, OpGraph graph) {
 		super(title);
 		setWindowName(title);
@@ -256,9 +264,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		this.processor = processor;
 		this.graph = graph;
 		init();
+		setupWizardSteps();
 		inInit = false;
 	}
-
+	
 	@Override
 	public void setJMenuBar(JMenuBar menuBar) {
 		super.setJMenuBar(menuBar);
@@ -624,7 +633,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 	
 	public boolean reportBufferAvailable() {
-		return bufferPanel.getBufferNames().contains("Report");
+		return (bufferPanel != null ? bufferPanel.getBufferNames().contains("Report") : false);
 	}
 	
 	public Optional<ReportTree> getCurrentReportTree() {
@@ -670,7 +679,62 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		busyLabel.getBusyPainter().setHighlightColor(Color.white);
 		statusLabel = new JLabel();
-
+		
+		final JPopupMenu overridesMenu = new JPopupMenu("Overrides");
+		overridesMenu.addPopupMenuListener(new PopupMenuListener() {
+			
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				overridesMenu.removeAll();
+				globalOptionsPanel.setupMenu(new MenuBuilder(overridesMenu));
+			}
+			
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			
+		});
+		
+		PhonUIAction overridesMenuAct = new PhonUIAction(this, "noop");
+		overridesMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show overrides menu");
+		overridesMenuAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
+		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+		overridesMenuAct.putValue(DropDownButton.BUTTON_POPUP, overridesMenu);
+		
+		DropDownButton overridesButton = new DropDownButton(overridesMenuAct);
+		overridesButton.setOnlyPopup(true);
+		overridesButton.setBorderPainted(true);
+		overridesButton.setBackground(Color.white);
+		overridesButton.setOpaque(true);
+		overridesButton.setBorder(
+				BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.black),
+						BorderFactory.createEmptyBorder(0, 5, 0, 5)));
+				
+		JPanel topPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		topPanel.add(super.breadcrumbScroller, gbc);
+		
+		++gbc.gridx;
+		gbc.weightx = 0.0;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		topPanel.add(overridesButton, gbc);
+		
+		add(topPanel, BorderLayout.NORTH);
+	}
+	
+	private void setupWizardSteps() {
 		final WizardExtension nodeWizardList =
 				(graph.getExtensionClasses().contains(WizardExtension.class)
 				? graph.getExtension(WizardExtension.class)
@@ -724,58 +788,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		stepWithOverrides.add(globalOptionsPanel, BorderLayout.NORTH);
 		stepWithOverrides.add(stepPanel, BorderLayout.CENTER);
 		add(stepWithOverrides, BorderLayout.CENTER);
-		
-		final JPopupMenu overridesMenu = new JPopupMenu("Overrides");
-		overridesMenu.addPopupMenuListener(new PopupMenuListener() {
-			
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				overridesMenu.removeAll();
-				globalOptionsPanel.setupMenu(new MenuBuilder(overridesMenu));
-			}
-			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			
-		});
-		
-		PhonUIAction overridesMenuAct = new PhonUIAction(this, "noop");
-		overridesMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show overrides menu");
-		overridesMenuAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
-		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
-		overridesMenuAct.putValue(DropDownButton.BUTTON_POPUP, overridesMenu);
-		
-		DropDownButton overridesButton = new DropDownButton(overridesMenuAct);
-		overridesButton.setOnlyPopup(true);
-		overridesButton.setBorderPainted(true);
-		overridesButton.setBackground(Color.white);
-		overridesButton.setOpaque(true);
-		overridesButton.setBorder(
-				BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.black),
-						BorderFactory.createEmptyBorder(0, 5, 0, 5)));
-				
-		JPanel topPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.insets = new Insets(0, 0, 0, 0);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		topPanel.add(super.breadcrumbScroller, gbc);
-		
-		++gbc.gridx;
-		gbc.weightx = 0.0;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		topPanel.add(overridesButton, gbc);
-		
-		add(topPanel, BorderLayout.NORTH);
 	}
 	
 	/**
@@ -819,8 +831,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		
 		// remove all buttons from breadcrumb
 		breadCrumbViewer.remove(nextButton);
-		breadCrumbViewer.remove(btnStop);
-		breadCrumbViewer.remove(btnRunAgain);
+		if(btnStop != null)
+			breadCrumbViewer.remove(btnStop);
+		if(btnRunAgain != null)
+			breadCrumbViewer.remove(btnRunAgain);
 	
 		if(breadCrumbViewer.getBreadcrumb().getCurrentState() == reportDataStep) {
 			if(running) {
