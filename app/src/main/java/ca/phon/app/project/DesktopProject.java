@@ -25,8 +25,6 @@ import org.apache.commons.io.FileUtils;
 import ca.phon.project.LocalProject;
 import ca.phon.project.ProjectEvent;
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.CorpusType;
-import ca.phon.project.io.SessionType;
 
 /**
  * Local project which will send files to trash instead of

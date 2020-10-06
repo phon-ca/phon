@@ -1,6 +1,5 @@
 package ca.phon.syllable.phonex;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import ca.phon.fsa.OffsetType;
 import ca.phon.fsa.TransitionType;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.phonex.EndOfInputTransition;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.phonex.PhonexTransition;
 import ca.phon.syllable.SyllableConstituentType;

@@ -1,7 +1,6 @@
 package ca.phon.audio;
 
 import java.io.IOException;
-import java.nio.BufferUnderflowException;
 
 public class AudioFileSampled implements Sampled {
 

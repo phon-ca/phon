@@ -20,13 +20,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.DiacriticFilter;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.StressMarker;
 import ca.phon.ipa.StressType;
-import ca.phon.ipa.features.FeatureSet;
 
 /**
  * Adds syllabification information to Phones.

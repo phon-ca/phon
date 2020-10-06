@@ -15,7 +15,6 @@
  */
 package ca.phon.extensions;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**

@@ -24,7 +24,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.Processor;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.util.icons.IconManager;

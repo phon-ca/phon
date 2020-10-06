@@ -8,15 +8,9 @@ import java.util.Stack;
 import javax.swing.SwingUtilities;
 
 import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.Processor;
-import ca.phon.opgraph.ProcessorEvent;
 import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.worker.PhonWorker;
 
 public class StepToAction extends OpgraphDebugAction {
 

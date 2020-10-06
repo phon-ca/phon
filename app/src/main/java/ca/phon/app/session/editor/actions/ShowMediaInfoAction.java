@@ -19,7 +19,6 @@ import ca.phon.util.MsFormatter;
 import ca.phon.util.OSInfo;
 import uk.co.caprica.vlcj.media.AudioTrackInfo;
 import uk.co.caprica.vlcj.media.InfoApi;
-import uk.co.caprica.vlcj.media.Media;
 import uk.co.caprica.vlcj.media.VideoTrackInfo;
 
 public class ShowMediaInfoAction extends SessionEditorAction {

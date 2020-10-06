@@ -2,19 +2,13 @@ package ca.phon.audio;
 
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.BufferUnderflowException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel.MapMode;
-import java.util.Arrays;
-import java.util.logging.Logger;
-
-import org.apache.logging.log4j.core.time.PreciseClock;
 
 /**
  * An audio file. For a list of supported file types see {@link AudioFileType}.

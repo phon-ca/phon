@@ -27,7 +27,6 @@ import ca.phon.plugin.IPluginEntryPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;

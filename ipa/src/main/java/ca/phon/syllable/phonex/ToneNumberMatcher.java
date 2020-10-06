@@ -18,7 +18,6 @@ package ca.phon.syllable.phonex;
 import java.util.List;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.features.FeatureSet;
 import ca.phon.phonex.PhoneMatcher;
 import ca.phon.syllable.SyllabificationInfo;
 

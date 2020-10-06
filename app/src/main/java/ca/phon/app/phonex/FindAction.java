@@ -2,8 +2,6 @@ package ca.phon.app.phonex;
 
 import java.awt.event.ActionEvent;
 
-import ca.phon.app.opgraph.nodes.log.GetBufferNode;
-
 public class FindAction extends PhonexDebuggerAction {
 
 	public FindAction(PhonexDebugger debugger) {

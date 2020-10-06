@@ -17,19 +17,13 @@ package ca.phon.app.opgraph.analysis;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.SwingWorker;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.opgraph.report.ReportAction;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.worker.PhonWorker;

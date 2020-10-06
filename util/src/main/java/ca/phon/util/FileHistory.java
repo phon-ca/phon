@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ca.phon.util.PrefHelper;
-
 public class FileHistory implements Iterable<File> {
 	
 	private final static int DEFAULT_MAX_FOLDERS = 10;

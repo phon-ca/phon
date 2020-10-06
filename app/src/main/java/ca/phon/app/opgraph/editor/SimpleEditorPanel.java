@@ -104,7 +104,6 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.PhonScriptNode;
 import ca.phon.app.opgraph.nodes.ScriptNode;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
-import ca.phon.app.opgraph.nodes.table.TableScriptNode;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
 import ca.phon.extensions.ExtensionSupport;

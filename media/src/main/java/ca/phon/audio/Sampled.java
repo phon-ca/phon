@@ -15,8 +15,6 @@
  */
 package ca.phon.audio;
 
-import java.io.IOException;
-
 public interface Sampled {
 	
 	/**

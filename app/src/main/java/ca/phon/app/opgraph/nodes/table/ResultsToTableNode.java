@@ -46,8 +46,6 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.parser.IPATokenType;
-import ca.phon.ipa.parser.IPATokens;
 import ca.phon.opgraph.InputField;
 import ca.phon.opgraph.OpContext;
 import ca.phon.opgraph.OpNode;

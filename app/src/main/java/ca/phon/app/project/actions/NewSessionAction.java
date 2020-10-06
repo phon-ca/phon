@@ -17,16 +17,13 @@ package ca.phon.app.project.actions;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 import ca.phon.app.project.NewSessionDialog;
 import ca.phon.app.project.ProjectWindow;
-import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
-import ca.phon.util.Tuple;
 
 public class NewSessionAction extends ProjectWindowAction {
 	

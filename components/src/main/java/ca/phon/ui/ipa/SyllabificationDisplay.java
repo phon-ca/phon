@@ -19,7 +19,6 @@ package ca.phon.ui.ipa;
 import java.awt.Dimension;
 
 import javax.swing.JComponent;
-import javax.swing.plaf.ComponentUI;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;

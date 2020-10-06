@@ -13,7 +13,6 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.ipa.PhoneMapDisplayUI;
 
 public class RecentFilesMenuListener implements MenuListener {
 
