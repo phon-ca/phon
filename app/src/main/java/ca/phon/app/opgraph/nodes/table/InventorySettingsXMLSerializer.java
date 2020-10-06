@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -36,6 +35,7 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
+import ca.phon.xml.XMLConstants;
 
 public class InventorySettingsXMLSerializer implements XMLSerializer {
 	

@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -40,6 +39,7 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.query.db.ResultSetManager;
 import ca.phon.query.db.xml.io.query.QueryType;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;
+import ca.phon.xml.XMLConstants;
 
 /**
  * An implementation of {@link ResultSetManager} that implements an XML-based

@@ -119,8 +119,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.sourceVersion>11</project.build.sourceVersion>
-		<project.build.targetVersion>11</project.build.targetVersion>
+		<project.build.sourceVersion>15</project.build.sourceVersion>
+		<project.build.targetVersion>15</project.build.targetVersion>
 
 		<ca.hedlund.tst.version>0.5</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3</ca.hedlund.desktopicons.version>
@@ -162,7 +162,7 @@
 		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
 		
 		<!-- java.xml.bind -->
-		<jaxb.version>2.2.11</jaxb.version>
+		<jaxb.version>2.3.3</jaxb.version>
 		<javax.activation.activation.version>1.1.1</javax.activation.activation.version>
 		
 		<!-- Maven plugins -->
@@ -473,24 +473,15 @@
 			
 			<!-- java.xml.bind -->
 			<dependency>
-			    <groupId>javax.xml.bind</groupId>
-			    <artifactId>jaxb-api</artifactId>
-			    <version>${jaxb.version}</version>
+			    <groupId>jakarta.xml.bind</groupId>
+			    <artifactId>jakarta.xml.bind-api</artifactId>
+			    <version>2.3.3</version>
 			</dependency>
-			<dependency>
-			    <groupId>com.sun.xml.bind</groupId>
-			    <artifactId>jaxb-core</artifactId>
-			    <version>${jaxb.version}</version>
-			</dependency>
+			
 			<dependency>
 			    <groupId>com.sun.xml.bind</groupId>
 			    <artifactId>jaxb-impl</artifactId>
 			    <version>${jaxb.version}</version>
-			</dependency>
-			<dependency>
-			    <groupId>javax.activation</groupId>
-			    <artifactId>activation</artifactId>
-			    <version>${javax.activation.activation.version}</version>
 			</dependency>
 			
 			<dependency>

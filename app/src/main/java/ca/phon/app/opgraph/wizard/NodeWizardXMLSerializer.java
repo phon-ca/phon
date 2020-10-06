@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -31,6 +30,7 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
+import ca.phon.xml.XMLConstants;
 
 public class NodeWizardXMLSerializer implements XMLSerializer {
 	

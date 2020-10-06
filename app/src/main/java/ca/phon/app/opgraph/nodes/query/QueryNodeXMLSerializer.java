@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -50,6 +49,7 @@ import ca.phon.query.script.QueryScript;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.script.params.ScriptParameters;
+import ca.phon.xml.XMLConstants;
 
 public class QueryNodeXMLSerializer implements XMLSerializer {
 

@@ -4,7 +4,6 @@ import static ca.phon.opgraph.io.xml.XMLSerializerFactory.DEFAULT_NAMESPACE;
 
 import java.io.IOException;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -16,6 +15,7 @@ import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.extensions.Extendable;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
+import ca.phon.xml.XMLConstants;
 
 public class QueryReportNodeXMLSerializer implements XMLSerializer {
 	

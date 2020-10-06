@@ -17,7 +17,6 @@ package ca.phon.syllabifier.opgraph.extensions.xml;
 
 import java.io.IOException;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -28,6 +27,7 @@ import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;
+import ca.phon.xml.XMLConstants;
 
 public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 	

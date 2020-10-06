@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -41,6 +40,7 @@ import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.query.report.io.ReportDesign;
 import ca.phon.util.PrefHelper;
+import ca.phon.xml.XMLConstants;
 
 
 public class ReportDesignNodeXMLSerializer implements XMLSerializer {

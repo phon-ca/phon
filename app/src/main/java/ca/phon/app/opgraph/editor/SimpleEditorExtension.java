@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -32,6 +31,7 @@ import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.xml.XMLConstants;
 
 /**
  * Extension for {@link OpGraph}s created using the {@link SimpleEditorPanel}.
