@@ -207,10 +207,6 @@ public class FolderProjectList extends JPanel {
 					&& !f.getName().equals("backups")) {
 				// check for a project.xml file
 				projectButtons.add(getProjectButton(f));
-			} else if(f.isFile()) {
-				if(f.getName().endsWith(".phon") || f.getName().endsWith(".zip")) {
-					projectButtons.add(getProjectButton(f));
-				}
 			}
 		}
 		
@@ -225,73 +221,60 @@ public class FolderProjectList extends JPanel {
 		ImageIcon icon = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.SMALL);
 		ImageIcon iconL = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.MEDIUM);
 		
-		// if we have a file, we need to add the import action
-		if(f.isFile()) {
-			PhonUIAction extractAction = new PhonUIAction(this, "onExtractProject", retVal);
+		PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
+		
+		openAction.putValue(Action.NAME, "Open project");
+		openAction.putValue(Action.SHORT_DESCRIPTION, "Open: " + f.getAbsolutePath());
+		openAction.putValue(Action.SMALL_ICON, icon);
+		openAction.putValue(Action.LARGE_ICON_KEY, iconL);
+		retVal.setDefaultAction(openAction);
+		
+		String fsIconName = "apps/system-file-manager";
+		String fsName = "file system viewer";
+		
+		ImageIcon fsIcon = IconManager.getInstance().getIcon(fsIconName, IconSize.SMALL);
+		ImageIcon fsIconL = IconManager.getInstance().getIcon(fsIconName, IconSize.MEDIUM);
+		
+		if(OSInfo.isWindows()) {
+			fsName = "File Explorer";
 			
-			extractAction.putValue(Action.NAME, "Extract project");
-			extractAction.putValue(Action.SHORT_DESCRIPTION, "Extract: " +  f.getAbsolutePath());
-			extractAction.putValue(Action.SMALL_ICON, icon);
-			extractAction.putValue(Action.LARGE_ICON_KEY, iconL);
-			retVal.setDefaultAction(extractAction);
+			final String explorerPath = "C:\\Windows\\explorer.exe";
+			ImageIcon explorerIcon = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.SMALL);
+			ImageIcon explorerIconL = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.MEDIUM);
 			
-			retVal.getTopLabel().setForeground(PhonGuiConstants.PHON_ORANGE);
-		} else {
-			PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
+			if(explorerIcon != null)
+				fsIcon = explorerIcon;
+			if(explorerIconL != null)
+				fsIconL = explorerIconL;
+		} else if(OSInfo.isMacOs()) {
+			fsName = "Finder";
 			
-			openAction.putValue(Action.NAME, "Open project");
-			openAction.putValue(Action.SHORT_DESCRIPTION, "Open: " + f.getAbsolutePath());
-			openAction.putValue(Action.SMALL_ICON, icon);
-			openAction.putValue(Action.LARGE_ICON_KEY, iconL);
-			retVal.setDefaultAction(openAction);
+			ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
+			ImageIcon finderIconL = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.MEDIUM);
 			
-			String fsIconName = "apps/system-file-manager";
-			String fsName = "file system viewer";
-			
-			ImageIcon fsIcon = IconManager.getInstance().getIcon(fsIconName, IconSize.SMALL);
-			ImageIcon fsIconL = IconManager.getInstance().getIcon(fsIconName, IconSize.MEDIUM);
-			
-			if(OSInfo.isWindows()) {
-				fsName = "File Explorer";
-				
-				final String explorerPath = "C:\\Windows\\explorer.exe";
-				ImageIcon explorerIcon = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.SMALL);
-				ImageIcon explorerIconL = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.MEDIUM);
-				
-				if(explorerIcon != null)
-					fsIcon = explorerIcon;
-				if(explorerIconL != null)
-					fsIconL = explorerIconL;
-			} else if(OSInfo.isMacOs()) {
-				fsName = "Finder";
-				
-				ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
-				ImageIcon finderIconL = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.MEDIUM);
-				
-				if(finderIcon != null)
-					fsIcon = finderIcon;
-				if(finderIconL != null)
-					fsIconL = finderIconL;
-			}
-			
-			PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
-			showAction.putValue(Action.NAME, "Show project");
-			showAction.putValue(Action.SMALL_ICON, fsIcon);
-			showAction.putValue(Action.LARGE_ICON_KEY, fsIconL);
-			showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
-			retVal.addAction(showAction);
-			
-			final String defaultArchiveIconName = "actions/archive-insert";
-			ImageIcon archiveIcn = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.SMALL);
-			ImageIcon archiveIcnL = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.MEDIUM);
-			
-			PhonUIAction archiveAction = new PhonUIAction(this, "onArchiveProject", retVal);
-			archiveAction.putValue(Action.NAME, "Archive project");
-			archiveAction.putValue(Action.SHORT_DESCRIPTION, "Create .zip archive of phon project...");
-			archiveAction.putValue(Action.SMALL_ICON, archiveIcn);
-			archiveAction.putValue(Action.LARGE_ICON_KEY, archiveIcnL);
-			retVal.addAction(archiveAction);
+			if(finderIcon != null)
+				fsIcon = finderIcon;
+			if(finderIconL != null)
+				fsIconL = finderIconL;
 		}
+		
+		PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
+		showAction.putValue(Action.NAME, "Show project");
+		showAction.putValue(Action.SMALL_ICON, fsIcon);
+		showAction.putValue(Action.LARGE_ICON_KEY, fsIconL);
+		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
+		retVal.addAction(showAction);
+		
+		final String defaultArchiveIconName = "actions/archive-insert";
+		ImageIcon archiveIcn = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.SMALL);
+		ImageIcon archiveIcnL = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.MEDIUM);
+		
+		PhonUIAction archiveAction = new PhonUIAction(this, "onArchiveProject", retVal);
+		archiveAction.putValue(Action.NAME, "Archive project");
+		archiveAction.putValue(Action.SHORT_DESCRIPTION, "Create .zip archive of phon project...");
+		archiveAction.putValue(Action.SMALL_ICON, archiveIcn);
+		archiveAction.putValue(Action.LARGE_ICON_KEY, archiveIcnL);
+		retVal.addAction(archiveAction);
 		retVal.getTopLabel().setIcon(iconL);
 		
 		return retVal;
@@ -503,63 +486,6 @@ public class FolderProjectList extends JPanel {
 		} catch (ProjectConfigurationException e) {
 			LOGGER.error(e.getMessage());
 		}
-	}
-	
-	public void onExtractProject(PhonActionEvent pae) {
-		LocalProjectButton btn = (LocalProjectButton)pae.getData();
-		
-		ExtractProjectArchiveTask task = new ExtractProjectArchiveTask(btn.getProjectFile());
-		File destDir = task.getDestDir();
-		if(destDir == null) {
-			NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, 
-					"Not a project archive", "'" + btn.getProjectFile() + "' does not contain a phon project");
-			return;
-		}
-		task.setName("Extracting: " + btn.getProjectFile().getName());
-		task.addTaskListener(new PhonTaskListener() {
-			
-			@Override
-			public void statusChanged(PhonTask task, TaskStatus oldStatus,
-					TaskStatus newStatus) {
-				if(newStatus == TaskStatus.FINISHED) {
-					long curTime = System.currentTimeMillis();
-					long totalTime = task.getStartTime() - curTime;
-					
-					if(totalTime < 500) {
-						try {
-							Thread.sleep(500 - totalTime);
-						} catch (InterruptedException e) {}
-					}
-					
-					// refresh
-					refresh();
-				} else if(newStatus == TaskStatus.ERROR) {
-					// display dialog
-					NativeDialogs.showMessageDialog(CommonModuleFrame.getCurrentFrame(), new NativeDialogListener() {
-						@Override
-						public void nativeDialogEvent(NativeDialogEvent event) {
-						}
-					}, null, "Error extracting project", "Reason: " + 
-						(task.getException() != null ? task.getException().getMessage() : "no reason given"));
-					
-					refresh();
-				}
-			}
-			
-			@Override
-			public void propertyChanged(PhonTask task, String property,
-					Object oldValue, Object newValue) {
-			}
-		});
-		
-		PhonTaskButton newBtn = new PhonTaskButton(task);
-		
-		int idx = projectButtons.indexOf(btn);
-		projectButtons.remove(idx);
-		projectButtons.add(idx, newBtn);
-		updateProjectList();
-		
-		PhonWorker.getInstance().invokeLater(task);
 	}
 	
 	public void onOpenProject(PhonActionEvent pae) {
