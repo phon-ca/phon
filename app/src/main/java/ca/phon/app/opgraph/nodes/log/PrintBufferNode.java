@@ -100,7 +100,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 
 	public PrintBufferNode() {
 		super();
-
+		
 		putField(dataField);
 		putField(bufferNameField);
 		putField(appendField);

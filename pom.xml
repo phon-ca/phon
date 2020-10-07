@@ -150,20 +150,19 @@
 		<org.apache.logging.log4j.version>2.13.3</org.apache.logging.log4j.version>
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
-		<org.codehaus.groovy.groovy-all.version>2.5.9</org.codehaus.groovy.groovy-all.version>
+		<org.codehaus.groovy.groovy-all.version>2.5.13</org.codehaus.groovy.groovy-all.version>
 		<org.dockingframes.docking-frames-common.version>1.1.3p1</org.dockingframes.docking-frames-common.version>
 		<org.dockingframes.docking-frames-core.version>1.1.3p1</org.dockingframes.docking-frames-core.version>
 		<org.jsoup.jsoup.version>1.11.2</org.jsoup.jsoup.version>
 		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.14.0</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
-		<org.mozilla.rhino.version>1.7.12</org.mozilla.rhino.version>
+		<org.mozilla.rhino.version>1.7.13</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
 		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>		
 		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
 		
 		<!-- java.xml.bind -->
 		<jaxb.version>2.3.3</jaxb.version>
-		<javax.activation.activation.version>1.1.1</javax.activation.activation.version>
 		
 		<!-- Maven plugins -->
 		<org.antlr.antlr3-maven-plugin.version>3.5.2</org.antlr.antlr3-maven-plugin.version>
@@ -341,7 +340,6 @@
 				<groupId>org.mozilla</groupId>
 				<artifactId>rhino</artifactId>
 				<version>${org.mozilla.rhino.version}</version>
-				<classifier>full</classifier>
 			</dependency>
 
 			<dependency>
@@ -576,7 +574,6 @@
 				<configuration>
 					<source>${project.build.sourceVersion}</source>
 					<target>${project.build.targetVersion}</target>
-					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 					<release>${project.build.targetVersion}</release>
 				</configuration>
 			</plugin>

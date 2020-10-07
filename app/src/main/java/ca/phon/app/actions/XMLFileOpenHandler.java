@@ -3,6 +3,7 @@ package ca.phon.app.actions;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -16,7 +17,6 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.plugin.PluginManager;
-import jline.internal.InputStreamReader;
 
 @PhonPlugin(name="Open")
 public class XMLFileOpenHandler implements OpenFileHandler, IPluginExtensionPoint<OpenFileHandler> {
