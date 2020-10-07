@@ -14,8 +14,13 @@
 	<description>Phon application project.  This project includes all code related to the
 	UI and all application level logic.</description>
 
+	<properties>
+		<org.codehaus.groovy.version>2.5.13</org.codehaus.groovy.version>
+		<org.graalvm.js.version>20.2.0</org.graalvm.js.version>
+	</properties>
+
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>stringtemplate</artifactId>
 			<version>3.2.1</version>
@@ -68,9 +73,9 @@
 			<artifactId>commons-cli</artifactId>
 		</dependency>
 		<dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-collections4</artifactId>
-      </dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
@@ -100,88 +105,112 @@
 			<groupId>com.jgoodies</groupId>
 			<artifactId>jgoodies-looks</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.lingala.zip4j</groupId>
 			<artifactId>zip4j</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.eclipse.jgit</groupId>
-		    <artifactId>org.eclipse.jgit</artifactId>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
 		</dependency>
 
 		<dependency>
-		    <groupId>org.eclipse.jgit</groupId>
-		    <artifactId>org.eclipse.jgit.ui</artifactId>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit.ui</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>guru.nidi</groupId>
 			<artifactId>graphviz-java</artifactId>
 		</dependency>
 
 		<!-- jxbrowesr -->
-	    <dependency>
-	    	<groupId>com.teamdev</groupId>
-	    	<artifactId>jxbrowser</artifactId>
-	    </dependency>
-	    
-	    <dependency>
-	    	<groupId>com.teamdev</groupId>
-	    	<artifactId>jxbrowser</artifactId>
-	    	<classifier>mac</classifier>
-	    </dependency>
-	    
-	    <dependency>
-	    	<groupId>com.teamdev</groupId>
-	    	<artifactId>jxbrowser</artifactId>
-	    	<classifier>win64</classifier>
-	    </dependency>
-	    
-	    <dependency>
-	    	<groupId>com.teamdev</groupId>
-	    	<artifactId>jxbrowser</artifactId>
-	    	<classifier>linux-x64</classifier>
-	    </dependency>
-	    
-	    <dependency>
-	    	<groupId>com.teamdev</groupId>
-	    	<artifactId>jxbrowser</artifactId>
-	    	<classifier>license-phon</classifier>
-	    </dependency>
+		<dependency>
+			<groupId>com.teamdev</groupId>
+			<artifactId>jxbrowser</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.teamdev</groupId>
+			<artifactId>jxbrowser</artifactId>
+			<classifier>mac</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>com.teamdev</groupId>
+			<artifactId>jxbrowser</artifactId>
+			<classifier>win64</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>com.teamdev</groupId>
+			<artifactId>jxbrowser</artifactId>
+			<classifier>linux-x64</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>com.teamdev</groupId>
+			<artifactId>jxbrowser</artifactId>
+			<classifier>license-phon</classifier>
+		</dependency>
 		
-		
+		<!-- Markdown -->
 		<dependency>
 			<groupId>com.atlassian.commonmark</groupId>
 			<artifactId>commonmark</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>com.atlassian.commonmark</groupId>
-		    <artifactId>commonmark-ext-gfm-tables</artifactId>
+			<groupId>com.atlassian.commonmark</groupId>
+			<artifactId>commonmark-ext-gfm-tables</artifactId>
 		</dependency>
-		
+
+		<!-- Excel -->
 		<dependency>
-	      <groupId>net.sourceforge.jexcelapi</groupId>
-	      <artifactId>jxl</artifactId>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
 		</dependency>
-		
+
+		<!-- Other -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.zafarkhaja</groupId>
 			<artifactId>java-semver</artifactId>
 			<version>0.9.0</version>
 		</dependency>
-		
+
 		<dependency>
-		  <groupId>com.github.davidmoten</groupId>
-		  <artifactId>rtree</artifactId>
+			<groupId>com.github.davidmoten</groupId>
+			<artifactId>rtree</artifactId>
 		</dependency>
-		
+
+		<!-- Script Engines -->
+		<dependency>
+	   		<groupId>org.codehaus.groovy</groupId>
+	   		<artifactId>groovy-all</artifactId>
+	   		<version>${org.codehaus.groovy.version}</version>
+	   		<type>pom</type>
+	   		<scope>runtime</scope>
+	   	</dependency>
+	    
+	    <dependency>
+	    	<groupId>org.graalvm.js</groupId>
+	    	<artifactId>js</artifactId>
+	    	<version>${org.graalvm.js.version}</version>
+	    	<scope>runtime</scope>
+	    </dependency>
+	    
+	    <dependency>
+	    	<groupId>org.graalvm.js</groupId>
+	    	<artifactId>js-scriptengine</artifactId>
+	    	<version>${org.graalvm.js.version}</version>
+	    	<scope>runtime</scope>
+	    </dependency>
 	</dependencies>
 
 </project>
