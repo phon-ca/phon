@@ -539,6 +539,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				+ phoneBoxSize.height;
 
 		retVal.width = widthPerPhone * (display.getNumberOfDisplayedPhones())
+				+ 2 * insetSize
 				+ c.getInsets().right + c.getInsets().left;
 
 		retVal.height = height + c.getInsets().top + c.getInsets().bottom
