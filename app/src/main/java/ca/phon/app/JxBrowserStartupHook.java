@@ -44,7 +44,7 @@ public class JxBrowserStartupHook implements PhonStartupHook, IPluginExtensionPo
 	
 	public static final String CHROMIUM_FOLDER = "jxbrowser.chromiumFolder";
 	public final static String DEFAULT_CHROMIUM_FOLDER = PrefHelper.getUserDataFolder() + File.separator + "chromium";
-
+	
 	@Override
 	public Class<?> getExtensionType() {
 		return PhonStartupHook.class;

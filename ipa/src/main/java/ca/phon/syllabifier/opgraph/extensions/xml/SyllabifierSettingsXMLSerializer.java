@@ -35,7 +35,7 @@ public class SyllabifierSettingsXMLSerializer implements XMLSerializer {
 	static final String PREFIX = "ops";
 	
 	static final QName SETTINGS_QNAME = new QName(NAMESPACE, "settings", PREFIX);
-
+	
 	@Override
 	public void write(XMLSerializerFactory serializerFactory, Document doc,
 			Element parentElem, Object obj) throws IOException {

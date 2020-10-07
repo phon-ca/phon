@@ -86,6 +86,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.dockingframes</groupId>
+			<artifactId>docking-frames-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dockingframes</groupId>
 			<artifactId>docking-frames-common</artifactId>
 		</dependency>
 		<dependency>
