@@ -16,7 +16,6 @@
 
 	<properties>
 		<org.codehaus.groovy.version>2.5.13</org.codehaus.groovy.version>
-		<org.graalvm.js.version>20.2.0</org.graalvm.js.version>
 	</properties>
 
 	<dependencies>
@@ -195,6 +194,12 @@
 	   		<artifactId>groovy-all</artifactId>
 	   		<version>${org.codehaus.groovy.version}</version>
 	   		<type>pom</type>
+	   		<scope>runtime</scope>
+	   	</dependency>
+	   	<dependency>
+	   		<groupId>org.mozilla</groupId>
+	   		<artifactId>rhino-engine</artifactId>
+	   		<version>${org.mozilla.rhino.version}</version>
 	   		<scope>runtime</scope>
 	   	</dependency>
 	</dependencies>
