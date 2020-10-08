@@ -134,6 +134,8 @@ public class OrthoTokenSource implements TokenSource {
 		String type = null;
 		boolean hadSlash = false;
 		boolean finished = false;
+		int parenIdx = 0;
+		
 		for( ; cIndex < data.length; cIndex++) {
 			final char c = data[cIndex];
 			
@@ -148,13 +150,26 @@ public class OrthoTokenSource implements TokenSource {
 				break;
 				
 			case '(':
+				if(hadSlash) {
+					hadSlash = false;
+				} else {
+					parenIdx++;
+				}
+				buffer.append(c);
+				break;
+				
 			case ')':
 				if(hadSlash) {
 					hadSlash = false;
 					buffer.append(c);
 					break;
 				} else {
-					finished = true;
+					if(parenIdx > 0) {
+						--parenIdx;
+						buffer.append(c);
+					} else {
+						finished = true;
+					}
 					break;
 				}
 				
