@@ -189,7 +189,7 @@
 			<artifactId>rtree</artifactId>
 		</dependency>
 
-		<!-- Script Engines -->
+		<!-- Script Engines (runtime only) -->
 		<dependency>
 	   		<groupId>org.codehaus.groovy</groupId>
 	   		<artifactId>groovy-all</artifactId>
@@ -197,20 +197,6 @@
 	   		<type>pom</type>
 	   		<scope>runtime</scope>
 	   	</dependency>
-	    
-	    <dependency>
-	    	<groupId>org.graalvm.js</groupId>
-	    	<artifactId>js</artifactId>
-	    	<version>${org.graalvm.js.version}</version>
-	    	<scope>runtime</scope>
-	    </dependency>
-	    
-	    <dependency>
-	    	<groupId>org.graalvm.js</groupId>
-	    	<artifactId>js-scriptengine</artifactId>
-	    	<version>${org.graalvm.js.version}</version>
-	    	<scope>runtime</scope>
-	    </dependency>
 	</dependencies>
 
 </project>

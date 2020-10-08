@@ -465,7 +465,7 @@
 			<dependency>
 			    <groupId>jakarta.xml.bind</groupId>
 			    <artifactId>jakarta.xml.bind-api</artifactId>
-			    <version>2.3.3</version>
+			    <version>${jaxb.version}</version>
 			</dependency>
 			
 			<dependency>
@@ -474,6 +474,7 @@
 			    <version>${jaxb.version}</version>
 			</dependency>
 			
+			<!-- vlc4j -->
 			<dependency>
 		      <groupId>uk.co.caprica</groupId> 
 		      <artifactId>vlcj</artifactId> 
