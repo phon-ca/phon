@@ -121,6 +121,10 @@ public class RecentFiles implements Iterable<File> {
 		fileHistory.clear();
 		saveHistory();
 	}
+	
+	public int size() {
+		return this.fileHistory.size();
+	}
 
 	@Override
 	public Iterator<File> iterator() {

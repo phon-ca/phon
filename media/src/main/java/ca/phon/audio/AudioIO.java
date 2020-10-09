@@ -17,7 +17,7 @@ import org.apache.commons.io.FilenameUtils;
  * Methods for reading and writing uncompressed audio sample data.
  * 
  */
-public class AudioIO {
+public final class AudioIO {
 	
 	private final static int WAVE_FORMAT_PCM = 0x0001;
 	private final static int WAVE_FORMAT_IEEE_FLOAT = 0x0003;

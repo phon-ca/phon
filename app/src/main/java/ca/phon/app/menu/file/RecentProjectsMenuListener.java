@@ -26,6 +26,7 @@ import javax.swing.event.MenuListener;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.RecentProjects;
 import ca.phon.plugin.PluginAction;
+import ca.phon.ui.action.PhonUIAction;
 
 /**
  * Setup recent projects menu
@@ -53,12 +54,18 @@ public class RecentProjectsMenuListener implements MenuListener {
 			final EntryPointArgs args = new EntryPointArgs();
 			args.put(EntryPointArgs.PROJECT_LOCATION, projectFile.getAbsolutePath());
 			projectAct.putArgs(args);
-			projectAct.putValue(Action.NAME, projectFile.getName());
+			projectAct.putValue(Action.NAME, projectFile.getAbsolutePath());
 			projectAct.putValue(Action.SHORT_DESCRIPTION, projectFile.getAbsolutePath());
 			
 			JMenuItem projectItem = new JMenuItem(projectAct);
 			menu.add(projectItem);
 		}
+		
+		menu.addSeparator();
+		final PhonUIAction clearHistoryAct = new PhonUIAction(history, "clearHistory");
+		clearHistoryAct.putValue(PhonUIAction.NAME, "Clear project history");
+		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear recent project history");
+		menu.add(clearHistoryAct);
 	}
 	
 }

@@ -43,6 +43,7 @@ import ca.phon.app.menu.tools.IpaMapCommand;
 import ca.phon.app.menu.tools.LanguageCodesCommand;
 import ca.phon.app.menu.window.OpenWindowsMenuListener;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
+import ca.phon.app.menu.workspace.WorkspaceHistoryMenuListener;
 import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.welcome.WelcomeWindow;
@@ -131,7 +132,12 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		JMenu workspaceMenu = builder.addMenu(".@Edit", "Workspace");
 		
 		workspaceMenu.add(new SelectWorkspaceCommand());
-	
+		
+		JMenu workspaceHistoryMenu = new JMenu("Workspace history");
+		workspaceHistoryMenu.addMenuListener(new WorkspaceHistoryMenuListener());
+		workspaceMenu.add(workspaceHistoryMenu);
+		
+		workspaceMenu.addSeparator();
 		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
 		workspaceProjectsMenu.addMenuListener(new WorkspaceProjectsMenuListener());
 		workspaceMenu.add(workspaceProjectsMenu);
