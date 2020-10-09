@@ -89,6 +89,7 @@ ca.phon.fsa
 ca.phon.xml
 ca.phon.xml
 ca.phon.xml
+ca.phon.xml
 ca.phon.xml.annotation
 ca.phon.xml
 ca.phon.xml
@@ -1128,6 +1129,7 @@ ca.phon.app.menu.file
 ca.phon.app.menu.file
 ca.phon.app.menu
 ca.phon.app.menu
+ca.phon.app.menu.workspace
 ca.phon.app.menu.workspace
 ca.phon.app.menu.workspace
 ca.phon.app.menu.workspace
