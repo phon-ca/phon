@@ -137,7 +137,7 @@
             <topicref href="analysis/specialized/vocalization.md" format="markdown"/>
             <topicref href="analysis/specialized/wap.md" format="markdown"/>
         </topichead>
-        <topicref href="analysis/analysis_composer.md" format="markdown"/>
+        <topicref href="analysis/analysis_composer.dita" format="dita"/>
     </chapter>
     <chapter navtitle="CHAT Support">
         <topicref href="chat/phontalk.dita" format="dita"/>

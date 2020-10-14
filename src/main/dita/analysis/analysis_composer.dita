@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="using-the-analysis-composer">
+    <title>Using the Analysis Composer</title>
+    <body>
+        <p>The <wintitle>Analysis Composer</wintitle> may be accessed from the window menu under <menucascade>
+                <uicontrol>Analysis</uicontrol>
+                <uicontrol>Analysis Composer</uicontrol>
+            </menucascade>.  The composer allows for setup of canned anlyses using a combination of
+            built-in analyses and queries available in the application. View the video below for an
+            example uinsg the <wintitle>Analysis Composer</wintitle>.</p>
+        <p><object data="https://www.youtube.com/embed/VPBeItHbQKg" outputclass="iframe">
+                <param name="allowfullscreen"/>
+            </object></p>
+    </body>
+</topic>
