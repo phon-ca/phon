@@ -118,7 +118,7 @@
    <appContext helpID="vocalization" path="analysis/specialized/vocalization.html"/>
    <appContext helpID="word-level-analysis-of-polysyllables-wap"
                path="analysis/specialized/wap.html"/>
-   <appContext helpID="custom-analysis-using-composer-simple"
+   <appContext helpID="using-the-analysis-composer"
                path="analysis/analysis_composer.html"/>
    <appContext helpID="phontalk" path="chat/phontalk.html"/>
    <appContext helpID="import_project" path="chat/import_project.html"/>
