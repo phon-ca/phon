@@ -3,15 +3,18 @@
 <topic id="built-in-analyses">
     <title>Built-in Analyses</title>
     <body>
+        <p><object data="https://www.youtube.com/embed/mRUs4TMwVnk" outputclass="iframe">
+                <param name="allowfullscreen"/>
+            </object></p>
         <p>Analyses built into Phon offer ready access to general results about different aspects of
             phonological behaviours at a click. Currently-supported analyses include:</p>
         <ul>
             <li><p>Consonants: a series of analyses on phonological patterns affecting consonants
                     and consonant clusters within words, based on systematic comparisons between IPA
                     Target and IPA Actual pairs of transcribed forms.</p></li>
-            <li><p>PPC (Percentage of Phones Correct): Series of algorithms to extract percentages
-                    of consonants and vowels correct (e.g. Shriberg et al., 1997; Shriberg &amp;
-                    Kwiatkowski, 1982), including at the level of consonant clusters.</p></li>
+            <li><p>Percent Phones Correct (PPC): Series of algorithms to extract percentages of consonants and
+                    vowels correct (e.g. Shriberg et al., 1997; Shriberg &amp; Kwiatkowski, 1982),
+                    including at the level of consonant clusters.</p></li>
             <li><p>Phone Inventory: List of phones in IPA Target and IPA Actual tiers with their
                     frequency counts</p></li>
             <li><p>PMLU (Phonological Mean Length of Utterance): Algorithm to calculate phonological
