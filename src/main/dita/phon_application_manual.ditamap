@@ -8,7 +8,7 @@
         <booklists>
             <toc/>
         </booklists>
-        <topicref href="getting_started.md" format="markdown">
+        <topicref href="getting_started.dita" format="dita">
             <topicref href="install.md" format="markdown"/>
             <topicref href="known_issues.md" format="markdown"/>
         </topicref>
@@ -126,7 +126,7 @@
         <topicref href="analysis/pdc.dita"/>
         <topicref href="analysis/ppc.dita" format="dita"/>
         <topicref href="analysis/pntc.dita"/>
-        <topicref href="analysis/phone_inventory.md" format="markdown"/>
+        <topicref href="analysis/phone_inventory.dita"/>
         <topicref href="analysis/phonological_processes.md" format="markdown"/>
         <topicref href="analysis/pmlu.md" format="markdown"/>
         <topicref href="analysis/word_list.md" format="markdown"/>

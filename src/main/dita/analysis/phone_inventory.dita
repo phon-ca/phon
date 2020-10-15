@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="pntc">
+    <title>Phone Inventory</title>
+    <body>
+        <p>The Phone Inventory analysis will provide a inventory of phones
+        used in both the IPA Target and IPA Actual tiers for the selected sessions and participants.</p>
+    </body>
+    <topic id="data-preparation">
+        <title>Data Preparation</title>
+        <body>
+            <p>Session data is queried by word for each IPA Target and IPA Actual word. Tiers
+            are queried independently and alignment information is not used for this analysis.</p>
+        </body>
+    </topic>
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <p>
+                <fig id="fig_cdm_vhn_3nb">
+                    <title>Phone Inventory Parameters</title>
+                    <image placement="break" href="images/phone_inventory_parameters.png"
+                        id="image_ddm_vhn_3nb"/>
+                </fig>
+            </p>
+            <p>
+                <ol>
+                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
+                </ol>
+            </p>
+        </body>
+    </topic>
+   
+    <topic id="report-outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/phone_inventory_example.html" format="html" scope="external"
+                    >here</xref> to see an example report.</p>
+            <ul>
+                <li>
+                    <p><b>Phone Inventory</b></p>
+                    <ul id="ul_tdw_3ln_3nb">
+                        <li>
+                            <p><b>Parameters</b></p>
+                        </li>
+                        <li>
+                            <p><b>Summary</b></p>
+                            <ul id="ul_bcv_3ln_3nb">
+                                <li>
+                                    <p><i>Participant 1</i></p>
+                                </li>
+                                <li>
+                                    <p>… (for each selected participant)</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><b>Aggregate</b><ul id="ul_qpl_cmn_3nb">
+                                <li><b>Participant 1</b><ul id="ul_xfp_cmn_3nb">
+                                        <li><i>IPA Target</i></li>
+                                        <li><i>IPA Actual</i></li>
+                                    </ul></li>
+                                <li>… (for each selected participant)</li>
+                            </ul></li>
+                        <li><b>Breakdown</b><ul id="ul_t52_kmn_3nb">
+                                <li><b>Participant 1</b><ul id="ul_u52_kmn_3nb">
+                                        <li><i>IPA Target</i></li>
+                                        <li><i>IPA Actual</i></li>
+                                    </ul></li>
+                                <li>… (for each selected participant)</li>
+                            </ul></li>
+                    </ul>
+                </li>
+            </ul>
+        </body>
+    </topic>
+</topic>

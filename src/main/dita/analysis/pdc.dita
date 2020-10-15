@@ -6,38 +6,6 @@
         <p>The PDC analysis will calculate the percentage of actual phones with correct
             diacritics.</p>
     </body>
-    <topic id="report-outline">
-        <title>Report Outline</title>
-        <body>
-            <p>An example table of contents is displayed below. Bold level elements are section
-                headers while italic items are one of the tables listed above. Click <xref
-                    href="./examples/pdc_example.html" format="html" scope="external">here</xref> to see an
-                example report.</p>
-            <ul>
-                <li><p><b>Percent Diacritics Correct (PDC)</b></p><ul>
-                        <li>
-                            <p><b>Summary</b></p>
-                            <ul>
-                                <li>
-                                    <p><i>All Participants</i></p>
-                                </li>
-                                <li>
-                                    <p><i>IPA Patterns</i></p>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
-                                <li><i>Summary</i></li>
-                                <li><i>IPA Patterns</i></li>
-                            </ul></li>
-                        <li>… (for each selected participant)</li>
-                        <li>
-                            <p><b>Listing (All Results)</b></p>
-                        </li>
-                    </ul></li>
-            </ul>
-        </body>
-    </topic>
     <topic id="data-preparation">
         <title>Data Preparation</title>
         <body>
@@ -50,6 +18,13 @@
     <topic id="parameters">
         <title>Parameters</title>
         <body>
+            <p>
+                <fig id="fig_xyt_pgn_3nb">
+                    <title>Percent Diacritics Correct Parameters</title>
+                    <image placement="break" href="images/pdc_parameters.png" id="image_yyt_pgn_3nb"
+                    />
+                </fig>
+            </p>
             <p>The PPC report can be restricted to different sets of phones.  The following
                 pre-defined report types are available<ol id="ol_xkz_fql_1nb">
                     <li>All phones</li>
@@ -76,6 +51,38 @@
             <p><foreign outputclass="embed-latex"> \begin{align} PDC &amp;= \frac{correct}{(correct
                     + incorrect)} \times 100 \\ &amp;= \frac{correct}{(correct + deletions +
                     substitutions + epenthesis)} \times 100 \end{align}</foreign></p>
+        </body>
+    </topic>
+    <topic id="report-outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/pdc_example.html" format="html" scope="external">here</xref> to
+                see an example report.</p>
+            <ul>
+                <li><p><b>Percent Diacritics Correct (PDC)</b></p><ul>
+                    <li>
+                        <p><b>Summary</b></p>
+                        <ul>
+                            <li>
+                                <p><i>All Participants</i></p>
+                            </li>
+                            <li>
+                                <p><i>IPA Patterns</i></p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
+                        <li><i>Summary</i></li>
+                        <li><i>IPA Patterns</i></li>
+                    </ul></li>
+                    <li>… (for each selected participant)</li>
+                    <li>
+                        <p><b>Listing (All Results)</b></p>
+                    </li>
+                </ul></li>
+            </ul>
         </body>
     </topic>
 </topic>

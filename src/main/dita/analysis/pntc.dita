@@ -8,40 +8,6 @@
             are specified in Phon please see <xref
                 href="../ipa/transcription.dita#phone/tone_number"/>.</p>
     </body>
-    <topic id="report-outline">
-        <title>Report Outline</title>
-        <body>
-            <p>An example table of contents is displayed below. Bold level elements are section
-                headers while italic items are one of the tables listed above. Click <xref
-                    href="./examples/pntc_example.html" format="html" scope="external">here</xref> to
-                see an example report.</p>
-            <ul>
-                <li><p><b>Percent Number Tones Correct (PNTC)</b></p><ul>
-                        <li>
-                            <p><b>Summary</b></p>
-                            <ul>
-                                <li>
-                                    <p><i>All Participants</i></p>
-                                </li>
-                                <li><i>Tonal Patterns</i></li>
-                                <li>
-                                    <p><i>IPA Patterns</i></p>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
-                                <li><i>Summary</i></li>
-                                <li><i>Tonal Patterns</i></li>
-                                <li><i>IPA Patterns</i></li>
-                            </ul></li>
-                        <li>… (for each selected participant)</li>
-                        <li>
-                            <p><b>Listing (All Results)</b></p>
-                        </li>
-                    </ul></li>
-            </ul>
-        </body>
-    </topic>
     <topic id="data-preparation">
         <title>Data Preparation</title>
         <body>
@@ -54,6 +20,13 @@
     <topic id="parameters">
         <title>Parameters</title>
         <body>
+            <p>
+                <fig id="fig_cdm_vhn_3nb">
+                    <title>Percent Number Tones Correct Parameters</title>
+                    <image placement="break" href="images/pntc_parameters.png"
+                        id="image_ddm_vhn_3nb"/>
+                </fig>
+            </p>
             <p>
                 <ol>
                     <li><xref href="../query/common_query_options.dita#group_options"/></li>
@@ -72,6 +45,40 @@
                 PNTC &amp;= \frac{correct}{(correct + incorrect)} \times 100 \\
                     &amp;= \frac{correct}{(correct + deletions + substitutions)} \times 100
                 \end{align}</foreign></p>
+        </body>
+    </topic>
+    <topic id="report-outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/pntc_example.html" format="html" scope="external">here</xref>
+                to see an example report.</p>
+            <ul>
+                <li><p><b>Percent Number Tones Correct (PNTC)</b></p><ul>
+                    <li>
+                        <p><b>Summary</b></p>
+                        <ul>
+                            <li>
+                                <p><i>All Participants</i></p>
+                            </li>
+                            <li><i>Tonal Patterns</i></li>
+                            <li>
+                                <p><i>IPA Patterns</i></p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
+                        <li><i>Summary</i></li>
+                        <li><i>Tonal Patterns</i></li>
+                        <li><i>IPA Patterns</i></li>
+                    </ul></li>
+                    <li>… (for each selected participant)</li>
+                    <li>
+                        <p><b>Listing (All Results)</b></p>
+                    </li>
+                </ul></li>
+            </ul>
         </body>
     </topic>
 </topic>
