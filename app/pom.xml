@@ -14,10 +14,6 @@
 	<description>Phon application project.  This project includes all code related to the
 	UI and all application level logic.</description>
 
-	<properties>
-		<org.codehaus.groovy.version>2.5.13</org.codehaus.groovy.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -188,13 +184,6 @@
 		</dependency>
 
 		<!-- Script Engines (runtime only) -->
-		<dependency>
-	   		<groupId>org.codehaus.groovy</groupId>
-	   		<artifactId>groovy-all</artifactId>
-	   		<version>${org.codehaus.groovy.version}</version>
-	   		<type>pom</type>
-	   		<scope>runtime</scope>
-	   	</dependency>
 	   	<dependency>
 	   		<groupId>org.mozilla</groupId>
 	   		<artifactId>rhino-engine</artifactId>
