@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
-   <appContext helpID="getting-started" path="getting_started.html"/>
+   <appContext helpID="getting_started" path="getting_started.html"/>
    <appContext helpID="installing-phon" path="install.html"/>
    <appContext helpID="known-issues" path="known_issues.html"/>
    <appContext helpID="welcome_window" path="welcome/welcome_window.html"/>
@@ -106,7 +106,7 @@
    <appContext helpID="Percent_Diacritics_Correct_PDC" path="analysis/pdc.html"/>
    <appContext helpID="analysis-ppc" path="analysis/ppc.html"/>
    <appContext helpID="pntc" path="analysis/pntc.html"/>
-   <appContext helpID="phone-inventory" path="analysis/phone_inventory.html"/>
+   <appContext helpID="pntc" path="analysis/phone_inventory.html"/>
    <appContext helpID="phonological-processes"
                path="analysis/phonological_processes.html"/>
    <appContext helpID="phonological-mean-length-of-utterance-pmlu"
