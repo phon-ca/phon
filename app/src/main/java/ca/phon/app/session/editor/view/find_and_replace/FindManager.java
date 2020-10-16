@@ -293,6 +293,7 @@ public class FindManager {
 					}
 					
 					if(charRange != null) {
+						charRange.setExcludesEnd(true);
 						final RecordRange recRange =
 								new RecordRange(tier.getName(), new GroupRange(i, charRange));
 						retVal = new SessionRange(uttIdx, recRange);
@@ -337,11 +338,11 @@ public class FindManager {
 					grpIdx = currentUtt.numberOfGroups() - 1;
 				}
 				
-				for(int i = grpIdx; i >= 0; i--) {
+				for(int i = grpIdx; i >= 0 && tier.numberOfGroups() > i; i--) {
 					Range charRange = null;
 					Range tierExprRange = null;
 					Range anyExprRange = null;
-					
+										
 					Object grpVal = tier.getGroup(i);
 					if(charIdx == Integer.MAX_VALUE) {
 						final String grpTxt = FormatterUtil.format(grpVal);
@@ -368,6 +369,7 @@ public class FindManager {
 					}
 					
 					if(charRange != null) {
+						charRange.setExcludesEnd(true);
 						final RecordRange recRange =
 								new RecordRange(tier.getName(), new GroupRange(i, charRange));
 						retVal = new SessionRange(uttIdx, recRange);
