@@ -18,6 +18,7 @@ package ca.phon.app.menu.edit;
 import java.awt.Window;
 import java.lang.ref.WeakReference;
 
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
@@ -79,6 +80,14 @@ public class EditMenuListener implements MenuListener {
 		// prefs
 		final JMenuItem prefsItem = new JMenuItem(new PreferencesCommand());
 		editMenu.add(prefsItem);
+		
+		if(owner != null && owner instanceof IExtendable) {
+			final IExtendable extWindow = (IExtendable)owner;
+			final EditMenuModifier modifier = (EditMenuModifier)extWindow.getExtension(EditMenuModifier.class);
+			if(modifier != null) {
+				modifier.modfiyEditMenu(editMenu);
+			}
+		}
 	}
 
 	@Override

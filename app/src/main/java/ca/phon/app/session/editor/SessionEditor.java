@@ -43,6 +43,7 @@ import org.jdesktop.swingx.JXStatusBar;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.StockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.menu.edit.EditMenuModifier;
 import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
@@ -55,6 +56,7 @@ import ca.phon.app.session.editor.actions.ExportAsHTMLAction;
 import ca.phon.app.session.editor.actions.ExportCustomSegmentAction;
 import ca.phon.app.session.editor.actions.ExportSegmentAction;
 import ca.phon.app.session.editor.actions.ExportSpeechTurnAction;
+import ca.phon.app.session.editor.actions.FindAndReplaceAction;
 import ca.phon.app.session.editor.actions.FirstRecordAction;
 import ca.phon.app.session.editor.actions.LastRecordAction;
 import ca.phon.app.session.editor.actions.MoveRecordBackwardAction;
@@ -91,6 +93,7 @@ import ca.phon.session.io.SessionWriter;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -384,7 +387,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			}
 
 		});
-
+		
 		// save as.. menu
 		final JMenu saveAsMenu = new JMenu("Save as...");
 		final SessionOutputFactory factory = new SessionOutputFactory();
@@ -395,6 +398,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		fileMenu.add(new JSeparator(), 2);
 		
 		fileMenu.add(new JMenuItem(new ExportAsHTMLAction(this)), 3);
+		
+		putExtension(EditMenuModifier.class, (editMenu) -> {
+			editMenu.add(new JMenuItem(new FindAndReplaceAction(SessionEditor.this)), 3);
+			editMenu.add(new JSeparator(), 4);
+		});
 
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");

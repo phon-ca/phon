@@ -182,7 +182,7 @@ public class RecordDataEditorView extends EditorView {
 	/*
 	 * Find and replace
 	 */
-	private JToggleButton findAndReplaceButton;
+	private JButton findAndReplaceButton;
 	private FindAndReplacePanel findAndReplacePanel;
 
 	/*
@@ -690,7 +690,7 @@ public class RecordDataEditorView extends EditorView {
 			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace");
-			findAndReplaceButton = new JToggleButton(toggleFindAndReplaceAct);
+			findAndReplaceButton = new JButton(toggleFindAndReplaceAct);
 			
 			topPanel.add(findAndReplaceButton, cc.xy(colIdx++, rowIdx));
 			colIdx++;

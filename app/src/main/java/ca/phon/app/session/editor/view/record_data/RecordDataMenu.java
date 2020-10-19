@@ -15,20 +15,26 @@
  */
 package ca.phon.app.session.editor.view.record_data;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import ca.phon.app.session.editor.view.record_data.actions.DeleteGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.MergeAllGroupsCommand;
 import ca.phon.app.session.editor.view.record_data.actions.MergeGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.NewGroupCommand;
 import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 /**
  * Menu for the Record Data editor view.
  *
  */
-public class RecordDataMenu extends JMenu {
+public class RecordDataMenu extends JMenu implements MenuListener {
 
 	private static final long serialVersionUID = -2095672949678390961L;
 
@@ -37,10 +43,21 @@ public class RecordDataMenu extends JMenu {
 	public RecordDataMenu(RecordDataEditorView editor) {
 		super();
 		this.editor = editor;
-		init();
+		addMenuListener(this);
 	}
-	
-	private void init() {
+
+	@Override
+	public void menuSelected(MenuEvent e) {
+		removeAll();
+		
+		final PhonUIAction findAndReplaceAct = new PhonUIAction(editor, "onToggleFindAndReplace");
+		findAndReplaceAct.putValue(PhonUIAction.NAME, "Find & Replace");
+		findAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace UI");
+		findAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
+		findAndReplaceAct.putValue(PhonUIAction.SELECTED_KEY, editor.isFindAndReplaceVisible());
+		add(new JCheckBoxMenuItem(findAndReplaceAct));
+		addSeparator();
+		
 		// new group action
 		final NewGroupCommand newGroupCommand = new NewGroupCommand(editor);
 		final JMenuItem newGroupItem = new JMenuItem(newGroupCommand);
@@ -63,6 +80,14 @@ public class RecordDataMenu extends JMenu {
 		
 		addSeparator();
 		add(new MergeAllGroupsCommand(editor));
+	}
+
+	@Override
+	public void menuDeselected(MenuEvent e) {
+	}
+
+	@Override
+	public void menuCanceled(MenuEvent e) {
 	}
 	
 }
