@@ -15,6 +15,8 @@
  */
 package ca.phon.ipa;
 
+import java.util.ArrayList;
+
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.ipa.parser.IPATokenType;
 import ca.phon.ipa.parser.IPATokens;
@@ -127,6 +129,19 @@ public final class CompoundPhone extends Phone {
 		this.ligature = ligature;
 	}
 	
+//	@Override
+//	public Diacritic[] getToneNumberDiacritics() {
+//		ArrayList<Diacritic> diacritics = new ArrayList<>();
+//		
+//		Diacritic[] p1Diacritics = getFirstPhone().getToneNumberDiacritics();
+//		for(Diacritic d:p1Diacritics) diacritics.add(d);
+//
+//		Diacritic[] p2Diacritics = getSecondPhone().getToneNumberDiacritics();
+//		for(Diacritic d:p2Diacritics) diacritics.add(d);		
+//		
+//		return diacritics.toArray(new Diacritic[0]);
+//	}
+
 	@Override
 	protected FeatureSet _getFeatureSet() {
 		FeatureSet retVal = FeatureSet.union(firstPhone.getFeatureSet(), secondPhone.getFeatureSet());

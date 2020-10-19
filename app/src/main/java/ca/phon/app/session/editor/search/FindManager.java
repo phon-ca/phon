@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.app.session.editor.search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,6 +92,10 @@ public class FindManager {
 				this.searchTiers.add(toi.getTierName());
 			}
 		}
+	}
+	
+	public Session getSession() {
+		return this.session;
 	}
 
 	public FindDirection getDirection() {

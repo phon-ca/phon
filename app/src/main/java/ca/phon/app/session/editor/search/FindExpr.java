@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.app.session.editor.search;
 
 import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.phon.app.session.editor.search.SearchType;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.FormatterUtil;

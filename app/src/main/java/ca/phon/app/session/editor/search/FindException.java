@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ca.phon.app.session.editor.view.find_and_replace;
+package ca.phon.app.session.editor.search;
 
 /**
  *

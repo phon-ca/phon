@@ -39,7 +39,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
@@ -52,7 +54,10 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.MouseInputAdapter;
@@ -65,6 +70,7 @@ import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -114,6 +120,7 @@ import ca.phon.session.position.GroupLocation;
 import ca.phon.session.position.RecordLocation;
 import ca.phon.session.position.SessionLocation;
 import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Range;
@@ -134,15 +141,13 @@ public class RecordDataEditorView extends EditorView {
 
 	public final static String VIEW_ICON = "misc/record";
 
-	/*
-	 * Common data for all records
-	 */
 	private JPanel topPanel;
 
 	/**
 	 * speaker selection
 	 */
 	private JComboBox<Participant> speakerBox;
+	
 
 	private volatile boolean updating = false;
 
@@ -173,6 +178,12 @@ public class RecordDataEditorView extends EditorView {
 	private RecordNumberField recNumField;
 	
 	private JButton playButton;
+	
+	/*
+	 * Find and replace
+	 */
+	private JToggleButton findAndReplaceButton;
+	private FindAndReplacePanel findAndReplacePanel;
 
 	/*
 	 * Keep track of 'current' group and tier.  This is done by tracking
@@ -250,8 +261,15 @@ public class RecordDataEditorView extends EditorView {
 
 		statusPanel.add(charLbl, cc.xy(8,1));
 		statusPanel.add(currentCharLbl, cc.xy(9,1));
+		
+		findAndReplacePanel = new FindAndReplacePanel(getEditor());
+		findAndReplacePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		findAndReplacePanel.setVisible(false);
+		JPanel bottomPanel = new JPanel(new VerticalLayout());
+		bottomPanel.add(findAndReplacePanel);
+		bottomPanel.add(statusPanel);
 
-		add(statusPanel, BorderLayout.SOUTH);
+		add(bottomPanel, BorderLayout.SOUTH);
 
 		final PhonUIAction playSegAct = new PhonUIAction(this, "playPause");
 		playSegAct.putValue(PhonUIAction.NAME, "Play segment");
@@ -568,7 +586,7 @@ public class RecordDataEditorView extends EditorView {
 			final Session session = editor.getSession();
 
 			final FormLayout layout = new FormLayout(
-					"pref, pref, 3dlu, pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref",
+					"pref, pref, 3dlu, pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref, 5dlu, right:pref",
 					"pref");
 			topPanel = new JPanel(layout);
 
@@ -667,19 +685,16 @@ public class RecordDataEditorView extends EditorView {
 			final JButton splitGroupBtn = new JButton(splitGroupAct);
 			splitGroupBtn.setFocusable(false);
 			btnPanel.add(splitGroupBtn);
-
-			/*
-			 * XXX removed in Phon 2.2
-			 */
-			/*
-			final DeleteGroupCommand delGroupAct = new DeleteGroupCommand(this);
-			delGroupAct.putValue(DeleteGroupCommand.SHORT_DESCRIPTION, delGroupAct.getValue(DeleteGroupCommand.NAME));
-			delGroupAct.putValue(DeleteGroupCommand.NAME, null);
-			final JButton delGroupBtn = new JButton(delGroupAct);
-			delGroupBtn.setFocusable(false);
-			btnPanel.add(delGroupBtn);
-			*/
-
+			
+			final PhonUIAction toggleFindAndReplaceAct = new PhonUIAction(this, "onToggleFindAndReplace");
+			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
+			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
+			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace");
+			findAndReplaceButton = new JToggleButton(toggleFindAndReplaceAct);
+			
+			topPanel.add(findAndReplaceButton, cc.xy(colIdx++, rowIdx));
+			colIdx++;
+			
 			topPanel.add(btnPanel, cc.xy(colIdx++, rowIdx));
 			colIdx++; // spacer
 
@@ -689,6 +704,20 @@ public class RecordDataEditorView extends EditorView {
 		return topPanel;
 	}
 
+	private void setupSpeakerBoxModel() {
+		if(this.speakerBox == null) return;
+		
+		Participant selected = (Participant)speakerBox.getModel().getSelectedItem();
+		final DefaultComboBoxModel<Participant> speakerBoxModel = new DefaultComboBoxModel<>();
+		speakerBoxModel.addElement(Participant.UNKNOWN);
+		for(Participant participant:getEditor().getSession().getParticipants()) {
+			speakerBoxModel.addElement(participant);
+		}
+		speakerBox.setModel(speakerBoxModel);
+		if(selected != null)
+			speakerBox.setSelectedItem(selected);
+	}
+	
 	private SessionEditorUndoableEdit updateRecordAlignment(Record record, int group) {
 		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 		final Tier<IPATranscript> ipaActual = record.getIPAActual();
@@ -932,12 +961,7 @@ public class RecordDataEditorView extends EditorView {
 
 	@RunOnEDT
 	public void onParticipantsChanged(EditorEvent event) {
-		remove(topPanel);
-		topPanel = null;
-		topPanel = getTopPanel();
-		add(topPanel, BorderLayout.NORTH);
-		revalidate();
-		repaint();
+		setupSpeakerBoxModel();
 	}
 
 	@RunOnEDT
@@ -953,7 +977,20 @@ public class RecordDataEditorView extends EditorView {
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 	}
-
+	
+	/* Find & Replace */
+	public boolean isFindAndReplaceVisible() {
+		return this.findAndReplacePanel.isVisible();
+	}
+	
+	public void setFindAndReplaceVisible(boolean visible) {
+		this.findAndReplacePanel.setVisible(visible);
+	}
+	
+	public void onToggleFindAndReplace(PhonActionEvent pae) {
+		setFindAndReplaceVisible(!isFindAndReplaceVisible());
+	}
+	
 	@Override
 	public String getName() {
 		return VIEW_NAME;
