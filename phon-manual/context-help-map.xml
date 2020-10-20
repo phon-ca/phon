@@ -109,8 +109,7 @@
    <appContext helpID="pntc" path="analysis/phone_inventory.html"/>
    <appContext helpID="phonological-processes"
                path="analysis/phonological_processes.html"/>
-   <appContext helpID="phonological-mean-length-of-utterance-pmlu"
-               path="analysis/pmlu.html"/>
+   <appContext helpID="pmlu" path="analysis/pmlu.html"/>
    <appContext helpID="word-list" path="analysis/word_list.html"/>
    <appContext helpID="word-match" path="analysis/specialized/word_match.html"/>
    <appContext helpID="multisyllabic-nonlinear-analysis"
