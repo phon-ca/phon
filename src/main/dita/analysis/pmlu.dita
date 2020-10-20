@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="pmlu">
+    <title>Phonological Mean Length of Utterance (PMLU)</title>
+    <body>
+        <p>The PMLU analysis calculates:<ol id="ol_mfw_smy_jnb">
+                <li>Phonlogical Mean Length of Utterance (PMLU) (Ingram 2002)</li>
+                <li>Expanded Phonological Mean Length of Utterance (ePMLU) (Arias &amp; Lleó
+                    2013)</li>
+            </ol></p>
+    </body>
+    <topic id="data_preparation">
+        <title>Data Preparation</title>
+        <body>
+            <p>Session data is queried by word for each IPA Target and IPA Actual tuple. Proper
+                syllabification and phone alignment is required for accurate results. All
+                participants should have unique names/identification numbers and a speaker should be
+                assigned to all records.</p>
+        </body>
+    </topic>
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <p>
+                <fig id="fig_qsd_zgn_3nb">
+                    <title>PMLU Parameters</title>
+                    <image placement="break" href="images/pmlu_parameters.png" id="image_rsd_zgn_3nb"
+                    />
+                </fig>
+            </p>
+            <p>Inclusion of the PMLU/ePMLU calclations can be controlled using the checkboxes
+                displayed in the parameters. By default all truncated words are ignored. The closed
+                syllable bonus is used in the <xref href="#epmlu_syllables_calculation"
+                    format="dita"/> calculation and may be adjusted using the provided field.</p>
+            <p>Other parameters:<ol id="ol_qkx_cqy_mjb">
+                    <li><xref href="../query/phones_query.dita#aligned-phones"/></li>    
+                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
+                </ol></p>
+        </body>
+    </topic>
+    <topic id="calculations">
+        <title>Calculations</title>
+        <topic id="pmlu_calculation">
+            <title>PMLU</title>
+            <body>
+                <p><keyword>PMLU</keyword><sub>Target</sub> is calculated as the number of consonants in
+                    the target transcript. <keyword>PMLU</keyword><sub>Actual</sub> is calculated as the
+                    number of segments in the actual transcript plus the number of target-like
+                    consonants produced. In this case target-like will ignore diacritics between
+                    compared phones. <keyword>PWP</keyword> is defined as the ratio of
+                        <keyword>PMLU</keyword><sub>Actual</sub> to
+                        <keyword>PMLU</keyword><sub>Target</sub>.</p>
+                <p><foreign outputclass="embed-latex">
+                    \begin{align} 
+                    PMLU\textsubscript{Target} &amp;= \[ \sum_{t \in targetIPA}
+                        \[  \left\{
+                        \begin{array}{rr}
+                            0 &amp; \textrm{t is a vowel} \\
+                            1 &amp; \textrm{t is a consonant} \\
+                        \end{array}
+                        \right. \]
+                    \] \\
+                    PMLU\textsubscript{Actual} &amp;= |actualIPA| \plus \[ \sum_{t,a \in targetIPA,actualIPA}
+                        \[  \left\{
+                        \begin{array}{rr}
+                            0 &amp; \textrm{t is a vowel} \\
+                            (stripdiacritics(t) = stripdiacritics(a)) &amp; \textrm{t is a consonant} \\
+                        \end{array}
+                        \right. \]
+                    \] \\
+                    PWP &amp;= \frac{PMLU\textsubscript{Actual}}{PMLU\textsubscript{Target}} \\
+                    \end{align}</foreign></p>
+            </body>
+        </topic>
+        <topic id="epmlu_features_calculation">
+            <title>ePMLU<sub>Features</sub></title>
+            <body>
+                <p><keyword>ePMLU</keyword><sub>Target Features</sub> is calculated as three times
+                    the number of consonants in the target transcript (one for each of 'manner',
+                    'place' and 'voicing'.) <keyword>ePMLU</keyword><sub>Actual Features</sub> is
+                    calculated as the sum of the number of correctly produced place, manner, and
+                    voicing features for each target consonant.
+                        <keyword>ePWP</keyword><sub>Features</sub> is defined as the ratio of
+                        <keyword>ePMLU</keyword><sub>Actual Features</sub> to
+                        <keyword>ePMLU</keyword><sub>Target Features</sub>.</p>
+                <p><foreign outputclass="embed-latex">
+                    \begin{align} 
+                    ePMLU\textsubscript{Target Features} &amp;= 3 \times \textrm{(# consonants in target IPA)} \\
+                    ePMLU\textsubscript{Actual Features} &amp;=  \[ \sum_{t,a \in targetIPA,actualIPA} 
+                        \[  \left\{
+                        \begin{array}{rr}
+                            0 &amp; \textrm{t is a vowel} \\
+                            (manner(t) \equals manner(a)) \plus (place(t) \equals place(a)) \plus (voicing(t) \equals voicing(a)) &amp; \textrm{t is a consonant} \\
+                        \end{array}
+                        \right. \]
+                    \] \\
+                    ePWP\textsubscript{Features} &amp;= \frac{ePMLU\textsubscript{Actual Features}}{ePMLU\textsubscript{Target Features}} \\
+                    \end{align}</foreign></p>
+            </body>
+        </topic>
+        <topic id="epmlu_syllables_calculation">
+            <title>ePMLU<sub>Syllables</sub></title>
+            <body>
+                <p><keyword>ePMLU</keyword><sub>Target Syllables</sub> is calculated as two times the
+                    number of syllables in the target transcript plus the closed syllable bonus for each
+                    closed syllable.  <keyword>ePMLU</keyword><sub>Actual syllables</sub> is calculated in the same manner.
+                    <keyword>ePWP</keyword><sub>Features</sub> is defined as the ratio of
+                    <keyword>ePMLU</keyword><sub>Actual Features</sub> to
+                    <keyword>ePMLU</keyword><sub>Target Features</sub>.</p>
+                <p><foreign outputclass="embed-latex">
+                    \begin{align} 
+                    ePMLU\textsubscript{Target Syllables} &amp;= \[ \sum_{syll \in targetIPA} 
+                        \[  \left\{
+                        \begin{array}{rr}
+                            2 &amp; \textrm{syll is open} \\
+                            2 \plus closedSyllBonus &amp; \textrm{syll is closed} \\
+                        \end{array}
+                        \right. \]
+                        \] \\
+                    ePMLU\textsubscript{Actual Syllables} &amp;= \[ \sum_{syll \in actualIPA} 
+                        \[  \left\{
+                        \begin{array}{rr}
+                            2 &amp; \textrm{syll is open} \\
+                            2 \plus closedSyllBonus &amp; \textrm{syll is closed} \\
+                        \end{array}
+                        \right. \]
+                        \] \\    
+                    ePWP\textsubscript{Syllables} &amp;= \frac{ePMLU\textsubscript{Actual Syllables}}{ePMLU\textsubscript{Target Syllables}} \\
+                    \end{align}</foreign></p>
+            </body>
+        </topic>
+        <topic id="epmlu_calculation">
+            <title>ePMLU</title>
+            <body>
+                <p><keyword>ePMLU</keyword><sub>Target</sub> is calculated as
+                        <keyword>ePMLU</keyword><sub>Target Features</sub> plus
+                        <keyword>ePMLU</keyword><sub>Actual Features</sub>.
+                        <keyword>ePMLU</keyword><sub>Actual</sub> is calculated in the same manner.
+                        <keyword>ePWP</keyword> is defined as the ratio of
+                        <keyword>ePMLU</keyword><sub>Actual</sub> to
+                        <keyword>ePMLU</keyword><sub>Target</sub>.</p>
+                <p><foreign outputclass="embed-latex">
+                    \begin{align} 
+                    ePMLU\textsubscript{Target} &amp;= ePMLU\textsubscript{Target Features} \plus ePMLU\textsubscript{Target Syllables} \\
+                    ePMLU\textsubscript{Actual} &amp;= ePMLU\textsubscript{Actual Features} \plus ePMLU\textsubscript{Actual Syllables} \\
+                    ePWP &amp;= \frac{ePMLU\textsubscript{Actual}}{ePMLU\textsubscript{Target}} \\
+                    \end{align}</foreign></p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="report_outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/ppc_example.html" format="html" scope="external">here</xref> to
+                see an example report.</p>
+            <ul>
+                <li>
+                    <p><b>Phonological Mean Length of Utterance (PMLU)</b></p>
+                    <ul id="ul_jd1_2ly_jnb">
+                        <li>
+                            <p>Parameters</p>
+                        </li>
+                        <li>
+                            <p><b>Summary</b></p>
+                            <ul id="ul_umz_dly_jnb">
+                                <li>
+                                    <p><i>All Participants</i></p>
+                                </li>
+                                <li>
+                                    <p><i>Participant 1</i></p>
+                                </li>
+                                <li>… for(each selected participant)</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p><b><i>Listing</i></b> (All results with PMLU/ePMLU calcations for
+                                each aligned pair)</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </body>
+    </topic>
+</topic>
