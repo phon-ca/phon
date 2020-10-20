@@ -54,87 +54,87 @@
                         <keyword>PMLU</keyword><sub>Target</sub>.</p>
                 <p><foreign outputclass="embed-latex">
                     \begin{align} 
-                    PMLU\textsubscript{Target} &amp;= \[ \sum_{t \in targetIPA}
+                    PMLU_{Target} &amp;= \[ \sum_{t \in targetIPA}
                         \[  \left\{
                         \begin{array}{rr}
-                            0 &amp; \textrm{t is a vowel} \\
-                            1 &amp; \textrm{t is a consonant} \\
+                            0 &amp; t \textrm{ is a vowel} \\
+                            1 &amp; t \textrm{ is a consonant} \\
                         \end{array}
                         \right. \]
                     \] \\
-                    PMLU\textsubscript{Actual} &amp;= |actualIPA| \plus \[ \sum_{t,a \in targetIPA,actualIPA}
+                    PMLU_{Actual} &amp;= |actualIPA| \plus \[ \sum_{t,a \in targetIPA,actualIPA}
                         \[  \left\{
                         \begin{array}{rr}
-                            0 &amp; \textrm{t is a vowel} \\
-                            (stripdiacritics(t) = stripdiacritics(a)) &amp; \textrm{t is a consonant} \\
+                            0 &amp; t \textrm{ is a vowel} \\
+                            (stripdiacritics(t) = stripdiacritics(a)) &amp; t \textrm{ is a consonant} \\
                         \end{array}
                         \right. \]
                     \] \\
-                    PWP &amp;= \frac{PMLU\textsubscript{Actual}}{PMLU\textsubscript{Target}} \\
+                    PWP &amp;= \frac{PMLU_{Actual}}{PMLU_{Target}} \\
                     \end{align}</foreign></p>
             </body>
         </topic>
         <topic id="epmlu_features_calculation">
             <title>ePMLU<sub>Features</sub></title>
             <body>
-                <p><keyword>ePMLU</keyword><sub>Target Features</sub> is calculated as three times
+                <p><keyword>ePMLU</keyword><sub>TargetFeatures</sub> is calculated as three times
                     the number of consonants in the target transcript (one for each of 'manner',
-                    'place' and 'voicing'.) <keyword>ePMLU</keyword><sub>Actual Features</sub> is
+                    'place' and 'voicing'.) <keyword>ePMLU</keyword><sub>ActualFeatures</sub> is
                     calculated as the sum of the number of correctly produced place, manner, and
                     voicing features for each target consonant.
                         <keyword>ePWP</keyword><sub>Features</sub> is defined as the ratio of
-                        <keyword>ePMLU</keyword><sub>Actual Features</sub> to
-                        <keyword>ePMLU</keyword><sub>Target Features</sub>.</p>
+                        <keyword>ePMLU</keyword><sub>ActualFeatures</sub> to
+                        <keyword>ePMLU</keyword><sub>TargetFeatures</sub>.</p>
                 <p><foreign outputclass="embed-latex">
                     \begin{align} 
-                    ePMLU\textsubscript{Target Features} &amp;= \[ \sum_{t \in targetIPA} 
+                    ePMLU_{Target Features} &amp;= \[ \sum_{t \in targetIPA} 
                         \[  \left\{
                         \begin{array}{rr}
-                          0 &amp; \textrm{t is a vowel} \\
-                          3 &amp; \textrm{t is a consonant} \\
+                          0 &amp; t \textrm{ is a vowel} \\
+                          3 &amp; t \textrm{ is a consonant} \\
                         \end{array}
                         \right. \]
                         \] \\
-                    ePMLU\textsubscript{Actual Features} &amp;=  \[ \sum_{t,a \in targetIPA,actualIPA} 
+                    ePMLU_{Actual Features} &amp;=  \[ \sum_{t,a \in targetIPA,actualIPA} 
                         \[  \left\{
                         \begin{array}{rr}
-                            0 &amp; \textrm{t is a vowel} \\
-                            (manner(t) \equals manner(a)) \plus (place(t) \equals place(a)) \plus (voicing(t) \equals voicing(a)) &amp; \textrm{t is a consonant} \\
+                            0 &amp; t \textrm{ is a vowel} \\
+                            (manner(t) \equals manner(a)) \plus (place(t) \equals place(a)) \plus (voicing(t) \equals voicing(a)) &amp; t \textrm{ is a consonant} \\
                         \end{array}
                         \right. \]
                     \] \\
-                    ePWP\textsubscript{Features} &amp;= \frac{ePMLU\textsubscript{Actual Features}}{ePMLU\textsubscript{Target Features}} \\
+                    ePWP_{Features} &amp;= \frac{ePMLU_{Actual Features}}{ePMLU_{Target Features}} \\
                     \end{align}</foreign></p>
             </body>
         </topic>
         <topic id="epmlu_syllables_calculation">
             <title>ePMLU<sub>Syllables</sub></title>
             <body>
-                <p><keyword>ePMLU</keyword><sub>Target Syllables</sub> is calculated as two times the
-                    number of syllables in the target transcript plus the closed syllable bonus for each
-                    closed syllable.  <keyword>ePMLU</keyword><sub>Actual syllables</sub> is calculated in the same manner.
-                    <keyword>ePWP</keyword><sub>Features</sub> is defined as the ratio of
-                    <keyword>ePMLU</keyword><sub>Actual Features</sub> to
-                    <keyword>ePMLU</keyword><sub>Target Features</sub>.</p>
+                <p><keyword>ePMLU</keyword><sub>TargetSyllables</sub> is calculated as two times the
+                    number of syllables in the target transcript plus the closed syllable bonus for
+                    each closed syllable. <keyword>ePMLU</keyword><sub>ActualSyllables</sub> is
+                    calculated in the same manner. <keyword>ePWP</keyword><sub>Syllables</sub> is
+                    defined as the ratio of <keyword>ePMLU</keyword><sub>ActualSyllables</sub> to
+                        <keyword>ePMLU</keyword><sub>TargetSyllables</sub>.</p>
                 <p><foreign outputclass="embed-latex">
                     \begin{align} 
-                    ePMLU\textsubscript{Target Syllables} &amp;= \[ \sum_{syll \in targetIPA} 
+                    ePMLU_{Target Syllables} &amp;= \[ \sum_{\sigma \in targetIPA} 
                         \[  \left\{
                         \begin{array}{rr}
-                            2 &amp; \textrm{syll is open} \\
-                            2 \plus closedSyllBonus &amp; \textrm{syll is closed} \\
+                            2 &amp; \sigma \textrm{ is open} \\
+                            2 \plus closedSyllBonus &amp; \sigma \textrm{ is closed} \\
                         \end{array}
                         \right. \]
                         \] \\
-                    ePMLU\textsubscript{Actual Syllables} &amp;= \[ \sum_{syll \in actualIPA} 
+                    ePMLU_{Actual Syllables} &amp;= \[ \sum_{\sigma \in actualIPA} 
                         \[  \left\{
                         \begin{array}{rr}
-                            2 &amp; \textrm{syll is open} \\
-                            2 \plus closedSyllBonus &amp; \textrm{syll is closed} \\
+                            2 &amp; \sigma \textrm{ is open} \\
+                            2 \plus closedSyllBonus &amp; \sigma \textrm{ is closed} \\
                         \end{array}
                         \right. \]
                         \] \\    
-                    ePWP\textsubscript{Syllables} &amp;= \frac{ePMLU\textsubscript{Actual Syllables}}{ePMLU\textsubscript{Target Syllables}} \\
+                    ePWP\textsubscript{Syllables} &amp;= \frac{ePMLU_{Actual Syllables}}{ePMLU_{Target Syllables}} \\
                     \end{align}</foreign></p>
             </body>
         </topic>
@@ -142,17 +142,17 @@
             <title>ePMLU</title>
             <body>
                 <p><keyword>ePMLU</keyword><sub>Target</sub> is calculated as
-                        <keyword>ePMLU</keyword><sub>Target Features</sub> plus
-                        <keyword>ePMLU</keyword><sub>Actual Features</sub>.
+                        <keyword>ePMLU</keyword><sub>TargetFeatures</sub> plus
+                        <keyword>ePMLU</keyword><sub>TargetSyllables</sub>.
                         <keyword>ePMLU</keyword><sub>Actual</sub> is calculated in the same manner.
                         <keyword>ePWP</keyword> is defined as the ratio of
                         <keyword>ePMLU</keyword><sub>Actual</sub> to
                         <keyword>ePMLU</keyword><sub>Target</sub>.</p>
                 <p><foreign outputclass="embed-latex">
                     \begin{align} 
-                    ePMLU\textsubscript{Target} &amp;= ePMLU\textsubscript{Target Features} \plus ePMLU\textsubscript{Target Syllables} \\
-                    ePMLU\textsubscript{Actual} &amp;= ePMLU\textsubscript{Actual Features} \plus ePMLU\textsubscript{Actual Syllables} \\
-                    ePWP &amp;= \frac{ePMLU\textsubscript{Actual}}{ePMLU\textsubscript{Target}} \\
+                    ePMLU_{Target} &amp;= ePMLU_{Target Features} \plus ePMLU_{Target Syllables} \\
+                    ePMLU_{Actual} &amp;= ePMLU_{Actual Features} \plus ePMLU_{Actual Syllables} \\
+                    ePWP &amp;= \frac{ePMLU_{Actual}}{ePMLU_{Target}} \\
                     \end{align}</foreign></p>
             </body>
         </topic>
