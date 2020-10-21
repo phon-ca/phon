@@ -1,23 +1,29 @@
+/*
+params =
+{enum, searchTier, "IPA Target"|"IPA Actual", 0, "Search Tier"}
+;
+ */
+
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var PNTC = require("lib/PNTC").PNTC;
-var PNTCOptions = require("lib/PNTC").PNTCOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
-var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
  * Setup params
  *******************************/
+
 var filters = {
-	"pntc": new PNTCOptions("filters.pntc"),
 	"searchBy": new SearchByOptions("filters.searchBy"),
+	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
+	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
 	"group": new GroupFilter("filters.group"),
 	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
@@ -32,8 +38,20 @@ var filters = {
 
 function setup_params(params) {
 
-	filters.pntc.param_setup(params);
-	var insertIdx = params.size();
+	var insertIdx = 0;
+
+	// setup result filter section
+	var resultFilterSection = new SeparatorScriptParam("alignedPhonesHeader", "Aligned Phones", true);
+	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
+	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
+
+	params.add(resultFilterSection);
+	params.add(targetLbl);
+	filters.targetResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.targetResultFilter.param_setup(params);
+	params.add(actualLbl);
+	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.actualResultFilter.param_setup(params);
 
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
@@ -45,9 +63,9 @@ function setup_params(params) {
 	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
 
-	filters.word.searchByWordEnabled = true;
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
+	filters.wordPattern.setEnabled(false);
 
 	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
 	params.add(wordsep);
@@ -76,17 +94,22 @@ function setup_params(params) {
 	filters.speaker.param_setup(params);
 }
 
+/*
+ * Globals
+ */
 var session;
 
 function begin_search(s) {
 	session = s;
 }
 
-var searchTier = "IPA Target";
+
+/********************************
+ * query_record
+ * params:
+ * 	record - the current record
+ *******************************/
 function query_record(recordIndex, record) {
-	var nf = java.text.NumberFormat.getNumberInstance();
-	nf.setMinimumFractionDigits(1);
-	nf.setMaximumFractionDigits(2);
 	// check participant filter
 	if (! filters.speaker.check_speaker(record.speaker)) return;
 
@@ -115,16 +138,20 @@ function query_record(recordIndex, record) {
 			tierList.setTiers(filters.alignedGroup.tier);
 
 			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
-			for (var j = 0; j < alignedGroupData[0].length; j++) {
+			for(var j = 0; j < alignedGroupData[0].length; j++) {
 				groupAlignedResults.push(alignedGroupData[0][j]);
 			}
 		}
 
+		var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
+		var oppositeIpa = (searchTier == "IPA Target" ? group.IPAActual : group.IPATarget);
 		var phoneMap = group.phoneAlignment;
-		var toSearch = new Array();
-		toSearch.push([group, groupAlignedResults, groupAlignedMeta]);
 
-		if(filters.word.isUseFilter()) {
+		var toSearch = new Array();
+		toSearch.push([ipa, oppositeIpa, phoneMap, groupAlignedResults, groupAlignedMeta]);
+
+		// search by word?
+		if (filters.word.isUseFilter()) {
 			toSearch.length = 0;
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
@@ -134,19 +161,21 @@ function query_record(recordIndex, record) {
 				wordAlignedMeta.putAll(groupAlignedMeta);
 
 				var wordAlignedResults = new Array();
-				for (var k = 0; k < groupAlignedResults.length; k++) {
+				for(var k = 0; k < groupAlignedResults.length; k++) {
 					wordAlignedResults.push(groupAlignedResults[k]);
 				}
 
 				var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
-				for (var k = 0; k < wordAlignedData[0].length; k++) {
+				for(var k = 0; k < wordAlignedData[0].length; k++) {
 					wordAlignedResults.push(wordAlignedData[0][k]);
 				}
 				wordAlignedMeta.putAll(wordAlignedData[1]);
 
 				var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
-				var alignedIpa = (searchTier == "IPA Target" ? word.IPAActual: word.IPATarget);
-				var addWord = (wordIpa != null && wordIpa.length() > 0 && alignedIpa != null && alignedIpa.length() > 0);
+				var oppositeWordIpa = (searchTier == "IPA Target" ? word.IPAActual : word.IPATarget);
+				var wordAlign = word.phoneAlignment;;
+				
+				var addWord = (wordIpa != null);
 				// check word pattern if necessary
 				if (filters.wordPattern.isUseFilter()) {
 					addWord = filters.wordPattern.check_filter(wordIpa);
@@ -160,13 +189,13 @@ function query_record(recordIndex, record) {
 					tierList.setTiers(filters.alignedWord.tier);
 
 					var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
-					for (var k = 0; k < alignedWordData[0].length; k++) {
+					for(var k = 0; k < alignedWordData[0].length; k++) {
 						wordAlignedResults.push(alignedWordData[0][k]);
 					}
 				}
 
 				if (addWord == true) {
-					toSearch.push([word, wordAlignedResults, wordAlignedMeta]);
+					toSearch.push([wordIpa, oppositeWordIpa, wordAlign, wordAlignedResults, wordAlignedMeta]);
 				}
 			}
 		}
@@ -175,67 +204,88 @@ function query_record(recordIndex, record) {
 		if (filters.syllable.isUseFilter()) {
 			var syllList = new Array();
 			for (j = 0; j < toSearch.length; j++) {
-				var obj = toSearch[j][0];
-				var sylls = filters.syllable.getRequestedAlignedSyllables(obj, searchTier);
-
-				for (k = 0; k < sylls.size(); k++) {
-					syllList.push([sylls.get(k), toSearch[j][1], toSearch[j][2]]);
+				var parentIpa = toSearch[j][0];
+				var parentOppositeIpa = toSearch[j][1];
+				var parentAlignment = toSearch[j][2];
+				
+				var syllableMap = (new Packages.ca.phon.ipa.alignment.SyllableAligner()).calculateSyllableAlignment(parentIpa, parentOppositeIpa, parentAlignment);
+				var syllables = syllableMap.getTopElements();
+				
+				var sylls = filters.syllable.filterSyllables(syllableMap);
+				
+				for (k = 0; k < sylls.length; k++) {
+					var alignedSylls = syllableMap.getAligned(java.util.List.of(sylls[k]));
+					
+					if(alignedSylls.size() == 0) {
+						syllList.push([sylls[k], new IPATranscript(), 
+							parentAlignment.getSubAlignment(sylls[k], new IPATranscript()), toSearch[j][3], toSearch[j][4]]);
+					} else {
+						for(var alignIdx = 0; alignIdx < alignedSylls.size(); alignIdx++) {
+							syllList.push([sylls[k], alignedSylls.get(alignIdx),
+								parentAlignment.getSubAlignment(sylls[k], alignedSylls.get(alignIdx)), toSearch[j][3], toSearch[j][4]]);
+						}
+					}
 				}
 			}
 			toSearch = syllList;
 		}
 
 		for (j = 0; j < toSearch.length; j++) {
-			var obj = toSearch[j][0];
-			var alignedResults = toSearch[j][1];
-			var alignedMetadata = toSearch[j][2];
+			var match = toSearch[j][0];
+			var oppositeMatch = toSearch[j][1];
+			var alignment = toSearch[j][2];
+			var alignedResults = toSearch[j][3];
+			var alignedMetadata = toSearch[j][4];
+			
+			var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
+			var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
 
-			var pc = PNTC.calc_pntc(obj);
-			if(pc.target == 0) continue;
-
-			var ipaT = (obj.IPATarget != null ? obj.IPATarget: new IPATranscript());
-			var ipaA = (obj.IPAActual != null ? obj.IPAActual: new IPATranscript());
+			if (primaryFilter.isUseFilter()) {
+				if (! primaryFilter.check_filter(match)) {
+					continue;
+				}
+			}
+			if (alignedFilter.isUseFilter()) {
+				if (! alignedFilter.check_filter(oppositeMatch)) {
+					continue;
+				}
+			}
 
 			var result = factory.createResult();
-			result.schema = "ALIGNED";
+			// calculate start/end positions of data in text
+			var startIndex = ipa.stringIndexOf(match);
+			var length = match.toString().length();
+
 			result.recordIndex = recordIndex;
+			result.schema = "LINEAR";
 
-			var rvt = factory.createResultValue();
-			rvt.tierName = "IPA Target";
-			rvt.groupIndex = group.groupIndex;
-			var startIndex = (ipaT.length() == 0 ? 0 :
-				(filters.word.isUseFilter()
-					? (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : obj.getIPATargetWordLocation())
-					: (filters.syllable.isUseFilter() ? obj.getIPATargetLocation() : 0)));
-			var endIndex = startIndex + ipaT.toString().length();
-			rvt.range = new Range(startIndex, endIndex, true);
-			rvt.data = ipaT;
-			result.addResultValue(rvt);
+			var rv = factory.createResultValue();
+			rv.tierName = searchTier;
+			rv.groupIndex = group.groupIndex;
+			rv.range = new Range(startIndex, startIndex + length, true);
+			rv.data = (match != null ? match : new IPATranscript());
+			result.addResultValue(rv);
 
-			var rva = factory.createResultValue();
-			rva.tierName = "IPA Actual";
-			rva.groupIndex = group.groupIndex;
-			startIndex = (ipaA.length() == 0 ? 0 :
-				(filters.word.isUseFilter()
-					? (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : obj.getIPAActualWordLocation())
-					: (filters.syllable.isUseFilter() ? obj.getIPAActualLocation() : 0)) );
-			endIndex = startIndex + ipaA.toString().length();
-			rva.range = new Range(startIndex, endIndex, true);
-			rva.data = ipaA;
-			result.addResultValue(rva);
+			var alignedRv = factory.createResultValue();
+			alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
+			alignedRv.groupIndex = group.groupIndex;
+			if (oppositeMatch != null && oppositeMatch.length() > 0) {
+				var alignedStart = oppositeIpa.stringIndexOf(oppositeMatch);
+				var alignedLength = oppositeMatch.toString().length();
 
-			result.metadata.put("# Target", pc.target + "");
-			result.metadata.put("# Actual", pc.actual + "");
-			result.metadata.put("Syllables deleted", pc.syllDeleted + "");
-			result.metadata.put("Syllables epenthesized", pc.epen + "");
-			result.metadata.put("# Correct", pc.correct + "");
-			result.metadata.put("# Substituted", pc.substituted + "");
-			result.metadata.put("# Deleted", pc.deleted + "");
+				alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, true);
+				alignedRv.data = oppositeMatch;
+			} else {
+				alignedRv.range = new Range(0, 0, true);
+				alignedRv.data = "";
+			}
 
-			var pcVal = (pc.target > 0 ? (pc.correct / (pc.correct + pc.substituted + pc.deleted)): 0) * 100;
-			result.metadata.put("PNTC", nf.format(pcVal));
-			
-			for (var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+            result.addResultValue(alignedRv);
+			result.schema = "ALIGNED";
+
+            result.metadata.put("Alignment", alignment.toString(true));
+
+			for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
 				result.addResultValue(alignedResults[alignedResultIdx]);
 			}
 			result.metadata.putAll(alignedMetadata);

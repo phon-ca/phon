@@ -54,7 +54,7 @@ public interface ResultValue {
 	 * @param tierName  the tier name
 	 */
 	public abstract void setTierName(String tierName);
-
+	
 	/**
 	 * Gets the range for this result value.
 	 *

@@ -272,6 +272,39 @@ exports.SyllableFilter = function (id) {
 		return retVal.toArray();
 	};
 	
+	this.filterSyllables = function (syllableMap) {
+		var retVal = new java.util.ArrayList();
+		var retIdx = 0;
+		
+		var syllables = syllableMap.topElements;
+		
+		for (var sIndex = 0; sIndex < syllables.length; sIndex++) {
+			var syll = syllables[sIndex];
+			var stressOk = this.checkStress(syll);
+
+			var posOk = false;
+			if (sIndex == 0 && this.sInitial == true) posOk = true;
+			if (sIndex > 0 && sIndex < syllables.length -1 && this.sMedial == true) posOk = true;
+			if (sIndex == syllables.length -1 && this.sFinal == true) posOk = true;
+
+			// take care of singleton cases
+			if (sIndex == 0 && syllables.length == 1) posOk = this.sSingleton;
+
+			var truncatedOk = true;
+			if (this.ignoreTruncated == true) {
+				truncatedOk = (syllableMap.getAligned(syll).size() > 0);
+			}
+
+			var typeOk = this.checkType(syll);
+
+			if (posOk == true && stressOk == true && truncatedOk == true && typeOk) {
+				retVal.add(syll);
+			}
+		}
+
+		return retVal.toArray();
+	};
+	
 	/**
 	 * Get requested aligned syllables from the given object.
 	 * The object should be either a Group or AlignedWord.  The return
