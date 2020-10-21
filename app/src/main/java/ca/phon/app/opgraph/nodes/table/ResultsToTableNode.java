@@ -354,7 +354,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 								}
 								
 								if(ignoreDiacritics) {
-									stripDiacriticsFromText(buffer, onlyOrExcept, selectedDiacritics);
+									resultTxt = stripDiacriticsFromText(resultTxt, onlyOrExcept, selectedDiacritics);
 								}
 								
 								if(buffer.length() > 0) buffer.append("..");
@@ -374,7 +374,11 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 					if(includeMetadata) {
 						for(String metakey:metadataKeys) {
-							rowData.add(result.getMetadata().get(metakey));
+							String metaValue = result.getMetadata().get(metakey);
+							if(ignoreDiacritics) {
+								metaValue = stripDiacriticsFromText(metaValue, onlyOrExcept, selectedDiacritics);
+							}
+							rowData.add(metaValue);
 						}
 					}
 
@@ -392,13 +396,15 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		return retVal;
 	}
 	
-	private void stripDiacriticsFromText(StringBuffer buffer, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
-		for(int i = buffer.length() -1; i >= 0; i--) {
-			char ch = buffer.charAt(i);
-			if(!keepCharacter(ch, onlyOrExcept, selectedDiacritics)) {
-				buffer.delete(i, i);
+	private String stripDiacriticsFromText(String text, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		StringBuffer buffer = new StringBuffer();
+		for(int i = 0; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if(keepCharacter(ch, onlyOrExcept, selectedDiacritics)) {
+				buffer.append(ch);
 			}
 		}
+		return buffer.toString();
 	}
 	
 	private boolean keepCharacter(char ch, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
