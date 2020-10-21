@@ -129,18 +129,21 @@ public final class CompoundPhone extends Phone {
 		this.ligature = ligature;
 	}
 	
-//	@Override
-//	public Diacritic[] getToneNumberDiacritics() {
-//		ArrayList<Diacritic> diacritics = new ArrayList<>();
-//		
-//		Diacritic[] p1Diacritics = getFirstPhone().getToneNumberDiacritics();
-//		for(Diacritic d:p1Diacritics) diacritics.add(d);
-//
-//		Diacritic[] p2Diacritics = getSecondPhone().getToneNumberDiacritics();
-//		for(Diacritic d:p2Diacritics) diacritics.add(d);		
-//		
-//		return diacritics.toArray(new Diacritic[0]);
-//	}
+	@Override
+	public Diacritic[] getToneNumberDiacritics() {
+		ArrayList<Diacritic> diacritics = new ArrayList<>();
+		
+		Diacritic[] p1Diacritics = getFirstPhone().getToneNumberDiacritics();
+		for(Diacritic d:p1Diacritics) diacritics.add(d);
+
+		Diacritic[] p2Diacritics = getSecondPhone().getToneNumberDiacritics();
+		for(Diacritic d:p2Diacritics) diacritics.add(d);
+		
+		Diacritic[] selfDiacritics = super.getToneNumberDiacritics();
+		for(Diacritic d:selfDiacritics) diacritics.add(d);
+		
+		return diacritics.toArray(new Diacritic[0]);
+	}
 
 	@Override
 	protected FeatureSet _getFeatureSet() {
