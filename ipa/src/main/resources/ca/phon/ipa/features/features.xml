@@ -20,6 +20,7 @@
     xsi:schemaLocation="https://phon.ca/ns/features ../../../../xml/xsd/features.xsd">
     <feature name="null"/>
     <feature name="diacritic"/>
+	<feature name="punctuation"/>
     <feature name="unintelligible"/>
     <feature name="unreleased">
         <primary_family>diacritic</primary_family>
@@ -1016,7 +1017,7 @@
     <!--+ (0x2b)-->
     <feature_set char="+">diacritic</feature_set>
     <!--. (0x2e)-->
-    <feature_set char=".">diacritic</feature_set>
+    <feature_set char=".">punctuation</feature_set>
     <!--˸ (0x2f8)-->
     <feature_set char="˸">diacritic long</feature_set>
     <!--̃ (0x303)-->
@@ -1048,15 +1049,15 @@
     <!--ʽ (0x2bd)-->
     <feature_set char="ʽ">diacritic weaklyaspirated</feature_set>
     <!--ˈ (0x2c8)-->
-    <feature_set char="ˈ">diacritic prstress</feature_set>
+    <feature_set char="ˈ">punctuation prstress</feature_set>
     <!--ˌ (0x2cc)-->
-    <feature_set char="ˌ">diacritic secstress</feature_set>
+    <feature_set char="ˌ">punctuation secstress</feature_set>
     <!--  (0x20)-->
-    <feature_set char=" ">diacritic</feature_set>
+    <feature_set char=" ">punctuation</feature_set>
     <!--‿ (0x203f)-->
-    <feature_set char="‿">diacritic sandhi</feature_set>
+    <feature_set char="‿">punctuation sandhi</feature_set>
     <!--⁀ (0x2040)-->
-    <feature_set char="⁀">diacritic</feature_set>
+    <feature_set char="⁀">punctuation</feature_set>
     <!--̣ (0x323)-->
     <feature_set char="̣">diacritic lenis</feature_set>
     <!--̤ (0x324)-->
@@ -1204,7 +1205,7 @@
     <feature_set char="˭">diacritic unaspirated</feature_set>
     
     <!--↔ (0x2194)-->
-    <feature_set char="↔">diacritic</feature_set>
+    <feature_set char="↔">punctuation</feature_set>
         
     <!--ꜛ (0xa71b)-->
     <feature_set char="ꜛ">diacritic toneupstep</feature_set>
