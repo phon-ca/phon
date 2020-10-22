@@ -4,12 +4,8 @@
         <node id="1d6fc11b" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_project]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[ca.phon.project.Project]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                 </oga:settings>
                 <oga:meta x="45" y="67"/>
             </extensions>
@@ -17,12 +13,8 @@
         <node id="5e629711" name="Selected Sessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_selectedSessions]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[java.util.ArrayList]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
                 <oga:meta x="45" y="348"/>
             </extensions>
@@ -30,12 +22,8 @@
         <node id="6b8dfd59" name="Selected Participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_selectedParticipants]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[java.util.ArrayList]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedParticipants]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
                 <oga:meta x="45" y="449"/>
             </extensions>
@@ -43,23 +31,11 @@
         <node id="dc4dad38c60648c1" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="filters.ppc.onsetType">
-                        <![CDATA[All onsets]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.nucleusType">
-                        <![CDATA[All nuclei]]>
-                    </oga:property>
-                    <oga:property key="filters.searchBy.searchBy">
-                        <![CDATA[Word]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.codaType">
-                        <![CDATA[All codas]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.pattern.filter">
-                        <![CDATA[\w]]>
-                    </oga:property>
-                    <oga:property key="__script">
-                        <![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
+                    <oga:property key="filters.ppc.diacriticOptions.selectedDiacritics"><![CDATA[[]]]></oga:property>
+                    <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
+                    <oga:property key="filters.ppc.diacriticOptions.ignoreDiacritics"><![CDATA[false]]></oga:property>
+                    <oga:property key="filters.ppc.pattern.filter"><![CDATA[\w]]></oga:property>
+                    <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var TierList = require("lib/TierList").TierList;
@@ -148,39 +124,43 @@ function setup_params(params) {
 
 	filters.searchBy.includeSyllableOption = true;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
-}]]>
-                    </oga:property>
+}]]></oga:property>
+                    <oga:property key="filters.ppc.diacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
                 </oga:settings>
-                <oga:meta x="68" y="648"/>
+                <oga:meta x="68" y="642"/>
             </extensions>
         </node>
-        <opqry:queryNode id="434c072e" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-09-17T11:28:08.347-02:30" name="Phones" uuid="c5e02370-82d4-4f5c-8486-778c43284136">
+        <opqry:queryNode id="5b1f4477" name="Query : Aligned IPA" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-10-22T09:42:33.437-02:30" name="Aligned IPA" uuid="450ef81f-4abc-4b8a-b900-f633ec8b40e9">
                 <script>
-                    <url ref="Phones" rel="stock"/>
+                    <url ref="Aligned IPA" rel="stock"/>
+                    <param id="filters.actualResultFilter.filterType">Phonex</param>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
                     <param id="filters.groupPattern.filterType">Plain text</param>
-                    <param id="filters.primary.filter">.+</param>
                     <param id="filters.searchBy.searchBy">Word</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
                     <param id="filters.syllable.syllableType">Any syllable</param>
+                    <param id="filters.targetResultFilter.filterType">Phonex</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
+                    <param id="searchTier">IPA Target</param>
                 </script>
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="440" y="107"/>
+                <oga:meta x="422" y="117"/>
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="207136ae" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="166f4431">
+            <graph id="32fd71dc">
                 <node id="1c51967a" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="752" y="525"/>
                     </extensions>
@@ -188,9 +168,7 @@ function setup_params(params) {
                 <node id="4af0dd15" type="class:ca.phon.opgraph.nodes.general.TextNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text">
-                                <![CDATA[reportTitle]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text"><![CDATA[reportTitle]]></oga:property>
                         </oga:settings>
                         <oga:meta x="429" y="708"/>
                     </extensions>
@@ -198,9 +176,7 @@ function setup_params(params) {
                 <node id="1d741999" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="430" y="615"/>
                     </extensions>
@@ -208,12 +184,8 @@ function setup_params(params) {
                 <node id="20106c70" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="621" y="617"/>
                     </extensions>
@@ -221,12 +193,8 @@ function setup_params(params) {
                 <node id="613cd7b6" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[toString()]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
                         <oga:meta x="818" y="622"/>
                     </extensions>
@@ -239,17 +207,15 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="obj" ref="1c51967a"/>
             <ogcn:published_output field="value" name="value" ref="613cd7b6"/>
             <extensions>
-                <oga:meta x="372" y="618"/>
+                <oga:meta x="372" y="613"/>
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="23aa4be6b4214b66" name="includePPCNoEpen" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="34edc518">
+            <graph id="65c4c75e">
                 <node id="31d879b4a5f49ed" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="716" y="666"/>
                     </extensions>
@@ -257,9 +223,7 @@ function setup_params(params) {
                 <node id="12d29660d5dd402a" type="class:ca.phon.opgraph.nodes.general.TextNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text">
-                                <![CDATA[filters.ppc.includePPCNoEpen]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text"><![CDATA[filters.ppc.includePPCNoEpen]]></oga:property>
                         </oga:settings>
                         <oga:meta x="482" y="1110"/>
                     </extensions>
@@ -267,9 +231,7 @@ function setup_params(params) {
                 <node id="c1d7cb456130498f" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="481" y="1010"/>
                     </extensions>
@@ -277,12 +239,8 @@ function setup_params(params) {
                 <node id="27029aab93324f93" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[get(java.lang.Object)]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="701" y="1029"/>
                     </extensions>
@@ -290,9 +248,7 @@ function setup_params(params) {
                 <node id="b5160ae421504eef" name="Object" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
                         <oga:meta x="897" y="1038"/>
                     </extensions>
@@ -300,9 +256,7 @@ function setup_params(params) {
                 <node id="db67575f263d486e" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
-                                <![CDATA[java.lang.Boolean]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                         </oga:settings>
                         <oga:meta x="1089" y="1051"/>
                     </extensions>
@@ -316,21 +270,75 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="obj" ref="31d879b4a5f49ed"/>
             <ogcn:published_output field="obj" name="includePPCNoEpen" ref="db67575f263d486e"/>
             <extensions>
-                <oga:meta x="358" y="753"/>
+                <oga:meta x="358" y="748"/>
             </extensions>
         </ogcn:macro>
+        <node id="788f7598" name="Extract Diacritic Options" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <output name="ignoreDiacritics" type="java.lang.Boolean"/>
+            <output name="onlyOrExcept" type="java.lang.Boolean"/>
+            <output name="selectedDiacritics" type="java.util.Collection"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="__script"><![CDATA[importClass(Packages.ca.phon.query.script.params.DiacriticOptionsScriptParam)
+
+var diacriticOptionsParamInfo = {
+	"id": "filters.ppc.diacriticOptions",
+	"desc": "Diacritic Options",
+	"def": false,
+	"retainDia": new java.util.ArrayList()
+};
+var diacriticOptionsParam;
+
+var filters = {
+	"ppc": {
+		"diacriticOptions": {}
+	}
+};
+
+function setup_params(params) {
+	diacriticOptionsParam = new DiacriticOptionsScriptParam(
+		diacriticOptionsParamInfo.id,
+		diacriticOptionsParamInfo.desc,
+		diacriticOptionsParamInfo.def,
+		diacriticOptionsParamInfo.retainDia
+	);
+	params.add(diacriticOptionsParam);	
+}
+
+function init(inputs, outputs) {
+	outputs.add("ignoreDiacritics", "", false, java.lang.Boolean);
+	outputs.add("onlyOrExcept", "", false, java.lang.Boolean);
+	outputs.add("selectedDiacritics", "", false, java.util.Collection);
+}
+
+function run(context) {
+	var ignoreDiacritics = java.lang.Boolean.valueOf(
+		filters.ppc.diacriticOptions.ignoreDiacritics || false);
+	context.put("ignoreDiacritics", ignoreDiacritics);
+
+
+	var onlyOrExcept = false;
+	if(filters.ppc.diacriticOptions.selectionMode) {
+		onlyOrExcept = (filters.ppc.diacriticOptions.selectionMode == "Only");
+	}
+		
+	context.put("onlyOrExcept", onlyOrExcept);
+
+	var selectedDiacritics = filters.ppc.diacriticOptions.selectedDiacritics || new java.util.List();
+	context.put("selectedDiacritics", selectedDiacritics);
+}
+]]></oga:property>
+                </oga:settings>
+                <oga:meta x="45" y="821"/>
+            </extensions>
+        </node>
         <node id="4df37e74" name="Get Listing Title" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <output name="title" type="java.lang.String"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="filters.syllable.otherSyllTypePattern.filterType">
-                        <![CDATA[Plain text]]>
-                    </oga:property>
-                    <oga:property key="filters.syllable.syllableType">
-                        <![CDATA[Any syllable]]>
-                    </oga:property>
-                    <oga:property key="__script">
-                        <![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
+                    <oga:property key="filters.syllable.otherSyllTypePattern.filterType"><![CDATA[Plain text]]></oga:property>
+                    <oga:property key="filters.syllable.syllableType"><![CDATA[Any syllable]]></oga:property>
+                    <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 
@@ -362,27 +370,18 @@ function run(context) {
 
 	context.put("title", title + domain);
 }
-]]>
-                    </oga:property>
+]]></oga:property>
                 </oga:settings>
-                <oga:meta x="366" y="887"/>
+                <oga:meta x="366" y="882"/>
             </extensions>
         </node>
         <node id="556b9255" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="includeSessionInfo">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeSpeakerInfo">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeMetadata">
-                        <![CDATA[true]]>
-                    </oga:property>
-                    <oga:property key="includeTierInfo">
-                        <![CDATA[true]]>
-                    </oga:property>
+                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
                 <oga:meta x="676" y="106"/>
             </extensions>
@@ -392,8 +391,7 @@ function run(context) {
             <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="__script">
-                        <![CDATA[function init(inputs, outputs) {
+                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("includePPCNoEpen", "", false, false);
 	outputs.add("table", "", false, DefaultTableDataSource);
 }
@@ -418,8 +416,7 @@ function run(context) {
 
 	context.put("table", table);
 }
-]]>
-                    </oga:property>
+]]></oga:property>
                 </oga:settings>
                 <oga:meta x="1171" y="633"/>
             </extensions>
@@ -436,26 +433,15 @@ function run(context) {
             <output name="resultsByPhone" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="filters.ppc.onsetType">
-                        <![CDATA[All onsets]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.nucleusType">
-                        <![CDATA[All nuclei]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.codaType">
-                        <![CDATA[All codas]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.clusterType">
-                        <![CDATA[All clusters]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.ppcType">
-                        <![CDATA[Percent phones correct]]>
-                    </oga:property>
-                    <oga:property key="filters.ppc.pattern.filter">
-                        <![CDATA[\w]]>
-                    </oga:property>
-                    <oga:property key="__script">
-                        <![CDATA[importPackage(Packages.ca.phon.ipa.alignment)
+                    <oga:property key="filters.ppc.onsetType"><![CDATA[All onsets]]></oga:property>
+                    <oga:property key="filters.ppc.nucleusType"><![CDATA[All nuclei]]></oga:property>
+                    <oga:property key="filters.ppc.diacriticOptions.selectedDiacritics"><![CDATA[[]]]></oga:property>
+                    <oga:property key="filters.ppc.codaType"><![CDATA[All codas]]></oga:property>
+                    <oga:property key="filters.ppc.diacriticOptions.ignoreDiacritics"><![CDATA[false]]></oga:property>
+                    <oga:property key="filters.ppc.clusterType"><![CDATA[All clusters]]></oga:property>
+                    <oga:property key="filters.ppc.ppcType"><![CDATA[Percent phones correct]]></oga:property>
+                    <oga:property key="filters.ppc.pattern.filter"><![CDATA[\w]]></oga:property>
+                    <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.ipa.alignment)
 
 var PPC = require("lib/PPC").PPC;
 var PPCOptions = require("lib/PPC").PPCOptions;
@@ -585,8 +571,8 @@ function run(context) {
 
 	context.put("ppc", ppc);
 	context.put("resultsByPhone", resultsByPhone);
-}]]>
-                    </oga:property>
+}]]></oga:property>
+                    <oga:property key="filters.ppc.diacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
                 </oga:settings>
                 <oga:meta x="984" y="93"/>
             </extensions>
@@ -603,12 +589,8 @@ function run(context) {
             <output name="tableMap" type="java.util.Map">Map of key -&gt; table values</output>
             <extensions>
                 <oga:settings>
-                    <oga:property key="__scriptName">
-                        <![CDATA[Split Table]]>
-                    </oga:property>
-                    <oga:property key="columnName">
-                        <![CDATA[Speaker]]>
-                    </oga:property>
+                    <oga:property key="__scriptName"><![CDATA[Split Table]]></oga:property>
+                    <oga:property key="columnName"><![CDATA[Speaker]]></oga:property>
                 </oga:settings>
                 <oga:meta x="1265" y="99"/>
             </extensions>
@@ -618,12 +600,8 @@ function run(context) {
             <output name="tableMap" type="java.util.Map">Map of key -&gt; table values</output>
             <extensions>
                 <oga:settings>
-                    <oga:property key="__scriptName">
-                        <![CDATA[Split Table]]>
-                    </oga:property>
-                    <oga:property key="columnName">
-                        <![CDATA[Speaker]]>
-                    </oga:property>
+                    <oga:property key="__scriptName"><![CDATA[Split Table]]></oga:property>
+                    <oga:property key="columnName"><![CDATA[Speaker]]></oga:property>
                 </oga:settings>
                 <oga:meta x="1267" y="257"/>
             </extensions>
@@ -650,16 +628,12 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="d6eb54e5383f44b7" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="45403239">
+            <graph id="17a72cab">
                 <node id="cc87e3415bc44035" name="Current  Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
-                                <![CDATA[currentValue]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                         </oga:settings>
                         <oga:meta x="20" y="27"/>
                     </extensions>
@@ -667,9 +641,7 @@ function run(context) {
                 <node id="d26961af7290446c" name="PPC Table Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="49" y="197"/>
                     </extensions>
@@ -677,24 +649,18 @@ function run(context) {
                 <node id="5369910dcce94aef" name="By Phone Table Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.util.Map]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                         </oga:settings>
                         <oga:meta x="50" y="316"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="1fdb304153aa4455" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6804cc9a">
+                    <graph id="638d688d">
                         <node id="74e89447367042f5" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
-                                        <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
-                                    </oga:property>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
-                                        <![CDATA[currentValue]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="772" y="535"/>
                             </extensions>
@@ -702,9 +668,7 @@ function run(context) {
                     </graph>
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className">
-                                <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                         </oga:settings>
                         <oga:meta x="50" y="433"/>
                     </extensions>
@@ -712,9 +676,7 @@ function run(context) {
                 <node id="407566a6b7484732" name="Summary Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                         </oga:settings>
                         <oga:meta x="80" y="682"/>
                     </extensions>
@@ -722,9 +684,7 @@ function run(context) {
                 <node id="296bf6a4e9349fc" name="includePPCNoEpen" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[java.lang.Boolean]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                         </oga:settings>
                         <oga:meta x="82" y="859"/>
                     </extensions>
@@ -732,12 +692,8 @@ function run(context) {
                 <node id="8ea33bb3bbee4541" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[toString()]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                         </oga:settings>
                         <oga:meta x="205" y="27"/>
                     </extensions>
@@ -745,24 +701,18 @@ function run(context) {
                 <node id="1cd5f59092d04776" name="Global Summary Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                         </oga:settings>
                         <oga:meta x="1301" y="699"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="fbbac83d507343e3" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="384a855c">
+                    <graph id="ceb1016">
                         <node id="db46e4ca7ad84a34" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                        <![CDATA[toString()]]>
-                                    </oga:property>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                        <![CDATA[java.lang.Object]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="105" y="70"/>
                             </extensions>
@@ -770,12 +720,8 @@ function run(context) {
                         <node id="9ae78a72d5474d71" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                        <![CDATA[get(java.lang.Object)]]>
-                                    </oga:property>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                        <![CDATA[java.util.Map]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="296" y="73"/>
                             </extensions>
@@ -786,8 +732,7 @@ function run(context) {
                             <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource">table if exists, undefined otherwise</output>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="__script">
-                                        <![CDATA[
+                                    <oga:property key="__script"><![CDATA[
 // setup input/output fields
 function init(inputFields, outputFields) {
 	inputFields.add("table", "");
@@ -802,8 +747,7 @@ function run(context) {
 	context.put("exists", tableExists);
 	context.put("table", context.get("table"));
 }
-]]>
-                                    </oga:property>
+]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="514" y="94"/>
                             </extensions>
@@ -823,13 +767,11 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="83a128d56baa4161" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="69d9f40">
+                    <graph id="250bd4b">
                         <node id="7d6c1937f07b40fc" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                        <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="28" y="52"/>
                             </extensions>
@@ -837,9 +779,7 @@ function run(context) {
                         <node id="dd9da81e23db4b02" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                        <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="28" y="213"/>
                             </extensions>
@@ -847,9 +787,7 @@ function run(context) {
                         <node id="665cc93d58149bd" name="speaker" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                        <![CDATA[java.lang.Object]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="28" y="433"/>
                             </extensions>
@@ -857,9 +795,7 @@ function run(context) {
                         <node id="50fb1814107f4c2f" name="includePPCNoEpen" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                        <![CDATA[java.lang.Boolean]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="31" y="538"/>
                             </extensions>
@@ -867,9 +803,7 @@ function run(context) {
                         <node id="14561c8115f1481b" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                        <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="34" y="645"/>
                             </extensions>
@@ -877,9 +811,7 @@ function run(context) {
                         <node id="d2ca8ee4346e470c" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                        <![CDATA[java.util.Map]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="30" y="829"/>
                             </extensions>
@@ -887,12 +819,8 @@ function run(context) {
                         <node id="18798b6238914c4d" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                        <![CDATA[toString()]]>
-                                    </oga:property>
-                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                        <![CDATA[java.lang.Object]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="227" y="436"/>
                             </extensions>
@@ -926,26 +854,22 @@ function run(context) {
                         <node id="7e12600f4eed40b9" type="class:ca.phon.app.opgraph.nodes.table.ColumnSumNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="columns">
-                                        <![CDATA[# Target
+                                    <oga:property key="columns"><![CDATA[# Target
 # Actual
 # Correct
 # Substituted
 # Deleted
-# Epenthesized]]>
-                                    </oga:property>
+# Epenthesized]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="692" y="650"/>
                             </extensions>
                         </node>
                         <ogcn:macro id="86926ad138c84356" name="Get Table For Speaker (By Phone)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="7793a750">
+                            <graph id="3530ae30">
                                 <node id="a174d02431dd4d63" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                                <![CDATA[java.util.Map]]>
-                                            </oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="132" y="116"/>
                                     </extensions>
@@ -953,9 +877,7 @@ function run(context) {
                                 <node id="2e6c12d1bd8245a2" name="arg1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                                <![CDATA[java.lang.Object]]>
-                                            </oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="129" y="241"/>
                                     </extensions>
@@ -963,9 +885,7 @@ function run(context) {
                                 <node id="e464397a2194447" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                                <![CDATA[java.util.Map]]>
-                                            </oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="452" y="143"/>
                                     </extensions>
@@ -973,12 +893,8 @@ function run(context) {
                                 <node id="701170af31ec4354" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                                <![CDATA[get(java.lang.Object)]]>
-                                            </oga:property>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                                <![CDATA[java.util.Map]]>
-                                            </oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="656" y="139"/>
                                     </extensions>
@@ -986,9 +902,7 @@ function run(context) {
                                 <node id="842696138d884d83" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
-                                                <![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]>
-                                            </oga:property>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="874" y="148"/>
                                     </extensions>
@@ -1016,8 +930,7 @@ function run(context) {
                             <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="__script">
-                                        <![CDATA[function init(inputs, outputs) {
+                                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("table", "", false, false);
 	inputs.add("includePPCNoEpen", "", false, false);
 
@@ -1055,8 +968,7 @@ function run(context) {
 		}
 	}
 }
-]]>
-                                    </oga:property>
+]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="950" y="631"/>
                             </extensions>
@@ -1085,12 +997,8 @@ function run(context) {
                         <node id="43ef14dbd6c64822" name="Summary Table" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                                        <![CDATA[false]]>
-                                    </oga:property>
-                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns">
-                                        <![CDATA[Total]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[false]]></oga:property>
+                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"><![CDATA[Total]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1120" y="107">
                                     <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
@@ -1105,8 +1013,7 @@ function run(context) {
                             <output name="globalSummary" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="__script">
-                                        <![CDATA[function init(inputs, outputs) {
+                                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("speaker", "", false, false);
 	inputs.add("globalSummary", "", false, false);
 	inputs.add("speakerSummary", "", false, false);
@@ -1136,8 +1043,7 @@ function run(context) {
 		rowData[col++] = speakerSummary.getValueAt(speakerRow, "PPC (NoEpen)");
 	globalSummary.addRow(rowData);
 }
-]]>
-                                    </oga:property>
+]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1493" y="636"/>
                             </extensions>
@@ -1155,9 +1061,7 @@ function run(context) {
                         <node id="f16b07572b024d87" name="IPA Patterns" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                                        <![CDATA[true]]>
-                                    </oga:property>
+                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="1371" y="108">
@@ -1215,8 +1119,7 @@ function run(context) {
                     <output name="globalSummary" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
                     <extensions>
                         <oga:settings>
-                            <oga:property key="__script">
-                                <![CDATA[function init(inputs, outputs) {
+                            <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("speaker", "", false, false);
 	inputs.add("globalSummary", "", false, false);
 	inputs.add("includePPCNoEpen", "", false, false);
@@ -1243,8 +1146,7 @@ function run(context) {
 		rowData[col++] = 0.0;
 	globalSummary.addRow(rowData);
 }
-]]>
-                            </oga:property>
+]]></oga:property>
                         </oga:settings>
                         <oga:meta x="943" y="343"/>
                     </extensions>
@@ -1281,9 +1183,7 @@ function run(context) {
             <ogcn:published_output field="obj" name="summaryTable" ref="1cd5f59092d04776"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className">
-                        <![CDATA[java.util.ArrayList]]>
-                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
                 <oga:meta x="1537" y="163"/>
             </extensions>
@@ -1301,14 +1201,12 @@ function run(context) {
         <node id="6645a41401ae45e7" type="class:ca.phon.app.opgraph.nodes.table.ColumnSumNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="columns">
-                        <![CDATA[# Target
+                    <oga:property key="columns"><![CDATA[# Target
 # Actual
 # Correct
 # Substituted
 # Deleted
-# Epenthesized]]>
-                    </oga:property>
+# Epenthesized]]></oga:property>
                 </oga:settings>
                 <oga:meta x="987" y="781"/>
             </extensions>
@@ -1316,16 +1214,12 @@ function run(context) {
         <node id="4b473b32" name="Listing" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                        <![CDATA[false]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns">
-                        <![CDATA[Date
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[false]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"><![CDATA[Date
 Tier
 Range
 Result
-Alignment]]>
-                    </oga:property>
+Alignment]]></oga:property>
                 </oga:settings>
                 <oga:meta x="942" y="1089">
                     <oga:default for="sectionName" type="java.lang.String">Listing</oga:default>
@@ -1338,8 +1232,7 @@ Alignment]]>
             <output name="table" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="__script">
-                        <![CDATA[function init(inputs, outputs) {
+                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
 	inputs.add("table", "", false, false);
 	inputs.add("includePPCNoEpen", "", false, false);
 
@@ -1378,8 +1271,7 @@ function run(context) {
 		}
 	}
 }
-]]>
-                    </oga:property>
+]]></oga:property>
                 </oga:settings>
                 <oga:meta x="1186" y="786"/>
             </extensions>
@@ -1387,9 +1279,7 @@ function run(context) {
         <node id="b5388b855429419c" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                        <![CDATA[true]]>
-                    </oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
                 <oga:meta x="1469" y="625">
@@ -1400,9 +1290,7 @@ function run(context) {
         <node id="5559087faeb84cb3" name="Diacritic Patterns" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                        <![CDATA[true]]>
-                    </oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
                 <oga:meta x="1490" y="926">
@@ -1411,11 +1299,6 @@ function run(context) {
             </extensions>
         </node>
         <link dest="207136ae" destField="obj" source="dc4dad38c60648c1" sourceField="parameters"/>
-        <link dest="434c072e" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
-        <link dest="434c072e" destField="project" source="1d6fc11b" sourceField="obj"/>
-        <link dest="434c072e" destField="sessions" source="5e629711" sourceField="obj"/>
-        <link dest="556b9255" destField="project" source="434c072e" sourceField="project"/>
-        <link dest="556b9255" destField="results" source="434c072e" sourceField="results"/>
         <link dest="4820f2b261e74cd8" destField="table" source="556b9255" sourceField="table"/>
         <link dest="4820f2b261e74cd8" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
         <link dest="52411a13" destField="reportName" source="207136ae" sourceField="value"/>
@@ -1444,6 +1327,15 @@ function run(context) {
         <link dest="4df37e74" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
         <link dest="4b473b32" destField="sectionName" source="4df37e74" sourceField="title"/>
         <link dest="4b473b32" destField="enabled" source="d6eb54e5383f44b7" sourceField="finished"/>
+        <link dest="5b1f4477" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
+        <link dest="5b1f4477" destField="project" source="1d6fc11b" sourceField="obj"/>
+        <link dest="5b1f4477" destField="sessions" source="5e629711" sourceField="obj"/>
+        <link dest="556b9255" destField="project" source="5b1f4477" sourceField="project"/>
+        <link dest="556b9255" destField="results" source="5b1f4477" sourceField="results"/>
+        <link dest="788f7598" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
+        <link dest="556b9255" destField="ignoreDiacritics" source="788f7598" sourceField="ignoreDiacritics"/>
+        <link dest="556b9255" destField="onlyOrExcept" source="788f7598" sourceField="onlyOrExcept"/>
+        <link dest="556b9255" destField="selectedDiacritics" source="788f7598" sourceField="selectedDiacritics"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Percent Phones Correct">
@@ -1459,7 +1351,7 @@ function run(context) {
             <oga:notes>
                 <oga:note color="0xffff96" height="542" title="Inputs" width="365" x="26" y="11">Default inputs for all Analysis documents</oga:note>
                 <oga:note color="0x9696ff" height="536" title="Query and PPC Analysis" width="546" x="405" y="11">Use phones query to define a set of IPA Target+IPA Actual pairs for analysis.</oga:note>
-                <oga:note color="0xffff96" height="523" title="Params" width="647" x="27" y="562"/>
+                <oga:note color="0xffff96" height="523" title="Params" width="647" x="27" y="561"/>
                 <oga:note color="0x96ff96" height="540" title="PPC Analysis" width="907" x="964" y="13">Run PPC analysis on selected IPA pairs.</oga:note>
                 <oga:note color="0xffc864" height="725" title="Report" width="1089" x="690" y="565">Basic report with Summary and Breakdown sections.  Summary contains totals for the PCC columns created in Query stage</oga:note>
             </oga:notes>
