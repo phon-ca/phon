@@ -15,10 +15,9 @@
  */
 package ca.phon.ipa;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.features.*;
 
 /**
  * Phonetic dimensions

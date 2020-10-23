@@ -15,71 +15,36 @@
  */
 package ca.phon.app.query;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableRowSorter;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
-import org.apache.commons.lang.WordUtils;
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.apache.commons.lang.*;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.decorator.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogBuffer;
-import ca.phon.app.project.ShadowProject;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.project.Project;
-import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetManager;
-import ca.phon.query.db.Script;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptContext;
-import ca.phon.query.script.QueryTask;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.log.*;
+import ca.phon.app.project.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.project.exceptions.*;
+import ca.phon.query.db.*;
+import ca.phon.query.script.*;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
+import ca.phon.session.*;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
+import ca.phon.worker.PhonTask.*;
 
 public class QueryRunnerPanel extends JPanel {
 

@@ -15,16 +15,10 @@
  */
 package ca.phon.ipa.features;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.*;
 
 /**
  * Help class which reads a list of characters

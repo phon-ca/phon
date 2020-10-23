@@ -15,10 +15,7 @@
  */
 package ca.phon.app.opgraph.report.tree;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Tree node for report templates.  

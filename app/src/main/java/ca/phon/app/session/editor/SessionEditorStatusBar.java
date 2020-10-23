@@ -15,36 +15,26 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.time.format.DateTimeFormatter;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.ref.*;
+import java.time.format.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingConstants;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXStatusBar;
-import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXStatusBar.Constraint.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.ByteSize;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
+import ca.phon.app.log.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
+import ca.phon.worker.PhonTask.*;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 

@@ -1,21 +1,15 @@
 package ca.phon.ipamap2;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
-import java.util.function.Predicate;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.util.function.*;
 
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JComponent;
-import javax.swing.ListSelectionModel;
-import javax.swing.Scrollable;
-import javax.swing.event.EventListenerList;
-import javax.swing.plaf.ComponentUI;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.plaf.*;
 
-import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.ipamap.io.Grid;
+import ca.phon.ui.ipamap.io.*;
 
 /**
  * Display a single grid of the IPA Map.

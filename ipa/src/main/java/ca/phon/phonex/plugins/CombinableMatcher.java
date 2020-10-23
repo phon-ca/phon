@@ -15,7 +15,7 @@
  */
 package ca.phon.phonex.plugins;
 
-import ca.phon.phonex.PhoneMatcher;
+import ca.phon.phonex.*;
 
 /**
  * Interface for plug-in matchers which are able to be combined.

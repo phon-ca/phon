@@ -15,16 +15,14 @@
  */
 package ca.phon.ipadictionary;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.*;
 
 /**
  * Rule for handling contractions.

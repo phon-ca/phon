@@ -1,10 +1,8 @@
 package ca.phon.audio;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 /**
  * Audio file types

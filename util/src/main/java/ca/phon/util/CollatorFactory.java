@@ -15,8 +15,8 @@
  */
 package ca.phon.util;
 
-import java.text.Collator;
-import java.util.Locale;
+import java.text.*;
+import java.util.*;
 
 /**
  * Provides static methods for getting

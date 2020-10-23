@@ -1,8 +1,8 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.Color;
+import java.awt.*;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 
 public class TimelineViewColors {
 		

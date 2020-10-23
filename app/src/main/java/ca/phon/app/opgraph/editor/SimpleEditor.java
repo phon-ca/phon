@@ -15,31 +15,25 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.function.BiFunction;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.io.*;
+import java.util.function.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.*;
 
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.library.instantiators.Instantiator;
-import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.project.Project;
-import ca.phon.query.script.QueryScript;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.library.instantiators.*;
+import ca.phon.opgraph.nodes.general.*;
+import ca.phon.project.*;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.icons.*;
 
 /**
  * UI for creating new {@link OpgraphEditor} documents using existing

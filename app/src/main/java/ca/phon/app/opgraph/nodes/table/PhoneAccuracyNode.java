@@ -15,36 +15,27 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.awt.*;
+import java.text.*;
+import java.util.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ipa.tree.IpaTernaryTree;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.Range;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.ipa.tree.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.db.*;
+import ca.phon.query.report.datasource.*;
+import ca.phon.syllable.*;
+import ca.phon.util.*;
 
 /**
  * Accurate, Substitutions, Deletions Node (PhoneAccuracyNode)

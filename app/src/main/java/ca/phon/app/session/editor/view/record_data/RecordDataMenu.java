@@ -15,20 +15,12 @@
  */
 package ca.phon.app.session.editor.view.record_data;
 
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.session.editor.view.record_data.actions.DeleteGroupCommand;
-import ca.phon.app.session.editor.view.record_data.actions.MergeAllGroupsCommand;
-import ca.phon.app.session.editor.view.record_data.actions.MergeGroupCommand;
-import ca.phon.app.session.editor.view.record_data.actions.NewGroupCommand;
-import ca.phon.app.session.editor.view.record_data.actions.SplitGroupCommand;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.view.record_data.actions.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.icons.*;
 
 /**
  * Menu for the Record Data editor view.

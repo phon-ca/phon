@@ -15,7 +15,7 @@
  */
 package ca.phon.app.welcome;
 
-import ca.phon.ui.MultiActionButton;
+import ca.phon.ui.*;
 
 /**
  * Extension point for adding additional action buttons to the

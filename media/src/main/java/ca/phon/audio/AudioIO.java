@@ -1,16 +1,11 @@
 package ca.phon.audio;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.BufferUnderflowException;
-import java.util.Arrays;
-import java.util.logging.Logger;
+import java.io.*;
+import java.nio.*;
+import java.util.*;
+import java.util.logging.*;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.*;
 
 /**
  *

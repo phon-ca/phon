@@ -15,36 +15,22 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.TitledBorder;
+import javax.swing.*;
+import javax.swing.border.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionMediaModel;
-import ca.phon.app.syllabifier.SyllabifierComboBox;
-import ca.phon.ipadictionary.IPADictionaryLibrary;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.Language;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.syllabifier.*;
+import ca.phon.ipadictionary.*;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.*;
 
 /**
  * Panel for editing session editor prefs.

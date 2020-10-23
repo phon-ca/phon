@@ -15,22 +15,17 @@
  */
 package ca.phon.query.script;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Enumeration;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.net.*;
+import java.security.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.plugin.PluginManager;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.plugin.*;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 
 /**
  * Holds the text for a query script.

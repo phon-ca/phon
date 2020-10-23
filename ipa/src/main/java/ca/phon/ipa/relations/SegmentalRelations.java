@@ -15,14 +15,10 @@
  */
 package ca.phon.ipa.relations;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
 
 /**
  * Order of segmental relations: Reduplication, Migration, Metathesis, Harmony, Assimilation

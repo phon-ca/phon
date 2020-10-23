@@ -1,6 +1,6 @@
 package ca.phon.app.phonex;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
 public class StepAction extends PhonexDebuggerAction {
 

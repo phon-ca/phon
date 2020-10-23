@@ -1,49 +1,26 @@
 package ca.phon.app.session;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.query.OpenResultSetSelector;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.project.Project;
-import ca.phon.query.db.ReportHelper;
-import ca.phon.query.db.ResultSet;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.TierViewItem;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.query.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.ipa.*;
+import ca.phon.util.icons.*;
 
 /**
  * UI for editing session export settings.

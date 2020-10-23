@@ -15,35 +15,24 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.TreeMap;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXTitledSeparator;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.tree.IpaTernaryTree;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.ui.text.PromptedTextField;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.tree.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.report.datasource.*;
+import ca.phon.ui.text.*;
 
 @OpNodeInfo(
 		name="Feature Accuracy",

@@ -15,14 +15,13 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.util.icons.*;
 
 public class PlayAction extends SpeechAnalysisEditorViewAction {
 

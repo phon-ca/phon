@@ -16,16 +16,10 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.db.xml.io.resultset.MetaKeyList;
-import ca.phon.query.db.xml.io.resultset.ObjectFactory;
-import ca.phon.query.db.xml.io.resultset.ResultSetType;
-import ca.phon.query.db.xml.io.resultset.ResultType;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.io.resultset.*;
 
 /**
  * XML-based implementation of {@link ResultSet}. 

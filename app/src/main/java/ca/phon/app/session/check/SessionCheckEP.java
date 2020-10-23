@@ -1,11 +1,10 @@
 package ca.phon.app.session.check;
 
-import java.awt.Dimension;
-import java.util.Map;
+import java.awt.*;
+import java.util.*;
 
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.app.modules.*;
+import ca.phon.plugin.*;
 
 @PhonPlugin(name="Session Check")
 public class SessionCheckEP implements IPluginEntryPoint {

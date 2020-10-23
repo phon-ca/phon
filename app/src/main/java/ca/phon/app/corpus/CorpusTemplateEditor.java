@@ -15,13 +15,12 @@
  */
 package ca.phon.app.corpus;
 
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 
-import ca.phon.app.session.editor.RecordEditorPerspective;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
+import ca.phon.app.session.editor.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
 
 public class CorpusTemplateEditor extends SessionEditor {
 

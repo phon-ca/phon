@@ -15,13 +15,12 @@
  */
 package ca.phon.app.menu.workspace;
 
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.Action;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.plugin.PluginAction;
+import ca.phon.plugin.*;
 
 /**
  * Opens the workspace window.

@@ -1,30 +1,17 @@
 package ca.phon.media;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.beans.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.JComponent;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.media.TimeUIModel.Marker;
-import ca.phon.util.MsFormatter;
+import ca.phon.media.TimeUIModel.*;
+import ca.phon.util.*;
 
 public class DefaultTimebarUI extends TimebarUI {
 	

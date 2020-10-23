@@ -15,21 +15,17 @@
  */
 package ca.phon.app.query;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
+import javax.swing.*;
 
-import ca.phon.project.Project;
-import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.QueryScript;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.project.*;
+import ca.phon.query.history.*;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
 
 /**
  * Dialog for saving canned queries.

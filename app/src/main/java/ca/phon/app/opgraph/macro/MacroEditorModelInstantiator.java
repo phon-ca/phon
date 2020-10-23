@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.macro;
 
-import java.io.IOException;
+import java.io.*;
 
-import ca.phon.app.opgraph.editor.EditorModelInstantiator;
-import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator.*;
+import ca.phon.opgraph.*;
+import ca.phon.plugin.*;
 
 @EditorModelInstantiatorMenuInfo(
 		name="Macro",

@@ -15,7 +15,7 @@
  */
 package ca.phon.app.hooks;
 
-import ca.phon.plugin.PluginException;
+import ca.phon.plugin.*;
 
 /**
  * Interface used to perform operations before Phon is

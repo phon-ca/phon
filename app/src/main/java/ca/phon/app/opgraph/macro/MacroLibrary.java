@@ -15,31 +15,21 @@
  */
 package ca.phon.app.opgraph.macro;
 
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.MenuElement;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.project.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.resources.*;
 
 public class MacroLibrary {
 	

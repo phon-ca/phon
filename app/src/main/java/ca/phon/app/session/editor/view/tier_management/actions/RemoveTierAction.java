@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.view.tier_management.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.RemoveTierEdit;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.session.*;
 
 public class RemoveTierAction extends TierManagementAction {
 

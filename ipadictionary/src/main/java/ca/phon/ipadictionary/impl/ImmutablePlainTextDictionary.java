@@ -15,37 +15,18 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import ca.hedlund.tst.TernaryTree;
-import ca.phon.ipadictionary.ContractionRule;
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.BackingStoreException;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
-import ca.phon.ipadictionary.spi.GenerateSuggestions;
-import ca.phon.ipadictionary.spi.IPADictionarySPI;
-import ca.phon.ipadictionary.spi.LanguageInfo;
-import ca.phon.ipadictionary.spi.Metadata;
-import ca.phon.ipadictionary.spi.NameInfo;
-import ca.phon.ipadictionary.spi.OrthoKeyIterator;
-import ca.phon.ipadictionary.spi.PrefixSearch;
-import ca.phon.util.Language;
-import ca.phon.util.Tuple;
+import ca.hedlund.tst.*;
+import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.exceptions.*;
+import ca.phon.ipadictionary.spi.*;
+import ca.phon.util.*;
 
 /**
  * Implements the basic dictionary format used by Phon.

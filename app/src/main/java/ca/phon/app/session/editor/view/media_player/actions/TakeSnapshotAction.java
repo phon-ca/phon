@@ -15,11 +15,11 @@
  */
 package ca.phon.app.session.editor.view.media_player.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.ui.action.*;
 
 public class TakeSnapshotAction extends MediaPlayerAction {
 

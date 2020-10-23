@@ -15,19 +15,11 @@
  */
 package ca.phon.syllable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.ipa.CompoundPhone;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.IntraWordPause;
-import ca.phon.ipa.Phone;
-import ca.phon.ipa.StressMarker;
-import ca.phon.ipa.StressType;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.ipa.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * A phone visitor that breaks a list of phones

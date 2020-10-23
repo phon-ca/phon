@@ -15,11 +15,9 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.ipa.Diacritic;
+import ca.phon.ipa.*;
 
 public class InventorySettings implements Cloneable, IgnoreDiacriticsSettings {
 	

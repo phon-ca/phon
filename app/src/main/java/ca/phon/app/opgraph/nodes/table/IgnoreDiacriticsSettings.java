@@ -1,8 +1,8 @@
 package ca.phon.app.opgraph.nodes.table;
 
-import java.util.Collection;
+import java.util.*;
 
-import ca.phon.ipa.Diacritic;
+import ca.phon.ipa.*;
 
 /**
  * Implemented by inventory settings objects which use the ignore diacritics

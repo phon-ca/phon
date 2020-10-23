@@ -15,18 +15,13 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
+import java.io.*;
+import java.text.*;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterType;
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.util.PhonConstants;
+import au.com.bytecode.opencsv.*;
+import ca.phon.formatter.*;
+import ca.phon.ipa.*;
+import ca.phon.util.*;
 
 @FormatterType(value=TableDataSource.class)
 public class TableDataSourceFormatter implements Formatter<TableDataSource> {

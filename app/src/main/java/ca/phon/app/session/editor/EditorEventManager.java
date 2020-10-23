@@ -15,17 +15,11 @@
  */
 package ca.phon.app.session.editor;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.lang.ref.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.worker.*;
 
 /**
  * <p>Handles passing of internal EditorEvents.  Events can be dispatched on the AWT event

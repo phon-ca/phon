@@ -15,40 +15,23 @@
  */
 package ca.phon.app.project;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.Scrollable;
-import javax.swing.border.MatteBorder;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.welcome.LocalProjectButton;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.ui.PhonGuiConstants;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.OSInfo;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.hedlund.desktopicons.*;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.app.welcome.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 public class RecentProjectsList extends JPanel {
 

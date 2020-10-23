@@ -15,36 +15,14 @@
  */
 package ca.phon.ui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
 
-import javax.swing.BoundedRangeModel;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.LookAndFeel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicGraphicsUtils;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.plaf.*;
+import javax.swing.plaf.basic.*;
 
 public class DefaultRangeSliderUI extends RangeSliderUI implements SwingConstants {
 //	static {

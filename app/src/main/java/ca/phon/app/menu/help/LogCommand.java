@@ -15,10 +15,10 @@
  */
 package ca.phon.app.menu.help;
 
-import javax.swing.Action;
+import javax.swing.*;
 
-import ca.phon.app.log.LogViewerEP;
-import ca.phon.plugin.PluginAction;
+import ca.phon.app.log.*;
+import ca.phon.plugin.*;
 
 /**
  * Show log viewer window

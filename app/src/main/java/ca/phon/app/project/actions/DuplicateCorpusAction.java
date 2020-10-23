@@ -15,19 +15,17 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.project.Project;
-import ca.phon.util.CollatorFactory;
+import ca.phon.app.project.*;
+import ca.phon.project.*;
+import ca.phon.util.*;
 
 /**
  * Duplicate selected corpora in the project window. Corpus names

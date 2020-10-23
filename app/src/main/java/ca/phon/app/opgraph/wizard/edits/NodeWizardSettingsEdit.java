@@ -15,13 +15,10 @@
  */
 package ca.phon.app.opgraph.wizard.edits;
 
-import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.*;
 
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpNode;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.opgraph.*;
 
 public class NodeWizardSettingsEdit extends AbstractUndoableEdit {
 	

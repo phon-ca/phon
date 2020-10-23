@@ -15,40 +15,21 @@
  */
 package ca.phon.query.report.csv;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import javax.xml.bind.JAXBElement;
+import javax.xml.bind.*;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.report.ReportBuilder;
-import ca.phon.query.report.ReportBuilderException;
-import ca.phon.query.report.datasource.InventoryDataSource;
-import ca.phon.query.report.datasource.ParamDataSource;
-import ca.phon.query.report.datasource.ResultListingDataSource;
-import ca.phon.query.report.datasource.SummaryDataSource;
-import ca.phon.query.report.io.AggregrateInventory;
-import ca.phon.query.report.io.CommentSection;
+import au.com.bytecode.opencsv.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.query.report.*;
+import ca.phon.query.report.datasource.*;
+import ca.phon.query.report.io.*;
 import ca.phon.query.report.io.Group;
-import ca.phon.query.report.io.InventorySection;
-import ca.phon.query.report.io.ParamSection;
-import ca.phon.query.report.io.ReportDesign;
-import ca.phon.query.report.io.ResultListing;
-import ca.phon.query.report.io.Section;
-import ca.phon.query.report.io.SummarySection;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
-import ca.phon.session.Sex;
-import ca.phon.session.format.AgeFormatter;
-import ca.phon.session.format.DateFormatter;
-import ca.phon.util.OSInfo;
+import ca.phon.session.*;
+import ca.phon.session.format.*;
+import ca.phon.util.*;
 
 /**
  * CSV report builder implementation.

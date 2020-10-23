@@ -15,17 +15,13 @@
  */
 package ca.phon.app.session.check;
 
-import java.util.Properties;
+import java.util.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.Rank;
-import ca.phon.session.Session;
-import ca.phon.session.check.SessionCheck;
-import ca.phon.session.check.SessionValidator;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
+import ca.phon.session.check.*;
 
 @PhonPlugin(name="Check Segment Bounds", comments="Ensure media segments are within bounds")
 @Rank(4)

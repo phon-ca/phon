@@ -15,8 +15,8 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.features.*;
+import ca.phon.syllable.*;
 
 /**
  * Represents a boundary between words (i.e., a 'space'.)

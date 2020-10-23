@@ -15,11 +15,9 @@
  */
 package ca.phon.session.io;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 /**
  * Factory for creating {@link SessionWriter}s

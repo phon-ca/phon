@@ -1,17 +1,12 @@
 package ca.phon.media;
 
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
-import java.awt.Rectangle;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.beans.*;
 
-import javax.swing.JComponent;
-import javax.swing.plaf.ComponentUI;
+import javax.swing.*;
+import javax.swing.plaf.*;
 
-import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.*;
 
 /**
  * Base class for components which display information on a horizontal timeline

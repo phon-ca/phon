@@ -15,14 +15,13 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import org.commonmark.Extension;
-import org.commonmark.ext.gfm.tables.TablesExtension;
-import org.commonmark.html.HtmlRenderer;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
+import org.commonmark.*;
+import org.commonmark.ext.gfm.tables.*;
+import org.commonmark.html.*;
+import org.commonmark.node.*;
+import org.commonmark.parser.*;
 
 /**
  * Title, message, and message format.

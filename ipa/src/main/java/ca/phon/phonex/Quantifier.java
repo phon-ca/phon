@@ -15,7 +15,7 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.fsa.TransitionType;
+import ca.phon.fsa.*;
 
 /**
  * Quantifier for the phonex language.

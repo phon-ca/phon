@@ -1,6 +1,6 @@
 package ca.phon.app.session.editor;
 
-import java.util.EventListener;
+import java.util.*;
 
 public interface EditorViewListener extends EventListener {
 

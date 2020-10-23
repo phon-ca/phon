@@ -15,34 +15,24 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.text.NumberFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.io.*;
+import java.text.*;
+import java.time.*;
+import java.time.format.*;
+import java.util.concurrent.locks.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
 import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+import org.jdesktop.swingx.painter.effects.*;
 
-import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.ui.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.worker.*;
 
 public class LocalProjectButton extends MultiActionButton {
 

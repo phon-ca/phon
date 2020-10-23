@@ -15,18 +15,15 @@
  */
 package ca.phon.app.menu.analysis;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.opgraph.analysis.AnalysisLibrary;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.opgraph.analysis.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.*;
 
 public class AnalysisMenuListener implements MenuListener {
 

@@ -15,9 +15,8 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
 
 /**
  * Class to match phones based on 

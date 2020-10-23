@@ -1,29 +1,22 @@
 package ca.phon.app.session.editor;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.locks.*;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
-import ca.phon.audio.AudioIO;
-import ca.phon.audio.AudioIOException;
-import ca.phon.media.LongSound;
-import ca.phon.media.MediaLocator;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.log.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.audio.*;
+import ca.phon.media.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.*;
 
 /**
  * Media model for a session editor.

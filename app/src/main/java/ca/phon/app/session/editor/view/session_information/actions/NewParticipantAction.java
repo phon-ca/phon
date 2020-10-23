@@ -15,18 +15,16 @@ we3e * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
  */
 package ca.phon.app.session.editor.view.session_information.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddParticipantEdit;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.session.Participant;
-import ca.phon.session.SessionFactory;
-import ca.phon.ui.participant.ParticipantEditor;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.session_information.*;
+import ca.phon.session.*;
+import ca.phon.ui.participant.*;
+import ca.phon.util.icons.*;
 
 public class NewParticipantAction extends SessionInfoAction {
 

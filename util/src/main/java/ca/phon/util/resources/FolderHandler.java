@@ -15,9 +15,8 @@
  */
 package ca.phon.util.resources;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 /**
  * Scans a folder for files.  Scanning can be recursive and

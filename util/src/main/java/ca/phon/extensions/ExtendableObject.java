@@ -1,6 +1,6 @@
 package ca.phon.extensions;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Object with extension support enabled.

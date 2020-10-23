@@ -15,20 +15,18 @@
  */
 package ca.phon.query.script;
 
-import java.util.Iterator;
+import java.util.*;
 
-import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.*;
 
-import ca.phon.project.Project;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.script.QueryScript.QueryFunction;
-import ca.phon.script.PhonScriptException;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.query.script.QueryScript.*;
+import ca.phon.script.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.util.Range;
-import ca.phon.worker.PhonTask;
+import ca.phon.util.*;
+import ca.phon.worker.*;
 
 /**
  * Run a query given a project, session and query script.

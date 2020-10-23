@@ -15,16 +15,13 @@
  */
 package ca.phon.ui.action;
 
-import java.awt.event.ActionEvent;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.awt.event.*;
+import java.lang.ref.*;
+import java.lang.reflect.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import ca.phon.worker.PhonWorker;
+import ca.phon.worker.*;
 
 /**
  * <p>Swing action for Phon controls.  Allows for easy

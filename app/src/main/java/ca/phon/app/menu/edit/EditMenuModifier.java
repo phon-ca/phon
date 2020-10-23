@@ -1,7 +1,6 @@
 package ca.phon.app.menu.edit;
 
-import javax.swing.JComponent;
-import javax.swing.JMenu;
+import javax.swing.*;
 
 @FunctionalInterface
 public interface EditMenuModifier {

@@ -15,21 +15,11 @@
  */
 package ca.phon.ui.decorations;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.*;
+import javax.swing.plaf.basic.*;
 
 /**
  * Tab component based on ButtonTabComponent.java 

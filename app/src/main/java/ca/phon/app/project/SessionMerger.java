@@ -15,26 +15,14 @@
  */
 package ca.phon.app.project;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.project.Project;
-import ca.phon.session.Participant;
+import ca.phon.project.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionPath;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
-import ca.phon.session.filter.RangeRecordFilter;
-import ca.phon.session.filter.RecordFilter;
-import ca.phon.worker.PhonTask;
+import ca.phon.session.filter.*;
+import ca.phon.worker.*;
 
 /**
  * Handle merging of sessions

@@ -15,12 +15,11 @@
  */
 package ca.phon.app.theme;
 
-import javax.swing.UIDefaults;
+import javax.swing.*;
 
-import org.pushingpixels.lafwidget.LafWidget;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.fonts.FontPolicy;
-import org.pushingpixels.substance.api.fonts.FontSet;
+import org.pushingpixels.lafwidget.*;
+import org.pushingpixels.substance.api.*;
+import org.pushingpixels.substance.api.fonts.*;
 
 public class PhonSubstanceLookAndFeel extends SubstanceLookAndFeel {
 

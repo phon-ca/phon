@@ -15,12 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 
 public class PlayAdjacencySequenceAction extends PlaySegmentAction {
 	

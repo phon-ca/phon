@@ -15,20 +15,18 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.app.session.RecordTransferable;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddRecordEdit;
+import ca.phon.app.session.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
 import ca.phon.session.Record;
 
 /**

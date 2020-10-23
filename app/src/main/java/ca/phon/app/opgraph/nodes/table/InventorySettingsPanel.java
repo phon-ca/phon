@@ -15,43 +15,25 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
-import ca.phon.query.script.params.DiacriticOptionsPanel;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.text.PromptedTextField;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.*;
+import ca.phon.query.script.params.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.text.*;
+import ca.phon.util.icons.*;
 
 /**
  * Settings for inventory.

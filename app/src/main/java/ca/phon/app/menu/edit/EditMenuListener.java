@@ -15,17 +15,14 @@
  */
 package ca.phon.app.menu.edit;
 
-import java.awt.Window;
-import java.lang.ref.WeakReference;
+import java.awt.*;
+import java.lang.ref.*;
 
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-import javax.swing.undo.UndoManager;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.undo.*;
 
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 
 public class EditMenuListener implements MenuListener {
 	

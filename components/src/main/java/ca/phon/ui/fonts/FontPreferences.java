@@ -15,14 +15,13 @@
  */
 package ca.phon.ui.fonts;
 
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.ui.FontFormatter;
-import ca.phon.util.PrefHelper;
+import ca.phon.ui.*;
+import ca.phon.util.*;
 
 public class FontPreferences {
 	

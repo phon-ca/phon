@@ -15,7 +15,7 @@
  */
 package ca.phon.worker;
 
-import java.util.EventListener;
+import java.util.*;
 
 /**
  *

@@ -15,13 +15,11 @@
  */
 package ca.phon.app.menu.edit;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
-import javax.swing.undo.UndoManager;
+import javax.swing.*;
+import javax.swing.undo.*;
 
 /**
  * Handle the redo command for a given {@link UndoManager}

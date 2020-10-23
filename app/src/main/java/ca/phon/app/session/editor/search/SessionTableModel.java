@@ -15,15 +15,12 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.*;
 
-import ca.phon.session.Participant;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
 
 public class SessionTableModel extends AbstractTableModel {
 	

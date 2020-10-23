@@ -15,22 +15,17 @@
  */
 package ca.phon.app.session.editor.view.session_information.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.ParticipantUndoableEdit;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.session.Participant;
-import ca.phon.session.Participants;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.session_information.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.ui.participant.ParticipantEditor;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.participant.*;
+import ca.phon.util.icons.*;
 
 public class EditParticipantAction extends SessionInfoAction {
 

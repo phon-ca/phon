@@ -1,20 +1,11 @@
 package ca.phon.ui;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.util.*;
 
-import javax.swing.Action;
-import javax.swing.DefaultButtonModel;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 
 /**
  * {@link JButton} with a drop-down component.

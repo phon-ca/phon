@@ -15,14 +15,9 @@
  */
 package ca.phon.session.io.xml.v12;
 
-import ca.phon.orthography.OrthoComment;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoEvent;
-import ca.phon.orthography.OrthoPunct;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.OrthoWordnet;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.orthography.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Converts the visited orthography elements into a

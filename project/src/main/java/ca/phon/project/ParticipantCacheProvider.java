@@ -15,9 +15,7 @@
  */
 package ca.phon.project;
 
-import ca.phon.extensions.Extension;
-import ca.phon.extensions.ExtensionProvider;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 
 @Extension(Project.class)
 public class ParticipantCacheProvider implements ExtensionProvider {

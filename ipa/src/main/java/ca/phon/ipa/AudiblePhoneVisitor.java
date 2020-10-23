@@ -15,12 +15,10 @@
  */
 package ca.phon.ipa;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Visitor for filtering a list of phones into a list of 

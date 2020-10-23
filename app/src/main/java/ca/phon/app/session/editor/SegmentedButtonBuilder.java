@@ -15,19 +15,13 @@
  */
 package ca.phon.app.session.editor;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
-import javax.swing.AbstractButton;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import org.pushingpixels.substance.api.SubstanceConstants.Side;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.*;
+import org.pushingpixels.substance.api.SubstanceConstants.*;
 
 /**
  * Utility methods for creating segmented buttons.

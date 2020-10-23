@@ -15,23 +15,18 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import javax.xml.namespace.QName;
+import javax.xml.namespace.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.xml.XMLConstants;
+import ca.phon.opgraph.nodes.general.*;
+import ca.phon.xml.*;
 
 /**
  * Extension for {@link OpGraph}s created using the {@link SimpleEditorPanel}.

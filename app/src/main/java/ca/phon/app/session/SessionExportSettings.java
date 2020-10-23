@@ -1,13 +1,12 @@
 package ca.phon.app.session;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.prefs.Preferences;
+import java.util.*;
+import java.util.prefs.*;
 
-import ca.phon.query.db.ResultSet;
-import ca.phon.session.TierViewItem;
-import ca.phon.session.filter.RecordFilter;
-import ca.phon.util.PrefHelper;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
+import ca.phon.session.filter.*;
+import ca.phon.util.*;
 
 /**
  * Common options use when exporting sessions.

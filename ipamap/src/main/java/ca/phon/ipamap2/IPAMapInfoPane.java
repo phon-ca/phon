@@ -1,30 +1,20 @@
 package ca.phon.ipamap2;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.JXCollapsiblePane.Direction;
-import org.jdesktop.swingx.JXStatusBar;
-import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
+import org.apache.commons.lang3.*;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.*;
+import org.jdesktop.swingx.JXStatusBar.Constraint.*;
 
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.parser.IPATokens;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.parser.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.ipamap.io.*;
 
 public class IPAMapInfoPane extends JPanel {
 	

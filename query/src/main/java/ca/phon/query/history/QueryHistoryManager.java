@@ -15,18 +15,12 @@
  */
 package ca.phon.query.history;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.script.params.history.ObjectFactory;
-import ca.phon.script.params.history.ParamHistoryManager;
-import ca.phon.script.params.history.ParamHistoryType;
-import ca.phon.util.PrefHelper;
+import ca.phon.query.script.*;
+import ca.phon.script.params.history.*;
+import ca.phon.util.*;
 
 /**
  * Responsible for loading and saving query history files. Also includes

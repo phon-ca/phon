@@ -15,9 +15,9 @@
  */
 package ca.phon.ipa.relations;
 
-import java.util.Optional;
+import java.util.*;
 
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.alignment.*;
 
 public interface SegmentalRelationDetector {
 	

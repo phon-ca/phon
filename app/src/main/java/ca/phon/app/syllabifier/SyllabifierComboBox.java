@@ -1,20 +1,13 @@
 package ca.phon.app.syllabifier;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.*;
 
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.util.Language;
+import ca.phon.syllabifier.*;
+import ca.phon.util.*;
 
 public class SyllabifierComboBox extends JComboBox<Syllabifier> {
 	

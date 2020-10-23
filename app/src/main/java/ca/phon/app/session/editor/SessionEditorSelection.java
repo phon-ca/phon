@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.phon.util.Range;
+import ca.phon.util.*;
 
 /**
  * Selection information used for {@link EditorSelectionModel}

@@ -15,28 +15,20 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.nodes.query.ColumnOptionsPanel;
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.util.Tuple;
+import ca.phon.app.opgraph.nodes.query.*;
+import ca.phon.formatter.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.report.datasource.*;
+import ca.phon.util.*;
 
 @OpNodeInfo(
 		name="Token Summary",

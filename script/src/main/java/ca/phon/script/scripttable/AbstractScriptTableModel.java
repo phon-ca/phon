@@ -15,39 +15,20 @@
  */
 package ca.phon.script.scripttable;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import javax.script.ScriptException;
-import javax.swing.table.AbstractTableModel;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
+import javax.script.*;
+import javax.swing.table.*;
+import javax.xml.bind.*;
+import javax.xml.stream.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeJavaObject;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
-import org.mozilla.javascript.WrapFactory;
+import org.apache.logging.log4j.*;
+import org.mozilla.javascript.*;
 
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.scripttable.io.ObjectFactory;
-import ca.phon.script.scripttable.io.ScriptTable;
-import ca.phon.script.scripttable.io.ScriptTableColumn;
+import ca.phon.script.*;
+import ca.phon.script.scripttable.io.*;
 
 /**
  * <p>Abstract implementation of {@link ScriptTableModel}.  The class include

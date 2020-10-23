@@ -15,33 +15,15 @@
  */
 package ca.phon.ui.decorations;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Composite;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
+import java.awt.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
 
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.GlossPainter;
-import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.*;
 import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.PinstripePainter;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.fonts.*;
+import ca.phon.util.icons.*;
 
 /**
  * A header component meant to be placed at the top of a dialog.

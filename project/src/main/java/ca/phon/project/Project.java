@@ -15,21 +15,13 @@
  */
 package ca.phon.project;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 
-import ca.phon.extensions.IExtendable;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
-import ca.phon.session.io.SessionReader;
-import ca.phon.session.io.SessionWriter;
+import ca.phon.extensions.*;
+import ca.phon.session.*;
+import ca.phon.session.io.*;
 
 /**
  * Interface for a phon project.

@@ -16,7 +16,7 @@
 
 package ca.phon.ui.ipa;
 
-import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.*;
 
 /**
  *

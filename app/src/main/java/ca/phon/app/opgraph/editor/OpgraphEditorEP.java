@@ -15,13 +15,13 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.io.File;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
-import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.app.opgraph.macro.*;
+import ca.phon.plugin.*;
 
 public class OpgraphEditorEP implements IPluginEntryPoint {
 

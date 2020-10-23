@@ -15,20 +15,14 @@
  */
 package ca.phon.app.session.editor.search;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.table.TableModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.text.TableSearchField;
+import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.text.*;
 
 /**
  * Overrides the default table search field so that the row

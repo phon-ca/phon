@@ -15,8 +15,7 @@
  */
 package ca.phon.formatter;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
+import java.util.*;
 
 /**
  * Provides classpath access to formatters based on entries

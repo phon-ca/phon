@@ -15,22 +15,17 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.io.*;
+import java.lang.reflect.*;
 
-import javax.xml.namespace.QName;
+import javax.xml.namespace.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.xml.XMLConstants;
+import ca.phon.xml.*;
 
 public class NodeWizardXMLSerializer implements XMLSerializer {
 	

@@ -15,14 +15,11 @@
  */
 package ca.phon.phonex;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.PhonexMatcherReference;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.ipa.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 	

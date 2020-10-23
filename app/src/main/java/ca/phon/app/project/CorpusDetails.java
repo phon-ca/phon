@@ -15,43 +15,20 @@
  */
 package ca.phon.app.project;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.nio.file.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.StockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
-import ca.phon.app.log.LogUtil;
-import ca.phon.project.Project;
-import ca.phon.ui.DropDownIcon;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.OSInfo;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.hedlund.desktopicons.*;
+import ca.phon.app.log.*;
+import ca.phon.project.*;
+import ca.phon.ui.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 /**
  * Corpus details for project manager.

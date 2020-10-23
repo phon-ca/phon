@@ -15,15 +15,12 @@
  */
 package ca.phon.ipa;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.extensions.*;
 
 /**
  * Class for building {@link IPATranscript}s.

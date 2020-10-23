@@ -15,20 +15,13 @@
  */
 package ca.phon.ipa.alignment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
-import ca.phon.alignment.AlignmentMap;
-import ca.phon.alignment.IndelAligner;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.PhoneticProfile;
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.syllable.SyllableStress;
+import ca.phon.alignment.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
+import ca.phon.syllable.*;
 
 /**
  * Implementation of {@link IndelAligner} for {@link IPATranscript}s.

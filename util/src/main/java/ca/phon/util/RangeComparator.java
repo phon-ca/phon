@@ -15,7 +15,7 @@
  */
 package ca.phon.util;
 
-import java.util.Comparator;
+import java.util.*;
 
 public class RangeComparator implements Comparator<Range> {
 

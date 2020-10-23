@@ -15,25 +15,19 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.BorderLayout;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.*;
 
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierDescription;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.worker.*;
 
 
 /**

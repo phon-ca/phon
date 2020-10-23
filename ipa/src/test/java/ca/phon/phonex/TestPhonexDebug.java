@@ -1,16 +1,13 @@
 package ca.phon.phonex;
 
-import java.util.Arrays;
+import java.util.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import ca.phon.fsa.FSAState;
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.SimpleFSADebugContext;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.fsa.*;
+import ca.phon.ipa.*;
 
 @RunWith(JUnit4.class)
 public class TestPhonexDebug {

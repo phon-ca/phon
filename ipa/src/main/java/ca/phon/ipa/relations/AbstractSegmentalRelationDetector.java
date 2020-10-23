@@ -15,15 +15,11 @@
  */
 package ca.phon.ipa.relations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.PhoneticProfile;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ipa.relations.SegmentalRelation.Relation;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.ipa.relations.SegmentalRelation.*;
 
 public abstract class AbstractSegmentalRelationDetector implements SegmentalRelationDetector {
 	

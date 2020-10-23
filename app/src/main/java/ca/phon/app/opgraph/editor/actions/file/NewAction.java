@@ -15,18 +15,15 @@
  */
 package ca.phon.app.opgraph.editor.actions.file;
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.editor.EditorModelInstantiator;
-import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator.*;
+import ca.phon.app.opgraph.editor.actions.*;
+import ca.phon.opgraph.*;
+import ca.phon.ui.nativedialogs.*;
 
 /**
  * Show new graph dialog for the node editor

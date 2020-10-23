@@ -15,20 +15,17 @@
  */
 package ca.phon.app.opgraph.editor.actions.debug;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Optional;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.actions.*;
+import ca.phon.extensions.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 public class StopAction extends OpgraphEditorAction {
 

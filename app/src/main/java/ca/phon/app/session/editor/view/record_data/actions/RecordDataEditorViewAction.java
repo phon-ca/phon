@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.record_data.actions;
 
-import javax.swing.AbstractAction;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.app.session.editor.view.record_data.*;
 import ca.phon.session.Record;
 
 public abstract class RecordDataEditorViewAction extends AbstractAction {

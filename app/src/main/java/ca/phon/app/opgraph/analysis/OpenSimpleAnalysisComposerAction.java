@@ -15,18 +15,17 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.util.concurrent.Future;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.concurrent.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.Project;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.opgraph.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
 
 public class OpenSimpleAnalysisComposerAction extends HookableAction {
 	

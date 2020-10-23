@@ -15,20 +15,18 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.lang.ref.WeakReference;
-import java.text.ParseException;
+import java.lang.ref.*;
+import java.text.*;
 
-import javax.swing.JToolTip;
+import javax.swing.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.jdesktop.swingx.VerticalLayout;
+import org.apache.logging.log4j.*;
+import org.jdesktop.swingx.*;
 
-import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.AlternativeTranscript;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcriber;
-import ca.phon.syllabifier.Syllabifier;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
 
 /**
  * Editor for IPA Transcriptions (validated and blind.)

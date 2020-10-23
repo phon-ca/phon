@@ -15,36 +15,19 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.JCrypt;
+import ca.phon.session.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.toast.*;
+import ca.phon.util.*;
 
 public class TranscriberSelectionDialog extends JDialog {
 	

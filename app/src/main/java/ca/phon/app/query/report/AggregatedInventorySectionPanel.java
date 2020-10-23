@@ -15,7 +15,7 @@
  */
 package ca.phon.app.query.report;
 
-import ca.phon.query.report.io.AggregrateInventory;
+import ca.phon.query.report.io.*;
 
 public class AggregatedInventorySectionPanel extends InventorySectionPanel {
 	

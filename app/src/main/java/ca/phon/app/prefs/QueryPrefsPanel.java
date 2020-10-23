@@ -1,8 +1,8 @@
 package ca.phon.app.prefs;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
-import ca.phon.app.query.QueryAndReportWizardSettingsPanel;
+import ca.phon.app.query.*;
 
 public class QueryPrefsPanel extends PrefsPanel {
 

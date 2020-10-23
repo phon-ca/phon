@@ -15,22 +15,17 @@
  */
 package ca.phon.app.query;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
+import javax.swing.*;
 
-import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.OSInfo;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 /**
  * Custom dialog for editing query information.

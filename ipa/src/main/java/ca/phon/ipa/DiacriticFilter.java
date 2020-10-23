@@ -15,12 +15,12 @@
  */
 package ca.phon.ipa;
 
-import java.util.Arrays;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Visit each element in a {@link IPATranscript} and create a new 

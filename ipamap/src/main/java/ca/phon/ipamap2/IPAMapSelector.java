@@ -1,28 +1,17 @@
 package ca.phon.ipamap2;
 
-import java.awt.BorderLayout;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.ipamap.io.Grid;
-import ca.phon.ui.ipamap.io.ObjectFactory;
-import ca.phon.ui.tristatecheckbox.TristateCheckBox;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.ipamap.io.*;
+import ca.phon.ui.tristatecheckbox.*;
 
 /**
  * Allows for selection of a set of IPA elements.

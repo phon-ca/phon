@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.view.check.actions;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.session.editor.view.check.SessionCheckView;
+import ca.phon.app.hooks.*;
+import ca.phon.app.session.editor.view.check.*;
 
 public abstract class SessionCheckViewAction extends HookableAction {
 	

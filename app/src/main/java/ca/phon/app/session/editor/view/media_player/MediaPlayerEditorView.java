@@ -16,69 +16,32 @@
 
 package ca.phon.app.session.editor.view.media_player;
 
-import java.awt.BorderLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.io.*;
+import java.text.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-import javax.swing.text.MaskFormatter;
+import javax.swing.*;
+import javax.swing.text.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.jdesktop.swingx.VerticalLayout;
+import org.apache.logging.log4j.*;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.session.EditorViewAdapter;
-import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.DockPosition;
-import ca.phon.app.session.editor.EditorAction;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.ErrorBanner;
-import ca.phon.app.session.editor.RunOnEDT;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionMediaModel;
-import ca.phon.app.session.editor.actions.AssignMediaAction;
-import ca.phon.app.session.editor.undo.MediaLocationEdit;
-import ca.phon.app.session.editor.view.media_player.actions.GoToAction;
-import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
-import ca.phon.app.session.editor.view.media_player.actions.TakeSnapshotAction;
-import ca.phon.app.session.editor.view.media_player.actions.ToggleAdjustVideoAction;
-import ca.phon.media.MediaLocator;
-import ca.phon.media.VLCHelper;
-import ca.phon.media.player.IMediaMenuFilter;
-import ca.phon.media.player.PhonMediaPlayer;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Participant;
+import ca.phon.app.session.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.media_player.actions.*;
+import ca.phon.media.*;
+import ca.phon.media.player.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.ui.action.*;
+import ca.phon.ui.dnd.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.MsFormatter;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 /**
  * Panel for embedded media player for editor.

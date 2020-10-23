@@ -15,29 +15,15 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.Dimension;
-import java.awt.IllegalComponentStateException;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JWindow;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.text.JTextComponent;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
 
-import ca.phon.formatter.FormatterUtil;
+import ca.phon.formatter.*;
 
 public class TextCompleter implements DocumentListener, FocusListener, KeyListener, ListSelectionListener {
 

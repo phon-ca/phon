@@ -15,31 +15,19 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.commonmark.Extension;
-import org.commonmark.ext.gfm.tables.TablesExtension;
-import org.commonmark.html.HtmlRenderer;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
+import org.commonmark.*;
+import org.commonmark.ext.gfm.tables.*;
+import org.commonmark.html.*;
+import org.commonmark.node.*;
+import org.commonmark.parser.*;
 
-import ca.phon.app.VersionInfo;
-import ca.phon.app.html.HTMLConstants;
-import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.app.opgraph.report.tree.TableNode;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.app.*;
+import ca.phon.app.html.*;
+import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.query.report.datasource.*;
 
 /**
  * Create a html report using data from generated buffers in wizard.

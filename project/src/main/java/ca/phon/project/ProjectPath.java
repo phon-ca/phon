@@ -15,9 +15,9 @@
  */
 package ca.phon.project;
 
-import java.io.File;
+import java.io.*;
 
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 /**
  * Path used for project drag & drop support.  The path may 

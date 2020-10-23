@@ -15,7 +15,7 @@
  */
 package ca.phon.media.player;
 
-import javax.swing.JSlider;
+import javax.swing.*;
 
 public class TimeSlider extends JSlider {
 

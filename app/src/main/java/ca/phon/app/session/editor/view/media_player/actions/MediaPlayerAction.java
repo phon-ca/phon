@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.media_player.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.view.media_player.*;
 
 /**
  * Base class for media layer actions.

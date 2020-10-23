@@ -15,10 +15,10 @@
  */
 package ca.phon.app.menu.tools;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.ui.syllable.BasicSyllabifierTest;
+import ca.phon.app.hooks.*;
+import ca.phon.ui.syllable.*;
 
 public class BasicSyllabifierTestCommand extends HookableAction {
 

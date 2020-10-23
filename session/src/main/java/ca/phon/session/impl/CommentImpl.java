@@ -15,7 +15,7 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.spi.CommentSPI;
+import ca.phon.session.spi.*;
 
 /**
  * Implemtation for comment elements.

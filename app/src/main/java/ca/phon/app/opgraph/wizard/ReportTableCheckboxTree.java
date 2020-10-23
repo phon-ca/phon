@@ -15,23 +15,13 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.Component;
+import java.awt.*;
 
-import javax.swing.JTree;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.report.tree.ExcelExportableNode;
-import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
-import ca.phon.app.opgraph.report.tree.TableNode;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.util.icons.*;
 
 public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 	

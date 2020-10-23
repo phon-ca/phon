@@ -15,26 +15,21 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.Processor;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.*;
 
 public class AnalysisRunner implements Runnable {
 

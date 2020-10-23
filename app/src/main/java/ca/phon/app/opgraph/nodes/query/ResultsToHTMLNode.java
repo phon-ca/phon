@@ -15,64 +15,33 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.io.*;
+import java.lang.Boolean;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.jdesktop.swingx.VerticalLayout;
+import org.apache.commons.lang3.*;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.log.ExcelExporter;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.SessionExportSettings;
-import ca.phon.app.session.SessionToExcel;
-import ca.phon.app.session.SessionToHTML;
-import ca.phon.app.session.SessionToHTML.SessionToHTMLSettings;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.project.Project;
-import ca.phon.query.db.ResultSet;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionPath;
-import ca.phon.session.TierViewItem;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
+import ca.phon.app.log.*;
+import ca.phon.app.session.*;
+import ca.phon.app.session.SessionToHTML.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.ipa.*;
+import jxl.write.*;
 
 @OpNodeInfo(name="Results to HTML", category="Query", description="Print results in HTML format optionally including tier data.", showInLibrary=true)
 public class ResultsToHTMLNode extends OpNode implements NodeSettings {

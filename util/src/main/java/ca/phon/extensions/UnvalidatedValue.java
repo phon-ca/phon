@@ -15,7 +15,7 @@
  */
 package ca.phon.extensions;
 
-import java.text.ParseException;
+import java.text.*;
 
 /**
  * <p>A container for unvalidated data.  This class

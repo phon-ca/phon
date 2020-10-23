@@ -15,20 +15,15 @@
  */
 package ca.phon.app.corpus;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.SessionEditorEP;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.project.Project;
+import ca.phon.app.modules.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierViewItem;
 
 @PhonPlugin
 public class SessionTemplateEP extends SessionEditorEP {

@@ -15,15 +15,12 @@
  */
 package ca.phon.query;
 
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.HashSet;
+import java.text.*;
+import java.util.*;
 
+import ca.phon.formatter.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.*;
 
 public class TableUtils {
 	

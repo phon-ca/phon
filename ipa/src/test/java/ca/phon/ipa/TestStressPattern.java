@@ -15,11 +15,11 @@
  */
 package ca.phon.ipa;
 
-import java.text.ParseException;
+import java.text.*;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 import junit.framework.Assert;
 

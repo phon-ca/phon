@@ -1,7 +1,7 @@
 package ca.phon.app.session.editor.view.timeline.actions;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.session.editor.view.timeline.TimelineView;
+import ca.phon.app.hooks.*;
+import ca.phon.app.session.editor.view.timeline.*;
 
 public abstract class TimelineAction extends HookableAction {
 

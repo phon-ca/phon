@@ -1,27 +1,15 @@
 package ca.phon.media;
 
-import java.awt.AWTEvent;
-import java.awt.BasicStroke;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Stroke;
-import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.beans.*;
 
-import javax.swing.JComponent;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.ComponentUI;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.plaf.*;
 
-import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.*;
 
 public class TimeComponentUI extends ComponentUI {
 	

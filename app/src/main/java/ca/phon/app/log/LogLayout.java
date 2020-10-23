@@ -32,24 +32,19 @@
  */
 package ca.phon.app.log;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.io.LineNumberReader;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.lang.management.ManagementFactory;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.io.*;
+import java.lang.management.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.layout.AbstractStringLayout;
-import org.apache.logging.log4j.core.util.Transform;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.core.*;
+import org.apache.logging.log4j.core.config.*;
+import org.apache.logging.log4j.core.layout.*;
+import org.apache.logging.log4j.core.util.*;
+import org.apache.logging.log4j.util.*;
 
-import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.fonts.*;
 
 /**
  * Log4j2 layout for application log messages.

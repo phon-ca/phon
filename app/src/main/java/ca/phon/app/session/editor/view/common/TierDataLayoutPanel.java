@@ -15,11 +15,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * {@link JPanel} which uses {@link TierDataLayout} and {@link TierDataLayoutBgPainter}

@@ -1,34 +1,19 @@
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.app.log.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(category = "Table", description = "Create a new table with specified columns", name = "Create Table", showInLibrary = true)
 public class CreateTableNode extends OpNode implements NodeSettings {

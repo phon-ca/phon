@@ -1,24 +1,20 @@
 package ca.phon.ipamap2;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.awt.event.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
+import java.util.stream.*;
 
-import javax.swing.JComponent;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import com.github.davidmoten.rtree.RTree;
-import com.github.davidmoten.rtree.geometry.Geometries;
+import com.github.davidmoten.rtree.*;
+import com.github.davidmoten.rtree.geometry.*;
 
-import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ui.ipamap.io.*;
 
 public class DefaultIPAMapGridUI extends IPAMapGridUI {
 	

@@ -15,7 +15,7 @@
  */
 package ca.phon.ui;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 /**
  * Listen for verification events from a AbstractVerifier

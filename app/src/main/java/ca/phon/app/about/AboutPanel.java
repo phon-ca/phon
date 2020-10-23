@@ -15,31 +15,18 @@
  */
 package ca.phon.app.about;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
-import java.net.URL;
-import java.util.Set;
+import java.awt.*;
+import java.net.*;
+import java.util.*;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.PhonSplasher;
+import ca.phon.app.*;
 import ca.phon.app.VersionInfo;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
+import ca.phon.extensions.*;
+import ca.phon.ui.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.util.*;
 
 public class AboutPanel extends JPanel implements IExtendable {
 

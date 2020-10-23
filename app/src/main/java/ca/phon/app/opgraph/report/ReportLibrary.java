@@ -15,42 +15,28 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.MenuElement;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.editor.OpGraphLibrary;
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.project.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.Tuple;
-import ca.phon.util.resources.ResourceLoader;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.*;
+import ca.phon.util.resources.*;
+import ca.phon.worker.*;
 
 /**
  * <p>Library of query reports. These reports are available

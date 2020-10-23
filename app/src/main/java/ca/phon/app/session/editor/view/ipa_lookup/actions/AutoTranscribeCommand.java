@@ -15,20 +15,15 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriber;
-import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionDialog;
-import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.session.Session;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.ipa_lookup.*;
+import ca.phon.ipadictionary.*;
+import ca.phon.session.*;
+import ca.phon.worker.*;
 
 /**
  * Action for auto-transcribing a {@link Session} using the

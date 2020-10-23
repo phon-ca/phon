@@ -15,20 +15,12 @@
  */
 package ca.phon.app.project;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.project.LocalProject;
-import ca.phon.project.Project;
-import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.app.log.*;
+import ca.phon.project.*;
+import ca.phon.project.exceptions.*;
 
 /**
  * Shadow projects are used as temporary projects with the same

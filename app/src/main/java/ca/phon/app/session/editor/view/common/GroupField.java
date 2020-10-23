@@ -15,52 +15,29 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Toolkit;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.Highlight;
-import javax.swing.text.JTextComponent;
-import javax.swing.undo.UndoManager;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
+import javax.swing.text.Highlighter.*;
+import javax.swing.undo.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.app.session.editor.*;
+import ca.phon.extensions.*;
+import ca.phon.formatter.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.Tier;
-import ca.phon.session.TierListener;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.session.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
 
 /**
  * Text field for editing tier data for a group.

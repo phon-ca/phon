@@ -15,9 +15,9 @@
  */
 package ca.phon.formatter;
 
-import java.text.ParseException;
+import java.text.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
 public class FormatterUtil {
 	

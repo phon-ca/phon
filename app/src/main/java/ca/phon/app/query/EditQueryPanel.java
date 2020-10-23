@@ -15,25 +15,17 @@
  */
 package ca.phon.app.query;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.query.db.Query;
-import ca.phon.session.format.DateFormatter;
-import ca.phon.ui.StarBox;
-import ca.phon.util.icons.IconSize;
+import ca.phon.query.db.*;
+import ca.phon.session.format.*;
+import ca.phon.ui.*;
+import ca.phon.util.icons.*;
 
 /**
  * Edit query name and comments.

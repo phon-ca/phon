@@ -15,22 +15,14 @@
  */
 package ca.phon.session.io.xml.v12;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.Orthography;
-import ca.phon.session.Comment;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Participant;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.orthography.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Tier;
-import ca.phon.session.TierString;
-import ca.phon.session.spi.RecordSPI;
+import ca.phon.session.spi.*;
 
 public final class LazyRecord implements RecordSPI {
 	

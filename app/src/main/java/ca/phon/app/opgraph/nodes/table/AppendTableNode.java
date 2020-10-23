@@ -15,12 +15,9 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(
 	name="Append Table",

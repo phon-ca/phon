@@ -15,20 +15,13 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.AWTException;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
+import javax.swing.*;
 
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.action.*;
+import ca.phon.util.icons.*;
 
 /**
  * Setup IPA Map as a system tray application.

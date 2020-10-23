@@ -15,32 +15,22 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.stream.Collectors;
+import java.awt.*;
+import java.util.*;
+import java.util.stream.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.orthography.Orthography;
-import ca.phon.query.TableUtils;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.session.SystemTierType;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.orthography.*;
+import ca.phon.query.*;
+import ca.phon.query.report.datasource.*;
+import ca.phon.session.*;
 
 /**
  *

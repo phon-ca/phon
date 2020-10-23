@@ -15,29 +15,16 @@
  */
 package ca.phon.ipa;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.*;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexCompiler;
-import ca.phon.phonex.PhonexLexer;
-import ca.phon.phonex.PhonexParser;
-import ca.phon.syllable.Segregated;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.phonex.*;
+import ca.phon.syllable.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Performs the cover operation on a {@link IPATranscript}

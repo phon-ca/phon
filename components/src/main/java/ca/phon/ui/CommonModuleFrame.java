@@ -16,52 +16,26 @@
 package ca.phon.ui;
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.Project;
-import ca.phon.ui.menu.MenuManager;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.extensions.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.ui.menu.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.*;
 import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 
 /**

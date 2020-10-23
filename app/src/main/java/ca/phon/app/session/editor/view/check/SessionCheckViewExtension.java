@@ -1,12 +1,8 @@
 package ca.phon.app.session.editor.view.check;
 
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.EditorViewCategory;
-import ca.phon.app.session.editor.EditorViewInfo;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.app.session.editor.*;
+import ca.phon.phonex.*;
+import ca.phon.plugin.*;
 
 @PhonexPlugin(name="Session Check")
 @EditorViewInfo(category=EditorViewCategory.SESSION, icon=SessionCheckView.ICON_NAME, name=SessionCheckView.VIEW_NAME)

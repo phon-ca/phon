@@ -15,13 +15,8 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.EditorViewCategory;
-import ca.phon.app.session.editor.EditorViewInfo;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
 
 @PhonPlugin(name="Syllabification & Alignment")
 @EditorViewInfo(name="Syllabification & Alignment", category=EditorViewCategory.RECORD, icon="misc/syllabification")

@@ -15,15 +15,14 @@
  */
 package ca.phon.ipa.features;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import ca.phon.ipa.parser.IPATokens;
+import ca.phon.ipa.parser.*;
 import junit.framework.Assert;
 
 @RunWith(JUnit4.class)

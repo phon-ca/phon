@@ -15,10 +15,9 @@
  */
 package ca.phon.app.hooks;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.app.BootWindow;
+import ca.phon.app.*;
 
 /**
  * Interface used to perform operations before Phon is

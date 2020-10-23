@@ -15,9 +15,9 @@
  */
 package ca.phon.worker;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 
-import javax.swing.event.EventListenerList;
+import javax.swing.event.*;
 
 /**
  *

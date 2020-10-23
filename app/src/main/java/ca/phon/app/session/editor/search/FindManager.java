@@ -16,22 +16,13 @@
 
 package ca.phon.app.session.editor.search;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.formatter.FormatterUtil;
+import ca.phon.formatter.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
-import ca.phon.session.TierViewItem;
-import ca.phon.session.position.GroupRange;
-import ca.phon.session.position.RecordLocation;
-import ca.phon.session.position.RecordRange;
-import ca.phon.session.position.SessionLocation;
-import ca.phon.session.position.SessionRange;
-import ca.phon.util.Range;
+import ca.phon.session.position.*;
+import ca.phon.util.*;
 
 /**
  * Class to manage find and replace for a

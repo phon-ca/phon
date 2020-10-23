@@ -15,47 +15,32 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.autosave.Autosaves;
-import ca.phon.app.menu.file.OpenFileHistory;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.view.check.SessionCheckView;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.project.LocalProject;
-import ca.phon.project.Project;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Transcriber;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.JCrypt;
-import ca.phon.util.Range;
+import ca.phon.app.autosave.*;
+import ca.phon.app.menu.file.*;
+import ca.phon.app.modules.*;
+import ca.phon.app.session.editor.view.check.*;
+import ca.phon.app.session.editor.view.record_data.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
+import ca.phon.ui.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.*;
 
 /**
  * SessionEditor entry point

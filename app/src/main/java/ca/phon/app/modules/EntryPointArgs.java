@@ -15,23 +15,16 @@
  */
 package ca.phon.app.modules;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
-import ca.phon.app.project.DesktopProjectFactory;
-import ca.phon.app.workspace.Workspace;
-import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
-import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.session.Session;
+import ca.phon.app.project.*;
+import ca.phon.app.workspace.*;
+import ca.phon.project.*;
+import ca.phon.project.exceptions.*;
+import ca.phon.session.*;
 
 /**
  * Argument information for plug-in entry points.

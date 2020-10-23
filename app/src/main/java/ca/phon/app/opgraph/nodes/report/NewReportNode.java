@@ -15,23 +15,16 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.Properties;
+import java.awt.*;
+import java.util.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
 
 @OpNodeInfo(name="New Report", description="New report tree", category="Report", showInLibrary=true)
 public class NewReportNode extends OpNode implements NodeSettings {

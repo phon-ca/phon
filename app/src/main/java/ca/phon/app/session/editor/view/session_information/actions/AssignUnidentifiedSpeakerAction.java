@@ -15,24 +15,18 @@
  */
 package ca.phon.app.session.editor.view.session_information.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-import javax.swing.undo.CompoundEdit;
+import javax.swing.*;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.session.Participant;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.session_information.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 public class AssignUnidentifiedSpeakerAction extends SessionInfoAction {
 

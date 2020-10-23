@@ -15,8 +15,7 @@
  */
 package ca.phon.app.log;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public interface BufferPanelContainer {
 

@@ -1,12 +1,8 @@
 package ca.phon.media;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.Rank;
+import ca.phon.plugin.*;
 
 @PhonPlugin(name = "LongSound" )
 @Rank(10)

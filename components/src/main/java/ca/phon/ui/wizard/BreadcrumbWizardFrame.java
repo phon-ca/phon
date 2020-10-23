@@ -15,21 +15,12 @@
  */
 package ca.phon.ui.wizard;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Rectangle;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.jbreadcrumb.Breadcrumb;
-import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
-import ca.phon.ui.jbreadcrumb.JBreadcrumb;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.jbreadcrumb.*;
 
 /**
  * Wizard frame with breadcrumb UI for navigation

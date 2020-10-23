@@ -15,22 +15,14 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.bind.*;
+import javax.xml.transform.stream.*;
 
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.basic.io.ObjectFactory;
-import ca.phon.syllabifier.basic.io.SyllabifierDef;
-import ca.phon.util.resources.FolderHandler;
+import ca.phon.syllabifier.*;
+import ca.phon.syllabifier.basic.io.*;
+import ca.phon.util.resources.*;
 
 public class BasicSyllabifierFolderHandler extends FolderHandler<Syllabifier> {
 	

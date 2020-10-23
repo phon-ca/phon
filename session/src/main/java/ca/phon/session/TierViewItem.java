@@ -15,8 +15,8 @@
  */
 package ca.phon.session;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.spi.TierViewItemSPI;
+import ca.phon.extensions.*;
+import ca.phon.session.spi.*;
 
 /**
  * An entry for tier ordering, vibility and locking.

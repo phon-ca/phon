@@ -15,20 +15,8 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.Rank;
-import ca.phon.session.spi.CommentSPI;
-import ca.phon.session.spi.MediaSegmentSPI;
-import ca.phon.session.spi.ParticipantSPI;
-import ca.phon.session.spi.RecordSPI;
-import ca.phon.session.spi.SessionFactorySPI;
-import ca.phon.session.spi.SessionMetadataSPI;
-import ca.phon.session.spi.SessionSPI;
-import ca.phon.session.spi.TierDescriptionSPI;
-import ca.phon.session.spi.TierSPI;
-import ca.phon.session.spi.TierViewItemSPI;
-import ca.phon.session.spi.TranscriberSPI;
+import ca.phon.plugin.*;
+import ca.phon.session.spi.*;
 
 /**
  * Default implementation of a session factory.

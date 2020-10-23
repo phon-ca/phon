@@ -1,22 +1,18 @@
 package ca.phon.app.query;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.*;
 
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetManager;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.Tuple;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
+import ca.phon.ui.*;
+import ca.phon.util.*;
 
 /**
  * Display available {@link ResultSet}s for a session.

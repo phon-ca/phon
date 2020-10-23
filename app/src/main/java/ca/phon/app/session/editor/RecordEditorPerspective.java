@@ -15,22 +15,14 @@
  */
 package ca.phon.app.session.editor;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.util.PrefHelper;
-import ca.phon.util.resources.ClassLoaderHandler;
-import ca.phon.util.resources.FolderHandler;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.util.*;
+import ca.phon.util.resources.*;
 
 /**
  * Perspective for record editor docking views.  This class

@@ -15,17 +15,16 @@
  */
 package ca.phon.app.query;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.Map;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.project.Project;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
 
 public class QueryAndReportWizardEP implements IPluginEntryPoint {
 	

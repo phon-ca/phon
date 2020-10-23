@@ -15,8 +15,8 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.exceptions.*;
 
 /**
  * Required interface for IPADictionary implementations.

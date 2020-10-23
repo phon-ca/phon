@@ -15,9 +15,9 @@
  */
 package ca.phon.ipa;
 
-import java.util.Comparator;
+import java.util.*;
 
-import ca.phon.extensions.Extension;
+import ca.phon.extensions.*;
 
 /**
  * Implementation of Levenshtein distance (https://en.wikipedia.org/wiki/Levenshtein_distance)

@@ -1,8 +1,7 @@
 package ca.phon.app.session.check;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.session.check.SessionCheck;
+import ca.phon.plugin.*;
+import ca.phon.session.check.*;
 
 /**
  * Create configuration forms for {@link SessionCheck}s.

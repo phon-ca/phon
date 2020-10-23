@@ -15,28 +15,21 @@
  */
 package ca.phon.app.opgraph.editor.actions.file;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.util.List;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.menu.file.OpenFileHistory;
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.editor.OpgraphEditorModelFactory;
-import ca.phon.app.opgraph.editor.OpgraphFileFilter;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.RecentFiles;
+import ca.phon.app.log.*;
+import ca.phon.app.menu.file.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.actions.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.*;
 
 public class OpenAction extends OpgraphEditorAction {
 	

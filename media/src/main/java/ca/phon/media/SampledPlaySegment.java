@@ -1,29 +1,14 @@
 package ca.phon.media;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.Line;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.Mixer.Info;
-import javax.swing.SwingWorker;
+import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat.*;
+import javax.sound.sampled.Mixer.*;
+import javax.swing.*;
 
-import ca.phon.audio.AudioFileEncoding;
-import ca.phon.audio.AudioIO;
-import ca.phon.audio.AudioIOException;
-import ca.phon.audio.Sampled;
+import ca.phon.audio.*;
 
 public class SampledPlaySegment extends PlaySegment {
 	

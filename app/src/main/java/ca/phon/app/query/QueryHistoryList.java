@@ -1,18 +1,13 @@
 package ca.phon.app.query;
 
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
-import ca.phon.script.params.history.ObjectFactory;
-import ca.phon.script.params.history.ParamHistoryList;
-import ca.phon.script.params.history.ParamHistoryManager;
-import ca.phon.script.params.history.ParamSetType;
-import ca.phon.script.params.history.ParamType;
+import ca.phon.script.params.*;
+import ca.phon.script.params.history.*;
 
 public class QueryHistoryList extends ParamHistoryList {
 

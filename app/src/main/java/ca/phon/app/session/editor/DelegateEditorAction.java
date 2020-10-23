@@ -16,12 +16,11 @@
 
 package ca.phon.app.session.editor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.worker.PhonWorker;
+import ca.phon.worker.*;
 
 /**
  * Action class for editor events.  This class will call

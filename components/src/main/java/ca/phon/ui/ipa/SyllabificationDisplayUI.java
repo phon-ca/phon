@@ -16,10 +16,9 @@
 
 package ca.phon.ui.ipa;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 
-import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.*;
 
 /**
  *

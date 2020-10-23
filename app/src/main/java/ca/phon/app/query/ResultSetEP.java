@@ -15,25 +15,18 @@
  */
 package ca.phon.app.query;
 
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.awt.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionEditorEP;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.ResultSet;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.modules.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.ui.*;
 
 /**
  * Display a result set optionally along with the

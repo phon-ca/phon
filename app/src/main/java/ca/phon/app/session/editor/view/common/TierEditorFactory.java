@@ -15,23 +15,14 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.List;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.FocusManager;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.session.Tier;
-import ca.phon.session.TierDescription;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
 
 /**
  * Create tier editors

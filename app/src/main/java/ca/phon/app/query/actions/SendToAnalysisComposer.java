@@ -1,23 +1,22 @@
 package ca.phon.app.query.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.concurrent.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.analysis.OpenSimpleAnalysisComposerAction;
-import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.app.query.QueryAndReportWizard;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.project.Project;
-import ca.phon.query.script.QueryScript;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.analysis.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.query.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.nodes.general.*;
+import ca.phon.project.*;
+import ca.phon.query.script.*;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 public class SendToAnalysisComposer extends HookableAction {
 

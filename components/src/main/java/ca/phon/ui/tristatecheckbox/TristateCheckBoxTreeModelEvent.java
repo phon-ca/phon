@@ -15,7 +15,7 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import javax.swing.event.TreeModelEvent;
+import javax.swing.event.*;
 
 /**
  * {@link TreeModelEvent} sent when changes to checking paths for a node changes.

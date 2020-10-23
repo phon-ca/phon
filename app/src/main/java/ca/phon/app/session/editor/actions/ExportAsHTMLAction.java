@@ -15,11 +15,11 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.session.SessionToHTMLWizard;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.project.Project;
+import ca.phon.app.session.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.project.*;
 
 public class ExportAsHTMLAction extends SessionEditorAction {
 

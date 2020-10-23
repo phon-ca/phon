@@ -15,14 +15,11 @@
  */
 package ca.phon.ipa.relations;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
-import ca.phon.ipa.PhoneDimension;
+import ca.phon.ipa.*;
 
 public class SegmentalRelationComparator implements Comparator<SegmentalRelation> {
 

@@ -15,19 +15,10 @@
  */
 package ca.phon.xml;
 
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.EndDocument;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.EntityDeclaration;
-import javax.xml.stream.events.EntityReference;
-import javax.xml.stream.events.NotationDeclaration;
-import javax.xml.stream.events.ProcessingInstruction;
-import javax.xml.stream.events.StartDocument;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.events.*;
 
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Visitor implementation for xml stream events.

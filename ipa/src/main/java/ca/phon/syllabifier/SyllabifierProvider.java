@@ -15,9 +15,9 @@
  */
 package ca.phon.syllabifier;
 
-import java.util.ServiceLoader;
+import java.util.*;
 
-import ca.phon.util.resources.ResourceHandler;
+import ca.phon.util.resources.*;
 
 /**
  * Interface used by {@link ServiceLoader} to automatically

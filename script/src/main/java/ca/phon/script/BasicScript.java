@@ -15,19 +15,13 @@
  */
 package ca.phon.script;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.extensions.*;
+import ca.phon.script.params.*;
 
 /**
  * Basic phon script in memory.  This script stores the script

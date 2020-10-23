@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.*;
 
 public class GroupFieldHighlighter extends DefaultHighlighter {
 	

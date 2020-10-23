@@ -15,17 +15,16 @@
  */
 package ca.phon.app.autosave;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.Calendar;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 import javax.swing.Timer;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.session.editor.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.*;
 
 /**
  * Handles timer and performs actions for autosave of sessions.

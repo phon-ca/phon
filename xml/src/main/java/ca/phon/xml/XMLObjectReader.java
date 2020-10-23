@@ -15,10 +15,9 @@
  */
 package ca.phon.xml;
 
-import java.io.IOException;
+import java.io.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
 /**
  * A class that reads objects from a given XML stream.

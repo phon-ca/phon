@@ -1,24 +1,13 @@
 package ca.phon.session.check;
 
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.Rank;
-import ca.phon.session.Group;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
-import ca.phon.session.Word;
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 
 @PhonPlugin(name="Check Phone Alignments", comments="Check phone alignments")
 @Rank(2)

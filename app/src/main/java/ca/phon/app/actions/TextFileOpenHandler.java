@@ -1,16 +1,13 @@
 package ca.phon.app.actions;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.*;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.BufferWindow;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.app.log.*;
+import ca.phon.phonex.*;
+import ca.phon.plugin.*;
 
 @PhonexPlugin(name="Open")
 public class TextFileOpenHandler implements OpenFileHandler, IPluginExtensionPoint<OpenFileHandler> {

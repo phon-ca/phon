@@ -15,25 +15,18 @@
  */
 package ca.phon.app.project;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.JComponent;
-import javax.swing.JList;
+import javax.swing.*;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.*;
 
-import ca.phon.project.Project;
-import ca.phon.project.ProjectPath;
-import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.project.*;
+import ca.phon.ui.dnd.*;
 import ca.phon.ui.nativedialogs.FileFilter;
 
 public class ProjectDataTransferHandler extends FileTransferHandler {

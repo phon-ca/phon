@@ -15,26 +15,18 @@
  */
 package ca.phon.app.excel;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.lang.Number;
+import java.time.*;
+import java.util.*;
 
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.*;
 
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import jxl.write.DateTime;
-import jxl.write.Label;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableSheet;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
+import ca.phon.formatter.*;
+import ca.phon.query.report.datasource.*;
+import jxl.write.*;
+import jxl.write.biff.*;
 
 /**
  * Utility methods for working with Excel workbook files.

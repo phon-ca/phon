@@ -15,7 +15,7 @@
  */
 package ca.phon.ipa.parser;
 
-import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.*;
 
 /**
  * Interface for implementing error handlers for phone

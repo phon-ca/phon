@@ -15,12 +15,10 @@
  */
 package ca.phon.plugin;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.util.StackTraceInfo;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.*;
+import ca.phon.worker.*;
 
 /**
  * Methods for executing plugin entry points

@@ -15,7 +15,7 @@
  */
 package ca.phon.query.script;
 
-import ca.phon.util.resources.ResourceHandler;
+import ca.phon.util.resources.*;
 
 // extension point for plug-in script libraries
 public interface QueryScriptHandler extends ResourceHandler<QueryScript> {

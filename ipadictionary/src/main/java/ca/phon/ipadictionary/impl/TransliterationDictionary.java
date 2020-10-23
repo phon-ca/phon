@@ -15,45 +15,22 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.net.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
+import org.apache.commons.lang3.*;
+import org.apache.logging.log4j.*;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
-import ca.phon.ipadictionary.spi.IPADictionarySPI;
-import ca.phon.ipadictionary.spi.LanguageInfo;
-import ca.phon.ipadictionary.spi.Metadata;
-import ca.phon.ipadictionary.spi.NameInfo;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
-import ca.phon.util.Language;
-import ca.phon.util.Tuple;
-import de.susebox.jtopas.Flags;
-import de.susebox.jtopas.StandardTokenizer;
-import de.susebox.jtopas.StandardTokenizerProperties;
-import de.susebox.jtopas.StringSource;
-import de.susebox.jtopas.Token;
-import de.susebox.jtopas.Tokenizer;
-import de.susebox.jtopas.TokenizerException;
-import de.susebox.jtopas.TokenizerProperties;
-import de.susebox.jtopas.TokenizerSource;
+import ca.phon.ipa.*;
+import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.exceptions.*;
+import ca.phon.ipadictionary.spi.*;
+import ca.phon.phonex.*;
+import ca.phon.util.*;
+import de.susebox.jtopas.*;
 
 /**
  * An IPADictionary implementation that uses a tokenizer and lookup

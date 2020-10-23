@@ -1,25 +1,21 @@
 package ca.phon.app.session.check;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.*;
+import java.io.*;
 import java.util.List;
 
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.session.SessionSelector;
-import ca.phon.app.session.SessionSelectorActiveEditorSupport;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.Processor;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.wizard.WizardStep;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.session.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.wizard.*;
 
 /**
  * Check sessions for errors.

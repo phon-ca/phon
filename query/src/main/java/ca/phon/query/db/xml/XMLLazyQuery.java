@@ -16,13 +16,11 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 
-import ca.phon.query.db.Script;
+import ca.phon.query.db.*;
 
 /**
  * Similar to {@link XMLQuery}, except loading of result set data is lazy

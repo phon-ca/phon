@@ -1,18 +1,11 @@
 package ca.phon.ipamap2;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.*;
+import java.awt.geom.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ui.ipamap.io.*;
 
 public class DefaultIPAMapCellRenderer implements IPAMapCellRenderer {
 	

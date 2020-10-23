@@ -15,16 +15,15 @@
  */
 package ca.phon.app.project;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.Map;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 
-import ca.phon.app.welcome.ProjectArchiveTask;
-import ca.phon.app.workspace.Workspace;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.project.Project;
-import ca.phon.session.format.DateFormatter;
+import ca.phon.app.welcome.*;
+import ca.phon.app.workspace.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.session.format.*;
 
 @PhonPlugin(name="default")
 public class ProjectArchiveEP implements IPluginEntryPoint {

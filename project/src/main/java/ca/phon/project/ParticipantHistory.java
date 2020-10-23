@@ -15,12 +15,10 @@
  */
 package ca.phon.project;
 
-import java.time.Period;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.time.*;
+import java.util.*;
 
-import ca.phon.session.SessionPath;
+import ca.phon.session.*;
 
 /**
  * Runtime extension for Participant objects.  This

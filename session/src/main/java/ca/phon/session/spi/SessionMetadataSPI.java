@@ -1,6 +1,6 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.Comment;
+import ca.phon.session.*;
 
 public interface SessionMetadataSPI {
 	

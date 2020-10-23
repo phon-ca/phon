@@ -1,10 +1,10 @@
 package ca.phon.session;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.spi.SessionSPI;
+import ca.phon.extensions.*;
+import ca.phon.session.spi.*;
 
 /**
  * A session in a project.

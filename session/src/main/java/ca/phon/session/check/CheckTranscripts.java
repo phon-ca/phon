@@ -15,26 +15,17 @@
  */
 package ca.phon.session.check;
 
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
-import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.Rank;
-import ca.phon.session.Group;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.parser.exceptions.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.PrefHelper;
+import ca.phon.syllabifier.*;
+import ca.phon.syllable.*;
+import ca.phon.util.*;
 
 /**
  * Check IPA transcriptions for a session. 

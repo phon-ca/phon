@@ -15,12 +15,10 @@
  */
 package ca.phon.app;
 
-import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.plugin.*;
+import ca.phon.syllabifier.*;
 
 public class ObjectLoaderHook implements PhonStartupHook , IPluginExtensionPoint<PhonStartupHook> {
 

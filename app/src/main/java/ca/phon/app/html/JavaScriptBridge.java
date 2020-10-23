@@ -1,17 +1,15 @@
 package ca.phon.app.html;
 
-import com.teamdev.jxbrowser.chromium.JSArray;
+import com.teamdev.jxbrowser.chromium.*;
 
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.SessionEditorEP;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.project.Project;
-import ca.phon.query.db.QueryFactory;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.db.xml.XMLQueryFactory;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.Range;
+import ca.phon.app.modules.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.*;
+import ca.phon.ui.*;
+import ca.phon.util.*;
 
 /**
  * JavaScript bridge for common Phon functions.

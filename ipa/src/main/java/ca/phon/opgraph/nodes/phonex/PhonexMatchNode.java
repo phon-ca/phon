@@ -15,21 +15,15 @@
  */
 package ca.phon.opgraph.nodes.phonex;
 
-import java.awt.Component;
-import java.util.Properties;
+import java.awt.*;
+import java.util.*;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.phonex.*;
 
 @OpNodeInfo(
 		name="Phonex Matcher",

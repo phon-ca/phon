@@ -1,12 +1,9 @@
 package ca.phon.fsa;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
-import ca.phon.fsa.FSAState.RunningState;
-import ca.phon.fsa.SimpleFSA.DecisionTracker;
+import ca.phon.fsa.FSAState.*;
+import ca.phon.fsa.SimpleFSA.*;
 
 /**
  * Class for executing a SimleFSA in a step-by-step

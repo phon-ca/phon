@@ -16,10 +16,10 @@
 
 package ca.phon.query.db;
 
-import java.util.regex.Matcher;
+import java.util.regex.*;
 
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.util.Range;
+import ca.phon.phonex.*;
+import ca.phon.util.*;
 
 /**
  * A reference to a piece of data in a result.

@@ -15,10 +15,10 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import java.util.Iterator;
+import java.util.*;
 
-import ca.phon.extensions.Extension;
-import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.extensions.*;
+import ca.phon.ipadictionary.*;
 
 /**
  * Capability for iterating the orthographic keys found

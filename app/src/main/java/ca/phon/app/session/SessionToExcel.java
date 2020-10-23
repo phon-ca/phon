@@ -1,43 +1,29 @@
 package ca.phon.app.session;
 
 import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
+import java.awt.image.*;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
-import ca.phon.app.excel.WorkbookFormats;
-import ca.phon.app.excel.WorkbookUtils;
-import ca.phon.app.log.LogUtil;
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.query.db.ReportHelper;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetRecordFilter;
+import ca.phon.app.excel.*;
+import ca.phon.app.log.*;
+import ca.phon.formatter.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.filter.RecordFilter;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.Tuple;
-import jxl.format.CellFormat;
-import jxl.write.DateTime;
+import ca.phon.session.filter.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.util.*;
+import jxl.format.*;
+import jxl.write.*;
 import jxl.write.Label;
-import jxl.write.NumberFormat;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableImage;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
 
 public class SessionToExcel extends SessionExporter {
 

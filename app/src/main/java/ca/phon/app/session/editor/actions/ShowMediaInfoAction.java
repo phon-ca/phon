@@ -1,25 +1,16 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.util.List;
 
-import ca.phon.app.log.BufferWindow;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionMediaModel;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.audio.AudioFileInfo;
-import ca.phon.audio.AudioIO;
-import ca.phon.audio.InvalidHeaderException;
-import ca.phon.audio.UnsupportedFormatException;
-import ca.phon.util.MsFormatter;
-import ca.phon.util.OSInfo;
-import uk.co.caprica.vlcj.media.AudioTrackInfo;
-import uk.co.caprica.vlcj.media.InfoApi;
-import uk.co.caprica.vlcj.media.VideoTrackInfo;
+import ca.phon.app.log.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.audio.*;
+import ca.phon.util.*;
+import uk.co.caprica.vlcj.media.*;
 
 public class ShowMediaInfoAction extends SessionEditorAction {
 	

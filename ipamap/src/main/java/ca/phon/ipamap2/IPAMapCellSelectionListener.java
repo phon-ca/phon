@@ -1,6 +1,6 @@
 package ca.phon.ipamap2;
 
-import java.util.EventListener;
+import java.util.*;
 
 /**
  * Functional interface for listening to changes to ipa map

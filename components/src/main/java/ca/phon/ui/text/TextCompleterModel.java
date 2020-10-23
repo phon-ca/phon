@@ -15,7 +15,7 @@
  */
 package ca.phon.ui.text;
 
-import java.util.List;
+import java.util.*;
 
 public interface TextCompleterModel<T> {
 	

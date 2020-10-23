@@ -15,11 +15,9 @@
  */
 package ca.phon.app.opgraph.macro;
 
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.opgraph.*;
+import ca.phon.plugin.*;
 
 @PhonPlugin(author="Greg J. Hedlund <ghedlund@mun.ca>", minPhonVersion="2.1.0", name="Default Opgraph Editor Model")
 public class MacroOpgraphEditorModelExtPt implements IPluginExtensionPoint<OpgraphEditorModel> {

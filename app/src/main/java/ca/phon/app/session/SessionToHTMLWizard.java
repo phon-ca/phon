@@ -15,30 +15,20 @@
  */
 package ca.phon.app.session;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.util.concurrent.ExecutionException;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.concurrent.*;
 
-import javax.swing.JScrollPane;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.ExcelExporter;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.wizard.BreadcrumbWizardFrame;
-import ca.phon.ui.wizard.WizardStep;
+import ca.phon.app.log.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.wizard.*;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 

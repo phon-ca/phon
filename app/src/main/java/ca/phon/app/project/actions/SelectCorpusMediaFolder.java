@@ -15,17 +15,15 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.ActionEvent;
-import java.util.List;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.project.Project;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.project.*;
+import ca.phon.project.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.*;
 
 public class SelectCorpusMediaFolder extends ProjectWindowAction {
 

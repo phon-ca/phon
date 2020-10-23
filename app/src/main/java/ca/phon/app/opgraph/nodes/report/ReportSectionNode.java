@@ -15,12 +15,9 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.*;
 
 public abstract class ReportSectionNode extends OpNode {
 

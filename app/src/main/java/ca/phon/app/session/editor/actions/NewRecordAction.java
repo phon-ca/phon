@@ -15,16 +15,14 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddRecordEdit;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.util.icons.*;
 
 /**
  * Add a new record to the current session.  The record

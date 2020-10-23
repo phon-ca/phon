@@ -16,17 +16,16 @@
 
 package ca.phon.media;
 
-import java.io.File;
+import java.io.*;
 
-import com.sun.jna.NativeLibrary;
+import com.sun.jna.*;
 
 import ca.phon.ui.nativedialogs.OSInfo;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PrefHelper;
-import uk.co.caprica.vlcj.binding.LibC;
-import uk.co.caprica.vlcj.binding.RuntimeUtil;
-import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-import uk.co.caprica.vlcj.support.Info;
+import ca.phon.ui.toast.*;
+import ca.phon.util.*;
+import uk.co.caprica.vlcj.binding.*;
+import uk.co.caprica.vlcj.factory.*;
+import uk.co.caprica.vlcj.support.*;
 
 /**
  * Helper methods for using vlc4j

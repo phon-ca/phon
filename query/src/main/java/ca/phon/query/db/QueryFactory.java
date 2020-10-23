@@ -16,7 +16,7 @@
 
 package ca.phon.query.db;
 
-import ca.phon.project.Project;
+import ca.phon.project.*;
 
 /**
  * A factory interface for the creation of query-related objects. This

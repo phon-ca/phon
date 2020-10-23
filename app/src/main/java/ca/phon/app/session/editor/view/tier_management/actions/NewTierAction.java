@@ -15,25 +15,18 @@
  */
 package ca.phon.app.session.editor.view.tier_management.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddTierEdit;
-import ca.phon.app.session.editor.view.tier_management.TierEditorDialog;
-import ca.phon.app.session.editor.view.tier_management.TierInfoEditor;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.session.*;
+import ca.phon.ui.toast.*;
+import ca.phon.util.icons.*;
 
 public class NewTierAction extends TierManagementAction {
 

@@ -15,9 +15,9 @@
  */
 package ca.phon.session.impl;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import ca.phon.session.spi.TranscriberSPI;
+import ca.phon.session.spi.*;
 
 public class TranscriberImpl implements TranscriberSPI {
 	

@@ -16,12 +16,10 @@
 
 package ca.phon.query.db;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 
 /**

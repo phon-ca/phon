@@ -15,7 +15,7 @@
  */
 package ca.phon.formatter;
 
-import java.text.ParseException;
+import java.text.*;
 
 /**
  * Basic formatter which simply returns the given string

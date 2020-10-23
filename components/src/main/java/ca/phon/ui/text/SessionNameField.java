@@ -15,7 +15,7 @@
  */
 package ca.phon.ui.text;
 
-import ca.phon.project.Project;
+import ca.phon.project.*;
 
 /**
  * {@link PromptedTextField} for session names.

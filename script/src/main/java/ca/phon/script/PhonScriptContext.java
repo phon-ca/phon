@@ -15,27 +15,16 @@
  */
 package ca.phon.script;
 
-import java.io.PrintStream;
-import java.net.URI;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ContextFactory;
-import org.mozilla.javascript.ImporterTopLevel;
-import org.mozilla.javascript.Script;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
-import org.mozilla.javascript.WrapFactory;
-import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
-import org.mozilla.javascript.commonjs.module.Require;
-import org.mozilla.javascript.commonjs.module.RequireBuilder;
-import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
-import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
-import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
+import org.mozilla.javascript.*;
+import org.mozilla.javascript.commonjs.module.*;
+import org.mozilla.javascript.commonjs.module.provider.*;
 
-import ca.phon.script.js.ExtendableWrapFactory;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.js.*;
+import ca.phon.script.params.*;
 
 /**
  * Handles setting up script context, scope and

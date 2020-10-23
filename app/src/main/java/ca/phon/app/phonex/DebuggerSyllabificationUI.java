@@ -1,15 +1,11 @@
 package ca.phon.app.phonex;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import ca.phon.ui.ipa.DefaultSyllabificationDisplayUI;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.ipa.*;
+import ca.phon.util.icons.*;
 
 public class DebuggerSyllabificationUI extends DefaultSyllabificationDisplayUI {
 

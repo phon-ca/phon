@@ -15,7 +15,7 @@
  */
 package ca.phon.plugin;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * Entry point for a plugin

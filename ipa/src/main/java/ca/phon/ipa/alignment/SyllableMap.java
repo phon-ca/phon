@@ -15,8 +15,8 @@
  */
 package ca.phon.ipa.alignment;
 
-import ca.phon.alignment.AlignmentMap;
-import ca.phon.ipa.IPATranscript;
+import ca.phon.alignment.*;
+import ca.phon.ipa.*;
 
 /**
  *

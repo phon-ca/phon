@@ -15,10 +15,9 @@
  */
 package ca.phon.ipa;
 
-import java.text.ParseException;
+import java.text.*;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterType;
+import ca.phon.formatter.*;
 
 /**
  * IPA transcript formatter

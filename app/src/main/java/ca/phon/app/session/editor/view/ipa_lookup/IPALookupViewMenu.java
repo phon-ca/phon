@@ -15,11 +15,9 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import javax.swing.JMenu;
+import javax.swing.*;
 
-import ca.phon.app.session.editor.view.ipa_lookup.actions.AutoTranscribeCommand;
-import ca.phon.app.session.editor.view.ipa_lookup.actions.ExportIPACommand;
-import ca.phon.app.session.editor.view.ipa_lookup.actions.ImportIPACommand;
+import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
 
 public class IPALookupViewMenu extends JMenu {
 	

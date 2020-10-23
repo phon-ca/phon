@@ -1,25 +1,20 @@
 package ca.phon.app.session;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Base64;
-import java.util.concurrent.atomic.AtomicReference;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.imageio.*;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.app.log.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.ipa.*;
 
 public abstract class SessionExporter {
 	

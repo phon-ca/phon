@@ -1,45 +1,22 @@
 package ca.phon.ipamap2;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.function.*;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.Scrollable;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.JXCollapsiblePane.Direction;
-import org.jdesktop.swingx.VerticalLayout;
-import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.*;
+import org.jdesktop.swingx.painter.*;
 import org.jdesktop.swingx.painter.Painter;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.ipamap.io.Grid;
-import ca.phon.util.Tuple;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.ipamap.io.*;
+import ca.phon.util.*;
 
 /**
  * Container for {@link IPAMapGrid}s.

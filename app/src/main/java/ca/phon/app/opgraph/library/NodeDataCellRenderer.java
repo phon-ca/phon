@@ -15,21 +15,14 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.*;
 
-import javax.swing.JEditorPane;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
+import javax.swing.border.*;
 
-import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.*;
 
-import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.*;
 
 public class NodeDataCellRenderer implements ListCellRenderer<NodeData> {
 	

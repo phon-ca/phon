@@ -15,63 +15,30 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.tree.*;
+import javax.xml.bind.*;
+import javax.xml.namespace.*;
 
-import org.jdesktop.swingx.JXTree;
+import org.jdesktop.swingx.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.query.report.ReportIO;
-import ca.phon.query.report.io.AggregrateInventory;
-import ca.phon.query.report.io.CommentSection;
-import ca.phon.query.report.io.Group;
-import ca.phon.query.report.io.InventorySection;
-import ca.phon.query.report.io.ObjectFactory;
-import ca.phon.query.report.io.ParamSection;
-import ca.phon.query.report.io.ReportDesign;
-import ca.phon.query.report.io.ResultListing;
-import ca.phon.query.report.io.Section;
-import ca.phon.query.report.io.SummarySection;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.query.report.*;
+import ca.phon.query.report.io.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.toast.*;
+import ca.phon.util.icons.*;
 
 /**
  * A panel used for editing report templates.

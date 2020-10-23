@@ -15,24 +15,21 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.editor.EditorModelInstantiator;
-import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.opgraph.app.extensions.Note;
-import ca.phon.opgraph.app.extensions.Notes;
-import ca.phon.opgraph.app.util.GraphUtils;
-import ca.phon.opgraph.extensions.NodeMetadata;
-import ca.phon.opgraph.nodes.reflect.ObjectNode;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.project.Project;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.app.util.*;
+import ca.phon.opgraph.extensions.*;
+import ca.phon.opgraph.nodes.reflect.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
 
 @EditorModelInstantiatorMenuInfo(
 		name="Analysis",

@@ -15,8 +15,7 @@
  */
 package ca.phon.util;
 
-import java.util.Collection;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Basic (FIFO) Queue class based on java.util.Vector.

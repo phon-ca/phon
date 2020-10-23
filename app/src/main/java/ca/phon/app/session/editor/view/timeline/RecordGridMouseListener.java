@@ -1,6 +1,6 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 /**
  * Interface for handling various mouse events for records in the {@link RecordGrid}

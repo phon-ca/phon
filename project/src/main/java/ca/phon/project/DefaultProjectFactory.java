@@ -15,11 +15,9 @@
  */
 package ca.phon.project;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
-import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.project.exceptions.*;
 
 /**
  * Default project factory implementation.

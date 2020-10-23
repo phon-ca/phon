@@ -15,15 +15,10 @@
  */
 package ca.phon.session;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.extensions.IExtendable;
-import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.session.spi.TierSPI;
+import ca.phon.extensions.*;
+import ca.phon.session.spi.*;
 
 /**
  * A tier in a record.  A tier has a name, type and a number

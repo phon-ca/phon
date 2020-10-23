@@ -1,15 +1,9 @@
 package ca.phon.ui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.net.URL;
+import java.awt.*;
+import java.net.*;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 /**
  * Create a 'drop-down' icon composed of an original icon

@@ -15,27 +15,17 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.lang.ref.WeakReference;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.ref.*;
+import java.util.*;
 
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.wizard.WizardEvent;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.wizard.*;
+import ca.phon.util.icons.*;
 
 public class WizardStepList extends JPanel {
 	

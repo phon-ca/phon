@@ -16,7 +16,7 @@
 
 package ca.phon.query.db;
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Interface for a set of results from a Phon query.

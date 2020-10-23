@@ -15,16 +15,13 @@
  */
 package ca.phon.app.session.editor;
 
-import java.lang.ref.WeakReference;
-import java.util.Set;
+import java.lang.ref.*;
+import java.util.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.event.EventListenerList;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.*;
 
 /**
  * A view in the {@link SessionEditor}.  Each editor view

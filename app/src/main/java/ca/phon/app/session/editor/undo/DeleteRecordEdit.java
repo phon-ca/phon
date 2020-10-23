@@ -15,8 +15,7 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 
 /**

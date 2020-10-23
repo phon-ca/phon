@@ -15,8 +15,7 @@
  */
 package ca.phon.cvseq;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  *

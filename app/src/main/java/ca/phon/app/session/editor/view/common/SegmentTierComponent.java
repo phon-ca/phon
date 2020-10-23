@@ -16,39 +16,28 @@
 
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.lang.ref.WeakReference;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.ref.*;
+import java.text.*;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.formatter.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.MediaSegment;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.Tier;
-import ca.phon.session.TierListener;
-import ca.phon.session.check.SegmentOverlapCheck;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.PrefHelper;
+import ca.phon.session.check.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.*;
 
 /**
  * Editor for media segments.

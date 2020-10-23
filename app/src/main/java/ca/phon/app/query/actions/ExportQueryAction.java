@@ -1,24 +1,19 @@
 package ca.phon.app.query.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.menu.file.OpenFileHistory;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.app.menu.file.*;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 /**
  * Export query to a file on disk.

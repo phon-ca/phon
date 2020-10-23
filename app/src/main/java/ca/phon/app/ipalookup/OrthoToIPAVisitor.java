@@ -15,14 +15,10 @@
  */
 package ca.phon.app.ipalookup;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.orthography.OrthoComment;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.OrthoWordnet;
-import ca.phon.orthography.Orthography;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.ipa.*;
+import ca.phon.orthography.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Create an {@link IPATranscript} from the given {@link Orthography}.  The

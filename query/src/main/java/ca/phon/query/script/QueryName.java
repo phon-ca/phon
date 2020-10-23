@@ -15,12 +15,11 @@
  */
 package ca.phon.query.script;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.io.*;
+import java.net.*;
 
-import ca.phon.extensions.Extension;
-import ca.phon.query.db.ScriptLibrary;
+import ca.phon.extensions.*;
+import ca.phon.query.db.*;
 
 /**
  * Extension for {@link QueryScript} objects which provides

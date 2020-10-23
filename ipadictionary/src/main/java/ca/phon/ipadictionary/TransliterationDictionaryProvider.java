@@ -15,12 +15,12 @@
  */
 package ca.phon.ipadictionary;
 
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 
-import ca.phon.ipadictionary.impl.TransliterationDictionary;
-import ca.phon.plugin.PluginManager;
-import ca.phon.util.resources.ClassLoaderHandler;
+import ca.phon.ipadictionary.impl.*;
+import ca.phon.plugin.*;
+import ca.phon.util.resources.*;
 
 /**
  * Dictionary which use a tokenizer and lookup table

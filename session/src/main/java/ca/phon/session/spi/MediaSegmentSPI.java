@@ -1,6 +1,6 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.MediaUnit;
+import ca.phon.session.*;
 
 public interface MediaSegmentSPI {
 

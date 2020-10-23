@@ -15,16 +15,10 @@
  */
 package ca.phon.app.session.editor.search.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.search.FindManager;
-import ca.phon.app.session.editor.search.FindManager.FindDirection;
-import ca.phon.app.session.editor.search.FindManager.FindStatus;
-import ca.phon.app.session.editor.view.find_and_replace.FindAndReplaceEditorView;
-import ca.phon.app.session.editor.view.record_data.FindAndReplacePanel;
-import ca.phon.session.position.SessionRange;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.record_data.*;
 
 public class FindNextAction extends FindAndReplaceAction {
 

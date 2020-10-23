@@ -15,16 +15,14 @@
  */
 package ca.phon.app;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
-import com.github.zafarkhaja.semver.Version;
+import com.github.zafarkhaja.semver.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.log.*;
+import ca.phon.util.*;
 
 /**
  * Methods for determining the version number of the application.

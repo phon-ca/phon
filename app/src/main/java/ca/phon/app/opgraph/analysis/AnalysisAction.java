@@ -15,18 +15,16 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.report.ReportAction;
-import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.hooks.*;
+import ca.phon.app.opgraph.report.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.worker.*;
 
 public class AnalysisAction extends HookableAction {
 

@@ -15,12 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
 
-import javax.swing.Action;
+import javax.swing.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.hooks.*;
+import ca.phon.app.session.editor.*;
 
 /**
  * Base class for {@link SessionEditor} {@link Action}s.

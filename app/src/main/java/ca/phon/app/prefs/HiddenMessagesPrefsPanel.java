@@ -15,12 +15,11 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXList;
+import org.jdesktop.swingx.*;
 
 public class HiddenMessagesPrefsPanel extends PrefsPanel {
 

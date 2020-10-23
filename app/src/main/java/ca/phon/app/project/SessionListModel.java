@@ -15,17 +15,14 @@
  */
 package ca.phon.app.project;
 
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.project.Project;
-import ca.phon.util.CollatorFactory;
+import ca.phon.project.*;
+import ca.phon.util.*;
 
 /**
  * Handles the data model for the session list in the

@@ -15,8 +15,8 @@
  */
 package ca.phon.app.project;
 
-import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.project.*;
+import ca.phon.ui.*;
 
 /**
  * <p>Common module frame with project extension.</p>

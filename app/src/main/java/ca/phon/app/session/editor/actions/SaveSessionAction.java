@@ -15,19 +15,17 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.session.Session;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.session.*;
+import ca.phon.util.icons.*;
 
 /**
  * <p>Save the {@link Session} currently open in the {@link SessionEditor}.</p>

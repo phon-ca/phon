@@ -15,7 +15,7 @@
  */
 package ca.phon.script.params;
 
-import java.util.Iterator;
+import java.util.*;
 
 public class MultiboolScriptParam extends ScriptParam {
 	

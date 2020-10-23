@@ -15,18 +15,14 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.query.report.io.Group;
+import ca.phon.query.report.io.*;
 
 public class GroupSectionPanel extends SectionPanel<Group> {
 	

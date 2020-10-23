@@ -15,39 +15,18 @@
  */
 package ca.phon.ui.wizard;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.*;
 
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.wizard.WizardEvent.WizardEventType;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.*;
+import ca.phon.ui.wizard.WizardEvent.*;
+import ca.phon.util.icons.*;
 
 /**
  * A basic wizard implementation.

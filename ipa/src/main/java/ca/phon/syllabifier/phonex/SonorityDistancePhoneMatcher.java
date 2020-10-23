@@ -15,8 +15,8 @@
  */
 package ca.phon.syllabifier.phonex;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.phonex.PhoneMatcher;
+import ca.phon.ipa.*;
+import ca.phon.phonex.*;
 
 /**
  * Phone matcher for sonority distance.

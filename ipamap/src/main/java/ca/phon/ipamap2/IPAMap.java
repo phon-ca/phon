@@ -1,8 +1,8 @@
 package ca.phon.ipamap2;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class IPAMap  {
 	

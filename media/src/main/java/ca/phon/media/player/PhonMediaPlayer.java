@@ -16,64 +16,34 @@
 
 package ca.phon.media.player;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.io.*;
+import java.nio.*;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputAdapter;
+import javax.imageio.*;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.media.VLCHelper;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.media.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.dnd.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
-import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCallbackAdapter;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
+import uk.co.caprica.vlcj.factory.*;
+import uk.co.caprica.vlcj.player.base.*;
+import uk.co.caprica.vlcj.player.embedded.*;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.*;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.*;
 
 /**
  * Media player using vlc4j (including media playback controls.)

@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.util.List;
+import java.util.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 /**
  * Interface used to load tier editors.

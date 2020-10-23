@@ -15,19 +15,15 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.BorderLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.beans.*;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.media.MediaLocator;
+import ca.phon.media.*;
 
 /**
  * Edit prefs for media such as media search paths.

@@ -15,7 +15,7 @@
  */
 package ca.phon.ipadictionary.exceptions;
 
-import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.*;
 
 /**
  * Exception thrown during {@link IPADictionary#addEntry(String, String)}

@@ -15,17 +15,13 @@
  */
 package ca.phon.session;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ipa.alignment.SyllableAligner;
-import ca.phon.ipa.alignment.SyllableMap;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoWordExtractor;
-import ca.phon.orthography.Orthography;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.orthography.*;
 
 /**
  * <p>Aligned word access for a record. A word is typically any text content

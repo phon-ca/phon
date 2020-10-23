@@ -15,17 +15,14 @@
  */
 package ca.phon.cvseq;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 
-import ca.phon.cvseq.fsa.CVSeqCompiler;
-import ca.phon.fsa.FSAState;
-import ca.phon.fsa.SimpleFSA;
-import ca.phon.ipa.IPAElement;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.Range;
+import ca.phon.cvseq.fsa.*;
+import ca.phon.fsa.*;
+import ca.phon.ipa.*;
+import ca.phon.syllable.*;
+import ca.phon.util.*;
 
 /**
  *

@@ -15,20 +15,14 @@
  */
 package ca.phon.ui.menu;
 
-import java.awt.Component;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.awt.*;
+import java.lang.ref.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.MenuElement;
+import javax.swing.*;
 
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 /**
  * <p>Helper class for building menus.  Menus items are 'addressed' using paths.  Paths are

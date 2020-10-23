@@ -16,7 +16,7 @@
 
 package ca.phon.media.player;
 
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 
 /**
  * Adds/removes entries from the media menu.

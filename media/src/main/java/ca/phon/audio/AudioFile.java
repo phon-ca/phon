@@ -1,14 +1,9 @@
 package ca.phon.audio;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.nio.BufferUnderflowException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel.MapMode;
+import java.io.*;
+import java.math.*;
+import java.nio.*;
+import java.nio.channels.FileChannel.*;
 
 /**
  * An audio file. For a list of supported file types see {@link AudioFileType}.

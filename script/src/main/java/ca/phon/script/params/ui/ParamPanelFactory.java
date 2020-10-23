@@ -15,38 +15,24 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.BorderLayout;
-import java.util.Optional;
-import java.util.function.Supplier;
+import java.awt.*;
+import java.util.*;
+import java.util.function.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.fife.ui.rsyntaxtextarea.ErrorStrip;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rtextarea.RTextScrollPane;
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXCollapsiblePane;
-import org.jdesktop.swingx.VerticalLayout;
+import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rtextarea.*;
+import org.jdesktop.swingx.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.plugin.PluginManager;
-import ca.phon.script.params.BooleanScriptParam;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.script.params.LabelScriptParam;
-import ca.phon.script.params.MultiboolScriptParam;
-import ca.phon.script.params.PatternScriptParam;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.SeparatorScriptParam;
-import ca.phon.script.params.StringScriptParam;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.text.PromptedTextField;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.plugin.*;
+import ca.phon.script.params.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.ui.text.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 /**
  * Create a script param form.

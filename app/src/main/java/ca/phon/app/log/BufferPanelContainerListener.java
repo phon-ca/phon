@@ -15,7 +15,7 @@
  */
 package ca.phon.app.log;
 
-import java.util.EventListener;
+import java.util.*;
 
 public interface BufferPanelContainerListener extends EventListener {
 

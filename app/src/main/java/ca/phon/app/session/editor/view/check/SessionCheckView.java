@@ -15,36 +15,22 @@
  */
 package ca.phon.app.session.editor.view.check;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JToolBar;
-import javax.swing.SwingWorker;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogBuffer;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionEditorStatusBar;
-import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
-import ca.phon.session.check.SessionValidator;
-import ca.phon.session.check.ValidationEvent;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import au.com.bytecode.opencsv.*;
+import ca.phon.app.log.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.check.actions.*;
+import ca.phon.session.check.*;
+import ca.phon.util.icons.*;
 
 public class SessionCheckView extends EditorView {
 	

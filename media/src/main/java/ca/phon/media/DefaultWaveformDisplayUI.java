@@ -1,29 +1,16 @@
 package ca.phon.media;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
-import java.awt.geom.Area;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.beans.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.JComponent;
-import javax.swing.SwingWorker;
-import javax.swing.UIManager;
+import javax.swing.*;
 
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 /**
  * Default implementation of UI for {@link WaveformDisplay}

@@ -1,10 +1,8 @@
 package ca.phon.ipamap2;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.*;
 
-import ca.phon.ui.ipamap.io.Cell;
+import ca.phon.ui.ipamap.io.*;
 
 public interface IPAMapCellRenderer {
 	

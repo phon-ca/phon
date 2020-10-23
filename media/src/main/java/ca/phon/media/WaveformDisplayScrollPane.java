@@ -1,6 +1,6 @@
 package ca.phon.media;
 
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 /**
  * Scroll pane for waveform displays providing a timeline and

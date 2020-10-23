@@ -1,6 +1,6 @@
 package ca.phon.app.session.editor.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 
 public class ExportAdjacencySequenceAction extends ExportSegmentAction {
 

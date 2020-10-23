@@ -15,11 +15,10 @@
  */
 package ca.phon.plugin;
 
-import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.AbstractAction;
+import javax.swing.*;
 
 /**
  * Action for quickly executing plugin entry points.

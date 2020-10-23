@@ -15,15 +15,12 @@
  */
 package ca.phon.ui.menu;
 
-import java.awt.Window;
+import java.awt.*;
 import java.util.List;
 
-import javax.swing.JMenuBar;
+import javax.swing.*;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.IPluginMenuFilter;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 /**
  * Helper class to build menus based on plugin

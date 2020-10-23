@@ -15,14 +15,11 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.session.SyllabifierInfo;
-import ca.phon.session.Tier;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.app.session.editor.*;
+import ca.phon.ipa.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
 
 /**
  * Editor for IPATranscript tiers 

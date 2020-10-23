@@ -15,27 +15,15 @@
  */
 package ca.phon.ui.text;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.text.JTextComponent;
+import javax.swing.text.*;
 
-import org.fife.ui.autocomplete.BasicCompletion;
-import org.fife.ui.autocomplete.Completion;
-import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.autocomplete.TemplateCompletion;
-import org.fife.ui.autocomplete.Util;
+import org.fife.ui.autocomplete.*;
 
-import ca.phon.ipa.features.Feature;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PhonexPluginManager;
-import ca.phon.phonex.PluginProvider;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.features.*;
+import ca.phon.phonex.*;
+import ca.phon.syllable.*;
 
 /**
  * Autocomplete provider for rsyntaxtextarea phonex editor.

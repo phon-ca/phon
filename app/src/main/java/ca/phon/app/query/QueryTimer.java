@@ -15,11 +15,10 @@
  */
 package ca.phon.app.query;
 
-import ca.phon.query.script.QueryTask;
-import ca.phon.ui.PhonLoggerConsole;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonTask.TaskStatus;
-import ca.phon.worker.PhonTaskListener;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
+import ca.phon.worker.*;
+import ca.phon.worker.PhonTask.*;
 
 public class QueryTimer implements PhonTaskListener {
 	

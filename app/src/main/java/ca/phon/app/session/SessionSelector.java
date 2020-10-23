@@ -15,32 +15,21 @@
  */
 package ca.phon.app.session;
 
-import java.awt.Component;
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.*;
+import java.text.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.*;
+import javax.swing.tree.*;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
-import ca.phon.util.CollatorFactory;
-import ca.phon.util.OSInfo;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.hedlund.desktopicons.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 /**
  * Displays an interface for selection one or more

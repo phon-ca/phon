@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
-import javax.swing.AbstractListModel;
+import javax.swing.*;
 
-import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.*;
 
 /**
  *

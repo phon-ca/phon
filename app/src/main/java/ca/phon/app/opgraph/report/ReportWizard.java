@@ -15,25 +15,20 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.BorderLayout;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.app.query.ResultSetSelector;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.Processor;
-import ca.phon.project.Project;
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultSetManager;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.Tuple;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.query.*;
+import ca.phon.opgraph.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.wizard.*;
+import ca.phon.util.*;
 
 public class ReportWizard extends NodeWizard {
 

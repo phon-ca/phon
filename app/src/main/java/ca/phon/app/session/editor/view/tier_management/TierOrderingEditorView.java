@@ -15,61 +15,27 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.ComponentInputMap;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.EditorAction;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.RunOnEDT;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.TierViewEdit;
-import ca.phon.app.session.editor.view.tier_management.actions.EditTierAction;
-import ca.phon.app.session.editor.view.tier_management.actions.MoveTierAction;
-import ca.phon.app.session.editor.view.tier_management.actions.NewTierAction;
-import ca.phon.app.session.editor.view.tier_management.actions.RemoveTierAction;
-import ca.phon.app.session.editor.view.tier_management.actions.ResetTierFontAction;
-import ca.phon.app.session.editor.view.tier_management.actions.ToggleHideAllTiersAction;
-import ca.phon.app.session.editor.view.tier_management.actions.ToggleLockAllTiersAction;
-import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierLockAction;
-import ca.phon.app.session.editor.view.tier_management.actions.ToggleTierVisibleAction;
-import ca.phon.session.Session;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tier_management.actions.*;
+import ca.phon.session.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 /**
  * Panel for changing tier ordering, visibility and fonts.

@@ -15,37 +15,17 @@
  */
 package ca.phon.script.params.history;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.time.*;
+import java.util.*;
+import java.util.stream.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
+import javax.xml.bind.*;
+import javax.xml.datatype.*;
+import javax.xml.stream.*;
 
-import ca.phon.script.PhonScript;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 
 /**
  * Manager for {@link ParamHistoryType} objects.  This method provides the application

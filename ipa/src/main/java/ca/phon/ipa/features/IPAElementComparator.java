@@ -15,11 +15,10 @@
  */
 package ca.phon.ipa.features;
 
-import java.text.Collator;
-import java.text.ParseException;
-import java.util.Comparator;
+import java.text.*;
+import java.util.*;
 
-import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.*;
 
 public class IPAElementComparator implements Comparator<IPAElement> {
 	

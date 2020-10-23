@@ -15,16 +15,13 @@
  */
 package ca.phon.app.menu.workspace;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
+import java.awt.event.*;
+import java.io.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.workspace.Workspace;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.app.hooks.*;
+import ca.phon.app.workspace.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
 
 public class SelectWorkspaceCommand extends HookableAction {
 

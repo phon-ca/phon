@@ -1,11 +1,10 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.record_data.*;
+import ca.phon.util.icons.*;
 
 public class FindAndReplaceAction extends SessionEditorAction {
 

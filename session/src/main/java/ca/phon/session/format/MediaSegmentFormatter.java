@@ -15,14 +15,11 @@
  */
 package ca.phon.session.format;
 
-import java.text.ParseException;
+import java.text.*;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterType;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.MediaUnit;
-import ca.phon.session.SessionFactory;
-import ca.phon.util.MsFormatter;
+import ca.phon.formatter.*;
+import ca.phon.session.*;
+import ca.phon.util.*;
 
 @FormatterType(MediaSegment.class)
 public class MediaSegmentFormatter implements Formatter<MediaSegment> {

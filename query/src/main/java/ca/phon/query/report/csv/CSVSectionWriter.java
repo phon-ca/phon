@@ -15,7 +15,7 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import au.com.bytecode.opencsv.*;
 
 /**
  * Interface for writing report sections in csv format.

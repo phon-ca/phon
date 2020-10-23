@@ -15,20 +15,13 @@
  */
 package ca.phon.script.params.ui;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
-import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
-import org.fife.ui.rsyntaxtextarea.Token;
-import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
-import org.fife.ui.rsyntaxtextarea.parser.ExtendedHyperlinkListener;
-import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
-import org.fife.ui.rsyntaxtextarea.parser.Parser;
-import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
+import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rsyntaxtextarea.parser.*;
 
-import ca.phon.script.params.PatternScriptParam;
+import ca.phon.script.params.*;
 
 public class PatternScriptParamParser implements Parser {
 	

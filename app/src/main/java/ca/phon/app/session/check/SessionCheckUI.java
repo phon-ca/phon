@@ -1,6 +1,6 @@
 package ca.phon.app.session.check;
 
-import java.awt.Component;
+import java.awt.*;
 
 public interface SessionCheckUI {
 	

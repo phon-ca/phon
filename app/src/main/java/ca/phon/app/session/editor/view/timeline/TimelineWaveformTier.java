@@ -1,53 +1,26 @@
 
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 
-import javax.swing.ActionMap;
+import javax.swing.*;
 import javax.swing.FocusManager;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.*;
 
-import ca.phon.app.session.editor.DelegateEditorAction;
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.RunOnEDT;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.ExportAdjacencySequenceAction;
-import ca.phon.app.session.editor.actions.ExportCustomSegmentAction;
-import ca.phon.app.session.editor.actions.ExportSegmentAction;
-import ca.phon.app.session.editor.actions.ExportSpeechTurnAction;
-import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
-import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
-import ca.phon.app.session.editor.actions.PlaySegmentAction;
-import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
-import ca.phon.app.session.editor.undo.AddRecordEdit;
-import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.media.TimeUIModel;
-import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.media.WaveformDisplay;
-import ca.phon.orthography.Orthography;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Participant;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.media.*;
+import ca.phon.media.TimeUIModel.*;
+import ca.phon.orthography.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.icons.*;
 
 public class TimelineWaveformTier extends TimelineTier  {
 

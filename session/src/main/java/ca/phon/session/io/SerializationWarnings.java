@@ -15,13 +15,10 @@
  */
 package ca.phon.session.io;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.extensions.Extension;
-import ca.phon.session.Session;
+import ca.phon.extensions.*;
+import ca.phon.session.*;
 
 @Extension(Session.class)
 public class SerializationWarnings {

@@ -1,6 +1,6 @@
 package ca.phon.app.query;
 
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 
 public class QueryAndReportWizardSettings {
 	

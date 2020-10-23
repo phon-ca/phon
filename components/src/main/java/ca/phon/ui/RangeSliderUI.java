@@ -15,7 +15,7 @@
  */
 package ca.phon.ui;
 
-import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.*;
 
 public abstract class RangeSliderUI extends ComponentUI {
 

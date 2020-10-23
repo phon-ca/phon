@@ -15,12 +15,12 @@
  */
 package ca.phon.ui.text;
 
-import java.text.ParseException;
+import java.text.*;
 
-import javax.swing.JFormattedTextField;
-import javax.swing.text.MaskFormatter;
+import javax.swing.*;
+import javax.swing.text.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
 /**
  * Text field for editing media segment times.  Times are displayed

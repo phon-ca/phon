@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.awt.Component;
+import java.awt.*;
 
 import javax.swing.FocusManager;
-import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.common.GroupField;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.common.*;
+import ca.phon.app.session.editor.view.record_data.*;
 import ca.phon.session.Record;
 
 /**

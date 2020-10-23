@@ -1,7 +1,6 @@
 package ca.phon.app.session;
 
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.EditorViewListener;
+import ca.phon.app.session.editor.*;
 
 public class EditorViewAdapter implements EditorViewListener {
 

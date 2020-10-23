@@ -15,42 +15,20 @@
  */
 package ca.phon.app.project.git;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.function.Consumer;
+import java.io.*;
+import java.util.function.*;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PullResult;
-import org.eclipse.jgit.api.Status;
-import org.eclipse.jgit.api.StatusCommand;
-import org.eclipse.jgit.api.errors.AbortedByHookException;
-import org.eclipse.jgit.api.errors.CanceledException;
-import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
-import org.eclipse.jgit.api.errors.DetachedHeadException;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidConfigurationException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.NoFilepatternException;
-import org.eclipse.jgit.api.errors.NoHeadException;
-import org.eclipse.jgit.api.errors.NoMessageException;
-import org.eclipse.jgit.api.errors.RefNotAdvertisedException;
-import org.eclipse.jgit.api.errors.RefNotFoundException;
+import org.eclipse.jgit.api.*;
+import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.api.errors.UnmergedPathsException;
-import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
-import org.eclipse.jgit.dircache.DirCache;
-import org.eclipse.jgit.errors.NoWorkTreeException;
-import org.eclipse.jgit.lib.ProgressMonitor;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.transport.PushResult;
+import org.eclipse.jgit.dircache.*;
+import org.eclipse.jgit.errors.*;
+import org.eclipse.jgit.lib.*;
+import org.eclipse.jgit.revwalk.*;
+import org.eclipse.jgit.storage.file.*;
+import org.eclipse.jgit.transport.*;
 
-import ca.phon.project.Project;
+import ca.phon.project.*;
 
 /**
  *

@@ -15,41 +15,24 @@
  */
 package ca.phon.app.project.checkwizard;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.prefs.PhonProperties;
-import ca.phon.app.session.SessionSelector;
-import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.prefs.*;
+import ca.phon.app.session.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.wizard.*;
+import ca.phon.util.*;
 
 /**
  * Step 1 - Check IPA wizard

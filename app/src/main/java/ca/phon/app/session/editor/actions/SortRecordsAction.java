@@ -15,16 +15,13 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.RecordSortDialog;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.RecordMoveEdit;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
 import ca.phon.session.Record;
 
 public class SortRecordsAction extends SessionEditorAction {

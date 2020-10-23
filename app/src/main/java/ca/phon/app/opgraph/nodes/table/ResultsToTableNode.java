@@ -15,60 +15,34 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.io.IOException;
-import java.text.ParseException;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.io.*;
+import java.text.*;
+import java.time.*;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXTitledSeparator;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.opgraph.GlobalParameter;
+import ca.phon.app.opgraph.*;
+import ca.phon.formatter.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.project.Project;
-import ca.phon.query.db.ReportHelper;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
-import ca.phon.query.script.params.DiacriticOptionsPanel;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
-import ca.phon.session.Group;
-import ca.phon.session.Participant;
+import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.query.report.datasource.*;
+import ca.phon.query.script.params.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
 
 @OpNodeInfo(name="Results To Table",
 	description="Convert a set of result to a table",

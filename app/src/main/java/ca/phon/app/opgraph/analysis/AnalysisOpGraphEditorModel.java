@@ -15,37 +15,26 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.BorderLayout;
-import java.awt.Rectangle;
-import java.util.Map;
+import java.awt.*;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.CompoundBorder;
-import javax.swing.undo.UndoableEdit;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.undo.*;
 
-import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel;
-import ca.phon.app.opgraph.library.PhonNodeLibrary;
-import ca.phon.app.opgraph.wizard.GraphOutlineExtension;
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.app.project.ParticipantsPanel;
-import ca.phon.app.workspace.Workspace;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpLink;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.app.edits.graph.AddNodeEdit;
-import ca.phon.opgraph.dag.CycleDetectedException;
-import ca.phon.opgraph.dag.InvalidEdgeException;
-import ca.phon.opgraph.dag.VertexNotFoundException;
-import ca.phon.opgraph.exceptions.ItemMissingException;
-import ca.phon.opgraph.extensions.CompositeNode;
-import ca.phon.project.Project;
-import ca.phon.util.Tuple;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.library.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.project.*;
+import ca.phon.app.workspace.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.edits.graph.*;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.extensions.*;
+import ca.phon.project.*;
+import ca.phon.util.*;
 
 public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 

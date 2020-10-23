@@ -1,33 +1,17 @@
 package ca.phon.ipamap2;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import ca.phon.ipa.features.Feature;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.ipa.features.FeatureSet;
-import ca.phon.ipa.parser.IPATokenType;
-import ca.phon.ipa.parser.IPATokens;
-import ca.phon.ipamap.IpaMapSearchField.SearchType;
-import ca.phon.ui.ipamap.io.Cell;
-import ca.phon.ui.ipamap.io.CellProp;
-import ca.phon.ui.ipamap.io.Grid;
-import ca.phon.ui.ipamap.io.IpaGrids;
-import ca.phon.ui.ipamap.io.ObjectFactory;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.parser.*;
+import ca.phon.ipamap.IpaMapSearchField.*;
+import ca.phon.ui.ipamap.io.*;
 
 public class IPAGrids {
 	

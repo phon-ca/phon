@@ -15,24 +15,18 @@
  */
 package ca.phon.query;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.apache.logging.log4j.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
+import org.junit.runners.Parameterized.*;
 
-import ca.phon.project.DefaultProjectFactory;
-import ca.phon.project.Project;
-import ca.phon.project.ProjectFactory;
-import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.script.params.EnumScriptParam;
-import ca.phon.session.Session;
+import ca.phon.project.*;
+import ca.phon.project.exceptions.*;
+import ca.phon.script.params.*;
+import ca.phon.session.*;
 
 /**
  * Tests of the Phones.js query

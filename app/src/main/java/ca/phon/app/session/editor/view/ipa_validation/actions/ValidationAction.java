@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.ipa_validation.ValidationEditorView;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.view.ipa_validation.*;
 
 public abstract class ValidationAction extends SessionEditorAction {
 

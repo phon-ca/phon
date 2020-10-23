@@ -15,24 +15,16 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.beans.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JScrollPane;
-import javax.swing.text.JTextComponent;
+import javax.swing.*;
+import javax.swing.text.*;
 
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.util.PrefHelper;
+import ca.phon.ui.*;
+import ca.phon.util.*;
 
 /**
  * Frame with custom behaviour for the Ipa Map.

@@ -15,12 +15,10 @@
  */
 package ca.phon.app.project;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
 
-import ca.phon.project.Project;
-import ca.phon.project.ProjectEvent;
-import ca.phon.project.ProjectEvent.ProjectEventType;
-import ca.phon.project.ProjectListener;
+import ca.phon.project.*;
+import ca.phon.project.ProjectEvent.*;
 
 public class ProjectWindowProjectListener implements ProjectListener {
 

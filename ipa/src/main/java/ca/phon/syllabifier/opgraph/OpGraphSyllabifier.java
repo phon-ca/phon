@@ -15,20 +15,15 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.Processor;
-import ca.phon.opgraph.io.OpGraphSerializer;
-import ca.phon.opgraph.io.OpGraphSerializerFactory;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
-import ca.phon.util.Language;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.io.*;
+import ca.phon.syllabifier.*;
+import ca.phon.syllabifier.opgraph.extensions.*;
+import ca.phon.util.*;
 
 /**
  * Syllabifier implementation using operable graphs.

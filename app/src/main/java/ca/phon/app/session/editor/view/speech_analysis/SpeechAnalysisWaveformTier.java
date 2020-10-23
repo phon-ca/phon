@@ -1,16 +1,12 @@
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JMenu;
-import javax.swing.JSeparator;
+import javax.swing.*;
 
-import ca.phon.media.WaveformDisplay;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.PrefHelper;
+import ca.phon.media.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.util.*;
 
 public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 	

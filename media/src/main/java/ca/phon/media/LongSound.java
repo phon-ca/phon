@@ -1,15 +1,11 @@
 package ca.phon.media;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.util.PrefHelper;
+import ca.phon.extensions.*;
+import ca.phon.plugin.*;
+import ca.phon.util.*;
 
 /**
  * LongSound objects allow for access to audio stream information

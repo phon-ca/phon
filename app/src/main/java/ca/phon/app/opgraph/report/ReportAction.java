@@ -15,20 +15,18 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.concurrent.ExecutionException;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.concurrent.*;
 
-import javax.swing.SwingWorker;
+import javax.swing.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.app.OpgraphIO;
-import ca.phon.project.Project;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.hooks.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.project.*;
+import ca.phon.worker.*;
 
 public class ReportAction extends HookableAction {
 	

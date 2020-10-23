@@ -15,19 +15,15 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.report.datasource.*;
 
 /**
  * Count the total number of tokens and distinct tokens

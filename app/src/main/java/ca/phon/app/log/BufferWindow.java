@@ -15,21 +15,16 @@
  */
 package ca.phon.app.log;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.util.Collection;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.menu.*;
 
 public class BufferWindow extends CommonModuleFrame implements BufferPanelContainer {
 

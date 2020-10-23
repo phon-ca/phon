@@ -15,7 +15,7 @@
  */
 package ca.phon.session.position;
 
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 /**
  * Helper classes for holding current and start locations

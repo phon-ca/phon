@@ -15,17 +15,12 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
-import javax.swing.KeyStroke;
-import javax.swing.Scrollable;
+import javax.swing.*;
 
-import org.fife.ui.autocomplete.AutoCompletion;
-import org.fife.ui.autocomplete.CompletionProvider;
-import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.autocomplete.*;
+import org.fife.ui.rsyntaxtextarea.*;
 
 /**
  * Editor for query patterns with custom syntax highlighting

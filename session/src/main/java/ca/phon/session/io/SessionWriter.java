@@ -15,10 +15,9 @@
  */
 package ca.phon.session.io;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 /**
  * Interface for writing {@link Session} objects

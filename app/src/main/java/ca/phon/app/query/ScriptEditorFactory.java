@@ -1,14 +1,13 @@
 package ca.phon.app.query;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
+import javax.swing.event.*;
+import javax.swing.text.*;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rtextarea.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.script.PhonScript;
+import ca.phon.app.log.*;
+import ca.phon.script.*;
 
 public class ScriptEditorFactory {
 	

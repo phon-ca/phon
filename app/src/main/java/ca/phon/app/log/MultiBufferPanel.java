@@ -15,45 +15,19 @@
  */
 package ca.phon.app.log;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import javax.swing.border.BevelBorder;
-import javax.swing.event.EventListenerList;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
-import ca.phon.app.log.actions.CloseAllBuffersAction;
-import ca.phon.app.log.actions.CloseCurrentBufferAction;
-import ca.phon.app.log.actions.PrintHTMLBufferAction;
-import ca.phon.app.log.actions.SaveAllBuffersAction;
-import ca.phon.app.log.actions.SaveBufferAction;
-import ca.phon.app.log.actions.SaveBufferAsWorkbookAction;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.log.actions.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.*;
 
 /**
  * Container for multiple {@link BufferPanels}

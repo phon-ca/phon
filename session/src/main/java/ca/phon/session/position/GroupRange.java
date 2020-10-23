@@ -15,8 +15,7 @@
  */
 package ca.phon.session.position;
 
-import ca.phon.util.Range;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 public class GroupRange extends Tuple<Integer, Range> {
 	

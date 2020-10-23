@@ -15,9 +15,9 @@
  */
 package ca.phon.ui.painter;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 /**
  * A painter interface similar to the SwingX painter

@@ -15,18 +15,14 @@
  */
 package ca.phon.opgraph.nodes.phonex;
 
-import java.awt.BorderLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.Properties;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+import javax.swing.*;
 
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.edits.node.NodeSettingsEdit;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.edits.node.*;
 
 /**
  * Phonex node settings panel.

@@ -15,12 +15,11 @@
  */
 package ca.phon.app.project.actions;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.app.hooks.*;
+import ca.phon.app.project.*;
+import ca.phon.ui.nativedialogs.*;
 
 public abstract class ProjectWindowAction extends HookableAction {
 

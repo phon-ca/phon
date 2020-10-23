@@ -15,10 +15,10 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.project.mergewizard.DeriveSessionWizard;
+import ca.phon.app.project.*;
+import ca.phon.app.project.mergewizard.*;
 
 public class DeriveSessionAction extends ProjectWindowAction {
 

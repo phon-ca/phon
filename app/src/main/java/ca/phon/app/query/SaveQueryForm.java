@@ -15,40 +15,27 @@
  */
 package ca.phon.app.query;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.project.Project;
-import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.history.ParamSetType;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.log.*;
+import ca.phon.project.*;
+import ca.phon.query.history.*;
+import ca.phon.query.script.*;
+import ca.phon.script.*;
+import ca.phon.script.params.history.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.toast.*;
+import ca.phon.util.*;
 
 public class SaveQueryForm extends JPanel {
 	

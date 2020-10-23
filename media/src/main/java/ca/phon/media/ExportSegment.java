@@ -1,12 +1,10 @@
 package ca.phon.media;
 
-import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.IOException;
+import java.beans.*;
+import java.io.*;
 
-import ca.phon.audio.AudioFileEncoding;
-import ca.phon.audio.AudioFileType;
-import ca.phon.extensions.Extension;
+import ca.phon.audio.*;
+import ca.phon.extensions.*;
 
 /**
  * Extension interface for LongSound objects.

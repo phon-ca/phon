@@ -15,11 +15,9 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import javax.swing.Icon;
-import javax.swing.JCheckBox;
+import javax.swing.*;
 
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 
 public class TristateCheckBox extends JCheckBox {
 

@@ -15,27 +15,17 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.session.SyllabifierInfo;
-import ca.phon.session.SystemTierType;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.util.Language;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
+import ca.phon.util.*;
 
 public class SyllabificationSettingsPanel extends JPanel {
 	

@@ -1,33 +1,23 @@
 package ca.phon.app.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.menu.file.OpenFileHistory;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.app.menu.file.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
 
 public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 

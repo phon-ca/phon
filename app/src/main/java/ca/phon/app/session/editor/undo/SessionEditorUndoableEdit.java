@@ -15,18 +15,14 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.lang.ref.WeakReference;
-import java.util.Set;
+import java.lang.ref.*;
+import java.util.*;
 
-import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.UndoManager;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.session.Session;
+import ca.phon.app.session.editor.*;
+import ca.phon.extensions.*;
+import ca.phon.session.*;
 
 /**
  * Base class for {@link SessionEditor} changes.  All changes to the

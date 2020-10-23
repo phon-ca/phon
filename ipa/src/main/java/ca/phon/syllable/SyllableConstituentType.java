@@ -16,9 +16,9 @@
 
 package ca.phon.syllable;
 
-import java.awt.Color;
+import java.awt.*;
 
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 
 /**
  * Parts of a syllable. Every phone may have one of these

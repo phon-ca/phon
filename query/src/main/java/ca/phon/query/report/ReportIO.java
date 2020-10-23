@@ -15,24 +15,12 @@
  */
 package ca.phon.query.report;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.bind.*;
+import javax.xml.stream.*;
 
-import ca.phon.query.report.io.ObjectFactory;
-import ca.phon.query.report.io.ReportDesign;
+import ca.phon.query.report.io.*;
 
 /**
  * Methods for reading/writing report designs.

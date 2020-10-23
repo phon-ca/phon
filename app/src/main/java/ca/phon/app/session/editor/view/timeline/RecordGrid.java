@@ -1,23 +1,15 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
-import ca.phon.media.TimeComponent;
-import ca.phon.media.TimeUIModel;
-import ca.phon.session.Participant;
+import ca.phon.media.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
 
 public class RecordGrid extends TimeComponent {
 	

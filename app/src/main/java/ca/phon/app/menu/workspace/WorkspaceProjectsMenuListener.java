@@ -15,15 +15,14 @@
  */
 package ca.phon.app.menu.workspace;
 
-import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.OpenProjectEP;
-import ca.phon.app.workspace.Workspace;
-import ca.phon.plugin.PluginAction;
-import ca.phon.project.Project;
+import ca.phon.app.modules.*;
+import ca.phon.app.project.*;
+import ca.phon.app.workspace.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
 
 public class WorkspaceProjectsMenuListener implements MenuListener {
 

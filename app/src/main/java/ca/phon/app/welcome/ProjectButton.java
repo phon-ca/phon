@@ -15,41 +15,27 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.locks.*;
+import java.util.regex.*;
 
-import javax.swing.Action;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+import org.jdesktop.swingx.painter.effects.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.ui.MultiActionButton;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.ui.*;
+import ca.phon.worker.*;
 
 /**
  * Displays a project button for the start dialog.

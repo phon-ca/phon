@@ -15,8 +15,8 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import ca.phon.extensions.Extension;
-import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.extensions.*;
+import ca.phon.ipadictionary.*;
 
 /**
  * Dictionary 'names.' The default name is the uri

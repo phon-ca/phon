@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.editor.actions.view;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.actions.*;
 
 public class ToggleViewAction extends OpgraphEditorAction {
 

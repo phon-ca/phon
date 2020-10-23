@@ -15,18 +15,13 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
+import javax.swing.*;
 
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
 
 /**
  * Simple dialog that closes on OK or Cancel. Use showDialog() to display the

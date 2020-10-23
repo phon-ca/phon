@@ -1,29 +1,20 @@
 package ca.phon.query.script.params;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.ipamap2.DiacriticSelector;
-import ca.phon.ipamap2.IPAMapCellSelectionListener;
-import ca.phon.ipamap2.IPAMapGrid;
-import ca.phon.ipamap2.IPAMapGridContainer;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ipamap2.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
+import ca.phon.script.params.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.icons.*;
 
 public class DiacriticOptionsPanel extends JPanel {
 	

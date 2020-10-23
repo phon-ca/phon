@@ -15,41 +15,21 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.ref.WeakReference;
+import java.awt.*;
+import java.beans.*;
+import java.lang.ref.*;
 import java.util.List;
 
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.session.editor.actions.DeleteRecordAction;
-import ca.phon.app.session.editor.actions.DuplicateRecordAction;
-import ca.phon.app.session.editor.actions.NewRecordAction;
-import ca.phon.app.session.editor.actions.PlayAdjacencySequenceAction;
-import ca.phon.app.session.editor.actions.PlayCustomSegmentAction;
-import ca.phon.app.session.editor.actions.PlaySegmentAction;
-import ca.phon.app.session.editor.actions.PlaySpeechTurnAction;
-import ca.phon.app.session.editor.actions.SaveSessionAction;
-import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.search.*;
+import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.icons.*;
 
 /**
  * Session editor toolbar

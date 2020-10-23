@@ -15,14 +15,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.*;
 
 /**
  * Annotation requried for {@link TierEditor} {@link IPluginExtensionPoint}s.

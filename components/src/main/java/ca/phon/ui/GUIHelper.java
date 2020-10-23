@@ -15,19 +15,11 @@
  */
 package ca.phon.ui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.font.LineMetrics;
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
+import java.awt.font.*;
+import java.awt.geom.*;
 
-import javax.swing.JComponent;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 /**
  * A class similar to {@link SwingUtilities} that has some helper functions

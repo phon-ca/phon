@@ -15,11 +15,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Tier;
+import ca.phon.app.session.editor.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
 
 @TierEditorInfo(type=MediaSegment.class)
 public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEditor> {

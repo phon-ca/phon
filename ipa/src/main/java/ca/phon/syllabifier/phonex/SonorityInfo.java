@@ -15,8 +15,8 @@
  */
 package ca.phon.syllabifier.phonex;
 
-import ca.phon.extensions.Extension;
-import ca.phon.ipa.IPAElement;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
 
 /**
  * Sonority information used during syllabification.

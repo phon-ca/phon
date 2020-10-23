@@ -15,63 +15,30 @@
  */
 package ca.phon.app.query;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.io.*;
+import java.lang.ref.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.query.actions.ExportQueryAction;
-import ca.phon.app.query.actions.SaveQueryAction;
-import ca.phon.project.Project;
-import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
-import ca.phon.script.params.history.ObjectFactory;
-import ca.phon.script.params.history.ParamSetType;
-import ca.phon.script.params.history.ParamType;
-import ca.phon.ui.ButtonPopup;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.log.*;
+import ca.phon.app.query.actions.*;
+import ca.phon.project.*;
+import ca.phon.query.history.*;
+import ca.phon.query.script.*;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
+import ca.phon.script.params.history.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.icons.*;
 
 /**
  * Utility panel for controlling query history for a {@link QueryScript}.

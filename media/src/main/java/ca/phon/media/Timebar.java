@@ -1,11 +1,10 @@
 package ca.phon.media;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 
-import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.media.TimeUIModel.*;
 
 public class Timebar extends TimeComponent {
 

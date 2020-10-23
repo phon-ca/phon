@@ -15,15 +15,13 @@
  */
 package ca.phon.app.autosave;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.UUID;
+import java.io.*;
+import java.lang.ref.*;
+import java.time.*;
+import java.util.*;
 
-import ca.phon.project.Project;
-import ca.phon.session.Session;
+import ca.phon.project.*;
+import ca.phon.session.*;
 
 /**
  * Extension for {@link Project}s which manages auto-save files for 

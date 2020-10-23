@@ -15,32 +15,23 @@
  */
 package ca.phon.app.project.mergewizard;
 
-import java.awt.BorderLayout;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.util.Collections;
+import java.awt.*;
+import java.io.*;
+import java.time.*;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.project.SessionMerger;
-import ca.phon.project.Project;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionPath;
-import ca.phon.session.filter.RecordFilter;
-import ca.phon.session.format.DateFormatter;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.wizard.WizardFrame;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.log.*;
+import ca.phon.app.project.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.session.filter.*;
+import ca.phon.session.format.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.wizard.*;
+import ca.phon.worker.*;
 
 /**
  * Merge one or more session into a new session.

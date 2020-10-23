@@ -15,12 +15,10 @@
  */
 package ca.phon.ui;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
+import java.time.format.*;
 
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
+import javax.swing.text.*;
 
 public class DateTimeDocument extends PlainDocument {
 	

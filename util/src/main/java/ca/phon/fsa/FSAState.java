@@ -15,7 +15,7 @@
  */
 package ca.phon.fsa;
 
-import java.util.Arrays;
+import java.util.*;
 
 
 /**

@@ -15,21 +15,16 @@
  */
 package ca.phon.ipa;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import ca.phon.ipa.features.IPAElementComparator;
-import ca.phon.ipa.tree.IpaTernaryTree;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.tree.*;
 
 @RunWith(JUnit4.class)
 public class TestTernaryTree {

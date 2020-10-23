@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.tier_management.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.view.tier_management.*;
 
 public abstract class TierManagementAction extends SessionEditorAction {
 

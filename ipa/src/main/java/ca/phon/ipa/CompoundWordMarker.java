@@ -15,7 +15,7 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.features.*;
 
 /**
  * Compound word marker.

@@ -1,15 +1,10 @@
 package ca.phon.media;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.Scrollable;
+import javax.swing.*;
 
 /**
  * Basic waveform display

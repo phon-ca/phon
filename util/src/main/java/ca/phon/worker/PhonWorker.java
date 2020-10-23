@@ -15,11 +15,10 @@
  */
 package ca.phon.worker;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
+import java.util.concurrent.*;
 
-import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonTask.*;
 
 /**
  * A worker thread for the application.

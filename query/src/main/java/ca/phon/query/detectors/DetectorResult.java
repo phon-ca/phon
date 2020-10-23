@@ -15,14 +15,11 @@
  */
 package ca.phon.query.detectors;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.ipa.PhoneDimension;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
 
 /**
  * A result object for two positions of a {@link PhoneMap}

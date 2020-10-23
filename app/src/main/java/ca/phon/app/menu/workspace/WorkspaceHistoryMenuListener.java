@@ -1,14 +1,12 @@
 package ca.phon.app.menu.workspace;
 
-import java.io.File;
+import java.io.*;
 
-import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.workspace.Workspace;
-import ca.phon.app.workspace.WorkspaceHistory;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.app.workspace.*;
+import ca.phon.ui.action.*;
 
 public class WorkspaceHistoryMenuListener implements MenuListener {
 

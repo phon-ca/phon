@@ -15,8 +15,7 @@
  */
 package ca.phon.xml;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLResolver;
+import javax.xml.stream.*;
 
 /**
  * 

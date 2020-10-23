@@ -16,18 +16,13 @@
 
 package ca.phon.session;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.Orthography;
-import ca.phon.orthography.OrthographyBuilder;
-import ca.phon.session.spi.RecordSPI;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.orthography.*;
+import ca.phon.session.spi.*;
 
 
 /**

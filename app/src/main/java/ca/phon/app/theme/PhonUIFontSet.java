@@ -15,11 +15,11 @@
  */
 package ca.phon.app.theme;
 
-import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.*;
 
-import org.pushingpixels.substance.api.fonts.FontSet;
+import org.pushingpixels.substance.api.fonts.*;
 
-import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.fonts.*;
 
 class PhonUIFontSet implements FontSet {
 

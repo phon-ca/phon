@@ -15,14 +15,13 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
+import java.awt.event.*;
+import java.io.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.project.Project;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.project.*;
+import ca.phon.project.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.*;
 
 public class SelectProjectMediaFolder extends ProjectWindowAction {
 

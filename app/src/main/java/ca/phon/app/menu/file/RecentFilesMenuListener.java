@@ -1,18 +1,16 @@
 package ca.phon.app.menu.file;
 
-import java.awt.Toolkit;
-import java.io.File;
+import java.awt.*;
+import java.io.*;
 
-import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.actions.OpenFileEP;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.app.actions.*;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.action.*;
 
 public class RecentFilesMenuListener implements MenuListener {
 

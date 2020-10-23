@@ -1,45 +1,25 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.AWTEvent;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.undo.CompoundEdit;
+import javax.swing.*;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddRecordEdit;
-import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
-import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
-import ca.phon.media.TimeUIModel;
-import ca.phon.media.player.PhonMediaPlayer;
-import ca.phon.orthography.Orthography;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.Participant;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.app.session.editor.view.media_player.actions.*;
+import ca.phon.media.*;
+import ca.phon.media.player.*;
+import ca.phon.orthography.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
+import uk.co.caprica.vlcj.player.base.*;
 
 public final class SegmentationHandler {
 

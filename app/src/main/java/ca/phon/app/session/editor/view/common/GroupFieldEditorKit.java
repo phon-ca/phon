@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.*;
 
 public class GroupFieldEditorKit extends DefaultEditorKit {
 

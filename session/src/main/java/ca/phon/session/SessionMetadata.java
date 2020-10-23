@@ -16,8 +16,8 @@
 
 package ca.phon.session;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.spi.SessionMetadataSPI;
+import ca.phon.extensions.*;
+import ca.phon.session.spi.*;
 
 /**
  * Transcript Metadata

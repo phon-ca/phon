@@ -15,12 +15,12 @@
  */
 package ca.phon.app.project;
 
-import java.util.List;
+import java.util.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.project.Project;
-import ca.phon.session.SessionPath;
+import ca.phon.project.*;
+import ca.phon.session.*;
 
 public class ContextPanel extends JPanel {
 

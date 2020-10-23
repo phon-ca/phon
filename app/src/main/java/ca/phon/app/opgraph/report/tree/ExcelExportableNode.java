@@ -1,6 +1,6 @@
 package ca.phon.app.opgraph.report.tree;
 
-import ca.phon.app.log.ExcelExporter;
+import ca.phon.app.log.*;
 
 public class ExcelExportableNode extends TextNode {
 

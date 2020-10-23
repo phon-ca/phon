@@ -15,22 +15,19 @@
  */
 package ca.phon.app.opgraph.editor.actions.graph;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.opgraph.editor.OpgraphEditor;
-import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionModel;
-import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.opgraph.nodes.menu.edits.ExplodeMacroEdit;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.editor.actions.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.components.canvas.*;
+import ca.phon.opgraph.nodes.general.*;
+import ca.phon.opgraph.nodes.menu.edits.*;
+import ca.phon.util.icons.*;
 
 public class ExpandMacroAction extends OpgraphEditorAction {
 

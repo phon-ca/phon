@@ -1,32 +1,19 @@
 package ca.phon.app.opgraph;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.awt.*;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.ipa.Diacritic;
-import ca.phon.query.script.params.DiacriticOptionsPanel;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
-import ca.phon.ui.HidablePanel;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ipa.*;
+import ca.phon.query.script.params.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.*;
+import ca.phon.util.icons.*;
 
 /**
  * UI for modifying OverrideParamter settings for a report/analysis.

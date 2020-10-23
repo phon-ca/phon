@@ -15,18 +15,17 @@
  */
 package ca.phon.app.project.git.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.*;
+import org.eclipse.jgit.api.errors.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.project.actions.ProjectWindowAction;
-import ca.phon.app.project.git.ProjectGitController;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.project.*;
+import ca.phon.app.project.actions.*;
+import ca.phon.app.project.git.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.*;
 
 /**
  * Initialize new repository for project.  Will also setup default

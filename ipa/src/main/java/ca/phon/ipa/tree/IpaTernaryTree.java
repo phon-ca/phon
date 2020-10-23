@@ -15,19 +15,12 @@
  */
 package ca.phon.ipa.tree;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.*;
+import java.util.concurrent.locks.*;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.features.IPAElementComparator;
-import ca.phon.ipa.tree.IpaTernaryTreeNode.Position;
+import ca.phon.ipa.*;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.tree.IpaTernaryTreeNode.*;
 
 /**
  * Ternary tree implementation for IPA transcripts

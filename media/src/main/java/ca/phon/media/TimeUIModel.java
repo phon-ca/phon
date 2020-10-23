@@ -1,17 +1,11 @@
 package ca.phon.media;
 
-import java.awt.Color;
-import java.awt.Insets;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.awt.*;
+import java.beans.*;
+import java.math.*;
+import java.util.*;
 
-import javax.swing.event.EventListenerList;
+import javax.swing.event.*;
 
 /**
  * Time model for UI applications.  Useful for time based media.

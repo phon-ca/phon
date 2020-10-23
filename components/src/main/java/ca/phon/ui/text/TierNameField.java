@@ -15,10 +15,10 @@
  */
 package ca.phon.ui.text;
 
-import java.util.Arrays;
+import java.util.*;
 
-import ca.phon.project.Project;
-import ca.phon.session.SystemTierType;
+import ca.phon.project.*;
+import ca.phon.session.*;
 
 /**
  * {@link PromptedTextField} for a tier name.  If a project is given,

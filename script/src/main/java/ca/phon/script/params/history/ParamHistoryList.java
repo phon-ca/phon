@@ -1,16 +1,13 @@
 package ca.phon.script.params.history;
 
-import java.awt.Component;
+import java.awt.*;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
-import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.*;
 
 /**
  *  

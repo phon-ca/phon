@@ -15,7 +15,7 @@
  */
 package ca.phon.ipa.features;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * A phonetic feature

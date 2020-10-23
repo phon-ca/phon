@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
 
 public class OpgraphFileFilter extends FileFilter {
 	

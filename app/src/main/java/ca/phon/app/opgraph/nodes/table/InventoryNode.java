@@ -15,35 +15,21 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
-import ca.phon.app.opgraph.wizard.NodeWizard;
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.query.TableUtils;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultValue;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.query.*;
+import ca.phon.query.db.*;
+import ca.phon.query.report.datasource.*;
 
 /**
  * Calculate inventory for a table

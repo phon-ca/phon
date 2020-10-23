@@ -15,14 +15,12 @@
  */
 package ca.phon.ui.participant;
 
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 
 public class AnonymizeParticipantOptionsPanel extends JPanel {
 

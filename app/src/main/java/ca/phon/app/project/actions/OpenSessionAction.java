@@ -15,18 +15,16 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.session.SessionPath;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.project.*;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
+import ca.phon.util.icons.*;
 
 public class OpenSessionAction extends ProjectWindowAction {
 	

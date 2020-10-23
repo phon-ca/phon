@@ -15,11 +15,11 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.JCheckBox;
+import javax.swing.*;
 
-import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.*;
 
 /**
  * Boolean script parameters

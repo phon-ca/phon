@@ -15,14 +15,12 @@
  */
 package ca.phon.query.report.csv;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
-import javax.swing.JTable;
+import javax.swing.*;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.util.OSInfo;
+import au.com.bytecode.opencsv.*;
+import ca.phon.util.*;
 
 /**
  * Writes a csv file based on the values displayed

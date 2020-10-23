@@ -15,11 +15,10 @@
  */
 package ca.phon.project;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 
-import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.project.exceptions.*;
 
 /**
  * Create projects from {@link URL}s

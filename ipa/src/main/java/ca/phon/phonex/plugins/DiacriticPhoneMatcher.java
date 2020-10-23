@@ -15,18 +15,11 @@
  */
 package ca.phon.phonex.plugins;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.apache.logging.log4j.LogManager;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.*;
+import org.apache.logging.log4j.*;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexCompiler;
-import ca.phon.phonex.PhonexLexer;
-import ca.phon.phonex.PhonexParser;
+import ca.phon.phonex.*;
 
 /**
  * <p>Base matcher for all diacritic phonex plug-ins.  The matcher accepts

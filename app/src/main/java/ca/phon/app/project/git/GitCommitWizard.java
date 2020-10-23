@@ -15,35 +15,26 @@
  */
 package ca.phon.app.project.git;
 
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.Status;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.VerticalLayout;
+import org.eclipse.jgit.api.*;
+import org.eclipse.jgit.api.errors.*;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.project.git.CommitTableModel.FileStatus;
-import ca.phon.app.project.git.actions.GitProgressBuffer;
-import ca.phon.project.Project;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.ui.wizard.WizardFrame;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.util.PrefHelper;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.project.git.CommitTableModel.*;
+import ca.phon.app.project.git.actions.*;
+import ca.phon.project.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.toast.*;
+import ca.phon.ui.wizard.*;
+import ca.phon.util.*;
+import ca.phon.worker.*;
 
 public class GitCommitWizard extends WizardFrame {
 	

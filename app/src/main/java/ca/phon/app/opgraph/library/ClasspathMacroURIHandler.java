@@ -1,19 +1,14 @@
 package ca.phon.app.opgraph.library;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.*;
 
-import ca.phon.opgraph.library.NodeData;
-import ca.phon.opgraph.library.handlers.URIHandler;
-import ca.phon.opgraph.nodes.general.MacroNodeData;
-import ca.phon.opgraph.nodes.general.MacroNodeInstantiator;
+import ca.phon.opgraph.library.*;
+import ca.phon.opgraph.library.handlers.*;
+import ca.phon.opgraph.nodes.general.*;
 
 /**
  * Load macros from classpath (used in {@link PhonNodeLibrary})

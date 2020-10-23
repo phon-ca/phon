@@ -1,21 +1,18 @@
 package ca.phon.app.opgraph.nodes.query;
 
-import static ca.phon.opgraph.io.xml.XMLSerializerFactory.DEFAULT_NAMESPACE;
+import static ca.phon.opgraph.io.xml.XMLSerializerFactory.*;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.xml.namespace.QName;
+import javax.xml.namespace.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.extensions.Extendable;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.extensions.*;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.xml.XMLConstants;
+import ca.phon.xml.*;
 
 public class QueryReportNodeXMLSerializer implements XMLSerializer {
 	

@@ -15,11 +15,11 @@
  */
 package ca.phon.ui;
 
-import java.io.File;
+import java.io.*;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 
 /**
  * Displays a file path as just the name or a shortened

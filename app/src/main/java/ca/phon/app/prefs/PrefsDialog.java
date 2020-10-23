@@ -15,24 +15,15 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.plugin.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
 
 
 /**

@@ -15,11 +15,10 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
 
-import ca.phon.app.project.NewCorpusDialog;
-import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.*;
 
 public class NewCorpusAction extends ProjectWindowAction {
 	

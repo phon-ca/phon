@@ -16,10 +16,10 @@
 package ca.phon.phonex;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.*;
 import junit.framework.Assert;
 
 @RunWith(JUnit4.class)

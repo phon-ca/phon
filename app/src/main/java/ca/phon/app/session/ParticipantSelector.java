@@ -15,26 +15,16 @@
  */
 package ca.phon.app.session;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.*;
+import javax.swing.tree.*;
 
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.project.ParticipantHistory;
-import ca.phon.project.Project;
-import ca.phon.session.Participant;
-import ca.phon.session.SessionPath;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTree;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellEditor;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeCellRenderer;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.formatter.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.util.icons.*;
 
 public class ParticipantSelector extends TristateCheckBoxTree {
 

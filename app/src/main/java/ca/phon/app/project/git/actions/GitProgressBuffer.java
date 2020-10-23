@@ -15,21 +15,19 @@
  */
 package ca.phon.app.project.git.actions;
 
-import java.awt.BorderLayout;
-import java.io.PrintWriter;
-import java.util.Stack;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import org.eclipse.jgit.lib.ProgressMonitor;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.LogBuffer;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.app.log.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
 
 /**
  * Frame for displaying progress from a git command.

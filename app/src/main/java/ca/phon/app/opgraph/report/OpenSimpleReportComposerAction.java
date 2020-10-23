@@ -15,16 +15,15 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.Project;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.opgraph.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
 
 public class OpenSimpleReportComposerAction extends HookableAction {
 	

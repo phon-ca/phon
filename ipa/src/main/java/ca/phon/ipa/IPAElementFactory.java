@@ -15,8 +15,7 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.*;
 
 /**
  * A factory for creating various types of {@link IPAElement}

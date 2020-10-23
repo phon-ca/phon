@@ -15,21 +15,16 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment.actions;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.*;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.session.Group;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
 
 public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 

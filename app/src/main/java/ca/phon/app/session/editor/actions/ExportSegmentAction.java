@@ -1,34 +1,23 @@
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
-import javax.swing.Action;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.CustomSegmentDialog;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionMediaModel;
-import ca.phon.audio.AudioFileType;
-import ca.phon.media.ExportSegment;
-import ca.phon.media.LongSound;
-import ca.phon.session.MediaSegment;
+import ca.phon.app.log.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.audio.*;
+import ca.phon.media.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.position.SegmentCalculator;
+import ca.phon.session.position.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
 
 public class ExportSegmentAction extends SessionEditorAction {
 

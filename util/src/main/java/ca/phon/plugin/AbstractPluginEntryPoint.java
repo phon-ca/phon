@@ -15,10 +15,9 @@
  */
 package ca.phon.plugin;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import ca.phon.worker.PhonTask;
+import ca.phon.worker.*;
 
 public abstract class AbstractPluginEntryPoint extends PhonTask implements IPluginEntryPoint {
 	

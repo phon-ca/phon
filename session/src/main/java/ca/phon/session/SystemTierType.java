@@ -15,9 +15,9 @@
  */
 package ca.phon.session;
 
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.Orthography;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.orthography.*;
 
 /**
  * Tier descriptions for default tiers.

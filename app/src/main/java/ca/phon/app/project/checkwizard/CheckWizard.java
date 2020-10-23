@@ -15,36 +15,26 @@
  */
 package ca.phon.app.project.checkwizard;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.UUID;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.project.checkwizard.CheckWizardStep1.Operation;
-import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneAligner;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.project.Project;
+import ca.phon.app.log.*;
+import ca.phon.app.project.checkwizard.CheckWizardStep1.*;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SessionPath;
-import ca.phon.session.Tier;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.wizard.BreadcrumbWizardFrame;
-import ca.phon.ui.wizard.WizardStep;
-import ca.phon.worker.PhonTask;
-import ca.phon.worker.PhonWorker;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.wizard.*;
+import ca.phon.worker.*;
 
 /**
  * A wizard for checking/repairing IPA transcriptions

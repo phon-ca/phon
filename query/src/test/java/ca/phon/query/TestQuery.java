@@ -15,26 +15,21 @@
  */
 package ca.phon.query;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.mozilla.javascript.Scriptable;
+import org.junit.runner.*;
+import org.junit.runners.*;
+import org.junit.runners.Parameterized.*;
+import org.mozilla.javascript.*;
 
-import ca.phon.project.Project;
-import ca.phon.query.db.ResultSet;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryTask;
-import ca.phon.script.PhonScriptContext;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParameters;
-import ca.phon.session.Session;
+import ca.phon.project.*;
+import ca.phon.query.db.*;
+import ca.phon.query.script.*;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
+import ca.phon.session.*;
 import junit.framework.Assert;
 
 /**

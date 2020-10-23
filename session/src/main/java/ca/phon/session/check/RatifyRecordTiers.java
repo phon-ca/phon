@@ -1,10 +1,9 @@
 package ca.phon.session.check;
 
-import java.util.Properties;
+import java.util.*;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.session.Session;
+import ca.phon.plugin.*;
+import ca.phon.session.*;
 
 public class RatifyRecordTiers implements SessionCheck, IPluginExtensionPoint<SessionCheck> {
 

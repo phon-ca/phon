@@ -15,20 +15,13 @@
  */
 package ca.phon.session.impl;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import ca.phon.session.Participant;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SessionFactory;
-import ca.phon.session.SessionMetadata;
-import ca.phon.session.TierDescription;
-import ca.phon.session.TierViewItem;
-import ca.phon.session.Transcriber;
-import ca.phon.session.spi.SessionSPI;
+import ca.phon.session.spi.*;
 
 public class SessionImpl implements SessionSPI {
 	

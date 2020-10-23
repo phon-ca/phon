@@ -15,13 +15,10 @@
  */
 package ca.phon.script.params;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.beans.*;
+import java.util.*;
 
-import ca.phon.script.PhonScriptContext;
+import ca.phon.script.*;
 
 /**
  * A parameter for a script.  These parameters are setup by the {@link PhonScriptContext}

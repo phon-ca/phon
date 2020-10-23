@@ -15,8 +15,8 @@
  */
 package ca.phon.syllable;
 
-import ca.phon.ipa.IntraWordPause;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.ipa.*;
+import ca.phon.visitor.annotation.*;
 
 public class SyllableAndPausesVisitor extends SyllableVisitor {
 	

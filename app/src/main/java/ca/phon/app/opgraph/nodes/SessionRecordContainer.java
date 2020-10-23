@@ -15,11 +15,9 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import ca.phon.session.Session;
+import ca.phon.session.*;
 
 public class SessionRecordContainer implements RecordContainer {
 	

@@ -15,9 +15,9 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import ca.phon.extensions.Extension;
-import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.util.Language;
+import ca.phon.extensions.*;
+import ca.phon.ipadictionary.*;
+import ca.phon.util.*;
 
 /**
  * Capability for returning langauge information

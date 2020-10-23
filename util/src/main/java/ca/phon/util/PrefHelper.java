@@ -15,20 +15,11 @@
  */
 package ca.phon.util;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.Format;
-import java.text.ParseException;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
+import java.awt.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.text.*;
+import java.util.prefs.*;
 
 
 

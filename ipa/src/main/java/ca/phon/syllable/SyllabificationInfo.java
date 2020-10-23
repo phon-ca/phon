@@ -15,16 +15,11 @@
  */
 package ca.phon.syllable;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import ca.phon.extensions.Extension;
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
-import ca.phon.ipa.StressMarker;
-import ca.phon.ipa.StressType;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
 
 /**
  * Adds syllabification information to Phones.

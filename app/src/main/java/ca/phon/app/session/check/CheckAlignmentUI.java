@@ -1,13 +1,12 @@
 package ca.phon.app.session.check;
 
-import java.awt.Component;
+import java.awt.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.session.check.CheckAlignment;
+import ca.phon.session.check.*;
 
 public class CheckAlignmentUI extends JPanel implements SessionCheckUI {
 

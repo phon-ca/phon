@@ -15,33 +15,26 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.Dimension;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.opgraph.editor.SimpleEditor;
-import ca.phon.app.opgraph.nodes.AnalysisNodeInstantiator;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.dag.CycleDetectedException;
-import ca.phon.opgraph.dag.InvalidEdgeException;
-import ca.phon.opgraph.dag.VertexNotFoundException;
-import ca.phon.opgraph.exceptions.ItemMissingException;
-import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.plugin.IPluginEntryPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.nodes.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.nodes.general.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
 
 @PhonPlugin(name=AnalysisComposerEP.EP_NAME)
 public class AnalysisComposerEP implements IPluginEntryPoint {

@@ -15,11 +15,10 @@
  */
 package ca.phon.session;
 
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.util.Tuple;
+import ca.phon.extensions.*;
+import ca.phon.util.*;
 
 /**
  * Helper class for holding location for sessions

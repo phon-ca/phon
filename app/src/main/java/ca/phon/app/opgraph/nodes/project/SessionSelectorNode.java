@@ -15,33 +15,23 @@
  */
 package ca.phon.app.opgraph.nodes.project;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
+import java.awt.*;
+import java.lang.reflect.*;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.session.SessionSelector;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.app.session.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.layout.*;
 
 @OpNodeInfo(
 	category="Project",

@@ -15,11 +15,10 @@
  */
 package ca.phon.app.project;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.util.RecentFiles;
+import ca.phon.util.*;
 
 public class RecentProjects extends RecentFiles {
 	

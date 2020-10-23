@@ -15,38 +15,27 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.io.File;
-import java.util.ArrayList;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.undo.UndoableEdit;
+import javax.swing.*;
+import javax.swing.undo.*;
 
-import ca.phon.app.opgraph.library.LibraryView;
-import ca.phon.app.opgraph.wizard.WizardExtension;
-import ca.phon.app.query.ScriptPanel;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.app.GraphEditorModel;
-import ca.phon.opgraph.app.components.NodeSettingsPanel;
-import ca.phon.opgraph.app.components.canvas.GraphCanvas;
-import ca.phon.opgraph.app.components.canvas.GraphCanvasScroller;
-import ca.phon.opgraph.app.edits.graph.DeleteNodesEdit;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.extensions.CompositeNode;
-import ca.phon.opgraph.library.NodeLibrary;
-import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
+import ca.phon.app.opgraph.library.*;
+import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.query.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.components.*;
+import ca.phon.opgraph.app.components.canvas.*;
+import ca.phon.opgraph.app.edits.graph.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.extensions.*;
+import ca.phon.opgraph.library.*;
+import ca.phon.ui.jbreadcrumb.*;
+import ca.phon.util.*;
 
 /**
  * Base model for the opgraph editor.

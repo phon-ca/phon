@@ -15,19 +15,18 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
-import javax.swing.Action;
+import javax.swing.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.app.project.*;
+import ca.phon.project.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
 
 public class DeleteSessionAction extends ProjectWindowAction {

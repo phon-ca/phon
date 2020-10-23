@@ -15,22 +15,20 @@
  */
 package ca.phon.app.query.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.query.QueryAndReportWizard;
-import ca.phon.app.query.QueryHistoryAndNameToolbar;
-import ca.phon.query.history.QueryHistoryManager;
-import ca.phon.query.script.QueryScript;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.app.query.*;
+import ca.phon.query.history.*;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
 
 public class DeleteAllUnnamedEntriesAction extends HookableAction {
 

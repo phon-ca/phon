@@ -1,20 +1,15 @@
 package ca.phon.app.session.editor;
 
-import java.awt.Toolkit;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.IOException;
+import java.awt.*;
+import java.beans.*;
+import java.io.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.media.LongSound;
-import ca.phon.media.PlaySegment;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.SessionFactory;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import ca.phon.app.log.*;
+import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.media.*;
+import ca.phon.session.*;
+import ca.phon.ui.nativedialogs.*;
+import uk.co.caprica.vlcj.player.base.*;
 
 /**
  * Centralized segment playback for the editor with

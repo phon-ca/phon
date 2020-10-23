@@ -15,13 +15,11 @@
  */
 package ca.phon.session.format;
 
-import java.text.ParseException;
-import java.time.Period;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.*;
+import java.time.*;
+import java.util.regex.*;
 
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterType;
+import ca.phon.formatter.*;
 
 /**
  * Create formatters for ages stored in {@link Period} objects.

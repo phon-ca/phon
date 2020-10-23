@@ -15,15 +15,13 @@
  */
 package ca.phon.app.menu.file;
 
-import java.awt.Desktop;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.LogUtil;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.hooks.*;
+import ca.phon.app.log.*;
+import ca.phon.util.*;
 
 public class ShowApplicationDataFolderCommand extends HookableAction {
 

@@ -15,24 +15,16 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
-import ca.phon.app.ipalookup.OrthoWordIPAOptions;
-import ca.phon.app.session.editor.view.common.TierDataConstraint;
-import ca.phon.app.session.editor.view.common.TierDataLayoutPanel;
-import ca.phon.orthography.OrthoElement;
-import ca.phon.orthography.OrthoWord;
-import ca.phon.orthography.OrthoWordnet;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
+import ca.phon.app.ipalookup.*;
+import ca.phon.app.session.editor.view.common.*;
+import ca.phon.orthography.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.visitor.*;
+import ca.phon.visitor.annotation.*;
 
 public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 	

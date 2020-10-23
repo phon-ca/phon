@@ -1,6 +1,6 @@
 package ca.phon.util;
 
-import java.lang.ref.Cleaner;
+import java.lang.ref.*;
 
 /**
  * Wrapper method for a static cleaner for the application.

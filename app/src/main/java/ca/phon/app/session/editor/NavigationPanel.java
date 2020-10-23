@@ -15,28 +15,16 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.lang.ref.WeakReference;
-import java.util.List;
+import java.awt.event.*;
+import java.lang.ref.*;
+import java.util.*;
 
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.session.editor.actions.FirstRecordAction;
-import ca.phon.app.session.editor.actions.LastRecordAction;
-import ca.phon.app.session.editor.actions.NextRecordAction;
-import ca.phon.app.session.editor.actions.PreviousRecordAction;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.ui.action.*;
 
 public class NavigationPanel extends JPanel {
 	

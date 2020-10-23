@@ -1,16 +1,12 @@
 package ca.phon.app.query;
 
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.query.QueryAndReportWizardSettings.ReportLoadStrategy;
+import ca.phon.app.query.QueryAndReportWizardSettings.*;
 
 /**
  * UI for editing {@link QueryAndReportWizardSettings}

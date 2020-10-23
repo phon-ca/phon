@@ -15,9 +15,9 @@
  */
 package ca.phon.ui.syllable;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
 
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.syllable.*;
 
 /**
  * Simple combo box for selecting a syllable constituen type.

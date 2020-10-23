@@ -15,25 +15,15 @@
  */
 package ca.phon.orthography;
 
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.text.*;
+import java.util.*;
 
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.*;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.orthography.parser.OrthoTokenSource;
-import ca.phon.orthography.parser.OrthographyParser;
-import ca.phon.orthography.parser.exceptions.OrthoParserException;
-import ca.phon.visitor.Visitable;
-import ca.phon.visitor.Visitor;
+import ca.phon.extensions.*;
+import ca.phon.orthography.parser.*;
+import ca.phon.orthography.parser.exceptions.*;
+import ca.phon.visitor.*;
 
 /**
  * Container for orthographic transcriptions.  This class is immutable after being created.

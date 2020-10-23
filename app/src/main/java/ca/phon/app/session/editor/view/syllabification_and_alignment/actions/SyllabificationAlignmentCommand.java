@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.SyllabificationAlignmentEditorView;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.*;
 
 public abstract class SyllabificationAlignmentCommand extends SessionEditorAction {
 

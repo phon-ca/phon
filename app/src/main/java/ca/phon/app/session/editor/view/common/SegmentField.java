@@ -15,28 +15,17 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.text.ParseException;
+import java.awt.*;
+import java.text.*;
 
-import javax.swing.JFormattedTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.MaskFormatter;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.session.MediaSegment;
-import ca.phon.session.format.MediaSegmentFormatter;
+import ca.phon.session.*;
+import ca.phon.session.format.*;
 
 public class SegmentField extends JFormattedTextField {
 	

@@ -15,22 +15,16 @@
  */
 package ca.phon.app.log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+import java.io.*;
+import java.util.logging.*;
 
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.RollingFileAppender;
-import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
-import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy;
-import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.*;
+import org.apache.logging.log4j.core.appender.*;
+import org.apache.logging.log4j.core.appender.rolling.*;
+import org.apache.logging.log4j.core.config.*;
 
-import ca.phon.util.PrefHelper;
+import ca.phon.util.*;
 
 /**
  * Method for setup and management of application logs.

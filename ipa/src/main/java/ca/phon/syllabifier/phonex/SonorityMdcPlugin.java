@@ -15,11 +15,9 @@
  */
 package ca.phon.syllabifier.phonex;
 
-import java.util.List;
+import java.util.*;
 
-import ca.phon.phonex.PhoneMatcher;
-import ca.phon.phonex.PhonexPlugin;
-import ca.phon.phonex.PluginProvider;
+import ca.phon.phonex.*;
 
 /**
  * Provides the phonex 'mdc' (minimum distance constraint)

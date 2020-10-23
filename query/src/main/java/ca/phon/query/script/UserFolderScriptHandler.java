@@ -15,12 +15,10 @@
  */
 package ca.phon.query.script;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
 
-import ca.phon.query.db.ScriptLibrary;
-import ca.phon.util.resources.FolderHandler;
+import ca.phon.query.db.*;
+import ca.phon.util.resources.*;
 
 public class UserFolderScriptHandler extends FolderHandler<QueryScript> {
 

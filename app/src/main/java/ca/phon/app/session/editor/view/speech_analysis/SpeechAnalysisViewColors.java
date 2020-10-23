@@ -1,8 +1,8 @@
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.Color;
+import java.awt.*;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 
 public class SpeechAnalysisViewColors {
 

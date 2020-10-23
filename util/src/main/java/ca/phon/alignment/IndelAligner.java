@@ -15,7 +15,7 @@
  */
 package ca.phon.alignment;
 
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 

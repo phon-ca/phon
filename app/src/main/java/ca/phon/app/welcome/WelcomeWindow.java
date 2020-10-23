@@ -15,60 +15,33 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.util.Set;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.util.*;
 
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import org.jdesktop.swingx.JXTitledSeparator;
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+import org.jdesktop.swingx.painter.effects.*;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.NativeUtilities;
-import ca.hedlund.desktopicons.StockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.hedlund.desktopicons.*;
 import ca.phon.app.VersionInfo;
-import ca.phon.app.menu.edit.PreferencesCommand;
-import ca.phon.app.menu.file.NewProjectCommand;
-import ca.phon.app.menu.file.OpenProjectCommand;
-import ca.phon.app.project.RecentProjects;
-import ca.phon.app.project.RecentProjectsList;
-import ca.phon.app.workspace.Workspace;
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.decorations.TitledPanel;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.menu.edit.*;
+import ca.phon.app.menu.file.*;
+import ca.phon.app.project.*;
+import ca.phon.app.workspace.*;
+import ca.phon.extensions.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.*;
+import ca.phon.ui.fonts.*;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 /**
  * Entry window for the application.  This window provides access to

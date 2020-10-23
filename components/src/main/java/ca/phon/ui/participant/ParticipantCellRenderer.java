@@ -15,17 +15,15 @@
  */
 package ca.phon.ui.participant;
 
-import java.awt.Component;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
+import java.awt.*;
+import java.time.*;
+import java.time.format.*;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.*;
+import javax.swing.table.*;
 
-import ca.phon.session.Sex;
-import ca.phon.session.format.AgeFormatter;
+import ca.phon.session.*;
+import ca.phon.session.format.*;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 

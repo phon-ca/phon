@@ -15,27 +15,18 @@
  */
 package ca.phon.syllabifier.opgraph.nodes;
 
-import java.awt.Component;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
 
-import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.opgraph.InputField;
-import ca.phon.opgraph.OpContext;
-import ca.phon.opgraph.OpNode;
-import ca.phon.opgraph.OpNodeInfo;
-import ca.phon.opgraph.OutputField;
-import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.extensions.NodeSettings;
-import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.opgraph.nodes.phonex.PhonexNode;
-import ca.phon.opgraph.nodes.phonex.PhonexSettingsPanel;
-import ca.phon.phonex.PhonexMatcher;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.nodes.phonex.*;
+import ca.phon.phonex.*;
+import ca.phon.syllable.*;
 
 @OpNodeInfo(
 		name="Mark Constituent Type",

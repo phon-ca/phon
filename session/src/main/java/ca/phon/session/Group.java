@@ -15,13 +15,10 @@
  */
  package ca.phon.session;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.ipa.alignment.SyllableAligner;
-import ca.phon.ipa.alignment.SyllableMap;
-import ca.phon.orthography.OrthoWordExtractor;
-import ca.phon.orthography.Orthography;
+import ca.phon.extensions.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.orthography.*;
 
 /**
  * A Group is a vertical view of tier information

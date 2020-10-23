@@ -15,17 +15,16 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.xml.namespace.QName;
+import javax.xml.namespace.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
-import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.xml.XMLConstants;
+import ca.phon.xml.*;
 
 public class NodeEditorSettingsSerializer implements XMLSerializer {
 

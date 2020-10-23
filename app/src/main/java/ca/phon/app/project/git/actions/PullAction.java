@@ -15,22 +15,18 @@
  */
 package ca.phon.app.project.git.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.awt.event.*;
+import java.io.*;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.MergeResult;
-import org.eclipse.jgit.api.PullResult;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.transport.FetchResult;
-import org.eclipse.jgit.transport.TrackingRefUpdate;
+import org.eclipse.jgit.api.*;
+import org.eclipse.jgit.api.errors.*;
+import org.eclipse.jgit.transport.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.project.actions.ProjectWindowAction;
-import ca.phon.app.project.git.ProjectGitController;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.worker.PhonWorker;
+import ca.phon.app.project.*;
+import ca.phon.app.project.actions.*;
+import ca.phon.app.project.git.*;
+import ca.phon.ui.*;
+import ca.phon.worker.*;
 
 public class PullAction extends ProjectWindowAction {
 	

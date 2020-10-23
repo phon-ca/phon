@@ -15,9 +15,8 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.tools.ToolContext;
-import org.apache.velocity.tools.ToolManager;
+import org.apache.velocity.*;
+import org.apache.velocity.tools.*;
 
 public class NodeWizardReportContext {
 	

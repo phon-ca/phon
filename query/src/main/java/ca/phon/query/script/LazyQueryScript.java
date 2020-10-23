@@ -15,20 +15,13 @@
  */
 package ca.phon.query.script;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 
-import ca.phon.query.db.Query;
-import ca.phon.query.db.QueryManager;
-import ca.phon.query.db.ScriptLibrary;
-import ca.phon.query.db.xml.XMLQuery;
-import ca.phon.script.BasicScript;
-import ca.phon.script.PhonScriptException;
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.ScriptParameters;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.*;
+import ca.phon.script.*;
+import ca.phon.script.params.*;
 
 /**
  * Defers loading of the query script until data is needed.

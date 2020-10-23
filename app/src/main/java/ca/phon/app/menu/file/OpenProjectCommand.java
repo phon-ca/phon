@@ -15,21 +15,17 @@
  */
 package ca.phon.app.menu.file;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.OpenProjectEP;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.app.hooks.*;
+import ca.phon.app.modules.*;
+import ca.phon.app.project.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.*;
+import ca.phon.ui.nativedialogs.*;
 
 public class OpenProjectCommand extends HookableAction {
 

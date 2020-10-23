@@ -16,7 +16,7 @@
 
 package ca.phon.util;
 
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * Encodes and decodes to and from Base64 notation.

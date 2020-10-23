@@ -15,39 +15,25 @@
  */
 package ca.phon.app.menu.query;
 
-import java.awt.Desktop;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.prefs.PreferencesEP;
-import ca.phon.plugin.PluginAction;
-import ca.phon.project.Project;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.query.script.QueryScriptLibrary;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.app.log.*;
+import ca.phon.app.prefs.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.query.script.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.util.resources.*;
 
 /**
  * Dynamic building of query menu

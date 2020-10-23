@@ -15,9 +15,7 @@
  */
 package ca.phon.phonex;
 
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Class to help with loading/finding

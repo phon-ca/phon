@@ -15,33 +15,15 @@
  */
 package ca.phon.session;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.io.*;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.*;
 
-import ca.phon.extensions.ExtendableObject;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import ca.phon.session.io.SessionInputFactory;
-import ca.phon.session.io.SessionOutputFactory;
-import ca.phon.session.io.SessionReader;
-import ca.phon.session.io.SessionWriter;
-import ca.phon.session.spi.CommentSPI;
-import ca.phon.session.spi.MediaSegmentSPI;
-import ca.phon.session.spi.ParticipantSPI;
-import ca.phon.session.spi.RecordSPI;
-import ca.phon.session.spi.SessionFactorySPI;
-import ca.phon.session.spi.SessionMetadataSPI;
-import ca.phon.session.spi.SessionSPI;
-import ca.phon.session.spi.TierDescriptionSPI;
-import ca.phon.session.spi.TierSPI;
-import ca.phon.session.spi.TierViewItemSPI;
-import ca.phon.session.spi.TranscriberSPI;
+import ca.phon.extensions.*;
+import ca.phon.plugin.*;
+import ca.phon.session.io.*;
+import ca.phon.session.spi.*;
 
 /**
  * A factory for creating mutable session objects.

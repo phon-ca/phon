@@ -15,13 +15,13 @@
  */
 package ca.phon.ipadictionary;
 
-import java.util.Iterator;
+import java.util.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.util.resources.*;
 
 @RunWith(JUnit4.class)
 public class IPADictionaryManagerTest {

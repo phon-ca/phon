@@ -15,18 +15,15 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.project.RenameSessionDialog;
-import ca.phon.project.Project;
-import ca.phon.session.Session;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.CollatorFactory;
+import ca.phon.app.project.*;
+import ca.phon.project.*;
+import ca.phon.session.*;
+import ca.phon.ui.toast.*;
+import ca.phon.util.*;
 
 public class RenameSessionAction extends ProjectWindowAction {
 	

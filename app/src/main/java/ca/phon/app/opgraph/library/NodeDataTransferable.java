@@ -15,12 +15,10 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
+import java.awt.datatransfer.*;
+import java.io.*;
 
-import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.*;
 
 public class NodeDataTransferable implements Transferable {
 

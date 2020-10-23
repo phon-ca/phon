@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.net.URL;
+import java.net.*;
 
-import ca.phon.project.Project;
-import ca.phon.util.resources.ResourceLoader;
+import ca.phon.project.*;
+import ca.phon.util.resources.*;
 
 public interface OpGraphLibrary {
 

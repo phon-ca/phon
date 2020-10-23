@@ -15,12 +15,11 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
-import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.*;
 
 public class RefreshAction extends ProjectWindowAction {
 

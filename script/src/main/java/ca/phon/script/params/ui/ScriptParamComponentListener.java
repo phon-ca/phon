@@ -15,13 +15,12 @@
  */
 package ca.phon.script.params.ui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.ref.WeakReference;
+import java.beans.*;
+import java.lang.ref.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
-import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.*;
 
 public class ScriptParamComponentListener implements PropertyChangeListener {
 	

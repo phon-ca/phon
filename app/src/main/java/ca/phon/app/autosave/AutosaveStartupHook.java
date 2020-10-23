@@ -15,11 +15,9 @@
  */
 package ca.phon.app.autosave;
 
-import ca.phon.app.hooks.PhonStartupHook;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginException;
-import ca.phon.util.PrefHelper;
+import ca.phon.app.hooks.*;
+import ca.phon.plugin.*;
+import ca.phon.util.*;
 
 public class AutosaveStartupHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 

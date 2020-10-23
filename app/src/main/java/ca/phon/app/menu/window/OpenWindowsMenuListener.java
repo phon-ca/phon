@@ -15,32 +15,22 @@
  */
 package ca.phon.app.menu.window;
 
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.lang.ref.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.project.OpenProjectEP;
-import ca.phon.app.project.ProjectWindow;
-import ca.phon.app.welcome.WelcomeWindow;
-import ca.phon.app.welcome.WelcomeWindowEP;
-import ca.phon.plugin.PluginAction;
-import ca.phon.plugin.PluginEntryPointRunner;
-import ca.phon.plugin.PluginException;
-import ca.phon.project.Project;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.*;
+import ca.phon.app.project.*;
+import ca.phon.app.welcome.*;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
 
 /**
  * Populates a menu with open windows organized by project.

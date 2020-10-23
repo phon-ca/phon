@@ -15,13 +15,10 @@
  */
 package ca.phon.ipa.parser;
 
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.*;
 
-import ca.phon.ipa.parser.exceptions.IPAParserException;
-import ca.phon.ipa.parser.exceptions.InvalidTokenException;
-import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.ipa.parser.exceptions.*;
+import ca.phon.syllable.*;
 
 
 /**

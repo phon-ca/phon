@@ -15,24 +15,17 @@
  */
 package ca.phon.app.theme;
 
-import java.awt.Color;
+import java.awt.*;
 
-import org.pushingpixels.substance.api.ColorSchemeAssociationKind;
-import org.pushingpixels.substance.api.ComponentState;
-import org.pushingpixels.substance.api.ComponentStateFacet;
-import org.pushingpixels.substance.api.DecorationAreaType;
-import org.pushingpixels.substance.api.SubstanceColorScheme;
-import org.pushingpixels.substance.api.SubstanceColorSchemeBundle;
-import org.pushingpixels.substance.api.SubstanceSkin;
-import org.pushingpixels.substance.api.colorscheme.BaseColorScheme;
-import org.pushingpixels.substance.api.colorscheme.SteelBlueColorScheme;
-import org.pushingpixels.substance.api.painter.border.GlassBorderPainter;
-import org.pushingpixels.substance.api.painter.decoration.ArcDecorationPainter;
-import org.pushingpixels.substance.api.painter.fill.ClassicFillPainter;
-import org.pushingpixels.substance.api.painter.highlight.GlassHighlightPainter;
-import org.pushingpixels.substance.api.painter.overlay.BottomLineOverlayPainter;
-import org.pushingpixels.substance.api.shaper.ClassicButtonShaper;
-import org.pushingpixels.substance.internal.colorscheme.BlendBiColorScheme;
+import org.pushingpixels.substance.api.*;
+import org.pushingpixels.substance.api.colorscheme.*;
+import org.pushingpixels.substance.api.painter.border.*;
+import org.pushingpixels.substance.api.painter.decoration.*;
+import org.pushingpixels.substance.api.painter.fill.*;
+import org.pushingpixels.substance.api.painter.highlight.*;
+import org.pushingpixels.substance.api.painter.overlay.*;
+import org.pushingpixels.substance.api.shaper.*;
+import org.pushingpixels.substance.internal.colorscheme.*;
 
 public class PhonSubstanceSkin extends SubstanceSkin {
 	/**

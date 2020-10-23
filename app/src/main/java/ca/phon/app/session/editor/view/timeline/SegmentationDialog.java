@@ -1,39 +1,23 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
-import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.*;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.timeline.SegmentationHandler.MediaStart;
-import ca.phon.app.session.editor.view.timeline.SegmentationHandler.SegmentationMode;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.timeline.SegmentationHandler.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.session.Participant;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.text.FormatterTextField;
-import ca.phon.util.PrefHelper;
+import ca.phon.session.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.text.*;
+import ca.phon.util.*;
 
 /**
  * Options dialog for segmentation.

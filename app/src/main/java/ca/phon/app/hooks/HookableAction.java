@@ -15,13 +15,12 @@
  */
 package ca.phon.app.hooks;
 
-import java.awt.event.ActionEvent;
-import java.util.List;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.AbstractAction;
+import javax.swing.*;
 
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.*;
 
 /**
  * 

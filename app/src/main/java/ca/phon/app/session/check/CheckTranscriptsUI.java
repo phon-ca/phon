@@ -1,26 +1,14 @@
 package ca.phon.app.session.check;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import ca.phon.session.check.CheckTranscripts;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.util.Language;
+import ca.phon.session.check.*;
+import ca.phon.syllabifier.*;
+import ca.phon.util.*;
 
 public class CheckTranscriptsUI extends JPanel implements SessionCheckUI {
 	

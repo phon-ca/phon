@@ -15,15 +15,14 @@
  */
 package ca.phon.project;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
+import java.io.*;
+import java.util.*;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.project.exceptions.*;
 import junit.framework.Assert;
 
 /**

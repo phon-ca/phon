@@ -15,14 +15,11 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
-import ca.phon.app.opgraph.nodes.RecordContainer;
-import ca.phon.query.db.Result;
-import ca.phon.query.db.ResultSet;
-import ca.phon.session.Session;
+import ca.phon.app.opgraph.nodes.*;
+import ca.phon.query.db.*;
+import ca.phon.session.*;
 
 public class ResultSetRecordContainer implements RecordContainer {
 

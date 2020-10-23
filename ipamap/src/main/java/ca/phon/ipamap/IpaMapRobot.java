@@ -15,16 +15,12 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.io.*;
 
-import ca.phon.util.OSInfo;
+import ca.phon.util.*;
 
 public class IpaMapRobot implements IpaMapListener {
 	

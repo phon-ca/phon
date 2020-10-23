@@ -15,25 +15,16 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
-import ca.phon.app.log.MultiBufferPanel;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
-import ca.phon.ui.ButtonPopup;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.app.log.*;
+import ca.phon.app.opgraph.wizard.actions.*;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.icons.*;
 
 public class WizardMultiBufferPanel extends MultiBufferPanel {
 

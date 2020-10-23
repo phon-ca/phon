@@ -15,27 +15,21 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
-import javax.xml.namespace.QName;
+import javax.xml.namespace.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.*;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElementFactory;
-import ca.phon.opgraph.OpGraph;
-import ca.phon.opgraph.OpNode;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.*;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.io.xml.XMLSerializer;
 import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.xml.XMLConstants;
+import ca.phon.xml.*;
 
 public class InventorySettingsXMLSerializer implements XMLSerializer {
 	

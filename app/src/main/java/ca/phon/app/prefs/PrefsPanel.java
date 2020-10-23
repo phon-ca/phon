@@ -15,7 +15,7 @@
  */
 package ca.phon.app.prefs;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * A panel for the preferences dialog.  This
