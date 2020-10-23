@@ -304,7 +304,7 @@ scope {
 @init {
 	$phonex_matcher_ref::cmbDias = new ArrayList<Diacritic>();
 }
-	:	ps=prefix_section? DOLLAR_SIGN DIGIT (cd=COMBINING_DIACRITIC {$phonex_matcher_ref::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})* ss=suffix_section?
+	:	ps=prefix_section? BACKSLASH DIGIT (cd=COMBINING_DIACRITIC {$phonex_matcher_ref::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})* ss=suffix_section?
 	{
 		Diacritic[] prefixDiacritics = new Diacritic[0];
 		if(ps != null) {
@@ -327,7 +327,7 @@ scope {
 		ref.setCombiningDiacritics(combiningDiacritics);
 		$phonexMatcherRef = ref;
 	}
-	|	ps=prefix_section? DOLLAR_SIGN OPEN_BRACE GROUP_NAME CLOSE_BRACE (cd=COMBINING_DIACRITIC {$phonex_matcher_ref::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})* ss=suffix_section?
+	|	ps=prefix_section? BACKSLASH OPEN_BRACE GROUP_NAME CLOSE_BRACE (cd=COMBINING_DIACRITIC {$phonex_matcher_ref::cmbDias.add( factory.createDiacritic( $cd.text.charAt(0) ) );})* ss=suffix_section?
 	{
 		Diacritic[] prefixDiacritics = new Diacritic[0];
 		if(ps != null) {

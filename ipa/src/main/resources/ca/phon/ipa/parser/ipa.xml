@@ -26,10 +26,14 @@
         <name>Space</name>
         <token>SPACE</token>
     </char>
-    <char value="&#x0024;">
+    <!--<char value="&#x0024;">
         <name>Dollar Sign</name>
         <token>DOLLAR_SIGN</token>
-    </char>
+    </char>-->
+	<char value="&#x005c;">
+		<name>Backslash</name>
+		<token>BACKSLASH</token>
+	</char>
     <char value="&#x007b;">
         <name>Open Brace</name>
         <token>OPEN_BRACE</token>

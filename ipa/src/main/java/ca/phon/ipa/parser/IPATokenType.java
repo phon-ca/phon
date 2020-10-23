@@ -49,7 +49,7 @@ public enum IPATokenType {
     COLON("Colon"),
     SCTYPE("Syllable ConstituentType"),
     SANDHI("Sandhi"),
-    DOLLAR_SIGN("Dollar sign"),
+    BACKSLASH("Backslash"),
     OPEN_BRACE("Open brace"),
     GROUP_NAME("Group name"),
     CLOSE_BRACE("Close brace"),

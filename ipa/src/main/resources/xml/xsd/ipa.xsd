@@ -70,7 +70,7 @@
             <!-- Phonex matcher references -->
             <xs:enumeration value="OPEN_BRACE"/>
             <xs:enumeration value="CLOSE_BRACE"/>
-            <xs:enumeration value="DOLLAR_SIGN"/>
+            <xs:enumeration value="BACKSLASH"/>
             <xs:enumeration value="GROUP_NAME"/>
             <xs:enumeration value="DIGIT"/>
             
