@@ -1,5 +1,5 @@
 /*
-we3e * Copyright (C) 2012-2018 Gregory Hedlund & Yvan Rose
+ * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
