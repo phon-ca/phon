@@ -13,6 +13,10 @@
 	<name>Phon Application</name>
 	<description>Phon application project.  This project includes all code related to the
 	UI and all application level logic.</description>
+	
+	<properties>
+		<org.codehaus.groovy.version>2.5.13</org.codehaus.groovy.version>
+	</properties>
 
 	<dependencies>
 		<dependency>

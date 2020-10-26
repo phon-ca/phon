@@ -173,8 +173,6 @@
 		<org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
 		<org.codehaus.mojo.jaxb2-maven-plugin.version>2.4</org.codehaus.mojo.jaxb2-maven-plugin.version>
 		
-		<org.codehaus.groovy.version>2.5.13</org.codehaus.groovy.version>
-		
 		<!-- jxbrowser -->
 		<com.teamdev.jxbrowser.version>6.24.2</com.teamdev.jxbrowser.version>
 		<com.teamdev.jxbrowser.license.version>6.X</com.teamdev.jxbrowser.license.version>
