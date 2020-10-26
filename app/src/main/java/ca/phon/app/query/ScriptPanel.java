@@ -63,7 +63,7 @@ public class ScriptPanel extends JPanel implements Scrollable {
 	 * Create a new empty script panel
 	 */
 	public ScriptPanel() {
-		this(new QueryScript(""));
+		this(new BasicScript(""));
 	}
 
 	/**
