@@ -5,8 +5,8 @@
     <body>
         <p>The Phonological Processes analyses will query and report on pre-defined and custom IPA
             Target ↔ IPA Actual processes. These processes are typicalled defined using phonex
-            expressions.  Each pre-defined process is available as a named analyis under the
-                <uicontrol>Phonological Processes</uicontrol> menu.</p>
+            expressions. Each pre-defined process is available as a named analyis under the
+                <uicontrol>Phonological Processes</uicontrol> submenu.</p>
     </body>
     <topic id="params">
         <title>Parameters</title>
@@ -18,6 +18,10 @@
                  />
              </fig>
             </p>
+            <p> Phonological processes are defined using a pair of IPA Target/Actual expressions.
+                Custom processes may be defined by entering the appropriate IPA Target/Actual
+                expression in the form under <uicontrol>IPA Target/Actual Options</uicontrol> as
+                shown above. </p>
             <p>Several pre-defined phonological processes have been defined and are accessible by
                 name under the <menucascade>
                     <uicontrol>Analysis</uicontrol>
