@@ -127,8 +127,8 @@
         <topicref href="analysis/ppc.dita" format="dita"/>
         <topicref href="analysis/pntc.dita"/>
         <topicref href="analysis/phone_inventory.dita"/>
-        <topicref href="analysis/phonological_processes.md" format="markdown"/>
         <topicref href="analysis/pmlu.dita"/>
+        <topicref href="analysis/phonological_processes.dita"/>
         <topicref href="analysis/word_inventory.dita" format="dita"/>
         <topichead navtitle="Specialized">
             <topicref href="analysis/specialized/word_match.md" format="markdown"/>
