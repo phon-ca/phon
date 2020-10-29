@@ -42,9 +42,6 @@ public class DiacriticOptionsScriptParamComponentFactory
 	@Override
 	public JComponent createScriptParamComponent(ScriptParam scriptParam) {
 		DiacriticOptionsPanel retVal = new DiacriticOptionsPanel((DiacriticOptionsScriptParam)scriptParam);
-		
-		
-		
 		return retVal;
 	}
 	

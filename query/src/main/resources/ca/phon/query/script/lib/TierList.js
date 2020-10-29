@@ -19,6 +19,8 @@
 /*
  * List of tiers entered by the user.
  */
+ 
+importPackage(Packages.ca.phon.query.script.params)
 
 exports.TierList = function(id) {
 
@@ -32,7 +34,7 @@ exports.TierList = function(id) {
 	this.tiers = tiersParamInfo.def;
 
 	this.param_setup = function(params) {
-		this.tiersParam = new StringScriptParam(
+		this.tiersParam = new TierListScriptParam(
         		tiersParamInfo.id,
         		tiersParamInfo.title,
         		tiersParamInfo.def);
