@@ -41,53 +41,28 @@ public class TierListScriptParamPanel extends JPanel {
 		Set<String> tierSet = param.tierSet();
 		
 		orthographyBox = new JCheckBox(SystemTierType.Orthography.getName());
-		
 		orthographyBox.addActionListener( (e) -> {
-			if(orthographyBox.isSelected()) {
-				param.addTier(SystemTierType.Orthography.getName());
-			} else {
-				param.removeTier(SystemTierType.Orthography.getName());
-			}
+			param.setTiers(selectedTiers());
 		});
 		
 		ipaTargetBox = new JCheckBox(SystemTierType.IPATarget.getName());
-		
 		ipaTargetBox.addActionListener( (e) -> {
-			if(ipaTargetBox.isSelected()) {
-				param.addTier(SystemTierType.IPATarget.getName());
-			} else {
-				param.removeTier(SystemTierType.IPATarget.getName());
-			}
+			param.setTiers(selectedTiers());
 		});
 		
 		ipaActualBox = new JCheckBox(SystemTierType.IPAActual.getName());
-		
 		ipaActualBox.addActionListener( (e) -> {
-			if(ipaActualBox.isSelected()) {
-				param.addTier(SystemTierType.IPAActual.getName());
-			} else {
-				param.removeTier(SystemTierType.IPAActual.getName());
-			}
+			param.setTiers(selectedTiers());
 		});
 		
 		alignmentBox = new JCheckBox(SystemTierType.SyllableAlignment.getName());
-		
 		alignmentBox.addActionListener( (e) -> {
-			if(alignmentBox.isSelected()) {
-				param.addTier(SystemTierType.SyllableAlignment.getName());
-			} else {
-				param.removeTier(SystemTierType.SyllableAlignment.getName());
-			}
+			param.setTiers(selectedTiers());
 		});
 		
 		notesBox = new JCheckBox(SystemTierType.Notes.getName());
-		
 		notesBox.addActionListener( (e) -> {
-			if(notesBox.isSelected()) {
-				param.addTier(SystemTierType.Notes.getName());
-			} else {
-				param.removeTier(SystemTierType.Notes.getName());
-			}
+			param.setTiers(selectedTiers());
 		});
 		
 		JPanel boxPanel = new JPanel(new GridLayout(2, 3));
@@ -111,6 +86,22 @@ public class TierListScriptParamPanel extends JPanel {
 	}
 	
 	private void installParamListeners() {
+		param.addPropertyChangeListener(ScriptParam.ENABLED_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setEnabled((boolean)evt.getNewValue());
+			}
+			
+		});
+		param.addPropertyChangeListener(ScriptParam.VISIBLE_PROP, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setVisible((boolean)evt.getNewValue());
+			}
+			
+		});
 		param.addPropertyChangeListener(StringScriptParam.PROMPT_PROP, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
