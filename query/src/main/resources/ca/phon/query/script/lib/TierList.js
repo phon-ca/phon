@@ -32,13 +32,17 @@ exports.TierList = function(id) {
 	};
 	this.tiersParam;
 	this.tiers = tiersParamInfo.def;
+	
+	this.setEnabled = function(enabled) {
+		this.tiersParam.setEnabled(enabled == true);
+	};
 
 	this.param_setup = function(params) {
 		this.tiersParam = new TierListScriptParam(
-        		tiersParamInfo.id,
-        		tiersParamInfo.title,
-        		tiersParamInfo.def);
-        	this.tiersParam.setPrompt(tiersParamInfo.prompt);
+    		tiersParamInfo.id,
+    		tiersParamInfo.title,
+    		tiersParamInfo.def);
+    	this.tiersParam.setPrompt(tiersParamInfo.prompt);
 
 		params.add(this.tiersParam);
 	};

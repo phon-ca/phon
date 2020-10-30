@@ -611,6 +611,11 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryHistoryPanel = new QueryHistoryAndNameToolbar(queryHistoryManager, scriptPanel);
 		if(settings.isLoadPreviousExecutionOnStartup() && queryHistoryManager.size() > 0)
 			queryHistoryPanel.gotoLast();
+		else if(queryHistoryPanel.getStockQueries().size() > 0) {
+			queryHistoryPanel.loadFromParamSet(queryHistoryPanel.getStockQueries().getParamSet(0));
+			queryHistoryPanel.updateLabelFromCurrentHash();
+		}
+		
 		queryHistoryPanel.setOpaque(false);
 		queryPanel.getContentContainer().add(queryHistoryPanel, BorderLayout.NORTH);
 		

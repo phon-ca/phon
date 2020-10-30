@@ -77,9 +77,7 @@ function setup_params(params) {
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
 
-	var sep = new LabelScriptParam("", "<html><b>Add Aligned Groups</b></html>");
-	params.add(sep);
-	filters.groupTiers.param_setup(params);
+	
 	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
 	params.add(sep2);
 	filters.alignedGroup.param_setup(params);
@@ -87,10 +85,6 @@ function setup_params(params) {
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
-
-	var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
-	params.add(wordsep);
-	filters.wordTiers.param_setup(params);
 
 	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
 	params.add(wordsep2);
@@ -100,6 +94,7 @@ function setup_params(params) {
 			var enabled = e.source.getValue(e.source.paramId);
 			filters.wordPattern.setEnabled(enabled);
 			filters.alignedWord.setEnabled(enabled);
+			filters.wordTiers.setEnabled(enabled);
 		}
 	};
 	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
@@ -111,7 +106,16 @@ function setup_params(params) {
 
 	filters.searchBy.includeSyllableOption = true;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
-
+	
+	var otherDataScriptParamSep = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
+	params.add(otherDataScriptParamSep);
+	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
+	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
+	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+	
 	filters.speaker.param_setup(params);
 }
 
