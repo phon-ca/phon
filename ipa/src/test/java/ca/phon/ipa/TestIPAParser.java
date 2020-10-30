@@ -234,7 +234,7 @@ public class TestIPAParser {
 			Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
 		}
 		
-		final String ipaTxt = "t${o}st";
+		final String ipaTxt = "t\\{o}st";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(ipaTxt);
 		Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
 	}
