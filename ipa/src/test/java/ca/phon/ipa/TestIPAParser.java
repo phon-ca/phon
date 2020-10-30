@@ -229,7 +229,7 @@ public class TestIPAParser {
 	@Test
 	public void testPhonexMatcherRefernce() throws Exception {
 		for(int i = 0; i < 10; i++) {
-			final String ipaTxt = "t$" + i + "st";
+			final String ipaTxt = "t\\" + i + "st";
 			final IPATranscript ipa = IPATranscript.parseIPATranscript(ipaTxt);
 			Assert.assertEquals(PhonexMatcherReference.class, ipa.elementAt(1).getClass());
 		}
