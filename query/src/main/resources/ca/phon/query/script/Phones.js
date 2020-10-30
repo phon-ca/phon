@@ -114,6 +114,7 @@ function setup_params(params) {
 	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
+	filters.wordTiers.setEnabled(enabled);
 	
 	filters.speaker.param_setup(params);
 }

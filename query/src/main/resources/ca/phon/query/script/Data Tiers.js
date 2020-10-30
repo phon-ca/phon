@@ -64,6 +64,7 @@ function setup_params(params) {
 			var enabled = e.source.getValue(e.source.paramId);
 			filters.wordTiers.tiersParam.setEnabled(enabled == true);
 			filters.alignedWord.setEnabled(enabled);
+			filters.wordTiers.setEnabled(enabled);
 		}
 	};
 	filters.word.searchByWordParam.addPropertyChangeListener(alignedWordListener);
@@ -77,6 +78,7 @@ function setup_params(params) {
 	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
+	filters.wordTiers.setEnabled(filters.word.searchByWord);
 
 	filters.speaker.param_setup(params);
 }
