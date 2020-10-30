@@ -156,6 +156,8 @@ public class TierListScriptParamPanel extends JPanel {
 			"Target Stress", "Actual Stress"
 		};
 		for(SystemTierType stt:SystemTierType.values()) {
+			if(stt == SystemTierType.ActualSyllables ||
+					stt == SystemTierType.TargetSyllables) continue;
 			retVal.addCompletion(stt.getName());
 		}
 		for(String otherTier:otherTiers) {
