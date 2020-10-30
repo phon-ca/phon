@@ -41,7 +41,7 @@ public class QueryScriptCommand extends PluginAction {
 		}
 		putValue(NAME, qn.getName() + "...");
 		
-		// don't load previous settings if a stock library
+		// don't load previous settings if not in stock library
 		// or if settings have been defined in an xml file
 		if(qn.getScriptLibrary() != ScriptLibrary.STOCK
 				|| qn.getLocation().getPath().endsWith(".xml")) {

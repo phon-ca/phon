@@ -41,12 +41,8 @@ function setup_params(params) {
 	filters.group.param_setup(params);
 	filters.groupPattern.param_setup(params);
 
-	var sep = new LabelScriptParam("", "<html><b>Add Aligned Groups</b></html>");
-	params.add(sep);
-	filters.groupTiers.param_setup(params);
-
-	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
-	params.add(sep2);
+	var alignedGroupHeader = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
+	params.add(alignedGroupHeader);
 	filters.alignedGroup.param_setup(params);
 
 	// change default status of word filter for this query
@@ -54,12 +50,8 @@ function setup_params(params) {
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	
-    var wordsep = new LabelScriptParam("", "<html><b>Add Aligned Words</b></html>");
-	params.add(wordsep);
-	filters.wordTiers.param_setup(params);
-
-	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
-	params.add(wordsep2);
+	var alignedWordHeader = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
+	params.add(alignedWordHeader);
 	filters.alignedWord.param_setup(params);
 
 	var alignedWordListener = new java.beans.PropertyChangeListener {
@@ -76,6 +68,15 @@ function setup_params(params) {
 	
 	filters.searchBy.includeSyllableOption = true;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
+
+	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
+	params.add(otherDataHeader);
+	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
+	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
+	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
 
 	filters.speaker.param_setup(params);
 }

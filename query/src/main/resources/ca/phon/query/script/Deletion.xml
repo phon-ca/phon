@@ -18,5 +18,7 @@
         <param id="filters.targetResultFilter.filterType">Phonex</param>
         <param id="filters.wordPattern.filterType">Plain text</param>
         <param id="searchTier">IPA Target</param>
+    	<param id="otherDataHeader.collapsed">false</param>
+    	<param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
     </script>
 </query>
