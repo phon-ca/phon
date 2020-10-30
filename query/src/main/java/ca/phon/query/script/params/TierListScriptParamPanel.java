@@ -38,8 +38,6 @@ public class TierListScriptParamPanel extends JPanel {
 	}
 	
 	private void init() {
-		Set<String> tierSet = param.tierSet();
-		
 		orthographyBox = new JCheckBox(SystemTierType.Orthography.getName());
 		orthographyBox.addActionListener( (e) -> {
 			param.setTiers(selectedTiers());
@@ -150,6 +148,7 @@ public class TierListScriptParamPanel extends JPanel {
 
 	private DefaultTextCompleterModel createTextCompleterModel() {
 		DefaultTextCompleterModel retVal = new DefaultTextCompleterModel();
+		retVal.setSeparator(",");
 		
 		String[] otherTiers = {
 			"Target Syllabification", "Actual Syllabification",

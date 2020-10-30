@@ -28,10 +28,20 @@ public class TreeTextCompleterModel<T> implements TextCompleterModel<T> {
 	
 	private boolean includeInfixEntries = false;
 	
+	private String separator = null;
+	
 	public TreeTextCompleterModel() {
 		super();
 		
 		this.tree = new TernaryTree<T>();
+	}
+	
+	public String getSeparator() {
+		return this.separator;
+	}
+	
+	public void setSeparator(String separator) {
+		this.separator = separator;
 	}
 	
 	public boolean isIncludeInfixEntries() {
@@ -73,12 +83,21 @@ public class TreeTextCompleterModel<T> implements TextCompleterModel<T> {
 	
 	@Override
 	public List<String> getCompletions(String text) {
+		String prefix = "";
+		if(separator != null) {
+			int lastIdx = text.lastIndexOf(separator);
+			if(lastIdx >= 0) {
+				prefix = text.substring(0, lastIdx+1);
+				text = text.substring(lastIdx+1);
+			}
+		}
+		
 		if(!caseSensitive) text = text.toLowerCase();
-		final Set<Entry<String, T>> entries = tree.entriesWithPrefix(text, caseSensitive);
+		final Set<Entry<String, T>> entries = tree.entriesWithPrefix(text.trim(), caseSensitive);
 		
 		final List<String> retVal = new ArrayList<>(entries.size());
 		for(Entry<String, T> entry:entries) {
-			retVal.add(entry.getKey());
+			retVal.add(prefix + entry.getKey());
 		}
 		Collections.sort(retVal);
 		
@@ -86,8 +105,8 @@ public class TreeTextCompleterModel<T> implements TextCompleterModel<T> {
 			final List<String> otherCompletions = new ArrayList<>();
 			final Set<Entry<String, T>> infixEntries = tree.entriesForKeysContaining(text, caseSensitive);
 			for(Entry<String, T> entry:infixEntries) {
-				if(!retVal.contains(entry.getKey()))
-					otherCompletions.add(entry.getKey());
+				if(!retVal.contains(prefix + entry.getKey()))
+					otherCompletions.add(prefix + entry.getKey());
 			}
 			Collections.sort(otherCompletions);
 			retVal.addAll(otherCompletions);

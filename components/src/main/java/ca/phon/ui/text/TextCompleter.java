@@ -42,7 +42,7 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 	private DefaultListModel<String> completionListModel;
 
 	private boolean useDataForCompletion = false;
-
+	
 	public TextCompleter() {
 		this(new DefaultTextCompleterModel());
 	}
@@ -128,7 +128,7 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 	}
 
 	protected void buildPopup() {
-		final String text = textComponent.getText();
+		String text = textComponent.getText();
 
 		completionListModel.clear();
 		completions = model.getCompletions(text);
@@ -226,6 +226,7 @@ public class TextCompleter implements DocumentListener, FocusListener, KeyListen
 			final String completion =
 					(isUseDataForCompletion() ? FormatterUtil.format(model.getData(completions.get(selectedIdx))) : completions.get(selectedIdx));
 			String text = getTextComponent().getText();
+						
 			final String replacementText = model.completeText(text, completion);
 
 			SwingUtilities.invokeLater( () -> { getTextComponent().setText(replacementText); } );
