@@ -76,7 +76,7 @@ $(document).ready( function () {
     <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
     -->
     <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.1.3">Phon 3.1.3</a>
-    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.1.4-beta.3">Phon 3.1.4-beta.3</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.2.0-beta.1">Phon 3.2.0-beta.1</a>
     <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
 </div>
             </div>
@@ -144,34 +144,39 @@ $(document).ready( function () {
                 list of pre-defined processes is:<ul class="- topic/ul ul" id="params__ul_sbs_vp2_mnb">
                     <li class="- topic/li li">Coronal Backing<p class="- topic/p p">IPA Target expression:
                             <code class="+ topic/ph pr-d/codeph ph codeph">{coronal}</code></p><p class="- topic/p p">IPA Actual expression:
-                                <code class="+ topic/ph pr-d/codeph ph codeph">{dorsal}</code></p></li>
+                                <code class="+ topic/ph pr-d/codeph ph codeph">{dorsal}</code> (exact match)</p></li>
                     <li class="- topic/li li">Deaffrication<p class="- topic/p p">IPA Target expression:
-                        <code class="+ topic/ph pr-d/codeph ph codeph">{affricate}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{-affricate}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{affricate}</code></p><p class="- topic/p p">IPA Actual expression:
+                                <code class="+ topic/ph pr-d/codeph ph codeph">{-affricate}</code> (exact match) </p></li>
                     <li class="- topic/li li">Deletion<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">\w</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">^$</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">^$</code> (exact match)</p></li>
                     <li class="- topic/li li">Devoicing<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{voiced}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{voiceless}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{voiceless}</code> (exact match)</p></li>
                     <li class="- topic/li li">Liquid Gliding &amp; Vocalization<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{liquid}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">[\g\v]</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">[\g\v]</code> (exact match)</p></li>
                     <li class="- topic/li li">Glottalization<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{-glottal}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{glottal}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{glottal}</code> (exact match)</p></li>
                     <li class="- topic/li li">Lateralization<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{-lateral}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{lateral}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{lateral}</code> (exact match)</p></li>
                     <li class="- topic/li li">Fricative Stopping<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{fricative}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{stop}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{stop}</code> (exact match)</p></li>
                     <li class="- topic/li li">Velar Fronting<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{velar}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{coronal}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{coronal}</code> (exact match)</p></li>
                     <li class="- topic/li li">Voicing<p class="- topic/p p">IPA Target expression:
                         <code class="+ topic/ph pr-d/codeph ph codeph">{voiceless}</code></p><p class="- topic/p p">IPA Actual expression:
-                            <code class="+ topic/ph pr-d/codeph ph codeph">{voiced}</code></p></li>
+                            <code class="+ topic/ph pr-d/codeph ph codeph">{voiced}</code> (exact match)</p></li>
+                    <li class="- topic/li li">Epenthesis<p class="- topic/p p">IPA Target expression: <code class="+ topic/ph pr-d/codeph ph codeph">^$</code> (exact match)</p><div class="- topic/p p">IPA Actual expression: <code class="+ topic/ph pr-d/codeph ph codeph">\w</code><div class="- topic/note note note note_note"><span class="note__title">Note:</span> Unlike the other processes IPA Actual is queried
+                                before IPA Target during the analysis. Likewise the 'count' shown in
+                                tables of this analysis is the number of elements found in IPA
+                                Actual. Epenthesis is not displayed in the drop-down menu but you
+                                can find the epenthesis analysis under the <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Analysis</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Phonlogical Process</span></span> menu.</div></div></li>
                 </ul></div>
             <div class="- topic/p p">Other parameters:<ol class="- topic/ol ol" id="params__ol_qkx_cqy_mjb">
                 <li class="- topic/li li"><a class="- topic/xref xref" href="../query/phones_query.html#aligned-phones">Aligned Phones</a></li>

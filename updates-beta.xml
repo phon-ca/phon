@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.1.4-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_3.dmg" newVersion="3.1.4-beta.3" newMediaFileId="macos" fileSize="272476229" md5Sum="855198ca78d83da2db14a8dd0c9e9b5e" sha256Sum="718775afda3732ef2f2661d6ff5f0f60f031bf0fd89ee81efe966e947c2535c5" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_1.dmg" newVersion="3.2.0-beta.1" newMediaFileId="macos" fileSize="272510070" md5Sum="9289a2e54a5b6f699a23ed1df7fbe3b0" sha256Sum="332dc239e55a30f88d490cfd47b5a935e58a8a179a48cd71e6d0410a5b369ba7" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
  * Added new File -&gt; Open command allowing opening of individual files including:
    - Phon session files (.xml)
    - TalkBank files (.xml)
@@ -21,6 +23,8 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * Recent project menu now displays full path and includes a menu item to clear history
  * Updated to Java 15
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
 
 ## Changes from 3.1.2
 
@@ -366,9 +370,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_1_4-beta_3.dmg" newVersion="3.1.4-beta.3" newMediaFileId="macos" fileSize="272476229" md5Sum="855198ca78d83da2db14a8dd0c9e9b5e" sha256Sum="718775afda3732ef2f2661d6ff5f0f60f031bf0fd89ee81efe966e947c2535c5" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_1.dmg" newVersion="3.2.0-beta.1" newMediaFileId="macos" fileSize="272510070" md5Sum="9289a2e54a5b6f699a23ed1df7fbe3b0" sha256Sum="332dc239e55a30f88d490cfd47b5a935e58a8a179a48cd71e6d0410a5b369ba7" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
  * Added new File -&gt; Open command allowing opening of individual files including:
    - Phon session files (.xml)
    - TalkBank files (.xml)
@@ -387,6 +393,8 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * Recent project menu now displays full path and includes a menu item to clear history
  * Updated to Java 15
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
 
 ## Changes from 3.1.2
 
@@ -732,9 +740,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_3.exe" newVersion="3.1.4-beta.3" newMediaFileId="win64" fileSize="282192648" md5Sum="12e63a610871d2d2743be584ab707a7f" sha256Sum="00411b991e4e994bda71445b2f2bfc873b51a61bd6becff3b1cfe2da6edb8706" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.exe" newVersion="3.2.0-beta.1" newMediaFileId="win64" fileSize="282266888" md5Sum="e1d44d3e9132780414be997117432089" sha256Sum="ad9521488a2075ecaeb9d7fe21092e8714306b03d1af78e2e016b2f8f1469fae" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
  * Added new File -&gt; Open command allowing opening of individual files including:
    - Phon session files (.xml)
    - TalkBank files (.xml)
@@ -753,6 +763,8 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * Recent project menu now displays full path and includes a menu item to clear history
  * Updated to Java 15
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
 
 ## Changes from 3.1.2
 
@@ -1098,9 +1110,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_3.exe" newVersion="3.1.4-beta.3" newMediaFileId="win64" fileSize="282192648" md5Sum="12e63a610871d2d2743be584ab707a7f" sha256Sum="00411b991e4e994bda71445b2f2bfc873b51a61bd6becff3b1cfe2da6edb8706" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.exe" newVersion="3.2.0-beta.1" newMediaFileId="win64" fileSize="282266888" md5Sum="e1d44d3e9132780414be997117432089" sha256Sum="ad9521488a2075ecaeb9d7fe21092e8714306b03d1af78e2e016b2f8f1469fae" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
  * Added new File -&gt; Open command allowing opening of individual files including:
    - Phon session files (.xml)
    - TalkBank files (.xml)
@@ -1119,6 +1133,8 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * Recent project menu now displays full path and includes a menu item to clear history
  * Updated to Java 15
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
 
 ## Changes from 3.1.2
 
@@ -1464,9 +1480,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_3.exe" newVersion="3.1.4-beta.3" newMediaFileId="win64" fileSize="282192648" md5Sum="12e63a610871d2d2743be584ab707a7f" sha256Sum="00411b991e4e994bda71445b2f2bfc873b51a61bd6becff3b1cfe2da6edb8706" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.exe" newVersion="3.2.0-beta.1" newMediaFileId="win64" fileSize="282266888" md5Sum="e1d44d3e9132780414be997117432089" sha256Sum="ad9521488a2075ecaeb9d7fe21092e8714306b03d1af78e2e016b2f8f1469fae" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
  * Added new File -&gt; Open command allowing opening of individual files including:
    - Phon session files (.xml)
    - TalkBank files (.xml)
@@ -1485,6 +1503,8 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * Recent project menu now displays full path and includes a menu item to clear history
  * Updated to Java 15
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
 
 ## Changes from 3.1.2
 
@@ -1830,9 +1850,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_1_4-beta_3.zip" newVersion="3.1.4-beta.3" newMediaFileId="win64zip" fileSize="281162091" md5Sum="bd1401bd7c82beee785f6ece9dec2f6f" sha256Sum="f1c2791a9518dbab1732c332b3e1a74f7488c5d2451e165909baa209cf9b1583" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.zip" newVersion="3.2.0-beta.1" newMediaFileId="win64zip" fileSize="281236327" md5Sum="f96ce26de585a4e11f931a5285922f1f" sha256Sum="73dba0768ae22de7ab09cc127e5e1cc1bcaacd8912e5977af8561f47c6478bc9" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
  * Added new File -&gt; Open command allowing opening of individual files including:
    - Phon session files (.xml)
    - TalkBank files (.xml)
@@ -1851,6 +1873,8 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * Recent project menu now displays full path and includes a menu item to clear history
  * Updated to Java 15
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
 
 ## Changes from 3.1.2
 
