@@ -44,7 +44,7 @@ public class TestReplace {
 	@Test
 	public void testReplaceWithTone() throws Exception {
 		final IPATranscript ipa = IPATranscript.parseIPATranscript("hello\u0304 world");
-		final IPATranscript replace = IPATranscript.parseIPATranscript("$1\u0300");
+		final IPATranscript replace = IPATranscript.parseIPATranscript("\\1\u0300");
 		
 		final PhonexPattern pattern = PhonexPattern.compile("({v, -toneextrahigh, -tonehigh, -tonemid, -tonelow, -toneextralow, -tonefalling, -tonerising, -tonelowrising, -tonerisingfalling, -tonefallingrising })");
 		final PhonexMatcher matcher = pattern.matcher(ipa);
