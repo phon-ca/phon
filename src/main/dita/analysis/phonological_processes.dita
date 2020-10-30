@@ -31,34 +31,42 @@
                 list of pre-defined processes is:<ul id="ul_sbs_vp2_mnb">
                     <li>Coronal Backing<p>IPA Target expression:
                             <codeph>{coronal}</codeph></p><p>IPA Actual expression:
-                                <codeph>{dorsal}</codeph></p></li>
+                                <codeph>{dorsal}</codeph> (exact match)</p></li>
                     <li>Deaffrication<p>IPA Target expression:
-                        <codeph>{affricate}</codeph></p><p>IPA Actual expression:
-                            <codeph>{-affricate}</codeph></p></li>
+                            <codeph>{affricate}</codeph></p><p>IPA Actual expression:
+                                <codeph>{-affricate}</codeph> (exact match) </p></li>
                     <li>Deletion<p>IPA Target expression:
                         <codeph>\w</codeph></p><p>IPA Actual expression:
-                            <codeph>^$</codeph></p></li>
+                            <codeph>^$</codeph> (exact match)</p></li>
                     <li>Devoicing<p>IPA Target expression:
                         <codeph>{voiced}</codeph></p><p>IPA Actual expression:
-                            <codeph>{voiceless}</codeph></p></li>
+                            <codeph>{voiceless}</codeph> (exact match)</p></li>
                     <li>Liquid Gliding &amp; Vocalization<p>IPA Target expression:
                         <codeph>{liquid}</codeph></p><p>IPA Actual expression:
-                            <codeph>[\g\v]</codeph></p></li>
+                            <codeph>[\g\v]</codeph> (exact match)</p></li>
                     <li>Glottalization<p>IPA Target expression:
                         <codeph>{-glottal}</codeph></p><p>IPA Actual expression:
-                            <codeph>{glottal}</codeph></p></li>
+                            <codeph>{glottal}</codeph> (exact match)</p></li>
                     <li>Lateralization<p>IPA Target expression:
                         <codeph>{-lateral}</codeph></p><p>IPA Actual expression:
-                            <codeph>{lateral}</codeph></p></li>
+                            <codeph>{lateral}</codeph> (exact match)</p></li>
                     <li>Fricative Stopping<p>IPA Target expression:
                         <codeph>{fricative}</codeph></p><p>IPA Actual expression:
-                            <codeph>{stop}</codeph></p></li>
+                            <codeph>{stop}</codeph> (exact match)</p></li>
                     <li>Velar Fronting<p>IPA Target expression:
                         <codeph>{velar}</codeph></p><p>IPA Actual expression:
-                            <codeph>{coronal}</codeph></p></li>
+                            <codeph>{coronal}</codeph> (exact match)</p></li>
                     <li>Voicing<p>IPA Target expression:
                         <codeph>{voiceless}</codeph></p><p>IPA Actual expression:
-                            <codeph>{voiced}</codeph></p></li>
+                            <codeph>{voiced}</codeph> (exact match)</p></li>
+                    <li>Epenthesis<p>IPA Target expression: <codeph>^$</codeph> (exact match)</p><p>IPA Actual expression: <codeph>\w</codeph><note>Unlike the other processes IPA Actual is queried
+                                before IPA Target during the analysis. Likewise the 'count' shown in
+                                tables of this analysis is the number of elements found in IPA
+                                Actual. Epenthesis is not displayed in the drop-down menu but you
+                                can find the epenthesis analysis under the <menucascade>
+                                    <uicontrol>Analysis</uicontrol>
+                                    <uicontrol>Phonlogical Process</uicontrol>
+                                </menucascade> menu.</note></p></li>
                 </ul></p>
             <p>Other parameters:<ol id="ol_qkx_cqy_mjb">
                 <li><xref href="../query/phones_query.dita#aligned-phones"/></li>
