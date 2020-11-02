@@ -1,3 +1,15 @@
+ca.hedlund.dp.visitor
+ca.hedlund.dp.visitor.annotation
+ca.hedlund.jpraat
+ca.hedlund.jpraat.annotations
+ca.hedlund.jpraat.binding
+ca.hedlund.jpraat.binding.fon
+ca.hedlund.jpraat.binding.jna
+ca.hedlund.jpraat.binding.melder
+ca.hedlund.jpraat.binding.stat
+ca.hedlund.jpraat.binding.sys
+ca.hedlund.jpraat.codegen
+ca.hedlund.jpraat.exceptions
 ca.phon.alignment
 ca.phon.app
 ca.phon.app.about
@@ -62,6 +74,7 @@ ca.phon.app.session.check
 ca.phon.app.session.editor
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.search
+ca.phon.app.session.editor.search.actions
 ca.phon.app.session.editor.undo
 ca.phon.app.session.editor.view
 ca.phon.app.session.editor.view.check
@@ -129,6 +142,8 @@ ca.phon.orthography.parser
 ca.phon.orthography.parser.exceptions
 ca.phon.phonex
 ca.phon.phonex.plugins
+ca.phon.phontalk
+ca.phon.phontalk.parser
 ca.phon.plugin
 ca.phon.project
 ca.phon.project.exceptions
