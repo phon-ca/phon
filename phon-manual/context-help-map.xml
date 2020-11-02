@@ -2,6 +2,7 @@
 <map>
    <appContext helpID="getting_started" path="getting_started.html"/>
    <appContext helpID="installing-phon" path="install.html"/>
+   <appContext helpID="tutorials" path="tutorials.html"/>
    <appContext helpID="known-issues" path="known_issues.html"/>
    <appContext helpID="welcome_window" path="welcome/welcome_window.html"/>
    <appContext helpID="preferences" path="prefs/preferences.html"/>
