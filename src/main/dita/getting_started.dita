@@ -106,8 +106,7 @@
         <title>Other Information</title>
         <body>
             <ul>
-                <li><p><b><xref href="https://phonbank.talkbank.org/tutorials.html" format="html"
-                                scope="external">Tutorial Videos</xref></b></p></li>
+                <li><b><xref href="tutorials.dita"/></b></li>
                 <li><p><b><xref href="https://github.com/phon-ca/PhonDemoProject/archive/1.zip"
                                 format="zip" scope="external">Demo Project</xref></b></p><ul>
                         <li><p><xref href="https://github.com/phon-ca/PhonDemoProject" format="html"

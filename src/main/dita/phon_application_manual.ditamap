@@ -8,8 +8,9 @@
         <booklists>
             <toc/>
         </booklists>
-        <topicref href="getting_started.dita" format="dita">
+        <topicref href="getting_started.dita">
             <topicref href="install.md" format="markdown"/>
+            <topicref href="tutorials.dita"/>
             <topicref href="known_issues.md" format="markdown"/>
         </topicref>
     </frontmatter>
