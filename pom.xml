@@ -125,7 +125,7 @@
 		<ca.hedlund.tst.version>0.5</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3</ca.hedlund.desktopicons.version>
 		<ca.phon.opgraph.version>2.0.7</ca.phon.opgraph.version>
-		<ca.phon.native-dialogs.version>15</ca.phon.native-dialogs.version>
+		<ca.phon.native-dialogs.version>16</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>5</ca.phon.jbreadcrumb.version>
 		
 		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
