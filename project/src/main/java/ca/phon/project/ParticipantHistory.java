@@ -34,45 +34,7 @@ public class ParticipantHistory {
 	private Map<SessionPath, Period> ageHistory;
 	
 	// number of records for participant
-	private Map<SessionPath, Integer> recordHistory; 
-	
-//	public static ParticipantHistory calculateHistoryForParticpant(Project project, Collection<SessionPath> sessions, Participant speaker) {
-//		final ParticipantHistory history = new ParticipantHistory();
-//		
-//		for(SessionPath sessionPath:sessions) {
-//			try {
-//				Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
-//				// find particpiant from session
-//				Participant participant = null;
-//				
-//				for(Participant p:session.getParticipants()) {
-//					if(p.getId().equals(speaker.getId())
-//							&& p.getName().equals(speaker.getName())
-//							&& p.getRole().equals(speaker.getRole())) {
-//						participant = p;
-//						break;
-//					}
-//				}
-//				
-//				// get record count
-//				int count = 0;
-//				for(Record r:session.getRecords()) {
-//					if(r.getSpeaker() == speaker) ++count;
-//				}
-//				
-//				if(participant != null || count > 0) {
-//					Period age = 
-//							(participant != null ? participant.getAge(session.getDate()) : null);
-//					history.setAgeForSession(sessionPath, age);
-//					history.setNumberOfRecordsForSession(sessionPath, count);
-//				}
-//			} catch (IOException e) {
-//				LOGGER.warn( e.getLocalizedMessage(), e);
-//			}
-//		}
-//		
-//		return history;
-//	}
+	private Map<SessionPath, Integer> recordHistory;
 	
 	public ParticipantHistory() {
 		super();
