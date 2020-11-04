@@ -93,11 +93,13 @@ public abstract class FolderHandler<T> extends FileHandler<T> {
 		if(!folder.exists() || !folder.isDirectory()) return;
 		if(!getRecursive()) {
 			File[] fileList = new File[0];
+			
 			if(getFileFilter() != null) {
 				fileList = folder.listFiles(getFileFilter());
 			} else {
 				fileList = folder.listFiles();
 			}
+			Arrays.sort(fileList, (f1, f2) -> f1.getName().compareTo(f2.getName()) );
 			
 			for(File f:fileList) addFile(f);
 		} else {
