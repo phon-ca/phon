@@ -131,10 +131,10 @@ function setup_params(params) {
                 <oga:meta x="68" y="642"/>
             </extensions>
         </node>
-        <opqry:queryNode id="5b1f4477" name="Query : Aligned IPA" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-10-30T09:55:58.355-02:30" name="Aligned IPA" uuid="49aceb2d-c4b9-4d68-add6-13411d3995dc">
+        <opqry:queryNode id="5b1f4477" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-10-30T09:55:58.355-02:30" name="Aligned IPA Domains" uuid="49aceb2d-c4b9-4d68-add6-13411d3995dc">
                 <script>
-                    <url ref="Aligned IPA" rel="stock"/>
+                    <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
