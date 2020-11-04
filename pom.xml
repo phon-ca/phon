@@ -122,7 +122,7 @@
 		<project.build.sourceVersion>15</project.build.sourceVersion>
 		<project.build.targetVersion>15</project.build.targetVersion>
 
-		<ca.hedlund.tst.version>0.5</ca.hedlund.tst.version>
+		<ca.hedlund.tst.version>0.6</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>3</ca.hedlund.desktopicons.version>
 		<ca.phon.opgraph.version>2.0.8</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>16</ca.phon.native-dialogs.version>

@@ -99,7 +99,6 @@ public abstract class FolderHandler<T> extends FileHandler<T> {
 			} else {
 				fileList = folder.listFiles();
 			}
-			Arrays.sort(fileList, (f1, f2) -> f1.getName().compareTo(f2.getName()) );
 			
 			for(File f:fileList) addFile(f);
 		} else {
@@ -115,7 +114,6 @@ public abstract class FolderHandler<T> extends FileHandler<T> {
 	private void scanFolderRecursive(File f) {
 		if(f.isDirectory()) {
 			File[] allFiles = f.listFiles();
-			Arrays.sort(allFiles, (f1, f2) -> f1.getName().compareTo(f2.getName()) );
 			
 			for(File currentFile:allFiles) {
 				// check for a match first - directories could be
