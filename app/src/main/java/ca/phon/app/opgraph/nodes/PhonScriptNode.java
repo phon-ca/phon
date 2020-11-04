@@ -50,9 +50,9 @@ import ca.phon.util.*;
 import ca.phon.util.icons.*;
 
 @OpNodeInfo(
-		name="Script",
-		category="General",
-		description="Generic script node with optional parameter setup.",
+		name="PhonScript",
+		category="Scripting",
+		description="PhonScript node with optional parameter setup and form.",
 		showInLibrary=true
 )
 public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContextMenuExtension, ScriptNode {

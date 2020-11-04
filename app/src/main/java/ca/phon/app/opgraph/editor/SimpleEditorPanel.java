@@ -50,6 +50,7 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.*;
 import ca.phon.opgraph.app.edits.graph.*;
 import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.app.util.*;
 import ca.phon.opgraph.extensions.*;
 import ca.phon.opgraph.library.instantiators.*;
 import ca.phon.opgraph.nodes.general.*;
@@ -1622,6 +1623,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						final MacroNodeData nodeData = new MacroNodeData(documentURL, uri, documentName, "", "", nodeInstantiator, false);
 
 						final MacroNode analysisNode = nodeInstantiator.newInstance(nodeData, getGraph());
+						GraphUtils.changeNodeIds(analysisNode.getGraph());
 						
 						final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
 						if(editorExt != null) {

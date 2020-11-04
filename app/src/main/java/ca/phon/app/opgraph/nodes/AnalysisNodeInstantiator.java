@@ -37,8 +37,6 @@ public class AnalysisNodeInstantiator extends MacroNodeInstantiator {
 		OpGraph graph = null;
 		if(params.length == 1 && params[0] instanceof OpGraph) {
 			graph = (OpGraph)params[0];
-//			if(node.isGraphEmbedded())
-//			GraphUtils.changeNodeIds(graph);
 			node = new MacroNode(graph);
 		} else {
 			node = super.newInstance(params);
