@@ -31,7 +31,11 @@
         <node id="340ab625" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="filters.word.sectionHeader.collapsed"><![CDATA[false]]></oga:property>
+                    <oga:property key="otherDataHeader.collapsed"><![CDATA[false]]></oga:property>
+                    <oga:property key="filters.primary.tier"><![CDATA[Orthography]]></oga:property>
+                    <oga:property key="filters.wordTiers.tiers"><![CDATA[IPA Target,IPA Actual]]></oga:property>
+                    <oga:property key="filters.primary.patternFilter.filter"><![CDATA[.+]]></oga:property>
+                    <oga:property key="filters.primary.patternFilter.filterType"><![CDATA[Regular expression]]></oga:property>
                     <oga:property key="__script"><![CDATA[var FeatureFilter = require("lib/FeatureFilter").FeatureFilter;
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
@@ -116,7 +120,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="287d90c6" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-10-30T10:55:07.944-02:30" name="Data Tiers" uuid="e2b0c1e4-5444-4aca-a461-4d2ca4aafeea">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2020-11-04T11:29:40.079-03:30" name="Data Tiers" uuid="cd8a2a7b-09cf-47c4-8180-3b037c0821bb">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
@@ -130,7 +134,8 @@ function setup_params(params) {
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.word.searchByWord">true</param>
-                    <param id="filters.word.sectionHeader.collapsed">false</param>
+                    <param id="filters.wordTiers.tiers">IPA Target,IPA Actual</param>
+                    <param id="otherDataHeader.collapsed">false</param>
                 </script>
             </qry:query>
             <extensions>
@@ -139,7 +144,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="f63f59df38fc40b4" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3c7108e3">
+            <graph id="1c577c6d">
                 <node id="a2ed2f06ac5c4bab" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -329,7 +334,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="452a4427" name="For each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="178fe6bf">
+            <graph id="292e68e5">
                 <node id="10712848" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -357,7 +362,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="8f745ad762bb4eea" name="Create Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1f4406f2">
+                    <graph id="6911d318">
                         <node id="240b40fabaf5440e" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -405,7 +410,6 @@ function tableOp(context, table) {
                 <node id="ffb532c390864527" name="Aggregate Node" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                         </oga:settings>
                         <oga:meta x="56" y="653"/>
@@ -420,7 +424,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="bbde549c376f403b" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="ce3ebad">
+                    <graph id="6257a40">
                         <node id="759a7aa6ca80429e" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -493,7 +497,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="7ccf9c80" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="164662ee">
+                    <graph id="719b097a">
                         <node id="d03c932" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -535,7 +539,7 @@ function run(context) {
                                 <oga:meta x="57" y="827"/>
                             </extensions>
                         </node>
-                        <node id="20e1fdce" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
+                        <node id="20e1fdce" name="Aggregate" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
                             <extensions>
                                 <opqry:inventoryoptions>
                                     <opqry:automaticConfiguration configureAutomatically="true">
@@ -656,7 +660,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="69c83b0d" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="14ae36bf">
+                            <graph id="1fc632ff">
                                 <node id="35e1aa36" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -700,7 +704,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="e47ae067af324e22" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4ce63278">
+                                    <graph id="3ccb61f4">
                                         <node id="6cf9573f00914335" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -759,7 +763,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="224859ac" name="If Speaker has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4b867674">
+                                    <graph id="42fdd7ec">
                                         <node id="49a376c2" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
