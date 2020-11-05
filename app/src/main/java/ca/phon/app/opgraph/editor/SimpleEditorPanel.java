@@ -101,6 +101,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private DropDownButton saveButton;
 	private JButton browseButton;
 	private DropDownButton addButton;
+	private JButton duplicateButton;
 	private JButton removeButton;
 	private JButton moveUpButton;
 	private JButton moveDownButton;
@@ -326,7 +327,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		addAct.putValue(DropDownButton.BUTTON_POPUP, addMenu);
 		addButton = new DropDownButton(addAct);
-
+		
+		final ImageIcon dupIcn =
+				IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
+		final PhonUIAction dupAct = new PhonUIAction(this, "onDuplicate");
+		dupAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Duplicate selected " + getModel().getNoun().getObj1());
+		dupAct.putValue(PhonUIAction.SMALL_ICON, dupIcn);
+		duplicateButton = new JButton(dupAct);
+		
 		final ImageIcon removeIcn =
 				IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
 		final PhonUIAction removeAct = new PhonUIAction(this, "onRemove");
@@ -412,6 +420,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		toolbar.addSeparator();
 
 		toolbar.add(addButton);
+		toolbar.add(duplicateButton);
 		toolbar.add(removeButton);
 		toolbar.addSeparator();
 		
@@ -753,10 +762,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	}
 	
 	public void onDuplicate() {
-		final int selectedRow = nodeTable.getSelectedRow();
-		if(selectedRow >= 0 && selectedRow < macroNodes.size()) {
-			final MacroNode selectedNode = (MacroNode)macroNodes.get(selectedRow);
-						
+		List<MacroNode> selectedMacros = new ArrayList<>();
+		for(int selectedRow:nodeTable.getSelectedRows()) {
+			MacroNode macroNode = macroNodes.get(selectedRow);
+			selectedMacros.add(macroNode);
+		}
+		
+		for(MacroNode selectedNode:selectedMacros) {
 			final OpGraph tempGraph = new OpGraph();
 			tempGraph.add(selectedNode);
 			tempGraph.setId("root");
@@ -772,7 +784,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					MacroNode rtGraphNode = 
 							(MacroNode)rtGraph.getVertices().iterator().next();
 					
-					AddDocumentsWorker worker = new AddDocumentsWorker(List.of(rtGraphNode), selectedRow+1);
+					AddDocumentsWorker worker = new AddDocumentsWorker(List.of(rtGraphNode), macroNodes.indexOf(selectedNode)+1);
 					worker.execute();
 				} else {
 					throw new IOException("Round-trip of graph failed");

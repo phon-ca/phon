@@ -119,6 +119,14 @@ public class SimpleEditor extends CommonModuleFrame {
 		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add " + getModel().getNoun().getObj1() + "...");
 		addAct.putValue(PhonUIAction.SMALL_ICON, addIcn);
 		final JMenuItem addItem = new JMenuItem(addAct);
+		
+		final ImageIcon dupIcn =
+				IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
+		final PhonUIAction dupAct = new PhonUIAction(editorPanel, "onDuplicate");
+		dupAct.putValue(PhonUIAction.NAME, "Duplicate " + getModel().getNoun().getObj1());
+		dupAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Duplicate selected " + getModel().getNoun().getObj1());
+		dupAct.putValue(PhonUIAction.SMALL_ICON, dupIcn);
+		final JMenuItem dupItem = new JMenuItem(dupAct);
 
 		final ImageIcon removeIcn =
 				IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
@@ -196,6 +204,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		builder.addMenu(".@Edit", "Table");
 		builder.addItem("Table", addItem);
+		builder.addItem("Table", dupItem);
 		builder.addItem("Table", removeItem);
 		builder.addSeparator("Table", "settings");
 		builder.addItem("Table", settingsItem);
