@@ -52,6 +52,7 @@ import ca.phon.opgraph.app.edits.graph.*;
 import ca.phon.opgraph.app.extensions.*;
 import ca.phon.opgraph.app.util.*;
 import ca.phon.opgraph.extensions.*;
+import ca.phon.opgraph.io.*;
 import ca.phon.opgraph.library.instantiators.*;
 import ca.phon.opgraph.nodes.general.*;
 import ca.phon.plugin.*;
@@ -78,6 +79,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	private final static int Y_START = 50;
 	private final static int X_START = 400;
 	private final static int Y_SEP = 150;
+	
+	private final static String FROM_QUERY_NODE_NAME = "FromQueryScript";
 	
 	/**
 	 * The library of items which will be displayed in the
@@ -748,6 +751,38 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
             getModel().getDocument().getUndoSupport().endUpdate();
 		}
 	}
+	
+	public void onDuplicate() {
+		final int selectedRow = nodeTable.getSelectedRow();
+		if(selectedRow >= 0 && selectedRow < macroNodes.size()) {
+			final MacroNode selectedNode = (MacroNode)macroNodes.get(selectedRow);
+						
+			final OpGraph tempGraph = new OpGraph();
+			tempGraph.add(selectedNode);
+			tempGraph.setId("root");
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			try {
+				final OpGraphSerializer serializer = OpGraphSerializerFactory.getDefaultSerializer();
+				serializer.write(tempGraph, bos);
+				ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+				OpGraph rtGraph = OpgraphIO.read(bin);
+				GraphUtils.changeNodeIds(rtGraph);
+				
+				if(rtGraph.getVertices().size() > 0) {
+					MacroNode rtGraphNode = 
+							(MacroNode)rtGraph.getVertices().iterator().next();
+					
+					AddDocumentsWorker worker = new AddDocumentsWorker(List.of(rtGraphNode), selectedRow+1);
+					worker.execute();
+				} else {
+					throw new IOException("Round-trip of graph failed");
+				}
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.severe(e);
+			}
+		}
+	}
 
 	public void onShowSettings() {
 		final int selectedRow = nodeTable.getSelectedRow();
@@ -839,6 +874,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				SimpleEditorExtension ext = graph.getExtension(SimpleEditorExtension.class);
 				if(ext == null) {
 					throw new IOException("Selected graph was not created using the simple composer, use Composer (advanced) instead");
+				}
+				
+				for(MacroNode macroNode:ext.getMacroNodes()) {
+					Optional<OpNode> fromQueryNode = macroNode.getGraph().getNodesByName(FROM_QUERY_NODE_NAME).stream().findFirst();
+					if(fromQueryNode.isPresent()) {
+						setupQueryNameListener(macroNode);
+					}
 				}
 				
 				// ensure that our wizard extension types match!
@@ -1565,10 +1607,9 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		@Override
 		protected void process(List<MacroNode> chunks) {
 			for(MacroNode node:chunks) {
-				if(node.getExtension(QueryScript.class) != null) {
-					setupQueryNameListener(node);
-					// remove temporary extension
-					node.putExtension(QueryScript.class, null);
+				Optional<OpNode> fromQueryNode = node.getGraph().getNodesByName(FROM_QUERY_NODE_NAME).stream().findFirst();
+				if(fromQueryNode.isPresent()) {
+					setupQueryNameListener(node);	
 				}
 				
 				addNode(node, (idx >= 0 ? idx++ : -1));
@@ -1627,6 +1668,12 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						
 						final SimpleEditorExtension editorExt = analysisNode.getGraph().getExtension(SimpleEditorExtension.class);
 						if(editorExt != null) {
+							for(MacroNode macroNode:editorExt.getMacroNodes()) {
+								Optional<OpNode> fromQueryNode = macroNode.getGraph().getNodesByName(FROM_QUERY_NODE_NAME).stream().findFirst();
+								if(fromQueryNode.isPresent()) {
+									setupQueryNameListener(macroNode);
+								}
+							}
 							retVal.addAll(editorExt.getMacroNodes());
 							
 							super.publish(editorExt.getMacroNodes().toArray(new MacroNode[0]));
@@ -1658,7 +1705,13 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 				} else if(document instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)document;
 					final MacroNode node = queryNodeInstantiator.apply(queryScript, new OpGraph());
-					node.putExtension(QueryScript.class, queryScript);
+					
+					// add a 'flag' node to the macro node's graph
+					// which indicates this macro node we generated from
+					// a query script
+					BooleanNode qsFlagNode = new BooleanNode(Boolean.TRUE);
+					qsFlagNode.setName(FROM_QUERY_NODE_NAME);
+					node.getGraph().add(qsFlagNode);
 					
 					retVal.add(node);
 					super.publish(node);
