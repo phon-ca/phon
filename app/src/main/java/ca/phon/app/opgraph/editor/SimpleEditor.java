@@ -53,7 +53,7 @@ public class SimpleEditor extends CommonModuleFrame {
 			BiFunction<QueryScript, OpGraph, MacroNode> queryNodeInstantiator,
 			BiFunction<OpGraph, Project, Runnable> runFactory) {
 		this(project, library, new OpGraph(), modelInstantiator, nodeInstantiator, queryNodeInstantiator, runFactory);
-	}
+	}		
 
 	/**
 	 * Constructor
@@ -111,14 +111,6 @@ public class SimpleEditor extends CommonModuleFrame {
 		final KeyStroke saveKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, saveKs);
 		final JMenuItem saveItem = new JMenuItem(saveAct);
-
-		final ImageIcon addIcn =
-				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final PhonUIAction addAct = new PhonUIAction(editorPanel, "onAdd");
-		addAct.putValue(PhonUIAction.NAME, "Add " + getModel().getNoun().getObj1() + "...");
-		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add " + getModel().getNoun().getObj1() + "...");
-		addAct.putValue(PhonUIAction.SMALL_ICON, addIcn);
-		final JMenuItem addItem = new JMenuItem(addAct);
 		
 		final ImageIcon dupIcn =
 				IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
@@ -137,16 +129,6 @@ public class SimpleEditor extends CommonModuleFrame {
 		final KeyStroke removeKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 		removeAct.putValue(PhonUIAction.ACCELERATOR_KEY, removeKs);
 		final JMenuItem removeItem = new JMenuItem(removeAct);
-
-		final ImageIcon settingsIcn =
-				IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL);
-		final PhonUIAction settingsAct = new PhonUIAction(editorPanel, "onShowSettings");
-		settingsAct.putValue(PhonUIAction.NAME, "Settings...");
-		settingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show settings for selected " + getModel().getNoun().getObj1());
-		settingsAct.putValue(PhonUIAction.SMALL_ICON, settingsIcn);
-		final KeyStroke settingsKs = KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
-		settingsAct.putValue(PhonUIAction.ACCELERATOR_KEY, settingsKs);
-		final JMenuItem settingsItem = new JMenuItem(settingsAct);
 
 		final ImageIcon renameIcn =
 				IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
@@ -203,12 +185,9 @@ public class SimpleEditor extends CommonModuleFrame {
 		builder.addSeparator("File@Open in Composer (advanced)", "remainder");
 
 		builder.addMenu(".@Edit", "Table");
-		builder.addItem("Table", addItem);
+		builder.addItem("Table", renameItem);
 		builder.addItem("Table", dupItem);
 		builder.addItem("Table", removeItem);
-		builder.addSeparator("Table", "settings");
-		builder.addItem("Table", settingsItem);
-		builder.addItem("Table", renameItem);
 		builder.addSeparator("Table", "move");
 		builder.addItem("Table", upItem);
 		builder.addItem("Table", downItem);

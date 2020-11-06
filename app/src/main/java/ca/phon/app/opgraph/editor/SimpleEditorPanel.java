@@ -383,6 +383,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		nodeTable.setTransferHandler(new NodeTableTransferHandler());
 		nodeTable.setDropMode(DropMode.INSERT);
 		nodeTable.setVisibleRowCount(10);
+		nodeTable.addMouseListener(nodeTableMouseAdapter);
 
 		final ActionMap am = nodeTable.getActionMap();
 		final InputMap inputMap = nodeTable.getInputMap(JComponent.WHEN_FOCUSED);
@@ -1756,6 +1757,88 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 	
 	}
+	
+	private void showContextMenu(MouseEvent e) {
+		int idx = nodeTable.rowAtPoint(e.getPoint());
+		if(idx >=  0 && idx < nodeTable.getModel().getRowCount()) {
+			if(nodeTable.getSelectedRow() != idx) {
+				nodeTable.setRowSelectionInterval(idx, idx);
+			}
+			
+			JPopupMenu menu = new JPopupMenu();
+			
+			final ImageIcon dupIcn =
+					IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
+			final PhonUIAction dupAct = new PhonUIAction(this, "onDuplicate");
+			dupAct.putValue(PhonUIAction.NAME, "Duplicate " + getModel().getNoun().getObj1());
+			dupAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Duplicate selected " + getModel().getNoun().getObj1());
+			dupAct.putValue(PhonUIAction.SMALL_ICON, dupIcn);
+			final JMenuItem dupItem = new JMenuItem(dupAct);
+
+			final ImageIcon removeIcn =
+					IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
+			final PhonUIAction removeAct = new PhonUIAction(this, "onRemove");
+			removeAct.putValue(PhonUIAction.NAME, "Remove " + getModel().getNoun().getObj1());
+			removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove selected " + getModel().getNoun().getObj1());
+			removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcn);
+			final KeyStroke removeKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+			removeAct.putValue(PhonUIAction.ACCELERATOR_KEY, removeKs);
+			final JMenuItem removeItem = new JMenuItem(removeAct);
+
+			final ImageIcon renameIcn =
+					IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
+			final PhonUIAction renameAct = new PhonUIAction(this, "onRename");
+			renameAct.putValue(PhonUIAction.NAME, "Rename");
+			renameAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Rename selected " + getModel().getNoun().getObj1());
+			renameAct.putValue(PhonUIAction.SMALL_ICON, renameIcn);
+			final JMenuItem renameItem = new JMenuItem(renameAct);
+
+			final ImageIcon upIcn =
+					IconManager.getInstance().getIcon("actions/draw-arrow-up", IconSize.SMALL);
+			final PhonUIAction upAct = new PhonUIAction(this, "onMoveUp");
+			upAct.putValue(PhonUIAction.NAME, "Move up");
+			upAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " up");
+			upAct.putValue(PhonUIAction.SMALL_ICON, upIcn);
+			final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+			upAct.putValue(PhonUIAction.ACCELERATOR_KEY, upKs);
+			final JMenuItem upItem = new JMenuItem(upAct);
+
+			final ImageIcon downIcn =
+					IconManager.getInstance().getIcon("actions/draw-arrow-down", IconSize.SMALL);
+			final PhonUIAction downAct = new PhonUIAction(this, "onMoveDown");
+			downAct.putValue(PhonUIAction.NAME, "Move down");
+			downAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " down");
+			downAct.putValue(PhonUIAction.SMALL_ICON, downIcn);
+			final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+			downAct.putValue(PhonUIAction.ACCELERATOR_KEY, downKs);
+			final JMenuItem downItem = new JMenuItem(downAct);
+			
+			menu.add(renameItem);
+			menu.add(dupItem);
+			menu.add(removeItem);
+			menu.addSeparator();
+			menu.add(upItem);
+			menu.add(downItem);
+			
+			menu.show(nodeTable, e.getX(), e.getY());
+		}		
+	}
+	
+	private MouseAdapter nodeTableMouseAdapter = new MouseAdapter() {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(e.isPopupTrigger())
+				showContextMenu(e);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.isPopupTrigger())
+				showContextMenu(e);
+		}
+
+	};
 
 	private final DataFlavor nodeTreeDataFlavor = new DataFlavor(DefaultMutableTreeNode[].class, "DefaultMutableTreeNode Array");
 
