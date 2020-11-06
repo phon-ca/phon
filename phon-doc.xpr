@@ -22,7 +22,7 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>Phon Manual - EPUB</String>
+                                        <String>Phon Manual (PDF)</String>
                                         <String>PhonManual - Web</String>
                                     </list>
                                 </field>
