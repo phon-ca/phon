@@ -14,6 +14,9 @@
 	<description>Phon application project.  This project includes all code related to the
 	UI and all application level logic.</description>
 	
+	<properties>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -190,7 +193,6 @@
 	   		<version>${org.mozilla.rhino.version}</version>
 	   		<scope>runtime</scope>
 	   	</dependency>
-	   	<dependency>
 	</dependencies>
 
 </project>
