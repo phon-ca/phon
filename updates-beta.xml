@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_1.dmg" newVersion="3.2.0-beta.1" newMediaFileId="macos" fileSize="272510070" md5Sum="9289a2e54a5b6f699a23ed1df7fbe3b0" sha256Sum="332dc239e55a30f88d490cfd47b5a935e58a8a179a48cd71e6d0410a5b369ba7" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_2.dmg" newVersion="3.2.0-beta.2" newMediaFileId="macos" fileSize="272557561" md5Sum="f70ed207fafe5536a3258d2cd961927d" sha256Sum="28382f2a17d3fe2fcb16e8296d9211aee9475dd894b417b9f8f02ea1860e3691" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -25,6 +25,9 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
  * PhonShell scripts may now be opened using the File -&gt; Open menu command
  * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
 
 ## Changes from 3.1.2
 
@@ -370,7 +373,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_1.dmg" newVersion="3.2.0-beta.1" newMediaFileId="macos" fileSize="272510070" md5Sum="9289a2e54a5b6f699a23ed1df7fbe3b0" sha256Sum="332dc239e55a30f88d490cfd47b5a935e58a8a179a48cd71e6d0410a5b369ba7" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_2.dmg" newVersion="3.2.0-beta.2" newMediaFileId="macos" fileSize="272557561" md5Sum="f70ed207fafe5536a3258d2cd961927d" sha256Sum="28382f2a17d3fe2fcb16e8296d9211aee9475dd894b417b9f8f02ea1860e3691" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -395,6 +398,9 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
  * PhonShell scripts may now be opened using the File -&gt; Open menu command
  * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
 
 ## Changes from 3.1.2
 
@@ -740,7 +746,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.exe" newVersion="3.2.0-beta.1" newMediaFileId="win64" fileSize="282266888" md5Sum="e1d44d3e9132780414be997117432089" sha256Sum="ad9521488a2075ecaeb9d7fe21092e8714306b03d1af78e2e016b2f8f1469fae" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.exe" newVersion="3.2.0-beta.2" newMediaFileId="win64" fileSize="282299656" md5Sum="113ec9859e91da26c77e1d189af0acae" sha256Sum="268aa66ec1e62fc4aba9873519b72b6461814e2265a6208a93b74657941f3bd4" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -765,6 +771,9 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
  * PhonShell scripts may now be opened using the File -&gt; Open menu command
  * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
 
 ## Changes from 3.1.2
 
@@ -1110,7 +1119,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.exe" newVersion="3.2.0-beta.1" newMediaFileId="win64" fileSize="282266888" md5Sum="e1d44d3e9132780414be997117432089" sha256Sum="ad9521488a2075ecaeb9d7fe21092e8714306b03d1af78e2e016b2f8f1469fae" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.exe" newVersion="3.2.0-beta.2" newMediaFileId="win64" fileSize="282299656" md5Sum="113ec9859e91da26c77e1d189af0acae" sha256Sum="268aa66ec1e62fc4aba9873519b72b6461814e2265a6208a93b74657941f3bd4" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -1135,6 +1144,9 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
  * PhonShell scripts may now be opened using the File -&gt; Open menu command
  * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
 
 ## Changes from 3.1.2
 
@@ -1480,7 +1492,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.exe" newVersion="3.2.0-beta.1" newMediaFileId="win64" fileSize="282266888" md5Sum="e1d44d3e9132780414be997117432089" sha256Sum="ad9521488a2075ecaeb9d7fe21092e8714306b03d1af78e2e016b2f8f1469fae" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.exe" newVersion="3.2.0-beta.2" newMediaFileId="win64" fileSize="282299656" md5Sum="113ec9859e91da26c77e1d189af0acae" sha256Sum="268aa66ec1e62fc4aba9873519b72b6461814e2265a6208a93b74657941f3bd4" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -1505,6 +1517,9 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
  * PhonShell scripts may now be opened using the File -&gt; Open menu command
  * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
 
 ## Changes from 3.1.2
 
@@ -1850,7 +1865,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_1.zip" newVersion="3.2.0-beta.1" newMediaFileId="win64zip" fileSize="281236327" md5Sum="f96ce26de585a4e11f931a5285922f1f" sha256Sum="73dba0768ae22de7ab09cc127e5e1cc1bcaacd8912e5977af8561f47c6478bc9" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.zip" newVersion="3.2.0-beta.2" newMediaFileId="win64zip" fileSize="281268631" md5Sum="57a0c0509e82c09002500aaae640a95b" sha256Sum="16a777fed84e8e77fea59377feb7417f18b1e19a369a7b432034b28d776f2ebd" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -1875,6 +1890,9 @@ File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
  * PhonShell now usess Rhino JavaScript engine instead of nashorn
  * PhonShell scripts may now be opened using the File -&gt; Open menu command
  * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
 
 ## Changes from 3.1.2
 

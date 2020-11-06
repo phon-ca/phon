@@ -1,15 +1,5 @@
 ca.hedlund.dp.visitor
 ca.hedlund.dp.visitor.annotation
-ca.hedlund.jpraat
-ca.hedlund.jpraat.annotations
-ca.hedlund.jpraat.binding
-ca.hedlund.jpraat.binding.fon
-ca.hedlund.jpraat.binding.jna
-ca.hedlund.jpraat.binding.melder
-ca.hedlund.jpraat.binding.stat
-ca.hedlund.jpraat.binding.sys
-ca.hedlund.jpraat.codegen
-ca.hedlund.jpraat.exceptions
 ca.phon.alignment
 ca.phon.app
 ca.phon.app.about
