@@ -62,13 +62,12 @@
    <appContext helpID="basic-phone-matching"
                path="phonex/examples/consonants_examples.html"/>
    <appContext helpID="example-phones-queries" path="phonex/examples/phones.html"/>
+   <appContext helpID="queries" path="query/queries.html"/>
    <appContext helpID="query_and_report_wizard"
                path="query/query_and_report_wizard.html"/>
    <appContext helpID="view_result_set" path="query/view_result_set.html"/>
    <appContext helpID="query_data_tiers" path="query/data_tiers_query.html"/>
    <appContext helpID="phones_query" path="query/phones_query.html"/>
-   <appContext helpID="deletions" path="query/deletions_query.html"/>
-   <appContext helpID="epenthesis" path="query/epenthesis_query.html"/>
    <appContext helpID="segmental_relations_query"
                path="query/segmental_relations_query.html"/>
    <appContext helpID="common_query_options" path="query/common_query_options.html"/>
