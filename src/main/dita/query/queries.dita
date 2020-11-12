@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="queries">
+    <title>Queries</title>
+    <body>
+        <p>Phon includes 3 different queries types available from the window menu under
+                <uicontrol>Query</uicontrol>:<ol id="ol_t1l_qkk_qnb">
+                <li><xref href="data_tiers_query.dita"/><p>The Data Tiers query will query any tier
+                        as well as include aligned data to the target query</p></li>
+                <li><xref href="phones_query.dita"/><p>The Phones query will look for a query the
+                        IPA Target or IPA Actual tier for a sequence of phones and return the
+                        sequence along with the aligned phones from the other tier. Deletion and
+                        Epenthesis - also available from the <uicontrol>Query</uicontrol> menu are
+                        canned versions the Phones query.</p></li>
+                <li><xref href="segmental_relations_query.dita"/><p>Query different types Segmental
+                        Relations found in aligned data between IPA Target and IPA Actual.</p></li>
+            </ol></p>
+        <p>Once a query has been completed the results may be reviewed in the application or turned
+            into a report. See the <xref href="query_and_report_wizard.dita"/> section and the <xref
+                href="../tutorials.dita"/> page for  demonstrations of using query forms and
+            creating reports.</p>
+    </body>
+</topic>

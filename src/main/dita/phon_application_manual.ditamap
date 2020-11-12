@@ -84,15 +84,13 @@
             <topicref href="phonex/examples/phones.md" format="markdown"/>
         </topichead>
     </chapter>
-    <chapter navtitle="Queries" audience="intermediate">
+    <chapter navtitle="Queries" audience="intermediate" href="query/queries.dita">
         <topicref href="query/query_and_report_wizard.dita" format="dita">
             <topicref href="query/view_result_set.dita"/>
         </topicref>
         <topichead navtitle="Query Types">
             <topicref href="query/data_tiers_query.dita" format="dita"/>
             <topicref href="query/phones_query.dita" format="dita"/>
-            <topicref href="query/deletions_query.md" format="markdown"/>
-            <topicref href="query/epenthesis_query.md" format="markdown"/>
             <topicref href="query/segmental_relations_query.dita" format="dita"/>
             <topicref href="query/common_query_options.dita"/>
         </topichead>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="common_query_options">
-    <title>Common Query Paramters</title>
+    <title>Common Query Parameters</title>
     <body>
         <p>These query parameters can be found in most query forms.</p>
     </body>
@@ -213,6 +213,33 @@
                     </itemgroup>
                 </li>
             </ol>
+        </body>
+    </topic>
+    
+    <topic id="additional_tier_data">
+        <title>Additional Tier Data</title>
+        <shortdesc>Include data from additional tiers with the result.</shortdesc>
+        <body>
+            <p>Data in tiers aligned with the primary query object may be included with the result.
+                Use the provided checkboxes to include data from default tiers or use the text field
+                to provide a comma-separated list of user-defined tiers. When
+                    <uicontrol>Group</uicontrol> is selected under the <uicontrol>Search
+                    By</uicontrol> options, use the <uicontrol>Add aligned groups</uicontrol>
+                section, when <uicontrol>Word</uicontrol> is selected the <uicontrol>Add aligned
+                    words</uicontrol> section will also be available.</p>
+            <p>
+                Several 'derived' tiers based on IPA data may be include using the text field.
+                <ul>
+                    <li><codeph>Target CV</codeph>- IPA Target covered using C for consonants and V for vowels</li>
+                    <li><codeph>Actual CV</codeph> - IPA Actual covered using C for consonants and V
+                        for vowels</li>
+                    <li><codeph>Target Stress</codeph> - IPA Target syllables covered using 1 for
+                        primary stress, 2 for secondary stress and U for unstressed</li>
+                    <li><codeph>Actual Stress</codeph> - IPA Actual syllables covered using 1 for
+                        primary stress, 2 for secondary stress and U for unstressed</li>
+                    <li><codeph/></li>
+                </ul>
+            </p>
         </body>
     </topic>
     

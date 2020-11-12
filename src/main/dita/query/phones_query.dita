@@ -3,14 +3,22 @@
 <topic id="phones_query">
     <title>Phones</title>
     <body>
-        <p>The <b>Phones</b> query is used to query data contained within IPA Target and IPA Actual
-            tiers.</p>
+        <p>The <b>Phones</b> query is used to identify sequences of phones within either the IPA
+            Target or IPA Actual tier. By default the phones query will include the phones which are
+            aligned with the target sequence in the result.</p>
         <fig id="fig_nc2_gjd_flb">
             <title>Phones Query</title>
             <image placement="inline" href="images/phones_query.png" id="image_oc2_gjd_flb">
                 <alt>Phones Query</alt>
             </image>
         </fig>
+        <p>When opening the query window, the last query options will automatically be loaded. (This
+            behaviour may be changed in application preference - see <xref href="../prefs/preferences.dita#query">Query Preferences</xref>.) If no query history is available,
+            the 'Any phones' query (as shown above) is loaded. Pre-defined query parameters can be
+            found in the <uicontrol>Query name</uicontrol> combo box in the top-right corner of the
+            query form (see <xref href="query_and_report_wizard.dita#named-queries"/>.)</p>
+        <p>Deletions and Epenthesis are canned versions of the Phones query and can also be found in
+            the <uicontrol>Query</uicontrol> menu.</p>
     </body>
     
     <topic id="parameters">
@@ -25,30 +33,34 @@
                 <li><p>Expression: query expression</p><ul>
                         <li><p>Case sensitive (not applicable for phonex expressions)</p></li>
                         <li><p>Exact match</p></li>
-                        <li><p>Allow overlapping matches (phonex only)</p></li>
                     </ul></li>
             </ul>
         </body>
         <topic id="aligned-phones">
             <title>Aligned Phones</title>
             <body>
+                <fig id="fig_aligned_phones">
+                    <image placement="inline" href="images/aligned_phones.png" id="image_aligned_phones">
+                        <alt>Aligned Phones</alt>
+                    </image>
+                </fig>
                 <p>The phones aligned with the queried phones can be added to query results. If
-                    'include aligned phones' is selected the aligned results may be filtered using
-                    the <b>IPA Target Matcher</b> and <b>IPA Actual Matcher</b> expressions.</p>
+                        <uicontrol>Include aligned phones</uicontrol> is selected the aligned
+                    results may also be filtered using the <b>IPA Target Matcher</b> and <b>IPA
+                        Actual Matcher</b> expressions.</p>
             </body>
         </topic>
         <topic id="other-parameters">
             <title>Other Parameters</title>
             <body>
                 <ul>
-                    <li><p><xref href="./query_group_options.html" format="html">Group
-                                Options</xref></p></li>
-                    <li><p><xref href="./query_word_options.html" format="html">Word
-                            Options</xref></p></li>
-                    <li><p><xref href="./query_syllable_options.html" format="html">Syllable
-                                Options</xref></p></li>
-                    <li><p><xref href="./query_participant_filter.html" format="html">Participant
-                                Filter</xref></p></li>
+                    <li><xref href="common_query_options.dita#group_options"/></li>
+                    <li><xref href="common_query_options.dita#aligned_group_options"/></li>
+                    <li><xref href="common_query_options.dita#word_options"/></li>
+                    <li><xref href="common_query_options.dita#aligned_word_options"/></li>
+                    <li><xref href="common_query_options.dita#syllable_options"/></li>
+                    <li><xref href="common_query_options.dita#additional_tier_data"/></li>
+                    <li><xref href="common_query_options.dita#participant_filter"/></li>
                 </ul>
             </body>
         </topic>

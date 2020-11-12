@@ -7,7 +7,7 @@
             record tier.</p>
         <fig id="fig_azj_q2d_flb">
             <title>Data Tiers Query</title>
-            <image placement="inline" href="images/data_tiers_query.png" id="image_bzj_q2d_flb">
+            <image placement="inline" href="images/data_tiers.png" id="image_bzj_q2d_flb">
                 <alt>Data Tiers Query</alt>
             </image>
         </fig>
@@ -40,11 +40,20 @@
                 </li>
             </ol>
         </body>
-        <related-links>
-            <link href="./common_query_options.dita#group_options"/>
-            <link href="./common_query_options.dita#word_options"/>
-            <link href="./common_query_options.dita#participant_filter"/>
-        </related-links>
+    </topic>
+    
+    <topic id="other-parameters">
+        <title>Other Parameters</title>
+        <body>
+            <ul>
+                <li><xref href="common_query_options.dita#group_options"/></li>
+                <li><xref href="common_query_options.dita#aligned_group_options"/></li>
+                <li><xref href="common_query_options.dita#word_options"/></li>
+                <li><xref href="common_query_options.dita#aligned_word_options"/></li>
+                <li><xref href="common_query_options.dita#additional_tier_data"/></li>
+                <li><xref href="common_query_options.dita#participant_filter"/></li>
+            </ul>
+        </body>
     </topic>
     
 </topic>
