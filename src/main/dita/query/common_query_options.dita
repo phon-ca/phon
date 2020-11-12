@@ -3,7 +3,9 @@
 <topic id="common_query_options">
     <title>Common Query Parameters</title>
     <body>
-        <p>These query parameters can be found in most query forms.</p>
+        <p>These query parameters can be found in most query forms. Query parameters are organized
+            into collapsible sections inside query forms. To expand/collapse a section click the
+            dark-grey section header.</p>
     </body>
     
     <topic id="group_options">
@@ -11,6 +13,8 @@
         <shortdesc>Limit the results based on position or an expression defining the word
             group.</shortdesc>
         <body>
+            <image placement="break" href="images/group_options.png" id="image_sym_nnk_qnb"/>
+            
             <ol>
                 <li>
                     <p>Open the <uicontrol>Group Filter</uicontrol> panel by clicking on its title
@@ -50,12 +54,14 @@
     </topic>
     
     <topic id="aligned_group_options">
-        <title>Aligned Group Options</title>
+        <title>Aligned Group Filter</title>
         <shortdesc>You may also limit the results based on an expression defining an aligned word group
             in another tier.</shortdesc>
         <body>
-            <section>From the <uicontrol>Aligned Group</uicontrol> section of the <wintitle>Group
-                Filter</wintitle>:</section>
+            <image placement="break" href="images/aligned_group_filter.png" id="image_sym_nnk_qnb2"/>
+            
+            <section>From the <uicontrol>Aligned Group Filter</uicontrol> section of <wintitle>Group
+                    Options</wintitle>:</section>
             <ol>
                 <li>
                     <p>Enter the name of the filter tier in the <uicontrol>Tier name</uicontrol>
@@ -86,6 +92,8 @@
         <title>Word Options</title>
         <shortdesc>Limit the results based on position or an expression defining the word.</shortdesc>
         <body>
+            <image placement="break" href="images/word_options.png" id="image_sym1_nnk_qnb"/>
+            
             <ol>
                 <li>
                     <p>Open the <uicontrol>Word Filter</uicontrol> panel by clicking on its title
@@ -129,12 +137,14 @@
     </topic>
     
     <topic id="aligned_word_options">
-        <title>Aligned Word Options</title>
+        <title>Aligned Word Filter</title>
         <shortdesc>You may also limit the results based on an expression defining an aligned word in
             another tier.</shortdesc>
         <body>
-            <section>From the <uicontrol>Aligned Word</uicontrol> section of the <wintitle>Word
-                Filter</wintitle>:</section>
+            <image placement="break" href="images/aligned_word_filter.png" id="image_sym2_nnk_qnb2"/>
+            
+            <section>From the <uicontrol>Aligned Word Filter</uicontrol> section of the
+                    <wintitle>Word Options</wintitle>:</section>
             <ol>
                 <li>
                     <p>Enter the name of the filter tier in the <uicontrol>Tier name</uicontrol>
@@ -166,6 +176,8 @@
         <shortdesc>Limit the results based on position or an expression defining the
             syllable.</shortdesc>
         <body>
+            <image placement="break" href="images/syllable_options.png" id="image_syll_nnk_qnb"/>
+            
             <ol>
                 <li>
                     <p>Open the <uicontrol>Syllable Filter</uicontrol> panel by clicking on its title
@@ -220,16 +232,23 @@
         <title>Additional Tier Data</title>
         <shortdesc>Include data from additional tiers with the result.</shortdesc>
         <body>
+            <image placement="break" href="images/additional_tier_data.png" id="image_tiers_nnk_qnb"/>
+            
             <p>Data in tiers aligned with the primary query object may be included with the result.
                 Use the provided checkboxes to include data from default tiers or use the text field
                 to provide a comma-separated list of user-defined tiers. When
                     <uicontrol>Group</uicontrol> is selected under the <uicontrol>Search
                     By</uicontrol> options, use the <uicontrol>Add aligned groups</uicontrol>
                 section, when <uicontrol>Word</uicontrol> is selected the <uicontrol>Add aligned
-                    words</uicontrol> section will also be available.</p>
+                    words</uicontrol> section will also be available. The selected tier data will be
+                displayed as either 'Tier Name (Group)' or 'Tier Name (Word)' in report tables.</p>
             <p>
                 Several 'derived' tiers based on IPA data may be include using the text field.
                 <ul>
+                    <li><codeph>Target Syllabification</codeph> - IPA Target including syllable
+                        constituent labels (e.g., c:O for a c which is an onset)</li>
+                    <li><codeph>Actual Syllabification</codeph> - IPA Actual including syllable
+                        constituent labels</li>
                     <li><codeph>Target CV</codeph>- IPA Target covered using C for consonants and V for vowels</li>
                     <li><codeph>Actual CV</codeph> - IPA Actual covered using C for consonants and V
                         for vowels</li>
@@ -237,7 +256,6 @@
                         primary stress, 2 for secondary stress and U for unstressed</li>
                     <li><codeph>Actual Stress</codeph> - IPA Actual syllables covered using 1 for
                         primary stress, 2 for secondary stress and U for unstressed</li>
-                    <li><codeph/></li>
                 </ul>
             </p>
         </body>
@@ -247,6 +265,8 @@
         <title>Participant Filter</title>
         <shortdesc>Limit the results based on participant information.</shortdesc>
         <body>
+            <image placement="break" href="images/participant_options.png" id="image_sym_nnk_qnb"/>
+            
             <ol>
                 <li>
                     <ul>
