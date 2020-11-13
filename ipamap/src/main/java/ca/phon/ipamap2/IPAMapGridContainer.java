@@ -179,6 +179,7 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 				MattePainter mp = new MattePainter(UIManager.getColor("Button.background"));
 				mp.paint(g, object, width, height);
 			}
+			
 		});
 		
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
