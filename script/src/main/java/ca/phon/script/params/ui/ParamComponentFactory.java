@@ -279,26 +279,6 @@ public class ParamComponentFactory {
 
 		btn.setHorizontalAlignment(SwingConstants.LEFT);
 		btn.putClientProperty("JComponent.sizeVariant", "small");
-//		btn.setBorderPainted(false);
-//		btn.setBackgroundPainter(new Painter<JXButton>() {
-//
-//			@Override
-//			public void paint(Graphics2D g, JXButton object, int width, int height) {
-//				MattePainter mp = new MattePainter(Color.LIGHT_GRAY);
-//						//Color.decode("#efefef"));
-//				mp.paint(g, object, width, height);
-//			}
-//			
-//		});
-//		btn.setBackgroundPainter(new Painter<JXButton>() {
-//			
-//			@Override
-//			public void paint(Graphics2D g, JXButton object, int width, int height) {
-//				MattePainter mp = new MattePainter(UIManager.getColor("Button.background"));
-//				mp.paint(g, object, width, height);
-//			}
-//			
-//		});
 
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -322,13 +302,6 @@ public class ParamComponentFactory {
 	}
 	
 	private void installPatternParamListener(final RSyntaxTextArea textArea, final PatternScriptParam param) {
-//		param.addPropertyChangeListener(StringScriptParam.VALIDATE_PROP, (e) -> {
-//			if(!(Boolean)e.getNewValue()) {
-//				textArea.setForeground(Color.red);
-//			} else {
-//				textArea.setForeground(Color.black);
-//			}
-//		});
 		textArea.addParser(new PatternScriptParamParser(param));
 		param.addPropertyChangeListener(PatternScriptParam.FORMAT_PROP, (e) -> {
 			textArea.setSyntaxEditingStyle(param.getFormat());
