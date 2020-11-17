@@ -132,6 +132,18 @@
             </body>
         </topic>
         
+        <topic id="find_and_replace">
+            <title>Find &amp; Replace</title>
+            <body>
+                <p>The Find &amp; Replace UI can be displayed using the <menucascade>
+                        <uicontrol>Edit</uicontrol>
+                        <uicontrol>Find &amp; Replace</uicontrol>
+                    </menucascade> menu item of the <wintitle>Session Editor</wintitle> or by
+                    clicking the button in the toolbar of the <wintitle>Record Data</wintitle>
+                    view.</p>
+            </body>
+        </topic>
+        
     </topic>
     
 </topic>
