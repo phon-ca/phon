@@ -113,8 +113,13 @@ public class TransliterationTokenizer {
 			} else if(!match && !isPrefix) {
 				if(currentMatchIdx >= 0) {
 					retVal.add(currentMatch);
-					currentToken = currentToken.substring(currentMatch.length());
+					idx -= (currentToken.length() - currentMatch.length());
+					
+				} else {
+					retVal.add("" + currentToken.charAt(0));
+					idx -= (currentToken.length()-1);
 				}
+				currentToken = "";
 				currentMatchIdx = -1;
 				currentMatch = "";
 			}
