@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_2.dmg" newVersion="3.2.0-beta.2" newMediaFileId="macos" fileSize="272557561" md5Sum="f70ed207fafe5536a3258d2cd961927d" sha256Sum="28382f2a17d3fe2fcb16e8296d9211aee9475dd894b417b9f8f02ea1860e3691" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_4.dmg" newVersion="3.2.0-beta.4" newMediaFileId="macos" fileSize="272562047" md5Sum="5652e4234001aba166c453faf8fd1517" sha256Sum="222b1abcb17632aeef4ec986b5a5e2b7a1b1b981c8efe9ec39b220d9e2c1149e" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -373,7 +373,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_2.dmg" newVersion="3.2.0-beta.2" newMediaFileId="macos" fileSize="272557561" md5Sum="f70ed207fafe5536a3258d2cd961927d" sha256Sum="28382f2a17d3fe2fcb16e8296d9211aee9475dd894b417b9f8f02ea1860e3691" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0-beta_4.dmg" newVersion="3.2.0-beta.4" newMediaFileId="macos" fileSize="272562047" md5Sum="5652e4234001aba166c453faf8fd1517" sha256Sum="222b1abcb17632aeef4ec986b5a5e2b7a1b1b981c8efe9ec39b220d9e2c1149e" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -746,7 +746,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.exe" newVersion="3.2.0-beta.2" newMediaFileId="win64" fileSize="282299656" md5Sum="113ec9859e91da26c77e1d189af0acae" sha256Sum="268aa66ec1e62fc4aba9873519b72b6461814e2265a6208a93b74657941f3bd4" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_4.exe" newVersion="3.2.0-beta.4" newMediaFileId="win64" fileSize="282303752" md5Sum="6c71fe65a8801c50421cebb2ea9041dc" sha256Sum="6d6da08a45f1e686ebc96151524f178799d81cdef90bef48df9e596d6683da5b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -1119,7 +1119,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.exe" newVersion="3.2.0-beta.2" newMediaFileId="win64" fileSize="282299656" md5Sum="113ec9859e91da26c77e1d189af0acae" sha256Sum="268aa66ec1e62fc4aba9873519b72b6461814e2265a6208a93b74657941f3bd4" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_4.exe" newVersion="3.2.0-beta.4" newMediaFileId="win64" fileSize="282303752" md5Sum="6c71fe65a8801c50421cebb2ea9041dc" sha256Sum="6d6da08a45f1e686ebc96151524f178799d81cdef90bef48df9e596d6683da5b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -1492,7 +1492,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.exe" newVersion="3.2.0-beta.2" newMediaFileId="win64" fileSize="282299656" md5Sum="113ec9859e91da26c77e1d189af0acae" sha256Sum="268aa66ec1e62fc4aba9873519b72b6461814e2265a6208a93b74657941f3bd4" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_4.exe" newVersion="3.2.0-beta.4" newMediaFileId="win64" fileSize="282303752" md5Sum="6c71fe65a8801c50421cebb2ea9041dc" sha256Sum="6d6da08a45f1e686ebc96151524f178799d81cdef90bef48df9e596d6683da5b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
@@ -1865,7 +1865,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_2.zip" newVersion="3.2.0-beta.2" newMediaFileId="win64zip" fileSize="281268631" md5Sum="57a0c0509e82c09002500aaae640a95b" sha256Sum="16a777fed84e8e77fea59377feb7417f18b1e19a369a7b432034b28d776f2ebd" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0-beta_4.zip" newVersion="3.2.0-beta.4" newMediaFileId="win64zip" fileSize="281272380" md5Sum="7ad8d23b07681cc8c9d2bb289ad0a7e9" sha256Sum="dbac77da87d985df6f8a187de041e2dd56ccfcf3635dddf19de65c7f299127b9" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
