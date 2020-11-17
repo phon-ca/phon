@@ -15,6 +15,7 @@
 	UI and all application level logic.</description>
 	
 	<properties>
+		<org.codehaus.groovy.version>2.5.13</org.codehaus.groovy.version>
 	</properties>
 
 	<dependencies>
@@ -192,6 +193,13 @@
 	   		<artifactId>rhino-engine</artifactId>
 	   		<version>${org.mozilla.rhino.version}</version>
 	   		<scope>runtime</scope>
+	   	</dependency>
+	   	<dependency>
+	   		<groupId>org.codehaus.groovy</groupId>
+	   		<artifactId>groovy-all</artifactId>
+	   		<version>${org.codehaus.groovy.version}</version>
+	   		<scope>runtime</scope>
+	   		<type>pom</type>
 	   	</dependency>
 	</dependencies>
 
