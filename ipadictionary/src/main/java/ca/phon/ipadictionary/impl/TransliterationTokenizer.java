@@ -114,11 +114,7 @@ public class TransliterationTokenizer {
 				if(currentMatchIdx >= 0) {
 					retVal.add(currentMatch);
 					currentToken = currentToken.substring(currentMatch.length());
-				} 
-				// add each character as a separate token since no match was found
-				for(char ch:currentToken.toCharArray()) retVal.add("" + ch);
-				
-				currentToken = "";
+				}
 				currentMatchIdx = -1;
 				currentMatch = "";
 			}
