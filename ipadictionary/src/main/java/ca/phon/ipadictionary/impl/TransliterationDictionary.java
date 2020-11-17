@@ -30,7 +30,6 @@ import ca.phon.ipadictionary.exceptions.*;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.phonex.*;
 import ca.phon.util.*;
-import de.susebox.jtopas.*;
 
 /**
  * An IPADictionary implementation that uses a tokenizer and lookup
@@ -67,6 +66,8 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	
 	// token <-> phone mappings
 	private Map<String, String> tokenMap;
+	
+	private TransliterationTokenizer tokenizer;
 	
 	private URL mapFile;
 	
@@ -150,28 +151,10 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			orthography = m.replaceAll(preReplaceExpr);
 		}
 		
-		final StringBuilder builder = new StringBuilder();
-		final Tokenizer tokenizer = createTokenizer();
-		
-		try {
-			final TokenizerSource source = new StringSource(orthography);
-			tokenizer.setSource(source);
-			
-			while(tokenizer.hasMoreToken()) {
-				final Token token = tokenizer.nextToken();
-				if(token.getType() == Token.SPECIAL_SEQUENCE) {
-					builder.append(token.getCompanion());
-				} else if(token.getType() == Token.NORMAL) {
-					// add unknown sequences to return value
-					builder.append(token.getImage());
-					
-				}
-			}
-		} catch (TokenizerException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		if(tokenizer == null) {
+			tokenizer = new TransliterationTokenizer(getTokenMap());
 		}
-		
-		String builderStr = builder.toString();
+		String builderStr = tokenizer.transliterate(orthography);
 		
 		for(var postFind:postFindList) {
 			var pattern = postFind.getObj1();
@@ -251,24 +234,6 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		reader.close();
 	}
 	
-	/*
-	 * Create the tokenizer that will be used on the input string
-	 */
-	private Tokenizer createTokenizer() {
-		final TokenizerProperties props = new StandardTokenizerProperties();
-		props.setSeparators(null);
-		props.setParseFlags(Flags.F_KEEP_DATA | Flags.F_SINGLE_LINE_STRING);
-		
-		final Map<String, String> map = getTokenMap();
-		
-		for(String key:map.keySet()) {
-			props.addSpecialSequence(key, map.get(key));
-		}
-		
-		final Tokenizer tokenizer = new StandardTokenizer(props);
-		return tokenizer;
-	}
-
 	@Override
 	public String getMetadataValue(String key) {
 		return metadata.get(key);
