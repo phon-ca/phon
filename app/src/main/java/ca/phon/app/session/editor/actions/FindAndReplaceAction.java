@@ -15,7 +15,10 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import java.awt.*;
 import java.awt.event.*;
+
+import javax.swing.*;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.record_data.*;
@@ -31,12 +34,15 @@ public class FindAndReplaceAction extends SessionEditorAction {
 	
 	private final static String ICON_NAME = "actions/edit-find-replace";
 	
+	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+	
 	public FindAndReplaceAction(SessionEditor editor) {
 		super(editor);
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);
 		putValue(SMALL_ICON, IconManager.getInstance().getIcon(ICON_NAME, IconSize.SMALL));
+		putValue(ACCELERATOR_KEY, KS);
 	}
 
 	@Override
