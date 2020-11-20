@@ -73,6 +73,7 @@ public class TimelineRecordTier extends TimelineTier {
 		recordGrid = new RecordGrid(getTimeModel(), session);
 		if (getParentView().getEditor().currentRecord() != null)
 			setupRecord(getParentView().getEditor().currentRecord());
+		recordGrid.addParticipantMenuHandler(this::setupSpeakerContextMenu);
 
 		recordGrid.addPropertyChangeListener("splitMode", e -> {
 			if (!((boolean) e.getNewValue())) {
@@ -701,6 +702,29 @@ public class TimelineRecordTier extends TimelineTier {
 			if (includeAccel)
 				enterSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, 0));
 			builder.addItem(".", enterSplitModeAct);
+		}
+	}
+	
+	public void setupSpeakerContextMenu(Participant participant, MenuBuilder builder) {
+		Session session = getParentView().getEditor().getSession();
+		JMenu reassignMenu = new JMenu("Reassign records to");
+		for(Participant speaker:session.getParticipants()) {
+			if(speaker != participant) {
+				final ReassignRecordsAction reassignAct = new ReassignRecordsAction(getParentView(), participant, speaker);
+				reassignAct.putValue(Action.NAME, speaker.toString());
+				reassignAct.putValue(Action.SHORT_DESCRIPTION, String.format("Reassign all records from %s to %s", participant, speaker));
+				reassignMenu.add(reassignAct);
+			}
+		}
+		if(Participant.UNKNOWN != participant) {
+			final ReassignRecordsAction reassignAct = new ReassignRecordsAction(getParentView(), participant, Participant.UNKNOWN);
+			reassignAct.putValue(Action.NAME, Participant.UNKNOWN.toString());
+			reassignAct.putValue(Action.SHORT_DESCRIPTION, String.format("Reassign all records from %s to %s", participant, Participant.UNKNOWN));
+			reassignMenu.add(reassignAct);
+		}
+		builder.addSeparator(".", "reassign");
+		if(reassignMenu.getItemCount() > 0) {
+			builder.addMenu(".", reassignMenu);
 		}
 	}
 

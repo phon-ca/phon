@@ -19,12 +19,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.*;
 
+import javax.swing.event.*;
+
+import ca.phon.app.session.editor.view.timeline.actions.*;
 import ca.phon.media.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.*;
+import ca.phon.util.*;
 
 public class RecordGrid extends TimeComponent {
 	
@@ -39,6 +44,8 @@ public class RecordGrid extends TimeComponent {
 	private Insets tierInsets = new Insets(2, 2, 2, 2);
 	
 	private final List<RecordGridMouseListener> listeners = Collections.synchronizedList(new ArrayList<>());
+	
+	private final List<BiConsumer<Participant, MenuBuilder>> participantMenuHandlers = Collections.synchronizedList(new ArrayList<>());
 	
 	private final static String uiClassId = "RecordGridUI";
 	
@@ -155,6 +162,23 @@ public class RecordGrid extends TimeComponent {
 	}
 	
 	/**
+	 * Add a listener to particpant pop-up menus.
+	 * 
+	 * @param listener
+	 */
+	public void addParticipantMenuHandler(BiConsumer<Participant, MenuBuilder> listener) {
+		participantMenuHandlers.add(listener);
+	}
+	
+	public void removeParticipantMenuHandler(BiConsumer<Participant, MenuBuilder> listener) {
+		participantMenuHandlers.remove(listener);
+	}
+	
+	public List<BiConsumer<Participant, MenuBuilder>> getParticipantMenuHandlers() {
+		return this.participantMenuHandlers;
+	}
+	
+	/**
 	 * Setup speaker menu for given participant
 	 * 
 	 * @param participant
@@ -162,8 +186,12 @@ public class RecordGrid extends TimeComponent {
 	public void setupParticipantMenu(Participant participant, MenuBuilder builder) {
 		final PhonUIAction removeSpeakerAct = new PhonUIAction(this, "removeSpeaker", participant);
 		removeSpeakerAct.putValue(PhonUIAction.NAME, "Hide participant");
-		removeSpeakerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove " + participant + " tier from view");
+		removeSpeakerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + participant + " tier from view");
 		builder.addItem(".", removeSpeakerAct);
+		
+		for(var menuHandler:getParticipantMenuHandlers()) {
+			menuHandler.accept(participant, builder);
+		}
 	}
 	
 	public boolean isSplitMode() {
