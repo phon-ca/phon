@@ -28,6 +28,7 @@ import org.jdesktop.swingx.painter.Painter;
 
 import ca.phon.script.params.*;
 import ca.phon.script.params.EnumScriptParam.*;
+import ca.phon.ui.*;
 import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.*;
 
@@ -37,6 +38,8 @@ import ca.phon.ui.text.PromptedTextField.*;
  *
  */
 public class ParamComponentFactory {
+	
+	private final static String BUTTON_BG = "#cccccc";
 
 	/**
 	 * Create the label for the param
@@ -279,6 +282,28 @@ public class ParamComponentFactory {
 
 		btn.setHorizontalAlignment(SwingConstants.LEFT);
 		btn.putClientProperty("JComponent.sizeVariant", "small");
+		btn.setBorderPainted(false);
+		btn.setBackgroundPainter(new Painter<JXButton>() {
+			
+			@Override
+			public void paint(Graphics2D g, JXButton object, int width, int height) {
+				if(cp.isCollapsed()) {
+					MattePainter mp = new MattePainter(UIManager.getColor("Button.background"));
+					mp.paint(g, object, width, height);
+				} else {					
+					Color bgColor = Color.decode(BUTTON_BG);
+					
+					float[] hsbVals = Color.RGBtoHSB(bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue(), null);
+					Color topColor = Color.getHSBColor(hsbVals[0], hsbVals[1], 0.5f * (1.0f + hsbVals[2]));
+					
+					GradientPaint gp = new GradientPaint(new Point(0,0), topColor,
+							new Point(0, object.getHeight()), bgColor);
+					MattePainter mp = new MattePainter(gp);
+					mp.paint(g, object, width, height);
+				}
+			}
+			
+		});
 
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
