@@ -135,12 +135,24 @@
         <topic id="find_and_replace">
             <title>Find &amp; Replace</title>
             <body>
-                <p>The Find &amp; Replace UI can be displayed using the <menucascade>
+                <p>The Find &amp; Replace UI of the <uicontrol>Record Data</uicontrol> view can be
+                    displayed using the <menucascade>
                         <uicontrol>Edit</uicontrol>
                         <uicontrol>Find &amp; Replace</uicontrol>
                     </menucascade> menu item of the <wintitle>Session Editor</wintitle> or by
-                    clicking the button in the toolbar of the <wintitle>Record Data</wintitle>
-                    view.</p>
+                    clicking the find &amp; replace button in the toolbar of the <wintitle>Record
+                        Data</wintitle> view. Use the combo box to select tier for search. Search
+                    expression may be in plain text, regular expression, or phonex. See <xref
+                        href="find_and_replace_view.dita">Find and Replace View</xref> for the
+                    legacy Find &amp; Replace UI allowing for more fine-grained control over
+                    expressions in individual tiers.</p>
+                <fig id="fig_gvd_4qs_dlq2">
+                    <title>Record Data: Find &amp; Replace</title>
+                    <image placement="inline" href="images/record_data_find_replace.png"
+                        id="image_hvd_4qs_dlq2">
+                        <alt>Record Data: Find &amp; Replace</alt>
+                    </image>
+                </fig>
             </body>
         </topic>
         

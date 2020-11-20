@@ -35,14 +35,21 @@
                     >Phonex</xref> expression may be entered to create a custom phone set. See <xref
                     href="../phonex/examples/phones.md" format="md">Example Phones Queries</xref>
                 for some useful examples.</p>
-            <p>Other parameters:<ol id="ol_qkx_cqy_mjb">
+        </body>
+        
+        <topic id="other_parameters">
+            <title>Other parameters</title>
+            <body>
+                <p><ul id="ol_qkx_cqy_mjb">
                     <li>Ignore diacritics - ignore diacritics when comparing phones (default:
                         no)</li>
                     <li><xref href="../query/common_query_options.dita#group_options"/></li>
                     <li><xref href="../query/common_query_options.dita#word_options"/></li>
                     <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
-                </ol></p>
-        </body>
+                    <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                </ul></p>
+            </body>
+        </topic>
     </topic>
     <topic id="topic_wgv_ybb_mjb">
         <title>PDC Calculation</title>

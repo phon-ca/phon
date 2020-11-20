@@ -83,6 +83,15 @@
                     with the “+” diacritic to indicate their status as epenthetic.</p>
             </body>
         </topic>
+        <topic id="other_paramters">
+            <title>Other parameters</title>
+            <body><p><ul id="ol_qkx_cqy_mjb">
+                <li><xref href="../query/phones_query.dita#aligned-phones"/></li>
+                <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+            </ul></p></body>
+        </topic>
     </topic>
     <topic id="consonants_outline">
         <title>Report Outline</title>

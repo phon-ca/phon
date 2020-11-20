@@ -27,14 +27,22 @@
                         id="image_ddm_vhn_3nb"/>
                 </fig>
             </p>
-            <p>
-                <ol>
-                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
-                </ol>
-            </p>
         </body>
+        
+        <topic id="other_parameters">
+            <title>Other parameters</title>
+            <body>
+                <p>
+                    <ul>
+                        <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
+                        <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                    </ul>
+                </p>
+            </body>
+        </topic>
+        
     </topic>
     <topic id="topic_wgv_ybb_mjb">
         <title>PNTC Calculation</title>
