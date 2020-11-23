@@ -15,12 +15,19 @@
  */
 package ca.phon.app.session.editor;
 
+import java.util.*;
+
+import javax.swing.text.Highlighter.*;
+
+import ca.phon.extensions.*;
 import ca.phon.util.*;
 
 /**
- * Selection information used for {@link EditorSelectionModel}
+ * Selection information used for {@link EditorSelectionModel}.
+ * Custom highlighting can be obtained by attaching an extension
+ * of type {@link HighlightPainter}
  */
-public class SessionEditorSelection {
+public class SessionEditorSelection implements IExtendable {
 	
 	private final int recordIndex;
 	
@@ -29,6 +36,8 @@ public class SessionEditorSelection {
 	private final int groupIndex;
 	
 	private final Range groupRange;
+	
+	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorSelection.class, this);
 
 	public SessionEditorSelection(int recordIndex, String tierName,
 			int groupIndex, Range groupRange) {
@@ -37,6 +46,8 @@ public class SessionEditorSelection {
 		this.tierName = tierName;
 		this.groupIndex = groupIndex;
 		this.groupRange = groupRange;
+		
+		extSupport.initExtensions();
 	}
 
 	public int getRecordIndex() {
@@ -53,6 +64,22 @@ public class SessionEditorSelection {
 
 	public Range getGroupRange() {
 		return groupRange;
+	}
+
+	public Set<Class<?>> getExtensions() {
+		return extSupport.getExtensions();
+	}
+
+	public <T> T getExtension(Class<T> cap) {
+		return extSupport.getExtension(cap);
+	}
+
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extSupport.putExtension(cap, impl);
+	}
+
+	public <T> T removeExtension(Class<T> cap) {
+		return extSupport.removeExtension(cap);
 	}
 	
 }
