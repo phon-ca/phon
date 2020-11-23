@@ -35,6 +35,8 @@ import org.apache.commons.lang.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.*;
 
+import com.teamdev.jxbrowser.chromium.internal.ipc.message.*;
+
 import ca.hedlund.desktopicons.*;
 import ca.hedlund.tst.*;
 import ca.phon.app.log.*;
@@ -1171,6 +1173,31 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			}
 		}
 	}
+	
+	private void updateOptionals() {
+		WizardExtension ext = getGraph().getExtension(WizardExtension.class);
+		if(ext == null) return;
+		List<OpNode> currentOptionals = new ArrayList<>(ext.getOptionalNodes());
+		List<OpNode> newOptionals = new ArrayList<>();
+		// add optionls to new 
+		for(int i =- 0; i < macroNodes.size(); i++) {
+			MacroNode macroNode = macroNodes.get(i);
+			if(currentOptionals.contains(macroNode)) {
+				newOptionals.add(macroNode);
+				currentOptionals.remove(macroNode);
+				ext.removeOptionalNode(macroNode);
+			}
+		}
+		// add anything remanding
+		newOptionals.addAll(currentOptionals);
+		for(OpNode optNode:currentOptionals) ext.removeOptionalNode(optNode);
+		
+		// add optionals back in order
+		for(OpNode optNode:newOptionals) {
+			ext.addOptionalNode(optNode);
+			ext.setOptionalNodeDefault(optNode, true);
+		}
+	}
 
 	private void updateNodeLocations() {
 		for(int i = 0; i < macroNodes.size(); i++) {
@@ -1187,6 +1214,8 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					deltaX, deltaY);
 			getModel().getDocument().getUndoSupport().postEdit(moveEdit);
 		}
+		// update optionals as well
+		updateOptionals();
 	}
 
 	private TreeModel createTreeModel() {
