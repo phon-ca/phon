@@ -461,8 +461,10 @@ public class RecordDataEditorView extends EditorView {
 						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
 						final Range r = selection.getGroupRange();
 						try {
-							hl.addHighlight(r.getFirst(), r.getLast()+1,
-									new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED));
+							HighlightPainter painter = selection.getExtension(HighlightPainter.class);
+							if(painter == null)
+								painter = new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED);
+							hl.addHighlight(r.getFirst(), r.getLast()+1, painter);
 						} catch (BadLocationException e) {
 							LOGGER.info( e.getLocalizedMessage(), e);
 						}

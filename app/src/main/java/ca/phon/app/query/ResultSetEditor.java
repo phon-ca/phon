@@ -17,6 +17,7 @@ package ca.phon.app.query;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -24,13 +25,18 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+import javax.swing.text.*;
+import javax.swing.text.DefaultHighlighter.*;
+import javax.swing.text.Highlighter.*;
 
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.decorator.*;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
+import org.jdesktop.swingx.decorator.Highlighter;
 
 import com.jgoodies.forms.layout.*;
 
+import ca.phon.app.log.*;
 import ca.phon.app.project.*;
 import ca.phon.app.query.report.*;
 import ca.phon.app.session.editor.*;
@@ -712,11 +718,39 @@ public class ResultSetEditor extends ProjectFrame {
 					final Result r = resultSet.getResult(resultIdx);
 					final EditorSelectionModel selectionModel = getEditor().getSelectionModel();
 					selectionModel.clear();
-					for(ResultValue rv:r) {
+					
+					int numPrimaryRvs = 1;
+					switch(r.getSchema()) {
+					case "LINEAR":
+						numPrimaryRvs = 1;
+						break;
+						
+					case "ALIGNED":
+						numPrimaryRvs = 2;
+						break;
+						
+					case "DETECTOR":
+						numPrimaryRvs = 4;
+						break;
+						
+					default:
+						break;
+					}
+					
+					for(int rvIdx = 0; rvIdx < r.getNumberOfResultValues(); rvIdx++) {
+						ResultValue rv = r.getResultValue(rvIdx);
 						final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
 						final SessionEditorSelection selection = 
 								new SessionEditorSelection(r.getRecordIndex(), rv.getTierName(),
 										rv.getGroupIndex(), range);
+						
+						if(rvIdx >= numPrimaryRvs) {
+							// draw secondary highlights with a box instead of 
+							// default highlight painter
+							selection.putExtension(HighlightPainter.class, 
+									new OutlineHighlightPainter(PhonGuiConstants.PHON_SELECTED));
+						}
+						
 						selectionModel.addSelection(selection);
 					}
 					if(getEditor().getCurrentRecordIndex() != r.getRecordIndex()) 
@@ -730,6 +764,29 @@ public class ResultSetEditor extends ProjectFrame {
 			}
 		}
 	};
+	
+	private class OutlineHighlightPainter implements HighlightPainter {
+		
+		private final Color color;
+		
+		public OutlineHighlightPainter(Color color) {
+			this.color = color;
+		}
+
+		@Override
+		public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
+			g.setColor(color);
+			Rectangle r = bounds.getBounds();
+			try {
+				Rectangle2D p0r = c.modelToView2D(p0);
+				Rectangle2D p1r = c.modelToView2D(p1);
+				g.drawRect((int)p0r.getX(), r.y, (int)(p1r.getX()-p0r.getX()), r.height-1);
+			} catch (BadLocationException e) {
+				LogUtil.warning(e);
+			}
+		}
+		
+	}
 	
 	/**
 	 * Excluded table filter
