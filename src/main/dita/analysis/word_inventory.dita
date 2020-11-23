@@ -20,13 +20,20 @@
                 Orthogrpahy tier. You may change this using the form shown above. To add additional
                 tiers, use the <uicontrol>Add Aligned Words</uicontrol> field under <xref
                     href="../query/common_query_options.dita#word_options"/>. </p>
-            <p>Other parameters:<ol id="ol_qkx_cqy_mjb">
-                <li>Ignore diacritics - ignore diacritics when comparing phones (default:
-                    no)</li>
-                <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                <li><xref href="../query/common_query_options.dita#word_options"/></li>
-            </ol></p>
+            
         </body>
+        <topic id="other_parameters">
+            <title>Other Parameters</title>
+            <body>
+                <p><ul id="ol_qkx_cqy_mjb">
+                    <li>Ignore diacritics - ignore diacritics when comparing phones (default:
+                        no)</li>
+                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                </ul></p>
+            </body>
+        </topic>
     </topic>
     <topic id="outline">
         <title>Report Outline</title>

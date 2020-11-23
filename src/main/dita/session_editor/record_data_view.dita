@@ -139,10 +139,11 @@
                     displayed using the <menucascade>
                         <uicontrol>Edit</uicontrol>
                         <uicontrol>Find &amp; Replace</uicontrol>
-                    </menucascade> menu item of the <wintitle>Session Editor</wintitle> or by
-                    clicking the find &amp; replace button in the toolbar of the <wintitle>Record
-                        Data</wintitle> view. Use the combo box to select tier for search. Search
-                    expression may be in plain text, regular expression, or phonex. See <xref
+                    </menucascade>, use the <uicontrol><shortcut>CMD/CTRL+F</shortcut></uicontrol>
+                    menu item of the <wintitle>Session Editor</wintitle> or by clicking the find
+                    &amp; replace button in the toolbar of the <wintitle>Record Data</wintitle>
+                    view. Use the combo box to select tier for search. Search expression may be in
+                    plain text, regular expression, or phonex. See <xref
                         href="find_and_replace_view.dita">Find and Replace View</xref> for the
                     legacy Find &amp; Replace UI allowing for more fine-grained control over
                     expressions in individual tiers.</p>

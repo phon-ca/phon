@@ -111,6 +111,14 @@
                             <keyword>Unidentified</keyword>.</p>
                 </body>
             </topic>
+            <topic id="reassign-participant">
+                <title>Reassign Records</title>
+                <body>
+                    <p>Menu items to reassign all records from one participant to another are located
+                    in the contextual menu for participants available by clicking on the participant
+                    name in the <uicontrol>record grid</uicontrol>.</p>
+                </body>
+            </topic>
         </topic>
         <topic id="hideshow-tier">
             <title>Hide/Show Tier</title>
