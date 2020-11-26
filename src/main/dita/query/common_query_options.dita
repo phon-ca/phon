@@ -8,6 +8,25 @@
             dark-grey section header.</p>
     </body>
     
+    <topic id="search_by">
+        <title>Search by</title>
+        <shortdesc>Control search domain of queries/analyses.</shortdesc>
+        <body>
+            <image placement="break" href="images/search_by_options.png" id="image_sym_sby_qnb"/>
+            <p>The <uicontrol>Search by</uicontrol> options appear at the beginning of most
+                query/analysis forms and provide a way to choose the domain of a query. By default
+                most queries will search by <uicontrol>Word</uicontrol> allowing access to <xref
+                    href="#word_options" format="dita">Word Options</xref>. If the tiers being
+                queried are IPA tiers <uicontrol>then by syllable</uicontrol> will also be available
+                which will allow access to <xref href="#syllable_options" format="dita">Syllable
+                    Options</xref> if selected. The <uicontrol>Search by</uicontrol> settings may
+                also be controlled using the <uicontrol>search by word</uicontrol> and
+                    <uicontrol>search by syllable</uicontrol> checkboxes under <xref
+                    href="#word_options" format="dita">Word Options</xref> and <xref
+                    href="#syllable_options" format="dita">Syllable Options</xref> respectively.</p>
+        </body>
+    </topic>
+    
     <topic id="group_options">
         <title>Group Options</title>
         <shortdesc>Limit the results based on position or an expression defining the word
