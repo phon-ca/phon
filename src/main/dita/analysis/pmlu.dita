@@ -38,6 +38,7 @@
             <title>Other Parameters</title>
             <body>
                 <p><ul id="ol_qkx_cqy_mjb">
+                    <li><xref href="../query/common_query_options.dita#search_by"/></li>
                     <li><xref href="../query/phones_query.dita#aligned-phones"/></li>    
                     <li><xref href="../query/common_query_options.dita#group_options"/></li>
                     <li><xref href="../query/common_query_options.dita#word_options"/></li>

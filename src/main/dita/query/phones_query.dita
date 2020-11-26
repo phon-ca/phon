@@ -54,6 +54,7 @@
             <title>Other Parameters</title>
             <body>
                 <ul>
+                    <li><xref href="common_query_options.dita#search_by"/></li>
                     <li><xref href="common_query_options.dita#group_options"/></li>
                     <li><xref href="common_query_options.dita#aligned_group_options"/></li>
                     <li><xref href="common_query_options.dita#word_options"/></li>
