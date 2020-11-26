@@ -197,19 +197,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 		
 	};
-	
-	private BreadcrumbListener<OpGraph, String> breadcrumbListener = new BreadcrumbListener<OpGraph, String>() {
 		
-		@Override
-		public void breadCrumbEvent(BreadcrumbEvent<OpGraph, String> evt) {
-			if(evt.getValue().equals("root")) {
-				// root graph has changed - reset and update
-				resetAndUpdate();
-			}
-		}
-		
-	};
-	
 	private void resetAndUpdate() {
 		// read macro nodes from graph extension
 		macroNodes.clear();
@@ -1070,37 +1058,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		return true;
 	}
 	
-	private JPanel createDocumentsPanel(TreeModel treeModel) {
-		JPanel retVal = new JPanel(new VerticalLayout());
-		
-		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
-		for(int i = 0; i < rootNode.getChildCount(); i++) {
-			TreeNode cnode = rootNode.getChildAt(i);
-			setupDocumentsPanel(cnode, retVal);
-		}
-		
-		return retVal;
-	}
-	
-	private void setupDocumentsPanel(TreeNode treeNode, JPanel panel) {
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNode;
-
-		JPanel docPanel = new JPanel(new GridLayout(0, 3));
-		
-		for(int i = 0; i < node.getChildCount(); i++) {
-			TreeNode cnode = node.getChildAt(i);
-			
-			if(cnode.isLeaf()) {
-				DocumentLabel docLabel = new DocumentLabel(((DefaultMutableTreeNode)cnode).getUserObject());
-				docPanel.add(docLabel);
-			} else {
-				setupDocumentsPanel(cnode, panel);
-			}
-		}
-		
-		panel.add(docPanel);
-	}
-	
 	/**
 	 * If the given analysis/report node has a settings node 'Parameters' which
 	 * is a {@link PhonScriptNode} and has a parameter 'reportTitle' this
@@ -1217,7 +1174,12 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		// update optionals as well
 		updateOptionals();
 	}
-
+	
+	public void updateTreeModel() {
+		TreeModel treeModel = createTreeModel();
+		documentTree.setModel(treeModel);
+	}
+	
 	private TreeModel createTreeModel() {
 		final DefaultMutableTreeNode root = new DefaultMutableTreeNode("Add-able Items", true);
 
