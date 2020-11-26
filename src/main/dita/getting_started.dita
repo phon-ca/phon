@@ -86,17 +86,17 @@
             </body>
         </topic>
         <topic id="phon_beta">
-            <title>Phon 3.2.0-beta.5</title>
+            <title>Phon 3.2.0-beta.7</title>
             <body>
                 <ul>
                     <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.5/Phon_macos_3_2_0-beta_5.dmg"
+                                href="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.7/Phon_macos_3_2_0-beta_7.dmg"
                                 format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p></li>
                     <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.5/Phon_windows-x64_3_2_0-beta_5.exe"
+                                href="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.7/Phon_windows-x64_3_2_0-beta_7.exe"
                                 format="exe" scope="external">Windows (64-bit) (installer)</xref> |
                                 <xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.5/Phon_windows-x64_3_2_0-beta_5.zip"
+                                href="https://github.com/phon-ca/phon/releases/download/3.2.0-beta.7/Phon_windows-x64_3_2_0-beta_7.zip"
                                 format="zip" scope="external">Windows (64 bit) (zip)</xref></p></li>
                 </ul>
             </body>
