@@ -12,3 +12,6 @@ Thumbs.db
 ipadictionary/derby.log
 app/data/bin
 bin
+.idea/
+*.iml
+all/
