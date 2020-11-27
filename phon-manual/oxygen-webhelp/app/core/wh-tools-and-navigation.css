@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------------
+ *  
+ * Tools and navigation
+ * 
+ */
+.wh_print_link,
+.wh_navigation_links,
+.wh_navigation_links .navnext,
+.wh_navigation_links .navprev{
+    display:inline-block;
+    margin-left:0.5em;
+}
+
+.wh_print_link button {
+    border: none;
+    background-color: transparent;
+}
+
+/**
+ * Content area
+ */
+@media screen{
+	/* On media print it creates problems if there is a two column page layout: big spaces around the elements that span all columns. */
+	.wh_content_area {
+	    min-height: 500px;
+	}
+}

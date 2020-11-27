@@ -8,6 +8,8 @@ define(["require", "config"], function() {
             'menu',
             'searchAutocomplete',
             'webhelp',
+            'codeblock',
+            'top-menu',
             'template-module-loader'
         ]);
     });

@@ -1,0 +1,15 @@
+/*
+ * Responsive images
+ */
+.image {
+    max-width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+}
+img.image:not(img[usemap]) {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+img.image:not(img[usemap]):hover {opacity: 0.7;}

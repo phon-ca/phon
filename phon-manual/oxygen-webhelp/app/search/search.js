@@ -517,7 +517,7 @@ define(['util', 'options', 'nwSearchFnt', 'searchHistoryItems', 'localization', 
         } else {
             // Search expression is empty. If there are stop words, display a message accordingly
             if (lastSearchResult.excluded.length > 0) {
-                $wh_search_results_items = $();
+                $wh_search_results_items = $('<div/>');
                 var $p = $('<p/>', {
                     class: 'wh_search_results_for'
                 }).html(i18n.getLocalization("no_results_only_stop_words1"));

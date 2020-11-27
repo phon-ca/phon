@@ -7,6 +7,8 @@ define(["require", "config"], function() {
         'menu',
         'searchAutocomplete',
         'webhelp',
+	    'codeblock',
+	    'top-menu',
         'search-init',
         'context-help',
         'template-module-loader',

@@ -6,6 +6,7 @@ define(["require", "config"], function() {
         'polyfill',
         'menu',
         'expand',
+        'permalink',
         'template-module-loader'
     ]);
 });

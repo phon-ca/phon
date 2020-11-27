@@ -145,74 +145,7 @@ define(["options", 'util', 'jquery', 'jquery.highlight'], function(options, util
 
         highlightSearchTerm();
 
-        /*
-         * Codeblock copy to clipboard action
-         */
-        $('.codeblock').mouseover(function(){
-            // WH-1806
-            var item = $('<span class="copyTooltip wh-tooltip-container" data-tooltip-position="left"/>');
-            if ( $(this).find('.copyTooltip').length == 0 ){
-                $(this).prepend(item);
-
-                $('.codeblock .copyTooltip').click(function(){
-                    var txt = $(this).closest(".codeblock").text();
-                    if(!txt || txt == ''){
-                        return;
-                    }
-                    copyTextToClipboard(txt, $(this));
-                });
-            }
-        });
-
-        $('.codeblock').mouseleave(function(){
-            $(this).find('.copyTooltip').remove();
-        });
-
-        /**
-         * @description Copy the text to the clipboard
-         */
-        function copyTextToClipboard(text, copyTooltipSpan) {
-            var textArea = document.createElement("textarea");
-            textArea.style.position = 'fixed';
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                var successful = document.execCommand('copy');
-
-                // WH-1806
-                if (copyTooltipSpan.find('.wh-tooltip').length == 0) {
-                    var tooltipContainer = $(
-                    '<span>' +
-                        '  <span class="wh-tooltip"><p class="wh-tooltip-content">Copied to clipboard</p></span>' +
-                        '</span>'
-                    );
-                    copyTooltipSpan.prepend(tooltipContainer);
-                    copyTooltipSpan.mouseleave(function() {
-                        tooltipContainer.remove();
-                    });
-                    setTimeout(function(){ tooltipContainer.remove();}, 3000);
-                }
-            } catch (err) {
-                // Unable to copy
-                if (copyTooltipSpan.find('.wh-tooltip').length == 0) {
-                    var tooltipContainer = $(
-                        '<span>' +
-                        '  <span class="wh-tooltip"><p class="wh-tooltip-content">Oops, unable to copy</p></span>' +
-                        '</span>'
-                    );
-                    copyTooltipSpan.mouseleave(function() {
-                        tooltipContainer.remove();
-                    });
-                    copyTooltipSpan.prepend(tooltipContainer);
-                    setTimeout(function(){ tooltipContainer.remove(); }, 3000);
-                }
-                // WH-1806
-                //$('.copyTooltip').tooltip({title: 'Oops, unable to copy', trigger: "click"});
-                util.debug('Oops, unable to copy codeblock content!', err)
-            }
-            document.body.removeChild(textArea);
-        }
+        
 
         /**
          * Check to see if the window is top if not then display button
@@ -415,49 +348,4 @@ function handlePageTocPosition(scrollPosition) {
         $('.wh_hide_highlight').show();
     }
 
-    var isTouchEnabled = false;
-    try {
-        if (document.createEvent("TouchEvent")) {
-            isTouchEnabled = true;
-        }
-    } catch (e) {
-        util.debug(e);
-    }
-
-    /**
-     * Open the link from top_menu when the current group is expanded.
-     *
-     * Apply the events also on the dynamically generated elements.
-     */
-
-    $(document).on('click', ".wh_top_menu li", function (event) {
-        $(".wh_top_menu li").removeClass('active');
-        $(this).addClass('active');
-        $(this).parents('li').addClass('active');
-
-        event.stopImmediatePropagation();
-    });
-
-    $(document).on('click', '.wh_top_menu a', function (event) {
-        var pointerType;
-        if (typeof event.pointerType !== "undefined") {
-            pointerType = event.pointerType;
-        }
-
-        if ($(window).width() < 767 || isTouchEnabled || pointerType == "touch") {
-            var areaExpanded = $(this).closest('li');
-            var isActive = areaExpanded.hasClass('active');
-            var hasChildren = areaExpanded.hasClass('has-children');
-            if (isActive || !hasChildren) {
-                window.location = $(this).attr("href");
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return false;
-            } else {
-                event.preventDefault();
-            }
-        } else {
-            return true;
-        }
-    });
 });

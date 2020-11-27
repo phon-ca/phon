@@ -3,7 +3,10 @@ define(function() {
     var modulePaths = {
         // core
         "webhelp" : "core/webhelp",
+        "codeblock": "core/wh-codeblock",
+        "top-menu": "core/wh-top-menu",
         "expand": "core/expand",
+        "permalink": "core/permalink",
         "polyfill": "core/polyfill",
         // context sensitive help
         "context-help" : "context-help/context-help",
@@ -97,6 +100,16 @@ define(function() {
     requirejs.config({
         paths : modulePaths,
         shim : shimConfig,
+        urlArgs: function(id, url) {
+            var args = '2020111801';
+        	
+            if(id === 'index-1' || id === 'index-2' || id === 'index-3' || id === 'stopwords' 
+            ||id === 'htmlFileInfoList' || id === 'keywords') {
+                args = '20201127124327';
+        	} 
+	
+	        return (url.indexOf('?') === -1 ? '?' : '&') + args;
+    	},
         map: {
             // @see http://requirejs.org/docs/jquery.html#noconflictmap
 

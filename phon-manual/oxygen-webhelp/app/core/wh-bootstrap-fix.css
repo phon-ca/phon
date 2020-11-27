@@ -1,0 +1,60 @@
+/*
+ * ------------------------------------------------------------------
+ *  
+ * Fight bootstrap
+ *  
+ */
+
+/*Fix for: Bootstrap marks all the LIs as position:relative, so you cannot position an 
+  li:after or a li:before absolutely to a parent of your choice.*/
+.wh_publication_toc .nav>li {
+    position:inherit;
+}
+
+/* WH-231
+ * Compacting the side-toc
+ *  */
+li.hide-after, li.hide-before{display:none}
+.dots-before, .dots-after{cursor: pointer; text-indent: 1.1em; color: #ccc; font-size: .8em}
+.dots-before span, .dots-after span{border:1px solid #e1e1e1; padding: 2px 7px; border-radius: 14px; }
+.dots-before span:hover, .dots-after span:hover{border:1px solid #bbb; background-color:#fff }
+
+
+
+/*Fix for: Bootstrap puts a two pixels border bottom under the thead, 
+    with a light color and bottom alignement.*/
+.table>thead>tr>th,
+.table>thead>tr>td,
+.table>tfoot>tr>th,
+.table>tfoot>tr>td,
+.table>tbody>tr>th,
+.table>tbody>tr>td,
+.table>caption+thead>tr:first-child>td,
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>td,
+.table>thead:first-child>tr:first-child>th {
+    /*
+       WH-1947 In order for the default alignment to apply as it is defined
+       in elements.css we need not to override it from this very specific rule.
+    */
+    /*  vertical-align:inherit ;*/
+    border-color:inherit;
+}
+td, th {
+    padding: 0.5em;
+}
+
+/*Fix for: Bootstrap sets a light gray color to the table caption. Use a darker color.*/
+caption{
+    color:inherit;
+    margin-top:1em;
+    caption-side: top;
+}
+
+/* Bootstrap adds a dotted border-bottom for abbr elements and browser renders them with with a dotted underline */
+abbr, abbr[title] {
+    text-decoration: none;
+    border-bottom: none;
+}

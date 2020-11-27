@@ -76,7 +76,8 @@ a.wh_term_target{
 .wh_term .wh_term{
     break-inside:avoid;
 }
-@media screen{
+
+@media screen {
 	@-moz-document url-prefix() {
 	  .wh_term .wh_term{
 	        display: table

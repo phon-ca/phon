@@ -13,13 +13,6 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
             /* Index terms groups */
             ".wh_term_group > .wh_first_letter"
         ],
-        /* WH-1613 - permalink selector  */
-        "permalinks": [
-            ".dt[id]",
-            ".section[id] .sectiontitle",
-            ".title.topictitle2[id]",
-            "table[id] .tablecap"
-        ]
     };
 
     var expandInitialState = options.get("webhelp.topic.collapsible.elements.initial.state");
@@ -52,19 +45,6 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
         );
 
         /*
-         * WH-1613
-         * Add the permalink icons
-         */
-        selectors.permalinks.forEach(
-            function (selector) {
-                var matchedNodes = $(document).find(selector);
-                // Add the element for the permalink action
-                matchedNodes.append("<span class='permalink'/>");
-            }
-        );
-
-
-        /*
          * Slide down when click on a letter from the indexterms bar
          * */
         $('.wh-letters a').click(function (e) {
@@ -75,20 +55,6 @@ define(["options", "localization", "jquery"], function (options, i18n, $) {
             if ($("[id='" + id + "']").length > 0) {
                 $('html, body').animate({scrollTop: $("[id='" + id + "']").offset().top}, 1000);
             }
-        });
-
-
-        /*
-         * WH-1613
-         * Permalink action
-         * */
-        $('span.permalink').click(function (e) {
-            var id = $(this).closest('[id]').attr('id');
-            var hash = '#' + id;
-            e.preventDefault();
-            history.replaceState({}, '', hash);
-
-            $('html, body').animate({scrollTop: $("[id='" + id + "']").offset().top}, 1000);
         });
 
         /* Expand / collapse subtopic sections */

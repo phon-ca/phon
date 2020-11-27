@@ -8,8 +8,11 @@ define(["require", "config"], function() {
         'toc',
         'searchAutocomplete',
         'webhelp',
+        'codeblock',
+        'top-menu',
         'search-init',
         'expand',
+        'permalink',
         'image-map',
         'template-module-loader',
         'bootstrap'

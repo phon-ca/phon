@@ -424,15 +424,15 @@ Example:
     font-weight: 400;
 }
 
-.wh_related_links,
-.wh_child_links,
-.wh_topic_content .related-links{
+.wh_related_links .related-links,
+.wh_topic_content .related-links,
+.wh_child_links{
     border-top: 1px solid #ccc;
     padding-top: 7px;
     margin-top: 0;
 }
 
-.wh_related_links,
+.wh_related_links .related-links,
 .wh_topic_content .related-links{
     padding: .5em 1.5em ;
 }
@@ -442,7 +442,7 @@ Example:
 }
 
 .related-links strong{
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .related-links a,
