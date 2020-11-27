@@ -32,6 +32,7 @@ import ca.phon.ui.*;
 import ca.phon.ui.action.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 
 public class RecentProjectsList extends JPanel {
 
@@ -82,13 +83,18 @@ public class RecentProjectsList extends JPanel {
 	public void updateProjectList() {
 		buttonPanel.removeAll();
 		buttonPanel.revalidate();
+
+		PhonWorker worker = PhonWorker.createWorker();
+		worker.setFinishWhenQueueEmpty(true);
 		
 		final RecentProjects history = new RecentProjects();
 		
 		boolean stripeRow = false;
 		for(File projectFolder:history) {
 			final LocalProjectButton projectButton = getProjectButton(projectFolder);
-			
+
+			projectButton.updateProjectSize(worker);
+
 			if(stripeRow) {
 				projectButton.setBackground(PhonGuiConstants.PHON_UI_STRIP_COLOR);
 				stripeRow = false;
@@ -99,6 +105,7 @@ public class RecentProjectsList extends JPanel {
 			
 			buttonPanel.add(projectButton);
 		}
+		worker.start();
 	}
 	
 	private LocalProjectButton getProjectButton(File projectFolder) {

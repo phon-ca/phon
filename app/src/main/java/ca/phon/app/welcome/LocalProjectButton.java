@@ -57,8 +57,10 @@ public class LocalProjectButton extends MultiActionButton {
 		setBackgroundPainter(bgPainter);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	}
 
-		PhonWorker.getInstance().invokeLater(new ProjectSizeCalcTask());
+	public void updateProjectSize(PhonWorker worker) {
+		worker.invokeLater(new ProjectSizeCalcTask());
 	}
 
 	/**
@@ -158,8 +160,11 @@ public class LocalProjectButton extends MultiActionButton {
 			// return size of file
 			retVal = f.length();
 		} else if(f.isDirectory()) {
-			for(File lf:f.listFiles()) {
-				retVal += getSize(lf);
+			File[] files = f.listFiles();
+			if(files != null) {
+				for (File lf : files) {
+					retVal += getSize(lf);
+				}
 			}
 		}
 		return retVal;

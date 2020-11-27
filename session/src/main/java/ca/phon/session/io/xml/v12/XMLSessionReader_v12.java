@@ -643,9 +643,13 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 					(eleIdx < syllabification.size() ? syllabification.get(eleIdx++) : null);
 			if(ct != null) {
 				final ConstituentTypeType ctt = ct.getScType();
+				final SyllabificationInfo info = cp.getExtension(SyllabificationInfo.class);
 				final SyllableConstituentType scType = SyllableConstituentType.fromString(ctt.toString());
 				if(scType != null) {
-					cp.setScType(scType);
+					info.setConstituentType(scType);
+					if(scType == SyllableConstituentType.NUCLEUS) {
+						info.setDiphthongMember(!ct.isHiatus());
+					}
 				}
 			}
 		}

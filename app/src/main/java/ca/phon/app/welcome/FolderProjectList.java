@@ -143,10 +143,17 @@ public class FolderProjectList extends JPanel {
 		listPanel.removeAll();
 		listPanel.revalidate();
 		listPanel.repaint();
+
+		PhonWorker worker = PhonWorker.createWorker();
+		worker.setFinishWhenQueueEmpty(true);
 		
 		boolean stripRow = false;
 		for(MultiActionButton btn:projectButtons) {
 			listPanel.add(btn);
+
+			if(btn instanceof LocalProjectButton) {
+				((LocalProjectButton) btn).updateProjectSize(worker);
+			}
 			
 			if(stripRow) {
 				btn.setBackground(PhonGuiConstants.PHON_UI_STRIP_COLOR);
@@ -156,7 +163,8 @@ public class FolderProjectList extends JPanel {
 				stripRow = true;
 			}
 		}
-		
+
+		worker.start();
 		revalidate();
 		listPanel.revalidate();
 		listPanel.repaint();
