@@ -23,29 +23,29 @@
             </extensions>
         </node>
         <ogcn:macro id="5ce06501" name="MarkNuclei" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="474f703f">
+            <graph id="68d59746">
                 <node id="1e0dcec" name="MarkNuclei #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(D=\v[{v}])]]></oga:property>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(D=\g\v)]]></oga:property>
                         </oga:settings>
                         <oga:meta x="15" y="14"/>
+                    </extensions>
+                </node>
+                <node id="b2e75c7f724c4226" name="Fix GVGV seqs" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[.:N(O=\g:N).:N]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="345" y="29"/>
                     </extensions>
                 </node>
                 <node id="376f4fc8" name="MarkNuclei #2" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(D=\g\v)]]></oga:property>
+                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(N={c, syllabic})]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="203" y="15"/>
-                    </extensions>
-                </node>
-                <node id="68f8fc49" name="MarkNuclei #3" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(D={v,high,lax}\v)]]></oga:property>
-                        </oga:settings>
-                        <oga:meta x="391" y="15"/>
+                        <oga:meta x="243" y="136"/>
                     </extensions>
                 </node>
                 <node id="1956fc53" name="MarkNuclei #4" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
@@ -53,12 +53,12 @@
                         <oga:settings>
                             <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA[(N=\v)]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="579" y="15"/>
+                        <oga:meta x="464" y="263"/>
                     </extensions>
                 </node>
-                <link dest="376f4fc8" destField="ipa" source="1e0dcec" sourceField="ipa out"/>
-                <link dest="68f8fc49" destField="ipa" source="376f4fc8" sourceField="ipa out"/>
-                <link dest="1956fc53" destField="ipa" source="68f8fc49" sourceField="ipa out"/>
+                <link dest="1956fc53" destField="ipa" source="376f4fc8" sourceField="ipa out"/>
+                <link dest="b2e75c7f724c4226" destField="ipa" source="1e0dcec" sourceField="ipa out"/>
+                <link dest="376f4fc8" destField="ipa" source="b2e75c7f724c4226" sourceField="ipa out"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
                     <ops:settings lang="yue" name="Yue Chinese"/>
@@ -71,7 +71,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="40ced119" name="MarkOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="36487464">
+            <graph id="43b26900">
                 <node id="18f64bb4" name="MarkOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -80,6 +80,10 @@
                         <oga:meta x="15" y="15"/>
                     </extensions>
                 </node>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
+                    <ops:settings lang="yue" name="Yue Chinese"/>
+                </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="18f64bb4"/>
             <ogcn:published_output field="ipa out" name="ipa" ref="18f64bb4"/>
@@ -88,7 +92,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="2ba5634d" name="MaxOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="79888ff7">
+            <graph id="1e0478a2">
                 <node id="313e54e7" name="MaxOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -105,7 +109,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4b695456" name="MarkCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="150b2471">
+            <graph id="3338ee3f">
                 <node id="36fd9910" name="MarkCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -126,7 +130,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="2daac9" name="MaxCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3c80ec59">
+            <graph id="21a7aa30">
                 <node id="50694453" name="MaxCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
