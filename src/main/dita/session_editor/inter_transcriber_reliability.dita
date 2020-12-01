@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="inter_transcriber_reliability">
+    <title>Inter-transcriber Reliability</title>
+    <shortdesc>The inter-transcriber reliability report provides several metrics of agreement
+        between blind transcribers in a Phon session. </shortdesc>
+    <topic id="topic_th3_1rj_vnb">
+        <title>Usage</title>
+        <body>
+            <p>To open the inter-transcriber reliability wizard select <menucascade>
+                    <uicontrol>Session</uicontrol>
+                    <uicontrol>Inter-transcriber Reliability</uicontrol>
+                </menucascade> from the <wintitle>Session Editor</wintitle> window menu. The menu
+                item will be disabled if the editor is in <keyword>blind mode</keyword> or there are
+                less than two transcribers for the session.</p>
+            <p>INSERT SCREENSHOT</p>
+            <p>The first step of the wizard allows selection of domain for comparison (group or
+                word), the transcribers for comparison, and which metrics will be included. Standard
+                options for ignoring diacritics are also available. After clicking
+                    <uicontrol>Next</uicontrol> a HTML report is produced as described below and
+                displayed as the last step of the wizard. Options to save the report and export
+                report tables will be available from the toolbar and context menu.</p>
+        </body>
+    </topic>
+    <topic id="report">
+        <title>Report Outline</title>
+        <body>
+            <p>A table will be produced for each pair of selected transcribers. For each row of the
+                table, which corresponds to a group/word in the session, the following items will be
+                calculated (<i>t1</i> is the transcript for transcriber 1, <i>t2</i> is the
+                transcript for transcriber 2):<ul id="ul_dqk_sqj_vnb">
+                    <li><i><keyword>Levenshtein Distance</keyword></i><p>Levenshtein Distance
+                            calculates the number of typed-edits required to turn <i>t1</i> into
+                                <i>t2</i> (and vice versa)</p></li>
+                    <li><i><keyword>Phone Agreement</keyword></i><p>Phone agreement is calculated as
+                            the average of percent phones correct (PPC) between <i>t1</i> and
+                                <i>t2</i>:</p>
+                        <foreign outputclass="embed-latex">PhoneAgreement(t1,t2) = \frac{PPC(t1,t2)
+                            + PPC(t2,t1)}{2}</foreign></li>
+                    <li><i><keyword>Consonant Agreement</keyword></i> (optional, default:
+                            yes)<p>Consonant agreement is caculated as the average of percent
+                            consonants correct (PCC) between <i>t1</i> and <i>t2</i>:</p>
+                        <foreign outputclass="embed-latex">ConsonantAgreement(t1,t2) =
+                            \frac{PCC(t1,t2) + PCC(t2,t1)}{2}</foreign></li>
+                    <li><i><keyword>Vowel Agreement</keyword></i> (optional, default: yes)<p>Vowel
+                            agreement is calculated as is calculated as the average of percent
+                            vowels correct (PVC) between <i>t1</i> and <i>t2</i>:</p>
+                        <foreign outputclass="embed-latex">VowelAgreement(t1,t2) = \frac{PVC(t1,t2)
+                            + PVC(t2,t1)}{2}</foreign></li>
+                    <li><i><keyword>Diacritic Agreement</keyword></i> (optional, default:
+                            no)<p>Diacritic agreement is caculated as the average of percent
+                            diacritics correct (PDC) between <i>t1</i> and <i>t2</i>:</p>
+                        <foreign outputclass="embed-latex">DiacriticAgreement(t1,t2) =
+                            \frac{PDC(t1,t2) + PDC(t2,t1)}{2}</foreign></li>
+                    <li><i><keyword>Number Tone Agreement</keyword></i> (optional, default:
+                            no)<p>Number tone agreement is calculated as the averager of percent
+                            number tones correct (PNTC) between <i>t1</i> and <i>t2</i>:</p>
+                        <foreign outputclass="embed-latex">NumberToneAgreement(t1,t2) =
+                            \frac{PNTC(t1,t2) + PNTC(t2,t1)}{2}</foreign></li>
+                </ul><note>The *Agreement columns are calculated as an average because the
+                        <keyword>percent correct</keyword> function is not commutative.</note></p>
+            <p>The final row of each table will include an average of each selected metric.</p>
+            <p>INSERT EXAMPLE</p>
+        </body>
+    </topic>
+</topic>
