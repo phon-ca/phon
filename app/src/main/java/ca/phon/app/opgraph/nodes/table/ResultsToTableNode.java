@@ -384,7 +384,12 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	private boolean keepCharacter(char ch, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
 		FeatureMatrix fm = FeatureMatrix.getInstance();
 		Collection<Character> dias = fm.getCharactersWithFeature("diacritic");
-		
+
+		// don't strip ligatures
+		dias.remove(Character.valueOf('\u035c'));
+		dias.remove(Character.valueOf('\u0361'));
+		dias.remove(Character.valueOf('\u0362'));
+
 		if(dias.contains(ch)) {
 			boolean inSet = selectedDiacritics.stream().filter( d -> d.getCharacter() == ch ).findFirst().isPresent();
 			
