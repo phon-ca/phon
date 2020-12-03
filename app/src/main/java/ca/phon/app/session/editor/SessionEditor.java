@@ -299,7 +299,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/**
 	 * Setup editor window menu
 	 *
-	 * @param menu
+	 * @param menuBar
 	 */
 	@Override
 	public void setJMenuBar(JMenuBar menuBar) {
@@ -376,6 +376,11 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				sessionMenu.add(new PreviousRecordAction(SessionEditor.this));
 				sessionMenu.add(new NextRecordAction(SessionEditor.this));
 				sessionMenu.add(new LastRecordAction(SessionEditor.this));
+
+				sessionMenu.addSeparator();
+				JMenuItem itrItem = new JMenuItem(new ITRAction(SessionEditor.this));
+				itrItem.setEnabled(getDataModel().getTranscriber() == null && getSession().getTranscriberCount() > 1);
+				sessionMenu.add(itrItem);
 			}
 			
 			@Override

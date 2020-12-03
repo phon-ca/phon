@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<opgraph xmlns="https://www.phon.ca/ns/opgraph" xmlns:nes="https://www.phon.ca/ns/node_editor" xmlns:oga="https://www.phon.ca/ns/opgraph-app" xmlns:ogcn="https://www.phon.ca/ns/opgraph-common-nodes" xmlns:opqry="https://phon.ca/ns/opgraph_query">
+    <graph id="root">
+        <node id="63f943fe" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
+                </oga:settings>
+                <oga:meta x="70" y="54"/>
+            </extensions>
+        </node>
+        <node id="5a71fd4" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_session]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Session]]></oga:property>
+                </oga:settings>
+                <oga:meta x="112" y="335"/>
+            </extensions>
+        </node>
+        <node id="329582f9" name="Transcribers" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_transcribers]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.List]]></oga:property>
+                </oga:settings>
+                <oga:meta x="210" y="756"/>
+            </extensions>
+        </node>
+        <node id="5231c1b7" name="groupOrWord" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_groupOrWord]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="210" y="857"/>
+            </extensions>
+        </node>
+        <node id="15b88cc0" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_ignoreDiacritics]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="210" y="958"/>
+            </extensions>
+        </node>
+        <node id="2da78402" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_onlyOrExcept]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="210" y="1059"/>
+            </extensions>
+        </node>
+        <node id="15dba9cd" name="SelectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_selectedDiacritics]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
+                </oga:settings>
+                <oga:meta x="210" y="1160"/>
+            </extensions>
+        </node>
+        <node id="562e602" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
+            <extensions>
+                <oga:settings/>
+                <oga:meta x="664" y="1189">
+                    <oga:default for="reportName" type="java.lang.String">Inter-transcriber Reliability</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <node id="1102605d" name="includeConsonantAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_includeConsonantAgreement]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="149" y="1261"/>
+            </extensions>
+        </node>
+        <node id="14f1d7f1" name="includeVowelAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_includeVowelAgreement]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="181" y="1362"/>
+            </extensions>
+        </node>
+        <node id="717efc81" name="includeDiacriticAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_includeDiacriticAgreement]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="166" y="1463"/>
+            </extensions>
+        </node>
+        <node id="72680407" name="includeToneNumberAgreement" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="contextKey"><![CDATA[_includeToneNumberAgreement]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="132" y="1564"/>
+            </extensions>
+        </node>
+        <node id="b92bf05360124e26" name="ITR" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <input name="project" optional="false"/>
+            <input name="session" optional="false"/>
+            <input name="transcribers" optional="false"/>
+            <input name="groupOrWord" optional="false"/>
+            <input name="ignoreDiacritics" optional="true"/>
+            <input name="onlyOrExcept" optional="true"/>
+            <input name="selectedDiacritics" optional="true"/>
+            <input name="includeConsonantAgreement" optional="false"/>
+            <input name="includeVowelAgreement" optional="false"/>
+            <input name="includeDiacriticAgreement" optional="false"/>
+            <input name="includeToneNumberAgreement" optional="false"/>
+            <output name="summary" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
+            <output name="itrTableMap" type="java.util.Map"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="filters.allphones.filter"><![CDATA[\w]]></oga:property>
+                    <oga:property key="filters.consonants.filter"><![CDATA[\c]]></oga:property>
+                    <oga:property key="filters.vowels.filter"><![CDATA[\v]]></oga:property>
+                    <oga:property key="__script"><![CDATA[var PPC = require("lib/PPC").PPC;
+var PDC = require("lib/PDC").PDC;
+var PNTC = require("lib/PNTC").PNTC;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
+var PatternType = require("lib/PatternFilter").PatternType;
+
+var filters = {
+    "allphones": new PatternFilter("filters.allphones"),
+    "consonants": new PatternFilter("filters.consonants"),
+    "vowels": new PatternFilter("filters.vowels")
+};
+
+const LEVENSHTEIN_DISTANCE = "Levenshtein Distance";
+const PHONE_AGREEMENT = "Phone Agreement";
+const CONSONANT_AGREEMENT = "Consonant Agreement";
+const VOWEL_AGREEMENT = "Vowel Agreement";
+const DIACRITIC_AGREEMENT = "Diacritic Agreement";
+const TONE_NUMBER_AGREEMENT = "Tone Number Agreement";
+
+function setup_params(params) {
+    var sep1 = new SeparatorScriptParam("All phones", false);
+    params.add(sep1);
+    filters.allphones.setSelectedPatternType(PatternType.PHONEX);
+    filters.allphones.param_setup(params);
+    filters.allphones.setPattern("\\w");
+
+    var sep2 = new SeparatorScriptParam("Consonants", false);
+    params.add(sep2);
+    filters.consonants.setSelectedPatternType(PatternType.PHONEX);
+    filters.consonants.param_setup(params);
+    filters.consonants.setPattern("\\c");
+
+    var sep3 = new SeparatorScriptParam("Vowels", false);
+    params.add(sep3);
+    filters.vowels.setSelectedPatternType(PatternType.PHONEX);
+    filters.vowels.param_setup(params);
+    filters.vowels.setPattern("\\v");
+}
+
+function init(inputs, outputs) {
+    inputs.add("project", "", false, false);
+    inputs.add("session", "", false, false);
+    inputs.add("transcribers", "", false, false);
+    inputs.add("groupOrWord", "", false, false);
+    inputs.add("ignoreDiacritics", "", true, false);
+    inputs.add("onlyOrExcept", "", true, false);
+    inputs.add("selectedDiacritics", "", true, false);
+    inputs.add("includeConsonantAgreement", "", false, false);
+    inputs.add("includeVowelAgreement", "", false, false);
+    inputs.add("includeDiacriticAgreement", "", false, false);
+    inputs.add("includeToneNumberAgreement", "", false, false);
+
+    outputs.add("summary", "", false, DefaultTableDataSource);
+    outputs.add("itrTableMap", "", false, java.util.Map);
+}
+
+function setupSummaryTable(includeConsonantAgreement,
+                    includeVowelAgreement, includeDiacriticAgreement,
+                    includeToneNumberAgreement) {
+    var table = new DefaultTableDataSource();
+
+    var col = 0;
+    table.setColumnTitle(col++, "Transcribers");
+
+    table.setColumnTitle(col++, LEVENSHTEIN_DISTANCE);
+    table.setColumnTitle(col++, PHONE_AGREEMENT);
+    if(includeConsonantAgreement == true)
+        table.setColumnTitle(col++, CONSONANT_AGREEMENT);
+    if(includeVowelAgreement == true)
+        table.setColumnTitle(col++, VOWEL_AGREEMENT);
+    if(includeDiacriticAgreement == true)
+        table.setColumnTitle(col++, DIACRITIC_AGREEMENT);
+    if(includeToneNumberAgreement == true)
+        table.setColumnTitle(col++, TONE_NUMBER_AGREEMENT);
+
+    return table;
+}
+
+function setupTable(t1, t2, includeConsonantAgreement,
+                    includeVowelAgreement, includeDiacriticAgreement,
+                    includeToneNumberAgreement) {
+    var table = new DefaultTableDataSource();
+
+    var col = 0;
+    table.setColumnTitle(col++, "Record #");
+    table.setColumnTitle(col++, "Group #");
+    table.setColumnTitle(col++, "Orthography");
+    table.setColumnTitle(col++, "IPA Target");
+    table.setColumnTitle(col++, t1);
+    table.setColumnTitle(col++, t2);
+    table.setColumnTitle(col++, LEVENSHTEIN_DISTANCE);
+    table.setColumnTitle(col++, PHONE_AGREEMENT);
+    if(includeConsonantAgreement == true)
+        table.setColumnTitle(col++, CONSONANT_AGREEMENT);
+    if(includeVowelAgreement == true)
+        table.setColumnTitle(col++, VOWEL_AGREEMENT);
+    if(includeDiacriticAgreement == true)
+        table.setColumnTitle(col++, DIACRITIC_AGREEMENT);
+    if(includeToneNumberAgreement == true)
+        table.setColumnTitle(col++, TONE_NUMBER_AGREEMENT);
+
+    return table;
+}
+
+function calcPhoneAgreement(t1, t2, filter) {
+    var aligner = new Packages.ca.phon.ipa.alignment.PhoneAligner();
+    var t1vt2 = aligner.calculatePhoneAlignment(t1, t2);
+    var t2vt1 = aligner.calculatePhoneAlignment(t2, t1);
+
+    var t1vt2Obj = {
+        getIPATarget: function() {
+            return t1;
+        },
+
+        getIPAActual: function() {
+            return t2;
+        },
+
+        getPhoneAlignment: function() {
+            return t1vt2;
+        }
+    }
+
+    var t2vt1Obj = {
+        getIPATarget: function() {
+            return t2;
+        },
+
+        getIPAActual: function() {
+            return t1;
+        },
+
+        getPhoneAlignment: function() {
+            return t2vt1;
+        }
+    }
+
+    // diacritics will already be stripped
+    var diacriticOptions = {
+        ignoreDiacritics: false
+    }
+
+    // a negative value indicates undefined
+    var agreement = -1;
+
+    var ppcT1vsT2 = PPC.calc_ppc_aligned(t1vt2Obj, filter, diacriticOptions, false);
+    var d1 = ppcT1vsT2.correct + ppcT1vsT2.substituted + ppcT1vsT2.deleted + ppcT1vsT2.epen;
+
+    var ppcT2vsT1 = PPC.calc_ppc_aligned(t2vt1Obj, filter, diacriticOptions, false);
+    var d2 = ppcT2vsT1.correct + ppcT2vsT1.substituted + ppcT2vsT1.deleted + ppcT2vsT1.epen;
+
+    if(d1 > 0 || d2 > 0) {
+        var ppc1 = (d1 > 0 ? ppcT1vsT2.correct / d1 : 0);
+        var ppc2 = (d2 > 0 ? ppcT2vsT1.correct / d2 : 0);
+        agreement = (ppc1 + ppc2) / 2;
+    }
+
+    return agreement;
+}
+
+function calcDiacriticAgreement(t1, t2) {
+    var aligner = new Packages.ca.phon.ipa.alignment.PhoneAligner();
+    var t1vt2 = aligner.calculatePhoneAlignment(t1, t2);
+    var t2vt1 = aligner.calculatePhoneAlignment(t2, t1);
+
+    var t1vt2Obj = {
+        getIPATarget: function() {
+            return t1;
+        },
+
+        getIPAActual: function() {
+            return t2;
+        },
+
+        getPhoneAlignment: function() {
+            return t1vt2;
+        }
+    }
+
+    var t2vt1Obj = {
+        getIPATarget: function() {
+            return t2;
+        },
+
+        getIPAActual: function() {
+            return t1;
+        },
+
+        getPhoneAlignment: function() {
+            return t2vt1;
+        }
+    }
+
+    // diacritics will already be stripped
+    var diacriticOptions = {
+        ignoreDiacritics: false
+    }
+
+    // a negative value indicates undefined
+    var agreement = -1;
+
+    var ppcT1vsT2 = PDC.calc_pdc(t1vt2Obj, filters.allphones, diacriticOptions);
+    var d1 = ppcT1vsT2.correct + ppcT1vsT2.substituted + ppcT1vsT2.deleted;
+
+    var ppcT2vsT1 = PDC.calc_pdc(t2vt1Obj, filters.allphones, diacriticOptions);
+    var d2 = ppcT2vsT1.correct + ppcT2vsT1.substituted + ppcT2vsT1.deleted;
+
+    if(d1 > 0 || d2 > 0) {
+        var ppc1 = (d1 > 0 ? ppcT1vsT2.correct / d1 : 0);
+        var ppc2 = (d2 > 0 ? ppcT2vsT1.correct / d2 : 0);
+        agreement = (ppc1 + ppc2) / 2;
+    }
+
+    return agreement;
+}
+
+function calcToneNumberAgreement(t1, t2) {
+    var aligner = new Packages.ca.phon.ipa.alignment.PhoneAligner();
+    var t1vt2 = aligner.calculatePhoneAlignment(t1, t2);
+    var t2vt1 = aligner.calculatePhoneAlignment(t2, t1);
+
+    var t1vt2Obj = {
+        getIPATarget: function() {
+            return t1;
+        },
+
+        getIPAActual: function() {
+            return t2;
+        },
+
+        getPhoneAlignment: function() {
+            return t1vt2;
+        }
+    }
+
+    var t2vt1Obj = {
+        getIPATarget: function() {
+            return t2;
+        },
+
+        getIPAActual: function() {
+            return t1;
+        },
+
+        getPhoneAlignment: function() {
+            return t2vt1;
+        }
+    }
+
+    // diacritics will already be stripped
+    var diacriticOptions = {
+        ignoreDiacritics: false
+    }
+
+    // a negative value indicates undefined
+    var agreement = -1;
+
+    var ppcT1vsT2 = PNTC.calc_pntc(t1vt2Obj);
+    var d1 = ppcT1vsT2.correct + ppcT1vsT2.substituted + ppcT1vsT2.deleted + ppcT1vsT2.epen;
+
+    var ppcT2vsT1 = PNTC.calc_pntc(t2vt1Obj);
+    var d2 = ppcT2vsT1.correct + ppcT2vsT1.substituted + ppcT2vsT1.deleted + ppcT2vsT1.epen;
+
+    if(d1 > 0 || d2 > 0) {
+        var ppc1 = (d1 > 0 ? ppcT1vsT2.correct / d1 : 0);
+        var ppc2 = (d2 > 0 ? ppcT2vsT1.correct / d2 : 0);
+        agreement = (ppc1 + ppc2) / 2;
+    }
+
+    return agreement;
+}
+
+/**
+ *
+ * @param obj a custom object following protocol
+ *  {
+ *      orthography:
+ *      IPATarget:
+ *      t1:
+ *      t2:
+ *      alignment:
+ *  }
+ * @param transcriber1
+ * @param transcriber2
+ * @param ignoreDiacritics
+ * @param onlyOrExcept
+ * @param selectedDiacritics
+ * @param includeConsonantAgreement
+ * @param includeVowelAgreement
+ * @param includeDiacriticAgreement
+ * @param includeToneNumberAgreement
+ * @returns {[]} row data excluding record/group #
+ */
+function calcITRRow(obj, transcriber1, transcriber2,
+                    ignoreDiacritics, onlyOrExcept, selectedDiacritics,
+                    includeConsonantAgreement, includeVowelAgreement,
+                    includeDiacriticAgreement, includeToneNumberAgreement) {
+    var rowData = [];
+
+    rowData.push(obj.orthography);
+    rowData.push(obj.IPATarget);
+
+    rowData.push(obj.t1);
+    rowData.push(obj.t2);
+    rowData.push(Packages.ca.phon.ipa.LevenshteinDistance.distance(obj.t1, obj.t2));
+    var phoneAgreement = calcPhoneAgreement(obj.t1, obj.t2, filters.allphones);
+    if(phoneAgreement >= 0)
+        rowData.push(phoneAgreement * 100.0);
+    else
+        rowData.push("");
+
+    if(includeConsonantAgreement == true) {
+        var consonantAgreement = calcPhoneAgreement(obj.t1, obj.t2, filters.consonants);
+        if(consonantAgreement >= 0)
+            rowData.push(consonantAgreement * 100.0);
+        else
+            rowData.push("");
+    }
+
+    if(includeVowelAgreement == true) {
+        var vowelAgreement = calcPhoneAgreement(obj.t1, obj.t2, filters.vowels);
+        if(vowelAgreement >= 0)
+            rowData.push(vowelAgreement * 100.0);
+        else
+            rowData.push("");
+    }
+
+    if(includeDiacriticAgreement == true) {
+        var diacriticAgreement = calcDiacriticAgreement(obj.t1, obj.t2);
+        if(diacriticAgreement >= 0)
+            rowData.push( diacriticAgreement * 100.0 );
+        else
+            rowData.push("");
+    }
+
+    if(includeToneNumberAgreement == true) {
+        var toneNumberAgreement = calcToneNumberAgreement(obj.t1, obj.t2);
+        if(toneNumberAgreement >= 0)
+            rowData.push( toneNumberAgreement * 100.0 );
+        else
+            rowData.push("");
+    }
+
+    return rowData;
+}
+
+function getSyllabifier(session) {
+    var syllabifierLibrary = Packages.ca.phon.syllabifier.SyllabifierLibrary.getInstance();
+    var syllabiifer = syllabifierLibrary.defaultSyllabifier();
+
+    var syllabifierInfo = session.getExtension(Packages.ca.phon.session.SyllabifierInfo);
+    if(syllabifierInfo != null) {
+       var actualSyllabifierLang = syllabifierInfo.getSyllabifierLanguageForTier("IPA Actual");
+       if(actualSyllabifierLang != null) {
+           var actualSyllabifier = syllabifierLibrary.getSyllabifierForLanguage(actualSyllabifierLang);
+           if(actualSyllabifier != null) {
+               syllabiifer = actualSyllabifier;
+           }
+       }
+    }
+    return syllabiifer;
+}
+
+function addSummaryRow(table,
+                       includeConsonantAgreement, includeVowelAgreement,
+                       includeDiacriticAgreement, includeToneNumberAgreement) {
+    var vals = [0, 0, 0, 0, 0, 0];
+    var cnts = [0, 0, 0, 0, 0, 0];
+
+    for(var row = 0; row < table.rowCount; row++) {
+        var lvsDist = table.getValueAt(row, LEVENSHTEIN_DISTANCE);
+        if(Number(lvsDist) != NaN && ("" + lvsDist != "")) {
+            vals[0] += Number(lvsDist);
+            ++cnts[0];
+        }
+
+        var phoneAgreement = table.getValueAt(row, PHONE_AGREEMENT);
+        if(Number(phoneAgreement) != NaN && ("" + phoneAgreement != "")) {
+            vals[1] += Number(phoneAgreement);
+            ++cnts[1];
+        }
+
+        if(includeConsonantAgreement == true) {
+            var consonantAgreement = table.getValueAt(row, CONSONANT_AGREEMENT);
+            if(Number(consonantAgreement) != NaN && ("" + consonantAgreement != "")) {
+                vals[2] += Number(consonantAgreement);
+                ++cnts[2];
+            }
+        }
+
+        if(includeVowelAgreement == true) {
+            var vowelAgreement = table.getValueAt(row, VOWEL_AGREEMENT);
+            if(Number(vowelAgreement) != NaN && ("" + vowelAgreement != "")) {
+                vals[3] += Number(vowelAgreement);
+                ++cnts[3];
+            }
+        }
+
+        if(includeDiacriticAgreement == true) {
+            var diacriticAgreement = table.getValueAt(row, DIACRITIC_AGREEMENT);
+            if(Number(diacriticAgreement) != NaN && ("" + diacriticAgreement != "")) {
+                vals[4] += Number(diacriticAgreement);
+                ++cnts[4];
+            }
+        }
+
+        if(includeToneNumberAgreement == true) {
+            var toneNumberAgreement = table.getValueAt(row, TONE_NUMBER_AGREEMENT);
+            if(Number(toneNumberAgreement) != NaN && ("" + toneNumberAgreement != "")) {
+                vals[5] += Number(toneNumberAgreement);
+                ++cnts[5];
+            }
+        }
+    }
+
+    var rowData = [ "", "", "", "", "", "" ];
+
+    if(cnts[0] > 0) {
+        rowData.push( vals[0]/cnts[0] );
+    } else {
+        rowData.push( "" );
+    }
+
+    if(cnts[1] > 0) {
+        rowData.push( vals[1]/cnts[1] );
+    } else {
+        rowData.push( "" );
+    }
+
+    if(includeConsonantAgreement == true) {
+        if(cnts[2] > 0) {
+            rowData.push( vals[2]/cnts[2] );
+        } else {
+            rowData.push( "" );
+        }
+    }
+
+    if(includeVowelAgreement == true) {
+        if(cnts[3] > 0) {
+            rowData.push( vals[3]/cnts[3] );
+        } else {
+            rowData.push( "" );
+        }
+    }
+
+    if(includeDiacriticAgreement == true) {
+        if(cnts[4] > 0) {
+            java.lang.System.out.println("Vals: " + vals[4] + ", Counts: " + cnts[4]);
+            rowData.push( vals[4]/cnts[4] );
+        } else {
+            rowData.push( "" );
+        }
+    }
+
+    if(includeToneNumberAgreement == true) {
+        if(cnts[5] > 0) {
+            rowData.push( vals[5]/cnts[5] );
+        } else {
+            rowData.push( "" );
+        }
+    }
+
+    table.addRow(rowData);
+}
+
+function run(context) {
+    var project = context.get("project");
+    var session = context.get("session");
+    var transcribers = context.get("transcribers");
+    var groupOrWord = context.get("groupOrWord");
+    var ignoreDiacritics = context.get("ignoreDiacritics");
+    var onlyOrExcept = context.get("onlyOrExcept");
+    var selectedDiacritics = context.get("selectedDiacritics");
+    var includeConsonantAgreement = context.get("includeConsonantAgreement");
+    var includeVowelAgreement = context.get("includeVowelAgreement");
+    var includeDiacriticAgreement = context.get("includeDiacriticAgreement");
+    var includeToneNumberAgreement = context.get("includeToneNumberAgreement");
+
+    var summaryTable = setupSummaryTable(includeConsonantAgreement, includeVowelAgreement,
+        includeDiacriticAgreement, includeToneNumberAgreement);
+    context.put("summary", summaryTable);
+
+    var itrTableMap = new java.util.LinkedHashMap();
+    context.put("itrTableMap", itrTableMap);
+
+    var syllabifier = getSyllabifier(session);
+
+    if(transcribers.size() < 2) return;
+    for(var i = 0; i < transcribers.size()-1; i++) {
+        var transcriber1 = transcribers.get(i);
+        for(var j = i+1; j < transcribers.size(); j++) {
+            var transcriber2 = transcribers.get(j);
+            var table = setupTable(transcriber1, transcriber2,
+                includeConsonantAgreement, includeVowelAgreement, includeDiacriticAgreement, includeToneNumberAgreement);
+            var tupleKey = new Packages.ca.phon.util.Tuple(transcriber1, transcriber2);
+            itrTableMap.put(tupleKey, table);
+
+            for(var rIdx = 0; rIdx < session.recordCount; rIdx++) {
+                var record = session.getRecord(rIdx);
+                for(var gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
+                    var group = record.getGroup(gIdx);
+
+                    var ipaA = group.IPAActual;
+                    var blindTranscripts = ipaA.getExtension(Packages.ca.phon.ipa.AlternativeTranscript);
+
+                    var t1 = blindTranscripts.get(transcriber1.username);
+                    var t2 = blindTranscripts.get(transcriber2.username);
+
+                    if(t1 == null || t2 == null
+                        || t1.length() == 0 || t2.length() == 0) continue;
+
+                    // ignoreDiacritics
+                    if(ignoreDiacritics == true) {
+                        if(onlyOrExcept == true) {
+                            t1 = t1.stripDiacritics(selectedDiacritics);
+                            t2 = t2.stripDiacritics(selectedDiacritics);
+                        } else {
+                            t1 = t1.stripDiacriticsExcept(selectedDiacritics);
+                            t2 = t2.stripDiacriticsExcept(selectedDiacritics);
+                        }
+                    }
+
+                    // syllabify transcriptions
+                    syllabifier.syllabify(t1.toList());
+                    syllabifier.syllabify(t2.toList());
+
+                    if(groupOrWord == true) {
+                        obj = {
+                            orthography: group.orthography,
+                            IPATarget: group.IPATarget,
+                            t1: t1,
+                            t2: t2
+                        }
+
+                        rowData = calcITRRow(obj, transcriber1, transcriber2,
+                            ignoreDiacritics, onlyOrExcept, selectedDiacritics,
+                            includeConsonantAgreement, includeVowelAgreement,
+                            includeDiacriticAgreement, includeToneNumberAgreement);
+                        rowData.unshift( java.lang.Integer.valueOf(rIdx+1), java.lang.Integer.valueOf(gIdx+1) );
+                        table.addRow(rowData);
+                    } else {
+                        for(var wIdx = 0; wIdx < group.getAlignedWordCount(); wIdx++) {
+                            var word = group.getAlignedWord(wIdx);
+
+                            obj = {
+                                orthography: word.orthography,
+                                IPATarget: word.IPATarget,
+                                t1: (t1.words().size() > wIdx ? t1.words().get(wIdx) : new IPATranscript()),
+                                t2: (t2.words().size() > wIdx ? t2.words().get(wIdx) : new IPATranscript())
+                            }
+
+                            var rowData = calcITRRow(obj, transcriber1, transcriber2,
+                                ignoreDiacritics, onlyOrExcept, selectedDiacritics,
+                                includeConsonantAgreement, includeVowelAgreement,
+                                includeDiacriticAgreement, includeToneNumberAgreement);
+                            rowData.unshift( java.lang.Integer.valueOf(rIdx+1), java.lang.Integer.valueOf(gIdx+1) );
+                            table.addRow(rowData);
+                        }
+                    }
+                }
+            }
+
+            addSummaryRow(table,
+                includeConsonantAgreement, includeVowelAgreement,
+                includeDiacriticAgreement, includeToneNumberAgreement);
+            // add to summary table
+            var summaryRow = [];
+            summaryRow.push(transcriber1 + " vs. " + transcriber2);
+            summaryRow.push(table.getValueAt(table.rowCount-1, LEVENSHTEIN_DISTANCE));
+            summaryRow.push(table.getValueAt(table.rowCount-1, PHONE_AGREEMENT));
+            if(includeConsonantAgreement == true)
+                summaryRow.push(table.getValueAt(table.rowCount-1, CONSONANT_AGREEMENT));
+            if(includeVowelAgreement == true)
+                summaryRow.push(table.getValueAt(table.rowCount-1, VOWEL_AGREEMENT));
+            if(includeDiacriticAgreement == true)
+                summaryRow.push(table.getValueAt(table.rowCount-1, DIACRITIC_AGREEMENT));
+            if(includeToneNumberAgreement == true)
+                summaryRow.push(table.getValueAt(table.rowCount-1, TONE_NUMBER_AGREEMENT));
+            summaryTable.addRow(summaryRow);
+        }
+    }
+}
+]]></oga:property>
+                </oga:settings>
+                <oga:meta x="627" y="725"/>
+            </extensions>
+        </node>
+        <node id="4bd4ce11" name="Map#keySet()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[keySet()]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1046" y="792"/>
+            </extensions>
+        </node>
+        <node id="2d337296" name="Summary Table" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                </oga:settings>
+                <oga:meta x="1015" y="1137">
+                    <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
+        <ogcn:macro id="6a1258a1" name="For Each Transcriber Tuple" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
+            <graph id="12716674">
+                <node id="4557ef60" name="CurrentItem" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="50" y="542"/>
+                    </extensions>
+                </node>
+                <node id="16375518" name="TableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="59" y="1004"/>
+                    </extensions>
+                </node>
+                <ogcn:macro id="b98aa833682544a0" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
+                    <graph id="6cca8ed1">
+                        <node id="1bc77e70df5d4114" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
+                                </oga:settings>
+                            </extensions>
+                        </node>
+                    </graph>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="50" y="1137"/>
+                    </extensions>
+                </ogcn:macro>
+                <node id="f36fc10" name="Tuple (cast)" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.util.Tuple]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="248" y="771"/>
+                    </extensions>
+                </node>
+                <node id="1805fcaf" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="330" y="1004"/>
+                    </extensions>
+                </node>
+                <node id="2a2a4367" name="Tuple" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.util.Tuple]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="459" y="774"/>
+                    </extensions>
+                </node>
+                <node id="4684f0aa" name="DefaultTableDataSource (cast)" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="594" y="1005"/>
+                    </extensions>
+                </node>
+                <node id="73d11916" type="class:ca.phon.opgraph.nodes.general.ArrayNode">
+                    <input name="object1" optional="false">object in array</input>
+                    <input name="object2" optional="false">object in array</input>
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.general.ArrayNode.numObjects"><![CDATA[2]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="722" y="780"/>
+                    </extensions>
+                </node>
+                <node id="12d0e1a9" name="String#format(String,Object[])" type="class:ca.phon.opgraph.nodes.reflect.StaticMethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticMethodNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.StaticMethodNode.classMember"><![CDATA[format(java.lang.String,[Ljava.lang.Object;)]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="954" y="784">
+                            <oga:default for="arg1" type="java.lang.String">%s vs. %s</oga:default>
+                        </oga:meta>
+                    </extensions>
+                </node>
+                <node id="b6edb43" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                        </oga:settings>
+                        <oga:meta x="972" y="950"/>
+                    </extensions>
+                </node>
+                <link dest="f36fc10" destField="obj" source="4557ef60" sourceField="obj"/>
+                <link dest="2a2a4367" destField="obj" source="f36fc10" sourceField="obj"/>
+                <link dest="73d11916" destField="object1" source="2a2a4367" sourceField="obj1"/>
+                <link dest="73d11916" destField="object2" source="2a2a4367" sourceField="obj2"/>
+                <link dest="12d0e1a9" destField="arg2" source="73d11916" sourceField="array"/>
+                <link dest="b6edb43" destField="sectionName" source="12d0e1a9" sourceField="value"/>
+                <link dest="1805fcaf" destField="arg1" source="4557ef60" sourceField="obj"/>
+                <link dest="1805fcaf" destField="obj" source="16375518" sourceField="obj"/>
+                <link dest="4684f0aa" destField="obj" source="1805fcaf" sourceField="value"/>
+                <link dest="b6edb43" destField="table" source="4684f0aa" sourceField="obj"/>
+                <link dest="b6edb43" destField="parent" source="b98aa833682544a0" sourceField="collection"/>
+                <extensions>
+                    <oga:notes>
+                        <oga:note color="0x96ff96" height="191" title="Create Title of Table" width="1146" x="92" y="722"/>
+                    </oga:notes>
+                    <nes:settings type="ca.phon.app.opgraph.macro.MacroOpgraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="obj" name="tableMap" ref="16375518"/>
+            <ogcn:published_input field="collection" name="reportNode" ref="b98aa833682544a0"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.Set]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1288" y="792"/>
+            </extensions>
+        </ogcn:macro>
+        <link dest="b92bf05360124e26" destField="project" source="63f943fe" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="session" source="5a71fd4" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="transcribers" source="329582f9" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="groupOrWord" source="5231c1b7" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="onlyOrExcept" source="2da78402" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="selectedDiacritics" source="15dba9cd" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="includeConsonantAgreement" source="1102605d" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="includeVowelAgreement" source="14f1d7f1" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="includeDiacriticAgreement" source="717efc81" sourceField="obj"/>
+        <link dest="b92bf05360124e26" destField="includeToneNumberAgreement" source="72680407" sourceField="obj"/>
+        <link dest="4bd4ce11" destField="obj" source="b92bf05360124e26" sourceField="itrTableMap"/>
+        <link dest="6a1258a1" destField="collection" source="4bd4ce11" sourceField="value"/>
+        <link dest="6a1258a1" destField="tableMap" source="b92bf05360124e26" sourceField="itrTableMap"/>
+        <link dest="b92bf05360124e26" destField="ignoreDiacritics" source="15b88cc0" sourceField="obj"/>
+        <link dest="2d337296" destField="table" source="b92bf05360124e26" sourceField="summary"/>
+        <link dest="2d337296" destField="parent" source="562e602" sourceField="root"/>
+        <link dest="6a1258a1" destField="reportNode" source="2d337296" sourceField="parent"/>
+        <extensions>
+            <opqry:nodewizard type="ca.phon.app.opgraph.wizard.WizardExtension">
+                <opqry:info format="html" title="ITRGraph">
+                    <opqry:message/>
+                </opqry:info>
+            </opqry:nodewizard>
+            <nes:settings type="ca.phon.app.opgraph.macro.MacroOpgraphEditorModel"/>
+            <oga:notes>
+                <oga:note color="0xffff96" height="1631" title="Macro Inputs" width="439" x="23" y="24"/>
+            </oga:notes>
+        </extensions>
+    </graph>
+</opgraph>

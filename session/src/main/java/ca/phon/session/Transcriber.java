@@ -62,5 +62,17 @@ public final class Transcriber extends ExtendableObject {
 	public void setPassword(String password) {
 		transcriberImpl.setPassword(password);
 	}
-	
+
+	@Override
+	public String toString() {
+		String realName = getRealName();
+		String username = getUsername();
+
+		if(realName != null && realName.length() > 0) {
+			return realName;
+		} else {
+			return username;
+		}
+	}
+
 }

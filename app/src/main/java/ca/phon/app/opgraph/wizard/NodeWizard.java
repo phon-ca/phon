@@ -150,6 +150,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	public final static String IGNORE_DIACRITICS_GLOBAL_OPTION = GlobalParameter.IGNORE_DIACRITICS.getParamId();
 	public final static String ONLYOREXCEPT_GLOBAL_OPTION = GlobalParameter.ONLY_OR_EXCEPT.getParamId();
 	public final static String SELECTED_DIACRITICS_GLOBAL_OPTION = GlobalParameter.SELECTED_DIACRITICS.getParamId();
+	protected DropDownButton overridesButton;
 	
 	protected boolean inInit = true;
 
@@ -333,86 +334,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		// add global options
 		if(globalOptionsPanel != null) {
 			globalOptionsPanel.setupMenu(builder);
-			
-//			builder.addItem(".", "-- Overrides --").setEnabled(false);
-//			
-//			final String caseSensitiveValue = (globalOptionsPanel.isOverrideCaseSensitive()
-//					? (globalOptionsPanel.isCaseSensitive() ? "yes" : "no")
-//					: "Don't override");
-//			final JMenu caseSensitiveMenu = builder.addMenu(".", "Case sensitive: " + caseSensitiveValue);
-//			
-//			final PhonUIAction defCSAct = new PhonUIAction(globalOptionsPanel, "setOverrideCaseSensitive", false);
-//			defCSAct.putValue(PhonUIAction.NAME, "Don't override");
-//			defCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
-//			defCSAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalCaseSensitive());
-//			final JCheckBoxMenuItem defCSItem = new JCheckBoxMenuItem(defCSAct);
-//			caseSensitiveMenu.add(defCSItem);
-//			
-//			final PhonUIAction yesCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", true);
-//			yesCSAct.putValue(PhonUIAction.NAME, "yes");
-//			yesCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
-//			yesCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && globalOptionsPanel.isCaseSensitive());
-//			final JCheckBoxMenuItem yesCSItem = new JCheckBoxMenuItem(yesCSAct);
-//			caseSensitiveMenu.add(yesCSItem);
-//			
-//			final PhonUIAction noCSAct = new PhonUIAction(globalOptionsPanel, "setCaseSensitive", false);
-//			noCSAct.putValue(PhonUIAction.NAME, "no");
-//			noCSAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options in report settings");
-//			noCSAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalCaseSensitive() && !globalOptionsPanel.isCaseSensitive());
-//			final JCheckBoxMenuItem noCSItem = new JCheckBoxMenuItem(noCSAct);
-//			caseSensitiveMenu.add(noCSItem);
-//			
-//			final String ignoreDiacriticsValue = (globalOptionsPanel.isUseGlobalIgnoreDiacritics()
-//					? (globalOptionsPanel.isIgnoreDiacritics() ? "yes" : "no")
-//					: "default");
-//			final JMenu ignoreDiacriticsMenu = builder.addMenu(".", "Ignore diacritics: " + ignoreDiacriticsValue);
-//			
-//			final PhonUIAction defIDAct = new PhonUIAction(globalOptionsPanel, "useDefaultIgnoreDiacritics");
-//			defIDAct.putValue(PhonUIAction.NAME, "default");
-//			defIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
-//			defIDAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseGlobalIgnoreDiacritics());
-//			final JCheckBoxMenuItem defIDItem = new JCheckBoxMenuItem(defIDAct);
-//			ignoreDiacriticsMenu.add(defIDItem);
-//			
-//			final PhonUIAction yesIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", true);
-//			yesIDAct.putValue(PhonUIAction.NAME, "yes");
-//			yesIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
-//			yesIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && globalOptionsPanel.isIgnoreDiacritics());
-//			final JCheckBoxMenuItem yesIDItem = new JCheckBoxMenuItem(yesIDAct);
-//			ignoreDiacriticsMenu.add(yesIDItem);
-//			
-//			final PhonUIAction noIDAct = new PhonUIAction(globalOptionsPanel, "setIgnoreDiacritics", false);
-//			noIDAct.putValue(PhonUIAction.NAME, "no");
-//			noIDAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options in report settings");
-//			noIDAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseGlobalIgnoreDiacritics() && !globalOptionsPanel.isIgnoreDiacritics());
-//			final JCheckBoxMenuItem noIDItem = new JCheckBoxMenuItem(noIDAct);
-//			ignoreDiacriticsMenu.add(noIDItem);
-//			
-//			final String inventoryGroupingValue = (globalOptionsPanel.isUseInventoryGrouping()
-//					? globalOptionsPanel.getInventoryGrouping()
-//					: "default");
-//			final JMenu inventoryGroupingMenu = builder.addMenu(".", "Inventory grouping: " + inventoryGroupingValue);
-//			
-//			final PhonUIAction defIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "default");
-//			defIGAct.putValue(PhonUIAction.NAME, "default");
-//			defIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
-//			defIGAct.putValue(PhonUIAction.SELECTED_KEY, !globalOptionsPanel.isUseInventoryGrouping());
-//			final JCheckBoxMenuItem defIGItem = new JCheckBoxMenuItem(defIGAct);
-//			inventoryGroupingMenu.add(defIGItem);
-//			
-//			final PhonUIAction sessionIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Session");
-//			sessionIGAct.putValue(PhonUIAction.NAME, "Session");
-//			sessionIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
-//			sessionIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Session"));
-//			final JCheckBoxMenuItem sessionIGItem = new JCheckBoxMenuItem(sessionIGAct);
-//			inventoryGroupingMenu.add(sessionIGItem);
-//			
-//			final PhonUIAction ageIGAct = new PhonUIAction(globalOptionsPanel, "setInventoryGrouping", "Age");
-//			ageIGAct.putValue(PhonUIAction.NAME, "Age");
-//			ageIGAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping options in report settings");
-//			ageIGAct.putValue(PhonUIAction.SELECTED_KEY, globalOptionsPanel.isUseInventoryGrouping() && globalOptionsPanel.getInventoryGrouping().equals("Age"));
-//			final JCheckBoxMenuItem ageIGItem = new JCheckBoxMenuItem(ageIGAct);
-//			inventoryGroupingMenu.add(ageIGItem);
 			
 			builder.addSeparator(".", "_globalOptions");
 		}
@@ -633,7 +554,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 		overridesMenuAct.putValue(DropDownButton.BUTTON_POPUP, overridesMenu);
 		
-		DropDownButton overridesButton = new DropDownButton(overridesMenuAct);
+		overridesButton = new DropDownButton(overridesMenuAct);
 		overridesButton.setOnlyPopup(true);
 		overridesButton.setBorderPainted(true);
 		overridesButton.setBackground(Color.white);
