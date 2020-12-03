@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="inter_transcriber_reliability">
-    <title>Inter-transcriber Reliability</title>
+    <title>Inter-transcriber Reliability (beta)</title>
     <shortdesc>The inter-transcriber reliability report provides several metrics of agreement
         between blind transcribers in a Phon session. </shortdesc>
     <topic id="topic_th3_1rj_vnb">
@@ -13,7 +13,9 @@
                 </menucascade> from the <wintitle>Session Editor</wintitle> window menu. The menu
                 item will be disabled if the editor is in <keyword>blind mode</keyword> or there are
                 less than two transcribers for the session.</p>
-            <p>INSERT SCREENSHOT</p>
+            <p>
+                <image placement="break" href="images/itr_options.png" id="image_ydq_qhg_wnb"/>
+            </p>
             <p>The first step of the wizard allows selection of domain for comparison (group or
                 word), the transcribers for comparison, and which metrics will be included. Standard
                 options for ignoring diacritics are also available. After clicking
@@ -59,8 +61,12 @@
                             \frac{PNTC(t1,t2) + PNTC(t2,t1)}{2}</foreign></li>
                 </ul><note>The *Agreement columns are calculated as an average because the
                         <keyword>percent correct</keyword> function is not commutative.</note></p>
-            <p>The final row of each table will include an average of each selected metric.</p>
-            <p>INSERT EXAMPLE</p>
+            <p>The final row of each table will include an average of each selected metric.  A
+                summary table continaing the last row of each transcriber table will also be added
+                to the beginning of the report.</p>
+            <p>
+                <image placement="break" href="images/itr_example.png" id="image_pk1_whg_wnb"/>
+            </p>
         </body>
     </topic>
 </topic>
