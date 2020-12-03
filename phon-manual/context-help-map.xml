@@ -11,6 +11,8 @@
    <appContext helpID="conceptId" path="project_manager/sessions.html"/>
    <appContext helpID="session-editor" path="session_editor/session_editor.html"/>
    <appContext helpID="conceptId" path="session_editor/blind_transcription.html"/>
+   <appContext helpID="inter_transcriber_reliability"
+               path="session_editor/inter_transcriber_reliability.html"/>
    <appContext helpID="conceptId" path="session_editor/participants.html"/>
    <appContext helpID="records" path="session_editor/records.html"/>
    <appContext helpID="media" path="session_editor/editor_media.html"/>
