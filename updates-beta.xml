@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.1-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_1.dmg" newVersion="3.2.1-beta.1" newMediaFileId="macos" fileSize="272579649" md5Sum="52c3773314e8cd04e824ab5936f362cf" sha256Sum="13c624ae489e6bab04d7f2f1819e4f8f6ef6db513dc29a04d62d393976aa7a4f" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.1-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_2.dmg" newVersion="3.2.1-beta.2" newMediaFileId="macos" fileSize="272580075" md5Sum="c54e52012bfc0fa68bb35f9ae14b4fce" sha256Sum="f8e89dfe8a820cc4e0351bc7e81a679eef65d3f805ec2a78624aeba28580f291" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
@@ -381,7 +381,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_1.dmg" newVersion="3.2.1-beta.1" newMediaFileId="macos" fileSize="272579649" md5Sum="52c3773314e8cd04e824ab5936f362cf" sha256Sum="13c624ae489e6bab04d7f2f1819e4f8f6ef6db513dc29a04d62d393976aa7a4f" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_2.dmg" newVersion="3.2.1-beta.2" newMediaFileId="macos" fileSize="272580075" md5Sum="c54e52012bfc0fa68bb35f9ae14b4fce" sha256Sum="f8e89dfe8a820cc4e0351bc7e81a679eef65d3f805ec2a78624aeba28580f291" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
@@ -762,7 +762,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_1.exe" newVersion="3.2.1-beta.1" newMediaFileId="win64" fileSize="282325256" md5Sum="1c64eac2d3c773a9eea988335d570326" sha256Sum="6f9b14438af61138d63e442f93d67eb99726495e35c6001e175c8c84dafe3a09" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_2.exe" newVersion="3.2.1-beta.2" newMediaFileId="win64" fileSize="282325768" md5Sum="96929b1f6d3aff44faef8fe2ac315927" sha256Sum="b8dca4a5e86dd3dcee0ac6632d919983665bd34b69785d31ab2d2cc13591675f" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
@@ -1143,7 +1143,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_1.exe" newVersion="3.2.1-beta.1" newMediaFileId="win64" fileSize="282325256" md5Sum="1c64eac2d3c773a9eea988335d570326" sha256Sum="6f9b14438af61138d63e442f93d67eb99726495e35c6001e175c8c84dafe3a09" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_2.exe" newVersion="3.2.1-beta.2" newMediaFileId="win64" fileSize="282325768" md5Sum="96929b1f6d3aff44faef8fe2ac315927" sha256Sum="b8dca4a5e86dd3dcee0ac6632d919983665bd34b69785d31ab2d2cc13591675f" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
@@ -1524,7 +1524,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_1.exe" newVersion="3.2.1-beta.1" newMediaFileId="win64" fileSize="282325256" md5Sum="1c64eac2d3c773a9eea988335d570326" sha256Sum="6f9b14438af61138d63e442f93d67eb99726495e35c6001e175c8c84dafe3a09" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_2.exe" newVersion="3.2.1-beta.2" newMediaFileId="win64" fileSize="282325768" md5Sum="96929b1f6d3aff44faef8fe2ac315927" sha256Sum="b8dca4a5e86dd3dcee0ac6632d919983665bd34b69785d31ab2d2cc13591675f" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
@@ -1905,7 +1905,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_1.zip" newVersion="3.2.1-beta.1" newMediaFileId="win64zip" fileSize="281294965" md5Sum="7632ebe7e4ddf957e63293235615065f" sha256Sum="43e55843945b7ba20f51a83c35cac1af32b4652bac5aa49c0fcb6d4f9a446335" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_2.zip" newVersion="3.2.1-beta.2" newMediaFileId="win64zip" fileSize="281295344" md5Sum="0ad3eaed6758527316af12403ad3a213" sha256Sum="c1802aae9aa01ae3566e72f9987740107308373a172c15726fa9f9c5079b335c" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
