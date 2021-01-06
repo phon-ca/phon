@@ -184,8 +184,8 @@ function init(inputs, outputs) {
 }
 
 function setupSummaryTable(includeConsonantAgreement,
-                    includeVowelAgreement, includeDiacriticAgreement,
-                    includeToneNumberAgreement) {
+                           includeVowelAgreement, includeDiacriticAgreement,
+                           includeToneNumberAgreement) {
     var table = new DefaultTableDataSource();
 
     var col = 0;
@@ -479,13 +479,13 @@ function getSyllabifier(session) {
 
     var syllabifierInfo = session.getExtension(Packages.ca.phon.session.SyllabifierInfo);
     if(syllabifierInfo != null) {
-       var actualSyllabifierLang = syllabifierInfo.getSyllabifierLanguageForTier("IPA Actual");
-       if(actualSyllabifierLang != null) {
-           var actualSyllabifier = syllabifierLibrary.getSyllabifierForLanguage(actualSyllabifierLang);
-           if(actualSyllabifier != null) {
-               syllabiifer = actualSyllabifier;
-           }
-       }
+        var actualSyllabifierLang = syllabifierInfo.getSyllabifierLanguageForTier("IPA Actual");
+        if(actualSyllabifierLang != null) {
+            var actualSyllabifier = syllabifierLibrary.getSyllabifierForLanguage(actualSyllabifierLang);
+            if(actualSyllabifier != null) {
+                syllabiifer = actualSyllabifier;
+            }
+        }
     }
     return syllabiifer;
 }
@@ -632,6 +632,8 @@ function run(context) {
                     var ipaA = group.IPAActual;
                     var blindTranscripts = ipaA.getExtension(Packages.ca.phon.ipa.AlternativeTranscript);
 
+                    if(blindTranscripts == null) continue;
+
                     var t1 = blindTranscripts.get(transcriber1.username);
                     var t2 = blindTranscripts.get(transcriber2.username);
 
@@ -735,7 +737,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="6a1258a1" name="For Each Transcriber Tuple" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="12716674">
+            <graph id="4cfc9112">
                 <node id="4557ef60" name="CurrentItem" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -754,7 +756,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="b98aa833682544a0" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="6cca8ed1">
+                    <graph id="bcc6561">
                         <node id="1bc77e70df5d4114" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
