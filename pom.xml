@@ -144,6 +144,7 @@
 		<net.sourceforge.jexcelapi.version>2.6.12</net.sourceforge.jexcelapi.version>
 		<org.antlr.stringtemplate.version>3.2.1</org.antlr.stringtemplate.version>
 		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
+		<org.antlr.antlr4.version>4.7.2</org.antlr.antlr4.version>
 		<org.apache.commons.commons-lang3.version>3.1</org.apache.commons.commons-lang3.version>
 		<commons-io.version>2.6</commons-io.version>
 		<org.apache.commons.commons-collections4.version>4.1</org.apache.commons.commons-collections4.version>
@@ -166,6 +167,7 @@
 		
 		<!-- Maven plugins -->
 		<org.antlr.antlr3-maven-plugin.version>3.5.2</org.antlr.antlr3-maven-plugin.version>
+		<org.antlr.antlr4-maven-plugin.version>4.7.2</org.antlr.antlr4-maven-plugin.version>
 		<org.apache.maven.plugins.maven-compiler-plugin.version>3.8.0</org.apache.maven.plugins.maven-compiler-plugin.version>
 		<org.apache.maven.plugins.maven-javadoc-plugin.version>3.0.1</org.apache.maven.plugins.maven-javadoc-plugin.version>
 		<org.apache.maven.plugins.maven-shade-plugin.version>2.2</org.apache.maven.plugins.maven-shade-plugin.version>
@@ -303,6 +305,12 @@
 				<groupId>org.antlr</groupId>
 				<artifactId>stringtemplate</artifactId>
 				<version>${org.antlr.stringtemplate.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4</artifactId>
+				<version>${org.antlr.antlr4.version}</version>
 			</dependency>
 
 			<dependency>
@@ -551,6 +559,12 @@
 					<groupId>org.antlr</groupId>
 					<artifactId>antlr3-maven-plugin</artifactId>
 					<version>${org.antlr.antlr3-maven-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.antlr</groupId>
+					<artifactId>antlr4-maven-plugin</artifactId>
+					<version>${org.antlr.antlr4-maven-plugin.version}</version>
 				</plugin>
 
 				<plugin>
