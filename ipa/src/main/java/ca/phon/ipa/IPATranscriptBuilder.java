@@ -272,6 +272,13 @@ public class IPATranscriptBuilder {
 	public IPAElement last() {
 		return (buffer.size() > 0 ? buffer.get(buffer.size()-1) : null);
 	}
+
+	public IPAElement removeLast() {
+		if(size() > 0) {
+			return buffer.remove(buffer.size()-1);
+		}
+		return null;
+	}
 	
 	/**
 	 * Reverse elements in this builder.

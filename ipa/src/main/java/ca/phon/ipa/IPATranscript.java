@@ -32,6 +32,7 @@ import ca.phon.syllable.*;
 import ca.phon.util.*;
 import ca.phon.visitor.*;
 import ca.phon.visitor.annotation.*;
+import org.antlr.v4.runtime.CharStreams;
 
 /**
  * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements
@@ -51,12 +52,15 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(IPATranscript.class, this);
 
+	public final static String USE_ANTLR4 = IPATranscript.class.getName() + ".useAntlr4";
+	private final static boolean defaultUseAntlr4 = false;
+
 	private final IPAElement[] transcription;
 
 	/**
 	 * Convert a string into an {@link IPATranscript}
 	 *
-	 * @param transcription the text of the IPA transcription
+	 * @param transcript the text of the IPA transcription
 	 *
 	 */
 	public static IPATranscript parseIPATranscript(String transcript)
@@ -64,18 +68,32 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		IPATranscript retVal = new IPATranscript();
 
 		if(transcript.trim().length() > 0) {
-			try {
-				IPALexer lexer = new IPALexer(transcript);
-				TokenStream tokenStream = new CommonTokenStream(lexer);
+			if(PrefHelper.getBoolean(USE_ANTLR4, defaultUseAntlr4)) {
+                org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(transcript);
+                UnicodeIPALexer lexer = new UnicodeIPALexer(charStream);
+                org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 
-				IPAParser parser = new IPAParser(tokenStream);
-				retVal = parser.transcription();
-			} catch (RecognitionException re) {
-				throw new ParseException(transcript, re.charPositionInLine);
-			} catch (IPAParserException e) {
-				final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
-				pe.addSuppressed(e);
-				throw pe;
+                UnicodeIPAParser parser = new UnicodeIPAParser(tokenStream);
+				parser.setErrorHandler(new UnicodeIPAParserErrorStrategy());
+				UnicodeIPAParserListener listener = new UnicodeIPAParserListener();
+				parser.addParseListener(listener);
+				parser.start();
+
+				retVal = listener.getTranscript();
+			} else {
+				try {
+					IPALexer lexer = new IPALexer(transcript);
+					TokenStream tokenStream = new CommonTokenStream(lexer);
+
+					IPAParser parser = new IPAParser(tokenStream);
+					retVal = parser.transcription();
+				} catch (RecognitionException re) {
+					throw new ParseException(transcript, re.charPositionInLine);
+				} catch (IPAParserException e) {
+					final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
+					pe.addSuppressed(e);
+					throw pe;
+				}
 			}
 		}
 
@@ -554,7 +572,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 * Finds the index of the given ipa element in
 	 * the string representation of the transcript.
 	 *
-	 * @param element
+	 * @param ele
 	 * @return the string index of the specified element
 	 *  or < 0 if not found
 	 */
@@ -772,8 +790,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 * 
 	 * @param consonantCover
 	 * @param vowelCover
-	 * 
-	 * @param ch
+	 *
 	 * @return
 	 */
 	public IPATranscript cover(Character consonantCover, Character vowelCover) {
