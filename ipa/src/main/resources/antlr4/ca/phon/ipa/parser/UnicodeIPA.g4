@@ -59,8 +59,8 @@ stress
 	| SECONDARY_STRESS 	# SecondaryStress
 	;
 
-phone 
-    : phone LIGATURE phone												# CompoundPhone
+phone
+	: phone LIGATURE phone												# CompoundPhone
 	| prefix_section? base_phone COMBINING_DIACRITIC* suffix_section?	# SinglePhone
 	;
 	
@@ -112,8 +112,8 @@ compound_word_marker
 	;
 
 sandhi
-    : SANDHI		# SandhiMarker
-    ;
+	: SANDHI		# SandhiMarker
+	;
 
 intra_word_pause
 	: INTRA_WORD_PAUSE
