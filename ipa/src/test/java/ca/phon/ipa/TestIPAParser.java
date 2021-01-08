@@ -24,7 +24,7 @@ import org.junit.runners.*;
 
 import ca.phon.ipa.parser.*;
 import ca.phon.syllable.*;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * Test methods for the ipa parser.
@@ -227,7 +227,7 @@ public class TestIPAParser {
 	}
 
 	@Test
-	public void testPhonexMatcherRefernce() throws Exception {
+	public void testPhonexMatcherReference() throws Exception {
 		for(int i = 0; i < 10; i++) {
 			final String ipaTxt = "t\\" + i + "st";
 			final IPATranscript ipa = IPATranscript.parseIPATranscript(ipaTxt);
@@ -302,7 +302,9 @@ public class TestIPAParser {
 	public void testInvalidConsitutentType() throws Exception {
 		final String txt = "ʌ:wɪtaʊ";
 		
-		IPATranscript.parseIPATranscript(txt);
+		IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertNull(ipa);
 	}
 	
 }

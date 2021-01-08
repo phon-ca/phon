@@ -17,11 +17,14 @@ package ca.phon.ipa;
 
 import java.text.*;
 
+import ca.phon.ipa.parser.exceptions.HangingLigatureException;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.InvalidTokenException;
+import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 import org.junit.Test;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-import ca.phon.ipa.parser.exceptions.*;
 import junit.framework.Assert;
 
 @RunWith(JUnit4.class)
@@ -74,7 +77,7 @@ public class TestIPAParserErrors {
 	@Test
 	public void testHangingLigature() throws ParseException {
 		String txt = "t\u035c";
-		testError(txt, 2, HangingLigatureException.class);
+		testError(txt, 1, HangingLigatureException.class);
 		
 		txt = "\u035c";
 		testError(txt, 0, HangingLigatureException.class);
@@ -118,12 +121,17 @@ public class TestIPAParserErrors {
 		String txt = "e\u0361\u007c";
 		testError(txt, 2, InvalidTokenException.class);
 		
-		txt = "ʰ͡|ˑeːː͡ɪ̃n";
+
+	}
+
+	@Test
+	public void testInvalidCompound2() {
+		String txt = "ʰ͡|ˑeːː͡ɪ̃n";
 		testError(txt, 2, IPAParserException.class);
 	}
 	
 	@Test
-	public void testIntrWordNumber() {
+	public void testIntraWordNumber() {
 		final String txt = "he6lo";
 		testError(txt, 2, IPAParserException.class);
 	}

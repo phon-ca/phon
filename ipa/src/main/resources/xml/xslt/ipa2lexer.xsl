@@ -26,7 +26,19 @@
 * limitations under the License.
 */
 lexer grammar ipa;
-	
+
+SC_TYPE
+: COLON [lLoOnNdDcCrReEuU]
+;
+
+GROUP_NAME
+: OPEN_BRACE [a-zA-Z][a-zA-Z0-9_]* CLOSE_BRACE
+;
+
+WS
+: [ \t\r\n]+
+;
+
 <xsl:for-each select="fn:distinct-values(ipa:ipa/ipa:char/ipa:token)">
 <xsl:variable name="tokenType" select="."/>
 <xsl:choose>
@@ -39,6 +51,10 @@ BACKSLASH
 	<xsl:otherwise>
 <xsl:choose>
 <xsl:when test="$tokenType = 'DIGIT'">
+NUMBER
+	: DIGIT+
+;
+
 fragment
 </xsl:when>
 <xsl:when test="$tokenType = 'COLON'">

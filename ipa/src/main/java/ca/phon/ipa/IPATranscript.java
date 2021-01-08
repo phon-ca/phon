@@ -19,13 +19,13 @@ import java.text.*;
 import java.util.*;
 import java.util.function.*;
 
+import ca.phon.ipa.parser.exceptions.IPAParserException;
 import org.antlr.runtime.*;
 
 import ca.phon.cvseq.*;
 import ca.phon.extensions.*;
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
-import ca.phon.ipa.parser.exceptions.*;
 import ca.phon.phonex.*;
 import ca.phon.stresspattern.*;
 import ca.phon.syllable.*;
@@ -69,17 +69,31 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 		if(transcript.trim().length() > 0) {
 			if(PrefHelper.getBoolean(USE_ANTLR4, defaultUseAntlr4)) {
-                org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(transcript);
-                UnicodeIPALexer lexer = new UnicodeIPALexer(charStream);
-                org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+				try {
+					org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(transcript);
+					UnicodeIPALexer lexer = new UnicodeIPALexer(charStream);
+					UnicodeIPAParserErrorListener errorListener = new UnicodeIPAParserErrorListener();
+					lexer.addErrorListener(errorListener);
+					org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 
-                UnicodeIPAParser parser = new UnicodeIPAParser(tokenStream);
-				parser.setErrorHandler(new UnicodeIPAParserErrorStrategy());
-				UnicodeIPAParserListener listener = new UnicodeIPAParserListener();
-				parser.addParseListener(listener);
-				parser.start();
+					UnicodeIPAParser parser = new UnicodeIPAParser(tokenStream);
+					UnicodeIPAParserListener listener = new UnicodeIPAParserListener();
+					parser.setErrorHandler(new UnicodeIPAParserErrorStrategy(listener));
+					parser.addParseListener(listener);
+					parser.start();
 
-				retVal = listener.getTranscript();
+					if (errorListener.getParseExceptions().size() > 0) {
+						throw errorListener.getParseExceptions().get(0);
+					}
+
+					retVal = listener.getTranscript();
+				} catch (ParseException pe) {
+					throw pe;
+				} catch (IPAParserException e) {
+					final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
+					pe.addSuppressed(e);
+					throw pe;
+				}
 			} else {
 				try {
 					IPALexer lexer = new IPALexer(transcript);

@@ -54,7 +54,11 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	private final List<Diacritic> prefixCache = new ArrayList<>();
 	
 	private final List<Diacritic> suffixCache = new ArrayList<>();
-	
+
+	public IPATranscriptBuilder getBuilder() {
+		return this.builder;
+	}
+
 	@Override
 	public void exitStart(StartContext ctx) {
 		if(builder.last() instanceof WordBoundary) {
@@ -124,6 +128,9 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	
 	@Override
 	public void exitSinglePhone(SinglePhoneContext ctx) {
+		// parse error
+		if(ctx.base_phone() == null) return;
+
 		Character basePhone = ctx.base_phone().getText().charAt(0);
 		Diacritic[] combining = null;
 		
@@ -257,7 +264,8 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 	@Override
 	public void exitCompoundPhone(CompoundPhoneContext ctx) {
-		builder.makeCompoundPhone(ctx.LIGATURE().getText().charAt(0));
+		if(builder.size() >= 2)
+			builder.makeCompoundPhone(ctx.LIGATURE().getText().charAt(0));
 	}
 	
 	@Override
