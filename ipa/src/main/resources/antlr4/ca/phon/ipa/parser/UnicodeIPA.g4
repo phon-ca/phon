@@ -35,7 +35,7 @@ transcription
 	;
 
 word_boundary
-	: WS		# WhiteSpace
+	: WS    # WhiteSpace
 	;
 
 word
@@ -55,13 +55,13 @@ ipa_element
 	;
 	
 stress 
-	: PRIMARY_STRESS	# PrimaryStress
-	| SECONDARY_STRESS 	# SecondaryStress
+	: PRIMARY_STRESS    # PrimaryStress
+	| SECONDARY_STRESS  # SecondaryStress
 	;
 
 phone
-	: phone LIGATURE phone												# CompoundPhone
-	| prefix_section? base_phone COMBINING_DIACRITIC* suffix_section?	# SinglePhone
+	: phone LIGATURE phone                                              # CompoundPhone
+	| prefix_section? base_phone COMBINING_DIACRITIC* suffix_section?   # SinglePhone
 	;
 	
 base_phone
@@ -76,9 +76,9 @@ prefix_section
 	;
 	
 prefix_diacritic
-	: PREFIX_DIACRITIC COMBINING_DIACRITIC*					# PrefixDiacritic
-	| SUFFIX_DIACRITIC ROLE_REVERSAL COMBINING_DIACRITIC*	# PrefixDiacriticRoleReversed
-	| SUFFIX_DIACRITIC COMBINING_DIACRITIC* LIGATURE		# PrefixDiacriticLigature
+	: PREFIX_DIACRITIC COMBINING_DIACRITIC*                 # PrefixDiacritic
+	| SUFFIX_DIACRITIC ROLE_REVERSAL COMBINING_DIACRITIC*   # PrefixDiacriticRoleReversed
+	| SUFFIX_DIACRITIC COMBINING_DIACRITIC* LIGATURE        # PrefixDiacriticLigature
 	;
 
 suffix_section
@@ -86,10 +86,10 @@ suffix_section
 	;
 
 suffix_diacritic
-	: SUFFIX_DIACRITIC COMBINING_DIACRITIC*					# SuffixDiacritic
-	| PREFIX_DIACRITIC ROLE_REVERSAL COMBINING_DIACRITIC*	# SuffixDiacriticRoleReversed
-	| LIGATURE PREFIX_DIACRITIC COMBINING_DIACRITIC*		# SuffixDiacriticLigature
-	| TONE													# Tone
+	: SUFFIX_DIACRITIC COMBINING_DIACRITIC*                 # SuffixDiacritic
+	| PREFIX_DIACRITIC ROLE_REVERSAL COMBINING_DIACRITIC*   # SuffixDiacriticRoleReversed
+	| LIGATURE PREFIX_DIACRITIC COMBINING_DIACRITIC*        # SuffixDiacriticLigature
+	| TONE                                                  # Tone
 	;
 
 phone_length
@@ -102,17 +102,17 @@ phone_length
 	;
 
 syllable_boundary
-	: PERIOD		# SyllableBoundary
-	| MINOR_GROUP 	# MinorGroup
-	| MAJOR_GROUP 	# MajorGroup
+	: PERIOD        # SyllableBoundary
+	| MINOR_GROUP   # MinorGroup
+	| MAJOR_GROUP   # MajorGroup
 	;
 
 compound_word_marker
-	: PLUS			# CompoundWordMarker
+	: PLUS          # CompoundWordMarker
 	;
 
 sandhi
-	: SANDHI		# SandhiMarker
+	: SANDHI        # SandhiMarker
 	;
 
 intra_word_pause
@@ -124,9 +124,9 @@ pause
 	;
 
 pause_length
-	: PERIOD				# ShortPause
-	| PERIOD PERIOD			# MeduimPause
-	| PERIOD PERIOD PERIOD	# LongPause
+	: PERIOD                # ShortPause
+	| PERIOD PERIOD         # MeduimPause
+	| PERIOD PERIOD PERIOD  # LongPause
 	;
 
 /* Other Items */
@@ -134,8 +134,8 @@ pause_length
  * Phonex matcher references are used in find and replace expressions.
  */
 phonex_matcher_ref
-	: BACKSLASH NUMBER		# GroupNumberRef
-	| BACKSLASH GROUP_NAME	# GroupNameRef
+	: BACKSLASH NUMBER      # GroupNumberRef
+	| BACKSLASH GROUP_NAME  # GroupNameRef
 	;
 
 sctype
