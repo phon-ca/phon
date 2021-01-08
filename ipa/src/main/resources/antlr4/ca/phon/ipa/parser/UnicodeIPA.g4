@@ -113,7 +113,7 @@ compound_word_marker
 
 sandhi
     : SANDHI		# SandhiMarker
-	;
+    ;
 
 intra_word_pause
 	: INTRA_WORD_PAUSE
