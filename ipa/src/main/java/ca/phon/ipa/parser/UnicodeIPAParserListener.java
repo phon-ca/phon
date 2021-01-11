@@ -5,15 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ca.phon.ipa.*;
+import ca.phon.ipa.parser.exceptions.HangingLigatureException;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
+import ca.phon.syllable.SyllabificationInfo;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
-import ca.phon.ipa.Diacritic;
-import ca.phon.ipa.IPAElementFactory;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.PauseLength;
-import ca.phon.ipa.Phone;
-import ca.phon.ipa.WordBoundary;
 import ca.phon.ipa.parser.UnicodeIPAParser.AlignmentContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.CompoundPhoneContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.CompoundWordMarkerContext;
@@ -40,7 +39,6 @@ import ca.phon.ipa.parser.UnicodeIPAParser.SuffixDiacriticContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.SuffixDiacriticLigatureContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.SuffixDiacriticRoleReversedContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.SyllableBoundaryContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.ToneContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.TranscriptionContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.WordContext;
 import ca.phon.syllable.SyllableConstituentType;
@@ -59,30 +57,91 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		return this.builder;
 	}
 
+	private List<IPAParserException> parserErrors = new ArrayList<>();
+
+	public List<IPAParserException> getParserErrors() {
+		return this.parserErrors;
+	}
+
+	@Override
+	public void visitErrorNode(ErrorNode errorNode) {
+		Token symbol = errorNode.getSymbol();
+		IPAParserException ex = new IPAParserException(errorNode.getText());
+
+		// ignore leading whitespace
+		if(symbol.getType() == UnicodeIPAParser.WS && builder.size() == 0) {
+			// recover
+			return;
+		}
+
+		switch(errorNode.getSymbol().getType()) {
+		case UnicodeIPAParser.LIGATURE:
+			ex = new HangingLigatureException("Stray initial ligature");
+			break;
+
+		case UnicodeIPAParser.PREFIX_DIACRITIC:
+		case UnicodeIPAParser.SUFFIX_DIACRITIC:
+		case UnicodeIPAParser.COMBINING_DIACRITIC:
+		case UnicodeIPAParser.TONE:
+		case UnicodeIPAParser.TONE_NUMBER:
+		case UnicodeIPAParser.LONG:
+		case UnicodeIPAParser.HALF_LONG:
+		case UnicodeIPAParser.PERIOD:
+		case UnicodeIPAParser.MINOR_GROUP:
+		case UnicodeIPAParser.MAJOR_GROUP:
+		case UnicodeIPAParser.SANDHI:
+		case UnicodeIPAParser.PLUS:
+		case UnicodeIPAParser.PRIMARY_STRESS:
+		case UnicodeIPAParser.SECONDARY_STRESS:
+			ex = new StrayDiacriticException("Stray diacriitc " + symbol.getText());
+			break;
+
+		default:
+			break;
+		}
+		ex.setPositionInLine(symbol.getCharPositionInLine());
+		parserErrors.add(ex);
+	}
+
 	@Override
 	public void exitStart(StartContext ctx) {
-		if(builder.last() instanceof WordBoundary) {
+		while(builder.size() > 0 && builder.last() instanceof WordBoundary) {
 			builder.removeLast();
 		}
+		if(builder.size() > 0) {
+			IPAElement ele = builder.last();
+			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
+				|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
+				throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+			}
+		}
 	}
-	
-	@Override
-	public void exitWord(WordContext ctx) {
-		builder.appendWordBoundary();
-	}
-	
+
 	@Override
 	public void exitPrimaryStress(PrimaryStressContext ctx) {
+		if(builder.last() instanceof SyllableBoundary
+			|| builder.last() instanceof StressMarker
+			|| builder.last() instanceof IntonationGroup)
+			throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
 		builder.append(factory.createPrimaryStress());
 	}
 	
 	@Override
 	public void exitSecondaryStress(SecondaryStressContext ctx) {
+		if(builder.last() instanceof SyllableBoundary
+			|| builder.last() instanceof StressMarker
+			|| builder.last() instanceof IntonationGroup)
+			throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
 		builder.append(factory.createSecondaryStress());
 	}
 	
 	@Override
 	public void exitSyllableBoundary(SyllableBoundaryContext ctx) {
+		if(builder.last() instanceof SyllableBoundary
+			|| builder.last() instanceof StressMarker
+			|| builder.last() instanceof IntonationGroup
+			|| builder.last() instanceof WordBoundary)
+			throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
 		builder.append(factory.createSyllableBoundary());
 	}
 	
@@ -90,7 +149,12 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	public void exitIntra_word_pause(Intra_word_pauseContext ctx) {
 		builder.append(factory.createIntraWordPause());
 	}
-	
+
+	@Override
+	public void exitWhiteSpace(UnicodeIPAParser.WhiteSpaceContext ctx) {
+		builder.appendWordBoundary();
+	}
+
 	@Override
 	public void exitCompoundWordMarker(CompoundWordMarkerContext ctx) {
 		builder.append(factory.createCompoundWordMarker());
@@ -104,13 +168,57 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	@Override
 	public void exitGroupNumberRef(GroupNumberRefContext ctx) {
 		Integer groupIndex = Integer.parseInt(ctx.NUMBER().getText());
-		builder.append(factory.createPhonexMatcherReference(groupIndex));
+
+		Diacritic[] combining = null;
+
+		if(ctx.COMBINING_DIACRITIC() != null) {
+			combining = ctx.COMBINING_DIACRITIC().stream()
+					.map( tn -> factory.createDiacritic(tn.getText().charAt(0)) )
+					.collect(Collectors.toList())
+					.toArray(Diacritic[]::new);
+		}
+
+		PhonexMatcherReference phonexMatcherReference = factory.createPhonexMatcherReference(groupIndex);
+		if(combining != null)
+			phonexMatcherReference.setCombiningDiacritics(combining);
+
+		phonexMatcherReference.setPrefixDiacritics(prefixCache.toArray(new Diacritic[0]));
+		phonexMatcherReference.setSuffixDiacritics(suffixCache.toArray(new Diacritic[0]));
+
+		builder.append(phonexMatcherReference);
+
+		prefixCache.clear();
+		suffixCache.clear();
 	}
 	
 	@Override
 	public void exitGroupNameRef(GroupNameRefContext ctx) {
 		String groupName = ctx.GROUP_NAME().getText().substring(1, ctx.GROUP_NAME().getText().length()-1);
-		builder.append(factory.createPhonexMatcherReference(groupName));
+
+		Diacritic[] combining = null;
+
+		if(ctx.COMBINING_DIACRITIC() != null) {
+			combining = ctx.COMBINING_DIACRITIC().stream()
+					.map( tn -> factory.createDiacritic(tn.getText().charAt(0)) )
+					.collect(Collectors.toList())
+					.toArray(Diacritic[]::new);
+		}
+
+		PhonexMatcherReference phonexMatcherReference = factory.createPhonexMatcherReference(groupName);
+		if(combining != null)
+			phonexMatcherReference.setCombiningDiacritics(combining);
+
+		phonexMatcherReference.setPrefixDiacritics(prefixCache.toArray(new Diacritic[0]));
+		phonexMatcherReference.setSuffixDiacritics(suffixCache.toArray(new Diacritic[0]));
+
+		builder.append(phonexMatcherReference);
+
+		prefixCache.clear();
+		suffixCache.clear();
+	}
+
+	private void appendPhonexMatcherReference(PhonexMatcherReference phonexMatcherReference) {
+
 	}
 	
 	@Override
@@ -118,18 +226,18 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		SyllableConstituentType scType = SyllableConstituentType.fromString(ctx.getText().charAt(1)+"");
 		if(builder.size() > 0) {
 			builder.last().setScType(scType);
+			if(scType == SyllableConstituentType.NUCLEUS && ctx.getText().matches(":[dD]")) {
+				SyllabificationInfo sinfo = builder.last().getExtension(SyllabificationInfo.class);
+				sinfo.setDiphthongMember(true);
+			}
 		}
 	}
-	
-	@Override
-	public void enterSinglePhone(SinglePhoneContext ctx) {
-		
-	}
-	
+
 	@Override
 	public void exitSinglePhone(SinglePhoneContext ctx) {
 		// parse error
-		if(ctx.base_phone() == null) return;
+		if(ctx.base_phone() == null
+			|| ctx.base_phone().getText().length() == 0) return;
 
 		Character basePhone = ctx.base_phone().getText().charAt(0);
 		Diacritic[] combining = null;
@@ -140,14 +248,23 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 					.collect(Collectors.toList())
 					.toArray(Diacritic[]::new);
 		}
-		
+
 		Phone p = factory.createPhone(prefixCache.toArray(Diacritic[]::new), basePhone, combining, suffixCache.toArray(Diacritic[]::new));
 		builder.append(p);
 		
 		prefixCache.clear();
 		suffixCache.clear();
 	}
-	
+
+	@Override
+	public void exitPhone_length(UnicodeIPAParser.Phone_lengthContext ctx) {
+		String phoneLength = ctx.getText();
+		for(char lengthCh:phoneLength.toCharArray()) {
+			Diacritic lengthDia = factory.createDiacritic(lengthCh);
+			suffixCache.add(lengthDia);
+		}
+	}
+
 	@Override
 	public void exitPrefixDiacritic(PrefixDiacriticContext ctx) {
 		char prefixChar = ctx.PREFIX_DIACRITIC().getText().charAt(0);
@@ -245,13 +362,21 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		Diacritic suffixDia = factory.createDiacritic(new Diacritic[] {lig}, suffixChar, combining);
 		suffixCache.add(suffixDia);
 	}
-	
+
 	@Override
-	public void exitTone(ToneContext ctx) {
-		Diacritic toneDia = factory.createDiacritic(ctx.TONE().getText().charAt(0));
+	public void exitTone(UnicodeIPAParser.ToneContext ctx) {
+		Diacritic toneDia = factory.createDiacritic(ctx.getText().charAt(0));
 		suffixCache.add(toneDia);
 	}
-	
+
+	@Override
+	public void exitTone_number(UnicodeIPAParser.Tone_numberContext ctx) {
+		for(char ch:ctx.getText().toCharArray()) {
+			Diacritic toneNumberDia = factory.createDiacritic(ch);
+			suffixCache.add(toneNumberDia);
+		}
+	}
+
 	@Override
 	public void exitMinorGroup(MinorGroupContext ctx) {
 		builder.append(factory.createMinorIntonationGroup());
@@ -267,12 +392,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		if(builder.size() >= 2)
 			builder.makeCompoundPhone(ctx.LIGATURE().getText().charAt(0));
 	}
-	
-	@Override
-	public void exitPause(PauseContext ctx) {
-		builder.append(factory.createWordBoundary());
-	}
-	
+
 	@Override
 	public void exitShortPause(ShortPauseContext ctx) {
 		builder.append(factory.createPause(PauseLength.SHORT));

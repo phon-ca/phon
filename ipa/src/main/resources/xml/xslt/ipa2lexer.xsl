@@ -28,7 +28,7 @@
 lexer grammar ipa;
 
 SC_TYPE
-: COLON [lLoOnNdDcCrReEuU]
+: COLON [aAlLoOnNdDcCrReEuU]
 ;
 
 GROUP_NAME

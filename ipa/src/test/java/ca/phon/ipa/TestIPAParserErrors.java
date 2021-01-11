@@ -53,7 +53,7 @@ public class TestIPAParserErrors {
 		final ParseException pe = testParser(txt);
 		Assert.assertNotNull(pe);
 		Assert.assertEquals(location, pe.getErrorOffset());
-		Assert.assertEquals(errorType, pe.getSuppressed()[0].getClass());
+		Assert.assertTrue(errorType.isAssignableFrom(pe.getSuppressed()[0].getClass()));
 	}
 	
 	@Test
@@ -71,7 +71,7 @@ public class TestIPAParserErrors {
 	@Test
 	public void testStrayFinalPrefixDiacritic() {
 		final String txt = "ɔʷⁿ";
-		testError(txt, 3, StrayDiacriticException.class);
+		testError(txt, 2, StrayDiacriticException.class);
 	}
 	
 	@Test
@@ -139,13 +139,13 @@ public class TestIPAParserErrors {
 	@Test
 	public void testDoubleSyllableBoundary()  {
 		String txt = "hel..o";
-		testError(txt, 5, StrayDiacriticException.class);
+		testError(txt, 4, StrayDiacriticException.class);
 		
 		txt = "hel.\u02c8o";
-		testError(txt, 5, StrayDiacriticException.class);
+		testError(txt, 4, StrayDiacriticException.class);
 		
 		txt = "hel\u02c8\u02c8o";
-		testError(txt, 5, StrayDiacriticException.class);
+		testError(txt, 4, StrayDiacriticException.class);
 	}
 	
 	@Test

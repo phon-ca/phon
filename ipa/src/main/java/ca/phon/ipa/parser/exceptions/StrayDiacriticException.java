@@ -27,6 +27,11 @@ public class StrayDiacriticException extends IPAParserException {
 		super(message, cause);
 	}
 
+	public StrayDiacriticException(String message, int location) {
+		super(message);
+		setPositionInLine(location);
+	}
+
 	public StrayDiacriticException(String message) {
 		super(message);
 	}

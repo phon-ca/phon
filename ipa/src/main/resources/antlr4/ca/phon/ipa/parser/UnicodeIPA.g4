@@ -39,10 +39,10 @@ word_boundary
 	;
 
 word
-	: word compound_word_marker word
-	| ipa_element+
-	| pause
-	| alignment
+	: word compound_word_marker word    # CompoundWord
+	| ipa_element+                      # SimpleWord
+	| pause                             # WordPause
+	| alignment                         # WordAlignment
 	;
 
 ipa_element
@@ -82,7 +82,11 @@ prefix_diacritic
 	;
 
 suffix_section
-	: phone_length? suffix_diacritic+
+	: phone_length? suffix_diacritic* tone_number?
+	;
+
+tone_number
+	:   TONE_NUMBER+
 	;
 
 suffix_diacritic
@@ -134,8 +138,8 @@ pause_length
  * Phonex matcher references are used in find and replace expressions.
  */
 phonex_matcher_ref
-	: BACKSLASH NUMBER      # GroupNumberRef
-	| BACKSLASH GROUP_NAME  # GroupNameRef
+	: prefix_section? BACKSLASH NUMBER COMBINING_DIACRITIC* suffix_section?         # GroupNumberRef
+	| prefix_section? BACKSLASH GROUP_NAME COMBINING_DIACRITIC* suffix_section?    # GroupNameRef
 	;
 
 sctype

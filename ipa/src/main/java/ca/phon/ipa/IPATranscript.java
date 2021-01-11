@@ -85,11 +85,12 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 					if (errorListener.getParseExceptions().size() > 0) {
 						throw errorListener.getParseExceptions().get(0);
 					}
+					if(listener.getParserErrors().size() > 0) {
+						throw listener.getParserErrors().get(0);
+					}
 
 					retVal = listener.getTranscript();
-				} catch (ParseException pe) {
-					throw pe;
-				} catch (IPAParserException e) {
+				}catch (IPAParserException e) {
 					final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
 					pe.addSuppressed(e);
 					throw pe;
