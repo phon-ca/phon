@@ -143,12 +143,12 @@ public final class AudioFile implements AutoCloseable, Closeable {
 	 * 
 	 * @param buffer
 	 */
-	public synchronized void readSamples(double[][] buffer) throws IOException {
+	public synchronized int readSamples(double[][] buffer) throws IOException {
 		if(buffer.length == 0) // no samples to read
-			return;
+			return 0;
 		if(buffer[0] == null)
 			throw new IOException(new NullPointerException("buffer[0]"));
-		readSamples(buffer, 0, buffer[0].length);
+		return readSamples(buffer, 0, buffer[0].length);
 	}
 	
 	/**
