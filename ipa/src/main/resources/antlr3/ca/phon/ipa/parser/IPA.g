@@ -157,6 +157,9 @@ scope {
 		if($word::makeCompound) {
 			final HangingLigatureException hle = new HangingLigatureException("Ligature missing right-hand element");
 			int idx = input.LT(1).getCharPositionInLine();
+            if(input.LA(1) == CommonToken.EOF && input.size() - 2 > 0) {
+                idx = input.get(input.size()-2).getCharPositionInLine();
+            }
 			if(idx < 0) {
 				// end of string
 				idx = input.toString().length();
@@ -168,6 +171,9 @@ scope {
 			|| $word::builder.last() instanceof StressMarker) {
 			final IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
 			int idx = input.LT(1).getCharPositionInLine();
+			if(input.LA(1) == CommonToken.EOF && input.size() - 2 > 0) {
+                idx = input.get(input.size()-2).getCharPositionInLine();
+            }
 			if(idx < 0) {
 				// end of string
 				idx = input.toString().length();
@@ -210,7 +216,11 @@ word_element returns [IPAElement p]
 		if($word::builder.last() instanceof SyllableBoundary
 			|| $word::builder.last() instanceof StressMarker) {
 			IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
-			pe.setPositionInLine(input.LT(1).getCharPositionInLine());
+			if(input.size() > input.index() - 1) {
+                pe.setPositionInLine(input.get(input.index()-1).getCharPositionInLine());
+            } else {
+                pe.setPositionInLine(input.get(input.index()).getCharPositionInLine());
+            }
 			throw pe;
 		}
 		$p = $stress.stressMarker;
@@ -224,7 +234,11 @@ word_element returns [IPAElement p]
 		if($word::builder.last() instanceof SyllableBoundary
 			|| $word::builder.last() instanceof StressMarker) {
 			IPAParserException pe = new StrayDiacriticException("Expecting next syllable");
-			pe.setPositionInLine(input.LT(1).getCharPositionInLine());
+			if(input.size() > input.index() - 1) {
+                pe.setPositionInLine(input.get(input.index()-1).getCharPositionInLine());
+            } else {
+                pe.setPositionInLine(input.get(input.index()).getCharPositionInLine());
+            }
 			throw pe;
 		}
 		$p = $syllable_boundary.syllableBoundary;
@@ -530,7 +544,12 @@ scope {
 	;
 	catch [NoViableAltException e] {
 		final StrayDiacriticException sde = new StrayDiacriticException("Stray diacritic, expecting \u0361");
-		sde.setPositionInLine(e.index);
+		if(input.get(input.index()).getType() == CommonToken.EOF
+            && input.size() > input.index()-1) {
+            sde.setPositionInLine(input.get(input.index()-1).getCharPositionInLine());
+        } else {
+            sde.setPositionInLine(input.get(input.index()).getCharPositionInLine());
+        }
 		throw sde;
 	}
 

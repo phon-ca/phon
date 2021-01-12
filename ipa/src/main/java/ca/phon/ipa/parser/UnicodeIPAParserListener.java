@@ -10,6 +10,7 @@ import ca.phon.ipa.parser.exceptions.HangingLigatureException;
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 import ca.phon.syllable.SyllabificationInfo;
+import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
@@ -76,7 +77,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 		switch(errorNode.getSymbol().getType()) {
 		case UnicodeIPAParser.LIGATURE:
-			ex = new HangingLigatureException("Stray initial ligature");
+			ex = new HangingLigatureException("Ligature missing left-hand element");
 			break;
 
 		case UnicodeIPAParser.PREFIX_DIACRITIC:
@@ -112,36 +113,44 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 			IPAElement ele = builder.last();
 			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
 				|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-				throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+				int idx = ctx.getStop().getCharPositionInLine();
+				if(ctx.getStop().getType() == CommonToken.EOF) --idx;
+				throw new StrayDiacriticException("Expecting next syllable", idx);
 			}
 		}
 	}
 
 	@Override
 	public void exitPrimaryStress(PrimaryStressContext ctx) {
-		if(builder.last() instanceof SyllableBoundary
-			|| builder.last() instanceof StressMarker
-			|| builder.last() instanceof IntonationGroup)
-			throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+		if(builder.size() > 0) {
+			if (builder.last() instanceof SyllableBoundary
+					|| builder.last() instanceof StressMarker
+					|| builder.last() instanceof IntonationGroup)
+				throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+		}
 		builder.append(factory.createPrimaryStress());
 	}
 	
 	@Override
 	public void exitSecondaryStress(SecondaryStressContext ctx) {
-		if(builder.last() instanceof SyllableBoundary
-			|| builder.last() instanceof StressMarker
-			|| builder.last() instanceof IntonationGroup)
-			throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+		if(builder.size() > 0) {
+			if (builder.last() instanceof SyllableBoundary
+					|| builder.last() instanceof StressMarker
+					|| builder.last() instanceof IntonationGroup)
+				throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+		}
 		builder.append(factory.createSecondaryStress());
 	}
 	
 	@Override
 	public void exitSyllableBoundary(SyllableBoundaryContext ctx) {
-		if(builder.last() instanceof SyllableBoundary
-			|| builder.last() instanceof StressMarker
-			|| builder.last() instanceof IntonationGroup
-			|| builder.last() instanceof WordBoundary)
-			throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+		if(builder.size() > 0) {
+			if (builder.last() instanceof SyllableBoundary
+					|| builder.last() instanceof StressMarker
+					|| builder.last() instanceof IntonationGroup
+					|| builder.last() instanceof WordBoundary)
+				throw new StrayDiacriticException("Expecting next syllable", ctx.getStop().getCharPositionInLine());
+		}
 		builder.append(factory.createSyllableBoundary());
 	}
 	

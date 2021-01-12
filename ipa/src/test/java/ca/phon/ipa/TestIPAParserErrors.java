@@ -29,7 +29,7 @@ import junit.framework.Assert;
 
 @RunWith(JUnit4.class)
 public class TestIPAParserErrors {
-	
+
 	/**
 	 * Returns the exception thrown by the given invalid IPA
 	 * transcript.  If the parser passes, null is returned.
@@ -151,13 +151,13 @@ public class TestIPAParserErrors {
 	@Test
 	public void testHangingSyllableBoundary() {
 		String txt = "helo\u02c8";
-		testError(txt, 5, StrayDiacriticException.class);
+		testError(txt, 4, StrayDiacriticException.class);
 		
 		txt = "helo\u02cc";
-		testError(txt, 5, StrayDiacriticException.class);
+		testError(txt, 4, StrayDiacriticException.class);
 		
 		txt = "helo.";
-		testError(txt, 5, StrayDiacriticException.class);
+		testError(txt, 4, StrayDiacriticException.class);
 		
 	}
 	

@@ -32,7 +32,7 @@ public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {
 				if (token.getType() == UnicodeIPAParser.WS) {
 					// do nothing, trailing whitespace is trimmed by parser once parsing has completed
 				} else if (token.getType() == UnicodeIPAParser.LIGATURE) {
-					HangingLigatureException hle = new HangingLigatureException("");
+					HangingLigatureException hle = new HangingLigatureException("Ligature missing right-hand element");
 					hle.setPositionInLine(token.getCharPositionInLine());
 					ex = hle;
 				} else if(token.getType() == UnicodeIPAParser.PREFIX_DIACRITIC
@@ -76,15 +76,8 @@ public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {
 	
 	@Override
 	public Token recoverInline(Parser recognizer) throws RecognitionException {
-//		Token currentToken = recognizer.getCurrentToken();
-//		if(currentToken != null) {
-////			String msg = String.format("Unexpected symbol '%s'", currentToken.getText());
-////			IPAParserException ex = new IPAParserException(msg);
-////			ex.setPositionInLine(currentToken.getCharPositionInLine());
-//			throw ex;
-//		} else {
-			throw new InputMismatchException(recognizer);
-//		}
+		// don't recover
+		throw new InputMismatchException(recognizer);
 	}
 	
 }

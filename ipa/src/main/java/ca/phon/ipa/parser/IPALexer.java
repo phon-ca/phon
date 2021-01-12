@@ -16,6 +16,7 @@
 package ca.phon.ipa.parser;
 
 import ca.phon.ipa.parser.exceptions.IPAParserException;
+import ca.phon.ipa.parser.exceptions.InvalidTokenException;
 import org.antlr.runtime.*;
 
 import ca.phon.syllable.*;
@@ -126,7 +127,7 @@ public class IPALexer implements TokenSource {
 					--currentPosition;
 			} else {
 				if(tokenType == null) {
-					IPAParserException ex = new IPAParserException("Invalid token '" + currentChar + "'");
+					InvalidTokenException ex = new InvalidTokenException("Invalid token '" + currentChar + "'");
 					ex.setPositionInLine(currentPosition);
 					throw ex;
 				} else {
