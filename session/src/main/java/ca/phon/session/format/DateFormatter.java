@@ -27,7 +27,7 @@ public class DateFormatter implements Formatter<LocalDate> {
 	public final static String DATETIME_FORMAT = "yyyy-MM-dd";
 	
 	/**
-	 * Create a date formatter for {@link DateTime} objects.
+	 * Create a date formatter for {@link LocalDateTime} objects.
 	 * 
 	 * @return formatter
 	 */
@@ -72,7 +72,11 @@ public class DateFormatter implements Formatter<LocalDate> {
 	 */
 	public static LocalDate stringToDateTime(String text) {
 		final DateTimeFormatter formatter = createFormatter();
-		return LocalDate.parse(text, formatter);
+		try {
+			return LocalDate.parse(text, formatter);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override

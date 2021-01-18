@@ -308,6 +308,21 @@ public class SessionInfoEditorView extends EditorView {
 			}
 			
 		});
+
+		retVal.getTextField().addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(retVal.getTextField().getState() == FieldState.PROMPT) {
+					retVal.setDateTime(sessionDate);
+				}
+			}
+		});
+
 		return retVal;
 	}
 	
