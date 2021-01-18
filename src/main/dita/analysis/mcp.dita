@@ -48,7 +48,7 @@
                                 <li>Word-initial Onsets (OOi)</li>
                                 <li>Word-medial Onsets (OOm)</li>
                                 <li>Word-medial Coda+Onset (COm)</li>
-                                <li>Word-final Coads (CCf)</li>
+                                <li>Word-final Codas (CCf)</li>
                             </ol></p></li>
                     <li><i>Pattern</i><p>Pattern is a two or three letter code describing the IPA
                             Target and IPA Actual alignment. <codeph>S</codeph> represents
@@ -159,10 +159,10 @@
                 </fig>
             </p>
             <p>Cluster types included in the analysis may be selected using checkboxes as shown above:<ol>
-                    <li>Word-initial Onsets (OO-i)</li>
-                    <li>Word-medial Onsets (OO-m)</li>
-                    <li>Word-medial Coda+Onset (CO-m)</li>
-                    <li>Word-final Codas (CC-f)</li>
+                    <li>Word-initial Onsets (OOi)</li>
+                    <li>Word-medial Onsets (OOm)</li>
+                    <li>Word-medial Coda+Onset (COm)</li>
+                    <li>Word-final Codas (CCf)</li>
                 </ol></p>
         </body>
 
