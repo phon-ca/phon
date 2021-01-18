@@ -105,6 +105,7 @@
                path="report/acoustic_data_reports/vot_report.html"/>
    <appContext helpID="built-in-analyses" path="analysis/analyses.html"/>
    <appContext helpID="consonants" path="analysis/consonants.html"/>
+   <appContext helpID="mcp" path="analysis/mcp.html"/>
    <appContext helpID="Percent_Diacritics_Correct_PDC" path="analysis/pdc.html"/>
    <appContext helpID="analysis-ppc" path="analysis/ppc.html"/>
    <appContext helpID="pntc" path="analysis/pntc.html"/>
