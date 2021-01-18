@@ -42,7 +42,6 @@ word
 	: word compound_word_marker word    # CompoundWord
 	| ipa_element+                      # SimpleWord
 	| pause                             # WordPause
-	| alignment                         # WordAlignment
 	;
 
 ipa_element
@@ -52,6 +51,7 @@ ipa_element
 	| sandhi
 	| intra_word_pause
 	| phonex_matcher_ref
+	| alignment
 	;
 	
 stress 
@@ -129,7 +129,7 @@ pause
 
 pause_length
 	: PERIOD                # ShortPause
-	| PERIOD PERIOD         # MeduimPause
+	| PERIOD PERIOD         # MediumPause
 	| PERIOD PERIOD PERIOD  # LongPause
 	;
 

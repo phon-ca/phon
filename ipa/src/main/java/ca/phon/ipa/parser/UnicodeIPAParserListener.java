@@ -22,7 +22,7 @@ import ca.phon.ipa.parser.UnicodeIPAParser.GroupNumberRefContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.Intra_word_pauseContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.LongPauseContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.MajorGroupContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.MeduimPauseContext;
+import ca.phon.ipa.parser.UnicodeIPAParser.MediumPauseContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.MinorGroupContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.PauseContext;
 import ca.phon.ipa.parser.UnicodeIPAParser.Phonex_matcher_refContext;
@@ -408,7 +408,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	}
 	
 	@Override
-	public void exitMeduimPause(MeduimPauseContext ctx) {
+	public void exitMediumPause(MediumPauseContext ctx) {
 		builder.append(factory.createPause(PauseLength.MEDIUM));
 	}
 	
