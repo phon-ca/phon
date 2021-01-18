@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="mcp">
+    <title>Measure of Cluster Proximity (beta)</title>
+    <body>
+        <p>The Measure of Cluster Proximity (MCP) is a quantitative metric to evaluate consonant
+            cluster production in speech development. This measure addresses the issue of
+            quantitatively differentiating stages in cluster production highlighted by the common
+            patterns of cluster reduction, vowel epenthesis, two-member productions, with either
+            substituted or correct phones.</p>
+    </body>
+    <topic id="data-preparation">
+        <title>Data Preparation</title>
+        <body>
+            <p>Session data is queried by word for each IPA Target and IPA Actual tuple. Proper
+                syllabification and phone alignment is required for accurate results. All
+                participants should have unique names/identification numbers and a speaker should be
+                assigned to all records.</p>
+        </body>
+    </topic>
+    <topic id="mcp-columns">
+        <title>MCP Data</title>
+        <body>
+            <p>The measure is computed on two-consonant clusters only (tri-consonantal or longer
+                clusters are ignored by the algorithm). The MCP analysis will add the following
+                information to each cluster identified in the query: <ol id="ol_uc1_smd_j4b">
+                    <li><i>Context</i><p>Context will include the type of target cluster as well as
+                            the word location. Four types of clusters are considered in the
+                                analysis:<ol id="ol_ss5_lld_j4b">
+                                <li>Word-initial Onsets (OOi)</li>
+                                <li>Word-medial Onsets (OOm)</li>
+                                <li>Word-medial Coda+Onset (COm)</li>
+                                <li>Word-final Coads (CCf)</li>
+                            </ol></p></li>
+                    <li><i>Pattern</i><p>Pattern is a two or three letter code describing the IPA
+                            Target and IPA Actual alignment. <codeph>S</codeph> represents
+                            substitution, <codeph>D</codeph> represents deletion, <codeph>C</codeph>
+                            represents correct, and <codeph>V</codeph> represents vowel
+                            epenthesis.</p></li>
+                    <li><i>Proximity</i><p>Each <i>Pattern</i> is assigned a proximity value between
+                            0% and 100%, with all values set in 12.5% increments between 0% and
+                            100%, each of which provides a combined assessment of both the number of
+                            phones produced and the quality of these phones relative to the target
+                            cluster (Babatsouli &amp; Sotiropoulos 2018; Babatsouli 2020), as shown
+                            in the proximity lookup table below.</p><p>
+                            <table frame="all" rowsep="1" colsep="1" id="table_j2k_xld_j4b">
+                                <title>Proximity Lookup Table</title>
+                                <tgroup cols="2">
+                                    <colspec colname="c1" colnum="1" colwidth="1*"/>
+                                    <colspec colname="c2" colnum="2" colwidth="1*"/>
+                                    <thead>
+                                        <row>
+                                            <entry>Pattern</entry>
+                                            <entry>Proximity (%)</entry>
+                                        </row>
+                                    </thead>
+                                    <tbody>
+                                        <row>
+                                            <entry>DD</entry>
+                                            <entry>0</entry>
+                                        </row>
+                                        <row>
+                                            <entry>CC</entry>
+                                            <entry>100</entry>
+                                        </row>
+                                        <row>
+                                            <entry>DS</entry>
+                                            <entry>12.5</entry>
+                                        </row>
+                                        <row>
+                                            <entry>SD</entry>
+                                            <entry>12.5</entry>
+                                        </row>
+                                        <row>
+                                            <entry>CD</entry>
+                                            <entry>25</entry>
+                                        </row>
+                                        <row>
+                                            <entry>DC</entry>
+                                            <entry>25</entry>
+                                        </row>
+                                        <row>
+                                            <entry>SVS</entry>
+                                            <entry>37.5</entry>
+                                        </row>
+                                        <row>
+                                            <entry>CVS</entry>
+                                            <entry>50</entry>
+                                        </row>
+                                        <row>
+                                            <entry>SVC</entry>
+                                            <entry>50</entry>
+                                        </row>
+                                        <row>
+                                            <entry>CVC</entry>
+                                            <entry>62.5</entry>
+                                        </row>
+                                        <row>
+                                            <entry>SS</entry>
+                                            <entry>75</entry>
+                                        </row>
+                                        <row>
+                                            <entry>CS</entry>
+                                            <entry>87.5</entry>
+                                        </row>
+                                        <row>
+                                            <entry>SC</entry>
+                                            <entry>87.5</entry>
+                                        </row>
+                                    </tbody>
+                                </tgroup>
+                            </table>
+                        </p></li>
+                </ol></p>
+        </body>
+    </topic>
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <p>
+                <fig id="fig_qsd_zgn_3nbf">
+                    <title>Measure of Cluster Proximity Parameters</title>
+                    <image placement="break" href="images/mcp_parameters.png"
+                        id="image_rsd_zgn_3nbf"/>
+                </fig>
+            </p>
+            <p>Cluster types included in the analysis may be selected using checkboxes as shown above:<ol>
+                    <li>Word-initial Onsets (OO-i)</li>
+                    <li>Word-medial Onsets (OO-m)</li>
+                    <li>Word-medial Coda+Onset (CO-m)</li>
+                    <li>Word-final Codas (CC-f)</li>
+                </ol></p>
+        </body>
+
+        <topic id="other_paramters">
+            <title>Other parameters</title>
+            <body>
+                <p><ul id="ol_qkx_cqy_mjb">
+                        <li>Ignore diacritics - ignore diacritics when comparing phones (default:
+                            no)</li>
+                        <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../query/common_query_options.dita#additional_tier_data"
+                            /></li>
+                    </ul></p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="report-outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/mcp_example.html" format="html" scope="external">here</xref> to
+                see an example report.</p>
+            <ul>
+                <li><p><b>Measure of Cluster Proximity</b></p><ul>
+                    <li>
+                        <p><b><i>Summary</i></b></p>
+                    </li>
+                    <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
+                        <li><i>Summary</i></li>
+                        <li><i>Aggregate (all clusters)</i></li>
+                                <li><i>Aggregate (OOi)</i></li>
+                                <li><i>Aggregate (OOm)</i></li>
+                                <li><i>Aggregate (COm)</i></li>
+                                <li><i>Aggregate (CCf)</i></li>
+                    </ul></li>
+                    <li>… (for each selected participant)</li>
+                    <li>
+                        <p><b><i>Listing</i></b></p>
+                    </li>
+                </ul></li>
+            </ul>
+        </body>
+    </topic>
+    <topic id="topic_uxj_23d_j4b">
+        <title>References</title>
+        <body>
+            <p> Babatsouli, Elena &amp; Dimitrios Sotiropoulos. 2018. A Measure for Cluster
+                Proximity (mcp) in Child Speech. <i>Clinical Linguistics &amp; Phonetics</i> 32(12).
+                1071–1089. <xref href="https://doi.org/10.1080/02699206.2018.1510982" format="html"
+                    scope="external">https://doi.org/10.1080/02699206.2018.1510982</xref>.</p>
+            <p> Babatsouli, Elena. 2020. Correlation Between the Measure for Cluster Proximity (mcp)
+                and the Percentage of Consonants Correct (pcc). <i>Clinical Linguistics &amp;
+                    Phonetics</i> 1–19. <xref href="https://doi.org/10.1080/02699206.2020.1744189"
+                    format="html" scope="external"
+                    >https://doi.org/10.1080/02699206.2020.1744189</xref>. <xref
+                    href="https://www.tandfonline.com/doi/full/10.1080/02699206.2020.1744189"
+                    format="html" scope="external"
+                    >https://www.tandfonline.com/doi/full/10.1080/02699206.2020.1744189</xref> (29
+                June, 2020).</p>
+        </body>
+    </topic>
+</topic>
