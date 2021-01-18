@@ -161,7 +161,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="291eae19" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-01-18T08:38:10.014-03:30" name="Phones" uuid="1af55b4a-b283-4d9a-894a-75f5c8a2d07d">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-01-18T08:56:41.375-03:30" name="Phones" uuid="c4a91a88-fa05-4b0a-87e7-e2b29363f6db">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -188,7 +188,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="fe7af74acf244cc5" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1c50b3ce">
+            <graph id="c24e2b3">
                 <node id="6adf9970e3f94b11" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -257,7 +257,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="cfaa51a7f0d34ae8" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6ed1cdcb">
+            <graph id="3a4efe33">
                 <node id="bfe45fece3284315" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -297,7 +297,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="67c4ef6cb57465f" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6779834b">
+            <graph id="6bf376ad">
                 <node id="5a5fa9581bad4ec3" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -366,7 +366,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="ec5354e915a34904" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3aaf2121">
+            <graph id="4b2c622f">
                 <node id="ad9f396e94049" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -435,7 +435,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6e347499d1f9495b" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6560ef70">
+            <graph id="46b5a6bd">
                 <node id="d916c90248a4049" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -564,7 +564,7 @@ function run(context) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="1597" y="579"/>
+                <oga:meta x="1670" y="578"/>
             </extensions>
         </node>
         <node id="4f7966e0e93341f8" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
@@ -797,7 +797,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="9889335" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="339a96eb">
+            <graph id="575f6ab5">
                 <node id="5310fdc6" name="Current Participant" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -816,7 +816,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="25d6ae39a0b04749" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="2a8003f5">
+                    <graph id="efec132">
                         <node id="a8bdfb94a8134019" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -859,7 +859,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="65e33378748d4d1c" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="7d73321a">
+                    <graph id="5b4ad247">
                         <node id="d6ed7c1f5c4549bb" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -928,7 +928,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="b292896639074dcc" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="129fb4be">
+                    <graph id="311e7f24">
                         <node id="8c1ed3233db842d6" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -997,7 +997,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="540ba06ad0b74a4b" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="d3c7c26">
+                    <graph id="38dbfe02">
                         <node id="7eb356be19b047fb" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1074,7 +1074,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="2c64aebb86954e48" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="636ea79">
+                    <graph id="2d74fc8a">
                         <node id="d1e11f99d3654947" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1143,7 +1143,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="f40203e0683543ed" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="12701a0d">
+                    <graph id="54174b3b">
                         <node id="a6e9a273a324e66" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -1208,7 +1208,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="7f21a390" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="33db385f">
+                    <graph id="17693ee8">
                         <node id="49393c62" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1270,7 +1270,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="fb14e4cf56bb4017" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="1036007e">
+                            <graph id="6b0e6a1d">
                                 <node id="a0710dce73984adc" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1339,7 +1339,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="3b3e7752ed11418b" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="787e1831">
+                            <graph id="5c7612b1">
                                 <node id="fc117105f7ff4d57" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1408,7 +1408,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="7cc7e7af6e7a4b3b" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="11128deb">
+                            <graph id="4d435e46">
                                 <node id="e7afbc46e3bb40d8" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1488,7 +1488,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="e97ff83d90574de6" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="5c6fe68c">
+                            <graph id="26f6e03e">
                                 <node id="678b5742dc6e4e68" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1574,7 +1574,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="516e2d56" name="Word Initial Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="5d3d780b">
+                            <graph id="4a8023b8">
                                 <node id="25766a92" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1592,7 +1592,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="5f025a2cce2b49ed" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="7f1fb121">
+                                    <graph id="fa21636">
                                         <node id="671223d0" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1727,7 +1727,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="cf0f30956be74a03" name="Word Medial Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="2049df19">
+                            <graph id="493cece4">
                                 <node id="b4c18089ed947f4" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1745,7 +1745,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="b8476d2c113d481f" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="94ebc6c">
+                                    <graph id="4554da74">
                                         <node id="7b2317ca1d8b4a32" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1932,7 +1932,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="a4430255ca1a4ff8" name="Word Medial Coda+Onset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="2fe51bfa">
+                            <graph id="2d9efbcf">
                                 <node id="487a6366f5014e2f" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1950,7 +1950,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="effdd022709a4907" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="6ae0a22b">
+                                    <graph id="48b53da6">
                                         <node id="913c862e3ae049c2" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2085,7 +2085,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="668363f15d1e4a3f" name="Word Final Codas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="4eab6f35">
+                            <graph id="40d72308">
                                 <node id="58af8a883c8b4105" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -2103,7 +2103,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="a5fac639aeed4a92" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="5b1adced">
+                                    <graph id="4a289f44">
                                         <node id="3df02d615fc24e98" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2247,7 +2247,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="1590cd22" name="For Each Selected Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="4bab9c5">
+                            <graph id="7e84ff05">
                                 <node id="6910c3c5" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -2282,7 +2282,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="83c83989f3f34f63" name="Get Table of Results For Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4fc63070">
+                                    <graph id="42a523c9">
                                         <node id="d17866ffd0a842ae" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2350,7 +2350,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="6a4f669dc07a4800" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="371e9a30">
+                                    <graph id="654fc5bc">
                                         <node id="bfa96ac0543427c" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2419,7 +2419,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="b38ab06885b74369" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="390d2c5f">
+                                    <graph id="5d2dc230">
                                         <node id="6a18fe4df59e43cf" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2488,7 +2488,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="6b40d80351124454" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="1297d77">
+                                    <graph id="3d02bdd1">
                                         <node id="6d17120455b142cd" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2557,7 +2557,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="c4183f0e4d2745f8" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4698ac0e">
+                                    <graph id="35e35471">
                                         <node id="e355029fa7fc45fe" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2751,7 +2751,7 @@ function run(context) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1369" y="397"/>
+                                <oga:meta x="1452" y="383"/>
                             </extensions>
                         </ogcn:macro>
                         <node id="55bd808c" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -2865,7 +2865,7 @@ function run(context) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1611" y="406"/>
+                                <oga:meta x="1694" y="392"/>
                             </extensions>
                         </node>
                         <node id="2b124a85" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -3088,12 +3088,17 @@ Alignment]]></oga:property>
                 <opqry:info format="html" title="Measure of Cluster Proximity">
                     <opqry:message/>
                 </opqry:info>
+                <opqry:node ref="20b5d641db254ead" showAsStep="true">
+                    <opqry:info format="html" title="Parameters">
+                        <opqry:message/>
+                    </opqry:info>
+                </opqry:node>
             </opqry:nodewizard>
             <oga:notes>
                 <oga:note color="0xffff96" height="537" title="Analysis Inputs" width="379" x="10" y="10">These inputs are provided to all analyses.</oga:note>
                 <oga:note color="0xffc864" height="198" title="Start Report" width="734" x="10" y="560">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
                 <oga:note color="0x9696ff" height="537" title="Query" width="745" x="400" y="10"/>
-                <oga:note color="0xffc864" height="200" title="Add to Report" width="586" x="759" y="562"/>
+                <oga:note color="0xffc864" height="198" title="Add to Report" width="620" x="759" y="562"/>
                 <oga:note color="0xffff96" height="536" title="Shape Data" width="534" x="1159" y="11">Add MCP columns and filter rows</oga:note>
                 <oga:note color="0xff96ff" height="450" title="About" width="577" x="12" y="777">The Measure of Cluster Proximity is a quantitative metric to evaluate consonant cluster production in speech development. This measure addresses the issue of quantitatively differentiating stages in cluster production highlighted by the common patterns of cluster reduction, vowel epenthesis, two-member productions, with either substituted or correct phones. 
 Babatsouli, Elena &amp; Dimitrios Sotiropoulos. 2018. A Measure for Cluster Proximity (mcp) in Child Speech. Clinical Linguistics &amp; Phonetics 32(12). 1071–1089. https://doi.org/10.1080/02699206.2018.1510982.
