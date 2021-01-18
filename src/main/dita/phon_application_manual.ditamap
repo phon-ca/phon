@@ -123,6 +123,7 @@
     <chapter navtitle="Analyses" audience="intermediate">
         <topicref href="analysis/analyses.dita" format="dita"/>
         <topicref href="analysis/consonants.dita" format="dita"/>
+        <topicref href="analysis/mcp.dita"/>
         <topicref href="analysis/pdc.dita"/>
         <topicref href="analysis/ppc.dita" format="dita"/>
         <topicref href="analysis/pntc.dita"/>
