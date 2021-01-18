@@ -18,6 +18,7 @@ package ca.phon.ipa;
 import java.text.*;
 import java.util.*;
 
+import ca.phon.util.PrefHelper;
 import org.junit.Test;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -192,6 +193,17 @@ public class TestIPAParser {
 		
 		Assert.assertEquals(7, ipa.length());
 		Assert.assertEquals(CompoundWordMarker.class, ipa.elementAt(3).getClass());
+	}
+
+	@Test
+	public void testComplexCompound() throws Exception {
+		if(PrefHelper.getBoolean(IPATranscript.USE_ANTLR4, false)) {
+			final String testString = "ⁿ̃e̯ːˑ³⁷͡ʰ̵ɪᶾ⁵¹";
+			final IPATranscript ipa = IPATranscript.parseIPATranscript(testString);
+
+			Assert.assertEquals(1, ipa.length());
+			Assert.assertEquals(testString, ipa.toString());
+		}
 	}
 	
 	@Test
