@@ -9,6 +9,24 @@
             patterns of cluster reduction, vowel epenthesis, two-member productions, with either
             substituted or correct phones.</p>
     </body>
+    <topic id="topic_uxj_23d_j4b">
+        <title>References</title>
+        <body>
+            <p> Babatsouli, Elena &amp; Dimitrios Sotiropoulos. 2018. A Measure for Cluster
+                Proximity (mcp) in Child Speech. <i>Clinical Linguistics &amp; Phonetics</i> 32(12).
+                1071–1089. <xref href="https://doi.org/10.1080/02699206.2018.1510982" format="html"
+                    scope="external">https://doi.org/10.1080/02699206.2018.1510982</xref>.</p>
+            <p> Babatsouli, Elena. 2020. Correlation Between the Measure for Cluster Proximity (mcp)
+                and the Percentage of Consonants Correct (pcc). <i>Clinical Linguistics &amp;
+                    Phonetics</i> 1–19. <xref href="https://doi.org/10.1080/02699206.2020.1744189"
+                        format="html" scope="external"
+                        >https://doi.org/10.1080/02699206.2020.1744189</xref>. <xref
+                            href="https://www.tandfonline.com/doi/full/10.1080/02699206.2020.1744189"
+                            format="html" scope="external"
+                            >https://www.tandfonline.com/doi/full/10.1080/02699206.2020.1744189</xref> (29
+                June, 2020).</p>
+        </body>
+    </topic>
     <topic id="data-preparation">
         <title>Data Preparation</title>
         <body>
@@ -56,55 +74,71 @@
                                     </thead>
                                     <tbody>
                                         <row>
-                                            <entry>DD</entry>
+                                            <entry><codeph>DD</codeph></entry>
                                             <entry>0</entry>
                                         </row>
                                         <row>
-                                            <entry>CC</entry>
+                                            <entry><codeph>CC</codeph></entry>
                                             <entry>100</entry>
                                         </row>
                                         <row>
-                                            <entry>DS</entry>
+                                            <entry><codeph>DS</codeph></entry>
                                             <entry>12.5</entry>
                                         </row>
                                         <row>
-                                            <entry>SD</entry>
+                                            <entry><codeph>SD</codeph></entry>
                                             <entry>12.5</entry>
                                         </row>
                                         <row>
-                                            <entry>CD</entry>
+                                            <entry><codeph>SVD</codeph></entry>
+                                            <entry>18.75</entry>
+                                        </row>
+                                        <row>
+                                            <entry><codeph>DVS</codeph></entry>
+                                            <entry>18.75</entry>
+                                        </row>
+                                        <row>
+                                            <entry><codeph>CD</codeph></entry>
                                             <entry>25</entry>
                                         </row>
                                         <row>
-                                            <entry>DC</entry>
+                                            <entry><codeph>DC</codeph></entry>
                                             <entry>25</entry>
                                         </row>
                                         <row>
-                                            <entry>SVS</entry>
+                                            <entry><codeph>CVD</codeph></entry>
+                                            <entry>31.25</entry>
+                                        </row>
+                                        <row>
+                                            <entry><codeph>DVC</codeph></entry>
+                                            <entry>31.25</entry>
+                                        </row>
+                                        <row>
+                                            <entry><codeph>SVS</codeph></entry>
                                             <entry>37.5</entry>
                                         </row>
                                         <row>
-                                            <entry>CVS</entry>
+                                            <entry><codeph>CVS</codeph></entry>
                                             <entry>50</entry>
                                         </row>
                                         <row>
-                                            <entry>SVC</entry>
+                                            <entry><codeph>SVC</codeph></entry>
                                             <entry>50</entry>
                                         </row>
                                         <row>
-                                            <entry>CVC</entry>
+                                            <entry><codeph>CVC</codeph></entry>
                                             <entry>62.5</entry>
                                         </row>
                                         <row>
-                                            <entry>SS</entry>
+                                            <entry><codeph>SS</codeph></entry>
                                             <entry>75</entry>
                                         </row>
                                         <row>
-                                            <entry>CS</entry>
+                                            <entry><codeph>CS</codeph></entry>
                                             <entry>87.5</entry>
                                         </row>
                                         <row>
-                                            <entry>SC</entry>
+                                            <entry><codeph>SC</codeph></entry>
                                             <entry>87.5</entry>
                                         </row>
                                     </tbody>
@@ -174,22 +208,5 @@
             </ul>
         </body>
     </topic>
-    <topic id="topic_uxj_23d_j4b">
-        <title>References</title>
-        <body>
-            <p> Babatsouli, Elena &amp; Dimitrios Sotiropoulos. 2018. A Measure for Cluster
-                Proximity (mcp) in Child Speech. <i>Clinical Linguistics &amp; Phonetics</i> 32(12).
-                1071–1089. <xref href="https://doi.org/10.1080/02699206.2018.1510982" format="html"
-                    scope="external">https://doi.org/10.1080/02699206.2018.1510982</xref>.</p>
-            <p> Babatsouli, Elena. 2020. Correlation Between the Measure for Cluster Proximity (mcp)
-                and the Percentage of Consonants Correct (pcc). <i>Clinical Linguistics &amp;
-                    Phonetics</i> 1–19. <xref href="https://doi.org/10.1080/02699206.2020.1744189"
-                    format="html" scope="external"
-                    >https://doi.org/10.1080/02699206.2020.1744189</xref>. <xref
-                    href="https://www.tandfonline.com/doi/full/10.1080/02699206.2020.1744189"
-                    format="html" scope="external"
-                    >https://www.tandfonline.com/doi/full/10.1080/02699206.2020.1744189</xref> (29
-                June, 2020).</p>
-        </body>
-    </topic>
+    
 </topic>
