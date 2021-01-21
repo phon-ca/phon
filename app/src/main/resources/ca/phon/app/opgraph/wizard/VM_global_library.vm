@@ -4,6 +4,8 @@
 #macro( h2 $title $id ) <h2 id='$id'>$title</h2>#end
 #macro( h3 $title $id ) <h3 id='$id'>$title</h3>#end
 #macro( h4 $title $id ) <h4 id='$id'>$title</h4>#end
+#macro( h5 $title $id ) <h5 id='$id'>$title</h5>#end
+#macro( h6 $title $id ) <h6 id='$id'>$title</h6>#end
 
 #macro( printHeader $table $columnNames )
 	#set($maxCol = $table.columnCount - 1)
