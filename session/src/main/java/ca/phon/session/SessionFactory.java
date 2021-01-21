@@ -382,6 +382,10 @@ public final class SessionFactory extends ExtendableObject {
 	public Participant createUnknownParticipant() {
 		return new Participant( new UnidentifiedParticipant() );
 	}
+
+	public Participant createAllParticipant() {
+		return new Participant( new AllParticipant() );
+	}
 	
 	/**
 	 * Clone participant

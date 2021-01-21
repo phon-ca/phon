@@ -32,3 +32,5 @@ ca.phon.app.opgraph.nodes.table.FeatureAccuracyNode
 ca.phon.app.opgraph.nodes.table.PhoneSimilarity
 ca.phon.app.opgraph.nodes.table.PhoneAccuracyNode
 ca.phon.app.opgraph.nodes.query.ResultsToHTMLNode
+ca.phon.app.opgraph.nodes.SelectedParticipantsNode
+ca.phon.app.opgraph.nodes.ForEachParticipant

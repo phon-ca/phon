@@ -27,6 +27,8 @@ import ca.phon.session.spi.*;
  *
  */
 public final class Participant extends ExtendableObject {
+
+	public static final Participant ALL = SessionFactory.newFactory().createAllParticipant();
 	
 	public static final Participant UNKNOWN = SessionFactory.newFactory().createUnknownParticipant();
 
