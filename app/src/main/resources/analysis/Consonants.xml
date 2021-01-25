@@ -1262,7 +1262,7 @@ function getRowValue(table, row) {
                 </oga:meta>
             </extensions>
         </node>
-        <ogcn:macro id="603e3e9d" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
+        <ogcn:macro id="acbf84de39bd45eb" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
             <graph id="38b8b592">
                 <node id="7837adb0" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
@@ -2744,14 +2744,14 @@ Epenthesis]]></oga:property>
         <link dest="59507af9f4184ea4" destField="sessions" source="72826b97" sourceField="obj"/>
         <link dest="4eb780b7b254113" destField="script" source="5223b5337ae04841" sourceField="script"/>
         <link dest="83a1a6852460460b" destField="parameters" source="5223b5337ae04841" sourceField="parameters"/>
-        <link dest="603e3e9d" destField="_inputTable1" source="59507af9f4184ea4" sourceField="singletonOnsets"/>
-        <link dest="603e3e9d" destField="_inputTable2" source="59507af9f4184ea4" sourceField="singletonCodas"/>
-        <link dest="603e3e9d" destField="_inputTable3" source="59507af9f4184ea4" sourceField="singletonOEHS"/>
-        <link dest="603e3e9d" destField="_inputTable4" source="59507af9f4184ea4" sourceField="tautosyllabicOnsets"/>
-        <link dest="603e3e9d" destField="_inputTable5" source="59507af9f4184ea4" sourceField="tautosyllabicCodas"/>
-        <link dest="603e3e9d" destField="_inputTable6" source="59507af9f4184ea4" sourceField="heterosyllabicClusters"/>
-        <link dest="603e3e9d" destField="participants" source="5a3f5ab0" sourceField="participants"/>
-        <link dest="603e3e9d" destField="reportNode" source="2b71638b6e934d5f" sourceField="section"/>
+        <link dest="acbf84de39bd45eb" destField="_inputTable1" source="59507af9f4184ea4" sourceField="singletonOnsets"/>
+        <link dest="acbf84de39bd45eb" destField="_inputTable2" source="59507af9f4184ea4" sourceField="singletonCodas"/>
+        <link dest="acbf84de39bd45eb" destField="_inputTable3" source="59507af9f4184ea4" sourceField="singletonOEHS"/>
+        <link dest="acbf84de39bd45eb" destField="_inputTable4" source="59507af9f4184ea4" sourceField="tautosyllabicOnsets"/>
+        <link dest="acbf84de39bd45eb" destField="_inputTable5" source="59507af9f4184ea4" sourceField="tautosyllabicCodas"/>
+        <link dest="acbf84de39bd45eb" destField="_inputTable6" source="59507af9f4184ea4" sourceField="heterosyllabicClusters"/>
+        <link dest="acbf84de39bd45eb" destField="participants" source="5a3f5ab0" sourceField="participants"/>
+        <link dest="acbf84de39bd45eb" destField="reportNode" source="2b71638b6e934d5f" sourceField="section"/>
         <link dest="6a86097aea664524" destField="obj" source="5223b5337ae04841" sourceField="parameters"/>
         <link dest="5a3f5ab0" destField="combine" source="6a86097aea664524" sourceField="value"/>
         <extensions>
