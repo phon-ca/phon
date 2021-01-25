@@ -194,6 +194,7 @@
 		<module>media</module>
 		<module>query</module>
 		<module>app</module>
+		<module>all</module>
 	</modules>
 
 	<dependencyManagement>
