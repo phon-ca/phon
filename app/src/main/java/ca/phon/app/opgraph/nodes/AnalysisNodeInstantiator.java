@@ -43,21 +43,6 @@ public class AnalysisNodeInstantiator extends MacroNodeInstantiator {
 			graph = node.getGraph();
 		}
 		
-		// find input nodes and publish fields
-		final OpNode projectNode = graph.getNodesByName("Project").stream().findFirst().orElse(null);
-		if(projectNode == null)
-			throw new InstantiationException("Project node not found in analysis document");
-		final OpNode sessionsNode = graph.getNodesByName("Selected Sessions").stream().findFirst().orElse(null);
-		if(sessionsNode == null)
-			throw new InstantiationException("Selected Sessions node not found in analysis document");
-		final OpNode participantsNode = graph.getNodesByName("Selected Participants").stream().findFirst().orElse(null);
-		if(participantsNode == null)
-			throw new InstantiationException("Selected Participants node not found in analysis document");
-
-		node.publish("project", projectNode, projectNode.getInputFieldWithKey("obj"));
-		node.publish("selectedSessions", sessionsNode, sessionsNode.getInputFieldWithKey("obj"));
-		node.publish("selectedParticipants", participantsNode, participantsNode.getInputFieldWithKey("obj"));
-		
 		// set 'name' to Parameters node 'reportname' if available
 		// find the 'Parameters' settings node
 		final WizardExtension wizardExtension = graph.getExtension(WizardExtension.class);
