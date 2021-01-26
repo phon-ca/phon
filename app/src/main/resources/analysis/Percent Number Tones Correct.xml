@@ -51,7 +51,6 @@ function run(context) {
             <extensions>
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
-                    <oga:property key="otherDataHeader.collapsed"><![CDATA[false]]></oga:property>
                     <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography,IPA Target,IPA Actual]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -94,6 +93,15 @@ var reportTitleParamInfo = {
 var reportTitleParam;
 var reportTitle = reportTitleParamInfo.def;
 
+var combineParticipantsParamInfo = {
+	"id": "combineParticipants",
+	"title": "Combine results",
+	"desc": "Combine results for all selected participants",
+	"def": false
+};
+var combineParticipantsParam;
+var combineParticipants = combineParticipantsParamInfo.def;
+
 function setup_params(params) {
 
 	reportTitleParam = new StringScriptParam(
@@ -102,6 +110,16 @@ function setup_params(params) {
 			reportTitleParamInfo.def);
 		 reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
+
+	combineParticipantsParam = new BooleanScriptParam(
+		combineParticipantsParamInfo.id,
+		combineParticipantsParamInfo.desc,
+		combineParticipantsParamInfo.title,
+		combineParticipantsParamInfo.def);
+	params.add(combineParticipantsParam);
+
+	var optionsSep = new SeparatorScriptParam("Options", false);
+	params.add(optionsSep);
 
 	filters.pntc.param_setup(params);
 	var insertIdx = params.size();
@@ -149,11 +167,11 @@ function setup_params(params) {
 	filters.wordTiers.setEnabled(enabled);
 }]]></oga:property>
                 </oga:settings>
-                <oga:meta x="20" y="662"/>
+                <oga:meta x="25" y="696"/>
             </extensions>
         </node>
         <opqry:queryNode id="1f2a5721" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-01-26T08:57:34.187-03:30" name="Aligned IPA Domains" uuid="c53ec8e4-34b6-49a4-a397-edecb4b6c328">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-01-26T10:13:37.451-03:30" name="Aligned IPA Domains" uuid="5b94942a-1ff3-4e04-b093-91d95ce51f35">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -169,6 +187,7 @@ function setup_params(params) {
                     <param id="filters.syllable.syllableType">Any syllable</param>
                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
+                    <param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
                     <param id="searchTier">IPA Target</param>
                 </script>
             </qry:query>
@@ -178,7 +197,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="68180f75">
+            <graph id="dbb6521">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -218,7 +237,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="73d5137add6043a6" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5243250e">
+            <graph id="22362920">
                 <node id="b08db04d89424752" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -512,7 +531,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="424c6a59" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="21c87141">
+            <graph id="3d6a22fa">
                 <node id="3759a36a" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -548,7 +567,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="945e057185e74864" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="3dd25461">
+                    <graph id="24d790f3">
                         <node id="65b6213415b545ba" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
