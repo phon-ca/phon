@@ -7,6 +7,7 @@ import ca.phon.opgraph.app.components.canvas.NodeStyle;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.extensions.CustomProcessing;
+import ca.phon.opgraph.extensions.Publishable;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.opgraph.nodes.general.script.InputFields;
 import ca.phon.opgraph.nodes.reflect.*;
@@ -91,16 +92,15 @@ public class ForEachParticipant extends MacroNode implements NodeSettings, Custo
 				final String tableInputKey = INPUT_TABLE_KEY_PREFIX + (i + 1);
 				final InputField tableInputField = new InputField(tableInputKey, "Input table # " + (i + 1),
 						true, false, TableDataSource.class);
-				putField(tableInputField);
+				final int inputFieldPos = i+2;
+				putField(inputFieldPos, tableInputField);
 				toKeep.add(tableInputField);
 			} else {
 				toKeep.add(getInputFieldWithKey(inputKey));
 			}
 		}
 
-		for(PublishedInput publishedInput:super.getPublishedInputs()) {
-			toKeep.add(publishedInput);
-		}
+		toKeep.addAll(super.getPublishedInputs());
 
 		List<InputField> oldInputs = new ArrayList<>(getInputFields());
 		oldInputs.removeAll(toKeep);
@@ -135,7 +135,19 @@ public class ForEachParticipant extends MacroNode implements NodeSettings, Custo
 
 			Optional<Participant> selectedSpeaker =
 				participants.stream()
-					.filter(p -> p.getId().equals(rowSpeaker.getId()) && p.getName().equals(rowSpeaker.getName()) )
+					.filter(p -> {
+						if(p.getId().equals(rowSpeaker.getId())) {
+							if(p.getName() == null && rowSpeaker.getName() == null) {
+								return true;
+							} else if(p.getName() != null) {
+								return p.getName().equals(rowSpeaker.getName());
+							} else {
+								return false;
+							}
+						} else {
+							return false;
+						}
+					})
 					.findFirst();
 			if(selectedSpeaker.isPresent()) {
 				Object rowData[] = new Object[table.getColumnCount()];
