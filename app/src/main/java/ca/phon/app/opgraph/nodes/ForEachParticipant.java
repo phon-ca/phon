@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@OpNodeInfo(name="For Each Participant", description = "Iterate over a list of participants with optional table data", category = "Table", showInLibrary = true)
+@OpNodeInfo(name="For Each Participant", description = "Iterate over a list of participants with optional table data", category = "Participants", showInLibrary = true)
 public class ForEachParticipant extends MacroNode implements NodeSettings, CustomProcessing, CustomProcessing.CustomProcessor {
 
 	static {

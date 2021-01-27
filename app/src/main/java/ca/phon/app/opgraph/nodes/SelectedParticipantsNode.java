@@ -14,7 +14,7 @@ import java.util.*;
  * containing {@link ca.phon.session.Participant}.ALL.
  *
  */
-@OpNodeInfo(name = "Selected Participants", description = "Selected participants for analysis", category = "Objects", showInLibrary = true)
+@OpNodeInfo(name = "Selected Participants", description = "Selected participants for analysis", category = "Participants", showInLibrary = true)
 public class SelectedParticipantsNode extends OpNode {
 
 	/*
