@@ -57,9 +57,6 @@ exports.PMLUOptions = function(id) {
 	this.closedSyllBonus = ePMLUClosedSyllBonusParamInfo.def;
 	
 	this.param_setup = function( params ) {
-		var cvOptionsSep = new SeparatorScriptParam("pmluCmpOpts", "Comparison Options", false);
-		params.add(cvOptionsSep);
-	
 		ignoreTruncatedParam = new BooleanScriptParam(
 			ignoreTruncatedParamInfo.id,
 			ignoreTruncatedParamInfo.desc,
