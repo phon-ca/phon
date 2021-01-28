@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.stream.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
@@ -96,7 +98,7 @@ public class TimelineRecordTier extends TimelineTier {
 		setLayout(new BorderLayout());
 		add(recordGrid, BorderLayout.CENTER);
 	}
-	
+
 	private void addToolbarButtons() {
 		JToolBar toolbar = getParentView().getToolbar();
 		
@@ -133,6 +135,10 @@ public class TimelineRecordTier extends TimelineTier {
 
 	public RecordGrid getRecordGrid() {
 		return this.recordGrid;
+	}
+
+	public ListSelectionModel getSelectionModel() {
+		return recordGrid.getSelectionModel();
 	}
 
 	public Interval currentRecordInterval() {
@@ -266,6 +272,8 @@ public class TimelineRecordTier extends TimelineTier {
 			getTimeModel().removeInterval(currentRecordInterval);
 
 		if(r != null) {
+			int rIdx = getParentView().getEditor().getCurrentRecordIndex();
+
 			MediaSegment segment = r.getSegment().getGroup(0);
 			var segStartTime = segment.getStartValue() / 1000.0f;
 			var segEndTime = segment.getEndValue() / 1000.0f;
@@ -297,6 +305,8 @@ public class TimelineRecordTier extends TimelineTier {
 							: TimelineViewColors.INTERVAL_BACKGROUND));
 	
 			recordGrid.setCurrentRecord(r);
+		} else {
+			getSelectionModel().clearSelection();
 		}
 		
 		mouseListener.waitForRecordChange = false;
@@ -909,7 +919,14 @@ public class TimelineRecordTier extends TimelineTier {
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
-			getParentView().getEditor().setCurrentRecordIndex(recordIndex);
+			if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
+				if(getSelectionModel().isSelectedIndex(recordIndex))
+					getSelectionModel().removeSelectionInterval(recordIndex, recordIndex);
+				else
+					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
+			} else if(me.getModifiersEx() == 0) {
+				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
+			}
 		}
 
 		@Override
@@ -926,7 +943,7 @@ public class TimelineRecordTier extends TimelineTier {
 
 		@Override
 		public void recordDragged(int recordIndex, MouseEvent me) {
-			if (getParentView().getEditor().getCurrentRecordIndex() != recordIndex) {
+			if (!getSelectionModel().isSelectedIndex(recordIndex)) {
 				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 				waitForRecordChange = true;
 				return;

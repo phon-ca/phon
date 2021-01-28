@@ -99,7 +99,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 			
 		});
-				
+
+		this.recordGrid.getSelectionModel().addListSelectionListener( e -> recordGrid.repaintRecord(recordGrid.getSelectionModel().getAnchorSelectionIndex()) );
+
 		c.addPropertyChangeListener(propListener);
 		c.addMouseListener(mouseListener);
 		c.addMouseMotionListener(mouseListener);
@@ -467,7 +469,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	protected void paintSegmentLabelAndActions(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
 		Icon recordIcon = null;
-		Color recordLblColor = (recordIndex == recordGrid.getCurrentRecordIndex() ? Color.black : Color.lightGray);
+		Color recordLblColor = (recordGrid.getSelectionModel().isSelectedIndex(recordIndex) ? Color.black : Color.lightGray);
 		
 		// don't paint overlap warning if record is at 0 and has zero-length segment
 		boolean checkForOverlap = true;
@@ -584,6 +586,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				g2.draw(foucsRect);
 			}
 		} else {
+//			Stroke stroke = new BasicStroke(1.0f);
 			if(isRecordPressed(recordIndex)) {
 				g2.setColor(Color.GRAY);
 			} else {
@@ -592,6 +595,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
 				g2.setColor(Color.GRAY);
 			}
+			if(recordGrid.getSelectionModel().isSelectedIndex(recordIndex)) {
+				g2.setColor(Color.BLUE);
+			}
+
+//			g2.setStroke(stroke);
 			g2.draw(roundedRect);
 		}
 		g2.setStroke(oldStroke);
@@ -652,7 +660,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			int labelWidth = (int)labelRect.getWidth() - (2 * TEXT_MARGIN);
 			int labelHeight = (int)labelRect.getHeight();
 			
-			SwingUtilities.paintComponent(g2, renderer, recordGrid, 
+			SwingUtilities.paintComponent(g2, renderer, recordGrid,
 					labelX, labelY, labelWidth, labelHeight);
 		
 			if(labelWidth < renderer.getPreferredSize().width) {

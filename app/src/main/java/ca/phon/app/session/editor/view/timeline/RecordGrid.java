@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.*;
 
+import javax.swing.*;
 import javax.swing.event.*;
 
 import ca.phon.app.session.editor.view.timeline.actions.*;
@@ -34,7 +35,9 @@ import ca.phon.util.*;
 public class RecordGrid extends TimeComponent {
 	
 	private Session session;
-	
+
+	private ListSelectionModel selectionModel = new DefaultListSelectionModel();
+
 	private Set<Participant> speakerSet = new LinkedHashSet<>();
 	
 	private Set<String> tierSet = new LinkedHashSet<>();
@@ -138,7 +141,9 @@ public class RecordGrid extends TimeComponent {
 	public List<String> getTiers() {
 		return Collections.unmodifiableList(new ArrayList<>(tierSet));
 	}
-	
+
+	public ListSelectionModel getSelectionModel() { return selectionModel; }
+
 	public int getCurrentRecordIndex() {
 		return this.currentRecordIndex;
 	}
@@ -146,6 +151,9 @@ public class RecordGrid extends TimeComponent {
 	public void setCurrentRecordIndex(int recordIndex) {
 		var oldVal = this.currentRecordIndex;
 		this.currentRecordIndex = recordIndex;
+
+		selectionModel.setSelectionInterval(recordIndex, recordIndex);
+
 		super.firePropertyChange("currentRecordIndex", oldVal, recordIndex);
 	}
 	
@@ -246,7 +254,7 @@ public class RecordGrid extends TimeComponent {
 		this.rightRecordSplit = record;
 		firePropertyChange("rightRecordSplit", oldVal, record);
 	}
-	
+
 	public void addRecordGridMouseListener(RecordGridMouseListener listener) {
 		listeners.add(listener);
 	}
@@ -254,7 +262,15 @@ public class RecordGrid extends TimeComponent {
 	public void removeRecordGridMouseListener(RecordGridMouseListener listener) {
 		listeners.remove(listener);
 	}
-	
+
+	public void repaintRecord(int recordIndex) {
+		if(recordIndex >= 0 && recordIndex < session.getRecordCount()) {
+			Record r = session.getRecord(recordIndex);
+			MediaSegment segment = r.getSegment().getGroup(0);
+			super.repaint(segment.getStartValue()/1000.0f, segment.getEndValue()/1000.0f);
+		}
+	}
+
 	public void fireRecordClicked(int recordIndex, MouseEvent me) {
 		listeners.forEach( (l) -> l.recordClicked(recordIndex, me) );
 	}
@@ -305,9 +321,7 @@ public class RecordGrid extends TimeComponent {
 	public Dimension getPreferredSize() {
 		return getUI().getPreferredSize(this);
 	}
-	
-	
-	
+
 	/**
 	 * 'Ghost' markers are markers which are only visible
 	 * when the mouse hovers over them.
