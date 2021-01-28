@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.*;
 
+import javax.print.attribute.standard.Media;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -267,43 +268,49 @@ public class TimelineRecordTier extends TimelineTier {
 				onRecordDeleted);
 	}
 
-	public void setupRecord(Record r) {
-		if (currentRecordInterval != null)
+	private void updateCurrentRecordInterval(Record r) {
+		if(r == null) return;
+
+		if(currentRecordInterval != null)
 			getTimeModel().removeInterval(currentRecordInterval);
 
-		if(r != null) {
-			int rIdx = getParentView().getEditor().getCurrentRecordIndex();
+		int rIdx = getParentView().getEditor().getCurrentRecordIndex();
 
-			MediaSegment segment = r.getSegment().getGroup(0);
-			var segStartTime = segment.getStartValue() / 1000.0f;
-			var segEndTime = segment.getEndValue() / 1000.0f;
-	
-			// check for 'GhostMarker's which, if present, will
-			// become the start/end marker for the record interval
-			Optional<RecordGrid.GhostMarker> ghostMarker = recordGrid.getTimeModel().getMarkers().parallelStream()
-					.filter((m) -> m instanceof GhostMarker).map((m) -> GhostMarker.class.cast(m)).findAny();
-			if (ghostMarker.isPresent() && recordGrid.getUI().getCurrentlyDraggedMarker() == ghostMarker.get()) {
-				Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
-				Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
-				currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
-				currentRecordInterval.setRepaintEntireInterval(true);
-				currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
-				recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
-			} else {
-				currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
-				currentRecordInterval.setRepaintEntireInterval(true);
-				currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
-			}
-			currentRecordInterval.getStartMarker()
-					.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
-							: TimelineViewColors.INTERVAL_MARKER_COLOR));
-			currentRecordInterval.getEndMarker()
-					.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
-							: TimelineViewColors.INTERVAL_MARKER_COLOR));
-			currentRecordInterval
-					.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND
-							: TimelineViewColors.INTERVAL_BACKGROUND));
-	
+		MediaSegment segment = r.getSegment().getGroup(0);
+		var segStartTime = segment.getStartValue() / 1000.0f;
+		var segEndTime = segment.getEndValue() / 1000.0f;
+
+		// check for 'GhostMarker's which, if present, will
+		// become the start/end marker for the record interval
+		Optional<RecordGrid.GhostMarker> ghostMarker = recordGrid.getTimeModel().getMarkers().parallelStream()
+				.filter((m) -> m instanceof GhostMarker).map((m) -> GhostMarker.class.cast(m)).findAny();
+		if (ghostMarker.isPresent() && recordGrid.getUI().getCurrentlyDraggedMarker() == ghostMarker.get()) {
+			Marker startMarker = ghostMarker.get().isStart() ? ghostMarker.get() : new Marker(segStartTime);
+			Marker endMarker = ghostMarker.get().isStart() ? new Marker(segEndTime) : ghostMarker.get();
+			currentRecordInterval = getTimeModel().addInterval(startMarker, endMarker);
+			currentRecordInterval.setRepaintEntireInterval(true);
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
+			recordGrid.getUI().beginDrag(currentRecordInterval, ghostMarker.get());
+		} else {
+			currentRecordInterval = getTimeModel().addInterval(segStartTime, segEndTime);
+			currentRecordInterval.setRepaintEntireInterval(true);
+			currentRecordInterval.addPropertyChangeListener(new RecordIntervalListener());
+		}
+		currentRecordInterval.getStartMarker()
+				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
+						: TimelineViewColors.INTERVAL_MARKER_COLOR));
+		currentRecordInterval.getEndMarker()
+				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_MARKER_COLOR
+						: TimelineViewColors.INTERVAL_MARKER_COLOR));
+		currentRecordInterval
+				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND
+						: TimelineViewColors.INTERVAL_BACKGROUND));
+	}
+
+	public void setupRecord(Record r) {
+		updateCurrentRecordInterval(r);
+
+		if(r != null) {
 			recordGrid.setCurrentRecord(r);
 		} else {
 			getSelectionModel().clearSelection();
@@ -357,7 +364,7 @@ public class TimelineRecordTier extends TimelineTier {
 	public void onTierChanged(EditorEvent ee) {
 		if (SystemTierType.Orthography.getName().equals(ee.getEventData().toString())
 				|| SystemTierType.Segment.getName().equals(ee.getEventData().toString())) {
-			setupRecord(getParentView().getEditor().currentRecord());
+			updateCurrentRecordInterval(getParentView().getEditor().currentRecord());
 			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 	}
@@ -859,37 +866,78 @@ public class TimelineRecordTier extends TimelineTier {
 			}
 		}
 	};
-	
-	private Participant cancelParticipant = Participant.UNKNOWN;
-	
-	private float cancelStartTime = -1.0f;
-	
-	private float cancelEndTime = -1.0f;
-	
-	private int currentDraggedRecord = -1;
+//
+//	private Participant cancelParticipant = Participant.UNKNOWN;
+//
+//	private float cancelStartTime = -1.0f;
+//
+//	private float cancelEndTime = -1.0f;
+//
+//	private int currentDraggedRecord = -1;
+//
+//	private float mouseDragOffset = -1.0f;
 
-	private float mouseDragOffset = -1.0f;
+	private class DragData {
+		/*
+		 * Participant being dragged or Participant.ALL if
+		 * multiple participants are being dragged
+		 */
+		Participant participant;
+
+		int draggedRecord = -1;
+		float mouseDragOffset = -1.0f;
+
+		Map<Integer, MediaSegment> originalSegments = new LinkedHashMap<>();
+
+		boolean isFirstChange = true;
+	}
+	private final DragData dragData = new DragData();
 
 	private void beingRecordDrag(int recordIndex) {
 		Toolkit.getDefaultToolkit().addAWTEventListener(cancelDragListener, AWTEvent.KEY_EVENT_MASK);
-		currentDraggedRecord = recordIndex;
+		dragData.draggedRecord = recordIndex;
+		Set<Participant> participants = new HashSet<>();
+
+		dragData.originalSegments.clear();
+		for(int selectedRecord:getSelectionModel().getSelectedIndices()) {
+			Record r = getRecordGrid().getSession().getRecord(selectedRecord);
+			participants.add(r.getSpeaker());
+
+			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment origSeg = SessionFactory.newFactory().createMediaSegment();
+			origSeg.setStartValue(recordSeg.getStartValue());
+			origSeg.setEndValue(recordSeg.getEndValue());
+			dragData.originalSegments.put(selectedRecord, origSeg);
+		}
+		dragData.participant = (participants.size() == 1 ? participants.iterator().next() : Participant.ALL);
 		currentRecordInterval.setValueAdjusting(true);
+
+		dragData.isFirstChange = true;
 	}
 	
 	private void endRecordDrag() {
 		Toolkit.getDefaultToolkit().removeAWTEventListener(cancelDragListener);
-		currentDraggedRecord = -1;
 		if (currentRecordInterval != null)
 			currentRecordInterval.setValueAdjusting(false);
+		dragData.draggedRecord = -1;
 	}
 	
 	private void cancelRecordDrag() {
-		if(currentRecordInterval != null) {
-			getParentView().getEditor().currentRecord().setSpeaker(cancelParticipant);
-			currentRecordInterval.getStartMarker().setTime(cancelStartTime);
-			currentRecordInterval.getEndMarker().setTime(cancelEndTime);
+		for(int recordIndex:getSelectionModel().getSelectedIndices()) {
+			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
+			if(dragData.participant != Participant.ALL)
+				r.setSpeaker(dragData.participant);
+			MediaSegment origSegment = dragData.originalSegments.get(recordIndex);
+			if (currentRecordInterval != null && getRecordGrid().getCurrentRecordIndex() == recordIndex) {
+				currentRecordInterval.getStartMarker().setTime(origSegment.getStartValue());
+				currentRecordInterval.getEndMarker().setTime(origSegment.getEndValue());
+			} else {
+				MediaSegment recordSeg = r.getSegment().getGroup(0);
+				recordSeg.setStartValue(origSegment.getStartValue());
+				recordSeg.setEndValue(origSegment.getEndValue());
+			}
 		}
-		mouseDragOffset = -1.0f;
+		dragData.mouseDragOffset = -1.0f;
 		endRecordDrag();
 	}
 	
@@ -933,7 +981,7 @@ public class TimelineRecordTier extends TimelineTier {
 		public void recordPressed(int recordIndex, MouseEvent me) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
 			MediaSegment seg = r.getSegment().getGroup(0);
-			mouseDragOffset = getTimeModel().timeAtX(me.getX()) - seg.getStartValue() / 1000.0f;
+			dragData.mouseDragOffset = getTimeModel().timeAtX(me.getX()) - seg.getStartValue() / 1000.0f;
 		}
 
 		@Override
@@ -954,16 +1002,13 @@ public class TimelineRecordTier extends TimelineTier {
 				if (currentRecordInterval == null)
 					return;
 
-				if (currentDraggedRecord != recordIndex) {
+				if (dragData.draggedRecord != recordIndex) {
 					// don't adjust an already changing interval
 					if (currentRecordInterval.isValueAdjusting())
 						return;
 					
-					if(mouseDragOffset < 0) return;
-					
-					cancelParticipant = getParentView().getEditor().currentRecord().getSpeaker();
-					cancelStartTime = currentRecordInterval.getStartMarker().getTime();
-					cancelEndTime = currentRecordInterval.getEndMarker().getTime();
+					if(dragData.mouseDragOffset < 0) return;
+
 					beingRecordDrag(recordIndex);
 				}
 
@@ -978,36 +1023,60 @@ public class TimelineRecordTier extends TimelineTier {
 				}
 
 				Participant mouseOverSpeaker = recordGrid.getUI().getSpeakerAtPoint(me.getPoint());
-				if (mouseOverSpeaker != null
+				if (dragData.participant != Participant.ALL
+						&& mouseOverSpeaker != null
 						&& mouseOverSpeaker != getParentView().getEditor().currentRecord().getSpeaker()) {
-					// change speakers
-					ChangeSpeakerEdit chEdit = new ChangeSpeakerEdit(getParentView().getEditor(),
-							getParentView().getEditor().currentRecord(), mouseOverSpeaker);
-					getParentView().getEditor().getUndoSupport().postEdit(chEdit);
+					// change participants if all selections are in the same speaker tier
+					for(int rIdx:getSelectionModel().getSelectedIndices()) {
+						// change speakers
+						ChangeSpeakerEdit chEdit = new ChangeSpeakerEdit(getParentView().getEditor(),
+								getParentView().getEditor().getSession().getRecord(rIdx), mouseOverSpeaker);
+						getParentView().getEditor().getUndoSupport().postEdit(chEdit);
+					}
 				}
 
-				float startTime = currentRecordInterval.getStartMarker().getTime();
-				float endTime = currentRecordInterval.getEndMarker().getTime();
-				float intervalDuration = endTime - startTime;
+				Record dragRecord = getRecordGrid().getSession().getRecord(dragData.draggedRecord);
+				MediaSegment dragSeg = dragRecord.getSegment().getGroup(0);
 
-				float oldOffsetTime = currentRecordInterval.getStartMarker().getTime() + mouseDragOffset;
+				float startTime = dragSeg.getStartValue() / 1000.0f;
+				float oldOffsetTime = startTime + dragData.mouseDragOffset;
 				float newOffsetTime = recordGrid.timeAtX(me.getX());
 				int direction = (oldOffsetTime < newOffsetTime ? 1 : -1);
+				float delta = (direction < 0 ? oldOffsetTime - newOffsetTime : newOffsetTime - oldOffsetTime);
 
-				float newStartTime = 0.0f;
-				float newEndTime = 0.0f;
+				for(int rIdx:getSelectionModel().getSelectedIndices()) {
+					Record selectedRecord = getRecordGrid().getSession().getRecord(rIdx);
+					MediaSegment seg = selectedRecord.getSegment().getGroup(0);
 
-				if (direction < 0) {
-					newStartTime = Math.max(newOffsetTime - mouseDragOffset, getTimeModel().getStartTime());
-					newEndTime = newStartTime + intervalDuration;
-				} else {
-					newEndTime = Math.min(newOffsetTime + (intervalDuration - mouseDragOffset),
-							getTimeModel().getEndTime());
-					newStartTime = newEndTime - intervalDuration;
+					float st = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
+							currentRecordInterval.getStartMarker().getTime() : seg.getStartValue() / 1000.0f);
+					float et = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
+							currentRecordInterval.getEndMarker().getTime() : seg.getEndValue() / 1000.0f);
+					float intervalDuration = et - st;
+
+					float newStartTime = 0.0f;
+					float newEndTime = 0.0f;
+
+					if (direction < 0) {
+						newStartTime = Math.max(st - delta, getTimeModel().getStartTime());
+						newEndTime = newStartTime + intervalDuration;
+					} else {
+						newEndTime = Math.min(et + delta, getTimeModel().getEndTime());
+						newStartTime = newEndTime - intervalDuration;
+					}
+					if(rIdx == getRecordGrid().getCurrentRecordIndex()) {
+						currentRecordInterval.getStartMarker().setTime(newStartTime);
+						currentRecordInterval.getEndMarker().setTime(newEndTime);
+					} else {
+						MediaSegment newSeg = SessionFactory.newFactory().createMediaSegment();
+						newSeg.setStartValue(newStartTime * 1000.0f);
+						newSeg.setEndValue(newEndTime * 1000.0f);
+						TierEdit<MediaSegment> tierEdit = new TierEdit<>(getParentView().getEditor(), selectedRecord.getSegment(), 0, newSeg);
+						tierEdit.setFireHardChangeOnUndo(false);
+						getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
+					}
 				}
-
-				currentRecordInterval.getStartMarker().setTime(newStartTime);
-				currentRecordInterval.getEndMarker().setTime(newEndTime);
+				dragData.isFirstChange = false;
 			}
 		}
 
