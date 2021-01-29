@@ -156,7 +156,7 @@ public class TimelineRecordTier extends TimelineTier {
 		actionMap.put(escapeKey, escapeAction);
 
 		final String deleteRecordKey = "delete_record";
-		final DeleteRecordAction deleteRecordAction = new DeleteRecordAction(getParentView().getEditor());
+		final DeleteRecordsAction deleteRecordAction = new DeleteRecordsAction(getParentView());
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), deleteRecordKey);
 		actionMap.put(deleteRecordKey, deleteRecordAction);
 
@@ -631,10 +631,10 @@ public class TimelineRecordTier extends TimelineTier {
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
 		setupSplitModeMenu(builder, includeAccel);
 
-		var delAction = new DeleteRecordAction(getParentView().getEditor());
+		var delAction = new DeleteRecordsAction(getParentView());
 		if (includeAccel)
 			delAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-		builder.addItem(".", new DeleteRecordAction(getParentView().getEditor()));
+		builder.addItem(".", new DeleteRecordsAction(getParentView()));
 
 		// change speaker menu
 		JMenu changeSpeakerMenu = builder.addMenu(".", "Change participant");
@@ -992,8 +992,12 @@ public class TimelineRecordTier extends TimelineTier {
 		@Override
 		public void recordDragged(int recordIndex, MouseEvent me) {
 			if (!getSelectionModel().isSelectedIndex(recordIndex)) {
-				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
-				waitForRecordChange = true;
+				if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
+					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
+				} else {
+					getParentView().getEditor().setCurrentRecordIndex(recordIndex);
+					waitForRecordChange = true;
+				}
 				return;
 			} else if(waitForRecordChange) {
 				return;
