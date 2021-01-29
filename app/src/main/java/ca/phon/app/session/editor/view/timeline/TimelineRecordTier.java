@@ -209,9 +209,13 @@ public class TimelineRecordTier extends TimelineTier {
 		}
 		var speaker = (speakerIdx == 0 ? Participant.UNKNOWN : recordGrid.getSpeakers().get(speakerIdx - 1));
 
-		final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getParentView().getEditor(),
-				getParentView().getEditor().currentRecord(), speaker);
-		getParentView().getEditor().getUndoSupport().postEdit(edit);
+		getParentView().getEditor().getUndoSupport().beginUpdate();
+		for(int recordIndex:getSelectionModel().getSelectedIndices()) {
+			final ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getParentView().getEditor(),
+					getParentView().getEditor().getSession().getRecord(recordIndex), speaker);
+			getParentView().getEditor().getUndoSupport().postEdit(edit);
+		}
+		getParentView().getEditor().getUndoSupport().endUpdate();
 	}
 
 	public void onEscape(PhonActionEvent pae) {
