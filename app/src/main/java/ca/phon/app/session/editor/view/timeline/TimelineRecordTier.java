@@ -150,6 +150,11 @@ public class TimelineRecordTier extends TimelineTier {
 		final InputMap inputMap = recordGrid.getInputMap();
 		final ActionMap actionMap = recordGrid.getActionMap();
 
+		final String selectAllKey = "select_all";
+		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectAll");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), selectAllKey);
+		actionMap.put(selectAllKey, selectAllAct);
+
 		final String escapeKey = "escape";
 		final PhonUIAction escapeAction = new PhonUIAction(this, "onEscape", false);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), escapeKey);
@@ -226,8 +231,27 @@ public class TimelineRecordTier extends TimelineTier {
 					.getView(MediaPlayerEditorView.VIEW_TITLE);
 			if (mediaView.getPlayer().isPlaying()) {
 				mediaView.getPlayer().pause();
+				return;
 			}
 		}
+		if(getSelectionModel().getSelectedItemsCount() > 1) {
+			// reset record selection
+			getSelectionModel().setSelectionInterval(getParentView().getEditor().getCurrentRecordIndex(),
+					getParentView().getEditor().getCurrentRecordIndex());
+			recordGrid.repaint(recordGrid.getVisibleRect());
+		}
+	}
+
+	public void onSelectAll(PhonActionEvent pae) {
+		if(getParentView().getEditor().getSession().getRecordCount() == 0) return;
+
+		if(getSelectionModel().getSelectedItemsCount() == getParentView().getEditor().getSession().getRecordCount()) {
+			getSelectionModel().setSelectionInterval(getParentView().getEditor().getCurrentRecordIndex(),
+					getParentView().getEditor().getCurrentRecordIndex());
+		} else {
+			getSelectionModel().addSelectionInterval(0, getParentView().getEditor().getSession().getRecordCount() - 1);
+		}
+		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
 	private final DelegateEditorAction onRecordChange = new DelegateEditorAction(this, "onRecordChange");
