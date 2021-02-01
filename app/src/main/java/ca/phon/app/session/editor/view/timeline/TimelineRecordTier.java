@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.timeline;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.security.Key;
 import java.util.*;
 import java.util.List;
 import java.util.stream.*;
@@ -170,6 +171,46 @@ public class TimelineRecordTier extends TimelineTier {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), playSegmentKey);
 		actionMap.put(playSegmentKey, playSegmentAction);
 
+		final String moveRight = "move_segments_right";
+		final PhonUIAction moveRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK), moveRight);
+		actionMap.put(moveRight, moveRightAct);
+
+		final String moveRightSlow = "move_segments_right_slow";
+		final PhonUIAction moveRightSlowAct = new PhonUIAction(this, "onMoveSegmentsRight", 1);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), moveRightSlow);
+		actionMap.put(moveRightSlow, moveRightSlowAct);
+
+		final String moveLeft = "move_segments_left";
+		final PhonUIAction moveLeftAct = new PhonUIAction(this, "onMoveSegmentsLeft", 5);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK), moveLeft);
+		actionMap.put(moveLeft, moveLeftAct);
+
+		final String moveLeftSlow = "move_segments_left_slow";
+		final PhonUIAction moveLeftSlowAct = new PhonUIAction(this, "onMoveSegmentsLeft", 1);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), moveLeftSlow);
+		actionMap.put(moveLeftSlow, moveLeftSlowAct);
+
+		final String growSegments = "grow_segments";
+		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK), growSegments);
+		actionMap.put(growSegments, growSegmentsAct);
+
+		final String growSegmentsSlow = "grow_segments_slow";
+		final PhonUIAction growSegmentsSlowAct = new PhonUIAction(this, "onGrowSegments", 1);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), growSegmentsSlow);
+		actionMap.put(growSegmentsSlow, growSegmentsSlowAct);
+
+		final String shrinkSegments = "shrink_segments";
+		final PhonUIAction shrinkSegmentsAct = new PhonUIAction(this, "onShrinkSegments", 3);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK), shrinkSegments);
+		actionMap.put(shrinkSegments, shrinkSegmentsAct);
+
+		final String shrinkSegmentsSlow = "shrink_segments_slow";
+		final PhonUIAction shrinkSegmentsSlowAct = new PhonUIAction(this, "onShrinkSegments", 1);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), shrinkSegmentsSlow);
+		actionMap.put(shrinkSegmentsSlow, shrinkSegmentsSlowAct);
+
 		for (int i = 0; i < 10; i++) {
 			final PhonUIAction chSpeakerAct = new PhonUIAction(this, "onChangeSpeakerByIndex", i);
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i,
@@ -221,6 +262,111 @@ public class TimelineRecordTier extends TimelineTier {
 			getParentView().getEditor().getUndoSupport().postEdit(edit);
 		}
 		getParentView().getEditor().getUndoSupport().endUpdate();
+	}
+
+	public void onMoveSegmentsRight(PhonActionEvent pae) {
+		int amount = Integer.parseInt(pae.getData().toString());
+		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
+		float secondsToAdd = amount * secondsPerPixel;
+
+		getParentView().getEditor().getUndoSupport().beginUpdate();
+		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
+			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
+
+			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
+			float startValue = recordSeg.getStartValue() + (1000.0f * secondsToAdd);
+			float endValue = recordSeg.getEndValue() + (1000.0f * secondsToAdd);
+			if(endValue/1000.0f <= getTimeModel().getEndTime()) {
+				seg.setStartValue(startValue);
+				seg.setEndValue(endValue);
+
+				TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+				changeSeg.setFireHardChangeOnUndo(true);
+				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
+			}
+		}
+		getParentView().getEditor().getUndoSupport().endUpdate();
+		recordGrid.repaint(recordGrid.getVisibleRect());
+	}
+
+	public void onGrowSegments(PhonActionEvent pae) {
+		int amount = Integer.parseInt(pae.getData().toString());
+		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
+		float secondsToAdd = amount * secondsPerPixel;
+
+		getParentView().getEditor().getUndoSupport().beginUpdate();
+		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
+			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
+
+			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
+			float startValue =  Math.max(0, recordSeg.getStartValue() - (1000.0f * secondsToAdd));
+			float endValue = Math.min(getTimeModel().getEndTime() * 1000.0f, recordSeg.getEndValue() + (1000.0f * secondsToAdd));
+
+			seg.setStartValue(startValue);
+			seg.setEndValue(endValue);
+
+			TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+			changeSeg.setFireHardChangeOnUndo(true);
+			getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
+		}
+		getParentView().getEditor().getUndoSupport().endUpdate();
+		recordGrid.repaint(recordGrid.getVisibleRect());
+	}
+
+	public void onShrinkSegments(PhonActionEvent pae) {
+		int amount = Integer.parseInt(pae.getData().toString());
+		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
+		float secondsToSubtract = amount * secondsPerPixel;
+
+		getParentView().getEditor().getUndoSupport().beginUpdate();
+		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
+			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
+
+			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
+			float startValue = recordSeg.getStartValue() + (1000.0f * secondsToSubtract);
+			float endValue = recordSeg.getEndValue() - (1000.0f * secondsToSubtract);
+
+			if(startValue <= endValue) {
+				seg.setStartValue(startValue);
+				seg.setEndValue(endValue);
+
+				TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+				changeSeg.setFireHardChangeOnUndo(true);
+				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
+			}
+		}
+		getParentView().getEditor().getUndoSupport().endUpdate();
+		recordGrid.repaint(recordGrid.getVisibleRect());
+	}
+
+	public void onMoveSegmentsLeft(PhonActionEvent pae) {
+		int amount = Integer.parseInt(pae.getData().toString());
+		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
+		float secondsToAdd = amount * secondsPerPixel;
+
+		getParentView().getEditor().getUndoSupport().beginUpdate();
+		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
+			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
+
+			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
+			float startValue =  recordSeg.getStartValue() - (1000.0f * secondsToAdd);
+			float endValue = recordSeg.getEndValue() - (1000.0f * secondsToAdd);
+
+			if(startValue >= 0) {
+				seg.setStartValue(startValue);
+				seg.setEndValue(endValue);
+
+				TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+				changeSeg.setFireHardChangeOnUndo(true);
+				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
+			}
+		}
+		getParentView().getEditor().getUndoSupport().endUpdate();
+		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
 	public void onEscape(PhonActionEvent pae) {
