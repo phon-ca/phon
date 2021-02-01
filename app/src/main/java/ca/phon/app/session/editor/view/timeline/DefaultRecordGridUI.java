@@ -41,6 +41,7 @@ import ca.phon.ui.fonts.*;
 import ca.phon.ui.menu.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+import org.w3c.dom.css.Rect;
 
 public class DefaultRecordGridUI extends RecordGridUI {
 	
@@ -380,6 +381,20 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		for(var marker:recordGrid.getTimeModel().getMarkers()) {
 			paintMarker(g2, marker);
 		}
+
+		// paint selection rectangle (if any)
+		if(mouseListener.isDraggingSelection) {
+			painSelectionRect(g2);
+		}
+	}
+
+	protected void painSelectionRect(Graphics2D g2) {
+		Rectangle selectionRect = mouseListener.getSelectionRect();
+		g2.setColor(UIManager.getColor(TimelineViewColors.SELECTION_RECTANGLE));
+		g2.fill(selectionRect);
+
+
+		g2.setColor(Color.lightGray);
 	}
 	
 	protected void paintStripes(Graphics2D g2) {
@@ -595,7 +610,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			if(!isRecordPressed(recordIndex) && isRecordEntered(recordIndex)) {
 				g2.setColor(Color.GRAY);
 			}
-			if(recordGrid.getSelectionModel().isSelectedIndex(recordIndex)) {
+			if(recordGrid.getSelectionModel().isSelectedIndex(recordIndex)
+				|| (mouseListener.isDraggingSelection && mouseListener.getSelectionRect() != null && mouseListener.getSelectionRect().intersects(segmentRect)) ) {
 				g2.setColor(Color.BLUE);
 			}
 
@@ -708,6 +724,20 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			return Optional.empty();
 		}
 	}
+
+	private <T> List<T> overlapTest(RTree<T, com.github.davidmoten.rtree.geometry.Rectangle> tree, com.github.davidmoten.rtree.geometry.Rectangle r) {
+		var entries = tree.search(r);
+		List<Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>> tupleList = new ArrayList<>();
+		entries
+				.map( entry -> new Tuple<com.github.davidmoten.rtree.geometry.Rectangle, T>(entry.geometry(), entry.value()))
+				.subscribe(tupleList::add);
+
+		List<T> retVal = new ArrayList<>();
+		for(var currentTuple:tupleList) {
+			retVal.add(currentTuple.getObj2());
+		}
+		return retVal;
+	}
 	
 	/**
 	 * Return the closest action to the given point.
@@ -753,12 +783,51 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 		private RecordGrid.GhostMarker currentMouseOverMarker = null;
 
+		private boolean isDraggingSelection = false;
+		private Point selectionPoint1 = null;
+		private Point selectionPoint2 = null;
+
+		private void beginSelectionDrag(Point p) {
+			this.isDraggingSelection = true;
+			this.selectionPoint1 = p;
+			this.selectionPoint2 = p;
+			recordGrid.repaint(recordGrid.getVisibleRect());
+		}
+
+		private void updateSelectionDrag(Point p) {
+			this.selectionPoint2 = p;
+			recordGrid.repaint(recordGrid.getVisibleRect());
+		}
+
+		private void endSelectionDrag(Point p) {
+			Rectangle selectionRect = getSelectionRect();
+			com.github.davidmoten.rtree.geometry.Rectangle r =
+					Geometries.rectangle(selectionRect.x, selectionRect.y, selectionRect.getMaxX(), selectionRect.getMaxY());
+			List<Integer> recordsToSelect = overlapTest(recordTree, r);
+			for(int recordIdx:recordsToSelect) {
+				recordGrid.getSelectionModel().addSelectionInterval(recordIdx, recordIdx);
+			}
+
+			this.isDraggingSelection = false;
+			recordGrid.repaint(recordGrid.getVisibleRect());
+		}
+
+		private Rectangle getSelectionRect() {
+			if(selectionPoint1 == null || selectionPoint2 == null) return null;
+			Rectangle r1 = new Rectangle(selectionPoint1);
+			r1.add(selectionPoint2);
+			return r1;
+		}
+
 		@Override
 		public void mousePressed(MouseEvent e) {			
 			if(getCurrentlyDraggedMarker() != null) return;
 
 			if(recordGrid.isFocusable())
 				recordGrid.requestFocusInWindow();
+
+			// only handle primary button events here
+			if(e.getButton() != MouseEvent.BUTTON1) return;
 			
 			com.github.davidmoten.rtree.geometry.Point p = 
 					Geometries.point(e.getX(), e.getY());
@@ -774,6 +843,14 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					var i = recordOpt.get();
 					pressedRecordIdx = i;
 					recordGrid.fireRecordPressed(i, e);
+				} else {
+					if(recordGrid.getSelectionModel().getSelectedItemsCount() > 1) {
+						if((e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != MouseEvent.CTRL_DOWN_MASK) {
+							recordGrid.getSelectionModel().setSelectionInterval(recordGrid.getCurrentRecordIndex(), recordGrid.getCurrentRecordIndex());
+							recordGrid.repaint(recordGrid.getVisibleRect());
+						}
+					}
+					beginSelectionDrag(e.getPoint());
 				}
 			}
 		}
@@ -793,6 +870,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				pressedRecordIdx = -1;
 			}
 			pressedRecordIdx = -1;
+
+			if(isDraggingSelection) {
+				endSelectionDrag(e.getPoint());
+			}
 		}
 		
 		@Override
@@ -869,7 +950,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			
 			if(currentMouseOverMarker != null && getCurrentlyDraggedMarker() != currentMouseOverMarker) {
 				recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
-//				currentMouseOverMarker = null;
+			}
+
+			if(pressedRecordIdx < 0 && isDraggingSelection) {
+				updateSelectionDrag(me.getPoint());
 			}
 		}
 

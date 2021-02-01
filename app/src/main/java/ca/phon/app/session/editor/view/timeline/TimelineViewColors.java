@@ -23,6 +23,7 @@ public class TimelineViewColors {
 		
 	public static void install() {
 		UIManager.put(INTERVAL_BACKGROUND, DEFAULT_INTERVAL_BACKGROUND);
+		UIManager.put(SELECTION_RECTANGLE, DEFAULT_SELECTION_RECTANGLE);
 		UIManager.put(FOCUSED_INTERVAL_BACKGROUND, DEFAULT_FOCUSED_INTERVAL_BACKGROUND);
 		UIManager.put(SEGMENTATION_INTERVAL_BACKGROUND, DEFAULT_SEGMENTATION_INTERVAL_BACKGROUND);
 		UIManager.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
@@ -35,6 +36,9 @@ public class TimelineViewColors {
 	 */
 	public final static String INTERVAL_BACKGROUND = "TimelineView.unfocusedInterval";
 	public final static Color DEFAULT_INTERVAL_BACKGROUND = new Color(255, 255, 255, 50);
+
+	public final static String SELECTION_RECTANGLE = "TimelineView.selectionRect";
+	public final static Color DEFAULT_SELECTION_RECTANGLE =  new Color(55, 137, 220, 50);
 	
 	/**
 	 * Focused interval background
