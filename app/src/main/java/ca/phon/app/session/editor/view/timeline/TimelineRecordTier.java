@@ -243,13 +243,24 @@ public class TimelineRecordTier extends TimelineTier {
 	}
 
 	public void onSelectAll(PhonActionEvent pae) {
-		if(getParentView().getEditor().getSession().getRecordCount() == 0) return;
+		List<Integer> visibleRecords = new ArrayList<>();
+		List<Participant> visibleSpeakers = getSpeakerList();
+		if(isSpeakerVisible(Participant.UNKNOWN))
+			visibleSpeakers.add(Participant.UNKNOWN);
+		for(int i = 0; i < getParentView().getEditor().getSession().getRecordCount(); i++) {
+			if(visibleSpeakers.contains(getParentView().getEditor().getSession().getRecord(i).getSpeaker())) {
+				visibleRecords.add(i);
+			}
+		}
+		if(visibleRecords.size() == 0) return;
 
-		if(getSelectionModel().getSelectedItemsCount() == getParentView().getEditor().getSession().getRecordCount()) {
+		if(getSelectionModel().getSelectedItemsCount() == visibleRecords.size()) {
 			getSelectionModel().setSelectionInterval(getParentView().getEditor().getCurrentRecordIndex(),
 					getParentView().getEditor().getCurrentRecordIndex());
 		} else {
-			getSelectionModel().addSelectionInterval(0, getParentView().getEditor().getSession().getRecordCount() - 1);
+			for(int visibleRecord:visibleRecords) {
+				getSelectionModel().addSelectionInterval(visibleRecord, visibleRecord);
+			}
 		}
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
