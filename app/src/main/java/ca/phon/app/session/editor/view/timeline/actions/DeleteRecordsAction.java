@@ -41,7 +41,7 @@ public class DeleteRecordsAction extends TimelineAction  {
         props.setTitle("Delete record" + (recordsToDelete.length > 0 ? "s" : ""));
         props.setHeader("Confirm delete record" + (recordsToDelete.length > 0 ? "s" : ""));
         props.setMessage("Delete record " + String.format("%d", editor.getCurrentRecordIndex()+1)
-                + (recordsToDelete.length > 0 ? String.format("and %d others", recordsToDelete.length-1) : "") + "?");
+                + (recordsToDelete.length > 0 ? String.format(" and %d others", recordsToDelete.length-1) : "") + "?");
         props.setOptions(MessageDialogProperties.okCancelOptions);
         int retVal = NativeDialogs.showMessageDialog(props);
         if(retVal == 1) return;
