@@ -132,7 +132,6 @@ public class TimelineRecordTier extends TimelineTier {
 		acceptSplitButton = new JButton(acceptSplitAct);
 		acceptSplitButton.setVisible(false);
 		toolbar.add(acceptSplitButton);
-
 	}
 
 	public RecordGrid getRecordGrid() {
@@ -385,6 +384,18 @@ public class TimelineRecordTier extends TimelineTier {
 			getSelectionModel().setSelectionInterval(getParentView().getEditor().getCurrentRecordIndex(),
 					getParentView().getEditor().getCurrentRecordIndex());
 			recordGrid.repaint(recordGrid.getVisibleRect());
+		}
+	}
+
+	public void onSelectSpeaker(PhonActionEvent pae) {
+		Participant speaker = (Participant) pae.getData();
+		if(speaker == null) return;
+
+		for(int rIdx = 0; rIdx < getParentView().getEditor().getSession().getRecordCount(); rIdx++) {
+			Record r = getParentView().getEditor().getSession().getRecord(rIdx);
+			if(r.getSpeaker() == speaker) {
+				getSelectionModel().addSelectionInterval(rIdx, rIdx);
+			}
 		}
 	}
 
@@ -814,6 +825,27 @@ public class TimelineRecordTier extends TimelineTier {
 
 	@Override
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
+		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectAll");
+		selectAllAct.putValue(PhonUIAction.NAME, "Select all");
+		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all visible records");
+		if(includeAccel)
+			selectAllAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		builder.addItem(".", selectAllAct);
+
+		JMenu speakerMenu = builder.addMenu(".", "Select all for participant");
+		for(Participant speaker:getSpeakerList()) {
+			PhonUIAction selectSpeakerAct = new PhonUIAction(this, "onSelectSpeaker", speaker);
+			selectSpeakerAct.putValue(PhonUIAction.NAME, speaker.toString());
+			speakerMenu.add(selectSpeakerAct);
+		}
+		if(isSpeakerVisible(Participant.UNKNOWN)) {
+			PhonUIAction selectSpeakerAct = new PhonUIAction(this, "onSelectSpeaker", Participant.UNKNOWN);
+			selectSpeakerAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN.toString());
+			speakerMenu.add(selectSpeakerAct);
+		}
+
+		builder.addSeparator(".", "record_seleciton");
+
 		setupSplitModeMenu(builder, includeAccel);
 
 		var delAction = new DeleteRecordsAction(getParentView());
