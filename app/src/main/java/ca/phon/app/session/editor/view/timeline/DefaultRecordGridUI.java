@@ -787,24 +787,31 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		private Point selectionPoint1 = null;
 		private Point selectionPoint2 = null;
 
-		private void beginSelectionDrag(Point p) {
+		private void beginSelectionDrag(MouseEvent me) {
+			Point p = me.getPoint();
 			this.isDraggingSelection = true;
 			this.selectionPoint1 = p;
 			this.selectionPoint2 = p;
 			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 
-		private void updateSelectionDrag(Point p) {
+		private void updateSelectionDrag(MouseEvent me) {
+			Point p = me.getPoint();
 			this.selectionPoint2 = p;
 			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 
-		private void endSelectionDrag(Point p) {
+		private void endSelectionDrag(MouseEvent me) {
 			Rectangle selectionRect = getSelectionRect();
 			com.github.davidmoten.rtree.geometry.Rectangle r =
 					Geometries.rectangle(selectionRect.x, selectionRect.y, selectionRect.getMaxX(), selectionRect.getMaxY());
 			List<Integer> recordsToSelect = overlapTest(recordTree, r);
-			for(int recordIdx:recordsToSelect) {
+			Collections.sort(recordsToSelect);
+			Set<Integer> recordSet = new LinkedHashSet<>(recordsToSelect);
+			if(recordSet.size() > 0 && !recordSet.contains(recordGrid.getCurrentRecordIndex())) {
+				recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
+			}
+			for(int recordIdx:recordSet) {
 				recordGrid.getSelectionModel().addSelectionInterval(recordIdx, recordIdx);
 			}
 
@@ -834,6 +841,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			Optional<Action> actionOpt = actionHitTest(p);
 			if(actionOpt.isPresent()) {
 				actionOpt.get().actionPerformed(new ActionEvent(recordGrid, -1, ""));
+				return;
 			}
 			
 			Optional<Integer> markerOpt = markerHitTest(p);
@@ -850,7 +858,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 							recordGrid.repaint(recordGrid.getVisibleRect());
 						}
 					}
-					beginSelectionDrag(e.getPoint());
+					beginSelectionDrag(e);
 				}
 			}
 		}
@@ -872,7 +880,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			pressedRecordIdx = -1;
 
 			if(isDraggingSelection) {
-				endSelectionDrag(e.getPoint());
+				endSelectionDrag(e);
 			}
 		}
 		
@@ -953,7 +961,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			}
 
 			if(pressedRecordIdx < 0 && isDraggingSelection) {
-				updateSelectionDrag(me.getPoint());
+				updateSelectionDrag(me);
 			}
 		}
 

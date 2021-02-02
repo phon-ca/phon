@@ -84,6 +84,13 @@ public class TimelineRecordTier extends TimelineTier {
 				endSplitMode(recordGrid.isSplitModeAccept());
 			}
 		});
+		// add listener for changes in selected record which occur from the record grid
+		recordGrid.addPropertyChangeListener("currentRecordIndex", e -> {
+			int newIdx = (int) e.getNewValue();
+			if(newIdx != getParentView().getEditor().getCurrentRecordIndex()) {
+				getParentView().getEditor().setCurrentRecordIndex(newIdx);
+			}
+		});
 		recordGrid.addFocusListener(selectionFocusListener);
 
 		recordGrid.setFont(FontPreferences.getTierFont());
@@ -518,11 +525,17 @@ public class TimelineRecordTier extends TimelineTier {
 	/* Editor events */
 	@RunOnEDT
 	public void onRecordChange(EditorEvent evt) {
+		Record r = (Record) evt.getEventData();
+		// don't update if already switched to record
+		if(recordGrid.getCurrentRecordIndex() == getParentView().getEditor().getCurrentRecordIndex()) {
+			updateCurrentRecordInterval(r);
+			return;
+		}
+
 		if (recordGrid.isSplitMode()) {
 			recordGrid.setSplitModeAccept(false);
 			recordGrid.setSplitMode(false);
 		}
-		Record r = (Record) evt.getEventData();
 		setupRecord(r);
 
 		recordGrid.repaint(recordGrid.getVisibleRect());
@@ -846,6 +859,36 @@ public class TimelineRecordTier extends TimelineTier {
 
 		builder.addSeparator(".", "record_seleciton");
 
+		final PhonUIAction moveSegmentsRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
+		moveSegmentsRightAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " right");
+		moveSegmentsRightAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records right on the timeline");
+		if(includeAccel)
+			moveSegmentsRightAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", moveSegmentsRightAct);
+
+		final PhonUIAction moveSegmentsLeftAct = new PhonUIAction(this, "onMoveSegmentsLeft", 5);
+		moveSegmentsLeftAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " left");
+		moveSegmentsLeftAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records left on the timeline");
+		if(includeAccel)
+			moveSegmentsLeftAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", moveSegmentsLeftAct);
+
+		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
+		growSegmentsAct.putValue(PhonUIAction.NAME, "Grow record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
+		growSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Grow selected records");
+		if(includeAccel)
+			growSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK));
+		builder.addItem(".", growSegmentsAct);
+
+		final PhonUIAction shrinkSegmentsAct = new PhonUIAction(this, "onShrinkSegments", 3);
+		shrinkSegmentsAct.putValue(PhonUIAction.NAME, "Shrink record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
+		shrinkSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Shrink selected records");
+		if(includeAccel)
+			shrinkSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK));
+		builder.addItem(".", shrinkSegmentsAct);
+
+		builder.addSeparator(".", "segment_times");
+
 		setupSplitModeMenu(builder, includeAccel);
 
 		var delAction = new DeleteRecordsAction(getParentView());
@@ -940,6 +983,12 @@ public class TimelineRecordTier extends TimelineTier {
 	}
 	
 	public void setupSpeakerContextMenu(Participant participant, MenuBuilder builder) {
+		builder.addSeparator(".", "select");
+		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectSpeaker", participant);
+		selectAllAct.putValue(PhonUIAction.NAME, "Select all");
+		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all records for " + participant.toString());
+		builder.addItem(".", selectAllAct);
+
 		Session session = getParentView().getEditor().getSession();
 		JMenu reassignMenu = new JMenu("Reassign records to");
 		for(Participant speaker:session.getParticipants()) {
