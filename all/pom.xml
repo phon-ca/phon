@@ -142,6 +142,7 @@
             <artifactId>phon-shell-plugin</artifactId>
             <version>${ca.phon.phon-shell-plugin.version}</version>
         </dependency>
+
         <dependency>
             <groupId>ca.phon</groupId>
             <artifactId>phon-groovy-plugin</artifactId>

@@ -64,7 +64,7 @@ public abstract class OpgraphDebugAction extends OpgraphEditorAction {
 			final Processor ctx = new Processor(document.getRootGraph());
 			document.setProcessingContext(ctx);
 			ctx.getContext().setDebug(true);
-			SwingUtilities.invokeLater( () -> getEditor().getModel().setupContext(ctx.getContext()) );
+			getEditor().getModel().setupContext(ctx.getContext());
 		}
 		return document.getProcessingContext();
 	}
