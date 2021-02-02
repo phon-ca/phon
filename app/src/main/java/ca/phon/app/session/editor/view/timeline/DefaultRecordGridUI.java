@@ -444,6 +444,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				} else {
 					g2.setColor(Color.LIGHT_GRAY);
 				}
+				if(recordGrid.getSelectionModel().isSelectedIndex(recordIndex)
+						|| (mouseListener.isDraggingSelection && mouseListener.getSelectionRect() != null && mouseListener.getSelectionRect().intersects(segmentRect)) ) {
+					g2.setColor(Color.BLUE);
+				}
 				g2.draw(recordLine);
 			}
 			
