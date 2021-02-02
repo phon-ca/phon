@@ -18,14 +18,23 @@ package ca.phon.app.opgraph.nodes;
 import java.util.*;
 
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 public class SessionRecordContainer implements RecordContainer {
 	
 	private Session session;
-	
+
+	private Collection<Participant> selectedParticipants = List.of(Participant.ALL);
+
 	public SessionRecordContainer(Session session) {
 		super();
 		this.session = session;
+	}
+
+	public SessionRecordContainer(Session session, Collection<Participant> selectedParticipants) {
+		super();
+		this.session = session;
+		this.selectedParticipants = selectedParticipants;
 	}
 
 	@Override
@@ -35,11 +44,48 @@ public class SessionRecordContainer implements RecordContainer {
 
 	@Override
 	public Iterator<Integer> idxIterator() {
-		List<Integer> idxList = new ArrayList<>();
-		for(int i = 0; i < session.getRecordCount(); i++) {
-			idxList.add(i);
+		return new SelectedParticipantsRecordContainer();
+	}
+
+	private class SelectedParticipantsRecordContainer implements Iterator<Integer> {
+
+		private int currentRecord = 0;
+
+		@Override
+		public boolean hasNext() {
+			if(selectedParticipants.size() == 1 && selectedParticipants.iterator().next() == Participant.ALL) {
+				return currentRecord < session.getRecordCount();
+			} else {
+				while (currentRecord < session.getRecordCount()) {
+					Record r = session.getRecord(currentRecord);
+					Participant speaker = r.getSpeaker();
+					Optional<Participant> selectedVersion = selectedParticipants.stream()
+							.filter(p -> {
+								if (p.getId().equals(speaker.getId())) {
+									if (p.getName() == null && speaker.getName() == null) {
+										return true;
+									} else {
+										return (p.getName() != null && p.getName().equals(speaker.getName()));
+									}
+								} else {
+									return false;
+								}
+							}).findFirst();
+					if (selectedVersion.isPresent()) {
+						return true;
+					} else {
+						++currentRecord;
+					}
+				}
+				return false;
+			}
 		}
-		return idxList.iterator();
+
+		@Override
+		public Integer next() {
+			return currentRecord++;
+		}
+
 	}
 
 }

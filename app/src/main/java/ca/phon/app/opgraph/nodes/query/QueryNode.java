@@ -41,6 +41,7 @@ import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.ui.*;
 import ca.phon.ui.layout.*;
 import ca.phon.util.*;
@@ -163,6 +164,9 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 		final Object inputObj = opCtx.get(sessionsInputField);
 		if(inputObj == null) throw new ProcessingException(null, "No session information given");
 
+		final Collection<Participant> selectedParticipants = (Collection<Participant>) opCtx.get("_selectedParticipants");
+		if(selectedParticipants == null) throw new ProcessingException(null, "No selected participants");
+
 		final QueryManager qm = QueryManager.getInstance();
 		final QueryFactory queryFactory = qm.createQueryFactory();
 		final Query query = queryFactory.createQuery(project);
@@ -221,7 +225,7 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 		}
 
 		final List<RecordContainer> recordContainers =
-				RecordContainer.toRecordContainers(project, inputObj);
+				RecordContainer.toRecordContainers(project, selectedParticipants, inputObj);
 
 		final ResultSet[] results = new ResultSet[recordContainers.size()];
 

@@ -27,24 +27,24 @@ public interface RecordContainer {
 	
 	static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RecordContainer.class.getName());
 	
-	public static List<RecordContainer> toRecordContainers(Project project, Object obj) {
+	public static List<RecordContainer> toRecordContainers(Project project, Collection<Participant> selectedParticipants, Object obj) {
 		List<RecordContainer> retVal = new ArrayList<>();
 		if(obj instanceof SessionPath) {
 			SessionPath sessionLoc = (SessionPath)obj;
 			try {
 				Session session = project.openSession(sessionLoc.getCorpus(), sessionLoc.getSession());
-				retVal.add(new SessionRecordContainer(session));
+				retVal.add(new SessionRecordContainer(session, selectedParticipants));
 			} catch (IOException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 			}
 		} else if(obj instanceof SessionPath[]) {
 			SessionPath[] paths = (SessionPath[])obj;
-			for(SessionPath path:paths) retVal.addAll(toRecordContainers(project, path));
+			for(SessionPath path:paths) retVal.addAll(toRecordContainers(project, selectedParticipants, path));
 		} else if(obj instanceof Session) {
-			retVal.add(new SessionRecordContainer((Session)obj));
+			retVal.add(new SessionRecordContainer((Session)obj, selectedParticipants));
 		} else if(obj instanceof Session[]) {
 			Session[] sessions = (Session[])obj;
-			for(Session session:sessions) retVal.add(new SessionRecordContainer(session));
+			for(Session session:sessions) retVal.add(new SessionRecordContainer(session, selectedParticipants));
 		} else if(obj instanceof ResultSet) {
 			ResultSet rs = (ResultSet)obj;
 			try {
@@ -55,10 +55,10 @@ public interface RecordContainer {
 			}
 		} else if(obj instanceof ResultSet[]) {
 			ResultSet[] resultSets = (ResultSet[])obj;
-			for(ResultSet resultSet:resultSets) retVal.addAll(toRecordContainers(project, resultSet));
+			for(ResultSet resultSet:resultSets) retVal.addAll(toRecordContainers(project, selectedParticipants, resultSet));
 		} else if(obj instanceof Collection) {
 			Collection<?> collection = (Collection<?>)obj;
-			for(Object o:collection) retVal.addAll(toRecordContainers(project, o));
+			for(Object o:collection) retVal.addAll(toRecordContainers(project, selectedParticipants, o));
 		}
 		return retVal;
 	}
