@@ -1233,7 +1233,7 @@ public class TimelineRecordTier extends TimelineTier {
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
-			if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
+			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
 				if(getSelectionModel().isSelectedIndex(recordIndex))
 					getSelectionModel().removeSelectionInterval(recordIndex, recordIndex);
 				else

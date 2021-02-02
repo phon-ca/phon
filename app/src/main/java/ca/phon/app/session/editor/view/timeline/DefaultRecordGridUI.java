@@ -808,7 +808,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			List<Integer> recordsToSelect = overlapTest(recordTree, r);
 			Collections.sort(recordsToSelect);
 			Set<Integer> recordSet = new LinkedHashSet<>(recordsToSelect);
-			if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != MouseEvent.CTRL_DOWN_MASK) {
+			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) != Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
 				if (recordSet.size() > 0 && !recordSet.contains(recordGrid.getCurrentRecordIndex())) {
 					recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
 				}
@@ -855,7 +855,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					recordGrid.fireRecordPressed(i, e);
 				} else {
 					if(recordGrid.getSelectionModel().getSelectedItemsCount() > 1) {
-						if((e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != MouseEvent.CTRL_DOWN_MASK) {
+						if((e.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) != Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
 							recordGrid.getSelectionModel().setSelectionInterval(recordGrid.getCurrentRecordIndex(), recordGrid.getCurrentRecordIndex());
 							recordGrid.repaint(recordGrid.getVisibleRect());
 						}
