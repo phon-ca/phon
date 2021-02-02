@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.1-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_3.dmg" newVersion="3.2.1-beta.3" newMediaFileId="macos" fileSize="285717077" md5Sum="d66838090948274b84072500a0ea3e33" sha256Sum="b95d397e3b7e6602d3ceb17b717879acb9c745cc17841f7adcf95cb67cd7bfdf" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.1-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_4.dmg" newVersion="3.2.1-beta.4" newMediaFileId="macos" fileSize="285769837" md5Sum="25bac3b42fe919884e7d6527b71438f2" sha256Sum="3d97953630d7379ddbc5fca09e9bb119a750fd37098a187c369de8c2148876fb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Fixed issue with session date field
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions.
+ * Added new actions for moving selected records left/right: CTRL+,/. 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records.
 
 ## Changes from 3.1.3
 
@@ -383,12 +388,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_3.dmg" newVersion="3.2.1-beta.3" newMediaFileId="macos" fileSize="285717077" md5Sum="d66838090948274b84072500a0ea3e33" sha256Sum="b95d397e3b7e6602d3ceb17b717879acb9c745cc17841f7adcf95cb67cd7bfdf" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_4.dmg" newVersion="3.2.1-beta.4" newMediaFileId="macos" fileSize="285769837" md5Sum="25bac3b42fe919884e7d6527b71438f2" sha256Sum="3d97953630d7379ddbc5fca09e9bb119a750fd37098a187c369de8c2148876fb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Fixed issue with session date field
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions.
+ * Added new actions for moving selected records left/right: CTRL+,/. 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records.
 
 ## Changes from 3.1.3
 
@@ -766,12 +776,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_3.exe" newVersion="3.2.1-beta.3" newMediaFileId="win64" fileSize="295448592" md5Sum="27ba1071495cf8b985b4e69ac1374dae" sha256Sum="aacda6597dae8b3a0c3059aba9f05d13433d5ba0765a329f7118ab62f2b62f4e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_4.exe" newVersion="3.2.1-beta.4" newMediaFileId="win64" fileSize="295485968" md5Sum="53c55ba380eb37c14fcb827f00d2401a" sha256Sum="389c4d887ed7bd591dd37b5dd5135b57705fdd8a37b3abc5128671a4bf5f1c78" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Fixed issue with session date field
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions.
+ * Added new actions for moving selected records left/right: CTRL+,/. 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records.
 
 ## Changes from 3.1.3
 
@@ -1149,12 +1164,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_3.exe" newVersion="3.2.1-beta.3" newMediaFileId="win64" fileSize="295448592" md5Sum="27ba1071495cf8b985b4e69ac1374dae" sha256Sum="aacda6597dae8b3a0c3059aba9f05d13433d5ba0765a329f7118ab62f2b62f4e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_4.exe" newVersion="3.2.1-beta.4" newMediaFileId="win64" fileSize="295485968" md5Sum="53c55ba380eb37c14fcb827f00d2401a" sha256Sum="389c4d887ed7bd591dd37b5dd5135b57705fdd8a37b3abc5128671a4bf5f1c78" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Fixed issue with session date field
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions.
+ * Added new actions for moving selected records left/right: CTRL+,/. 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records.
 
 ## Changes from 3.1.3
 
@@ -1532,12 +1552,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_3.exe" newVersion="3.2.1-beta.3" newMediaFileId="win64" fileSize="295448592" md5Sum="27ba1071495cf8b985b4e69ac1374dae" sha256Sum="aacda6597dae8b3a0c3059aba9f05d13433d5ba0765a329f7118ab62f2b62f4e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_4.exe" newVersion="3.2.1-beta.4" newMediaFileId="win64" fileSize="295485968" md5Sum="53c55ba380eb37c14fcb827f00d2401a" sha256Sum="389c4d887ed7bd591dd37b5dd5135b57705fdd8a37b3abc5128671a4bf5f1c78" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Fixed issue with session date field
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions.
+ * Added new actions for moving selected records left/right: CTRL+,/. 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records.
 
 ## Changes from 3.1.3
 
@@ -1915,12 +1940,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_3.zip" newVersion="3.2.1-beta.3" newMediaFileId="win64zip" fileSize="294417694" md5Sum="c559ed2f667cfe8741274fceabcb6e4d" sha256Sum="3ac5f3c0afe3e90e95a47ddb221b421913dd858fa958d8166e41283cc1c949de" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_4.zip" newVersion="3.2.1-beta.4" newMediaFileId="win64zip" fileSize="294455444" md5Sum="b99d8f68fb3c94c836732b8327bb9cb7" sha256Sum="b060ad22a81cfacc86de1d3ed835ac24bac298064c7dae895ce5882fdee2ab33" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Fixed issue with session date field
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions.
+ * Added new actions for moving selected records left/right: CTRL+,/. 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records.
 
 ## Changes from 3.1.3
 

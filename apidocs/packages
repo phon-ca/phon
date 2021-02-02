@@ -79,6 +79,7 @@ ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes.table
 ca.phon.app.opgraph.nodes.table
+ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes.log
 ca.phon.app.opgraph.nodes.log
 ca.phon.app.opgraph.nodes.log
@@ -104,6 +105,7 @@ ca.phon.app.opgraph.nodes.query
 ca.phon.app.opgraph.nodes.query
 ca.phon.app.opgraph.nodes.query
 ca.phon.app.opgraph.nodes.query
+ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.wizard
 ca.phon.app.opgraph.wizard
@@ -689,6 +691,7 @@ ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline.actions
+ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline
 ca.phon.app.session.editor.view.timeline
 ca.phon.app.session.editor.view.timeline
@@ -764,6 +767,7 @@ ca.phon.session.impl
 ca.phon.session.impl
 ca.phon.session.impl
 ca.phon.session.impl
+ca.phon.session
 ca.phon.session
 ca.phon.session
 ca.phon.session
