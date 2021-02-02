@@ -808,8 +808,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			List<Integer> recordsToSelect = overlapTest(recordTree, r);
 			Collections.sort(recordsToSelect);
 			Set<Integer> recordSet = new LinkedHashSet<>(recordsToSelect);
-			if(recordSet.size() > 0 && !recordSet.contains(recordGrid.getCurrentRecordIndex())) {
-				recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
+			if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != MouseEvent.CTRL_DOWN_MASK) {
+				if (recordSet.size() > 0 && !recordSet.contains(recordGrid.getCurrentRecordIndex())) {
+					recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
+				}
 			}
 			for(int recordIdx:recordSet) {
 				recordGrid.getSelectionModel().addSelectionInterval(recordIdx, recordIdx);
