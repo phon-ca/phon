@@ -143,7 +143,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="5b1f4477" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-01-26T11:25:41.238-03:30" name="Aligned IPA Domains" uuid="9e683d2e-901a-4618-862b-e9e997be1624">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-02-03T10:06:41.526-03:30" name="Aligned IPA Domains" uuid="007c6fbf-f043-40a0-908e-cb30469e00d0">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -169,7 +169,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="207136ae" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="7029ac36">
+            <graph id="1e8e1684">
                 <node id="1c51967a" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -224,7 +224,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="26c8137d438248e5" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="7822e303">
+            <graph id="326db2b">
                 <node id="a40e7a48c9fd42cd" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -293,7 +293,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="23aa4be6b4214b66" name="includePPCNoEpen" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="29d58fe2">
+            <graph id="2afd890d">
                 <node id="31d879b4a5f49ed" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -514,6 +514,14 @@ function run(context) {
                 <oga:meta x="696" y="644"/>
             </extensions>
         </node>
+        <node id="68204310" name="Boolean" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                </oga:settings>
+                <oga:meta x="1312" y="752"/>
+            </extensions>
+        </node>
         <node id="4820f2b261e74cd8" name="PPC" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <input name="table" optional="false"/>
             <output name="ppc" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
@@ -669,11 +677,10 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="d6eb54e5383f44b7" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="27e27926">
+            <graph id="3064f1e2">
                 <node id="17c24bf2343d42c4" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[_currentSpeaker]]></oga:property>
                         </oga:settings>
@@ -690,7 +697,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="1fdb304153aa4455" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="7f82bf72">
+                    <graph id="13678820">
                         <node id="74e89447367042f5" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -724,12 +731,38 @@ function run(context) {
                         <oga:meta x="156" y="955"/>
                     </extensions>
                 </node>
+                <node id="cae63d738e6c43a0" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey"/>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="160" y="1076"/>
+                    </extensions>
+                </node>
+                <node id="e35d3b8525f94529" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey"/>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="162" y="1173"/>
+                    </extensions>
+                </node>
+                <node id="221fc4cc" name="selectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="contextKey"/>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="164" y="1274"/>
+                    </extensions>
+                </node>
                 <ogcn:macro id="83a128d56baa4161" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2d397645">
+                    <graph id="158e2995">
                         <node id="7d6c1937f07b40fc" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="28" y="52"/>
@@ -738,7 +771,6 @@ function run(context) {
                         <node id="dd9da81e23db4b02" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="28" y="213"/>
@@ -747,7 +779,6 @@ function run(context) {
                         <node id="50fb1814107f4c2f" name="includePPCNoEpen" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="40" y="438"/>
@@ -756,7 +787,6 @@ function run(context) {
                         <node id="55f1ccf0" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="37" y="524"/>
@@ -765,7 +795,6 @@ function run(context) {
                         <node id="656aaaf" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="44" y="822"/>
@@ -774,10 +803,36 @@ function run(context) {
                         <node id="27795750e0874fbe" name="table by phone" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="49" y="943"/>
+                            </extensions>
+                        </node>
+                        <node id="2aec03509f7746a4" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="contextKey"/>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="57" y="1075"/>
+                            </extensions>
+                        </node>
+                        <node id="e393fad1fb07453a" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="contextKey"/>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="59" y="1172"/>
+                            </extensions>
+                        </node>
+                        <node id="eefaa5daea5142ea" name="selectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="contextKey"/>
+                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="61" y="1273"/>
                             </extensions>
                         </node>
                         <node id="77fe3d25" name="Participant#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
@@ -990,9 +1045,12 @@ function run(context) {
                         <link dest="ff0b0a57f775493d" destField="speaker" source="55f1ccf0" sourceField="obj"/>
                         <link dest="5124ae57e7314840" destField="table" source="27795750e0874fbe" sourceField="obj"/>
                         <link dest="ace5908aa4654763" destField="table" source="656aaaf" sourceField="obj"/>
+                        <link dest="5124ae57e7314840" destField="ignoreDiacritics" source="2aec03509f7746a4" sourceField="obj"/>
+                        <link dest="5124ae57e7314840" destField="onlyOrExcept" source="e393fad1fb07453a" sourceField="obj"/>
+                        <link dest="5124ae57e7314840" destField="selectedDiacritics" source="eefaa5daea5142ea" sourceField="obj"/>
                         <extensions>
                             <oga:notes>
-                                <oga:note color="0xffff96" height="1088" title="Inputs" width="414" x="17" y="12"/>
+                                <oga:note color="0xffff96" height="1382" title="Inputs" width="430" x="17" y="12"/>
                                 <oga:note color="0xffc864" height="415" title="Report" width="878" x="795" y="26"/>
                                 <oga:note color="0xffff96" height="244" title="Note" width="792" x="454" y="771"/>
                             </oga:notes>
@@ -1005,6 +1063,9 @@ function run(context) {
                     <ogcn:published_input field="obj" name="speaker" ref="55f1ccf0"/>
                     <ogcn:published_input field="obj" name="table" ref="656aaaf"/>
                     <ogcn:published_input field="obj" name="tableByPhone" ref="27795750e0874fbe"/>
+                    <ogcn:published_input field="obj" name="ignoreDiacritics" ref="2aec03509f7746a4"/>
+                    <ogcn:published_input field="obj" name="onlyOrExcept" ref="e393fad1fb07453a"/>
+                    <ogcn:published_input field="obj" name="selectedDiacritics" ref="eefaa5daea5142ea"/>
                     <extensions>
                         <oga:meta x="845" y="88"/>
                     </extensions>
@@ -1058,7 +1119,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="812" y="311"/>
+                        <oga:meta x="817" y="337"/>
                     </extensions>
                 </node>
                 <link dest="83a128d56baa4161" destField="parent" source="1fdb304153aa4455" sourceField="collection"/>
@@ -1074,9 +1135,12 @@ function run(context) {
                 <link dest="83a128d56baa4161" destField="speaker" source="17c24bf2343d42c4" sourceField="obj"/>
                 <link dest="83a128d56baa4161" destField="table" source="e1f229bdb204dec" sourceField="_speakerTable1"/>
                 <link dest="83a128d56baa4161" destField="tableByPhone" source="e1f229bdb204dec" sourceField="_speakerTable2"/>
+                <link dest="83a128d56baa4161" destField="ignoreDiacritics" source="cae63d738e6c43a0" sourceField="obj"/>
+                <link dest="83a128d56baa4161" destField="onlyOrExcept" source="e35d3b8525f94529" sourceField="obj"/>
+                <link dest="83a128d56baa4161" destField="selectedDiacritics" source="221fc4cc" sourceField="obj"/>
                 <extensions>
                     <oga:notes>
-                        <oga:note color="0xffff96" height="652" title="Inputs" width="391" x="65" y="464"/>
+                        <oga:note color="0xffff96" height="1048" title="Inputs" width="361" x="65" y="464"/>
                         <oga:note color="0xffff96" height="279" title="Outputs" width="304" x="699" y="740"/>
                         <oga:note color="0xffff96" height="450" title="Iteration" width="386" x="67" y="7"/>
                     </oga:notes>
@@ -1088,6 +1152,9 @@ function run(context) {
             <ogcn:published_input field="collection" name="reportSection" ref="1fdb304153aa4455"/>
             <ogcn:published_input field="obj" name="summaryTable" ref="407566a6b7484732"/>
             <ogcn:published_input field="obj" name="includePPCNoEpen" ref="296bf6a4e9349fc"/>
+            <ogcn:published_input field="obj" name="ignoreDiacritics" ref="cae63d738e6c43a0"/>
+            <ogcn:published_input field="obj" name="onlyOrExcept" ref="e35d3b8525f94529"/>
+            <ogcn:published_input field="obj" name="selectedDiacritics" ref="221fc4cc"/>
             <ogcn:published_output field="obj" name="summaryTable" ref="1cd5f59092d04776"/>
             <extensions>
                 <oga:settings>
@@ -1257,14 +1324,18 @@ function run(context) {
         <link dest="556b9255" destField="project" source="5b1f4477" sourceField="project"/>
         <link dest="556b9255" destField="results" source="5b1f4477" sourceField="results"/>
         <link dest="788f7598" destField="parameters" source="dc4dad38c60648c1" sourceField="parameters"/>
-        <link dest="556b9255" destField="ignoreDiacritics" source="788f7598" sourceField="ignoreDiacritics"/>
-        <link dest="556b9255" destField="onlyOrExcept" source="788f7598" sourceField="onlyOrExcept"/>
-        <link dest="556b9255" destField="selectedDiacritics" source="788f7598" sourceField="selectedDiacritics"/>
         <link dest="26c8137d438248e5" destField="obj" source="dc4dad38c60648c1" sourceField="parameters"/>
         <link dest="2732b358" destField="combine" source="26c8137d438248e5" sourceField="value"/>
         <link dest="d6eb54e5383f44b7" destField="participants" source="2732b358" sourceField="participants"/>
         <link dest="d6eb54e5383f44b7" destField="_inputTable1" source="4820f2b261e74cd8" sourceField="ppc"/>
         <link dest="d6eb54e5383f44b7" destField="_inputTable2" source="4820f2b261e74cd8" sourceField="resultsByPhone"/>
+        <link dest="6902fdcf64fb4e1a" destField="ignoreDiacritics" source="788f7598" sourceField="ignoreDiacritics"/>
+        <link dest="6902fdcf64fb4e1a" destField="onlyOrExcept" source="788f7598" sourceField="onlyOrExcept"/>
+        <link dest="6902fdcf64fb4e1a" destField="selectedDiacritics" source="788f7598" sourceField="selectedDiacritics"/>
+        <link dest="68204310" destField="obj" source="788f7598" sourceField="ignoreDiacritics"/>
+        <link dest="d6eb54e5383f44b7" destField="ignoreDiacritics" source="788f7598" sourceField="ignoreDiacritics"/>
+        <link dest="d6eb54e5383f44b7" destField="onlyOrExcept" source="788f7598" sourceField="onlyOrExcept"/>
+        <link dest="d6eb54e5383f44b7" destField="selectedDiacritics" source="788f7598" sourceField="selectedDiacritics"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Percent Phones Correct">
