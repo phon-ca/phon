@@ -515,6 +515,42 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		return filter.getIPATranscript();
 	}
 
+	/*
+	 * Static utility methods for removing diacritics from strings
+	 */
+	private static boolean keepCharacter(char ch, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		FeatureMatrix fm = FeatureMatrix.getInstance();
+		Collection<Character> dias = fm.getCharactersWithFeature("diacritic");
+
+		// don't strip ligatures
+		dias.remove(Character.valueOf('\u035c'));
+		dias.remove(Character.valueOf('\u0361'));
+		dias.remove(Character.valueOf('\u0362'));
+
+		if(dias.contains(ch)) {
+			boolean inSet = selectedDiacritics.stream().filter( d -> d.getCharacter() == ch ).findFirst().isPresent();
+
+			if(onlyOrExcept) {
+				return !inSet;
+			} else {
+				return inSet;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	public static String stripDiacriticsFromText(String text, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		StringBuffer buffer = new StringBuffer();
+		for(int i = 0; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if(keepCharacter(ch, onlyOrExcept, selectedDiacritics)) {
+				buffer.append(ch);
+			}
+		}
+		return buffer.toString();
+	}
+
 	/**
 	 * Create a list of phones which produce a sound.
 	 *

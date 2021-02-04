@@ -21,6 +21,7 @@ import java.util.*;
 import ca.phon.formatter.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.ipa.*;
+import ca.phon.ipa.features.FeatureMatrix;
 
 public class TableUtils {
 	
@@ -86,16 +87,20 @@ public class TableUtils {
 	
 	public static String objToString(Object val, boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
 		String retVal = (val != null ? FormatterUtil.format(val) : "");
-		if(ignoreDiacritics && val instanceof IPATranscript) {
-			try {
-				IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
-					IPATranscript.parseIPATranscript(retVal));
-				retVal =
-						(onlyOrExcept
-								? transcript.removePunctuation().stripDiacritics(selectedDiacritics).toString()
-								: transcript.removePunctuation().stripDiacriticsExcept(selectedDiacritics)).toString();
-			} catch (ParseException e) {
-				
+		if(ignoreDiacritics) {
+			if(val instanceof IPATranscript) {
+				try {
+					IPATranscript transcript = (val instanceof IPATranscript ? (IPATranscript) val :
+						IPATranscript.parseIPATranscript(retVal));
+					retVal =
+							(onlyOrExcept
+									? transcript.removePunctuation().stripDiacritics(selectedDiacritics).toString()
+									: transcript.removePunctuation().stripDiacriticsExcept(selectedDiacritics)).toString();
+				} catch (ParseException e) {
+
+				}
+			} else {
+				retVal = IPATranscript.stripDiacriticsFromText(retVal, onlyOrExcept, selectedDiacritics);
 			}
 		}
 		return retVal;

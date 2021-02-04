@@ -22,6 +22,7 @@ import java.util.stream.*;
 
 import ca.phon.app.opgraph.nodes.table.InventorySettings.*;
 import ca.phon.app.opgraph.wizard.*;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.*;
@@ -30,6 +31,7 @@ import ca.phon.opgraph.exceptions.*;
 import ca.phon.query.*;
 import ca.phon.query.db.*;
 import ca.phon.query.report.datasource.*;
+import ca.phon.ui.action.PhonUIAction;
 
 /**
  * Calculate inventory for a table
@@ -45,11 +47,21 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 	private InventorySettings settings = new InventorySettings();
 	
 	private InventorySettingsPanel settingsPanel = null;
-	
+
+	private InputField ignoreDiacriticsInput = new InputField("ignoreDiacritics", "", true, true, Boolean.class);
+
+	private InputField onlyOrExceptInput = new InputField("onlyOrExcept", "", true, true, Boolean.class);
+
+	private InputField selectedDiacriticsInput = new InputField("selectedDiacritics", "", true, true, Collection.class);
+
 	private OutputField settingsOutput = new OutputField("settings", "Inventory settings", true, InventorySettings.class);
 
 	public InventoryNode() {
 		super();
+
+		putField(ignoreDiacriticsInput);
+		putField(onlyOrExceptInput);
+		putField(selectedDiacriticsInput);
 
 		putField(settingsOutput);
 		
@@ -90,16 +102,19 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		// diacritic options - the following three settings are controled by the ignoreDiacritics flag
 		final boolean ignoreDiacritics = 
 				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ? 
-						(boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) : settings.isIgnoreDiacritics());
+						(boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) :
+							(context.get(ignoreDiacriticsInput) != null ? (boolean)context.get(ignoreDiacriticsInput) : settings.isIgnoreDiacritics()) );
 		
 		final boolean onlyOrExcept = 
 				(context.containsKey(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ?
-						(boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) : settings.isOnlyOrExcept());
+						(boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) :
+							(context.get(onlyOrExceptInput) != null ? (boolean)context.get(onlyOrExceptInput) : settings.isOnlyOrExcept()) );
 		
 		@SuppressWarnings("unchecked")
 		final Collection<Diacritic> selectedDiacritics = 
 				(context.containsKey(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ? 
-						((Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION)) : settings.getSelectedDiacritics());
+						((Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION)) :
+							(context.get(selectedDiacriticsInput) != null ? (Collection<Diacritic>) context.get(selectedDiacriticsInput) : settings.getSelectedDiacritics()) );
 		
 		if(settings.isAutoGrouping()) {
 			ColumnInfo groupBy = new ColumnInfo();
@@ -181,19 +196,46 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 		if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) && !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
 			groupBy.caseSensitive = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
 		}
-		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
-			groupBy.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
-			groupBy.onlyOrExcept = (boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION);
-			groupBy.selectedDiacritics = (Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION);
+
+		Boolean ignoreDiacriticsOpt =
+				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")
+						? (Boolean) context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION)
+						: (context.get(ignoreDiacriticsInput) != null ? (Boolean) context.get(ignoreDiacriticsInput) : null));
+		if(ignoreDiacriticsOpt != null) {
+			groupBy.ignoreDiacritics = ignoreDiacriticsOpt;
 		}
+
+		Boolean onlyOrExceptOpt =
+				(context.containsKey(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")
+						? (Boolean) context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION)
+						: (context.get(onlyOrExceptInput) != null ? (Boolean) context.get(onlyOrExceptInput) : null));
+		if(onlyOrExceptOpt != null) {
+			groupBy.onlyOrExcept = onlyOrExceptOpt;
+		}
+
+		Collection<Diacritic> selectedDiacriticsOpt =
+				(context.containsKey(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")
+						? (Collection<Diacritic>) context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION)
+						: (context.get(selectedDiacriticsInput) != null ? (Collection<Diacritic>) context.get(selectedDiacriticsInput) : null));
+		if(selectedDiacriticsOpt != null) {
+			groupBy.selectedDiacritics = selectedDiacriticsOpt;
+		}
+
 		for(ColumnInfo info:settings.getColumns()) {
 			if(context.containsKey(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION) && !context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION).equals("default")) {
 				info.caseSensitive = (boolean)context.get(NodeWizard.CASE_SENSITIVE_GLOBAL_OPTION);
 			}
-			if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
-				info.ignoreDiacritics = (boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
-				info.onlyOrExcept = (boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION);
-				info.selectedDiacritics = (Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION);
+
+			if(ignoreDiacriticsOpt != null) {
+				info.ignoreDiacritics = ignoreDiacriticsOpt;
+			}
+
+			if(onlyOrExceptOpt != null) {
+				info.onlyOrExcept = onlyOrExceptOpt;
+			}
+
+			if(selectedDiacriticsOpt != null) {
+				info.selectedDiacritics = selectedDiacriticsOpt;
 			}
 		}
 		
@@ -292,12 +334,28 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 				int col = inventoryCols[ic];
 				rowData[ic] = (col >= 0 ?
 						table.getValueAt(row, inventoryCols[ic]) : "");
-				if(rowData[ic] instanceof IPATranscript && settings.getColumns().get(ic).ignoreDiacritics) {
-					IPATranscript val = ((IPATranscript)rowData[ic]).removePunctuation();
-					val = (settings.getColumns().get(ic).onlyOrExcept
-							? val.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics)
-							: val.stripDiacriticsExcept(settings.getColumns().get(ic).selectedDiacritics));
-					rowData[ic] = val;
+				if(settings.getColumns().get(ic).ignoreDiacritics) {
+					if(rowData[ic] instanceof IPATranscript) {
+						IPATranscript val = ((IPATranscript) rowData[ic]).removePunctuation();
+						val = (settings.getColumns().get(ic).onlyOrExcept
+								? val.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics)
+								: val.stripDiacriticsExcept(settings.getColumns().get(ic).selectedDiacritics));
+						rowData[ic] = val;
+					} else if(rowData[ic] instanceof IPAElement) {
+						IPATranscriptBuilder builder = new IPATranscriptBuilder();
+						builder.append((IPAElement)rowData[ic]);
+						IPATranscript ipa = builder.toIPATranscript();
+						if(settings.getColumns().get(ic).onlyOrExcept) {
+							ipa = ipa.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics);
+						} else {
+							ipa = ipa.stripDiacriticsExcept(settings.getColumns().get(ic).selectedDiacritics);
+						}
+						rowData[ic] = (ipa.length() > 0 ? ipa.elementAt(0) : "");
+					} else {
+						String txt = (rowData[ic] != null ? FormatterUtil.format(rowData[ic]) : "");
+						rowData[ic] = IPATranscript.stripDiacriticsFromText(txt,
+								settings.getColumns().get(ic).isOnlyOrExcept(), settings.getColumns().get(ic).getSelectedDiacritics());
+					}
 				}
 			}
 			
