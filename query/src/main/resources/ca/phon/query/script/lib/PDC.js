@@ -78,6 +78,14 @@ exports.PDC = {
 			
 			for(var j = 0; j < audiblePhones.length(); j++) {
 				var phone = audiblePhones.elementAt(j);
+				var originalPhone = phone;
+
+				// strip diacritics here
+				if(diacriticOptions.ignoreDiacritics == true) {
+					var stripped = this.strip_diacritics(new IPATranscript([phone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics);
+					phone = stripped.elementAt(0);
+				}
+
 				if(phone.getPrefixDiacritics().length > 0 ||
 					phone.getSuffixDiacritics().length > 0 ||
 					phone.getCombiningDiacritics().length > 0) {
@@ -87,14 +95,11 @@ exports.PDC = {
 					var wasSub = false;
 					var wasDel = false;
 					
-					var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
+					var alignedData = alignment["getAligned(java.lang.Iterable)"]([originalPhone]);
 					if (alignedData.size() > 0) {
 						var actualPhone = alignedData.get(0);
 						if (actualPhone != null) {
-							var targetPhoneString =
-								(diacriticOptions.ignoreDiacritics == true 
-									? this.strip_diacritics(new IPATranscript([phone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
-									: phone.toString());
+							var targetPhoneString = phone.toString();
 							var actualPhoneString =
 								(diacriticOptions.ignoreDiacritics == true 
 									? this.strip_diacritics(new IPATranscript([actualPhone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics).toString()
@@ -113,7 +118,7 @@ exports.PDC = {
 						}
 						
 						var expandedResult = {
-							target: (phone != null ? targetGroup.indexOf(phone) : -1),
+							target: (originalPhone != null ? targetGroup.indexOf(originalPhone) : -1),
 							actual: (actualPhone != null ? actualGroup.indexOf(actualPhone) : -1),
 							correct: (wasCorrect == true ? 1 : 0),
 							substituted: (wasSub == true ? 1 : 0),
@@ -147,17 +152,25 @@ exports.PDC = {
 			
 			for(var j = 0; j < audiblePhones.length(); j++) {
 				var phone = audiblePhones.elementAt(j);
+				var originalPhone = phone;
+
+				// strip diacritics here
+				if(diacriticOptions.ignoreDiacritics == true) {
+					var stripped = this.strip_diacritics(new IPATranscript([phone]), diacriticOptions.selectionMode, diacriticOptions.selectedDiacritics);
+					phone = stripped.elementAt(0);
+				}
+
 				if(phone.getPrefixDiacritics().length > 0 ||
 					phone.getSuffixDiacritics().length > 0 ||
 					phone.getCombiningDiacritics().length > 0) {
 					numActual++;
-					var alignedData = alignment["getAligned(java.lang.Iterable)"]([phone]);
+					var alignedData = alignment["getAligned(java.lang.Iterable)"]([originalPhone]);
 					if(alignedData.size() == 0) { 
 						numEpenthesized++;
 						
 						var expandedResult = {
 							target: -1,
-							actual: (phone != null ? actualGroup.indexOf(phone) : -1),
+							actual: (originalPhone != null ? actualGroup.indexOf(originalPhone) : -1),
 							correct: 0,
 							substituted: 0,
 							deleted: 0,
@@ -173,7 +186,7 @@ exports.PDC = {
 							
 							var expandedResult = {
 								target: targetGroup.indexOf(targetPhone),
-								actual: (phone != null ? actualGroup.indexOf(phone) : -1),
+								actual: (originalPhone != null ? actualGroup.indexOf(originalPhone) : -1),
 								correct: 0,
 								substituted: 1,
 								deleted: 0,
