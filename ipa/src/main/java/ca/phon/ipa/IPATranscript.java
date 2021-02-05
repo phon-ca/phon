@@ -496,7 +496,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		} else {
 			Predicate<Diacritic> pred = (dia) -> {
 				return selectedDiacritics.parallelStream()
-						.filter( (d) -> dia.getText().contentEquals(d.getText()) )
+						.filter( (d) -> dia.getText().contains(d.getText()) )
 						.count() > 0;
 			};
 			return stripDiacritics(pred);		
