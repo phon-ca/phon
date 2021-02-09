@@ -130,13 +130,12 @@ public class VLCHelper {
 		        	LOGGER.info(String.format("DYLD_LIBRARY_PATH\t\t: %s", val(info.dyldLibraryPath())));
 		        	LOGGER.info(String.format("DYLD_FALLBACK_LIBRARY_PATH\t: %s", val(info.dyldFallbackLibraryPath())));
 		        }
-		        
-		        
+
 	        	MediaPlayerFactory factory = new MediaPlayerFactory();
 	        	LOGGER.info(String.format("VLC Version\t\t\t: %s", factory.application().version()));
 	        	
 				isLoaded = true;
-			} catch (UnsatisfiedLinkError e) {
+			} catch (UnsatisfiedLinkError | RuntimeException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
 				if(showError)
 					ToastFactory.makeToast(e.getLocalizedMessage()).start();
