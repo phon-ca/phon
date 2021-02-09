@@ -73,7 +73,7 @@ public class MarkConstituentNode extends OpNode implements PhonexNode {
 					grp.forEach( (e) -> e.setScType(scType) );
 					
 					if(grpName.equalsIgnoreCase("D")) {
-						for(int eleIdx = 0; eleIdx < grp.size(); eleIdx++) {
+						for(int eleIdx = 1; eleIdx < grp.size(); eleIdx++) {
 							grp.get(eleIdx).getExtension(SyllabificationInfo.class).setDiphthongMember(true);
 						}
 					}
