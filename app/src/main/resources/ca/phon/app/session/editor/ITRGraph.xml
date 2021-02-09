@@ -429,8 +429,8 @@ function calcITRRow(obj, transcriber1, transcriber2,
     rowData.push(obj.orthography);
     rowData.push(obj.IPATarget);
 
-    rowData.push(obj.t1);
-    rowData.push(obj.t2);
+    rowData.push(obj.t1orig);
+    rowData.push(obj.t2orig);
     rowData.push(Packages.ca.phon.ipa.LevenshteinDistance.distance(obj.t1, obj.t2));
     var phoneAgreement = calcPhoneAgreement(obj.t1, obj.t2, filters.allphones);
     if(phoneAgreement >= 0)
@@ -635,7 +635,9 @@ function run(context) {
                     if(blindTranscripts == null) continue;
 
                     var t1 = blindTranscripts.get(transcriber1.username);
+                    var t1orig = t1;
                     var t2 = blindTranscripts.get(transcriber2.username);
+                    var t2orig = t2;
 
                     if(t1 == null || t2 == null
                         || t1.length() == 0 || t2.length() == 0) continue;
@@ -660,7 +662,9 @@ function run(context) {
                             orthography: group.orthography,
                             IPATarget: group.IPATarget,
                             t1: t1,
-                            t2: t2
+                            t1orig: t1orig,
+                            t2: t2,
+                            t2orig: t2orig
                         }
 
                         rowData = calcITRRow(obj, transcriber1, transcriber2,
@@ -677,7 +681,9 @@ function run(context) {
                                 orthography: word.orthography,
                                 IPATarget: word.IPATarget,
                                 t1: (t1.words().size() > wIdx ? t1.words().get(wIdx) : new IPATranscript()),
-                                t2: (t2.words().size() > wIdx ? t2.words().get(wIdx) : new IPATranscript())
+                                t1orig: (t1orig.words().size() > wIdx ? t1orig.words().get(wIdx) : new IPATranscript()),
+                                t2: (t2.words().size() > wIdx ? t2.words().get(wIdx) : new IPATranscript()),
+                                t2orig: (t2orig.words().size() > wIdx ? t2orig.words().get(wIdx) : new IPATranscript())
                             }
 
                             var rowData = calcITRRow(obj, transcriber1, transcriber2,
@@ -737,7 +743,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="6a1258a1" name="For Each Transcriber Tuple" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="4cfc9112">
+            <graph id="1935a126">
                 <node id="4557ef60" name="CurrentItem" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -756,7 +762,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="b98aa833682544a0" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="bcc6561">
+                    <graph id="5e89c5f1">
                         <node id="1bc77e70df5d4114" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
