@@ -65,13 +65,13 @@ public class RecordTransferable implements Transferable {
 			return this;
 		} else if (flavor == DataFlavor.stringFlavor) {
 			// record to CSV
-			return recordToCSV();
+			return recordToCSV(record);
 		} else {
 			throw new UnsupportedFlavorException(flavor);
 		}
 	}
-	
-	private String recordToCSV() {
+
+	static String recordToCSV(Record record) {
 		final ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		try {
 			final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');

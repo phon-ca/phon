@@ -16,9 +16,11 @@
 package ca.phon.app.actions;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.lang.reflect.*;
 import java.util.*;
 
+import javax.swing.*;
 import javax.swing.text.*;
 
 import ca.phon.plugin.*;
@@ -35,38 +37,49 @@ public class CopyEP implements IPluginEntryPoint {
 	}
 	
 	private void begin() {
-		// copy text from the component with keyboard focus
-		Component keyboardComp = 
-			KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-		if(keyboardComp == null) return;
-		
-		if(keyboardComp instanceof JTextComponent) {
-			JTextComponent textComp = (JTextComponent)keyboardComp;
-			textComp.copy();
-		} else {
-			// if it was not a text component, see if we have the cut
-			// method available
-			Method copyMethod = null;
-			try {
-				copyMethod = keyboardComp.getClass().getMethod("copy", new Class[0]);
-			} catch (SecurityException ex) {
-				LOGGER.error( ex.getMessage(), ex);
-			} catch (NoSuchMethodException ex) {
-				LOGGER.error( ex.getMessage(), ex);
-			}
-			
-			if(copyMethod != null) {
-				try {
-					copyMethod.invoke(keyboardComp, new Object[0]);
-				} catch (IllegalArgumentException ex) {
-					LOGGER.error( ex.getMessage(), ex);
-				} catch (IllegalAccessException ex) {
-					LOGGER.error( ex.getMessage(), ex);
-				} catch (InvocationTargetException ex) {
-					LOGGER.error( ex.getMessage(), ex);
+		Component focusedComp = FocusManager.getCurrentManager().getFocusOwner();
+		if(focusedComp instanceof  JComponent) {
+			Action copyAct = ((JComponent) focusedComp).getActionMap().get("copy");
+			if(copyAct != null) {
+				copyAct.actionPerformed(new ActionEvent(this, -1, "copy"));
+				return;
+			} else {
+				// copy text from the component with keyboard focus
+				Component keyboardComp =
+						KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+				if(keyboardComp == null) return;
+
+				if(keyboardComp instanceof JTextComponent) {
+					JTextComponent textComp = (JTextComponent)keyboardComp;
+					textComp.copy();
+				} else {
+					// if it was not a text component, see if we have the cut
+					// method available
+					Method copyMethod = null;
+					try {
+						copyMethod = keyboardComp.getClass().getMethod("copy", new Class[0]);
+					} catch (SecurityException ex) {
+						LOGGER.error( ex.getMessage(), ex);
+					} catch (NoSuchMethodException ex) {
+						LOGGER.error( ex.getMessage(), ex);
+					}
+
+					if(copyMethod != null) {
+						try {
+							copyMethod.invoke(keyboardComp, new Object[0]);
+						} catch (IllegalArgumentException ex) {
+							LOGGER.error( ex.getMessage(), ex);
+						} catch (IllegalAccessException ex) {
+							LOGGER.error( ex.getMessage(), ex);
+						} catch (InvocationTargetException ex) {
+							LOGGER.error( ex.getMessage(), ex);
+						}
+					}
 				}
 			}
 		}
+
+
 	}
 
 	@Override
