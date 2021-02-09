@@ -15,11 +15,16 @@
  */
 package ca.phon.phonex;
 
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 import org.apache.logging.log4j.*;
 
 import ca.phon.ipa.*;
 import ca.phon.visitor.*;
 import ca.phon.visitor.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 	
@@ -55,10 +60,37 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 			}
 			groupIndex = matcher.pattern().groupIndex(groupName);
 		}
+
+		IPATranscript grpValue = new IPATranscript(matcher.group(groupIndex));
+
+		// check for tone swapping
+		List<Diacritic> newToneNumber = new ArrayList<>();
+		for(Diacritic dia:pmr.getSuffixDiacritics()) {
+			if(IPATokens.getSharedInstance().getTokenType(dia.getCharacter()) == IPATokenType.TONE_NUMBER) {
+				newToneNumber.add(dia);
+			}
+		}
+
+		List<Diacritic> oldToneNumber = new ArrayList<>();
+		if(grpValue.length() > 0) {
+			IPAElement lastEle = grpValue.elementAt(grpValue.length()-1);
+			if(lastEle instanceof Phone) {
+				for (Diacritic dia : ((Phone)lastEle).getSuffixDiacritics()) {
+					if (IPATokens.getSharedInstance().getTokenType(dia.getCharacter()) == IPATokenType.TONE_NUMBER) {
+						oldToneNumber.add(dia);
+					}
+				}
+				// swapping tones, remove current tone
+				if (newToneNumber.size() > 0 && oldToneNumber.size() > 0)
+					grpValue = grpValue.stripDiacritics(oldToneNumber);
+			}
+		}
+
 		builder.append(pmr.getPrefix());
-		builder.append(matcher.group(groupIndex));
+		builder.append(grpValue);
 		builder.append(pmr.getCombining());
 		builder.append(pmr.getSuffix());
+
 	}
 	
 }
