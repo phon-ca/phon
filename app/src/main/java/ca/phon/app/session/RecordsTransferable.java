@@ -25,22 +25,62 @@ public class RecordsTransferable implements Transferable {
 
     public final static DataFlavor FLAVOR = new DataFlavor(RecordsTransferable.class, "RecordsTransferable");
 
+    /**
+     * Cloned session information
+     */
     private final Session session;
 
-    private final int[] records;
+    /**
+     * Cloned records
+     */
+    private final List<Record> clonedRecords;
 
     public RecordsTransferable(Session session, int[] records) {
         super();
-        this.session = session;
-        this.records = records;
+
+        // setup cloned session
+        SessionFactory factory = SessionFactory.newFactory();
+        this.session = factory.cloneSession(session);
+        List<Participant> speakerList = new ArrayList<>();
+        for(Participant p:session.getParticipants()) {
+            Participant clonedParticipant = factory.cloneParticipant(p);
+            speakerList.add(p);
+            this.session.addParticipant(clonedParticipant);
+        }
+        List<Participant> clonedSpeakerList = new ArrayList<>();
+        for(Participant clonedParticipant:this.session.getParticipants())
+            clonedSpeakerList.add(clonedParticipant);
+
+        for(TierDescription td:session.getUserTiers()) {
+            this.session.addUserTier(factory.createTierDescription(td.getName(), td.isGrouped(), td.getDeclaredType()));
+        }
+
+        final List<TierViewItem> tv = new ArrayList<>(session.getTierView());
+        this.session.setTierView(tv);
+
+        // setup cloned records
+        this.clonedRecords = new ArrayList<>();
+        for(int recordIndex:records) {
+            Record record = session.getRecord(recordIndex);
+            Record clonedRecord = factory.cloneRecord(record);
+
+            if(record.getSpeaker() != Participant.UNKNOWN)
+                clonedRecord.setSpeaker(this.session.getParticipant(speakerList.indexOf(record.getSpeaker())));
+            clonedSpeakerList.remove(clonedRecord.getSpeaker());
+
+            this.clonedRecords.add(clonedRecord);
+        }
+
+        for(Participant toRemove:clonedSpeakerList)
+            this.session.removeParticipant(toRemove);
     }
 
     public Session getSession() {
         return this.session;
     }
 
-    public int[] getRecords() {
-        return this.records;
+    public List<Record> getRecords() {
+        return this.clonedRecords;
     }
 
     @Override
@@ -72,7 +112,7 @@ public class RecordsTransferable implements Transferable {
             final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');
 
             int numColumns = writeHeader(writer, session);
-            for(int record:getRecords()) {
+            for(Record record:getRecords()) {
                writeRecord(writer, session, record, numColumns);
             }
 
@@ -102,9 +142,8 @@ public class RecordsTransferable implements Transferable {
         return columnNames.size();
     }
 
-    private void writeRecord(CSVWriter writer, Session session, int recordIndex, int numColumns) throws
+    private void writeRecord(CSVWriter writer, Session session, Record record, int numColumns) throws
              IOException {
-        Record record = session.getRecord(recordIndex);
         String[] rowData = new String[numColumns];
         int colIdx = 0;
 

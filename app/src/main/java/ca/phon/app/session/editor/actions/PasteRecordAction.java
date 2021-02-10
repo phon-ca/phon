@@ -68,23 +68,38 @@ public class PasteRecordAction extends SessionEditorAction {
 				Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
 		if(clipboardContents.isDataFlavorSupported(RecordsTransferable.FLAVOR)) {
 			try {
-				RecordsTransferable recordsTransferable = (RecordsTransferable) clipboardContents.getTransferData(RecordsTransferable.FLAVOR);
 				getEditor().getUndoSupport().beginUpdate();
+
+				RecordsTransferable recordsTransferable = (RecordsTransferable) clipboardContents.getTransferData(RecordsTransferable.FLAVOR);
 				Session session = recordsTransferable.getSession();
+
+				List<String> idList = new ArrayList<>();
+				for(Participant p:session.getParticipants()) {
+					Optional<Participant> existingParticipant =
+							StreamSupport.stream(getEditor().getSession().getParticipants().spliterator(), false)
+								.filter( pt -> p.toString().equals(pt.toString()) )
+								.findAny();
+					if(existingParticipant.isEmpty()) {
+						Participant clonedParticipant = SessionFactory.newFactory().cloneParticipant(p);
+						if (idList.contains(clonedParticipant.getId()))
+							clonedParticipant.setId(getRoleId(clonedParticipant));
+						idList.add(clonedParticipant.getId());
+						AddParticipantEdit addParticipantEdit = new AddParticipantEdit(getEditor(), clonedParticipant);
+						getEditor().getUndoSupport().postEdit(addParticipantEdit);
+					} else {
+						idList.add(existingParticipant.get().getId());
+					}
+				}
+
 				ratifyTiers(session);
-				for(int recordIndex:recordsTransferable.getRecords()) {
-					Record r = session.getRecord(recordIndex);
+
+				for(Record r:recordsTransferable.getRecords()) {
 					Optional<Participant> existingSpeaker =
 							StreamSupport.stream(getEditor().getSession().getParticipants().spliterator(), false)
 									.filter( p -> p.toString().equals(r.getSpeaker().toString()) )
 									.findAny();
 					Participant speaker = Participant.UNKNOWN;
-					if(existingSpeaker.isEmpty()) {
-						speaker = SessionFactory.newFactory().cloneParticipant(r.getSpeaker());
-						speaker.setId(getRoleId(speaker));
-						AddParticipantEdit addParticipantEdit = new AddParticipantEdit(getEditor(), speaker);
-						getEditor().getUndoSupport().postEdit(addParticipantEdit);
-					} else {
+					if(r.getSpeaker() != Participant.UNKNOWN && existingSpeaker.isPresent()) {
 						speaker = existingSpeaker.get();
 					}
 
@@ -93,6 +108,7 @@ public class PasteRecordAction extends SessionEditorAction {
 					AddRecordEdit addRecordEdit = new AddRecordEdit(getEditor(), clonedRecord);
 					getEditor().getUndoSupport().postEdit(addRecordEdit);
 				}
+
 				getEditor().getUndoSupport().endUpdate();
 			} catch (IOException | UnsupportedFlavorException e) {
 				Toolkit.getDefaultToolkit().beep();
