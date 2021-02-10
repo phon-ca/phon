@@ -94,7 +94,11 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		for(Record r:session.getRecords()) {
 			if(!r.hasTier(tierViewItem.getTierName())) {
 				Tier<?> tier = factory.createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.isGrouped());
-				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
+				if(tierDescription.isGrouped()) {
+					for (int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
+						tier.addGroup();
+					}
+				} else {
 					tier.addGroup();
 				}
 				r.putTier(tier);
