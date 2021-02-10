@@ -5,6 +5,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import jxl.demo.CSV;
 import org.apache.logging.log4j.LogManager;
 
 import java.awt.datatransfer.DataFlavor;
@@ -70,10 +71,9 @@ public class RecordsTransferable implements Transferable {
         try {
             final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');
 
+            int numColumns = writeHeader(writer, session);
             for(int record:getRecords()) {
-                String recordTxt = recordToCSV(session.getRecord(record));
-                bout.write(recordTxt.getBytes());
-                bout.write('\n');
+               writeRecord(writer, session, record, numColumns);
             }
 
             writer.flush();
@@ -86,64 +86,46 @@ public class RecordsTransferable implements Transferable {
         return new String(bout.toByteArray(), Charset.forName("UTF-8"));
     }
 
-    private String recordToCSV(Record record) {
-        final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        try {
-            final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');
+    private int writeHeader(CSVWriter writer, Session session) throws IOException {
+        List<String> columnNames = new ArrayList<>();
+        columnNames.add("Speaker");
+        columnNames.add("Orthography");
+        columnNames.add("IPA Target");
+        columnNames.add("IPA Actual");
+        columnNames.add("Segment");
+        columnNames.add("Notes");
 
-            final String[] uuidLine = {"UUID", record.getUuid().toString()};
-            writer.writeNext(uuidLine);
-
-            final String[] speakerLine = {"Speaker",
-                    (record.getSpeaker() != null ? record.getSpeaker().getName() : "")};
-            writer.writeNext(speakerLine);
-
-            final List<String> row = new ArrayList<String>();
-            final Tier<Orthography> orthography = record.getOrthography();
-            row.add(orthography.getName());
-            for(Orthography ortho:orthography) row.add(ortho.toString());
-            writer.writeNext(row.toArray(new String[0]));
-
-            row.clear();
-            final Tier<IPATranscript> ipaTarget = record.getIPATarget();
-            row.add(ipaTarget.getName());
-            for(IPATranscript t:ipaTarget) row.add(t.toString());
-            writer.writeNext(row.toArray(new String[0]));
-
-            row.clear();
-            final Tier<IPATranscript> ipaActual = record.getIPAActual();
-            row.add(ipaActual.getName());
-            for(IPATranscript t:ipaActual) row.add(t.toString());
-            writer.writeNext(row.toArray(new String[0]));
-
-            row.clear();
-            final Tier<TierString> notes = record.getNotes();
-            row.add(notes.getName());
-            row.add(notes.getGroup(0).toString());
-            writer.writeNext(row.toArray(new String[0]));
-
-            row.clear();
-            final Tier<MediaSegment> segment = record.getSegment();
-            row.add(segment.getName());
-            row.add(segment.getGroup(0).toString());
-            writer.writeNext(row.toArray(new String[0]));
-
-            for(String tierName:record.getExtraTierNames()) {
-                row.clear();
-                final Tier<String> tier = record.getTier(tierName, String.class);
-                row.add(tier.getName());
-                for(String v:tier) row.add(v);
-                writer.writeNext(row.toArray(new String[0]));
-            }
-
-            writer.flush();
-            writer.close();
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error( e.getLocalizedMessage(), e);
-        } catch (IOException e) {
-            LOGGER.error( e.getLocalizedMessage(), e);
+        for(TierDescription td:session.getUserTiers()) {
+            columnNames.add(td.getName());
         }
-        return new String(bout.toByteArray(), Charset.forName("UTF-8"));
+        writer.writeNext(columnNames.toArray(new String[columnNames.size()]));
+        return columnNames.size();
+    }
+
+    private void writeRecord(CSVWriter writer, Session session, int recordIndex, int numColumns) throws
+             IOException {
+        Record record = session.getRecord(recordIndex);
+        String[] rowData = new String[numColumns];
+        int colIdx = 0;
+
+        rowData[colIdx++] = (record.getSpeaker() != null ? record.getSpeaker().toString() : "");
+        rowData[colIdx++] = record.getOrthography().toString();
+        rowData[colIdx++] = record.getIPATarget().toString();
+        rowData[colIdx++] = record.getIPAActual().toString();
+        rowData[colIdx++] = record.getSegment().getGroup(0).toString();
+        rowData[colIdx++] = record.getNotes().getGroup(0).toString();
+
+        for(TierDescription userTier:session.getUserTiers()) {
+            Tier<?> tier = record.getTier(userTier.getName());
+            if(userTier.isGrouped()) {
+                rowData[colIdx++] = (tier != null ? tier.toString() : "");
+            } else {
+                rowData[colIdx++] = (tier != null && tier.numberOfGroups() > 0 ? tier.getGroup(0).toString() : "");
+            }
+        }
+
+        writer.writeNext(rowData);
+        writer.flush();
     }
 
 }
