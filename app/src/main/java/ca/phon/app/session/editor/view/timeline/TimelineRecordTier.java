@@ -48,6 +48,7 @@ import ca.phon.ui.fonts.*;
 import ca.phon.ui.menu.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+import org.apache.commons.logging.Log;
 
 public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
@@ -853,6 +854,32 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	@Override
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
+
+		final PhonUIAction copyAct = new PhonUIAction(this, "copy");
+		copyAct.putValue(PhonUIAction.NAME, "Copy record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
+		copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selected records");
+		builder.addItem(".", copyAct);
+
+		Transferable clipboardContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
+		if(clipboardContents != null && clipboardContents.isDataFlavorSupported(RecordsTransferable.FLAVOR)) {
+			try {
+				RecordsTransferable recordsTransferable = (RecordsTransferable) clipboardContents.getTransferData(RecordsTransferable.FLAVOR);
+				final PhonUIAction pasteAct = new PhonUIAction(this, "paste");
+				pasteAct.putValue(PhonUIAction.NAME, "Paste record" + (recordsTransferable.getRecords().size() > 1 ? "s" : ""));
+				pasteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste records");
+				builder.addItem(".", pasteAct);
+			} catch (UnsupportedFlavorException | IOException e) {
+				LogUtil.warning(e);
+			}
+		}
+
+		final PhonUIAction cutAct = new PhonUIAction(this, "cut");
+		cutAct.putValue(PhonUIAction.NAME, "Cut record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
+		cutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cut selected records");
+		builder.addItem(".", cutAct);
+
+		builder.addSeparator(".", "copy_paste");
+
 		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectAll");
 		selectAllAct.putValue(PhonUIAction.NAME, "Select all");
 		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all visible records");
@@ -872,37 +899,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			speakerMenu.add(selectSpeakerAct);
 		}
 
-		builder.addSeparator(".", "record_seleciton");
-
-		final PhonUIAction moveSegmentsRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
-		moveSegmentsRightAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " right");
-		moveSegmentsRightAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records right on the timeline");
-		if(includeAccel)
-			moveSegmentsRightAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_DOWN_MASK));
-		builder.addItem(".", moveSegmentsRightAct);
-
-		final PhonUIAction moveSegmentsLeftAct = new PhonUIAction(this, "onMoveSegmentsLeft", 5);
-		moveSegmentsLeftAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " left");
-		moveSegmentsLeftAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records left on the timeline");
-		if(includeAccel)
-			moveSegmentsLeftAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_DOWN_MASK));
-		builder.addItem(".", moveSegmentsLeftAct);
-
-		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
-		growSegmentsAct.putValue(PhonUIAction.NAME, "Grow record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
-		growSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Grow selected records");
-		if(includeAccel)
-			growSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
-		builder.addItem(".", growSegmentsAct);
-
-		final PhonUIAction shrinkSegmentsAct = new PhonUIAction(this, "onShrinkSegments", 3);
-		shrinkSegmentsAct.putValue(PhonUIAction.NAME, "Shrink record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
-		shrinkSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Shrink selected records");
-		if(includeAccel)
-			shrinkSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK));
-		builder.addItem(".", shrinkSegmentsAct);
-
-		builder.addSeparator(".", "segment_times");
+		builder.addSeparator(".", "selection");
 
 		setupSplitModeMenu(builder, includeAccel);
 
@@ -941,6 +938,36 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 			++speakerNum;
 		}
+
+		builder.addSeparator(".", "record_actions");
+
+		final PhonUIAction moveSegmentsRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
+		moveSegmentsRightAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " right");
+		moveSegmentsRightAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records right on the timeline");
+		if(includeAccel)
+			moveSegmentsRightAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", moveSegmentsRightAct);
+
+		final PhonUIAction moveSegmentsLeftAct = new PhonUIAction(this, "onMoveSegmentsLeft", 5);
+		moveSegmentsLeftAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " left");
+		moveSegmentsLeftAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records left on the timeline");
+		if(includeAccel)
+			moveSegmentsLeftAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", moveSegmentsLeftAct);
+
+		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
+		growSegmentsAct.putValue(PhonUIAction.NAME, "Grow record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
+		growSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Grow selected records");
+		if(includeAccel)
+			growSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", growSegmentsAct);
+
+		final PhonUIAction shrinkSegmentsAct = new PhonUIAction(this, "onShrinkSegments", 3);
+		shrinkSegmentsAct.putValue(PhonUIAction.NAME, "Shrink record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
+		shrinkSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Shrink selected records");
+		if(includeAccel)
+			shrinkSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", shrinkSegmentsAct);
 	}
 
 	private void setupSplitModeMenu(MenuBuilder builder, boolean includeAccel) {
