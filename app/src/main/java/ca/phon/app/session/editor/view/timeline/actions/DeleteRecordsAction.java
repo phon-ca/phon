@@ -9,8 +9,10 @@ import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import org.pushingpixels.trident.Timeline;
 
 import java.awt.event.ActionEvent;
+import java.sql.Time;
 
 public class DeleteRecordsAction extends TimelineAction  {
 
@@ -20,8 +22,16 @@ public class DeleteRecordsAction extends TimelineAction  {
 
     private final static String ICON = "misc/record-delete";
 
+    private boolean showConfirmation = true;
+
     public DeleteRecordsAction(TimelineView view) {
+        this(view, true);
+    }
+
+    public DeleteRecordsAction(TimelineView view, boolean showConfirmation) {
         super(view);
+
+        this.showConfirmation = showConfirmation;
 
         putValue(NAME, CMD_NAME);
         putValue(SHORT_DESCRIPTION, SHORT_DESC);
@@ -35,21 +45,24 @@ public class DeleteRecordsAction extends TimelineAction  {
 
         int[] recordsToDelete = recordTier.getSelectionModel().getSelectedIndices();
 
-        final MessageDialogProperties props = new MessageDialogProperties();
-        props.setRunAsync(false);
-        props.setParentWindow(editor);
-        props.setTitle("Delete record" + (recordsToDelete.length > 0 ? "s" : ""));
-        props.setHeader("Confirm delete record" + (recordsToDelete.length > 0 ? "s" : ""));
-        props.setMessage("Delete record " + String.format("%d", editor.getCurrentRecordIndex()+1)
-                + (recordsToDelete.length > 0 ? String.format(" and %d others", recordsToDelete.length-1) : "") + "?");
-        props.setOptions(MessageDialogProperties.okCancelOptions);
-        int retVal = NativeDialogs.showMessageDialog(props);
-        if(retVal == 1) return;
+        if(showConfirmation) {
+            final MessageDialogProperties props = new MessageDialogProperties();
+            props.setRunAsync(false);
+            props.setParentWindow(editor);
+            props.setTitle("Delete record" + (recordsToDelete.length > 0 ? "s" : ""));
+            props.setHeader("Confirm delete record" + (recordsToDelete.length > 0 ? "s" : ""));
+            props.setMessage("Delete record " + String.format("%d", editor.getCurrentRecordIndex() + 1)
+                    + (recordsToDelete.length > 1 ? String.format(" and %d others", recordsToDelete.length - 1) : "") + "?");
+            props.setOptions(MessageDialogProperties.okCancelOptions);
+            int retVal = NativeDialogs.showMessageDialog(props);
+            if (retVal == 1) return;
+        }
 
         editor.getUndoSupport().beginUpdate();
         for(int i = recordsToDelete.length-1; i >= 0; i--) {
             int recordIdx = recordsToDelete[i];
             final DeleteRecordEdit edit = new DeleteRecordEdit(editor, recordIdx);
+            edit.setFireEvent(i == recordsToDelete.length-1);
             editor.getUndoSupport().postEdit(edit);
         }
         editor.getUndoSupport().endUpdate();

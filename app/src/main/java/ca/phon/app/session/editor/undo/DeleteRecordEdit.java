@@ -29,6 +29,8 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 
 	private Record deletedRecord = null;
 
+	private boolean fireEvent = true;
+
 	public DeleteRecordEdit(SessionEditor editor) {
 		super(editor);
 	}
@@ -37,6 +39,10 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		super(editor);
 		
 		this.recordIndex = recordIndex;
+	}
+
+	public void setFireEvent(boolean fireEvent) {
+		this.fireEvent = fireEvent;
 	}
 
 	@Override
@@ -48,7 +54,8 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		editor.getSession().addRecord(recordIndex, deletedRecord);
 
-		queueEvent(EditorEventType.RECORD_ADDED_EVT, editor.getUndoSupport(), deletedRecord);
+		if(fireEvent)
+			queueEvent(EditorEventType.RECORD_ADDED_EVT, editor.getUndoSupport(), deletedRecord);
 	}
 
 	@Override
@@ -61,7 +68,8 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		deletedRecord = editor.getSession().getRecord(recordIndex);
 		editor.getSession().removeRecord(deletedRecord);
 
-		queueEvent(EditorEventType.RECORD_DELETED_EVT, getSource(), deletedRecord);
+		if(fireEvent)
+			queueEvent(EditorEventType.RECORD_DELETED_EVT, getSource(), deletedRecord);
 	}
 
 }

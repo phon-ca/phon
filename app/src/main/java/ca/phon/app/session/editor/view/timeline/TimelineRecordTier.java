@@ -1323,7 +1323,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	public void cut(PhonActionEvent pae) {
 		copy();
-		DeleteRecordsAction deleteRecordsAction = new DeleteRecordsAction(getParentView());
+		DeleteRecordsAction deleteRecordsAction = new DeleteRecordsAction(getParentView(), false);
 		deleteRecordsAction.actionPerformed(pae.getActionEvent());
 	}
 
