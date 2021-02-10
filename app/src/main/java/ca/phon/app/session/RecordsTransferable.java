@@ -71,9 +71,69 @@ public class RecordsTransferable implements Transferable {
             final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');
 
             for(int record:getRecords()) {
-                String recordTxt = RecordTransferable.recordToCSV(session.getRecord(record));
+                String recordTxt = recordToCSV(session.getRecord(record));
                 bout.write(recordTxt.getBytes());
                 bout.write('\n');
+            }
+
+            writer.flush();
+            writer.close();
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error( e.getLocalizedMessage(), e);
+        } catch (IOException e) {
+            LOGGER.error( e.getLocalizedMessage(), e);
+        }
+        return new String(bout.toByteArray(), Charset.forName("UTF-8"));
+    }
+
+    private String recordToCSV(Record record) {
+        final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        try {
+            final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');
+
+            final String[] uuidLine = {"UUID", record.getUuid().toString()};
+            writer.writeNext(uuidLine);
+
+            final String[] speakerLine = {"Speaker",
+                    (record.getSpeaker() != null ? record.getSpeaker().getName() : "")};
+            writer.writeNext(speakerLine);
+
+            final List<String> row = new ArrayList<String>();
+            final Tier<Orthography> orthography = record.getOrthography();
+            row.add(orthography.getName());
+            for(Orthography ortho:orthography) row.add(ortho.toString());
+            writer.writeNext(row.toArray(new String[0]));
+
+            row.clear();
+            final Tier<IPATranscript> ipaTarget = record.getIPATarget();
+            row.add(ipaTarget.getName());
+            for(IPATranscript t:ipaTarget) row.add(t.toString());
+            writer.writeNext(row.toArray(new String[0]));
+
+            row.clear();
+            final Tier<IPATranscript> ipaActual = record.getIPAActual();
+            row.add(ipaActual.getName());
+            for(IPATranscript t:ipaActual) row.add(t.toString());
+            writer.writeNext(row.toArray(new String[0]));
+
+            row.clear();
+            final Tier<TierString> notes = record.getNotes();
+            row.add(notes.getName());
+            row.add(notes.getGroup(0).toString());
+            writer.writeNext(row.toArray(new String[0]));
+
+            row.clear();
+            final Tier<MediaSegment> segment = record.getSegment();
+            row.add(segment.getName());
+            row.add(segment.getGroup(0).toString());
+            writer.writeNext(row.toArray(new String[0]));
+
+            for(String tierName:record.getExtraTierNames()) {
+                row.clear();
+                final Tier<String> tier = record.getTier(tierName, String.class);
+                row.add(tier.getName());
+                for(String v:tier) row.add(v);
+                writer.writeNext(row.toArray(new String[0]));
             }
 
             writer.flush();

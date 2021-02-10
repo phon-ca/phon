@@ -53,12 +53,8 @@ public class CopyRecordAction extends SessionEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionEditor editor = getEditor();
-		final Record record = editor.currentRecord();
-		
-		final SessionFactory factory = SessionFactory.newFactory();
-		final Record copiedRecord = factory.cloneRecord(record);
-		
-		final RecordTransferable clipboardContents = new RecordTransferable(copiedRecord);
+
+		final RecordsTransferable clipboardContents = new RecordsTransferable(editor.getSession(), new int[]{editor.getCurrentRecordIndex()});
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(clipboardContents, editor);
 	}
 

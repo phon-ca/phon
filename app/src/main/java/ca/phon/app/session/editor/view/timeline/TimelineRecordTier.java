@@ -23,15 +23,11 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.beans.*;
 import java.io.IOException;
-import java.security.Key;
 import java.util.*;
 import java.util.List;
 import java.util.stream.*;
 
-import javax.print.attribute.standard.Media;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.RecordsTransferable;
@@ -228,7 +224,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "copy");
 		actionMap.put("copy", copyRecordsAct);
 
-		final PhonUIAction pasteRecordsAct = new PhonUIAction(this, "paste");
+		final PasteRecordAction pasteRecordsAct = new PasteRecordAction(getParentView().getEditor() );
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "paste");
 		actionMap.put("paste", pasteRecordsAct);
 
@@ -1237,81 +1233,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		RecordsTransferable transferable = new RecordsTransferable(getParentView().getEditor().getSession(),
 				getSelectionModel().getSelectedIndices());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, this);
-	}
-
-	/**
-	 * Paste records from clipboard
-	 */
-	public void paste() {
-		Transferable clipboardContents =
-				Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
-		if(clipboardContents.isDataFlavorSupported(RecordsTransferable.FLAVOR)) {
-			try {
-				RecordsTransferable recordsTransferable = (RecordsTransferable) clipboardContents.getTransferData(RecordsTransferable.FLAVOR);
-				getParentView().getEditor().getUndoSupport().beginUpdate();
-				Session session = recordsTransferable.getSession();
-				ratifyTiers(session);
-				for(int recordIndex:recordsTransferable.getRecords()) {
-					Record r = session.getRecord(recordIndex);
-					Optional<Participant> existingSpeaker =
-							StreamSupport.stream(getParentView().getEditor().getSession().getParticipants().spliterator(), false)
-								.filter( p -> {
-									if(p.getId().equals(r.getSpeaker().getId())) {
-										if(p.getName() == null) {
-											return r.getSpeaker().getName() == null;
-										} else {
-											return p.getName().equals(r.getSpeaker().getName());
-										}
-									} else {
-										return false;
-									}
-								} )
-								.findAny();
-					Participant speaker = Participant.UNKNOWN;
-					if(existingSpeaker.isEmpty()) {
-						speaker = SessionFactory.newFactory().cloneParticipant(r.getSpeaker());
-						AddParticipantEdit addParticipantEdit = new AddParticipantEdit(getParentView().getEditor(), speaker);
-						getParentView().getEditor().getUndoSupport().postEdit(addParticipantEdit);
-					} else {
-						speaker = existingSpeaker.get();
-					}
-
-					Record clonedRecord = SessionFactory.newFactory().cloneRecord(r);
-					clonedRecord.setSpeaker(speaker);
-					AddRecordEdit addRecordEdit = new AddRecordEdit(getParentView().getEditor(), clonedRecord);
-					getParentView().getEditor().getUndoSupport().postEdit(addRecordEdit);
-				}
-				getParentView().getEditor().getUndoSupport().endUpdate();
-			} catch (IOException | UnsupportedFlavorException e) {
-				Toolkit.getDefaultToolkit().beep();
-				LogUtil.severe(e);
-			}
-		}
-	}
-
-	private void ratifyTiers(Session copySession) {
-		Session mySession = getParentView().getEditor().getSession();
-		TierDescriptions currentTiers = mySession.getUserTiers();
-		TierDescriptions copyTiers = copySession.getUserTiers();
-
-		SessionFactory sessionFactory = SessionFactory.newFactory();
-		List<TierDescription> toAdd = new ArrayList<>();
-		for(TierDescription td:copyTiers) {
-			Optional<TierDescription> existingTier =
-					StreamSupport.stream(currentTiers.spliterator(), false)
-						.filter( desc -> td.getName().equals(desc.getName()) && td.isGrouped() == desc.isGrouped() )
-						.findAny();
-			if(!existingTier.isPresent()) {
-				toAdd.add(td);
-			}
-		}
-
-		if(toAdd.size() > 0) {
-			for (TierDescription td : toAdd) {
-				AddTierEdit addTierEdit = new AddTierEdit(getParentView().getEditor(), td, sessionFactory.createTierViewItem(td.getName()) );
-				getParentView().getEditor().getUndoSupport().postEdit(addTierEdit);
-			}
-		}
 	}
 
 	private final AWTEventListener cancelDragListener = new AWTEventListener() {

@@ -19,15 +19,21 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import javax.swing.*;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.session.*;
+import ca.phon.session.Record;
 import org.apache.logging.log4j.*;
 
 import ca.phon.app.session.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.session.Record;
 
 /**
  * Paste record from system clipboard.
@@ -58,25 +64,74 @@ public class PasteRecordAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e1) {
-		final Transferable clipboardContents = 
-				Toolkit.getDefaultToolkit().getSystemClipboard().getContents(getEditor());
-		if(clipboardContents == null) return;
-		Object obj = null;
-		try {
-			obj = clipboardContents.getTransferData(RecordTransferable.FLAVOR);
-		} catch (UnsupportedFlavorException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		Transferable clipboardContents =
+				Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
+		if(clipboardContents.isDataFlavorSupported(RecordsTransferable.FLAVOR)) {
+			try {
+				RecordsTransferable recordsTransferable = (RecordsTransferable) clipboardContents.getTransferData(RecordsTransferable.FLAVOR);
+				getEditor().getUndoSupport().beginUpdate();
+				Session session = recordsTransferable.getSession();
+				ratifyTiers(session);
+				for(int recordIndex:recordsTransferable.getRecords()) {
+					Record r = session.getRecord(recordIndex);
+					Optional<Participant> existingSpeaker =
+							StreamSupport.stream(getEditor().getSession().getParticipants().spliterator(), false)
+									.filter( p -> {
+										if(p.getId().equals(r.getSpeaker().getId())) {
+											if(p.getName() == null) {
+												return r.getSpeaker().getName() == null;
+											} else {
+												return p.getName().equals(r.getSpeaker().getName());
+											}
+										} else {
+											return false;
+										}
+									} )
+									.findAny();
+					Participant speaker = Participant.UNKNOWN;
+					if(existingSpeaker.isEmpty()) {
+						speaker = SessionFactory.newFactory().cloneParticipant(r.getSpeaker());
+						AddParticipantEdit addParticipantEdit = new AddParticipantEdit(getEditor(), speaker);
+						getEditor().getUndoSupport().postEdit(addParticipantEdit);
+					} else {
+						speaker = existingSpeaker.get();
+					}
+
+					Record clonedRecord = SessionFactory.newFactory().cloneRecord(r);
+					clonedRecord.setSpeaker(speaker);
+					AddRecordEdit addRecordEdit = new AddRecordEdit(getEditor(), clonedRecord);
+					getEditor().getUndoSupport().postEdit(addRecordEdit);
+				}
+				getEditor().getUndoSupport().endUpdate();
+			} catch (IOException | UnsupportedFlavorException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.severe(e);
+			}
 		}
-		final RecordTransferable recTrans = (obj != null ? (RecordTransferable)obj : null);
-		if(recTrans != null) {
-			final Record record = recTrans.getRecord();
-			
-			final int index = getEditor().getCurrentRecordIndex() + 1;
-			
-			final AddRecordEdit edit = new AddRecordEdit(getEditor(), record, index);
-			getEditor().getUndoSupport().postEdit(edit);
+	}
+
+	private void ratifyTiers(Session copySession) {
+		Session mySession = getEditor().getSession();
+		TierDescriptions currentTiers = mySession.getUserTiers();
+		TierDescriptions copyTiers = copySession.getUserTiers();
+
+		SessionFactory sessionFactory = SessionFactory.newFactory();
+		List<TierDescription> toAdd = new ArrayList<>();
+		for(TierDescription td:copyTiers) {
+			Optional<TierDescription> existingTier =
+					StreamSupport.stream(currentTiers.spliterator(), false)
+							.filter( desc -> td.getName().equals(desc.getName()) && td.isGrouped() == desc.isGrouped() )
+							.findAny();
+			if(!existingTier.isPresent()) {
+				toAdd.add(td);
+			}
+		}
+
+		if(toAdd.size() > 0) {
+			for (TierDescription td : toAdd) {
+				AddTierEdit addTierEdit = new AddTierEdit(getEditor(), td, sessionFactory.createTierViewItem(td.getName()) );
+				getEditor().getUndoSupport().postEdit(addTierEdit);
+			}
 		}
 	}
 
