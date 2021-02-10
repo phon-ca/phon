@@ -1311,14 +1311,17 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			if(me.getButton() != MouseEvent.BUTTON1) return;
 
 			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
-				if(getSelectionModel().isSelectedIndex(recordIndex))
+				if (getSelectionModel().isSelectedIndex(recordIndex))
 					getSelectionModel().removeSelectionInterval(recordIndex, recordIndex);
 				else
 					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
+			} else if((me.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
+				getSelectionModel().addSelectionInterval(getSelectionModel().getLeadSelectionIndex(), recordIndex);
 			} else if(me.getModifiersEx() == 0) {
 				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 				getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
 			}
+			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 
 		@Override
@@ -1339,6 +1342,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
 					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
 				} else {
+					getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
 					getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 					waitForRecordChange = true;
 				}
