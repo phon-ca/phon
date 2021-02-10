@@ -419,11 +419,20 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		Participant speaker = (Participant) pae.getData();
 		if(speaker == null) return;
 
+		List<Integer> participantRecords = new ArrayList<>();
 		for(int rIdx = 0; rIdx < getParentView().getEditor().getSession().getRecordCount(); rIdx++) {
 			Record r = getParentView().getEditor().getSession().getRecord(rIdx);
 			if(r.getSpeaker() == speaker) {
-				getSelectionModel().addSelectionInterval(rIdx, rIdx);
+				participantRecords.add(rIdx);
 			}
+		}
+
+		if(participantRecords.size() == 0) return;
+
+		getSelectionModel().clearSelection();
+		for(int recordIndex:participantRecords) getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
+		if(!participantRecords.contains(recordGrid.getCurrentRecordIndex())) {
+			recordGrid.setCurrentRecordIndex(participantRecords.get(0));
 		}
 	}
 
