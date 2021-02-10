@@ -152,7 +152,7 @@ public class RecordGrid extends TimeComponent {
 		var oldVal = this.currentRecordIndex;
 		this.currentRecordIndex = recordIndex;
 
-		selectionModel.setSelectionInterval(recordIndex, recordIndex);
+		//selectionModel.setSelectionInterval(recordIndex, recordIndex);
 
 		super.firePropertyChange("currentRecordIndex", oldVal, recordIndex);
 	}

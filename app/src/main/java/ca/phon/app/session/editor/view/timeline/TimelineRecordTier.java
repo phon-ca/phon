@@ -224,7 +224,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "copy");
 		actionMap.put("copy", copyRecordsAct);
 
-		final PasteRecordAction pasteRecordsAct = new PasteRecordAction(getParentView().getEditor() );
+		final PhonUIAction pasteRecordsAct = new PhonUIAction( this, "paste" );
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "paste");
 		actionMap.put("paste", pasteRecordsAct);
 
@@ -1235,6 +1235,16 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, this);
 	}
 
+	public void paste(PhonActionEvent pae) {
+		int prevNumRecords = getParentView().getEditor().getSession().getRecordCount();
+		PasteRecordAction pasteAct = new PasteRecordAction(getParentView().getEditor());
+		pasteAct.actionPerformed(pae.getActionEvent());
+		int numRecords = getParentView().getEditor().getSession().getRecordCount();
+
+		// select all new records
+		getSelectionModel().setSelectionInterval(prevNumRecords, numRecords-1);
+	}
+
 	private final AWTEventListener cancelDragListener = new AWTEventListener() {
 		
 		@Override
@@ -1270,6 +1280,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
 			} else if(me.getModifiersEx() == 0) {
 				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
+				getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
 			}
 		}
 

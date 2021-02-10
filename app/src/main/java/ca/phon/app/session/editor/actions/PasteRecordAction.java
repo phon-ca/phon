@@ -93,6 +93,7 @@ public class PasteRecordAction extends SessionEditorAction {
 
 				ratifyTiers(session);
 
+				boolean fireEvent = true;
 				for(Record r:recordsTransferable.getRecords()) {
 					Optional<Participant> existingSpeaker =
 							StreamSupport.stream(getEditor().getSession().getParticipants().spliterator(), false)
@@ -105,7 +106,12 @@ public class PasteRecordAction extends SessionEditorAction {
 
 					Record clonedRecord = SessionFactory.newFactory().cloneRecord(r);
 					clonedRecord.setSpeaker(speaker);
+
 					AddRecordEdit addRecordEdit = new AddRecordEdit(getEditor(), clonedRecord);
+					addRecordEdit.setFireEvent(fireEvent);
+					if(fireEvent) {
+						fireEvent = false;
+					}
 					getEditor().getUndoSupport().postEdit(addRecordEdit);
 				}
 
