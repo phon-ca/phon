@@ -228,6 +228,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "paste");
 		actionMap.put("paste", pasteRecordsAct);
 
+		final PhonUIAction cutRecordsAct = new PhonUIAction(this, "cut");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "cut");
+		actionMap.put("cut", cutRecordsAct);
+
 		for (int i = 0; i < 10; i++) {
 			final PhonUIAction chSpeakerAct = new PhonUIAction(this, "onChangeSpeakerByIndex", i);
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i,
@@ -1243,6 +1247,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		// select all new records
 		getSelectionModel().setSelectionInterval(prevNumRecords, numRecords-1);
+	}
+
+	public void cut(PhonActionEvent pae) {
+		copy();
+		DeleteRecordsAction deleteRecordsAction = new DeleteRecordsAction(getParentView());
+		deleteRecordsAction.actionPerformed(pae.getActionEvent());
 	}
 
 	private final AWTEventListener cancelDragListener = new AWTEventListener() {
