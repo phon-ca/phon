@@ -76,21 +76,12 @@ public class PasteRecordAction extends SessionEditorAction {
 					Record r = session.getRecord(recordIndex);
 					Optional<Participant> existingSpeaker =
 							StreamSupport.stream(getEditor().getSession().getParticipants().spliterator(), false)
-									.filter( p -> {
-										if(p.getId().equals(r.getSpeaker().getId())) {
-											if(p.getName() == null) {
-												return r.getSpeaker().getName() == null;
-											} else {
-												return p.getName().equals(r.getSpeaker().getName());
-											}
-										} else {
-											return false;
-										}
-									} )
+									.filter( p -> p.toString().equals(r.getSpeaker().toString()) )
 									.findAny();
 					Participant speaker = Participant.UNKNOWN;
 					if(existingSpeaker.isEmpty()) {
 						speaker = SessionFactory.newFactory().cloneParticipant(r.getSpeaker());
+						speaker.setId(getRoleId(speaker));
 						AddParticipantEdit addParticipantEdit = new AddParticipantEdit(getEditor(), speaker);
 						getEditor().getUndoSupport().postEdit(addParticipantEdit);
 					} else {
@@ -108,6 +99,19 @@ public class PasteRecordAction extends SessionEditorAction {
 				LogUtil.severe(e);
 			}
 		}
+	}
+
+	private String getRoleId(Participant speaker) {
+		final ParticipantRole role = speaker.getRole();
+		String id = role.getId();
+
+		int idx = 0;
+		for(Participant otherP:getEditor().getSession().getParticipants()) {
+			if(otherP.getId().equals(id)) {
+				id = role.getId().substring(0, 2) + (++idx);
+			}
+		}
+		return id;
 	}
 
 	private void ratifyTiers(Session copySession) {
@@ -129,6 +133,7 @@ public class PasteRecordAction extends SessionEditorAction {
 
 		if(toAdd.size() > 0) {
 			for (TierDescription td : toAdd) {
+				TierViewItem tvi = sessionFactory.createTierViewItem(td.getName(), td.isGrouped(), true);
 				AddTierEdit addTierEdit = new AddTierEdit(getEditor(), td, sessionFactory.createTierViewItem(td.getName()) );
 				getEditor().getUndoSupport().postEdit(addTierEdit);
 			}
