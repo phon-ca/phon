@@ -26,7 +26,6 @@ import org.jdesktop.swingx.*;
 
 import ca.phon.query.db.*;
 import ca.phon.session.*;
-import ca.phon.ui.*;
 import ca.phon.util.*;
 
 /**
@@ -48,7 +47,7 @@ public class OpenResultSetSelector extends JPanel {
 	}
 	
 	private void init() {
-		var resultSets = findResultSets();
+		var resultSets = QueryAndReportWizard.findOpenResultSets(session);
 		resultSetTable = new JXTable(new ResultSetTableModel(resultSets));
 		resultSetTable.setVisibleRowCount(3);
 		
@@ -67,36 +66,6 @@ public class OpenResultSetSelector extends JPanel {
 		ResultSetTableModel tableModel = (ResultSetTableModel)resultSetTable.getModel();
 		for(int selectedRow:resultSetTable.getSelectedRows()) {
 			retVal.add(tableModel.resultSets.get(selectedRow).getObj2().getObj2());
-		}
-		return retVal;
-	}
-	
-	/**
-	 * Returns a map of QueryAndReportWizard to
-	 * @return
-	 */
-	private List<Tuple<QueryAndReportWizard, Tuple<String, ResultSet>>> findResultSets() {
-		List<Tuple<QueryAndReportWizard, Tuple<String, ResultSet>>> retVal = new ArrayList<>();
-		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof QueryAndReportWizard) {
-				QueryAndReportWizard wizard = (QueryAndReportWizard)cmf;
-				var openQueries = wizard.getQueryRunners();
-				for(String queryName:openQueries.keySet()) {
-					var runnerPanel = openQueries.get(queryName);
-					
-					final QueryManager queryManager = QueryManager.getSharedInstance();
-					final ResultSetManager rsManager = queryManager.createResultSetManager();
-					
-					var sessionPath = new SessionPath(session.getCorpus(), session.getName());
-					var rs = rsManager.getResultSetsForQuery(runnerPanel.getTempProject(), runnerPanel.getQuery())
-							.stream().filter( (currentRs) -> currentRs.getSessionPath().equals(sessionPath.toString()) )
-							.findAny();
-					if(rs.isPresent()) {
-						var tuple = new Tuple<>(wizard, new Tuple<>(queryName, rs.get()));
-						retVal.add(tuple);
-					}
-				}
-			}
 		}
 		return retVal;
 	}

@@ -30,6 +30,7 @@ import java.util.stream.*;
 import javax.swing.*;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.query.QueryAndReportWizard;
 import ca.phon.app.session.RecordsTransferable;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
@@ -41,6 +42,10 @@ import ca.phon.app.session.editor.view.timeline.RecordGrid.*;
 import ca.phon.app.session.editor.view.timeline.actions.*;
 import ca.phon.media.*;
 import ca.phon.media.TimeUIModel.*;
+import ca.phon.query.db.Query;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.action.*;
@@ -420,6 +425,19 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				getSelectionModel().addSelectionInterval(rIdx, rIdx);
 			}
 		}
+	}
+
+	public void onSelectResultRecords(PhonActionEvent pae) {
+		ResultSet rs = (ResultSet) pae.getData();
+		Set<Integer> recordSet = new LinkedHashSet<>();
+		for(int i = 0; i < rs.numberOfResults(false); i++) {
+			recordSet.add(rs.getResult(i).getRecordIndex());
+		}
+
+		getSelectionModel().clearSelection();
+		for(int recordIndex:recordSet) getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
+		if(recordSet.size() > 0 && !recordSet.contains(recordGrid.getCurrentRecordIndex()))
+			recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
 	}
 
 	public void onSelectAll(PhonActionEvent pae) {
@@ -897,6 +915,24 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			PhonUIAction selectSpeakerAct = new PhonUIAction(this, "onSelectSpeaker", Participant.UNKNOWN);
 			selectSpeakerAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN.toString());
 			speakerMenu.add(selectSpeakerAct);
+		}
+
+		var openResultSets = QueryAndReportWizard.findOpenResultSets(getParentView().getEditor().getSession());
+		if(openResultSets.size() > 0) {
+			JMenu selectResultsMenu = builder.addMenu(".", "Select records from query results");
+			for(int i = 0; i < openResultSets.size(); i++) {
+				var tuple = openResultSets.get(i);
+				QueryAndReportWizard wizard = tuple.getObj1();
+				QueryScript queryScript = wizard.getQueryScript();
+				QueryName queryName = queryScript.getExtension(QueryName.class);
+				String queryNum = tuple.getObj2().getObj1();
+				ResultSet rs = tuple.getObj2().getObj2();
+
+				String queryItemName = String.format("%s: %s (%d results)", queryName.getName(), queryNum, rs.numberOfResults(false));
+				final PhonUIAction selectResultRecordsAct = new PhonUIAction(this, "onSelectResultRecords", rs);
+				selectResultRecordsAct.putValue(PhonUIAction.NAME, queryItemName);
+				selectResultsMenu.add(selectResultRecordsAct);
+			}
 		}
 
 		builder.addSeparator(".", "selection");

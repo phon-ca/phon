@@ -130,6 +130,38 @@ public class QueryAndReportWizard extends NodeWizard {
 	private final QueryAndReportWizardSettings settings;
 	
 	private int windowIdx = 0;
+
+	/**
+	 * Find all open results sets for the given session.
+	 *
+	 * @param session
+	 * @return all open result sets along with query names for given session
+	 */
+	public static List<Tuple<QueryAndReportWizard, Tuple<String, ResultSet>>> findOpenResultSets(Session session) {
+		List<Tuple<QueryAndReportWizard, Tuple<String, ResultSet>>> retVal = new ArrayList<>();
+		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+			if(cmf instanceof QueryAndReportWizard) {
+				QueryAndReportWizard wizard = (QueryAndReportWizard)cmf;
+				var openQueries = wizard.getQueryRunners();
+				for(String queryName:openQueries.keySet()) {
+					var runnerPanel = openQueries.get(queryName);
+
+					final QueryManager queryManager = QueryManager.getSharedInstance();
+					final ResultSetManager rsManager = queryManager.createResultSetManager();
+
+					var sessionPath = new SessionPath(session.getCorpus(), session.getName());
+					var rs = rsManager.getResultSetsForQuery(runnerPanel.getTempProject(), runnerPanel.getQuery())
+							.stream().filter( (currentRs) -> currentRs.getSessionPath().equals(sessionPath.toString()) )
+							.findAny();
+					if(rs.isPresent()) {
+						var tuple = new Tuple<>(wizard, new Tuple<>(queryName, rs.get()));
+						retVal.add(tuple);
+					}
+				}
+			}
+		}
+		return retVal;
+	}
 	
 	public QueryAndReportWizard(Project project, QueryScript queryScript, QueryAndReportWizardSettings settings) {
 		// init with 'dummy' processor and graph as these will be created 0during the wizard
