@@ -107,7 +107,7 @@
         <ca.hedlund.libjpraat.version>6.0.52</ca.hedlund.libjpraat.version>
 
         <!-- Dependency versions -->
-        <ca.phon.phon-dict-data.version>27</ca.phon.phon-dict-data.version>
+        <ca.phon.phon-dict-data.version>28</ca.phon.phon-dict-data.version>
         <ca.phon.app.version>${project.version}</ca.phon.app.version>
         <ca.phon.phon-shell-plugin.version>20</ca.phon.phon-shell-plugin.version>
         <ca.phon.phon-groovy-plugin.version>4</ca.phon.phon-groovy-plugin.version>
