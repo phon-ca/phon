@@ -29,6 +29,7 @@ import java.util.stream.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+import javax.tools.Tool;
 
 import com.github.davidmoten.rtree.*;
 import com.github.davidmoten.rtree.geometry.*;
@@ -812,13 +813,18 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			List<Integer> recordsToSelect = overlapTest(recordTree, r);
 			Collections.sort(recordsToSelect);
 			Set<Integer> recordSet = new LinkedHashSet<>(recordsToSelect);
-			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) != Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
-				if (recordSet.size() > 0 && !recordSet.contains(recordGrid.getCurrentRecordIndex())) {
+
+			if(recordSet.size() > 0) {
+				boolean addToSelection =
+						(me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+				if (!addToSelection) {
+					recordGrid.getSelectionModel().clearSelection();
+				}
+				for (int reocrdIndex : recordSet)
+					recordGrid.getSelectionModel().addSelectionInterval(reocrdIndex, reocrdIndex);
+				if (!recordGrid.getSelectionModel().isSelectedIndex(recordGrid.getCurrentRecordIndex())) {
 					recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
 				}
-			}
-			for(int recordIdx:recordSet) {
-				recordGrid.getSelectionModel().addSelectionInterval(recordIdx, recordIdx);
 			}
 
 			this.isDraggingSelection = false;
