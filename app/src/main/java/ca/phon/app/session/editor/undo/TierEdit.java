@@ -55,9 +55,9 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	/**
 	 * Constructor 
 	 * 
-	 * @param group
-	 * @param tierName
-	 * @param oldValue
+	 * @param editor
+	 * @param tier
+	 * @param groupIndex
 	 * @param newValue
 	 */
 	public TierEdit(SessionEditor editor, Tier<T> tier, int groupIndex, T newValue) {

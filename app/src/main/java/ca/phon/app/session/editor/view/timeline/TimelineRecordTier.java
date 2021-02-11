@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.*;
 
+import javax.print.attribute.standard.Media;
 import javax.swing.*;
 
 import ca.phon.app.log.LogUtil;
@@ -1152,8 +1153,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private class RecordIntervalListener implements PropertyChangeListener {
 
 		private boolean isFirstChange = true;
+
 		private MediaSegment editSegment;
-		private float segmentLength;
 		private TierEdit<MediaSegment> segmentTierEdit;
 
 		@Override
@@ -1163,7 +1164,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			
 			MediaSegment segment = r.getSegment().getGroup(0);
 			final SessionFactory factory = SessionFactory.newFactory();
-			segmentLength = segment.getEndValue() - segment.getStartValue();
 
 			if(evt.getPropertyName().equals("valueAdjusting")) {
 				if(recordGrid.isFocusable()) {
@@ -1252,6 +1252,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		int draggedRecord = -1;
 		float mouseDragOffset = -1.0f;
 
+		//Map<Integer, TierEdit<MediaSegment>> tierEdits = new LinkedHashMap<>();
+		Map<Integer, MediaSegment> editSegments = new LinkedHashMap<>();
 		Map<Integer, MediaSegment> originalSegments = new LinkedHashMap<>();
 
 		boolean isFirstChange = true;
@@ -1273,6 +1275,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			origSeg.setStartValue(recordSeg.getStartValue());
 			origSeg.setEndValue(recordSeg.getEndValue());
 			dragData.originalSegments.put(selectedRecord, origSeg);
+
+			MediaSegment editSegment = SessionFactory.newFactory().createMediaSegment();
+			editSegment.setStartValue(origSeg.getStartValue());
+			editSegment.setEndValue(origSeg.getEndValue());
+			dragData.editSegments.put(selectedRecord, editSegment);
 		}
 		dragData.participant = (participants.size() == 1 ? participants.iterator().next() : Participant.ALL);
 		currentRecordInterval.setValueAdjusting(true);
@@ -1473,12 +1480,14 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 						currentRecordInterval.getStartMarker().setTime(newStartTime);
 						currentRecordInterval.getEndMarker().setTime(newEndTime);
 					} else {
-						MediaSegment newSeg = SessionFactory.newFactory().createMediaSegment();
-						newSeg.setStartValue(newStartTime * 1000.0f);
-						newSeg.setEndValue(newEndTime * 1000.0f);
-						TierEdit<MediaSegment> tierEdit = new TierEdit<>(getParentView().getEditor(), selectedRecord.getSegment(), 0, newSeg);
-						tierEdit.setFireHardChangeOnUndo(false);
-						getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
+						MediaSegment editSeg = dragData.editSegments.get(rIdx);
+						editSeg.setStartValue(newStartTime * 1000.0f);
+						editSeg.setEndValue(newEndTime * 1000.0f);
+
+						if(dragData.isFirstChange) {
+							TierEdit<MediaSegment> tierEdit = new TierEdit<>(getParentView().getEditor(), selectedRecord.getSegment(), 0, editSeg);
+							getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
+						}
 					}
 				}
 				dragData.isFirstChange = false;
