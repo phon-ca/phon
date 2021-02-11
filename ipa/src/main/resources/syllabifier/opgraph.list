@@ -14,6 +14,8 @@ syllabifier/graphs/eng-simple.xml
 syllabifier/graphs/eng-smith.xml
 syllabifier/graphs/eng-smith-simple.xml
 syllabifier/graphs/eng.xml
+syllabifier/graphs/fas.xml
+syllabifier/graphs/fas-simple.xml
 syllabifier/graphs/fra-simple.xml
 syllabifier/graphs/fra.xml
 syllabifier/graphs/gue.xml
