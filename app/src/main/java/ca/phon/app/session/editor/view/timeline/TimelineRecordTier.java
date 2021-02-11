@@ -1266,6 +1266,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		Set<Participant> participants = new HashSet<>();
 
 		dragData.originalSegments.clear();
+		dragData.editSegments.clear();
 		for(int selectedRecord:getSelectionModel().getSelectedIndices()) {
 			Record r = getRecordGrid().getSession().getRecord(selectedRecord);
 			participants.add(r.getSpeaker());
