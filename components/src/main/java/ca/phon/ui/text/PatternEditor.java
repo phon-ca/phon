@@ -19,6 +19,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import ca.phon.ui.fonts.FontPreferences;
 import org.fife.ui.autocomplete.*;
 import org.fife.ui.rsyntaxtextarea.*;
 
@@ -36,8 +37,6 @@ public class PatternEditor extends RSyntaxTextArea implements Scrollable {
 	private static void installSyntaxStyles() {
 		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
 		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
-		
-		// TODO regular expressions
 	}
 	
 	private boolean autoCompleteEnabled = true;
@@ -88,7 +87,8 @@ public class PatternEditor extends RSyntaxTextArea implements Scrollable {
 	
 	
 	public PatternEditor(String text, String format) {
-		super(text);		
+		super(text);
+		setFont(FontPreferences.getMonospaceFont());
 		setSyntaxEditingStyle(format);
 	}
 	
