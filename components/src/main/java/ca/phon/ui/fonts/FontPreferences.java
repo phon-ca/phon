@@ -29,16 +29,14 @@ public class FontPreferences {
 
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
 			// sans-serif
+			"Noto Sans",
 			"Lucida Grande", // macos
-			"Helvetica", // macos
 			"Segoe UI", // windows
-			"Microsoft Sans Serif", // windows
-			"Tahoma", // windows
 			"Arial Unicode MS",
-			"Arial Unicode",
-			"Arial", // macos + windows
+			"Arial",
 
 			// serif fonts
+			"Noto Serif",
 			"Times New Roman",
 			"Charis SIL",
 			"Charis SIL Compact",
