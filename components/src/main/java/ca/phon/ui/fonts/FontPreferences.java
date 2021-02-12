@@ -26,18 +26,25 @@ import ca.phon.util.*;
 public class FontPreferences {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
-	
+
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
-		"Charis SIL", 
-		"Charis SIL Compact", 
-		"Arial Unicode MS", 
-		"Arial", 
-		"Doulos SIL",
-		"Gentium", 
-		"Lucida Grande", 
-		"Tahoma"
+			// sans-serif
+			"Arial Unicode MS",
+			"Arial Unicode",
+			"Helvetica", // macos
+			"Lucida Grande", // macos
+			"Segoe UI", // windows
+			"Microsoft Sans Serif", // windows
+			"Tahoma", // windows
+			"Arial", // macos + windows
+
+			// serif fonts
+			"Times New Roman",
+			"Charis SIL",
+			"Charis SIL Compact",
+			"Doulos SIL"
 	};
-	
+
 	// return the name of the first available IPA font
 	public static final String getFirstAvailableIPAFont() {
 		final String[] allFonts = 
