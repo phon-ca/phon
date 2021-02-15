@@ -111,7 +111,7 @@
         <ca.phon.app.version>${project.version}</ca.phon.app.version>
         <ca.phon.phon-shell-plugin.version>21</ca.phon.phon-shell-plugin.version>
         <ca.phon.phon-groovy-plugin.version>4</ca.phon.phon-groovy-plugin.version>
-        <ca.phon.phon-praat-plugin.version>50</ca.phon.phon-praat-plugin.version>
+        <ca.phon.phon-praat-plugin.version>51</ca.phon.phon-praat-plugin.version>
         <ca.phon.phon-update-plugin.version>18</ca.phon.phon-update-plugin.version>
         <ca.phon.phon-version-triggers.version>3</ca.phon.phon-version-triggers.version>
         <ca.phon.csv.plugin.version>23</ca.phon.csv.plugin.version>
