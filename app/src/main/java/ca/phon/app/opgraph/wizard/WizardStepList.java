@@ -70,10 +70,10 @@ public class WizardStepList extends JPanel {
 			WizardStep step = getWizard().getWizardStep(stepIdx);
 			if(step == currentStep) {
 				stepLabels.get(stepIdx).setIcon(currentStepIcon);
-				stepLabels.get(stepIdx).setFont(FontPreferences.getControlFont().deriveFont(Font.BOLD));
+				stepLabels.get(stepIdx).setFont(FontPreferences.getMonospaceFont().deriveFont(Font.BOLD));
 			} else {
 				stepLabels.get(stepIdx).setIcon(stepIcon);
-				stepLabels.get(stepIdx).setFont(FontPreferences.getControlFont());
+				stepLabels.get(stepIdx).setFont(FontPreferences.getMonospaceFont());
 			}
 		}
 	}

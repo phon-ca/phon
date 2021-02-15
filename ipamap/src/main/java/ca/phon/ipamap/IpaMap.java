@@ -124,7 +124,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Default font
 	 */
-	private final static String DEFAULT_FONT = (new FontFormatter()).format(FontPreferences.getUIIpaFont());
+	private final static String DEFAULT_FONT = (new FontFormatter()).format(FontPreferences.getTierFont());
 	
 	/**
 	 * Load the scale property

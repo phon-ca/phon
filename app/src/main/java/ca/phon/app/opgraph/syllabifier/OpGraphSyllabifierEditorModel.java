@@ -71,7 +71,7 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 			syllabifierPanel = new JPanel();
 
 			ipaField = new JTextField();
-			ipaField.setFont(FontPreferences.getUIIpaFont());
+			ipaField.setFont(FontPreferences.getTierFont());
 			ipaField.getDocument().addDocumentListener(new DocumentListener() {
 
 				@Override

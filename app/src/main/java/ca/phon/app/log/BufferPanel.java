@@ -216,7 +216,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 		retVal.setColumnControlVisible(true);
 		retVal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		retVal.setFont(FontPreferences.getUIIpaFont());
+		retVal.setFont(FontPreferences.getTierFont());
 
 		final ActionMap am = retVal.getActionMap();
 		final InputMap im = retVal.getInputMap(JComponent.WHEN_FOCUSED);

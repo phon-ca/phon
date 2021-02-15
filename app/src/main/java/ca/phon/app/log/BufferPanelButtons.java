@@ -126,7 +126,7 @@ public class BufferPanelButtons extends JComponent {
 			final JFrame tempFrame = new JFrame("HTML Table");
 			final JEditorPane editorPane = new JEditorPane("text/html", html);
 			editorPane.setEditable(false);
-			editorPane.setFont(FontPreferences.getUIIpaFont());
+			editorPane.setFont(FontPreferences.getTierFont());
 			tempFrame.add(new JScrollPane(editorPane));
 			
 			tempFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -47,7 +47,7 @@ public class NodeEditorStatusBar extends JXStatusBar {
 		pbar.add(progressBar, (new CellConstraints()).xy(1, 1));
 		
 		progressLabel = new JLabel();
-		progressLabel.setFont(FontPreferences.getSmallFont());
+		progressLabel.setFont(progressLabel.getFont().deriveFont(10.0f));
 		
 		add(progressLabel, new JXStatusBar.Constraint(200));
 		add(pbar, new JXStatusBar.Constraint(120));

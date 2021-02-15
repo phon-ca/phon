@@ -170,7 +170,7 @@ public class TimeSliderUI extends SliderUI {
 				timeFrame.getRootPane().putClientProperty("Window.shadow", Boolean.FALSE);
 				
 				timeLbl = new JLabel(" 000:00.00 ");
-				timeLbl.setFont(FontPreferences.getSmallFont());
+				timeLbl.setFont(timeLbl.getFont().deriveFont(10.0f));
 				
 				timeFrame.add(timeLbl);
 				timeFrame.pack();

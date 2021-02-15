@@ -417,7 +417,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			
 			syllabificationDisplay = new SyllabificationDisplay();
 			syllabificationDisplay.setTranscript(ipaT);
-			syllabificationDisplay.setFont(FontPreferences.getUIIpaFont());
+			syllabificationDisplay.setFont(FontPreferences.getTierFont());
 			syllabificationDisplay.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 5));
 			
 			includeAlignmentBox = new JCheckBox("Include alignment");
@@ -427,7 +427,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			alignmentDisplay = new PhoneMapDisplay();
 			alignmentDisplay.setPhoneMapForGroup(0, alignment);
 			alignmentDisplay.setBackground(Color.WHITE);
-			alignmentDisplay.setFont(FontPreferences.getUIIpaFont());
+			alignmentDisplay.setFont(FontPreferences.getTierFont());
 			alignmentDisplay.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 5));
 			
 			JPanel tierDataLeftPanel = new JPanel(new GridBagLayout());

@@ -57,7 +57,7 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		grids = new IPAGrids();
 		mapGrids = new ArrayList<>();
 		
-		setFont(FontPreferences.getUIIpaFont());
+		setFont(FontPreferences.getTierFont());
 		
 		init();
 	}

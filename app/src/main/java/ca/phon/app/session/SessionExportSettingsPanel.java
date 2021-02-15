@@ -205,7 +205,7 @@ public class SessionExportSettingsPanel extends JPanel {
 		
 		syllabificationDisplay = new SyllabificationDisplay();
 		syllabificationDisplay.setTranscript(ipaT);
-		syllabificationDisplay.setFont(FontPreferences.getUIIpaFont());
+		syllabificationDisplay.setFont(FontPreferences.getTierFont());
 		
 		includeAlignmentBox = new JCheckBox("Include alignment");
 		includeAlignmentBox.setSelected(settings.isIncludeAlignment());
@@ -213,7 +213,7 @@ public class SessionExportSettingsPanel extends JPanel {
 		alignmentDisplay = new PhoneMapDisplay();
 		alignmentDisplay.setPhoneMapForGroup(0, alignment);
 		alignmentDisplay.setBackground(Color.WHITE);
-		alignmentDisplay.setFont(FontPreferences.getUIIpaFont());
+		alignmentDisplay.setFont(FontPreferences.getTierFont());
 		
 		JPanel tierOptionsPanel = new JPanel(new GridBagLayout());
 		tierOptionsPanel.setBorder(BorderFactory.createTitledBorder("Tier Options"));

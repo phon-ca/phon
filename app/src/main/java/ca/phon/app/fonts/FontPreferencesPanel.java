@@ -38,16 +38,8 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 	private JSlider fontSizeSlider;
 	
 	private FontSelectionButton tierFontBtn;
-	
-	private FontSelectionButton uiIpaFontBtn;
-	
-	private FontSelectionButton controlFontBtn;
-	
-	private FontSelectionButton menuFontBtn;
-	
+
 	private FontSelectionButton titleFontBtn;
-	
-	private FontSelectionButton smallFontBtn;
 	
 	private FontSelectionButton monospaceBtn;
 	
@@ -69,18 +61,13 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		tierFontBtn.setDefaultVal(FontPreferences.DEFAULT_TIER_FONT);
 		tierFontBtn.setTopLabelText("<html><b>Tier font</b> &#8226; Default font for tiers</html>");
 		tierFontBtn.setSelectedFont(FontPreferences.getTierFont());
-		
-		uiIpaFontBtn = new FontSelectionButton();
-		uiIpaFontBtn.setFontProp(FontPreferences.UI_IPA_FONT);
-		uiIpaFontBtn.setDefaultVal(FontPreferences.DEFAULT_UI_IPA_FONT);
-		uiIpaFontBtn.setTopLabelText("<html><b>UI Font</b> &#8226; Font used for UI controls which display IPA text</html>");
-		uiIpaFontBtn.setSelectedFont(FontPreferences.getUIIpaFont());
-		
-		final JPanel tierFontsPanel = new JPanel(new VerticalLayout());
-		tierFontsPanel.add(tierFontBtn);
-		tierFontsPanel.add(uiIpaFontBtn);
-		tierFontsPanel.setBorder(BorderFactory.createTitledBorder("IPA Fonts"));
-		
+
+		titleFontBtn = new FontSelectionButton();
+		titleFontBtn.setFontProp(FontPreferences.TITLE_FONT);
+		titleFontBtn.setDefaultVal(FontPreferences.DEFAULT_TITLE_FONT);
+		titleFontBtn.setTopLabelText("<html><b>Title font</b> &#8226; Font used in some UI headers</html>");
+		titleFontBtn.setSelectedFont(FontPreferences.getTitleFont());
+
 		final Hashtable<Integer, JLabel> hashTbl = new Hashtable<Integer, JLabel>();
 		hashTbl.put(0, new JLabel("Default"));
 		
@@ -131,31 +118,7 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		fontSizePanel.add(smallLbl, cc.xy(2, 1));
 		fontSizePanel.add(fontSizeSlider, cc.xy(3, 1));
 		fontSizePanel.add(largeLbl, cc.xy(4, 1));
-		
-		controlFontBtn = new FontSelectionButton();
-		controlFontBtn.setFontProp(FontPreferences.CONTROL_FONT);
-		controlFontBtn.setDefaultVal(FontPreferences.DEFAULT_CONTROL_FONT);
-		controlFontBtn.setTopLabelText("<html><b>Control font</b> &#8226; Default font for UI controls</html>");
-		controlFontBtn.setSelectedFont(FontPreferences.getControlFont());
-		
-		titleFontBtn = new FontSelectionButton();
-		titleFontBtn.setFontProp(FontPreferences.TITLE_FONT);
-		titleFontBtn.setDefaultVal(FontPreferences.DEFAULT_TITLE_FONT);
-		titleFontBtn.setTopLabelText("<html><b>Title font</b> &#8226; Font used in titles</html>");
-		titleFontBtn.setSelectedFont(FontPreferences.getTitleFont());
-		
-		smallFontBtn = new FontSelectionButton();
-		smallFontBtn.setFontProp(FontPreferences.SMALL_FONT);
-		smallFontBtn.setDefaultVal(FontPreferences.DEFAULT_SMALL_FONT);
-		smallFontBtn.setTopLabelText("<html><b>Small font</b> &#8226; Font used in tool tips</html>");
-		smallFontBtn.setSelectedFont(FontPreferences.getSmallFont());
-		
-		menuFontBtn = new FontSelectionButton();
-		menuFontBtn.setFontProp(FontPreferences.MENU_FONT);
-		menuFontBtn.setDefaultVal(FontPreferences.DEFAULT_MENU_FONT);
-		menuFontBtn.setTopLabelText("<html><b>Menu font</b> &#8226; Font used in menus</html>");
-		menuFontBtn.setSelectedFont(FontPreferences.getMenuFont());
-		
+
 		monospaceBtn = new FontSelectionButton();
 		monospaceBtn.setFontProp(FontPreferences.MONOSPACE_FONT);
 		monospaceBtn.setDefaultVal(FontPreferences.DEFAULT_MONOSPACE_FONT);
@@ -163,18 +126,14 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		monospaceBtn.setSelectedFont(FontPreferences.getMonospaceFont());
 		
 		final JPanel uiFontsPanel = new JPanel(new VerticalLayout());
-//		uiFontsPanel.add(fontSizePanel);
-		uiFontsPanel.add(controlFontBtn);
-		uiFontsPanel.add(menuFontBtn);
+		uiFontsPanel.add(tierFontBtn);
 		uiFontsPanel.add(titleFontBtn);
-		uiFontsPanel.add(smallFontBtn);
 		uiFontsPanel.add(monospaceBtn);
 		
 		uiFontsPanel.setBorder(BorderFactory.createTitledBorder("UI Fonts"));
 		
 		setLayout(new VerticalLayout());
 		add(restartPanel);
-		add(tierFontsPanel);
 		add(uiFontsPanel);
 	}
 

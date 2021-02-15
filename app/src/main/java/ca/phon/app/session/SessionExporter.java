@@ -65,7 +65,7 @@ public abstract class SessionExporter {
 				SwingUtilities.invokeAndWait( () -> {
 					syllabificationDisplay = new SyllabificationDisplay();
 					syllabificationRenderPane = new JPanel();
-					syllabificationDisplay.setFont(FontPreferences.getUIIpaFont());
+					syllabificationDisplay.setFont(FontPreferences.getTierFont());
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				LogUtil.severe(e.getLocalizedMessage(), e);
@@ -80,7 +80,7 @@ public abstract class SessionExporter {
 				SwingUtilities.invokeAndWait( () -> {
 					alignmentDisplay = new PhoneMapDisplay();
 					alignmentDisplay.setBackground(Color.white);
-					alignmentDisplay.setFont(FontPreferences.getUIIpaFont());
+					alignmentDisplay.setFont(FontPreferences.getTierFont());
 					alignmentRenderPane = new JPanel();
 				});
 			} catch (InvocationTargetException | InterruptedException e) {

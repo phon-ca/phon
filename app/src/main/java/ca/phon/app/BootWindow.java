@@ -67,7 +67,7 @@ public class BootWindow extends Window {
 		g.drawImage(bootImage, 0, 0, this);
 		
 		// paint the version string
-		Font versionFont = FontPreferences.getControlFont();
+		Font versionFont = FontPreferences.getMonospaceFont();
 		g.setFont(versionFont);
 		
 		String vString = VersionInfo.getInstance().getVersionNoBuild();

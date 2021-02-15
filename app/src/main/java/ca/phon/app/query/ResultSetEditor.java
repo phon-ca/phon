@@ -503,7 +503,7 @@ public class ResultSetEditor extends ProjectFrame {
 		final ResultListingTableModel model = new ResultListingTableModel(session, resultSet, getListing());
 		resultTable = new JXTable(model);
 		resultTable.setColumnControlVisible(true);
-		resultTable.setFont(FontPreferences.getUIIpaFont());
+		resultTable.setFont(FontPreferences.getTierFont());
 		resultTable.addMouseListener(new MouseInputAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -541,7 +541,7 @@ public class ResultSetEditor extends ProjectFrame {
 		};
 		tableSearchField.setColumns(20);
 		tableSearchField.setPrompt("Filter results");
-		tableSearchField.getTextField().setFont(FontPreferences.getUIIpaFont());
+		tableSearchField.getTextField().setFont(FontPreferences.getTierFont());
 		tableSearchField.getTextField().addKeyListener(new KeyListener() {
 			
 			@Override

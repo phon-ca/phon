@@ -131,7 +131,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 
 		sessionPathLabel = new JLabel(getEditor().getSession().getCorpus() + "/" +
 				getEditor().getSession().getName());
-		sessionPathLabel.setFont(FontPreferences.getSmallFont());
+		sessionPathLabel.setFont(sessionPathLabel.getFont().deriveFont(10.0f));
 		sessionPathLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		sessionPathLabel.setToolTipText(
 				getEditor().getProject().getSessionPath(getEditor().getSession()) + " (click to show corpus folder)");
@@ -176,7 +176,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		progressBar.setValue(0);
 
 		progressLabel = new JLabel();
-		progressLabel.setFont(FontPreferences.getSmallFont());
+		progressLabel.setFont(progressLabel.getFont().deriveFont(10.0f));
 
 		add(progressLabel, new JXStatusBar.Constraint(200));
 		add(progressBar, new JXStatusBar.Constraint(120));

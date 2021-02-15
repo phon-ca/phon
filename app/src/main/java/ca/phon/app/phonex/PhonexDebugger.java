@@ -115,7 +115,7 @@ public class PhonexDebugger extends JComponent {
 		strip.setOpaque(false);
 		
 		transcriptionField = new JTextField();
-		transcriptionField.setFont(FontPreferences.getUIIpaFont());
+		transcriptionField.setFont(FontPreferences.getTierFont());
 		transcriptionField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override

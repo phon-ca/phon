@@ -141,7 +141,7 @@ public class IPAMapSelector extends JComponent {
 //		selectedMap.addCellMouseListener(cellMouseListener);
 		
 		map = new IPAMapGridContainer();
-		map.setFont(FontPreferences.getUIIpaFont().deriveFont(18.0f));
+		map.setFont(FontPreferences.getTierFont().deriveFont(18.0f));
 		
 		map.setSelectionEnabled(true);
 		map.addCellSelectionListener(cellSelectionListener);

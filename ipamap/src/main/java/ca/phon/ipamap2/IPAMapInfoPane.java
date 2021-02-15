@@ -90,7 +90,7 @@ public class IPAMapInfoPane extends JPanel {
 		collapsiblePane.setCollapsed(true);
 		
 		previewLabel = new JLabel();
-		previewLabel.setFont(FontPreferences.getUIIpaFont().deriveFont(72.0f));
+		previewLabel.setFont(FontPreferences.getTierFont().deriveFont(72.0f));
 		previewLabel.setOpaque(true);
 		previewLabel.setBackground(Color.white);
 		previewLabel.setHorizontalAlignment(SwingConstants.CENTER);

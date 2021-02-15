@@ -156,7 +156,7 @@ public class ParamPanelFactory extends VisitorAdapter<ScriptParam> {
 	public void visitStringScriptParam(StringScriptParam param) {
 		final JLabel paramLabel = factory.createParamLabel(param);
 		final PromptedTextField textField = factory.createStringScriptParamComponent(param);
-		textField.setFont(FontPreferences.getUIIpaFont());
+		textField.setFont(FontPreferences.getTierFont());
 		final JPanel panel = createComponentPanel(paramLabel, textField);
 		currentContainer.add(panel);
 	}

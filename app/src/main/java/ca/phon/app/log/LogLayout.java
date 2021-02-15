@@ -91,12 +91,12 @@ public class LogLayout extends AbstractStringLayout {
 	/**
 	 * Default font family: {@value}.
 	 */
-	public static final String DEFAULT_FONT_FAMILY = FontPreferences.getUIIpaFont().getFontName()  + ",arial,sans-serif";
+	public static final String DEFAULT_FONT_FAMILY = FontPreferences.getTierFont().getFontName()  + ",arial,sans-serif";
 	
 	private static final String TRACE_PREFIX = "<br />&nbsp;&nbsp;&nbsp;&nbsp;";
 	private static final String REGEXP = Strings.LINE_SEPARATOR.equals("\n") ? "\n" : Strings.LINE_SEPARATOR + "|\n";
 	
-	private String fontName = FontPreferences.getUIIpaFont().getFontName();
+	private String fontName = FontPreferences.getTierFont().getFontName();
 	
 	private static final String DEFAULT_TITLE = "Phon Log Messages";
 	private String title = DEFAULT_TITLE;

@@ -49,7 +49,7 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 	public SessionEditorQuickSearchField(Session session, JTable table) {
 		super(table);
 		this.session = session;
-		getTextField().setFont(FontPreferences.getUIIpaFont());
+		getTextField().setFont(FontPreferences.getTierFont());
 	}
 	
 	@Override
