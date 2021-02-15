@@ -102,10 +102,6 @@
         <project.build.sourceVersion>11</project.build.sourceVersion>
         <project.build.targetVersion>11</project.build.targetVersion>
 
-        <!-- External resources -->
-        <org.videolan.vlc.version>3.0.1</org.videolan.vlc.version>
-        <ca.hedlund.libjpraat.version>6.0.52</ca.hedlund.libjpraat.version>
-
         <!-- Dependency versions -->
         <ca.phon.phon-dict-data.version>29</ca.phon.phon-dict-data.version>
         <ca.phon.app.version>${project.version}</ca.phon.app.version>
