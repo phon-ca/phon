@@ -19,6 +19,8 @@
 
 /* Default body and element styles */
 body {
+    font-family: "Noto Sans", "Arial", sans-serif;
+    font-size: 12pt;
     background: white;
     font-size: 10pt;
     margin-top: 0px;
@@ -110,11 +112,11 @@ img {
 }
 
 .text-value {
-	font-family: inherit;
+	font-family: "Noto Sans", "Arial", sans-serif;
 }
 
 .tier-value {
-    font-family:"Charis SIL Compact", "noto sans", "Charis SIL", arial, sans-serif;
+    font-family: "Noto Sans", "Arial", sans-serif;
 }
 
 .tier-value--link {
@@ -127,7 +129,7 @@ img {
 }
 
 .number-value {
-    font-family:"noto monospace", monospace;
+    font-family: "Noto Sans Mono", monospace;
 }
 
 .participants {
@@ -171,12 +173,12 @@ img {
     }
 
     body {
-        font-family: arial, times, serif;
+        font-family: "Noto Sans", "Arial", sans-serif;
         font-size: 12pt;
     }
 
     .tier-value {
-        font-family: "Charis SIL Compact", "noto serif", "Charis SIL", times, serif;
+        font-family: "Noto Sans", "Arial", sans-serif;
         font-size: 12pt;
     }
 
