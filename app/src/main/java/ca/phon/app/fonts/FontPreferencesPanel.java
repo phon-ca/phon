@@ -135,6 +135,7 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		setLayout(new VerticalLayout());
 		add(restartPanel);
 		add(uiFontsPanel);
+//		add(fontSizePanel);
 	}
 
 	@Override
