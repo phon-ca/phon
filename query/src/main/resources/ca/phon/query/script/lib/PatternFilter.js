@@ -394,13 +394,25 @@ exports.PatternFilter = function (id) {
 	};
 
 	var checkPhonex = function (obj, filter, exactMatch) {
-		if (!(obj instanceof IPATranscript)) return false;
-		flags = 0;
-
-		if (exactMatch == true) {
-			return obj.matches(filter, flags);
+		if (!(obj instanceof IPATranscript)) {
+			if(obj instanceof IPAElement) {
+				return checkPhonex((new IPATranscriptBuilder()).append(obj).toIPATranscript(), filter, exactMatch);
+			} else {
+				try {
+					var ipa = IPATranscript.parseIPATranscript(obj.toString());
+					return checkPhonex(ipa, filter, exactMatch);
+				} catch (e) {
+					return false;
+				}
+			}
 		} else {
-			return obj.contains(filter, flags);
+			flags = 0;
+
+			if (exactMatch == true) {
+				return obj.matches(filter, flags);
+			} else {
+				return obj.contains(filter, flags);
+			}
 		}
 	};
 
@@ -553,7 +565,18 @@ exports.PatternFilter = function (id) {
 	var findPhonex = function (obj, filter, exactMatch) {
 		var retVal = new Array();
 
-		if (!(obj instanceof IPATranscript)) return retVal;
+		if (!(obj instanceof IPATranscript)) {
+			if(obj instanceof IPAElement) {
+				return findPhonex((new IPATranscriptBuilder()).append(obj).toIPATranscript(), filter, exactMatch);
+			} else {
+				try {
+					var ipa = IPATranscript.parseIPATranscript(obj.toString());
+					return findPhonex(ipa, filter, exactMatch);
+				} catch (e) {
+					return retVal;
+				}
+			}
+		}
 
 		flags = 0;
 
