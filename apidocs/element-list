@@ -91,7 +91,6 @@ ca.phon.app.session.editor.view.tier_management.actions
 ca.phon.app.session.editor.view.timeline
 ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.syllabifier
-ca.phon.app.theme
 ca.phon.app.welcome
 ca.phon.app.workspace
 ca.phon.audio
