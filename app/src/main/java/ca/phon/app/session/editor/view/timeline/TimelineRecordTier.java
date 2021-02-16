@@ -23,6 +23,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.beans.*;
 import java.io.IOException;
+import java.security.Key;
 import java.util.*;
 import java.util.List;
 import java.util.stream.*;
@@ -886,6 +887,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final PhonUIAction copyAct = new PhonUIAction(this, "copy");
 		copyAct.putValue(PhonUIAction.NAME, "Copy record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
 		copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selected records");
+		if(includeAccel)
+			copyAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		builder.addItem(".", copyAct);
 
 		Transferable clipboardContents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
@@ -895,6 +898,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				final PhonUIAction pasteAct = new PhonUIAction(this, "paste");
 				pasteAct.putValue(PhonUIAction.NAME, "Paste record" + (recordsTransferable.getRecords().size() > 1 ? "s" : ""));
 				pasteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste records");
+				if(includeAccel)
+					pasteAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 				builder.addItem(".", pasteAct);
 			} catch (UnsupportedFlavorException | IOException e) {
 				LogUtil.warning(e);
@@ -904,6 +909,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final PhonUIAction cutAct = new PhonUIAction(this, "cut");
 		cutAct.putValue(PhonUIAction.NAME, "Cut record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
 		cutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cut selected records");
+		if(includeAccel)
+				cutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		builder.addItem(".", cutAct);
 
 		builder.addSeparator(".", "copy_paste");
