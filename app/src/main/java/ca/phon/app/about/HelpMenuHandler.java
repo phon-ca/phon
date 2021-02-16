@@ -47,7 +47,13 @@ public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint
 		showOnlineManualAct.putValue(PhonUIAction.NAME, "Show manual (online)...");
 		showOnlineManualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, path);
 
+		final String licensePath = "https://github.com/phon-ca/phon/blob/master/LICENSE.txt";
+		final PhonUIAction showLicenseAct = new PhonUIAction(HelpMenuHandler.class, "showOnlineManual", licensePath);
+		showLicenseAct.putValue(PhonUIAction.NAME, "Show license (online)...");
+		showLicenseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show application license");
+
 		menu.add(new JMenuItem(showOnlineManualAct), 0);
+		menu.add(new JMenuItem(showLicenseAct));
 	}
 
 	public static void showOnlineManual(String path) {
