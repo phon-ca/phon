@@ -22,6 +22,8 @@ import java.util.stream.*;
 import ca.phon.ipa.*;
 
 public class DiacriticSelector extends IPAMapSelector {
+
+	private final static float DEFAULT_FONT_SIZE = 20.0f;
 	
 	private final static String DIACRITICS_FILE = "diacritics.xml";
 	
@@ -31,6 +33,9 @@ public class DiacriticSelector extends IPAMapSelector {
 		setSectionVisible("Other Consonants", false);
 		setSectionVisible("Other Vowels", false);
 		setSectionVisible("Other Symbols", false);
+
+		getMapGridContainer().setFont(IPAMap.getDefaultIPAMapFont().deriveFont(DEFAULT_FONT_SIZE));
+		revalidate();
 	}
 	
 	@Override

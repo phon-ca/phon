@@ -17,9 +17,12 @@ package ca.phon.ipamap2;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.function.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -35,30 +38,29 @@ import ca.phon.util.*;
 
 /**
  * Container for {@link IPAMapGrid}s.
- * 
+ *
  */
 public class IPAMapGridContainer extends JPanel implements Scrollable {
-	
+
 	private IPAGrids grids;
-	
+
 	private List<IPAMapGrid> mapGrids;
-	
+
 	private boolean selectionEnabled = false;
-	
+
 	private Map<IPAMapGrid, JXCollapsiblePane> cpMap = new HashMap<>();
-	
+
 	private Map<IPAMapGrid, JPanel> togglePanelMap = new HashMap<>();
-		
+
 	private final EventListenerList listenerList = new EventListenerList();
-	
+
+
 	public IPAMapGridContainer() {
 		super();
 		
 		grids = new IPAGrids();
 		mapGrids = new ArrayList<>();
-		
-		setFont(FontPreferences.getTierFont());
-		
+
 		init();
 	}
 	
@@ -80,6 +82,14 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 		for(var ipaGrid:grids.getInternal().getGrid()) {
 			addGrid(ipaGrid);
 		}
+	}
+
+	@Override
+	public void setFont(Font font) {
+		super.setFont(font);
+
+		if(mapGrids != null)
+			mapGrids.forEach( g -> g.setFont(font) );
 	}
 	
 	/**
@@ -220,7 +230,7 @@ public class IPAMapGridContainer extends JPanel implements Scrollable {
 	 * The returned panel has a {@link BorderLayout} with
 	 * the togglebutton in the center position.
 	 * 
-	 * @param gridName
+	 * @param mapGrid
 	 * @return panel or <code>null</code>
 	 */
 	public JPanel getMapGridPanel(IPAMapGrid mapGrid) {

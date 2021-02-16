@@ -135,21 +135,16 @@ public class IPAMapSelector extends JComponent {
 		selectedCellGrid.setName("Selected");
 		selectedCellGrid.setCols(14);
 		selectedCellGrid.setRows(2);
-//		selectedMapContainer = new IPAMapGridContainer();
-//		var gridTuple = selectedMapContainer.addGrid(selectedCellGrid);
-//		selectedMap = gridTuple.getObj2();
-//		selectedMap.addCellMouseListener(cellMouseListener);
 		
 		map = new IPAMapGridContainer();
-		map.setFont(FontPreferences.getTierFont().deriveFont(18.0f));
+		map.setFont(IPAMap.getDefaultIPAMapFont());
 		
 		map.setSelectionEnabled(true);
 		map.addCellSelectionListener(cellSelectionListener);
 		infoPane = new IPAMapInfoPane();
 		
 		map.addCellMouseListener(cellMouseListener);
-		
-//		add(selectedMapContainer, BorderLayout.NORTH);
+
 		add(new JScrollPane(map), BorderLayout.CENTER);
 		add(infoPane, BorderLayout.SOUTH);
 	}
