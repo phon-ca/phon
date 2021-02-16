@@ -123,8 +123,9 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	
 	/**
 	 * Default font
+	 *
 	 */
-	private final static String DEFAULT_FONT = (new FontFormatter()).format(FontPreferences.getTierFont());
+	private final static Font DEFAULT_FONT = ca.phon.ipamap2.IPAMap.getDefaultIPAMapFont();
 	
 	/**
 	 * Load the scale property
@@ -580,7 +581,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	 * Get font pref
 	 */
 	private static Font getFontPref() {
-		return PrefHelper.getFont(FONT_PROP, Font.decode(DEFAULT_FONT));
+		return PrefHelper.getFont(FONT_PROP, DEFAULT_FONT);
 	}
 	
 	/**
