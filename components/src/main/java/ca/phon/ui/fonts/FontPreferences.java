@@ -30,20 +30,17 @@ public class FontPreferences {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
 
-	public static final String[] SUGGESTED_SANS_IPA_FONT_NAMES = {
-			"Arial",
-			"Arial Unicode MS",
-			"Lucida Grande", // macos
-			"Noto Sans",
-			"Segoe UI" // windows
-	};
-
-	public static final String[] SUGGESTED_SERIF_IPA_FONT_NAMES = {
-			"Charis SIL",
-			"Charis SIL Compact",
-			"Doulos SIL",
-			"Noto Serif",
-			"Times New Roman"
+	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
+			"Arial",				// sans
+			"Arial Unicode MS",		// sans
+			"Charis SIL",			// serif
+			"Charis SIL Compact",	// serif
+			"Doulos SIL",			// serif
+			"Lucida Grande",		// sans
+			"Noto Sans",			// sans
+			"Noto Serif",			// serif
+			"Segoe UI",				// sans
+			"Times New Roman"		// serif
 	};
 
 	public static final String[] SUGGESTED_MONOSPACE_FONT_NAMES = {

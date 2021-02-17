@@ -51,11 +51,13 @@ public class FontPreferencesPanel extends PrefsPanel implements IPluginExtension
 		tierFontBtn.setFontProp(FontPreferences.TIER_FONT);
 		tierFontBtn.setDefaultVal(FontPreferences.DEFAULT_TIER_FONT);
 		tierFontBtn.setTopLabelText("<html><b>Tier font</b> &#8226; Default font for tiers</html>");
+		tierFontBtn.setSuggestedFonts(FontPreferences.SUGGESTED_IPA_FONT_NAMES);
 		tierFontBtn.setSelectedFont(FontPreferences.getTierFont());
 
 		monospaceBtn = new FontSelectionButton();
 		monospaceBtn.setFontProp(FontPreferences.MONOSPACE_FONT);
 		monospaceBtn.setDefaultVal(FontPreferences.DEFAULT_MONOSPACE_FONT);
+		monospaceBtn.setSuggestedFonts(FontPreferences.SUGGESTED_MONOSPACE_FONT_NAMES);
 		monospaceBtn.setTopLabelText("<html><b>Monospace font</b> &#8226; Font used in consoles</html>");
 		monospaceBtn.setSelectedFont(FontPreferences.getMonospaceFont());
 		
