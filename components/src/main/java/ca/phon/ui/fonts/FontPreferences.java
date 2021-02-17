@@ -31,19 +31,25 @@ public class FontPreferences {
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
 
 	public static final String[] SUGGESTED_SANS_IPA_FONT_NAMES = {
-			"Noto Sans",
-			"Lucida Grande", // macos
-			"Segoe UI", // windows
+			"Arial",
 			"Arial Unicode MS",
-			"Arial"
+			"Lucida Grande", // macos
+			"Noto Sans",
+			"Segoe UI" // windows
 	};
 
 	public static final String[] SUGGESTED_SERIF_IPA_FONT_NAMES = {
-			"Noto Serif",
 			"Charis SIL",
 			"Charis SIL Compact",
-			"Times New Roman",
-			"Doulos SIL"
+			"Doulos SIL",
+			"Noto Serif",
+			"Times New Roman"
+	};
+
+	public static final String[] SUGGESTED_MONOSPACE_FONT_NAMES = {
+			"Courier New",
+			"Menlo",
+			"Noto Sans Mono"
 	};
 
 	/**
