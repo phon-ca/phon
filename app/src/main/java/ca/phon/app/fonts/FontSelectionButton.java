@@ -41,6 +41,15 @@ public class FontSelectionButton extends MultiActionButton {
 
 	private String[] suggestedFonts = new String[0];
 
+	final ImageIcon icon =
+			IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL);
+	final ImageIcon reloadIcon =
+			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
+	final ImageIcon addIcon =
+			IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
+	final ImageIcon subIcon =
+			IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
+
 	public FontSelectionButton() {
 		super();
 		
@@ -58,10 +67,13 @@ public class FontSelectionButton extends MultiActionButton {
 	}
 	
 	private void init() {
-		final ImageIcon icon = 
-			IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL);
-		final ImageIcon reloadIcon = 
-			IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
+		final PhonUIAction onIncreaseFontSize = new PhonUIAction(this, "onIncreaseFontSize");
+		onIncreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase point size by 2");
+		onIncreaseFontSize.putValue(PhonUIAction.LARGE_ICON_KEY, addIcon);
+
+		final PhonUIAction onDecreaseFontSize = new PhonUIAction(this, "onDecreaseFontSize");
+		onDecreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease point size by 2");
+		onDecreaseFontSize.putValue(PhonUIAction.LARGE_ICON_KEY, subIcon);
 		
 		final PhonUIAction defaultAct = new PhonUIAction(this, "onShowFontMenu");
 		defaultAct.putValue(PhonUIAction.NAME, "Select font");
@@ -71,8 +83,10 @@ public class FontSelectionButton extends MultiActionButton {
 		reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset to default");
 		reloadAct.putValue(PhonUIAction.LARGE_ICON_KEY, reloadIcon);
 		
+		addAction(onIncreaseFontSize);
+		addAction(onDecreaseFontSize);
 		addAction(reloadAct);
-		
+
 		setDefaultAction(defaultAct);
 		
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -108,11 +122,33 @@ public class FontSelectionButton extends MultiActionButton {
 		MenuBuilder builder = new MenuBuilder(popupMenu);
 
 		// reset
-		final ImageIcon icon =
-				IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL);
-		final ImageIcon reloadIcon =
-				IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
 
+
+		final PhonUIAction toggleBoldAct = new PhonUIAction(this, "onToggleStyle", Font.BOLD);
+		toggleBoldAct.putValue(PhonUIAction.NAME, "Bold");
+		toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
+		toggleBoldAct.putValue(PhonUIAction.SELECTED_KEY, getSelectedFont().isBold());
+		builder.addItem(".", new JCheckBoxMenuItem(toggleBoldAct));
+
+		final PhonUIAction toggleItalicAct = new PhonUIAction(this, "onToggleStyle", Font.ITALIC);
+		toggleItalicAct.putValue(PhonUIAction.NAME, "Italic");
+		toggleItalicAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle italic modifier");
+		toggleItalicAct.putValue(PhonUIAction.SELECTED_KEY, getSelectedFont().isItalic());
+		builder.addItem(".", new JCheckBoxMenuItem(toggleItalicAct));
+
+		final PhonUIAction onIncreaseFontSize = new PhonUIAction(this, "onIncreaseFontSize");
+		onIncreaseFontSize.putValue(PhonUIAction.NAME, "Increase size");
+		onIncreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase point size by 2");
+		onIncreaseFontSize.putValue(PhonUIAction.SMALL_ICON, addIcon);
+		builder.addItem(".", onIncreaseFontSize);
+
+		final PhonUIAction onDecreaseFontSize = new PhonUIAction(this, "onDecreaseFontSize");
+		onDecreaseFontSize.putValue(PhonUIAction.NAME, "Decrease size");
+		onDecreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease point size by 2");
+		onDecreaseFontSize.putValue(PhonUIAction.SMALL_ICON, subIcon);
+		builder.addItem(".", onDecreaseFontSize);
+
+		builder.addSeparator(".", "modifiers");
 
 		final PhonUIAction reloadAct = new PhonUIAction(this, "onReload");
 		reloadAct.putValue(PhonUIAction.NAME, "Reset to default");
@@ -143,7 +179,7 @@ public class FontSelectionButton extends MultiActionButton {
 		builder.addSeparator(".", "font-dialog");
 		final PhonUIAction defaultAct = new PhonUIAction(this, "onSelectFont");
 		defaultAct.putValue(PhonUIAction.NAME, "Select font....");
-		defaultAct.putValue(PhonUIAction.NAME, "Select font using font selection dialog");
+		defaultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font using font selection dialog");
 		defaultAct.putValue(PhonUIAction.LARGE_ICON_KEY, icon);
 		builder.addItem(".", defaultAct);
 
@@ -156,7 +192,10 @@ public class FontSelectionButton extends MultiActionButton {
 
 		float currentFontSize = getSelectedFont().getSize();
 
-		setSelectedFont(Font.decode(String.format("%s-PLAIN-%d", suggestedFont, (int)currentFontSize)));
+		Font font = Font.decode(String.format("%s-PLAIN-%d", suggestedFont, (int)currentFontSize));
+		PrefHelper.getUserPreferences()
+				.put(getFontProp(), (new FontFormatter()).format(font));
+		setSelectedFont(font);
 	}
 
 	public void onSelectFont() {
@@ -167,11 +206,39 @@ public class FontSelectionButton extends MultiActionButton {
 		props.setFontSize(getSelectedFont().getSize());
 		props.setBold(getSelectedFont().isBold());
 		props.setItalic(getSelectedFont().isItalic());
-		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setParentWindow(SwingUtilities.getWindowAncestor(this));
 	
 		NativeDialogs.showFontDialog(props);
 	}
-	
+
+	public void onIncreaseFontSize() {
+		Font currentFont = getSelectedFont();
+		Font biggerFont = currentFont.deriveFont(Math.min(72.0f, currentFont.getSize() + 2.0f));
+		PrefHelper.getUserPreferences()
+				.put(getFontProp(), (new FontFormatter()).format(biggerFont));
+		setSelectedFont(biggerFont);
+	}
+
+	public void onDecreaseFontSize() {
+		Font currentFont = getSelectedFont();
+		Font smallerFont = currentFont.deriveFont(Math.max(1.0f, currentFont.getSize() - 2.0f));
+		PrefHelper.getUserPreferences()
+				.put(getFontProp(), (new FontFormatter()).format(smallerFont));
+		setSelectedFont(smallerFont);
+	}
+
+	public void onToggleStyle(PhonActionEvent pae) {
+		int style = Integer.parseInt(pae.getData().toString());
+
+		Font currentFont = getSelectedFont();
+		int fontStyle = currentFont.getStyle();
+		fontStyle ^= style;
+		Font font = currentFont.deriveFont(fontStyle);
+		PrefHelper.getUserPreferences()
+				.put(getFontProp(), (new FontFormatter()).format(font));
+		setSelectedFont(font);
+	}
+
 	public void onReload() {
 		PrefHelper.getUserPreferences()
 			.put(getFontProp(), getDefaultVal());
