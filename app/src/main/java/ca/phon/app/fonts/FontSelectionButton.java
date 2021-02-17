@@ -49,6 +49,10 @@ public class FontSelectionButton extends MultiActionButton {
 			IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
 	final ImageIcon subIcon =
 			IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
+	final ImageIcon boldIcon =
+			IconManager.getInstance().getIcon("actions/format-text-bold", IconSize.SMALL);
+	final ImageIcon italicIcon =
+			IconManager.getInstance().getIcon("actions/format-text-italic", IconSize.SMALL);
 
 	public FontSelectionButton() {
 		super();
@@ -82,9 +86,19 @@ public class FontSelectionButton extends MultiActionButton {
 		final PhonUIAction reloadAct = new PhonUIAction(this, "onReload");
 		reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset to default");
 		reloadAct.putValue(PhonUIAction.LARGE_ICON_KEY, reloadIcon);
+
+		final PhonUIAction toggleBoldAct = new PhonUIAction(this, "onToggleStyle", Font.BOLD);
+		toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
+		toggleBoldAct.putValue(PhonUIAction.LARGE_ICON_KEY, boldIcon);
+
+		final PhonUIAction toggleItalicAct = new PhonUIAction(this, "onToggleStyle", Font.ITALIC);
+		toggleItalicAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle italic modifier");
+		toggleItalicAct.putValue(PhonUIAction.LARGE_ICON_KEY, italicIcon);
 		
 		addAction(onIncreaseFontSize);
 		addAction(onDecreaseFontSize);
+		addAction(toggleBoldAct);
+		addAction(toggleItalicAct);
 		addAction(reloadAct);
 
 		setDefaultAction(defaultAct);
@@ -128,12 +142,14 @@ public class FontSelectionButton extends MultiActionButton {
 		toggleBoldAct.putValue(PhonUIAction.NAME, "Bold");
 		toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
 		toggleBoldAct.putValue(PhonUIAction.SELECTED_KEY, getSelectedFont().isBold());
+		toggleBoldAct.putValue(PhonUIAction.SMALL_ICON, boldIcon);
 		builder.addItem(".", new JCheckBoxMenuItem(toggleBoldAct));
 
 		final PhonUIAction toggleItalicAct = new PhonUIAction(this, "onToggleStyle", Font.ITALIC);
 		toggleItalicAct.putValue(PhonUIAction.NAME, "Italic");
 		toggleItalicAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle italic modifier");
 		toggleItalicAct.putValue(PhonUIAction.SELECTED_KEY, getSelectedFont().isItalic());
+		toggleItalicAct.putValue(PhonUIAction.SMALL_ICON, italicIcon);
 		builder.addItem(".", new JCheckBoxMenuItem(toggleItalicAct));
 
 		final PhonUIAction onIncreaseFontSize = new PhonUIAction(this, "onIncreaseFontSize");
