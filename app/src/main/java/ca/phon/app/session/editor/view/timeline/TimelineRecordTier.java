@@ -44,14 +44,17 @@ import ca.phon.app.session.editor.view.timeline.RecordGrid.*;
 import ca.phon.app.session.editor.view.timeline.actions.*;
 import ca.phon.media.*;
 import ca.phon.media.TimeUIModel.*;
+import ca.phon.opgraph.app.components.canvas.CanvasMinimap;
 import ca.phon.query.db.Query;
 import ca.phon.query.db.ResultSet;
 import ca.phon.query.script.QueryName;
 import ca.phon.query.script.QueryScript;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.*;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.*;
 import ca.phon.ui.text.FormatterTextField;
 import ca.phon.util.*;
@@ -75,6 +78,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private JButton splitButton;
 	private JButton cancelSplitButton;
 	private JButton acceptSplitButton;
+
+	private JButton moveSegmentsButton;
 
 	public TimelineRecordTier(TimelineView parent) {
 		super(parent);
@@ -151,6 +156,16 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		acceptSplitButton = new JButton(acceptSplitAct);
 		acceptSplitButton.setVisible(false);
 		toolbar.add(acceptSplitButton);
+
+		toolbar.addSeparator();
+
+		final PhonUIAction moveSegmentsAct = new PhonUIAction(this, "onMoveSegments");
+		moveSegmentsAct.putValue(PhonUIAction.NAME, "Move records");
+		moveSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records a specified amount of time");
+		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
+				IconManager.getInstance().getIcon("actions/list-move", IconSize.SMALL));
+		moveSegmentsButton = new JButton(moveSegmentsAct);
+		toolbar.add(moveSegmentsButton);
 	}
 
 	public RecordGrid getRecordGrid() {
@@ -208,6 +223,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final PhonUIAction moveLeftSlowAct = new PhonUIAction(this, "onMoveSegmentsLeft", 1);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), moveLeftSlow);
 		actionMap.put(moveLeftSlow, moveLeftSlowAct);
+
+		final String move = "move_segments";
+		final PhonUIAction moveAct = new PhonUIAction(this, "onMoveSegments");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, KeyEvent.CTRL_DOWN_MASK), move);
+		actionMap.put(move, moveAct);
 
 		final String growSegments = "grow_segments";
 		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
@@ -475,6 +495,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
+	private JFrame timeSelectionPopup;
 	/**
 	 * Display a UI for moving records a specific amount of time
 	 *
@@ -482,8 +503,110 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	 */
 	public void onMoveSegments(PhonActionEvent pae) {
 		final FormatterTextField<Long> msField = new FormatterTextField<>(new MsFormatter());
-		msField.setText("");
+		msField.setPrompt("###:##.###");
+		msField.setToolTipText("Enter number, may use ###:##.### format. Negative values allowed.");
+
+		String lblText = """
+				<html><p>Enter time in ms (###:##.### format allowed)<br/>Negative values move records left</p></html>
+				""";
+		JLabel lbl = new JLabel(lblText);
+
+		JPanel movePanel = new JPanel(new BorderLayout());
+		movePanel.add(lbl, BorderLayout.NORTH);
+		movePanel.add(msField, BorderLayout.CENTER);
+
+		final PhonUIAction okAct = new PhonUIAction(this, "onConfirmMoveSegments", msField);
+		okAct.putValue(PhonUIAction.NAME, "Ok");
+		okAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move segments given amount of time");
+		JButton okBtn = new JButton(okAct);
+		msField.setAction(okAct);
+
+		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancelMoveSegments");
+		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
+		cancelAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cancel move segments");
+		JButton cancelBtn = new JButton(cancelAct);
+
+		msField.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cancel");
+		msField.getActionMap().put("cancel", cancelAct);
+
+		JComponent btnPanel = ButtonBarBuilder.buildOkCancelBar(okBtn, cancelBtn);
+		movePanel.add(btnPanel, BorderLayout.SOUTH);
+
+		timeSelectionPopup = new JFrame();
+		timeSelectionPopup.setUndecorated(true);
+		timeSelectionPopup.addWindowFocusListener(new WindowFocusListener() {
+
+			@Override
+			public void windowGainedFocus(WindowEvent we) {
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent we) {
+				if (timeSelectionPopup != null) {
+					timeSelectionPopup.setVisible(false);
+					timeSelectionPopup = null;
+				}
+			}
+		});
+		timeSelectionPopup.getContentPane().add(movePanel);
+		timeSelectionPopup.getRootPane().setDefaultButton(okBtn);
+
+		timeSelectionPopup.pack();
+		Point p = moveSegmentsButton.getLocation();
+		SwingUtilities.convertPointToScreen(p, moveSegmentsButton.getParent());
+		// setup bounds
+		Rectangle windowBounds = new Rectangle(
+				p.x,
+				p.y + moveSegmentsButton.getHeight(),
+				timeSelectionPopup.getPreferredSize().width,
+				timeSelectionPopup.getPreferredSize().height);
+		timeSelectionPopup.setBounds(windowBounds);
+		timeSelectionPopup.setVisible(true);
 	}
+
+	public void onConfirmMoveSegments(PhonActionEvent pae) {
+		FormatterTextField<Long> msField = (FormatterTextField<Long>)pae.getData();
+		Long confirmedValue = msField.getValue();
+		if(confirmedValue == null) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		float ms = confirmedValue.floatValue();
+
+		boolean firstChange = true;
+		getParentView().getEditor().getUndoSupport().beginUpdate();
+		for(int recordIndex:getSelectionModel().getSelectedIndices()) {
+			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
+			MediaSegment seg = r.getSegment().getGroup(0);
+			float segLength = seg.getEndValue() - seg.getStartValue();
+			MediaSegment newSeg = SessionFactory.newFactory().createMediaSegment();
+
+			if (ms > 0) {
+				newSeg.setEndValue(Math.min(getTimeModel().getEndTime()*1000.0f, seg.getEndValue()+ms));
+				newSeg.setStartValue(newSeg.getEndValue()-segLength);
+			} else if (ms < 0) {
+				newSeg.setStartValue(Math.max(0, seg.getStartValue() + ms));
+				newSeg.setEndValue(newSeg.getStartValue() + segLength);
+			}
+
+			TierEdit<MediaSegment> tierEdit = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, newSeg);
+			tierEdit.setFireHardChangeOnUndo(firstChange);
+			getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
+			firstChange = false;
+		}
+		getParentView().getEditor().getUndoSupport().endUpdate();
+
+		EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+		getParentView().getEditor().getEventManager().queueEvent(ee);
+
+		onCancelMoveSegments(pae);
+	}
+
+	public void onCancelMoveSegments(PhonActionEvent pae) {
+		timeSelectionPopup.setVisible(false);
+		timeSelectionPopup = null;
+	}
+
 
 	private final DelegateEditorAction onRecordChange = new DelegateEditorAction(this, "onRecordChange");
 
@@ -1004,6 +1127,15 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 
 		builder.addSeparator(".", "record_actions");
+
+		final PhonUIAction moveSegmentsAct = new PhonUIAction(this, "onMoveSegments");
+		moveSegmentsAct.putValue(PhonUIAction.NAME, "Move records...");
+		moveSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records a specified amount of time");
+		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
+				IconManager.getInstance().getIcon("actions/list-move", IconSize.SMALL));
+		if(includeAccel)
+			moveSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, KeyEvent.CTRL_DOWN_MASK));
+		builder.addItem(".", moveSegmentsAct);
 
 		final PhonUIAction moveSegmentsRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
 		moveSegmentsRightAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " right");
