@@ -15,13 +15,15 @@
  */
 package ca.phon.util;
 
+import ca.phon.formatter.Formatter;
+
 import java.text.*;
 
 
 /**
  * Format time values in miliseconds into parseable strings.
  */
-public class MsFormatter {
+public class MsFormatter implements Formatter<Long> {
 	
 	/**
 	 * Create a new formatter object.
@@ -55,4 +57,15 @@ public class MsFormatter {
 		final Format format = createFormatter();
 		return ((Long)format.parseObject(msText)).longValue();
 	}
+
+	@Override
+	public String format(Long obj) {
+		return msToDisplayString(obj.longValue());
+	}
+
+	@Override
+	public Long parse(String text) throws ParseException {
+		return displayStringToMs(text);
+	}
+
 }

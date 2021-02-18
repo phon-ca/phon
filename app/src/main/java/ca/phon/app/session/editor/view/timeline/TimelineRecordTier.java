@@ -53,6 +53,7 @@ import ca.phon.session.Record;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.*;
 import ca.phon.ui.menu.*;
+import ca.phon.ui.text.FormatterTextField;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import org.apache.commons.logging.Log;
@@ -472,6 +473,16 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			}
 		}
 		recordGrid.repaint(recordGrid.getVisibleRect());
+	}
+
+	/**
+	 * Display a UI for moving records a specific amount of time
+	 *
+	 * @param pae
+	 */
+	public void onMoveSegments(PhonActionEvent pae) {
+		final FormatterTextField<Long> msField = new FormatterTextField<>(new MsFormatter());
+		msField.setText("");
 	}
 
 	private final DelegateEditorAction onRecordChange = new DelegateEditorAction(this, "onRecordChange");

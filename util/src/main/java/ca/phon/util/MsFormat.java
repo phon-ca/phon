@@ -27,7 +27,7 @@ public class MsFormat extends Format {
 
 	private static final long serialVersionUID = 4432179935812692306L;
 	
-	private final static String PATTERN = "([0-9]{3})\\:([0-9]{2})\\.([0-9]{3})";
+	private final static String PATTERN = "(?:([0-9]{1,3})\\:)?([0-9]{1,2})\\.([0-9]{1,3})";
 
 	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo,
@@ -80,23 +80,34 @@ public class MsFormat extends Format {
 	@Override
 	public Object parseObject(String source, ParsePosition pos) {
 		Object retVal = null;
-		final Pattern pattern = Pattern.compile(PATTERN);
-		final Matcher matcher = pattern.matcher(source);
-		if(matcher.matches()) {
-			final String minString = matcher.group(1);
-			final int mins = Integer.parseInt(minString);
-			
-			final String secString = matcher.group(2);
-			final int secs = Integer.parseInt(secString);
-			
-			final String msString = matcher.group(3);
-			final int ms = Integer.parseInt(msString);
-			
-			retVal = new Long(
-					ms + (secs * 1000) + (mins * 60 * 1000));
+		boolean negative = source.startsWith("-");
+		if(negative)
+			source = source.substring(1);
+		long value = 0L;
+		if(source.matches("[0-9]+")) {
+			value = Long.parseLong(source);
 			pos.setIndex(source.length());
+		} else {
+			final Pattern pattern = Pattern.compile(PATTERN);
+			final Matcher matcher = pattern.matcher(source);
+			if (matcher.matches()) {
+				final String minString = matcher.group(1);
+				int mins = 0;
+				if(minString != null)
+					mins = Integer.parseInt(minString);
+
+				final String secString = matcher.group(2);
+				final int secs = Integer.parseInt(secString);
+
+				final String msString = matcher.group(3);
+				final int ms = Integer.parseInt(msString);
+
+				value = new Long(
+						ms + (secs * 1000) + (mins * 60 * 1000));
+				pos.setIndex(source.length());
+			}
 		}
-		return retVal;
+		return (negative ? -1 : 1) * value;
 	}
 
 }
