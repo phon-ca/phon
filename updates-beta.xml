@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.1-beta.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_5.dmg" newVersion="3.2.1-beta.5" newMediaFileId="macos" fileSize="372408220" md5Sum="32435957e1735aea9fb608ffa6a29960" sha256Sum="9b2de8be5acc76842c1bc11cebdb18376ae5b22e740402f0d3c412880550f953" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_1.dmg" newVersion="3.3.0-beta.1" newMediaFileId="macos" fileSize="365099278" md5Sum="faa9aabfdf5b94722e6eb3f835622a30" sha256Sum="f4479dc5731b5bbcdea143ef7e1d46037e8148686eaca3652945532b5e9dbd74" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
  * Font preferences have been simplified and reset
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier managment functions into new context menu available on tier lables in Record Data view
  * Added new option to 'Combine results for all participants' to all stock analyses.
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
@@ -394,11 +397,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_1-beta_5.dmg" newVersion="3.2.1-beta.5" newMediaFileId="macos" fileSize="372408220" md5Sum="32435957e1735aea9fb608ffa6a29960" sha256Sum="9b2de8be5acc76842c1bc11cebdb18376ae5b22e740402f0d3c412880550f953" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_1.dmg" newVersion="3.3.0-beta.1" newMediaFileId="macos" fileSize="365099278" md5Sum="faa9aabfdf5b94722e6eb3f835622a30" sha256Sum="f4479dc5731b5bbcdea143ef7e1d46037e8148686eaca3652945532b5e9dbd74" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
  * Font preferences have been simplified and reset
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier managment functions into new context menu available on tier lables in Record Data view
  * Added new option to 'Combine results for all participants' to all stock analyses.
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
@@ -788,11 +794,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_5.exe" newVersion="3.2.1-beta.5" newMediaFileId="win64" fileSize="378048016" md5Sum="23e4d72bf34523746f75d3ff1d789f01" sha256Sum="fbe9ee76abc54acfdb31fe1557f2969434520264aa58e316a172d8988e152422" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_1.exe" newVersion="3.3.0-beta.1" newMediaFileId="win64" fileSize="378054160" md5Sum="2646244640d40a6c9f79ee3921d232bd" sha256Sum="2baf85f86e698111be80ddbaccd834c30f0c4f5d60230a88df4dfaa87c0c2c50" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
  * Font preferences have been simplified and reset
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier managment functions into new context menu available on tier lables in Record Data view
  * Added new option to 'Combine results for all participants' to all stock analyses.
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
@@ -1182,11 +1191,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_5.exe" newVersion="3.2.1-beta.5" newMediaFileId="win64" fileSize="378048016" md5Sum="23e4d72bf34523746f75d3ff1d789f01" sha256Sum="fbe9ee76abc54acfdb31fe1557f2969434520264aa58e316a172d8988e152422" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_1.exe" newVersion="3.3.0-beta.1" newMediaFileId="win64" fileSize="378054160" md5Sum="2646244640d40a6c9f79ee3921d232bd" sha256Sum="2baf85f86e698111be80ddbaccd834c30f0c4f5d60230a88df4dfaa87c0c2c50" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
  * Font preferences have been simplified and reset
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier managment functions into new context menu available on tier lables in Record Data view
  * Added new option to 'Combine results for all participants' to all stock analyses.
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
@@ -1576,11 +1588,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_5.exe" newVersion="3.2.1-beta.5" newMediaFileId="win64" fileSize="378048016" md5Sum="23e4d72bf34523746f75d3ff1d789f01" sha256Sum="fbe9ee76abc54acfdb31fe1557f2969434520264aa58e316a172d8988e152422" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_1.exe" newVersion="3.3.0-beta.1" newMediaFileId="win64" fileSize="378054160" md5Sum="2646244640d40a6c9f79ee3921d232bd" sha256Sum="2baf85f86e698111be80ddbaccd834c30f0c4f5d60230a88df4dfaa87c0c2c50" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
  * Font preferences have been simplified and reset
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier managment functions into new context menu available on tier lables in Record Data view
  * Added new option to 'Combine results for all participants' to all stock analyses.
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
@@ -1970,11 +1985,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_1-beta_5.zip" newVersion="3.2.1-beta.5" newMediaFileId="win64zip" fileSize="376996264" md5Sum="462b94076b5755ce03256c3bfe73241a" sha256Sum="06a0bf5127db8b30f5405789148e88fc2f30a0079392d061d0facacb6333efc4" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_1.zip" newVersion="3.3.0-beta.1" newMediaFileId="win64zip" fileSize="377002527" md5Sum="ed8c2340488bf91924eb17aa44d78dd0" sha256Sum="54f087ce8fcb4b52994280aec3f9442f53af4d1a1866ad888208909bd0d285af" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
  * Font preferences have been simplified and reset
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier managment functions into new context menu available on tier lables in Record Data view
  * Added new option to 'Combine results for all participants' to all stock analyses.
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis

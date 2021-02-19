@@ -668,6 +668,7 @@ ca.phon.app.session.editor.view.tier_management.actions
 ca.phon.app.session.editor.view.tier_management.actions
 ca.phon.app.session.editor.view.tier_management.actions
 ca.phon.app.session.editor.view.tier_management.actions
+ca.phon.app.session.editor.view.tier_management.actions
 ca.phon.app.session.editor.view.tier_management
 ca.phon.app.session.editor.view.timeline
 ca.phon.app.session.editor.view.timeline
@@ -926,6 +927,7 @@ ca.phon.ui.ipa
 ca.phon.ui.ipa
 ca.phon.ui.ipa
 ca.phon.ui.ipa
+ca.phon.ui
 ca.phon.ui
 ca.phon.ui
 ca.phon.ui.participant
