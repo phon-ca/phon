@@ -43,7 +43,7 @@ public class VersionInfo implements Comparable<VersionInfo> {
 	private final static String VERSION_PROP_FILE = "phon.build.properties";
 		
 	// dev version
-	private final static String DEV_VERSION = "3.2.1-dev";
+	private final static String DEV_VERSION = "3.3.0-dev";
 	
 	/*
 	 * regex pattern for syntax of previous versions
