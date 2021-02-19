@@ -295,7 +295,7 @@ public class TierOrderingEditorView extends EditorView {
 		final ResetTierFontAction resetTierFontAction = new ResetTierFontAction(getEditor(), this, tvi);
 		builder.addItem(".", resetTierFontAction);
 
-		JMenu fontMenu = builder.addMenu(".", "Select font");
+		JMenu fontMenu = builder.addMenu(".", "Font");
 		setupFontMenu(new MenuBuilder(fontMenu), tvi);
 
 		builder.addSeparator(".", "move");
@@ -387,7 +387,53 @@ public class TierOrderingEditorView extends EditorView {
 			selectSuggestedFont.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use font: " + suggestedFont);
 			builder.addItem(".", selectSuggestedFont);
 		}
+
+		builder.addSeparator(".", "font-dialog");
+		final PhonUIAction defaultAct = new PhonUIAction(this, "onSelectFont", tvi);
+		defaultAct.putValue(PhonUIAction.NAME, "Select font....");
+		defaultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font using font selection dialog");
+		defaultAct.putValue(PhonUIAction.LARGE_ICON_KEY, icon);
+		builder.addItem(".", defaultAct);
 	}
+
+	public void onSelectFont(PhonActionEvent pae) {
+		if(pae.getData() ==  null) return;
+		TierViewItem tvi = (TierViewItem) pae.getData();
+		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
+
+		final FontDialogProperties props = new FontDialogProperties();
+		props.setRunAsync(true);
+		props.setListener(new FontDlgListener(tvi));
+		props.setFontName(currentFont.getName());
+		props.setFontSize(currentFont.getSize());
+		props.setBold(currentFont.isBold());
+		props.setItalic(currentFont.isItalic());
+		props.setParentWindow(getEditor());
+
+		NativeDialogs.showFontDialog(props);
+	}
+
+	private class FontDlgListener implements NativeDialogListener {
+
+		private TierViewItem tvi;
+
+		public FontDlgListener(TierViewItem tvi) {
+			this.tvi = tvi;
+		}
+
+		@Override
+		public void nativeDialogEvent(NativeDialogEvent nativeDialogEvent) {
+			if(nativeDialogEvent.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+				Font selectedFont = (Font)nativeDialogEvent.getDialogData();
+
+				TierViewItem newItem = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(),
+						(new FontFormatter()).format(selectedFont), tvi.isTierLocked());
+
+				final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), tvi, newItem);
+				getEditor().getUndoSupport().postEdit(edit);
+			}
+		}
+	};
 
 	public void onSelectSuggestedFont(PhonActionEvent pae) {
 		if(pae.getData() == null) return;
