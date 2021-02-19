@@ -53,7 +53,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	private final ExtensionSupport extSupport = new ExtensionSupport(IPATranscript.class, this);
 
 	public final static String USE_ANTLR4 = IPATranscript.class.getName() + ".useAntlr4";
-	private final static boolean defaultUseAntlr4 = false;
+	private final static boolean defaultUseAntlr4 = true;
 
 	private final IPAElement[] transcription;
 
