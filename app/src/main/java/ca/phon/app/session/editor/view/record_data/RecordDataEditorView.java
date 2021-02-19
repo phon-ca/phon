@@ -29,6 +29,8 @@ import javax.swing.text.*;
 import javax.swing.text.Highlighter.*;
 import javax.swing.undo.*;
 
+import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.ui.menu.MenuBuilder;
 import org.jdesktop.swingx.*;
 
 import com.jgoodies.forms.layout.*;
@@ -282,7 +284,15 @@ public class RecordDataEditorView extends EditorView {
 			tierLabel.setHorizontalTextPosition(SwingConstants.LEFT);
 			tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			tierLabel.setIcon(dropDownIcon);
+			tierLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			tierLabelComp.add(tierLabel);
+
+			tierLabel.addMouseListener(new MouseInputAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					showTierContextMenu(e, tierLabel.getText());
+				}
+			});
 
 			contentPane.add(tierLabelComp, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
 
@@ -790,7 +800,7 @@ public class RecordDataEditorView extends EditorView {
 	 * Return the 'current' tier.  This is the last tier that
 	 * was focused within the editor.
 	 *
-	 * @param current tier or <code>null</code> if not
+	 * @return current tier or <code>null</code> if not
 	 *  set
 	 */
 	public Tier<?> currentTier() {
@@ -800,7 +810,7 @@ public class RecordDataEditorView extends EditorView {
 	/**
 	 * Return the current group index.
 	 *
-	 * @param the current group index, < 0 if not set
+	 * @return the current group index, < 0 if not set
 	 */
 	public int currentGroupIndex() {
 		return (currentGroupIndex != null ? currentGroupIndex.get() : -1);
@@ -843,6 +853,30 @@ public class RecordDataEditorView extends EditorView {
 		final EditorEvent ee = new EditorEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, this,
 				getSessionLocation());
 		getEditor().getEventManager().queueEvent(ee);
+	}
+
+	/**
+	 * Show context menu for given tier
+	 *
+	 * @param tier
+	 */
+	public void showTierContextMenu(MouseEvent me, String tier) {
+		JPopupMenu tierMenu = new JPopupMenu();
+		MenuBuilder builder = new MenuBuilder(tierMenu);
+
+		TierOrderingEditorView tierOrderView =
+				(TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_TITLE);
+		if(tierOrderView != null) {
+			for(int i = 0; i < getEditor().getSession().getTierView().size(); i++) {
+				TierViewItem tvi = getEditor().getSession().getTierView().get(i);
+				if(tvi.getTierName().equals(tier)) {
+					tierOrderView.setupTierContextMenu(i, builder);
+					break;
+				}
+			}
+		}
+
+		tierMenu.show(me.getComponent(), 0, me.getComponent().getHeight());
 	}
 
 	/*

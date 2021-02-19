@@ -135,9 +135,6 @@ public class FontSelectionButton extends MultiActionButton {
 		JPopupMenu popupMenu = new JPopupMenu();
 		MenuBuilder builder = new MenuBuilder(popupMenu);
 
-		// reset
-
-
 		final PhonUIAction toggleBoldAct = new PhonUIAction(this, "onToggleStyle", Font.BOLD);
 		toggleBoldAct.putValue(PhonUIAction.NAME, "Bold");
 		toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
