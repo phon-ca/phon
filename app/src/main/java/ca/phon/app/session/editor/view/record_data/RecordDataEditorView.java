@@ -275,10 +275,13 @@ public class RecordDataEditorView extends EditorView {
 			
 			JPanel tierLabelComp = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 			tierLabelComp.setOpaque(false);
+
+			DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
 			
 			final JLabel tierLabel = new JLabel(tierName);
-			tierLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+			tierLabel.setHorizontalTextPosition(SwingConstants.LEFT);
 			tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			tierLabel.setIcon(dropDownIcon);
 			tierLabelComp.add(tierLabel);
 
 			contentPane.add(tierLabelComp, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));

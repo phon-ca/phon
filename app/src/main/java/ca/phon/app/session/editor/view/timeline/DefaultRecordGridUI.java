@@ -968,11 +968,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		@Override
 		public void mouseDragged(MouseEvent me) {
-			if(pressedRecordIdx >= 0) 
+			if(pressedRecordIdx >= 0)
 				recordGrid.fireRecordDragged(pressedRecordIdx, me);
-			
-			if(currentMouseOverMarker != null && getCurrentlyDraggedMarker() != currentMouseOverMarker) {
-				recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
+
+			if(currentMouseOverMarker != null) {
+				if(getCurrentlyDraggedMarker() != currentMouseOverMarker) {
+					recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);
+				}
 			}
 
 			if(pressedRecordIdx < 0 && isDraggingSelection) {

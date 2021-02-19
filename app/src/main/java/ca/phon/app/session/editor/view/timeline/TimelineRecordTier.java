@@ -92,8 +92,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private void init() {
 		Session session = getParentView().getEditor().getSession();
 		recordGrid = new RecordGrid(getTimeModel(), session);
-		if (getParentView().getEditor().currentRecord() != null)
+		if (getParentView().getEditor().currentRecord() != null) {
+			recordGrid.getSelectionModel().setSelectionInterval(getParentView().getEditor().getCurrentRecordIndex(), getParentView().getEditor().getCurrentRecordIndex());
 			setupRecord(getParentView().getEditor().currentRecord());
+		}
 		recordGrid.addParticipantMenuHandler(this::setupSpeakerContextMenu);
 
 		recordGrid.addPropertyChangeListener("splitMode", e -> {
@@ -690,14 +692,13 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	}
 
 	public void setupRecord(Record r) {
-		updateCurrentRecordInterval(r);
-
 		if(r != null) {
 			recordGrid.setCurrentRecord(r);
 		} else {
 			getSelectionModel().clearSelection();
 		}
-		
+		updateCurrentRecordInterval(r);
+
 		mouseListener.waitForRecordChange = false;
 	}
 
@@ -1131,8 +1132,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final PhonUIAction moveSegmentsAct = new PhonUIAction(this, "onMoveSegments");
 		moveSegmentsAct.putValue(PhonUIAction.NAME, "Move records...");
 		moveSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records a specified amount of time");
-		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
-				IconManager.getInstance().getIcon("actions/list-move", IconSize.SMALL));
+//		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
+//				IconManager.getInstance().getIcon("actions/list-move", IconSize.SMALL));
 		if(includeAccel)
 			moveSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, KeyEvent.CTRL_DOWN_MASK));
 		builder.addItem(".", moveSegmentsAct);
@@ -1519,7 +1520,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
-			if(me.getButton() != MouseEvent.BUTTON1) return;
+			if(me.isPopupTrigger()) return;
 
 			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
 				if (getSelectionModel().isSelectedIndex(recordIndex))
@@ -1550,7 +1551,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		@Override
 		public void recordDragged(int recordIndex, MouseEvent me) {
 			if (!getSelectionModel().isSelectedIndex(recordIndex)) {
-				if((me.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
+				if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
 					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
 				} else {
 					getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
