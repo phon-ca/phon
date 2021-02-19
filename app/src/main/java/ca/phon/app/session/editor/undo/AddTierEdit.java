@@ -35,11 +35,19 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 	private final TierDescription tierDescription;
 	
 	private final TierViewItem tierViewItem;
-	
+
+	private int index = -1;
+
 	public AddTierEdit(SessionEditor editor, TierDescription tierDesc, TierViewItem tvi) {
+		this(editor, tierDesc, tvi, -1);
+	}
+
+
+	public AddTierEdit(SessionEditor editor, TierDescription tierDesc, TierViewItem tvi, int index) {
 		super(editor);
 		this.tierDescription = tierDesc;
 		this.tierViewItem = tvi;
+		this.index = index;
 	}
 	
 	@Override
@@ -87,7 +95,10 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		
 		final List<TierViewItem> tierView = session.getTierView();
 		final List<TierViewItem> newView = new ArrayList<TierViewItem>(tierView);
-		newView.add(this.tierViewItem);
+		if(this.index >= 0)
+			newView.add(index, this.tierViewItem);
+		else
+			newView.add(this.tierViewItem);
 		session.setTierView(newView);
 		
 		SessionFactory factory = SessionFactory.newFactory();

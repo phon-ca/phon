@@ -26,7 +26,9 @@ public class ToggleTierLockAction extends TierManagementAction {
 	
 	private static final long serialVersionUID = 6445019863407426817L;
 
-	private final static String CMD_NAME = "Toggle tier locked";
+	private final static String LOCK_TIER = "Lock tier";
+
+	private final static String UNLOCK_TIER = "Unlock tier";
 	
 	private final static String SHORT_DESC = "";
 	
@@ -36,8 +38,11 @@ public class ToggleTierLockAction extends TierManagementAction {
 			TierOrderingEditorView view, TierViewItem item) {
 		super(editor, view);
 		this.item = item;
-		
-		putValue(NAME, CMD_NAME);
+
+		if(item.isTierLocked())
+			putValue(NAME, UNLOCK_TIER);
+		else
+			putValue(NAME, LOCK_TIER);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 	}
 	

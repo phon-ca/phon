@@ -26,7 +26,9 @@ public class ToggleTierVisibleAction extends TierManagementAction {
 
 	private static final long serialVersionUID = -4743364905920496226L;
 	
-	private final static String CMD_NAME = "Toggle tier visible";
+	private final static String SHOW_TIER = "Show tier";
+
+	private final static String HIDE_TIER = "Hide tier";
 	
 	private final static String SHORT_DESC = "";
 	
@@ -36,8 +38,11 @@ public class ToggleTierVisibleAction extends TierManagementAction {
 			TierOrderingEditorView view, TierViewItem tierViewItem) {
 		super(editor, view);
 		this.item = tierViewItem;
-		
-		putValue(NAME, CMD_NAME);
+
+		if(tierViewItem.isVisible())
+			putValue(NAME, HIDE_TIER);
+		else
+			putValue(NAME, SHOW_TIER);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
 	}
 

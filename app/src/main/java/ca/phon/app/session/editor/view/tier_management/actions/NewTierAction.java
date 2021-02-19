@@ -39,8 +39,16 @@ public class NewTierAction extends TierManagementAction {
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
 
+	private int index = -1;
+
 	public NewTierAction(SessionEditor editor, TierOrderingEditorView view) {
+		this(editor, view, -1);
+	}
+
+	public NewTierAction(SessionEditor editor, TierOrderingEditorView view, int index) {
 		super(editor, view);
+
+		this.index = index;
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SMALL_ICON, ICON);
@@ -88,7 +96,7 @@ public class NewTierAction extends TierManagementAction {
 			final TierDescription tierDescription = tierEditor.createTierDescription();
 			final TierViewItem tierViewItem = tierEditor.createTierViewItem();
 			
-			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem);
+			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem, index);
 			editor.getUndoSupport().postEdit(edit);
 		}
 	}
