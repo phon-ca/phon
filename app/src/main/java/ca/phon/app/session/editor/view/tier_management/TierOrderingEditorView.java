@@ -292,8 +292,10 @@ public class TierOrderingEditorView extends EditorView {
 
 		builder.addSeparator(".", "font");
 
-		final ResetTierFontAction resetTierFontAction = new ResetTierFontAction(getEditor(), this, tvi);
-		builder.addItem(".", resetTierFontAction);
+		if(!"default".equals(tvi.getTierFont())) {
+			final ResetTierFontAction resetTierFontAction = new ResetTierFontAction(getEditor(), this, tvi);
+			builder.addItem(".", resetTierFontAction);
+		}
 
 		JMenu fontMenu = builder.addMenu(".", "Font");
 		setupFontMenu(new MenuBuilder(fontMenu), tvi);
