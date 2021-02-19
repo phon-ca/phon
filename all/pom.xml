@@ -103,7 +103,7 @@
         <project.build.targetVersion>11</project.build.targetVersion>
 
         <!-- Dependency versions -->
-        <ca.phon.phon-dict-data.version>30</ca.phon.phon-dict-data.version>
+        <ca.phon.phon-dict-data.version>31</ca.phon.phon-dict-data.version>
         <ca.phon.app.version>${project.version}</ca.phon.app.version>
         <ca.phon.phon-shell-plugin.version>21</ca.phon.phon-shell-plugin.version>
         <ca.phon.phon-groovy-plugin.version>4</ca.phon.phon-groovy-plugin.version>
