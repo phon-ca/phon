@@ -414,12 +414,15 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	protected Rectangle paintSpeakerLabel(Graphics g2, Participant speaker) {		
 		Rectangle speakerLabelRect = getSpeakerLabelRect(speaker);
 		speakerLabelRect.x += recordGrid.getVisibleRect().x;
-				
+
+		DropDownIcon dropDownIcon = new DropDownIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL),
+			0, SwingConstants.BOTTOM);
+
 		renderer.setHorizontalTextPosition(SwingConstants.RIGHT);
 		renderer.setForeground(recordGrid.getForeground());
 		renderer.setFont(recordGrid.getFont().deriveFont(Font.BOLD));
 		renderer.setText(speaker.toString());
-		renderer.setIcon(IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
+		renderer.setIcon(dropDownIcon);
 		SwingUtilities.paintComponent(g2, renderer, recordGrid, speakerLabelRect);
 		
 		return speakerLabelRect;
