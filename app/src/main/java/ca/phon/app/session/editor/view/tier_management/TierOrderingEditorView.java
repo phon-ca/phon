@@ -320,6 +320,13 @@ public class TierOrderingEditorView extends EditorView {
 				StreamSupport.stream(getEditor().getSession().getUserTiers().spliterator(), false)
 					.filter( td -> td.getName().equals(tvi.getTierName()) )
 					.findAny();
+		TierDescription td = (tierDesc.isPresent() ? tierDesc.get() :
+				SessionFactory.newFactory().createTierDescription(tvi.getTierName(),
+						(systemTier != null ? systemTier.isGrouped() : false), TierString.class));
+
+		final DuplicateTierAction dupTierAction = new DuplicateTierAction(getEditor(), this, td, tierViewIdx+1);
+		builder.addItem(".", dupTierAction);
+
 		if(tierDesc.isPresent()) {
 			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), this, tierDesc.get(), tvi);
 			builder.addItem(".", removeTierAction);
