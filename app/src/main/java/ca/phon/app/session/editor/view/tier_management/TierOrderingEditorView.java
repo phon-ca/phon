@@ -387,13 +387,6 @@ public class TierOrderingEditorView extends EditorView {
 			selectSuggestedFont.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use font: " + suggestedFont);
 			builder.addItem(".", selectSuggestedFont);
 		}
-
-		builder.addSeparator(".", "font-dialog");
-		final PhonUIAction defaultAct = new PhonUIAction(this, "onSelectFont");
-		defaultAct.putValue(PhonUIAction.NAME, "Select font....");
-		defaultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font using font selection dialog");
-		defaultAct.putValue(PhonUIAction.LARGE_ICON_KEY, icon);
-		builder.addItem(".", defaultAct);
 	}
 
 	public void onSelectSuggestedFont(PhonActionEvent pae) {
