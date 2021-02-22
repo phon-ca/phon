@@ -20,6 +20,7 @@ import java.text.*;
 
 import javax.swing.*;
 
+import ca.phon.ui.ipa.SyllabificationDisplay;
 import org.apache.logging.log4j.*;
 import org.jdesktop.swingx.*;
 
@@ -129,7 +130,6 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	public JToolTip createToolTip() {
 		JToolTip retVal = super.createToolTip();
 		retVal.setLayout(new VerticalLayout());
-		
 		return retVal;
 	}
 	

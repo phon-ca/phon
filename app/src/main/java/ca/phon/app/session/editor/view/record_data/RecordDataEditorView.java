@@ -30,6 +30,7 @@ import javax.swing.text.Highlighter.*;
 import javax.swing.undo.*;
 
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import org.jdesktop.swingx.*;
 
@@ -1021,14 +1022,6 @@ public class RecordDataEditorView extends EditorView {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-//			final JComponent comp = (JComponent)e.getSource();
-//			if(comp != null && comp instanceof JTextComponent) {
-//				final JTextComponent textComp = (JTextComponent)comp;
-//				if(textComp.getSelectedText() != null) {
-//					textComp.setSelectionStart(-1);
-//					textComp.setSelectionEnd(-1);
-//				}
-//			}
 		}
 
 	}

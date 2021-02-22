@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.record_data.IPAFieldTooltip;
 import ca.phon.ipa.*;
 import ca.phon.plugin.*;
 import ca.phon.session.*;
@@ -59,7 +60,12 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 						info.getSyllabifierLanguageForTier(tier.getName()));
 			}
 			
-			return new IPAGroupField(ipaTier, group, editor.getDataModel().getTranscriber(), syllabifier);
+			IPAGroupField retVal = new IPAGroupField(ipaTier, group, editor.getDataModel().getTranscriber(), syllabifier);
+
+			IPAFieldTooltip tooltip = new IPAFieldTooltip();
+			tooltip.install(retVal);
+
+			return retVal;
 		}
 		
 	};
