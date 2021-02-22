@@ -15,6 +15,7 @@
  */
 package ca.phon.formatter;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 /**
@@ -23,6 +24,17 @@ import java.util.*;
  * files.
  */
 public class FormatterFactory {
+
+	private static final List<Formatter<?>> formatters = new ArrayList<>();
+
+	static {
+		final ServiceLoader<Formatter> formatterLoader = ServiceLoader.load(Formatter.class);
+		final Iterator<Formatter> formatterItr = formatterLoader.iterator();
+		while(formatterItr.hasNext()) {
+			final Formatter<?> formatter = formatterItr.next();
+			formatters.add(formatter);
+		}
+	}
 	
 	/**
 	 * Create a new formatter for the given type.
@@ -34,19 +46,19 @@ public class FormatterFactory {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T> Formatter<T> createFormatter(Class<T> type) {
 		Formatter<T> retVal = null;
-		final ServiceLoader<Formatter> formatterLoader = ServiceLoader.load(Formatter.class);
-		final Iterator<Formatter> formatterItr = formatterLoader.iterator();
-		while(formatterItr.hasNext()) {
-			final Formatter<?> formatter = formatterItr.next();
-			final FormatterType formatterType = formatter.getClass().getAnnotation(FormatterType.class);
-			if(formatterType != null) {
-				if(formatterType.value().isAssignableFrom(type)) {
-					retVal = (Formatter<T>) formatter;
-					break;
-				}
-			}
-		}
-		return retVal;
+
+		Optional<Formatter<?>> formatter =
+				formatters.parallelStream()
+					.filter( f ->  {
+						FormatterType ft = f.getClass().getAnnotation(FormatterType.class);
+						if(ft != null) {
+							return ft.value().isAssignableFrom(type);
+						} else {
+							return false;
+						}
+					}).findFirst();
+
+		return (formatter.isPresent() ? (Formatter<T>) formatter.get() : null);
 	}
 	
 }
