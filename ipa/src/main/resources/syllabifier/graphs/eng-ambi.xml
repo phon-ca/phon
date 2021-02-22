@@ -61,7 +61,7 @@
                 <link dest="36bc5a81" destField="ipa" source="a6c7308e308c4df4" sourceField="ipa out"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng" name="English"/>
+                    <ops:settings lang="eng-ambi" name="English-ambi"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="72545151"/>
@@ -82,7 +82,7 @@
                 </node>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng" name="English"/>
+                    <ops:settings lang="eng-ambi" name="English-ambi"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="3e48be56"/>
@@ -112,7 +112,7 @@
                 <link dest="394aead9111e45cf" destField="ipa" source="ed74e54" sourceField="ipa out"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng" name="English"/>
+                    <ops:settings lang="eng-ambi" name="English-ambi"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="ed74e54"/>
@@ -150,7 +150,7 @@
                 </node>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng" name="English"/>
+                    <ops:settings lang="eng-ambi" name="English-ambi"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="4f4d1c38"/>
@@ -171,7 +171,7 @@
                 </node>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng" name="English"/>
+                    <ops:settings lang="eng-ambi" name="English-ambi"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="105b9d0739754a7c"/>
@@ -244,7 +244,7 @@
                 </node>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng-ambi" name="English-ambisyllabic"/>
+                    <ops:settings lang="eng-ambi" name="English-ambi"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="9aa9403757d14d85"/>

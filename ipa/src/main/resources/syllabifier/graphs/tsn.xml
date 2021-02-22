@@ -64,7 +64,7 @@
                 </node>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng" name="English"/>
+                    <ops:settings lang="tsn" name="Tswana"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="3e48be56"/>

@@ -138,7 +138,7 @@
                 <link dest="5f5ecab4a8bb441a" destField="ipa" source="92a06cf7420d4cf8" sourceField="ipa out"/>
                 <extensions>
                     <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
-                    <ops:settings lang="eng-simple" name="English-simple"/>
+                    <ops:settings lang="fas" name="Persian-simple"/>
                 </extensions>
             </graph>
             <ogcn:published_input field="ipa" name="ipa" ref="1bed0d438c6e40da"/>
