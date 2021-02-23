@@ -492,7 +492,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 		if (display.hasFocus() && display.getNumberOfDisplayedPhones() > 0
 				&& display.getFocusedPhone() < display.getNumberOfDisplayedPhones()
-				&& display.getFocusedPhone() > 0) {
+				&& display.getFocusedPhone() >= 0) {
 
 			Area phoneArea = phoneAreas.get(display.getFocusedPhone());
 

@@ -17,10 +17,16 @@ package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.record_data.IPAFieldTooltip;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.ScTypeEdit;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.ToggleDiphthongEdit;
 import ca.phon.ipa.*;
 import ca.phon.plugin.*;
 import ca.phon.session.*;
 import ca.phon.syllabifier.*;
+import ca.phon.ui.ipa.SyllabificationDisplay;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Editor for IPATranscript tiers 
@@ -64,6 +70,29 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 
 			IPAFieldTooltip tooltip = new IPAFieldTooltip();
 			tooltip.install(retVal);
+			tooltip.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					final SyllabificationDisplay.SyllabificationChangeData newVal = (SyllabificationDisplay.SyllabificationChangeData)evt.getNewValue();
+					final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+					final ScTypeEdit edit = new ScTypeEdit(editor, display.getTranscript(), newVal.getPosition(), newVal.getScType());
+					editor.getUndoSupport().postEdit(edit);
+				}
+
+			});
+
+			tooltip.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+					final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(editor, display.getTranscript(), (Integer)evt.getNewValue());
+					editor.getUndoSupport().postEdit(edit);
+				}
+
+			});
+
 
 			return retVal;
 		}

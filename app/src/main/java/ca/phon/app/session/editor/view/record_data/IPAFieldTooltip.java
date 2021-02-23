@@ -1,12 +1,24 @@
 package ca.phon.app.session.editor.view.record_data;
 
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.IPAGroupField;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.ScTypeEdit;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.ToggleDiphthongEdit;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.ResetSyllabificationCommand;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Group;
+import ca.phon.session.SyllabifierInfo;
+import ca.phon.session.SystemTierType;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.util.Language;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.annotation.Nullable;
@@ -14,7 +26,10 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.html.Option;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Optional;
 
 public class IPAFieldTooltip {
@@ -23,7 +38,9 @@ public class IPAFieldTooltip {
 
 	private Optional<PhoneMap> alignment;
 
-	private JFrame currentFrame;
+	private ToolTipWindow currentFrame;
+
+	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 
 	public IPAFieldTooltip() {
 		super();
@@ -39,35 +56,145 @@ public class IPAFieldTooltip {
 		if(currentFrame != null)
 			currentFrame.setVisible(false);
 
-		JFrame window = new JFrame();
-		window.setUndecorated(true);
-
-		window.setLayout(new VerticalLayout(0));
-
-		field.validateAndUpdate();
-		IPATranscript value = field.getGroupValue();
-		if(value != null) {
-			SyllabificationDisplay sd = new SyllabificationDisplay();
-			sd.setTranscript(value);
-
-			window.add(sd);
-		}
-		if(alignment.isPresent()) {
-			window.add(new JSeparator(SwingConstants.HORIZONTAL));
-
-			PhoneMapDisplay alignmentDisplay = new PhoneMapDisplay();
-			alignmentDisplay.setPhoneMapForGroup(0, alignment.get());
-			window.add(alignmentDisplay);
-		}
-
+		ToolTipWindow window = new ToolTipWindow();
 		window.pack();
-		window.setFocusable(false);
+		window.setFocusableWindowState(false);
 
 		Point p = field.getLocationOnScreen();
 		window.setLocation(p.x, p.y + field.getHeight());
 		window.setVisible(true);
 
 		currentFrame = window;
+		Toolkit.getDefaultToolkit().addAWTEventListener(focusListener, AWTEvent.KEY_EVENT_MASK);
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(listener);
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return propSupport.getPropertyChangeListeners();
+	}
+
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+		return propSupport.getPropertyChangeListeners(propertyName);
+	}
+
+	private AWTEventListener focusListener = new AWTEventListener() {
+
+		@Override
+		public void eventDispatched(AWTEvent event) {
+			// cleanup
+			if(currentFrame == null) return;
+				Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+			if(event instanceof KeyEvent) {
+				if(((KeyEvent) event).getKeyCode() == KeyEvent.VK_F2) {
+					SwingUtilities.invokeLater( () -> {
+						final ToolTipWindow focusTooltip = currentFrame;
+						focusTooltip.setFocusableWindowState(true);
+						focusTooltip.requestFocus();
+
+						if(focusTooltip.syllabificationDisplay.getNumberOfDisplayedPhones() > 0)
+							focusTooltip.syllabificationDisplay.setFocusedPhone(0);
+
+						focusTooltip.syllabificationDisplay.requestFocusInWindow();
+						focusTooltip.addWindowFocusListener(new WindowFocusListener() {
+
+							@Override
+							public void windowGainedFocus(WindowEvent e) {
+
+							}
+
+							@Override
+							public void windowLostFocus(WindowEvent e) {
+								focusTooltip.setVisible(false);
+							}
+
+						});
+
+						currentFrame = null;
+					});
+					((KeyEvent) event).consume();
+					Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+				}
+			}
+		}
+
+	};
+
+	public class ToolTipWindow extends JFrame {
+
+		private SyllabificationDisplay syllabificationDisplay;
+
+		private PhoneMapDisplay alignmentDisplay;
+
+		private JLabel label;
+
+		public ToolTipWindow() {
+			super();
+
+			setUndecorated(true);
+			init();
+		}
+
+		private void init() {
+			setLayout(new VerticalLayout(0));
+
+			JPanel contentPanel = new JPanel(new VerticalLayout());
+
+			if(field.hasFocus())
+				field.validateAndUpdate();
+			IPATranscript value = field.getGroupValue();
+			if(value != null) {
+				syllabificationDisplay = new SyllabificationDisplay();
+				syllabificationDisplay.setTranscript(value);
+				syllabificationDisplay.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, propSupport::firePropertyChange );
+				syllabificationDisplay.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, propSupport::firePropertyChange);
+
+				contentPanel.add(syllabificationDisplay);
+			}
+			if(alignment.isPresent()) {
+				contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+
+				PhoneMapDisplay alignmentDisplay = new PhoneMapDisplay();
+				alignmentDisplay.setPhoneMapForGroup(0, alignment.get());
+				contentPanel.add(alignmentDisplay);
+			}
+
+			add(new JScrollPane(contentPanel));
+
+			label = new JLabel("Press F2 for focus");
+			label.setFont(label.getFont().deriveFont(Font.ITALIC, 10.0f));
+			add(label);
+
+			addWindowFocusListener(new WindowFocusListener() {
+				@Override
+				public void windowGainedFocus(WindowEvent e) {
+					label.setVisible(false);
+					revalidate();
+					pack();
+				}
+
+				@Override
+				public void windowLostFocus(WindowEvent e) {
+
+				}
+
+			});
+		}
+
 	}
 
 	private class TooltipMouseListener extends MouseInputAdapter {
@@ -92,6 +219,7 @@ public class IPAFieldTooltip {
 			if(currentFrame != null) {
 				currentFrame.setVisible(false);
 				currentFrame = null;
+				Toolkit.getDefaultToolkit().removeAWTEventListener(focusListener);
 			}
 			if(currentTimer != null) {
 				currentTimer.stop();
