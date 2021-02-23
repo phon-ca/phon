@@ -332,7 +332,7 @@ public class RecordDataEditorView extends EditorView {
 				List<TierEditor> editors = new ArrayList<>();
 				editorMap.put(tier.getName(), editors);
 				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
-					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, gIdx);
+					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, record, tier, gIdx);
 					tierEditor.addTierEditorListener(tierEditorListener);
 					final Component tierComp = tierEditor.getEditorComponent();
 					if(tierFont != null)
@@ -358,7 +358,7 @@ public class RecordDataEditorView extends EditorView {
 					editors.add(tierEditor);
 				}
 			} else {
-				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, tier, 0);
+				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, record, tier, 0);
 				tierEditor.addTierEditorListener(tierEditorListener);
 				Component tierComp = tierEditor.getEditorComponent();
 				if(tierFont != null)

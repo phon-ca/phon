@@ -11,9 +11,11 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Group;
 import ca.phon.session.SyllabifierInfo;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.util.Language;
@@ -36,7 +38,7 @@ public class IPAFieldTooltip {
 
 	private IPAGroupField field;
 
-	private Optional<PhoneMap> alignment;
+	private Optional<Tier<PhoneMap>> alignmentTier;
 
 	private ToolTipWindow currentFrame;
 
@@ -44,12 +46,16 @@ public class IPAFieldTooltip {
 
 	public IPAFieldTooltip() {
 		super();
-		this.alignment = Optional.empty();
+		this.alignmentTier = Optional.empty();
 	}
 
 	public void install(IPAGroupField groupField) {
 		this.field = groupField;
 		this.field.addMouseListener(new TooltipMouseListener());
+	}
+
+	public void setAlignmentTier(Tier<PhoneMap> alignment) {
+		this.alignmentTier = Optional.of(alignment);
 	}
 
 	private void showWindow() {
@@ -146,6 +152,7 @@ public class IPAFieldTooltip {
 			super();
 
 			setUndecorated(true);
+			setResizable(true);
 			init();
 		}
 
@@ -153,24 +160,42 @@ public class IPAFieldTooltip {
 			setLayout(new VerticalLayout(0));
 
 			JPanel contentPanel = new JPanel(new VerticalLayout());
+			contentPanel.setBackground(Color.WHITE);
 
 			if(field.hasFocus())
 				field.validateAndUpdate();
 			IPATranscript value = field.getGroupValue();
 			if(value != null) {
 				syllabificationDisplay = new SyllabificationDisplay();
+				syllabificationDisplay.setFont(FontPreferences.getTierFont());
 				syllabificationDisplay.setTranscript(value);
 				syllabificationDisplay.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, propSupport::firePropertyChange );
 				syllabificationDisplay.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, propSupport::firePropertyChange);
 
 				contentPanel.add(syllabificationDisplay);
 			}
-			if(alignment.isPresent()) {
-				contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+			if(alignmentTier.isPresent()) {
+				PhoneMap alignment = alignmentTier.get().getGroup(field.getGroupIndex());
+				if(alignment.getTargetRep().length() > 0
+					&& alignment.getActualRep().length() > 0
+					&& alignment.getAlignmentLength() > 0) {
+					contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-				PhoneMapDisplay alignmentDisplay = new PhoneMapDisplay();
-				alignmentDisplay.setPhoneMapForGroup(0, alignment.get());
-				contentPanel.add(alignmentDisplay);
+					PhoneMap pm = new PhoneMap(alignment.getTargetRep(), alignment.getActualRep());
+					pm.setTopAlignment(alignment.getTopAlignment());
+					pm.setBottomAlignment(alignment.getBottomAlignment());
+
+					PhoneMapDisplay alignmentDisplay = new PhoneMapDisplay();
+					alignmentDisplay.setFont(FontPreferences.getTierFont());
+					alignmentDisplay.setPhoneMapForGroup(0, pm);
+					alignmentDisplay.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP,
+						(e) -> {
+							revalidate();
+							pack();
+							propSupport.firePropertyChange(e);
+						});
+					contentPanel.add(alignmentDisplay);
+				}
 			}
 
 			add(new JScrollPane(contentPanel));

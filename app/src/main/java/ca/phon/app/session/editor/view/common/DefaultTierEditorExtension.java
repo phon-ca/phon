@@ -38,8 +38,8 @@ public class DefaultTierEditorExtension implements IPluginExtensionPoint<TierEdi
 		
 		@Override
 		public TierEditor createObject(Object... args) {
-			final Tier<?> tier = Tier.class.cast(args[1]);
-			final Integer group = Integer.class.cast(args[2]);
+			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
+			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
 			
 			if(tier.getDeclaredType() != String.class) {
 				throw new IllegalArgumentException("Tier type must be " + String.class.getName());

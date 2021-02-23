@@ -136,7 +136,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		eventManager.registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, updateAct);
 
 		final EditorAction tierChangeAct =
-				new DelegateEditorAction(this, "onTierChange");
+				new DelegateEditorAction(this, "onTierChanged");
 		eventManager.registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, tierChangeAct);
 
 		final EditorAction tierChangedAct =
@@ -391,13 +391,15 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		}
 	}
 
-	@RunOnEDT
-	public void onTierChange(EditorEvent ee) {
-		if(ee.getEventData() != null && ee.getSource() == getEditor().getUndoSupport()) {
-			update();
-			repaint();
-		}
-	}
+//	@RunOnEDT
+//	public void onTierChange(EditorEvent ee) {
+//		if(ee.getEventData() != null && ee.getSource() == getEditor().getUndoSupport()) {
+//			final String tierName = ee.getEventData().toString();
+//
+//			update();
+//			repaint();
+//		}
+//	}
 
 	@RunOnEDT
 	public void onScChange(EditorEvent ee) {

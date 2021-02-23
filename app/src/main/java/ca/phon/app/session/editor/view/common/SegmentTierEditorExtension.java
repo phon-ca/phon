@@ -37,9 +37,9 @@ public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEdi
 		@SuppressWarnings("unchecked")
 		@Override
 		public TierEditor createObject(Object... args) {
-			final SessionEditor editor = SessionEditor.class.cast(args[0]);
-			final Tier<?> tier = Tier.class.cast(args[1]);
-			final Integer group = Integer.class.cast(args[2]);
+			final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
+			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
+			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
 			
 			if(tier.getDeclaredType() != MediaSegment.class) {
 				throw new IllegalArgumentException("Tier type must be " + MediaSegment.class.getName());

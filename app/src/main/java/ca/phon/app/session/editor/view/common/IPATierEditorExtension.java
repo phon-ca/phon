@@ -16,17 +16,22 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.record_data.IPAFieldTooltip;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.ScTypeEdit;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.ToggleDiphthongEdit;
 import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.plugin.*;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.syllabifier.*;
+import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
 
 /**
  * Editor for IPATranscript tiers 
@@ -48,9 +53,10 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 		
 		@Override
 		public TierEditor createObject(Object... args) {
-			final SessionEditor editor = SessionEditor.class.cast(args[0]);
-			final Tier<?> tier = Tier.class.cast(args[1]);
-			final Integer group = Integer.class.cast(args[2]);
+			final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
+			final Record record = Record.class.cast(args[TierEditorFactory.RECORD]);
+			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
+			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
 			
 			if(tier.getDeclaredType() != IPATranscript.class) {
 				throw new IllegalArgumentException("Tier type must be " + IPATranscript.class.getName());
@@ -58,6 +64,9 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 			
 			@SuppressWarnings("unchecked")
 			final Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+
+			final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+			PhoneMap alignment = alignmentTier.getGroup(group);
 			
 			Syllabifier syllabifier = null;
 			final SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
@@ -69,6 +78,7 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 			IPAGroupField retVal = new IPAGroupField(ipaTier, group, editor.getDataModel().getTranscriber(), syllabifier);
 
 			IPAFieldTooltip tooltip = new IPAFieldTooltip();
+			tooltip.setAlignmentTier(alignmentTier);
 			tooltip.install(retVal);
 			tooltip.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, new PropertyChangeListener() {
 
@@ -88,6 +98,24 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 				public void propertyChange(PropertyChangeEvent evt) {
 					final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
 					final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(editor, display.getTranscript(), (Integer)evt.getNewValue());
+					editor.getUndoSupport().postEdit(edit);
+				}
+
+			});
+
+			tooltip.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)evt.getNewValue();
+					final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
+
+					final PhoneMap pm = new PhoneMap(record.getIPATarget().getGroup(group), record.getIPAActual().getGroup(group));
+					pm.setTopAlignment(newVal.getAlignment()[0]);
+					pm.setBottomAlignment(newVal.getAlignment()[1]);
+
+					final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(editor, alignmentTier, group, pm);
+					edit.setFireHardChangeOnUndo(true);
 					editor.getUndoSupport().postEdit(edit);
 				}
 

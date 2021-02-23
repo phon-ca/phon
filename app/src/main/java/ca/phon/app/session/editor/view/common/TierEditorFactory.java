@@ -23,11 +23,17 @@ import javax.swing.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 /**
  * Create tier editors
  */
 public class TierEditorFactory {
+
+	public final static int EDITOR = 0;
+	public final static int RECORD = 1;
+	public final static int TIER = 2;
+	public final static int GROUP = 3;
 
 	public TierEditorFactory() {
 		
@@ -40,7 +46,7 @@ public class TierEditorFactory {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public TierEditor createTierEditor(SessionEditor editor, TierDescription tierDescription,
-			Tier<?> tier, int group) {
+	                                   Record record, Tier<?> tier, int group) {
 		TierEditor retVal = null;
 		
 		final Class<?> tierType = tier.getDeclaredType();
@@ -54,7 +60,7 @@ public class TierEditorFactory {
 					if(info.tierName().length() > 0) {
 						if(!info.tierName().equals(tier.getName())) continue;
 					}
-					retVal = extPt.getFactory().createObject(editor, tier, group);
+					retVal = extPt.getFactory().createObject(editor, record, tier, group);
 					// don't continue to look use this editor
 					if(info.tierName().equalsIgnoreCase(tier.getName())) {
 						break;
