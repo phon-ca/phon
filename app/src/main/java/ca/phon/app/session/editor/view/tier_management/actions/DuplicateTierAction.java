@@ -53,7 +53,9 @@ public class DuplicateTierAction extends TierManagementAction {
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		tierEditor.setGrouped(td.isGrouped());
 		newTierDialog.add(tierEditor);
-		newTierDialog.setTitle("New Tier");
+		newTierDialog.setTitle("Duplicate Tier");
+		newTierDialog.getHeader().setHeaderText("Duplicate Tier");
+		newTierDialog.getHeader().setDescText("Create a new tier with the contents of " + td.getName());
 		newTierDialog.setModal(true);
 		newTierDialog.pack();
 

@@ -56,6 +56,10 @@ public class TierEditorDialog extends JDialog {
 		init();
 	}
 
+	public DialogHeader getHeader() {
+		return this.header;
+	}
+
 	private void init() {
 		header = new DialogHeader(getTitle(), "");
 

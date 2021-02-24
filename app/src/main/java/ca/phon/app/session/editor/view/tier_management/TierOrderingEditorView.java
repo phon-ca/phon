@@ -331,10 +331,6 @@ public class TierOrderingEditorView extends EditorView {
 			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), this, tierDesc.get(), tvi);
 			builder.addItem(".", removeTierAction);
 		}
-
-		// edit tier
-		final EditTierAction editTierAction = new EditTierAction(getEditor(), this, tvi);
-		builder.addItem(".", editTierAction);
 	}
 
 	private void setupFontMenu(MenuBuilder builder, TierViewItem tvi) {
