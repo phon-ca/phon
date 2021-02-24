@@ -39,6 +39,9 @@ import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.orthography.Orthography;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import org.jdesktop.swingx.*;
@@ -955,9 +958,26 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 								builder.append(sourceTier.getGroup(i).toString());
 							}
 
-							TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), (Tier<IPATranscript>) destTier, i, builder.toIPATranscript());
+							IPATranscript ipa = builder.toIPATranscript();
+							SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
+							SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+							Syllabifier syllabifier = library.defaultSyllabifier();
+							if(info != null) {
+								Syllabifier tierSyllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(destTier.getName()));
+								if(tierSyllabifier != null) {
+									syllabifier = tierSyllabifier;
+								}
+							}
+							syllabifier.syllabify(ipa.toList());
+
+							TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), (Tier<IPATranscript>) destTier, i, ipa);
 							edit.setFireHardChangeOnUndo(i == 0);
 							getEditor().getUndoSupport().postEdit(edit);
+
+							PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(destRecord.getIPATarget().getGroup(i),
+									destRecord.getIPAActual().getGroup(i));
+							TierEdit<PhoneMap> alignEdit = new TierEdit<>(getEditor(), destRecord.getPhoneAlignment(), i, pm);
+							getEditor().getUndoSupport().postEdit(alignEdit);
 						} else if (destTier.getDeclaredType() == TierString.class) {
 							TierString copyTxt = new TierString(sourceTier.getGroup(i).toString());
 
