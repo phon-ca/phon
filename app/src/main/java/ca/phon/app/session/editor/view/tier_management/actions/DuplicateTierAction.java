@@ -101,7 +101,8 @@ public class DuplicateTierAction extends TierManagementAction {
 				Tier<TierString> dupTier = r.getTier(tierDescription.getName(), TierString.class);
 
 				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
-					TierEdit<TierString> tierEdit = new TierEdit<>(getEditor(), dupTier, gIdx, new TierString(existingTier.getGroup(gIdx).toString()));
+					Object existingVal = (gIdx < existingTier.numberOfGroups() ? existingTier.getGroup(gIdx) : "");
+					TierEdit<TierString> tierEdit = new TierEdit<>(getEditor(), dupTier, gIdx, new TierString(existingVal.toString()));
 					getEditor().getUndoSupport().postEdit(tierEdit);
 				}
 			}
