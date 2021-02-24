@@ -1,6 +1,7 @@
 package ca.phon.app.session;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.app.log.LogUtil;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordsTransferable implements Transferable {
-
-    private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordsTransferable.class.getName());
 
     public final static DataFlavor FLAVOR = new DataFlavor(RecordsTransferable.class, "RecordsTransferable");
 
@@ -118,10 +117,8 @@ public class RecordsTransferable implements Transferable {
 
             writer.flush();
             writer.close();
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error( e.getLocalizedMessage(), e);
         } catch (IOException e) {
-            LOGGER.error( e.getLocalizedMessage(), e);
+            LogUtil.severe( e.getLocalizedMessage(), e);
         }
         return new String(bout.toByteArray(), Charset.forName("UTF-8"));
     }

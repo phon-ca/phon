@@ -16,8 +16,11 @@
 package ca.phon.app.session.editor.view.record_data;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.*;
@@ -28,8 +31,14 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.text.Highlighter.*;
 import javax.swing.undo.*;
+import javax.tools.Tool;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.TierTransferrable;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
+import ca.phon.orthography.Orthography;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 import ca.phon.ui.menu.MenuBuilder;
 import org.jdesktop.swingx.*;
@@ -56,7 +65,7 @@ import ca.phon.util.icons.*;
  * Editor view for tier data.
  *
  */
-public class RecordDataEditorView extends EditorView {
+public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RecordDataEditorView.class.getName());
 
@@ -672,6 +681,11 @@ public class RecordDataEditorView extends EditorView {
 		return pmEdit;
 	}
 
+	@Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents) {
+
+	}
+
 	private class RecordTierEditorListener implements TierEditorListener {
 
 		private final Record record;
@@ -859,18 +873,34 @@ public class RecordDataEditorView extends EditorView {
 	/**
 	 * Show context menu for given tier
 	 *
-	 * @param tier
+	 * @param me
+	 * @param tierName
 	 */
-	public void showTierContextMenu(MouseEvent me, String tier) {
+	public void showTierContextMenu(MouseEvent me, String tierName) {
 		JPopupMenu tierMenu = new JPopupMenu();
 		MenuBuilder builder = new MenuBuilder(tierMenu);
+
+		Tier<?> tier = getEditor().currentRecord().getTier(tierName);
+
+		final PhonUIAction copyTierAct = new PhonUIAction(this, "onCopyTier", tier);
+		copyTierAct.putValue(PhonUIAction.NAME, "Copy tier");
+		copyTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy tier contents to clipboard");
+		builder.addItem(".", copyTierAct);
+
+		if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)) {
+			final PhonUIAction pasteTierAct = new PhonUIAction(this, "onPasteTier", new Tuple<Record, Tier<?>>(getEditor().currentRecord(), tier));
+			pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
+			pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
+			builder.addItem(".", pasteTierAct);
+		}
+		builder.addSeparator(".", "copy_paste");
 
 		TierOrderingEditorView tierOrderView =
 				(TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_TITLE);
 		if(tierOrderView != null) {
 			for(int i = 0; i < getEditor().getSession().getTierView().size(); i++) {
 				TierViewItem tvi = getEditor().getSession().getTierView().get(i);
-				if(tvi.getTierName().equals(tier)) {
+				if(tvi.getTierName().equals(tierName)) {
 					tierOrderView.setupTierContextMenu(i, builder);
 					break;
 				}
@@ -878,6 +908,109 @@ public class RecordDataEditorView extends EditorView {
 		}
 
 		tierMenu.show(me.getComponent(), 0, me.getComponent().getHeight());
+	}
+
+	public void onCopyTier(PhonActionEvent pae) {
+		Tier<?> tier = (Tier<?>) pae.getData();
+
+		TierTransferrable tierTrans = new TierTransferrable(tier);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(tierTrans, this);
+	}
+
+	public void onPasteTier(PhonActionEvent pae) {
+		Tuple<Record, Tier<?>> tuple = (Tuple<Record, Tier<?>>) pae.getData();
+		Record destRecord = tuple.getObj1();
+		Tier<?> destTier = tuple.getObj2();
+		SystemTierType systemTier = SystemTierType.tierFromString(destTier.getName());
+
+		Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
+		if(transferable.isDataFlavorSupported(TierTransferrable.FLAVOR)) {
+			try {
+				TierTransferrable tierTrans = (TierTransferrable) transferable.getTransferData(TierTransferrable.FLAVOR);
+				Tier<?> sourceTier = tierTrans.getTier();
+
+				getEditor().getUndoSupport().beginUpdate();
+				if (destTier.isGrouped()) {
+					while (sourceTier.numberOfGroups() > destRecord.numberOfGroups()) {
+						AddGroupEdit edit = new AddGroupEdit(getEditor(), destRecord, destRecord.numberOfGroups());
+						getEditor().getUndoSupport().postEdit(edit);
+					}
+					for (int i = 0; i < sourceTier.numberOfGroups(); i++) {
+						if (destTier.getDeclaredType() == Orthography.class) {
+							try {
+								Orthography copyOrtho = Orthography.parseOrthography(sourceTier.getGroup(i).toString());
+
+								TierEdit<Orthography> edit = new TierEdit<>(getEditor(), (Tier<Orthography>) destTier, i, copyOrtho);
+								edit.setFireHardChangeOnUndo(i == 0);
+								getEditor().getUndoSupport().postEdit(edit);
+							} catch (ParseException pe) {
+								LogUtil.warning(pe);
+							}
+						} else if (destTier.getDeclaredType() == IPATranscript.class) {
+							IPATranscriptBuilder builder = new IPATranscriptBuilder();
+							if (sourceTier.getDeclaredType() == IPATranscript.class) {
+								IPATranscript src = ((Tier<IPATranscript>) sourceTier).getGroup(i);
+								builder.append(src);
+							} else {
+								builder.append(sourceTier.getGroup(i).toString());
+							}
+
+							TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), (Tier<IPATranscript>) destTier, i, builder.toIPATranscript());
+							edit.setFireHardChangeOnUndo(i == 0);
+							getEditor().getUndoSupport().postEdit(edit);
+						} else if (destTier.getDeclaredType() == TierString.class) {
+							TierString copyTxt = new TierString(sourceTier.getGroup(i).toString());
+
+							TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, i, copyTxt);
+							edit.setFireHardChangeOnUndo(i == 0);
+							getEditor().getUndoSupport().postEdit(edit);
+						} else {
+							LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
+						}
+					}
+				} else {
+					if (destTier.getDeclaredType() == MediaSegment.class) {
+						if (sourceTier.getDeclaredType() == MediaSegment.class) {
+							MediaSegment origSeg = ((Tier<MediaSegment>) sourceTier).getGroup(0);
+							MediaSegment copySeg = SessionFactory.newFactory().createMediaSegment();
+							copySeg.setStartValue(origSeg.getStartValue());
+							copySeg.setEndValue(origSeg.getEndValue());
+
+							TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, copySeg);
+							edit.setFireHardChangeOnUndo(true);
+							getEditor().getUndoSupport().postEdit(edit);
+						} else {
+							Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
+							if (segmentFormatter != null) {
+								try {
+									MediaSegment seg = segmentFormatter.parse(sourceTier.getGroup(0).toString());
+
+									TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, seg);
+									edit.setFireHardChangeOnUndo(true);
+									getEditor().getUndoSupport().postEdit(edit);
+								} catch (ParseException e) {
+									LogUtil.warning(e);
+								}
+							}
+						}
+					} else if (destTier.getDeclaredType() == TierString.class) {
+						String tierTxt = sourceTier.toString();
+						tierTxt = tierTxt.replaceAll("\\[", "").replaceAll("\\]", "");
+
+						TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, 0, new TierString(tierTxt));
+						edit.setFireHardChangeOnUndo(true);
+						getEditor().getUndoSupport().postEdit(edit);
+					} else {
+						LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
+					}
+				}
+				getEditor().getUndoSupport().endUpdate();
+			} catch(IOException | UnsupportedFlavorException e) {
+				LogUtil.severe(e);
+			}
+		} else {
+			LogUtil.warning("Pasting from other data flavors not supported");
+		}
 	}
 
 	/*
