@@ -718,6 +718,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 		setupRecord(r);
 
+		getSelectionModel().setSelectionInterval(getParentView().getEditor().getCurrentRecordIndex(),
+				getParentView().getEditor().getCurrentRecordIndex());
+
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
