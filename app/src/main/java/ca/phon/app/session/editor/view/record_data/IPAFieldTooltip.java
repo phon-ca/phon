@@ -32,6 +32,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.security.Key;
 import java.util.Optional;
 
 public class IPAFieldTooltip {
@@ -216,8 +217,12 @@ public class IPAFieldTooltip {
 				public void windowLostFocus(WindowEvent e) {
 
 				}
-
 			});
+
+			final PhonUIAction closeAct = new PhonUIAction(this, "setVisible", false);
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "close");
+			getRootPane().getActionMap().put("close", closeAct);
 		}
 
 	}
