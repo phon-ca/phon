@@ -1308,9 +1308,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		private boolean isFirstChange = true;
 
-		private MediaSegment editSegment;
-		private TierEdit<MediaSegment> segmentTierEdit;
-
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			Record r = recordGrid.getCurrentRecord();
@@ -1326,35 +1323,30 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				// exit split mode if active
 				recordGrid.setSplitModeAccept(false);
 				recordGrid.setSplitMode(false);
-				
-				if((boolean)evt.getNewValue()) {
-					editSegment = factory.createMediaSegment();
-					editSegment.setStartValue(segment.getStartValue());
-					editSegment.setEndValue(segment.getEndValue());
 
-					segmentTierEdit = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, editSegment);
+				if((boolean)evt.getNewValue()) {
 					isFirstChange = true;
 					getParentView().getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
-					segmentTierEdit.setFireHardChangeOnUndo(true);
 					getParentView().getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TIER_CHANGED_EVT, TimelineRecordTier.class, SystemTierType.Segment.getName()));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
+				MediaSegment newSegment = factory.createMediaSegment();
+				newSegment.setStartValue(segment.getStartValue());
+				newSegment.setEndValue(segment.getEndValue());
+
 				if(evt.getPropertyName().startsWith("startMarker")) {
-					editSegment.setStartValue((float)evt.getNewValue() * 1000.0f);
-					editSegment.setEndValue(segment.getEndValue());
+					newSegment.setStartValue((float)evt.getNewValue() * 1000.0f);
 				} else if(evt.getPropertyName().startsWith("endMarker")) {
-					editSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
-					editSegment.setStartValue(segment.getStartValue());
+					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
 				}
 
-				if(isFirstChange) {
-					getParentView().getEditor().getUndoSupport().postEdit(segmentTierEdit);
-					isFirstChange = false;
-				}
+				TierEdit<MediaSegment> segmentEdit = new TierEdit<MediaSegment>(getParentView().getEditor(), r.getSegment(), 0, newSegment);
+				getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
+				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
+				isFirstChange = false;
 
-				// XXX repaint grid - requried to fix incorrect flags and record numbers
 				recordGrid.repaint(recordGrid.getVisibleRect());
 			}
 		}
