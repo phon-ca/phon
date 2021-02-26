@@ -74,7 +74,6 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	/**
 	 * Dictionary name
 	 * Loaded from the dictionary file using the MetadataToken 'name'
-	 * E.g.,
 	 * 
 	 * #name English
 	 */

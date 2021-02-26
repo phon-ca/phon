@@ -17,9 +17,14 @@ package ca.phon.ipadictionary.impl;
 
 import java.io.*;
 import java.net.*;
+import java.text.ParseException;
 import java.util.*;
 import java.util.regex.*;
 
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import org.apache.commons.lang3.*;
 
 import ca.hedlund.tst.*;
@@ -27,6 +32,7 @@ import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.exceptions.*;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.util.*;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * Implements the basic dictionary format used by Phon.
@@ -36,12 +42,11 @@ import ca.phon.util.*;
  * separated using a specified token (default '\p{Space}') -
  * regular expressions are allowed.
  * 
- * This dictionary is immutable.  For dictionaries which 
- * allow changes, see {@link MutablePlainTextDictionary}.
- * 
  */
 public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	LanguageInfo, NameInfo, GenerateSuggestions, OrthoKeyIterator, PrefixSearch, Metadata {
+
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(ImmutablePlainTextDictionary.class.getName());
 	
 	/*
 	 * token descriptions for metadata/processing instructions
@@ -50,6 +55,12 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		NAME("name"),
 		LANGUAGE("lang"),
 		CONTRACTION_RULE("ctr"),
+		PREPROCESSEXPR("prefind"),
+		PREPROCESSREPLACE("prereplace"),
+		POSTPROCESSEXPR("postfind"),
+		POSTPROCESSREPLACE("postreplace"),
+		PHONEXFIND("phonexfind"),
+		PHONEXREPLACE("phonexreplace"),
 		OTHER("other");
 		
 		private String value;
@@ -119,11 +130,26 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * #website http://www.uoh.org/
 	 */
 	private Map<String, String> metadata = new TreeMap<String, String>();
+
+	/**
+	 * Regex pattern for pre-processing text
+	 */
+	private Pattern preFindPattern;
+
+	/**
+	 * Replace expression used for each instance of preFindPattern found
+	 * in the orthographic text
+	 */
+	private String preReplaceExpr;
+
+	private List<Tuple<Pattern,String>> postFindList = new ArrayList<>();
+
+	private List<Tuple<PhonexPattern, IPATranscript>> postPhonexFindList = new ArrayList<>();
 	
 	/**
 	 * Default constructor.
 	 * 
-	 * @param file
+	 * @param dbFile
 	 */
 	public ImmutablePlainTextDictionary(URL dbFile) {
 		this.dbFile = dbFile;
@@ -233,7 +259,9 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		}
 		reader.close();
 	}
-	
+
+	private Tuple<Pattern, String> currentPostFindTuple = new Tuple<>();
+	private Tuple<PhonexPattern, IPATranscript> currentPhonexFindTuple = new Tuple<>();
 	/**
 	 * Process metadata value
 	 * 
@@ -253,6 +281,47 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		} else if(token.equalsIgnoreCase(MetadataToken.CONTRACTION_RULE.toString())) {
 			final ContractionRule cr = ContractionRule.parseContractionRule(value);
 			ctrRules.add(cr);
+		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSEXPR.toString())) {
+			preFindPattern = Pattern.compile(value);
+		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSREPLACE.toString())) {
+			preReplaceExpr = value;
+		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSEXPR.toString())) {
+			Pattern p = Pattern.compile(value);
+			currentPostFindTuple.setObj1(p);
+			if(currentPostFindTuple.getObj1() != null && currentPostFindTuple.getObj2() != null) {
+				postFindList.add(currentPostFindTuple);
+				currentPostFindTuple = new Tuple<>();
+			}
+		} else if(token.equalsIgnoreCase(MetadataToken.POSTPROCESSREPLACE.toString())) {
+			currentPostFindTuple.setObj2(value);
+			if(currentPostFindTuple.getObj1() != null && currentPostFindTuple.getObj2() != null) {
+				postFindList.add(currentPostFindTuple);
+				currentPostFindTuple = new Tuple<>();
+			}
+		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXFIND.toString())) {
+			try {
+				var p = PhonexPattern.compile(value);
+				currentPhonexFindTuple.setObj1(p);
+
+				if(currentPhonexFindTuple.getObj1() != null && currentPhonexFindTuple.getObj2() != null) {
+					postPhonexFindList.add(currentPhonexFindTuple);
+					currentPhonexFindTuple = new Tuple<>();
+				}
+			} catch (PhonexPatternException e) {
+				LOGGER.error(e);
+			}
+		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXREPLACE.toString())) {
+			try {
+				var r = IPATranscript.parseIPATranscript(value);
+				currentPhonexFindTuple.setObj2(r);
+
+				if(currentPhonexFindTuple.getObj1() != null && currentPhonexFindTuple.getObj2() != null) {
+					postPhonexFindList.add(currentPhonexFindTuple);
+					currentPhonexFindTuple = new Tuple<>();
+				}
+			} catch (ParseException e) {
+				LOGGER.error(e);
+			}
 		} else {
 			metadata.put(token, value);
 		}
@@ -332,6 +401,12 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	public String[] lookup(String orthography) 
 		throws IPADictionaryExecption {
 		orthography = StringUtils.strip(orthography, "?!\"'.\\/@&$()^%#*");
+
+		if(preFindPattern != null && preReplaceExpr != null) {
+			final Matcher m = preFindPattern.matcher(orthography);
+			orthography = m.replaceAll(preReplaceExpr);
+		}
+
 		TernaryTree<List<String>> db;
 		try {
 			db = lazyLoadDb();
@@ -342,7 +417,39 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		List<String> ipaEntries = 
 			db.get(orthography.toLowerCase());
 		if(ipaEntries != null && ipaEntries.size() > 0) {
-			return ipaEntries.toArray(new String[0]);
+			String[] retVal = new String[ipaEntries.size()];
+			retVal = ipaEntries.toArray(retVal);
+
+			for(int i = 0; i < retVal.length; i++) {
+				String str = retVal[i];
+
+				for(var postFind:postFindList) {
+					var pattern = postFind.getObj1();
+					var m = pattern.matcher(str);
+					str = m.replaceAll(postFind.getObj2());
+				}
+
+				for(var postPhonexFind:postPhonexFindList) {
+					try {
+						final IPATranscript ipa = IPATranscript.parseIPATranscript(str);
+
+						var pattern = postPhonexFind.getObj1();
+						var matcher = pattern.matcher(ipa);
+
+						final IPATranscriptBuilder ipaBuilder = new IPATranscriptBuilder();
+						while(matcher.find()) {
+							matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
+						}
+						matcher.appendTail(ipaBuilder);
+						str = ipaBuilder.toIPATranscript().toString();
+					} catch (ParseException e) {
+						LOGGER.warn(e.getLocalizedMessage(), e);
+					}
+				}
+				retVal[i] = str;
+			}
+
+			return retVal;
 		} else {
 			return new String[0];
 		}
