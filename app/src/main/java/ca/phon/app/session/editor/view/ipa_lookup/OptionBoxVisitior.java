@@ -16,11 +16,14 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
 import java.awt.event.*;
+import java.text.ParseException;
 
 import javax.swing.*;
 
 import ca.phon.app.ipalookup.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.view.common.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.*;
 import ca.phon.ui.fonts.*;
 import ca.phon.visitor.*;
@@ -70,22 +73,26 @@ public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 		int myCol = col;
 		for(int i = 0; i < options.length; i++) {
 			final String opt = options[i];
-			final JRadioButton btn = new JRadioButton(opt);
-			btn.setFont(FontPreferences.getTierFont());
-			btn.setOpaque(false);
-			btn.setBorderPainted(false);
-			if(opts.getSelectedOption() == i) 
-				btn.setSelected(true);
-			
-			btn.addActionListener(new OptionListener(opts, i));
-			
-			groupPanel.add(btn, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+myCol, row+i+1));
-			
-			final JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
-			groupPanel.add(sep, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+myCol+1, row+i+1));
-			
-			
-			bg.add(btn);
+			try {
+				IPATranscript ipa = IPATranscript.parseIPATranscript(opt);
+				final JRadioButton btn = new JRadioButton(ipa.toString());
+				btn.setFont(FontPreferences.getTierFont());
+				btn.setOpaque(false);
+				btn.setBorderPainted(false);
+				if(opts.getSelectedOption() == i)
+					btn.setSelected(true);
+
+				btn.addActionListener(new OptionListener(opts, i));
+
+				groupPanel.add(btn, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+myCol, row+i+1));
+
+				final JSeparator sep = new JSeparator(SwingConstants.VERTICAL);
+				groupPanel.add(sep, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+myCol+1, row+i+1));
+
+				bg.add(btn);
+			} catch (ParseException e) {
+				LogUtil.warning(e);
+			}
 		}
 		col += 2;
 		wordIdx++;
