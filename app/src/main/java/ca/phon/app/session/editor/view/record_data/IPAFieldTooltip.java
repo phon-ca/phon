@@ -63,6 +63,8 @@ public class IPAFieldTooltip {
 		if(currentFrame != null)
 			currentFrame.setVisible(false);
 
+		if(field.getGroupValue().length() == 0) return;
+
 		ToolTipWindow window = new ToolTipWindow();
 		window.pack();
 		window.setFocusableWindowState(false);
