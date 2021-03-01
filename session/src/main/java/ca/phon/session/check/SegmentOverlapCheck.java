@@ -29,7 +29,7 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 	/** Overlap tolerance in ms */
 	public final static String OVERLAP_TOLERANCE_PROPERTY =
 			SegmentOverlapCheck.class.getName() + ".overlapTolerance";
-	public final static int DEFAULT_OVERLAP_TOLERANCE = 200;
+	public final static int DEFAULT_OVERLAP_TOLERANCE = 0;
 	private int overlapTolerance =
 			PrefHelper.getInt(OVERLAP_TOLERANCE_PROPERTY, DEFAULT_OVERLAP_TOLERANCE);
 
