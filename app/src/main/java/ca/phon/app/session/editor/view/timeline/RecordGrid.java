@@ -196,7 +196,7 @@ public class RecordGrid extends TimeComponent {
 		removeSpeakerAct.putValue(PhonUIAction.NAME, "Hide participant");
 		removeSpeakerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + participant + " tier from view");
 		builder.addItem(".", removeSpeakerAct);
-		
+
 		for(var menuHandler:getParticipantMenuHandlers()) {
 			menuHandler.accept(participant, builder);
 		}

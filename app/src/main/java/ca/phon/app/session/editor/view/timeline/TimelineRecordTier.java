@@ -65,7 +65,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private RecordGrid recordGrid;
 
-	private Map<Participant, Boolean> speakerVisibility = new HashMap<>();
+//	private Map<Participant, Boolean> speakerVisibility = new HashMap<>();
 
 	private Map<String, Boolean> tierVisibility = new HashMap<>();
 
@@ -743,13 +743,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	@RunOnEDT
 	public void onParticipantRemoved(EditorEvent ee) {
-		speakerVisibility.remove((Participant) ee.getEventData());
-		setupSpeakers();
+		recordGrid.removeSpeaker((Participant) ee.getEventData());
 	}
 
 	@RunOnEDT
 	public void onParticipantAdded(EditorEvent ee) {
-		setupSpeakers();
+		setSpeakerVisible((Participant) ee.getEventData(), true);
 	}
 
 	@RunOnEDT
@@ -768,17 +767,27 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	 * @return
 	 */
 	public boolean isSpeakerVisible(Participant speaker) {
-		boolean retVal = true;
-
-		if (speakerVisibility.containsKey(speaker))
-			retVal = speakerVisibility.get(speaker);
-
-		return retVal;
+		return recordGrid.getSpeakers().contains(speaker);
 	}
 
 	public void setSpeakerVisible(Participant speaker, boolean visible) {
-		speakerVisibility.put(speaker, visible);
-		setupSpeakers();
+		List<Participant> currentSpeakers = new ArrayList<>(recordGrid.getSpeakers());
+		List<Participant> allSpeakers = new ArrayList<>();
+		for(Participant p:recordGrid.getSession().getParticipants()) allSpeakers.add(p);
+		allSpeakers.add(Participant.UNKNOWN);
+
+		List<Participant> newSpeakerList = new ArrayList<>();
+		for(Participant sessionSpeaker:allSpeakers) {
+			if(sessionSpeaker == speaker) {
+				if(visible)
+					newSpeakerList.add(sessionSpeaker);
+			} else {
+				if(currentSpeakers.contains(sessionSpeaker))
+					newSpeakerList.add(sessionSpeaker);
+			}
+		}
+
+		recordGrid.setSpeakers(newSpeakerList);
 	}
 
 	public void toggleSpeaker(PhonActionEvent pae) {
@@ -804,11 +813,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		var speakerList = new ArrayList<Participant>();
 		for (var speaker : session.getParticipants()) {
-			if (isSpeakerVisible(speaker))
-				speakerList.add(speaker);
+			speakerList.add(speaker);
 		}
-		if (isSpeakerVisible(Participant.UNKNOWN))
-			speakerList.add(Participant.UNKNOWN);
+		speakerList.add(Participant.UNKNOWN);
+
 		recordGrid.setSpeakers(speakerList);
 	}
 
