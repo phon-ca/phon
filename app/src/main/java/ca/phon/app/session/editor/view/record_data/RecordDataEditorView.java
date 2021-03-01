@@ -24,6 +24,8 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -890,7 +892,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		copyTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy tier contents to clipboard");
 		builder.addItem(".", copyTierAct);
 
-		if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)) {
+		if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)
+			|| Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
 			final PhonUIAction pasteTierAct = new PhonUIAction(this, "onPasteTier", new Tuple<Record, Tier<?>>(getEditor().currentRecord(), tier));
 			pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
 			pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
@@ -920,117 +923,147 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(tierTrans, this);
 	}
 
+	private final static String GROUPED_TIER_PATTERN = "\\[.*?\\](\\p{Space}?\\[.*?\\])*";
+	private final static String GROUP_DATA_PATTERN = "\\[(.*?)\\]";
 	public void onPasteTier(PhonActionEvent pae) {
 		Tuple<Record, Tier<?>> tuple = (Tuple<Record, Tier<?>>) pae.getData();
 		Record destRecord = tuple.getObj1();
 		Tier<?> destTier = tuple.getObj2();
-		SystemTierType systemTier = SystemTierType.tierFromString(destTier.getName());
 
 		Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
 		if(transferable.isDataFlavorSupported(TierTransferrable.FLAVOR)) {
 			try {
-				TierTransferrable tierTrans = (TierTransferrable) transferable.getTransferData(TierTransferrable.FLAVOR);
-				Tier<?> sourceTier = tierTrans.getTier();
+				TierTransferrable tierTransferrable = (TierTransferrable) transferable.getTransferData(TierTransferrable.FLAVOR);
+				pasteTier(destRecord, tierTransferrable.getTier(), destTier);
+			} catch (IOException | UnsupportedFlavorException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.warning(e);
+			}
+		} else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+			try {
+				String clipboardText = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
+				String noBrackets = clipboardText.replaceAll("\\[", "").replaceAll("\\]", "");
 
-				getEditor().getUndoSupport().beginUpdate();
-				if (destTier.isGrouped()) {
-					while (sourceTier.numberOfGroups() > destRecord.numberOfGroups()) {
-						AddGroupEdit edit = new AddGroupEdit(getEditor(), destRecord, destRecord.numberOfGroups());
-						getEditor().getUndoSupport().postEdit(edit);
-					}
-					for (int i = 0; i < sourceTier.numberOfGroups(); i++) {
-						if (destTier.getDeclaredType() == Orthography.class) {
-							try {
-								Orthography copyOrtho = Orthography.parseOrthography(sourceTier.getGroup(i).toString());
-
-								TierEdit<Orthography> edit = new TierEdit<>(getEditor(), (Tier<Orthography>) destTier, i, copyOrtho);
-								edit.setFireHardChangeOnUndo(i == 0);
-								getEditor().getUndoSupport().postEdit(edit);
-							} catch (ParseException pe) {
-								LogUtil.warning(pe);
-							}
-						} else if (destTier.getDeclaredType() == IPATranscript.class) {
-							IPATranscriptBuilder builder = new IPATranscriptBuilder();
-							if (sourceTier.getDeclaredType() == IPATranscript.class) {
-								IPATranscript src = ((Tier<IPATranscript>) sourceTier).getGroup(i);
-								builder.append(src);
-							} else {
-								builder.append(sourceTier.getGroup(i).toString());
-							}
-
-							IPATranscript ipa = builder.toIPATranscript();
-							SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
-							SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-							Syllabifier syllabifier = library.defaultSyllabifier();
-							if(info != null) {
-								Syllabifier tierSyllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(destTier.getName()));
-								if(tierSyllabifier != null) {
-									syllabifier = tierSyllabifier;
-								}
-							}
-							syllabifier.syllabify(ipa.toList());
-
-							TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), (Tier<IPATranscript>) destTier, i, ipa);
-							edit.setFireHardChangeOnUndo(i == 0);
-							getEditor().getUndoSupport().postEdit(edit);
-
-							PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(destRecord.getIPATarget().getGroup(i),
-									destRecord.getIPAActual().getGroup(i));
-							TierEdit<PhoneMap> alignEdit = new TierEdit<>(getEditor(), destRecord.getPhoneAlignment(), i, pm);
-							getEditor().getUndoSupport().postEdit(alignEdit);
-						} else if (destTier.getDeclaredType() == TierString.class) {
-							TierString copyTxt = new TierString(sourceTier.getGroup(i).toString());
-
-							TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, i, copyTxt);
-							edit.setFireHardChangeOnUndo(i == 0);
-							getEditor().getUndoSupport().postEdit(edit);
-						} else {
-							LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
+				Tier<TierString> srcTier = SessionFactory.newFactory().createTier("temp", TierString.class, destTier.isGrouped());
+				if(destTier.isGrouped()) {
+					if(clipboardText.matches(GROUPED_TIER_PATTERN)) {
+						Pattern grpPattern = Pattern.compile(GROUP_DATA_PATTERN);
+						Matcher m = grpPattern.matcher(clipboardText);
+						while(m.find()) {
+							srcTier.addGroup(new TierString(m.group(1)));
 						}
+					} else {
+						srcTier.addGroup(new TierString(noBrackets));
 					}
 				} else {
-					if (destTier.getDeclaredType() == MediaSegment.class) {
-						if (sourceTier.getDeclaredType() == MediaSegment.class) {
-							MediaSegment origSeg = ((Tier<MediaSegment>) sourceTier).getGroup(0);
-							MediaSegment copySeg = SessionFactory.newFactory().createMediaSegment();
-							copySeg.setStartValue(origSeg.getStartValue());
-							copySeg.setEndValue(origSeg.getEndValue());
-
-							TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, copySeg);
-							edit.setFireHardChangeOnUndo(true);
-							getEditor().getUndoSupport().postEdit(edit);
-						} else {
-							Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
-							if (segmentFormatter != null) {
-								try {
-									MediaSegment seg = segmentFormatter.parse(sourceTier.getGroup(0).toString());
-
-									TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, seg);
-									edit.setFireHardChangeOnUndo(true);
-									getEditor().getUndoSupport().postEdit(edit);
-								} catch (ParseException e) {
-									LogUtil.warning(e);
-								}
-							}
-						}
-					} else if (destTier.getDeclaredType() == TierString.class) {
-						String tierTxt = sourceTier.toString();
-						tierTxt = tierTxt.replaceAll("\\[", "").replaceAll("\\]", "");
-
-						TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, 0, new TierString(tierTxt));
-						edit.setFireHardChangeOnUndo(true);
-						getEditor().getUndoSupport().postEdit(edit);
-					} else {
-						LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
-					}
+					srcTier.addGroup(new TierString(noBrackets));
 				}
-				getEditor().getUndoSupport().endUpdate();
-			} catch(IOException | UnsupportedFlavorException e) {
+				pasteTier(destRecord, srcTier, destTier);
+			} catch (IOException | UnsupportedFlavorException e) {
+				Toolkit.getDefaultToolkit().beep();
 				LogUtil.severe(e);
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep();
 			LogUtil.warning("Pasting from other data flavors not supported");
 		}
+	}
+
+	private void pasteTier(Record destRecord, Tier<?> sourceTier, Tier<?> destTier) {
+		getEditor().getUndoSupport().beginUpdate();
+		if (destTier.isGrouped()) {
+			while (sourceTier.numberOfGroups() > destRecord.numberOfGroups()) {
+				AddGroupEdit edit = new AddGroupEdit(getEditor(), destRecord, destRecord.numberOfGroups());
+				getEditor().getUndoSupport().postEdit(edit);
+			}
+			for (int i = 0; i < sourceTier.numberOfGroups(); i++) {
+				if (destTier.getDeclaredType() == Orthography.class) {
+					try {
+						Orthography copyOrtho = Orthography.parseOrthography(sourceTier.getGroup(i).toString());
+
+						TierEdit<Orthography> edit = new TierEdit<>(getEditor(), (Tier<Orthography>) destTier, i, copyOrtho);
+						edit.setFireHardChangeOnUndo(i == 0);
+						getEditor().getUndoSupport().postEdit(edit);
+					} catch (ParseException pe) {
+						LogUtil.warning(pe);
+					}
+				} else if (destTier.getDeclaredType() == IPATranscript.class) {
+					IPATranscriptBuilder builder = new IPATranscriptBuilder();
+					if (sourceTier.getDeclaredType() == IPATranscript.class) {
+						IPATranscript src = ((Tier<IPATranscript>) sourceTier).getGroup(i);
+						builder.append(src);
+					} else {
+						builder.append(sourceTier.getGroup(i).toString());
+					}
+
+					IPATranscript ipa = builder.toIPATranscript();
+					SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
+					SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+					Syllabifier syllabifier = library.defaultSyllabifier();
+					if (info != null) {
+						Syllabifier tierSyllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(destTier.getName()));
+						if (tierSyllabifier != null) {
+							syllabifier = tierSyllabifier;
+						}
+					}
+					syllabifier.syllabify(ipa.toList());
+
+					TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), (Tier<IPATranscript>) destTier, i, ipa);
+					edit.setFireHardChangeOnUndo(i == 0);
+					getEditor().getUndoSupport().postEdit(edit);
+
+					PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(destRecord.getIPATarget().getGroup(i),
+							destRecord.getIPAActual().getGroup(i));
+					TierEdit<PhoneMap> alignEdit = new TierEdit<>(getEditor(), destRecord.getPhoneAlignment(), i, pm);
+					getEditor().getUndoSupport().postEdit(alignEdit);
+				} else if (destTier.getDeclaredType() == TierString.class) {
+					TierString copyTxt = new TierString(sourceTier.getGroup(i).toString());
+
+					TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, i, copyTxt);
+					edit.setFireHardChangeOnUndo(i == 0);
+					getEditor().getUndoSupport().postEdit(edit);
+				} else {
+					LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
+				}
+			}
+		} else {
+			if (destTier.getDeclaredType() == MediaSegment.class) {
+				if (sourceTier.getDeclaredType() == MediaSegment.class) {
+					MediaSegment origSeg = ((Tier<MediaSegment>) sourceTier).getGroup(0);
+					MediaSegment copySeg = SessionFactory.newFactory().createMediaSegment();
+					copySeg.setStartValue(origSeg.getStartValue());
+					copySeg.setEndValue(origSeg.getEndValue());
+
+					TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, copySeg);
+					edit.setFireHardChangeOnUndo(true);
+					getEditor().getUndoSupport().postEdit(edit);
+				} else {
+					Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
+					if (segmentFormatter != null) {
+						try {
+							MediaSegment seg = segmentFormatter.parse(sourceTier.getGroup(0).toString());
+
+							TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, seg);
+							edit.setFireHardChangeOnUndo(true);
+							getEditor().getUndoSupport().postEdit(edit);
+						} catch (ParseException e) {
+							LogUtil.warning(e);
+						}
+					}
+				}
+			} else if (destTier.getDeclaredType() == TierString.class) {
+				String tierTxt = sourceTier.toString();
+				tierTxt = tierTxt.replaceAll("\\[", "").replaceAll("\\]", "");
+
+				TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, 0, new TierString(tierTxt));
+				edit.setFireHardChangeOnUndo(true);
+				getEditor().getUndoSupport().postEdit(edit);
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
+			}
+		}
+		getEditor().getUndoSupport().endUpdate();
 	}
 
 	/*
