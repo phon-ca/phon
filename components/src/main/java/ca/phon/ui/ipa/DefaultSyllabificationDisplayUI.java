@@ -449,14 +449,15 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 						phoneRect.y + phoneBoxInsets.top, phoneBoxSize.width,
 						phoneBoxSize.height);
 
+				String txt = (new IPATranscriptBuilder()).append(p).toIPATranscript().stripDiacritics().toString();
 				Font f = displayFont;
 				FontMetrics fm = g.getFontMetrics(f);
-				Rectangle2D stringBounds = fm.getStringBounds(p.getText(), g);
+				Rectangle2D stringBounds = fm.getStringBounds(txt, g);
 				while ((stringBounds.getWidth() > pBox.width)
 						|| (stringBounds.getHeight() > pBox.height)) {
 					f = f.deriveFont(f.getSize2D() - 0.2f);
 					fm = g.getFontMetrics(f);
-					stringBounds = fm.getStringBounds(p.getText(), g);
+					stringBounds = fm.getStringBounds(txt, g);
 				}
 
 				float phoneX = pBox.x + (pBox.width / 2.0f)
@@ -466,7 +467,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 				g2d.setFont(f);
 				g2d.setColor(c.getForeground());
-				g2d.drawString(p.getText(), phoneX, phoneY);
+				g2d.drawString(txt, phoneX, phoneY);
 
 				phoneRect.translate(phoneRect.width, 0);
 			}

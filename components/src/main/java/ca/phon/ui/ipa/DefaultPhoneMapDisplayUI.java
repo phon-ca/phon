@@ -238,16 +238,17 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 				pRect.y + phoneBoxInsets.top,
 				phoneBoxSize.width, phoneBoxSize.height);
 
+		String txt = (new IPATranscriptBuilder()).append(p).toIPATranscript().stripDiacritics().toString();
 		Font f = displayFont;
 		FontMetrics fm = g2d.getFontMetrics(f);
 		Rectangle2D stringBounds =
-				fm.getStringBounds(p.getText(), g2d);
+				fm.getStringBounds(txt, g2d);
 		while(
 				(stringBounds.getWidth() > pBox.width)
 				|| (stringBounds.getHeight() > pBox.height)) {
 			f = f.deriveFont(f.getSize2D()-0.2f);
 			fm = g2d.getFontMetrics(f);
-			stringBounds = fm.getStringBounds(p.getText(), g2d);
+			stringBounds = fm.getStringBounds(txt, g2d);
 		}
 
 		float phoneX =
@@ -257,7 +258,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 		g2d.setFont(f);
 		g2d.setColor(display.getForeground());
-		g2d.drawString(p.getText(), phoneX, phoneY);
+		g2d.drawString(txt, phoneX, phoneY);
 	}
 
 	@Override
