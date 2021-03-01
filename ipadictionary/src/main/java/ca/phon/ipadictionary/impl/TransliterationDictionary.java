@@ -173,7 +173,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 					matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 				}
 				matcher.appendTail(ipaBuilder);
-				builderStr = ipaBuilder.toIPATranscript().toString();
+				builderStr = ipaBuilder.toIPATranscript().toString(true);
 			} catch (ParseException e) {
 				LOGGER.warn(e.getLocalizedMessage(), e);
 			}

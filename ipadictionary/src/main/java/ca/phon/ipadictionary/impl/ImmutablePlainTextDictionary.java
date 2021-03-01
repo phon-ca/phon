@@ -441,7 +441,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 							matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 						}
 						matcher.appendTail(ipaBuilder);
-						str = ipaBuilder.toIPATranscript().toString();
+						str = ipaBuilder.toIPATranscript().toString(true);
 					} catch (ParseException e) {
 						LOGGER.warn(e.getLocalizedMessage(), e);
 					}
