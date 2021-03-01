@@ -30,6 +30,8 @@ import java.util.stream.*;
 
 import javax.print.attribute.standard.Media;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.QueryAndReportWizard;
@@ -1523,7 +1525,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
-			if(me.isPopupTrigger()) return;
+			if(me.getButton() != MouseEvent.BUTTON1) return;
 
 			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
 				if (getSelectionModel().isSelectedIndex(recordIndex))
