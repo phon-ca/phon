@@ -450,6 +450,7 @@ ca.phon.app.session
 ca.phon.app.session
 ca.phon.app.session
 ca.phon.app.session
+ca.phon.app.session
 ca.phon.app.session.check
 ca.phon.app.session.check
 ca.phon.app.session.check
@@ -558,6 +559,7 @@ ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
+ca.phon.app.session.editor.view.record_data
 ca.phon.app.session.editor.view.record_data
 ca.phon.app.session.editor.view.record_data
 ca.phon.app.session.editor.view.record_data
