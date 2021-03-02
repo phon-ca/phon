@@ -729,10 +729,9 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 						PhonexTransition.class.cast(initialTransition);
 				PhonexTransition cpyTrans = 
 						PhonexTransition.class.cast(pTrans.clone());
-//						new PhonexTransition(pTrans.getMatcher(), pTrans.getTypeMatcher());
 				cpyTrans.setFirstState(finalState);
 				cpyTrans.setToState(stateMap.get(pTrans.getToState()));
-//				cpyTrans.setImage(pTrans.getImage());
+				cpyTrans.setOffsetType(pTrans.getOffsetType());
 				addTransition(cpyTrans);
 			}
 		}
@@ -746,10 +745,9 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 							PhonexTransition.class.cast(transition);
 					PhonexTransition cpyTrans = 
 							PhonexTransition.class.cast(pTrans.clone());
-//							new PhonexTransition(pTrans.getMatcher(), pTrans.getTypeMatcher());
 					cpyTrans.setFirstState(stateMap.get(pTrans.getFirstState()));
 					cpyTrans.setToState(stateMap.get(pTrans.getToState()));
-//					cpyTrans.setImage(pTrans.getImage());
+					cpyTrans.setOffsetType(pTrans.getOffsetType());
 					addTransition(cpyTrans);
 				}
 			}
