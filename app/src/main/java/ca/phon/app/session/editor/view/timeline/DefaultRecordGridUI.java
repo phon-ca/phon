@@ -896,11 +896,13 @@ public class DefaultRecordGridUI extends RecordGridUI {
 						recordGrid.getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
 					}
 				} else if(e.getButton() == MouseEvent.BUTTON3) {
-					if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
-						recordGrid.getSelectionModel().addSelectionInterval(recordGrid.getSelectionModel().getLeadSelectionIndex(), recordIndex);
-					} else {
-						recordGrid.setCurrentRecordIndex(recordIndex);
-						recordGrid.getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
+					if(!recordGrid.getSelectionModel().isSelectedIndex(recordIndex)) {
+						if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
+							recordGrid.getSelectionModel().addSelectionInterval(recordGrid.getSelectionModel().getLeadSelectionIndex(), recordIndex);
+						} else {
+							recordGrid.setCurrentRecordIndex(recordIndex);
+							recordGrid.getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
+						}
 					}
 				}
 				recordGrid.fireRecordClicked(recordOpt.get(), e);
