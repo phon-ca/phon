@@ -1518,27 +1518,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	
 	private class RecordMouseListener extends RecordGridMouseAdapter {
 
-		// offset (in sec) from left of interval where we are starting the drag
-		
 		volatile boolean waitForRecordChange = false;
-		
 
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
-			if(me.getButton() != MouseEvent.BUTTON1) return;
-
-			if((me.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
-				if (getSelectionModel().isSelectedIndex(recordIndex))
-					getSelectionModel().removeSelectionInterval(recordIndex, recordIndex);
-				else
-					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
-			} else if((me.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
-				getSelectionModel().addSelectionInterval(getSelectionModel().getLeadSelectionIndex(), recordIndex);
-			} else if(me.getModifiersEx() == 0) {
-				getParentView().getEditor().setCurrentRecordIndex(recordIndex);
-				getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
-			}
-			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 
 		@Override

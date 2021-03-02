@@ -882,8 +882,30 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		public void mouseClicked(MouseEvent e) {
 			Optional<Integer> recordOpt = recordHitTest(Geometries.point(e.getX(), e.getY()));
 			if(recordOpt.isPresent()) {
+				int recordIndex = recordOpt.get().intValue();
+				if(e.getButton() == MouseEvent.BUTTON1) {
+					if ((e.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
+						if (recordGrid.getSelectionModel().isSelectedIndex(recordIndex))
+							recordGrid.getSelectionModel().removeSelectionInterval(recordIndex, recordIndex);
+						else
+							recordGrid.getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
+					} else if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
+						recordGrid.getSelectionModel().addSelectionInterval(recordGrid.getSelectionModel().getLeadSelectionIndex(), recordIndex);
+					} else if (e.getModifiersEx() == 0) {
+						recordGrid.setCurrentRecordIndex(recordIndex);
+						recordGrid.getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
+					}
+				} else if(e.getButton() == MouseEvent.BUTTON3) {
+					if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
+						recordGrid.getSelectionModel().addSelectionInterval(recordGrid.getSelectionModel().getLeadSelectionIndex(), recordIndex);
+					} else {
+						recordGrid.setCurrentRecordIndex(recordIndex);
+						recordGrid.getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
+					}
+				}
 				recordGrid.fireRecordClicked(recordOpt.get(), e);
 			}
+			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
 
 		@Override
