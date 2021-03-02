@@ -25,6 +25,8 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.phonex.PhonexPattern;
 import ca.phon.phonex.PhonexPatternException;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import org.apache.commons.lang3.*;
 
 import ca.hedlund.tst.*;
@@ -55,6 +57,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		NAME("name"),
 		LANGUAGE("lang"),
 		CONTRACTION_RULE("ctr"),
+		SYLLABIFIER("syllabifier"),
 		PREPROCESSEXPR("prefind"),
 		PREPROCESSREPLACE("prereplace"),
 		POSTPROCESSEXPR("postfind"),
@@ -121,6 +124,12 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	 * #lang eng
 	 */
 	private Language language = new Language();
+
+	/**
+	 * Syllabifier used to syllabifier transcriptions
+	 * before phonex find/replace are executed
+	 */
+	private Syllabifier syllabifier = null;
 	
 	/**
 	 * Other metadata values.  Common values are
@@ -281,6 +290,9 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 		} else if(token.equalsIgnoreCase(MetadataToken.CONTRACTION_RULE.toString())) {
 			final ContractionRule cr = ContractionRule.parseContractionRule(value);
 			ctrRules.add(cr);
+		} else if(token.equalsIgnoreCase(ImmutablePlainTextDictionary.MetadataToken.SYLLABIFIER.toString())) {
+			final Language lang = Language.parseLanguage(value);
+			this.syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
 		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSEXPR.toString())) {
 			preFindPattern = Pattern.compile(value);
 		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSREPLACE.toString())) {
@@ -432,6 +444,9 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 				for(var postPhonexFind:postPhonexFindList) {
 					try {
 						final IPATranscript ipa = IPATranscript.parseIPATranscript(str);
+						if(syllabifier != null) {
+							syllabifier.syllabify(ipa.toList());
+						}
 
 						var pattern = postPhonexFind.getObj1();
 						var matcher = pattern.matcher(ipa);
@@ -441,7 +456,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 							matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 						}
 						matcher.appendTail(ipaBuilder);
-						str = ipaBuilder.toIPATranscript().toString(true);
+						str = ipaBuilder.toIPATranscript().toString();
 					} catch (ParseException e) {
 						LOGGER.warn(e.getLocalizedMessage(), e);
 					}

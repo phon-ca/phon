@@ -21,6 +21,8 @@ import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
 import org.apache.commons.lang3.*;
 import org.apache.logging.log4j.*;
 
@@ -42,6 +44,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	private enum MetadataToken {
 		NAME("name"),
 		LANGUAGE("lang"),
+		SYLLABIFIER("syllabifier"),
 		PREPROCESSEXPR("prefind"),
 		PREPROCESSREPLACE("prereplace"),
 		POSTPROCESSEXPR("postfind"),
@@ -88,6 +91,12 @@ public class TransliterationDictionary implements IPADictionarySPI,
 	 * #lang eng
 	 */
 	private Language language = null;
+
+	/**
+	 * Syllabifier used to syllabifier transcriptions
+	 * before phonex find/replace are executed
+	 */
+	private Syllabifier syllabifier = null;
 	
 	/**
 	 * Other metadata values.  Common values are
@@ -164,6 +173,9 @@ public class TransliterationDictionary implements IPADictionarySPI,
 		for(var postPhonexFind:postPhonexFindList) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
+				if(syllabifier != null) {
+					syllabifier.syllabify(ipa.toList());
+				}
 				
 				var pattern = postPhonexFind.getObj1();
 				var matcher = pattern.matcher(ipa);
@@ -173,7 +185,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 					matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 				}
 				matcher.appendTail(ipaBuilder);
-				builderStr = ipaBuilder.toIPATranscript().toString(true);
+				builderStr = ipaBuilder.toIPATranscript().toString();
 			} catch (ParseException e) {
 				LOGGER.warn(e.getLocalizedMessage(), e);
 			}
@@ -296,6 +308,9 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			// attempt to load language
 			final Language lang = Language.parseLanguage(value);
 			this.language = lang;
+		} else if(token.equalsIgnoreCase(MetadataToken.SYLLABIFIER.toString())) {
+			final Language lang = Language.parseLanguage(value);
+			this.syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
 		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSEXPR.toString())) {
 			preFindPattern = Pattern.compile(value);
 		} else if(token.equalsIgnoreCase(MetadataToken.PREPROCESSREPLACE.toString())) {
