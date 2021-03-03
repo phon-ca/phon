@@ -15,12 +15,13 @@
  */
 package ca.phon.app.menu.query;
 
-import ca.phon.app.modules.*;
-import ca.phon.app.query.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.query.script.*;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.query.QueryAndReportWizardEP;
+import ca.phon.plugin.PluginAction;
+import ca.phon.project.Project;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.query.script.QueryName;
+import ca.phon.query.script.QueryScript;
 
 /**
  * Open the query script editor with given script.

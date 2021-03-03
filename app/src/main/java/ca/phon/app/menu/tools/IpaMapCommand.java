@@ -15,13 +15,13 @@
  */
 package ca.phon.app.menu.tools;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.ipamap.IPAMapEP;
+import ca.phon.ipamap.IpaMap;
+import ca.phon.plugin.PluginAction;
 
 import javax.swing.*;
-
-import ca.phon.ipamap.*;
-import ca.phon.plugin.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Toggle visiblity of the {@link IpaMap}

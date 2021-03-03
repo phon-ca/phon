@@ -15,9 +15,9 @@
  */
 package ca.phon.app.menu.query;
 
-import ca.phon.app.modules.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.plugin.PluginAction;
+import ca.phon.project.Project;
 
 /**
  * Open query history window for given project

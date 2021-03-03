@@ -15,12 +15,11 @@
  */
 package ca.phon.app.menu.edit;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.plugin.PluginAction;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * 

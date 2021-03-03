@@ -15,12 +15,12 @@
  */
 package ca.phon.app.log;
 
-import java.io.*;
-import java.util.*;
+import au.com.bytecode.opencsv.CSVReader;
 
-import javax.swing.table.*;
-
-import au.com.bytecode.opencsv.*;
+import javax.swing.table.AbstractTableModel;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Table model using a CSV reader for table data.

@@ -15,13 +15,12 @@
  */
 package ca.phon.app.menu.file;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.plugin.PluginAction;
+import ca.phon.util.OSInfo;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Command for exiting the application.

@@ -15,31 +15,40 @@
  */
 package ca.phon.app.query.report;
 
-import static ca.phon.query.report.util.ResultListingFieldBuilder.*;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-
-import javax.script.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.query.*;
+import ca.phon.app.query.ScriptPanel;
 import ca.phon.query.report.io.*;
-import ca.phon.query.script.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
-import ca.phon.session.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
+import ca.phon.query.script.QueryScript;
+import ca.phon.query.script.QueryScriptContext;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.EnumScriptParam;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ScriptParameters;
+import ca.phon.session.SystemTierType;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.jdesktop.swingx.JXList;
+
+import javax.script.ScriptEngineFactory;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.List;
+import java.util.*;
+
+import static ca.phon.query.report.util.ResultListingFieldBuilder.*;
 
 /**
  * Section panel for customizable result listings.

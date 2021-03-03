@@ -15,16 +15,18 @@
  */
 package ca.phon.app.log;
 
+import ca.phon.app.excel.WorkbookUtils;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.*;
-
-import org.jsoup.*;
-import org.jsoup.nodes.*;
-import org.jsoup.select.*;
-
-import ca.phon.app.excel.*;
-import ca.phon.query.report.datasource.*;
-import jxl.write.*;
-import jxl.write.biff.*;
 
 public class HTMLToWorkbookWriter {
 

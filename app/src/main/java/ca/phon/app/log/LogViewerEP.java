@@ -15,11 +15,11 @@
  */
 package ca.phon.app.log;
 
-import java.util.*;
+import ca.phon.plugin.IPluginEntryPoint;
+import ca.phon.plugin.PhonPlugin;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
+import java.util.Map;
 
 @PhonPlugin(name="LogViewer")
 public class LogViewerEP implements IPluginEntryPoint {

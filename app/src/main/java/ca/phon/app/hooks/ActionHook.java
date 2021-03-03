@@ -15,7 +15,7 @@
  */
 package ca.phon.app.hooks;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Interface used for {@link HookableAction}s.

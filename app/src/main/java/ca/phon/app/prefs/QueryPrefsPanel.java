@@ -15,9 +15,9 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.*;
+import ca.phon.app.query.QueryAndReportWizardSettingsPanel;
 
-import ca.phon.app.query.*;
+import java.awt.*;
 
 public class QueryPrefsPanel extends PrefsPanel {
 

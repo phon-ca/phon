@@ -15,30 +15,35 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.query.report.ReportIO;
+import ca.phon.query.report.io.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import javax.xml.bind.*;
-import javax.xml.namespace.*;
-
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.query.report.*;
-import ca.phon.query.report.io.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.toast.*;
-import ca.phon.util.icons.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A panel used for editing report templates.

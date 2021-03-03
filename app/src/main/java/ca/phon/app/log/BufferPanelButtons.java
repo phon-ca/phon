@@ -15,16 +15,16 @@
  */
 package ca.phon.app.log;
 
-import java.beans.*;
-import java.lang.ref.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.icons.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 
 public class BufferPanelButtons extends JComponent {
 

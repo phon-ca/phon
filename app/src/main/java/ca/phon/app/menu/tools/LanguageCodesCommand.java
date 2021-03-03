@@ -15,10 +15,10 @@
  */
 package ca.phon.app.menu.tools;
 
-import javax.swing.*;
+import ca.phon.app.help.LanguageCodeEP;
+import ca.phon.plugin.PluginAction;
 
-import ca.phon.app.help.*;
-import ca.phon.plugin.*;
+import javax.swing.*;
 
 /**
  * Show the language code lookup window.

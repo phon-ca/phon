@@ -15,12 +15,12 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.*;
+import ca.phon.query.report.io.CommentSection;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.query.report.io.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 
 public class CommentSectionPanel extends SectionPanel<CommentSection> {
 	

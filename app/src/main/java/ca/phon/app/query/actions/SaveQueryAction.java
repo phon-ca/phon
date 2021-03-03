@@ -15,26 +15,29 @@
  */
 package ca.phon.app.query.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
+import ca.phon.query.history.QueryHistoryManager;
+import ca.phon.query.script.QueryScript;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.history.ParamSetType;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.text.DefaultTextCompleterModel;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.TextCompleter;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.query.history.*;
-import ca.phon.query.script.*;
-import ca.phon.script.*;
-import ca.phon.script.params.history.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.text.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 /**
  * Save (or name) query param settings in user history.

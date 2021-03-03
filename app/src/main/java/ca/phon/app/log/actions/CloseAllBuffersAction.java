@@ -15,10 +15,10 @@
  */
 package ca.phon.app.log.actions;
 
-import java.awt.event.*;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.BufferPanelContainer;
 
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
+import java.awt.event.ActionEvent;
 
 public class CloseAllBuffersAction extends HookableAction {
 

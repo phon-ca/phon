@@ -15,12 +15,12 @@
  */
 package ca.phon.app.prefs;
 
-import ca.phon.app.autosave.*;
-import ca.phon.app.workspace.*;
-import ca.phon.ipadictionary.*;
-import ca.phon.media.*;
-import ca.phon.syllabifier.*;
-import ca.phon.ui.*;
+import ca.phon.app.autosave.AutosaveManager;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.media.MediaLocator;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
 
 /**
  * Property names used in the application.

@@ -15,9 +15,9 @@
  */
 package ca.phon.app.menu.edit;
 
-import javax.swing.*;
+import ca.phon.plugin.PluginAction;
 
-import ca.phon.plugin.*;
+import javax.swing.*;
 
 /**
  * Open preferences dialog

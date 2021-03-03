@@ -15,12 +15,16 @@
  */
 package ca.phon.app.query.report;
 
-import java.util.*;
+import ca.phon.query.report.io.Group;
+import ca.phon.query.report.io.ReportDesign;
+import ca.phon.query.report.io.Section;
 
-import javax.swing.event.*;
-import javax.swing.tree.*;
-
-import ca.phon.query.report.io.*;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tree model for report settings.

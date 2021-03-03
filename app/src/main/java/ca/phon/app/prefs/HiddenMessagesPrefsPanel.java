@@ -15,11 +15,10 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.*;
+import org.jdesktop.swingx.JXList;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
+import java.awt.*;
 
 public class HiddenMessagesPrefsPanel extends PrefsPanel {
 

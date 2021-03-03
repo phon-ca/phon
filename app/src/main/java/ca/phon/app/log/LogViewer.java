@@ -15,19 +15,19 @@
  */
 package ca.phon.app.log;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.zip.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.awt.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Application log viewer.

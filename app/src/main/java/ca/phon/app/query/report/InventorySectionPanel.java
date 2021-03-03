@@ -15,14 +15,14 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.query.report.io.InventorySection;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.query.report.io.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Inventory section panel

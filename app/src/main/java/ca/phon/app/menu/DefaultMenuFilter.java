@@ -15,30 +15,34 @@
  */
 package ca.phon.app.menu;
 
-import java.awt.*;
+import ca.phon.app.actions.OpenFileEP;
+import ca.phon.app.menu.analysis.AnalysisMenuListener;
+import ca.phon.app.menu.edit.EditMenuListener;
+import ca.phon.app.menu.file.*;
+import ca.phon.app.menu.help.HelpCommand;
+import ca.phon.app.menu.help.LogCommand;
+import ca.phon.app.menu.macro.MacroMenuListener;
+import ca.phon.app.menu.query.QueryMenuListener;
+import ca.phon.app.menu.tools.BasicSyllabifierTestCommand;
+import ca.phon.app.menu.tools.IpaMapCommand;
+import ca.phon.app.menu.tools.LanguageCodesCommand;
+import ca.phon.app.menu.window.OpenWindowsMenuListener;
+import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
+import ca.phon.app.menu.workspace.WorkspaceHistoryMenuListener;
+import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
+import ca.phon.app.prefs.PhonProperties;
+import ca.phon.app.welcome.WelcomeWindow;
+import ca.phon.plugin.IPluginMenuFilter;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.PrefHelper;
+import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.app.actions.*;
-import ca.phon.app.menu.analysis.*;
-import ca.phon.app.menu.edit.*;
-import ca.phon.app.menu.file.*;
-import ca.phon.app.menu.help.*;
-import ca.phon.app.menu.macro.*;
-import ca.phon.app.menu.query.*;
-import ca.phon.app.menu.tools.*;
-import ca.phon.app.menu.window.*;
-import ca.phon.app.menu.workspace.*;
-import ca.phon.app.prefs.*;
-import ca.phon.app.welcome.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.awt.*;
 
 /**
  * Create the default menu for all Phon windows.

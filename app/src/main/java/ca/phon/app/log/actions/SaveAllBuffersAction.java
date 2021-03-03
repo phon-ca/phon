@@ -15,19 +15,24 @@
  */
 package ca.phon.app.log.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.BufferPanel;
+import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.ui.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class SaveAllBuffersAction extends HookableAction {
 

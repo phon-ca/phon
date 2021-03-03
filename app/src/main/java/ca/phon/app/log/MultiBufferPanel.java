@@ -15,19 +15,19 @@
  */
 package ca.phon.app.log;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.log.actions.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-
-import ca.phon.app.log.actions.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.EventListenerList;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.util.List;
+import java.util.*;
 
 /**
  * Container for multiple {@link BufferPanels}

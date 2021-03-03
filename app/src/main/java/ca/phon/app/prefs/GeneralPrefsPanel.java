@@ -15,16 +15,17 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.*;
+import ca.phon.ui.HidablePanel;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.PrefHelper;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 /**
  * Edit general application prefs such as

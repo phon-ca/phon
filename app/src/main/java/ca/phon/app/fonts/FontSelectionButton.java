@@ -15,17 +15,22 @@
  */
 package ca.phon.app.fonts;
 
-import java.awt.*;
-import java.util.concurrent.atomic.*;
+import ca.phon.ui.FontFormatter;
+import ca.phon.ui.MultiActionButton;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FontDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FontSelectionButton extends MultiActionButton {
 	

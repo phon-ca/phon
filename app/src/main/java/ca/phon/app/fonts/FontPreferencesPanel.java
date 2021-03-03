@@ -15,14 +15,14 @@
  */
 package ca.phon.app.fonts;
 
+import ca.phon.app.prefs.PrefsPanel;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.ui.HidablePanel;
+import ca.phon.ui.fonts.FontPreferences;
+import org.jdesktop.swingx.VerticalLayout;
+
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.prefs.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.*;
-import ca.phon.ui.fonts.*;
 
 public class FontPreferencesPanel extends PrefsPanel implements IPluginExtensionPoint<PrefsPanel> {
 

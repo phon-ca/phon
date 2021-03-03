@@ -15,22 +15,25 @@
  */
 package ca.phon.app.prefs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionMediaModel;
+import ca.phon.app.syllabifier.SyllabifierComboBox;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
-import javax.swing.border.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.syllabifier.*;
-import ca.phon.ipadictionary.*;
-import ca.phon.syllabifier.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Panel for editing session editor prefs.

@@ -15,47 +15,57 @@
  */
 package ca.phon.app.log;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
-import java.io.File;
-import java.lang.ref.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
-import java.util.function.*;
+import au.com.bytecode.opencsv.CSVReader;
+import ca.phon.app.excel.WorkbookUtils;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.EditorSelectionModel;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorEP;
+import ca.phon.app.session.editor.SessionEditorSelection;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.plugin.PluginException;
+import ca.phon.project.Project;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.ResultValue;
+import ca.phon.query.report.csv.CSVTableDataWriter;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.OSInfo;
+import ca.phon.util.Range;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.BrowserType;
+import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.events.ConsoleEvent.Level;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+import jxl.Workbook;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+import org.fife.ui.rtextarea.RTextScrollPane;
+import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-
-import org.fife.ui.rtextarea.*;
-import org.jdesktop.swingx.*;
-
-import com.teamdev.jxbrowser.chromium.*;
-import com.teamdev.jxbrowser.chromium.events.ConsoleEvent.*;
-import com.teamdev.jxbrowser.chromium.swing.*;
-
-import au.com.bytecode.opencsv.*;
-import ca.phon.app.excel.*;
-import ca.phon.app.modules.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.extensions.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.query.report.csv.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
-import ca.phon.util.Range;
-import jxl.*;
-import jxl.write.*;
-import jxl.write.biff.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * A panel showing a single {@link LogBuffer} with options

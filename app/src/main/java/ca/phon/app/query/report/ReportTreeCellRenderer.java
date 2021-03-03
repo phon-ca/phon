@@ -15,16 +15,15 @@
  */
 package ca.phon.app.query.report;
 
-import java.awt.*;
-import java.util.*;
+import ca.phon.query.report.io.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-import javax.swing.tree.*;
-
-import org.apache.commons.lang3.*;
-
-import ca.phon.query.report.io.*;
-import ca.phon.util.icons.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
+import java.util.HashMap;
 
 public class ReportTreeCellRenderer extends DefaultTreeCellRenderer {
 	

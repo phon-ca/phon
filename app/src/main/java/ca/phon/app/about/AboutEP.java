@@ -15,11 +15,10 @@
  */
 package ca.phon.app.about;
 
-import java.util.*;
+import ca.phon.plugin.IPluginEntryPoint;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
+import java.util.Map;
 
 public class AboutEP implements IPluginEntryPoint {
 

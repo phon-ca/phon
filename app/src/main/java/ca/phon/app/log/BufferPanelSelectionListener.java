@@ -15,7 +15,7 @@
  */
 package ca.phon.app.log;
 
-import java.util.*;
+import java.util.EventListener;
 
 public interface BufferPanelSelectionListener extends EventListener {
 	

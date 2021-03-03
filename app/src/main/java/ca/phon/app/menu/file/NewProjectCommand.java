@@ -15,22 +15,26 @@
  */
 package ca.phon.app.menu.file;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.DesktopProjectFactory;
+import ca.phon.app.project.OpenProjectEP;
+import ca.phon.app.welcome.WelcomeWindow;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.project.ProjectFactory;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.modules.*;
-import ca.phon.app.project.*;
-import ca.phon.app.welcome.*;
-import ca.phon.app.workspace.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.worker.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class NewProjectCommand extends HookableAction {
 

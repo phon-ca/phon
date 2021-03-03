@@ -15,9 +15,9 @@
  */
 package ca.phon.app.menu.help;
 
-import javax.swing.*;
+import ca.phon.plugin.PluginAction;
 
-import ca.phon.plugin.*;
+import javax.swing.*;
 
 /**
  * Show application help

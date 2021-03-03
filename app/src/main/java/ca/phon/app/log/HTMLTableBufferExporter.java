@@ -15,9 +15,9 @@
  */
 package ca.phon.app.log;
 
-import java.io.*;
+import au.com.bytecode.opencsv.CSVReader;
 
-import au.com.bytecode.opencsv.*;
+import java.io.StringReader;
 
 /**
  * Convert buffer table to an HTML table.

@@ -15,15 +15,15 @@
  */
 package ca.phon.app.menu.file;
 
-import java.io.*;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.RecentProjects;
+import ca.phon.plugin.PluginAction;
+import ca.phon.ui.action.PhonUIAction;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.app.modules.*;
-import ca.phon.app.project.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.action.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.io.File;
 
 /**
  * Setup recent projects menu

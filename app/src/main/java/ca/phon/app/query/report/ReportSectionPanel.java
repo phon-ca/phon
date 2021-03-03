@@ -15,9 +15,9 @@
  */
 package ca.phon.app.query.report;
 
-import java.io.*;
+import ca.phon.query.report.io.ReportDesign;
 
-import ca.phon.query.report.io.*;
+import java.io.File;
 
 public class ReportSectionPanel extends SectionPanel<ReportDesign> {
 	

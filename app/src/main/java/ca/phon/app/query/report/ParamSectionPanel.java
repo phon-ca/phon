@@ -15,7 +15,7 @@
  */
 package ca.phon.app.query.report;
 
-import ca.phon.query.report.io.*;
+import ca.phon.query.report.io.ParamSection;
 
 public class ParamSectionPanel extends SectionPanel<ParamSection> {
 	

@@ -32,19 +32,18 @@
  */
 package ca.phon.app.log;
 
+import ca.phon.ui.fonts.FontPreferences;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.AbstractStringLayout;
+import org.apache.logging.log4j.core.util.Transform;
+import org.apache.logging.log4j.util.Strings;
+
 import java.io.*;
-import java.lang.management.*;
-import java.nio.charset.*;
-import java.util.*;
-
-import org.apache.logging.log4j.*;
-import org.apache.logging.log4j.core.*;
-import org.apache.logging.log4j.core.config.*;
-import org.apache.logging.log4j.core.layout.*;
-import org.apache.logging.log4j.core.util.*;
-import org.apache.logging.log4j.util.*;
-
-import ca.phon.ui.fonts.*;
+import java.lang.management.ManagementFactory;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 /**
  * Log4j2 layout for application log messages.
