@@ -287,7 +287,7 @@ public class RecordLookupPanel extends JPanel {
 			if(syllabifier != null) syllabifier.syllabify(ipaA.toList());
 		}
 
-		final CompoundEdit edit = new CompoundEdit();
+		getEditor().getUndoSupport().beginUpdate();
 		IPATranscript targetIpa = (ipaTarget.numberOfGroups() > i ? ipaTarget.getGroup(i) : new IPATranscript());
 		if(ipaTargetBox.isSelected()) {
 			if(transcriber != null) {
@@ -302,9 +302,7 @@ public class RecordLookupPanel extends JPanel {
 				}
 				if(set) {
 					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaTarget, i, transcriber, ipa, targetIpa);
-					blindEdit.doIt();
-					edit.addEdit(blindEdit);
-
+					getEditor().getUndoSupport().postEdit(blindEdit);
 				}
 			} else {
 				IPATranscript oldIpa = ipaTarget.getGroup(i);
@@ -315,9 +313,9 @@ public class RecordLookupPanel extends JPanel {
 					final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipa.putExtension(AlternativeTranscript.class, alts);
 
-					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<IPATranscript>(editor, ipaTarget, i, ipa);
-					ipaTargetEdit.doIt();
-					edit.addEdit(ipaTargetEdit);
+					final IPALookupEdit ipaTargetEdit = new IPALookupEdit(editor, getDictionary(), r.getOrthography().getGroup(i).toString(),
+							ipaTarget, i, ipa);
+					getEditor().getUndoSupport().postEdit(ipaTargetEdit);
 					targetIpa = ipa;
 				}
 			}
@@ -337,8 +335,7 @@ public class RecordLookupPanel extends JPanel {
 				}
 				if(set) {
 					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaActual, i, transcriber, ipa, actualIpa);
-					blindEdit.doIt();
-					edit.addEdit(blindEdit);
+					getEditor().getUndoSupport().postEdit(blindEdit);
 				}
 			} else {
 				IPATranscript oldIpa = ipaActual.getGroup(i);
@@ -349,9 +346,9 @@ public class RecordLookupPanel extends JPanel {
 					final AlternativeTranscript alts = actualIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipaA.putExtension(AlternativeTranscript.class, alts);
 
-					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<IPATranscript>(editor, ipaActual, i, ipaA);
-					ipaActualEdit.doIt();
-					edit.addEdit(ipaActualEdit);
+					final IPALookupEdit ipaActualEdit = new IPALookupEdit(editor, getDictionary(), r.getOrthography().getGroup(i).toString(),
+							ipaActual, i, ipaA);
+					getEditor().getUndoSupport().postEdit(ipaActualEdit);
 					actualIpa = ipaA;
 				}
 			}
@@ -362,15 +359,13 @@ public class RecordLookupPanel extends JPanel {
 			final PhoneMap pm = aligner.calculatePhoneAlignment(targetIpa, actualIpa);
 
 			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
-			pmEdit.doIt();
-			edit.addEdit(pmEdit);
+			getEditor().getUndoSupport().postEdit(pmEdit);
 		}
 
 		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
 		getEditor().getEventManager().queueEvent(ee);
 
-		edit.end();
-		getEditor().getUndoSupport().postEdit(edit);
+		getEditor().getUndoSupport().endUpdate();
 	}
 
 	private final TierEditorListener tierListener = new TierEditorListener() {
