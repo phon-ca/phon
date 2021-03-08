@@ -129,6 +129,38 @@ public class IPATranscriptBuilder {
 	}
 
 	/**
+	 * Append the given string to the transcript, attempting to retain syllabification.
+	 * This utilizes the {@link IPATranscript#parseIPATranscript(String)} method.
+	 * The given ipa should be parse-able on it's own.
+	 *
+	 * @param ipa
+	 *
+	 * @return builder
+	 * @param  retainSyllabification
+	 */
+	public IPATranscriptBuilder append(String ipa, boolean retainSyllabification) {
+		if(unvalidatedValue != null) {
+			unvalidatedValue.setValue(unvalidatedValue.getValue() + ipa);
+			return this;
+		}
+		try {
+			String currentTxt = toIPATranscript().toString(true);
+
+			final IPATranscript transcript = IPATranscript.parseIPATranscript(toIPATranscript().toString(retainSyllabification) + ipa);
+			buffer.clear();
+			append(transcript);
+		} catch (ParseException e) {
+			LOGGER.warn( e.getLocalizedMessage(), e);
+
+			// keep as an unvalidated value
+			final IPATranscript transcript = toIPATranscript();
+			final ParseException pe = new ParseException(e.getMessage(), transcript.toList().size()+e.getErrorOffset());
+			unvalidatedValue = new UnvalidatedValue(transcript.toString() + ipa, pe);
+		}
+		return this;
+	}
+
+	/**
 	 * Append the given string to the transcript.
 	 * This utilizes the {@link IPATranscript#parseIPATranscript(String)} method.
 	 * 
@@ -137,23 +169,7 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder append(String ipa) {
-		if(unvalidatedValue != null) {
-			unvalidatedValue.setValue(unvalidatedValue.getValue() + ipa);
-			return this;
-		}
-		try {
-			final IPATranscript transcript = IPATranscript.parseIPATranscript(toIPATranscript().toString() + ipa);
-			buffer.clear();
-			append(transcript);
-		} catch (ParseException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
-			
-			// keep as an unvalidated value
-			final IPATranscript transcript = toIPATranscript();
-			final ParseException pe = new ParseException(e.getMessage(), transcript.toList().size()+e.getErrorOffset());
-			unvalidatedValue = new UnvalidatedValue(transcript.toString() + ipa, pe);
-		}
-		return this;
+		return append(ipa, false);
 	}
 	
 	/**
