@@ -18,11 +18,14 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import java.awt.*;
 import java.lang.ref.*;
 import java.text.*;
+import java.util.List;
 import java.util.concurrent.atomic.*;
 
 import javax.swing.*;
 import javax.swing.undo.*;
 
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
 import org.apache.logging.log4j.*;
 import org.jdesktop.swingx.*;
 
@@ -165,6 +168,18 @@ public class RecordLookupPanel extends JPanel {
 			ortho.accept(orthoLookup);
 			final WordLookupVisitor visitor = new WordLookupVisitor(this);
 			ortho.accept(visitor);
+
+			// do post processing
+			if(getDictionary() != null) {
+				List<IPluginExtensionPoint<IPALookupPostProcessor>> extPts =
+						PluginManager.getInstance().getExtensionPoints(IPALookupPostProcessor.class);
+				IPATranscript ipa = lookupTier.getGroup(lookupTier.numberOfGroups() - 1);
+				for (var extPt : extPts) {
+					IPALookupPostProcessor postprocessor = extPt.getFactory().createObject();
+					ipa = postprocessor.postProcess(getDictionary(), ortho.toString(), ipa);
+				}
+				lookupTier.setGroup(lookupTier.numberOfGroups() - 1, ipa);
+			}
 		}
 	}
 

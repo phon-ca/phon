@@ -134,8 +134,11 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void doIt() {
-		if(groupIndex < tier.numberOfGroups()) {
-			setOldValue(tier.getGroup(groupIndex));			
+		int groupIndex = getGroupIndex();
+		Tier<T> tier = getTier();
+		T newValue = getNewValue();
+		if(getGroupIndex() < tier.numberOfGroups()) {
+			setOldValue(tier.getGroup(groupIndex));
 			tier.setGroup(groupIndex, newValue);
 		} else {
 			while(tier.numberOfGroups() < groupIndex) tier.addGroup();

@@ -169,7 +169,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			var m = pattern.matcher(builderStr);
 			builderStr = m.replaceAll(postFind.getObj2());
 		}
-		
+
 		for(var postPhonexFind:postPhonexFindList) {
 			try {
 				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
@@ -185,12 +185,22 @@ public class TransliterationDictionary implements IPADictionarySPI,
 					matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 				}
 				matcher.appendTail(ipaBuilder);
-				builderStr = ipaBuilder.toIPATranscript().toString();
+				builderStr = ipaBuilder.toIPATranscript().toString(true);
 			} catch (ParseException e) {
 				LOGGER.warn(e.getLocalizedMessage(), e);
 			}
 		}
-		
+
+		if (syllabifier != null) {
+			// convert to a transcript and return with syllabifiation
+			try {
+				final IPATranscript ipa = IPATranscript.parseIPATranscript(builderStr);
+					syllabifier.syllabify(ipa.toList());
+				builderStr = ipa.toString(true);
+			} catch (ParseException e) {
+				LOGGER.warn(e.getLocalizedMessage(), e);
+			}
+		}
 		return new String[] { builderStr };
 	}
 	

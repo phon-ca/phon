@@ -435,16 +435,16 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 			for(int i = 0; i < retVal.length; i++) {
 				String str = retVal[i];
 
-				for(var postFind:postFindList) {
+				for (var postFind : postFindList) {
 					var pattern = postFind.getObj1();
 					var m = pattern.matcher(str);
 					str = m.replaceAll(postFind.getObj2());
 				}
 
-				for(var postPhonexFind:postPhonexFindList) {
+				for (var postPhonexFind : postPhonexFindList) {
 					try {
 						final IPATranscript ipa = IPATranscript.parseIPATranscript(str);
-						if(syllabifier != null) {
+						if (syllabifier != null) {
 							syllabifier.syllabify(ipa.toList());
 						}
 
@@ -452,11 +452,22 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 						var matcher = pattern.matcher(ipa);
 
 						final IPATranscriptBuilder ipaBuilder = new IPATranscriptBuilder();
-						while(matcher.find()) {
+						while (matcher.find()) {
 							matcher.appendReplacement(ipaBuilder, postPhonexFind.getObj2());
 						}
 						matcher.appendTail(ipaBuilder);
-						str = ipaBuilder.toIPATranscript().toString();
+						str = ipaBuilder.toIPATranscript().toString(true);
+					} catch (ParseException e) {
+						LOGGER.warn(e.getLocalizedMessage(), e);
+					}
+				}
+
+				if (syllabifier != null) {
+					// convert to a transcript and return with syllabifiation
+					try {
+						final IPATranscript ipa = IPATranscript.parseIPATranscript(str);
+							syllabifier.syllabify(ipa.toList());
+						str = ipa.toString(true);
 					} catch (ParseException e) {
 						LOGGER.warn(e.getLocalizedMessage(), e);
 					}

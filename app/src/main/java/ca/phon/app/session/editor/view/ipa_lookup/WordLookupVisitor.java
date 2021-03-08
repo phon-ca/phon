@@ -79,7 +79,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 		builder.append(grp);
 		if(builder.size() > 0)
 			builder.appendWordBoundary();
-		builder.append(txt);
+		builder.append(txt, true);
 		recordLookupPanel.lookupTier.setGroup(grpIdx, builder.toIPATranscript());
 	}
 
