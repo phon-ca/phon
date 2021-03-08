@@ -85,9 +85,15 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 
 		builder.append(pmr.getPrefix());
 		builder.append(grpValue);
-		builder.append(pmr.getCombining());
-		builder.append(pmr.getSuffix());
 
+		if(pmr.getCombining().length() > 0
+			|| pmr.getSuffix().length() > 0) {
+			String temp = builder.last().toString();
+			temp += pmr.getCombining() + pmr.getSuffix();
+			temp += ":" + builder.last().getScType().getIdChar();
+			builder.removeLast();
+			builder.append(temp, true);
+		}
 	}
 	
 }
