@@ -221,8 +221,8 @@ public class AutoTranscriber {
 					if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
 					
 					targetEdit = 
-							new TierEdit<IPATranscript>(getEditor(), record.getIPATarget(), i, 
-									newValue);
+							new IPALookupEdit(getEditor(), getDictionary(), record.getOrthography().getGroup(i).toString(),
+									record.getIPATarget(), i, newValue);
 				}
 				targetEdit.doIt();
 				retVal.addEdit(targetEdit);
@@ -246,8 +246,8 @@ public class AutoTranscriber {
 					if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
 					
 					actualEdit = 
-							new TierEdit<IPATranscript>(getEditor(), record.getIPAActual(), i, 
-									newValue);
+							new IPALookupEdit(getEditor(), getDictionary(), record.getOrthography().getGroup(i).toString(),
+									record.getIPAActual(), i, newValue);
 				}
 				actualEdit.doIt();
 				retVal.addEdit(actualEdit);

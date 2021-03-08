@@ -328,8 +328,7 @@ public class RecordLookupPanel extends JPanel {
 					final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipa.putExtension(AlternativeTranscript.class, alts);
 
-					final IPALookupEdit ipaTargetEdit = new IPALookupEdit(editor, getDictionary(), r.getOrthography().getGroup(i).toString(),
-							ipaTarget, i, ipa);
+					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, i, ipa);
 					getEditor().getUndoSupport().postEdit(ipaTargetEdit);
 					targetIpa = ipa;
 				}
@@ -361,8 +360,7 @@ public class RecordLookupPanel extends JPanel {
 					final AlternativeTranscript alts = actualIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipaA.putExtension(AlternativeTranscript.class, alts);
 
-					final IPALookupEdit ipaActualEdit = new IPALookupEdit(editor, getDictionary(), r.getOrthography().getGroup(i).toString(),
-							ipaActual, i, ipaA);
+					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<>(editor, ipaActual, i, ipaA);
 					getEditor().getUndoSupport().postEdit(ipaActualEdit);
 					actualIpa = ipaA;
 				}
