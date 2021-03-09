@@ -1,9 +1,13 @@
 # Installing Phon
 > Phon 3.0+ requires a 64-bit operating system.
 
-## Install Required Fonts
+## Fonts
 
-Download required fronts from https://www.phon.ca/downloads/ipafonts.zip.
+The default tier font for Phon is *Noto Sans*. Phon comes installed with a version of
+*Noto Sans* and *Noto Serif* with all IPA characters and most characters needed for European languages.
+
+For other languages and inter-application compatibility we recommend installing the [Noto](https://www.google.com/get/noto) fonts found at
+[](https://www.google.com/get/noto/) by following the instructions at [](https://www.google.com/get/noto/help/install/).
 
 ## Windows
 
