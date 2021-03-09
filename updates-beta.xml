@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_2.dmg" newVersion="3.3.0-beta.2" newMediaFileId="macos" fileSize="288722811" md5Sum="d5a0bd73ff7ff7923ff0e37301ba7c82" sha256Sum="0e3b453e0851d4577f267fa3163b5fa90cc8d2acbd71d2ea099170ff9ec14577" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_3.dmg" newVersion="3.3.0-beta.3" newMediaFileId="macos" fileSize="288708895" md5Sum="3301dde6b39088486a7fd39314278eda" sha256Sum="98c759462e839099d139045a1adc1670aca25a18f08e63c6c2a776239bc74d79" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -402,7 +402,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_2.dmg" newVersion="3.3.0-beta.2" newMediaFileId="macos" fileSize="288722811" md5Sum="d5a0bd73ff7ff7923ff0e37301ba7c82" sha256Sum="0e3b453e0851d4577f267fa3163b5fa90cc8d2acbd71d2ea099170ff9ec14577" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_3.dmg" newVersion="3.3.0-beta.3" newMediaFileId="macos" fileSize="288708895" md5Sum="3301dde6b39088486a7fd39314278eda" sha256Sum="98c759462e839099d139045a1adc1670aca25a18f08e63c6c2a776239bc74d79" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -804,7 +804,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_2.exe" newVersion="3.3.0-beta.2" newMediaFileId="win64" fileSize="302037536" md5Sum="2637c75a6fde0beeaddafbb0b1e2ccf9" sha256Sum="879f8b73360330063b1aa9276fc4d24d351852b39990c64492598d390e5ee620" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.exe" newVersion="3.3.0-beta.3" newMediaFileId="win64" fileSize="302045728" md5Sum="9fc9ac00a27cc2ebbe5df8d01f174cd6" sha256Sum="670696446ad12c4fd27bc85f3d2f36928b0c954b8be449e75c358ea8b5a4724a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -1206,7 +1206,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_2.exe" newVersion="3.3.0-beta.2" newMediaFileId="win64" fileSize="302037536" md5Sum="2637c75a6fde0beeaddafbb0b1e2ccf9" sha256Sum="879f8b73360330063b1aa9276fc4d24d351852b39990c64492598d390e5ee620" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.exe" newVersion="3.3.0-beta.3" newMediaFileId="win64" fileSize="302045728" md5Sum="9fc9ac00a27cc2ebbe5df8d01f174cd6" sha256Sum="670696446ad12c4fd27bc85f3d2f36928b0c954b8be449e75c358ea8b5a4724a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -1608,7 +1608,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_2.exe" newVersion="3.3.0-beta.2" newMediaFileId="win64" fileSize="302037536" md5Sum="2637c75a6fde0beeaddafbb0b1e2ccf9" sha256Sum="879f8b73360330063b1aa9276fc4d24d351852b39990c64492598d390e5ee620" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.exe" newVersion="3.3.0-beta.3" newMediaFileId="win64" fileSize="302045728" md5Sum="9fc9ac00a27cc2ebbe5df8d01f174cd6" sha256Sum="670696446ad12c4fd27bc85f3d2f36928b0c954b8be449e75c358ea8b5a4724a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -2010,7 +2010,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_2.zip" newVersion="3.3.0-beta.2" newMediaFileId="win64zip" fileSize="301006458" md5Sum="344480bd8a2e9a04ddbb41685845c1e5" sha256Sum="5ba92db919f6f77a549ae9ffaca453e9ff3cea8b65ef8029129c35c4b83d49fd" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.zip" newVersion="3.3.0-beta.3" newMediaFileId="win64zip" fileSize="301013976" md5Sum="0358cb30650862e6b66fcd68b41522d8" sha256Sum="f3fb7b27f8d58cc32a1fc426b83fb6de3223a2ed89eb4115a4f66baa0cb177c0" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon

@@ -96,6 +96,7 @@ ca.phon.app.workspace
 ca.phon.audio
 ca.phon.cvseq
 ca.phon.cvseq.fsa
+ca.phon.dict.cmn
 ca.phon.extensions
 ca.phon.featureset.xml
 ca.phon.fontconverter
