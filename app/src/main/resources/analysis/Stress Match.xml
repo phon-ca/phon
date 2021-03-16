@@ -50,7 +50,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="5b41918f" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-16T10:00:47.304-02:30" name="Aligned IPA Domains" uuid="b0c2d322-1ca8-4a78-b63e-475268c4d512">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-16T10:12:29.840-02:30" name="Aligned IPA Domains" uuid="cdbd8fda-5339-456b-b020-3258d398c3d9">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.searchBy.searchBy">Word</param>
@@ -62,7 +62,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4cb4e8a0">
+            <graph id="7a4dea0">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -205,7 +205,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="20485340">
+            <graph id="81367e5">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -250,7 +250,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="d11f780">
+                    <graph id="66215ac">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -319,7 +319,7 @@ function run(context) {
                                     <opqry:column caseSensitive="true" column="Stress Match"/>
                                 </opqry:inventoryoptions>
                                 <oga:settings/>
-                                <oga:meta x="572" y="481"/>
+                                <oga:meta x="421" y="397"/>
                             </extensions>
                         </node>
                         <node id="55c2303a" name="Split Table" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -333,23 +333,43 @@ function run(context) {
                                 <oga:meta x="513" y="818"/>
                             </extensions>
                         </node>
-                        <node id="751a1da8" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
+                        <node id="dbf146c" name="Add percentage" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                            <input name="table" optional="false"/>
+                            <output name="table" type="ca.phon.query.report.datasource.TableDataSource"/>
                             <extensions>
-                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
-                                    <opqry:sortBy column="Stress Match" order="descending" type="plain"/>
-                                    <opqry:sortBy column="Target Stress" order="ascending" type="plain"/>
-                                    <opqry:sortBy column="Actual Stress" order="ascending" type="plain"/>
-                                </opqry:sortoptions>
-                                <oga:settings/>
-                                <oga:meta x="881" y="495"/>
+                                <oga:settings>
+                                    <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
+	inputs.add("table", "", TableDataSource);
+
+	outputs.add("table", "", false, TableDataSource);
+}
+
+function run(context) {
+	var table = context.get("table");
+
+	table.setColumnTitle(table.columnCount, "%");
+
+	var total = 0;
+	for(var row = 0; row < table.rowCount; row++) {
+		total += table.getValueAt(row, "Total");
+	}
+
+	for(var row = 0; row < table.rowCount; row++) {
+		var rowTotal = table.getValueAt(row, "Total");
+		var p = (rowTotal / total) * 100.0;
+		table.setValueAt(row, table.columnCount-1, p);
+	}
+}
+]]></oga:property>
+                                </oga:settings>
+                                <oga:meta x="677" y="410"/>
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="144b964b">
+                            <graph id="7c192274">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="contextKey"/>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                                         </oga:settings>
@@ -375,7 +395,6 @@ function run(context) {
                                 <node id="c714758fdf784dbd" name="Summary Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="contextKey"/>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="137" y="819"/>
@@ -393,14 +412,13 @@ function run(context) {
                                 <node id="5da24341" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
-                                            <oga:property key="contextKey"/>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="1492" y="778"/>
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="56fab29b">
+                                    <graph id="7a033917">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -459,11 +477,10 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="6e4daf12">
+                                    <graph id="4d7d2d0d">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
-                                                    <oga:property key="contextKey"/>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                 </oga:settings>
                                                 <oga:meta x="131" y="204"/>
@@ -472,7 +489,6 @@ function run(context) {
                                         <node id="1c289180" name="speaker" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
-                                                    <oga:property key="contextKey"/>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                                 </oga:settings>
                                                 <oga:meta x="115" y="371"/>
@@ -481,7 +497,6 @@ function run(context) {
                                         <node id="75d1c693" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
-                                                    <oga:property key="contextKey"/>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                 </oga:settings>
                                                 <oga:meta x="116" y="723"/>
@@ -490,7 +505,6 @@ function run(context) {
                                         <node id="3157562e" name="summaryTable" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
-                                                    <oga:property key="contextKey"/>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                                 </oga:settings>
                                                 <oga:meta x="135" y="913"/>
@@ -648,15 +662,15 @@ function run(context) {
                                 <oga:meta x="799" y="827"/>
                             </extensions>
                         </ogcn:macro>
-                        <node id="6f27d620" name="Stress Patterns" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="751a1da8" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
                             <extensions>
-                                <oga:settings>
-                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
-                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
-                                </oga:settings>
-                                <oga:meta x="1182" y="535">
-                                    <oga:default for="sectionName" type="java.lang.String">Stress Patterns</oga:default>
-                                </oga:meta>
+                                <opqry:sortoptions autoSortOrder="ascending" configureAutomatically="false">
+                                    <opqry:sortBy column="Stress Match" order="descending" type="plain"/>
+                                    <opqry:sortBy column="Target Stress" order="ascending" type="plain"/>
+                                    <opqry:sortBy column="Actual Stress" order="ascending" type="plain"/>
+                                </opqry:sortoptions>
+                                <oga:settings/>
+                                <oga:meta x="912" y="432"/>
                             </extensions>
                         </node>
                         <node id="756383e3" name="Summary" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -668,6 +682,17 @@ function run(context) {
                                 <oga:meta x="1186" y="715">
                                     <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                </oga:meta>
+                            </extensions>
+                        </node>
+                        <node id="6f27d620" name="Stress Patterns" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                            <extensions>
+                                <oga:settings>
+                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
+                                    <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
+                                </oga:settings>
+                                <oga:meta x="1182" y="535">
+                                    <oga:default for="sectionName" type="java.lang.String">Stress Patterns</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -713,7 +738,6 @@ Alignment]]></oga:property>
                         <link dest="6ec6e7c6" destField="table" source="b4a67de" sourceField="trueTable"/>
                         <link dest="b4a67de" destField="table" source="53c0dfca" sourceField="obj"/>
                         <link dest="5b6120d0" destField="table" source="53c0dfca" sourceField="obj"/>
-                        <link dest="751a1da8" destField="table" source="5b6120d0" sourceField="table"/>
                         <link dest="6f27d620" destField="table" source="751a1da8" sourceField="table"/>
                         <link dest="6f27d620" destField="parent" source="4fd62258" sourceField="obj"/>
                         <link dest="6ec6e7c6" destField="parent" source="6f27d620" sourceField="parent"/>
@@ -725,6 +749,8 @@ Alignment]]></oga:property>
                         <link dest="1d635760" destField="summaryTable" source="6845e29147164c6f" sourceField="table"/>
                         <link dest="1d635760" destField="speaker" source="4f39ae80" sourceField="obj"/>
                         <link dest="756383e3" destField="table" source="1d635760" sourceField="summaryTable"/>
+                        <link dest="dbf146c" destField="table" source="5b6120d0" sourceField="table"/>
+                        <link dest="751a1da8" destField="table" source="dbf146c" sourceField="table"/>
                         <extensions>
                             <oga:notes>
                                 <oga:note color="0xffff96" height="744" title="Inputs" width="378" x="19" y="15"/>
