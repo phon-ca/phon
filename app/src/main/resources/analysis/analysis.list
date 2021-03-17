@@ -3,6 +3,7 @@ analysis/Consonants.xml
 analysis/CV Match.xml
 analysis/Measure of Cluster Proximity.xml
 analysis/Stress Match.xml
+analysis/Syllable Count Match.xml
 analysis/Percent Diacritics Correct.xml
 analysis/Percent Number Tones Correct.xml
 analysis/Percent Phones Correct.xml
