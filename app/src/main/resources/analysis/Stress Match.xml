@@ -19,13 +19,6 @@
                 <oga:meta x="20" y="341"/>
             </extensions>
         </node>
-        <node id="61f652a9" type="class:ca.phon.app.opgraph.nodes.SelectedParticipantsNode">
-            <extensions>
-                <oga:meta x="22" y="437">
-                    <oga:default for="combine" type="java.lang.Boolean">true</oga:default>
-                </oga:meta>
-            </extensions>
-        </node>
         <node id="cdd80a7d0d484a91" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <extensions>
                 <oga:settings>
@@ -39,6 +32,24 @@
 var reportTitleParam;
 var reportTitle = reportTitleParamInfo.def;
 
+var combineParticipantsParamInfo = {
+	"id": "combineParticipants",
+	"title": "Combine results",
+	"desc": "Combine results for all selected participants",
+	"def": false
+};
+var combineParticipantsParam;
+var combineParticipants = combineParticipantsParamInfo.def;
+
+var ignoreTruncatedParamInfo = {
+	"id": "ignoreTruncated",
+	"def": true,
+	"title": "",
+	"desc": "Ignore truncated"
+};
+var ignoreTruncatedParam;
+var ignoreTruncated = ignoreTruncatedParamInfo.def;
+
 function setup_params(params) {
 	reportTitleParam = new StringScriptParam(
 			reportTitleParamInfo.id,
@@ -46,10 +57,27 @@ function setup_params(params) {
 			reportTitleParamInfo.def);
      reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
+
+	combineParticipantsParam = new BooleanScriptParam(
+		combineParticipantsParamInfo.id,
+		combineParticipantsParamInfo.desc,
+		combineParticipantsParamInfo.title,
+		combineParticipantsParamInfo.def);
+	params.add(combineParticipantsParam);
+
+	var optionsSep = new SeparatorScriptParam("Options", false);
+	params.add(2, optionsSep);
+
+	ignoreTruncatedParam = new BooleanScriptParam(
+		ignoreTruncatedParamInfo.id,
+		ignoreTruncatedParamInfo.desc,
+		ignoreTruncatedParamInfo.title,
+		ignoreTruncatedParamInfo.def);
+	params.add(ignoreTruncatedParam);
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="21" y="624"/>
+                <oga:meta x="35" y="640"/>
             </extensions>
         </node>
         <node id="349f74d1" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
@@ -57,11 +85,11 @@ function setup_params(params) {
                 <oga:settings>
                     <oga:property key="columns"><![CDATA[Speaker,Word Count,Stress Matches,Match %,Stress Mis-matches,Mis-match %]]></oga:property>
                 </oga:settings>
-                <oga:meta x="543" y="787"/>
+                <oga:meta x="833" y="725"/>
             </extensions>
         </node>
         <opqry:queryNode id="5b41918f" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-17T07:39:17.995-02:30" name="Aligned IPA Domains" uuid="3d60e0a4-c80d-4674-b303-98aab5113f13">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-17T07:45:52.070-02:30" name="Aligned IPA Domains" uuid="45cd4a5f-d6b7-4e45-9164-41ef75764df6">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.searchBy.searchBy">Word</param>
@@ -109,7 +137,76 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="11fbceb6d16b42a5"/>
             <ogcn:published_output field="value" name="reportTitle" ref="a8147ee018ca42ad"/>
             <extensions>
-                <oga:meta x="258" y="624"/>
+                <oga:meta x="272" y="640"/>
+            </extensions>
+        </ogcn:macro>
+        <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
+            <graph id="68a7c74b">
+                <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="271" y="993"/>
+                    </extensions>
+                </node>
+                <node id="ee73347a2e4c421e" type="class:ca.phon.opgraph.nodes.general.TextNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.general.TextNode.text"/>
+                        </oga:settings>
+                        <oga:meta x="482" y="1110"/>
+                    </extensions>
+                </node>
+                <node id="aa30fcc22104f09" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="481" y="1010"/>
+                    </extensions>
+                </node>
+                <node id="c5cdf18f69604854" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[get(java.lang.Object)]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="701" y="1029"/>
+                    </extensions>
+                </node>
+                <node id="f5662b93094d45f5" name="Object" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="897" y="1038"/>
+                    </extensions>
+                </node>
+                <node id="8556803b9a44c5b" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="1089" y="1051"/>
+                    </extensions>
+                </node>
+                <link dest="c5cdf18f69604854" destField="obj" source="aa30fcc22104f09" sourceField="obj"/>
+                <link dest="f5662b93094d45f5" destField="obj" source="c5cdf18f69604854" sourceField="value"/>
+                <link dest="8556803b9a44c5b" destField="obj" source="f5662b93094d45f5" sourceField="obj"/>
+                <link dest="aa30fcc22104f09" destField="obj" source="5f9cb1feb4de4dde" sourceField="obj"/>
+                <link dest="c5cdf18f69604854" destField="arg1" source="ee73347a2e4c421e" sourceField="value"/>
+                <extensions>
+                    <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
+                </extensions>
+            </graph>
+            <ogcn:published_input field="obj" name="obj" ref="5f9cb1feb4de4dde"/>
+            <ogcn:published_input field="format" name="format" ref="ee73347a2e4c421e"/>
+            <ogcn:published_output field="obj" name="value" ref="8556803b9a44c5b"/>
+            <extensions>
+                <oga:meta x="291" y="754">
+                    <oga:default for="format" type="java.lang.String">combineParticipants</oga:default>
+                </oga:meta>
             </extensions>
         </ogcn:macro>
         <node id="7ccee095" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -123,10 +220,17 @@ function setup_params(params) {
                 <oga:meta x="783" y="150"/>
             </extensions>
         </node>
+        <node id="61f652a9" type="class:ca.phon.app.opgraph.nodes.SelectedParticipantsNode">
+            <extensions>
+                <oga:meta x="22" y="437">
+                    <oga:default for="combine" type="java.lang.Boolean">false</oga:default>
+                </oga:meta>
+            </extensions>
+        </node>
         <node id="45b9da4ad4864623" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="491" y="624"/>
+                <oga:meta x="505" y="640"/>
             </extensions>
         </node>
         <node id="29538193" name="Add Stress Match Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -919,7 +1023,7 @@ Alignment]]></oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                 </oga:settings>
-                <oga:meta x="956" y="687">
+                <oga:meta x="1107" y="679">
                     <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                 </oga:meta>
@@ -939,6 +1043,9 @@ Alignment]]></oga:property>
         <link dest="19371265" destField="table" source="349f74d1" sourceField="table"/>
         <link dest="24dd4e14" destField="summaryTable" source="349f74d1" sourceField="table"/>
         <link dest="19371265" destField="enabled" source="24dd4e14" sourceField="finished"/>
+        <link dest="7ede50e845f64d60" destField="obj" source="cdd80a7d0d484a91" sourceField="parameters"/>
+        <link dest="61f652a9" destField="combine" source="7ede50e845f64d60" sourceField="value"/>
+        <link dest="29538193" destField="parameters" source="cdd80a7d0d484a91" sourceField="parameters"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Stress Match">
@@ -947,7 +1054,7 @@ Alignment]]></oga:property>
             </opqry:nodewizard>
             <oga:notes>
                 <oga:note color="0xffff96" height="537" title="Analysis Inputs" width="379" x="10" y="10">These inputs are provided to all analyses.</oga:note>
-                <oga:note color="0xffc864" height="198" title="Start Report" width="734" x="10" y="560">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
+                <oga:note color="0xffc864" height="304" title="Start Report" width="755" x="24" y="576">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
                 <oga:note color="0x9696ff" height="537" title="Query" width="745" x="400" y="10">Execute query and generate a query report using the Report Composer.  The report output from the 'Query Report' node should be added to the report created by the 'New Report' node below. To 'chain' queries, add a new query node using the Library view. Connect the 'project' and 'results' outputs from one query node to the 'project' and 'sessions' inputs of the next query.</oga:note>
             </oga:notes>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
