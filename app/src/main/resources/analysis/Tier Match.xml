@@ -24,7 +24,9 @@
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
                     <oga:property key="filters.tier2.tier"><![CDATA[IPA Actual]]></oga:property>
+                    <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography]]></oga:property>
                     <oga:property key="filters.tier1.tier"><![CDATA[IPA Target]]></oga:property>
+                    <oga:property key="reportTitle"><![CDATA[Tier Match]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
@@ -197,36 +199,11 @@ function setup_params(params) {
         <node id="349f74d1" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="columns"><![CDATA[Speaker,Word Count,CV Matches,Match %,CV Mis-matches,Mis-match %]]></oga:property>
+                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Avg Distance,Matches,Match %,Mis-matches,Mis-match %]]></oga:property>
                 </oga:settings>
                 <oga:meta x="833" y="725"/>
             </extensions>
         </node>
-        <opqry:queryNode id="1f162c16" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-19T08:24:01.015-02:30" name="Data Tiers" uuid="eeb8a711-8c14-491f-b65f-a2f8c3936fb6">
-                <script>
-                    <url ref="Data Tiers" rel="stock"/>
-                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
-                    <param id="filters.alignedWord.patternFilter.filter">.*</param>
-                    <param id="filters.alignedWord.patternFilter.filterType">Regular expression</param>
-                    <param id="filters.alignedWord.tier">IPA Actual</param>
-                    <param id="filters.primary.patternFilter.filter">.+</param>
-                    <param id="filters.primary.patternFilter.filterType">Regular expression</param>
-                    <param id="filters.primary.tier">IPA Target</param>
-                    <param id="filters.searchBy.searchBy">Word</param>
-                    <param id="filters.speaker.age1Comparator">equal to</param>
-                    <param id="filters.speaker.age2Comparator">equal to</param>
-                    <param id="filters.speaker.ageOperator">(select operator)</param>
-                    <param id="filters.speaker.participantRole">(select role)</param>
-                    <param id="filters.word.searchByWord">true</param>
-                    <param id="filters.word.sectionHeader.collapsed">false</param>
-                </script>
-            </qry:query>
-            <extensions>
-                <oga:settings/>
-                <oga:meta x="433" y="157"/>
-            </extensions>
-        </opqry:queryNode>
         <node id="38486d02" name="Setup Query Params" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <input name="params" optional="false"/>
             <output name="params" type="java.util.Map"/>
@@ -243,7 +220,7 @@ function run(context) {
 	var tier1 = params.get("filters.tier1.tier");
 	params.put("filters.primary.tier", tier1);
 	params.put("filters.primary.patternFilter.filter", ".+");
-	
+	params.put("filters.primary.patternFilter.filterType", "Regular expression");
 
 	var searchBy = params.get("filters.searchBy.searchBy");
 	var tier2 = params.get("filters.tier2.tier");
@@ -251,9 +228,11 @@ function run(context) {
 	if(searchBy == "Group") {
 		params.put("filters.alignedGroup.tier", tier2);
 		params.put("filters.alignedGroup.patternFilter.filter", ".*");
+		params.put("filters.alignedGroup.patternFilter.filterType", "Regular expression");
 	} else if(searchBy == "Word") {
 		params.put("filters.alignedWord.tier", tier2);
 		params.put("filters.alignedWord.patternFilter.filter", ".*");
+		params.put("filters.alignedWord.patternFilter.filterType", "Regular expression");
 	}
 }
 ]]></oga:property>
@@ -262,7 +241,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="546c6352">
+            <graph id="18386d74">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -302,7 +281,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="13545029">
+            <graph id="549e2882">
                 <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -371,7 +350,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="693cfdfcdf824413" name="searchBy" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1a421317">
+            <graph id="6865b141">
                 <node id="f209e3eabfde45e9" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -430,17 +409,30 @@ function run(context) {
                 </oga:meta>
             </extensions>
         </ogcn:macro>
-        <node id="7ccee095" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+        <opqry:queryNode id="1f162c16" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-19T09:35:03.056-02:30" name="Data Tiers" uuid="a7dd0d6a-7311-461e-a8a6-1997a0ce5cea">
+                <script>
+                    <url ref="Data Tiers" rel="stock"/>
+                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.alignedWord.patternFilter.filter">.*</param>
+                    <param id="filters.alignedWord.patternFilter.filterType">Regular expression</param>
+                    <param id="filters.alignedWord.tier">IPA Actual</param>
+                    <param id="filters.primary.patternFilter.filter">.+</param>
+                    <param id="filters.primary.patternFilter.filterType">Regular expression</param>
+                    <param id="filters.primary.tier">IPA Target</param>
+                    <param id="filters.searchBy.searchBy">Word</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
+                    <param id="filters.word.searchByWord">true</param>
+                </script>
+            </qry:query>
             <extensions>
-                <oga:settings>
-                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
-                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
-                </oga:settings>
-                <oga:meta x="783" y="150"/>
+                <oga:settings/>
+                <oga:meta x="433" y="157"/>
             </extensions>
-        </node>
+        </opqry:queryNode>
         <node id="61f652a9" type="class:ca.phon.app.opgraph.nodes.SelectedParticipantsNode">
             <extensions>
                 <oga:meta x="22" y="437">
@@ -454,12 +446,25 @@ function run(context) {
                 <oga:meta x="505" y="640"/>
             </extensions>
         </node>
+        <node id="7ccee095" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="includeSessionInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeSpeakerInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
+                    <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
+                </oga:settings>
+                <oga:meta x="783" y="150"/>
+            </extensions>
+        </node>
         <node id="29538193" name="Add Tier Match Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
             <input name="table" optional="false"/>
             <input name="searchBy" optional="false"/>
             <output name="matchTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
+                    <oga:property key="filters.tier2.tier"><![CDATA[IPA Actual]]></oga:property>
+                    <oga:property key="filters.tier1.tier"><![CDATA[IPA Target]]></oga:property>
                     <oga:property key="__script"><![CDATA[var TierSelection = require("lib/TierSelection").TierSelection;
 
 var filters = {
@@ -550,6 +555,35 @@ function copyTableRow(srcRow, destRow) {
 	return col;
 }
 
+// levenshtein distance
+function distance(v1, v2) {
+	var m = v1.length();
+	var n = v2.length();
+	
+	var mat = new Array(m+1).fill(0);
+	for(var i = 0; i <= m; i++) {
+		mat[i] = new Array(n+1).fill(0);
+	}
+	
+	for(var i = 1; i <= m; i++) mat[i][0] = i;
+	for(var j = 1; j <= n; j++) mat[0][j] = j;
+		
+	for(var j = 1; j <= n; j++) {
+		for(var i = 1; i <=m; i++) {
+			var sele = v1.charAt(i-1);
+			var tele = v2.charAt(j-1);
+				
+			if(sele == tele)
+				mat[i][j] = mat[i-1][j-1];
+			else
+				mat[i][j] = Math.min(mat[i-1][j] + 1, 
+						Math.min(mat[i][j-1]+1, mat[i-1][j-1]+1));
+		}
+	}
+		
+	return mat[m][n];
+}
+
 function run(context) {
 	var searchBy = context.get("searchBy");
 	
@@ -558,7 +592,7 @@ function run(context) {
 
 	var matchTable = new DefaultTableDataSource();
 	var col = copyTableSchema(table, matchTable);
-	matchTable.setColumnTitle(col++, "Levenshtein Distance");
+	matchTable.setColumnTitle(col++, "Distance");
 	matchTable.setColumnTitle(col++, "Tier Match");
 	context.put("matchTable", matchTable);
 
@@ -601,7 +635,7 @@ function run(context) {
 		var v1txt = (caseSensitive == true ? v1.toString() : v1.toString().toLowerCase());
 		var v2txt = (caseSensitive == true ? v2.toString() : v2.toString().toLowerCase());
 
-		destRow[col++] = 0.0;
+		destRow[col++] = distance(v1txt, v2txt);
 		destRow[col++] = (v1txt.matches(v2txt) ? "1" : "0");
 
 		matchTable.addRow(destRow);
@@ -609,11 +643,11 @@ function run(context) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="802" y="402"/>
+                <oga:meta x="802" y="404"/>
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="70a5cf2c">
+            <graph id="7ef7d3a0">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -696,7 +730,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="45f4f414">
+                    <graph id="227e0c19">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -708,7 +742,6 @@ function run(context) {
                         <node id="4fd62258" name="parent" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="67" y="390"/>
@@ -725,7 +758,7 @@ function run(context) {
                         <node id="6845e29147164c6f" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,CV Matches,Match %,CV Mis-matches,Mis-match %]]></oga:property>
+                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Avg Distance,Matches,Match %,Mis-matches,Mis-match %]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="510" y="663"/>
                             </extensions>
@@ -788,12 +821,12 @@ Result
 Alignment]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1184" y="114">
-                                    <oga:default for="sectionName" type="java.lang.String">CV Matches</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Matches</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="6f103a37">
+                            <graph id="8fc3b76">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -845,7 +878,7 @@ Alignment]]></oga:property>
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="7626999b">
+                                    <graph id="4b246cfe">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -904,7 +937,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="3acd3a7b">
+                                    <graph id="42220a3e">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -985,8 +1018,14 @@ function run(context) {
 	rowData[col++] = session;
 	rowData[col++] = (history != null ? history.getAgeForSession(session) : "");
 
+	var totalDist = 0;
+	for(var row = 0; row < mismatchTable.rowCount; row++) {
+		totalDist += mismatchTable.getValueAt(row, "Distance");
+	}
+
 	var total = matchTable.rowCount + mismatchTable.rowCount;
 	rowData[col++] = total;
+	rowData[col++] = (total > 0 ? (totalDist / total) * 1.0 : 0);
 	rowData[col++] = matchTable.rowCount;
 	rowData[col++] = (matchTable.rowCount / total) * 100.0;
 	rowData[col++] = mismatchTable.rowCount;
@@ -1104,7 +1143,7 @@ Result
 Alignment]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1184" y="335">
-                                    <oga:default for="sectionName" type="java.lang.String">CV Mis-matches</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Mis-matches</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -1143,16 +1182,23 @@ function run(context) {
 	var total = 0;
 	var totalMatches = 0;
 	var totalMismatches = 0;
+	var avgDistance = 0;
+	var sessionsWithResults = 0;
 	for(var row = 0; row < speakerSummary.rowCount; row++) {
-		total += speakerSummary.getValueAt(row, "Word Count");
-		totalMatches += speakerSummary.getValueAt(row, "CV Matches");
-		totalMismatches += speakerSummary.getValueAt(row, "CV Mis-matches");
+		var wc = speakerSummary.getValueAt(row, "Word Count");
+		if(wc > 0) sessionsWithResults++;
+		total += wc;
+		
+		avgDistance += speakerSummary.getValueAt(row, "Avg Distance");
+		totalMatches += speakerSummary.getValueAt(row, "Matches");
+		totalMismatches += speakerSummary.getValueAt(row, "Mis-matches");
 	}
 	
 	var rowData = [];
 	var col = 0;
 	rowData[col++] = speaker;
 	rowData[col++] = total;
+	rowData[col++] = (sessionsWithResults > 0 ? avgDistance / sessionsWithResults : 0.0);
 	rowData[col++] = totalMatches;
 	rowData[col++] = (totalMatches / total) * 100.0;
 	rowData[col++] = totalMismatches;
@@ -1269,6 +1315,7 @@ function run(context) {
         <link dest="38486d02" destField="params" source="cdd80a7d0d484a91" sourceField="parameters"/>
         <link dest="693cfdfcdf824413" destField="obj" source="cdd80a7d0d484a91" sourceField="parameters"/>
         <link dest="29538193" destField="searchBy" source="693cfdfcdf824413" sourceField="obj"/>
+        <link dest="1f162c16" destField="parameters" source="38486d02" sourceField="params"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Tier Match">
