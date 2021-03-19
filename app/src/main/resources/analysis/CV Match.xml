@@ -23,8 +23,9 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
-                    <oga:property key="otherDataHeader.collapsed"><![CDATA[false]]></oga:property>
-                    <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography]]></oga:property>
+                    <oga:property key="diacriticOptions.selectedDiacritics"><![CDATA[[ˑ, ː]]]></oga:property>
+                    <oga:property key="diacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
+                    <oga:property key="diacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
                     <oga:property key="reportTitle"><![CDATA[CV Match]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -81,6 +82,15 @@ var ignoreTruncatedParamInfo = {
 var ignoreTruncatedParam;
 var ignoreTruncated = ignoreTruncatedParamInfo.def;
 
+var diacriticOptionsParamInfo = {
+		"id": "diacriticOptions",
+		"desc": "Diacritic Options",
+		"def": false,
+		"retainDia": new java.util.ArrayList()
+	};
+var diacriticOptionsParam;
+var diacriticOptions = {};
+
 function setup_params(params) {
 	reportTitleParam = new StringScriptParam(
 			reportTitleParamInfo.id,
@@ -106,7 +116,15 @@ function setup_params(params) {
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
 
-	var insertIdx = params.size()-1;
+	diacriticOptionsParam = new DiacriticOptionsScriptParam(
+		diacriticOptionsParamInfo.id,
+		diacriticOptionsParamInfo.desc,
+		diacriticOptionsParamInfo.def,
+		diacriticOptionsParamInfo.retainDia
+	);		
+	params.add(diacriticOptionsParam);
+
+	var insertIdx = params.size()-2;
 
 	// setup result filter section
 	var resultFilterSection = new SeparatorScriptParam("alignedPhonesHeader", "Aligned Phones", true);
@@ -175,7 +193,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="5b41918f" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-17T08:33:40.280-02:30" name="Aligned IPA Domains" uuid="92d70d9d-3c0b-4047-b0dc-034ba74d7ac2">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-19T11:05:59.314-02:30" name="Aligned IPA Domains" uuid="3b5234fe-e1c4-40b1-b5e0-a31d4cd6fefa">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -185,8 +203,6 @@ function setup_params(params) {
                     <param id="filters.searchBy.searchBy">Word</param>
                     <param id="filters.targetResultFilter.filterType">Phonex</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
-                    <param id="filters.wordTiers.tiers">Orthography</param>
-                    <param id="otherDataHeader.collapsed">false</param>
                 </script>
             </qry:query>
             <extensions>
@@ -195,7 +211,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4260dd8">
+            <graph id="6844ebae">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -235,7 +251,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="277407a2">
+            <graph id="25f34486">
                 <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -332,7 +348,9 @@ function setup_params(params) {
             <output name="matchTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="__script"><![CDATA[var ignoreTruncatedParamInfo = {
+                    <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.query.script.params)
+
+var ignoreTruncatedParamInfo = {
 	"id": "ignoreTruncated",
 	"def": true,
 	"title": "",
@@ -341,6 +359,16 @@ function setup_params(params) {
 var ignoreTruncatedParam;
 var ignoreTruncated = ignoreTruncatedParamInfo.def;
 
+var diacriticOptionsParamInfo = {
+		"id": "diacriticOptions",
+		"desc": "Diacritic Options",
+		"def": false,
+		"retainDia": new java.util.ArrayList()
+	};
+var diacriticOptionsParam;
+var diacriticOptions = {};
+
+
 function setup_params(params) {
 	ignoreTruncatedParam = new BooleanScriptParam(
 		ignoreTruncatedParamInfo.id,
@@ -348,6 +376,14 @@ function setup_params(params) {
 		ignoreTruncatedParamInfo.title,
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
+
+	diacriticOptionsParam = new DiacriticOptionsScriptParam(
+		diacriticOptionsParamInfo.id,
+		diacriticOptionsParamInfo.desc,
+		diacriticOptionsParamInfo.def,
+		diacriticOptionsParamInfo.retainDia
+	);		
+	params.add(diacriticOptionsParam);
 }
 
 function init(inputs, outputs) {
@@ -400,12 +436,21 @@ function run(context) {
 
 		var ipaT = srcRow[ipaTargetCol];
 		var ipaA = srcRow[ipaActualCol];
-
 		if(ignoreTruncated == true 
 			&& (ipaA == null || ipaA.length() == 0)) continue;
+			
+		if(diacriticOptions.ignoreDiacritics == true) {
+			if("only" == diacriticOptions.selectionMode) {
+				ipaT = ipaT.stripDiacritics(diacriticOptions.selectedDiacritics);
+				ipaA = ipaA.stripDiacritics(diacriticOptions.selectedDiacritics);
+			} else {
+				ipaT = ipaT.stripDiacriticsExcept(diacriticOptions.selectedDiacritics);
+				ipaA = ipaA.stripDiacriticsExcept(diacriticOptions.selectedDiacritics);
+			}
+		}
 
-		var tcv = ipaT.stripDiacriticsExcept(longDiacritics).cvPattern;
-		var acv = ipaA.stripDiacriticsExcept(longDiacritics).cvPattern;
+		var tcv = ipaT.cvPattern;
+		var acv = ipaA.cvPattern;
 		destRow[col++] = tcv;
 		destRow[col++] = acv;
 		destRow[col++] = (tcv.matches(acv) ? "1" : "0");
@@ -419,7 +464,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="43d8828e">
+            <graph id="62654781">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -502,7 +547,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="f007bf2">
+                    <graph id="3bdedf1c">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -626,7 +671,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="7fc4360e">
+                            <graph id="75a26cd3">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -678,7 +723,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="1d04a039">
+                                    <graph id="7243203f">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -737,7 +782,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4f832097">
+                                    <graph id="77d7d288">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
