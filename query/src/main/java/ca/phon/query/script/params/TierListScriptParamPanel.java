@@ -1,8 +1,11 @@
 package ca.phon.query.script.params;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.*;
 
 import javax.swing.*;
@@ -16,7 +19,7 @@ import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.*;
 
 public class TierListScriptParamPanel extends JPanel {
-	
+
 	/* Checkboxes for default tiers */
 	private JCheckBox orthographyBox;
 	private JCheckBox ipaTargetBox;
@@ -36,7 +39,7 @@ public class TierListScriptParamPanel extends JPanel {
 		init();
 		installParamListeners();
 	}
-	
+
 	private void init() {
 		orthographyBox = new JCheckBox(SystemTierType.Orthography.getName());
 		orthographyBox.addActionListener( (e) -> {
@@ -69,7 +72,6 @@ public class TierListScriptParamPanel extends JPanel {
 		boxPanel.add(ipaActualBox);
 		boxPanel.add(alignmentBox);
 		boxPanel.add(notesBox);
-
 		
 		tierField = new PromptedTextField("Enter tier names separated by ','");
 		TextCompleter completer = new TextCompleter(createTextCompleterModel());
@@ -166,7 +168,7 @@ public class TierListScriptParamPanel extends JPanel {
 		
 		return retVal;
 	}
-	
+
 	private void updateForm() {
 		Set<String> tierSet = param.tierSet();
 		if(tierField.getState() != FieldState.PROMPT) return;
@@ -184,7 +186,7 @@ public class TierListScriptParamPanel extends JPanel {
 		tierField.setText(remainder);
 		tierField.getDocument().addDocumentListener(tierFieldListener);
 	}
-	
+
 	private Set<String> selectedTiers() {
 		Set<String> retVal = new LinkedHashSet<>();
 		

@@ -32,7 +32,7 @@ exports.TierList = function(id) {
 	};
 	this.tiersParam;
 	this.tiers = tiersParamInfo.def;
-	
+
 	this.setEnabled = function(enabled) {
 		this.tiersParam.setEnabled(enabled == true);
 	};
