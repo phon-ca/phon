@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_3.dmg" newVersion="3.3.0-beta.3" newMediaFileId="macos" fileSize="288708895" md5Sum="3301dde6b39088486a7fd39314278eda" sha256Sum="98c759462e839099d139045a1adc1670aca25a18f08e63c6c2a776239bc74d79" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_4.dmg" newVersion="3.3.0-beta.4" newMediaFileId="macos" fileSize="288768735" md5Sum="1a8a365d8be9f31d3402c35682078aeb" sha256Sum="f622a1f8571f03c28d60af004fb2361f36691276b0763333e287c59d440941e1" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -12,6 +12,7 @@
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Match, Stress Match, and Syllable Count Match analyses
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
  * Updated cmn and tsn dictionaries
@@ -402,7 +403,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_3.dmg" newVersion="3.3.0-beta.3" newMediaFileId="macos" fileSize="288708895" md5Sum="3301dde6b39088486a7fd39314278eda" sha256Sum="98c759462e839099d139045a1adc1670aca25a18f08e63c6c2a776239bc74d79" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_4.dmg" newVersion="3.3.0-beta.4" newMediaFileId="macos" fileSize="288768735" md5Sum="1a8a365d8be9f31d3402c35682078aeb" sha256Sum="f622a1f8571f03c28d60af004fb2361f36691276b0763333e287c59d440941e1" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -414,6 +415,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Match, Stress Match, and Syllable Count Match analyses
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
  * Updated cmn and tsn dictionaries
@@ -804,7 +806,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.exe" newVersion="3.3.0-beta.3" newMediaFileId="win64" fileSize="302045728" md5Sum="9fc9ac00a27cc2ebbe5df8d01f174cd6" sha256Sum="670696446ad12c4fd27bc85f3d2f36928b0c954b8be449e75c358ea8b5a4724a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_4.exe" newVersion="3.3.0-beta.4" newMediaFileId="win64" fileSize="302094880" md5Sum="d481093f20dca2f70eff44ebe4e9e7e9" sha256Sum="d93a20b30b759c65b9104f795b1db8aa6b3536b29d0da3e2fe368f12fc0e1eda" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -816,6 +818,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Match, Stress Match, and Syllable Count Match analyses
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
  * Updated cmn and tsn dictionaries
@@ -1206,7 +1209,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.exe" newVersion="3.3.0-beta.3" newMediaFileId="win64" fileSize="302045728" md5Sum="9fc9ac00a27cc2ebbe5df8d01f174cd6" sha256Sum="670696446ad12c4fd27bc85f3d2f36928b0c954b8be449e75c358ea8b5a4724a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_4.exe" newVersion="3.3.0-beta.4" newMediaFileId="win64" fileSize="302094880" md5Sum="d481093f20dca2f70eff44ebe4e9e7e9" sha256Sum="d93a20b30b759c65b9104f795b1db8aa6b3536b29d0da3e2fe368f12fc0e1eda" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -1218,6 +1221,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Match, Stress Match, and Syllable Count Match analyses
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
  * Updated cmn and tsn dictionaries
@@ -1608,7 +1612,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.exe" newVersion="3.3.0-beta.3" newMediaFileId="win64" fileSize="302045728" md5Sum="9fc9ac00a27cc2ebbe5df8d01f174cd6" sha256Sum="670696446ad12c4fd27bc85f3d2f36928b0c954b8be449e75c358ea8b5a4724a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_4.exe" newVersion="3.3.0-beta.4" newMediaFileId="win64" fileSize="302094880" md5Sum="d481093f20dca2f70eff44ebe4e9e7e9" sha256Sum="d93a20b30b759c65b9104f795b1db8aa6b3536b29d0da3e2fe368f12fc0e1eda" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -1620,6 +1624,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Match, Stress Match, and Syllable Count Match analyses
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
  * Updated cmn and tsn dictionaries
@@ -2010,7 +2015,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_3.zip" newVersion="3.3.0-beta.3" newMediaFileId="win64zip" fileSize="301013976" md5Sum="0358cb30650862e6b66fcd68b41522d8" sha256Sum="f3fb7b27f8d58cc32a1fc426b83fb6de3223a2ed89eb4115a4f66baa0cb177c0" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_4.zip" newVersion="3.3.0-beta.4" newMediaFileId="win64zip" fileSize="301062981" md5Sum="6790c34a06e98e18aacaa8750b4ad0fa" sha256Sum="4a9ec4e5be99342923f6fe361faa6c2d713087131f2d18e12fddf8e35da25389" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -2022,6 +2027,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Match, Stress Match, and Syllable Count Match analyses
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
  * Updated cmn and tsn dictionaries
