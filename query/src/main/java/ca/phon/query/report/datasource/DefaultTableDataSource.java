@@ -231,6 +231,11 @@ public class DefaultTableDataSource implements TableDataSource {
 		rowVals[col] = newVal;
 	}
 
+	public void setValueAt(int row, String colname, Object newVal) {
+		int columnIndex = getColumnIndex(colname);
+		setValueAt(row, columnIndex, newVal);
+	}
+
 	public String getDefaultColumnTitle(int col) {
 		int let1 = col / 26;
 		int let2 = col % 26;
