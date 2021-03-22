@@ -169,7 +169,7 @@ function setup_params(params) {
         <node id="349f74d1" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Stress Matches,Match %,Stress Mis-matches,Mis-match %]]></oga:property>
+                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Stress Matches,Match %,Stress Mismatches,Mismatch %]]></oga:property>
                 </oga:settings>
                 <oga:meta x="833" y="725"/>
             </extensions>
@@ -525,7 +525,7 @@ function run(context) {
                         <node id="6845e29147164c6f" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Stress Matches,Match %,Stress Mis-matches,Mis-match %]]></oga:property>
+                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Stress Matches,Match %,Stress Mismatches,Mismatch %]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="509" y="664"/>
                             </extensions>
@@ -966,7 +966,7 @@ function run(context) {
 	for(var row = 0; row < speakerSummary.rowCount; row++) {
 		total += speakerSummary.getValueAt(row, "Word Count");
 		totalMatches += speakerSummary.getValueAt(row, "Stress Matches");
-		totalMismatches += speakerSummary.getValueAt(row, "Stress Mis-matches");
+		totalMismatches += speakerSummary.getValueAt(row, "Stress Mismatches");
 	}
 	
 	var rowData = [];
@@ -1030,7 +1030,7 @@ Result
 Alignment]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1184" y="335">
-                                    <oga:default for="sectionName" type="java.lang.String">Stress Mis-matches</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Stress Mismatches</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>

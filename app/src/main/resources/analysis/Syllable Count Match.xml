@@ -169,7 +169,7 @@ function setup_params(params) {
         <node id="349f74d1" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Syllable Count Matches,Match %,Syllable Count Mis-matches,Mis-match %]]></oga:property>
+                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Syllable Count Matches,Match %,Syllable Count Mismatches,Mismatch %]]></oga:property>
                 </oga:settings>
                 <oga:meta x="833" y="725"/>
             </extensions>
@@ -527,7 +527,7 @@ function run(context) {
                         <node id="6845e29147164c6f" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Syllable Count Matches,Match %,Syllable Count Mis-matches,Mis-match %]]></oga:property>
+                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Syllable Count Matches,Match %,Syllable Count Mismatches,Mismatch %]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="510" y="663"/>
                             </extensions>
@@ -968,7 +968,7 @@ function run(context) {
 	for(var row = 0; row < speakerSummary.rowCount; row++) {
 		total += speakerSummary.getValueAt(row, "Word Count");
 		totalMatches += speakerSummary.getValueAt(row, "Syllable Count Matches");
-		totalMismatches += speakerSummary.getValueAt(row, "Syllable Count Mis-matches");
+		totalMismatches += speakerSummary.getValueAt(row, "Syllable Count Mismatches");
 	}
 	
 	var rowData = [];
@@ -1017,7 +1017,7 @@ Alignment]]></oga:property>
                                 </oga:meta>
                             </extensions>
                         </node>
-                        <node id="5e0492b1b24f466e" name="Syllable Count Mis-matches" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="5e0492b1b24f466e" name="Syllable Count Mismatches" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[false]]></oga:property>
@@ -1032,7 +1032,7 @@ Result
 Alignment]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1184" y="335">
-                                    <oga:default for="sectionName" type="java.lang.String">Syllable Count Mis-matches</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Syllable Count Mismatches</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>

@@ -199,7 +199,7 @@ function setup_params(params) {
         <node id="349f74d1" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Avg Distance,Matches,Match %,Mis-matches,Mis-match %]]></oga:property>
+                    <oga:property key="columns"><![CDATA[Speaker,Word Count,Avg Distance,Matches,Match %,Mismatches,Mismatch %]]></oga:property>
                 </oga:settings>
                 <oga:meta x="833" y="725"/>
             </extensions>
@@ -762,7 +762,7 @@ function run(context) {
                         <node id="6845e29147164c6f" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Avg Distance,Matches,Match %,Mis-matches,Mis-match %]]></oga:property>
+                                    <oga:property key="columns"><![CDATA[Session,Age,Word Count,Avg Distance,Matches,Match %,Mismatches,Mismatch %]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="510" y="663"/>
                             </extensions>
@@ -1132,7 +1132,7 @@ function run(context) {
                                 <oga:meta x="799" y="826"/>
                             </extensions>
                         </ogcn:macro>
-                        <node id="5e0492b1b24f466e" name="Mis-matches" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="5e0492b1b24f466e" name="Mismatches" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[false]]></oga:property>
@@ -1147,7 +1147,7 @@ Result
 Alignment]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="1184" y="335">
-                                    <oga:default for="sectionName" type="java.lang.String">Mis-matches</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Mismatches</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -1195,7 +1195,7 @@ function run(context) {
 		
 		avgDistance += speakerSummary.getValueAt(row, "Avg Distance");
 		totalMatches += speakerSummary.getValueAt(row, "Matches");
-		totalMismatches += speakerSummary.getValueAt(row, "Mis-matches");
+		totalMismatches += speakerSummary.getValueAt(row, "Mismatches");
 	}
 
 	var row = summaryTable.rowCount-1;
@@ -1208,8 +1208,8 @@ function run(context) {
 	summaryTable.setValueAt(row, "Match %", 
 		(total > 0 ? (totalMatches / total) * 100.0 : 0.0));
 
-	summaryTable.setValueAt(row, "Mis-matches", totalMismatches);
-	summaryTable.setValueAt(row, "Mis-match %", 
+	summaryTable.setValueAt(row, "Mismatches", totalMismatches);
+	summaryTable.setValueAt(row, "Mismatch %", 
 		(total > 0 ? (totalMismatches / total) * 100.0 : 0.0));
 }
 ]]></oga:property>
