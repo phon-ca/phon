@@ -241,7 +241,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="76902664">
+            <graph id="38133baf">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -281,7 +281,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4b5089e8">
+            <graph id="74109c83">
                 <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -350,7 +350,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="693cfdfcdf824413" name="searchBy" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1cb230d1">
+            <graph id="65704c25">
                 <node id="f209e3eabfde45e9" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -410,7 +410,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <opqry:queryNode id="1f162c16" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-22T09:16:36.812-02:30" name="Data Tiers" uuid="e16d5ff6-0023-46f9-a898-254cff6435bd">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-23T05:39:27.395-02:30" name="Data Tiers" uuid="2a5ece15-ff2b-4a83-9a8f-d1b1ada240e9">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
@@ -648,7 +648,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="7e0dd180">
+            <graph id="220dfd82">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -734,7 +734,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="b5d6aa8">
+                    <graph id="68fc8fad">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -830,7 +830,7 @@ Alignment]]></oga:property>
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="652259c6">
+                            <graph id="bc18e8">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -873,6 +873,40 @@ Alignment]]></oga:property>
                                         <oga:meta x="401" y="74"/>
                                     </extensions>
                                 </node>
+                                <node id="3470fce7" name="Add empty row to summary" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+                                    <input name="currentSession" optional="false"/>
+                                    <input name="summaryTable" optional="false"/>
+                                    <output name="summaryTable" type="ca.phon.query.report.datasource.TableDataSource"/>
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
+	inputs.add("currentSession", "");
+	inputs.add("summaryTable", "", TableDataSource);
+
+	outputs.add("summaryTable", "", false, TableDataSource);
+}
+
+function run(context) {
+	var summaryTable = context.get("summaryTable");
+	var session = context.get("currentSession");
+
+	var rowData = [];
+	var col = 0;
+	rowData[col++] = session;
+	rowData[col++] = "";
+	rowData[col++] = 0;
+	rowData[col++] = 0;
+	rowData[col++] = 0.0;
+	rowData[col++] = 0;
+	rowData[col++] = 0.0;
+
+	summaryTable.addRow(rowData);
+}
+]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="821" y="223"/>
+                                    </extensions>
+                                </node>
                                 <node id="5da24341" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -882,7 +916,7 @@ Alignment]]></oga:property>
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="29a6c06e">
+                                    <graph id="756747fc">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -937,11 +971,11 @@ function run(context) {
                                     <ogcn:published_output field="exists" name="exists" ref="46d48b6c44264bf3"/>
                                     <ogcn:published_output field="table" name="table" ref="46d48b6c44264bf3"/>
                                     <extensions>
-                                        <oga:meta x="537" y="209"/>
+                                        <oga:meta x="474" y="222"/>
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4a599fee">
+                                    <graph id="759f2f18">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1017,25 +1051,30 @@ function run(context) {
 
 	var history = speaker.getExtension(Packages.ca.phon.project.ParticipantHistory);
 
-	var rowData = [];
-	var col = 0;
-	rowData[col++] = session;
-	rowData[col++] = (history != null ? history.getAgeForSession(session) : "");
-
 	var totalDist = 0;
 	for(var row = 0; row < mismatchTable.rowCount; row++) {
 		totalDist += mismatchTable.getValueAt(row, "Distance");
 	}
+	
+	var row = summaryTable.rowCount - 1;
+	var age = (history != null ? history.getAgeForSession(session) : "");
+	summaryTable.setValueAt(row, "Age", age);
+	
+	
 
 	var total = matchTable.rowCount + mismatchTable.rowCount;
-	rowData[col++] = total;
-	rowData[col++] = (total > 0 ? (totalDist / total) * 1.0 : 0);
-	rowData[col++] = matchTable.rowCount;
-	rowData[col++] = (matchTable.rowCount / total) * 100.0;
-	rowData[col++] = mismatchTable.rowCount;
-	rowData[col++] = (mismatchTable.rowCount / total) * 100.0;
+	summaryTable.setValueAt(row, "Word Count", total);
+	
+	var avgDist = (total > 0 ? (totalDist / total) * 1.0 : 0);
+	summaryTable.setValueAt(row, "Avg Distance", avgDist);
 
-	summaryTable.addRow(rowData);
+	summaryTable.setValueAt(row, "Matches", matchTable.rowCount);
+	var matchp = (total > 0 ? (matchTable.rowCount / total) * 100.0 : 0.0);
+	summaryTable.setValueAt(row, "Match %", matchp);
+	
+	summaryTable.setValueAt(row, "Mismatches", mismatchTable.rowCount);
+	var mismatchp = (total > 0 ? (mismatchTable.rowCount / total) * 100.0 : 0.0);
+	summaryTable.setValueAt(row, "Mismatch %", mismatchp);
 }
 ]]></oga:property>
                                                 </oga:settings>
@@ -1060,58 +1099,20 @@ function run(context) {
                                     <ogcn:published_input field="obj" name="speaker" ref="1c289180"/>
                                     <ogcn:published_input field="obj" name="session" ref="87ed7647c22c4d2d"/>
                                     <extensions>
-                                        <oga:meta x="887" y="211"/>
+                                        <oga:meta x="1249" y="210"/>
                                     </extensions>
                                 </ogcn:macro>
-                                <node id="750bec4d" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
-                                    <extensions>
-                                        <oga:meta x="725" y="540"/>
-                                    </extensions>
-                                </node>
-                                <node id="3470fce7" name="Add empty row to summary" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
-                                    <input name="currentSession" optional="false"/>
-                                    <input name="summaryTable" optional="false"/>
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="__script"><![CDATA[function init(inputs, outputs) {
-	inputs.add("currentSession", "");
-	inputs.add("summaryTable", "", TableDataSource);
-}
-
-function run(context) {
-	var summaryTable = context.get("summaryTable");
-	var session = context.get("currentSession");
-
-	var rowData = [];
-	var col = 0;
-	rowData[col++] = session;
-	rowData[col++] = "";
-	rowData[col++] = 0;
-	rowData[col++] = 0;
-	rowData[col++] = 0.0;
-	rowData[col++] = 0;
-	rowData[col++] = 0.0;
-
-	summaryTable.addRow(rowData);
-}
-]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="940" y="528"/>
-                                    </extensions>
-                                </node>
                                 <link dest="3156d821830b429c" destField="tableMap" source="de972cbb45724290" sourceField="obj"/>
-                                <link dest="5a1101a4" destField="summaryTable" source="c714758fdf784dbd" sourceField="obj"/>
                                 <link dest="5a1101a4" destField="table" source="3156d821830b429c" sourceField="table"/>
                                 <link dest="5a1101a4" destField="speaker" source="65408686af7c439c" sourceField="obj"/>
                                 <link dest="5a1101a4" destField="enabled" source="3156d821830b429c" sourceField="exists"/>
                                 <link dest="3470fce7" destField="currentSession" source="ed3dc6f" sourceField="obj"/>
                                 <link dest="3470fce7" destField="summaryTable" source="c714758fdf784dbd" sourceField="obj"/>
                                 <link dest="5a1101a4" destField="session" source="ed3dc6f" sourceField="obj"/>
-                                <link dest="750bec4d" destField="x" source="3156d821830b429c" sourceField="exists"/>
-                                <link dest="3470fce7" destField="enabled" source="750bec4d" sourceField="result"/>
                                 <link dest="5da24341" destField="obj" source="c714758fdf784dbd" sourceField="obj"/>
                                 <link dest="475cde45" destField="obj" source="ed3dc6f" sourceField="obj"/>
                                 <link dest="3156d821830b429c" destField="sessionName" source="475cde45" sourceField="value"/>
+                                <link dest="5a1101a4" destField="summaryTable" source="3470fce7" sourceField="summaryTable"/>
                                 <extensions>
                                     <oga:notes>
                                         <oga:note color="0xffff96" height="191" title="Iteration" width="355" x="36" y="18"/>
