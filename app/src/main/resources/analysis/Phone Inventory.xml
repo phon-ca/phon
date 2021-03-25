@@ -25,6 +25,7 @@
                     <oga:property key="filters.primary_actual.filter"><![CDATA[\w]]></oga:property>
                     <oga:property key="filters.primary_target.filter"><![CDATA[\w]]></oga:property>
                     <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography,IPA Target,IPA Actual]]></oga:property>
+                    <oga:property key="processSelection"><![CDATA[All Phones]]></oga:property>
                     <oga:property key="__script"><![CDATA[var TierList = require("lib/TierList").TierList;
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
@@ -36,6 +37,7 @@ var PatternType = require("lib/PatternFilter").PatternType;
 var StressPatternOptions = require("lib/StressPattern").StressPatternOptions;
 var CvPatternOptions = require("lib/CvPattern").CvPatternOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 
 /********************************
  * Setup params
@@ -109,7 +111,8 @@ var filters = {
 	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"wordTiers": new TierList("filters.wordTiers"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
-	"syllable": new SyllableFilter("filters.syllable")
+	"syllable": new SyllableFilter("filters.syllable"),
+	"speaker": new ParticipantFilter("filters.speaker")
 };
 
 var reportTitleParamInfo = {
@@ -197,6 +200,8 @@ function setup_params(params) {
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
 	filters.wordTiers.setEnabled(enabled);
+
+	filters.speaker.param_setup(params);
 }
 
 function createTypeSelection() {
@@ -245,7 +250,7 @@ function run(context) {
             </extensions>
         </node>
         <opqry:queryNode id="230571e9" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-02-16T13:35:43.476-03:30" name="Query Node" uuid="9a37c83f-5d77-4434-92b6-b25ff52cda18">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T08:21:55.478-02:30" name="Query Node" uuid="8c32c41e-2ebd-4ce3-ba5b-1febcc815a70">
                 <script>
                     <source>/*
 params =
@@ -606,7 +611,7 @@ function query_record(recordIndex, record) {
             </extensions>
         </opqry:queryNode>
         <opqry:queryNode id="34c3c8ef8e8547ce" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-02-16T13:35:43.493-03:30" name="Query Node" uuid="81c237ca-041f-4aee-b4a5-221f94ef817f">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T08:21:55.481-02:30" name="Query Node" uuid="49eef248-bfa9-4e58-9c79-623898574efb">
                 <script>
                     <source>/*
 params =
@@ -973,7 +978,7 @@ function query_record(recordIndex, record) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="d4e5e1df1bf7410b" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="46fa00cc">
+            <graph id="33662851">
                 <node id="d4c390a1e5434491" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -1013,7 +1018,7 @@ function query_record(recordIndex, record) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="23539cc0a0fe4588" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="7efe5a61">
+            <graph id="58a32ab8">
                 <node id="69792100bbb04af7" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -1157,7 +1162,7 @@ function query_record(recordIndex, record) {
             </extensions>
         </node>
         <ogcn:macro id="2f2adbfc" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="2fe3d88b">
+            <graph id="3c36c0f8">
                 <node id="5042889a" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1177,7 +1182,7 @@ function query_record(recordIndex, record) {
                     </extensions>
                 </node>
                 <ogcn:macro id="d46d8e294c6d4cdb" name="Create Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1dba1713">
+                    <graph id="34485e55">
                         <node id="bc207b6e015a423b" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -1263,11 +1268,10 @@ function query_record(recordIndex, record) {
                     </extensions>
                 </node>
                 <ogcn:macro id="d3187ad6031143a4" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="44f9886a">
+                    <graph id="49796a8f">
                         <node id="f169188dc7e9468d" name="IPATargetTable" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="44" y="92"/>
@@ -1276,7 +1280,6 @@ function query_record(recordIndex, record) {
                         <node id="c2922b476b434221" name="IPAActualTable" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="54" y="241"/>
@@ -1450,7 +1453,7 @@ function query_record(recordIndex, record) {
                             </extensions>
                         </node>
                         <ogcn:macro id="63946adcd0cf470e" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="49fe264f">
+                            <graph id="21a0a14e">
                                 <node id="99bb217415504b56" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -1510,7 +1513,7 @@ function query_record(recordIndex, record) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="d9210757f65f4cc1" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="225671e7">
+                                    <graph id="101a83b6">
                                         <node id="9faf511a714e4e59" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1589,7 +1592,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="22c8508ecef74b54" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2a9a3006">
+                                    <graph id="2a709359">
                                         <node id="594667969504475b" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1673,7 +1676,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="a52c23a374e4c87" name="If Speaker has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="7d158b43">
+                                    <graph id="456002f2">
                                         <node id="8b1d112fbd104c34" name="IPA Target Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>

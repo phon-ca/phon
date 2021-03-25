@@ -37,7 +37,7 @@ var PPCOptions = require("lib/PPC").PPCOptions;
 var ResultType = require("lib/PhonScriptConstants").ResultType;
 var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
-
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 
 /********************************
  * Setup params
@@ -53,7 +53,8 @@ var filters = {
 	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
-	"syllable": new SyllableFilter("filters.syllable")
+	"syllable": new SyllableFilter("filters.syllable"),
+	"speaker": new ParticipantFilter("filters.speaker")
 };
 
 var reportTitleParamInfo = {
@@ -137,13 +138,15 @@ function setup_params(params) {
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
 	filters.wordTiers.setEnabled(enabled);
+
+	filters.speaker.param_setup(params);
 }]]></oga:property>
                 </oga:settings>
                 <oga:meta x="68" y="642"/>
             </extensions>
         </node>
         <opqry:queryNode id="5b1f4477" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-02-03T10:06:41.526-03:30" name="Aligned IPA Domains" uuid="007c6fbf-f043-40a0-908e-cb30469e00d0">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T08:18:25.039-02:30" name="Aligned IPA Domains" uuid="ebbb65e9-6b3c-40fa-9fe1-9d3313b286c2">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -169,7 +172,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="207136ae" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="1e8e1684">
+            <graph id="2898d1c7">
                 <node id="1c51967a" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -224,7 +227,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="26c8137d438248e5" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="326db2b">
+            <graph id="77b38405">
                 <node id="a40e7a48c9fd42cd" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -293,7 +296,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="23aa4be6b4214b66" name="includePPCNoEpen" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="2afd890d">
+            <graph id="14e1fd85">
                 <node id="31d879b4a5f49ed" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -677,7 +680,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="d6eb54e5383f44b7" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="3064f1e2">
+            <graph id="520ff0fa">
                 <node id="17c24bf2343d42c4" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -697,7 +700,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="1fdb304153aa4455" name="Report Node" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="13678820">
+                    <graph id="458176eb">
                         <node id="74e89447367042f5" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -734,7 +737,6 @@ function run(context) {
                 <node id="cae63d738e6c43a0" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                         </oga:settings>
                         <oga:meta x="160" y="1076"/>
@@ -743,7 +745,6 @@ function run(context) {
                 <node id="e35d3b8525f94529" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                         </oga:settings>
                         <oga:meta x="162" y="1173"/>
@@ -752,14 +753,13 @@ function run(context) {
                 <node id="221fc4cc" name="selectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
                         </oga:settings>
                         <oga:meta x="164" y="1274"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="83a128d56baa4161" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="158e2995">
+                    <graph id="14acf194">
                         <node id="7d6c1937f07b40fc" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -811,7 +811,6 @@ function run(context) {
                         <node id="2aec03509f7746a4" name="ignoreDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="57" y="1075"/>
@@ -820,7 +819,6 @@ function run(context) {
                         <node id="e393fad1fb07453a" name="onlyOrExcept" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Boolean]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="59" y="1172"/>
@@ -829,7 +827,6 @@ function run(context) {
                         <node id="eefaa5daea5142ea" name="selectedDiacritics" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="contextKey"/>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Collection]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="61" y="1273"/>
