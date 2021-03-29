@@ -1,6 +1,6 @@
 # General
 analysis/Consonants.xml
-analysis/CV Match.xml
+analysis/CV Pattern Match.xml
 analysis/Measure of Cluster Proximity.xml
 analysis/Percent Diacritics Correct.xml
 analysis/Percent Number Tones Correct.xml

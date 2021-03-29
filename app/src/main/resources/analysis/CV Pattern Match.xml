@@ -23,10 +23,9 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
-                    <oga:property key="diacriticOptions.selectedDiacritics"><![CDATA[[ː, ˑ]]]></oga:property>
-                    <oga:property key="diacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
-                    <oga:property key="diacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
-                    <oga:property key="reportTitle"><![CDATA[CV Match]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.selectedDiacritics"><![CDATA[[ˑ, ː]]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
@@ -60,7 +59,7 @@ var filters = {
 var reportTitleParamInfo = {
 	"id": "reportTitle",
 	"title": "Report Title",
-	"def": "Report",
+	"def": "CV Pattern Match",
 	"prompt": "Enter report title"
 };
 var reportTitleParam;
@@ -84,14 +83,26 @@ var ignoreTruncatedParamInfo = {
 var ignoreTruncatedParam;
 var ignoreTruncated = ignoreTruncatedParamInfo.def;
 
-var diacriticOptionsParamInfo = {
-		"id": "diacriticOptions",
-		"desc": "Diacritic Options",
+var cvPatternDiacriticOptionsParamInfo = {
+		"id": "cvPatternDiacriticOptions",
+		"desc": "CV Pattern Options",
 		"def": false,
 		"retainDia": new java.util.ArrayList()
 	};
-var diacriticOptionsParam;
-var diacriticOptions = {};
+var cvPatternDiacriticOptionsParam;
+var cvPatternDiacriticOptions = {};
+
+var cvPatternOptionsParamInfo = {
+	"ids": ["cvPatternIncludeStress", "cvPatternIncludeExplicit", "cvPatternInsertImplicit", "cvPatternCompensatoryLengthening"],
+	"desc": "",
+	"titles": ["Include stress makers", "Include explicit syllable boundaries (.)", "Insert implicit (unmarked) syllable boundaries", "Compensatory lengthening (Cː -> CC)"],
+	"defs": [true, true, false, true]
+};
+var cvPatternOptionsParam;
+var cvPatternIncludeStress = cvPatternOptionsParamInfo.defs[0];
+var cvPatternIncludeExplicit = cvPatternOptionsParamInfo.defs[1];
+var cvPatternInsertImplicit = cvPatternOptionsParamInfo.defs[2];
+var cvPatternCompensatoryLengthening = cvPatternOptionsParamInfo.defs[3];
 
 function setup_params(params) {
 	reportTitleParam = new StringScriptParam(
@@ -118,13 +129,21 @@ function setup_params(params) {
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
 
-	diacriticOptionsParam = new DiacriticOptionsScriptParam(
-		diacriticOptionsParamInfo.id,
-		diacriticOptionsParamInfo.desc,
-		diacriticOptionsParamInfo.def,
-		diacriticOptionsParamInfo.retainDia
+	cvPatternDiacriticOptionsParam = new DiacriticOptionsScriptParam(
+		cvPatternDiacriticOptionsParamInfo.id,
+		cvPatternDiacriticOptionsParamInfo.desc,
+		cvPatternDiacriticOptionsParamInfo.def,
+		cvPatternDiacriticOptionsParamInfo.retainDia
 	);		
-	params.add(diacriticOptionsParam);
+	params.add(cvPatternDiacriticOptionsParam);
+
+	cvPatternOptionsParam = new MultiboolScriptParam(
+		cvPatternOptionsParamInfo.ids,
+		cvPatternOptionsParamInfo.defs,
+		cvPatternOptionsParamInfo.titles,
+		cvPatternOptionsParamInfo.desc,
+		1);
+	params.add(cvPatternOptionsParam);
 
 	var insertIdx = params.size()-2;
 
@@ -185,7 +204,7 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="39" y="640"/>
+                <oga:meta x="51" y="627"/>
             </extensions>
         </node>
         <node id="349f74d1" name="Create Summary Table" type="class:ca.phon.app.opgraph.nodes.table.CreateTableNode">
@@ -197,10 +216,20 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="5b41918f" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-23T11:15:52.504-02:30" name="Aligned IPA Domains" uuid="2ce379f8-9903-4e8a-80b4-43a91222efe4">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-29T06:58:07.950-02:30" name="Aligned IPA Domains" uuid="fcddd056-ceab-4a56-9b45-0d49e837d6b5">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
+                    <param id="filters.actualResultFilter.filterType">Phonex</param>
+                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
+                    <param id="filters.groupPattern.filterType">Plain text</param>
                     <param id="filters.searchBy.searchBy">Word</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
+                    <param id="filters.targetResultFilter.filterType">Phonex</param>
+                    <param id="filters.wordPattern.filterType">Plain text</param>
                 </script>
             </qry:query>
             <extensions>
@@ -209,7 +238,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6ccd61ba">
+            <graph id="4fadc0b4">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -245,11 +274,11 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="11fbceb6d16b42a5"/>
             <ogcn:published_output field="value" name="reportTitle" ref="a8147ee018ca42ad"/>
             <extensions>
-                <oga:meta x="272" y="640"/>
+                <oga:meta x="284" y="628"/>
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4a470e8">
+            <graph id="20aa02fd">
                 <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -312,7 +341,7 @@ function setup_params(params) {
             <ogcn:published_input field="format" name="format" ref="ee73347a2e4c421e"/>
             <ogcn:published_output field="obj" name="value" ref="8556803b9a44c5b"/>
             <extensions>
-                <oga:meta x="291" y="754">
+                <oga:meta x="303" y="742">
                     <oga:default for="format" type="java.lang.String">combineParticipants</oga:default>
                 </oga:meta>
             </extensions>
@@ -338,7 +367,7 @@ function setup_params(params) {
         <node id="45b9da4ad4864623" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="505" y="640"/>
+                <oga:meta x="517" y="628"/>
             </extensions>
         </node>
         <node id="29538193" name="Add CV Match Columns" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -346,9 +375,9 @@ function setup_params(params) {
             <output name="matchTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="diacriticOptions.selectedDiacritics"><![CDATA[[ˑ, ː]]]></oga:property>
-                    <oga:property key="diacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
-                    <oga:property key="diacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.selectedDiacritics"><![CDATA[[ˑ, ː]]]></oga:property>
                     <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.query.script.params)
 
 var ignoreTruncatedParamInfo = {
@@ -360,15 +389,26 @@ var ignoreTruncatedParamInfo = {
 var ignoreTruncatedParam;
 var ignoreTruncated = ignoreTruncatedParamInfo.def;
 
-var diacriticOptionsParamInfo = {
-		"id": "diacriticOptions",
-		"desc": "Diacritic Options",
+var cvPatternDiacriticOptionsParamInfo = {
+		"id": "cvPatternDiacriticOptions",
+		"desc": "CV Pattern Options",
 		"def": false,
 		"retainDia": new java.util.ArrayList()
 	};
-var diacriticOptionsParam;
-var diacriticOptions = {};
+var cvPatternDiacriticOptionsParam;
+var cvPatternDiacriticOptions = {};
 
+var cvPatternOptionsParamInfo = {
+	"ids": ["cvPatternIncludeStress", "cvPatternIncludeExplicit", "cvPatternInsertImplicit", "cvPatternCompensatoryLengthening"],
+	"desc": "",
+	"titles": ["Include stress makers", "Include explicit syllable boundaries (.)", "Insert implicit (unmarked) syllable boundaries", "Compensatory lengthening (Cː -> CC)"],
+	"defs": [true, true, false, true]
+};
+var cvPatternOptionsParam;
+var cvPatternIncludeStress = cvPatternOptionsParamInfo.defs[0];
+var cvPatternIncludeExplicit = cvPatternOptionsParamInfo.defs[1];
+var cvPatternInsertImplicit = cvPatternOptionsParamInfo.defs[2];
+var cvPatternCompensatoryLengthening = cvPatternOptionsParamInfo.defs[3];
 
 function setup_params(params) {
 	ignoreTruncatedParam = new BooleanScriptParam(
@@ -378,13 +418,21 @@ function setup_params(params) {
 		ignoreTruncatedParamInfo.def);
 	params.add(ignoreTruncatedParam);
 
-	diacriticOptionsParam = new DiacriticOptionsScriptParam(
-		diacriticOptionsParamInfo.id,
-		diacriticOptionsParamInfo.desc,
-		diacriticOptionsParamInfo.def,
-		diacriticOptionsParamInfo.retainDia
+	cvPatternDiacriticOptionsParam = new DiacriticOptionsScriptParam(
+		cvPatternDiacriticOptionsParamInfo.id,
+		cvPatternDiacriticOptionsParamInfo.desc,
+		cvPatternDiacriticOptionsParamInfo.def,
+		cvPatternDiacriticOptionsParamInfo.retainDia
 	);		
-	params.add(diacriticOptionsParam);
+	params.add(cvPatternDiacriticOptionsParam);
+
+	cvPatternOptionsParam = new MultiboolScriptParam(
+		cvPatternOptionsParamInfo.ids,
+		cvPatternOptionsParamInfo.defs,
+		cvPatternOptionsParamInfo.titles,
+		cvPatternOptionsParamInfo.desc,
+		1);
+	params.add(cvPatternOptionsParam);
 }
 
 function init(inputs, outputs) {
@@ -407,6 +455,78 @@ function copyTableRow(srcRow, destRow) {
 		destRow[col] = srcRow[col];
 	}
 	return col;
+}
+
+function cvPattern(ipa) {
+	var cvPattern = ipa.cover("G=\\g; C=\\c; V=\\v");
+
+	if(cvPatternDiacriticOptions.ignoreDiacritics == true) {
+		if("only" == cvPatternDiacriticOptions.selectionMode) {
+			cvPattern = cvPattern.stripDiacritics(cvPatternDiacriticOptions.selectdDiacritics);
+		} else {
+			cvPattern = cvPattern.stripDiacriticsExcept(cvPatternDiacriticOptions.selectedDiacritics);
+		}
+	}
+
+	if(cvPatternIncludeStress == false) {
+		var builder = new IPATranscriptBuilder();
+		var visitor = new Packages.ca.phon.visitor.Visitor() {
+			visit: function(ele) {
+				if(!(ele instanceof StressMarker))
+					builder.append(ele);
+			}
+		};
+		cvPattern.accept(visitor);
+		cvPattern = builder.toIPATranscript();
+	}
+
+	if(cvPatternIncludeExplicit == false) {
+		var builder = new IPATranscriptBuilder();
+		var visitor = new Packages.ca.phon.visitor.Visitor() {
+			visit: function(ele) {
+				if(!".".equals(ele.toString()))
+					builder.append(ele);
+			}
+		};
+		cvPattern.accept(visitor);
+		cvPattern = builder.toIPATranscript();
+	}
+
+	if(cvPatternInsertImplicit == true) {
+		var builder = new IPATranscriptBuilder();
+		var sylls = cvPattern.syllables();
+		var idx = 0;
+		for(var i = 0; i < sylls.size(); i++) {
+			var syll = sylls.get(i);
+			if(idx > 0) {
+				if(!(cvPattern.elementAt(idx) instanceof StressMarker)
+					&& !".".equals(cvPattern.elementAt(idx).toString())) {
+					builder.appendSyllableBoundary();
+				}
+			}
+			builder.append(syll);
+			idx += syll.length();
+		}
+		cvPattern = builder.toIPATranscript();
+	}
+
+	if(cvPatternCompensatoryLengthening == true) {
+		cvPattern = cvPattern.replaceAll("C&{long}", "CC");
+		cvPattern = cvPattern.replaceAll("C&{halflong}", "CC");
+
+		cvPattern = cvPattern.replaceAll("G&{long}", "GG");
+		cvPattern = cvPattern.replaceAll("G&{halflong}", "GG");
+
+		cvPattern = cvPattern.replaceAll("V&{long}", "VV");
+		cvPattern = cvPattern.replaceAll("V&{halflong}", "VV");
+
+		cvPattern = cvPattern.replaceAll("V_V&{long}", "V͡VV");
+		cvPattern = cvPattern.replaceAll("C_V&{long}", "C͡VV");
+		cvPattern = cvPattern.replaceAll("V_C&{long}", "V͡CC");
+		cvPattern = cvPattern.replaceAll("C_C&{long}", "C͡CC");
+	}
+
+	return cvPattern;
 }
 
 function run(context) {
@@ -439,33 +559,23 @@ function run(context) {
 		var ipaA = srcRow[ipaActualCol];
 		if(ignoreTruncated == true 
 			&& (ipaA == null || ipaA.length() == 0)) continue;
-			
-		if(diacriticOptions.ignoreDiacritics == true) {
-			if("only" == diacriticOptions.selectionMode) {
-				ipaT = ipaT.stripDiacritics(diacriticOptions.selectedDiacritics);
-				ipaA = ipaA.stripDiacritics(diacriticOptions.selectedDiacritics);
-			} else {
-				ipaT = ipaT.stripDiacriticsExcept(diacriticOptions.selectedDiacritics);
-				ipaA = ipaA.stripDiacriticsExcept(diacriticOptions.selectedDiacritics);
-			}
-		}
 
-		var tcv = ipaT.cvPattern;
-		var acv = ipaA.cvPattern;
+		var tcv = cvPattern(ipaT);
+		var acv = cvPattern(ipaA);
 		destRow[col++] = tcv;
 		destRow[col++] = acv;
-		destRow[col++] = (tcv.matches(acv) ? "1" : "0");
+		destRow[col++] = (tcv.toString().matches(acv.toString()) ? "1" : "0");
 
 		matchTable.addRow(destRow);
 	}
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="800" y="409"/>
+                <oga:meta x="801" y="409"/>
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="732debfb">
+            <graph id="6c2a811d">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -551,7 +661,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="204176b7">
+                    <graph id="481cecf2">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -675,7 +785,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="77e6bff1">
+                            <graph id="6c91634c">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -761,7 +871,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="24d0518b">
+                                    <graph id="3c6b27c">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -820,7 +930,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="5353c849">
+                                    <graph id="7f7089c0">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1205,7 +1315,7 @@ Alignment]]></oga:property>
             </opqry:nodewizard>
             <oga:notes>
                 <oga:note color="0xffff96" height="537" title="Analysis Inputs" width="379" x="10" y="10">These inputs are provided to all analyses.</oga:note>
-                <oga:note color="0xffc864" height="304" title="Start Report" width="755" x="24" y="576">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
+                <oga:note color="0xffc864" height="304" title="Start Report" width="755" x="36" y="564">Reports are created in a tree structure. When combined using the Analysis Composer the report tree created by the 'New Report' node will be added as a subtree to the larger report.</oga:note>
                 <oga:note color="0x9696ff" height="537" title="Query" width="745" x="400" y="10">Execute query and generate a query report using the Report Composer.  The report output from the 'Query Report' node should be added to the report created by the 'New Report' node below. To 'chain' queries, add a new query node using the Library view. Connect the 'project' and 'results' outputs from one query node to the 'project' and 'sessions' inputs of the next query.</oga:note>
             </oga:notes>
             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
