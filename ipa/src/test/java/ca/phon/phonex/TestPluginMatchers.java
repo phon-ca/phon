@@ -60,6 +60,8 @@ public class TestPluginMatchers extends PhonexTest {
 
 		Assert.assertEquals(4, ipa.indexOf("\\c&[ʰʷ]", 2));
 		Assert.assertEquals(4, ipa.indexOf("\\c:diacritic(\"[ʰʷ]\")", 2));
+
+		Assert.assertEquals(2, ipa.indexOf("\\v&{long}"));
 	}
 
 	@Test
