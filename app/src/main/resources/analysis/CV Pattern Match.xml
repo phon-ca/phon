@@ -217,7 +217,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="5b41918f" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-29T07:17:50.112-02:30" name="Aligned IPA Domains" uuid="a89abd5f-4493-4738-8df2-38e6dd2e7181">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-29T07:27:08.443-02:30" name="Aligned IPA Domains" uuid="a8036650-17a6-4c7d-af4e-d126829a22af">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -239,7 +239,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4e35d713">
+            <graph id="47a4b31">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -279,7 +279,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5537c05a">
+            <graph id="4649802e">
                 <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -523,6 +523,11 @@ function cvPattern(ipa) {
 		cvPattern = cvPattern.replaceAll("C_V&{long}", "C͡VV");
 		cvPattern = cvPattern.replaceAll("V_C&{long}", "V͡CC");
 		cvPattern = cvPattern.replaceAll("C_C&{long}", "C͡CC");
+
+		cvPattern = cvPattern.replaceAll("V_V&{halflong}", "V͡VV");
+		cvPattern = cvPattern.replaceAll("C_V&{halflong}", "C͡VV");
+		cvPattern = cvPattern.replaceAll("V_C&{halflong}", "V͡CC");
+		cvPattern = cvPattern.replaceAll("C_C&{halflong}", "C͡CC");
 	}
 
 	return cvPattern;
@@ -574,7 +579,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="447667aa">
+            <graph id="41fb1258">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -660,7 +665,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="69c3d59f">
+                    <graph id="4fc86b47">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -784,7 +789,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="4d1bc13c">
+                            <graph id="57533462">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -870,7 +875,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="608b56c3">
+                                    <graph id="2671dfa3">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -929,7 +934,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="45897b2e">
+                                    <graph id="3d6d5467">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
