@@ -50,6 +50,8 @@ public class DiacriticOptionsScriptParam extends ScriptParam {
 	private String selectedDiacriticsParamId;
 	
 	private String selectionModeParamId;
+
+	private String verb = "Ignore";
 	
 	public DiacriticOptionsScriptParam(String id, String desc, boolean defaultIgnoreDiacritics, Collection<Diacritic> defaultSelectedDiacritics) {
 		this(id, desc, defaultIgnoreDiacritics, SelectionMode.EXCEPT, defaultSelectedDiacritics);
@@ -74,7 +76,15 @@ public class DiacriticOptionsScriptParam extends ScriptParam {
 		setValue(selectedDiacriticsParamId, defaultSelectedDiacritics);
 		setDefaultValue(selectedDiacriticsParamId, defaultSelectedDiacritics);
 	}
-	
+
+	public String getVerb() {
+		return this.verb;
+	}
+
+	public void setVerb(String verb) {
+		this.verb = verb;
+	}
+
 	public String getIgnoreDiacriticsParamId() {
 		return this.ignoreDiacriticsParamId;
 	}
