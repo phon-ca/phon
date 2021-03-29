@@ -18,6 +18,7 @@ package ca.phon.ipa;
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.regex.Pattern;
 
 import ca.phon.ipa.parser.exceptions.IPAParserException;
 import org.antlr.runtime.*;
@@ -416,6 +417,78 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	/**
+	 * Replace the first occurrence of the a phonex expression
+	 * with the given replacement.
+	 *
+	 * @param pattern
+	 * @param replacement
+	 *
+	 * @return a new IPA transcript
+	 */
+	public IPATranscript replaceFirst(String pattern, String replacement) throws ParseException {
+		PhonexPattern phonex = PhonexPattern.compile(pattern);
+		IPATranscript replace = IPATranscript.parseIPATranscript(replacement);
+		return replaceFirst(phonex, replace);
+	}
+
+	/**
+	 * Replace the first occurrence of the a phonex expression
+	 * with the given replacement.
+	 *
+	 * @param pattern
+	 * @param replacement
+	 *
+	 * @return a new IPA transcript
+	 */
+	public IPATranscript replaceFirst(PhonexPattern pattern, IPATranscript replacement) {
+		IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		PhonexMatcher matcher = pattern.matcher(this);
+
+		if(matcher.find()) {
+			matcher.appendReplacement(builder, replacement);
+		}
+		matcher.appendTail(builder);
+
+		return builder.toIPATranscript();
+	}
+
+	/**
+	 * Replace all occurrences of the a phonex expression with
+	 * the given replacement.
+	 *
+	 * @param pattern
+	 * @param replacement
+	 *
+	 * @return a new IPA transcript
+	 */
+	public IPATranscript replaceAll(String pattern, String replacement) throws ParseException {
+		PhonexPattern phonex = PhonexPattern.compile(pattern);
+		IPATranscript replace = IPATranscript.parseIPATranscript(replacement);
+		return replaceAll(phonex, replace);
+	}
+
+	/**
+	 * Replace all occurrences of the a phonex expression with
+	 * the given replacement.
+	 *
+	 * @param pattern
+	 * @param replacement
+	 *
+	 * @return a new IPA transcript
+	 */
+	public IPATranscript replaceAll(PhonexPattern pattern, IPATranscript replacement) {
+		IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		PhonexMatcher matcher = pattern.matcher(this);
+
+		while(matcher.find()) {
+			matcher.appendReplacement(builder, replacement);
+		}
+		matcher.appendTail(builder);
+
+		return builder.toIPATranscript();
+	}
+
+	/**
 	 * Return a new IPATranscript that include the contents
 	 * of this transcript along with the contents of the given
 	 * transcript appended at the end.
@@ -804,7 +877,16 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 		return retVal;
 	}
-	
+
+	/**
+	 * Get default CGV pattern cover
+	 *
+	 * @return transcript covered using  G=\g; C=\c; V=\v
+	 */
+	public IPATranscript cover() {
+		return cover("G=\\g; C=\\c; V=\\v");
+	}
+
 	/**
 	 * Cover using string encoding symbol map.
 	 * 
