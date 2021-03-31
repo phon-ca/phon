@@ -31,6 +31,10 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.tools.Tool;
 
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.log.LogUtil;
 import com.github.davidmoten.rtree.*;
 import com.github.davidmoten.rtree.geometry.*;
 
@@ -51,7 +55,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	private final static int TEXT_MARGIN = 6;
 	
 	private final static int TIER_GAP = 5;
-	
+
+	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordLabelTree;
+
 	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordTree;
 	
 	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> markerTree;
@@ -68,7 +74,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	public DefaultRecordGridUI() {
 		super();
-		
+
+		recordLabelTree = RTree.create();
 		recordTree = RTree.create();
 		markerTree = RTree.create();
 		messageTree = RTree.create();
@@ -273,11 +280,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	@Override
 	public void paint(Graphics g, JComponent c) {
 		final Graphics2D g2 = (Graphics2D)g;
-		
+
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		
 		Session session = recordGrid.getSession();
+		recordLabelTree = RTree.create();
 		recordTree = RTree.create();
 		markerTree = RTree.create();
 		messageTree = RTree.create();
@@ -324,14 +332,15 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			
 			var segXmin = recordGrid.xForTime(seg.getStartValue() / 1000.0f);
 			var segXmax = recordGrid.xForTime(seg.getEndValue() / 1000.0f);
-			
+
+			// add segment rect to model
 			Rectangle2D segRect = new Rectangle2D.Double(segXmin, segY, segXmax-segXmin, templateRect.getHeight());
 			if(!recordGrid.isSplitMode())
 				recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
 						(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
 		
-			if(segRect.getWidth() > 0 && !g2.getClipBounds().intersects(segRect)) continue;
-			if(segRect.getWidth() == 0 && !g2.getClipBounds().contains(new Point((int)segRect.getX(), (int)segRect.getY()))) continue;
+			if(segRect.getWidth() > 0 && !recordGrid.getVisibleRect().intersects(segRect)) continue;
+			if(segRect.getWidth() == 0 && !recordGrid.getVisibleRect().contains(new Point((int)segRect.getX(), (int)segRect.getY()))) continue;
 			
 			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
 				Record leftRecord = recordGrid.getLeftRecordSplit();
@@ -353,11 +362,11 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			
 			if(segRect.getWidth() > 0) {
 				paintSegment(g2, rIdx, r, segRect);
-				visibleRecords.put(rIdx, segRect);
 			} else {
 				paintZeroLengthSegment(g2, rIdx, r, segRect);
 			}
-			
+			visibleRecords.put(rIdx, segRect);
+
 			// setup 'marker' rectangles 
 			
 			// start marker
@@ -372,9 +381,45 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		// paint segment labels
 		for(Integer rIdx:visibleRecords.keySet()) {
 			Rectangle2D segRect = visibleRecords.get(rIdx);
-			paintSegmentLabelAndActions(g2, rIdx, session.getRecord(rIdx), segRect);
+
+			Rectangle2D lblRect = calculateSegmentLabelRect(g2, rIdx, session.getRecord(rIdx), segRect);
+			recordLabelTree = recordLabelTree.add(rIdx, Geometries.rectangle( (float)lblRect.getX(), (float)lblRect.getY(),
+					(float)lblRect.getMaxX(), (float)lblRect.getMaxY()));
 		}
-				
+
+		Set<Integer> overlapSet = new HashSet<>();
+		for(Integer rIdx:visibleRecords.keySet()) {
+			Rectangle2D segRect = visibleRecords.get(rIdx);
+			Rectangle2D lblRect = calculateSegmentLabelRect(g2, rIdx, session.getRecord(rIdx), segRect);
+
+			var lblQuery = recordLabelTree.search(Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(),
+					(float)lblRect.getMaxX(), (float)lblRect.getMaxY()));
+			List<Tuple<com.github.davidmoten.rtree.geometry.Rectangle, Integer>> tupleList = new ArrayList<>();
+			lblQuery
+					.map( entry -> new Tuple<com.github.davidmoten.rtree.geometry.Rectangle, Integer>(entry.geometry(), entry.value()))
+					.subscribe(tupleList::add);
+
+
+			if(tupleList.size() == 1) {
+				paintSegmentLabelAndActions(g2, rIdx, session.getRecord(rIdx), segRect);
+			} else {
+				if(!overlapSet.contains(rIdx)) {
+					var sortedRects= tupleList.stream().map( Tuple::getObj1 )
+							.sorted( (r1, r2) -> Double.valueOf(r1.x1()).compareTo(Double.valueOf(r2.x1())) )
+							.collect(Collectors.toList());
+					com.github.davidmoten.rtree.geometry.Rectangle leftMostRect = sortedRects.get(0);
+
+					var overlapRecords = tupleList.stream().map( Tuple::getObj2 ).collect(Collectors.toSet());
+					overlapSet.addAll(overlapRecords);
+
+					lblRect = new Rectangle2D.Double(leftMostRect.x1(), lblRect.getY(), lblRect.getWidth(), lblRect.getHeight());
+
+					Color color = overlapRecords.contains(recordGrid.getCurrentRecordIndex()) ? Color.black : Color.gray;
+					paintMultipleMarkers(g2, overlapRecords, color, lblRect);
+				}
+			}
+		}
+
 		for(var interval:recordGrid.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval, false);
 		}
@@ -389,11 +434,184 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 	}
 
+	private Set<Integer> calculateOverlappingRecords(Set<Integer> recordSet) {
+		Set<Integer> overlappingRecords = new LinkedHashSet<>();
+		List<Integer> recordList = new ArrayList<>(recordSet);
+		for(int i = 0; i < recordList.size(); i++) {
+			int r1Idx = recordList.get(i);
+			Rectangle2D r1 = visibleRecords.get(r1Idx);
+			for(int j = i+1; j < recordList.size(); j++) {
+				int r2Idx = recordList.get(j);
+				Rectangle2D r2 = visibleRecords.get(r2Idx);
+
+				if(r1.intersects(r2)) {
+					overlappingRecords.add(r1Idx);
+					overlappingRecords.add(r2Idx);
+				}
+			}
+		}
+		return overlappingRecords;
+	}
+
+	protected void paintMultipleMarkers(Graphics2D g2, Set<Integer> recordSet, Color color, Rectangle2D rect) {
+		final Font font = recordGrid.getFont();
+		if(font != null) {
+			renderer.setFont(font);
+		}
+
+		StringBuilder msgBuilder = new StringBuilder();
+		msgBuilder.append("Multiple records at this position.");
+
+		// determine if any records overlap
+		Set<Integer> overlappingRecords = calculateOverlappingRecords(recordSet);
+		if(overlappingRecords.size() > 0) {
+			msgBuilder.append(" Overlapping records (#");
+			msgBuilder.append(overlappingRecords.stream().map( i -> Integer.toString(i+1) ).collect(Collectors.joining(",#")));
+			msgBuilder.append(")");
+		}
+
+		StockIcon stockIcon = (OSInfo.isMacOs() ? MacOSStockIcon.AlertNoteIcon
+				: WindowsStockIcon.INFO);
+		Icon icon = (overlappingRecords.size() > 0
+				? IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL)
+				: IconManager.getInstance().getSystemStockIcon(stockIcon, IconSize.XSMALL));
+
+		DropDownIcon dropDownIcon = new DropDownIcon(icon, 0, SwingConstants.BOTTOM);
+		renderer.setHorizontalTextPosition(SwingConstants.LEFT);
+		renderer.setIcon(dropDownIcon);
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html>");
+		builder.append("#");
+		Iterator<Integer> itr = recordSet.iterator();
+
+		builder.append("<span style='color: ");
+		int r1Idx = itr.next();
+		if(recordGrid.getSelectionModel().isSelectedIndex(r1Idx)) {
+			builder.append("black;'>");
+		} else {
+			builder.append("gray;'>");
+		}
+		builder.append(r1Idx+1);
+		builder.append("</span>");
+		builder.append(",");
+
+		builder.append("<span style='color: ");
+		int r2Idx = itr.next();
+		if(recordGrid.getSelectionModel().isSelectedIndex(r2Idx)) {
+			builder.append("black;'>");
+		} else {
+			builder.append("gray;'>");
+		}
+		builder.append(r2Idx+1);
+		builder.append("</span>");
+
+		Set<Integer> rSet = new HashSet<>(recordSet);
+		rSet.remove(r1Idx);
+		rSet.remove(r2Idx);
+		Set<Integer> selectedRecords = new HashSet<Integer>();
+		selectedRecords.retainAll(rSet);
+		if(itr.hasNext()) {
+			builder.append(",");
+			builder.append("<span style='color: ");
+
+			if(selectedRecords.size() > 0) {
+				builder.append("black;'>");
+			} else {
+				builder.append("gray;'>");
+			}
+			builder.append("\u2026");
+			builder.append("</span>");
+		}
+		builder.append("</html>");
+
+		renderer.setText(builder.toString());
+
+		renderer.setForeground(color);
+
+		Dimension prefSize = renderer.getPreferredSize();
+
+		int labelX = (int)rect.getX();
+		int labelY = (int)(rect.getY() - prefSize.getHeight());
+
+		Rectangle lblRect = new Rectangle(labelX, labelY, prefSize.width, prefSize.height);
+		SwingUtilities.paintComponent(g2, renderer, recordGrid,
+				labelX, labelY, prefSize.width, prefSize.height);
+
+		PhonUIAction showMultipleMarkersAct = new PhonUIAction(this, "showMultipleMarkerMenu", new Tuple<>(recordSet, lblRect));
+		actionsTree = actionsTree.add(showMultipleMarkersAct, Geometries.rectangle(labelX, labelY, labelX + prefSize.width, labelY + prefSize.height));
+
+		String msg = msgBuilder.toString();
+		if(msg.length() > 0) {
+			messageTree = messageTree.add(msg, Geometries.rectangle(labelX, labelY, labelX + prefSize.width, labelY + prefSize.height));
+		}
+	}
+
+	private void addRecordsToMenu(MenuBuilder builder, List<Integer> recordList, int fromIdx, int toIdx) {
+		for(int i = fromIdx; i < toIdx; i++) {
+			int rIdx = recordList.get(i);
+
+			PhonUIAction selectRecordAct = new PhonUIAction(this, "setCurrentRecordIndex", rIdx);
+			selectRecordAct.putValue(PhonUIAction.NAME, String.format("#%d", rIdx + 1));
+			selectRecordAct.putValue(PhonUIAction.SHORT_DESCRIPTION, String.format("Select record %d", rIdx + 1));
+			builder.addItem(".", selectRecordAct);
+		}
+	}
+
+	public void showMultipleMarkerMenu(PhonActionEvent pae) {
+		Tuple<Set<Integer>, Rectangle> tpl = (Tuple<Set<Integer>, Rectangle>)pae.getData();
+		Set<Integer> recordSet = tpl.getObj1();
+		List<Integer> recordList = new ArrayList<>(recordSet);
+		Rectangle lblRect = tpl.getObj2();
+
+		JPopupMenu menu = new JPopupMenu();
+		MenuBuilder builder = new MenuBuilder(menu);
+
+		if(recordList.size() <= 10) {
+			addRecordsToMenu(builder, recordList, 0, Math.min(10, recordList.size()));
+		} else {
+			int idx = 0;
+			while(idx < recordList.size()) {
+				JMenu subMenu = builder.addMenu(".", String.format("%d ... %d", (idx+1), Math.min(idx+10, recordList.size())));
+				MenuBuilder subBuilder = new MenuBuilder(subMenu);
+				addRecordsToMenu(subBuilder, recordList, idx, Math.min(idx+10, recordList.size()));
+
+				idx += 10;
+			}
+		}
+
+		builder.addSeparator(".", "select_all");
+
+		PhonUIAction selectAllAct = new PhonUIAction(this, "selectRecords", recordSet);
+		selectAllAct.putValue(PhonUIAction.NAME, "Select " + (recordSet.size() == 2 ? " both" : "all"));
+		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all records in list");
+		builder.addItem(".", selectAllAct);
+
+		menu.show((Component)pae.getActionEvent().getSource(), (int)lblRect.getX(), (int)lblRect.getMaxY() );
+	}
+
+	public void setCurrentRecordIndex(PhonActionEvent pae) {
+		Integer rIdx = (Integer) pae.getData();
+		recordGrid.getSelectionModel().clearSelection();
+		recordGrid.setCurrentRecordIndex(rIdx);
+		recordGrid.getSelectionModel().setSelectionInterval(rIdx, rIdx);
+	}
+
+	public void selectRecords(PhonActionEvent pae) {
+		Set<Integer> recordSet = (Set<Integer>)pae.getData();
+
+		int currentRecord = recordGrid.getCurrentRecordIndex();
+		recordGrid.getSelectionModel().clearSelection();
+
+		recordSet.forEach( rIdx -> recordGrid.getSelectionModel().addSelectionInterval(rIdx, rIdx) );
+		if(!recordGrid.getSelectionModel().isSelectedIndex(currentRecord));
+		recordGrid.setCurrentRecordIndex(recordGrid.getSelectionModel().getMinSelectionIndex());
+	}
+
 	protected void painSelectionRect(Graphics2D g2) {
 		Rectangle selectionRect = mouseListener.getSelectionRect();
 		g2.setColor(UIManager.getColor(TimelineViewColors.SELECTION_RECTANGLE));
 		g2.fill(selectionRect);
-
 
 		g2.setColor(Color.lightGray);
 	}
@@ -430,18 +648,12 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	protected void paintZeroLengthSegment(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
 		if(g2.getClipBounds().contains(new Point((int)segmentRect.getX(), (int)segmentRect.getY()))) {
-			Icon recordIcon = null;
-			Color recordLblColor = Color.lightGray;
-			
+
 			Line2D recordLine = new Line2D.Double(segmentRect.getX(), segmentRect.getY(), segmentRect.getX(), segmentRect.getY()+segmentRect.getHeight());
 			
 			if(recordGrid.getCurrentRecordIndex() == recordIndex) {
 				g2.setColor(Color.BLUE);
 				g2.draw(recordLine);
-				
-				if(recordGrid.hasFocus()) {
-					recordLblColor = Color.black;
-				}
 			} else {
 				if(isRecordPressed(recordIndex)) {
 					g2.setColor(Color.GRAY);
@@ -454,42 +666,30 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				}
 				g2.draw(recordLine);
 			}
-			
-			String warnings = null;
-			// check to see if record overlaps other records for speaker
-			var overlapEntries = recordTree.search(Geometries.rectangle(segmentRect.getX(), segmentRect.getY(), 
-					segmentRect.getMaxX(), segmentRect.getMaxY()));
-			AtomicBoolean overlapRef = new AtomicBoolean(false);
-			overlapEntries.map( entry -> entry.value() )
-				.filter( (v) -> recordIndex != v )
-				.forEach( i -> {
-					overlapRef.getAndSet(true);
-				});
-			
-			if(overlapRef.get()) {
-				warnings = "Overlapping segments";
-				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
-			}
-			
-			// check to see if record is outside of media bounds			
-			float recordEndTime = recordGrid.timeAtX(segmentRect.getMaxX());
-			if(recordGrid.getTimeModel().getMediaEndTime() > 0.0f && recordEndTime > recordGrid.getTimeModel().getMediaEndTime()) {
-				warnings = (warnings != null ? warnings + "\n" : "" ) + "Segment out of bounds";
-				recordIcon = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
-			}
-			
-			Rectangle2D lblRect = paintRecordNumberLabel(g2, recordIndex, recordIcon, recordLblColor, segmentRect);
-			recordTree = recordTree.add(recordIndex, Geometries.rectangle((float)lblRect.getX(), (float)lblRect.getY(), 
-					(float)lblRect.getMaxX(), (float)(lblRect.getMaxY() - 0.1f)));
-	
-			if(warnings != null) {
-				// add warning to UI
-				messageTree = messageTree.add(warnings, Geometries.rectangle(lblRect.getX(), lblRect.getY(),
-						lblRect.getMaxX(), lblRect.getMaxY()));
-			}
 		}
 	}
-	
+
+	protected Rectangle2D calculateSegmentLabelRect(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
+		final Font font = recordGrid.getFont();
+		if(font != null) {
+			renderer.setFont(font);
+		}
+
+		ImageIcon icon = IconManager.getInstance().getIcon("blank", IconSize.SMALL);
+		renderer.setHorizontalTextPosition(SwingConstants.LEFT);
+		renderer.setIcon(icon);
+
+		String labelText = String.format("#%d", (recordIndex+1));
+		renderer.setText(labelText);
+
+		Dimension prefSize = renderer.getPreferredSize();
+
+		int labelX = (int)segmentRect.getX();
+		int labelY = (int)(segmentRect.getY());
+
+		return new Rectangle2D.Double(labelX, labelY, prefSize.getWidth(), prefSize.getHeight());
+	}
+
 	protected void paintSegmentLabelAndActions(Graphics2D g2, int recordIndex, Record r, Rectangle2D segmentRect) {
 		Icon recordIcon = null;
 		Color recordLblColor = (recordGrid.getSelectionModel().isSelectedIndex(recordIndex) ? Color.black : Color.lightGray);
@@ -964,7 +1164,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 						currentMouseOverMarker.addPropertyChangeListener("valueAdjusting", (evt) -> {
 							if(currentMouseOverMarker.isValueAdjusting()) {
 								// set current record
-								recordGrid.fireRecordClicked(currentMouseOverMarkerRecordIdx, e);
+								PhonActionEvent pae = new PhonActionEvent(new ActionEvent(e.getSource(), -1, ""), currentMouseOverMarkerRecordIdx);
+								setCurrentRecordIndex(pae);
 							}
 						});
 						
