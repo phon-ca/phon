@@ -109,7 +109,7 @@ public class IPAFieldTooltip {
 			if(currentFrame == null) return;
 				Toolkit.getDefaultToolkit().removeAWTEventListener(this);
 			if(event instanceof KeyEvent) {
-				if(((KeyEvent) event).getKeyCode() == KeyEvent.VK_F2) {
+				if(((KeyEvent) event).getKeyCode() == KeyEvent.VK_TAB) {
 					SwingUtilities.invokeLater( () -> {
 						final ToolTipWindow focusTooltip = currentFrame;
 						focusTooltip.setFocusableWindowState(true);
@@ -203,7 +203,7 @@ public class IPAFieldTooltip {
 
 			add(new JScrollPane(contentPanel));
 
-			label = new JLabel("Press F2 for focus");
+			label = new JLabel("Press Tab for focus");
 			label.setFont(label.getFont().deriveFont(Font.ITALIC, 10.0f));
 			add(label);
 
