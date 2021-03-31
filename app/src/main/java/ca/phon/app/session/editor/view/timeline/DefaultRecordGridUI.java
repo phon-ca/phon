@@ -509,13 +509,19 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Set<Integer> rSet = new HashSet<>(recordSet);
 		rSet.remove(r1Idx);
 		rSet.remove(r2Idx);
-		Set<Integer> selectedRecords = new HashSet<Integer>();
-		selectedRecords.retainAll(rSet);
+
 		if(itr.hasNext()) {
 			builder.append(",");
 			builder.append("<span style='color: ");
 
-			if(selectedRecords.size() > 0) {
+			boolean hasSelected = false;
+			for(int rIdx:recordGrid.getSelectionModel().getSelectedIndices()) {
+				if(rSet.contains(rIdx)) {
+					hasSelected = true;
+					break;
+				}
+			}
+			if(hasSelected) {
 				builder.append("black;'>");
 			} else {
 				builder.append("gray;'>");
