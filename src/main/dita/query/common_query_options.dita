@@ -7,7 +7,7 @@
             into collapsible sections inside query forms. To expand/collapse a section click the
             dark-grey section header.</p>
     </body>
-    
+
     <topic id="search_by">
         <title>Search by</title>
         <shortdesc>Control search domain of queries/analyses.</shortdesc>
@@ -26,14 +26,14 @@
                     href="#syllable_options" format="dita">Syllable Options</xref> respectively.</p>
         </body>
     </topic>
-    
+
     <topic id="group_options">
         <title>Group Options</title>
         <shortdesc>Limit the results based on position or an expression defining the word
             group.</shortdesc>
         <body>
             <image placement="break" href="images/group_options.png" id="image_sym_nnk_qnb"/>
-            
+
             <ol>
                 <li>
                     <p>Open the <uicontrol>Group Filter</uicontrol> panel by clicking on its title
@@ -49,36 +49,37 @@
                 </li>
                 <li>
                     <p>Enter the expression you would like to search for in the
-                        <uicontrol>Expression</uicontrol> field.</p>
+                            <uicontrol>Expression</uicontrol> field.</p>
                     <itemgroup>
                         <note>A filter can be used to <i>exclude</i> results based on an expression
-                            defining the word group, depending on the filter expression. For example,
-                            you can use the following regular expression (where <codeph>PATTERN</codeph>
-                            is the pattern you wish to
+                            defining the word group, depending on the filter expression. For
+                            example, you can use the following regular expression (where
+                                <codeph>PATTERN</codeph> is the pattern you wish to
                             exclude):<codeblock>^(?:(?!PATTERN).)*$</codeblock></note>
                     </itemgroup>
                 </li>
                 <li>
                     <p>Choose whether or not your query should be <uicontrol>Case
-                        sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
-                        check boxes.</p>
+                            sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using
+                        the check boxes.</p>
                     <itemgroup>
                         <note><uicontrol>Case sensitive</uicontrol> is not applicable to
-                            <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
-                            <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                                <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+                            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>
+                            expressions.</note>
                     </itemgroup>
                 </li>
             </ol>
         </body>
     </topic>
-    
+
     <topic id="aligned_group_options">
         <title>Aligned Group Filter</title>
-        <shortdesc>You may also limit the results based on an expression defining an aligned word group
-            in another tier.</shortdesc>
+        <shortdesc>You may also limit the results based on an expression defining an aligned word
+            group in another tier.</shortdesc>
         <body>
             <image placement="break" href="images/aligned_group_filter.png" id="image_sym_nnk_qnb2"/>
-            
+
             <section>From the <uicontrol>Aligned Group Filter</uicontrol> section of <wintitle>Group
                     Options</wintitle>:</section>
             <ol>
@@ -91,28 +92,30 @@
                 </li>
                 <li>
                     <p>Enter the expression you would like to filter with in the
-                        <uicontrol>Expression</uicontrol> field.</p>
+                            <uicontrol>Expression</uicontrol> field.</p>
                 </li>
                 <li>
                     <p>Choose whether or not your query should be <uicontrol>Case
-                        sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
-                        check boxes.</p>
+                            sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using
+                        the check boxes.</p>
                     <itemgroup>
                         <note><uicontrol>Case sensitive</uicontrol> is not applicable to
-                            <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
-                            <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                                <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+                            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>
+                            expressions.</note>
                     </itemgroup>
                 </li>
             </ol>
         </body>
     </topic>
-    
+
     <topic id="word_options">
         <title>Word Options</title>
-        <shortdesc>Limit the results based on position or an expression defining the word.</shortdesc>
+        <shortdesc>Limit the results based on position or an expression defining the
+            word.</shortdesc>
         <body>
             <image placement="break" href="images/word_options.png" id="image_sym1_nnk_qnb"/>
-            
+
             <ol>
                 <li>
                     <p>Open the <uicontrol>Word Filter</uicontrol> panel by clicking on its title
@@ -122,9 +125,9 @@
                     <p>Select the <uicontrol>Search by word</uicontrol> check box.</p>
                 </li>
                 <li>
-                    <p>To filter by word position, select the word positions you would like to search
-                        (i.e. singleton words; or initial, medial and/or final words in groups with
-                        multiple words).</p>
+                    <p>To filter by word position, select the word positions you would like to
+                        search (i.e. singleton words; or initial, medial and/or final words in
+                        groups with multiple words).</p>
                 </li>
                 <li>
                     <p>To filter by content, choose an <uicontrol>Expression Type</uicontrol> using
@@ -132,36 +135,37 @@
                 </li>
                 <li>
                     <p>Enter the expression you would like to search for in the
-                        <uicontrol>Expression</uicontrol> field.</p>
+                            <uicontrol>Expression</uicontrol> field.</p>
                     <itemgroup>
                         <note>A filter can be used to <i>exclude</i> results based on an expression
-                            defining the word group, depending on the filter expression. For example,
-                            you can use the following regular expression (where <codeph>PATTERN</codeph>
-                            is the pattern you wish to
+                            defining the word group, depending on the filter expression. For
+                            example, you can use the following regular expression (where
+                                <codeph>PATTERN</codeph> is the pattern you wish to
                             exclude):<codeblock>^(?:(?!PATTERN).)*$</codeblock></note>
                     </itemgroup>
                 </li>
                 <li>
                     <p>Choose whether or not your query should be <uicontrol>Case
-                        sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
-                        check boxes.</p>
+                            sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using
+                        the check boxes.</p>
                     <itemgroup>
                         <note><uicontrol>Case sensitive</uicontrol> is not applicable to
-                            <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
-                            <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                                <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+                            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>
+                            expressions.</note>
                     </itemgroup>
                 </li>
             </ol>
         </body>
     </topic>
-    
+
     <topic id="aligned_word_options">
         <title>Aligned Word Filter</title>
         <shortdesc>You may also limit the results based on an expression defining an aligned word in
             another tier.</shortdesc>
         <body>
             <image placement="break" href="images/aligned_word_filter.png" id="image_sym2_nnk_qnb2"/>
-            
+
             <section>From the <uicontrol>Aligned Word Filter</uicontrol> section of the
                     <wintitle>Word Options</wintitle>:</section>
             <ol>
@@ -174,45 +178,46 @@
                 </li>
                 <li>
                     <p>Enter the expression you would like to filter with in the
-                        <uicontrol>Expression</uicontrol> field.</p>
+                            <uicontrol>Expression</uicontrol> field.</p>
                 </li>
                 <li>
                     <p>Choose whether or not your query should be <uicontrol>Case
-                        sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
-                        check boxes.</p>
+                            sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using
+                        the check boxes.</p>
                     <itemgroup>
                         <note><uicontrol>Case sensitive</uicontrol> is not applicable to
-                            <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
-                            <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                                <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+                            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>
+                            expressions.</note>
                     </itemgroup>
                 </li>
             </ol>
         </body>
     </topic>
-    
+
     <topic id="syllable_options">
         <title>Syllable Options</title>
         <shortdesc>Limit the results based on position or an expression defining the
             syllable.</shortdesc>
         <body>
             <image placement="break" href="images/syllable_options.png" id="image_syll_nnk_qnb"/>
-            
+
             <ol>
                 <li>
-                    <p>Open the <uicontrol>Syllable Filter</uicontrol> panel by clicking on its title
-                        bar.</p>
+                    <p>Open the <uicontrol>Syllable Filter</uicontrol> panel by clicking on its
+                        title bar.</p>
                 </li>
                 <li>
                     <p>Select the <uicontrol>Search by syllable</uicontrol> check box.</p>
                 </li>
                 <li>
                     <p>Choose whether to <uicontrol>Ignore results from truncated
-                        syllables</uicontrol> by selecting or deselecting the check box.</p>
+                            syllables</uicontrol> by selecting or deselecting the check box.</p>
                 </li>
                 <li>
-                    <p>To filter by syllable position, select the syllable positions you would like to
-                        search (i.e. singleton syllables; or initial, medial and/or final syllables in
-                        words with multiple syllables).</p>
+                    <p>To filter by syllable position, select the syllable positions you would like
+                        to search (i.e. singleton syllables; or initial, medial and/or final
+                        syllables in words with multiple syllables).</p>
                 </li>
                 <li>
                     <p>To filter by syllable stress type, select the stress types you would like to
@@ -224,35 +229,36 @@
                 </li>
                 <li>
                     <p>Enter the expression you would like to search for in the
-                        <uicontrol>Expression</uicontrol> field.</p>
+                            <uicontrol>Expression</uicontrol> field.</p>
                     <itemgroup>
                         <note>A filter can be used to <i>exclude</i> results based on an expression
-                            defining the word group, depending on the filter expression. For example,
-                            you can use the following regular expression (where <codeph>PATTERN</codeph>
-                            is the pattern you wish to
+                            defining the word group, depending on the filter expression. For
+                            example, you can use the following regular expression (where
+                                <codeph>PATTERN</codeph> is the pattern you wish to
                             exclude):<codeblock>^(?:(?!PATTERN).)*$</codeblock></note>
                     </itemgroup>
                 </li>
                 <li>
                     <p>Choose whether or not your query should be <uicontrol>Case
-                        sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using the
-                        check boxes.</p>
+                            sensitive</uicontrol> and/or an <uicontrol>Exact match</uicontrol> using
+                        the check boxes.</p>
                     <itemgroup>
                         <note><uicontrol>Case sensitive</uicontrol> is not applicable to
-                            <uicontrol>Phonex</uicontrol>, <uicontrol>Stress pattern</uicontrol>, or
-                            <uicontrol>CGV pattern</uicontrol> expressions.</note>
+                                <uicontrol>Phonex</uicontrol>, <uicontrol>Stress
+                            pattern</uicontrol>, or <uicontrol>CGV pattern</uicontrol>
+                            expressions.</note>
                     </itemgroup>
                 </li>
             </ol>
         </body>
     </topic>
-    
+
     <topic id="additional_tier_data">
         <title>Additional Tier Data</title>
         <shortdesc>Include data from additional tiers with the result.</shortdesc>
         <body>
             <image placement="break" href="images/additional_tier_data.png" id="image_tiers_nnk_qnb"/>
-            
+
             <p>Data in tiers aligned with the primary query object may be included with the result.
                 Use the provided checkboxes to include data from default tiers or use the text field
                 to provide a comma-separated list of user-defined tiers. When
@@ -261,14 +267,13 @@
                 section, when <uicontrol>Word</uicontrol> is selected the <uicontrol>Add aligned
                     words</uicontrol> section will also be available. The selected tier data will be
                 displayed as either 'Tier Name (Group)' or 'Tier Name (Word)' in report tables.</p>
-            <p>
-                Several 'derived' tiers based on IPA data may be include using the text field.
-                <ul>
+            <p> Several 'derived' tiers based on IPA data may be include using the text field. <ul>
                     <li><codeph>Target Syllabification</codeph> - IPA Target including syllable
                         constituent labels (e.g., c:O for a c which is an onset)</li>
                     <li><codeph>Actual Syllabification</codeph> - IPA Actual including syllable
                         constituent labels</li>
-                    <li><codeph>Target CV</codeph>- IPA Target covered using C for consonants and V for vowels</li>
+                    <li><codeph>Target CV</codeph>- IPA Target covered using C for consonants and V
+                        for vowels</li>
                     <li><codeph>Actual CV</codeph> - IPA Actual covered using C for consonants and V
                         for vowels</li>
                     <li><codeph>Target Stress</codeph> - IPA Target syllables covered using 1 for
@@ -279,34 +284,49 @@
             </p>
         </body>
     </topic>
-    
+
     <topic id="participant_filter">
         <title>Participant Filter</title>
         <shortdesc>Limit the results based on participant information.</shortdesc>
         <body>
             <image placement="break" href="images/participant_options.png" id="image_sym_nnk_qnb"/>
-            
+
             <ol>
                 <li>
                     <ul>
                         <li>To filter by participant names, enter one or more names in the
-                            <uicontrol>Participant names</uicontrol> field, separated by comma if
-                            applicable.</li>
+                                <uicontrol>Participant names</uicontrol> field, separated by comma
+                            if applicable.</li>
                     </ul>
                     <ul id="choices_xc1_d1j_sj">
                         <li>To filter by age, use the context menu to select equal to, less than, or
-                            greater than and enter a name in the first <uicontrol>Age</uicontrol> field
-                            (using the format yy;mm.dd).</li>
+                            greater than and enter a name in the first <uicontrol>Age</uicontrol>
+                            field (using the format yy;mm.dd).</li>
                     </ul>
                     <ul id="choices_rp3_h1j_sj">
                         <li>To filter using an age range, select an operator using the context menu,
                             and specify the relevant options and age in the second
-                            <uicontrol>Age</uicontrol> field.</li>
+                                <uicontrol>Age</uicontrol> field.</li>
                     </ul>
                 </li>
             </ol>
         </body>
     </topic>
-    
-    
+
+    <topic id="ignore_diacritics">
+        <title>Diacritic Options</title>
+        <shortdesc>Ignore diacritics when comparing IPA transcripts.</shortdesc>
+        <body>
+            <image placement="break" href="images/ignore_diacritics_options.png"
+                id="image_sym_nnk_qnb"/>
+
+            <p>Use the checkbox to enable ignoring diacritics when comparing IPA transcripts. There
+                are two modes to ignore diacritics: only or except. For example, you may choose to
+                ignore 'only' a paticular set of diacritics, or 'except' a set of selected
+                diacritics. To select diacritics, click the 'select diacritics' button; a popup IPA
+                map will appear allowing you to make the selection.</p>
+            <p>In some forms the verb 'ignore' may be replaced by 'strip' to indicate the
+                information will be removed from the affected data.</p>
+        </body>
+    </topic>
 </topic>
