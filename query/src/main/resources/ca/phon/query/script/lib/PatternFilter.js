@@ -494,7 +494,7 @@ exports.PatternFilter = function (id) {
 		if (exactMatch == true) {
 			if (strA.equals(strB)) {
 				var v = {
-					start: 0, end: strA.length(), value: obj
+					start: 0, end: strA.length(), value: obj, position: "initial"
 				};
 				retVal.push(v);
 			}
@@ -502,15 +502,33 @@ exports.PatternFilter = function (id) {
 			var i = 0;
 			while ((i = strA.indexOf(strB, i)) >= 0) {
 				var myValue;
+				var position = "unknown";
 				if (obj instanceof IPATranscript) {
 					var startIpaIdx = obj.ipaIndexOf(i);
 					var endIpaIdx = obj.ipaIndexOf(i + strB.length() -1);
 					myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
+
+					if(startIpaIdx == 0 ||
+						(startIpaIdx == 1 && (strA.startsWith("\u02c8") || strA.startsWith("\u02cc")))) {
+						position = "initial";
+					} else if(i + strB.length() == strA.length()) {
+						position = "final";
+					} else {
+						position = "medial";
+					}
 				} else {
 					myValue = strA.substring(i, i + strB.length());
+
+					if(i == 0) {
+						position = "initial";
+					} else if(i + strB.length() == strA().length()) {
+						position = "final";
+					} else {
+						position = "medial";
+					}
 				}
 				var v = {
-					start: i, end: i + strB.length(), value: myValue
+					start: i, end: i + strB.length(), value: myValue, position: position
 				};
 
 				retVal.push(v);
@@ -529,7 +547,7 @@ exports.PatternFilter = function (id) {
 		if (exactMatch == true) {
 			if (regexMatcher.matches()) {
 				v = {
-					start: 0, end: obj.toString().length(), value: obj
+					start: 0, end: obj.toString().length(), value: obj, position: "initial"
 				};
 				retVal.push(v);
 			} else {
@@ -546,12 +564,29 @@ exports.PatternFilter = function (id) {
 						&& endIpaIdx >= 0 && endIpaIdx >= startIpaIdx && endIpaIdx < obj.length()) {
 						myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
 					}
+
+					if(startIpaIdx == 0 ||
+						(startIpaIdx == 1 && (strA.startsWith("\u02c8") || strA.startsWith("\u02cc")))) {
+						position = "initial";
+					} else if(regexMatcher.start() + strB.length() == strA.length()) {
+						position = "final";
+					} else {
+						position = "medial";
+					}
 				} else {
 					myValue = regexMatcher.group();
+
+					if(regexMatcher.start() == 0) {
+						position = "initial";
+					} else if(regexMatcher.start() + strB.length() == strA().length()) {
+						position = "final";
+					} else {
+						position = "medial";
+					}
 				}
 				if(myValue != null) {
 					v = {
-						start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher
+						start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher, position: position
 					};
 	
 					retVal.push(v);
@@ -586,12 +621,22 @@ exports.PatternFilter = function (id) {
 		if (exactMatch == true) {
 			if (phonexMatcher.matches()) {
 				v = {
-					start: 0, end: obj.length(), value: obj, matcher: phonexMatcher
+					start: 0, end: obj.length(), value: obj, matcher: phonexMatcher, position: "initial"
 				};
 				retVal.push(v);
 			}
 		} else {
 			while (phonexMatcher.find()) {
+				var position = "unknown";
+				if(phonexMatcher.start() == 0 ||
+					(phonexMatcher.start() == 1 && (obj.elementAt(0).toString().startsWith("\u02c8") || obj.elementAt(0).toString().startsWith("\u02cc")))) {
+					position = "initial";
+				} else if(phonexMatcher.end() == obj.length()) {
+					position = "final";
+				} else {
+					position = "medial";
+				}
+
 				var groupData = new Array();
 
 				for (grpIdx = 1; grpIdx <= phonexMatcher.groupCount(); grpIdx++) {
@@ -614,6 +659,7 @@ exports.PatternFilter = function (id) {
 
 				v = {
 					start: phonexMatcher.start(), end: phonexMatcher.end(), value: new IPATranscript(phonexMatcher.group()),
+					position: position,
 					groups: groupData
 				};
 				retVal.push(v);

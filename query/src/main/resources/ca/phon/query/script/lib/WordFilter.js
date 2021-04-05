@@ -123,8 +123,7 @@ exports.WordFilter = function (id) {
 	 *
 	 * {
 	 *   wordIndex: int,
-	 *   start: int,
-	 *   end: int,
+	 *   groupposition: (initial|medial|final),
 	 *   word: obj
 	 * }
 	 */
@@ -138,16 +137,33 @@ exports.WordFilter = function (id) {
 		var wordCount = group.getWordCount(tierName);
 		for (var wIndex = 0; wIndex < wordCount; wIndex++) {
 			var word = group.getAlignedWord(wIndex);
+			var position = "unknown";
 
 			var posOk = false;
-			if (wIndex == 0 && this.wInitial == true) posOk = true;
-			if (wIndex > 0 && wIndex < wordCount -1 && this.wMedial == true) posOk = true;
-			if (wIndex == wordCount -1 && this.wFinal == true) posOk = true;
+			if (wIndex == 0 && this.wInitial == true) {
+				posOk = true;
+				position = "initial";
+			}
+			if (wIndex > 0 && wIndex < wordCount -1 && this.wMedial == true) {
+				posOk = true;
+				position = "medial";
+			}
+			if (wIndex == wordCount -1 && this.wFinal == true) {
+				posOk = true;
+				position = "final";
+			}
 
-			if (wIndex == 0 && wordCount == 1) posOk = this.wSingleton;
+			if (wIndex == 0 && wordCount == 1) {
+				posOk = this.wSingleton;
+				position = "initial";
+			}
 
 			if (posOk == true) {
-				retVal.add(word);
+				retVal.add({
+					wordIndex: wIndex,
+					groupPosition: position,
+					word: word
+				});
 			}
 		}
 

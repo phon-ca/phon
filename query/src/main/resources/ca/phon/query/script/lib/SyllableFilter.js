@@ -235,7 +235,13 @@ exports.SyllableFilter = function (id) {
 	 * object.
 	 *
 	 * @param obj
-	 * @return list of syllables as IPATranscript objects
+	 * @return list of values with the following protocol
+	 *
+	 * {
+	 *     syllableIndex: int,
+	 *     wordPosition: (initial|medial|final),
+	 *     syllable: IPATranscript
+	 * }
 	 */
 	this.getRequestedSyllables = function (ipaObj, aligned) {
 		var retVal = new java.util.ArrayList();
@@ -248,14 +254,27 @@ exports.SyllableFilter = function (id) {
 		sIndex++) {
 			var syll = syllables.get(sIndex);
 			var stressOk = this.checkStress(syll);
+			var position = "unknown";
 
 			var posOk = false;
-			if (sIndex == 0 && this.sInitial == true) posOk = true;
-			if (sIndex > 0 && sIndex < syllables.size() -1 && this.sMedial == true) posOk = true;
-			if (sIndex == syllables.size() -1 && this.sFinal == true) posOk = true;
+			if (sIndex == 0 && this.sInitial == true) {
+				posOk = true;
+				position = "initial";
+			}
+			if (sIndex > 0 && sIndex < syllables.size() -1 && this.sMedial == true) {
+				posOk = true;
+				position = "medial";
+			}
+			if (sIndex == syllables.size() -1 && this.sFinal == true) {
+				posOk = true;
+				position = "final";
+			}
 
 			// take care of singleton cases
-			if (sIndex == 0 && syllables.size() == 1) posOk = this.sSingleton;
+			if (sIndex == 0 && syllables.size() == 1) {
+				posOk = this.sSingleton;
+				position = "initial";
+			}
 
 			var truncatedOk = true;
 			if (aligned != null && this.ignoreTruncated == true) {
@@ -265,7 +284,11 @@ exports.SyllableFilter = function (id) {
 			var typeOk = this.checkType(syll);
 
 			if (posOk == true && stressOk == true && truncatedOk == true && typeOk) {
-				retVal.add(syll);
+				retVal.add({
+					syllableIndex: sIndex,
+					syllablePosition: position,
+					syllable: syll
+				});
 			}
 		}
 
