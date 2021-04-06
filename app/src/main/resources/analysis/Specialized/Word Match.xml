@@ -33,7 +33,7 @@
                     <oga:property key="cvPatternDiacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
                     <oga:property key="cvPatternDiacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
                     <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography]]></oga:property>
-                    <oga:property key="cvPatternDiacriticOptions.selectedDiacritics"><![CDATA[[ˑ, ː]]]></oga:property>
+                    <oga:property key="cvPatternDiacriticOptions.selectedDiacritics"><![CDATA[[ː, ˑ]]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
@@ -97,16 +97,17 @@ var cvPatternDiacriticOptionsParam;
 var cvPatternDiacriticOptions = {};
 
 var cvPatternOptionsParamInfo = {
-	"ids": ["cvPatternIncludeStress", "cvPatternIncludeExplicit", "cvPatternInsertImplicit", "cvPatternCompensatoryLengthening"],
+	"ids": ["cvPatternIncludeStress", "cvPatternIncludeExplicit", "cvPatternInsertImplicit", "cvPatternCompensatoryLengthening", "cvPatternSimplifyComposedPhones"],
 	"desc": "",
-	"titles": ["Include stress makers", "Include explicit syllable boundaries (.)", "Insert implicit (unmarked) syllable boundaries", "Compensatory lengthening (Cː -> CC)"],
-	"defs": [true, true, false, true]
+	"titles": ["Include stress makers", "Include explicit syllable boundaries (.)", "Insert implicit (unmarked) syllable boundaries", "Compensatory lengthening (Cː -> CC)", "Simplify composed phones (C\u0361C -> C)"],
+	"defs": [true, true, false, true, true]
 };
 var cvPatternOptionsParam;
 var cvPatternIncludeStress = cvPatternOptionsParamInfo.defs[0];
 var cvPatternIncludeExplicit = cvPatternOptionsParamInfo.defs[1];
 var cvPatternInsertImplicit = cvPatternOptionsParamInfo.defs[2];
 var cvPatternCompensatoryLengthening = cvPatternOptionsParamInfo.defs[3];
+var cvPatternSimplifyComposedPhones = cvPatternOptionsParamInfo.defs[4];
 
 var diacriticOptionsParamInfo = {
 		"id": "diacriticOptions",
@@ -213,7 +214,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="c23d66e" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-29T07:27:28.986-02:30" name="Aligned IPA Domains" uuid="87cbcf0f-2bae-4dda-b348-81fc4cf5875b">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-04-06T14:36:25.277-02:30" name="Aligned IPA Domains" uuid="716bb08d-ac83-4e46-a8c2-2daf2bd0292e">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -239,7 +240,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="214d3352f4b34bbd" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5b448572">
+            <graph id="42dfdfb2">
                 <node id="c56d762a8e494f07" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -279,7 +280,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="8adf3ae3283641a5" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="62d1aa99">
+            <graph id="3ed1c248">
                 <node id="3b2754d5a9de4ca8" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -577,16 +578,17 @@ var cvPatternDiacriticOptionsParam;
 var cvPatternDiacriticOptions = {};
 
 var cvPatternOptionsParamInfo = {
-	"ids": ["cvPatternIncludeStress", "cvPatternIncludeExplicit", "cvPatternInsertImplicit", "cvPatternCompensatoryLengthening"],
+	"ids": ["cvPatternIncludeStress", "cvPatternIncludeExplicit", "cvPatternInsertImplicit", "cvPatternCompensatoryLengthening", "cvPatternSimplifyComposedPhones"],
 	"desc": "",
-	"titles": ["Include stress makers", "Include explicit syllable boundaries (.)", "Insert implicit (unmarked) syllable boundaries", "Compensatory lengthening (Cː -> CC)"],
-	"defs": [true, true, false, true]
+	"titles": ["Include stress makers", "Include explicit syllable boundaries (.)", "Insert implicit (unmarked) syllable boundaries", "Compensatory lengthening (Cː -> CC)", "Simplify composed phones (C\u0361C -> C)"],
+	"defs": [true, true, false, true, true]
 };
 var cvPatternOptionsParam;
 var cvPatternIncludeStress = cvPatternOptionsParamInfo.defs[0];
 var cvPatternIncludeExplicit = cvPatternOptionsParamInfo.defs[1];
 var cvPatternInsertImplicit = cvPatternOptionsParamInfo.defs[2];
 var cvPatternCompensatoryLengthening = cvPatternOptionsParamInfo.defs[3];
+var cvPatternSimplifyComposedPhones = cvPatternOptionsParamInfo.defs[4];
 
 function setup_params(params) {
 	ignoreTruncatedParam = new BooleanScriptParam(
@@ -700,14 +702,30 @@ function cvPattern(ipa) {
 		cvPattern = cvPattern.replaceAll("V&{halflong}", "VV");
 
 		cvPattern = cvPattern.replaceAll("V_V&{long}", "V͡VV");
-		cvPattern = cvPattern.replaceAll("C_V&{long}", "C͡VV");
-		cvPattern = cvPattern.replaceAll("V_C&{long}", "V͡CC");
+		cvPattern = cvPattern.replaceAll("G_V&{long}", "G͡VV");
+		cvPattern = cvPattern.replaceAll("V_G&{long}", "V͡GV");
+		
 		cvPattern = cvPattern.replaceAll("C_C&{long}", "C͡CC");
+		cvPattern = cvPattern.replaceAll("C_G&{long}", "G͡CC");
+		cvPattern = cvPattern.replaceAll("G_C&{long}", "C͡GC");
 
 		cvPattern = cvPattern.replaceAll("V_V&{halflong}", "V͡VV");
-		cvPattern = cvPattern.replaceAll("C_V&{halflong}", "C͡VV");
-		cvPattern = cvPattern.replaceAll("V_C&{halflong}", "V͡CC");
+		cvPattern = cvPattern.replaceAll("G_V&{halflong}", "G͡VV");
+		cvPattern = cvPattern.replaceAll("V_G&{halflong}", "V͡GC");
+		
 		cvPattern = cvPattern.replaceAll("C_C&{halflong}", "C͡CC");
+		cvPattern = cvPattern.replaceAll("C_G&{halflong}", "G͡CC");
+		cvPattern = cvPattern.replaceAll("G_C&{halflong}", "C͡GC");
+	}
+
+	if(cvPatternSimplifyComposedPhones == true) {
+		cvPattern = cvPattern.replaceAll("C_C", "C");
+		cvPattern = cvPattern.replaceAll("C_G", "C");
+		cvPattern = cvPattern.replaceAll("G_C", "C");
+		
+		cvPattern = cvPattern.replaceAll("V_V", "V");
+		cvPattern = cvPattern.replaceAll("V_G", "V");
+		cvPattern = cvPattern.replaceAll("G_V", "V");
 	}
 
 	return cvPattern;
@@ -748,7 +766,9 @@ function run(context) {
 		var acv = cvPattern(ipaA);
 		destRow[col++] = tcv;
 		destRow[col++] = acv;
-		destRow[col++] = (tcv.toString().matches(acv.toString()) ? "1" : "0");
+
+		var cvPatternMatch = tcv.toString().matches(acv.toString());
+		destRow[col++] = cvPatternMatch;
 
 		matchTable.addRow(destRow);
 	}
@@ -933,7 +953,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="12592a37" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="9988ca5">
+            <graph id="39e43987">
                 <node id="4bcac5a4" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1031,7 +1051,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="de1d0f5ec0604336" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="6c5ecf25">
+                    <graph id="8dd3a49">
                         <node id="dc94bfae68de4e33" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1313,7 +1333,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="fe9c8577822e4fc1" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="143b0d5a">
+                            <graph id="3e892c11">
                                 <node id="70bbcf0438cf40ba" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -1411,7 +1431,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="4bf1b8a048c94395" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="34d21198">
+                                    <graph id="94f6a9a">
                                         <node id="b236aec7e79543be" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1470,7 +1490,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="8a28193a84ad46e3" name="Tier Match Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="40666bf6">
+                                    <graph id="33b83132">
                                         <node id="abc8574952644e38" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1598,7 +1618,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="d91a610ffda740a7" name="CV Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2a4c09a8">
+                                    <graph id="2dfd28c7">
                                         <node id="3cad96d73b714417" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1716,7 +1736,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="f96f97a383d145e0" name="Stress Match Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="7524daa9">
+                                    <graph id="16981e54">
                                         <node id="9e6108ed56ff46e1" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1834,7 +1854,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="d68dfbfb5ca48e2" name="Syllable Count Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="21e0023">
+                                    <graph id="6c3b8e3d">
                                         <node id="a889401e208845d8" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
