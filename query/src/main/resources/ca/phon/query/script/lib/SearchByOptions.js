@@ -42,6 +42,8 @@ exports.SearchByOptions = function(id) {
     var includePositionalInformationParam;
     this.includePositionalInfo = includePositionalInformationParamInfo.def;
 
+    this.includePositionalOption = false;
+
     // these params are given during param_setup and references are kept here
     this.searchByWordParam = null;
     this.searchBySyllableParam = null;
@@ -108,13 +110,15 @@ exports.SearchByOptions = function(id) {
             thenBySyllableParam.addPropertyChangeListener(thenBySyllableListener);
         }
 
-        includePositionalInformationParam = new BooleanScriptParam(
-            includePositionalInformationParamInfo.id,
-            includePositionalInformationParamInfo.desc,
-            includePositionalInformationParamInfo.title,
-            includePositionalInformationParamInfo.def
-        );
-        params.add(index++, includePositionalInformationParam);
+        if(this.includePositionalOption == true) {
+            includePositionalInformationParam = new BooleanScriptParam(
+                includePositionalInformationParamInfo.id,
+                includePositionalInformationParamInfo.desc,
+                includePositionalInformationParamInfo.title,
+                includePositionalInformationParamInfo.def
+            );
+            params.add(index++, includePositionalInformationParam);
+        }
     };
 
 };

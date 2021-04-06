@@ -68,6 +68,7 @@ function setup_params(params) {
 	filters.syllable.param_setup(params);
 	
 	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.includePositionalOption = false;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
 
 	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
@@ -135,7 +136,8 @@ function query_record(recordIndex, record) {
 			toSearch.length = 0;
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
-				var word = selectedWords[j];
+				var wordData = selectedWords[j];
+				var word = wordData.word;
 
 				var wordAlignedMeta = new java.util.LinkedHashMap();
 				wordAlignedMeta.putAll(groupAlignedMeta);
@@ -187,8 +189,11 @@ function query_record(recordIndex, record) {
 				var sylls = filters.syllable.getRequestedSyllables(obj.targetRep, aligned);
 
 				for (k = 0; k < sylls.length; k++) {
-				    var alignedEles = aligned.getAligned(sylls[k].removePunctuation());
-				    var syllPhoneAlignment = aligned.getSubAlignment(sylls[k], new IPATranscript(alignedEles));
+					var syllData = sylls[k];
+					var syll = syllData.syllable;
+
+				    var alignedEles = aligned.getAligned(syll.removePunctuation());
+				    var syllPhoneAlignment = aligned.getSubAlignment(syll, new IPATranscript(alignedEles));
 				
 					syllList.push([syllPhoneAlignment, toSearch[j][1], toSearch[j][2]]);
 				}
