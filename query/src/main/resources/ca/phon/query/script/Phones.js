@@ -60,10 +60,11 @@ function setup_params(params) {
 	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
 
 	includeAlignedParam = new BooleanScriptParam(
-	includeAlignedParamInfo.id,
-	includeAlignedParamInfo.desc,
-	includeAlignedParamInfo.title,
-	includeAlignedParamInfo.def);
+		includeAlignedParamInfo.id,
+		includeAlignedParamInfo.desc,
+		includeAlignedParamInfo.title,
+		includeAlignedParamInfo.def
+	);
 
 	params.add(resultFilterSection);
 	params.add(includeAlignedParam);
@@ -105,7 +106,7 @@ function setup_params(params) {
 
 	filters.searchBy.includeSyllableOption = true;
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
-	
+
 	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
 	params.add(otherDataHeader);
 	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
@@ -179,10 +180,15 @@ function query_record(recordIndex, record) {
 			toSearch.length = 0;
 			var selectedWords = filters.word.getRequestedWords(group, searchTier);
 			for (j = 0; j < selectedWords.length; j++) {
-				var word = selectedWords[j];
+				var wordData = selectedWords[j];
+				var word = wordData.word;
 
 				var wordAlignedMeta = new java.util.LinkedHashMap();
 				wordAlignedMeta.putAll(groupAlignedMeta);
+
+				if(filters.searchBy.includePositionalInfo == true) {
+					wordAlignedMeta.put("Word Position", wordData.groupPosition);
+				}
 
 				var wordAlignedResults = new Array();
 				for(var k = 0; k < groupAlignedResults.length; k++) {
@@ -230,7 +236,17 @@ function query_record(recordIndex, record) {
 				var sylls = filters.syllable.getRequestedSyllables(obj, aligned);
 
 				for (k = 0; k < sylls.length; k++) {
-					syllList.push([sylls[k], toSearch[j][1], toSearch[j][2]]);
+					var syllData = sylls[k];
+					var syll = syllData.syllable;
+
+					var syllMeta = new java.util.LinkedHashMap();
+					syllMeta.putAll(toSearch[j][2]);
+
+					if(filters.searchBy.includePositionalInfo == true) {
+						syllMeta.put("Syllable Position", syllData.syllablePosition);
+					}
+
+					syllList.push([syll, toSearch[j][1], syllMeta]);
 				}
 			}
 			toSearch = syllList;
@@ -254,7 +270,8 @@ function query_record(recordIndex, record) {
 							start: xgrp.start,
 							end: xgrp.end,
 							value: xgrp.value,
-							groups: match.groups
+							groups: match.groups,
+							position: match.position
 						};
 						match = newMatch;
 					}
@@ -323,6 +340,11 @@ function query_record(recordIndex, record) {
 					result.schema = "ALIGNED";
 
                     result.metadata.put("Alignment", alignment.toString(true));
+				}
+
+				if(filters.searchBy.includePositionalInfo == true) {
+					//var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
+					result.metadata.put("Position", match.position);
 				}
 
 				for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
