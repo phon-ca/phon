@@ -42,7 +42,7 @@ exports.SearchByOptions = function(id) {
     var includePositionalInformationParam;
     this.includePositionalInfo = includePositionalInformationParamInfo.def;
 
-    this.includePositionalOption = false;
+    this.includePositionalOption = true;
 
     // these params are given during param_setup and references are kept here
     this.searchByWordParam = null;
