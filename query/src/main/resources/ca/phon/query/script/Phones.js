@@ -187,7 +187,7 @@ function query_record(recordIndex, record) {
 				wordAlignedMeta.putAll(groupAlignedMeta);
 
 				if(filters.searchBy.includePositionalInfo == true) {
-					wordAlignedMeta.put("Word Position", wordData.groupPosition);
+					wordAlignedMeta.put("Word Position", wordData.position);
 				}
 
 				var wordAlignedResults = new Array();
@@ -243,7 +243,7 @@ function query_record(recordIndex, record) {
 					syllMeta.putAll(toSearch[j][2]);
 
 					if(filters.searchBy.includePositionalInfo == true) {
-						syllMeta.put("Syllable Position", syllData.syllablePosition);
+						syllMeta.put("Syllable Position", syllData.position);
 					}
 
 					syllList.push([syll, toSearch[j][1], syllMeta]);

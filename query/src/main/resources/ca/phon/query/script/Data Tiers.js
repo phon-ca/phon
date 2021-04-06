@@ -142,7 +142,8 @@ function query_record(recordIndex, record) {
 			var words = filters.word.getRequestedWords(group, searchTier);
 
 			for (var wIdx = 0; wIdx < words.length; wIdx++) {
-				var word = words[wIdx];
+				var wordData = words[wIdx];
+				var word = wordData.word;
 				var checkWord = true;
 				var wordAlignedResults = new Array();
 
@@ -204,6 +205,11 @@ function query_record(recordIndex, record) {
 							result.addResultValue(wordAlignedResults[j]);
 						}
 
+						if(filters.searchBy.includePositionalInfo == true) {
+							result.metadata.put("Position", v.position);
+							result.metadata.put("Word Position", wordData.position);
+						}
+
 						var alignedGroupData = filters.groupTiers.getAlignedTierData(record, group, "Group");
 						for(var j = 0; j < alignedGroupData[0].length; j++) {
 							result.addResultValue(alignedGroupData[0][j]);
@@ -255,12 +261,15 @@ function query_record(recordIndex, record) {
 				for(var j = 0; j < alignedGroupData[0].length; j++) {
 					result.addResultValue(alignedGroupData[0][j]);
 				}
+
+				if(filters.searchBy.includePositionalInfo == true) {
+					result.metadata.put("Position", v.position);
+				}
+
 				result.metadata.putAll(alignedGroupData[1]);
 
 				results.addResult(result);
 			}
 		}
-
-
 	}
 }

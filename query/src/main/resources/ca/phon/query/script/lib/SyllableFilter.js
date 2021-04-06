@@ -239,7 +239,7 @@ exports.SyllableFilter = function (id) {
 	 *
 	 * {
 	 *     syllableIndex: int,
-	 *     wordPosition: (initial|medial|final),
+	 *     position: (initial|medial|final|singleton),
 	 *     syllable: IPATranscript
 	 * }
 	 */
@@ -273,7 +273,7 @@ exports.SyllableFilter = function (id) {
 			// take care of singleton cases
 			if (sIndex == 0 && syllables.size() == 1) {
 				posOk = this.sSingleton;
-				position = "initial";
+				position = "singleton";
 			}
 
 			var truncatedOk = true;
@@ -286,7 +286,7 @@ exports.SyllableFilter = function (id) {
 			if (posOk == true && stressOk == true && truncatedOk == true && typeOk) {
 				retVal.add({
 					syllableIndex: sIndex,
-					syllablePosition: position,
+					position: position,
 					syllable: syll
 				});
 			}

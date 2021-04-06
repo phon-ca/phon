@@ -123,7 +123,7 @@ exports.WordFilter = function (id) {
 	 *
 	 * {
 	 *   wordIndex: int,
-	 *   groupposition: (initial|medial|final),
+	 *   position: (initial|medial|final|singleton),
 	 *   word: obj
 	 * }
 	 */
@@ -155,13 +155,13 @@ exports.WordFilter = function (id) {
 
 			if (wIndex == 0 && wordCount == 1) {
 				posOk = this.wSingleton;
-				position = "initial";
+				position = "singleton";
 			}
 
 			if (posOk == true) {
 				retVal.add({
 					wordIndex: wIndex,
-					groupPosition: position,
+					position: position,
 					word: word
 				});
 			}
