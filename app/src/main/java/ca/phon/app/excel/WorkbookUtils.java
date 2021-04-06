@@ -22,6 +22,7 @@ import jxl.write.biff.RowsExceededException;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.table.TableModel;
+import java.lang.Boolean;
 import java.lang.Number;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -90,8 +91,11 @@ public class WorkbookUtils {
 							Date.from(((LocalDate)val).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 					sheet.addCell(cell);
 				} else if(val instanceof LocalDateTime) {
-					final DateTime cell = new DateTime(col, startRow+row+1,
-							Date.from(((LocalDateTime)val).atZone(ZoneId.systemDefault()).toInstant()));
+					final DateTime cell = new DateTime(col, startRow + row + 1,
+							Date.from(((LocalDateTime) val).atZone(ZoneId.systemDefault()).toInstant()));
+					sheet.addCell(cell);
+				} else if(val instanceof Boolean) {
+					final jxl.write.Boolean cell = new jxl.write.Boolean(col, startRow + row + 1, (boolean) val);
 					sheet.addCell(cell);
 				} else {
 					final Label cell = new Label(col, startRow+row+1, FormatterUtil.format(val));
