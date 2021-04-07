@@ -267,9 +267,9 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 						.stream()
 						.filter( (ci) -> ci.getName().equals(colName) )
 						.findFirst();
-				
+
 				rowData[rowDataIdx++] = 
-						(colInfoOpt.isPresent()
+						(colInfoOpt.isPresent() && (key.rowVals[i] instanceof String || key.rowVals[i] instanceof IPATranscript)
 							?	TableUtils.objToString(key.rowVals[i], colInfoOpt.get().ignoreDiacritics, colInfoOpt.get().onlyOrExcept, colInfoOpt.get().selectedDiacritics)
 							:	key.rowVals[i]);
 			}
@@ -343,14 +343,16 @@ public class InventoryNode extends TableOpNode implements NodeSettings {
 						rowData[ic] = val;
 					} else if(rowData[ic] instanceof IPAElement) {
 						IPATranscriptBuilder builder = new IPATranscriptBuilder();
-						builder.append((IPAElement)rowData[ic]);
+						builder.append((IPAElement) rowData[ic]);
 						IPATranscript ipa = builder.toIPATranscript();
-						if(settings.getColumns().get(ic).onlyOrExcept) {
+						if (settings.getColumns().get(ic).onlyOrExcept) {
 							ipa = ipa.stripDiacritics(settings.getColumns().get(ic).selectedDiacritics);
 						} else {
 							ipa = ipa.stripDiacriticsExcept(settings.getColumns().get(ic).selectedDiacritics);
 						}
 						rowData[ic] = (ipa.length() > 0 ? ipa.elementAt(0) : "");
+					} else if(rowData[ic] instanceof Boolean) {
+						// do nothing
 					} else {
 						String txt = (rowData[ic] != null ? FormatterUtil.format(rowData[ic]) : "");
 						rowData[ic] = IPATranscript.stripDiacriticsFromText(txt,
