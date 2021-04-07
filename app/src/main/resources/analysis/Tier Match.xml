@@ -23,6 +23,9 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
+                    <oga:property key="filters.searchBy.includePositionalInfo"><![CDATA[true]]></oga:property>
+                    <oga:property key="filters.tier2.tier"><![CDATA[IPA Actual]]></oga:property>
+                    <oga:property key="filters.tier1.tier"><![CDATA[IPA Target]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
@@ -241,7 +244,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="8f0397f8b59f4962" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5a0d024f">
+            <graph id="7683817c">
                 <node id="f34b7d4bee7f4b70" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -281,7 +284,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="7ede50e845f64d60" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="68dfc7f4">
+            <graph id="4aaefe85">
                 <node id="5f9cb1feb4de4dde" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -350,7 +353,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="693cfdfcdf824413" name="searchBy" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="687e9c07">
+            <graph id="2a1a8476">
                 <node id="f209e3eabfde45e9" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -410,7 +413,7 @@ function run(context) {
             </extensions>
         </ogcn:macro>
         <opqry:queryNode id="1f162c16" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T08:42:17.340-02:30" name="Data Tiers" uuid="0725334d-359d-45f7-818f-7911699179cd">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-04-07T07:28:24.188-02:30" name="Data Tiers" uuid="e3d1d771-ab08-4a73-a0df-11e87b70b822">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
@@ -420,14 +423,13 @@ function run(context) {
                     <param id="filters.primary.patternFilter.filter">.+</param>
                     <param id="filters.primary.patternFilter.filterType">Regular expression</param>
                     <param id="filters.primary.tier">IPA Target</param>
+                    <param id="filters.searchBy.includePositionalInfo">true</param>
                     <param id="filters.searchBy.searchBy">Word</param>
                     <param id="filters.speaker.age1Comparator">equal to</param>
                     <param id="filters.speaker.age2Comparator">equal to</param>
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.word.searchByWord">true</param>
-                    <param id="filters.word.sectionHeader.collapsed">false</param>
-                    <param id="filters.wordTiers.tiers">Orthography</param>
                 </script>
             </qry:query>
             <extensions>
@@ -638,7 +640,9 @@ function run(context) {
 		var v2txt = (caseSensitive == true ? v2.toString() : v2.toString().toLowerCase());
 
 		destRow[col++] = distance(v1txt, v2txt);
-		destRow[col++] = (v1txt.matches(v2txt) ? "1" : "0");
+
+		var tierMatch = v1txt.matches(v2txt);
+		destRow[col++] = tierMatch;
 
 		matchTable.addRow(destRow);
 	}
@@ -649,7 +653,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="24dd4e14" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="15469e17">
+            <graph id="bf0892a">
                 <node id="a4d4207" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -735,7 +739,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="5c13c66c" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="34543dfb">
+                    <graph id="cda6e7e">
                         <node id="4f39ae80" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -790,7 +794,7 @@ function run(context) {
                             <output name="falseTable" type="ca.phon.query.report.datasource.DefaultTableDataSource">Table of rows from output table which do not match the filter</output>
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="filters.column.filter"><![CDATA[1]]></oga:property>
+                                    <oga:property key="filters.column.filter"><![CDATA[true]]></oga:property>
                                     <oga:property key="filters.column.filterType"><![CDATA[Plain text]]></oga:property>
                                     <oga:property key="filters.column.exactMatch"><![CDATA[true]]></oga:property>
                                     <oga:property key="__scriptName"><![CDATA[Partition Table]]></oga:property>
@@ -831,7 +835,7 @@ Alignment]]></oga:property>
                             </extensions>
                         </node>
                         <ogcn:macro id="1d635760" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="1706fa78">
+                            <graph id="35027b80">
                                 <node id="ed3dc6f" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -917,7 +921,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="3156d821830b429c" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="647ffad7">
+                                    <graph id="1ad25045">
                                         <node id="c8e978a992fc4235" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -976,7 +980,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5a1101a4" name="Add to Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="31e76af3">
+                                    <graph id="6a333b56">
                                         <node id="87ed7647c22c4d2d" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1014,7 +1018,7 @@ function run(context) {
                                             <output name="falseTable" type="ca.phon.query.report.datasource.DefaultTableDataSource">Table of rows from output table which do not match the filter</output>
                                             <extensions>
                                                 <oga:settings>
-                                                    <oga:property key="filters.column.filter"><![CDATA[1]]></oga:property>
+                                                    <oga:property key="filters.column.filter"><![CDATA[true]]></oga:property>
                                                     <oga:property key="filters.column.filterType"><![CDATA[Plain text]]></oga:property>
                                                     <oga:property key="filters.column.exactMatch"><![CDATA[true]]></oga:property>
                                                     <oga:property key="__scriptName"><![CDATA[Partition Table]]></oga:property>
