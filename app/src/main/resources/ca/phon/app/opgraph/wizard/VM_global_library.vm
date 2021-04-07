@@ -26,13 +26,23 @@
 	#else
 	#set($clazz = $v.class)
 	#set($txt = $FormatterUtil.format($v))
+	#set($boolean = $Class.forName("java.lang.Boolean"))
 	#set($number = $Class.forName("java.lang.Number"))
 	#set($ipa = $Class.forName("ca.phon.ipa.IPATranscript"))
 	#if($clazz == $ipa) #set($type = "tier-value")
 	#elseif($number.isAssignableFrom($clazz))
 		#set($type = "number-value")
+	#elseif($boolean.isAssignableFrom($clazz))
+		#set($type = "number-value")
 	#else #set($type = "text-value")#end
 	#if($clazz == $ipa && $v.length() == 0) #set($txt = "\u2205") #end
+	#if($clazz == $boolean)
+		#if($v.booleanValue() == true)
+			#set($txt = "1")
+		#else
+			#set($txt = "0")
+		#end
+	#end
 <td class='$type'><span>$txt</span></td>
 	#end
 #end
