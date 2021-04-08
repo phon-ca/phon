@@ -343,8 +343,8 @@ function query_record(recordIndex, record) {
 				}
 
 				if(filters.searchBy.includePositionalInfo == true) {
-					//var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
-					result.metadata.put("Position", match.position);
+					var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
+					result.metadata.put("Position in " + searchBy, match.position);
 				}
 
 				for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {

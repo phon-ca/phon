@@ -494,7 +494,7 @@ exports.PatternFilter = function (id) {
 		if (exactMatch == true) {
 			if (strA.equals(strB)) {
 				var v = {
-					start: 0, end: strA.length(), value: obj, position: "initial"
+					start: 0, end: strA.length(), value: obj, position: "all"
 				};
 				retVal.push(v);
 			}
@@ -508,8 +508,12 @@ exports.PatternFilter = function (id) {
 					var endIpaIdx = obj.ipaIndexOf(i + strB.length() -1);
 					myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
 
-					if(startIpaIdx == 0 ||
-						(startIpaIdx == 1 && (strA.startsWith("\u02c8") || strA.startsWith("\u02cc")))) {
+					if(startIpaIdx == 0) {
+						if(endIpaIdx == obj.length() - 1)
+							position = "all";
+						else
+							position = "initial";
+					} else if(startIpaIdx == 1 && (strA.startsWith("\u02c8") || strA.startsWith("\u02cc"))) {
 						position = "initial";
 					} else if(i + strB.length() == strA.length()) {
 						position = "final";
@@ -520,7 +524,10 @@ exports.PatternFilter = function (id) {
 					myValue = strA.substring(i, i + strB.length());
 
 					if(i == 0) {
-						position = "initial";
+						if(strB.length() == strA.length())
+							position = "all";
+						else
+							position = "initial";
 					} else if(i + strB.length() == strA().length()) {
 						position = "final";
 					} else {
@@ -541,13 +548,14 @@ exports.PatternFilter = function (id) {
 
 	var findRegex = function (obj, filter, caseSensitive, exactMatch) {
 		var regexPattern = java.util.regex.Pattern.compile(filter, (caseSensitive == true ? 0: java.util.regex.Pattern.CASE_INSENSITIVE));
-		var regexMatcher = regexPattern.matcher(obj.toString());
+		var strA = obj.toString();
+		var regexMatcher = regexPattern.matcher(strA);
 		var retVal = new Array();
 
 		if (exactMatch == true) {
 			if (regexMatcher.matches()) {
 				v = {
-					start: 0, end: obj.toString().length(), value: obj, position: "initial"
+					start: 0, end: obj.toString().length(), value: obj, position: "all"
 				};
 				retVal.push(v);
 			} else {
@@ -565,10 +573,14 @@ exports.PatternFilter = function (id) {
 						myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
 					}
 
-					if(startIpaIdx == 0 ||
-						(startIpaIdx == 1 && (strA.startsWith("\u02c8") || strA.startsWith("\u02cc")))) {
+					if(startIpaIdx == 0) {
+						if(endIpaIdx ==  obj.length() - 1)
+							position = "all";
+						else
+							position = "initial";
+					} else if(startIpaIdx == 1 && (strA.startsWith("\u02c8") || strA.startsWith("\u02cc"))) {
 						position = "initial";
-					} else if(regexMatcher.start() + strB.length() == strA.length()) {
+					} else if(regexMatcher.end() == strA.length()) {
 						position = "final";
 					} else {
 						position = "medial";
@@ -577,8 +589,11 @@ exports.PatternFilter = function (id) {
 					myValue = regexMatcher.group();
 
 					if(regexMatcher.start() == 0) {
-						position = "initial";
-					} else if(regexMatcher.start() + strB.length() == strA().length()) {
+						if(regexMatcher.end() == strA.length())
+							position = "all";
+						else
+							position = "initial";
+					} else if(regexMatcher.end() == strA.length()) {
 						position = "final";
 					} else {
 						position = "medial";
@@ -621,15 +636,19 @@ exports.PatternFilter = function (id) {
 		if (exactMatch == true) {
 			if (phonexMatcher.matches()) {
 				v = {
-					start: 0, end: obj.length(), value: obj, matcher: phonexMatcher, position: "initial"
+					start: 0, end: obj.length(), value: obj, matcher: phonexMatcher, position: "all"
 				};
 				retVal.push(v);
 			}
 		} else {
 			while (phonexMatcher.find()) {
 				var position = "unknown";
-				if(phonexMatcher.start() == 0 ||
-					(phonexMatcher.start() == 1 && (obj.elementAt(0).toString().startsWith("\u02c8") || obj.elementAt(0).toString().startsWith("\u02cc")))) {
+				if(phonexMatcher.start() == 0) {
+					if(phonexMatcher.group().size() == obj.length())
+						position = "all";
+					else
+						position = "initial";
+				} else if(phonexMatcher.start() == 1 && (obj.elementAt(0).toString().startsWith("\u02c8") || obj.elementAt(0).toString().startsWith("\u02cc"))) {
 					position = "initial";
 				} else if(phonexMatcher.end() == obj.length()) {
 					position = "final";

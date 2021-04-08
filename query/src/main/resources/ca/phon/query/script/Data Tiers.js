@@ -206,7 +206,8 @@ function query_record(recordIndex, record) {
 						}
 
 						if(filters.searchBy.includePositionalInfo == true) {
-							result.metadata.put("Position", v.position);
+							var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
+							result.metadata.put("Position in " + searchBy, v.position);
 							result.metadata.put("Word Position", wordData.position);
 						}
 
@@ -263,7 +264,8 @@ function query_record(recordIndex, record) {
 				}
 
 				if(filters.searchBy.includePositionalInfo == true) {
-					result.metadata.put("Position", v.position);
+					var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
+					result.metadata.put("Position in " + searchBy, v.position);
 				}
 
 				result.metadata.putAll(alignedGroupData[1]);

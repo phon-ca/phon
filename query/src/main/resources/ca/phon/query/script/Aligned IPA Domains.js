@@ -304,6 +304,11 @@ function query_record(recordIndex, record) {
 
             result.metadata.put("Alignment", alignment.toString(true));
 
+            if(filters.searchBy.includePositionalInfo == true) {
+				var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
+				result.metadata.put("Position in " + searchBy, "all");
+			}
+
 			for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
 				result.addResultValue(alignedResults[alignedResultIdx]);
 			}
