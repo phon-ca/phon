@@ -53,6 +53,24 @@ exports.PNTC = {
 		SyllabificationInfo.setupSyllabificationInfo(actualGroup);
 		var alignment = group.getPhoneAlignment();
 		var syllAlignment = (new SyllableAligner()).calculateSyllableAlignment(targetGroup, actualGroup, alignment);
+
+		var targetTone = "";
+		for(var i = 0; i < targetGroup.syllables().size(); i++) {
+			var targetSyll = targetGroup.syllables().get(i);
+			var targetScInfo = targetSyll.elementAt(0).getExtension(SyllabificationInfo);
+			var targetToneNumber = (targetScInfo != null ? targetScInfo.toneNumber : "0");
+			if(targetToneNumber.length() == 0) targetToneNumber = "0";
+			targetTone += (targetTone.length > 0 ? "," : "") + targetToneNumber;
+		}
+
+		var actualTone = "";
+		for(var i = 0; i < actualGroup.syllables().size(); i++) {
+			var actualSyll = actualGroup.syllables().get(i);
+			var actualScInfo = actualSyll.elementAt(0).getExtension(SyllabificationInfo);
+			var actualToneNumber = (actualScInfo != null ? actualScInfo.toneNumber : "0");
+			if(actualToneNumber.length() == 0) actualToneNumber = "0";
+			actualTone += (actualTone.length > 0 ? "," : "") + actualToneNumber;
+		}
 		
 		numTarget = targetGroup.syllables().size();
 		numActual = actualGroup.syllables().size();
@@ -118,6 +136,8 @@ exports.PNTC = {
 		var retVal = {
 			target: numTarget,
 			actual: numActual,
+			targetTone: targetTone,
+			actualTone: actualTone,
 			correct: numCorrect,
 			substituted: numSubstituted,
 			deleted: numDeleted,

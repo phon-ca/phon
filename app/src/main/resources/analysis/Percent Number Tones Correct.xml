@@ -51,7 +51,7 @@ function run(context) {
             <extensions>
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
-                    <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography,IPA Target,IPA Actual]]></oga:property>
+                    <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography]]></oga:property>
                     <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
 var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
@@ -173,7 +173,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="1f2a5721" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T08:11:48.874-02:30" name="Aligned IPA Domains" uuid="ee44b898-fa31-4d6a-9c55-07447cc662d5">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-04-08T08:37:21.047-02:30" name="Aligned IPA Domains" uuid="919107ca-e17b-4921-b607-4b53dbe6d31e">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
@@ -199,7 +199,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="7486fc0611ca4abb" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="409ba460">
+            <graph id="3094b4ed">
                 <node id="a9eac15f05d9404a" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -239,7 +239,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="73d5137add6043a6" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="2140ad4b">
+            <graph id="75299281">
                 <node id="b08db04d89424752" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -407,6 +407,8 @@ function setupColumns(table, inputTable) {
 
 	table.setColumnTitle(col++, "# Target");
 	table.setColumnTitle(col++, "# Actual");
+	table.setColumnTitle(col++, "Target Tone");
+	table.setColumnTitle(col++, "Actual Tone");
 	table.setColumnTitle(col++, "Syllables Deleted");
 	table.setColumnTitle(col++, "Syllables Epenthesized");
 	table.setColumnTitle(col++, "# Correct");
@@ -472,6 +474,8 @@ function run(context) {
 		var pntcRow = copyRow(table, row);
 		pntcRow.push(pntcData.target);
 		pntcRow.push(pntcData.actual);
+		pntcRow.push(pntcData.targetTone);
+		pntcRow.push(pntcData.actualTone);
 		pntcRow.push(pntcData.syllDeleted);
 		pntcRow.push(pntcData.epen);
 		pntcRow.push(pntcData.correct);
@@ -533,7 +537,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="424c6a59" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="4e1c898a">
+            <graph id="5f6b0823">
                 <node id="3759a36a" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -569,7 +573,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="945e057185e74864" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="568731e">
+                    <graph id="4ee112de">
                         <node id="65b6213415b545ba" name="globalSummary" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
