@@ -32,7 +32,7 @@
                             <li>Insert implicit syllable boundaries - insert a dot at every syllable
                                 break which is not marked with stress.</li>
                             <li>Compensatory lengthening - any C or V marked with a long or halflong
-                                diacritic will be doubled.  Note: if length diacritics are ignored
+                                diacritic will be doubled. Note: if length diacritics are ignored
                                 then this setting will have no effect.</li>
                             <li>Simplify composed phones - phones composed with a ligature will be
                                 reduced to a single character.</li>
@@ -43,12 +43,13 @@
             <title>Other parameters</title>
             <body>
                 <p><ul id="ol_qkx_cqy_mjb">
-                     <li><xref href="../../query/common_query_options.dita#search_by"/></li>    
-                     <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                        <li><xref href="../../query/common_query_options.dita#group_options"/></li>
                         <li><xref href="../../query/common_query_options.dita#word_options"/></li>
                         <li><xref href="../../query/common_query_options.dita#additional_tier_data"
                             /></li>
-                    <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
+                        <li><xref href="../../query/common_query_options.dita#participant_filter"
+                            /></li>
                     </ul></p>
             </body>
         </topic>
@@ -75,7 +76,10 @@
                                 <li><i>Mismatches</i></li>
                                 <li><i>CV Pattern Matches</i></li>
                                 <li><i>CV Pattern Mismatches</i></li>
-                                <li/>
+                                <li><i>Stress Matches</i></li>
+                                <li><i>Stress Mismatches</i></li>
+                                <li><i>Syllable Count Matches</i></li>
+                                <li><i>Syllable Count Mismatches</i></li>
                             </ul>
                         </li>
                         <li>… (for each selected participant)</li>
@@ -90,39 +94,32 @@
         <body>
             <section>
                 <title>Whole word match</title>
-                <p>Bernhardt, B.M., Stemberger, J.P., Bérubé, D., Ciocca, V., Freitas, M.-J., Ignatova,
-                    D., Kogošek, D., Lundeborg Hammarström I., Másdóttir, T., Ozbič, M., Perez, D. &amp;
-                    Ramalho, A.M. 2020. Identification of protracted phonological development across
-                    languages - The Whole Word Match and basic mismatch measures. In E. Babatsouli, M.
-                    Ball &amp; N. Müller (eds.),
-                    <i>An</i><i>A</i><i>nthology</i><i>of</i><i>B</i><i>ilingual</i><i>C</i><i>hild</i><i>P</i><i>honology</i>
+                <p>Bernhardt, B.M., Stemberger, J.P., Bérubé, D., Ciocca, V., Freitas, M.-J.,
+                    Ignatova, D., Kogošek, D., Lundeborg Hammarström I., Másdóttir, T., Ozbič, M.,
+                    Perez, D. &amp; Ramalho, A.M. 2020. Identification of protracted phonological
+                    development across languages - The Whole Word Match and basic mismatch measures.
+                    In E. Babatsouli, M. Ball &amp; N. Müller (eds.),
+                        <i>An</i><i>A</i><i>nthology</i><i>of</i><i>B</i><i>ilingual</i><i>C</i><i>hild</i><i>P</i><i>honology</i>
                     (pp.274-308). Bristol, UK: Multilingual Matters. doi.org/10.21832/BABATS8410</p>
             </section>
-            
+
             <section>
                 <title>Word structure measures</title>
                 <p>Bernhardt, B., &amp; Gilbert, J. 1992. Applying linguistic theory to
-                    speech-language pathology: the case for nonlinear phonology.
-                        <i>Clinical Linguistics and Phonetics</i>, <i>6</i>, 123-145.
-                </p>
-          
-                <p>Bernhardt, B.M., Hanson, R., Perez, D., Ávila, C., Lleó, C.,
-                    Stemberger, J.P., Carballo, G., Mendoza, E., Fresneda, D. &amp;
-                    Chávez-Peón, M. 2015. Word structures of Granada Spanish-speaking
-                    preschoolers with typical versus protracted phonological
-                    development. <i>Intl. Jnl. of Lang. &amp; Communication
-                        Disorders</i>, <i>50</i>(3), 298-311. DOI:
-                    10.1111/1460-6984.12133.</p>
-                
+                    speech-language pathology: the case for nonlinear phonology. <i>Clinical
+                        Linguistics and Phonetics</i>, <i>6</i>, 123-145. </p>
+                <p>Bernhardt, B.M., Hanson, R., Perez, D., Ávila, C., Lleó, C., Stemberger, J.P.,
+                    Carballo, G., Mendoza, E., Fresneda, D. &amp; Chávez-Peón, M. 2015. Word
+                    structures of Granada Spanish-speaking preschoolers with typical versus
+                    protracted phonological development. <i>Intl. Jnl. of Lang. &amp; Communication
+                        Disorders</i>, <i>50</i>(3), 298-311. DOI: 10.1111/1460-6984.12133.</p>
                 <p>Bernhardt, B.M. &amp; Stemberger, J.P. 2000. Workbook in nonlinear phonology for
                     clinical application. Copyright with authors, available at
                     phonodevelopment.sites.olt.ubc.ca (Test Materials/English, at the bottom).</p>
-                
                 <p>Romonath, R. &amp; Bernhardt, B.M. 2017. Erwerb prosodischer Wortstrukturen bei
                     Vorschulkindern mit und ohne phonologische Störungen [Prosodic word structure
                     acquisition in preschool children with and without phonological disorders].
                         <i>Forschung Sprache</i> 1, 91-107.</p>
-                
                 <p>Stemberger, J.P. &amp; Bernhardt, B.M. 2018. Tap and trill clusters in typical
                     and protracted phonological development: Challenging segments in complex
                     phonological environments. Introduction to the special issue, <i>Clinical

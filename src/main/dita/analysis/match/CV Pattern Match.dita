@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="word_match">
+    <title>CV Pattern Match</title>
+    <body>
+        <p/>
+    </body>
+    <topic id="cv_match_parameters">
+        <title>Parameters</title>
+        <body>
+            <fig id="fig_qnr_jn4_nlb">
+                <title>CV Pattern Match Parameters</title>
+                <image placement="break" href="../images/cv_match_parameters.png"
+                    id="image_rnr_jn4_nlb">
+                    <alt>CV Pattern Match Parameters</alt>
+                </image>
+            </fig>
+            <p>The following parameters are available: <ul>
+                    <li><b>CV Pattern Options</b> - these options affect how the CV pattern of IPA
+                        transcripts is constructed. <ul>
+                            <li>Strip diacritics - See <xref
+                                    href="../../query/common_query_options.dita#ignore_diacritics"
+                                /></li>
+                            <li>Include stress markers</li>
+                            <li>Include explicit syllable boundaries (syllable breaks marked with a
+                                dot '.')</li>
+                            <li>Insert implicit syllable boundaries - insert a dot at every syllable
+                                break which is not marked with stress.</li>
+                            <li>Compensatory lengthening - any C or V marked with a long or halflong
+                                diacritic will be doubled.  Note: if length diacritics are ignored
+                                then this setting will have no effect.</li>
+                            <li>Simplify composed phones - phones composed with a ligature will be
+                                reduced to a single character.</li>
+                        </ul></li>
+                </ul></p>
+        </body>
+        <topic id="other_paramters">
+            <title>Other parameters</title>
+            <body>
+                <p><ul id="ol_qkx_cqy_mjb">
+                     <li><xref href="../../query/common_query_options.dita#search_by"/></li>    
+                     <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#additional_tier_data"
+                            /></li>
+                    <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
+                    </ul></p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="cv_match_outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/consonants_example.html" format="html" scope="external"
+                    >here</xref> to see an example report.</p>
+            <ul>
+                <li>
+                    <p><b>CV Pattern Match</b></p>
+                    <ul id="ul_pzg_gmg_3nb">
+                        <li><i>Summary</i> (all participants)</li>
+                        <li>
+                            <p><b>Participant 1</b></p>
+                            <ul id="ul_dzp_5mg_3nb">
+                                <li>
+                                    <p><i>Summary</i></p>
+                                </li>
+                                <li><i>CV Pattern Matches</i></li>
+                                <li><i>CV Pattern Mismatches</i></li>
+                            </ul>
+                        </li>
+                        <li>… (for each selected participant)</li>
+                        <li><i>Listing</i> (all results)</li>
+                    </ul>
+                </li>
+            </ul>
+        </body>
+    </topic>
+    
+</topic>

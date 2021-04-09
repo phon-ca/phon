@@ -127,7 +127,10 @@
         <topicref href="analysis/phone_inventory.dita"/>
         <topicref href="analysis/pmlu.dita"/>
         <topicref href="analysis/word_inventory.dita" format="dita"/>
-        <topichead navtitle="Match"/>
+        <topichead navtitle="Match">
+            <topicref href="analysis/match/CV%20Pattern%20Match.dita"/>
+            <topicref href="analysis/match/Tier%20Match.dita"/>
+        </topichead>
         <topichead navtitle="Percent Correct">
             <topicref href="analysis/percent%20correct/pdc.dita"/>
             <topicref href="analysis/percent%20correct/ppc.dita" format="dita"/>
