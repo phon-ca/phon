@@ -21,7 +21,7 @@
             <p>
                 <fig id="fig_xyt_pgn_3nb">
                     <title>Percent Diacritics Correct Parameters</title>
-                    <image placement="break" href="images/pdc_parameters.png" id="image_yyt_pgn_3nb"
+                    <image placement="break" href="../images/pdc_parameters.png" id="image_yyt_pgn_3nb"
                     />
                 </fig>
             </p>
@@ -31,9 +31,9 @@
                     <li>Consonants</li>
                     <li>Vowels</li>
                     <li>Other (custom)</li>
-                </ol>When 'Other (custom)' is selected a custom <xref href="../phonex/intro.dita"
+                </ol>When 'Other (custom)' is selected a custom <xref href="../../phonex/intro.dita"
                     >Phonex</xref> expression may be entered to create a custom phone set. See <xref
-                    href="../phonex/examples/phones.md" format="md">Example Phones Queries</xref>
+                    href="../../phonex/examples/phones.md" format="md">Example Phones Queries</xref>
                 for some useful examples.</p>
         </body>
         
@@ -41,12 +41,12 @@
             <title>Other parameters</title>
             <body>
                 <p><ul id="ol_qkx_cqy_mjb">
-                    <li><xref href="../query/common_query_options.dita#ignore_diacritics"/></li>
-                    <li><xref href="../query/common_query_options.dita#search_by"/></li>
-                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                    <li><xref href="../../query/common_query_options.dita#ignore_diacritics"/></li>
+                    <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                    <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#syllable_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
                 </ul></p>
             </body>
         </topic>

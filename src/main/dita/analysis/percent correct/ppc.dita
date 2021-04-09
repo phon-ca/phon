@@ -21,7 +21,7 @@
             <p>
                 <fig id="fig_qsd_zgn_3nb">
                     <title>Percent Phones Correct Parameters</title>
-                    <image placement="break" href="images/ppc_parameters.png" id="image_rsd_zgn_3nb"
+                    <image placement="break" href="../images/ppc_parameters.png" id="image_rsd_zgn_3nb"
                     />
                 </fig>
             </p>
@@ -60,8 +60,8 @@
                     <li>Percent correct (custom)</li>
                 </ol></p>
             <p>When 'Percent correct (custom)' is selected a custom <xref
-                    href="../phonex/intro.dita">Phonex</xref> expression may be entered to create a
-                custom phone set. See <xref href="../phonex/examples/phones.md" format="md">Example
+                    href="../../phonex/intro.dita">Phonex</xref> expression may be entered to create a
+                custom phone set. See <xref href="../../phonex/examples/phones.md" format="md">Example
                     Phones Queries</xref> for some useful examples.</p>
         </body>
         
@@ -74,11 +74,11 @@
                     <li>Ignore diacritics - ignore diacritics when comparing phones (default:
                         no)</li>
                     <li>Include PPC w/o epenthesis 'PPC (NoEpen)' (see below)</li>
-                    <li><xref href="../query/common_query_options.dita#search_by"/></li>
-                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                    <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                    <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#syllable_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
                 </ul></p>
             </body>
         </topic>

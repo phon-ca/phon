@@ -6,7 +6,7 @@
         <p>The Percent Nubmer Tones Correct (PNTC) analysis will calculate the percentage of
             syllables with correctly produced tones in the sampled data. To review how tone numbers
             are specified in Phon please see <xref
-                href="../ipa/transcription.dita#phone/tone_number"/>.</p>
+                href="../../ipa/transcription.dita#phone/tone_number"/>.</p>
     </body>
     <topic id="data-preparation">
         <title>Data Preparation</title>
@@ -23,7 +23,7 @@
             <p>
                 <fig id="fig_cdm_vhn_3nb">
                     <title>Percent Number Tones Correct Parameters</title>
-                    <image placement="break" href="images/pntc_parameters.png"
+                    <image placement="break" href="../images/pntc_parameters.png"
                         id="image_ddm_vhn_3nb"/>
                 </fig>
             </p>
@@ -34,11 +34,11 @@
             <body>
                 <p>
                     <ul>
-                        <li><xref href="../query/common_query_options.dita#search_by"/></li>
-                        <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                        <li><xref href="../query/common_query_options.dita#word_options"/></li>
-                        <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
-                        <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                        <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                        <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#syllable_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
                     </ul>
                 </p>
             </body>

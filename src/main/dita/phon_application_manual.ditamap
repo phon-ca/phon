@@ -124,13 +124,16 @@
         <topicref href="analysis/analyses.dita" format="dita"/>
         <topicref href="analysis/consonants.dita" format="dita"/>
         <topicref href="analysis/mcp.dita"/>
-        <topicref href="analysis/pdc.dita"/>
-        <topicref href="analysis/ppc.dita" format="dita"/>
-        <topicref href="analysis/pntc.dita"/>
         <topicref href="analysis/phone_inventory.dita"/>
         <topicref href="analysis/pmlu.dita"/>
-        <topicref href="analysis/phonological_processes.dita"/>
         <topicref href="analysis/word_inventory.dita" format="dita"/>
+        <topichead navtitle="Match"/>
+        <topichead navtitle="Percent Correct">
+            <topicref href="analysis/percent%20correct/pdc.dita"/>
+            <topicref href="analysis/percent%20correct/ppc.dita" format="dita"/>
+            <topicref href="analysis/percent%20correct/pntc.dita"/>
+        </topichead>
+        <topicref href="analysis/phonological_processes.dita"/>
         <topichead navtitle="Specialized">
             <topicref href="analysis/specialized/multisyllabic_nonlinear_analysis.md"
                 format="markdown"/>
