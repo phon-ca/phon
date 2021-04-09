@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="word_match">
+    <title>Stress Match</title>
+    <body>
+        <p>Check if the stress pattern between IPA Target and IPA Actual matches.</p>
+    </body>
+    <topic id="tier_match_parameters">
+        <title>Parameters</title>
+        <body>
+            <fig id="fig_qnr_jn4_nlb">
+                <title>Stress Match Parameters</title>
+                <image placement="break" href="../images/stress_match_parameters.png"
+                    id="image_rnr_jn4_nlb">
+                    <alt>Stress Match Parameters</alt>
+                </image>
+            </fig>
+          
+        </body>
+        <topic id="other_paramters">
+            <title>Other parameters</title>
+            <body>
+                <p><ul id="ol_qkx_cqy_mjb">
+                     <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                    <li><xref href="../../query/common_query_options.dita#ignore_diacritics"/></li>
+                     <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#additional_tier_data"
+                            /></li>
+                    <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
+                    </ul></p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="cv_match_outline">
+        <title>Report Outline</title>
+        <body>
+            <p>An example table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables. Click <xref
+                    href="./examples/consonants_example.html" format="html" scope="external"
+                    >here</xref> to see an example report.</p>
+            <ul>
+                <li>
+                    <p><b>Stress Match</b></p>
+                    <ul id="ul_pzg_gmg_3nb">
+                        <li><i>Summary</i> (all participants)</li>
+                        <li>
+                            <p><b>Participant 1</b></p>
+                            <ul id="ul_dzp_5mg_3nb">
+                                <li>
+                                    <p><i>Summary</i></p>
+                                </li>
+                                <li><i>Stress Matches</i></li>
+                                <li><i>Stress Mismatches</i></li>
+                            </ul>
+                        </li>
+                        <li>… (for each selected participant)</li>
+                        <li><i>Listing</i> (all results)</li>
+                    </ul>
+                </li>
+            </ul>
+        </body>
+    </topic>
+    
+</topic>

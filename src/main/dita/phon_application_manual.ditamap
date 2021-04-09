@@ -128,8 +128,10 @@
         <topicref href="analysis/pmlu.dita"/>
         <topicref href="analysis/word_inventory.dita" format="dita"/>
         <topichead navtitle="Match">
-            <topicref href="analysis/match/CV%20Pattern%20Match.dita"/>
-            <topicref href="analysis/match/Tier%20Match.dita"/>
+            <topicref href="analysis/match/cv_pattern_match.dita"/>
+            <topicref href="analysis/match/stress_match.dita"/>
+            <topicref href="analysis/match/syllable_count_match.dita"/>
+            <topicref href="analysis/match/tier_match.dita"/>
         </topichead>
         <topichead navtitle="Percent Correct">
             <topicref href="analysis/percent%20correct/pdc.dita"/>
