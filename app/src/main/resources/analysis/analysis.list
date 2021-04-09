@@ -1,18 +1,18 @@
 # General
 analysis/Consonants.xml
-analysis/CV Pattern Match.xml
 analysis/Measure of Cluster Proximity.xml
-analysis/Percent Diacritics Correct.xml
-analysis/Percent Number Tones Correct.xml
-analysis/Percent Phones Correct.xml
-analysis/PDC.xml
-analysis/PNTC.xml
 analysis/Phone Inventory.xml
 analysis/Phonological Mean Length of Utterance.xml
-analysis/Stress Match.xml
-analysis/Syllable Count Match.xml
-analysis/Tier Match.xml
 analysis/Word Inventory.xml
+#Match
+analysis/Match/CV Pattern Match.xml
+analysis/Match/Stress Match.xml
+analysis/Match/Syllable Count Match.xml
+analysis/Match/Tier Match.xml
+# Percent Correct
+analysis/Percent Correct/Percent Diacritics Correct.xml
+analysis/Percent Correct/Percent Number Tones Correct.xml
+analysis/Percent Correct/Percent Phones Correct.xml
 # Phonlogcial Processes
 analysis/Phonological Processes/Coronal Backing.xml
 analysis/Phonological Processes/Deaffrication.xml
