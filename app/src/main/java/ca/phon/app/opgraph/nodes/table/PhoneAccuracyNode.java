@@ -249,6 +249,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 			for(SyllableConstituentType scType:SyllableConstituentType.values()) scTypeCounts.put(scType, 0);
 			int lastIdx = 0;
 			SyllableConstituentType lastTargetType = (alignment.getTopElements().length > 0 ? alignment.getTopElements()[0].getScType() : null);
+			Counts rowCount = new Counts();
 			for(int i = 0; i < alignment.getAlignmentLength(); i++) {
 				final IPAElement ipaTEle = alignment.getTopAlignmentElements().get(i);
 				final IPAElement ipaAEle = alignment.getBottomAlignmentElements().get(i);
@@ -268,21 +269,26 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 				
 				Counts currentCount = new Counts();
 				++currentCount.count;
+				++rowCount.count;
 				if(ipaTEle != null && ipaAEle != null) {
 					if(compareElements(ipaTEle, ipaAEle, ignoreDiacritics, onlyOrExcept, selectedDiacritics)) {
 						++currentCount.accurate;
+						++rowCount.accurate;
 					} else {
 						++currentCount.substitions;
+						++rowCount.substitions;
 					}
 					scTypeCounts.put(ipaEle.getScType(), typeIdx);
 					lastTargetType = ipaTEle.getScType();
 				} else if(ipaTEle != null && ipaAEle == null) {
 					++currentCount.deletions;
+					++rowCount.deletions;
 					scTypeCounts.put(ipaEle.getScType(), typeIdx);
 					lastTargetType = ipaTEle.getScType();
 				} else if(ipaTEle == null && ipaAEle != null) {
 					if(isIncludeEpenthesis()) {
 						++currentCount.epenthesis;
+						++rowCount.epenthesis;
 						position = (lastTargetType != null ? lastTargetType.getIdChar() : ipaEle.getScType().getIdChar()) + ("" + lastIdx) + "+";
 					} else {
 						// ignore
@@ -298,15 +304,14 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 					posInfo = posInfo.plus(currentCount);
 				}
 				eleInfo.put(position, posInfo);
-
-				if(isAddAccuracyColumns()) {
-					inputTable.setValueAt(row, "Count", currentCount.count);
-					inputTable.setValueAt(row, "Accurate", currentCount.accurate);
-					inputTable.setValueAt(row, "Substitutions", currentCount.substitions);
-					inputTable.setValueAt(row, "Deletions", currentCount.deletions);
-					if(isIncludeEpenthesis())
-						inputTable.setValueAt(row, "Epenthesis", currentCount.epenthesis);
-				}
+			}
+			if(isAddAccuracyColumns()) {
+				inputTable.setValueAt(row, "Count", rowCount.count);
+				inputTable.setValueAt(row, "Accurate", rowCount.accurate);
+				inputTable.setValueAt(row, "Substitutions", rowCount.substitions);
+				inputTable.setValueAt(row, "Deletions", rowCount.deletions);
+				if(isIncludeEpenthesis())
+					inputTable.setValueAt(row, "Epenthesis", rowCount.epenthesis);
 			}
 		}
 		
