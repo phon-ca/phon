@@ -65,5 +65,11 @@
             </ul>
         </body>
     </topic>
-    
+    <topic id="see_also">
+        <title>See Also</title>
+        <body>
+            <p>This analysis is also part of the <xref href="../specialized/word_match.dita"/> analysis
+                available in the Specialized section in the Anslysis menu.</p>
+        </body>
+    </topic>
 </topic>

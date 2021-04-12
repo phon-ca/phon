@@ -3,7 +3,8 @@
 <topic id="word_match">
     <title>CV Pattern Match</title>
     <body>
-        <p/>
+        <p>Convert IPA Target and IPA Actual transcripts into a CV pattern and compare the
+            results.</p>
     </body>
     <topic id="cv_match_parameters">
         <title>Parameters</title>
@@ -75,6 +76,14 @@
                     </ul>
                 </li>
             </ul>
+        </body>
+    </topic>
+    
+    <topic id="see_also">
+        <title>See Also</title>
+        <body>
+        <p>This analysis is also part of the <xref href="../specialized/word_match.dita"/> analysis
+            available in the Specialized section in the Anslysis menu.</p>
         </body>
     </topic>
     
