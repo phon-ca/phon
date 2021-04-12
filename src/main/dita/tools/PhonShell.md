@@ -4,6 +4,8 @@
 
 ![../images/PhonShell.png](./images/phonshell.png)
 
+Visit [](https://www.phon.ca/apidocs/) to view the current API for Phon.
+
 ## Usage
 
 When opening *PhonShell*, you will be presented with a prompt such as:
