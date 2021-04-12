@@ -18,9 +18,13 @@ package ca.phon.app.opgraph.nodes.table;
 import java.awt.*;
 import java.text.*;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 
+import ca.phon.query.script.params.DiacriticOptionsPanel;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
 import org.jdesktop.swingx.*;
 
 import ca.phon.app.log.*;
@@ -74,18 +78,32 @@ import ca.phon.util.*;
  */
 @OpNodeInfo(category="IPA Table Analysis", description="", name="Phone Accuracy", showInLibrary=true)
 public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings {
-	
-	private boolean _ignoreDiacritics = false;
-	
+
+	private boolean ignoreDiacritics = false;
+
+	private boolean onlyOrExcept = false;
+
+	private Collection<Diacritic> selectedDiacritics = new ArrayList<>();
+
 	private boolean includeEpenthesis = false;
-	
+
 	private JPanel settingsPanel;
-	private JCheckBox ignoreDiacriticsBox;
+	private DiacriticOptionsPanel diacriticOptionsPanel;
 	private JCheckBox includeEpenthesisBox;
-	
+
+	private InputField ignoreDiacriticsInput = new InputField("ignoreDiacritics", "", true, true, Boolean.class);
+
+	private InputField onlyOrExceptInput = new InputField("onlyOrExcept", "", true, true, Boolean.class);
+
+	private InputField selectedDiacriticsInput = new InputField("selectedDiacritics", "", true, true, Collection.class);
+
 	public PhoneAccuracyNode() {
 		super();
-		
+
+		putField(ignoreDiacriticsInput);
+		putField(onlyOrExceptInput);
+		putField(selectedDiacriticsInput);
+
 		putExtension(NodeSettings.class, this);
 	}
 	
@@ -93,12 +111,23 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 	public void operate(OpContext context) throws ProcessingException {
 		final DefaultTableDataSource inputTable = (DefaultTableDataSource)context.get(super.tableInput);
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
-		
-		boolean ignoreDiacritics = isIgnoreDiacritics();
-		// global settings have hightest priority
-		if(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default")) {
-			ignoreDiacritics = (Boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION);
-		}
+
+		final boolean ignoreDiacritics =
+				(context.containsKey(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ?
+						(boolean)context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION) :
+						(context.get(ignoreDiacriticsInput) != null ? (boolean)context.get(ignoreDiacriticsInput) : isIgnoreDiacritics()) );
+
+		final boolean onlyOrExcept =
+				(context.containsKey(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ?
+						(boolean)context.get(NodeWizard.ONLYOREXCEPT_GLOBAL_OPTION) :
+						(context.get(onlyOrExceptInput) != null ? (boolean)context.get(onlyOrExceptInput) : isOnlyOrExcept()) );
+
+		@SuppressWarnings("unchecked")
+		final Collection<Diacritic> selectedDiacritics =
+				(context.containsKey(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION) && !context.get(NodeWizard.IGNORE_DIACRITICS_GLOBAL_OPTION).equals("default") ?
+						((Collection<Diacritic>)context.get(NodeWizard.SELECTED_DIACRITICS_GLOBAL_OPTION)) :
+						(context.get(selectedDiacriticsInput) != null ? (Collection<Diacritic>) context.get(selectedDiacriticsInput) : getSelectedDiacritics()) );
+
 		boolean includeEpenthesis = isIncludeEpenthesis();
 	
 		// find required input columns
@@ -227,7 +256,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 				Counts currentCount = new Counts();
 				++currentCount.count;
 				if(ipaTEle != null && ipaAEle != null) {
-					if(compareElements(ipaTEle, ipaAEle, ignoreDiacritics)) {
+					if(compareElements(ipaTEle, ipaAEle, ignoreDiacritics, onlyOrExcept, selectedDiacritics)) {
 						++currentCount.accurate;
 					} else {
 						++currentCount.substitions;
@@ -284,13 +313,21 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		context.put(super.tableOutput, outputTable);
 	}
 	
-	private boolean compareElements(IPAElement ele1, IPAElement ele2, boolean ignoreDiacritics) {
+	private boolean compareElements(IPAElement ele1, IPAElement ele2, boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
 		if(ignoreDiacritics) {
-			final IPATranscript testIPA1 = 
-					(new IPATranscriptBuilder()).append(ele1).toIPATranscript().stripDiacritics();
-			final IPATranscript testIPA2 = 
-					(new IPATranscriptBuilder()).append(ele2).toIPATranscript().stripDiacritics();
-			return testIPA1.toString().matches(testIPA2.toString());
+			if(onlyOrExcept) {
+				final IPATranscript testIPA1 =
+						(new IPATranscriptBuilder()).append(ele1).toIPATranscript().stripDiacritics(selectedDiacritics);
+				final IPATranscript testIPA2 =
+						(new IPATranscriptBuilder()).append(ele2).toIPATranscript().stripDiacritics(selectedDiacritics);
+				return testIPA1.toString().matches(testIPA2.toString());
+			} else {
+				final IPATranscript testIPA1 =
+						(new IPATranscriptBuilder()).append(ele1).toIPATranscript().stripDiacriticsExcept(selectedDiacritics);
+				final IPATranscript testIPA2 =
+						(new IPATranscriptBuilder()).append(ele2).toIPATranscript().stripDiacriticsExcept(selectedDiacritics);
+				return testIPA1.toString().matches(testIPA2.toString());
+			}
 		} else {
 			return ele1.toString().equals(ele2.toString());
 		}
@@ -338,13 +375,44 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 	}
 	
 	public boolean isIgnoreDiacritics() {
-		return (this.ignoreDiacriticsBox != null ? this.ignoreDiacriticsBox.isSelected() : this._ignoreDiacritics);
+		return (this.diacriticOptionsPanel != null ? this.diacriticOptionsPanel.getIgnoreDiacriticsBox().isSelected() : this.ignoreDiacritics);
 	}
 	
 	public void setIgnoreDiacritics(boolean ignoreDiacritics) {
-		this._ignoreDiacritics = ignoreDiacritics;
-		if(this.ignoreDiacriticsBox != null)
-			this.ignoreDiacriticsBox.setSelected(ignoreDiacritics);
+		this.ignoreDiacritics = ignoreDiacritics;
+		if(this.diacriticOptionsPanel != null)
+			this.diacriticOptionsPanel.getIgnoreDiacriticsBox().setSelected(ignoreDiacritics);
+	}
+
+	public boolean isOnlyOrExcept() {
+		return (this.diacriticOptionsPanel != null
+				? this.diacriticOptionsPanel.getSelectionModeBox().getSelectedItem()
+					== DiacriticOptionsScriptParam.SelectionMode.ONLY
+				: this.onlyOrExcept);
+	}
+
+	public void setOnlyOrExcept(boolean onlyOrExcept) {
+		this.onlyOrExcept = onlyOrExcept;
+		if(this.diacriticOptionsPanel != null) {
+			DiacriticOptionsScriptParam.SelectionMode mode =
+					(onlyOrExcept
+							? DiacriticOptionsScriptParam.SelectionMode.ONLY
+							: DiacriticOptionsScriptParam.SelectionMode.EXCEPT);
+			this.diacriticOptionsPanel.getSelectionModeBox().setSelectedItem(mode);
+		}
+	}
+
+	public Collection<Diacritic> getSelectedDiacritics() {
+		return (this.diacriticOptionsPanel != null
+					? this.diacriticOptionsPanel.getDiacriticSelector().getSelectedDiacritics()
+					: this.selectedDiacritics);
+	}
+
+	public void setSelectedDiacritics(Collection<Diacritic> selectedDiacritics) {
+		this.selectedDiacritics = selectedDiacritics;
+		if(this.diacriticOptionsPanel != null) {
+			this.diacriticOptionsPanel.getDiacriticSelector().setSelectedDiacritics(selectedDiacritics);
+		}
 	}
 
 	public boolean isIncludeEpenthesis() {
@@ -362,13 +430,12 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		if(settingsPanel == null) {
 			settingsPanel = new JPanel(new VerticalLayout());
 			
-			ignoreDiacriticsBox = new JCheckBox("Ignore diacritics");
-			ignoreDiacriticsBox.setSelected(_ignoreDiacritics);
-			
+			diacriticOptionsPanel = new DiacriticOptionsPanel();
+
 			includeEpenthesisBox = new JCheckBox("Include epenthesis");
 			includeEpenthesisBox.setSelected(includeEpenthesis);
 			
-			settingsPanel.add(ignoreDiacriticsBox);
+			settingsPanel.add(diacriticOptionsPanel);
 			settingsPanel.add(includeEpenthesisBox);
 		}
 		return settingsPanel;
@@ -378,6 +445,8 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 	public Properties getSettings() {
 		Properties props = new Properties();
 		props.setProperty("ignoreDiacritics", Boolean.toString(isIgnoreDiacritics()));
+		props.setProperty("onlyOrExcept", Boolean.toString(isOnlyOrExcept()));
+		props.setProperty("selectedDiacritics", getSelectedDiacritics().stream().map(Diacritic::toString).collect(Collectors.joining(";")));
 		props.setProperty("includeEpenthesis", Boolean.toString(isIncludeEpenthesis()));
 		return props;
 	}
@@ -385,6 +454,17 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 	@Override
 	public void loadSettings(Properties properties) {
 		setIgnoreDiacritics(Boolean.parseBoolean(properties.getProperty("ignoreDiacritics", "false")));
+		setOnlyOrExcept(Boolean.parseBoolean(properties.getProperty("onlyOrExcept", "false")));
+
+		IPAElementFactory factory = new IPAElementFactory();
+		String textContent = properties.getProperty("selectedDiacritics", "");
+		if(textContent.length() > 0) {
+			Collection<Diacritic> selectedDiacritics = Arrays.stream(textContent.split(";"))
+					.map(txt -> factory.createDiacritic(txt.charAt(0)))
+					.collect(Collectors.toList());
+			setSelectedDiacritics(selectedDiacritics);
+		}
+
 		setIncludeEpenthesis(Boolean.parseBoolean(properties.getProperty("includeEpenthesis", "false")));
 	}
 	
