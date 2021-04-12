@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_5.dmg" newVersion="3.3.0-beta.5" newMediaFileId="macos" fileSize="288771890" md5Sum="484c26e48c531de009f4c03256466977" sha256Sum="da0c03983d811e0f7a60c5fd407f1000f67fa2295a936a13f5a2b7414cc02870" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.6/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_6.dmg" newVersion="3.3.0-beta.6" newMediaFileId="macos" fileSize="288771789" md5Sum="f484ead5cccf218d92b497eadc59f2ae" sha256Sum="34beed5393994552f55026f6f5cde10fd38c6cea26cc7035ed44dc29d5ba7d29" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -9,10 +9,13 @@
  * Added new 'Duplicate Tier' action
  * Integrated tier management functions into new context menu available on tier lables in Record Data view
  * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added new common query option to add positional data to query results
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
  * Updated Specialized/Word Match analysis
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
@@ -405,7 +408,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_5.dmg" newVersion="3.3.0-beta.5" newMediaFileId="macos" fileSize="288771890" md5Sum="484c26e48c531de009f4c03256466977" sha256Sum="da0c03983d811e0f7a60c5fd407f1000f67fa2295a936a13f5a2b7414cc02870" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_6.dmg" newVersion="3.3.0-beta.6" newMediaFileId="macos" fileSize="288771789" md5Sum="f484ead5cccf218d92b497eadc59f2ae" sha256Sum="34beed5393994552f55026f6f5cde10fd38c6cea26cc7035ed44dc29d5ba7d29" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -414,10 +417,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new 'Duplicate Tier' action
  * Integrated tier management functions into new context menu available on tier lables in Record Data view
  * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added new common query option to add positional data to query results
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
  * Updated Specialized/Word Match analysis
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
@@ -810,7 +816,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_5.exe" newVersion="3.3.0-beta.5" newMediaFileId="win64" fileSize="302086688" md5Sum="1f92eac96286f6f3e9325811c7bc2d88" sha256Sum="6b75eb582a1513b6eb55d4f490f3e1ce4a578314198888abeb90453c71fab8d1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_6.exe" newVersion="3.3.0-beta.6" newMediaFileId="win64" fileSize="302092832" md5Sum="b51269c83fcc708e6841c4d22f67d31a" sha256Sum="cbc2ce21564a30d4481e48264d5f2f6c19be9ff2249093430adc3d02e7b17ef1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -819,10 +825,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new 'Duplicate Tier' action
  * Integrated tier management functions into new context menu available on tier lables in Record Data view
  * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added new common query option to add positional data to query results
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
  * Updated Specialized/Word Match analysis
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
@@ -1215,7 +1224,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_5.exe" newVersion="3.3.0-beta.5" newMediaFileId="win64" fileSize="302086688" md5Sum="1f92eac96286f6f3e9325811c7bc2d88" sha256Sum="6b75eb582a1513b6eb55d4f490f3e1ce4a578314198888abeb90453c71fab8d1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_6.exe" newVersion="3.3.0-beta.6" newMediaFileId="win64" fileSize="302092832" md5Sum="b51269c83fcc708e6841c4d22f67d31a" sha256Sum="cbc2ce21564a30d4481e48264d5f2f6c19be9ff2249093430adc3d02e7b17ef1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -1224,10 +1233,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new 'Duplicate Tier' action
  * Integrated tier management functions into new context menu available on tier lables in Record Data view
  * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added new common query option to add positional data to query results
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
  * Updated Specialized/Word Match analysis
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
@@ -1620,7 +1632,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_5.exe" newVersion="3.3.0-beta.5" newMediaFileId="win64" fileSize="302086688" md5Sum="1f92eac96286f6f3e9325811c7bc2d88" sha256Sum="6b75eb582a1513b6eb55d4f490f3e1ce4a578314198888abeb90453c71fab8d1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_6.exe" newVersion="3.3.0-beta.6" newMediaFileId="win64" fileSize="302092832" md5Sum="b51269c83fcc708e6841c4d22f67d31a" sha256Sum="cbc2ce21564a30d4481e48264d5f2f6c19be9ff2249093430adc3d02e7b17ef1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -1629,10 +1641,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new 'Duplicate Tier' action
  * Integrated tier management functions into new context menu available on tier lables in Record Data view
  * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added new common query option to add positional data to query results
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
  * Updated Specialized/Word Match analysis
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
@@ -2025,7 +2040,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_5.zip" newVersion="3.3.0-beta.5" newMediaFileId="win64zip" fileSize="301054253" md5Sum="1a9d3a52caca77c0c7fa43afdd5cf2ea" sha256Sum="346ef698eff664f24ab522576f54e4b2ce0943e954cf85399753ac27ce33a1b3" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_6.zip" newVersion="3.3.0-beta.6" newMediaFileId="win64zip" fileSize="301061743" md5Sum="f87023dec533c67a1de5bcc1d23feb9d" sha256Sum="35b5aa09902a807c60c5f39eca721652cdbf0855c4d7cc3f4994993adcb34912" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
  
  * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
@@ -2034,10 +2049,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added new 'Duplicate Tier' action
  * Integrated tier management functions into new context menu available on tier lables in Record Data view
  * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added new common query option to add positional data to query results
  * Added new option to 'Combine results for all participants' to all stock analyses
  * Added inter-transcriber reliability function to Session Editor
  * Added Measure of Cluster Proximity analysis
  * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
  * Updated Specialized/Word Match analysis
  * Fixed issue with session date field
  * Fixed a bug where results from non-selected participants would appear in analysis result listings
