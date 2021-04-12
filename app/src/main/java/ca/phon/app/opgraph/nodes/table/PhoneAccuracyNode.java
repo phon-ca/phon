@@ -87,9 +87,12 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 
 	private boolean includeEpenthesis = false;
 
+	private boolean addAccuracyColumns = false;
+
 	private JPanel settingsPanel;
 	private DiacriticOptionsPanel diacriticOptionsPanel;
 	private JCheckBox includeEpenthesisBox;
+	private JCheckBox addAccuracyColumnsBox;
 
 	private InputField ignoreDiacriticsInput = new InputField("ignoreDiacritics", "", true, true, Boolean.class);
 
@@ -158,6 +161,16 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		outputTable.setColumnTitle(col++, "Deletions");
 		if(includeEpenthesis)
 			outputTable.setColumnTitle(col++, "Epenthesis");
+
+		if(isAddAccuracyColumns()) {
+			int inputCol = inputTable.getColumnCount();
+			inputTable.setColumnTitle(inputCol++, "Count");
+			inputTable.setColumnTitle(inputCol++, "Accurate");
+			inputTable.setColumnTitle(inputCol++, "Substitutions");
+			inputTable.setColumnTitle(inputCol++, "Deletions");
+			if(isIncludeEpenthesis())
+				inputTable.setColumnTitle(inputCol++, "Epenthesis");
+		}
 		
 		// perform counts, store information in 3-level map
 		final IpaTernaryTree<Map<String, Map<String, Counts>>> asdInfo = new IpaTernaryTree<>();
@@ -285,6 +298,15 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 					posInfo = posInfo.plus(currentCount);
 				}
 				eleInfo.put(position, posInfo);
+
+				if(isAddAccuracyColumns()) {
+					inputTable.setValueAt(row, "Count", currentCount.count);
+					inputTable.setValueAt(row, "Accurate", currentCount.accurate);
+					inputTable.setValueAt(row, "Substitutions", currentCount.substitions);
+					inputTable.setValueAt(row, "Deletions", currentCount.deletions);
+					if(isIncludeEpenthesis())
+						inputTable.setValueAt(row, "Epenthesis", currentCount.epenthesis);
+				}
 			}
 		}
 		
@@ -424,6 +446,16 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		if(this.includeEpenthesisBox != null)
 			this.includeEpenthesisBox.setSelected(includeEpenthesis);
 	}
+
+	public boolean isAddAccuracyColumns() {
+		return (this.addAccuracyColumnsBox != null ? this.addAccuracyColumnsBox.isSelected() : this.addAccuracyColumns);
+	}
+
+	public void setAddAccuracyColumns(boolean addAccuracyColumns) {
+		this.addAccuracyColumns = addAccuracyColumns;
+		if(this.addAccuracyColumnsBox != null)
+			this.addAccuracyColumnsBox.setSelected(addAccuracyColumns);
+	}
 	
 	@Override
 	public Component getComponent(GraphDocument document) {
@@ -434,9 +466,12 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 
 			includeEpenthesisBox = new JCheckBox("Include epenthesis");
 			includeEpenthesisBox.setSelected(includeEpenthesis);
-			
+
+			addAccuracyColumnsBox = new JCheckBox("Add accuracy columns to input table");
+
 			settingsPanel.add(diacriticOptionsPanel);
 			settingsPanel.add(includeEpenthesisBox);
+			settingsPanel.add(addAccuracyColumnsBox);
 		}
 		return settingsPanel;
 	}
@@ -448,6 +483,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		props.setProperty("onlyOrExcept", Boolean.toString(isOnlyOrExcept()));
 		props.setProperty("selectedDiacritics", getSelectedDiacritics().stream().map(Diacritic::toString).collect(Collectors.joining(";")));
 		props.setProperty("includeEpenthesis", Boolean.toString(isIncludeEpenthesis()));
+		props.setProperty("addAccuracyColumns", Boolean.toString(isAddAccuracyColumns()));
 		return props;
 	}
 
@@ -466,6 +502,7 @@ public final class PhoneAccuracyNode extends TableOpNode implements NodeSettings
 		}
 
 		setIncludeEpenthesis(Boolean.parseBoolean(properties.getProperty("includeEpenthesis", "false")));
+		setAddAccuracyColumns(Boolean.parseBoolean(properties.getProperty("addAccuracyColumns", "false")));
 	}
 	
 }
