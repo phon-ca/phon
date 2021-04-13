@@ -68,7 +68,10 @@
                             containing the consonant (in Orthography, IPA Target, IPA Actual) and the
                             context within which the token was found. Within the Phon report preview,
                             the user can click on each individual result to visualize it within its
-                            corresponding data record.</p>
+                            corresponding data record. Listings will also include columns for accurarcy 
+                            ('Count', 'Accurate', 'Substitutions', 'Deletions', 'Epenthesis'.)</p>
+                        <p>If 'Include positional information' is selected (default 'true') then 
+                            listings will also include columns for position within the query domain.</p>
                         <image placement="break" href="images/consonants_table3.png"
                             id="image_bcy_d44_nlb"/></li>
                 </ul>
@@ -90,6 +93,7 @@
                 <li><xref href="../query/common_query_options.dita#group_options"/></li>
                 <li><xref href="../query/common_query_options.dita#word_options"/></li>
                 <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                <li><xref href="../query/common_query_options.dita#participant_filter"/></li>
             </ul></p></body>
         </topic>
     </topic>
@@ -144,6 +148,7 @@
                             </ul>
                         </li>
                         <li>… (for each selected participant)</li>
+                        <li><i>Listing</i> (all participants)</li>
                     </ul>
                 </li>
             </ul>
