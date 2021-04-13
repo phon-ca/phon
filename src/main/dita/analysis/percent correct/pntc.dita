@@ -39,6 +39,7 @@
                         <li><xref href="../../query/common_query_options.dita#word_options"/></li>
                         <li><xref href="../../query/common_query_options.dita#syllable_options"/></li>
                         <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
+                        <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
                     </ul>
                 </p>
             </body>
