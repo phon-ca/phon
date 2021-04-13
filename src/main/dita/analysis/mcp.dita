@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="mcp">
-    <title>Measure of Cluster Proximity (beta)</title>
+    <title>Measure of Cluster Proximity</title>
     <body>
         <p>The Measure of Cluster Proximity (MCP) is a quantitative metric to evaluate consonant
             cluster production in speech development. This measure addresses the issue of
