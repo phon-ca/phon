@@ -170,6 +170,8 @@
                         <li><xref href="../query/common_query_options.dita#word_options"/></li>
                         <li><xref href="../query/common_query_options.dita#additional_tier_data"
                             /></li>
+                         <li><xref href="../query/common_query_options.dita#participant_filter"
+                         /></li>
                     </ul></p>
             </body>
         </topic>
@@ -184,7 +186,7 @@
             <ul>
                 <li><p><b>Measure of Cluster Proximity</b></p><ul>
                     <li>
-                        <p><b><i>Summary</i></b></p>
+                        <p><i>Summary</i></p>
                     </li>
                     <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
                         <li><i>Summary</i></li>
@@ -196,7 +198,7 @@
                     </ul></li>
                     <li>… (for each selected participant)</li>
                     <li>
-                        <p><b><i>Listing</i></b></p>
+                        <p><i>Listing</i></p>
                     </li>
                 </ul></li>
             </ul>
