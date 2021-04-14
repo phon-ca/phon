@@ -1282,7 +1282,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		smallLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()));
 		smallLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel largeLbl = new JLabel("A");
-		largeLbl.setFont(getFont().deriveFont(24.0f));
+		largeLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()*2));
 		largeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		final JSlider scaleSlider = new JSlider(1, 101);
