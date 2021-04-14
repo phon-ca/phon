@@ -69,20 +69,20 @@ public class SaveTablesToFolderAction extends HookableAction {
 		return this.type;
 	}
 	
-	public boolean exportReportNode(String folder, ReportTreeNode node) {
+	public boolean exportReportNode(String folder, ReportTreeNode node, boolean useIntegerForBoolean) {
 		if(node instanceof TableNode) {
-			return exportTable(folder, node);
+			return exportTable(folder, node, useIntegerForBoolean);
 		} else if(node instanceof ExcelExportableNode) {
-			return exportExcelNode(folder, node);
+			return exportExcelNode(folder, node, useIntegerForBoolean);
 		} else 
 			return false;
 	}
-	
-	public boolean exportExcelNode(String folder, ReportTreeNode node) {
+
+	public boolean exportExcelNode(String folder, ReportTreeNode node, boolean useIntegerForBoolean) {
 		final ExcelExportableNode excelNode = (ExcelExportableNode)node;
 		
 		final ExcelExporter exporter = excelNode.getExporter();
-		
+
 		final File tableFile = getFileForNode(folder, node);
 		final File parentFolder = tableFile.getParentFile();
 		
@@ -106,7 +106,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 		return true;
 	}
 	
-	public boolean exportTable(String folder, ReportTreeNode node) {
+	public boolean exportTable(String folder, ReportTreeNode node, boolean useIntegerForBoolean) {
 		if(!(node instanceof TableNode)) return false;
 		final TableNode tableNode = (TableNode)node;
 		
@@ -123,7 +123,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 		}
 		
 		try {
-			writeTableToFile(table, tableFile, "UTF-8");
+			writeTableToFile(table, tableFile, "UTF-8", useIntegerForBoolean);
 			return true;
 		} catch (IOException e) {
 			LogUtil.severe(e);
@@ -187,22 +187,21 @@ public class SaveTablesToFolderAction extends HookableAction {
 			
 			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportReportNode, this::done, getType() == ExportType.EXCEL ? true : false);
 			exportDialog.setParentFrame(wizard);
-			
-			exportDialog.getCustomOptionsPanel().setLayout(new VerticalLayout());
+
 			exportDialog.getCustomOptionsPanel().add(exportWithFoldersBox);
 			
 			exportDialog.showDialog();
 		}
 	}
 	
-	private void writeTableToFile(DefaultTableDataSource table, File file, String encoding) throws IOException {
+	private void writeTableToFile(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
 		switch(getType() ) {
 		case CSV:
-			writeTableToCSVFile(table, file, encoding);
+			writeTableToCSVFile(table, file, encoding, useIntegerForBoolean);
 			break;
 			
 		case EXCEL:
-			writeTableToExcelWorkbook(table, file, encoding);
+			writeTableToExcelWorkbook(table, file, encoding, useIntegerForBoolean);
 			break;
 			
 		default:
@@ -210,12 +209,12 @@ public class SaveTablesToFolderAction extends HookableAction {
 		}
 	}
 	
-	private void writeTableToExcelWorkbook(DefaultTableDataSource table, File file, String encoding) throws IOException {
+	private void writeTableToExcelWorkbook(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
 		final WritableWorkbook workbook = Workbook.createWorkbook(file);
 		final WritableSheet sheet = workbook.createSheet("Sheet 1", 1);
 		
 		try {
-			WorkbookUtils.addTableToSheet(sheet, 0, table);
+			WorkbookUtils.addTableToSheet(sheet, 0, table, useIntegerForBoolean);
 			workbook.write();
 		} catch (WriteException e) {
 			throw new IOException(e);
@@ -228,7 +227,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 		}		
 	}
 	
-	private void writeTableToCSVFile(DefaultTableDataSource table, File file, String encoding) throws IOException {
+	private void writeTableToCSVFile(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
 		final CSVWriter writer = 
 				new CSVWriter(new PrintWriter(file, encoding), ',', '\"', 
 						(OSInfo.isWindows() ? "\r\n" : "\n"));
@@ -243,7 +242,10 @@ public class SaveTablesToFolderAction extends HookableAction {
 		final String[] currentRow = new String[table.getColumnCount()];
 		for(int row = 0; row < table.getRowCount(); row++) {
 			for(int col = 0; col < table.getColumnCount(); col++) {
-				final Object cellVal = table.getValueAt(row, col);
+				Object cellVal = table.getValueAt(row, col);
+				if(cellVal instanceof Boolean && useIntegerForBoolean) {
+					cellVal = (cellVal == Boolean.TRUE ? 1 : 0);
+				}
 				currentRow[col] = (cellVal == null ? "" : cellVal.toString());
 			}
 			writer.writeNext(currentRow);

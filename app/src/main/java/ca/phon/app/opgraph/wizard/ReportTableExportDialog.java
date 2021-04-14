@@ -47,8 +47,14 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	private final static String OPEN_AFTER_EXPORT_PROP = ReportTableExportDialog.class.getName() + ".openAfterExport";
 	private final static boolean DEFAULT_OPEN_AFTER_EXPORT = Boolean.TRUE;
 	private boolean openAfterExport = PrefHelper.getBoolean(OPEN_AFTER_EXPORT_PROP, DEFAULT_OPEN_AFTER_EXPORT);
+
+	private final static String USE_INTEGER_FOR_BOOLEAN_PROP = ReportTableExportDialog.class.getName() + ".useIntegerForBoolean";
+	private final static boolean DEFAULT_USE_INTEGER_FOR_BOOLEAN = Boolean.TRUE;
+	private boolean useIntegerForBoolean = PrefHelper.getBoolean(USE_INTEGER_FOR_BOOLEAN_PROP, DEFAULT_USE_INTEGER_FOR_BOOLEAN);
 	
 	private JCheckBox openAfterExportBox;
+
+	private JCheckBox useIntegerForBooleanBox;
 
 	private JPanel customOptionsPanel;
 	
@@ -62,13 +68,13 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	private JButton cancelButton;
 	
 	private Supplier<String> locationFunction;
-	private BiFunction<String, ReportTreeNode, Boolean> exportFunction;
+	private ReportTreeExportFunction exportFunction;
 	private Consumer<List<ReportTreeNode>> finishFunction;
 	
 	private boolean includeExcelExportable = false;
-	
+
 	public ReportTableExportDialog(ReportTree reportTree, Supplier<String> locationFunction,
-			BiFunction<String, ReportTreeNode, Boolean> exportFunction, Consumer<List<ReportTreeNode>> finishFunction, boolean includeExcelExportable) {
+			ReportTreeExportFunction exportFunction, Consumer<List<ReportTreeNode>> finishFunction, boolean includeExcelExportable) {
 		super();
 		setTitle("Export Report Tables");
 		
@@ -112,12 +118,22 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 			openAfterExport = openAfterExportBox.isSelected();
 			PrefHelper.getUserPreferences().putBoolean(OPEN_AFTER_EXPORT_PROP, openAfterExport); 
 		} );
-		
-		customOptionsPanel = new JPanel();
+
+		useIntegerForBooleanBox = new JCheckBox("Use integers (1/0) for boolean values");
+		useIntegerForBooleanBox.setSelected(useIntegerForBoolean);
+		useIntegerForBooleanBox.addActionListener( (e) -> {
+			useIntegerForBoolean = useIntegerForBooleanBox.isSelected();
+			PrefHelper.getUserPreferences().putBoolean(USE_INTEGER_FOR_BOOLEAN_PROP, useIntegerForBoolean);
+		});
+
+		customOptionsPanel = new JPanel(new VerticalLayout());
+		customOptionsPanel.add(useIntegerForBooleanBox);
+
 		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(exportButton, cancelButton, busyLabel, openAfterExportBox);
 		
 		final JPanel bottomPanel = new JPanel(new VerticalLayout());
 		bottomPanel.add(customOptionsPanel);
+		bottomPanel.add(useIntegerForBooleanBox);
 		bottomPanel.add(buttonBar);
 		
 		add(bottomPanel, BorderLayout.SOUTH);
@@ -180,7 +196,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		protected List<ReportTreeNode> doInBackground() throws Exception {
 			List<ReportTreeNode> processed = new ArrayList<>();
 			for(ReportTreeNode treeNode:treeNodes) {
-				boolean retVal = exportFunction.apply(exportLocation, treeNode);
+				boolean retVal = exportFunction.exportReportTree(exportLocation, treeNode, useIntegerForBoolean);
 				if(retVal) {
 					processed.add(treeNode);
 					publish(treeNode);

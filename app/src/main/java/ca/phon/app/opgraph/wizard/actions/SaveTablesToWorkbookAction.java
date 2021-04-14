@@ -43,15 +43,15 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 		this.wizard = wizard;
 	}
 	
-	public boolean exportReportNode(String filename, ReportTreeNode node) {
+	public boolean exportReportNode(String filename, ReportTreeNode node, boolean useIntegerForBoolean) {
 		if(node instanceof TableNode) {
-			return exportTable(filename, node);
+			return exportTable(filename, node, useIntegerForBoolean);
 		} else if(node instanceof ExcelExportableNode) {
 			return exportExcelNode(filename, node);
 		} else 
 			return false;
 	}
-	
+
 	public boolean exportExcelNode(String filename, ReportTreeNode node) {
 		final ExcelExportableNode excelNode = (ExcelExportableNode)node;
 		
@@ -75,7 +75,7 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 		return true;
 	}
 
-	public boolean exportTable(String filename, ReportTreeNode node) {
+	public boolean exportTable(String filename, ReportTreeNode node, boolean useIntegerForBoolean) {
 		if(!(node instanceof TableNode)) return false;
 		final TableNode tableNode = (TableNode)node;
 		
@@ -104,7 +104,7 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 		
 		final WritableSheet sheet = workbook.createSheet(name, workbook.getNumberOfSheets());
 		try {
-			WorkbookUtils.addTableToSheet(sheet, 0, table);
+			WorkbookUtils.addTableToSheet(sheet, 0, table, useIntegerForBoolean);
 		} catch (WriteException e1) {
 			LogUtil.severe(e1);
 			return false;

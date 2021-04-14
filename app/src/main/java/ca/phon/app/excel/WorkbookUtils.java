@@ -37,26 +37,35 @@ import java.util.List;
  */
 public class WorkbookUtils {
 
-	
 	public static int addTableToSheet(WritableSheet sheet, int startRow, DefaultTableDataSource table)
+			throws RowsExceededException, WriteException {
+		return addTableToSheet(sheet, startRow, table, false);
+	}
+
+	public static int addTableToSheet(WritableSheet sheet, int startRow, DefaultTableDataSource table, boolean useIntegerForBoolean)
 		throws RowsExceededException, WriteException {
 		final ArrayList<String> columns = new ArrayList<>();
 		for(int col = 0; col < table.getColumnCount(); col++) columns.add(table.getColumnTitle(col));
-		return addTableToSheet(sheet, startRow, table, columns);
+		return addTableToSheet(sheet, startRow, table, columns, useIntegerForBoolean);
 	}
-	
+
+	public static int addTableToSheet(WritableSheet sheet, int startRow, DefaultTableDataSource table, List<String> columns)
+			throws RowsExceededException, WriteException {
+		return addTableToSheet(sheet, startRow, table, columns, false);
+	}
+
 	/**
 	 * Add table to the given sheet starting at row.
 	 * Only print given columns.
 	 * 
 	 * @param sheet
-	 * @param row
+	 * @param startRow
 	 * @param table
 	 * @param columns
 	 * @throws WriteException 
 	 * @throws RowsExceededException 
 	 */
-	public static int addTableToSheet(WritableSheet sheet, int startRow, DefaultTableDataSource table, List<String> columns) 
+	public static int addTableToSheet(WritableSheet sheet, int startRow, DefaultTableDataSource table, List<String> columns, boolean useIntegerForBoolean)
 			throws RowsExceededException, WriteException {
 		// write header
 		WritableCellFormat cFormat = new WritableCellFormat();
@@ -95,8 +104,14 @@ public class WorkbookUtils {
 							Date.from(((LocalDateTime) val).atZone(ZoneId.systemDefault()).toInstant()));
 					sheet.addCell(cell);
 				} else if(val instanceof Boolean) {
-					final jxl.write.Boolean cell = new jxl.write.Boolean(col, startRow + row + 1, (boolean) val);
-					sheet.addCell(cell);
+					if(useIntegerForBoolean) {
+						final jxl.write.Number cell = new jxl.write.Number(col, startRow+row+1,
+								((boolean)val ? 1 : 0));
+						sheet.addCell(cell);
+					} else {
+						final jxl.write.Boolean cell = new jxl.write.Boolean(col, startRow + row + 1, (boolean) val);
+						sheet.addCell(cell);
+					}
 				} else {
 					final Label cell = new Label(col, startRow+row+1, FormatterUtil.format(val));
 					sheet.addCell(cell);
@@ -114,7 +129,12 @@ public class WorkbookUtils {
 		for(int col = 0; col < tableModel.getColumnCount(); col++) columns.add(tableModel.getColumnName(col));
 		return addTableToSheet(sheet, startRow, tableModel, columns);
 	}
-	
+
+	public static int addTableToSheet(WritableSheet sheet, int startRow, TableModel tableModel, List<String> columns)
+			throws RowsExceededException, WriteException {
+		return addTableToSheet(sheet, startRow, tableModel, columns, false);
+	}
+
 	/**
 	 * Add csv table model to workbook sheet.
 	 * 
@@ -123,7 +143,7 @@ public class WorkbookUtils {
 	 * @param tableModel
 	 * @param columns
 	 */
-	public static int addTableToSheet(WritableSheet sheet, int startRow, TableModel tableModel, List<String> columns)
+	public static int addTableToSheet(WritableSheet sheet, int startRow, TableModel tableModel, List<String> columns, boolean useIntegerForBoolean)
 		throws RowsExceededException, WriteException {
 		// write header
 		WritableCellFormat cFormat = new WritableCellFormat();
@@ -156,9 +176,18 @@ public class WorkbookUtils {
 							Date.from(((LocalDate)val).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 					sheet.addCell(cell);
 				} else if(val instanceof LocalDateTime) {
-					final DateTime cell = new DateTime(col, startRow+row+1,
-							Date.from(((LocalDateTime)val).atZone(ZoneId.systemDefault()).toInstant()));
+					final DateTime cell = new DateTime(col, startRow + row + 1,
+							Date.from(((LocalDateTime) val).atZone(ZoneId.systemDefault()).toInstant()));
 					sheet.addCell(cell);
+				} else if(val instanceof Boolean) {
+					if(useIntegerForBoolean) {
+						final jxl.write.Number cell = new jxl.write.Number(col, startRow+row+1,
+								((boolean)val ? 1 : 0));
+						sheet.addCell(cell);
+					} else {
+						final jxl.write.Boolean cell = new jxl.write.Boolean(col, startRow + row + 1, (boolean) val);
+						sheet.addCell(cell);
+					}
 				} else {
 					final Label cell = new Label(col, startRow+row+1, FormatterUtil.format(val));
 					sheet.addCell(cell);
