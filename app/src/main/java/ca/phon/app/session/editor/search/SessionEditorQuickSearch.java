@@ -93,7 +93,7 @@ public class SessionEditorQuickSearch {
 		table.getSelectionModel().addListSelectionListener(new SessionTableListener(table));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addHighlighter(HighlighterFactory.createSimpleStriping(PhonGuiConstants.PHON_UI_STRIP_COLOR));
-		table.setFont(FontPreferences.getTierFont());
+		table.setFont(FontPreferences.getTierFont().deriveFont(12.0f));
 		
 		return table;
 	}
