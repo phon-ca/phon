@@ -806,7 +806,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	private IpaMapSearchField createSearchField() {
 		final IpaMapSearchField searchField = new IpaMapSearchField();
 		searchField.setPrompt("Search Glyphs");
-		searchField.setFont(getFont().deriveFont(12.0f));
+		searchField.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()));
 		searchField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -1279,7 +1279,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		
 		// setup font scaler
 		final JLabel smallLbl = new JLabel("A");
-		smallLbl.setFont(getFont().deriveFont(12.0f));
+		smallLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()));
 		smallLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		JLabel largeLbl = new JLabel("A");
 		largeLbl.setFont(getFont().deriveFont(24.0f));
