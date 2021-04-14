@@ -49,6 +49,16 @@ public class FontPreferences {
 			"Noto Sans Mono"
 	};
 
+	public static final Float DEFAULT_FONT_SIZE = 12.0f;
+	public final static String DEFAULT_FONT_SIZE_PROP = FontPreferences.class.getName() + ".defaultFontSize";
+	public static float getDefaultFontSize() {
+		return PrefHelper.getFloat(DEFAULT_FONT_SIZE_PROP, DEFAULT_FONT_SIZE);
+	}
+
+	public static void setDefaultFontSize(float fontSize) {
+		PrefHelper.getUserPreferences().putFloat(DEFAULT_FONT_SIZE_PROP, fontSize);
+	}
+
 	/**
 	 * Reset all font preferences
 	 */
