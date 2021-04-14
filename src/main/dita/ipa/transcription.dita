@@ -3,7 +3,7 @@
 <topic id="transcription">
     <title>Parsing IPA Transcriptions</title>
     <body>
-        <p>Phonetic transcriptions - data entered into <keyword>IPA Targetr</keyword> and
+        <p>Phonetic transcriptions - data entered into <keyword>IPA Target</keyword> and
                 <keyword>IPA Actual</keyword> tiers - are parsed into discreet units, or
                 <keyword>IPA elements</keyword>. Each <keyword>IPA element</keyword> constitutes
             either a timing unit or annotation within the transcription. The following <keyword>IPA
