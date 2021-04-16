@@ -38,6 +38,7 @@ import javax.tools.Tool;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.TierTransferrable;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.view.timeline.TimelineRecordTier;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.orthography.Orthography;
@@ -86,9 +87,18 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	 * speaker selection
 	 */
 	private JComboBox<Participant> speakerBox;
-	
 
 	private volatile boolean updating = false;
+
+	/**
+	 * Font size
+	 */
+	private DropDownButton fontSizeButton;
+	private JPopupMenu fontSizeMenu;
+
+	public final static String FONT_SIZE_DELTA_PROP = RecordDataEditorView.class.getName() + ".fontSizeDelta";
+	public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
+	public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
 
 	/**
 	 * query exclusion
@@ -222,6 +232,12 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		getEditor().getSelectionModel().addSelectionModelListener(selectionListener);
 		
 		getEditor().getMediaModel().getSegmentPlayback().addPropertyChangeListener(segmentPlaybackListener);
+
+		addPropertyChangeListener("fontSizeDelta", e -> {
+			PrefHelper.getUserPreferences().putFloat(RecordDataEditorView.FONT_SIZE_DELTA_PROP, getFontSizeDelta());
+			update();
+			repaint();
+		});
 	}
 
 	private void setupEditorActions() {
@@ -336,6 +352,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
 				tierFont = Font.decode(fontString);
 			}
+			tierFont = tierFont.deriveFont(tierFont.getSize() + getFontSizeDelta());
 
 			Tier<?> tier = record.getTier(tierName);
 			if(tier == null) {
@@ -450,6 +467,16 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		}
 	}
 
+	public float getFontSizeDelta() {
+		return this.fontSizeDelta;
+	}
+
+	public void setFontSizeDelta(float fontSizeDelta) {
+		float oldVal = this.fontSizeDelta;
+		this.fontSizeDelta = fontSizeDelta;
+		firePropertyChange("fontSizeDelta", oldVal, fontSizeDelta);
+	}
+
 	/*
 	 * Session selections
 	 */
@@ -540,7 +567,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			final Session session = editor.getSession();
 
 			final FormLayout layout = new FormLayout(
-					"pref, pref, 3dlu, pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref, 5dlu, right:pref",
+					"pref, pref, 3dlu, pref, fill:pref:grow(0.5), 5dlu, pref, fill:pref:grow, right:pref, 5dlu, right:pref, 5dlu, right:pref, 5dlu, right:pref",
 					"pref");
 			topPanel = new JPanel(layout);
 
@@ -641,12 +668,77 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			btnPanel.add(splitGroupBtn);
 			
 			final PhonUIAction toggleFindAndReplaceAct = new PhonUIAction(this, "onToggleFindAndReplace");
-			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
+			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "Find & Replace");
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
-			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace");
+			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace panel");
 			findAndReplaceButton = new JButton(toggleFindAndReplaceAct);
 			
 			topPanel.add(findAndReplaceButton, cc.xy(colIdx++, rowIdx));
+			colIdx++;
+
+			fontSizeMenu = new JPopupMenu();
+			fontSizeMenu.addPopupMenuListener(new PopupMenuListener() {
+				@Override
+				public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+					fontSizeMenu.removeAll();
+
+					// setup font scaler
+					final JLabel smallLbl = new JLabel("A");
+					smallLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()));
+					smallLbl.setHorizontalAlignment(SwingConstants.CENTER);
+					JLabel largeLbl = new JLabel("A");
+					largeLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()*2));
+					largeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+
+					final JSlider scaleSlider = new JSlider(-8, 24);
+					scaleSlider.setValue((int)getFontSizeDelta());
+					scaleSlider.setMajorTickSpacing(8);
+					scaleSlider.setMinorTickSpacing(2);
+					scaleSlider.setSnapToTicks(true);
+					scaleSlider.setPaintTicks(true);
+					scaleSlider.addChangeListener( changeEvent -> {
+						int sliderVal = scaleSlider.getValue();
+						setFontSizeDelta(sliderVal);
+					});
+
+					JComponent fontComp = new JPanel(new HorizontalLayout());
+					fontComp.add(smallLbl);
+					fontComp.add(scaleSlider);
+					fontComp.add(largeLbl);
+
+					fontSizeMenu.add(fontComp);
+
+					fontSizeMenu.addSeparator();
+
+					final PhonUIAction useDefaultFontSizeAct = new PhonUIAction(RecordDataEditorView.this, "setFontSizeDelta", 0.0f);
+					useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
+					useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
+					fontSizeMenu.add(useDefaultFontSizeAct);
+				}
+
+				@Override
+				public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+				}
+
+				@Override
+				public void popupMenuCanceled(PopupMenuEvent e) {
+
+				}
+			});
+
+			final PhonUIAction fontSizeAct = new PhonUIAction(this, null);
+			fontSizeAct.putValue(PhonUIAction.NAME, "Font size");
+			fontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font size menu");
+			fontSizeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
+			fontSizeAct.putValue(DropDownButton.BUTTON_POPUP, fontSizeMenu);
+			fontSizeAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+			fontSizeAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+
+			fontSizeButton = new DropDownButton(fontSizeAct);
+			fontSizeButton.setOnlyPopup(true);
+
+			topPanel.add(fontSizeButton, cc.xy(colIdx++, rowIdx));
 			colIdx++;
 			
 			topPanel.add(btnPanel, cc.xy(colIdx++, rowIdx));
