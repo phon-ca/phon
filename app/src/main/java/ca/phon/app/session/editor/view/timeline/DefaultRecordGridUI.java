@@ -156,7 +156,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		}
 		
 		Font tierFont = ("default".equals(fontInfo)) ? FontPreferences.getTierFont() : Font.decode(fontInfo);
-		return tierFont;
+		float fontSize = (recordGrid.getFontSizeDelta() < 0
+				? Math.max(2.0f, tierFont.getSize()+recordGrid.getFontSizeDelta())
+				: Math.min(36.0f, tierFont.getSize()+recordGrid.getFontSizeDelta()));
+		return tierFont.deriveFont(fontSize);
 	}
 	
 	private int getTierHeight(String tierName) {
@@ -906,7 +909,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		if("speakerCount".equals(e.getPropertyName())
 				|| "tierCount".equals(e.getPropertyName())
 				|| "tierInsets".equals(e.getPropertyName())
-				|| "pixelsPerSecond".equals(e.getPropertyName())) {
+				|| "pixelsPerSecond".equals(e.getPropertyName())
+				|| "fontSizeDelta".equals(e.getPropertyName())) {
 			recordGrid.revalidate();
 			recordGrid.repaint();
 		} else if("currentRecordIndex".equals(e.getPropertyName())) {

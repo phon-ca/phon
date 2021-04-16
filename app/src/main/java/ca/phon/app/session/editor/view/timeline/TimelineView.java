@@ -26,6 +26,7 @@ import java.util.Timer;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import ca.phon.ui.fonts.FontPreferences;
 import org.jdesktop.swingx.*;
 
 import ca.phon.app.log.*;
@@ -83,6 +84,9 @@ public final class TimelineView extends EditorView {
 	
 	private DropDownButton tierVisiblityButton;
 	private JPopupMenu tierVisibilityMenu;
+
+	private DropDownButton fontSizeButton;
+	private JPopupMenu fontSizeMenu;
 	
 	private JScrollPane tierScrollPane;
 	private TierPanel tierPanel;
@@ -102,8 +106,7 @@ public final class TimelineView extends EditorView {
 	private TimelineWaveformTier wavTier;
 	
 	private TimelineRecordTier recordGrid;
-	
-	
+
 	// playback marker for segment playback
 	private Marker segmentPlaybackMarker;
 	
@@ -388,6 +391,68 @@ public final class TimelineView extends EditorView {
 		
 		tierVisiblityButton = new DropDownButton(tierVisibilityAct);
 		tierVisiblityButton.setOnlyPopup(true);
+
+		fontSizeMenu = new JPopupMenu();
+		fontSizeMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				fontSizeMenu.removeAll();
+
+				// setup font scaler
+				final JLabel smallLbl = new JLabel("A");
+				smallLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()));
+				smallLbl.setHorizontalAlignment(SwingConstants.CENTER);
+				JLabel largeLbl = new JLabel("A");
+				largeLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()*2));
+				largeLbl.setHorizontalAlignment(SwingConstants.CENTER);
+
+				final JSlider scaleSlider = new JSlider(-8, 24);
+				scaleSlider.setValue((int)recordGrid.getRecordGrid().getFontSizeDelta());
+				scaleSlider.setMajorTickSpacing(8);
+				scaleSlider.setMinorTickSpacing(2);
+				scaleSlider.setSnapToTicks(true);
+				scaleSlider.setPaintTicks(true);
+				scaleSlider.addChangeListener( changeEvent -> {
+					int sliderVal = scaleSlider.getValue();
+					recordGrid.getRecordGrid().setFontSizeDelta(sliderVal);
+				});
+
+				JComponent fontComp = new JPanel(new HorizontalLayout());
+				fontComp.add(smallLbl);
+				fontComp.add(scaleSlider);
+				fontComp.add(largeLbl);
+
+				fontSizeMenu.add(fontComp);
+
+				fontSizeMenu.addSeparator();
+
+				final PhonUIAction useDefaultFontSizeAct = new PhonUIAction(recordGrid.getRecordGrid(), "setFontSizeDelta", 0.0f);
+				useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
+				useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
+				fontSizeMenu.add(useDefaultFontSizeAct);
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+
+			}
+		});
+
+		final PhonUIAction fontSizeAct = new PhonUIAction(this, null);
+		fontSizeAct.putValue(PhonUIAction.NAME, "Font size");
+		fontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font size menu");
+		fontSizeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
+		fontSizeAct.putValue(DropDownButton.BUTTON_POPUP, fontSizeMenu);
+		fontSizeAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		fontSizeAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+
+		fontSizeButton = new DropDownButton(fontSizeAct);
+		fontSizeButton.setOnlyPopup(true);
 		
 		zoomOutButton = new JButton(new ZoomAction(this, false));
 		zoomInButton = new JButton(new ZoomAction(this, true));
@@ -402,6 +467,7 @@ public final class TimelineView extends EditorView {
 		toolbar.addSeparator();
 		toolbar.add(speakerButton);
 		toolbar.add(tierVisiblityButton);
+		toolbar.add(fontSizeButton);
 //		toolbar.add(splitRecordButton);
 		toolbar.addSeparator();
 		toolbar.add(zoomInButton);

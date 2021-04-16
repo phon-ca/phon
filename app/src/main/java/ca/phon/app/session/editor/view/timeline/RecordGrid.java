@@ -29,6 +29,7 @@ import ca.phon.media.*;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.*;
 import ca.phon.util.*;
 
@@ -51,7 +52,10 @@ public class RecordGrid extends TimeComponent {
 	private final List<BiConsumer<Participant, MenuBuilder>> participantMenuHandlers = Collections.synchronizedList(new ArrayList<>());
 	
 	private final static String uiClassId = "RecordGridUI";
-	
+
+	/** Size added to fontSize for each tier */
+	private float fontSizeDelta = 0.0f;
+
 	/* 
 	 * Split mode.
 	 * 
@@ -79,7 +83,17 @@ public class RecordGrid extends TimeComponent {
 		
 		updateUI();
 	}
-	
+
+	public float getFontSizeDelta() {
+		return this.fontSizeDelta;
+	}
+
+	public void setFontSizeDelta(float fontSizeDelta) {
+		float oldValue = this.fontSizeDelta;
+		this.fontSizeDelta = fontSizeDelta;
+		firePropertyChange("fontSizeDelta", oldValue, fontSizeDelta);
+	}
+
 	public void addSpeaker(Participant speaker) {
 		var currentSpeakerCount = speakerSet.size();
 		speakerSet.add(speaker);

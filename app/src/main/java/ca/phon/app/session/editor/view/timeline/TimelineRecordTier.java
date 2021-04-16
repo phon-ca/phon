@@ -30,6 +30,8 @@ import java.util.stream.*;
 
 import javax.print.attribute.standard.Media;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -83,6 +85,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private JButton moveSegmentsButton;
 
+	public final static String FONT_SIZE_DELTA_PROP = TimelineRecordTier.class.getName() + ".fontSizeDelta";
+	public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
+	public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
+
 	public TimelineRecordTier(TimelineView parent) {
 		super(parent);
 
@@ -117,6 +123,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.setFont(FontPreferences.getTierFont());
 		setupRecordGridActions();
 		setupSpeakers();
+
+		recordGrid.setFontSizeDelta(fontSizeDelta);
+		recordGrid.addPropertyChangeListener("fontSizeDelta", e -> {
+			this.fontSizeDelta = recordGrid.getFontSizeDelta();
+			PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, this.fontSizeDelta);
+		});
 
 		// add ortho by default
 		tierVisibility.put(SystemTierType.Orthography.getName(), Boolean.TRUE);
