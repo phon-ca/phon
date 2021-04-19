@@ -1,10 +1,8 @@
-# General
-analysis/Consonants.xml
-analysis/Measure of Cluster Proximity.xml
-analysis/Phone Inventory.xml
-analysis/Phonological Mean Length of Utterance.xml
-analysis/Word Inventory.xml
-#Match
+# Inventory
+analysis/Inventory/Consonants.xml
+analysis/Inventory/Phone Inventory.xml
+analysis/Inventory/Word Inventory.xml
+# Match
 analysis/Match/CV Pattern Match.xml
 analysis/Match/Stress Match.xml
 analysis/Match/Syllable Count Match.xml
@@ -32,3 +30,6 @@ analysis/Specialized/Multisyllabic Non-linear.xml
 analysis/Specialized/Vocalization.xml
 analysis/Specialized/Word Match.xml
 analysis/Specialized/Word-Level Analysis of Polysyllables.xml
+# General
+analysis/Measure of Cluster Proximity.xml
+analysis/Phonological Mean Length of Utterance.xml
