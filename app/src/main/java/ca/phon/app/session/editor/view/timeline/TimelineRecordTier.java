@@ -636,6 +636,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private final DelegateEditorAction onParticipantAddedAct = new DelegateEditorAction(this, "onParticipantAdded");
 
+	private final DelegateEditorAction onTierViewChangedAct = new DelegateEditorAction(this, "onTierViewChanged");
+
 	private void setupEditorEvents() {
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT,
 				onRecordChange);
@@ -643,6 +645,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				onSpeakerChange);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT,
 				onTierChangedAct);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT,
+				onTierViewChangedAct);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED,
 				onParticipantRemoveAct);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED,
@@ -658,6 +662,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				onSpeakerChange);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT,
 				onTierChangedAct);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT,
+				onTierViewChangedAct);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.PARTICIPANT_REMOVED,
 				onParticipantRemoveAct);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.PARTICIPANT_ADDED,
@@ -763,6 +769,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	@RunOnEDT
 	public void onParticipantAdded(EditorEvent ee) {
 		setSpeakerVisible((Participant) ee.getEventData(), true);
+	}
+
+	@RunOnEDT
+	public void onTierViewChanged(EditorEvent ee) {
+		revalidate();
+		repaint();
 	}
 
 	@RunOnEDT
