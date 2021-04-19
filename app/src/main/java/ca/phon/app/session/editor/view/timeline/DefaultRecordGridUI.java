@@ -157,8 +157,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		Font tierFont = ("default".equals(fontInfo)) ? FontPreferences.getTierFont() : Font.decode(fontInfo);
 		float fontSize = (recordGrid.getFontSizeDelta() < 0
-				? Math.max(2.0f, tierFont.getSize()+recordGrid.getFontSizeDelta())
-				: Math.min(36.0f, tierFont.getSize()+recordGrid.getFontSizeDelta()));
+				? Math.max(FontPreferences.MIN_FONT_SIZE, tierFont.getSize()+recordGrid.getFontSizeDelta())
+				: Math.min(FontPreferences.MAX_FONT_SIZE, tierFont.getSize()+recordGrid.getFontSizeDelta()));
 		return tierFont.deriveFont(fontSize);
 	}
 	

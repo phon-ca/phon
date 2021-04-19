@@ -352,7 +352,11 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			if(fontString != null && !fontString.equalsIgnoreCase("default")) {
 				tierFont = Font.decode(fontString);
 			}
-			tierFont = tierFont.deriveFont(tierFont.getSize() + getFontSizeDelta());
+
+			float fontSize = getFontSizeDelta() < 0
+					? Math.max(FontPreferences.MIN_FONT_SIZE, tierFont.getSize() + getFontSizeDelta())
+					: Math.min(FontPreferences.MAX_FONT_SIZE, tierFont.getSize() + getFontSizeDelta());
+			tierFont = tierFont.deriveFont(fontSize);
 
 			Tier<?> tier = record.getTier(tierName);
 			if(tier == null) {
