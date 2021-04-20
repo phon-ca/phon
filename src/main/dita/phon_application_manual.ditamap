@@ -124,9 +124,11 @@
         <topicref href="analysis/analyses.dita" format="dita"/>
         <topicref href="analysis/consonants.dita" format="dita"/>
         <topicref href="analysis/mcp.dita"/>
-        <topicref href="analysis/phone_inventory.dita"/>
         <topicref href="analysis/pmlu.dita"/>
-        <topicref href="analysis/word_inventory.dita" format="dita"/>
+        <topichead navtitle="Inventory">
+            <topicref href="analysis/phone_inventory.dita"/>
+            <topicref href="analysis/word_inventory.dita" format="dita"/>
+        </topichead>
         <topichead navtitle="Match">
             <topicref href="analysis/match/cv_pattern_match.dita"/>
             <topicref href="analysis/match/stress_match.dita"/>
