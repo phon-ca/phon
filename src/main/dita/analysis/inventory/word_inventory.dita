@@ -12,14 +12,14 @@
             <p>
              <fig id="fig_xyt_pgn_4nb">
                  <title>Word Inventory Parameters</title>
-                 <image placement="break" href="images/word_inventory_parameters.png" id="image_yyt_pgn_4nb"
+                 <image placement="break" href="../images/word_inventory_parameters.png" id="image_yyt_pgn_4nb"
                  />
              </fig>
             </p>
             <p> By default, the word inventory analysis will create an inventory of words in the
                 Orthogrpahy tier. You may change this using the form shown above. To add additional
                 tiers, use the <uicontrol>Add Aligned Words</uicontrol> field under <xref
-                    href="../query/common_query_options.dita#word_options"/>. </p>
+                    href="../../query/common_query_options.dita#word_options"/>. </p>
             
         </body>
         <topic id="other_parameters">
@@ -28,10 +28,10 @@
                 <p><ul id="ol_qkx_cqy_mjb">
                     <li>Ignore diacritics - ignore diacritics when comparing phones (default:
                         no)</li>
-                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
-                    <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
-                    <li><xref href="../query/common_query_options.dita#participant_filter"/></li>
+                    <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
+                    <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
                 </ul></p>
             </body>
         </topic>
@@ -41,7 +41,7 @@
         <body>
             <p>An example table of contents is displayed below. Bold level elements are section
                 headers while italic items are tables. Click <xref
-                    href="./examples/word_inventory_example.html" format="html" scope="external">here</xref> to
+                    href="../examples/word_inventory_example.html" format="html" scope="external">here</xref> to
                 see an example report.</p>
             <ul>
                 <li><p><b>Word Inventory</b></p><ul>

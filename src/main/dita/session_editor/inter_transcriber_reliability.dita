@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="inter_transcriber_reliability">
-    <title>Inter-transcriber Reliability (beta)</title>
+    <title>Inter-transcriber Reliability</title>
     <shortdesc>The inter-transcriber reliability report provides several metrics of agreement
         between blind transcribers in a Phon session. </shortdesc>
     <topic id="topic_th3_1rj_vnb">

@@ -19,7 +19,7 @@
             <p>
                 <fig id="fig_cdm_vhn_3nb">
                     <title>Phone Inventory Parameters</title>
-                    <image placement="break" href="images/phone_inventory_parameters.png"
+                    <image placement="break" href="../images/phone_inventory_parameters.png"
                         id="image_ddm_vhn_3nb"/>
                 </fig>
             </p>
@@ -31,12 +31,12 @@
             <body>
                 <p>
                     <ul>
-                        <li><xref href="../query/common_query_options.dita#search_by"/></li>
-                        <li><xref href="../query/common_query_options.dita#group_options"/></li>
-                        <li><xref href="../query/common_query_options.dita#word_options"/></li>
-                        <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
-                        <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
-                        <li><xref href="../query/common_query_options.dita#participant_filter"/></li>
+                        <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                        <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#syllable_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
+                        <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
                     </ul>
                 </p>
             </body>
@@ -48,7 +48,7 @@
         <body>
             <p>An example table of contents is displayed below. Bold level elements are section
                 headers while italic items are tables. Click <xref
-                    href="./examples/phone_inventory_example.html" format="html" scope="external"
+                    href="../examples/phone_inventory_example.html" format="html" scope="external"
                     >here</xref> to see an example report.</p>
             <ul>
                 <li>

@@ -54,7 +54,7 @@
         <body>
             <p>An example table of contents is displayed below. Bold level elements are section
                 headers while italic items are tables. Click <xref
-                    href="./examples/consonants_example.html" format="html" scope="external"
+                    href="../examples/cv_pattern_match_example.html" format="html" scope="external"
                     >here</xref> to see an example report.</p>
             <ul>
                 <li>
