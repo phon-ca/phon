@@ -179,7 +179,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		moveSegmentsAct.putValue(PhonUIAction.NAME, "Move records");
 		moveSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records a specified amount of time");
 		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
-				IconManager.getInstance().getIcon("actions/list-move", IconSize.SMALL));
+				IconManager.getInstance().getIcon("actions/transform-move", IconSize.SMALL));
 		moveSegmentsButton = new JButton(moveSegmentsAct);
 		toolbar.add(moveSegmentsButton);
 	}
