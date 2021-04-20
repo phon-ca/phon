@@ -69,9 +69,7 @@
                         <li>
                             <p><b>Participant 1</b></p>
                             <ul id="ul_dzp_5mg_3nb">
-                                <li>
-                                    <p><i>Summary</i></p>
-                                </li>
+                                <li><i>Summary</i></li>
                                 <li><i>Matches</i></li>
                                 <li><i>Mismatches</i></li>
                                 <li><i>CV Pattern Matches</i></li>
@@ -101,6 +99,8 @@
                     In E. Babatsouli, M. Ball &amp; N. Müller (eds.),
                         <i>An</i><i>A</i><i>nthology</i><i>of</i><i>B</i><i>ilingual</i><i>C</i><i>hild</i><i>P</i><i>honology</i>
                     (pp.274-308). Bristol, UK: Multilingual Matters. doi.org/10.21832/BABATS8410</p>
+                <p>Available at <xref href="http://phonodevelopment.sites.olt.ubc.ca/" format="html"
+                        scope="external"/>.</p>
             </section>
 
             <section>
