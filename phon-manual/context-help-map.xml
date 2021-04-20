@@ -106,9 +106,9 @@
    <appContext helpID="built-in-analyses" path="analysis/analyses.html"/>
    <appContext helpID="consonants" path="analysis/consonants.html"/>
    <appContext helpID="mcp" path="analysis/mcp.html"/>
-   <appContext helpID="pntc" path="analysis/phone_inventory.html"/>
    <appContext helpID="pmlu" path="analysis/pmlu.html"/>
-   <appContext helpID="word_inventory" path="analysis/word_inventory.html"/>
+   <appContext helpID="pntc" path="analysis/inventory/phone_inventory.html"/>
+   <appContext helpID="word_inventory" path="analysis/inventory/word_inventory.html"/>
    <appContext helpID="word_match" path="analysis/match/cv_pattern_match.html"/>
    <appContext helpID="word_match" path="analysis/match/stress_match.html"/>
    <appContext helpID="word_match" path="analysis/match/syllable_count_match.html"/>
