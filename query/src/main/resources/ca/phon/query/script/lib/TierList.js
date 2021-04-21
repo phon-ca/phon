@@ -52,7 +52,9 @@ exports.TierList = function(id) {
 
 		var splits = this.tiers.split(',');
 		for(var i = 0; i < splits.length; i++) {
-			retVal.push(splits[i].trim());
+			var tierName = splits[i].trim();
+			if(tierName.length() > 0)
+				retVal.push(tierName);
 		}
 
 		return retVal;
@@ -79,7 +81,7 @@ exports.TierList = function(id) {
 		
 		if(typeof obj.getTier !== "function") return [ [], new java.util.HashMap() ];
 
-		var extraTiers = this.getTiers();
+		var extraTiers = this.getTiers()
 		for(var j = 0; j < extraTiers.length; j++) {
 			var tierName = extraTiers[j];
 			var tierVal = null;

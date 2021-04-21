@@ -24,7 +24,7 @@
                 <oga:settings>
                     <oga:property key="filters.primary.tier"><![CDATA[Orthography]]></oga:property>
                     <oga:property key="filters.wordTiers.tiers"><![CDATA[IPA Target,IPA Actual]]></oga:property>
-                    <oga:property key="filters.primary.patternFilter.filter"><![CDATA[.*]]></oga:property>
+                    <oga:property key="filters.primary.patternFilter.filter"><![CDATA[.+]]></oga:property>
                     <oga:property key="filters.primary.patternFilter.filterType"><![CDATA[Regular expression]]></oga:property>
                     <oga:property key="__script"><![CDATA[var FeatureFilter = require("lib/FeatureFilter").FeatureFilter;
 var GroupFilter = require("lib/GroupFilter").GroupFilter;
@@ -131,7 +131,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="287d90c6" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T08:44:44.578-02:30" name="Data Tiers" uuid="8ac42e18-625a-4ace-8d1c-b3907fc14682">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-04-21T09:19:46.589-02:30" name="Data Tiers" uuid="ec80b1a6-0cb0-4402-aefe-08e7ad205c9f">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
@@ -145,7 +145,6 @@ function setup_params(params) {
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
                     <param id="filters.word.searchByWord">true</param>
-                    <param id="filters.word.sectionHeader.collapsed">false</param>
                     <param id="filters.wordTiers.tiers">IPA Target,IPA Actual</param>
                 </script>
             </qry:query>
@@ -155,7 +154,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="f63f59df38fc40b4" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="531a1472">
+            <graph id="2225dfd">
                 <node id="a2ed2f06ac5c4bab" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -195,7 +194,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="2468bb9cdfbb4330" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="4ead994d">
+            <graph id="235969d7">
                 <node id="2a194e9e92594648" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -273,6 +272,62 @@ function setup_params(params) {
                 <oga:meta x="541" y="642"/>
             </extensions>
         </node>
+        <node id="22be4eb" name="Extract Tier List" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
+            <output name="tierList" type="java.lang.String"/>
+            <extensions>
+                <oga:settings>
+                    <oga:property key="filters.primary.tier"><![CDATA[Orthography]]></oga:property>
+                    <oga:property key="filters.wordTiers.tiers"><![CDATA[IPA Target,IPA Actual]]></oga:property>
+                    <oga:property key="filters.primary.patternFilter.filter"><![CDATA[.+]]></oga:property>
+                    <oga:property key="filters.primary.patternFilter.filterType"><![CDATA[Regular expression]]></oga:property>
+                    <oga:property key="__script"><![CDATA[var TierFilter = require("lib/TierFilter").TierFilter;
+var TierList = require("lib/TierList").TierList;
+
+var filters = {
+    "primary": new TierFilter("filters.primary"),
+    "groupTiers": new TierList("filters.groupTiers"),
+    "wordTiers": new TierList("filters.wordTiers")
+}
+
+function init(inputs, outputs) {
+	outputs.add("tierList", "", false, java.lang.String);
+}
+
+function setup_params(params) {
+    filters.primary.param_setup(params);
+
+	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
+	params.add(otherDataHeader);
+	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
+	params.add(sep);
+	filters.groupTiers.param_setup(params);
+	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
+	params.add(wordsep);
+	filters.wordTiers.param_setup(params);
+	filters.wordTiers.setEnabled(true);
+}
+
+function run(context) {
+	var tierList = filters.primary.tier;
+
+	var groupTiers = filters.groupTiers.getTiers();
+	for(var i = 0; i < groupTiers.length; i++) {
+		tierList += ";" + groupTiers[i] + " (Group)";
+	}
+
+	var wordTiers = filters.wordTiers.getTiers();
+	for(var i = 0; i < wordTiers.length; i++) {
+		tierList += ";" + wordTiers[i] + " (Word)";
+	}
+	
+
+	context.put("tierList", tierList);
+}
+]]></oga:property>
+                </oga:settings>
+                <oga:meta x="312" y="748"/>
+            </extensions>
+        </node>
         <node id="730f0990" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
             <extensions>
                 <oga:settings>
@@ -293,6 +348,16 @@ function setup_params(params) {
             <extensions>
                 <oga:settings/>
                 <oga:meta x="544" y="528"/>
+            </extensions>
+        </node>
+        <node id="7ca14dc9" type="class:ca.phon.opgraph.nodes.general.SetGlobalNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="globalName"/>
+                </oga:settings>
+                <oga:meta x="553" y="751">
+                    <oga:default for="globalName" type="java.lang.String">__tierList</oga:default>
+                </oga:meta>
             </extensions>
         </node>
         <node id="efb5f34121334963" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
@@ -320,7 +385,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="b8837a6" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="7d8a92d8">
+            <graph id="3db25e51">
                 <node id="7040be5c" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -347,7 +412,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="338fc68111434950" name="Create Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="25dd1638">
+                    <graph id="43fcba6">
                         <node id="4b96f095a2d045d6" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -361,17 +426,24 @@ function setup_params(params) {
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="__script"><![CDATA[function tableOp(context, table) {
+	var tierList = context.get("__tierList");
+	var tiers = tierList.split(";");
+	
+	var col = 0;
 	// add headers to table
-	table.setColumnTitle(0, "Session");
-	table.setColumnTitle(1, "Role");
-	table.setColumnTitle(2, "Age");
-	table.setColumnTitle(3, "# Tokens");
-	table.setColumnTitle(4, "# Token Types");
-	table.setColumnTitle(5, "Ratio");
+	table.setColumnTitle(col++, "Session");
+	table.setColumnTitle(col++, "Role");
+	table.setColumnTitle(col++, "Age");
+
+	for(var i = 0; i < tiers.length; i++) {
+		table.setColumnTitle(col++, "# Types (" + tiers[i] + ")");
+		table.setColumnTitle(col++, "# Tokens (" + tiers[i] + ")");
+		table.setColumnTitle(col++, "Ratio (" + tiers[i] + ")");
+	}	
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="291" y="178"/>
+                                <oga:meta x="439" y="214"/>
                             </extensions>
                         </node>
                         <link dest="4d05c34a7d944f2f" destField="table" source="4b96f095a2d045d6" sourceField="value"/>
@@ -401,7 +473,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="ad3d3b6e3cd4523" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="35e4a31a">
+                    <graph id="54dbb50e">
                         <node id="d56515f989634a15" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -452,7 +524,7 @@ function setup_params(params) {
                                     </opqry:automaticConfiguration>
                                 </opqry:inventoryoptions>
                                 <oga:settings/>
-                                <oga:meta x="592" y="79"/>
+                                <oga:meta x="504" y="94"/>
                             </extensions>
                         </node>
                         <node id="54dfab1f21464906" name="Split Table by Session" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -564,7 +636,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="d4906685bba84381" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="3b0b9184">
+                            <graph id="2fd649f9">
                                 <node id="9b5db7214be44e9a" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -608,7 +680,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="2e0913e036ea41a2" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="506215fd">
+                                    <graph id="198e8c01">
                                         <node id="d252de31ccdf4d83" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -667,7 +739,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="5889c74f985645fb" name="If Speaker has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="26576b0b">
+                                    <graph id="31110bd6">
                                         <node id="9fe8487ab228485a" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -690,6 +762,15 @@ function run(context) {
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                                 </oga:settings>
                                                 <oga:meta x="48" y="393"/>
+                                            </extensions>
+                                        </node>
+                                        <node id="1ef64355" name="String" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                                            <extensions>
+                                                <oga:settings>
+                                                    <oga:property key="contextKey"><![CDATA[__tierList]]></oga:property>
+                                                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.String]]></oga:property>
+                                                </oga:settings>
+                                                <oga:meta x="374" y="627"/>
                                             </extensions>
                                         </node>
                                         <node id="b7f6570f519d4237" name="Summary Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -716,7 +797,7 @@ function run(context) {
                                                     <oga:property key="ignoreDiacritics"><![CDATA[true]]></oga:property>
                                                     <oga:property key="caseSensitive"><![CDATA[false]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="493" y="520"/>
+                                                <oga:meta x="563" y="625"/>
                                             </extensions>
                                         </node>
                                         <node id="4a556bc6b44b4818" name="Add row to Session Summary" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -737,20 +818,27 @@ function tableOp(context, table) {
 	var speaker = context.get("speaker");
 	var sessionPath = context.get("sessionPath");
 	var tokenSummary = context.get("tokenSummary");
+	var tierList = context.get("__tierList");
+	var tiers = tierList.split(";");
 	var history = speaker.getExtension(Packages.ca.phon.project.ParticipantHistory);
 
-	row[0] = sessionPath;
-	row[1] = speaker.role;
-	row[2] = history.getAgeForSession(sessionPath);
-	row[3] = tokenSummary.getValueAt("Tokens", "Result");
-	row[4] = tokenSummary.getValueAt("Types", "Result");
-	row[5] = tokenSummary.getValueAt("Ratio", "Result");
+	var col = 0;
+	row[col++] = sessionPath;
+	row[col++] = speaker.role;
+	row[col++] = history.getAgeForSession(sessionPath);
 
+	for(var i = 0; i < tiers.length; i++) {
+		var tier = tiers[i];
+		row[col++] = tokenSummary.getValueAt("Types", tier);
+		row[col++] = tokenSummary.getValueAt("Tokens", tier);
+		row[col++] = tokenSummary.getValueAt("Ratio", tier);
+	}
+	
 	table.addRow(row);
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="775" y="489"/>
+                                                <oga:meta x="904" y="538"/>
                                             </extensions>
                                         </node>
                                         <link dest="4a556bc6b44b4818" destField="speaker" source="553520ed844e4540" sourceField="obj"/>
@@ -759,6 +847,7 @@ function tableOp(context, table) {
                                         <link dest="294a5e8039b145e7" destField="table" source="9fe8487ab228485a" sourceField="obj"/>
                                         <link dest="4a556bc6b44b4818" destField="tokenSummary" source="294a5e8039b145e7" sourceField="table"/>
                                         <link dest="7719b552e61d4a59" destField="obj" source="c736a5808ea1447f" sourceField="obj"/>
+                                        <link dest="294a5e8039b145e7" destField="columns" source="1ef64355" sourceField="obj"/>
                                         <extensions>
                                             <oga:notes>
                                                 <oga:note color="0xffff96" height="1018" title="Inputs" width="316" x="36" y="78"/>
@@ -816,8 +905,8 @@ function tableOp(context, table) {
                         <link dest="c54d4640c45a40d8" destField="parent" source="81a57a2888db43fa" sourceField="obj"/>
                         <link dest="c54d4640c45a40d8" destField="table" source="44534f2b03b049ad" sourceField="table"/>
                         <link dest="c54d4640c45a40d8" destField="sectionName" source="9cc89319f3a549df" sourceField="name"/>
-                        <link dest="c8acb669b43146e1" destField="table" source="d56515f989634a15" sourceField="obj"/>
                         <link dest="54dfab1f21464906" destField="table" source="d56515f989634a15" sourceField="obj"/>
+                        <link dest="c8acb669b43146e1" destField="table" source="d56515f989634a15" sourceField="obj"/>
                         <extensions>
                             <oga:notes>
                                 <oga:note color="0xffff96" height="1205" title="Inputs" width="314" x="40" y="78"/>
@@ -832,7 +921,7 @@ function tableOp(context, table) {
                     <ogcn:published_input field="obj" name="table" ref="d56515f989634a15"/>
                     <ogcn:published_output field="collection" name="collection" ref="d4906685bba84381"/>
                     <extensions>
-                        <oga:meta x="710" y="430"/>
+                        <oga:meta x="710" y="429"/>
                     </extensions>
                 </ogcn:macro>
                 <node id="22b731bc448f4262" type="class:ca.phon.opgraph.nodes.general.ArrayNode">
@@ -928,6 +1017,8 @@ Result]]></oga:property>
         <link dest="b8837a6" destField="selectedSessions" source="7d78fc6" sourceField="obj"/>
         <link dest="b8837a6" destField="summaryNode" source="f6c0ca6a1a3a4277" sourceField="section"/>
         <link dest="b8837a6" destField="aggregateNode" source="eeea922b04a54863" sourceField="section"/>
+        <link dest="22be4eb" destField="parameters" source="340ab625" sourceField="parameters"/>
+        <link dest="7ca14dc9" destField="value" source="22be4eb" sourceField="tierList"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" title="Word Inventory">

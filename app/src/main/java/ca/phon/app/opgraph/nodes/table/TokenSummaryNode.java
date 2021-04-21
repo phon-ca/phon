@@ -45,8 +45,13 @@ public class TokenSummaryNode extends TableOpNode implements NodeSettings {
 	private JPanel settingsPanel;
 	private ColumnOptionsPanel columnOptions;
 
+	private InputField columnsInputField =
+			new InputField("columns", "Column names separated by ;", true, true, String.class);
+
 	public TokenSummaryNode() {
 		super();
+
+		putField(columnsInputField);
 
 		putExtension(NodeSettings.class, this);
 	}
@@ -56,7 +61,9 @@ public class TokenSummaryNode extends TableOpNode implements NodeSettings {
 		final DefaultTableDataSource inputTable = (DefaultTableDataSource)context.get(tableInput);
 		final DefaultTableDataSource outputTable = new DefaultTableDataSource();
 
-		final String[] columns = getColumnNames().split(";");
+		String columnString = (context.get(columnsInputField) != null
+				? context.get(columnsInputField).toString() : getColumnNames());
+		final String[] columns = columnString.split(";");
 		final Map<String, Tuple<Set<String>, Integer>> columnCounts = new LinkedHashMap<>();
 		for(String column:columns) {
 			column = column.trim();
@@ -191,7 +198,5 @@ public class TokenSummaryNode extends TableOpNode implements NodeSettings {
 		if(properties.containsKey("caseSensitive"))
 			setCaseSensitive(Boolean.parseBoolean(properties.getProperty("caseSensitive", "false")));
 	}
-
-
 
 }
