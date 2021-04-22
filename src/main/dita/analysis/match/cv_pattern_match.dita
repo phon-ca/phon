@@ -52,10 +52,8 @@
     <topic id="cv_match_outline">
         <title>Report Outline</title>
         <body>
-            <p>An example table of contents is displayed below. Bold level elements are section
-                headers while italic items are tables. Click <xref
-                    href="../examples/cv_pattern_match_example.html" format="html" scope="external"
-                    >here</xref> to see an example report.</p>
+            <p>An sample table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables.</p>
             <ul>
                 <li>
                     <p><b>CV Pattern Match</b></p>
@@ -76,6 +74,17 @@
                     </ul>
                 </li>
             </ul>
+        </body>
+    </topic>
+    
+    <topic id="example">
+        <title>Example</title>
+        <body>
+            <p>Click the link below to view an example report.</p><p>
+                <xref href="../examples/cv_pattern_match_example.html" format="html" scope="external"
+                    ><image align="center" href="../../images/report.png" id="image_t3t_nmj_jpb">
+                        <alt>Example Report</alt>
+                    </image> Example Report</xref></p>
         </body>
     </topic>
     
