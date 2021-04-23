@@ -104,7 +104,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	 * query exclusion
 	 */
 	private JCheckBox excludeFromSearchesBox;
-	private final static String excludeFromSearchesText = "Exclude from searches";
+	private final static String excludeFromSearchesText = "Exclude";
 
 	/**
 	 * content pane
@@ -638,6 +638,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 			final PhonUIAction excludeAct = new PhonUIAction(this, "onExclude");
 			excludeAct.putValue(PhonUIAction.NAME, excludeFromSearchesText);
+			excludeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exclude record from queries");
 			excludeFromSearchesBox = new JCheckBox(excludeAct);
 
 			topPanel.add(new JLabel("Speaker: "), cc.xy(colIdx++, rowIdx));
@@ -672,7 +673,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			btnPanel.add(splitGroupBtn);
 			
 			final PhonUIAction toggleFindAndReplaceAct = new PhonUIAction(this, "onToggleFindAndReplace");
-			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "Find & Replace");
+			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace panel");
 			findAndReplaceButton = new JButton(toggleFindAndReplaceAct);
@@ -732,8 +733,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			});
 
 			final PhonUIAction fontSizeAct = new PhonUIAction(this, null);
-			fontSizeAct.putValue(PhonUIAction.NAME, "Font size");
-			fontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font size menu");
+			fontSizeAct.putValue(PhonUIAction.NAME, "");
+			fontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font scale menu");
 			fontSizeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
 			fontSizeAct.putValue(DropDownButton.BUTTON_POPUP, fontSizeMenu);
 			fontSizeAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
