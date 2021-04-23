@@ -264,6 +264,9 @@ public class IPAFieldTooltip {
 			mouseExited(e);
 		}
 
+		@Override
+		public void mousePressed(MouseEvent e) { mouseExited(e); }
+
 	}
 
 }

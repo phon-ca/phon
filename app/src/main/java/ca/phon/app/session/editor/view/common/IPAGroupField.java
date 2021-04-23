@@ -125,7 +125,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			super.setValidatedObject(object);
 		}
 	}
-	
+
 	@Override
 	public JToolTip createToolTip() {
 		JToolTip retVal = super.createToolTip();
