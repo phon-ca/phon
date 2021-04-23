@@ -3,7 +3,9 @@ package ca.phon.app.session.editor.view.record_data;
 import ca.phon.app.session.editor.view.common.IPAGroupField;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.opgraph.InputField;
 import ca.phon.session.Tier;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
 
@@ -13,6 +15,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.security.Key;
 import java.util.Optional;
 
 public class IPAFieldTooltip {
@@ -32,14 +35,22 @@ public class IPAFieldTooltip {
 
 	public void install(IPAGroupField groupField) {
 		this.field = groupField;
-		this.field.addMouseListener(new TooltipMouseListener());
+		this.field.addMouseListener(new TooltipHandler());
+
+		ActionMap actionMap = this.field.getActionMap();
+		InputMap inputMap = this.field.getInputMap(JComponent.WHEN_FOCUSED);
+
+		String id = "showSyllabificationAndAlignment";
+		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+		inputMap.put(ks, id);
+		actionMap.put(id, new PhonUIAction(this, "showWindow"));
 	}
 
 	public void setAlignmentTier(Tier<PhoneMap> alignment) {
 		this.alignmentTier = Optional.of(alignment);
 	}
 
-	private void showWindow() {
+	public void showWindow() {
 		if(currentFrame != null)
 			currentFrame.setVisible(false);
 
@@ -150,7 +161,7 @@ public class IPAFieldTooltip {
 
 	};
 
-	private class TooltipMouseListener extends MouseInputAdapter {
+	private class TooltipHandler extends MouseInputAdapter {
 
 		private Timer currentTimer;
 
@@ -158,11 +169,14 @@ public class IPAFieldTooltip {
 		public void mouseEntered(MouseEvent e) {
 			super.mouseEntered(e);
 			if(currentTimer != null) return;
-			currentTimer = new Timer(2000, (evt) -> {
-				showWindow();
-			});
-			currentTimer.setRepeats(false);
-			currentTimer.start();
+
+			if((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK) {
+				currentTimer = new Timer(500, (evt) -> {
+					showWindow();
+				});
+				currentTimer.setRepeats(false);
+				currentTimer.start();
+			}
 		}
 
 		@Override
