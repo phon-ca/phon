@@ -1,47 +1,27 @@
 package ca.phon.app.session.editor.view.record_data;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.common.IPAGroupField;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.ScTypeEdit;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.ToggleDiphthongEdit;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.ResetSyllabificationCommand;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.Phone;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.session.Group;
-import ca.phon.session.SyllabifierInfo;
-import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.util.Language;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import org.jdesktop.swingx.VerticalLayout;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.text.html.Option;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.security.Key;
 import java.util.Optional;
 
 public class IPAFieldTooltip {
 
 	private IPAGroupField field;
 
-	private Optional<Tier<PhoneMap>> alignmentTier;
+	private SyllabificationAndAlignmentPopupWindow currentFrame;
 
-	private ToolTipWindow currentFrame;
+	private Optional<Tier<PhoneMap>> alignmentTier;
 
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 
@@ -65,9 +45,24 @@ public class IPAFieldTooltip {
 
 		if(field.getGroupValue().length() == 0) return;
 
-		ToolTipWindow window = new ToolTipWindow();
+		if(field.hasFocus()) {
+			field.validateAndUpdate();
+		}
+
+		int groupIndex = this.field.getGroupIndex();
+		Tier<IPATranscript> ipaTier = this.field.getTier();
+
+		SyllabificationAndAlignmentPopupWindow window = new SyllabificationAndAlignmentPopupWindow(ipaTier, alignmentTier, groupIndex);
 		window.pack();
 		window.setFocusableWindowState(false);
+
+		window.getSyllabificationAndAlignmentPropSupport().addPropertyChangeListener( (e) -> {
+			if(SyllabificationDisplay.SYLLABIFICATION_PROP_ID.equals(e.getPropertyName())
+				|| SyllabificationDisplay.HIATUS_CHANGE_PROP_ID.equals(e.getPropertyName())
+				|| PhoneMapDisplay.ALIGNMENT_CHANGE_PROP.equals(e.getPropertyName())) {
+				propSupport.firePropertyChange(e);
+			}
+		});
 
 		Point p = field.getLocationOnScreen();
 		window.setLocation(p.x, p.y + field.getHeight());
@@ -106,19 +101,21 @@ public class IPAFieldTooltip {
 		@Override
 		public void eventDispatched(AWTEvent event) {
 			// cleanup
-			if(currentFrame == null) return;
-				Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+			if(currentFrame == null) {
+				return;
+			}
+
 			if(event instanceof KeyEvent) {
 				if(((KeyEvent) event).getKeyCode() == KeyEvent.VK_TAB) {
 					SwingUtilities.invokeLater( () -> {
-						final ToolTipWindow focusTooltip = currentFrame;
+						final SyllabificationAndAlignmentPopupWindow focusTooltip = currentFrame;
 						focusTooltip.setFocusableWindowState(true);
 						focusTooltip.requestFocus();
 
-						if(focusTooltip.syllabificationDisplay.getNumberOfDisplayedPhones() > 0)
-							focusTooltip.syllabificationDisplay.setFocusedPhone(0);
+						if(focusTooltip.getSyllabificationDisplay().getNumberOfDisplayedPhones() > 0)
+							focusTooltip.getSyllabificationDisplay().setFocusedPhone(0);
 
-						focusTooltip.syllabificationDisplay.requestFocusInWindow();
+						focusTooltip.getSyllabificationDisplay().requestFocusInWindow();
 						focusTooltip.addWindowFocusListener(new WindowFocusListener() {
 
 							@Override
@@ -137,97 +134,21 @@ public class IPAFieldTooltip {
 					});
 					((KeyEvent) event).consume();
 					Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+				} else if(((KeyEvent) event).getKeyCode() == KeyEvent.VK_ESCAPE) {
+					if(currentFrame != null) {
+						currentFrame.setVisible(false);
+						currentFrame.dispose();
+						currentFrame = null;
+					}
+
+					((KeyEvent) event).consume();
+					Toolkit.getDefaultToolkit().removeAWTEventListener(this);
 				}
+
 			}
 		}
 
 	};
-
-	public class ToolTipWindow extends JFrame {
-
-		private SyllabificationDisplay syllabificationDisplay;
-
-		private PhoneMapDisplay alignmentDisplay;
-
-		private JLabel label;
-
-		public ToolTipWindow() {
-			super();
-
-			setUndecorated(true);
-			setResizable(true);
-			init();
-		}
-
-		private void init() {
-			setLayout(new VerticalLayout(0));
-
-			JPanel contentPanel = new JPanel(new VerticalLayout());
-			contentPanel.setBackground(Color.WHITE);
-
-			if(field.hasFocus())
-				field.validateAndUpdate();
-			IPATranscript value = field.getGroupValue();
-			if(value != null) {
-				syllabificationDisplay = new SyllabificationDisplay();
-				syllabificationDisplay.setFont(FontPreferences.getTierFont());
-				syllabificationDisplay.setTranscript(value);
-				syllabificationDisplay.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, propSupport::firePropertyChange );
-				syllabificationDisplay.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, propSupport::firePropertyChange);
-
-				contentPanel.add(syllabificationDisplay);
-			}
-			if(alignmentTier.isPresent()) {
-				PhoneMap alignment = alignmentTier.get().getGroup(field.getGroupIndex());
-				if(alignment.getTargetRep().length() > 0
-					&& alignment.getActualRep().length() > 0
-					&& alignment.getAlignmentLength() > 0) {
-					contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
-
-					PhoneMap pm = new PhoneMap(alignment.getTargetRep(), alignment.getActualRep());
-					pm.setTopAlignment(alignment.getTopAlignment());
-					pm.setBottomAlignment(alignment.getBottomAlignment());
-
-					PhoneMapDisplay alignmentDisplay = new PhoneMapDisplay();
-					alignmentDisplay.setFont(FontPreferences.getTierFont());
-					alignmentDisplay.setPhoneMapForGroup(0, pm);
-					alignmentDisplay.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP,
-						(e) -> {
-							revalidate();
-							pack();
-							propSupport.firePropertyChange(e);
-						});
-					contentPanel.add(alignmentDisplay);
-				}
-			}
-
-			add(new JScrollPane(contentPanel));
-
-			label = new JLabel("Press Tab for focus");
-			label.setFont(label.getFont().deriveFont(Font.ITALIC, 10.0f));
-			add(label);
-
-			addWindowFocusListener(new WindowFocusListener() {
-				@Override
-				public void windowGainedFocus(WindowEvent e) {
-					label.setVisible(false);
-					revalidate();
-					pack();
-				}
-
-				@Override
-				public void windowLostFocus(WindowEvent e) {
-
-				}
-			});
-
-			final PhonUIAction closeAct = new PhonUIAction(this, "setVisible", false);
-			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
-			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "close");
-			getRootPane().getActionMap().put("close", closeAct);
-		}
-
-	}
 
 	private class TooltipMouseListener extends MouseInputAdapter {
 
@@ -237,13 +158,11 @@ public class IPAFieldTooltip {
 		public void mouseEntered(MouseEvent e) {
 			super.mouseEntered(e);
 			if(currentTimer != null) return;
-//			if((e.getModifiersEx() & MouseEvent. SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK) {
-				currentTimer = new Timer(2000, (evt) -> {
-					showWindow();
-				});
-				currentTimer.setRepeats(false);
-				currentTimer.start();
-//			}
+			currentTimer = new Timer(2000, (evt) -> {
+				showWindow();
+			});
+			currentTimer.setRepeats(false);
+			currentTimer.start();
 		}
 
 		@Override
