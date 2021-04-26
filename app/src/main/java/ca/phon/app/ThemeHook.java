@@ -103,6 +103,10 @@ public class ThemeHook implements PhonStartupHook,
 			UIManager.getDefaults().put("List.selectionBackground", MACOS_BLUE);
 			UIManager.getDefaults().put("Tree.selectionBackground", MACOS_BLUE);
 		}
+
+		// fix selected tab foreground color
+		Color listSelectionForeground = UIManager.getColor("List.selectionForeground");
+		UIManager.put("TabbedPane.foreground", Color.black);
 	}
 	
 	@Override
