@@ -75,15 +75,15 @@
                                     <entry><userinput>CMD/CTRL+K</userinput></entry>
                                 </row>
                                 <row>
-                                    <entry>Move left </entry>
+                                    <entry>Move records left </entry>
                                     <entry><userinput>CMD/CTRL+,</userinput></entry>
                                 </row>
                                 <row>
-                                    <entry>More right</entry>
+                                    <entry>Move records right</entry>
                                     <entry><userinput>CMD/CTRL+.</userinput></entry>
                                 </row>
                                 <row>
-                                    <entry>More records...</entry>
+                                    <entry>Move records...</entry>
                                     <entry><userinput>CMD/CTRL+/</userinput></entry>
                                 </row>
                             </tbody>
@@ -226,14 +226,14 @@
                 </ol>
                 <p>Playback start position will determine where segmentation begins in the
                         <b>Timeline</b>. If no media is available segmentation will always begin at
-                        <codeph>000:00.000</codeph>.</p>
+                        <userinput>000:00.000</userinput>.</p>
                 <p>There are two modes available for segmentation:</p>
                 <ol>
                     <li><p>Insert new record at end of session</p><p>Use this option when segmenting
                             a new media file or continuing segmentation.</p></li>
                     <li><p>Replace segment for current record</p><p>Use this option when
                             re-segmenting an already-segmented record or set of records. Uopn user
-                            action (e.g. typing a given participant number or <codeph>1</codeph>,
+                            action (e.g. typing a given participant number or <userinput>1</userinput>,
                             the current record is assigned the new segment time and participant
                             (when relevant). Once all records segments have been overwritten using
                             this mode, new records will be inserted at end of the session.</p></li>
@@ -244,8 +244,8 @@
                 <body>
                     <p>While segmentation mode is active, a yellow segment will be painted in the
                             <b>Timeline</b> view. When a new record is identified using the
-                            <codeph>Space</codeph> or <codeph>1</codeph>...<codeph>9</codeph> or
-                            <codeph>Numpad 1</codeph>...<codeph>Numpad 9</codeph> keys the segment
+                            <userinput>Space</userinput> or <userinput>1</userinput>...<userinput>9</userinput> or
+                            <userinput>Numpad 1</userinput>...<userinput>Numpad 9</userinput> keys the segment
                         identified by yellow will become the media segment for the new record.</p>
                     <p>If <i>Use segmentation window</i> is not selected, segments will have no set
                         limit in length; the beginning time of the segment is constrained by the end
@@ -278,34 +278,34 @@
                             <tbody>
                                 <row>
                                     <entry>Stop segmentation</entry>
-                                    <entry><codeph>Esc</codeph></entry>
+                                    <entry><userinput>Esc</userinput></entry>
                                 </row>
                                 <row>
                                     <entry>Break (e.g., silence, noise, etc.)</entry>
-                                    <entry><codeph>b</codeph> or <codeph>Numpad
-                                        decimal</codeph></entry>
+                                    <entry><userinput>b</userinput> or <userinput>Numpad
+                                        decimal</userinput></entry>
                                 </row>
                                 <row>
                                     <entry>New segment (unidentified)</entry>
-                                    <entry><codeph>Space</codeph> or <codeph>0</codeph> or
-                                            <codeph>Numpad 0</codeph></entry>
+                                    <entry><userinput>Space</userinput> or <userinput>0</userinput> or
+                                            <userinput>Numpad 0</userinput></entry>
                                 </row>
                                 <row>
                                     <entry>New segment (participant 1...9)</entry>
-                                    <entry><codeph>1</codeph>...<codeph>9</codeph> or <codeph>Numpad
-                                            1</codeph>...<codeph>Numpad 9</codeph></entry>
+                                    <entry><userinput>1</userinput>...<userinput>9</userinput> or <userinput>Numpad
+                                            1</userinput>...<userinput>Numpad 9</userinput></entry>
                                 </row>
                                 <row>
                                     <entry>Toggle segmentation window</entry>
-                                    <entry><codeph>W</codeph></entry>
+                                    <entry><userinput>W</userinput></entry>
                                 </row>
                                 <row>
                                     <entry>Increase segmentation window (100ms)</entry>
-                                    <entry><codeph>Up</codeph></entry>
+                                    <entry><userinput>Up</userinput></entry>
                                 </row>
                                 <row>
                                     <entry>Decrease segmentation window (1000ms)</entry>
-                                    <entry><codeph>Down</codeph></entry>
+                                    <entry><userinput>Down</userinput></entry>
                                 </row>
                             </tbody>
                         </tgroup>
@@ -329,33 +329,33 @@
                                 <tbody>
                                     <row>
                                         <entry>Volume up</entry>
-                                        <entry><codeph>Shift+Up</codeph> or <codeph>Numpad
-                                                multiply</codeph></entry>
+                                        <entry><userinput>Shift+Up</userinput> or <userinput>Numpad
+                                                multiply</userinput></entry>
                                     </row>
                                     <row>
                                         <entry>Volume down</entry>
-                                        <entry><codeph>Shift+Down</codeph> or <codeph>Numpad
-                                                divide</codeph></entry>
+                                        <entry><userinput>Shift+Down</userinput> or <userinput>Numpad
+                                                divide</userinput></entry>
                                     </row>
                                     <row>
                                         <entry>Go back 1s</entry>
-                                        <entry><codeph>Left</codeph> or <codeph>Numpad
-                                                subtract</codeph></entry>
+                                        <entry><userinput>Left</userinput> or <userinput>Numpad
+                                                subtract</userinput></entry>
                                     </row>
                                     <row>
                                         <entry>Go forward 1s</entry>
-                                        <entry><codeph>Right</codeph> or <codeph>Numpad
-                                            add</codeph></entry>
+                                        <entry><userinput>Right</userinput> or <userinput>Numpad
+                                            add</userinput></entry>
                                     </row>
                                     <row>
                                         <entry>Go back 5s</entry>
-                                        <entry><codeph>Shift+Left</codeph> or <codeph>Shift+Numpad
-                                                subtract</codeph></entry>
+                                        <entry><userinput>Shift+Left</userinput> or <userinput>Shift+Numpad
+                                                subtract</userinput></entry>
                                     </row>
                                     <row>
                                         <entry>Go forward 5s</entry>
-                                        <entry><codeph>Shift+Right</codeph> or <codeph>Shift+Numpad
-                                                add</codeph></entry>
+                                        <entry><userinput>Shift+Right</userinput> or <userinput>Shift+Numpad
+                                                add</userinput></entry>
                                     </row>
                                 </tbody>
                             </tgroup>
@@ -368,12 +368,12 @@
             <title>Split Record</title>
             <body>
                 <p>Records segments may be split using the record grid. To enter split mode, select
-                    the segment to ne split, press the <codeph>S</codeph> key, press the "Split
+                    the segment to ne split, press the <userinput>S</userinput> key, press the "Split
                     Record" button in the toolbar, or select <i>Split record</i> from the contextual
                     menu. A new marker will appear in the middle of the current record segment. This
                     new marker can be dragged to adjust the position of the record split. Press
-                        <codeph>Enter</codeph> to accept the record split as shown and create the
-                    new record. Split mode can be exited using the <codeph>Escape</codeph> key and
+                        <userinput>Enter</userinput> to accept the record split as shown and create the
+                    new record. Split mode can be exited using the <userinput>Escape</userinput> key and
                     will also exit if the current editor record is switched or the current record
                     segment is modified.</p>
                 <fig>
@@ -383,9 +383,9 @@
                     </image>
                 </fig>
                 <p>Record data may be split by word group number by using the
-                        <codeph>0</codeph>...<codeph>9</codeph> keys on the keyboard.
-                        <codeph>0</codeph> will move all record data into the new record while
-                        <codeph>1</codeph>...<codeph>9</codeph> will split data after group 1, 2,
+                        <userinput>0</userinput>...<userinput>9</userinput> keys on the keyboard.
+                        <userinput>0</userinput> will move all record data into the new record while
+                        <userinput>1</userinput>...<userinput>9</userinput> will split data after group 1, 2,
                     etc,. Split position can be set using the context menu as well.</p>
             </body>
         </topic>
