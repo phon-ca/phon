@@ -183,11 +183,10 @@
             <body/>
             
             <topic id="generate_textgrid">
-                <title>Generate TextGrids</title>
-                <shortdesc>Generate TextGrids from Phon records.</shortdesc>
+                <title>Generate TextGrid</title>
                 <body>
                     <section>
-                        <p>The following procedure outlines how to generated new TextGrids from Phon
+                        <p>The following procedure outlines how to generated a new TextGrid from Phon
                             record data. To access the generate TextGrid wizard click the
                                 <uicontrol>TextGrid</uicontrol> button and select <menucascade>
                                 <uicontrol>Generate TextGrid...</uicontrol>
@@ -210,37 +209,27 @@
             </topic>
             
             <topic id="import_textgrid">
-                <title>Import TextGrids</title>
-                <shortdesc>Import TextGrids as Phon records.</shortdesc>
+                <title>Import TextGrid</title>
                 <body>
                     <section>
-                        <p>TextGrids created with Praat may be imported as Phon records.  Data from tiers in
-                            selected TextGrids will be mapped to Phon tier data.</p>
+                        <p>TextGrids created with Praat may be imported as Phon records. Data from
+                            tiers in selected TextGrids will be mapped to Phon tier data.<image
+                                placement="break" href="images/import_textgrid.png"
+                                id="image_vl2_pgn_kpb"/></p>
                     </section>
                     <ol>
+                        <li>Select the TextGrid from the list of TextGrids associated with the
+                            session from the drop down menu.</li>
+                        <li>Select the <uicontrol>Record reference tier</uicontrol> which is the
+                            tier which defines the record segments in the TextGrid. There will be
+                            one Phon record created for every interval in this TextGrid tier. An
+                            option to <uicontrol>ignore empty intervals</uicontrol> is also
+                            available.</li>
                         <li>
-                            <p>Open the Import TextGrids wizard by using the menu command <menucascade>
-                                <uicontrol>Plugins</uicontrol>
-                                <uicontrol>Import TextGrids...</uicontrol>
-                            </menucascade> from the <wintitle>Project Manager</wintitle> window.</p>
-                        </li>
-                        <li>
-                            <p>In the first step of the wizard, select a folder containing the TextGrids you
-                                wish to import using the browse button on the right-hand side of the text field.
-                                When you select the folder, a list of detected tier names from the TextGrids
-                                will be displayed in the table.</p>
-                        </li>
-                        <li>
-                            <p>For each TextGrid tier you wish to import, type the name of the Phon tier in
-                                the column titled <uicontrol>PhonTier</uicontrol>. You may assign more than one
-                                TextGrid tier to the same Phon tier. You may also assign a group marker for each
-                                imported tier. When a TextGrid interval with this marker as it's text is
-                                encountered a new group is created in the Phon record. By default, this is set
-                                to '#' as this is how Phon will generate TextGrid files. Click next.</p>
-                        </li>
-                        <li>
-                            <p>Choose which session in the project to which you wish to add the imported
-                                records or specifiy a new session name to be created.  Click next.</p>
+                            <p>For each TextGrid tier you wish to import, type the name of the Phon
+                                tier in the column titled <uicontrol>PhonTier</uicontrol>. You may
+                                assign more than one TextGrid tier to the same Phon tier. You may
+                                also select wether the Phon tier will be groupd. Click next.</p>
                         </li>
                         <li>
                             <p>The TextGrids will now be imported.  If any errors are encountered they will be
@@ -261,11 +250,12 @@
                     <ol>
                         <li>
                             <note>You will need Praat version 5.3.85 or later.  Praat must also be open.</note>
-                            <p>From the <uicontrol>Speech Analysis</uicontrol> view in the <wintitle>Session
-                                Editor</wintitle> window, choose <menucascade>
+                            <p>From the <uicontrol>Speech Analysis</uicontrol> view in the
+                                    <wintitle>Session Editor</wintitle> window, choose <menucascade>
                                     <uicontrol>Open TextGrid in Praat...</uicontrol>
-                                </menucascade> from the Praat menu. The TextGrid in Phon will fade and a button
-                                to unlock the TextGrid will be displayed.</p>
+                                </menucascade> from the <uicontrol>TextGrid</uicontrol> button menu.
+                                The TextGrid in Phon will fade and a button to unlock the TextGrid
+                                will be displayed.</p>
                         </li>
                         <li>
                             <note>Phon uses TextGrid tier naming to map values onto Phon tiers.  Do not change
