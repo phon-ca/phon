@@ -152,11 +152,12 @@ $(document).ready( function () {
                                 record.
                         </li>
                         <li class="- topic/li li">
-                            <div class="- topic/p p">Select a portion of the waveform for your revised segment and press
-                                <kbd class="+ topic/ph sw-d/userinput ph userinput">Enter</kbd>. Alternately, typeover the existing time values
-                                in the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Record Data</span> view with revised values and click the
-                                <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Refresh</span> button in the top left area of the
-                                <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Speech Analysis</span> view. <br /><img class="- topic/image image" id="taskId__image_wdr_vlm_sc" src="images/adjust_segment.png" /><br /></div>
+                            <p class="- topic/p p">Select a portion of the waveform for your revised segment and press
+                                    <kbd class="+ topic/ph sw-d/userinput ph userinput">Enter</kbd>. Alternately, typeover the existing
+                                time values in the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Record Data</span> view with
+                                revised values and click the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Refresh</span> button
+                                in the top left area of the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Speech Analysis</span>
+                                view.</p>
                             This action will adjust your segment start and end times.<div class="- topic/note note note note_note"><span class="note__title">Note:</span> To view a
                                 larger portion of the waveform, click <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Show More</span>. This
                                 extends the displayed interval by one second on each side. To redisplay the
@@ -283,32 +284,49 @@ $(document).ready( function () {
         <div class="- topic/body body"><p class="- topic/shortdesc shortdesc">The TextGrid viewer in Phon displays basic TextGrid information about the TextGrid
             assigned to the current session.</p>
             <p class="- topic/p p">To display the TextGrid view, choose <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Show TextGrid</span> from the
-                <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Praat</span> menu in the Speech Analysis view. You can select audio segments
-                by clicking intevals in the displayed TextGrid.</p>
+                    <span class="+ topic/ph ui-d/uicontrol ph uicontrol">TextGrid</span> button menu in the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Speech
+                    Analysis</span> view. You can select audio segments by clicking intervals
+                in the displayed TextGrid.</p>
         </div>
         
-        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="textgrid_tier_actions">
-            <h3 class="- topic/title title topictitle3" id="ariaid-title11">TextGrid Actions</h3>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="font_scaling">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title11">Font Scaling</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">Font size can be adjusted using the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Font size</span> button in the toolbar.
+                    Clicking this button will display a popup menu allowing adjustment of font size in the 
+                    TextGrid tier using a slider. This value will be remembered between instances of the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Session Editor</span>.</p>
+                <div class="- topic/p p">
+                    <br /><img class="- topic/image image" id="font_scaling__image_ot4_mdn_kpb" src="images/textgrid_font_scaling.png" /><br />
+                </div>
+            </div>
+        </article>
+        
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title12" id="textgrid_tier_actions">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title12">TextGrid Actions</h3>
             <div class="- topic/body body"></div>
             
-            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title12" id="generate_textgrid">
-                <h4 class="- topic/title title topictitle4" id="ariaid-title12">Generate TextGrids</h4>
-                
-                <div class="- topic/body body"><p class="- topic/shortdesc shortdesc">Generate TextGrids from Phon records.</p>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title13" id="textgrid_tier_management">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title13">Tier management</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">The TextGrid tier management dialog is avaiable from the
+                            <span class="+ topic/ph ui-d/uicontrol ph uicontrol">TextGrid</span> button menu by selecting <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Tier
+                            management</span>. Actions for manipulating TextGrid tier names,
+                        ordering, and visibility are available from this window.</p>
+                    <div class="- topic/p p">
+                        <br /><img class="- topic/image image" id="textgrid_tier_management__image_v4q_tj4_kpb" src="images/textgrid_tier_management.png" /><br />
+                    </div>
+                </div>
+            </article>
+            
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title14" id="generate_textgrid">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title14">Generate TextGrid</h4>
+                <div class="- topic/body body">
                     <section class="- topic/section section">
-                        <p class="- topic/p p">The following procedure outlines how to generated new TextGrids from Phon record
-                            data.</p>
+                        <p class="- topic/p p">The following procedure outlines how to generated a new TextGrid from Phon
+                            record data. To access the generate TextGrid wizard click the
+                                <span class="+ topic/ph ui-d/uicontrol ph uicontrol">TextGrid</span> button and select <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Generate TextGrid...</span></span> from the popup menu.</p>
                     </section>
                     <ol class="- topic/ol ol">
-                        <li class="- topic/li li">
-                            <div class="- topic/note note note note_note"><span class="note__title">Note:</span> You may also open the Generate TextGrids wizard from the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Session
-                                Editor</span> window, in which case skip step 2.</div>
-                            <p class="- topic/p p">From the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Project Manager</span> window choose <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Plugins</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Generate TextGrids...</span></span> from the window menu.</p>
-                        </li>
-                        <li class="- topic/li li">
-                            <p class="- topic/p p">In the wizard window, select a single session for which TextGrids will be
-                                generated. Click <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Next</span>.</p>
-                        </li>
                         <li class="- topic/li li">
                             <p class="- topic/p p">Choose the records that will be processed.  Click
                                 <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Next</span>.</p>
@@ -324,35 +342,26 @@ $(document).ready( function () {
                 </div>
             </article>
             
-            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title13" id="import_textgrid">
-                <h4 class="- topic/title title topictitle4" id="ariaid-title13">Import TextGrids</h4>
-                
-                <div class="- topic/body body"><p class="- topic/shortdesc shortdesc">Import TextGrids as Phon records.</p>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title15" id="import_textgrid">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title15">Import TextGrid</h4>
+                <div class="- topic/body body">
                     <section class="- topic/section section">
-                        <p class="- topic/p p">TextGrids created with Praat may be imported as Phon records.  Data from tiers in
-                            selected TextGrids will be mapped to Phon tier data.</p>
+                        <div class="- topic/p p">TextGrids created with Praat may be imported as Phon records. Data from
+                            tiers in selected TextGrids will be mapped to Phon tier data.<br /><img class="- topic/image image" id="import_textgrid__image_vl2_pgn_kpb" src="images/import_textgrid.png" /><br /></div>
                     </section>
                     <ol class="- topic/ol ol">
+                        <li class="- topic/li li">Select the TextGrid from the list of TextGrids associated with the
+                            session from the drop down menu.</li>
+                        <li class="- topic/li li">Select the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Record reference tier</span> which is the
+                            tier which defines the record segments in the TextGrid. There will be
+                            one Phon record created for every interval in this TextGrid tier. An
+                            option to <span class="+ topic/ph ui-d/uicontrol ph uicontrol">ignore empty intervals</span> is also
+                            available.</li>
                         <li class="- topic/li li">
-                            <p class="- topic/p p">Open the Import TextGrids wizard by using the menu command <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Plugins</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Import TextGrids...</span></span> from the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Project Manager</span> window.</p>
-                        </li>
-                        <li class="- topic/li li">
-                            <p class="- topic/p p">In the first step of the wizard, select a folder containing the TextGrids you
-                                wish to import using the browse button on the right-hand side of the text field.
-                                When you select the folder, a list of detected tier names from the TextGrids
-                                will be displayed in the table.</p>
-                        </li>
-                        <li class="- topic/li li">
-                            <p class="- topic/p p">For each TextGrid tier you wish to import, type the name of the Phon tier in
-                                the column titled <span class="+ topic/ph ui-d/uicontrol ph uicontrol">PhonTier</span>. You may assign more than one
-                                TextGrid tier to the same Phon tier. You may also assign a group marker for each
-                                imported tier. When a TextGrid interval with this marker as it's text is
-                                encountered a new group is created in the Phon record. By default, this is set
-                                to '#' as this is how Phon will generate TextGrid files. Click next.</p>
-                        </li>
-                        <li class="- topic/li li">
-                            <p class="- topic/p p">Choose which session in the project to which you wish to add the imported
-                                records or specifiy a new session name to be created.  Click next.</p>
+                            <p class="- topic/p p">For each TextGrid tier you wish to import, type the name of the Phon
+                                tier in the column titled <span class="+ topic/ph ui-d/uicontrol ph uicontrol">PhonTier</span>. You may
+                                assign more than one TextGrid tier to the same Phon tier. You may
+                                also select wether the Phon tier will be groupd. Click next.</p>
                         </li>
                         <li class="- topic/li li">
                             <p class="- topic/p p">The TextGrids will now be imported.  If any errors are encountered they will be
@@ -362,8 +371,8 @@ $(document).ready( function () {
                 </div>
             </article>
             
-            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title14" id="open_textgrid_in_praat">
-                <h4 class="- topic/title title topictitle4" id="ariaid-title14">Open TextGrid in Praat</h4>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title16" id="open_textgrid_in_praat">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title16">Open TextGrid in Praat</h4>
                 
                 <div class="- topic/body body"><p class="- topic/shortdesc shortdesc">Open a TextGrid managed by Phon in the Praat application.</p>
                     <section class="- topic/section section">
@@ -373,9 +382,10 @@ $(document).ready( function () {
                     <ol class="- topic/ol ol">
                         <li class="- topic/li li">
                             <div class="- topic/note note note note_note"><span class="note__title">Note:</span> You will need Praat version 5.3.85 or later.  Praat must also be open.</div>
-                            <p class="- topic/p p">From the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Speech Analysis</span> view in the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Session
-                                Editor</span> window, choose <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Open TextGrid in Praat...</span></span> from the Praat menu. The TextGrid in Phon will fade and a button
-                                to unlock the TextGrid will be displayed.</p>
+                            <p class="- topic/p p">From the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Speech Analysis</span> view in the
+                                    <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Session Editor</span> window, choose <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Open TextGrid in Praat...</span></span> from the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">TextGrid</span> button menu.
+                                The TextGrid in Phon will fade and a button to unlock the TextGrid
+                                will be displayed.</p>
                         </li>
                         <li class="- topic/li li">
                             <div class="- topic/note note note note_note"><span class="note__title">Note:</span> Phon uses TextGrid tier naming to map values onto Phon tiers.  Do not change
@@ -404,7 +414,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#waveform_tier" data-tocid="waveform_tier">Waveform Tier</a><ul><li class="topic-item"><a href="#waveform_actions" data-tocid="waveform_actions">Waveform Actions</a><ul><li class="topic-item"><a href="#taskId" data-tocid="taskId">Adjust Segment Start and End Times</a></li></ul></li></ul></li><li class="topic-item"><a href="#spectrogram_tier" data-tocid="spectrogram_tier">Spectrogram Tier</a><ul><li class="topic-item"><a href="#spectrogram_actions" data-tocid="spectrogram_actions">Spectrogram Actions</a><ul><li class="topic-item"><a href="#list_formants" data-tocid="list_formants">List Formants</a></li><li class="topic-item"><a href="#list_intensity" data-tocid="list_intensity">List Intensity</a></li><li class="topic-item"><a href="#list_pitch" data-tocid="list_pitch">List Pitch</a></li></ul></li></ul></li><li class="topic-item"><a href="#textgrid_tier" data-tocid="textgrid_tier">TextGrid Tier</a><ul><li class="topic-item"><a href="#textgrid_tier_actions" data-tocid="textgrid_tier_actions">TextGrid Actions</a><ul><li class="topic-item"><a href="#generate_textgrid" data-tocid="generate_textgrid">Generate TextGrids</a></li><li class="topic-item"><a href="#import_textgrid" data-tocid="import_textgrid">Import TextGrids</a></li><li class="topic-item"><a href="#open_textgrid_in_praat" data-tocid="open_textgrid_in_praat">Open TextGrid in Praat</a></li></ul></li></ul></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#waveform_tier" data-tocid="waveform_tier">Waveform Tier</a><ul><li class="topic-item"><a href="#waveform_actions" data-tocid="waveform_actions">Waveform Actions</a><ul><li class="topic-item"><a href="#taskId" data-tocid="taskId">Adjust Segment Start and End Times</a></li></ul></li></ul></li><li class="topic-item"><a href="#spectrogram_tier" data-tocid="spectrogram_tier">Spectrogram Tier</a><ul><li class="topic-item"><a href="#spectrogram_actions" data-tocid="spectrogram_actions">Spectrogram Actions</a><ul><li class="topic-item"><a href="#list_formants" data-tocid="list_formants">List Formants</a></li><li class="topic-item"><a href="#list_intensity" data-tocid="list_intensity">List Intensity</a></li><li class="topic-item"><a href="#list_pitch" data-tocid="list_pitch">List Pitch</a></li></ul></li></ul></li><li class="topic-item"><a href="#textgrid_tier" data-tocid="textgrid_tier">TextGrid Tier</a><ul><li class="topic-item"><a href="#font_scaling" data-tocid="font_scaling">Font Scaling</a></li><li class="topic-item"><a href="#textgrid_tier_actions" data-tocid="textgrid_tier_actions">TextGrid Actions</a><ul><li class="topic-item"><a href="#textgrid_tier_management" data-tocid="textgrid_tier_management">Tier management</a></li><li class="topic-item"><a href="#generate_textgrid" data-tocid="generate_textgrid">Generate TextGrid</a></li><li class="topic-item"><a href="#import_textgrid" data-tocid="import_textgrid">Import TextGrid</a></li><li class="topic-item"><a href="#open_textgrid_in_praat" data-tocid="open_textgrid_in_praat">Open TextGrid in Praat</a></li></ul></li></ul></li></ul></div>
                         </nav>
                     
                 </div>

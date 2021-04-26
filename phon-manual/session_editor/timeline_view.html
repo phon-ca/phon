@@ -168,7 +168,37 @@ $(document).ready( function () {
                     start and end markers are always visible for the current record and are
                     displayed when hovering over the end points of other record segments. Records
                     may also be dragged horizontally along the timeline to adjust both start and end
-                    times simultaneously.</p>
+                    times simultaneously. </p>
+                <div class="- topic/p p">Additional segment time modification options are available from the context menu.
+                    You may also move selected records a specific amount of time using the
+                        <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Move records</span> button in the toolbar.  The following
+                    keystrokes are available for modifying segment times:<table class="- topic/table table" id="adjust-segment-times__table_owz_vmm_kpb" data-ofbid="adjust-segment-times__table_owz_vmm_kpb"><caption></caption><colgroup><col /><col /></colgroup><thead class="- topic/thead thead">
+                                <tr class="- topic/row">
+                                    <th class="- topic/entry entry colsep-0 rowsep-0" id="adjust-segment-times__table_owz_vmm_kpb__entry__1">Action</th>
+                                    <th class="- topic/entry entry colsep-0 rowsep-0" id="adjust-segment-times__table_owz_vmm_kpb__entry__2">Keystroke(s)</th>
+                                </tr>
+                            </thead><tbody class="- topic/tbody tbody">
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__1">Grow record</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">CMD/CTRL+G</kbd></td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__1">Shrink record</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">CMD/CTRL+K</kbd></td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__1">Move records left </td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">CMD/CTRL+,</kbd></td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__1">Move records right</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">CMD/CTRL+.</kbd></td>
+                                </tr>
+                                <tr class="- topic/row">
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__1">Move records...</td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="adjust-segment-times__table_owz_vmm_kpb__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">CMD/CTRL+/</kbd></td>
+                                </tr>
+                            </tbody></table></div>
             </div>
         </article>
         <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title5" id="delete-record">
@@ -240,21 +270,43 @@ $(document).ready( function () {
                     record grid. Tier visibility may be toggled using the <em class="+ topic/ph hi-d/i ph i">Tiers</em> menu or
                     similar option in the contextual menu.</p>
             </div>
+            
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title13" id="font_scaling">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title13">Font Scaling</h4>
+                <div class="- topic/body body">
+                    <p class="- topic/p p">Font size can be adjusted using the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Font size</span> button in the toolbar.
+                    Clicking this button will display a popup menu allowing adjustment of font size in the 
+                    record grid using a slider. This value will be remembered between instances of the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Session Editor</span>.</p>
+                </div>
+            </article>
+            
         </article>
-        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title13" id="zoom-outin">
-            <h3 class="- topic/title title topictitle3" id="ariaid-title13">Zoom Out/In</h3>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title14" id="zoom-outin">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title14">Zoom Out/In</h3>
             <div class="- topic/body body">
                 <p class="- topic/p p">The zoom out/in actions will decrease/increase the horizontal resolution of the
                     waveform within the timeline. These actions are available in the toolbar and
                     contextual menus.</p>
             </div>
         </article>
+        
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title15" id="selecting_multiple_records">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title15">Selecting Multiple Records</h3>
+            <div class="- topic/body body">
+                <p class="- topic/p p">More than one record may be selected in the record grid. Selected records will be
+                    displayed with a blue border. The current record is always selected. Record
+                    selection can be manipulated using standard mouse and keyboard interactions
+                    (e.g., use CMD/CTRL+Click to add a record to the selection.) You may select all
+                    records for a speaker by clicking the speaker name and then <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Select
+                        all</span> from the context menu.</p>
+            </div>
+        </article>
     </article>
-    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title14" id="special-modes">
-        <h2 class="- topic/title title topictitle2" id="ariaid-title14">Special Modes</h2>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title16" id="special-modes">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title16">Special Modes</h2>
         <div class="- topic/body body"></div>
-        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title15" id="segmentation">
-            <h3 class="- topic/title title topictitle3" id="ariaid-title15">Segmentation</h3>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title17" id="segmentation">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title17">Segmentation</h3>
             <div class="- topic/body body">
                 <p class="- topic/p p">Segmentation is the process of assigning segment times for records using the
                     keyboard, usually while media is playing. To enter the Segmentation Mode, click
@@ -278,26 +330,26 @@ $(document).ready( function () {
                 </ol>
                 <p class="- topic/p p">Playback start position will determine where segmentation begins in the
                         <strong class="+ topic/ph hi-d/b ph b">Timeline</strong>. If no media is available segmentation will always begin at
-                        <code class="+ topic/ph pr-d/codeph ph codeph">000:00.000</code>.</p>
+                        <kbd class="+ topic/ph sw-d/userinput ph userinput">000:00.000</kbd>.</p>
                 <p class="- topic/p p">There are two modes available for segmentation:</p>
                 <ol class="- topic/ol ol">
                     <li class="- topic/li li"><p class="- topic/p p">Insert new record at end of session</p><p class="- topic/p p">Use this option when segmenting
                             a new media file or continuing segmentation.</p></li>
                     <li class="- topic/li li"><p class="- topic/p p">Replace segment for current record</p><p class="- topic/p p">Use this option when
                             re-segmenting an already-segmented record or set of records. Uopn user
-                            action (e.g. typing a given participant number or <code class="+ topic/ph pr-d/codeph ph codeph">1</code>,
+                            action (e.g. typing a given participant number or <kbd class="+ topic/ph sw-d/userinput ph userinput">1</kbd>,
                             the current record is assigned the new segment time and participant
                             (when relevant). Once all records segments have been overwritten using
                             this mode, new records will be inserted at end of the session.</p></li>
                 </ol>
             </div>
-            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title16" id="segmentation-window">
-                <h4 class="- topic/title title topictitle4" id="ariaid-title16">Segmentation Window</h4>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title18" id="segmentation-window">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title18">Segmentation Window</h4>
                 <div class="- topic/body body">
                     <p class="- topic/p p">While segmentation mode is active, a yellow segment will be painted in the
                             <strong class="+ topic/ph hi-d/b ph b">Timeline</strong> view. When a new record is identified using the
-                            <code class="+ topic/ph pr-d/codeph ph codeph">Space</code> or <code class="+ topic/ph pr-d/codeph ph codeph">1</code>...<code class="+ topic/ph pr-d/codeph ph codeph">9</code> or
-                            <code class="+ topic/ph pr-d/codeph ph codeph">Numpad 1</code>...<code class="+ topic/ph pr-d/codeph ph codeph">Numpad 9</code> keys the segment
+                            <kbd class="+ topic/ph sw-d/userinput ph userinput">Space</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">1</kbd>...<kbd class="+ topic/ph sw-d/userinput ph userinput">9</kbd> or
+                            <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad 1</kbd>...<kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad 9</kbd> keys the segment
                         identified by yellow will become the media segment for the new record.</p>
                     <p class="- topic/p p">If <em class="+ topic/ph hi-d/i ph i">Use segmentation window</em> is not selected, segments will have no set
                         limit in length; the beginning time of the segment is constrained by the end
@@ -310,8 +362,8 @@ $(document).ready( function () {
                     </figure>
                 </div>
             </article>
-            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title17" id="segmentation-controls">
-                <h4 class="- topic/title title topictitle4" id="ariaid-title17">Segmentation Controls</h4>
+            <article class="- topic/topic topic nested3" aria-labelledby="ariaid-title19" id="segmentation-controls">
+                <h4 class="- topic/title title topictitle4" id="ariaid-title19">Segmentation Controls</h4>
                 <div class="- topic/body body">
                     <p class="- topic/p p">During segmentation mode all keyboard input for the application will be
                         blocked except the following keystrokes:</p>
@@ -323,39 +375,39 @@ $(document).ready( function () {
                             </thead><tbody class="- topic/tbody tbody">
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">Stop segmentation</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Esc</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Esc</kbd></td>
                                 </tr>
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">Break (e.g., silence, noise, etc.)</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">b</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Numpad
-                                        decimal</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">b</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad
+                                        decimal</kbd></td>
                                 </tr>
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">New segment (unidentified)</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Space</code> or <code class="+ topic/ph pr-d/codeph ph codeph">0</code> or
-                                            <code class="+ topic/ph pr-d/codeph ph codeph">Numpad 0</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Space</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">0</kbd> or
+                                            <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad 0</kbd></td>
                                 </tr>
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">New segment (participant 1...9)</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">1</code>...<code class="+ topic/ph pr-d/codeph ph codeph">9</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Numpad
-                                            1</code>...<code class="+ topic/ph pr-d/codeph ph codeph">Numpad 9</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">1</kbd>...<kbd class="+ topic/ph sw-d/userinput ph userinput">9</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad
+                                            1</kbd>...<kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad 9</kbd></td>
                                 </tr>
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">Toggle segmentation window</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">W</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">W</kbd></td>
                                 </tr>
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">Increase segmentation window (100ms)</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Up</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Up</kbd></td>
                                 </tr>
                                 <tr class="- topic/row">
                                     <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__1">Decrease segmentation window (1000ms)</td>
-                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Down</code></td>
+                                    <td class="- topic/entry entry colsep-0 rowsep-0" headers="segmentation-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Down</kbd></td>
                                 </tr>
                             </tbody></table>
                 </div>
-                <article class="- topic/topic topic nested4" aria-labelledby="ariaid-title18" id="media-controls">
-                    <h5 class="- topic/title title topictitle5" id="ariaid-title18">Media Controls</h5>
+                <article class="- topic/topic topic nested4" aria-labelledby="ariaid-title20" id="media-controls">
+                    <h5 class="- topic/title title topictitle5" id="ariaid-title20">Media Controls</h5>
                     <div class="- topic/body body">
                         <p class="- topic/p p">The following keystrokes for controlling media playback are avavilable
                             when in segmentation mode:</p>
@@ -367,49 +419,49 @@ $(document).ready( function () {
                                 </thead><tbody class="- topic/tbody tbody">
                                     <tr class="- topic/row">
                                         <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__1">Volume up</td>
-                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Shift+Up</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Numpad
-                                                multiply</code></td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Shift+Up</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad
+                                                multiply</kbd></td>
                                     </tr>
                                     <tr class="- topic/row">
                                         <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__1">Volume down</td>
-                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Shift+Down</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Numpad
-                                                divide</code></td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Shift+Down</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad
+                                                divide</kbd></td>
                                     </tr>
                                     <tr class="- topic/row">
                                         <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__1">Go back 1s</td>
-                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Left</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Numpad
-                                                subtract</code></td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Left</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad
+                                                subtract</kbd></td>
                                     </tr>
                                     <tr class="- topic/row">
                                         <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__1">Go forward 1s</td>
-                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Right</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Numpad
-                                            add</code></td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Right</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Numpad
+                                            add</kbd></td>
                                     </tr>
                                     <tr class="- topic/row">
                                         <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__1">Go back 5s</td>
-                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Shift+Left</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Shift+Numpad
-                                                subtract</code></td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Shift+Left</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Shift+Numpad
+                                                subtract</kbd></td>
                                     </tr>
                                     <tr class="- topic/row">
                                         <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__1">Go forward 5s</td>
-                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><code class="+ topic/ph pr-d/codeph ph codeph">Shift+Right</code> or <code class="+ topic/ph pr-d/codeph ph codeph">Shift+Numpad
-                                                add</code></td>
+                                        <td class="- topic/entry entry colsep-0 rowsep-0" headers="media-controls__entry__2"><kbd class="+ topic/ph sw-d/userinput ph userinput">Shift+Right</kbd> or <kbd class="+ topic/ph sw-d/userinput ph userinput">Shift+Numpad
+                                                add</kbd></td>
                                     </tr>
                                 </tbody></table>
                     </div>
                 </article>
             </article>
         </article>
-        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title19" id="split-record">
-            <h3 class="- topic/title title topictitle3" id="ariaid-title19">Split Record</h3>
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title21" id="split-record">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title21">Split Record</h3>
             <div class="- topic/body body">
                 <p class="- topic/p p">Records segments may be split using the record grid. To enter split mode, select
-                    the segment to ne split, press the <code class="+ topic/ph pr-d/codeph ph codeph">S</code> key, press the "Split
+                    the segment to ne split, press the <kbd class="+ topic/ph sw-d/userinput ph userinput">S</kbd> key, press the "Split
                     Record" button in the toolbar, or select <em class="+ topic/ph hi-d/i ph i">Split record</em> from the contextual
                     menu. A new marker will appear in the middle of the current record segment. This
                     new marker can be dragged to adjust the position of the record split. Press
-                        <code class="+ topic/ph pr-d/codeph ph codeph">Enter</code> to accept the record split as shown and create the
-                    new record. Split mode can be exited using the <code class="+ topic/ph pr-d/codeph ph codeph">Escape</code> key and
+                        <kbd class="+ topic/ph sw-d/userinput ph userinput">Enter</kbd> to accept the record split as shown and create the
+                    new record. Split mode can be exited using the <kbd class="+ topic/ph sw-d/userinput ph userinput">Escape</kbd> key and
                     will also exit if the current editor record is switched or the current record
                     segment is modified.</p>
                 <figure class="- topic/fig fig fignone"><figcaption class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 4</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">Split Record</span></figcaption>
@@ -417,15 +469,15 @@ $(document).ready( function () {
                     <img class="- topic/image image" src="images/timeline_split_record.png" alt="Split Record" />
                 </figure>
                 <p class="- topic/p p">Record data may be split by word group number by using the
-                        <code class="+ topic/ph pr-d/codeph ph codeph">0</code>...<code class="+ topic/ph pr-d/codeph ph codeph">9</code> keys on the keyboard.
-                        <code class="+ topic/ph pr-d/codeph ph codeph">0</code> will move all record data into the new record while
-                        <code class="+ topic/ph pr-d/codeph ph codeph">1</code>...<code class="+ topic/ph pr-d/codeph ph codeph">9</code> will split data after group 1, 2,
+                        <kbd class="+ topic/ph sw-d/userinput ph userinput">0</kbd>...<kbd class="+ topic/ph sw-d/userinput ph userinput">9</kbd> keys on the keyboard.
+                        <kbd class="+ topic/ph sw-d/userinput ph userinput">0</kbd> will move all record data into the new record while
+                        <kbd class="+ topic/ph sw-d/userinput ph userinput">1</kbd>...<kbd class="+ topic/ph sw-d/userinput ph userinput">9</kbd> will split data after group 1, 2,
                     etc,. Split position can be set using the context menu as well.</p>
             </div>
         </article>
     </article>
-    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title20" id="warnings">
-        <h2 class="- topic/title title topictitle2" id="ariaid-title20">Warnings</h2>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title22" id="warnings">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title22">Warnings</h2>
         <div class="- topic/body body">
             <p class="- topic/p p">The following warnings will be indicated in the <strong class="+ topic/ph hi-d/b ph b">Timeline</strong> view:</p>
             <ol class="- topic/ol ol">
@@ -439,7 +491,7 @@ $(document).ready( function () {
                 
                 <img class="- topic/image image" src="images/timeline_overlapping_records.png" alt="Overlapping Segments" />
             </figure>
-        </div>
+        </div>   
     </article>
 </article></main></div>
                         
@@ -449,7 +501,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#actions" data-tocid="actions">Actions</a><ul><li class="topic-item"><a href="#play-segment" data-tocid="play-segment">Play segment</a></li><li class="topic-item"><a href="#adjust-segment-times" data-tocid="adjust-segment-times">Adjust segment times</a></li><li class="topic-item"><a href="#delete-record" data-tocid="delete-record">Delete record</a></li><li class="topic-item"><a href="#media-player-position" data-tocid="media-player-position">Media Player Position</a></li><li class="topic-item"><a href="#participants" data-tocid="participants">Participants</a><ul><li class="topic-item"><a href="#hideshow-participant" data-tocid="hideshow-participant">Hide/Show Participant</a></li><li class="topic-item"><a href="#add-participant" data-tocid="add-participant">Add Participant</a></li><li class="topic-item"><a href="#change-participant" data-tocid="change-participant">Change Participant</a></li><li class="topic-item"><a href="#reassign-participant" data-tocid="reassign-participant">Reassign Records</a></li></ul></li><li class="topic-item"><a href="#hideshow-tier" data-tocid="hideshow-tier">Hide/Show Tier</a></li><li class="topic-item"><a href="#zoom-outin" data-tocid="zoom-outin">Zoom Out/In</a></li></ul></li><li class="topic-item"><a href="#special-modes" data-tocid="special-modes">Special Modes</a><ul><li class="topic-item"><a href="#segmentation" data-tocid="segmentation">Segmentation</a><ul><li class="topic-item"><a href="#segmentation-window" data-tocid="segmentation-window">Segmentation Window</a></li><li class="topic-item"><a href="#segmentation-controls" data-tocid="segmentation-controls">Segmentation Controls</a><ul><li class="topic-item"><a href="#media-controls" data-tocid="media-controls">Media Controls</a></li></ul></li></ul></li><li class="topic-item"><a href="#split-record" data-tocid="split-record">Split Record</a></li></ul></li><li class="topic-item"><a href="#warnings" data-tocid="warnings">Warnings</a></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#actions" data-tocid="actions">Actions</a><ul><li class="topic-item"><a href="#play-segment" data-tocid="play-segment">Play segment</a></li><li class="topic-item"><a href="#adjust-segment-times" data-tocid="adjust-segment-times">Adjust segment times</a></li><li class="topic-item"><a href="#delete-record" data-tocid="delete-record">Delete record</a></li><li class="topic-item"><a href="#media-player-position" data-tocid="media-player-position">Media Player Position</a></li><li class="topic-item"><a href="#participants" data-tocid="participants">Participants</a><ul><li class="topic-item"><a href="#hideshow-participant" data-tocid="hideshow-participant">Hide/Show Participant</a></li><li class="topic-item"><a href="#add-participant" data-tocid="add-participant">Add Participant</a></li><li class="topic-item"><a href="#change-participant" data-tocid="change-participant">Change Participant</a></li><li class="topic-item"><a href="#reassign-participant" data-tocid="reassign-participant">Reassign Records</a></li></ul></li><li class="topic-item"><a href="#hideshow-tier" data-tocid="hideshow-tier">Hide/Show Tier</a><ul><li class="topic-item"><a href="#font_scaling" data-tocid="font_scaling">Font Scaling</a></li></ul></li><li class="topic-item"><a href="#zoom-outin" data-tocid="zoom-outin">Zoom Out/In</a></li><li class="topic-item"><a href="#selecting_multiple_records" data-tocid="selecting_multiple_records">Selecting Multiple Records</a></li></ul></li><li class="topic-item"><a href="#special-modes" data-tocid="special-modes">Special Modes</a><ul><li class="topic-item"><a href="#segmentation" data-tocid="segmentation">Segmentation</a><ul><li class="topic-item"><a href="#segmentation-window" data-tocid="segmentation-window">Segmentation Window</a></li><li class="topic-item"><a href="#segmentation-controls" data-tocid="segmentation-controls">Segmentation Controls</a><ul><li class="topic-item"><a href="#media-controls" data-tocid="media-controls">Media Controls</a></li></ul></li></ul></li><li class="topic-item"><a href="#split-record" data-tocid="split-record">Split Record</a></li></ul></li><li class="topic-item"><a href="#warnings" data-tocid="warnings">Warnings</a></li></ul></div>
                         </nav>
                     
                 </div>
