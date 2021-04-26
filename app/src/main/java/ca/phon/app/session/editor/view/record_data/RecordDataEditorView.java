@@ -131,7 +131,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	/*
 	 * Find and replace
 	 */
-	private JButton findAndReplaceButton;
+	private JToggleButton findAndReplaceButton;
 	private FindAndReplacePanel findAndReplacePanel;
 
 	/*
@@ -676,7 +676,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace panel");
-			findAndReplaceButton = new JButton(toggleFindAndReplaceAct);
+			findAndReplaceButton = new JToggleButton(toggleFindAndReplaceAct);
+			findAndReplaceButton.setSelected(false);
 			
 			topPanel.add(findAndReplaceButton, cc.xy(colIdx++, rowIdx));
 			colIdx++;
@@ -1232,6 +1233,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	
 	public void setFindAndReplaceVisible(boolean visible) {
 		this.findAndReplacePanel.setVisible(visible);
+		this.findAndReplaceButton.setSelected(visible);
 	}
 	
 	public void onToggleFindAndReplace(PhonActionEvent pae) {
