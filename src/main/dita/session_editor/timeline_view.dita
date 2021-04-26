@@ -52,7 +52,43 @@
                     start and end markers are always visible for the current record and are
                     displayed when hovering over the end points of other record segments. Records
                     may also be dragged horizontally along the timeline to adjust both start and end
-                    times simultaneously.</p>
+                    times simultaneously. </p>
+                <p>Additional segment time modification options are available from the context menu.
+                    You may also move selected records a specific amount of time using the
+                        <uicontrol>Move records</uicontrol> button in the toolbar.  The following
+                    keystrokes are available for modifying segment times:<table
+                        id="table_owz_vmm_kpb">
+                        <tgroup cols="2">
+                            <thead>
+                                <row>
+                                    <entry>Action</entry>
+                                    <entry>Keystroke(s)</entry>
+                                </row>
+                            </thead>
+                            <tbody>
+                                <row>
+                                    <entry>Grow record</entry>
+                                    <entry><userinput>CMD/CTRL+G</userinput></entry>
+                                </row>
+                                <row>
+                                    <entry>Shrink record</entry>
+                                    <entry><userinput>CMD/CTRL+K</userinput></entry>
+                                </row>
+                                <row>
+                                    <entry>Move left </entry>
+                                    <entry><userinput>CMD/CTRL+,</userinput></entry>
+                                </row>
+                                <row>
+                                    <entry>More right</entry>
+                                    <entry><userinput>CMD/CTRL+.</userinput></entry>
+                                </row>
+                                <row>
+                                    <entry>More records...</entry>
+                                    <entry><userinput>CMD/CTRL+/</userinput></entry>
+                                </row>
+                            </tbody>
+                        </tgroup>
+                    </table></p>
             </body>
         </topic>
         <topic id="delete-record">
@@ -134,6 +170,17 @@
                 <p>The zoom out/in actions will decrease/increase the horizontal resolution of the
                     waveform within the timeline. These actions are available in the toolbar and
                     contextual menus.</p>
+            </body>
+        </topic>
+        
+        <topic id="selecting_multiple_records">
+            <title>Selecting Multiple Records</title>
+            <body>
+                <p>More than one record may be selected in the record grid. Selected records will be
+                displayed with a blue border. The current record is always selected. Record selection
+                can be manipulated using standard mouse and keyboard interactions (e.g., use CMD/CTRL+Click to
+                add a record to the selection.)</p>
+                <p></p>
             </body>
         </topic>
     </topic>
