@@ -177,10 +177,11 @@
             <title>Selecting Multiple Records</title>
             <body>
                 <p>More than one record may be selected in the record grid. Selected records will be
-                displayed with a blue border. The current record is always selected. Record selection
-                can be manipulated using standard mouse and keyboard interactions (e.g., use CMD/CTRL+Click to
-                add a record to the selection.)</p>
-                <p></p>
+                    displayed with a blue border. The current record is always selected. Record
+                    selection can be manipulated using standard mouse and keyboard interactions
+                    (e.g., use CMD/CTRL+Click to add a record to the selection.) You may select all
+                    records for a speaker by clicking the speaker name and then <uicontrol>Select
+                        all</uicontrol> from the context menu.</p>
             </body>
         </topic>
     </topic>
@@ -396,6 +397,6 @@
                     <alt>Overlapping Segments</alt>
                 </image>
             </fig>
-        </body>
+        </body>   
     </topic>
 </topic>
