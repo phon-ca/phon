@@ -49,12 +49,6 @@ public class ThemeHook implements PhonStartupHook,
 					if (OSInfo.isMacOs()) {
 						setupMacosCustomizations();
 						return;
-						// code below used when changing theme on mac to keep
-						// system window menu
-//						final String[] uiKeys = new String[] { "MenuBarUI" };
-//						for (String key : uiKeys) {
-//							uiMap.put(key, UIManager.get(key));
-//						}
 					}
 					
 					try {
@@ -97,7 +91,6 @@ public class ThemeHook implements PhonStartupHook,
 	private void setupMacosCustomizations() {
 		// check list selection colours, change breadcrumb selection color to MACOS_BLUE if 
 		// user selection is not 'blue' or 'graphite' in system preferences
-		
 		Color listSelectionBackground = UIManager.getColor("List.selectionBackground");
 		if( !MACOS_BLUE.equals(listSelectionBackground) && !MACOS_GRAPHITE.equals(listSelectionBackground) ) {
 			UIManager.getDefaults().put("List.selectionBackground", MACOS_BLUE);
