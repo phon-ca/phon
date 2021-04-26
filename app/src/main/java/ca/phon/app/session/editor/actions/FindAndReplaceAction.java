@@ -51,7 +51,10 @@ public class FindAndReplaceAction extends SessionEditorAction {
 		if(!editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
 			editor.getViewModel().showView(RecordDataEditorView.VIEW_NAME);
 		}
-		((RecordDataEditorView)editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME)).setFindAndReplaceVisible(true);
+
+		RecordDataEditorView recordDataEditorView = (RecordDataEditorView)editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME);
+		boolean isVisible = recordDataEditorView.isFindAndReplaceVisible();
+		recordDataEditorView.setFindAndReplaceVisible(!isVisible);
 	}
 
 }
