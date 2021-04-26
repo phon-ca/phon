@@ -132,6 +132,19 @@
             </body>
         </topic>
         
+        <topic id="font_scaling">
+            <title>Font Scaling</title>
+            <body>
+                <p>Font size can be adjusted using the <uicontrol>Font size</uicontrol> button in the toolbar.
+                    Clicking this button will display a popup menu allowing adjustment of font size in the 
+                    record data view using a slider. This value will be remembered between instances of the <wintitle>Session Editor</wintitle>.</p>
+                <p>
+                    <image placement="break" href="images/record_data_font_scaling.png"
+                        id="image_ot4_mdn_kpb"/>
+                </p>
+            </body>
+        </topic>
+        
         <topic id="find_and_replace">
             <title>Find &amp; Replace</title>
             <body>
