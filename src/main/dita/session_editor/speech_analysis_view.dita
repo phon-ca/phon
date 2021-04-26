@@ -37,11 +37,11 @@
                         </li>
                         <li>
                             <p>Select a portion of the waveform for your revised segment and press
-                                <userinput>Enter</userinput>. Alternately, typeover the existing time values
-                                in the <uicontrol>Record Data</uicontrol> view with revised values and click the
-                                <uicontrol>Refresh</uicontrol> button in the top left area of the
-                                <wintitle>Speech Analysis</wintitle> view. <image placement="break" href="images/adjust_segment.png" id="image_wdr_vlm_sc"
-                                /></p>
+                                    <userinput>Enter</userinput>. Alternately, typeover the existing
+                                time values in the <uicontrol>Record Data</uicontrol> view with
+                                revised values and click the <uicontrol>Refresh</uicontrol> button
+                                in the top left area of the <wintitle>Speech Analysis</wintitle>
+                                view.</p>
                             <itemgroup>This action will adjust your segment start and end times.<note>To view a
                                 larger portion of the waveform, click <uicontrol>Show More</uicontrol>. This
                                 extends the displayed interval by one second on each side. To redisplay the
@@ -187,22 +187,13 @@
                 <shortdesc>Generate TextGrids from Phon records.</shortdesc>
                 <body>
                     <section>
-                        <p>The following procedure outlines how to generated new TextGrids from Phon record
-                            data.</p>
+                        <p>The following procedure outlines how to generated new TextGrids from Phon
+                            record data. To access the generate TextGrid wizard click the
+                                <uicontrol>TextGrid</uicontrol> button and select <menucascade>
+                                <uicontrol>Generate TextGrid...</uicontrol>
+                            </menucascade> from the popup menu.</p>
                     </section>
                     <ol>
-                        <li>
-                            <note>You may also open the Generate TextGrids wizard from the <wintitle>Session
-                                Editor</wintitle> window, in which case skip step 2.</note>
-                            <p>From the <wintitle>Project Manager</wintitle> window choose <menucascade>
-                                <uicontrol>Plugins</uicontrol>
-                                <uicontrol>Generate TextGrids...</uicontrol>
-                            </menucascade> from the window menu.</p>
-                        </li>
-                        <li>
-                            <p>In the wizard window, select a single session for which TextGrids will be
-                                generated. Click <uicontrol>Next</uicontrol>.</p>
-                        </li>
                         <li>
                             <p>Choose the records that will be processed.  Click
                                 <uicontrol>Next</uicontrol>.</p>
