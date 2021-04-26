@@ -174,13 +174,41 @@
             assigned to the current session.</shortdesc>
         <body>
             <p>To display the TextGrid view, choose <uicontrol>Show TextGrid</uicontrol> from the
-                <uicontrol>Praat</uicontrol> menu in the Speech Analysis view. You can select audio segments
-                by clicking intevals in the displayed TextGrid.</p>
+                    <uicontrol>TextGrid</uicontrol> button menu in the <uicontrol>Speech
+                    Analysis</uicontrol> view. You can select audio segments by clicking intervals
+                in the displayed TextGrid.</p>
         </body>
+        
+        <topic id="font_scaling">
+            <title>Font Scaling</title>
+            <body>
+                <p>Font size can be adjusted using the <uicontrol>Font size</uicontrol> button in the toolbar.
+                    Clicking this button will display a popup menu allowing adjustment of font size in the 
+                    TextGrid tier using a slider. This value will be remembered between instances of the <wintitle>Session Editor</wintitle>.</p>
+                <p>
+                    <image placement="break" href="images/textgrid_font_scaling.png"
+                        id="image_ot4_mdn_kpb"/>
+                </p>
+            </body>
+        </topic>
         
         <topic id="textgrid_tier_actions">
             <title>TextGrid Actions</title>
             <body/>
+            
+            <topic id="textgrid_tier_management">
+                <title>Tier management</title>
+                <body>
+                    <p>The TextGrid tier management dialog is avaiable from the
+                            <uicontrol>TextGrid</uicontrol> button menu by selecting <uicontrol>Tier
+                            management</uicontrol>. Actions for manipulating TextGrid tier names,
+                        ordering, and visibility are available from this window.</p>
+                    <p>
+                        <image placement="break" href="images/textgrid_tier_management.png"
+                            id="image_v4q_tj4_kpb"/>
+                    </p>
+                </body>
+            </topic>
             
             <topic id="generate_textgrid">
                 <title>Generate TextGrid</title>
