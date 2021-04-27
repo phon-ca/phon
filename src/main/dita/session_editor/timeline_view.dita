@@ -226,7 +226,7 @@
                 </ol>
                 <p>Playback start position will determine where segmentation begins in the
                         <b>Timeline</b>. If no media is available segmentation will always begin at
-                        <userinput>000:00.000</userinput>.</p>
+                        <codeph>000:00.000</codeph>.</p>
                 <p>There are two modes available for segmentation:</p>
                 <ol>
                     <li><p>Insert new record at end of session</p><p>Use this option when segmenting

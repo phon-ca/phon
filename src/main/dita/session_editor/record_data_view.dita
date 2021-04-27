@@ -152,7 +152,7 @@
                     displayed using the <menucascade>
                         <uicontrol>Edit</uicontrol>
                         <uicontrol>Find &amp; Replace</uicontrol>
-                    </menucascade>, use the <uicontrol><shortcut>CMD/CTRL+F</shortcut></uicontrol>
+                    </menucascade>, use the <userinput>CMD/CTRL+F</userinput>
                     menu item of the <wintitle>Session Editor</wintitle> or by clicking the find
                     &amp; replace button in the toolbar of the <wintitle>Record Data</wintitle>
                     view. Use the combo box to select tier for search. Search expression may be in
