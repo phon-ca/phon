@@ -272,16 +272,6 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 				int retVal = e.getDialogResult();
 				if(retVal == 0) {
 					PhonWorker.getInstance().invokeLater( this::saveAndClose );
-//					try {
-//						if(saveData()) {
-//							SwingUtilities.invokeLater( () -> dispose() );
-//						}
-//					} catch (IOException ex) {
-//						Toolkit.getDefaultToolkit().beep();
-//						LOGGER.error(ex.getMessage());
-//
-//						showMessageDialog("Save Failed", ex.getLocalizedMessage(), MessageDialogProperties.okOptions);
-//					}
 				} else if(retVal == 1) {
 					SwingUtilities.invokeLater( () -> dispose() );
 				}
