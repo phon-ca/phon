@@ -34,9 +34,10 @@ public enum OrthoPunctType {
 	FORWARD_SLASH('/'),
 	BACK_SLASH('\\'),
 	DOUBLE_COMMA('\u201e'),
-	DOUBLE_DAGGER('\u2021'),
+	DOUBLE_DAGGER('\u2021');
 
 	/* CHAT ca-element-type */
+	/*
 	BLOCKED_SEGMENTS('\u2260'),
 	CONSTRICTION('\u223e'),
 	INHALATION('\u2219'),
@@ -46,6 +47,7 @@ public enum OrthoPunctType {
 	PITCH_UP('\u2191'),
 	PRIMARY_STRESS('\u02c8'),
 	SECONDARY_STRESS('\u02cc');
+	 */
 	
 	private final char punctChar;
 	
