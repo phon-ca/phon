@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0-beta.7/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_7.dmg" newVersion="3.3.0-beta.7" newMediaFileId="macos" fileSize="288756672" md5Sum="ccedc6127f71a1372efdac88a5a5591c" sha256Sum="4c93672d2eb55cef2c7cfae31a55067e0995a145f1aaeea08bf51ebbb0ea77b7" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0.dmg" newVersion="3.3.0" newMediaFileId="macos" fileSize="288760795" md5Sum="24df5298c4767e6b13c12c77e463dae9" sha256Sum="ed6221714d42d21819b72fdc18a9c31b6f18f47b35c517782a0519e7b7129465" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
 
 ### Query &amp; Analysis
@@ -31,7 +31,7 @@
  * Added ability to select records based on query result sets in Timeline view
  * Improved behaviour of record labels when multiple records are at the same position in Timeline view
  * Diacritics are no longer shown in syllabifier and alignment boxes
- * New IPA tooltips are available.  Hovering over an IPA field for 2s will display the syllabification and alignment for that ipa field and group. You may modify syllabification and alignment by first pressing the Tab button to capture focus in the tooltip window
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
  * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
 
 ### Fonts
@@ -422,7 +422,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0-beta_7.dmg" newVersion="3.3.0-beta.7" newMediaFileId="macos" fileSize="288756672" md5Sum="ccedc6127f71a1372efdac88a5a5591c" sha256Sum="4c93672d2eb55cef2c7cfae31a55067e0995a145f1aaeea08bf51ebbb0ea77b7" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0.dmg" newVersion="3.3.0" newMediaFileId="macos" fileSize="288760795" md5Sum="24df5298c4767e6b13c12c77e463dae9" sha256Sum="ed6221714d42d21819b72fdc18a9c31b6f18f47b35c517782a0519e7b7129465" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.2.0
 
 ### Query &amp; Analysis
@@ -453,7 +453,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added ability to select records based on query result sets in Timeline view
  * Improved behaviour of record labels when multiple records are at the same position in Timeline view
  * Diacritics are no longer shown in syllabifier and alignment boxes
- * New IPA tooltips are available.  Hovering over an IPA field for 2s will display the syllabification and alignment for that ipa field and group. You may modify syllabification and alignment by first pressing the Tab button to capture focus in the tooltip window
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
  * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
 
 ### Fonts
@@ -844,7 +844,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_7.exe" newVersion="3.3.0-beta.7" newMediaFileId="win64" fileSize="302103584" md5Sum="b732ade24a99d7dd25538b09282a3ca6" sha256Sum="200d980d673e4841d317e508aedd790ef664512eb387438827efb0a2fb6d3433" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.exe" newVersion="3.3.0" newMediaFileId="win64" fileSize="302107168" md5Sum="c32dd323290d136636fc5d15be6c83a7" sha256Sum="50b6191d3bf6513cca22d681d5f5991eca938eac8e351d11e084edabd1a745c9" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
 ### Query &amp; Analysis
@@ -875,7 +875,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added ability to select records based on query result sets in Timeline view
  * Improved behaviour of record labels when multiple records are at the same position in Timeline view
  * Diacritics are no longer shown in syllabifier and alignment boxes
- * New IPA tooltips are available.  Hovering over an IPA field for 2s will display the syllabification and alignment for that ipa field and group. You may modify syllabification and alignment by first pressing the Tab button to capture focus in the tooltip window
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
  * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
 
 ### Fonts
@@ -1266,7 +1266,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_7.exe" newVersion="3.3.0-beta.7" newMediaFileId="win64" fileSize="302103584" md5Sum="b732ade24a99d7dd25538b09282a3ca6" sha256Sum="200d980d673e4841d317e508aedd790ef664512eb387438827efb0a2fb6d3433" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.exe" newVersion="3.3.0" newMediaFileId="win64" fileSize="302107168" md5Sum="c32dd323290d136636fc5d15be6c83a7" sha256Sum="50b6191d3bf6513cca22d681d5f5991eca938eac8e351d11e084edabd1a745c9" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
 ### Query &amp; Analysis
@@ -1297,7 +1297,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added ability to select records based on query result sets in Timeline view
  * Improved behaviour of record labels when multiple records are at the same position in Timeline view
  * Diacritics are no longer shown in syllabifier and alignment boxes
- * New IPA tooltips are available.  Hovering over an IPA field for 2s will display the syllabification and alignment for that ipa field and group. You may modify syllabification and alignment by first pressing the Tab button to capture focus in the tooltip window
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
  * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
 
 ### Fonts
@@ -1688,7 +1688,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_7.exe" newVersion="3.3.0-beta.7" newMediaFileId="win64" fileSize="302103584" md5Sum="b732ade24a99d7dd25538b09282a3ca6" sha256Sum="200d980d673e4841d317e508aedd790ef664512eb387438827efb0a2fb6d3433" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.exe" newVersion="3.3.0" newMediaFileId="win64" fileSize="302107168" md5Sum="c32dd323290d136636fc5d15be6c83a7" sha256Sum="50b6191d3bf6513cca22d681d5f5991eca938eac8e351d11e084edabd1a745c9" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
 ### Query &amp; Analysis
@@ -1719,7 +1719,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added ability to select records based on query result sets in Timeline view
  * Improved behaviour of record labels when multiple records are at the same position in Timeline view
  * Diacritics are no longer shown in syllabifier and alignment boxes
- * New IPA tooltips are available.  Hovering over an IPA field for 2s will display the syllabification and alignment for that ipa field and group. You may modify syllabification and alignment by first pressing the Tab button to capture focus in the tooltip window
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
  * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
 
 ### Fonts
@@ -2110,7 +2110,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0-beta_7.zip" newVersion="3.3.0-beta.7" newMediaFileId="win64zip" fileSize="301072444" md5Sum="16409380643cf411d981fa360148d3be" sha256Sum="743e7f8c270fd36c4d21648bea58e6fb3cb27c9ce9af4c0c70d8fc0432617daf" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.zip" newVersion="3.3.0" newMediaFileId="win64zip" fileSize="301066391" md5Sum="f2907c8e4499f1e5b7475430b8708ef7" sha256Sum="f381dc722551232db531b2375ba1ca0fee923d033666029289af59b9dc71a01d" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.2.0
 
 ### Query &amp; Analysis
@@ -2141,7 +2141,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Added ability to select records based on query result sets in Timeline view
  * Improved behaviour of record labels when multiple records are at the same position in Timeline view
  * Diacritics are no longer shown in syllabifier and alignment boxes
- * New IPA tooltips are available.  Hovering over an IPA field for 2s will display the syllabification and alignment for that ipa field and group. You may modify syllabification and alignment by first pressing the Tab button to capture focus in the tooltip window
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
  * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
 
 ### Fonts

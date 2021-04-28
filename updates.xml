@@ -1,7 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.2.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0.dmg" newVersion="3.2.0" newMediaFileId="macos" fileSize="272573842" md5Sum="38636aa76c4960691f9ae80138b730ef" sha256Sum="ba0fb2bc88d18cd9f9acf60666aaa254300bb94cd66d664b9bcaa7cfa369fc3b" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.1.3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.0/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0.dmg" newVersion="3.3.0" newMediaFileId="macos" fileSize="288760795" md5Sum="24df5298c4767e6b13c12c77e463dae9" sha256Sum="ed6221714d42d21819b72fdc18a9c31b6f18f47b35c517782a0519e7b7129465" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
  * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
@@ -377,8 +422,53 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_2_0.dmg" newVersion="3.2.0" newMediaFileId="macos" fileSize="272573842" md5Sum="38636aa76c4960691f9ae80138b730ef" sha256Sum="ba0fb2bc88d18cd9f9acf60666aaa254300bb94cd66d664b9bcaa7cfa369fc3b" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.1.3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_0.dmg" newVersion="3.3.0" newMediaFileId="macos" fileSize="288760795" md5Sum="24df5298c4767e6b13c12c77e463dae9" sha256Sum="ed6221714d42d21819b72fdc18a9c31b6f18f47b35c517782a0519e7b7129465" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
  * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
@@ -754,8 +844,53 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0.exe" newVersion="3.2.0" newMediaFileId="win64" fileSize="282312968" md5Sum="c10eca1c6cbd239ba4d9d526d258f209" sha256Sum="855fab8666f6cb11a6a75cb727d10e98eb34632c0f36550612a251b8d2e04b6b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.exe" newVersion="3.3.0" newMediaFileId="win64" fileSize="302107168" md5Sum="c32dd323290d136636fc5d15be6c83a7" sha256Sum="50b6191d3bf6513cca22d681d5f5991eca938eac8e351d11e084edabd1a745c9" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
  * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
@@ -1131,8 +1266,53 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0.exe" newVersion="3.2.0" newMediaFileId="win64" fileSize="282312968" md5Sum="c10eca1c6cbd239ba4d9d526d258f209" sha256Sum="855fab8666f6cb11a6a75cb727d10e98eb34632c0f36550612a251b8d2e04b6b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.exe" newVersion="3.3.0" newMediaFileId="win64" fileSize="302107168" md5Sum="c32dd323290d136636fc5d15be6c83a7" sha256Sum="50b6191d3bf6513cca22d681d5f5991eca938eac8e351d11e084edabd1a745c9" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
  * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
@@ -1508,8 +1688,53 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0.exe" newVersion="3.2.0" newMediaFileId="win64" fileSize="282312968" md5Sum="c10eca1c6cbd239ba4d9d526d258f209" sha256Sum="855fab8666f6cb11a6a75cb727d10e98eb34632c0f36550612a251b8d2e04b6b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.1.3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.exe" newVersion="3.3.0" newMediaFileId="win64" fileSize="302107168" md5Sum="c32dd323290d136636fc5d15be6c83a7" sha256Sum="50b6191d3bf6513cca22d681d5f5991eca938eac8e351d11e084edabd1a745c9" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
  * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
@@ -1885,8 +2110,53 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_2_0.zip" newVersion="3.2.0" newMediaFileId="win64zip" fileSize="281273625" md5Sum="4fa3a8cc8cbd7a4086a1d6b967a02245" sha256Sum="e0ac31cabe6f2a4da1b8d5fb6bb97cbdc36cd0d4e336a914138ea07b7c5380dd" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.1.3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_0.zip" newVersion="3.3.0" newMediaFileId="win64zip" fileSize="301066391" md5Sum="f2907c8e4499f1e5b7475430b8708ef7" sha256Sum="f381dc722551232db531b2375ba1ca0fee923d033666029289af59b9dc71a01d" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
 
  * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
  * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
