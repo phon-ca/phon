@@ -3,7 +3,13 @@
 <topic id="record-data">
     <title>Record Data</title>
     <body>
-        <p>The record data view displays tier data for the current record.</p>
+        <p>The record data view displays tier data for the current record. Each tier in the session
+            is displayed in the order defined in the <xref href="tier_management_view.dita"/>
+            view.</p>
+        <p>Phon records are divided into phonetic groups. Tiers in Phon may be grouped, in which
+            case each group is enclosed in a set of brackets, or ungrouped (i.e., the tier only has
+            one group.) In the example below, the Notes, Segment, and Translation tiers are
+            ungrouped while the Orthography, IPA Target, and IPA Actual tiers are grouped.</p>
         <fig id="fig_gvd_4qs_dlq">
             <title>Record Data View</title>
             <image placement="inline" href="images/record_data_view.png"
@@ -11,11 +17,18 @@
                 <alt>Record Data View</alt>
             </image>
         </fig>
+        <p>Within groups, words are aligned based on space boundaries. To remove a word from
+            consideration in word alignment, add a zero in front of the word in the Orthgraphy tier.
+            Word alignment is used during Queries and Analyses when searching by word is selected.
+            (Note this also means that words prefixed with a zero will not appear in queries when
+            search by word is selected.)</p>
     </body>
     
-    <topic id="record_data_actions">
-        <title>Actions</title>
-        <body/>
+    <topic id="group_actions">
+        <title>Group Actions</title>
+        <body>
+            <p>The following actions modify the number of groups in a record:</p>
+        </body>
     
         <topic id="new_group">
             <title>New Group</title>
@@ -113,63 +126,108 @@
             </body>
         </topic>
         
-        <topic id="exclude_record">
-            <title>Exclude Record from Queries</title>
-            <shortdesc>Exclude selected records from queries.</shortdesc>
-            <body>
-                <section>From the <wintitle>Record Data</wintitle> view, with the record you wish to exclude
-                    focused:</section>
-                <ol id="steps_d2f_gmb_v2">
-                    <li>
-                        <p>Select the check box to the right of the speaker's name.</p>
-                        <itemgroup>When running a query, this record will be excluded from the
-                            search.<note>To include previously excluded records in a session level
-                                query, from the <uicontrol>Query</uicontrol> view, select the
-                                <uicontrol>Include excluded records</uicontrol> check
-                                box.</note></itemgroup>
-                    </li>
-                </ol>
-            </body>
+    </topic>
+    
+    <topic id="tier_actions">
+        <title>Tier Context Menu</title>
+        <body><p>The following actions are available from the tier context menu which appears when clickin the the
+        tier name in the record data view.</p></body>
+        
+        <topic id="copy_tier">
+            <title>Copy Tier</title>
+            <body><p>Copy tier data to clipboard. Data may be pasted into another tier using the 
+            paste tier action. For IPA Tiers, this will also retain syllabification for the copied 
+            data.</p></body>
         </topic>
         
-        <topic id="font_scaling">
-            <title>Font Scaling</title>
-            <body>
-                <p>Font size can be adjusted using the <uicontrol>Font size</uicontrol> button in the toolbar.
-                    Clicking this button will display a popup menu allowing adjustment of font size in the 
-                    record data view using a slider. This value will be remembered between instances of the <wintitle>Session Editor</wintitle>.</p>
-                <p>
-                    <image placement="break" href="images/record_data_font_scaling.png"
-                        id="image_ot4_mdn_kpb"/>
-                </p>
-            </body>
+        <topic id="paste_tier">
+            <title>Paste Tier</title>
+            <body><p>Paste data from clipboard into the specified tier. Clipboard data may come from
+            the copy tier action, or by any text content. Use brackets to define groups, if no groups
+            are defined all data will be placed into the first group. New groups will be created if
+            necessary.</p></body>
         </topic>
         
-        <topic id="find_and_replace">
-            <title>Find &amp; Replace</title>
-            <body>
-                <p>The Find &amp; Replace UI of the <uicontrol>Record Data</uicontrol> view can be
-                    displayed using the <menucascade>
-                        <uicontrol>Edit</uicontrol>
-                        <uicontrol>Find &amp; Replace</uicontrol>
-                    </menucascade>, use the <userinput>CMD/CTRL+F</userinput>
-                    menu item of the <wintitle>Session Editor</wintitle> or by clicking the find
-                    &amp; replace button in the toolbar of the <wintitle>Record Data</wintitle>
-                    view. Use the combo box to select tier for search. Search expression may be in
-                    plain text, regular expression, or phonex. See <xref
-                        href="find_and_replace_view.dita">Find and Replace View</xref> for the
-                    legacy Find &amp; Replace UI allowing for more fine-grained control over
-                    expressions in individual tiers.</p>
-                <fig id="fig_gvd_4qs_dlq2">
-                    <title>Record Data: Find &amp; Replace</title>
-                    <image placement="inline" href="images/record_data_find_replace.png"
-                        id="image_hvd_4qs_dlq2">
-                        <alt>Record Data: Find &amp; Replace</alt>
-                    </image>
-                </fig>
-            </body>
+        <topic id="tier_font_changes">
+            <title>Tier Font</title>
+            <body><p>Tier fonts may be modified using the context menu. Options to modfify style and 
+            size are available as well as access to a font selection dialog. To scale the display of
+            tiers using the font scaling method described below.</p></body>
         </topic>
         
+        <topic id="move_tier">
+            <title>Move Tier</title>
+            <body><p>To change the position of the tier in the Record Data view, use the <uicontrol>Move tier up/down</uicontrol>
+            actions.</p></body>
+        </topic>
+        
+        <topic id="new_tier">
+            <title>New Tier</title>
+            <body><p>Select <uicontrol>New tier...</uicontrol>  to create a new tier which will appear after the specified tier.</p></body>
+        </topic>
+        
+        <topic id="duplicate_tier">
+            <title>Duplicate Tier</title>
+            <body><p>Select <uicontrol>Duplicate tier...</uicontrol> to duplicate the contents of a tier into a new
+                tier which will appear after the specified tier. You will be prompted to enter a new tier name.</p></body>
+        </topic>
+    </topic>
+    
+    <topic id="exclude_record">
+        <title>Exclude Record from Queries</title>
+        <shortdesc>Exclude selected records from queries.</shortdesc>
+        <body>
+            <section>From the <wintitle>Record Data</wintitle> view, with the record you wish to exclude
+                focused:</section>
+            <ol id="steps_d2f_gmb_v2">
+                <li>
+                    <p>Select the check box to the right of the speaker's name.</p>
+                    <itemgroup>When running a query, this record will be excluded from the
+                        search.<note>To include previously excluded records in a session level
+                            query, from the <uicontrol>Query</uicontrol> view, select the
+                            <uicontrol>Include excluded records</uicontrol> check
+                            box.</note></itemgroup>
+                </li>
+            </ol>
+        </body>
+    </topic>
+    
+    <topic id="find_and_replace">
+        <title>Find &amp; Replace</title>
+        <body>
+            <p>The Find &amp; Replace UI of the <uicontrol>Record Data</uicontrol> view can be
+                displayed using the <menucascade>
+                    <uicontrol>Edit</uicontrol>
+                    <uicontrol>Find &amp; Replace</uicontrol>
+                </menucascade>, use the <userinput>CMD/CTRL+F</userinput>
+                menu item of the <wintitle>Session Editor</wintitle> or by clicking the find
+                &amp; replace button in the toolbar of the <wintitle>Record Data</wintitle>
+                view. Use the combo box to select tier for search. Search expression may be in
+                plain text, regular expression, or phonex. See <xref
+                    href="find_and_replace_view.dita">Find and Replace View</xref> for the
+                legacy Find &amp; Replace UI allowing for more fine-grained control over
+                expressions in individual tiers.</p>
+            <fig id="fig_gvd_4qs_dlq2">
+                <title>Record Data: Find &amp; Replace</title>
+                <image placement="inline" href="images/record_data_find_replace.png"
+                    id="image_hvd_4qs_dlq2">
+                    <alt>Record Data: Find &amp; Replace</alt>
+                </image>
+            </fig>
+        </body>
+    </topic>
+    
+    <topic id="font_scaling">
+        <title>Font Scaling</title>
+        <body>
+            <p>Font size can be adjusted using the <uicontrol>Font size</uicontrol> button in the toolbar.
+                Clicking this button will display a popup menu allowing adjustment of font size in the 
+                record data view using a slider. This value will be remembered between instances of the <wintitle>Session Editor</wintitle>.</p>
+            <p>
+                <image placement="break" href="images/record_data_font_scaling.png"
+                    id="image_ot4_mdn_kpb"/>
+            </p>
+        </body>
     </topic>
     
 </topic>
