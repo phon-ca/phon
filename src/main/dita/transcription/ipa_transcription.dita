@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="transcription">
-    <title>Parsing IPA Transcriptions</title>
+    <title>IPA Transcription</title>
     <body>
         <p>Phonetic transcriptions - data entered into <keyword>IPA Target</keyword> and
                 <keyword>IPA Actual</keyword> tiers - are parsed into discreet units, or
@@ -60,7 +60,7 @@
                 
             </body>
             <related-links>
-                <link href="./ipa.dita#ipa_listing"/>
+                <link href="ipa.dita#ipa_listing"/>
             </related-links>
         </topic>
         

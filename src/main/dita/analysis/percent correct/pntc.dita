@@ -6,7 +6,7 @@
         <p>The Percent Nubmer Tones Correct (PNTC) analysis will calculate the percentage of
             syllables with correctly produced tones in the sampled data. To review how tone numbers
             are specified in Phon please see <xref
-                href="../../ipa/transcription.dita#phone/tone_number"/>.</p>
+                href="../../transcription/ipa_transcription.dita#phone/tone_number"/>.</p>
     </body>
     <topic id="data-preparation">
         <title>Data Preparation</title>

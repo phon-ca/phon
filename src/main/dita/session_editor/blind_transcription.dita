@@ -4,14 +4,13 @@
     <title>Blind Transcription</title>
     <body>
         <p>Due to the subjective nature of phonetic transcription (where measurement and
-            verification of all relevant segments may not be feasible), <i>Phon</i> has a built-in
-            system for performing multiple-blind transcriptions.</p>
+            verification of all relevant segments may not be feasible), Phon has a built-in system
+            for performing multiple-blind transcriptions.</p>
         <p>In a multiple-blind transcription process, records are transcribed by any number of
             separate users, who do not see each other's transcriptions. These separate
             transcriptions may then be resolved by an objective party, who can choose one over the
             other or compare them to reach a consensus transcription.</p>
-        <p>A typical example of multiple-blind transcription in <i>Phon</i> may proceed as
-            follows:</p>
+        <p>A typical example of multiple-blind transcription in Phon may proceed as follows:</p>
         <p>
             <ul id="ul_eii_kfb_vc">
                 <li>Two users perform separate blind transcriptions of all records in one session
@@ -29,6 +28,10 @@
         <p>The transcription which is settled upon is entered into the <uicontrol>IPA
                 Target</uicontrol> or <uicontrol>IPA Actual</uicontrol> field, and can be analyzed
             accordingly by project researchers, who will now have access to the best and most
-            objective transcriptions possible.</p>
+            objective transcriptions possible. See <xref href="ipa_validation_view.dita"/> for
+            instructions on validating IPA Transcriptions. See also the<xref
+                href="inter_transcriber_reliability.dita">inter-transcriber reliability</xref>
+            report which provides several metrics of agreement between blind transcribers in a Phon
+            session.</p>
     </body>
 </topic>

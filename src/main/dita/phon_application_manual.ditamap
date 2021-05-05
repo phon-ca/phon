@@ -22,7 +22,6 @@
             <topicref href="project_manager/sessions.dita"/>
         </topicref>
         <topicref href="session_editor/session_editor.dita" format="dita">
-            <topicref href="session_editor/blind_transcription.dita"/>
             <topicref href="session_editor/inter_transcriber_reliability.dita"/>
             <topicref href="session_editor/participants.dita"/>
             <topicref href="session_editor/records.dita"/>
@@ -55,10 +54,13 @@
             <topicref href="tools/iso_langauge_codes.md" format="markdown"/>
         </topichead>
     </chapter>
-    <chapter navtitle="IPA Transcription" audience="novice">
-        <topicref href="ipa/transcription.dita"/>
-        <topicref href="ipa/ipa.dita"/>
-        <topicref href="ipa/features.dita"/>
+    <chapter navtitle="Transcription" audience="novice">
+        <topicref href="transcription/record_data.dita"/>
+        <topicref href="session_editor/blind_transcription.dita"/>
+        <topicref href="transcription/orthography.dita"/>
+        <topicref href="transcription/ipa_transcription.dita"/>
+        <topicref href="transcription/ipa.dita"/>
+        <topicref href="transcription/features.dita"/>
     </chapter>
     <chapter navtitle="Phonex" audience="intermediate">
         <topicref href="phonex/phonex_introduction.md" format="markdown"/>

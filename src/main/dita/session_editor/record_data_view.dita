@@ -148,6 +148,12 @@
             necessary.</p></body>
         </topic>
         
+        <topic id="tier_visibility">
+            <title>Tier Visiblity/Locking</title>
+            <body><p>Use the <uicontrol>Hide tier</uicontrol>/<uicontrol>Lock tier</uicontrol> menu items to
+            modify tier visibility and locking.</p></body>
+        </topic>
+        
         <topic id="tier_font_changes">
             <title>Tier Font</title>
             <body><p>Tier fonts may be modified using the context menu. Options to modfify style and 
