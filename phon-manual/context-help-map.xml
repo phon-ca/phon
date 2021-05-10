@@ -10,9 +10,6 @@
    <appContext helpID="conceptId" path="project_manager/corpora.html"/>
    <appContext helpID="conceptId" path="project_manager/sessions.html"/>
    <appContext helpID="session-editor" path="session_editor/session_editor.html"/>
-   <appContext helpID="conceptId" path="session_editor/blind_transcription.html"/>
-   <appContext helpID="inter_transcriber_reliability"
-               path="session_editor/inter_transcriber_reliability.html"/>
    <appContext helpID="conceptId" path="session_editor/participants.html"/>
    <appContext helpID="records" path="session_editor/records.html"/>
    <appContext helpID="media" path="session_editor/editor_media.html"/>
@@ -39,13 +36,18 @@
                path="session_editor/find_and_replace_view.html"/>
    <appContext helpID="editor_layouts" path="session_editor/editor_layouts.html"/>
    <appContext helpID="editor_search" path="session_editor/editor_search.html"/>
+   <appContext helpID="inter_transcriber_reliability"
+               path="session_editor/inter_transcriber_reliability.html"/>
    <appContext helpID="editor_keystrokes" path="session_editor/editor_keystrokes.html"/>
    <appContext helpID="conceptId" path="tools/ipamap.html"/>
    <appContext helpID="phonshell" path="tools/phonshell.html"/>
    <appContext helpID="iso-language-codes" path="tools/iso_langauge_codes.html"/>
-   <appContext helpID="transcription" path="ipa/transcription.html"/>
-   <appContext helpID="ipa_listing" path="ipa/ipa.html"/>
-   <appContext helpID="feature_listing" path="ipa/features.html"/>
+   <appContext helpID="record_data" path="transcription/record_data.html"/>
+   <appContext helpID="conceptId" path="session_editor/blind_transcription.html"/>
+   <appContext helpID="orthography" path="transcription/orthography.html"/>
+   <appContext helpID="transcription" path="transcription/ipa_transcription.html"/>
+   <appContext helpID="ipa_listing" path="transcription/ipa.html"/>
+   <appContext helpID="feature_listing" path="transcription/features.html"/>
    <appContext helpID="introduction" path="phonex/phonex_introduction.html"/>
    <appContext helpID="concept_pjp_4nm_gg" path="phonex/phone_matchers.html"/>
    <appContext helpID="concept_qb1_dhn_gg" path="phonex/boundaries.html"/>
