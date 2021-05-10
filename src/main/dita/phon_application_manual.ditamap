@@ -22,7 +22,6 @@
             <topicref href="project_manager/sessions.dita"/>
         </topicref>
         <topicref href="session_editor/session_editor.dita" format="dita">
-            <topicref href="session_editor/inter_transcriber_reliability.dita"/>
             <topicref href="session_editor/participants.dita"/>
             <topicref href="session_editor/records.dita"/>
             <topicref href="session_editor/editor_media.dita" format="dita"/>
@@ -46,6 +45,7 @@
             </topicref>
             <topicref href="session_editor/editor_layouts.dita"/>
             <topicref href="session_editor/editor_search.dita"/>
+            <topicref href="session_editor/inter_transcriber_reliability.dita"/>
             <topicref href="session_editor/editor_keystrokes.dita"/>
         </topicref>
         <topichead navtitle="Tools">
