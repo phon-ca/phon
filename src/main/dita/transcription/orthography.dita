@@ -8,24 +8,57 @@
             word may be modifed using the prefixes and suffixes defined below. Events and comments
             may also be defined inline.</p>
     </body>
-    
     <topic id="word_prefix">
         <title>Word Prefix</title>
-        <body><p>Word prefixes will appear highlighted in yellow in the record data view. The following word
-                prefixes are available: <ul>
-                    <li><userinput>0</userinput><p>Word omission. This word will not be inclued in
-                            word alignment.</p></li>
-                    <li><userinput>&amp;+</userinput><p>Incomplete.</p></li>
-                    <li><userinput>&amp;-</userinput><p>Filler</p></li>
-                    <li><userinput>&amp;</userinput><p>Fragment</p></li>
-                </ul></p></body>
+        <body>
+            <p>Word prefixes will appear highlighted in yellow in the <xref
+                    href="../session_editor/record_data_view.dita">Record Data</xref> view. The
+                following word prefixes are available: <table id="table_special_form_markers">
+                    <tgroup cols="3">
+                        <colspec colnum="1" colname="col1"/>
+                        <colspec colnum="2" colname="col2"/>
+                        <colspec colnum="3" colname="col3"/>
+                        <thead>
+                            <row>
+                                <entry>Prefix</entry>
+                                <entry>Category</entry>
+                                <entry>Example</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry><codeph>0</codeph></entry>
+                                <entry>word omission (omitted from <xref
+                                        href="record_data.dita#record_data/word_alignment">word
+                                        alignment</xref>)</entry>
+                                <entry><codeph>0word</codeph></entry>
+                            </row>
+                            <row>
+                                <entry><codeph>&amp;+</codeph></entry>
+                                <entry>incomplete</entry>
+                                <entry><codeph>&amp;+ba</codeph></entry>
+                            </row>
+                            <row>
+                                <entry><codeph>&amp;-</codeph></entry>
+                                <entry>filler</entry>
+                                <entry><codeph>&amp;-um</codeph></entry>
+                            </row>
+                            <row>
+                                <entry><codeph>&amp;</codeph></entry>
+                                <entry>fragment</entry>
+                                <entry><codeph>&amp;ba</codeph></entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table></p>
+        </body>
     </topic>
-    
     <topic id="special-form-markers">
         <title>Special Form Markers</title>
         <body>
-            <p>The following special form markers are available in Phon and are added to the end of a word. Special form markers will appear highlighted in green in the 
-               Record Data view.</p>
+            <p>The following special form markers are available in Phon and are added to the end of
+                a word. Special form markers will appear highlighted in green in the <xref
+                    href="../session_editor/record_data_view.dita">Record Data</xref> view.</p>
             <table id="table_special_form_markers">
                 <tgroup cols="3">
                     <colspec colnum="1" colname="col1"/>
@@ -149,36 +182,41 @@
             </table>
         </body>
     </topic>
-    
     <topic id="punctuation">
         <title>Punctuation</title>
-        <body/>
+        <body>
+            <p>The following list of punctuation characters are allowed: <codeph># @ % ^ &amp; { } $
+                    = , . ! ?</codeph>. Punctuation characters are always separated from words by a
+                space.</p>
+        </body>
     </topic>
-    
     <topic id="special_sequences">
         <title>Special Sequences</title>
-        <body><p>If the word content is either <userinput>xxx</userinput>, <userinput>yyy</userinput> or <userinput>www</userinput> the
-        word is considered to be 'untranscribed.' Untranscribed word should be aligned with '*' in IPA Target and IPA Actual tiers.</p></body>
+        <body>
+            <p>If the word content is either <codeph>xxx</codeph>, <codeph>yyy</codeph>
+                or <codeph>www</codeph> the word is considered to be 'untranscribed.'
+                Untranscribed word should be aligned with '*' in IPA Target and IPA Actual
+                tiers.</p>
+        </body>
     </topic>
-    
     <topic id="inline_comments">
         <title>Inline Comments</title>
-        <body><p>Inline comments are enclosed within parentheses - '<userinput>(</userinput>' and
-                    '<userinput>)</userinput>' - or asterisks - '<userinput>*</userinput>'. Comments
+        <body>
+            <p>Inline comments are enclosed within parentheses - '<codeph>(</codeph>' and
+                '<codeph>)</codeph>' - or asterisks - '<codeph>*</codeph>'. Comments
                 may include any character data. When converting to/from CHAT data, some comments may
-                have the syntax <userinput>type:comment</userinput>. Comments enclosed with
-                asterisks are considered to be 'events' which occur within the utterance.</p></body>
+                have the syntax <codeph>type:comment</codeph>. Comments enclosed with
+                asterisks are considered to be 'events' which occur within the utterance.</p>
+        </body>
         <topic id="pause">
             <title>Pauses</title>
-            <body><p>A special type of comment is an intra-word pause. Intra-word pauses are defined by comments
-                    consisting of one to three periods indicating the perceived length of the pause.
-                    Pauses are included in word alignment and should be aligned with the
-                    complimentary <xref href="ipa_transcription.dita#intra-word_pause"
-                        >pause</xref> in IPA Target and IPA Actual tiers.</p></body>
+            <body>
+                <p>A special type of comment is an intra-word pause. Intra-word pauses are defined
+                    by comments consisting of one to three periods indicating the perceived length
+                    of the pause. Pauses are included in word alignment and should be aligned with
+                    the complimentary <xref href="ipa_transcription.dita#intra-word_pause"
+                        >pause</xref> in IPA Target and IPA Actual tiers.</p>
+            </body>
         </topic>
-    </topic>
-    
-    <topic id="ipa_lookup">
-        <title>IPA Lookup</title>
     </topic>
 </topic>

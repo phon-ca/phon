@@ -4,14 +4,11 @@
     <title>Tier Management</title>
     <body>
         <p>The <wintitle>Tier Management</wintitle> view allows for modification and locking of
-            session tiers.</p>
-        <fig id="fig_gvd_4tq_dlb">
-            <title>Tier Management View</title>
-            <image placement="inline" href="images/tier_management_view.png"
-                id="image_hvd_4tq_dlb">
-                <alt>Tier Management View</alt>
-            </image>
-        </fig>
+            session tiers.Watch the video below for an introduction to the <xref
+                href="../session_editor/tier_management_view.dita">Tier Management</xref> view.</p>
+            <object data="https://www.youtube.com/embed/WYS2jbBF-LI" outputclass="iframe">
+                <param name="allowfullscreen"/>
+            </object>
     </body>
     
     <topic id="tier_management_actions">

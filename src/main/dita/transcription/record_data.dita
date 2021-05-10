@@ -5,14 +5,15 @@
     <body>
         <p>Phon records are divided vertically in tiers and laterally into phonetic groups. Every
             Phon record includes the following tiers by default:<sl>
-            <sli><i><xref href="orthography.dita#word_prefix">Orthography</xref></i></sli>
-            <sli><i><xref href="ipa_transcription.dita">IPA Target</xref></i></sli>
-            <sli><i><xref href="ipa_transcription.dita">IPA Actual</xref></i></sli>
-            <sli><i>Segment</i></sli>
-            <sli><i>Notes</i></sli>
-        </sl></p>
-        <p>Additional tiers, called <keyword>user defined tiers</keyword>, may also be added to
-            record data.</p>
+                <sli><i><xref href="orthography.dita#word_prefix">Orthography</xref></i></sli>
+                <sli><i><xref href="ipa_transcription.dita">IPA Target</xref></i></sli>
+                <sli><i><xref href="ipa_transcription.dita">IPA Actual</xref></i></sli>
+                <sli><i>Segment</i></sli>
+                <sli><i>Notes</i></sli>
+            </sl>
+            Additional tiers, called <keyword>user defined tiers</keyword>, may also be added to
+            record data. </p>
+        
         <p>Tiers in Phon may be grouped, in which case each group is enclosed in a set of brackets,
             or ungrouped (i.e., the tier only has one group.) In the example below, the
             <i>Notes</i>, <i>Segment</i>, and <i>Translation</i> tiers are ungrouped while the
@@ -25,14 +26,15 @@
                 <alt>Record Data View</alt>
             </image>
         </fig>
+        
         <section id="word_alignment">
             <title>Word Alignment</title>
             <p>Within groups, words are aligned based on space boundaries. To remove a word from
-                consideration in word alignment, add a zero in front of the word in the Orthgraphy tier
-                (see <xref href="orthography.dita#word_prefix"/>.) Word alignment is used during Queries
-                and Analyses when searching by word is selected. (Note this also means that words
-                prefixed with a zero will not appear in queries when search by word is selected.)</p>
+                consideration in word alignment, add a zero in front of the word in the Orthgraphy
+                tier (see <xref href="orthography.dita#word_prefix"/>.) Word alignment is used
+                during Queries and Analyses when searching by word is selected. (Note this also
+                means that words prefixed with a zero will not appear in queries when search by word
+                is selected.)</p>
         </section>
     </body>
-    
 </topic>

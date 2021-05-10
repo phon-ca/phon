@@ -4,66 +4,10 @@
     <title>Records</title>
     <body>
         <p>Each session consists of a series of records. A record is, in general, a single uttrance
-            from a participant in the session.</p>
+            from a participant in the session. Read the <xref
+                href="../transcription/record_data.dita#record_data/word_alignment">Transcription</xref> chapter for
+            more information about Phon records.</p>
     </body>
-    
-    <topic id="record_tiers">
-        <title>Tiers</title>
-        <body>
-            <p>The following built-in tiers are available in every record:<sl>
-                    <sli><keyword>Orthography</keyword></sli>
-                    <sli><keyword>IPA Target</keyword></sli>
-                    <sli><keyword>IPA Actual</keyword></sli>
-                    <sli><keyword>Segment</keyword></sli>
-                    <sli><keyword>Notes</keyword></sli>
-                </sl></p>
-            <p>Additional tiers, called <keyword>user defined tiers</keyword>, may be added to
-                record data using the <xref href="session_information_view.dita"/> view.</p>
-        </body>
-        
-        <topic id="orthography_tier">
-            <title><keyword>Orthography</keyword></title>
-            <body>
-                <p>The <keyword>Orthography</keyword> tier encodes the spoken utterance, usually in
-                    the language of the speaker.</p>
-            </body>
-        </topic>
-        
-        <topic id="ipa_target_tier">
-            <title><keyword>IPA Target</keyword></title>
-            <body>
-                <p>The <keyword>IPA Target</keyword> tier encodes the phonetic transcription of the
-                    spoken utterance as expected.  There should be a transcription entered for each
-                    word found in the <keyword>Orthography</keyword> except where an ommision was
-                    indicated.</p>
-            </body>
-        </topic>
-        
-        <topic id="ipa_actual_tier">
-            <title><keyword>IPA Actual</keyword></title>
-            <body>
-                <p>The <keyword>IPA Actual</keyword> tier encodes the phonetic transcription of the
-                    spoken utterance as heard.  There should be a transcription for each word found
-                    in <keyword>Orthography</keyword> except where an ommision was indicated.</p>
-            </body>
-        </topic>
-        
-        <topic id="segment_tier">
-            <title><keyword>Segment</keyword></title>
-            <body>
-                <p>The <keyword>Segment</keyword> tier indicates the media start and end times for
-                    the spoken utterance.</p>
-            </body>
-        </topic>
-        
-        <topic id="notes_tier">
-            <title><keyword>Notes</keyword></title>
-            <body>
-                <p>The <keyword>Notes</keyword> tier allows for general note taking.</p>
-            </body>
-        </topic>
-        
-    </topic>
     
     <topic id="record_actions">
         <title>Actions</title>
