@@ -51,7 +51,7 @@ public class StressMatcher implements PhoneMatcher {
 		if(info != null) {
 			SyllableStress phoneStress = info.getStress();
 			retVal = stressTypes.contains(phoneStress)
-					|| (stressTypes.contains(SyllableStress.AnyStrress) &&
+					|| (stressTypes.contains(SyllableStress.AnyStress) &&
 							(info.getStress() == SyllableStress.PrimaryStress || info.getStress() == SyllableStress.SecondaryStress));
 		}
 		
