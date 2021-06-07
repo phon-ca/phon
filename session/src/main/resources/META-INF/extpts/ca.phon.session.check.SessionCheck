@@ -1,3 +1,4 @@
 ca.phon.session.check.CheckAlignment
 ca.phon.session.check.CheckTranscripts
 ca.phon.session.check.SegmentOverlapCheck
+ca.phon.session.check.AlignedWordCountCheck

@@ -4,12 +4,8 @@
         <node id="1bd8b9f4f6974bd0" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_project]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[ca.phon.project.Project]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                 </oga:settings>
                 <oga:meta x="23" y="15"/>
             </extensions>
@@ -17,12 +13,8 @@
         <node id="e8264b8fe6f64d96" name="Selected Sessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
             <extensions>
                 <oga:settings>
-                    <oga:property key="contextKey">
-                        <![CDATA[_selectedSessions]]>
-                    </oga:property>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                        <![CDATA[java.util.ArrayList]]>
-                    </oga:property>
+                    <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
                 <oga:meta x="21" y="295"/>
             </extensions>
@@ -36,16 +28,12 @@
             </extensions>
         </node>
         <ogcn:macro id="781d00f6" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="664d4154">
+            <graph id="35727302">
                 <node id="1acbd5d2" name="Current Item" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass">
-                                <![CDATA[java.lang.Object]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key">
-                                <![CDATA[currentValue]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ContextualItemClassNode.key"><![CDATA[currentValue]]></oga:property>
                         </oga:settings>
                         <oga:meta x="34" y="18"/>
                     </extensions>
@@ -53,12 +41,8 @@
                 <node id="cf817973cfe14ea8" name="Project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey">
-                                <![CDATA[_project]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[ca.phon.project.Project]]>
-                            </oga:property>
+                            <oga:property key="contextKey"><![CDATA[_project]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                         </oga:settings>
                         <oga:meta x="27" y="260"/>
                     </extensions>
@@ -66,10 +50,7 @@
                 <node id="e711997673a44294" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass">
-                                <![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                         </oga:settings>
                         <oga:meta x="30" y="531"/>
                     </extensions>
@@ -77,9 +58,7 @@
                 <node id="167e751d" name="to SessionPath" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass">
-                                <![CDATA[ca.phon.session.SessionPath]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[ca.phon.session.SessionPath]]></oga:property>
                         </oga:settings>
                         <oga:meta x="231" y="23"/>
                     </extensions>
@@ -87,12 +66,8 @@
                 <node id="67b97256" name="SessionPath#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember">
-                                <![CDATA[toString()]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass">
-                                <![CDATA[ca.phon.session.SessionPath]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.classMember"><![CDATA[toString()]]></oga:property>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[ca.phon.session.SessionPath]]></oga:property>
                         </oga:settings>
                         <oga:meta x="431" y="30"/>
                     </extensions>
@@ -100,37 +75,21 @@
                 <node id="49f58668" name="Session Check Options" type="class:ca.phon.app.opgraph.nodes.SessionCheckNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.session.check.CheckTranscripts.syllabifierLang">
-                                <![CDATA[eng]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.session.check.CheckAlignment.resetAlignment">
-                                <![CDATA[false]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.session.check.SegmentOverlapCheck.includeCheck">
-                                <![CDATA[true]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.session.check.CheckTranscripts.includeCheck">
-                                <![CDATA[true]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.app.session.check.SegmentBoundsCheck.includeCheck">
-                                <![CDATA[true]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.session.check.CheckAlignment.includeCheck">
-                                <![CDATA[true]]>
-                            </oga:property>
-                            <oga:property key="ca.phon.session.check.CheckTranscripts.resetSyllabification">
-                                <![CDATA[false]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.session.check.CheckTranscripts.syllabifierLang"><![CDATA[eng]]></oga:property>
+                            <oga:property key="ca.phon.session.check.CheckAlignment.resetAlignment"><![CDATA[false]]></oga:property>
+                            <oga:property key="ca.phon.session.check.SegmentOverlapCheck.includeCheck"><![CDATA[true]]></oga:property>
+                            <oga:property key="ca.phon.session.check.CheckTranscripts.includeCheck"><![CDATA[true]]></oga:property>
+                            <oga:property key="ca.phon.session.check.CheckAlignment.includeCheck"><![CDATA[true]]></oga:property>
+                            <oga:property key="ca.phon.session.check.CheckTranscripts.resetSyllabification"><![CDATA[false]]></oga:property>
+                            <oga:property key="ca.phon.session.check.AlignedWordCountCheck.includeCheck"><![CDATA[true]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="449" y="218"/>
+                        <oga:meta x="412" y="182"/>
                     </extensions>
                 </node>
                 <node id="3a126c6c" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns">
-                                <![CDATA[true]]>
-                            </oga:property>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
                         <oga:meta x="867" y="200"/>
@@ -138,16 +97,16 @@
                 </node>
                 <node id="250a46a5" type="class:ca.phon.opgraph.nodes.logic.LogicalNotNode">
                     <extensions>
-                        <oga:meta x="662" y="443"/>
+                        <oga:meta x="610" y="444"/>
                     </extensions>
                 </node>
                 <node id="12fec70f" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"/>
+                            <oga:property key="ca.phon.app.opgraph.nodes.report.TextSectionNode.text"><![CDATA[No warnings]]></oga:property>
                         </oga:settings>
                         <oga:meta x="886" y="437">
-                            <oga:default for="text" type="java.lang.String">No warnings</oga:default>
+                            <oga:default for="text" type="java.lang.String"/>
                         </oga:meta>
                     </extensions>
                 </node>
@@ -171,9 +130,7 @@
             <ogcn:published_input field="obj" name="reportNode" ref="e711997673a44294"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className">
-                        <![CDATA[java.util.ArrayList]]>
-                    </oga:property>
+                    <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
                 <oga:meta x="463" y="192"/>
             </extensions>
@@ -192,8 +149,6 @@
                         <opqry:message/>
                     </opqry:info>
                 </opqry:node>
-                <opqry:report-template name="Report Prefix"/>
-                <opqry:report-template name="Report Suffix"/>
             </opqry:nodewizard>
         </extensions>
     </graph>
