@@ -21,9 +21,17 @@ import ca.phon.extensions.*;
 import ca.phon.session.*;
 
 public class ValidationEvent implements IExtendable {
-	
+
+	public static enum Severity {
+		INFO,
+		WARNING,
+		ERROR
+	};
+
 	private final ExtensionSupport extSupport = new ExtensionSupport(ValidationEvent.class, this);
-	
+
+	private Severity severity = Severity.WARNING;
+
 	private Session session;
 	
 	private int record;
@@ -36,43 +44,76 @@ public class ValidationEvent implements IExtendable {
 	
 	private List<SessionQuickFix> quickFixes;
 
-	public ValidationEvent(Session session, String message) {
-		this(session, message, new SessionQuickFix[0]);
+	public ValidationEvent(Severity severity, Session session, String message) {
+		this(severity, session, message, new SessionQuickFix[0]);
 	}
-	
-	public ValidationEvent(Session session, String message, SessionQuickFix ... quickFixes) {
+
+	public ValidationEvent(Session session, String message) {
+		this(Severity.WARNING, session, message);
+	}
+
+	public ValidationEvent(Severity severity, Session session, String message, SessionQuickFix ... quickFixes) {
 		super();
+		this.severity = severity;
 		this.session = session;
 		this.message = message;
 		this.quickFixes = List.of(quickFixes);
+
+	}
+
+	public ValidationEvent(Session session, String message, SessionQuickFix ... quickFixes) {
+		this(Severity.WARNING, session, message, quickFixes);
+	}
+
+	public ValidationEvent(Severity severity, Session session, int record, String message) {
+		this(severity, session, record, message, new SessionQuickFix[0]);
 	}
 
 	public ValidationEvent(Session session, int record, String message) {
-		this(session, record, message, new SessionQuickFix[0]);
+		this(Severity.WARNING, session, record, message);
 	}
-	
-	public ValidationEvent(Session session, int record, String message, SessionQuickFix ... quickFixes) {
+
+	public ValidationEvent(Severity severity, Session session, int record, String message, SessionQuickFix ... quickFixes) {
 		super();
+		this.severity = severity;
 		this.session = session;
 		this.record = record;
 		this.message = message;
 		this.quickFixes = List.of(quickFixes);
+	}
+
+	public ValidationEvent(Session session, int record, String message, SessionQuickFix ... quickFixes) {
+		this(Severity.WARNING, session, record, message, quickFixes);
 	}
 
 	public ValidationEvent(Session session, int record, String tierName,
 			int group, String message) {
 		this(session, record, tierName, group, message, new SessionQuickFix[0]);
 	}
-	
+
 	public ValidationEvent(Session session, int record, String tierName,
+	                       int group, String message, SessionQuickFix ... quickFixes) {
+		this(Severity.WARNING, session, record, tierName, group, message, quickFixes);
+	}
+
+	public ValidationEvent(Severity severity, Session session, int record, String tierName,
 			int group, String message, SessionQuickFix ... quickFixes) {
 		super();
+		this.severity = severity;
 		this.session = session;
 		this.record = record;
 		this.tierName = tierName;
 		this.group = group;
 		this.message = message;
 		this.quickFixes = List.of(quickFixes);
+	}
+
+	public Severity getSeverity() {
+		return this.severity;
+	}
+
+	public void setSeverity(Severity severity) {
+		this.severity = severity;
 	}
 
 	public Session getSession() {

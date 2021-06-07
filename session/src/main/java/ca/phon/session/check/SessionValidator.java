@@ -50,19 +50,31 @@ public class SessionValidator implements IExtendable {
 		
 		this.sessionChecks.addAll(sessionChecks);
 	}
-	
+
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, message));
+	}
+
 	public void fireValidationEvent(Session session, String message) {
 		fireValidationEvent(new ValidationEvent(session, message));
 	}
-	
+
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, record, message));
+	}
+
 	public void fireValidationEvent(Session session, int record, String message) {
 		fireValidationEvent(new ValidationEvent(session, record, message));
+	}
+
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String tierName, int group, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, record, tierName, group, message));
 	}
 
 	public void fireValidationEvent(Session session, int record, String tierName, int group, String message) {
 		fireValidationEvent(new ValidationEvent(session, record, tierName, group, message));
 	}
-	
+
 	public void fireValidationEvent(final ValidationEvent evt) {
 		events.add(evt);
 		listeners.forEach( (l) -> { l.validationInfo(evt); } );
