@@ -151,7 +151,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		if(err.getSuppressed().length > 0) {
 			var err2 = uv.getParseError().getSuppressed()[0];
 			
-			if(err2.getMessage().equals("Expecting new syllable")) {
+			if(err2.getMessage() != null && err2.getMessage().equals("Expecting new syllable")) {
 				return new SessionQuickFix[] { new DuplicateSyllableBoundaryQuickFix() };
 			}
 		}
