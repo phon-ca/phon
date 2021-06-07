@@ -23,6 +23,7 @@ import java.util.stream.*;
 
 import javax.swing.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.jdesktop.swingx.*;
 
 import ca.phon.app.log.*;
@@ -124,6 +125,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		
 		DefaultTableDataSource warningsTable = new DefaultTableDataSource();
 		int col = 0;
+		warningsTable.setColumnTitle(col++, "Severity");
 		warningsTable.setColumnTitle(col++, "Session");
 		warningsTable.setColumnTitle(col++, "Record #");
 		warningsTable.setColumnTitle(col++, "Tier");
@@ -138,6 +140,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		validator.addValidationListener( (ve) -> {
 			Object row[] = new Object[warningsTable.getColumnCount()];
 			int c = 0;
+			row[c++] = StringUtils.capitalize(ve.getSeverity().toString().toLowerCase());
 			row[c++] = spRef.get();
 			row[c++] = ve.getRecord() + 1;
 			row[c++] = ve.getTierName();
