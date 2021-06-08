@@ -69,10 +69,17 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		segmentTier.addTierListener(tierListener);
 		this.groupIndex = groupIndex;
 
-		segmentField = new SegmentField();
+		segmentField = new SegmentField() {
+
+			public void validateText() {
+				super.validateText();
+				SegmentTierComponent.this.validateText();
+			}
+
+		};
 
 		updateText();
-		validateText();
+		//validateText();
 		segmentField.getDocument().addDocumentListener(docListener);
 
 		// validate text when 'enter' is pressed
@@ -148,10 +155,13 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		final int tolerance = PrefHelper.getInt(SegmentOverlapCheck.OVERLAP_TOLERANCE_PROPERTY, SegmentOverlapCheck.DEFAULT_OVERLAP_TOLERANCE);
 		MediaSegment validated = getValidatedObject();
 		if(getEditor().getCurrentRecordIndex() > 0) {
+			Record currentRecord = getEditor().currentRecord();
 			int idx = getEditor().getCurrentRecordIndex()-1;
 			Record prevRecord = null;
-			while(idx >= 0 && (prevRecord == null ||  prevRecord.getSpeaker() != getEditor().currentRecord().getSpeaker())) {
-				prevRecord = getEditor().getSession().getRecord(idx--);
+			while(idx >= 0 && prevRecord == null) {
+				Record r = getEditor().getSession().getRecord(idx--);
+				if(r.getSpeaker() == currentRecord.getSpeaker())
+					prevRecord = r;
 			}
 			if(prevRecord != null) {
 				MediaSegment prevSegment = prevRecord.getSegment().getGroup(0);
@@ -162,21 +172,11 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 						// XXX Border does not update properly while typing
 						getGroupFieldBorder().setShowWarningIcon(true);
 						segmentField.setToolTipText("Segment overlaps with previous record for " + prevRecord.getSpeaker() + " (#" + (idx+2) + ")");
+						repaint();
 					}
 				}
 			}
 		}
-		
-		// check if segment exceeds media length
-		final SpeechAnalysisEditorView speechAnalysisView = 
-				(SpeechAnalysisEditorView)getEditor().getViewModel().getView(SpeechAnalysisEditorView.VIEW_TITLE);
-//		if(speechAnalysisView != null && speechAnalysisView.getWavDisplay().getSampled() != null) {
-//			float mediaEndMS = speechAnalysisView.getWavDisplay().getSampled().getLength() * 1000.0f;
-//			if(validated.getEndValue() > mediaEndMS) {
-//				getGroupFieldBorder().setShowWarningIcon(true);
-//				segmentField.setToolTipText("Segment time exceeds media length");
-//			}
-//		}
 
 		return retVal;
 	}
@@ -258,7 +258,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 		@Override
 		public void insertUpdate(DocumentEvent de) {
-			if(segmentField.hasFocus() && validateText())
+			if(validateText() && segmentField.hasFocus())
 				updateTier();
 		}
 
@@ -289,6 +289,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 			if(!segmentField.hasFocus() && index == groupIndex) {
 				updateText();
 			}
+			validateText();
 		}
 
 		@Override
