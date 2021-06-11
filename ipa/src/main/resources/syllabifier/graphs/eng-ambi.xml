@@ -23,7 +23,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5ff28953" name="MarkNuclei" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="745b7d36">
+            <graph id="5ab0a291">
                 <node id="72545151" name="MarkNuclei #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -71,7 +71,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="77bad4c" name="MarkOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6fb8b757">
+            <graph id="40892c2f">
                 <node id="3e48be56" name="MarkOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -92,7 +92,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="23ab76f0" name="MaxOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="68d6224b">
+            <graph id="7476992c">
                 <node id="ed74e54" name="MaxOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -122,7 +122,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="5e804a71" name="MarkCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3d046329">
+            <graph id="58dbbd31">
                 <node id="1d88be0" name="MarkCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -139,7 +139,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6bfe217f" name="MaxCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="322a622d">
+            <graph id="24ff6e2e">
                 <node id="4f4d1c38" name="MaxCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -160,7 +160,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="f06ac1094d0b4cf4" name="MarkLA" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5a79d9bb">
+            <graph id="d47a18e">
                 <node id="105b9d0739754a7c" name="MarkLA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -181,7 +181,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="952f9aa" name="MarkRA" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="25fc3dd4">
+            <graph id="2f8445fd">
                 <node id="30430410" name="MarkRA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -198,7 +198,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="28d06691" name="MaxRA" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="36fff301">
+            <graph id="46b02af4">
                 <node id="3f66e93b" name="MaxRA #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -215,7 +215,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="16fbc3e3" name="MarkOEHS" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="18de25e1">
+            <graph id="833b7f">
                 <node id="4557ef93" name="MarkOEHS #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -232,7 +232,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="42fe6ae1d2254027" name="Ambisyllabicity" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="65d498cc">
+            <graph id="459e588c">
                 <node id="9aa9403757d14d85" name="Ambisyllabicity #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
