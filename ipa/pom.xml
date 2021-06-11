@@ -103,6 +103,27 @@
 								</outputProperty>
 							</outputProperties>
 						</transformationSet>
+						<transformationSet>
+							<dir>src/main/resources/ca/phon/ipa/parser/</dir>
+							<stylesheet>src/main/resources/xml/xslt/ipa2lexer-phonex.xsl</stylesheet>
+							<fileMappers>
+								<fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
+									<pattern>.*</pattern>
+									<replacement>phonexipa.g4</replacement>
+								</fileMapper>
+							</fileMappers>
+							<outputDir>target/generated-sources/antlr4/imports/</outputDir>
+							<outputProperties>
+								<outputProperty>
+									<name>method</name>
+									<value>text</value>
+								</outputProperty>
+								<outputProperty>
+									<name>encoding</name>
+									<value>UTF-8</value>
+								</outputProperty>
+							</outputProperties>
+						</transformationSet>
 					</transformationSets>
 				</configuration>
 				<dependencies>

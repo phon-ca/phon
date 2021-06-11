@@ -47,7 +47,7 @@ public class PhoneClassMatcher implements PhoneMatcher {
 	/**
 	 * Constructor
 	 * 
-	 * @param ... list of matchers
+	 * @param matchers list of matchers
 	 */
 	public PhoneClassMatcher(boolean not, PhoneMatcher ... matchers) {
 		for(PhoneMatcher matcher:matchers) {
@@ -86,4 +86,16 @@ public class PhoneClassMatcher implements PhoneMatcher {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append('[');
+		if(isNot())
+			builder.append('^');
+		for(PhoneMatcher matcher:matchers) {
+			builder.append(matcher.toString());
+		}
+		builder.append(']');
+		return builder.toString();
+	}
 }

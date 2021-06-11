@@ -70,4 +70,13 @@ public class CompoundPhoneMatcher implements PhoneMatcher {
 		}
 		
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(p1Matcher.toString());
+		builder.append("_");
+		builder.append(p2Matcher.toString());
+		return builder.toString();
+	}
 }

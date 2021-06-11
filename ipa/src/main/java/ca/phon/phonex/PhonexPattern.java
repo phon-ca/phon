@@ -16,12 +16,21 @@
 package ca.phon.phonex;
 
 import java.util.*;
+import java.util.BitSet;
 
+import ca.phon.util.PrefHelper;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
 
 import ca.phon.ipa.*;
 import ca.phon.syllable.*;
+import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.ANTLRErrorStrategy;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
  * <p>A compiled representation of a phonex expression.</p>
@@ -51,6 +60,9 @@ import ca.phon.syllable.*;
  */
 public class PhonexPattern implements Comparable<PhonexPattern> {
 
+	public final static String USE_ANTLR4 = PhonexPattern.class.getName() + ".useAntlr4";
+	private final static boolean defaultUseAntlr4 = true;
+
 	/**
 	 * phonex pattern
 	 */
@@ -77,6 +89,36 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 *
 	 */
 	public static PhonexPattern compile(String phonex, int flags) throws PhonexPatternException {
+		if(PrefHelper.getBoolean(USE_ANTLR4, defaultUseAntlr4)) {
+			return compileAntlr4(phonex, flags);
+		} else {
+			return compileAntlr3(phonex, flags);
+		}
+	}
+
+	private static PhonexPattern compileAntlr4(String phonex, int flags) throws PhonexPatternException {
+		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(phonex);
+		ca.phon.phonexg4.PhonexLexer lexer = new ca.phon.phonexg4.PhonexLexer(charStream);
+		org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+
+//		while(tokenStream.LT(1) != null) {
+//			org.antlr.v4.runtime.Token t = tokenStream.LT(1);
+//			tokenStream.consume();
+//
+//			System.out.println(t.getType());
+//		}
+
+
+		ca.phon.phonexg4.PhonexParser parser = new ca.phon.phonexg4.PhonexParser(tokenStream);
+		PhonexCompiler2 compiler = new PhonexCompiler2();
+
+		ca.phon.phonexg4.PhonexParser.ExprContext exprContext = parser.expr();
+		compiler.walkTree(exprContext);
+
+		return new PhonexPattern(compiler.getFsa());
+	}
+
+	private static PhonexPattern compileAntlr3(String phonex, int flags) throws PhonexPatternException {
 		CharStream exprStream = new ANTLRStringStream(phonex);
 		PhonexLexer lexer = new PhonexLexer(exprStream);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
