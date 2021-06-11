@@ -83,7 +83,6 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		case UnicodeIPAParser.PREFIX_DIACRITIC:
 		case UnicodeIPAParser.SUFFIX_DIACRITIC:
 		case UnicodeIPAParser.COMBINING_DIACRITIC:
-		case UnicodeIPAParser.TONE:
 		case UnicodeIPAParser.TONE_NUMBER:
 		case UnicodeIPAParser.LONG:
 		case UnicodeIPAParser.HALF_LONG:
@@ -372,11 +371,11 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		suffixCache.add(suffixDia);
 	}
 
-	@Override
-	public void exitTone(UnicodeIPAParser.ToneContext ctx) {
-		Diacritic toneDia = factory.createDiacritic(ctx.getText().charAt(0));
-		suffixCache.add(toneDia);
-	}
+//	@Override
+//	public void exitTone(UnicodeIPAParser.ToneContext ctx) {
+//		Diacritic toneDia = factory.createDiacritic(ctx.getText().charAt(0));
+//		suffixCache.add(toneDia);
+//	}
 
 	@Override
 	public void exitTone_number(UnicodeIPAParser.Tone_numberContext ctx) {

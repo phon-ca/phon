@@ -93,7 +93,6 @@ suffix_diacritic
 	: SUFFIX_DIACRITIC COMBINING_DIACRITIC*                 # SuffixDiacritic
 	| PREFIX_DIACRITIC ROLE_REVERSAL COMBINING_DIACRITIC*   # SuffixDiacriticRoleReversed
 	| LIGATURE PREFIX_DIACRITIC COMBINING_DIACRITIC*        # SuffixDiacriticLigature
-	| TONE                                                  # Tone
 	;
 
 phone_length

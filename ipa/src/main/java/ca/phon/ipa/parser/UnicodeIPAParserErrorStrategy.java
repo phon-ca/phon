@@ -38,7 +38,6 @@ public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {
 				} else if(token.getType() == UnicodeIPAParser.PREFIX_DIACRITIC
 					|| token.getType() == UnicodeIPAParser.SUFFIX_DIACRITIC
 					|| token.getType() == UnicodeIPAParser.COMBINING_DIACRITIC
-					|| token.getType() == UnicodeIPAParser.TONE
 					|| token.getType() == UnicodeIPAParser.TONE_NUMBER
 					|| e.getOffendingToken().getType() == UnicodeIPAParser.LONG
 					|| e.getOffendingToken().getType() == UnicodeIPAParser.HALF_LONG) {
@@ -58,7 +57,6 @@ public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {
 		} else if(e.getOffendingToken().getType() == UnicodeIPAParser.PREFIX_DIACRITIC
 				|| e.getOffendingToken().getType() == UnicodeIPAParser.SUFFIX_DIACRITIC
 				|| e.getOffendingToken().getType() == UnicodeIPAParser.COMBINING_DIACRITIC
-				|| e.getOffendingToken().getType() == UnicodeIPAParser.TONE
 				|| e.getOffendingToken().getType() == UnicodeIPAParser.TONE_NUMBER
 				|| e.getOffendingToken().getType() == UnicodeIPAParser.LONG
 				|| e.getOffendingToken().getType() == UnicodeIPAParser.HALF_LONG) {
