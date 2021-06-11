@@ -113,7 +113,7 @@ public class PhonexCompiler2 implements PhonexListener {
 		pushOrGroup();
 	}
 
-	private PhonexFSA popGroup(boolean capturing, String name, Quantifier quantifier) {
+	private PhonexFSA popGroup(PhonexParser.GroupContext groupContext, boolean capturing, String name, Quantifier quantifier) {
 		PhonexFSA grpFsa = fsaStack.pop();
 		int grpIdx = groupIndexStack.pop();
 
@@ -122,8 +122,10 @@ public class PhonexCompiler2 implements PhonexListener {
 			grpFsa = new PhonexFSA();
 			grpFsa.appendOredGroups(grpIdx, orGroup);
 		}
-		if(capturing)
+		if(capturing) {
+			// update group indicies inside transitions
 			grpFsa.setGroupIndex(grpIdx);
+		}
 		if(quantifier != null) {
 			grpFsa.applyQuantifier(quantifier);
 		}
@@ -161,7 +163,9 @@ public class PhonexCompiler2 implements PhonexListener {
 					int gidx = fsa.getGroupIndex(gn);
 					int currentGroupIdx = primaryFSA.getGroupIndex(gn);
 					if (currentGroupIdx > 0 && gidx != currentGroupIdx) {
-						// TODO throw exception
+						PhonexParser.NamedGroupContext namedCtx = (PhonexParser.NamedGroupContext) groupContext;
+						throw new PhonexPatternException(namedCtx.group_name().start.getLine(), namedCtx.group_name().getStart().getCharPositionInLine(),
+								"Duplicate group name: " + gn);
 					}
 					primaryFSA.setGroupName(fsa.getGroupIndex(gn), gn);
 				}
@@ -174,9 +178,18 @@ public class PhonexCompiler2 implements PhonexListener {
 		if(capturing && name != null) {
 			int currentGroupIdx = primaryFSA.getGroupIndex(name);
 			if(currentGroupIdx > 0 && grpIdx != currentGroupIdx) {
-				// TODO throw exception
+				PhonexParser.NamedGroupContext namedCtx = (PhonexParser.NamedGroupContext) groupContext;
+				throw new PhonexPatternException(namedCtx.group_name().start.getLine(), namedCtx.group_name().getStart().getCharPositionInLine(),
+						"Duplicate group name: " + name);
 			}
 			primaryFSA.setGroupName(grpIdx, name);
+		}
+
+		if(!capturing) {
+			nextGroupIndex = grpIdx;
+		}
+		if(capturing && orGroup.size() > 1) {
+			nextGroupIndex = Math.max(nextGroupIndex, primaryFSA.getNumberOfGroups()+1);
 		}
 
 		popQuantifierStack();
@@ -281,7 +294,7 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitCapturingGroup(PhonexParser.CapturingGroupContext ctx) {
-		PhonexFSA grpFsa = popGroup(true, null, quantifier);
+		PhonexFSA grpFsa = popGroup(ctx,true, null, quantifier);
 		if(grpFsa != primaryFSA && !fsaStack.isEmpty()) {
 			fsaStack.peek().appendGroup(grpFsa);
 		}
@@ -294,7 +307,7 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitNonCapturingGroup(PhonexParser.NonCapturingGroupContext ctx) {
-		PhonexFSA grpFsa = popGroup(false, null, quantifier);
+		PhonexFSA grpFsa = popGroup(ctx, false, null, quantifier);
 		if(grpFsa != primaryFSA && !fsaStack.isEmpty()) {
 			fsaStack.peek().appendGroup(grpFsa);
 		}
@@ -308,7 +321,7 @@ public class PhonexCompiler2 implements PhonexListener {
 	@Override
 	public void exitNamedGroup(PhonexParser.NamedGroupContext ctx) {
 		String groupName = ctx.group_name().getText();
-		PhonexFSA grpFsa = popGroup(true, groupName, quantifier);
+		PhonexFSA grpFsa = popGroup(ctx,true, groupName, quantifier);
 		if(grpFsa != primaryFSA && !fsaStack.isEmpty()) {
 			fsaStack.peek().appendGroup(grpFsa);
 		}
@@ -322,7 +335,7 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitLookBehindGroup(PhonexParser.LookBehindGroupContext ctx) {
-		PhonexFSA grpFsa = popGroup(false, null, quantifier);
+		PhonexFSA grpFsa = popGroup(ctx,false, null, quantifier);
 		grpFsa.getTransitions().forEach( t -> t.setOffsetType(OffsetType.LOOK_BEHIND) );
 
 		if(grpFsa != primaryFSA && !fsaStack.isEmpty())
@@ -337,7 +350,7 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitLookAheadGroup(PhonexParser.LookAheadGroupContext ctx) {
-		PhonexFSA grpFsa = popGroup(false, null, quantifier);
+		PhonexFSA grpFsa = popGroup(ctx,false, null, quantifier);
 		grpFsa.getTransitions().forEach( t -> t.setOffsetType(OffsetType.LOOK_AHEAD) );
 
 		if(grpFsa != primaryFSA && !fsaStack.isEmpty())
@@ -570,11 +583,12 @@ public class PhonexCompiler2 implements PhonexListener {
 				PhoneMatcher pluginMatcher = pluginProvider.createMatcher(args);
 				pluginMatcherList.add(pluginMatcher);
 			} catch (Exception ex) {
-				// TODO throw new PhonexPatternException
+				throw new PhonexPatternException(ctx.start.getLine(), ctx.start.getCharPositionInLine(),
+						ex);
 			}
 
 		} else {
-			// TODO throw NoSuchPluginException
+			throw new NoSuchPluginException(ctx.start.getLine(), ctx.start.getCharPositionInLine(), pluginName);
 		}
 	}
 
@@ -626,11 +640,20 @@ public class PhonexCompiler2 implements PhonexListener {
 	}
 
 	@Override
-	public void enterLengthMatcher(PhonexParser.LengthMatcherContext ctx) {}
+	public void enterLongMatcher(PhonexParser.LongMatcherContext ctx) {}
 
 	@Override
-	public void exitLengthMatcher(PhonexParser.LengthMatcherContext ctx) {
+	public void exitLongMatcher(PhonexParser.LongMatcherContext ctx) {
 		PhoneMatcher matcher = new AnyDiacriticPhoneMatcher("{long}");
+		pluginMatcherList.add(matcher);
+	}
+
+	@Override
+	public void enterHalflongMatcher(PhonexParser.HalflongMatcherContext ctx) {}
+
+	@Override
+	public void exitHalflongMatcher(PhonexParser.HalflongMatcherContext ctx) {
+		PhoneMatcher matcher = new AnyDiacriticPhoneMatcher("{halflong}");
 		pluginMatcherList.add(matcher);
 	}
 
@@ -671,7 +694,8 @@ public class PhonexCompiler2 implements PhonexListener {
 
 			Feature featureData = fm.getFeature(feature);
 			if(featureData == null) {
-				// TODO throw PhonexPatternException
+				throw new PhonexPatternException(ctx.negatable_identifier(i).start.getLine(),
+						ctx.negatable_identifier(i).start.getCharPositionInLine(), "Invalid feature: " + feature);
 			}
 
 			if(not) {

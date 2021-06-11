@@ -30,6 +30,7 @@ FORWARDSLASH
 	;
 
 </xsl:when>
+<xsl:when test="$tokenType = 'SPACE'"></xsl:when>
 <xsl:when test="$tokenType = 'MINOR_GROUP'">
 PIPE
 	:	'|'
@@ -70,6 +71,9 @@ NUMBER
 	: DIGIT+
 ;
 
+fragment
+</xsl:when>
+<xsl:when test="$tokenType = 'ALIGNMENT'">
 fragment
 </xsl:when>
 <xsl:when test="$tokenType = 'COVER_SYMBOL'">
@@ -117,10 +121,6 @@ AMP
 
 MINUS
 	: '-'
-	;
-
-TRIANGULAR_COLON
-	:	'\u02d0'
 	;
 
 SYLLABLE_CHAR
@@ -176,6 +176,7 @@ LETTER
 	|	CONSONANT
 	|	GLIDE
 	|	VOWEL
+	|	ALIGNMENT
 	;
 
 fragment
@@ -190,17 +191,17 @@ HEX_CHAR
 	;
 
 WS
-	:   ( ' ' | '\t' | '\r' | '\n' )
-		-> channel(1)
+	:	[ \t\r\n]+
+		-> skip
 	;
 
 COMMENT
-	:	'/*' .* '*/'
+	:	'/*' .*? '*/'
 		-> channel(2)
 	;
 
 EOL_COMMENT
-	:	'//' .* '\n'
+	:	'//' .*? '\n'
 		-> channel(2)
 	;
 
@@ -210,11 +211,11 @@ ESC_SEQ
 	;
 
 QUOTED_STRING
-	:  '"' ( ESC_SEQ | HEX_CHAR | ~('"') )* '"'
+	:  '"' ( ESC_SEQ | HEX_CHAR | ~('"') )*? '"'
 	;
 
 SINGLE_QUOTED_STRING
-	:	'\'' ( ESC_SEQ | HEX_CHAR | ~('\'') )* '\''
+	:	'\'' ( ESC_SEQ | HEX_CHAR | ~('\'') )*? '\''
 	;
 
 	</xsl:template>

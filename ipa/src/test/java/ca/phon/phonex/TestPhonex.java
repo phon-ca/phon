@@ -35,7 +35,7 @@ public class TestPhonex extends PhonexTest {
 	}
 
 	@Test(expected=PhonexPatternException.class)
-	public void textInvalidFeature() throws Exception {
+	public void testInvalidFeature() throws Exception {
 		PhonexPattern.compile("{invalid}");
 	}
 	

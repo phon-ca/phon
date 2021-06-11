@@ -115,7 +115,9 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		ca.phon.phonexg4.PhonexParser.ExprContext exprContext = parser.expr();
 		compiler.walkTree(exprContext);
 
-		return new PhonexPattern(compiler.getFsa());
+		PhonexPattern retVal = new PhonexPattern(compiler.getFsa());
+		retVal.pattern = phonex;
+		return retVal;
 	}
 
 	private static PhonexPattern compileAntlr3(String phonex, int flags) throws PhonexPatternException {

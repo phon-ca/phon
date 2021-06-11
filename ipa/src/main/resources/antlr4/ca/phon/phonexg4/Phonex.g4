@@ -104,7 +104,8 @@ plugin_matcher
     |   COLON MINUS? sctype                                                             # ScTypePluginMatcher
     |   AMP single_phone_matcher                                                        # DiacriticMatcher
     |   EXC MINUS? stress_type                                                          # StressTypeMatcher
-    |   TRIANGULAR_COLON                                                                # LengthMatcher
+    |   LONG                                                                            # LongMatcher
+    |   HALF_LONG                                                                       # HalflongMatcher
     ;
 
 argument
