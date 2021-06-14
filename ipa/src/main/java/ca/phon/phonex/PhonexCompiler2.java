@@ -69,6 +69,8 @@ public class PhonexCompiler2 implements PhonexListener {
 	// flag set when processing look-behind groups
 	private boolean lookBehind = false;
 
+	int flags = 0;
+
 	private void pushMatcherStack() {
 		matcherStacks.push(matcherStack);
 		matcherStack = new Stack<>();
@@ -227,6 +229,10 @@ public class PhonexCompiler2 implements PhonexListener {
 		return this.primaryFSA;
 	}
 
+	public int getFlags() {
+		return this.flags;
+	}
+
 	@Override
 	public void enterExpr(PhonexParser.ExprContext ctx) {
 		setupCapturingGroup();
@@ -251,12 +257,19 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void enterFlags(PhonexParser.FlagsContext ctx) {
-
+		this.flags = 0;
 	}
 
 	@Override
 	public void exitFlags(PhonexParser.FlagsContext ctx) {
-
+		for (TerminalNode terminalNode : ctx.LETTER()) {
+			PhonexFlag flag = PhonexFlag.fromChar(terminalNode.getText().charAt(0));
+			if(flag == null) {
+				throw new PhonexPatternException(terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getCharPositionInLine(),
+						"Invalid flag: " + terminalNode.getText());
+			}
+			this.flags |= flag.getBitmask();
+		}
 	}
 
 	@Override
@@ -365,14 +378,14 @@ public class PhonexCompiler2 implements PhonexListener {
 	public void exitGroup_name(PhonexParser.Group_nameContext ctx) {	}
 
 	@Override
-	public void enterSimpleMatcher(PhonexParser.SimpleMatcherContext ctx) {
+	public void enterBaseMatcher(PhonexParser.BaseMatcherContext ctx) {
 		pushMatcherStack();
 		pushQuantifierStack();
 		pluginMatcherList.clear();
 	}
 
 	@Override
-	public void exitSimpleMatcher(PhonexParser.SimpleMatcherContext ctx) {
+	public void exitBaseMatcher(PhonexParser.BaseMatcherContext ctx) {
 		PhoneMatcher matcher = matcherStack.pop();
 		PhoneMatcher[] pluginMatchers = filterPluginMatchers(pluginMatcherList);
 
@@ -393,9 +406,18 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitBackReference(PhonexParser.BackReferenceContext ctx) {
-		boolean isMinus = ctx.back_reference().MINUS() != null;
+		boolean isRelative = ctx.back_reference().MINUS() != null;
 		int groupIndex = Integer.parseInt(ctx.back_reference().NUMBER().getText());
-		if(isMinus) groupIndex *= -1;
+
+		if(isRelative) {
+			groupIndex = nextGroupIndex - groupIndex;
+		}
+
+		if(groupIndex >= nextGroupIndex || groupIndex < 1) {
+			throw new PhonexPatternException(ctx.back_reference().start.getLine(),
+					ctx.back_reference().start.getCharPositionInLine(), "Invalid group reference " + groupIndex);
+		}
+
 
 		PhoneMatcher[] pluginMatchers = filterPluginMatchers(pluginMatcherList);
 
@@ -429,10 +451,10 @@ public class PhonexCompiler2 implements PhonexListener {
 	}
 
 	@Override
-	public void enterSinglePhoneMatcher(PhonexParser.SinglePhoneMatcherContext ctx) {}
+	public void enterPhone_matcher(PhonexParser.Phone_matcherContext ctx) {}
 
 	@Override
-	public void exitSinglePhoneMatcher(PhonexParser.SinglePhoneMatcherContext ctx) {}
+	public void exitPhone_matcher(PhonexParser.Phone_matcherContext ctx) {}
 
 	@Override
 	public void enterCompoundPhoneMatcher(PhonexParser.CompoundPhoneMatcherContext ctx) {
@@ -509,17 +531,17 @@ public class PhonexCompiler2 implements PhonexListener {
 	public void exitCompound_phone_matcher(PhonexParser.Compound_phone_matcherContext ctx) {}
 
 	@Override
-	public void enterSingle_phone_matcher(PhonexParser.Single_phone_matcherContext ctx) {}
+	public void enterPhoneMatcher(PhonexParser.PhoneMatcherContext ctx) {}
 
 	@Override
-	public void exitSingle_phone_matcher(PhonexParser.Single_phone_matcherContext ctx) {}
+	public void exitPhoneMatcher(PhonexParser.PhoneMatcherContext ctx) {}
 
 	@Override
 	public void enterBase_phone_matcher(PhonexParser.Base_phone_matcherContext ctx) {}
 
 	@Override
 	public void exitBase_phone_matcher(PhonexParser.Base_phone_matcherContext ctx) {
-		String basePhone = ctx.LETTER().getText();
+		String basePhone = (ctx.LETTER() != null ? ctx.LETTER().getText() : ctx.DIACRITIC().getText());
 		BasePhoneMatcher matcher = new BasePhoneMatcher(basePhone.charAt(0));
 		matcherStack.push(matcher);
 	}
@@ -928,7 +950,8 @@ public class PhonexCompiler2 implements PhonexListener {
 			RegexMatcher matcher = new RegexMatcher(regex);
 			matcherStack.push(matcher);
 		} catch (PatternSyntaxException pse) {
-			// TODO throw exception
+			throw new PhonexPatternException(ctx.start.getLine(), ctx.start.getCharPositionInLine(),
+					pse.getMessage());
 		}
 	}
 
@@ -939,7 +962,6 @@ public class PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void visitErrorNode(ErrorNode node) {
-		System.err.println(node.toString());
 
 	}
 

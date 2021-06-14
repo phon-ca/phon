@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
+ * Copyright (C) Gregory Hedlund & Yvan Rose
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import java.util.BitSet;
 
 import ca.phon.util.PrefHelper;
 import org.antlr.runtime.*;
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.*;
 
 import ca.phon.ipa.*;
 import ca.phon.syllable.*;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRErrorStrategy;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -97,26 +97,26 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	}
 
 	private static PhonexPattern compileAntlr4(String phonex, int flags) throws PhonexPatternException {
+		ErrorListener listener = new ErrorListener();
+
 		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(phonex);
 		ca.phon.phonexg4.PhonexLexer lexer = new ca.phon.phonexg4.PhonexLexer(charStream);
+		lexer.addErrorListener(listener);
 		org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 
-//		while(tokenStream.LT(1) != null) {
-//			org.antlr.v4.runtime.Token t = tokenStream.LT(1);
-//			tokenStream.consume();
-//
-//			System.out.println(t.getType());
-//		}
-
-
 		ca.phon.phonexg4.PhonexParser parser = new ca.phon.phonexg4.PhonexParser(tokenStream);
+		parser.addErrorListener(listener);
 		PhonexCompiler2 compiler = new PhonexCompiler2();
 
 		ca.phon.phonexg4.PhonexParser.ExprContext exprContext = parser.expr();
+		if(listener.exceptions.size() > 0)
+			throw listener.exceptions.get(0);
+
 		compiler.walkTree(exprContext);
 
 		PhonexPattern retVal = new PhonexPattern(compiler.getFsa());
 		retVal.pattern = phonex;
+		retVal.flags = flags | compiler.flags;
 		return retVal;
 	}
 
@@ -245,4 +245,25 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	public int compareTo(PhonexPattern arg0) {
 		return pattern().compareTo(arg0.pattern());
 	}
+
+	private static class ErrorListener implements ANTLRErrorListener {
+
+		List<PhonexPatternException> exceptions = new ArrayList<>();
+
+		@Override
+		public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, org.antlr.v4.runtime.RecognitionException e) {
+			exceptions.add(new PhonexPatternException(line, charPositionInLine, e));
+		}
+
+		@Override
+		public void reportAmbiguity(org.antlr.v4.runtime.Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {}
+
+		@Override
+		public void reportAttemptingFullContext(org.antlr.v4.runtime.Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {}
+
+		@Override
+		public void reportContextSensitivity(org.antlr.v4.runtime.Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {}
+
+	}
+
 }
