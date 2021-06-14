@@ -132,6 +132,7 @@ ca.phon.orthography.parser
 ca.phon.orthography.parser.exceptions
 ca.phon.phonex
 ca.phon.phonex.plugins
+ca.phon.phonexg4
 ca.phon.phontalk
 ca.phon.phontalk.parser
 ca.phon.plugin
