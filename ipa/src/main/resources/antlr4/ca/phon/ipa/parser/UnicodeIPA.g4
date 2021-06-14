@@ -82,7 +82,7 @@ prefix_diacritic
 	;
 
 suffix_section
-	: phone_length? suffix_diacritic* tone_number?
+	: suffix_diacritic* phone_length? tone_number?
 	;
 
 tone_number
