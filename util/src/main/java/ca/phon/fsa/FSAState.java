@@ -94,15 +94,8 @@ public class FSAState<T> {
 	public void setLookBehindOffset(int lookBehindOffset) {
 		this.lookBehindOffset = lookBehindOffset;
 	}
-	
-//	@SuppressWarnings("unchecked")
+
 	public T[] getMatchedTape() {
-//		T[] retVal = (T[])Array.newInstance(T.getCl,capacity);
-//		List<T> retVal = new ArrayList<T>();
-//		
-//		for(int i = 0; i < tapeIndex; i++)
-//			retVal.add(tape[i]);
-//		return (T[])retVal.toArray();
 		return Arrays.copyOfRange(tape, 0, tapeIndex);
 	}
 	
@@ -114,7 +107,6 @@ public class FSAState<T> {
 	 *  for the group or <code>null</code> if
 	 *  not found
 	 */
-//	@SuppressWarnings("unchecked")
 	public T[] getGroup(int grpIdx) {
 		T[] retVal = null;
 		

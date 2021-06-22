@@ -42,12 +42,7 @@ public class EmptyTransition extends PhonexTransition {
 	@Override
 	public Object clone() {
 		EmptyTransition retVal = new EmptyTransition();
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
-		retVal.getInitGroups().addAll(getInitGroups());
-		retVal.getMatcherGroups().addAll(getMatcherGroups());
-		retVal.setType(getType());
-		retVal.setOffsetType(getOffsetType());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
 

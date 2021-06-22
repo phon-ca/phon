@@ -83,7 +83,7 @@ public class PhoneClassMatcher implements PhoneMatcher {
 
 	@Override
 	public boolean matchesAnything() {
-		return false;
+		return this.matchers.size() == 0;
 	}
 
 	@Override

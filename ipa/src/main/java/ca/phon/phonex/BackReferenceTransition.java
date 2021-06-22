@@ -115,10 +115,8 @@ public class BackReferenceTransition extends PhonexTransition {
 	@Override
 	public Object clone() {
 		BackReferenceTransition retVal = new BackReferenceTransition(groupIndex, getSecondaryMatchers().toArray(new PhoneMatcher[0]));
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
-		retVal.getInitGroups().addAll(getInitGroups());
-		retVal.getMatcherGroups().addAll(getMatcherGroups());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
+
 }

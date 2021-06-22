@@ -242,7 +242,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	 * Convienence method for appending matchers.
 	 * Same as <code>appendMatcher(matcher, null)</code>
 	 * 
-	 * @param the matcher
+	 * @param matcher
 	 */
 	public void appendMatcher(PhoneMatcher matcher) {
 		appendMatcher(matcher, new PhoneMatcher[0]);
@@ -259,8 +259,8 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	 * <li>makes the new state final</li>
 	 * </ul></p>
 	 * 
-	 * @param the matcher to add
-	 * @param optional type matcher - can be <code>null</code>
+	 * @param matcher to add
+	 * @param secondaryMatchers type matcher - can be <code>null</code>
 	 */
 	public void appendMatcher(PhoneMatcher matcher, PhoneMatcher ... secondaryMatchers) {
 		String[] oldFinalStates = stripFinalStates();
@@ -707,7 +707,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		
 		if(oldFinalStates.length == 0) {
 			// use initial state
-			oldFinalStates = new String[]{ fsa.getInitialState() };
+			oldFinalStates = new String[]{ this.getInitialState() };
 		}
 		
 		// copy all states other than the initial state
@@ -780,7 +780,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		default:
 			break;
 		}
-		
+
 		// apply transition type to final states
 		for(String finalState:getFinalStates()) {
 			for(FSATransition<IPAElement> fTrans:getTransitionsForState(finalState)) {
@@ -793,7 +793,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 	 * Apply the 'zero or more' quantifier
 	 * to the entire fsa
 	 * 
-	 * 
+	 * @param transitionType
 	 */
 	public void makeZeroOrMore() {
 		// copy all transitions from the initial state
@@ -804,10 +804,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 						PhonexTransition.class.cast(iniTrans);
 				PhonexTransition cpyTrans = 
 						PhonexTransition.class.cast(pTrans.clone());
-//						new PhonexTransition(pTrans.getMatcher(), pTrans.getTypeMatcher());
 				cpyTrans.setFirstState(finalState);
-//				cpyTrans.setToState(pTrans.getToState());
-//				cpyTrans.setImage(pTrans.getImage());
 				addTransition(cpyTrans);
 			}
 		}
@@ -829,10 +826,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 						PhonexTransition.class.cast(iniTrans);
 				PhonexTransition cpyTrans = 
 						PhonexTransition.class.cast(pTrans.clone());
-//						new PhonexTransition(pTrans.getMatcher(), pTrans.getTypeMatcher());
 				cpyTrans.setFirstState(finalState);
-//				cpyTrans.setToState(pTrans.getToState());
-//				cpyTrans.setImage(pTrans.getImage());
 				addTransition(cpyTrans);
 			}
 		}
@@ -861,7 +855,7 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		// case <int>
 		if(xbound > 0 && ybound < 0) {
 			for(int i = 1; i < xbound; i++) {
-				PhonexFSA fsa = PhonexFSA.class.cast(this.clone());
+				PhonexFSA fsa = PhonexFSA.class.cast(cpyFSA.clone());
 				// append copied machine onto this one
 				this.appendGroup(fsa);
 			}
@@ -879,20 +873,20 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 		// ybound is a maxiumum, no min
 		} else if(xbound == 0 && ybound > 0) {
 			for(int i = 1; i < ybound; i++) {
-				PhonexFSA fsa = PhonexFSA.class.cast(this.clone());
+				PhonexFSA fsa = PhonexFSA.class.cast(cpyFSA.clone());
 				fsa.makeZeroOrOne();
 				this.appendGroup(fsa);
 			}
 		} else if(xbound > 0 && ybound > 0) {
 			PhonexFSA atLeast = new PhonexFSA();
 			for(int i = 1; i < xbound; i++) {
-				PhonexFSA fsa = PhonexFSA.class.cast(this.clone());
+				PhonexFSA fsa = PhonexFSA.class.cast(cpyFSA.clone());
 				atLeast.appendGroup(fsa);
 			}
 			
 			// up to
 			for(int i = xbound; i < ybound; i++) {
-				PhonexFSA fsa = PhonexFSA.class.cast(this.clone());
+				PhonexFSA fsa = PhonexFSA.class.cast(cpyFSA.clone());
 				fsa.makeZeroOrOne();
 				atLeast.appendGroup(fsa);
 			}
@@ -963,27 +957,6 @@ public class PhonexFSA extends SimpleFSA<IPAElement> implements Cloneable {
 			}
 		}
 	}
-	
-	public void setParentGroupIndex(int parentGroupIndex) {
-		for(String state:getStates()) {
-			for(FSATransition<IPAElement> trans:getTransitionsForState(state)) {
-				Integer[] initGroups = trans.getInitGroups().toArray(new Integer[0]);
-				Integer[] matcherGroups = trans.getMatcherGroups().toArray(new Integer[0]);
-				
-
-				trans.getInitGroups().clear();
-				for(int i = 0; i < initGroups.length; i++) {
-					trans.getInitGroups().add(initGroups[i]+1);
-				}
-				trans.getMatcherGroups().clear();
-				for(int i = 0; i < matcherGroups.length; i++) {
-					trans.getMatcherGroups().add(matcherGroups[i]+1);
-				}
-				
-			}
-		}
-	}
-	
 	
 	@Override
 	public Object clone() {

@@ -35,10 +35,45 @@ public abstract class FSATransition<T> {
 	private OffsetType offsetType = OffsetType.NORMAL;
 	
 	/** Matcher groups started by this transition */
-	private final Set<Integer> startGroups = new HashSet<Integer>();
+	private final Set<Integer> startGroups = new HashSet<>();
 	
 	/** Matcher groups added to by this transition */
-	private final Set<Integer> matcherGroups = new HashSet<Integer>();
+	private final Set<Integer> matcherGroups = new HashSet<>();
+
+	/**
+	 * Copy information from only transition into another
+	 *
+	 * @param src
+	 * @param dest
+	 */
+	public static void copyTransitionInfo(FSATransition<?> src, FSATransition<?> dest) {
+		setupTransition(dest, src.firstState, src.toState, src.image, src.type, src.offsetType,
+				src.startGroups, src.matcherGroups);
+	}
+
+	/**
+	 * Setup transition with given information
+	 *
+	 * @param transition
+	 * @param firstState
+	 * @param toState
+	 * @param image
+	 * @param type
+	 * @param offsetType
+	 * @param startGroups
+	 * @param matcherGroups
+	 */
+	public static void setupTransition(FSATransition<?> transition, String firstState, String toState, String image,
+                      TransitionType type, OffsetType offsetType,
+                      Collection<Integer> startGroups, Collection<Integer> matcherGroups) {
+		transition.setFirstState(firstState);
+		transition.setToState(toState);
+		transition.setImage(image);
+		transition.setType(type);
+		transition.setOffsetType(offsetType);
+		transition.startGroups.addAll(startGroups);
+		transition.matcherGroups.addAll(matcherGroups);
+	}
 	
 	/**
 	 * Determines if the fsa will follow the transition

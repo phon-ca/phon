@@ -49,8 +49,7 @@ public class BeginningOfInputTransition extends PhonexTransition {
 	@Override
 	public Object clone() {
 		BeginningOfInputTransition retVal = new BeginningOfInputTransition();
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
 

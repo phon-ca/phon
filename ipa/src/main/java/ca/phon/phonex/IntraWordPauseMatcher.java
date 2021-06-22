@@ -32,4 +32,8 @@ public class IntraWordPauseMatcher implements PhoneMatcher {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "\\p";
+	}
 }

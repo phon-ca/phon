@@ -50,8 +50,7 @@ public class EndOfInputTransition extends PhonexTransition {
 	@Override
 	public Object clone() {
 		EndOfInputTransition retVal = new EndOfInputTransition();
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
 

@@ -142,13 +142,8 @@ public class PhonexTransition extends FSATransition<IPAElement> implements Clone
 	@Override
 	public Object clone() {
 		PhonexTransition retVal = new PhonexTransition(baseMatcher, secondaryMatchers.toArray(new PhoneMatcher[0]));
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
-		retVal.getInitGroups().addAll(getInitGroups());
-		retVal.getMatcherGroups().addAll(getMatcherGroups());
-		retVal.setType(getType());
-		retVal.setOffsetType(getOffsetType());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
-	
+
 }

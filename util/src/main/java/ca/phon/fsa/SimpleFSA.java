@@ -129,22 +129,13 @@ public class SimpleFSA<T> {
 	public List<FSATransition<T>> getTransitionsForState(String state) {
 		ArrayList<FSATransition<T>> retVal = 
 			new ArrayList<FSATransition<T>>();
-		
-//		ArrayList<AnythingTransition<T>> anythingTrans = 
-//			new ArrayList<AnythingTransition<T>>();
-		
+
 		for(FSATransition<T> transition:transitions) {
 			if(transition.getFirstState().equals(state)) {
-//				if(transition instanceof AnythingTransition)
-//					anythingTrans.add((AnythingTransition<T>)transition);
-//				else
 					retVal.add(transition);
 			}
 		}
-		
-		// add the 'anything' transitions to the end so they are processed last
-//		retVal.addAll(anythingTrans);
-		
+
 		Collections.sort(retVal, new TransitionComparator());
 		return retVal;
 	}
