@@ -294,11 +294,11 @@ public class IconManager {
 	 * 
 	 * @param icons
 	 */
-	public ImageIcon createIconStrip(ImageIcon[] icons) {
+	public ImageIcon createIconStrip(Icon[] icons) {
 		return createIconStrip(icons, 0);
 	}
 	
-	public ImageIcon createIconStrip(ImageIcon[] icons, int offset) {
+	public ImageIcon createIconStrip(Icon[] icons, int offset) {
 		// determine size
 		int width = 0;
 		int height = 0;
@@ -313,8 +313,9 @@ public class IconManager {
 		
 		int x = 0;
 		int y = 0;
-		for(ImageIcon icon:icons) {
-			g.drawImage(icon.getImage(), x, y, null);
+		for(Icon icon:icons) {
+			icon.paintIcon(null, g, x, y);
+//			g.drawImage(icon.getImage(), x, y, null);
 			x += icon.getIconWidth() + offset;
 		}
 		

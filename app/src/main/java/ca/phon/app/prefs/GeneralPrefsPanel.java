@@ -72,20 +72,10 @@ public class GeneralPrefsPanel extends PrefsPanel {
 		innerPanel.add(updatesPanel);
 
 		// workspace
-		boolean showWorkspaceProjects = PrefHelper.getBoolean(WelcomeWindow.SHOW_WORKSPACE_PROJECTS, WelcomeWindow.DEFAULT_SHOW_WORKSPACE_PROJECTS);
-
-		JCheckBox showWorksapceBox = new JCheckBox("Show workspace projects in Welcome window");
-		showWorksapceBox.setSelected(showWorkspaceProjects);
-		showWorksapceBox.addActionListener((e) -> {
-			PrefHelper.getUserPreferences().putBoolean(WelcomeWindow.SHOW_WORKSPACE_PROJECTS, showWorksapceBox.isSelected());
-		});
-
 		workspaceBtn = new WorkspaceButton();
-
 		JPanel workspacePanel = new JPanel(new VerticalLayout());
 		workspacePanel.setBorder(BorderFactory.createTitledBorder("Workspace"));
 		workspacePanel.add(new JLabel("The workspace folder is the default location for saving Phon projects"));
-		workspacePanel.add(showWorksapceBox);
 		workspacePanel.add(workspaceBtn);
 		innerPanel.add(workspacePanel);
 		

@@ -41,6 +41,7 @@ import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXTitledSeparator;
 import org.jdesktop.swingx.VerticalLayout;
 import org.jdesktop.swingx.painter.Painter;
@@ -62,9 +63,9 @@ import java.util.Set;
  */
 public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
-	public final static String SHOW_WORKSPACE_PROJECTS = WelcomeWindow.class.getName() + ".showWorkspaceProjects";
-	public final static boolean DEFAULT_SHOW_WORKSPACE_PROJECTS = false;
-	private boolean showWorkspaceProjects = PrefHelper.getBoolean(SHOW_WORKSPACE_PROJECTS, DEFAULT_SHOW_WORKSPACE_PROJECTS);
+	public final static String WORKSPACE_PROJECTS_COLLAPSED = WelcomeWindow.class.getName() + ".workspaceProjectCollapsed";
+	public final static boolean DEFAULT_COLLAPSE_WORKSPACE_PROJECTS = true;
+	private boolean showWorkspaceProjects = PrefHelper.getBoolean(WORKSPACE_PROJECTS_COLLAPSED, DEFAULT_COLLAPSE_WORKSPACE_PROJECTS);
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WelcomeWindow.class.getName());
 
@@ -106,21 +107,10 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 	}
 
 	private void init() {
-		final GridBagLayout layout = new GridBagLayout();
-		final GridBagConstraints gbc = new GridBagConstraints();
-		setLayout(layout);
-
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 2;
-		gbc.weightx = 1.0;
-		gbc.weighty = 0.0;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
+		setLayout(new BorderLayout());
 
 		header = new DialogHeader(HEADER_TITLE, HEADER_MESSAGE);
-		add(header, gbc);
+		add(header, BorderLayout.NORTH);
 
 		// setup actions
 		actionsPanel = new JPanel();
@@ -134,9 +124,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		actionsPanel.setPreferredSize(new Dimension(250, 0));
 		actionsPanel.add(newProjectButton);
 		actionsPanel.add(browseProjectButton);
-//		actionsPanel.add(new JXTitledSeparator("Settings"));
 		actionsPanel.add(openPrefsButton);
-//		actionsPanel.add(mediaPrefsButton);
 
 		// add plug-in actions
 		int pluginActions = 0;
@@ -151,15 +139,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		}
 
 		actionsContainer = new TitledPanel("Actions", actionsPanel);
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weightx = 0.0;
-		gbc.weighty = 1.0;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridheight = 2;
-		gbc.gridwidth = 1;
-		add(actionsContainer, gbc);
+		add(actionsContainer, BorderLayout.WEST);
 		
 		if(OSInfo.isMacOs()) {
 			final ImageIcon actionsIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarUtilitiesFolderIcon, IconSize.SMALL);
@@ -167,22 +147,24 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		}
 
 		workspaceProjectsPanel = new WorkspaceProjectsPanel();
-		workspaceContainer = new TitledPanel("Workspace", workspaceProjectsPanel);
-		workspaceContainer.setVisible(showWorkspaceProjects);
-		gbc.gridx++;
-		gbc.gridheight = 1;
-		add(workspaceContainer, gbc);
-		PrefHelper.getUserPreferences().addPreferenceChangeListener( (e) -> {
-			if(e.getKey().equals(WelcomeWindow.SHOW_WORKSPACE_PROJECTS)) {
-				workspaceContainer.setVisible(PrefHelper.getBoolean(WelcomeWindow.SHOW_WORKSPACE_PROJECTS, WelcomeWindow.DEFAULT_SHOW_WORKSPACE_PROJECTS));
-				revalidate();
+		final JXCollapsiblePane cpane = new JXCollapsiblePane(JXCollapsiblePane.Direction.UP);
+		cpane.setLayout(new BorderLayout());
+		cpane.add(workspaceProjectsPanel, BorderLayout.CENTER);
+		cpane.addPropertyChangeListener("collapsed", (e) -> {
+			updateWorkspaceDecoration(cpane);
+		});
+		workspaceContainer = new TitledPanel("Workspace", cpane);
+		workspaceProjectsPanel.setPreferredSize(new Dimension(0, 300));
+		workspaceContainer.getTitleLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		workspaceContainer.getTitleLabel().setToolTipText("Click to collapse/show workspace projects");
+		workspaceContainer.getTitleLabel().addMouseListener(new MouseInputAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				cpane.setCollapsed(!cpane.isCollapsed());
+				PrefHelper.getUserPreferences().putBoolean(WORKSPACE_PROJECTS_COLLAPSED, cpane.isCollapsed());
 			}
 		});
-
-		if(OSInfo.isMacOs()) {
-			final ImageIcon workspaceIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarDocumentsFolderIcon, IconSize.SMALL);
-			workspaceContainer.setLeftDecoration(new JLabel(workspaceIcn));
-		}
+		updateWorkspaceDecoration(cpane);
 
 		recentProjectsPanel = new JPanel();
 		recentProjectsPanel.setLayout(new BorderLayout());
@@ -202,8 +184,23 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 			}
 		});
 
-		gbc.gridy++;
-		add(recentProjectsContainer, gbc);
+		JPanel rightPanel = new JPanel(new BorderLayout());
+		rightPanel.add(workspaceContainer, BorderLayout.NORTH);
+		rightPanel.add(recentProjectsContainer, BorderLayout.CENTER);
+
+		add(rightPanel, BorderLayout.CENTER);
+	}
+
+	private void updateWorkspaceDecoration(JXCollapsiblePane cpane) {
+		Icon icn =
+				(cpane.isCollapsed() ? UIManager.getIcon("Tree.collapsedIcon") : UIManager.getIcon("Tree.expandedIcon"));
+
+		if(OSInfo.isMacOs()) {
+			final ImageIcon workspaceIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarDocumentsFolderIcon, IconSize.SMALL);
+			icn = IconManager.getInstance().createIconStrip(new Icon[]{workspaceIcn, icn});
+		}
+
+		workspaceContainer.setLeftDecoration(new JLabel(icn));
 	}
 
 	private MultiActionButton createNewButton() {
