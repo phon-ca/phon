@@ -110,7 +110,7 @@
         <ca.phon.phon-praat-plugin.version>53</ca.phon.phon-praat-plugin.version>
         <ca.phon.phon-update-plugin.version>18</ca.phon.phon-update-plugin.version>
         <ca.phon.phon-version-triggers.version>8</ca.phon.phon-version-triggers.version>
-        <ca.phon.csv.plugin.version>23</ca.phon.csv.plugin.version>
+        <ca.phon.csv.plugin.version>24</ca.phon.csv.plugin.version>
         <ca.phon.phontalk.version>3.5.3-SNAPSHOT</ca.phon.phontalk.version>
     </properties>
 
