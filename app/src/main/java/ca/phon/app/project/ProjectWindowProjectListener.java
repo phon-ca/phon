@@ -58,4 +58,5 @@ public class ProjectWindowProjectListener implements ProjectListener {
 	private void updateProjectWindow() {
 		getProjectWindow().updateLists();
 	}
+
 }
