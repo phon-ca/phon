@@ -83,7 +83,8 @@ public class GeneralPrefsPanel extends PrefsPanel {
 		workspaceBtn = new WorkspaceButton();
 
 		JPanel workspacePanel = new JPanel(new VerticalLayout());
-		workspacePanel.setBorder(BorderFactory.createTitledBorder("Workspace Projects"));
+		workspacePanel.setBorder(BorderFactory.createTitledBorder("Workspace"));
+		workspacePanel.add(new JLabel("The workspace folder is the default location for saving Phon projects"));
 		workspacePanel.add(showWorksapceBox);
 		workspacePanel.add(workspaceBtn);
 		innerPanel.add(workspacePanel);

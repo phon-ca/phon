@@ -25,6 +25,8 @@ public class RecentFiles implements Iterable<File> {
 	private final static int DEFAULT_MAX_FILES = 10;
 	
 	private int maxFiles = 10;
+
+	private boolean removeDeadEntries = false;
 	
 	private List<File> fileHistory = new ArrayList<>();
 	
@@ -35,9 +37,14 @@ public class RecentFiles implements Iterable<File> {
 	public RecentFiles(String propertyKey) {
 		this(propertyKey, DEFAULT_MAX_FILES);
 	}
-	
+
 	public RecentFiles(String propertyKey, int maxFiles) {
+		this(propertyKey, maxFiles, false);
+	}
+
+	public RecentFiles(String propertyKey, int maxFiles, boolean removeDeadEntries) {
 		super();
+		setRemoveDeadEntries(removeDeadEntries);
 		setMaxFiles(maxFiles);
 		setPropertyKey(propertyKey);
 	}
@@ -56,6 +63,14 @@ public class RecentFiles implements Iterable<File> {
 	
 	public File getFileAt(int idx) {
 		return fileHistory.get(idx);
+	}
+
+	public boolean isRemoveDeadEntries() {
+		return this.removeDeadEntries;
+	}
+
+	public void setRemoveDeadEntries(boolean removeDeadEntries) {
+		this.removeDeadEntries = removeDeadEntries;
 	}
 	
 	/**
@@ -90,6 +105,9 @@ public class RecentFiles implements Iterable<File> {
 			final File folder = new File(folderName);
 			fileHistory.add(0, folder);
 		}
+
+		if(isRemoveDeadEntries())
+			purgeFilesNotFound();
 	}
 	
 	public void saveHistory() {

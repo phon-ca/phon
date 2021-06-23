@@ -43,7 +43,8 @@ public class FileHistory implements Iterable<File> {
 		
 		this.prop = prop;
 		this.maxFolders = maxFolders;
-		
+		this.removeDeadEntries = removeDeadEntries;
+
 		loadHistory();
 	}
 

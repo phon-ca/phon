@@ -29,7 +29,7 @@ public class RecentProjects extends RecentFiles {
 	private List<File> projectHistory = new ArrayList<>();
 	
 	public RecentProjects() {
-		super(PROJECT_HISTORY_PROP, MAX_PROJECTS);
+		super(PROJECT_HISTORY_PROP, MAX_PROJECTS, true);
 	}
 	
 }
