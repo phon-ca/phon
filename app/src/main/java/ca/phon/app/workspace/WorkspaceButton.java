@@ -112,7 +112,9 @@ public class WorkspaceButton extends MultiActionButton {
 					PhonUIAction removeAct = new PhonUIAction(WorkspaceButton.this, "removeFromHistory", f);
 					removeAct.putValue(PhonUIAction.NAME, f.getAbsolutePath());
 					removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove " + f.getAbsolutePath() + " from workspace history");
-					removeItemMenu.add(removeAct);
+
+					removeItemMenu.add(removeAct).setEnabled(!f.equals(Workspace.userWorkspaceFolder()));
+
 				}
 			}
 
