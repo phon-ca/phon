@@ -166,11 +166,6 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 			actionsContainer.setLeftDecoration(new JLabel(actionsIcn));
 		}
 
-		// make sure workspace exists!
-		if(!Workspace.userWorkspaceFolder().exists()) {
-			Workspace.userWorkspaceFolder().mkdirs();
-		}
-
 		workspaceProjectsPanel = new WorkspaceProjectsPanel();
 		workspaceContainer = new TitledPanel("Workspace", workspaceProjectsPanel);
 		workspaceContainer.setVisible(showWorkspaceProjects);

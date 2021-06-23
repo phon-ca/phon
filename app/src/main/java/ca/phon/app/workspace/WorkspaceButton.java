@@ -40,9 +40,13 @@ public class WorkspaceButton extends MultiActionButton {
 		selectHistoryAct.putValue(Action.NAME, "Select workspace");
 		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Change workspace folder...");
 
+
 		ImageIcon workspaceIcnL =
-				IconManager.getInstance().getSystemIconForPath(
-						Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.MEDIUM);
+				(Workspace.userWorkspaceFolder().exists()
+						? (IconManager.getInstance().getSystemIconForPath(
+							Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.MEDIUM))
+						: IconManager.getInstance().getSystemStockIcon(
+						(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER), IconSize.MEDIUM));
 		DropDownIcon icn = new DropDownIcon(workspaceIcnL, 0, SwingConstants.BOTTOM);
 
 		setTopLabelText(WorkspaceTextStyler.toHeaderText("Workspace Folder"));
