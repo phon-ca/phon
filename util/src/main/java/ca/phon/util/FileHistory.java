@@ -27,18 +27,37 @@ public class FileHistory implements Iterable<File> {
 	public int maxFolders;
 	
 	private List<File> history = new ArrayList<>();
+
+	private boolean removeDeadEntries = false;
 		
 	public FileHistory(String prop) {
 		this(prop, DEFAULT_MAX_FOLDERS);
 	}
-	
+
 	public FileHistory(String prop, int maxFolders) {
+		this(prop, maxFolders, false);
+	}
+
+	public FileHistory(String prop, int maxFolders, boolean removeDeadEntries) {
 		super();
 		
 		this.prop = prop;
 		this.maxFolders = maxFolders;
 		
 		loadHistory();
+	}
+
+	/**
+	 * Remove dead entries on load
+	 *
+	 * @return boolean
+	 */
+	public boolean isRemoveDeadEntries() {
+		return this.removeDeadEntries;
+	}
+
+	public void setRemoveDeadEntries(boolean removeDeadEntries) {
+		this.removeDeadEntries = removeDeadEntries;
 	}
 	
 	private void loadHistory() {
@@ -49,6 +68,8 @@ public class FileHistory implements Iterable<File> {
 			if(folderName.trim().length() == 0) continue;
 			if(history.size() >= maxFolders) break;
 			final File folder = new File(folderName);
+			if(isRemoveDeadEntries() && !folder.exists())
+				continue;
 			history.add(0, folder);
 		}
 	}

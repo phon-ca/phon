@@ -56,7 +56,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 	public void filterWindowMenu(Window owner, JMenuBar menu) {
 		addFileMenu(owner, menu);
 		addEditMenu(owner, menu);
-		addWorkspaceMenu(owner, menu);
 		addQueryMenu(owner, menu);
 		addAnalysisMenu(owner, menu);
 		addToolsMenu(owner, menu);
@@ -113,27 +112,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		editListener.menuSelected(me);
 
 		menu.add(editMenu);
-	}
-
-	/**
-	 * Add 'Workspace' menu
-	 */
-	protected void addWorkspaceMenu(Window owner, JMenuBar menu) {
-		final MenuBuilder builder = new MenuBuilder(menu);
-		JMenu workspaceMenu = builder.addMenu(".@Edit", "Workspace");
-		
-		workspaceMenu.add(new SelectWorkspaceCommand());
-		
-		JMenu workspaceHistoryMenu = new JMenu("Workspace history");
-		workspaceHistoryMenu.addMenuListener(new WorkspaceHistoryMenuListener());
-		workspaceMenu.add(workspaceHistoryMenu);
-		
-		workspaceMenu.addSeparator();
-		final JMenu workspaceProjectsMenu = new JMenu("Workspace projects");
-		workspaceProjectsMenu.addMenuListener(new WorkspaceProjectsMenuListener());
-		workspaceMenu.add(workspaceProjectsMenu);
-	
-		menu.add(workspaceMenu);
 	}
 
 	/**

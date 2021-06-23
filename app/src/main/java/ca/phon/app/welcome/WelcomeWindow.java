@@ -15,33 +15,44 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.util.*;
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.NativeUtilities;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.VersionInfo;
+import ca.phon.app.menu.edit.PreferencesCommand;
+import ca.phon.app.menu.file.NewProjectCommand;
+import ca.phon.app.menu.file.OpenProjectCommand;
+import ca.phon.app.project.RecentProjects;
+import ca.phon.app.project.RecentProjectsList;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.MultiActionButton;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.OSInfo;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.JXTitledSeparator;
+import org.jdesktop.swingx.VerticalLayout;
+import org.jdesktop.swingx.painter.Painter;
+import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.effects.*;
-
-import ca.hedlund.desktopicons.*;
-import ca.phon.app.VersionInfo;
-import ca.phon.app.menu.edit.*;
-import ca.phon.app.menu.file.*;
-import ca.phon.app.project.*;
-import ca.phon.app.workspace.*;
-import ca.phon.extensions.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.Set;
 
 /**
  * Entry window for the application.  This window provides access to
@@ -50,6 +61,10 @@ import ca.phon.util.icons.*;
  *
  */
 public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
+
+	public final static String SHOW_WORKSPACE_PROJECTS = WelcomeWindow.class.getName() + ".showWorkspaceProjects";
+	public final static boolean DEFAULT_SHOW_WORKSPACE_PROJECTS = false;
+	private boolean showWorkspaceProjects = PrefHelper.getBoolean(SHOW_WORKSPACE_PROJECTS, DEFAULT_SHOW_WORKSPACE_PROJECTS);
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WelcomeWindow.class.getName());
 
@@ -155,13 +170,20 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		if(!Workspace.userWorkspaceFolder().exists()) {
 			Workspace.userWorkspaceFolder().mkdirs();
 		}
-		
+
 		workspaceProjectsPanel = new WorkspaceProjectsPanel();
 		workspaceContainer = new TitledPanel("Workspace", workspaceProjectsPanel);
+		workspaceContainer.setVisible(showWorkspaceProjects);
 		gbc.gridx++;
 		gbc.gridheight = 1;
 		add(workspaceContainer, gbc);
-		
+		PrefHelper.getUserPreferences().addPreferenceChangeListener( (e) -> {
+			if(e.getKey().equals(WelcomeWindow.SHOW_WORKSPACE_PROJECTS)) {
+				workspaceContainer.setVisible(PrefHelper.getBoolean(WelcomeWindow.SHOW_WORKSPACE_PROJECTS, WelcomeWindow.DEFAULT_SHOW_WORKSPACE_PROJECTS));
+				revalidate();
+			}
+		});
+
 		if(OSInfo.isMacOs()) {
 			final ImageIcon workspaceIcn = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.ToolbarDocumentsFolderIcon, IconSize.SMALL);
 			workspaceContainer.setLeftDecoration(new JLabel(workspaceIcn));

@@ -15,12 +15,14 @@
  */
 package ca.phon.app.prefs;
 
+import ca.phon.app.welcome.WelcomeWindow;
+import ca.phon.app.workspace.WorkspaceButton;
 import ca.phon.ui.HidablePanel;
+import ca.phon.ui.MultiActionButton;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -36,6 +38,8 @@ public class GeneralPrefsPanel extends PrefsPanel {
 
 	private static final long serialVersionUID = 8761130200130930937L;
 
+	private MultiActionButton workspaceBtn;
+
 	private final String checkForUpdateAtStartupProp = "ca.phon.application.updater.checkOnStartup";
 	
 	public GeneralPrefsPanel() {
@@ -45,8 +49,6 @@ public class GeneralPrefsPanel extends PrefsPanel {
 	}
 
 	private void init() {
-		CellConstraints cc = new CellConstraints();
-		
 		// update checking
 		boolean doCheckUpdate = PrefHelper.getBoolean(checkForUpdateAtStartupProp, true);
 		
@@ -63,14 +65,28 @@ public class GeneralPrefsPanel extends PrefsPanel {
 			
 		});
 		
-		
 		JPanel updatesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		FormLayout layout = 
-			new FormLayout("fill:pref:grow", "pref, pref");
-		JPanel innerPanel = new JPanel(layout);
+		JPanel innerPanel = new JPanel(new VerticalLayout());
 		updatesPanel.add(checkForUpdatesBox);
 		updatesPanel.setBorder(BorderFactory.createTitledBorder("Program Updates"));
-		innerPanel.add(updatesPanel, cc.xy(1,1));
+		innerPanel.add(updatesPanel);
+
+		// workspace
+		boolean showWorkspaceProjects = PrefHelper.getBoolean(WelcomeWindow.SHOW_WORKSPACE_PROJECTS, WelcomeWindow.DEFAULT_SHOW_WORKSPACE_PROJECTS);
+
+		JCheckBox showWorksapceBox = new JCheckBox("Show workspace projects in Welcome window");
+		showWorksapceBox.setSelected(showWorkspaceProjects);
+		showWorksapceBox.addActionListener((e) -> {
+			PrefHelper.getUserPreferences().putBoolean(WelcomeWindow.SHOW_WORKSPACE_PROJECTS, showWorksapceBox.isSelected());
+		});
+
+		workspaceBtn = new WorkspaceButton();
+
+		JPanel workspacePanel = new JPanel(new VerticalLayout());
+		workspacePanel.setBorder(BorderFactory.createTitledBorder("Workspace Projects"));
+		workspacePanel.add(showWorksapceBox);
+		workspacePanel.add(workspaceBtn);
+		innerPanel.add(workspacePanel);
 		
 		// info messages
 		PhonUIAction resetInfoMessagesAct = new PhonUIAction(this, "onResetInfoMessages");
@@ -80,16 +96,13 @@ public class GeneralPrefsPanel extends PrefsPanel {
 		JPanel resetPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		resetPanel.add(resetInfoMessagesBtn);
 		resetPanel.setBorder(BorderFactory.createTitledBorder("Information Messages"));
-		innerPanel.add(resetPanel, cc.xy(1, 2));
-		
-		// UI theme
-		
-		
+		innerPanel.add(resetPanel);
+
 		JScrollPane innerScroller = new JScrollPane(innerPanel);
 		setLayout(new BorderLayout());
 		add(innerScroller, BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * Reset hide-able messages.
 	 * @param pae

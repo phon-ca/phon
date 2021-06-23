@@ -15,7 +15,7 @@
  */
 package ca.phon.app.workspace;
 
-import ca.phon.util.*;
+import ca.phon.util.FileHistory;
 
 public class WorkspaceHistory extends FileHistory {
 	
@@ -24,7 +24,7 @@ public class WorkspaceHistory extends FileHistory {
 	private final static int MAX_FOLDERS = 10;
 
 	public WorkspaceHistory() {
-		super(WORKSPACE_HISTORY_PROP, MAX_FOLDERS);
+		super(WORKSPACE_HISTORY_PROP, MAX_FOLDERS, true);
 	}
 	
 }
