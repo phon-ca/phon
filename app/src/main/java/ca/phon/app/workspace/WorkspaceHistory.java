@@ -15,9 +15,9 @@
  */
 package ca.phon.app.workspace;
 
-import ca.phon.util.FileHistory;
+import ca.phon.util.RecentFiles;
 
-public class WorkspaceHistory extends FileHistory {
+public class WorkspaceHistory extends RecentFiles {
 	
 	public static final String WORKSPACE_HISTORY_PROP = WorkspaceHistory.class.getName() + ".stack";
 	

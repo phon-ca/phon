@@ -15,10 +15,10 @@
  */
 package ca.phon.app.menu.file;
 
-import ca.phon.util.FileHistory;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.RecentFiles;
 
-public class OpenFileHistory extends FileHistory {
+public class OpenFileHistory extends RecentFiles {
 
 	public final static String OPENFILE_HISTORY_PROP = OpenFileHistory.class.getName() + ".openFileHistory";
 	
