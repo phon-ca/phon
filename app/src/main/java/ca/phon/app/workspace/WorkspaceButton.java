@@ -40,13 +40,12 @@ public class WorkspaceButton extends MultiActionButton {
 		selectHistoryAct.putValue(Action.NAME, "Select workspace");
 		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Change workspace folder...");
 
-
 		ImageIcon workspaceIcnL =
 				(Workspace.userWorkspaceFolder().exists()
 						? (IconManager.getInstance().getSystemIconForPath(
 							Workspace.userWorkspaceFolder().getAbsolutePath(), "places/folder-workspace", IconSize.MEDIUM))
 						: IconManager.getInstance().getSystemStockIcon(
-						(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER), IconSize.MEDIUM));
+						(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.WARNING), IconSize.MEDIUM));
 		DropDownIcon icn = new DropDownIcon(workspaceIcnL, 0, SwingConstants.BOTTOM);
 
 		setTopLabelText(WorkspaceTextStyler.toHeaderText("Workspace Folder"));
@@ -73,13 +72,20 @@ public class WorkspaceButton extends MultiActionButton {
 		final MenuBuilder builder = new MenuBuilder(menu);
 
 		for(File workspaceFolder:history) {
-			ImageIcon workspaceIcn =
-					IconManager.getInstance().getSystemIconForPath(
-							workspaceFolder.getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
-			final PhonUIAction selectAction = new PhonUIAction(this, "onSelectFolder", workspaceFolder);
-			selectAction.putValue(PhonUIAction.NAME, workspaceFolder.getAbsolutePath());
-			selectAction.putValue(PhonUIAction.SMALL_ICON, workspaceIcn);
-			builder.addItem(".", selectAction);
+			if(workspaceFolder.equals(Workspace.userWorkspaceFolder()) && !workspaceFolder.exists()) {
+				final PhonUIAction createWorkspaceFolderAct = new PhonUIAction(this, "onCreateWorkspace");
+				createWorkspaceFolderAct.putValue(PhonUIAction.NAME, "Create workspace folder");
+				createWorkspaceFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create workspace folder on disk");
+				builder.addItem(".", createWorkspaceFolderAct);
+			} else {
+				ImageIcon workspaceIcn =
+						IconManager.getInstance().getSystemIconForPath(
+								workspaceFolder.getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
+				final PhonUIAction selectAction = new PhonUIAction(this, "onSelectFolder", workspaceFolder);
+				selectAction.putValue(PhonUIAction.NAME, workspaceFolder.getAbsolutePath());
+				selectAction.putValue(PhonUIAction.SMALL_ICON, workspaceIcn);
+				builder.addItem(".", selectAction);
+			}
 		}
 
 		ImageIcon browseIcn =
@@ -93,15 +99,6 @@ public class WorkspaceButton extends MultiActionButton {
 					IconManager.getInstance().getSystemStockIcon(WindowsStockIcon.FOLDEROPEN, IconSize.SMALL);
 			if(explorerIcon != null) browseIcn = explorerIcon;
 		}
-		builder.addSeparator(".", "browse");
-
-		final Action showWorkspaceAct = createShowWorkspaceAction();
-		builder.addItem(".@browse", showWorkspaceAct);
-
-		final SelectWorkspaceCommand cmd = new SelectWorkspaceCommand();
-		cmd.putValue(Action.NAME, "Browse for workspace folder...");
-		cmd.putValue(Action.SMALL_ICON, browseIcn);
-		builder.addItem(".", cmd);
 
 		builder.addSeparator(".", "clear");
 
@@ -134,6 +131,17 @@ public class WorkspaceButton extends MultiActionButton {
 		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear workspace history");
 		builder.addItem(".@clear", clearHistoryAct);
 
+		builder.addSeparator(".", "browse");
+
+		final Action showWorkspaceAct = createShowWorkspaceAction();
+		builder.addItem(".@browse", showWorkspaceAct);
+
+		final SelectWorkspaceCommand cmd = new SelectWorkspaceCommand();
+		cmd.putValue(Action.NAME, "Browse for workspace folder...");
+		cmd.putValue(Action.SMALL_ICON, browseIcn);
+		builder.addItem(".", cmd);
+
+
 		menu.show(this, 0, getHeight());
 	}
 
@@ -148,6 +156,14 @@ public class WorkspaceButton extends MultiActionButton {
 			}
 		}
 		history.saveHistory();
+	}
+
+	public void onCreateWorkspace() {
+		File workspaceFolder = Workspace.userWorkspaceFolder();
+		if(!workspaceFolder.exists()) {
+			boolean created = workspaceFolder.mkdirs();
+			System.out.println(created);
+		}
 	}
 
 	public void onShowWorkspace() {

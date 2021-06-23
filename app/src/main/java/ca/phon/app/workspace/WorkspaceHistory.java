@@ -17,6 +17,9 @@ package ca.phon.app.workspace;
 
 import ca.phon.util.RecentFiles;
 
+import java.io.File;
+import java.util.Iterator;
+
 public class WorkspaceHistory extends RecentFiles {
 	
 	public static final String WORKSPACE_HISTORY_PROP = WorkspaceHistory.class.getName() + ".stack";
@@ -26,5 +29,14 @@ public class WorkspaceHistory extends RecentFiles {
 	public WorkspaceHistory() {
 		super(WORKSPACE_HISTORY_PROP, MAX_FOLDERS, true);
 	}
-	
+
+	@Override
+	public void purgeFilesNotFound() {
+		final Iterator<File> itr = iterator();
+		while(itr.hasNext()) {
+			final File f = itr.next();
+			if(!f.equals(Workspace.userWorkspaceFolder()) && !f.exists())
+				itr.remove();
+		}
+	}
 }
