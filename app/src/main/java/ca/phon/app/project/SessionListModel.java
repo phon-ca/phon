@@ -114,6 +114,7 @@ public class SessionListModel implements ListModel<String> {
 	}
 	
 	public void refresh() {
+		if(corpus == null) return;
 		synchronized(cachedMutex) {
 			cachedSessions = project.getCorpusSessions(corpus);
 		}
