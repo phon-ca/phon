@@ -64,7 +64,8 @@ import java.util.Set;
 public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
 	public final static String WORKSPACE_PROJECTS_COLLAPSED = WelcomeWindow.class.getName() + ".workspaceProjectCollapsed";
-	public final static boolean DEFAULT_COLLAPSE_WORKSPACE_PROJECTS = true;
+	public final static boolean DEFAULT_COLLAPSE_WORKSPACE_PROJECTS =
+			(!Workspace.userWorkspaceFolder().exists() || Workspace.userWorkspace().getProjects().size() == 0);
 	private boolean showWorkspaceProjects = PrefHelper.getBoolean(WORKSPACE_PROJECTS_COLLAPSED, DEFAULT_COLLAPSE_WORKSPACE_PROJECTS);
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WelcomeWindow.class.getName());
