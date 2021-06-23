@@ -150,8 +150,10 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		final JXCollapsiblePane cpane = new JXCollapsiblePane(JXCollapsiblePane.Direction.UP);
 		cpane.setLayout(new BorderLayout());
 		cpane.add(workspaceProjectsPanel, BorderLayout.CENTER);
+		cpane.setCollapsed(PrefHelper.getBoolean(WORKSPACE_PROJECTS_COLLAPSED, DEFAULT_COLLAPSE_WORKSPACE_PROJECTS));
 		cpane.addPropertyChangeListener("collapsed", (e) -> {
 			updateWorkspaceDecoration(cpane);
+			PrefHelper.getUserPreferences().putBoolean(WORKSPACE_PROJECTS_COLLAPSED, cpane.isCollapsed());
 		});
 		workspaceContainer = new TitledPanel("Workspace", cpane);
 		workspaceProjectsPanel.setPreferredSize(new Dimension(0, 300));
@@ -161,7 +163,6 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				cpane.setCollapsed(!cpane.isCollapsed());
-				PrefHelper.getUserPreferences().putBoolean(WORKSPACE_PROJECTS_COLLAPSED, cpane.isCollapsed());
 			}
 		});
 		updateWorkspaceDecoration(cpane);
