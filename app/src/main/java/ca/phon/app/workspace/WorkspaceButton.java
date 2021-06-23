@@ -162,6 +162,10 @@ public class WorkspaceButton extends MultiActionButton {
 		File workspaceFolder = Workspace.userWorkspaceFolder();
 		if(!workspaceFolder.exists()) {
 			boolean created = workspaceFolder.mkdirs();
+			if(!created) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.warning("Workspace folder not created");
+			}
 		}
 	}
 
