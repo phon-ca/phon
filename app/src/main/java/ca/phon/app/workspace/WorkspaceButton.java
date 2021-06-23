@@ -17,9 +17,12 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class WorkspaceButton extends MultiActionButton {
 
@@ -97,12 +100,48 @@ public class WorkspaceButton extends MultiActionButton {
 		builder.addItem(".", cmd);
 
 		builder.addSeparator(".", "clear");
+
+		JMenu removeItemMenu = builder.addMenu(".", "Remove item from history");
+		removeItemMenu.addMenuListener(new MenuListener() {
+			@Override
+			public void menuSelected(MenuEvent e) {
+				removeItemMenu.removeAll();
+				Iterator<File> itr = history.iterator();
+				while(itr.hasNext()) {
+					File f = itr.next();
+					PhonUIAction removeAct = new PhonUIAction(WorkspaceButton.this, "removeFromHistory", f);
+					removeAct.putValue(PhonUIAction.NAME, f.getAbsolutePath());
+					removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove " + f.getAbsolutePath() + " from workspace history");
+					removeItemMenu.add(removeAct);
+				}
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {}
+		});
+
 		final PhonUIAction clearHistoryAct = new PhonUIAction(this, "onClearHistory");
 		clearHistoryAct.putValue(PhonUIAction.NAME, "Clear history");
 		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear workspace history");
 		builder.addItem(".@clear", clearHistoryAct);
 
 		menu.show(this, 0, getHeight());
+	}
+
+	public void removeFromHistory(File f) {
+		WorkspaceHistory history = new WorkspaceHistory();
+		Iterator<File> itr = history.iterator();
+		while(itr.hasNext()) {
+			File tf = itr.next();
+			if(tf.equals(f)) {
+				itr.remove();
+				break;
+			}
+		}
+		history.saveHistory();
 	}
 
 	public void onShowWorkspace() {
