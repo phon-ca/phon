@@ -39,7 +39,17 @@ public interface SessionCheck {
 		
 		return retVal;
 	}
-	
+
+	/**
+	 * Perform check by default in session editor and session check wizard.
+	 * This setting may be overridden by user settings in the Session Check
+	 * view.
+	 *
+	 * @return true if check should execute during record
+	 * editor start-up
+	 */
+	public boolean performCheckByDefault();
+
 	/**
 	 * Check session and report any issues using the given validator.
 	 * 

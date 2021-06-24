@@ -26,6 +26,11 @@ public class AlignedWordCountCheck implements SessionCheck, IPluginExtensionPoin
 	}
 
 	@Override
+	public boolean performCheckByDefault() {
+		return false;
+	}
+
+	@Override
 	public boolean checkSession(SessionValidator validator, Session session) {
 		session.getRecords().forEach( (final Record record) -> {
 			for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {

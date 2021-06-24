@@ -55,6 +55,11 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 	}
 
 	@Override
+	public boolean performCheckByDefault() {
+		return true;
+	}
+
+	@Override
 	public boolean checkSession(SessionValidator validator, Session session) {
 		boolean modified = false;
 		

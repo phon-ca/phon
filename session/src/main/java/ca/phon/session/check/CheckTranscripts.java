@@ -65,6 +65,11 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 	}
 
 	@Override
+	public boolean performCheckByDefault() {
+		return true;
+	}
+
+	@Override
 	public boolean checkSession(SessionValidator validator, Session session) {
 		boolean modified = false;
 		Syllabifier syllabifier = SyllabifierLibrary.getInstance().defaultSyllabifier();

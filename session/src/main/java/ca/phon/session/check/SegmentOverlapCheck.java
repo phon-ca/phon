@@ -52,6 +52,11 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 	}
 
 	@Override
+	public boolean performCheckByDefault() {
+		return true;
+	}
+
+	@Override
 	public boolean checkSession(SessionValidator validator, Session session) {
 		boolean modified = false;
 		final Map<Participant, Float> endTimes = new HashMap<>();

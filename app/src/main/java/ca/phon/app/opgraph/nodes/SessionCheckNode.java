@@ -71,7 +71,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		checkMap = new LinkedHashMap<>();
 		for(IPluginExtensionPoint<SessionCheck> extPt:PluginManager.getInstance().getExtensionPoints(SessionCheck.class)) {
 			SessionCheck check = extPt.getFactory().createObject();
-			checkMap.put(check, true);
+			checkMap.put(check, check.performCheckByDefault());
 		}
 		
 		putExtension(NodeSettings.class, this);
