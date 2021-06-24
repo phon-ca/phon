@@ -489,7 +489,7 @@ exports.PatternFilter = function (id) {
 		var retVal = new Array();
 
 		var strA = (caseSensitive == true ? obj.toString(): obj.toString().toLowerCase());
-		var strB = (caseSensitive == true ? filter: filter.toLowerCase());
+		var strB = (caseSensitive == true ? filter : filter.toLowerCase());
 
 		if (exactMatch == true) {
 			if (strA.equals(strB)) {
@@ -528,7 +528,7 @@ exports.PatternFilter = function (id) {
 							position = "all";
 						else
 							position = "initial";
-					} else if(i + strB.length() == strA().length()) {
+					} else if(i + strB.length() == strA.length()) {
 						position = "final";
 					} else {
 						position = "medial";
