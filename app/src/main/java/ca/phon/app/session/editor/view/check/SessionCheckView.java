@@ -29,27 +29,46 @@ import au.com.bytecode.opencsv.*;
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.*;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.PluginManager;
+import ca.phon.session.Session;
 import ca.phon.session.check.*;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
+import org.jdesktop.swingx.JXBusyLabel;
 
 public class SessionCheckView extends EditorView {
 	
 	public final static String VIEW_NAME = "Session Check";
 	
 	public final static String ICON_NAME = "emblems/flag-red";
-	
+
+	private DropDownButton settingsButton;
+
+	private JXBusyLabel busyLabel;
 	private JButton refreshButton;
-	
-//	final String[] showOptions = { "Warnings for session", "Warnings for current record" };
-//	private JComboBox<String> showBox;
-	
+
 	private BufferPanel bufferPanel;
-	
+
 	public SessionCheckView(SessionEditor editor) {
 		super(editor);
-		
+
 		init();
 		refresh();
+	}
+
+	private boolean doCheck(SessionCheck check) {
+		String checkProp = check.getClass().getName() + ".checkByDefault";
+		boolean doCheck = PrefHelper.getBoolean(checkProp, check.performCheckByDefault());
+		return doCheck;
+	}
+
+	private void setDoCheck(SessionCheck check, boolean doCheck) {
+		String checkProp = check.getClass().getName() + ".checkByDefault";
+		PrefHelper.getUserPreferences().putBoolean(checkProp, doCheck);
 	}
 	
 	private void init() {
@@ -57,18 +76,56 @@ public class SessionCheckView extends EditorView {
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		
-//		showBox = new JComboBox<>(showOptions);
-//		showBox.addItemListener( (e) -> {
-//			if(e.getStateChange() == ItemEvent.SELECTED) {
-//				refresh();
-//			}
-//		});
-//		
-//		toolBar.add(new JLabel("Show:"));
-//		toolBar.add(showBox);
-//		toolBar.addSeparator();
-		
+
+		final JPopupMenu settingsMenu = new JPopupMenu();
+		settingsMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				settingsMenu.removeAll();
+
+				for(IPluginExtensionPoint<SessionCheck> extPt:PluginManager.getInstance().getExtensionPoints(SessionCheck.class)) {
+					SessionCheck check = extPt.getFactory().createObject();
+					PhonPlugin pluginInfo = check.getClass().getAnnotation(PhonPlugin.class);
+					if(pluginInfo != null) {
+						JCheckBoxMenuItem item = new JCheckBoxMenuItem(pluginInfo.name());
+						item.setSelected(doCheck(check));
+						item.addActionListener( (evt) -> {
+							setDoCheck(check, item.isSelected());
+							refresh();
+						});
+						settingsMenu.add(item);
+					}
+				}
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+
+			}
+
+		});
+
+		final PhonUIAction dropDownAct = new PhonUIAction(this, "noop");
+		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
+		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select session checks...");
+		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, settingsMenu);
+		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
+		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+
+		settingsButton = new DropDownButton(dropDownAct);
+		settingsButton.setOnlyPopup(true);
+		toolBar.add(settingsButton);
+
+		toolBar.addSeparator();
+
+		busyLabel = new JXBusyLabel(new Dimension(16, 16));
+		toolBar.add(busyLabel);
+
 		refreshButton = new JButton(new SessionCheckRefreshAction(this));
 		toolBar.add(refreshButton);
 		
@@ -80,6 +137,7 @@ public class SessionCheckView extends EditorView {
 
 	public void refresh() {
 		bufferPanel.clear();
+		busyLabel.setBusy(true);
 		
 		SessionCheckWorker worker = new SessionCheckWorker();
 		worker.execute();
@@ -174,8 +232,15 @@ public class SessionCheckView extends EditorView {
 		@Override
 		protected List<ValidationEvent> doInBackground() throws Exception {
 			List<ValidationEvent> events = new ArrayList<>();
-			
-			SessionValidator validator = new SessionValidator();
+
+			List<SessionCheck> checks = new ArrayList<>();
+			for(IPluginExtensionPoint<SessionCheck> extPt:PluginManager.getInstance().getExtensionPoints(SessionCheck.class)) {
+				SessionCheck check = extPt.getFactory().createObject();
+				if(doCheck(check))
+					checks.add(check);
+			}
+
+			SessionValidator validator = new SessionValidator(checks);
 			validator.putExtension(SessionEditor.class, getEditor());
 			validator.addValidationListener( (e) -> {
 				events.add(e);
@@ -232,6 +297,12 @@ public class SessionCheckView extends EditorView {
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.warning(e);
 			}
+
+			SwingUtilities.invokeLater( () -> {
+				bufferPanel.getDataTable().packAll();
+			});
+
+			busyLabel.setBusy(false);
 		}
 		
 	}
