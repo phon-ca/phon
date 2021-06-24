@@ -97,7 +97,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 			checkBox.setSelected(inc);
 		}
 	}
-	
+
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		Project project = (Project)context.get(projectInput);
@@ -135,7 +135,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		
 		SessionValidator validator = new SessionValidator(
 				getChecks().stream()
-					.filter( checkMap::get )
+					.filter( this::isIncludeCheck )
 					.collect( Collectors.toList() ));
 		validator.addValidationListener( (ve) -> {
 			Object row[] = new Object[warningsTable.getColumnCount()];
@@ -218,7 +218,9 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 					gbc.gridy++;
 										
 					Component comp = checkUI.getComponent();
-					checkBox.addActionListener( (e) -> comp.setEnabled(checkBox.isSelected()) );
+					checkBox.addActionListener( (e) -> {
+						comp.setEnabled(checkBox.isSelected());
+					} );
 					checkPanel.add(comp, gbc);
 				}
 				
