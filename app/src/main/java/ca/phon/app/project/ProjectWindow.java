@@ -566,6 +566,13 @@ public class ProjectWindow extends CommonModuleFrame {
 				corpusList.requestFocusInWindow();
 			});
 		}
+
+		addWindowFocusListener(new WindowAdapter() {
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				refreshProject();
+			}
+		});
 	}
 	
 	private void setupProjectInformationPanel() {

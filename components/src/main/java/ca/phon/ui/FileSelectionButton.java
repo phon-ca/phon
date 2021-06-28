@@ -7,15 +7,14 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OSInfo;
-import ca.phon.util.RecentFiles;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -30,40 +29,44 @@ public class FileSelectionButton extends MultiActionButton {
 	private File selection;
 
 	// file history
-	private RecentFiles files;
+	private Iterable<File> files;
+
+	private FileFilter fileFilter;
 
 	private boolean selectFile = true;
 
 	private boolean selectFolder = false;
 
 	public FileSelectionButton() {
-		this(null);
-	}
-
-	public FileSelectionButton(String historyProp) {
 		super();
-
-		setHistoryPropertyKey(historyProp);
 		init();
 	}
 
-	public void setHistoryPropertyKey(String property) {
-		if(property != null) {
-			this.files = new RecentFiles(property);
+	public void setFiles(Iterable<File> files) {
+		this.files = files;
 
-			PhonUIAction selectHistoryAct =
-					new PhonUIAction(this, "onShowHistory");
-			selectHistoryAct.putValue(Action.NAME, "Select file");
-			selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Select file/folder");
-			setDefaultAction(selectHistoryAct);
+		if(this.files != null) {
+			PhonUIAction showFilesAct =
+					new PhonUIAction(this, "onShowFiles");
+			showFilesAct.putValue(Action.NAME, "Select file");
+			showFilesAct.putValue(Action.SHORT_DESCRIPTION, "Select file/folder");
+			setDefaultAction(showFilesAct);
 		} else {
 			this.files = null;
 			setDefaultAction(createBrowseAction());
 		}
 	}
 
-	public String getHistoryPropertyKey() {
-		return (this.files != null ? this.files.getPropertyKey() : null);
+	public Iterable<File> getFiles() {
+		return this.files;
+	}
+
+	public FileFilter getFileFilter() {
+		return fileFilter;
+	}
+
+	public void setFileFilter(FileFilter fileFilter) {
+		this.fileFilter = fileFilter;
 	}
 
 	public boolean isSelectFile() {
@@ -91,13 +94,13 @@ public class FileSelectionButton extends MultiActionButton {
 	}
 
 	public void setSelection(File selection) {
+		var oldVal = this.selection;
 		this.selection = selection;
-		update();
+		firePropertyChange("selection", oldVal, this.selection);
 	}
 
 	private void init() {
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
 
 		StockIcon stockIcon =
 				(OSInfo.isMacOs() ? MacOSStockIcon.GenericFolderIcon : WindowsStockIcon.FOLDER);
@@ -108,6 +111,8 @@ public class FileSelectionButton extends MultiActionButton {
 		getTopLabel().setIcon(ddicn);
 		getTopLabel().setFont(FontPreferences.getTitleFont());
 		update();
+
+		addPropertyChangeListener("selection", (e) -> this.update() );
 	}
 
 	private void update() {
@@ -120,7 +125,7 @@ public class FileSelectionButton extends MultiActionButton {
 		}
 	}
 
-	public void onShowHistory(PhonActionEvent pae) {
+	public void onShowFiles(PhonActionEvent pae) {
 		if(this.files == null)  return;
 
 		JPopupMenu menu = new JPopupMenu();
@@ -137,6 +142,8 @@ public class FileSelectionButton extends MultiActionButton {
 			}
 			builder.addSeparator(".", "history");
 			builder.addItem(".", createBrowseAction());
+
+			menu.show(this, 0, getHeight());
 		} else {
 			createBrowseAction().actionPerformed(pae.getActionEvent());
 		}
@@ -148,6 +155,8 @@ public class FileSelectionButton extends MultiActionButton {
 		props.setAllowMultipleSelection(false);
 		props.setCanChooseFiles(this.selectFile);
 		props.setCanChooseDirectories(this.selectFolder);
+		props.setFileFilter(fileFilter);
+		props.setRunAsync(false);
 
 		List<String> selection = NativeDialogs.showOpenDialog(props);
 		if(selection.size() > 0) {
