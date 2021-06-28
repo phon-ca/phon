@@ -116,7 +116,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 			if(word.getSuffix() != null) {
 				try {
 					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().toString().length() : 0) + word.getWord().length();
-					getHighlighter().addHighlight(i, i+word.getSuffix().toString().length()+1, suffixPainter);
+					getHighlighter().addHighlight(i, i+word.getSuffix().toString().length(), suffixPainter);
 							
 				} catch (BadLocationException e)  {}
 			}
