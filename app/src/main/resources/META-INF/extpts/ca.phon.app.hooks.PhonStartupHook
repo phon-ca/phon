@@ -1,3 +1,5 @@
+# Workspace Creation
+ca.phon.app.CreateWorkspaceStartupHook
 # Desktop
 ca.phon.app.PhonDesktopStartupHook
 # StartupHook

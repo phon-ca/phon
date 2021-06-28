@@ -67,11 +67,6 @@ private final static String TXT = "New project...";
 		props.setPrompt("Create Project");
 		props.setRunAsync(true);
 
-		// make sure workspace exists!
-		if(!Workspace.userWorkspaceFolder().exists()) {
-			Workspace.userWorkspaceFolder().mkdirs();
-		}
-
 		props.setInitialFolder(Workspace.userWorkspaceFolder().getAbsolutePath());
 		props.setListener( (e) -> {
 			if(e.getDialogData() != null) {
