@@ -50,7 +50,7 @@ import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Set;
@@ -157,7 +157,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 			PrefHelper.getUserPreferences().putBoolean(WORKSPACE_PROJECTS_COLLAPSED, cpane.isCollapsed());
 		});
 		workspaceContainer = new TitledPanel("Workspace", cpane);
-		workspaceProjectsPanel.setPreferredSize(new Dimension(0, 300));
+		workspaceProjectsPanel.setPreferredSize(new Dimension(0, 310));
 		workspaceContainer.getTitleLabel().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		workspaceContainer.getTitleLabel().setToolTipText("Click to collapse/show workspace projects");
 		workspaceContainer.getTitleLabel().addMouseListener(new MouseInputAdapter() {
@@ -191,6 +191,13 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		rightPanel.add(recentProjectsContainer, BorderLayout.CENTER);
 
 		add(rightPanel, BorderLayout.CENTER);
+
+		addWindowFocusListener(new WindowAdapter() {
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				refreshWorkspaceProjects();
+			}
+		});
 	}
 
 	private void updateWorkspaceDecoration(JXCollapsiblePane cpane) {
