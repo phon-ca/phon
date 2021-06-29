@@ -164,7 +164,7 @@ public class FileSelectionButton extends MultiActionButton {
 		}
 	}
 
-	private Action createBrowseAction() {
+	public Action createBrowseAction() {
 		PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
 		browseAct.putValue(PhonUIAction.NAME, "Browse...");
 		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for file/folder...");
