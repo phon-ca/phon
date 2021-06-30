@@ -166,7 +166,7 @@ public class FileSelectionButton extends MultiActionButton {
 		props.setRunAsync(false);
 
 		List<String> selection = NativeDialogs.showOpenDialog(props);
-		if(selection.size() > 0) {
+		if(selection != null && selection.size() > 0) {
 			setSelection(selection.get(0));
 		}
 	}
