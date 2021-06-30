@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.1-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1-beta_1.dmg" newVersion="3.3.1-beta.1" newMediaFileId="macos" fileSize="286825735" md5Sum="427a20dd042682f1df0523d25a88648f" sha256Sum="193f0945b702850a7d17c38b07576f68ede5315cff893d4252dd7a831f8b433a" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.1-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1-beta_2.dmg" newVersion="3.3.1-beta.2" newMediaFileId="macos" fileSize="286860223" md5Sum="9c78e44d92eb4550d1a55b5b0582ac5d" sha256Sum="f10efc588e337a8cc6ad4939b810c9881a80edc0f212054c62d70616edbc2d5d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.0
 
 ### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
  * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
  * Fixed issues related to session check
  * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
 
 ### Phonex
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
@@ -435,13 +451,29 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1-beta_1.dmg" newVersion="3.3.1-beta.1" newMediaFileId="macos" fileSize="286825735" md5Sum="427a20dd042682f1df0523d25a88648f" sha256Sum="193f0945b702850a7d17c38b07576f68ede5315cff893d4252dd7a831f8b433a" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1-beta_2.dmg" newVersion="3.3.1-beta.2" newMediaFileId="macos" fileSize="286860223" md5Sum="9c78e44d92eb4550d1a55b5b0582ac5d" sha256Sum="f10efc588e337a8cc6ad4939b810c9881a80edc0f212054c62d70616edbc2d5d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.0
 
 ### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
  * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
  * Fixed issues related to session check
  * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
 
 ### Phonex
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
@@ -870,13 +902,29 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_1.exe" newVersion="3.3.1-beta.1" newMediaFileId="win64" fileSize="302305824" md5Sum="648f8056504b6c9ea8a7b3f0f0a95789" sha256Sum="db6481cd19adda9bb3b91a2d175d14329ba0411cf05c20c00c4b3cd7a0042078" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.exe" newVersion="3.3.1-beta.2" newMediaFileId="win64" fileSize="302328864" md5Sum="83263ae536e85b8ba463566cf26663c5" sha256Sum="e51557e362bfd6efa039e56f4cfc29f3e6ba4c541b61e1b80754bdc244741528" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
  * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
  * Fixed issues related to session check
  * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
 
 ### Phonex
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
@@ -1305,13 +1353,29 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_1.exe" newVersion="3.3.1-beta.1" newMediaFileId="win64" fileSize="302305824" md5Sum="648f8056504b6c9ea8a7b3f0f0a95789" sha256Sum="db6481cd19adda9bb3b91a2d175d14329ba0411cf05c20c00c4b3cd7a0042078" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.exe" newVersion="3.3.1-beta.2" newMediaFileId="win64" fileSize="302328864" md5Sum="83263ae536e85b8ba463566cf26663c5" sha256Sum="e51557e362bfd6efa039e56f4cfc29f3e6ba4c541b61e1b80754bdc244741528" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
  * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
  * Fixed issues related to session check
  * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
 
 ### Phonex
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
@@ -1740,13 +1804,29 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_1.exe" newVersion="3.3.1-beta.1" newMediaFileId="win64" fileSize="302305824" md5Sum="648f8056504b6c9ea8a7b3f0f0a95789" sha256Sum="db6481cd19adda9bb3b91a2d175d14329ba0411cf05c20c00c4b3cd7a0042078" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.exe" newVersion="3.3.1-beta.2" newMediaFileId="win64" fileSize="302328864" md5Sum="83263ae536e85b8ba463566cf26663c5" sha256Sum="e51557e362bfd6efa039e56f4cfc29f3e6ba4c541b61e1b80754bdc244741528" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
  * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
  * Fixed issues related to session check
  * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
 
 ### Phonex
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
@@ -2175,13 +2255,29 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_1.zip" newVersion="3.3.1-beta.1" newMediaFileId="win64zip" fileSize="301266838" md5Sum="b8c02aa8ccadfffacb18b2c3e81c91a7" sha256Sum="2ab6bdefe8308538494dc8bdb6a1c4f721524f4101474fa7489ee0b7299378b7" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.zip" newVersion="3.3.1-beta.2" newMediaFileId="win64zip" fileSize="301289230" md5Sum="977383c4d8d6a70dc257d645a56c656a" sha256Sum="bdd35ef465f0d12757e8a9c93b41df5a0a4c8f74f8fd85421baa20324a50a820" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
  * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
  * Fixed issues related to session check
  * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
 
 ### Phonex
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```

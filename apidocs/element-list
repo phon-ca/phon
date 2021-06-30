@@ -135,6 +135,7 @@ ca.phon.phonex.plugins
 ca.phon.phonexg4
 ca.phon.phontalk
 ca.phon.phontalk.parser
+ca.phon.phontalk.plugin
 ca.phon.plugin
 ca.phon.project
 ca.phon.project.exceptions
