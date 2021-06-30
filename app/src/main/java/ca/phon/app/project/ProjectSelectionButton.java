@@ -26,7 +26,7 @@ public class ProjectSelectionButton extends FileSelectionButton {
 		setSelectFile(false);
 		setSelectFolder(true);
 
-		getTopLabel().setText("Select Project (click select a project folder)");
+		getTopLabel().setText("Project folder (click select a project folder)");
 
 		List<File> projectFiles = Workspace.userWorkspace().getProjects()
 				.stream().map( p -> new File(p.getLocation()) ).collect(Collectors.toList());

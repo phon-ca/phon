@@ -5,6 +5,7 @@ import ca.hedlund.desktopicons.StockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -13,10 +14,12 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.plaf.LoginPaneUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.awt.datatransfer.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,6 +116,10 @@ public class FileSelectionButton extends MultiActionButton {
 		update();
 
 		addPropertyChangeListener("selection", (e) -> this.update() );
+
+		// setup drop target
+		TransferHandler handler = new TransferHandler();
+		setTransferHandler(handler);
 	}
 
 	private void update() {
@@ -171,6 +178,27 @@ public class FileSelectionButton extends MultiActionButton {
 		browseAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL));
 		browseAct.putValue(PhonUIAction.LARGE_ICON_KEY, IconManager.getInstance().getIcon("actions/document-open", IconSize.MEDIUM));
 		return browseAct;
+	}
+
+	private class TransferHandler extends FileTransferHandler {
+
+		@Override
+		public boolean importData(JComponent comp, Transferable t) {
+			try {
+				File f = getFile(t);
+
+				if(!f.exists()) return false;
+
+				if(!isSelectFile() && f.isFile()) return false;
+				if(!isSelectFolder() && f.isDirectory()) return false;
+
+				setSelection(f);
+			} catch (IOException e) {
+				return false;
+			}
+			return true;
+		}
+
 	}
 
 }
