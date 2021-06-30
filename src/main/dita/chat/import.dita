@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="import_project">
-    <title>Import Project</title>
+    <title>Import from CHAT/TalkBank (beta)</title>
     <body>
-        <p>Create a new Phon project from a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
+        <p>Import to Phon from a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
         <p>Corpora in CHAT format may be downloaded from:</p>
         <ul>
             <li><p><xref href="https://phonbank.talkbank.org/access/" format="html" scope="external"
@@ -27,7 +27,7 @@
             <p>Open Phon, choose <menucascade>
                     <uicontrol>File</uicontrol>
                     <uicontrol>Import Project</uicontrol>
-                </menucascade> from the window menu:</p>
+                </menucascade> from the window menu, you will see the screen below:</p>
             <fig id="fig_import_project">
                 <image placement="break" href="images/import_project_step1a.png"
                     id="image_mml_wlb_2nb">
@@ -35,26 +35,35 @@
             </fig>
             <section>
                 <title>Select files</title>
-                <p>Enter the folder for import in the first field - you may type the filename or use
-                    the browse button. The folder name will be
-                        <filepath>/Volumes/Data/PhonBank-CHAT/CLPF</filepath> in our example. After
-                    selecting the import folder the <uicontrol>Project name</uicontrol> field will
-                    automatically be filled using the name of the selected import folder. A list of
-                    available files for import will be displayed in the file selection tree.</p>
-                  <fig id="fig_import_project_step1">
-                      <image placement="break" href="images/import_project_step1b.png"
-                          id="image_mml_wlb_2bb">
-                      </image>
-                  </fig>
-                <p>Enter the folder where the new project will be created in the export folder field. By
-                    default this will be set to your workspace folder. In the example below we use the
-                    folder <filepath>/Volumes/Data/PhonBank</filepath>. The project folder will include
-                    the project name, so the project folder in our example will be
-                        <filepath>/Volumes/Data/PhonBank/CLPF</filepath>.</p>
-                <p>Select files for import using the checkboxes in the file selection tree. Be default
-                    all files will be selected and any CHAT (.cha) or TalkBank (.xml) files will be
-                    detected and selected for conversion. All other files will be copied into the
-                    project folder.</p>
+                <p>Select the folder for import by clicking the <uicontrol>Import folder</uicontrol>
+                    button. (The folder name will be
+                        <filepath>/Volumes/Data/PhonBank-CHAT/CLPF</filepath> in our example.) Once
+                    selected the contents of the folder will appear in the <uicontrol>File
+                        selection</uicontrol> tree. Select files for import using the checkboxes. Be
+                    default all files will be selected and any CHAT (.cha) or TalkBank (.xml) files
+                    will be detected and selected for conversion. All other files will be copied
+                    into the project folder.</p>
+                <fig id="fig_import_project_select_files">
+                    <image placement="break" href="images/import_project_step1b.png"
+                        id="image_mml_wlb_2na">
+                    </image>
+                </fig>
+                <p>After selecting the import folder choose one of three actions for the import:<ul
+                        id="ul_kb4_z4r_cqb">
+                        <li><uicontrol>Create new project in workspace folder</uicontrol> - this
+                            option will be selected by default if the wizard is started from the
+                                <wintitle>Welcome</wintitle> window. A new project containing the
+                            selected files will be created in the current workspace folder.</li>
+                        <li><uicontrol>Add files to existing Phon project</uicontrol> - this option
+                            will be selected by default if the wizard is started from the
+                                <wintitle>Project Manager</wintitle> window. When selected a new
+                            button for selecting a project folder will become available.</li>
+                        <li><uicontrol>Advanced (keep existing folder structure)</uicontrol> - files
+                            will be exported using the same relative paths as the import folder.
+                            When selected a new button for selecting an output folder will become
+                            available. This option is useful for round-trip testing of data.</li>
+                    </ul></p>
+                
             </section>
             <section>
                 <title>Options</title>
@@ -89,7 +98,7 @@
                 </fig>
             </section>
             <p>To export this project back to CHAT or TalkBank format follow the instructions at
-                    <xref href="export_project.dita"/>.</p>
+                    <xref href="export.dita"/>.</p>
         </body>
     </topic>
 </topic>

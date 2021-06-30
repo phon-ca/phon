@@ -154,8 +154,8 @@
     </chapter>
     <chapter navtitle="CHAT Support">
         <topicref href="chat/phontalk.dita" format="dita"/>
-        <topicref href="chat/import_project.dita" format="dita"/>
-        <topicref href="chat/export_project.dita" format="dita"/>
+        <topicref href="chat/import.dita" format="dita"/>
+        <topicref href="chat/export.dita" format="dita"/>
         <topicref href="chat/main_line.dita" format="dita"/>
     </chapter>
 </bookmap>

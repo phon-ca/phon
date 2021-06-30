@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="export_project">
-    <title>Export Project</title>
+    <title>Export to CHAT/TalkBank (beta)</title>
     <body>
         <p>Export a Phon project to a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
         <p>The <wintitle>Export Project</wintitle> wizard is available from the
@@ -11,7 +11,7 @@
         <title>Example</title>
         <body>
             <p>For this example we will export the CLPF Project created using the steps found at
-                    <xref href="import_project.dita"/>.</p>
+                    <xref href="import.dita"/>.</p>
             <p>Open Phon, choose <menucascade>
                     <uicontrol>File</uicontrol>
                     <uicontrol>Export Project</uicontrol>
@@ -23,11 +23,11 @@
                 </fig>
             <section id="select_files">
                 <title>Select files</title>
-                <p>Select the project folder for export in the first field - you may type the filename
-                    or use the browse button. If the project is open, this will already be selected. The
-                    folder name will be <filepath>/Volumes/PhonBank/CLPF</filepath> in our example.
-                    After selecting the project folder a list of available files for export will be
-                    displayed in the file selection tree. </p>
+                <p>Select the project folder for export by clicking the <uicontrol>Project
+                        folder</uicontrol> button. If the project is open, this will already be
+                    selected. The folder name will be <filepath>/Volumes/PhonBank/CLPF</filepath> in
+                    our example. After selecting the project folder a list of available files for
+                    export will be displayed in the file selection tree. </p>
                 <fig id="fig_export_project_step1">
                     <image placement="break" href="images/export_project_step1b.png"
                         id="image_mml_wlb_2bb">
