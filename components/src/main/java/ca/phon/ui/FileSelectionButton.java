@@ -162,6 +162,7 @@ public class FileSelectionButton extends MultiActionButton {
 		props.setAllowMultipleSelection(false);
 		props.setCanChooseFiles(this.selectFile);
 		props.setCanChooseDirectories(this.selectFolder);
+		props.setCanCreateDirectories(true);
 		props.setFileFilter(fileFilter);
 		props.setRunAsync(false);
 
