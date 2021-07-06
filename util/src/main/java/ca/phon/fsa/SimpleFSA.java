@@ -35,6 +35,16 @@ public class SimpleFSA<T> {
 	private Set<String> finalStates;
 	/** The transitions */
 	private List<FSATransition<T>> transitions;
+
+	/**
+	 * Number of groups
+	 */
+	private int numberOfGroups = 0;
+
+	/**
+	 * Group names
+	 */
+	private String[] groupNames = new String[0];
 	
 	public SimpleFSA() {
 		super();
@@ -47,7 +57,98 @@ public class SimpleFSA<T> {
 		this.transitions = 
 			Collections.synchronizedList(new ArrayList<FSATransition<T>>());
 	}
-	
+
+	/**
+	 * Set the number of groups
+	 *
+	 * @param numberOfGroups
+	 */
+	public void setNumberOfGroups(int numberOfGroups) {
+		this.numberOfGroups = numberOfGroups;
+		this.groupNames = Arrays.copyOf(this.groupNames, numberOfGroups);
+	}
+
+	/**
+	 * Get the number of groups
+	 *
+	 * @return the number of groups
+	 */
+	public int getNumberOfGroups() {
+		return this.numberOfGroups;
+	}
+
+	/**
+	 * Get a list of all named groups
+	 *
+	 * @return list of group names
+	 */
+	public List<String> getGroupNames() {
+		List<String> retVal = new ArrayList<>();
+
+		for(int gIdx = 1; gIdx <= numberOfGroups; gIdx++) {
+			if(groupNames[gIdx-1] != null) {
+				retVal.add(groupNames[gIdx-1]);
+			}
+		}
+
+		return retVal;
+	}
+
+	/**
+	 * Get index of named group.
+	 *
+	 * @return index of named group or -1 if not found
+	 */
+	public int getGroupIndex(String groupName) {
+		int retVal = Arrays.asList(groupNames).indexOf(groupName);
+		if(retVal >= 0) {
+			return retVal+1;
+		}
+		return -1;
+	}
+
+	/**
+	 * Get the group name for the given
+	 * index.
+	 *
+	 * @param groupIndex
+	 * @return the group name or <code>null</code>
+	 *  if group is not named
+	 */
+	public String getGroupName(int groupIndex) {
+		String retVal = null;
+
+		if(groupIndex > 0 && groupIndex <= numberOfGroups) {
+			retVal = groupNames[groupIndex-1];
+		}
+
+		if(retVal == null) retVal = "";
+
+		return retVal;
+	}
+
+	/**
+	 * Set name of a group.
+	 * Set during compile time.
+	 *
+	 * @param groupIndex
+	 * @param groupName
+	 */
+	public void setGroupName(int groupIndex, String groupName) {
+		if(groupIndex > 0 && groupIndex <= numberOfGroups) {
+			groupNames[groupIndex-1] = groupName;
+		}
+	}
+
+	public void stripGroups() {
+		for(String state:getStates()) {
+			for(FSATransition<T> trans:getTransitionsForState(state)) {
+				trans.getInitGroups().clear();
+				trans.getMatcherGroups().clear();
+			}
+		}
+	}
+
 	/**
 	 * Add a new state to the machine.
 	 * 
