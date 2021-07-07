@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="import_project">
-    <title>Import from CHAT/TalkBank (beta)</title>
+    <title>Import from CHAT/TalkBank</title>
     <body>
         <p>Import to Phon from a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
         <p>Corpora in CHAT format may be downloaded from:</p>
         <ul>
-            <li><p><xref href="https://phonbank.talkbank.org/access/" format="html" scope="external"
-                        >Index to PhonBank corpora</xref></p></li>
-            <li><p><xref href="https://childes.talkbank.org/access/" format="html" scope="external"
-                        >Index to CHILDES corpora</xref></p></li>
+            <li>
+                <p><xref href="https://phonbank.talkbank.org/access/" format="html" scope="external"
+                        >Index to PhonBank corpora</xref></p>
+            </li>
+            <li>
+                <p><xref href="https://childes.talkbank.org/access/" format="html" scope="external"
+                        >Index to CHILDES corpora</xref></p>
+            </li>
         </ul>
         <p>The <wintitle>Import Project</wintitle> wizard is available from the
                 <uicontrol>File</uicontrol> menu in Phon.</p>
@@ -30,8 +34,7 @@
                 </menucascade> from the window menu, you will see the screen below:</p>
             <fig id="fig_import_project">
                 <image placement="break" href="images/import_project_step1a.png"
-                    id="image_mml_wlb_2nb">
-                </image>
+                    id="image_mml_wlb_2nb"/>
             </fig>
             <section>
                 <title>Select files</title>
@@ -45,8 +48,7 @@
                     into the project folder.</p>
                 <fig id="fig_import_project_select_files">
                     <image placement="break" href="images/import_project_step1b.png"
-                        id="image_mml_wlb_2na">
-                    </image>
+                        id="image_mml_wlb_2na"/>
                 </fig>
                 <p>After selecting the import folder choose one of three actions for the import:<ul
                         id="ul_kb4_z4r_cqb">
@@ -63,7 +65,6 @@
                             When selected a new button for selecting an output folder will become
                             available. This option is useful for round-trip testing of data.</li>
                     </ul></p>
-                
             </section>
             <section>
                 <title>Options</title>
@@ -72,29 +73,26 @@
                     transcriptions found in the CHAT files for import. </p>
                 <fig id="fig_import_project_step2">
                     <image placement="break" href="images/import_project_step2.png"
-                        id="image_mml_wlb_2xb">
-                    </image>
+                        id="image_mml_wlb_2xb"/>
                 </fig>
             </section>
             <section>
                 <title>Import</title>
-                <p>Click the <uicontrol>Next</uicontrol> button again to move to the import step. All
-                    selected files will appear in the table on the left and a log will appear on the
-                    right side of the window. The import process may take some time. The import may be
-                    canceled at any time using the <uicontrol>Stop</uicontrol> button at the top of the
-                    window. </p>
-                    <fig id="fig_import_project_step3">
-                        <image placement="break" href="images/import_project_step3a.png"
-                            id="image_mml_wlb_3nb">
-                        </image>
-                    </fig>
-                <p>When the import has been completed options to <uicontrol>Open project</uicontrol>,
-                        <uicontrol>Run again</uicontrol> and <uicontrol>Close window</uicontrol> are
-                    displayed. </p>
+                <p>Click the <uicontrol>Next</uicontrol> button again to move to the import step.
+                    All selected files will appear in the table on the left and a log will appear on
+                    the right side of the window. The import process may take some time. The import
+                    may be canceled at any time using the <uicontrol>Stop</uicontrol> button at the
+                    top of the window. </p>
+                <fig id="fig_import_project_step3">
+                    <image placement="break" href="images/import_project_step3a.png"
+                        id="image_mml_wlb_3nb"/>
+                </fig>
+                <p>When the import has been completed options to <uicontrol>Open
+                    project</uicontrol>, <uicontrol>Run again</uicontrol> and <uicontrol>Close
+                        window</uicontrol> are displayed. </p>
                 <fig id="fig_import_project_complete">
                     <image placement="break" href="images/import_project_step3b.png"
-                        id="image_mml_wlb_34b">
-                    </image>
+                        id="image_mml_wlb_34b"/>
                 </fig>
             </section>
             <p>To export this project back to CHAT or TalkBank format follow the instructions at

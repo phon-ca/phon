@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="export_project">
-    <title>Export to CHAT/TalkBank (beta)</title>
+    <title>Export to CHAT/TalkBank</title>
     <body>
         <p>Export a Phon project to a folder of CHAT (.cha) or TalkBank (.xml) files.</p>
         <p>The <wintitle>Export Project</wintitle> wizard is available from the
@@ -16,11 +16,10 @@
                     <uicontrol>File</uicontrol>
                     <uicontrol>Export Project</uicontrol>
                 </menucascade> from the window menu:</p>
-                <fig id="fig_export_project">
-                    <image placement="break" href="images/export_project_step1a.png"
-                        id="image_mml_wlb_2nb">
-                    </image>
-                </fig>
+            <fig id="fig_export_project">
+                <image placement="break" href="images/export_project_step1a.png"
+                    id="image_mml_wlb_2nb"/>
+            </fig>
             <section id="select_files">
                 <title>Select files</title>
                 <p>Select the project folder for export by clicking the <uicontrol>Project
@@ -30,47 +29,44 @@
                     export will be displayed in the file selection tree. </p>
                 <fig id="fig_export_project_step1">
                     <image placement="break" href="images/export_project_step1b.png"
-                        id="image_mml_wlb_2bb">
-                    </image>
+                        id="image_mml_wlb_2bb"/>
                 </fig>
-                <p>Enter the folder where the project will be exported in the output folder field. In
-                    the example below we use the folder <filepath>/Volumes/Data/PhonBank-CHAT
-                        Export</filepath>. The project name will be included as the first item in the
-                    export path for all files.</p>
-                <p>Select files for export using the checkboxes in the file selection tree. Be default
-                    all files will be selected and all Phon session files will be detected and selected
-                    for conversion. All other files will be copied into the export folder.</p>
+                <p>Enter the folder where the project will be exported in the output folder field.
+                    In the example below we use the folder <filepath>/Volumes/Data/PhonBank-CHAT
+                        Export</filepath>. The project name will be included as the first item in
+                    the export path for all files.</p>
+                <p>Select files for export using the checkboxes in the file selection tree. Be
+                    default all files will be selected and all Phon session files will be detected
+                    and selected for conversion. All other files will be copied into the export
+                    folder.</p>
             </section>
             <section id="options">
                 <title>Options</title>
                 <p>Click the <uicontrol>Next</uicontrol> button at the top of the wizard to view the
-                    Options step. In this step you may choose to export Phon sessions as CHAT (.cha) or
-                    TalkBank (.xml) format.</p>
+                    Options step. In this step you may choose to export Phon sessions as CHAT (.cha)
+                    or TalkBank (.xml) format.</p>
                 <fig id="fig_export_project_step2">
                     <image placement="break" href="images/export_project_step2.png"
-                        id="image_mml_wlb_2db">
-                    </image>
+                        id="image_mml_wlb_2db"/>
                 </fig>
             </section>
             <section id="export">
                 <title>Export</title>
-            <p>Click the <uicontrol>Next</uicontrol> button again to move to the export step. All
-                selected files will appear in the table on the left and a log will appear on the
-                right side of the window. The export process may take some time. The export may be
-                canceled at any time using the <uicontrol>Stop</uicontrol> button at the top of the
-                window.</p>
+                <p>Click the <uicontrol>Next</uicontrol> button again to move to the export step.
+                    All selected files will appear in the table on the left and a log will appear on
+                    the right side of the window. The export process may take some time. The export
+                    may be canceled at any time using the <uicontrol>Stop</uicontrol> button at the
+                    top of the window.</p>
                 <fig id="fig_export_project_step3">
                     <image placement="break" href="images/export_project_step3a.png"
-                        id="image_mml_wlb_3nb">
-                    </image>
+                        id="image_mml_wlb_3nb"/>
                 </fig>
-            <p>When the export has been completed options to <uicontrol>Open folder</uicontrol>,
-                    <uicontrol>Run again</uicontrol> and <uicontrol>Close window</uicontrol> are
-                displayed.</p>
+                <p>When the export has been completed options to <uicontrol>Open folder</uicontrol>,
+                        <uicontrol>Run again</uicontrol> and <uicontrol>Close window</uicontrol> are
+                    displayed.</p>
                 <fig id="fig_export_project_complete">
                     <image placement="break" href="images/export_project_step3b.png"
-                        id="image_mml_wlb_3hb">
-                    </image>
+                        id="image_mml_wlb_3hb"/>
                 </fig>
             </section>
         </body>
