@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1.dmg" newVersion="3.3.1" newMediaFileId="macos" fileSize="286852135" md5Sum="189f70c9e49ca18c2807cdda74bfe0f1" sha256Sum="3380664fb6a84655efd4248f6713202d3b68e18ad552770d16da8b999a492cff" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.0
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_2.dmg" newVersion="3.3.2" newMediaFileId="macos" fileSize="286850403" md5Sum="b8d4fe2244411e8f8c58ff0fa079a7db" sha256Sum="face876874e54da2f4d0c3735bd250ca06a786624e687a8054d40177a71d34de" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
 
 ### General
  * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
@@ -452,8 +456,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1.dmg" newVersion="3.3.1" newMediaFileId="macos" fileSize="286852135" md5Sum="189f70c9e49ca18c2807cdda74bfe0f1" sha256Sum="3380664fb6a84655efd4248f6713202d3b68e18ad552770d16da8b999a492cff" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.0
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_2.dmg" newVersion="3.3.2" newMediaFileId="macos" fileSize="286850403" md5Sum="b8d4fe2244411e8f8c58ff0fa079a7db" sha256Sum="face876874e54da2f4d0c3735bd250ca06a786624e687a8054d40177a71d34de" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
 
 ### General
  * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
@@ -904,8 +912,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.exe" newVersion="3.3.1" newMediaFileId="win64" fileSize="302326304" md5Sum="5d4a691d3077ebb7ff1bd883edafa070" sha256Sum="0e765ff4eb8c24dbbf24a55fe0cdef528ed7d0a7ee7d3a2a9f451ccad95550a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.0
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.exe" newVersion="3.3.2" newMediaFileId="win64" fileSize="302326816" md5Sum="e8f666783f28d3b2d2f3de60bae37bbe" sha256Sum="c5ff5d115f87d9bd46bc900039d11cc1368efae4c2d94c4d301bf1dbd70404ac" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
 
 ### General
  * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
@@ -1356,8 +1368,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.exe" newVersion="3.3.1" newMediaFileId="win64" fileSize="302326304" md5Sum="5d4a691d3077ebb7ff1bd883edafa070" sha256Sum="0e765ff4eb8c24dbbf24a55fe0cdef528ed7d0a7ee7d3a2a9f451ccad95550a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.0
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.exe" newVersion="3.3.2" newMediaFileId="win64" fileSize="302326816" md5Sum="e8f666783f28d3b2d2f3de60bae37bbe" sha256Sum="c5ff5d115f87d9bd46bc900039d11cc1368efae4c2d94c4d301bf1dbd70404ac" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
 
 ### General
  * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
@@ -1808,8 +1824,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.exe" newVersion="3.3.1" newMediaFileId="win64" fileSize="302326304" md5Sum="5d4a691d3077ebb7ff1bd883edafa070" sha256Sum="0e765ff4eb8c24dbbf24a55fe0cdef528ed7d0a7ee7d3a2a9f451ccad95550a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.0
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.exe" newVersion="3.3.2" newMediaFileId="win64" fileSize="302326816" md5Sum="e8f666783f28d3b2d2f3de60bae37bbe" sha256Sum="c5ff5d115f87d9bd46bc900039d11cc1368efae4c2d94c4d301bf1dbd70404ac" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
 
 ### General
  * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
@@ -2260,8 +2280,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.zip" newVersion="3.3.1" newMediaFileId="win64zip" fileSize="301278461" md5Sum="2c37dff5515512684f885e0e146f39ff" sha256Sum="8dc70b5901ba74170534b53d70a10210da98f15c328adb1fd9c77698f26ff6ca" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.0
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.zip" newVersion="3.3.2" newMediaFileId="win64zip" fileSize="301278406" md5Sum="75e2b4be78c57f1558c43af053d04fca" sha256Sum="1423ad5805bbe6736767c6c64417d499d1803276b1bdc73acfd54731c959e4f1" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
 
 ### General
  * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
