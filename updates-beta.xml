@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1.dmg" newVersion="3.3.1" newMediaFileId="macos" fileSize="286852135" md5Sum="189f70c9e49ca18c2807cdda74bfe0f1" sha256Sum="3380664fb6a84655efd4248f6713202d3b68e18ad552770d16da8b999a492cff" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.1-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1-beta_2.dmg" newVersion="3.3.1-beta.2" newMediaFileId="macos" fileSize="286860223" md5Sum="9c78e44d92eb4550d1a55b5b0582ac5d" sha256Sum="f10efc588e337a8cc6ad4939b810c9881a80edc0f212054c62d70616edbc2d5d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.0
 
 ### General
@@ -12,7 +12,6 @@
  * Fixed an issue with detecting positional information when using plain text queries
  * Fixed an issue with the 'keep like on top' option when sorting tables
  * Fixed highlight of word suffix codes
- * Update ara syllabifier
 
 ### CHAT/TalkBank Support
  * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
@@ -29,7 +28,7 @@
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
  * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
  * Regular expression matchers may be declared using single or double quotes
- * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+ * Long () and halflong () diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
 
 ## Changes from 3.2.0
 
@@ -452,7 +451,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1.dmg" newVersion="3.3.1" newMediaFileId="macos" fileSize="286852135" md5Sum="189f70c9e49ca18c2807cdda74bfe0f1" sha256Sum="3380664fb6a84655efd4248f6713202d3b68e18ad552770d16da8b999a492cff" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_1-beta_2.dmg" newVersion="3.3.1-beta.2" newMediaFileId="macos" fileSize="286860223" md5Sum="9c78e44d92eb4550d1a55b5b0582ac5d" sha256Sum="f10efc588e337a8cc6ad4939b810c9881a80edc0f212054c62d70616edbc2d5d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.0
 
 ### General
@@ -464,7 +463,6 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed an issue with detecting positional information when using plain text queries
  * Fixed an issue with the 'keep like on top' option when sorting tables
  * Fixed highlight of word suffix codes
- * Update ara syllabifier
 
 ### CHAT/TalkBank Support
  * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
@@ -481,7 +479,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
  * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
  * Regular expression matchers may be declared using single or double quotes
- * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+ * Long () and halflong () diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
 
 ## Changes from 3.2.0
 
@@ -904,7 +902,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.exe" newVersion="3.3.1" newMediaFileId="win64" fileSize="302326304" md5Sum="5d4a691d3077ebb7ff1bd883edafa070" sha256Sum="0e765ff4eb8c24dbbf24a55fe0cdef528ed7d0a7ee7d3a2a9f451ccad95550a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.exe" newVersion="3.3.1-beta.2" newMediaFileId="win64" fileSize="302328864" md5Sum="83263ae536e85b8ba463566cf26663c5" sha256Sum="e51557e362bfd6efa039e56f4cfc29f3e6ba4c541b61e1b80754bdc244741528" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
@@ -916,7 +914,6 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed an issue with detecting positional information when using plain text queries
  * Fixed an issue with the 'keep like on top' option when sorting tables
  * Fixed highlight of word suffix codes
- * Update ara syllabifier
 
 ### CHAT/TalkBank Support
  * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
@@ -933,7 +930,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
  * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
  * Regular expression matchers may be declared using single or double quotes
- * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+ * Long () and halflong () diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
 
 ## Changes from 3.2.0
 
@@ -1356,7 +1353,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.exe" newVersion="3.3.1" newMediaFileId="win64" fileSize="302326304" md5Sum="5d4a691d3077ebb7ff1bd883edafa070" sha256Sum="0e765ff4eb8c24dbbf24a55fe0cdef528ed7d0a7ee7d3a2a9f451ccad95550a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.exe" newVersion="3.3.1-beta.2" newMediaFileId="win64" fileSize="302328864" md5Sum="83263ae536e85b8ba463566cf26663c5" sha256Sum="e51557e362bfd6efa039e56f4cfc29f3e6ba4c541b61e1b80754bdc244741528" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
@@ -1368,7 +1365,6 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed an issue with detecting positional information when using plain text queries
  * Fixed an issue with the 'keep like on top' option when sorting tables
  * Fixed highlight of word suffix codes
- * Update ara syllabifier
 
 ### CHAT/TalkBank Support
  * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
@@ -1385,7 +1381,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
  * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
  * Regular expression matchers may be declared using single or double quotes
- * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+ * Long () and halflong () diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
 
 ## Changes from 3.2.0
 
@@ -1808,7 +1804,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.exe" newVersion="3.3.1" newMediaFileId="win64" fileSize="302326304" md5Sum="5d4a691d3077ebb7ff1bd883edafa070" sha256Sum="0e765ff4eb8c24dbbf24a55fe0cdef528ed7d0a7ee7d3a2a9f451ccad95550a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.exe" newVersion="3.3.1-beta.2" newMediaFileId="win64" fileSize="302328864" md5Sum="83263ae536e85b8ba463566cf26663c5" sha256Sum="e51557e362bfd6efa039e56f4cfc29f3e6ba4c541b61e1b80754bdc244741528" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
@@ -1820,7 +1816,6 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed an issue with detecting positional information when using plain text queries
  * Fixed an issue with the 'keep like on top' option when sorting tables
  * Fixed highlight of word suffix codes
- * Update ara syllabifier
 
 ### CHAT/TalkBank Support
  * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
@@ -1837,7 +1832,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
  * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
  * Regular expression matchers may be declared using single or double quotes
- * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+ * Long () and halflong () diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
 
 ## Changes from 3.2.0
 
@@ -2260,7 +2255,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1.zip" newVersion="3.3.1" newMediaFileId="win64zip" fileSize="301278461" md5Sum="2c37dff5515512684f885e0e146f39ff" sha256Sum="8dc70b5901ba74170534b53d70a10210da98f15c328adb1fd9c77698f26ff6ca" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_1-beta_2.zip" newVersion="3.3.1-beta.2" newMediaFileId="win64zip" fileSize="301289230" md5Sum="977383c4d8d6a70dc257d645a56c656a" sha256Sum="bdd35ef465f0d12757e8a9c93b41df5a0a4c8f74f8fd85421baa20324a50a820" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.0
 
 ### General
@@ -2272,7 +2267,6 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Fixed an issue with detecting positional information when using plain text queries
  * Fixed an issue with the 'keep like on top' option when sorting tables
  * Fixed highlight of word suffix codes
- * Update ara syllabifier
 
 ### CHAT/TalkBank Support
  * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
@@ -2289,7 +2283,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
  * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
  * Regular expression matchers may be declared using single or double quotes
- * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+ * Long () and halflong () diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
 
 ## Changes from 3.2.0
 
