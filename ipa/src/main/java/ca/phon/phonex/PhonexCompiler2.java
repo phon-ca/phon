@@ -44,7 +44,7 @@ import java.util.regex.PatternSyntaxException;
  * This class is used internally by PhonexPattern to compile phonex
  * strings into and FSA which can process IPAElements.
  */
-public class PhonexCompiler2 implements PhonexListener {
+public class  PhonexCompiler2 implements PhonexListener {
 
 	private PhonexFSA primaryFSA;
 
@@ -115,6 +115,17 @@ public class PhonexCompiler2 implements PhonexListener {
 		pushOrGroup();
 	}
 
+	/**
+	 * Called when compiler comes out of a group rule.
+	 * Adds the group FSA to the compiler's fsa
+	 * and fixes group indices.
+	 *
+	 * @param groupContext
+	 * @param capturing
+	 * @param name
+	 * @param quantifier
+	 * @return
+	 */
 	private PhonexFSA popGroup(PhonexParser.GroupContext groupContext, boolean capturing, String name, Quantifier quantifier) {
 		PhonexFSA grpFsa = fsaStack.pop();
 		int grpIdx = groupIndexStack.pop();
@@ -125,21 +136,22 @@ public class PhonexCompiler2 implements PhonexListener {
 			grpFsa.appendOredGroups(grpIdx, orGroup);
 		}
 		if(capturing) {
-			// update group indicies inside transitions
+			// update group indices inside transitions
 			grpFsa.setGroupIndex(grpIdx);
 		}
 		if(quantifier != null) {
 			grpFsa.applyQuantifier(quantifier);
 		}
 
+		// make current group fsa primary if the expression starts with this group
 		if(fsaStack.peek() == primaryFSA && primaryFSA.getFinalStates().length == 0) {
 			fsaStack.pop();
 			fsaStack.push(grpFsa);
 
+			// copy group information (if any) from current primaryFSA
 			if (primaryFSA.getNumberOfGroups() > grpFsa.getNumberOfGroups()) {
 				grpFsa.setNumberOfGroups(primaryFSA.getNumberOfGroups());
 			}
-
 			for (int gIdx = 1; gIdx <= primaryFSA.getNumberOfGroups(); gIdx++) {
 				String gName = primaryFSA.getGroupName(gIdx);
 				if (gName != null)
@@ -149,6 +161,7 @@ public class PhonexCompiler2 implements PhonexListener {
 		}
 
 		if(capturing) {
+			// copy group information from all machines in our current 'orGroup'
 			int maxGroupCount = grpIdx;
 			for (PhonexFSA fsa : orGroup) {
 				maxGroupCount = Math.max(maxGroupCount, fsa.getNumberOfGroups());
@@ -156,6 +169,9 @@ public class PhonexCompiler2 implements PhonexListener {
 			if (maxGroupCount > primaryFSA.getNumberOfGroups()) {
 				primaryFSA.setNumberOfGroups(maxGroupCount);
 			}
+
+			// setup nextGroupIndex if necessary
+			// this may occur when using or'ed group expressions
 			if (maxGroupCount >= nextGroupIndex) {
 				nextGroupIndex = maxGroupCount + 1;
 			}
@@ -169,7 +185,7 @@ public class PhonexCompiler2 implements PhonexListener {
 						throw new PhonexPatternException(namedCtx.group_name().start.getLine(), namedCtx.group_name().getStart().getCharPositionInLine(),
 								"Duplicate group name: " + gn);
 					}
-					primaryFSA.setGroupName(fsa.getGroupIndex(gn), gn);
+					primaryFSA.setGroupName(gidx, gn);
 				}
 			}
 		} else {
@@ -200,6 +216,13 @@ public class PhonexCompiler2 implements PhonexListener {
 		return grpFsa;
 	}
 
+	/**
+	 * Filter plugin matchers, combining matchers like multiple
+	 * constituent type matchers.
+	 *
+	 * @param pluginMatchers
+	 * @return a filtered list of plugin matchers
+	 */
 	private PhoneMatcher[] filterPluginMatchers(List<PhoneMatcher> pluginMatchers) {
 		// only keep one of each of these matchers
 		Map<Class<? extends CombinableMatcher>, CombinableMatcher> combinableMatchers = new HashMap<>();
@@ -368,7 +391,6 @@ public class PhonexCompiler2 implements PhonexListener {
 
 		if(grpFsa != primaryFSA && !fsaStack.isEmpty())
 			fsaStack.peek().appendGroup(grpFsa);
-		lookBehind = false;
 	}
 
 	@Override

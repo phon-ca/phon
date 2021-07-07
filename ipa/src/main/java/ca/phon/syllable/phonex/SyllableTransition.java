@@ -336,10 +336,8 @@ public class SyllableTransition extends PhonexTransition {
 		SyllableTransition retVal = new SyllableTransition();
 		retVal.matchers = Arrays.copyOf(matchers, matchers.length);
 		retVal.syllableRange = (syllableRange != null ? new Tuple<>(syllableRange.getObj1(), syllableRange.getObj2()) : null);
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
-		retVal.getInitGroups().addAll(getInitGroups());
-		retVal.getMatcherGroups().addAll(getMatcherGroups());
+		PhonexTransition.setupTransition(retVal, this.getFirstState(), this.getToState(), "", this.getType(), this.getOffsetType(),
+				this.getInitGroups(), getMatcherGroups());
 		return retVal;
 	}
 
