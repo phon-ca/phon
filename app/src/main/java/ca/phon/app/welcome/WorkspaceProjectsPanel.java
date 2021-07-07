@@ -15,8 +15,9 @@
  */
 package ca.phon.app.welcome;
 
-import ca.phon.app.workspace.WorkspaceButton;
+import ca.phon.app.workspace.*;
 import ca.phon.ui.MultiActionButton;
+import ca.phon.util.PrefHelper;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
@@ -59,6 +60,11 @@ public class WorkspaceProjectsPanel extends JPanel {
 		BgPainter bgPainter = new BgPainter();
 		workspaceBtn.setBackgroundPainter(bgPainter);
 		workspaceBtn.addMouseListener(bgPainter);
+		PrefHelper.getUserPreferences().addPreferenceChangeListener((e) -> {
+			if(e.getKey().equals(Workspace.WORKSPACE_FOLDER)) {
+				projectList.setFolder(Workspace.userWorkspaceFolder());
+			}
+		});
 
 		JPanel contentPanel = new JPanel();
 		contentPanel.setBackground(Color.white);
