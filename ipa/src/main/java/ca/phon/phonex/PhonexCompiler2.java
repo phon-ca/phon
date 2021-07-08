@@ -596,7 +596,7 @@ public class  PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitClass_matcher(PhonexParser.Class_matcherContext ctx) {
-		boolean isNot = ctx.getText().charAt(1) == '^';
+		boolean isNot = ctx.CARET() != null;
 
 		PhoneMatcher[] classMatchers = matcherStack.toArray(new PhoneMatcher[0]);
 		PhoneClassMatcher pcm = new PhoneClassMatcher(classMatchers);
@@ -644,7 +644,8 @@ public class  PhonexCompiler2 implements PhonexListener {
 		boolean isNot = ctx.MINUS() != null;
 		SyllableConstituentType scType = SyllableConstituentType.fromString(ctx.sctype().getText());
 		if(scType == null) {
-			// TODO throw exception
+			throw new PhonexPluginException(ctx.sctype().start.getLine(),
+					ctx.sctype().start.getCharPositionInLine(), "Invalid constituent type id: " + ctx.sctype().getText());
 		}
 		SyllableConstituentMatcher matcher = new SyllableConstituentMatcher();
 		if(isNot) {
@@ -801,13 +802,13 @@ public class  PhonexCompiler2 implements PhonexListener {
 	public void enterExactBoundedQuantifier(PhonexParser.ExactBoundedQuantifierContext ctx) {}
 
 	private void setupBoundedQuantifier(int start, int end) {
-		// TODO throw exception if start < end
 		quantifier = new Quantifier(start, end);
 	}
 
 	@Override
 	public void exitExactBoundedQuantifier(PhonexParser.ExactBoundedQuantifierContext ctx) {
-		setupBoundedQuantifier(Integer.parseInt(ctx.NUMBER().getText()), 0);
+		int start = Integer.parseInt(ctx.NUMBER().getText());
+		setupBoundedQuantifier(Integer.parseInt(ctx.NUMBER().getText()), -1);
 	}
 
 	@Override
