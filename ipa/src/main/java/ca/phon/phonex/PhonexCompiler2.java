@@ -807,7 +807,6 @@ public class  PhonexCompiler2 implements PhonexListener {
 
 	@Override
 	public void exitExactBoundedQuantifier(PhonexParser.ExactBoundedQuantifierContext ctx) {
-		int start = Integer.parseInt(ctx.NUMBER().getText());
 		setupBoundedQuantifier(Integer.parseInt(ctx.NUMBER().getText()), -1);
 	}
 
