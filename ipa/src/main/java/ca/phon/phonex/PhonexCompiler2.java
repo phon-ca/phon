@@ -908,8 +908,8 @@ public class  PhonexCompiler2 implements PhonexListener {
 			break;
 
 		default:
-			// TODO throw exception, invalid escape sequence
-			break;
+			throw new PhonexPatternException(ctx.start.getLine(),
+					ctx.start.getCharPositionInLine(), "Invalid phone class");
 		}
 	}
 
