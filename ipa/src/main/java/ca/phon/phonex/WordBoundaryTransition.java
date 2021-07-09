@@ -78,12 +78,7 @@ public class WordBoundaryTransition extends PhonexTransition {
 	@Override
 	public Object clone() {
 		WordBoundaryTransition retVal = new WordBoundaryTransition();
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
-		retVal.setType(getType());
-		retVal.setOffsetType(getOffsetType());
-		retVal.getInitGroups().addAll(getInitGroups());
-		retVal.getMatcherGroups().addAll(getMatcherGroups());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
 

@@ -59,34 +59,26 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 			if(tapeIdx >= currentState.getTape().length) return true;
 		}
 
-		// edges
-//		if(tapeIdx == 0 ||
-//				tapeIdx == currentState.getTape().length) {
-//			retVal = true;
-//			matchLength = 0;
-//		} else {
-			final IPAElement p = currentState.getTape()[tapeIdx];
+		final IPAElement p = currentState.getTape()[tapeIdx];
 		// punctuation
-			final PunctuationTest test = new PunctuationTest();
-			p.accept(test);
-			retVal = test.isPunct;
-			if(retVal) {
-				matchLength = 1;
-			}
+		final PunctuationTest test = new PunctuationTest();
+		p.accept(test);
+		retVal = test.isPunct;
+		if(retVal) {
+			matchLength = 1;
+		}
 
-		// implicit syllable edges
-			if(!retVal) {
-				for(IPATranscript syll:sylls) {
-					if(p == syll.elementAt(0) && (getOffsetType() == OffsetType.NORMAL || getOffsetType() == OffsetType.LOOK_AHEAD)) {
-						retVal = true;
-						matchLength = 0;
-					} else if(p == syll.elementAt(syll.length()-1) && getOffsetType() == OffsetType.LOOK_BEHIND) {
-						retVal = true;
-						matchLength = 0;
-					}
+		if(!retVal) {
+			for(IPATranscript syll:sylls) {
+				if(p == syll.elementAt(0) && (getOffsetType() == OffsetType.NORMAL || getOffsetType() == OffsetType.LOOK_AHEAD)) {
+					retVal = true;
+					matchLength = 0;
+				} else if(p == syll.elementAt(syll.length()-1) && getOffsetType() == OffsetType.LOOK_BEHIND) {
+					retVal = true;
+					matchLength = 0;
 				}
 			}
-//		}
+		}
 
 		return retVal;
 	}
@@ -104,12 +96,7 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 	@Override
 	public Object clone() {
 		SyllableBoundaryTransition retVal = new SyllableBoundaryTransition();
-		retVal.setFirstState(getFirstState());
-		retVal.setToState(getToState());
-		retVal.setType(getType());
-		retVal.setOffsetType(getOffsetType());
-		retVal.getInitGroups().addAll(getInitGroups());
-		retVal.getMatcherGroups().addAll(getMatcherGroups());
+		FSATransition.copyTransitionInfo(this, retVal);
 		return retVal;
 	}
 
