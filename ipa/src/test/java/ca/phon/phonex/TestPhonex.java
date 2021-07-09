@@ -656,6 +656,18 @@ public class TestPhonex extends PhonexTest {
 		};
 		testGroups(ipa, phonex, answers);
 	}
+
+	@Test
+	public void testBoundedQuantifier() throws  ParseException {
+		final String text = "hhellollla";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
+
+		final String phonex = "(?<[^\\c])(\\c<2>)\\v";
+		final IPATranscript[][] answers = new IPATranscript[][] {
+				{ ipa.subsection(3, 5) }
+		};
+		testGroups(ipa, phonex, answers);
+	}
 	
 	@Test
 	public void testGeminates() throws ParseException {
