@@ -658,7 +658,7 @@ public class TestPhonex extends PhonexTest {
 	}
 
 	@Test
-	public void testBoundedQuantifier() throws  ParseException {
+	public void testExactBoundedQuantifier() throws  ParseException {
 		final String text = "hhellollla";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(text);
 
