@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_2.dmg" newVersion="3.3.2" newMediaFileId="macos" fileSize="286850403" md5Sum="b8d4fe2244411e8f8c58ff0fa079a7db" sha256Sum="face876874e54da2f4d0c3735bd250ca06a786624e687a8054d40177a71d34de" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.1
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_3.dmg" newVersion="3.3.3" newMediaFileId="macos" fileSize="286848847" md5Sum="6ec2066591d4db173777a5b84ed0dff5" sha256Sum="3d812d0d7eb7830e899435dc5c1104034f4d1bf5e2c91d64e1ba8ed22ae83bdf" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
 
  * Fixed an issue with switching workspaces
 
@@ -456,8 +461,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_2.dmg" newVersion="3.3.2" newMediaFileId="macos" fileSize="286850403" md5Sum="b8d4fe2244411e8f8c58ff0fa079a7db" sha256Sum="face876874e54da2f4d0c3735bd250ca06a786624e687a8054d40177a71d34de" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.1
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_3.dmg" newVersion="3.3.3" newMediaFileId="macos" fileSize="286848847" md5Sum="6ec2066591d4db173777a5b84ed0dff5" sha256Sum="3d812d0d7eb7830e899435dc5c1104034f4d1bf5e2c91d64e1ba8ed22ae83bdf" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
 
  * Fixed an issue with switching workspaces
 
@@ -912,8 +922,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.exe" newVersion="3.3.2" newMediaFileId="win64" fileSize="302326816" md5Sum="e8f666783f28d3b2d2f3de60bae37bbe" sha256Sum="c5ff5d115f87d9bd46bc900039d11cc1368efae4c2d94c4d301bf1dbd70404ac" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.1
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.exe" newVersion="3.3.3" newMediaFileId="win64" fileSize="302326304" md5Sum="445c8b46c24e202c4a4408e7d9cb80d2" sha256Sum="e2d8d6e9cfdaf5482cf603286a8283ba08454a2901d88f9e20f4077d0d34c62a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
 
  * Fixed an issue with switching workspaces
 
@@ -1368,8 +1383,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.exe" newVersion="3.3.2" newMediaFileId="win64" fileSize="302326816" md5Sum="e8f666783f28d3b2d2f3de60bae37bbe" sha256Sum="c5ff5d115f87d9bd46bc900039d11cc1368efae4c2d94c4d301bf1dbd70404ac" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.1
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.exe" newVersion="3.3.3" newMediaFileId="win64" fileSize="302326304" md5Sum="445c8b46c24e202c4a4408e7d9cb80d2" sha256Sum="e2d8d6e9cfdaf5482cf603286a8283ba08454a2901d88f9e20f4077d0d34c62a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
 
  * Fixed an issue with switching workspaces
 
@@ -1824,8 +1844,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.exe" newVersion="3.3.2" newMediaFileId="win64" fileSize="302326816" md5Sum="e8f666783f28d3b2d2f3de60bae37bbe" sha256Sum="c5ff5d115f87d9bd46bc900039d11cc1368efae4c2d94c4d301bf1dbd70404ac" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.1
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.exe" newVersion="3.3.3" newMediaFileId="win64" fileSize="302326304" md5Sum="445c8b46c24e202c4a4408e7d9cb80d2" sha256Sum="e2d8d6e9cfdaf5482cf603286a8283ba08454a2901d88f9e20f4077d0d34c62a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
 
  * Fixed an issue with switching workspaces
 
@@ -2280,8 +2305,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_2.zip" newVersion="3.3.2" newMediaFileId="win64zip" fileSize="301278406" md5Sum="75e2b4be78c57f1558c43af053d04fca" sha256Sum="1423ad5805bbe6736767c6c64417d499d1803276b1bdc73acfd54731c959e4f1" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.1
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.zip" newVersion="3.3.3" newMediaFileId="win64zip" fileSize="301278781" md5Sum="84778a13ef1078d7d193bf423338397a" sha256Sum="1ef6800cf8dd731b2bf4e01cfd1fccb68ccb219a0dfee5c5f0898c5a7f52a657" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
 
  * Fixed an issue with switching workspaces
 
