@@ -82,9 +82,9 @@ public class SortNode extends TableOpNode implements NodeSettings {
 	}
 
 	private void putLikeOnTop(DefaultTableDataSource table) {
-		Map<Object, Tuple<Integer, Integer>> tablePartition = partitionTable(table);
+		Map<String, Tuple<Integer, Integer>> tablePartition = partitionTable(table);
 
-		for(Object key:tablePartition.keySet()) {
+		for(String key:tablePartition.keySet()) {
 			Tuple<Integer, Integer> groupInfo = tablePartition.get(key);
 			if(groupInfo.getObj2() > 0) {
 				Object[] row = table.getRow(groupInfo.getObj2());
@@ -102,8 +102,8 @@ public class SortNode extends TableOpNode implements NodeSettings {
 	 * for the group and the row index (if any) of the row with all columns
 	 * the same
 	 */
-	private Map<Object, Tuple<Integer, Integer>> partitionTable(DefaultTableDataSource table) {
-		Map<Object, Tuple<Integer, Integer>> retVal = new LinkedHashMap<>();
+	private Map<String, Tuple<Integer, Integer>> partitionTable(DefaultTableDataSource table) {
+		Map<String, Tuple<Integer, Integer>> retVal = new LinkedHashMap<>();
 		Object currentVal = null;
 
 		int column = table.getColumnIndex(getSortSettings().getSorting().get(0).getColumn());
@@ -112,7 +112,7 @@ public class SortNode extends TableOpNode implements NodeSettings {
 			Object val = table.getValueAt(row, column);
 			if(val == null) continue;
 			if(currentVal == null || cmp(getSortSettings().getSorting().get(0).getType(), currentVal, val) != 0) {
-				retVal.put(val, new Tuple<>(row, -1));
+				retVal.put(val.toString(), new Tuple<>(row, -1));
 				currentVal = val;
 			}
 
@@ -128,7 +128,9 @@ public class SortNode extends TableOpNode implements NodeSettings {
 			}
 
 			if(allLike) {
-				retVal.get(val).setObj2(row);
+				Tuple<Integer, Integer> rowData = retVal.get(val.toString());
+				if(rowData != null)
+					rowData.setObj2(row);
 			}
 		}
 
