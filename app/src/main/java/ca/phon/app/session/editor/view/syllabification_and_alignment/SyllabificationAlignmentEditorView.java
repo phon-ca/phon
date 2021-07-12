@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import ca.phon.util.PrefHelper;
 import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.session.editor.*;
@@ -49,10 +50,26 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	private JPanel topPanel;
 	private JButton settingsBtn;
+
+	private final static String SHOW_TARGET_IPA = "SyllabificationAndAlignmentEditorView.showTargetIPA";
+	private final static boolean DEFAULT_SHOW_TARGET_IPA = true;
 	private JCheckBox targetIPABox;
+
+	private final static String SHOW_ACTUAL_IPA = "SyllabificationAndAlignmentEditorView.showActualIPA";
+	private final static boolean DEFAULT_SHOW_ACTUAL_IPA = true;
 	private JCheckBox actualIPABox;
+
+	private final static String SHOW_ALIGNMENT = "SyllabificationAndAlignmentEditorView.showAlignment";
+	private final static boolean DEFAULT_SHOW_ALIGNMENT = true;
 	private JCheckBox alignmentBox;
+
+	private final static String COLOR_IN_ALIGNMENT = "SyllabificationAndAlignmentEditorView.colorInAlignment";
+	private final static boolean DEFAULT_COLOR_IN_ALIGNMENT = false;
 	private JCheckBox colorInAlignmentBox;
+
+	private final static String SHOW_DIACRITICS = "SyllabificationAndAlignmentEditorView.showDiacritics";
+	private final static boolean DEFAULT_SHOW_DIACRITICS = false;
+	private JCheckBox showDiacriticsBox;
 
 	private TierDataLayoutPanel contentPane;
 	private JScrollPane scroller;
@@ -74,7 +91,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		// top panel
 		final FormLayout topLayout = new FormLayout(
-				"pref, pref, pref, pref, pref, fill:pref:grow, right:pref", "pref");
+				"pref, pref, pref, pref, pref, pref, fill:pref:grow, right:pref", "pref");
 		topPanel = new JPanel(topLayout);
 
 		final SyllabificationSettingsCommand settingsAct = new SyllabificationSettingsCommand(getEditor(), this);
@@ -83,26 +100,32 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final PhonUIAction toggleTargetAct = new PhonUIAction(this, "toggleCheckbox");
 		toggleTargetAct.putValue(PhonUIAction.NAME, SystemTierType.TargetSyllables.getName());
 		toggleTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle target syllables");
-		toggleTargetAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
+		toggleTargetAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_TARGET_IPA, DEFAULT_SHOW_TARGET_IPA));
 		targetIPABox = new JCheckBox(toggleTargetAct);
 
 		final PhonUIAction toggleActualAct = new PhonUIAction(this, "toggleCheckbox");
 		toggleActualAct.putValue(PhonUIAction.NAME, SystemTierType.ActualSyllables.getName());
 		toggleActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle actual syllables");
-		toggleActualAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
+		toggleActualAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ACTUAL_IPA, DEFAULT_SHOW_ACTUAL_IPA));
 		actualIPABox = new JCheckBox(toggleActualAct);
 
 		final PhonUIAction toggleAlignmentAct = new PhonUIAction(this, "toggleCheckbox");
 		toggleAlignmentAct.putValue(PhonUIAction.NAME, SystemTierType.SyllableAlignment.getName());
 		toggleAlignmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle alignment");
-		toggleAlignmentAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
+		toggleAlignmentAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ALIGNMENT, DEFAULT_SHOW_ALIGNMENT));
 		alignmentBox = new JCheckBox(toggleAlignmentAct);
 
 		final PhonUIAction toggleAlignmentColorAct = new PhonUIAction(this, "toggleCheckbox");
 		toggleAlignmentColorAct.putValue(PhonUIAction.NAME, "Color in alignment");
 		toggleAlignmentColorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle color in alignment");
-		toggleAlignmentColorAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.FALSE);
+		toggleAlignmentColorAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(COLOR_IN_ALIGNMENT, DEFAULT_COLOR_IN_ALIGNMENT));
 		colorInAlignmentBox = new JCheckBox(toggleAlignmentColorAct);
+
+		final PhonUIAction toggleDiacriticsAct = new PhonUIAction(this, "toggleCheckbox");
+		toggleDiacriticsAct.putValue(PhonUIAction.NAME, "Show diacritics");
+		toggleDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle display of diacritics");
+		toggleDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_DIACRITICS, DEFAULT_SHOW_DIACRITICS));
+		showDiacriticsBox = new JCheckBox(toggleDiacriticsAct);
 
 		final TierDataLayoutButtons tdlb = new TierDataLayoutButtons(contentPane,
 				(TierDataLayout)contentPane.getLayout());
@@ -113,7 +136,8 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		topPanel.add(actualIPABox, cc.xy(3,1));
 		topPanel.add(alignmentBox, cc.xy(4,1));
 		topPanel.add(colorInAlignmentBox, cc.xy(5,1));
-		topPanel.add(tdlb, cc.xy(7,1));
+		topPanel.add(showDiacriticsBox, cc.xy(6, 1));
+		topPanel.add(tdlb, cc.xy(8,1));
 
 		setLayout(new BorderLayout());
 		scroller = new JScrollPane(contentPane);
@@ -233,9 +257,15 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	public void update() {
 		final boolean showTarget = targetIPABox.isSelected();
+		PrefHelper.getUserPreferences().putBoolean(SHOW_TARGET_IPA, showTarget);
 		final boolean showActual = actualIPABox.isSelected();
+		PrefHelper.getUserPreferences().putBoolean(SHOW_ACTUAL_IPA, showActual);
 		final boolean showAlignment = alignmentBox.isSelected();
+		PrefHelper.getUserPreferences().putBoolean(SHOW_ALIGNMENT, showAlignment);
 		final boolean colorInAlignment = colorInAlignmentBox.isSelected();
+		PrefHelper.getUserPreferences().putBoolean(COLOR_IN_ALIGNMENT, colorInAlignment);
+		final boolean showDiacritics = showDiacriticsBox.isSelected();
+		PrefHelper.getUserPreferences().putBoolean(SHOW_DIACRITICS, showDiacritics);
 
 		final SessionEditor editor = getEditor();
 		final Record record = editor.currentRecord();
@@ -319,6 +349,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				final SyllabificationDisplay ipaTargetDisplay = getIPATargetDisplay(gIndex);
 				ipaTargetDisplay.setFont(FontPreferences.getTierFont());
 				ipaTargetDisplay.setTranscript(ipaTarget);
+				ipaTargetDisplay.setShowDiacritics(showDiacritics);
 
 				if(!layout.hasLayoutComponent(ipaTargetDisplay)) {
 					final TierDataConstraint ipaTargetConstraint =
@@ -333,6 +364,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				final SyllabificationDisplay ipaActualDisplay = getIPAActualDisplay(gIndex);
 				ipaActualDisplay.setFont(FontPreferences.getTierFont());
 				ipaActualDisplay.setTranscript(ipaActual);
+				ipaActualDisplay.setShowDiacritics(showDiacritics);
 
 				if(!layout.hasLayoutComponent(ipaActualDisplay)) {
 					final TierDataConstraint ipaActualConstraint =
@@ -355,6 +387,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				pmDisplay.setPhoneMapForGroup(0, pm);
 				pmDisplay.setFocusedPosition(0);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
+				pmDisplay.setShowDiacritics(showDiacritics);
 
 				if(!layout.hasLayoutComponent(pmDisplay)) {
 					final TierDataConstraint pmConstraint =

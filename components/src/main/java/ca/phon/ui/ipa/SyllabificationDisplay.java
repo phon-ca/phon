@@ -35,6 +35,7 @@ public class SyllabificationDisplay extends JComponent {
 	
 	public static final String RESYLLABIFY_PROP_ID = "_resyllabify_";
 
+	private boolean showDiacritics = false;
 
 	/** The ui class ID */
 	private static final String uiClassId = "SyllabificationDisplayUI";
@@ -77,6 +78,16 @@ public class SyllabificationDisplay extends JComponent {
 
 	public SyllabificationDisplayUI getUI() {
 		return (SyllabificationDisplayUI)ui;
+	}
+
+	public boolean isShowDiacritics() {
+		return this.showDiacritics;
+	}
+
+	public void setShowDiacritics(boolean showDiacritics) {
+		boolean oldVal = this.showDiacritics;
+		this.showDiacritics = showDiacritics;
+		firePropertyChange("showDiacritics", oldVal, showDiacritics);
 	}
 
 	public int getFocusedPhone() {

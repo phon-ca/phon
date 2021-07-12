@@ -76,6 +76,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				display.repaint();
 			}
 		});
+		display.addPropertyChangeListener("showDiacritics", (e) -> display.repaint() );
 		display.setRequestFocusEnabled(true);
 	}
 
@@ -449,7 +450,12 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 						phoneRect.y + phoneBoxInsets.top, phoneBoxSize.width,
 						phoneBoxSize.height);
 
-				String txt = (new IPATranscriptBuilder()).append(p).toIPATranscript().stripDiacritics().toString();
+				IPATranscriptBuilder builder = new IPATranscriptBuilder();
+				builder.append(p);
+				IPATranscript trans = builder.toIPATranscript();
+				if(!display.isShowDiacritics())
+					trans = trans.stripDiacritics();
+				String txt = trans.toString();
 				Font f = displayFont;
 				FontMetrics fm = g.getFontMetrics(f);
 				Rectangle2D stringBounds = fm.getStringBounds(txt, g);

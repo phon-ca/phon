@@ -39,6 +39,8 @@ public class PhoneMapDisplay extends JComponent {
 	/** Property for drawing colours */
 	public static final String PAINT_PHONE_BACKGROUND_PROP = "_paint_phone_background_";
 
+	private boolean showDiacritics = false;
+
 	/** List of phone maps *
 	 *
 	 */
@@ -84,6 +86,16 @@ public class PhoneMapDisplay extends JComponent {
 
 	public PhoneMapDisplayUI getUI() {
 		return (PhoneMapDisplayUI)ui;
+	}
+
+	public boolean isShowDiacritics() {
+		return this.showDiacritics;
+	}
+
+	public void setShowDiacritics(boolean showDiacritics) {
+		boolean oldVal = this.showDiacritics;
+		this.showDiacritics = showDiacritics;
+		firePropertyChange("showDiacritics", oldVal, showDiacritics);
 	}
 
 	/**
