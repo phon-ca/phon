@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_3.dmg" newVersion="3.3.3" newMediaFileId="macos" fileSize="286848847" md5Sum="6ec2066591d4db173777a5b84ed0dff5" sha256Sum="3d812d0d7eb7830e899435dc5c1104034f4d1bf5e2c91d64e1ba8ed22ae83bdf" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.2
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_4.dmg" newVersion="3.3.4" newMediaFileId="macos" fileSize="286852970" md5Sum="469b22eb747ef9880d90fcb970fb1938" sha256Sum="90c72fc8c2979e7ec66413a1e6ff1afb4b409ffb81cdd7e1b08f00e9470aba37" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
 
  * Updated ara syllabifier and dictionary
  * Updated tsn dictionary
@@ -461,8 +467,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_3.dmg" newVersion="3.3.3" newMediaFileId="macos" fileSize="286848847" md5Sum="6ec2066591d4db173777a5b84ed0dff5" sha256Sum="3d812d0d7eb7830e899435dc5c1104034f4d1bf5e2c91d64e1ba8ed22ae83bdf" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.2
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_4.dmg" newVersion="3.3.4" newMediaFileId="macos" fileSize="286852970" md5Sum="469b22eb747ef9880d90fcb970fb1938" sha256Sum="90c72fc8c2979e7ec66413a1e6ff1afb4b409ffb81cdd7e1b08f00e9470aba37" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
 
  * Updated ara syllabifier and dictionary
  * Updated tsn dictionary
@@ -922,8 +934,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.exe" newVersion="3.3.3" newMediaFileId="win64" fileSize="302326304" md5Sum="445c8b46c24e202c4a4408e7d9cb80d2" sha256Sum="e2d8d6e9cfdaf5482cf603286a8283ba08454a2901d88f9e20f4077d0d34c62a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.2
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.exe" newVersion="3.3.4" newMediaFileId="win64" fileSize="302328864" md5Sum="f09cbfe81f98a85ea7238dd4f9b2fa07" sha256Sum="83bfa1e8a1cb0bdda4bd15b77cd38a4b348a275e330b9c4da46ad4e4a4e61e3b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
 
  * Updated ara syllabifier and dictionary
  * Updated tsn dictionary
@@ -1383,8 +1401,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.exe" newVersion="3.3.3" newMediaFileId="win64" fileSize="302326304" md5Sum="445c8b46c24e202c4a4408e7d9cb80d2" sha256Sum="e2d8d6e9cfdaf5482cf603286a8283ba08454a2901d88f9e20f4077d0d34c62a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.2
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.exe" newVersion="3.3.4" newMediaFileId="win64" fileSize="302328864" md5Sum="f09cbfe81f98a85ea7238dd4f9b2fa07" sha256Sum="83bfa1e8a1cb0bdda4bd15b77cd38a4b348a275e330b9c4da46ad4e4a4e61e3b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
 
  * Updated ara syllabifier and dictionary
  * Updated tsn dictionary
@@ -1844,8 +1868,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.exe" newVersion="3.3.3" newMediaFileId="win64" fileSize="302326304" md5Sum="445c8b46c24e202c4a4408e7d9cb80d2" sha256Sum="e2d8d6e9cfdaf5482cf603286a8283ba08454a2901d88f9e20f4077d0d34c62a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.2
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.exe" newVersion="3.3.4" newMediaFileId="win64" fileSize="302328864" md5Sum="f09cbfe81f98a85ea7238dd4f9b2fa07" sha256Sum="83bfa1e8a1cb0bdda4bd15b77cd38a4b348a275e330b9c4da46ad4e4a4e61e3b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
 
  * Updated ara syllabifier and dictionary
  * Updated tsn dictionary
@@ -2305,8 +2335,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_3.zip" newVersion="3.3.3" newMediaFileId="win64zip" fileSize="301278781" md5Sum="84778a13ef1078d7d193bf423338397a" sha256Sum="1ef6800cf8dd731b2bf4e01cfd1fccb68ccb219a0dfee5c5f0898c5a7f52a657" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.2
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.zip" newVersion="3.3.4" newMediaFileId="win64zip" fileSize="301281177" md5Sum="74dd2eda2ca0973065c4b966d8527d95" sha256Sum="505f5444fa15334d9b000da2bf161a2fda0620379dd7cea1e2625c1fb1839629" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
 
  * Updated ara syllabifier and dictionary
  * Updated tsn dictionary
