@@ -60,7 +60,8 @@ public class StressMatcher implements PhoneMatcher {
 
 	@Override
 	public boolean matchesAnything() {
-		return (stressTypes.size() == SyllableStress.values().length);
+		return stressTypes.contains(SyllableStress.AnyStress) ||
+				(stressTypes.contains(SyllableStress.NoStress) && stressTypes.contains(SyllableStress.PrimaryStress) && stressTypes.contains(SyllableStress.SecondaryStress));
 	}
 
 }
