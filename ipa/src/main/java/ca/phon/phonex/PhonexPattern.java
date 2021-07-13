@@ -167,13 +167,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		for(IPAElement ele:input) builder.append(ele);
 		IPATranscript transcript = builder.toIPATranscript();
 
-//		if(PhonexFlag.STRIP_DIACRITICS.checkFlag(flags)) {
-//			transcript = transcript.stripDiacritics();
-//		}
-//		if(PhonexFlag.STRIP_PUNCTUATION.checkFlag(flags)) {
-//			transcript = transcript.removePunctuation();
-//		}
-
 		SyllabificationInfo.setupSyllabificationInfo(transcript);
 		List<IPAElement> tape = transcript.toList();
 
@@ -215,7 +208,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	/**
 	 * Get the group name for the specified group
 	 *
-	 * @parma gIdx group index
+	 * @oaram gIdx group index
 	 * @return the group name for the specified group
 	 *  or <code>null</code> if the group is not named
 	 * @throws ArrayIndexOutOfBoundsException if the
@@ -227,7 +220,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 
 	/**
 	 * Return the group index for the given group name.
-	 *
 	 *
 	 * @return group index or < 0 if not found
 	 */
