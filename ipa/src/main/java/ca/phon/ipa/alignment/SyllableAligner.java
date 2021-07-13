@@ -40,6 +40,14 @@ public class SyllableAligner extends IndelAligner<IPATranscript> {
 					tally += 2;
 				} else if(ele.getFeatureSet().hasFeature("Vowel")) {
 					tally += 4;
+				} else {
+					// we are probably aligning cover symbols
+					// hard-align like symbols
+					if(alignedEle.get(0).getText().equals(ele.getText())) {
+						tally += 4;
+					} else {
+						tally += 1;
+					}
 				}
 			}
 		}
