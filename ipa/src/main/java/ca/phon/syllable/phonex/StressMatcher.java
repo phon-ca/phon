@@ -19,6 +19,7 @@ import java.util.*;
 
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
+import ca.phon.phonex.plugins.CombinableMatcher;
 import ca.phon.syllable.*;
 
 /**
@@ -31,6 +32,10 @@ public class StressMatcher implements PhoneMatcher {
 	 */
 	private Set<SyllableStress> stressTypes = 
 			new HashSet<SyllableStress>();
+
+	public StressMatcher() {
+
+	}
 	
 	/**
 	 * Add the given stress type to the list of
