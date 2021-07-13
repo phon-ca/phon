@@ -64,4 +64,36 @@ public class StressMatcher implements PhoneMatcher {
 				(stressTypes.contains(SyllableStress.NoStress) && stressTypes.contains(SyllableStress.PrimaryStress) && stressTypes.contains(SyllableStress.SecondaryStress));
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder retVal = new StringBuilder();
+
+		this.stressTypes.forEach( type -> {
+			if(!retVal.isEmpty())
+				retVal.append("|");
+			switch(type) {
+				case PrimaryStress:
+					retVal.append("1");
+					break;
+
+				case SecondaryStress:
+					retVal.append("2");
+					break;
+
+				case NoStress:
+					retVal.append("U");
+					break;
+
+				case AnyStress:
+					retVal.append("S");
+					break;
+
+				default:
+					break;
+			}
+		});
+
+		return retVal.toString();
+	}
+
 }
