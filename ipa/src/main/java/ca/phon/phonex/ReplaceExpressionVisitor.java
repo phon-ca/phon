@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(ReplaceExpressionVisitor.class.getName());
 
 	private final PhonexMatcher matcher;
 	
@@ -55,7 +53,6 @@ public class ReplaceExpressionVisitor extends VisitorAdapter<IPAElement> {
 		if(groupIndex < 0) {
 			final String groupName = pmr.getGroupName();
 			if(groupName == null) {
-				LOGGER.error("Unknown phonex matcher reference " + pmr.getText());
 				return;
 			}
 			groupIndex = matcher.pattern().groupIndex(groupName);
