@@ -280,7 +280,10 @@ public class PhonexMatcher {
 	 * group
 	 *
 	 * @param gIdx
-	 * @return group value for the specified group
+	 * @return (possibly empty) group value for the specified group
+	 *
+	 * @throws IllegalStateException if no previous match
+	 * @throws IndexOutOfBoundsException on gIdx
 	 */
 	public List<IPAElement> group(int gIdx) {
 		int start = start(gIdx);
@@ -289,6 +292,24 @@ public class PhonexMatcher {
 			return Arrays.asList(getTape()).subList(start, end);
 		} else {
 			return new ArrayList<>();
+		}
+	}
+
+	/**
+	 * Return the group value for the given group name
+	 *
+	 * @param groupName
+	 * @return group value for group name
+	 *
+	 * @throws IllegalStateException if no previous match
+	 * @throws IllegalArgumentException if group name is not valid for pattern
+	 */
+	public List<IPAElement> group(String groupName) {
+		int gIdx = pattern.groupIndex(groupName);
+		if(gIdx > 0) {
+			return group(gIdx);
+		} else {
+			throw new IllegalArgumentException(groupName);
 		}
 	}
 
