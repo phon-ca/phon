@@ -225,10 +225,6 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		suffixCache.clear();
 	}
 
-	private void appendPhonexMatcherReference(PhonexMatcherReference phonexMatcherReference) {
-
-	}
-	
 	@Override
 	public void exitSctype(SctypeContext ctx) {
 		SyllableConstituentType scType = SyllableConstituentType.fromString(ctx.getText().charAt(1)+"");
@@ -370,12 +366,6 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		Diacritic suffixDia = factory.createDiacritic(new Diacritic[] {lig}, suffixChar, combining);
 		suffixCache.add(suffixDia);
 	}
-
-//	@Override
-//	public void exitTone(UnicodeIPAParser.ToneContext ctx) {
-//		Diacritic toneDia = factory.createDiacritic(ctx.getText().charAt(0));
-//		suffixCache.add(toneDia);
-//	}
 
 	@Override
 	public void exitTone_number(UnicodeIPAParser.Tone_numberContext ctx) {
