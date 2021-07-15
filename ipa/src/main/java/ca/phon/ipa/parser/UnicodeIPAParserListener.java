@@ -93,7 +93,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		case UnicodeIPAParser.PLUS:
 		case UnicodeIPAParser.PRIMARY_STRESS:
 		case UnicodeIPAParser.SECONDARY_STRESS:
-			ex = new StrayDiacriticException("Stray diacriitc " + symbol.getText());
+			ex = new StrayDiacriticException("Stray diacritic " + symbol.getText());
 			break;
 
 		default:
