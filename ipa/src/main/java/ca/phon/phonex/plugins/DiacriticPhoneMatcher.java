@@ -15,8 +15,12 @@
  */
 package ca.phon.phonex.plugins;
 
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
+import ca.phon.phonexg4.PhonexLexer;
+import ca.phon.phonexg4.PhonexParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.logging.log4j.*;
 
 import ca.phon.phonex.*;
@@ -27,41 +31,25 @@ import ca.phon.phonex.*;
  * 
  */
 public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DiacriticPhoneMatcher.class.getName());
-	
+
 	private PhoneMatcher matcher;
 	
 	public DiacriticPhoneMatcher(String phonex) {
 		super();
-		
-		// compile phonex into a matcher
-		CharStream exprStream = new ANTLRStringStream(phonex); 
-		PhonexLexer lexer = new PhonexLexer(exprStream);
+		CharStream charStream = CharStreams.fromString(phonex);
+		PhonexLexer lexer = new PhonexLexer(charStream);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 		PhonexParser parser = new PhonexParser(tokenStream);
 
+		ParseTree ctx = null;
 		if(phonex.startsWith("[")) {
-			try {
-				PhonexParser.class_matcher_return val = parser.class_matcher();
-				CommonTree cmTree = CommonTree.class.cast(val.getTree());
-				CommonTreeNodeStream noes = new CommonTreeNodeStream(cmTree);
-				PhonexCompiler compiler = new PhonexCompiler(noes);
-				matcher = compiler.class_matcher();
-			} catch (RecognitionException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
-		} else {	
-			try {
-				PhonexParser.single_phone_matcher_return val = parser.single_phone_matcher();
-				CommonTree exprTree = CommonTree.class.cast(val.getTree());
-				CommonTreeNodeStream noes = new CommonTreeNodeStream(exprTree);
-				PhonexCompiler compiler = new PhonexCompiler(noes);
-				matcher = compiler.single_phone_matcher();
-			} catch (RecognitionException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
+			ctx = parser.class_matcher();
+		} else {
+			ctx = parser.base_matcher();
 		}
+		PhonexCompiler2 compiler = new PhonexCompiler2();
+		compiler.walkTree(ctx);
+		matcher = compiler.getTopMatcher();
 	}
 	
 	public DiacriticPhoneMatcher(PhoneMatcher matcher) {

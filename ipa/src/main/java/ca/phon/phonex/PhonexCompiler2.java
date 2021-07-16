@@ -256,6 +256,14 @@ public class  PhonexCompiler2 implements PhonexListener {
 		return this.flags;
 	}
 
+	/**
+	 * Return top element on matcher stack, useful when compiling single-element expressions
+	 *
+	 */
+	public PhoneMatcher getTopMatcher() {
+		return this.matcherStack != null && this.matcherStack.size() > 0 ? this.matcherStack.peek() : null;
+	}
+
 	@Override
 	public void enterExpr(PhonexParser.ExprContext ctx) {
 		setupCapturingGroup();
