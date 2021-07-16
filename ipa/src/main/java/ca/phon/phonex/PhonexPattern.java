@@ -85,10 +85,14 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 * @throws PhonexPatternException
 	 */
 	public static PhoneMatcher compileSingleMatcher(String phonex) throws PhonexPatternException {
+		ErrorListener listener = new ErrorListener();
+
 		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(phonex);
 		ca.phon.phonexg4.PhonexLexer lexer = new ca.phon.phonexg4.PhonexLexer(charStream);
+		lexer.addErrorListener(listener);
 		org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 		ca.phon.phonexg4.PhonexParser parser = new ca.phon.phonexg4.PhonexParser(tokenStream);
+		parser.addErrorListener(listener);
 
 		ParseTree ctx = null;
 		if(phonex.startsWith("[")) {
@@ -96,6 +100,9 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		} else {
 			ctx = parser.base_matcher();
 		}
+		if(!listener.exceptions.isEmpty())
+			throw listener.exceptions.get(0);
+
 		PhonexCompiler2 compiler = new PhonexCompiler2();
 		compiler.walkTree(ctx);
 		return compiler.getTopMatcher();
