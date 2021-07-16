@@ -15,14 +15,6 @@
  */
 package ca.phon.phonex.plugins;
 
-import ca.phon.phonexg4.PhonexLexer;
-import ca.phon.phonexg4.PhonexParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.apache.logging.log4j.*;
-
 import ca.phon.phonex.*;
 
 /**
@@ -33,23 +25,16 @@ import ca.phon.phonex.*;
 public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
 
 	private PhoneMatcher matcher;
-	
-	public DiacriticPhoneMatcher(String phonex) {
-		super();
-		CharStream charStream = CharStreams.fromString(phonex);
-		PhonexLexer lexer = new PhonexLexer(charStream);
-		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-		PhonexParser parser = new PhonexParser(tokenStream);
 
-		ParseTree ctx = null;
-		if(phonex.startsWith("[")) {
-			ctx = parser.class_matcher();
-		} else {
-			ctx = parser.base_matcher();
-		}
-		PhonexCompiler2 compiler = new PhonexCompiler2();
-		compiler.walkTree(ctx);
-		matcher = compiler.getTopMatcher();
+	/**
+	 * Create a new diacritic matcher with the given phonex expression
+	 *
+	 * @param phonex
+	 * @throws PhonexPatternException if phonex has errors
+	 */
+	public DiacriticPhoneMatcher(String phonex) throws PhonexPatternException {
+		super();
+		matcher = PhonexPattern.compileSingleMatcher(phonex);
 	}
 	
 	public DiacriticPhoneMatcher(PhoneMatcher matcher) {

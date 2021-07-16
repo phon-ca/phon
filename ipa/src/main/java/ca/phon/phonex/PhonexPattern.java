@@ -30,6 +30,7 @@ import ca.phon.syllable.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
@@ -74,6 +75,31 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	private PhonexFSA fsa;
 
 	private int flags = 0;
+
+	/**
+	 * Compile a phonex expression for a single matcher (including phone classes)
+	 * and return the provided matcher.
+	 *
+	 * @param phonex
+	 * @return
+	 * @throws PhonexPatternException
+	 */
+	public static PhoneMatcher compileSingleMatcher(String phonex) throws PhonexPatternException {
+		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(phonex);
+		ca.phon.phonexg4.PhonexLexer lexer = new ca.phon.phonexg4.PhonexLexer(charStream);
+		org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+		ca.phon.phonexg4.PhonexParser parser = new ca.phon.phonexg4.PhonexParser(tokenStream);
+
+		ParseTree ctx = null;
+		if(phonex.startsWith("[")) {
+			ctx = parser.class_matcher();
+		} else {
+			ctx = parser.base_matcher();
+		}
+		PhonexCompiler2 compiler = new PhonexCompiler2();
+		compiler.walkTree(ctx);
+		return compiler.getTopMatcher();
+	}
 
 	public static PhonexPattern compile(String phonex) throws PhonexPatternException {
 		return compile(phonex, 0);
