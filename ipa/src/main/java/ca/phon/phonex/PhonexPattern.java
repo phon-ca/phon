@@ -93,6 +93,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 		ca.phon.phonexg4.PhonexParser parser = new ca.phon.phonexg4.PhonexParser(tokenStream);
 		parser.addErrorListener(listener);
+		PhonexCompiler2 compiler = new PhonexCompiler2();
 
 		ParseTree ctx = null;
 		if(phonex.startsWith("[")) {
@@ -103,7 +104,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		if(!listener.exceptions.isEmpty())
 			throw listener.exceptions.get(0);
 
-		PhonexCompiler2 compiler = new PhonexCompiler2();
 		compiler.walkTree(ctx);
 		return compiler.getTopMatcher();
 	}
