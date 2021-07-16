@@ -15,10 +15,6 @@
  */
 package ca.phon.phonex.plugins;
 
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
-import org.apache.logging.log4j.*;
-
 import ca.phon.phonex.*;
 
 /**
@@ -27,41 +23,18 @@ import ca.phon.phonex.*;
  * 
  */
 public abstract class DiacriticPhoneMatcher implements PhoneMatcher {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DiacriticPhoneMatcher.class.getName());
-	
-	private PhoneMatcher matcher;
-	
-	public DiacriticPhoneMatcher(String phonex) {
-		super();
-		
-		// compile phonex into a matcher
-		CharStream exprStream = new ANTLRStringStream(phonex); 
-		PhonexLexer lexer = new PhonexLexer(exprStream);
-		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-		PhonexParser parser = new PhonexParser(tokenStream);
 
-		if(phonex.startsWith("[")) {
-			try {
-				PhonexParser.class_matcher_return val = parser.class_matcher();
-				CommonTree cmTree = CommonTree.class.cast(val.getTree());
-				CommonTreeNodeStream noes = new CommonTreeNodeStream(cmTree);
-				PhonexCompiler compiler = new PhonexCompiler(noes);
-				matcher = compiler.class_matcher();
-			} catch (RecognitionException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
-		} else {	
-			try {
-				PhonexParser.single_phone_matcher_return val = parser.single_phone_matcher();
-				CommonTree exprTree = CommonTree.class.cast(val.getTree());
-				CommonTreeNodeStream noes = new CommonTreeNodeStream(exprTree);
-				PhonexCompiler compiler = new PhonexCompiler(noes);
-				matcher = compiler.single_phone_matcher();
-			} catch (RecognitionException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
-		}
+	private PhoneMatcher matcher;
+
+	/**
+	 * Create a new diacritic matcher with the given phonex expression
+	 *
+	 * @param phonex
+	 * @throws PhonexPatternException if phonex has errors
+	 */
+	public DiacriticPhoneMatcher(String phonex) throws PhonexPatternException {
+		super();
+		matcher = PhonexPattern.compileSingleMatcher(phonex);
 	}
 	
 	public DiacriticPhoneMatcher(PhoneMatcher matcher) {

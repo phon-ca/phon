@@ -123,4 +123,5 @@ public class SyllableBoundaryTransition extends PhonexTransition {
 		}
 
 	}
+
 }

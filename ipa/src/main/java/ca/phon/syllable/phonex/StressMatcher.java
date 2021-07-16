@@ -19,6 +19,7 @@ import java.util.*;
 
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
+import ca.phon.phonex.plugins.CombinableMatcher;
 import ca.phon.syllable.*;
 
 /**
@@ -31,6 +32,10 @@ public class StressMatcher implements PhoneMatcher {
 	 */
 	private Set<SyllableStress> stressTypes = 
 			new HashSet<SyllableStress>();
+
+	public StressMatcher() {
+
+	}
 	
 	/**
 	 * Add the given stress type to the list of
@@ -60,7 +65,40 @@ public class StressMatcher implements PhoneMatcher {
 
 	@Override
 	public boolean matchesAnything() {
-		return (stressTypes.size() == SyllableStress.values().length);
+		return stressTypes.contains(SyllableStress.AnyStress) ||
+				(stressTypes.contains(SyllableStress.NoStress) && stressTypes.contains(SyllableStress.PrimaryStress) && stressTypes.contains(SyllableStress.SecondaryStress));
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder retVal = new StringBuilder();
+
+		this.stressTypes.forEach( type -> {
+			if(!retVal.isEmpty())
+				retVal.append("|");
+			switch(type) {
+				case PrimaryStress:
+					retVal.append("1");
+					break;
+
+				case SecondaryStress:
+					retVal.append("2");
+					break;
+
+				case NoStress:
+					retVal.append("U");
+					break;
+
+				case AnyStress:
+					retVal.append("S");
+					break;
+
+				default:
+					break;
+			}
+		});
+
+		return retVal.toString();
 	}
 
 }

@@ -256,6 +256,14 @@ public class  PhonexCompiler2 implements PhonexListener {
 		return this.flags;
 	}
 
+	/**
+	 * Return top element on matcher stack, useful when compiling single-element expressions
+	 *
+	 */
+	public PhoneMatcher getTopMatcher() {
+		return this.matcherStack != null && this.matcherStack.size() > 0 ? this.matcherStack.peek() : null;
+	}
+
 	@Override
 	public void enterExpr(PhonexParser.ExprContext ctx) {
 		setupCapturingGroup();
@@ -664,7 +672,8 @@ public class  PhonexCompiler2 implements PhonexListener {
 	@Override
 	public void exitDiacriticMatcher(PhonexParser.DiacriticMatcherContext ctx) {
 		if(matcherStack.isEmpty()) {
-			// TODO throw exception
+			throw new PhonexPatternException(ctx.start.getLine(), ctx.start.getCharPositionInLine(),
+					"Expecting matcher");
 		}
 		PhoneMatcher matcher = matcherStack.pop();
 		popMatcherStack();

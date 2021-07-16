@@ -155,7 +155,7 @@ public class PhonexMatcherReference extends IPAElement implements PrefixDiacriti
 
 	@Override
 	public String getText() {
-		var image = "$" + 
+		var image = "\\" +
 				(groupName != null ? "{" + groupName + "}" : groupIndex);
 		final StringBuilder sb = new StringBuilder();
 		sb.append(getPrefix());

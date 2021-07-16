@@ -1264,14 +1264,6 @@
         <name>Latin Letter Small T with Hook</name>
         <token>CONSONANT</token>
     </char>
-    <char value="&#x0265;">
-        <name>Latin Letter Small Turned H</name>
-        <token>CONSONANT</token>
-    </char>
-    <char value="&#x0270;">
-        <name>Latin Letter Small Turned M with Long Leg</name>
-        <token>CONSONANT</token>
-    </char>
     <char value="&#x0131;">
         <name>Latin Letter Small Dotless I</name>
         <token>VOWEL</token>

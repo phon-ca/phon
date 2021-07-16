@@ -30,6 +30,7 @@ import ca.phon.syllable.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
@@ -74,6 +75,38 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	private PhonexFSA fsa;
 
 	private int flags = 0;
+
+	/**
+	 * Compile a phonex expression for a single matcher (including phone classes)
+	 * and return the provided matcher.
+	 *
+	 * @param phonex
+	 * @return
+	 * @throws PhonexPatternException
+	 */
+	public static PhoneMatcher compileSingleMatcher(String phonex) throws PhonexPatternException {
+		ErrorListener listener = new ErrorListener();
+
+		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(phonex);
+		ca.phon.phonexg4.PhonexLexer lexer = new ca.phon.phonexg4.PhonexLexer(charStream);
+		lexer.addErrorListener(listener);
+		org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+		ca.phon.phonexg4.PhonexParser parser = new ca.phon.phonexg4.PhonexParser(tokenStream);
+		parser.addErrorListener(listener);
+		PhonexCompiler2 compiler = new PhonexCompiler2();
+
+		ParseTree ctx = null;
+		if(phonex.startsWith("[")) {
+			ctx = parser.class_matcher();
+		} else {
+			ctx = parser.base_matcher();
+		}
+		if(!listener.exceptions.isEmpty())
+			throw listener.exceptions.get(0);
+
+		compiler.walkTree(ctx);
+		return compiler.getTopMatcher();
+	}
 
 	public static PhonexPattern compile(String phonex) throws PhonexPatternException {
 		return compile(phonex, 0);
@@ -167,13 +200,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		for(IPAElement ele:input) builder.append(ele);
 		IPATranscript transcript = builder.toIPATranscript();
 
-//		if(PhonexFlag.STRIP_DIACRITICS.checkFlag(flags)) {
-//			transcript = transcript.stripDiacritics();
-//		}
-//		if(PhonexFlag.STRIP_PUNCTUATION.checkFlag(flags)) {
-//			transcript = transcript.removePunctuation();
-//		}
-
 		SyllabificationInfo.setupSyllabificationInfo(transcript);
 		List<IPAElement> tape = transcript.toList();
 
@@ -215,7 +241,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	/**
 	 * Get the group name for the specified group
 	 *
-	 * @parma gIdx group index
+	 * @oaram gIdx group index
 	 * @return the group name for the specified group
 	 *  or <code>null</code> if the group is not named
 	 * @throws ArrayIndexOutOfBoundsException if the
@@ -227,7 +253,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 
 	/**
 	 * Return the group index for the given group name.
-	 *
 	 *
 	 * @return group index or < 0 if not found
 	 */
