@@ -664,7 +664,8 @@ public class  PhonexCompiler2 implements PhonexListener {
 	@Override
 	public void exitDiacriticMatcher(PhonexParser.DiacriticMatcherContext ctx) {
 		if(matcherStack.isEmpty()) {
-			// TODO throw exception
+			throw new PhonexPatternException(ctx.start.getLine(), ctx.start.getCharPositionInLine(),
+					"Expecting matcher");
 		}
 		PhoneMatcher matcher = matcherStack.pop();
 		popMatcherStack();
