@@ -19,14 +19,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.text.*;
 import java.time.*;
 import java.time.format.*;
+import java.time.temporal.*;
 import java.util.concurrent.locks.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
+import ca.phon.app.log.LogUtil;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.painter.effects.*;
 
@@ -94,18 +98,23 @@ public class LocalProjectButton extends MultiActionButton {
 		getTopLabel().setFont(FontPreferences.getTitleFont());
 		getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
-		final long modTime = new File(projectFile, "project.xml").lastModified();
-		final ZoneId systemZoneId = ZoneId.systemDefault();
-		final ZoneOffset zoneOffset = systemZoneId.getRules().getOffset(Instant.now());
+		Path nioPath = projectFile.toPath();
+		ZonedDateTime zonedDate = null;
+		try {
+			BasicFileAttributes fileAttribs = Files.readAttributes(nioPath, BasicFileAttributes.class);
+			FileTime ft = fileAttribs.lastModifiedTime();
+			LocalDateTime ldt = ft.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+			zonedDate = ldt.atZone(ZoneId.systemDefault());
+		} catch (IOException e) {
+			LogUtil.warning(e);
+		}
 
-		final LocalDateTime modDate = LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), zoneOffset);
-		final ZonedDateTime zonedDate = ZonedDateTime.of(modDate, systemZoneId);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss (zzz)");
 
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		nf.setMaximumFractionDigits(2);
 
-		String modStr =	"Modified: " + formatter.format(zonedDate);
+		String modStr =	"Modified: " + (zonedDate != null ? formatter.format(zonedDate) : " ??? ");
 		String sizeStr = "Size: ";
 		if(!projSizeCalculated) {
 			sizeStr += "Calculating...";
@@ -131,11 +140,9 @@ public class LocalProjectButton extends MultiActionButton {
 			projSizeCalculated = true;
 			projSizeLock.unlock();
 
-
 			Runnable r = new Runnable() {
 				@Override
 				public void run() {
-
 					updateLabels();
 				}
 			};
