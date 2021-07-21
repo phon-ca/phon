@@ -319,66 +319,72 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
-			
-			MediaSegment seg = r.getSegment().getGroup(0);
-			
-			// update segment rect location
-			int segY = 0;
-			if(ymap.containsKey(r.getSpeaker())) {
-				segY = ymap.get(r.getSpeaker());
-			} else {
-				segY = TOP_BOTTOM_MARGIN + 
-						( recordGrid.getSpeakers().indexOf(r.getSpeaker()) * (speakerTierHeight + TIER_GAP) );
-				segY += 2 * getSpeakerLabelHeight();
-				ymap.put(r.getSpeaker(), segY);
-			}
-			
-			var segXmin = recordGrid.xForTime(seg.getStartValue() / 1000.0f);
-			var segXmax = recordGrid.xForTime(seg.getEndValue() / 1000.0f);
 
-			// add segment rect to model
-			Rectangle2D segRect = new Rectangle2D.Double(segXmin, segY, segXmax-segXmin, templateRect.getHeight());
-			if(!recordGrid.isSplitMode())
-				recordTree = recordTree.add(rIdx, Geometries.rectangle((float)segRect.getX(), (float)segRect.getY(), 
-						(float)(segRect.getX()+segRect.getWidth()), (float)(segRect.getY()+segRect.getHeight())));
-		
-			if(segRect.getWidth() > 0 && !recordGrid.getVisibleRect().intersects(segRect)) continue;
-			if(segRect.getWidth() == 0 && !recordGrid.getVisibleRect().contains(new Point((int)segRect.getX(), (int)segRect.getY()))) continue;
-			
-			if(recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
-				Record leftRecord = recordGrid.getLeftRecordSplit();
-				MediaSegment leftRecordSeg = leftRecord.getSegment().getGroup(0);
-				segRect.setFrame(segRect.getX(), segRect.getY(), 
-						recordGrid.xForTime(leftRecordSeg.getEndValue() / 1000.0f) - segRect.getX(), segRect.getHeight());
-				paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
-				paintSegmentLabelAndActions(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
-				
-				Record rightRecord = recordGrid.getRightRecordSplit();
-				MediaSegment rightRecordSeg = rightRecord.getSegment().getGroup(0);
-				segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getY(), 
-						recordGrid.xForTime(rightRecordSeg.getEndValue() / 1000.0f) - recordGrid.xForTime(rightRecordSeg.getStartValue()/1000.0f), segRect.getHeight());
-				paintSegment(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit(), segRect);
-				paintSegmentLabelAndActions(g2, (rIdx+2) * -1, recordGrid.getRightRecordSplit(), segRect);
-				
-				continue;
-			}
-			
-			if(segRect.getWidth() > 0) {
-				paintSegment(g2, rIdx, r, segRect);
-			} else {
-				paintZeroLengthSegment(g2, rIdx, r, segRect);
-			}
-			visibleRecords.put(rIdx, segRect);
+			try {
+				MediaSegment seg = r.getSegment().getGroup(0);
 
-			// setup 'marker' rectangles 
-			
-			// start marker
-			markerTree = markerTree.add(rIdx + 1, Geometries.rectangle((float)segRect.getX() - MARKER_PADDING, (float)segRect.getY(),
-					(float)segRect.getX() + MARKER_PADDING, (float)(segRect.getY()+segRect.getHeight())));
-			
-			// end marker
-			markerTree = markerTree.add(-(rIdx + 1), Geometries.rectangle((float)segRect.getMaxX() - 1, (float)segRect.getY(),
-					(float)segRect.getMaxX() + 1, (float)(segRect.getY()+segRect.getHeight())));
+				// update segment rect location
+				int segY = 0;
+				if (ymap.containsKey(r.getSpeaker())) {
+					segY = ymap.get(r.getSpeaker());
+				} else {
+					segY = TOP_BOTTOM_MARGIN +
+							(recordGrid.getSpeakers().indexOf(r.getSpeaker()) * (speakerTierHeight + TIER_GAP));
+					segY += 2 * getSpeakerLabelHeight();
+					ymap.put(r.getSpeaker(), segY);
+				}
+
+				var segXmin = recordGrid.xForTime(seg.getStartValue() / 1000.0f);
+				var segXmax = recordGrid.xForTime(seg.getEndValue() / 1000.0f);
+
+				// add segment rect to model
+				Rectangle2D segRect = new Rectangle2D.Double(segXmin, segY, segXmax - segXmin, templateRect.getHeight());
+				if (!recordGrid.isSplitMode())
+					recordTree = recordTree.add(rIdx, Geometries.rectangle((float) segRect.getX(), (float) segRect.getY(),
+							(float) (segRect.getX() + segRect.getWidth()), (float) (segRect.getY() + segRect.getHeight())));
+
+				if (segRect.getWidth() > 0 && !recordGrid.getVisibleRect().intersects(segRect)) continue;
+				if (segRect.getWidth() == 0 && !recordGrid.getVisibleRect().contains(new Point((int) segRect.getX(), (int) segRect.getY())))
+					continue;
+
+				if (recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
+					Record leftRecord = recordGrid.getLeftRecordSplit();
+					MediaSegment leftRecordSeg = leftRecord.getSegment().getGroup(0);
+					segRect.setFrame(segRect.getX(), segRect.getY(),
+							recordGrid.xForTime(leftRecordSeg.getEndValue() / 1000.0f) - segRect.getX(), segRect.getHeight());
+					paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
+					paintSegmentLabelAndActions(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
+
+					Record rightRecord = recordGrid.getRightRecordSplit();
+					MediaSegment rightRecordSeg = rightRecord.getSegment().getGroup(0);
+					segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getY(),
+							recordGrid.xForTime(rightRecordSeg.getEndValue() / 1000.0f) - recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getHeight());
+					paintSegment(g2, (rIdx + 2) * -1, recordGrid.getRightRecordSplit(), segRect);
+					paintSegmentLabelAndActions(g2, (rIdx + 2) * -1, recordGrid.getRightRecordSplit(), segRect);
+
+					continue;
+				}
+
+				if (segRect.getWidth() > 0) {
+					paintSegment(g2, rIdx, r, segRect);
+				} else {
+					paintZeroLengthSegment(g2, rIdx, r, segRect);
+				}
+				visibleRecords.put(rIdx, segRect);
+
+				// setup 'marker' rectangles
+
+				// start marker
+				markerTree = markerTree.add(rIdx + 1, Geometries.rectangle((float) segRect.getX() - MARKER_PADDING, (float) segRect.getY(),
+						(float) segRect.getX() + MARKER_PADDING, (float) (segRect.getY() + segRect.getHeight())));
+
+				// end marker
+				markerTree = markerTree.add(-(rIdx + 1), Geometries.rectangle((float) segRect.getMaxX() - 1, (float) segRect.getY(),
+						(float) segRect.getMaxX() + 1, (float) (segRect.getY() + segRect.getHeight())));
+			} catch (IllegalArgumentException ex) {
+				// may be thrown from tree.add methods above
+				LogUtil.warning("Failed drawing record: " + (rIdx+1), ex);
+			}
 		}
 	
 		// paint segment labels
