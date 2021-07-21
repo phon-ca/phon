@@ -625,7 +625,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	/**
-	 * Create a list of phones which produce a sound.
+	 * Create a list of IPAElements which produce a sound.
 	 *
 	 * @return audible phones
 	 */

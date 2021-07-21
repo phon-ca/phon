@@ -95,7 +95,7 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 		
 		score = matrix[width-1][height-1];
 		
-		alignment = this.retreiveAlignment(top, bottom, width-1, height-1, 0, matrix, tp, ap, score);
+		alignment = this.retrieveAlignment(top, bottom, width-1, height-1, 0, matrix, tp, ap, score);
 		swapIndels(alignment);
 		
 		retVal.setTopElements(top);
@@ -150,8 +150,8 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 	 * @param ap the stack used to store the actual alignment
 	 * @param score
 	 */
-	protected Integer[][] retreiveAlignment(T[] top, T[] bottom, 
-			int i, int j, int tally, int[][] matrix, Stack<Integer> tp, Stack<Integer> ap, int score) {
+	protected Integer[][] retrieveAlignment(T[] top, T[] bottom,
+											int i, int j, int tally, int[][] matrix, Stack<Integer> tp, Stack<Integer> ap, int score) {
 		// the base case for our recursion, we are looking at a 0x0 matrix
 		if(i == 0 && j == 0) {
 			Integer[][] toReturn = new Integer[2][];
@@ -185,7 +185,7 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 				
 				int newTally = tally + subVal;
 				
-				return this.retreiveAlignment(top, bottom,
+				return this.retrieveAlignment(top, bottom,
 						i-1, j-1, newTally,
 						matrix, 
 						tp, ap, score);
@@ -202,7 +202,7 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 				
 				int newTally = tally + this.costSkip(bottom[j-1]);
 				
-				return this.retreiveAlignment(top, bottom,
+				return this.retrieveAlignment(top, bottom,
 						i, j-1, newTally,
 						matrix, 
 						tp, ap,
@@ -218,7 +218,7 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 			
 			int newTally = tally + this.costSkip(top[i-1]);
 			
-			return this.retreiveAlignment(top, bottom,
+			return this.retrieveAlignment(top, bottom,
 					i-1, j, newTally,
 					matrix, 
 					tp, ap,
@@ -235,7 +235,7 @@ public abstract class IndelAligner<T> implements Aligner<T> {
 				
 				int newTally = tally + this.costSkip(top[i]);
 				
-				return this.retreiveAlignment(top, bottom, i, j-1, newTally, 
+				return this.retrieveAlignment(top, bottom, i, j-1, newTally,
 						matrix, 
 						tp, ap, score);
 			} else {

@@ -288,7 +288,7 @@ public class PhoneAligner extends IndelAligner<IPAElement> {
 			Integer[] tAlign = pm.getTopAlignment();
 			Integer[] aAlign = pm.getBottomAlignment();
 			
-			// XXX check for special case involving alignment with '*'
+			// check for special case involving alignment with '*'
 			if(     pm.getAlignmentLength() >= 2
 					&&
 					// initial indel on top for first position
