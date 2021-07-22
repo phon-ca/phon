@@ -397,11 +397,21 @@ public class LocalProject implements Project, ProjectRefresh {
 		
 		final File corpusFolder = getCorpusFolder(corpus);
 		final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
-		
-		try {
-			Files.write(corpusInfoFile.toPath(), description.getBytes("UTF-8"));
-		} catch (IOException e) {
-			LOGGER.error(e);
+
+		if(description.trim().length() > 0) {
+			try {
+				Files.write(corpusInfoFile.toPath(), description.trim().getBytes("UTF-8"));
+			} catch (IOException e) {
+				LOGGER.error(e);
+			}
+		} else {
+			if(corpusInfoFile.exists()) {
+				try {
+					Files.deleteIfExists(corpusInfoFile.toPath());
+				} catch (IOException e) {
+					LOGGER.error(e);
+				}
+			}
 		}
 
 		ProjectEvent pe = ProjectEvent.newCorpusDescriptionChangedEvent(corpus, old, description);
