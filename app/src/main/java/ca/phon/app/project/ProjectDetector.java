@@ -27,18 +27,14 @@ import java.util.function.Function;
 /**
  * Class which attempts to detect if a given file folder
  * is an actual Phon project folder.  This class performs
- * the following checks and returns <code>true</code> if
- * two or more pass:
+ * the following check
  * <ul>
- *     <li>check for a project.properties file</li>
- *     <li>check for a __res folder</li>
- *     <li>check for a backups.zip file</li>
  *     <li>check folders for a session file inside a corpus folder</li>
  * </ul>
  */
 public class ProjectDetector {
 
-	private final static int MIN_SCORE = 2;
+	private final static int MIN_SCORE = 1;
 
 	private boolean hasPropertiesFiles(File projectFolder) {
 		final File oldPropsFile = new File(projectFolder, LocalProject.PREV_PROJECT_PROPERTIES_FILE);
@@ -93,13 +89,13 @@ public class ProjectDetector {
 
 	public boolean isPhonProjectFolder(File folder) {
 		List<Function<File, Boolean>> checks = new ArrayList<>();
-		checks.add(this::hasPropertiesFiles);
-		checks.add(this::hasResourcesFolder);
-		checks.add(this::hasBackupsZip);
+//		checks.add(this::hasPropertiesFiles);
+//		checks.add(this::hasResourcesFolder);
+//		checks.add(this::hasBackupsZip);
 		checks.add(this::hasSessionFilesInChildFolders);
 
 		int score = (int)checks.parallelStream().filter(check -> check.apply(folder)).count();
-		return score >= MIN_SCORE;
+		return score >= 1;
 	}
 
 }
