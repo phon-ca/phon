@@ -27,6 +27,7 @@ import javax.xml.parsers.*;
 import javax.xml.stream.*;
 import javax.xml.xpath.*;
 
+import org.apache.logging.log4j.Level;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -60,7 +61,8 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Deprecated
 	public final static String PROJECT_XML_FILE = "project.xml";
 
-	public final static String PROJECT_PROPERTIES_FILE = ".properties";
+	public final static String PREV_PROJECT_PROPERTIES_FILE = ".properties";
+	public final static String PROJECT_PROPERTIES_FILE = "project.properties";
 
 	public final static String PROJECT_MEDIAFOLDER_PROP = "project.mediaFolder";
 
@@ -94,7 +96,7 @@ public class LocalProject implements Project, ProjectRefresh {
 
 	/**
 	 *
-	 * @param url
+	 * @param projectFolder
 	 */
 	protected LocalProject(File projectFolder)
 			throws ProjectConfigurationException {
@@ -116,7 +118,9 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 	
 	private void loadProperties() {
-		final File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
+		final File oldPropertiesFile = new File(getFolder(), PREV_PROJECT_PROPERTIES_FILE);
+		File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
+		propsFile = (propsFile.exists() ? propsFile : oldPropertiesFile);
 
 		if(propsFile.exists()) {
 			// load properties
@@ -238,6 +242,11 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	protected synchronized void saveProperties() throws IOException {
+		final File oldPropsFile = new File(getFolder(), PREV_PROJECT_PROPERTIES_FILE);
+		if(oldPropsFile.exists()) {
+			Files.deleteIfExists(oldPropsFile.toPath());
+		}
+
 		// save properties
 		final Properties properties = getExtension(Properties.class);
 		if(properties != null) {
@@ -245,72 +254,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			properties.store(new FileOutputStream(propFile), "Phon " + VersionInfo.getInstance().getLongVersion());
 		}
 	}
-
-//	/**
-//	 * Scan the project folder and build the list of corpora/sessions
-//	 * available.  Local projects will always take the current list of
-//	 * corpora/sessions directly from the storage device.
-//	 *
-//	 * @return list of corprora xml objects
-//	 */
-//	private List<CorpusType> scanProjectFolder() {
-//		final ObjectFactory factory = new ObjectFactory();
-//		final List<CorpusType> retVal = new ArrayList<CorpusType>();
-//
-//		for(File f:getFolder().listFiles()) {
-//			if(f.isDirectory()
-//					&& !f.getName().startsWith("~")
-//					&& !f.getName().endsWith("~")
-//					&& !f.getName().startsWith("__")
-//					&& !f.getName().startsWith(".")
-//					&& !f.isHidden()) {
-//				final String corpusName = f.getName();
-//				CorpusType ct = getCorpusInfo(corpusName);
-//				if(ct == null) {
-//					ct = factory.createCorpusType();
-//					ct.setName(corpusName);
-//					ct.setDescription("");
-//				}
-//
-//				final List<SessionType> toRemove = new ArrayList<SessionType>(ct.getSession());
-//				// look for all xml files inside corpus folder
-//				for(File xmlFile:f.listFiles()) {
-//					if((xmlFile.getName().endsWith(".xml")
-//							|| xmlFile.getName().endsWith(".cha"))
-//							&& !xmlFile.getName().startsWith("~")
-//							&& !xmlFile.getName().endsWith("~")
-//							&& !xmlFile.getName().startsWith("__")
-//							&& !xmlFile.getName().startsWith(".")
-//							&& !xmlFile.isHidden()) {
-//						final String sessionName = xmlFile.getName().substring(0, xmlFile.getName().lastIndexOf('.'));
-//
-//						SessionType sessionType = null;
-//						for(SessionType st:ct.getSession()) {
-//							if(st.getName().equals(sessionName)) {
-//								sessionType = st;
-//								break;
-//							}
-//						}
-//
-//						if(sessionType == null) {
-//							sessionType = factory.createSessionType();
-//							sessionType.setName(sessionName);
-//							ct.getSession().add(sessionType);
-//						} else {
-//							toRemove.remove(sessionType);
-//						}
-//					}
-//				}
-//				for(SessionType st:toRemove) {
-//					ct.getSession().remove(st);
-//				}
-//
-//				retVal.add(ct);
-//			}
-//		}
-//
-//		return retVal;
-//	}
 
 	private File getFolder() {
 		return this.projectFolder;

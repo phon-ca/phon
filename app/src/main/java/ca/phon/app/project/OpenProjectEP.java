@@ -17,6 +17,7 @@ package ca.phon.app.project;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -26,6 +27,7 @@ import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.ui.*;
 import ca.phon.ui.nativedialogs.*;
+import org.apache.logging.log4j.Level;
 
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {
@@ -133,6 +135,21 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		return false;
     }
 
+    private void moveOldProperitesFile() {
+		if(this.project == null) return;
+
+		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
+		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
+		if(oldPropsFile.exists() && !newPropsFile.exists()) {
+			LOGGER.log(Level.INFO, "Moving old .properties file to new project.properties");
+			try {
+				Files.move(oldPropsFile.toPath(), newPropsFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
+			} catch (IOException e) {
+				LOGGER.log(Level.ERROR, e.getLocalizedMessage(), e);
+			}
+		}
+    }
+
 	@Override
 	public void pluginStart(Map<String, Object> args)  {
 		if(GraphicsEnvironment.isHeadless()) return;
@@ -154,6 +171,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		
 		@Override
 		public void run() {
+			moveOldProperitesFile();
 			loadProject();
 		}
 		
