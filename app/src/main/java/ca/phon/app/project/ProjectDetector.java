@@ -99,7 +99,7 @@ public class ProjectDetector {
 		checks.add(this::hasSessionFilesInChildFolders);
 
 		int score = (int)checks.parallelStream().filter(check -> check.apply(folder)).count();
-		return score > MIN_SCORE;
+		return score >= MIN_SCORE;
 	}
 
 }
