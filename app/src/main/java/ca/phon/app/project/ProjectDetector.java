@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2005-2021 Gregory Hedlund & Yvan Rose
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
@@ -10,7 +25,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * Class which attempts to detect if a given Phon folder
+ * Class which attempts to detect if a given file folder
  * is an actual Phon project folder.  This class performs
  * the following checks and returns <code>true</code> if
  * two or more pass:
@@ -18,7 +33,7 @@ import java.util.function.Function;
  *     <li>check for a project.properties file</li>
  *     <li>check for a __res folder</li>
  *     <li>check for a backups.zip file</li>
- *     <li>check folders for a set of .xml files</li>
+ *     <li>check folders for a session file inside a corpus folder</li>
  * </ul>
  */
 public class ProjectDetector {
