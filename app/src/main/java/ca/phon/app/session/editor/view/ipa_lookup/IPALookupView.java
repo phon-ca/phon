@@ -204,6 +204,10 @@ public class IPALookupView extends EditorView {
 		else
 			SwingUtilities.invokeLater(onEdt);
 	}
+
+	public Language getSelectedDictionaryLanguage() {
+		return (Language) this.langBox.getSelectedItem();
+	}
 	
 	public void onLanguageSwitch() {
 		if(isUpdatingBox) return;

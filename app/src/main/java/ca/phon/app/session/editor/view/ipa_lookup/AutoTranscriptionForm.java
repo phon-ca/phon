@@ -17,11 +17,13 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
 
+import ca.phon.ipadictionary.IPADictionaryLibrary;
 import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.session.*;
@@ -30,6 +32,7 @@ import ca.phon.session.*;
 import ca.phon.session.filter.*;
 import ca.phon.syllabifier.*;
 import ca.phon.util.*;
+import org.jdesktop.swingx.VerticalLayout;
 
 /**
  * Form for selection options when performing automatic
@@ -52,7 +55,17 @@ public class AutoTranscriptionForm extends JPanel {
 
 	private JCheckBox overwriteBox;
 
+	private JComboBox<Language> dictionaryLanguageBox;
+
 	private JComboBox<Syllabifier> syllabifierBox;
+
+	public AutoTranscriptionForm() {
+		this(null, null);
+	}
+
+	public AutoTranscriptionForm(Project project) {
+		this(project, null);
+	}
 
 	public AutoTranscriptionForm(Project project, Session session) {
 		super();
@@ -60,14 +73,18 @@ public class AutoTranscriptionForm extends JPanel {
 		init(project, session);
 	}
 
-	private void init(Project project, Session t) {
-		FormLayout layout = new FormLayout(
-				"fill:pref:grow",
-				"pref, pref");
-		setLayout(layout);
-		CellConstraints cc = new CellConstraints();
+	private void init(Project project, Session session) {
+		setLayout(new VerticalLayout());
 
-		overwriteBox = new JCheckBox("Overwrite");
+		Set<Language> langs = IPADictionaryLibrary.getInstance().availableLanguages();
+		Language langArray[] = langs.toArray(new Language[0]);
+		Arrays.sort(langArray, new LanguageComparator());
+		final Language defLang = IPADictionaryLibrary.getInstance().getDefaultLanguage();
+		dictionaryLanguageBox = new JComboBox<>(langArray);
+		dictionaryLanguageBox.setRenderer(new LanguageCellRenderer());
+		dictionaryLanguageBox.setSelectedItem(defLang);
+
+		overwriteBox = new JCheckBox("Overwrite existing data");
 		overwriteBox.setSelected(false);
 
 		setIPATargetBox = new JCheckBox("IPA Target");
@@ -98,24 +115,39 @@ public class AutoTranscriptionForm extends JPanel {
 
 		FormLayout topLayout = new FormLayout(
 				"right:pref, fill:pref:grow",
-				"pref, pref, pref, pref, pref");
+				"pref, pref, pref, pref, pref, pref");
+		CellConstraints cc = new CellConstraints();
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(topLayout);
 
 		topPanel.setBorder(BorderFactory.createTitledBorder("Tier Options"));
 
+		topPanel.add(new JLabel("IPA Dictionary:"), cc.xy(1, 1));
+		topPanel.add(this.dictionaryLanguageBox, cc.xy(2, 1));
 		topPanel.add(new JLabel("Transcribe:"), cc.xy(1,2));
-		topPanel.add(overwriteBox, cc.xy(2,1));
 		topPanel.add(setIPATargetBox, cc.xy(2,2));
 		topPanel.add(setIPAActualBox, cc.xy(2,3));
-		topPanel.add(new JLabel("Syllabifier:"), cc.xy(1, 4));
-		topPanel.add(syllabifierBox, cc.xy(2, 4));
+		topPanel.add(overwriteBox, cc.xy(2,4));
+		topPanel.add(new JLabel("Syllabifier:"), cc.xy(1, 5));
+		topPanel.add(syllabifierBox, cc.xy(2, 5));
 
-		filterPanel = new RecordFilterPanel(project, t);
-		filterPanel.setBorder(BorderFactory.createTitledBorder("Record Selection"));
+		if(project != null && session != null) {
+			filterPanel = new RecordFilterPanel(project, session);
+			filterPanel.setBorder(BorderFactory.createTitledBorder("Record Selection"));
+		}
 
-		add(topPanel, cc.xy(1, 1));
-		add(filterPanel, cc.xy(1, 2));
+		add(topPanel);
+		if(project != null && session != null) {
+			add(filterPanel);
+		}
+	}
+
+	public Language getDictionaryLanguage() {
+		return (Language) this.dictionaryLanguageBox.getSelectedItem();
+	}
+
+	public void setDictionaryLanguage(Language lang) {
+		this.dictionaryLanguageBox.setSelectedItem(lang);
 	}
 
 	public boolean isSetIPATarget() {
@@ -159,6 +191,39 @@ public class AutoTranscriptionForm extends JPanel {
 			if(value != null) {
 				final Syllabifier syllabifier = (Syllabifier)value;
 				final String text = syllabifier.getName() + " (" + syllabifier.getLanguage().toString() + ")";
+				retVal.setText(text);
+			}
+
+			return retVal;
+		}
+
+	}
+
+	private class LanguageComparator implements Comparator<Language> {
+
+		@Override
+		public int compare(Language o1, Language o2) {
+			String l1 = o1.getPrimaryLanguage().getName() + " (" + o1.toString() + ")";
+			String l2 = o2.getPrimaryLanguage().getName() + " (" + o2.toString() + ")";
+			return l1.compareTo(l2);
+		}
+
+	}
+
+	private class LanguageCellRenderer extends DefaultListCellRenderer {
+
+		private static final long serialVersionUID = -5753923740573333306L;
+
+		@Override
+		public Component getListCellRendererComponent(JList list,
+		                                              Object value, int index, boolean isSelected,
+		                                              boolean cellHasFocus) {
+			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+					cellHasFocus);
+
+			if(value != null) {
+				final Language lang = (Language)value;
+				final String text = lang.getPrimaryLanguage().getName() + " (" + lang.toString() + ")";
 				retVal.setText(text);
 			}
 

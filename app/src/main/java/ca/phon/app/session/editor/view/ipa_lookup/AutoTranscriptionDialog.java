@@ -23,6 +23,7 @@ import ca.phon.project.*;
 import ca.phon.session.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.decorations.*;
+import ca.phon.util.Language;
 
 public class AutoTranscriptionDialog extends JDialog {
 	
@@ -41,10 +42,11 @@ public class AutoTranscriptionDialog extends JDialog {
 	
 	private boolean canceled = true;
 	
-	public AutoTranscriptionDialog(Project project, Session session) {
+	public AutoTranscriptionDialog(Project project, Session session, Language dictionaryLanguage) {
 		super();
 		
 		form = new AutoTranscriptionForm(project, session);
+		form.setDictionaryLanguage(dictionaryLanguage);
 		
 		init();
 	}

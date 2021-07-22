@@ -16,12 +16,14 @@
 package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
 import java.awt.event.*;
+import java.util.Optional;
 
 import javax.swing.undo.*;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.ipa_lookup.*;
 import ca.phon.ipadictionary.*;
+import ca.phon.opgraph.OpNode;
 import ca.phon.session.*;
 import ca.phon.worker.*;
 
@@ -49,7 +51,7 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 	public void actionPerformed(ActionEvent e) {
 		final SessionEditor sessionEditor = getLookupView().getEditor();
 		final AutoTranscriptionDialog autoTranscribeDialog = 
-				new AutoTranscriptionDialog(sessionEditor.getProject(), sessionEditor.getSession());
+				new AutoTranscriptionDialog(sessionEditor.getProject(), sessionEditor.getSession(), getLookupView().getSelectedDictionaryLanguage());
 		autoTranscribeDialog.setModal(true);
 		
 		autoTranscribeDialog.pack();
@@ -64,9 +66,12 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 				public void performTask() {
 					setStatus(TaskStatus.RUNNING);
 					setProperty(PhonTask.PROGRESS_PROP, -1f);
-					
+
+					Optional<IPADictionary> dict =
+							IPADictionaryLibrary.getInstance().dictionariesForLanguage(autoTranscribeDialog.getForm().getDictionaryLanguage()).stream().findAny();
+
 					final AutoTranscriber transcriber = new AutoTranscriber(sessionEditor);
-					transcriber.setDictionary(getLookupView().getLookupContext().getDictionary());
+					transcriber.setDictionary(dict.orElse(getLookupView().getLookupContext().getDictionary()));
 					transcriber.setOverwrite(autoTranscribeDialog.getForm().isOverwrite());
 					transcriber.setSetIPAActual(autoTranscribeDialog.getForm().isSetIPAActual());
 					transcriber.setSetIPATarget(autoTranscribeDialog.getForm().isSetIPATarget());
