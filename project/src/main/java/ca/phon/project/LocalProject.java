@@ -398,7 +398,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		final File corpusFolder = getCorpusFolder(corpus);
 		final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
 
-		if(description.trim().length() > 0) {
+		if(description != null && description.trim().length() > 0) {
 			try {
 				Files.write(corpusInfoFile.toPath(), description.trim().getBytes("UTF-8"));
 			} catch (IOException e) {
