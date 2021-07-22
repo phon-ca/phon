@@ -18,6 +18,7 @@ package ca.phon.app.workspace;
 import java.io.*;
 import java.util.*;
 
+import ca.phon.app.project.ProjectDetector;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.*;
 import ca.phon.util.*;
@@ -97,7 +98,7 @@ public class Workspace {
 	/**
 	 * Get the folder
 	 * 
-	 * @param workspaceFolder
+	 * @return File workspaceFolder
 	 */
 	public File getWorkspaceFolder() {
 		return this.workspaceFolder;
@@ -112,7 +113,8 @@ public class Workspace {
 		final List<Project> retVal = new ArrayList<Project>();
 		// scan workspace folder for projects
 		final File workspaceFolder = getWorkspaceFolder();
-		
+
+		final ProjectDetector detector = new ProjectDetector();
 		final ProjectFactory pf = new DefaultProjectFactory();
 		for(File workspaceFile:workspaceFolder.listFiles()) {
 			if(workspaceFile.isDirectory() 
@@ -121,12 +123,13 @@ public class Workspace {
 					&& !workspaceFile.getName().endsWith("~")
 					&& !workspaceFile.getName().startsWith("__")
 					&& !workspaceFile.getName().equals("backups")) {
-				// check to see if we can open the project
-				try {
-					final Project p = pf.openProject(workspaceFile);
-					retVal.add(p);
-				} catch (IOException e) {} catch (ProjectConfigurationException e) {
-					LOGGER.error(e.getLocalizedMessage(), e);
+				if(detector.isPhonProjectFolder(workspaceFile)) {
+					try {
+						final Project p = pf.openProject(workspaceFile);
+						retVal.add(p);
+					} catch (IOException | ProjectConfigurationException e) {
+						LOGGER.error(e.getLocalizedMessage(), e);
+					}
 				}
 			}
 		}

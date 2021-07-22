@@ -37,6 +37,17 @@ public class SessionInputFactory {
 		super();
 		readerExtPts = PluginManager.getInstance().getExtensionPoints(SessionReader.class);
 	}
+
+	public static Set<String> getSessionExtensions() {
+		final Set<String> retVal = new LinkedHashSet<>();
+
+		final SessionInputFactory factory = new SessionInputFactory();
+		for(SessionIO sessionIO:factory.availableReaders()) {
+			retVal.add(sessionIO.extension());
+		}
+
+		return retVal;
+	}
 	
 	/**
 	 * Get specified reader.
@@ -47,7 +58,6 @@ public class SessionInputFactory {
 	public SessionReader createReader(SessionIO sessionIO) {
 		return createReader(sessionIO.id(), sessionIO.version());
 	}
-	
 	
 	/**
 	 * Get the list of available session readers.

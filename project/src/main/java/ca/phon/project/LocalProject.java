@@ -481,7 +481,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	public List<String> getCorpusSessions(String corpus) {
 		final List<String> retVal = new ArrayList<String>();
 		
-		Set<String> validexts = getSessionExtensions();
+		Set<String> validexts = SessionInputFactory.getSessionExtensions();
 		
 		final File corpusFolder = getCorpusFolder(corpus);
 		try(DirectoryStream<Path> stream = Files.newDirectoryStream(corpusFolder.toPath())) {
@@ -515,20 +515,9 @@ public class LocalProject implements Project, ProjectRefresh {
 		return retVal;
 	}
 
-	private Set<String> getSessionExtensions() {
-		final Set<String> retVal = new LinkedHashSet<>();
-
-		final SessionInputFactory factory = new SessionInputFactory();
-		for(SessionIO sessionIO:factory.availableReaders()) {
-			retVal.add(sessionIO.extension());
-		}
-
-		return retVal;
-	}
-
 	public File getSessionFile(String corpus, String session) {
 		final List<File> potentialFiles =
-				getSessionExtensions().stream()
+				SessionInputFactory.getSessionExtensions().stream()
 					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
 					.collect( Collectors.toList() );
 		final Optional<File> optionalFile = potentialFiles.stream()
