@@ -1,3 +1,4 @@
+ca.phon.app.opgraph.nodes.AutomaticTranscriptionNode
 ca.phon.app.opgraph.nodes.PhonScriptNode
 ca.phon.app.opgraph.nodes.SessionCheckNode
 ca.phon.app.opgraph.nodes.project.SessionSelectorNode
