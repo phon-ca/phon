@@ -338,14 +338,40 @@ public final class Record extends ExtendableObject {
 		if(tBuilder.size() > 0) tBuilder.appendWordBoundary();
 		tBuilder.append(group2.getIPATarget());
 		final IPATranscript ipaTarget = tBuilder.toIPATranscript();
-		group1.setIPATarget(ipaTarget);
 
 		final IPATranscriptBuilder aBuilder = new IPATranscriptBuilder();
 		aBuilder.append(group1.getIPAActual());
 		if(aBuilder.size() > 0) aBuilder.appendWordBoundary();
 		aBuilder.append(group2.getIPAActual());
 		final IPATranscript ipaActual = aBuilder.toIPATranscript();
+
+		PhoneMap pm1 = group1.getPhoneAlignment();
+		if(pm1 == null) pm1 = new PhoneMap();
+		PhoneMap pm2 = group2.getPhoneAlignment();
+		if(pm2 == null) pm2 = new PhoneMap();
+		int alignmentLength = pm1.getAlignmentLength() + pm2.getAlignmentLength();
+		Integer[] topAlignment = new Integer[alignmentLength];
+		Integer[] bottomAlignment = new Integer[alignmentLength];
+		int aIdx = 0;
+		for(int i = 0; i < pm1.getAlignmentLekngth(); i++) {
+			topAlignment[aIdx] = pm1.getTopAlignment()[i];
+			bottomAlignment[aIdx] = pm1.getBottomAlignment()[i];
+			++aIdx;
+		}
+		final int topOffset = (group1.getIPATarget().audiblePhones().length() > 0 ? group1.getIPATarget().audiblePhones().length() : 0);
+		final int btmOffset = (group1.getIPAActual().audiblePhones().length() > 0 ? group1.getIPAActual().audiblePhones().length() : 0);
+		for(int i = 0; i < pm2.getAlignmentLength(); i++) {
+			topAlignment[aIdx] = pm2.getTopAlignment()[i] + topOffset;
+			bottomAlignment[aIdx] = pm2.getBottomAlignment()[i] + btmOffset;
+			++aIdx;
+		}
+		final PhoneMap combinedPhoneMap = new PhoneMap(ipaTarget, ipaActual);
+		combinedPhoneMap.setTopAlignment(topAlignment);
+		combinedPhoneMap.setBottomAlignment(bottomAlignment);
+
+		group1.setIPATarget(ipaTarget);
 		group1.setIPAActual(ipaActual);
+		group1.setPhoneAlignment(combinedPhoneMap);
 
 		// other tiers
 		for(String tierName:getExtraTierNames()) {
