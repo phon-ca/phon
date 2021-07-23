@@ -49,6 +49,7 @@ ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes
+ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes.project
 ca.phon.app.opgraph.nodes
 ca.phon.app.opgraph.nodes
@@ -228,6 +229,7 @@ ca.phon.app.welcome
 ca.phon.app.welcome
 ca.phon.app.welcome
 ca.phon.app.welcome
+ca.phon.app.project
 ca.phon.app.project
 ca.phon.app.project
 ca.phon.app.project
