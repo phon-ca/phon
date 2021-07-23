@@ -353,7 +353,7 @@ public final class Record extends ExtendableObject {
 		Integer[] topAlignment = new Integer[alignmentLength];
 		Integer[] bottomAlignment = new Integer[alignmentLength];
 		int aIdx = 0;
-		for(int i = 0; i < pm1.getAlignmentLekngth(); i++) {
+		for(int i = 0; i < pm1.getAlignmentLength(); i++) {
 			topAlignment[aIdx] = pm1.getTopAlignment()[i];
 			bottomAlignment[aIdx] = pm1.getBottomAlignment()[i];
 			++aIdx;
