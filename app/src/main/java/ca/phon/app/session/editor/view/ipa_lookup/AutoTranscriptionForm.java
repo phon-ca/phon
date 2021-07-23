@@ -120,7 +120,7 @@ public class AutoTranscriptionForm extends JPanel {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(topLayout);
 
-		topPanel.setBorder(BorderFactory.createTitledBorder("Tier Options"));
+		topPanel.setBorder(BorderFactory.createTitledBorder("Options"));
 
 		topPanel.add(new JLabel("IPA Dictionary:"), cc.xy(1, 1));
 		topPanel.add(this.dictionaryLanguageBox, cc.xy(2, 1));
@@ -154,12 +154,24 @@ public class AutoTranscriptionForm extends JPanel {
 		return setIPATargetBox.isSelected();
 	}
 
+	public void setSetIPATarget(boolean setIPATarget) {
+		this.setIPATargetBox.setSelected(setIPATarget);
+	}
+
 	public boolean isSetIPAActual() {
 		return setIPAActualBox.isSelected();
 	}
 
+	public void setSetIPAActual(boolean setIPAActual) {
+		this.setIPAActualBox.setSelected(setIPAActual);
+	}
+
 	public Syllabifier getSyllabifier() {
 		return (Syllabifier)syllabifierBox.getSelectedItem();
+	}
+
+	public void setSyllabifier(Syllabifier syllabifier) {
+		this.syllabifierBox.setSelectedItem(syllabifier);
 	}
 
 	public RecordFilter getRecordFilter() {
@@ -168,6 +180,10 @@ public class AutoTranscriptionForm extends JPanel {
 
 	public boolean isOverwrite() {
 		return overwriteBox.isSelected();
+	}
+
+	public void setOverwrite(boolean overwrite) {
+		this.overwriteBox.setSelected(overwrite);
 	}
 
 	private class SyllabifierComparator implements Comparator<Syllabifier> {
