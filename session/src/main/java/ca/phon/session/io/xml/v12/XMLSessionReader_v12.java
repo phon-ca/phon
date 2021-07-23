@@ -307,8 +307,8 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	
 	private MediaSegment copySegment(SessionFactory factory, SegmentType st) {
 		final MediaSegment segment = factory.createMediaSegment();
-		segment.setStartValue(st.getStartTime());
-		segment.setEndValue(st.getStartTime() + st.getDuration());
+		segment.setStartValue(Math.abs(st.getStartTime()));
+		segment.setEndValue(Math.abs(st.getStartTime()) + Math.abs(st.getDuration()));
 		segment.setUnitType(MediaUnit.Millisecond);
 		return segment;
 	}
