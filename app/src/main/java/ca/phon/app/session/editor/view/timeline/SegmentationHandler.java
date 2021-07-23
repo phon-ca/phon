@@ -27,6 +27,8 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.*;
 import ca.phon.app.session.editor.view.media_player.actions.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.media.*;
 import ca.phon.media.player.*;
 import ca.phon.orthography.*;
@@ -317,9 +319,10 @@ public final class SegmentationHandler {
 			m.setEndValue(segmentEnd);
 			
 			// setup orthography
-			utt.getOrthography().addGroup(new Orthography());
+			utt.addGroup();
+			utt.getOrthography().setGroup(0, new Orthography());
 			utt.getSegment().setGroup(0, m);
-			
+
 			SegmentationMode mode = getSegmentationMode();
 			if(mode == SegmentationMode.REPLACE_CURRENT && editor.currentRecord() == null) {
 				// switch to 'add record' mode
