@@ -86,7 +86,7 @@ public class SonorityNode extends OpNode implements NodeSettings {
 			this.settingsPanel.scaleArea.setText(sonorityScale);
 		}
 	}
-	
+
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
 		// get ipa from context

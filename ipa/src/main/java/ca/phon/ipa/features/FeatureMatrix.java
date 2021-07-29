@@ -32,8 +32,6 @@ import ca.phon.featureset.xml.*;
  */
 public class FeatureMatrix {
 
-	/** The root of the feature matrix. */
-	// private XMLFeatureMatrix matrix;
 	/** The singleton instance */
 	private static FeatureMatrix instance;
 
@@ -222,7 +220,7 @@ public class FeatureMatrix {
 		throws IOException {
 		try {
 			// parse the file
-			JAXBContext jaxbContext = JAXBContext.newInstance("ca.phon.featureset.xml");
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			JAXBElement<FeatureMatrixType> featureMatrixEle = unmarshaller.unmarshal(new StreamSource(stream), FeatureMatrixType.class);
 			FeatureMatrixType matrix = featureMatrixEle.getValue();
@@ -415,7 +413,7 @@ public class FeatureMatrix {
 	 * 
 	 * @param ipaChar
 	 *            IPA character to put the feature set with
-	 * @param fs
+	 * @param newFeatureSet
 	 *            feature set to put in
 	 */
 	public void putFeatureSet(char ipaChar, FeatureSet newFeatureSet) {
