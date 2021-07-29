@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.4/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_4.dmg" newVersion="3.3.4" newMediaFileId="macos" fileSize="286852970" md5Sum="469b22eb747ef9880d90fcb970fb1938" sha256Sum="90c72fc8c2979e7ec66413a1e6ff1afb4b409ffb81cdd7e1b08f00e9470aba37" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_5.dmg" newVersion="3.3.5" newMediaFileId="macos" fileSize="286878366" md5Sum="29c0e1565daad0201ca4f5236e75bdeb" sha256Sum="7f1463bf2ba86112ddadacdf5aa84adeb9b10dae3feedf7aa87bb0b44a0da1a4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
 
  * Fixed an bug with the 'keep like on top' sorting option
  * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
@@ -467,8 +477,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_4.dmg" newVersion="3.3.4" newMediaFileId="macos" fileSize="286852970" md5Sum="469b22eb747ef9880d90fcb970fb1938" sha256Sum="90c72fc8c2979e7ec66413a1e6ff1afb4b409ffb81cdd7e1b08f00e9470aba37" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_5.dmg" newVersion="3.3.5" newMediaFileId="macos" fileSize="286878366" md5Sum="29c0e1565daad0201ca4f5236e75bdeb" sha256Sum="7f1463bf2ba86112ddadacdf5aa84adeb9b10dae3feedf7aa87bb0b44a0da1a4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
 
  * Fixed an bug with the 'keep like on top' sorting option
  * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
@@ -934,8 +954,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.exe" newVersion="3.3.4" newMediaFileId="win64" fileSize="302328864" md5Sum="f09cbfe81f98a85ea7238dd4f9b2fa07" sha256Sum="83bfa1e8a1cb0bdda4bd15b77cd38a4b348a275e330b9c4da46ad4e4a4e61e3b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.exe" newVersion="3.3.5" newMediaFileId="win64" fileSize="302340128" md5Sum="8f274d2e8e8868fa61506dee367ca5e0" sha256Sum="d46eaf9eb7be00d3cbe751d99cb77121343a68da55a4ee79042a591eedd3d7cb" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
 
  * Fixed an bug with the 'keep like on top' sorting option
  * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
@@ -1401,8 +1431,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.exe" newVersion="3.3.4" newMediaFileId="win64" fileSize="302328864" md5Sum="f09cbfe81f98a85ea7238dd4f9b2fa07" sha256Sum="83bfa1e8a1cb0bdda4bd15b77cd38a4b348a275e330b9c4da46ad4e4a4e61e3b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.exe" newVersion="3.3.5" newMediaFileId="win64" fileSize="302340128" md5Sum="8f274d2e8e8868fa61506dee367ca5e0" sha256Sum="d46eaf9eb7be00d3cbe751d99cb77121343a68da55a4ee79042a591eedd3d7cb" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
 
  * Fixed an bug with the 'keep like on top' sorting option
  * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
@@ -1868,8 +1908,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.exe" newVersion="3.3.4" newMediaFileId="win64" fileSize="302328864" md5Sum="f09cbfe81f98a85ea7238dd4f9b2fa07" sha256Sum="83bfa1e8a1cb0bdda4bd15b77cd38a4b348a275e330b9c4da46ad4e4a4e61e3b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.exe" newVersion="3.3.5" newMediaFileId="win64" fileSize="302340128" md5Sum="8f274d2e8e8868fa61506dee367ca5e0" sha256Sum="d46eaf9eb7be00d3cbe751d99cb77121343a68da55a4ee79042a591eedd3d7cb" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
 
  * Fixed an bug with the 'keep like on top' sorting option
  * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
@@ -2335,8 +2385,18 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_4.zip" newVersion="3.3.4" newMediaFileId="win64zip" fileSize="301281177" md5Sum="74dd2eda2ca0973065c4b966d8527d95" sha256Sum="505f5444fa15334d9b000da2bf161a2fda0620379dd7cea1e2625c1fb1839629" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.zip" newVersion="3.3.5" newMediaFileId="win64zip" fileSize="301292685" md5Sum="c37318943c1252f097ce08a4774a571f" sha256Sum="ac57c40cac1fff8220f8b25c32bb6970632a05bef888b8fb7e24829df9822c0f" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
 
  * Fixed an bug with the 'keep like on top' sorting option
  * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
