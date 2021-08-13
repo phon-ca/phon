@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.5-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_5-beta_1.dmg" newVersion="3.3.5-beta.1" newMediaFileId="macos" fileSize="286879072" md5Sum="9a1593871a17ace25f93e4da9e745249" sha256Sum="c5b76685c0e3e781585758f4bc285c1cf3493e97c3166760495dda6848aa9dfc" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.4
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.6-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_1.dmg" newVersion="3.3.6-beta.1" newMediaFileId="macos" fileSize="286872250" md5Sum="9c468e91995c1e5eae6788decb52d02e" sha256Sum="8bd196980fde22368a824f7b99dfc5d0bf33f4ee18af3c81535a55ccebb14385" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -477,8 +482,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_5-beta_1.dmg" newVersion="3.3.5-beta.1" newMediaFileId="macos" fileSize="286879072" md5Sum="9a1593871a17ace25f93e4da9e745249" sha256Sum="c5b76685c0e3e781585758f4bc285c1cf3493e97c3166760495dda6848aa9dfc" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_1.dmg" newVersion="3.3.6-beta.1" newMediaFileId="macos" fileSize="286872250" md5Sum="9c468e91995c1e5eae6788decb52d02e" sha256Sum="8bd196980fde22368a824f7b99dfc5d0bf33f4ee18af3c81535a55ccebb14385" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -954,8 +964,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5-beta_1.exe" newVersion="3.3.5-beta.1" newMediaFileId="win64" fileSize="302342688" md5Sum="ba53615d23dd39d7d89741f535e97811" sha256Sum="d0ce7c47ff81f20fd29931b3c1c31f3243633d7317c601f4af128cdd2a6920c1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_1.exe" newVersion="3.3.6-beta.1" newMediaFileId="win64" fileSize="302346272" md5Sum="131d14db9a49f962415d6e8eee7bbc17" sha256Sum="40e1b258b2fdc2d22ba9ae98b92dac03d93d53f613898068655a2871c91fb225" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -1431,8 +1446,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5-beta_1.exe" newVersion="3.3.5-beta.1" newMediaFileId="win64" fileSize="302342688" md5Sum="ba53615d23dd39d7d89741f535e97811" sha256Sum="d0ce7c47ff81f20fd29931b3c1c31f3243633d7317c601f4af128cdd2a6920c1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_1.exe" newVersion="3.3.6-beta.1" newMediaFileId="win64" fileSize="302346272" md5Sum="131d14db9a49f962415d6e8eee7bbc17" sha256Sum="40e1b258b2fdc2d22ba9ae98b92dac03d93d53f613898068655a2871c91fb225" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -1908,8 +1928,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5-beta_1.exe" newVersion="3.3.5-beta.1" newMediaFileId="win64" fileSize="302342688" md5Sum="ba53615d23dd39d7d89741f535e97811" sha256Sum="d0ce7c47ff81f20fd29931b3c1c31f3243633d7317c601f4af128cdd2a6920c1" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_1.exe" newVersion="3.3.6-beta.1" newMediaFileId="win64" fileSize="302346272" md5Sum="131d14db9a49f962415d6e8eee7bbc17" sha256Sum="40e1b258b2fdc2d22ba9ae98b92dac03d93d53f613898068655a2871c91fb225" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -2385,8 +2410,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5-beta_1.zip" newVersion="3.3.5-beta.1" newMediaFileId="win64zip" fileSize="301303387" md5Sum="fbde0b5f634425051976bc6aa70d3c0b" sha256Sum="358dc396785c34c7e0376d966a5d00af2c110432f9da8122b44328e116b4bad7" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_1.zip" newVersion="3.3.6-beta.1" newMediaFileId="win64zip" fileSize="301307580" md5Sum="31a4b3bfcc936b355180a55ffc6d3e26" sha256Sum="0bc260641fb1417cce4e140a82a7a42ae45fe888329fdb97aa9262ee54f5eaef" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
