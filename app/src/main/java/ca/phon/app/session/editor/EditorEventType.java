@@ -36,6 +36,18 @@ public class EditorEventType {
 	public final static String MODIFICATION_EVENT = "_x_";
 
 	/**
+	 * Editor has saved the session
+	 * data: null
+	 */
+	public final static String EDITOR_SAVED_SESSION = "_EDITOR_SAVED_SESSION_";
+
+	/**
+	 * Editor should reload contents from disk
+	 * data: null
+	 */
+	public final static String EDITOR_RELOAD_FROM_DISK = "_EDITOR_RELOAD_FROM_DISK_";
+
+	/**
 	 * Called when the editor is about to close
 	 * data: null
 	 */
@@ -74,19 +86,19 @@ public class EditorEventType {
 
 	/**
 	 * New session
-	 * data: session handle - ITranscript
+	 * data: session
 	 */
 	public final static String SESSION_CHANGED_EVT = "_SESSION_CHANGED_";
 
 	/**
 	 * Current record has changed in editor
-	 * data: record handle - IUtterance
+	 * data: record
 	 */
 	public final static String RECORD_CHANGED_EVT = "_RECORD_CHANGED_";
 
 	/**
 	 * Highlighted search result change
-	 * data: search result handle - SerchResult
+	 * data: search result handle
 	 */
 	public final static String SEARCH_RESULT_CHANGED_EVT = "_SEARCH_RESULT_CHANGED_";
 

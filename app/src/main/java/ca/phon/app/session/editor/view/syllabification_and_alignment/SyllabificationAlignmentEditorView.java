@@ -153,6 +153,10 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final EditorEventManager eventManager = editor.getEventManager();
 
+		final EditorAction sessionChangedAct =
+				new DelegateEditorAction(this, "onSessionChanged");
+		eventManager.registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+
 		final EditorAction updateAct =
 				new DelegateEditorAction(this, "onDataChanged");
 		eventManager.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, updateAct);
@@ -405,6 +409,11 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	/*---- Editor Actions -------------------*/
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		onDataChanged(ee);
+	}
+
 	@RunOnEDT
 	public void onDataChanged(EditorEvent ee) {
 		update();

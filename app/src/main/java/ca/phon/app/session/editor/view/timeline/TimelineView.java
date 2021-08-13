@@ -790,8 +790,12 @@ public final class TimelineView extends EditorView {
 	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
 	
 	private final DelegateEditorAction onMediaLoadedAct = new DelegateEditorAction(this, "onMediaLoaded");
+
+	private final DelegateEditorAction onSessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
 	
 	private void registerEditorEvents() {
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, onSessionChangedAct);
+
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
@@ -808,6 +812,8 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void deregisterEditorEvents() {
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_CHANGED_EVT, onSessionChangedAct);
+
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
 		getEditor().getEventManager().removeActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
@@ -820,6 +826,11 @@ public final class TimelineView extends EditorView {
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
 		
 		getEditor().getEventManager().removeActionForEvent(MediaPlayerEditorView.MEDIA_LOADED_EVENT, onMediaLoadedAct);
+	}
+
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		update();
 	}
 	
 	@RunOnEDT

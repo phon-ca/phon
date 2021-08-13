@@ -234,6 +234,9 @@ public class TierOrderingEditorView extends EditorView {
 	}
 	
 	private void setupEditorActions() {
+		final EditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+
 		final EditorAction tierViewChangeAct = new DelegateEditorAction(this, "onTierViewChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, tierViewChangeAct);
 	}
@@ -590,18 +593,21 @@ public class TierOrderingEditorView extends EditorView {
 	 * Editor events 
 	 */
 	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		onTierViewChange(ee);
+	}
+
+	@RunOnEDT
 	public void onTierViewChange(EditorEvent ee) {
-//		if(ee.getSource() != getEditor().get) {
-			final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>(getEditor().getSession().getTierView());
-			tierOrderRef.getAndSet(tierOrder);
-			
-			// check for a current selection
-			int selectedRow = getTierOrderingTable().getSelectedRow();
-			((TierOrderingTableModel)tierOrderingTable.getModel()).setTierView(tierOrder);
-			if(selectedRow >= 0 && selectedRow < tierOrderingTable.getRowCount()) {
-				tierOrderingTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-			}
-//		}
+		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>(getEditor().getSession().getTierView());
+		tierOrderRef.getAndSet(tierOrder);
+
+		// check for a current selection
+		int selectedRow = getTierOrderingTable().getSelectedRow();
+		((TierOrderingTableModel)tierOrderingTable.getModel()).setTierView(tierOrder);
+		if(selectedRow >= 0 && selectedRow < tierOrderingTable.getRowCount()) {
+			tierOrderingTable.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+		}
 	}
 
 	/**

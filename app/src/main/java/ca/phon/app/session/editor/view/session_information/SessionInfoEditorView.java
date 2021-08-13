@@ -120,6 +120,9 @@ public class SessionInfoEditorView extends EditorView {
 	}
 
 	private void setupEditorActions() {
+		final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+
 		final DelegateEditorAction sessionMediaChangedAct = new
 				DelegateEditorAction(this, "onSessionMediaChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
@@ -352,6 +355,7 @@ public class SessionInfoEditorView extends EditorView {
 			mediaLocationField.setFile(new File(session.getMediaLocation()));
 			mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		} else {
+			mediaLocationField.setText("");
 			mediaLocationField.getTextField().setState(FieldState.PROMPT);
 		}
 		
@@ -431,6 +435,11 @@ public class SessionInfoEditorView extends EditorView {
 	}
 	
 	/** Editor actions */
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		update();
+	}
+
 	boolean updatingMediaLocation = false;
 	@RunOnEDT
 	public void onSessionMediaChanged(EditorEvent ee) {

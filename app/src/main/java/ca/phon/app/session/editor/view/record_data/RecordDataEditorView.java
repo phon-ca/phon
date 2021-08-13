@@ -241,6 +241,10 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	}
 
 	private void setupEditorActions() {
+		final EditorAction onSessionChangedAct =
+				new DelegateEditorAction(this, "onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, onSessionChangedAct);
+
 		final EditorAction onTierViewChangeAct =
 				new DelegateEditorAction(this, "onTierViewChange");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, onTierViewChangeAct);
@@ -1167,6 +1171,11 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	/*
 	 * Editor Actions
 	 */
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		onRecordChange(ee);
+	}
+
 	@RunOnEDT
 	public void onNumRecordsChanged(EditorEvent event) {
 		recNumField.setMaxNumber(getEditor().getSession().getRecordCount());

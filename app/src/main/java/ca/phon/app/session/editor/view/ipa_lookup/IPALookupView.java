@@ -101,6 +101,9 @@ public class IPALookupView extends EditorView {
 		
 		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierChanged");
 		editor.getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);
+
+		final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
+		editor.getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
 	}
 	
 	private void setupToolbar() {
@@ -224,6 +227,12 @@ public class IPALookupView extends EditorView {
 	/*
 	 * Editor actions
 	 */
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		// do same as if record changed
+		onRecordChanged(ee);
+	}
+
 	@RunOnEDT
 	public void onRecordChanged(EditorEvent ee) {
 		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;

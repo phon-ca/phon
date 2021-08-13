@@ -747,8 +747,10 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private final DelegateEditorAction recordChangedAct = new DelegateEditorAction(this, "onRecordChanged");
 	private final DelegateEditorAction recordRefershAct = new DelegateEditorAction(this, "onRecordRefresh");
 	private final DelegateEditorAction segmentChangedAct = new DelegateEditorAction(this, "onMediaSegmentChanged");
+	private final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
 	
 	private void setupEditorActions() {
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, sessionLoadedAct);
 		
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
@@ -759,7 +761,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
 	}
-	
+
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		onRecordChanged(ee);
+	}
+
 	@RunOnEDT
 	public void onSessionLoaded(EditorEvent ee) {
 		// time model will be at default settings when initialized

@@ -110,7 +110,8 @@ public class NavigationPanel extends JPanel {
 		recordNumberField.setMaxNumber(getEditor().getDataModel().getRecordCount());
 		recordNumberField.setColumns(3);
 		recordNumberField.setEditable(true);
-		recordNumberField.setText("1");
+		if(getEditor().getCurrentRecordIndex() >= 0)
+			recordNumberField.setText(Integer.toString(getEditor().getCurrentRecordIndex()+1));
 		recordNumberField.addFocusListener(new FocusListener() {
 			
 			@Override

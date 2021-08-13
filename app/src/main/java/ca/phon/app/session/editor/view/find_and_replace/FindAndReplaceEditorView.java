@@ -164,7 +164,12 @@ public class FindAndReplaceEditorView extends EditorView {
 		final EditorAction sessionLocationChangedAct = 
 				new DelegateEditorAction(this, "onSessionLocationChanged");
 		getEditor().getEventManager().registerActionForEvent(
-				EditorEventType.SESSION_LOCATION_CHANGED_EVT, sessionLocationChangedAct);	
+				EditorEventType.SESSION_LOCATION_CHANGED_EVT, sessionLocationChangedAct);
+
+		final EditorAction sessionChangedAct =
+				new DelegateEditorAction(this, "onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(
+				EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
 	}
 
 	private void updateTierView() {
@@ -270,7 +275,13 @@ public class FindAndReplaceEditorView extends EditorView {
 		updateTierView();
 		getFindManager().setSearchTier(getSearchTiers());
 	}
-	
+
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		updateTierView();
+		getFindManager().setSearchTier(getSearchTiers());
+	}
+
 	@RunOnEDT
 	public void onSessionLocationChanged(EditorEvent ee) {
 		final SessionLocation location = 

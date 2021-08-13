@@ -31,7 +31,7 @@ public class DefaultEditorDataModel implements EditorDataModel {
 	/**
 	 * Reference to session
 	 */
-	private final WeakReference<Session> sessionRef;
+	private final AtomicReference<Session> sessionRef;
 	
 	/**
 	 * Transcriber
@@ -43,12 +43,17 @@ public class DefaultEditorDataModel implements EditorDataModel {
 	 */
 	public DefaultEditorDataModel(Session session) {
 		super();
-		this.sessionRef = new WeakReference<Session>(session);
+		this.sessionRef = new AtomicReference<>(session);
 	}
 
 	@Override
 	public Session getSession() {
 		return sessionRef.get();
+	}
+
+	@Override
+	public void setSession(Session session) {
+		this.sessionRef.set(session);
 	}
 
 	@Override
@@ -69,30 +74,6 @@ public class DefaultEditorDataModel implements EditorDataModel {
 		if(session != null) retVal = session.getRecord(idx);
 		
 		return retVal;
-	}
-
-	@Override
-	public int getNextRecordIndex(int idx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getPrevRecordIndex(int idx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public RecordFilter getRecordFilter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setRecordFilter(RecordFilter filter) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

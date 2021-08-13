@@ -108,8 +108,11 @@ public class ValidationEditorView extends EditorView {
 	}
 	
 	private void setupEditorActions() {
-		final DelegateEditorAction recordChangeAct = new DelegateEditorAction(this, "onRecordChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
+		final DelegateEditorAction recordChangedAct = new DelegateEditorAction(this, "onRecordChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+
+		final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
 	}
 	
 	private void update() {
@@ -351,7 +354,12 @@ public class ValidationEditorView extends EditorView {
 	 * Editor actions
 	 */
 	@RunOnEDT
-	public void onRecordChange(EditorEvent ee) {
+	public void onSessionChanged(EditorEvent ee) {
+		update();
+	}
+
+	@RunOnEDT
+	public void onRecordChanged(EditorEvent ee) {
 		update();
 	}
 	

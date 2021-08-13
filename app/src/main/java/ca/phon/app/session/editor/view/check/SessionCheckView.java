@@ -58,6 +58,18 @@ public class SessionCheckView extends EditorView {
 
 		init();
 		refresh();
+
+		setupEditorActions();
+	}
+
+	private void setupEditorActions() {
+		final EditorAction sessionChangedAct = new DelegateEditorAction(this,"onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+	}
+
+	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		refresh();
 	}
 
 	private boolean doCheck(SessionCheck check) {

@@ -18,6 +18,7 @@ package ca.phon.project;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -837,15 +838,17 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public ZonedDateTime getSessionModificationTime(String corpus, String session) {
 		final File sessionFile = getSessionFile(corpus, session);
-		long modTime = 0L;
-		if(sessionFile.exists()) {
-			modTime = sessionFile.lastModified();
-		}
-		final ZoneId systemZoneId = ZoneId.systemDefault();
-		final ZoneOffset zoneOffset = systemZoneId.getRules().getOffset(Instant.now());
 
-		final LocalDateTime localTime = LocalDateTime.ofEpochSecond(modTime/1000, (int)(modTime%1000), zoneOffset);
-		return ZonedDateTime.of(localTime, systemZoneId);
+		Path nioPath = sessionFile.toPath();
+		try {
+			BasicFileAttributes fileAttribs = Files.readAttributes(nioPath, BasicFileAttributes.class);
+			FileTime ft = fileAttribs.lastModifiedTime();
+			LocalDateTime ldt = ft.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+			ZonedDateTime zonedDate = ldt.atZone(ZoneId.systemDefault());
+			return zonedDate;
+		} catch (IOException e) {
+			return ZonedDateTime.now();
+		}
 	}
 
 	@Override

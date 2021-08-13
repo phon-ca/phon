@@ -140,14 +140,16 @@ public class MediaPlayerEditorView extends EditorView {
 	 * Media players need to be refreshed when the
 	 * PlayerCanvas they are listening to becomes invalid.
 	 * @param pae
-	 * @throws VLCException
 	 */
-
 	public void onLoadMedia(PhonActionEvent pae) {
 		loadMedia();
 	}
 
 	public void onLoadMedia(EditorEvent ee) {
+		loadMedia();
+	}
+
+	public void onSessionChanged(EditorEvent ee) {
 		loadMedia();
 	}
 
@@ -177,6 +179,10 @@ public class MediaPlayerEditorView extends EditorView {
 				new DelegateEditorAction(this, "onMediaChanged");
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED,
 				mediaChangedAct);
+
+		final EditorAction sessionChangedAct =
+				new DelegateEditorAction(this, "onSessionChanged");
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
 
 		final EditorAction recordChangedAct =
 				new DelegateEditorAction(this, "onRecordChanged");

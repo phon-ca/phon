@@ -25,6 +25,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.undo.*;
 
+import ca.phon.app.log.LogUtil;
 import org.apache.logging.log4j.*;
 import org.jdesktop.swingx.*;
 
@@ -177,17 +178,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 		init();
 
-//		PrefHelper.getUserPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
-//
-//			@Override
-//			public void preferenceChange(PreferenceChangeEvent evt) {
-//				if(evt.getKey().equals(FontPreferences.TIER_FONT)) {
-//					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
-//					getEventManager().queueEvent(ee);
-//				}
-//			}
-//		});
-
 		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
 		setJMenuBar(menuBar);
 	}
@@ -255,9 +245,15 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		contentPane.add(dock, BorderLayout.CENTER);
 
 		setupEditorActions();
+
+		this.addWindowFocusListener(new SessionEditorModificationListener(this));
 	}
 
 	private void setupEditorActions() {
+		final EditorAction sessionChangedAct =
+				new DelegateEditorAction(this, "onSessionChanged");
+		getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+
 		final EditorAction modifiedChangedAct =
 				new DelegateEditorAction(this, "onModifiedChanged");
 		getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, modifiedChangedAct);
@@ -269,6 +265,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final EditorAction recordDeletedAct =
 				new DelegateEditorAction(this, "onRecordDeleted");
 		getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordDeletedAct);
+
+		final EditorAction reloadFromDiskAct =
+				new DelegateEditorAction(this, "onReloadSessionFromDisk");
+		getEventManager().registerActionForEvent(EditorEventType.EDITOR_RELOAD_FROM_DISK, reloadFromDiskAct);
 	}
 
 	/**
@@ -628,6 +628,28 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * Editor actions
 	 */
 	@RunOnEDT
+	public void onSessionChanged(EditorEvent ee) {
+		// reset media model
+		this.mediaModelRef.set(new SessionMediaModel(this));
+
+		// clear undo model
+		undoManager.discardAllEdits();
+
+		// update toolbar and record index
+		if(this.currentRecord >= getDataModel().getRecordCount()) {
+			this.currentRecord = getDataModel().getRecordCount()-1;
+		}
+		if(this.currentRecord < 0) {
+			this.currentRecord = 0;
+		}
+		remove(getToolbar());
+		this.toolbar = new SessionEditorToolbar(this);
+		add(this.toolbar, BorderLayout.NORTH);
+
+		setTitle(generateTitle());
+	}
+
+	@RunOnEDT
 	public void onModifiedChanged(EditorEvent eee) {
 		final String title = generateTitle();
 		setTitle(title);
@@ -651,6 +673,30 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		} else {
 			final EditorEvent refreshAct = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
 			getEventManager().queueEvent(refreshAct);
+		}
+	}
+
+	/**
+	 * Reload session data from  disk, this method does not display a warning dialog
+	 * This method is called when EditorEventType.SESSION_CHANGED_ON_DISK is fired
+	 *
+	 * @param ee
+	 */
+	@RunOnEDT
+	public void onReloadSessionFromDisk(EditorEvent ee) throws IOException {
+		final Project project = getProject();
+		final Session currentSession = getSession();
+
+		try {
+			final Session reloadedSession = project.openSession(currentSession.getCorpus(), currentSession.getName());
+			getDataModel().setSession(reloadedSession);
+			getEventManager().queueEvent(new EditorEvent(EditorEventType.SESSION_CHANGED_EVT, reloadedSession));
+
+			setModified(false);
+		} catch (IOException e) {
+			Toolkit.getDefaultToolkit().beep();
+			LogUtil.severe(e);
+			showMessageDialog("Unable to reload session", e.getLocalizedMessage(), MessageDialogProperties.okOptions);
 		}
 	}
 
@@ -730,7 +776,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				if(retVal == 1) return false;
 			}
 
-			// show a short messgae next to the save button to indicate save completed
+			getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_SAVED_SESSION));
+
+			// show a short message next to the save button to indicate save completed
 			return true;
 		} catch (IOException e) {
 			final MessageDialogProperties props = new MessageDialogProperties();
