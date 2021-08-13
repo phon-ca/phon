@@ -18,7 +18,7 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 	private final static String DLG1_MESSAGE_SUFFIX = " (current changes will be lost)";
 
 	private final static String DLG2_HEADER_TXT = "Session changed on disk";
-	private final static String DLG2_MESSAGE_TEXT = "Reloading data will lost all current changes, continue?";
+	private final static String DLG2_MESSAGE_TEXT = "Reloading data will lose all current changes, continue?";
 	private final static String[] DLG2_OPTIONS = { "Yes, discard changes", "Cancel" };
 
 	private SessionEditor editor;
