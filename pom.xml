@@ -154,7 +154,7 @@
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
 		<org.dockingframes.docking-frames-common.version>1.1.3p1</org.dockingframes.docking-frames-common.version>
 		<org.dockingframes.docking-frames-core.version>1.1.3p1</org.dockingframes.docking-frames-core.version>
-		<org.jsoup.jsoup.version>1.11.2</org.jsoup.jsoup.version>
+		<org.jsoup.jsoup.version>1.14.2</org.jsoup.jsoup.version>
 		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.14.0</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.13</org.mozilla.rhino.version>
