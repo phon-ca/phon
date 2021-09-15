@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.6-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_2.dmg" newVersion="3.3.6-beta.2" newMediaFileId="macos" fileSize="286872060" md5Sum="f87535ef81c42f5982ebef701fa1e4a8" sha256Sum="1631abd62be1ca2aa9794d0bdcf07ee73f95361ade235304e7b77c7f7adab3eb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.6-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_3.dmg" newVersion="3.3.6-beta.3" newMediaFileId="macos" fileSize="286874100" md5Sum="5f237cf888755e8eb0817855a111d1e5" sha256Sum="af3873ee02928ef3e344d86cb2a1fb37a1dd0080c892b352ed5640f6a13e9de0" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
 
 ## Changes from 3.3.4
 
@@ -482,11 +483,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_2.dmg" newVersion="3.3.6-beta.2" newMediaFileId="macos" fileSize="286872060" md5Sum="f87535ef81c42f5982ebef701fa1e4a8" sha256Sum="1631abd62be1ca2aa9794d0bdcf07ee73f95361ade235304e7b77c7f7adab3eb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_3.dmg" newVersion="3.3.6-beta.3" newMediaFileId="macos" fileSize="286874100" md5Sum="5f237cf888755e8eb0817855a111d1e5" sha256Sum="af3873ee02928ef3e344d86cb2a1fb37a1dd0080c892b352ed5640f6a13e9de0" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
 
 ## Changes from 3.3.4
 
@@ -964,11 +966,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_2.exe" newVersion="3.3.6-beta.2" newMediaFileId="win64" fileSize="302346272" md5Sum="aced443185d3afd4f04320f31604f503" sha256Sum="60009fabd132cf52f3e689e9a6d96acb0703e299b3ae28848ab07e8e5300bf4a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.exe" newVersion="3.3.6-beta.3" newMediaFileId="win64" fileSize="302348320" md5Sum="38f15650a43d12cf799251b837e9f41e" sha256Sum="77ea23596ddbec45f5dc0cc47b0e7e9381c47056926e3a9361f335e7807494af" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
 
 ## Changes from 3.3.4
 
@@ -1446,11 +1449,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_2.exe" newVersion="3.3.6-beta.2" newMediaFileId="win64" fileSize="302346272" md5Sum="aced443185d3afd4f04320f31604f503" sha256Sum="60009fabd132cf52f3e689e9a6d96acb0703e299b3ae28848ab07e8e5300bf4a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.exe" newVersion="3.3.6-beta.3" newMediaFileId="win64" fileSize="302348320" md5Sum="38f15650a43d12cf799251b837e9f41e" sha256Sum="77ea23596ddbec45f5dc0cc47b0e7e9381c47056926e3a9361f335e7807494af" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
 
 ## Changes from 3.3.4
 
@@ -1928,11 +1932,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_2.exe" newVersion="3.3.6-beta.2" newMediaFileId="win64" fileSize="302346272" md5Sum="aced443185d3afd4f04320f31604f503" sha256Sum="60009fabd132cf52f3e689e9a6d96acb0703e299b3ae28848ab07e8e5300bf4a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.exe" newVersion="3.3.6-beta.3" newMediaFileId="win64" fileSize="302348320" md5Sum="38f15650a43d12cf799251b837e9f41e" sha256Sum="77ea23596ddbec45f5dc0cc47b0e7e9381c47056926e3a9361f335e7807494af" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
 
 ## Changes from 3.3.4
 
@@ -2410,11 +2415,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_2.zip" newVersion="3.3.6-beta.2" newMediaFileId="win64zip" fileSize="301307084" md5Sum="9b28fada94f36abf03eded1dd79d2255" sha256Sum="88b4695b5f621b86b5103964d2e6024cf389d1d60cc861b2568fc060babbe3c8" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.zip" newVersion="3.3.6-beta.3" newMediaFileId="win64zip" fileSize="301309498" md5Sum="eb7f08f4e6e0d5706227bc14567bb10e" sha256Sum="2aac535c3b8b642f0b6a621bbfa72037d66867dccc4723deae35cbf9fe34d0c9" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
 
 ## Changes from 3.3.4
 
