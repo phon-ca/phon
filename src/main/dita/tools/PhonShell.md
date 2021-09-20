@@ -94,7 +94,7 @@ In the first statement, 'Hello World...' is printed in a new Phon buffer named '
 
 ### ```window```
 
-Provides a reference to the window from which the *PhonShell* console was opened.  For the Project Manager this will be an instance of ```ca.phon.app.project.ProjectWindow``` and for the Session Editor this will be an instance of ```ca.phon.app.session.SessionEditor```.  References to the current project and session can be obtained using the window variable.
+Provides a reference to the window from which the *PhonShell* console was opened.  For the Project Manager this will be an instance of ca.phon.app.project.ProjectWindow[ca.phon.app.ProjectWindow](https://www.phon.ca/apidocs/ca/phon/app/project/ProjectWindow.html) and for the Session Editor this will be an instance of ca.phon.app.session.SessionEditor[ca.phon.app.session.SessionEditor](https://www.phon.ca/apidocs/ca/phon/app/session/editor/SessionEditor.html).  References to the current project and session can be obtained using the window variable.
 
 ```
 js $ window.project
