@@ -1,6 +1,6 @@
 # PhonShell
 
-*PhonShell* is a plug-in introduced with *Phon 2.0* which provides a scripting environment for *Phon*.  *PhonShell* is available from the *Tools* windows menu. The *PhonShell* console is associated to the window from which it was opened and will be closed when the parent window is closed.
+*PhonShell*, available from the **Tools** menu, provides a scripting environment for *Phon* with options for scripting in either JavaScript or Groovy. The *PhonShell* console is associated to the window from which it was opened and will be closed when the parent window is closed.
 
 ![../images/PhonShell.png](./images/phonshell.png)
 
@@ -122,4 +122,5 @@ js $ __last + 1
 
 ## Saved Scripts
 
-PhonShell scripts which have been saved to disk may be executed by using ```::exec``` as mentioned above or by dragging the file onto an open PhonShell window using the mouse.  PhonShell scripts saved in the folder ```/Users/<username>/Library/ApplicationSupport/Phon/phonshell``` on macos or ```%APPDATA%\Phon\phonshell``` on windows will be displayed in the window menu under ```Tools``` > ```PhonShell scripts``` and may be executed by clicking the script name. The script will be executed in a new PhonShell window connected to the currently focused window. Scripts may also be saved and re-distributed with a project by placing the script in the ```__res/phonshell``` folder of the project file structure.
+PhonShell scripts which have been saved to disk may be executed by using ```::exec``` as mentioned above or by dragging the file onto an open PhonShell window using the mouse.  PhonShell scripts saved in the folder ```/Users/<username>/Library/ApplicationSupport/Phon/phonshell``` on macos or ```%APPDATA%\Phon\phonshell``` on windows will be displayed in the window menu under ```Tools``` > ```PhonShell scripts``` and may be executed by clicking the script name. The script will be executed in a new PhonShell window connected to the currently focused window. Scripts may also be saved and re-distributed with a project by placing the script in the ```__res/phonshell``` folder of the project file structure.  Note: Built-in commands are not available inside saved script files.
+
