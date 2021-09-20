@@ -119,3 +119,7 @@ js $ __last
 js $ __last + 1
 6.0
 ```
+
+## Saved Scripts
+
+PhonShell scripts which have been saved to disk may be executed by using ```::exec``` as mentioned above or by dragging the file onto an open PhonShell window using the mouse.  PhonShell scripts saved in the folder ```/Users/<username>/Library/ApplicationSupport/Phon/phonshell``` on macos or ```%APPDATA%\Phon\phonshell``` on windows will be displayed in the window menu under ```Tools``` > ```PhonShell scripts``` and may be executed by clicking the script name. The script will be executed in a new PhonShell window connected to the currently focused window. Scripts may also be saved and re-distributed with a project by placing the script in the ```__res/phonshell``` folder of the project file structure.
