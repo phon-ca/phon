@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_5.dmg" newVersion="3.3.5" newMediaFileId="macos" fileSize="286878366" md5Sum="29c0e1565daad0201ca4f5236e75bdeb" sha256Sum="7f1463bf2ba86112ddadacdf5aa84adeb9b10dae3feedf7aa87bb0b44a0da1a4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.4
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.6/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6.dmg" newVersion="3.3.6" newMediaFileId="macos" fileSize="286883966" md5Sum="82edb54a2f8a36d761edb4d15e2c25e7" sha256Sum="aa3e73b4a03d7d136a405e81d4a8b0ea033272fee315e4dfb523680433bcb94a" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -477,8 +483,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_5.dmg" newVersion="3.3.5" newMediaFileId="macos" fileSize="286878366" md5Sum="29c0e1565daad0201ca4f5236e75bdeb" sha256Sum="7f1463bf2ba86112ddadacdf5aa84adeb9b10dae3feedf7aa87bb0b44a0da1a4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6.dmg" newVersion="3.3.6" newMediaFileId="macos" fileSize="286883966" md5Sum="82edb54a2f8a36d761edb4d15e2c25e7" sha256Sum="aa3e73b4a03d7d136a405e81d4a8b0ea033272fee315e4dfb523680433bcb94a" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -954,8 +966,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.exe" newVersion="3.3.5" newMediaFileId="win64" fileSize="302340128" md5Sum="8f274d2e8e8868fa61506dee367ca5e0" sha256Sum="d46eaf9eb7be00d3cbe751d99cb77121343a68da55a4ee79042a591eedd3d7cb" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6.exe" newVersion="3.3.6" newMediaFileId="win64" fileSize="302346784" md5Sum="08d2eb5a5a45415a3caa84d14fd22ac5" sha256Sum="fdfd0c309fc5b6cc891bf12fea4fd40893c794d6d9738a3e0a360c72ffa29afe" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -1431,8 +1449,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.exe" newVersion="3.3.5" newMediaFileId="win64" fileSize="302340128" md5Sum="8f274d2e8e8868fa61506dee367ca5e0" sha256Sum="d46eaf9eb7be00d3cbe751d99cb77121343a68da55a4ee79042a591eedd3d7cb" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6.exe" newVersion="3.3.6" newMediaFileId="win64" fileSize="302346784" md5Sum="08d2eb5a5a45415a3caa84d14fd22ac5" sha256Sum="fdfd0c309fc5b6cc891bf12fea4fd40893c794d6d9738a3e0a360c72ffa29afe" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -1908,8 +1932,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.exe" newVersion="3.3.5" newMediaFileId="win64" fileSize="302340128" md5Sum="8f274d2e8e8868fa61506dee367ca5e0" sha256Sum="d46eaf9eb7be00d3cbe751d99cb77121343a68da55a4ee79042a591eedd3d7cb" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6.exe" newVersion="3.3.6" newMediaFileId="win64" fileSize="302346784" md5Sum="08d2eb5a5a45415a3caa84d14fd22ac5" sha256Sum="fdfd0c309fc5b6cc891bf12fea4fd40893c794d6d9738a3e0a360c72ffa29afe" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
@@ -2385,8 +2415,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_5.zip" newVersion="3.3.5" newMediaFileId="win64zip" fileSize="301292685" md5Sum="c37318943c1252f097ce08a4774a571f" sha256Sum="ac57c40cac1fff8220f8b25c32bb6970632a05bef888b8fb7e24829df9822c0f" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.4
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6.zip" newVersion="3.3.6" newMediaFileId="win64zip" fileSize="301299236" md5Sum="9b8e1d1e2f9e614c6d7125bc27b91cc1" sha256Sum="01bdc858a44d202f67408e33d943d74ac4bcd609677101d10126f88be00920a3" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
 
  * Added Urdu syllabifier
  * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
