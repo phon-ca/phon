@@ -177,7 +177,7 @@
 		
 		<!-- jxbrowser -->
 		<com.teamdev.jxbrowser.version>6.24.2</com.teamdev.jxbrowser.version>
-		<com.teamdev.jxbrowser.license.version>6.X</com.teamdev.jxbrowser.license.version>
+		<com.teamdev.jxbrowser.license.version>6.0</com.teamdev.jxbrowser.license.version>
 	</properties>
 
 	<modules>
@@ -527,9 +527,8 @@
 		    
 		    <dependency>
 		    	<groupId>com.teamdev</groupId>
-		    	<artifactId>jxbrowser</artifactId>
+		    	<artifactId>jxbrowser-license-phon</artifactId>
 		    	<version>${com.teamdev.jxbrowser.license.version}</version>
-		    	<classifier>license-phon</classifier>
 		    </dependency>
 		    
 		</dependencies>

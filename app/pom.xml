@@ -149,8 +149,7 @@
 
 		<dependency>
 			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser</artifactId>
-			<classifier>license-phon</classifier>
+			<artifactId>jxbrowser-license-phon</artifactId>
 		</dependency>
 		
 		<!-- Markdown -->
