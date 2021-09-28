@@ -69,8 +69,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private RecordGrid recordGrid;
 
-//	private Map<Participant, Boolean> speakerVisibility = new HashMap<>();
-
 	private Map<String, Boolean> tierVisibility = new HashMap<>();
 
 	private TimeUIModel.Interval currentRecordInterval = null;

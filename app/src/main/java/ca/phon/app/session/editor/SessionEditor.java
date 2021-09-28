@@ -269,6 +269,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		final EditorAction reloadFromDiskAct =
 				new DelegateEditorAction(this, "onReloadSessionFromDisk");
 		getEventManager().registerActionForEvent(EditorEventType.EDITOR_RELOAD_FROM_DISK, reloadFromDiskAct);
+
+		final EditorAction onClosingAct =
+				new DelegateEditorAction(this, "onEditorClosing");
+		getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, onClosingAct);
 	}
 
 	/**
@@ -627,6 +631,17 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/*
 	 * Editor actions
 	 */
+	@RunOnEDT
+	public void onEditorClosing(EditorEvent ee) {
+		if(getMediaModel().isSessionAudioAvailable()) {
+			try {
+				getMediaModel().getSharedSessionAudio().close();
+			} catch (IOException e) {
+				LogUtil.severe(e);
+			}
+		}
+	}
+
 	@RunOnEDT
 	public void onSessionChanged(EditorEvent ee) {
 		// reset media model

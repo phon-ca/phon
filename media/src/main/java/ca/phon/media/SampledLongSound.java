@@ -40,7 +40,12 @@ public class SampledLongSound extends LongSound {
 		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
 		putExtension(ExportSegment.class, new SampledExportSegment(sampled, audioFile.getAudioFileType(), audioFile.getAudioFileEncoding()));
 	}
-	
+
+	@Override
+	public void close() throws IOException {
+		sampled.close();
+	}
+
 	public Sampled getSampled() {
 		return this.sampled;
 	}

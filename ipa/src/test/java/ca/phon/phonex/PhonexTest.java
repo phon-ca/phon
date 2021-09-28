@@ -24,6 +24,7 @@ public class PhonexTest {
 
 	public void testGroups(IPATranscript t, String phonex, IPATranscript[][] groupData) {
 		final PhonexPattern pattern = PhonexPattern.compile(phonex);
+		System.out.println(pattern.getFsa().getDotText());
 		final PhonexMatcher matcher = pattern.matcher(t);
 
 		int idx = 0;

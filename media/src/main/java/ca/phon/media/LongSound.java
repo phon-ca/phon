@@ -68,6 +68,8 @@ public abstract class LongSound implements IExtendable {
 	public File getFile() {
 		return this.file;
 	}
+
+	public abstract void close() throws IOException;
 	
 	/**
 	 * Number of channels in audio file.

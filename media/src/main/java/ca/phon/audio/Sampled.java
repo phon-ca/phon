@@ -15,6 +15,8 @@
  */
 package ca.phon.audio;
 
+import java.io.IOException;
+
 public interface Sampled {
 	
 	/**
@@ -90,7 +92,12 @@ public interface Sampled {
 	 * @return length in seconds
 	 */
 	public float getLength();
-	
+
+	/**
+	 * Release resources
+	 */
+	public void close() throws IOException;
+
 	/**
 	 * Get the maximum value for the specified sample range
 	 * 

@@ -16,6 +16,7 @@
 package ca.phon.audio;
 
 import java.io.*;
+import java.nio.BufferUnderflowException;
 
 public class AudioFileSampled implements Sampled {
 
@@ -79,6 +80,11 @@ public class AudioFileSampled implements Sampled {
 	@Override
 	public float getLength() {
 		return getEndTime() - getStartTime();
+	}
+
+	@Override
+	public void close() throws IOException {
+		audioFile.close();
 	}
 
 	@Override
@@ -170,7 +176,7 @@ public class AudioFileSampled implements Sampled {
 		try {
 			audioFile.seekToSample(firstSample);
 			return audioFile.readSamples(buffer, offset, numSamples);
-		} catch (IOException e) {
+		} catch (IOException | BufferUnderflowException e) {
 			return 0;
 		}
 	}
