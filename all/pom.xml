@@ -169,6 +169,7 @@
             <artifactId>phon-version-triggers</artifactId>
             <version>${ca.phon.phon-version-triggers.version}</version>
         </dependency>
+
     </dependencies>
 
     <build/>
