@@ -44,22 +44,7 @@
 			<name>Jason Gedge</name>
 			<email>gedge@cs.mun.ca</email>
 		</contributor>
-		<contributor>
-			<name>Keith Maddocks</name>
-		</contributor>
-		<contributor>
-			<name>Philip O'Brien</name>
-			<email>pobrien@cs.mun.ca</email>
-		</contributor>
 	</contributors>
-
-	<licenses>
-		<license>
-			<name>GNU GPL v3.0+</name>
-			<distribution>repo</distribution>
-			<url>http://www.gnu.org/copyleft/gpl.html</url>
-		</license>
-	</licenses>
 
 	<distributionManagement>
 		<repository>
