@@ -107,7 +107,7 @@
 		<ca.phon.app.version>${project.version}</ca.phon.app.version>
 		<ca.phon.phon-shell-plugin.version>22</ca.phon.phon-shell-plugin.version>
 		<ca.phon.phon-groovy-plugin.version>5</ca.phon.phon-groovy-plugin.version>
-		<ca.phon.phon-praat-plugin.version>56</ca.phon.phon-praat-plugin.version>
+		<ca.phon.phon-praat-plugin.version>57</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-update-plugin.version>18</ca.phon.phon-update-plugin.version>
 		<ca.phon.phon-version-triggers.version>7</ca.phon.phon-version-triggers.version>
 		<ca.phon.phon-diarization-plugin.version>4</ca.phon.phon-diarization-plugin.version>
