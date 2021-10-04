@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -48,10 +49,10 @@
 
 	<distributionManagement>
 		<repository>
-     			<id>github</id>
-     			<name>GitHub phon-ca Apache Maven Packages</name>
+			<id>github</id>
+			<name>GitHub phon-ca Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/phon-ca/phon</url>
-   		</repository>
+		</repository>
 	</distributionManagement>
 
 	<properties>
@@ -64,7 +65,7 @@
 		<ca.phon.opgraph.version>2.1.2</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>17</ca.phon.native-dialogs.version>
 		<ca.phon.jbreadcrumb.version>5</ca.phon.jbreadcrumb.version>
-		
+
 		<com.atlassian.commonmark.version>0.6.0</com.atlassian.commonmark.version>
 		<com.fifesoft.autocomplete.version>2.6.1</com.fifesoft.autocomplete.version>
 		<com.fifesoft.rsyntaxtextarea.version>2.6.1</com.fifesoft.rsyntaxtextarea.version>
@@ -96,12 +97,12 @@
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.13</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
-		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>		
+		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>
 		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
-		
+
 		<!-- java.xml.bind -->
 		<jaxb.version>2.3.3</jaxb.version>
-		
+
 		<!-- Maven plugins -->
 		<org.antlr.antlr3-maven-plugin.version>3.5.2</org.antlr.antlr3-maven-plugin.version>
 		<org.antlr.antlr4-maven-plugin.version>4.7.2</org.antlr.antlr4-maven-plugin.version>
@@ -111,7 +112,7 @@
 		<org.apache.maven.plugins.maven-surefire-plugin.version>2.16</org.apache.maven.plugins.maven-surefire-plugin.version>
 		<org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
 		<org.codehaus.mojo.jaxb2-maven-plugin.version>2.4</org.codehaus.mojo.jaxb2-maven-plugin.version>
-		
+
 		<!-- jxbrowser -->
 		<com.teamdev.jxbrowser.version>6.24.2</com.teamdev.jxbrowser.version>
 		<com.teamdev.jxbrowser.license.version>6.0</com.teamdev.jxbrowser.license.version>
@@ -238,7 +239,7 @@
 				<artifactId>antlr</artifactId>
 				<version>${org.antlr.antlr.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.antlr</groupId>
 				<artifactId>stringtemplate</artifactId>
@@ -307,15 +308,15 @@
 			</dependency>
 
 			<dependency>
-			    <groupId>org.eclipse.jgit</groupId>
-			    <artifactId>org.eclipse.jgit</artifactId>
-			    <version>${org.eclipse.jgit.version}</version>
+				<groupId>org.eclipse.jgit</groupId>
+				<artifactId>org.eclipse.jgit</artifactId>
+				<version>${org.eclipse.jgit.version}</version>
 			</dependency>
 
 			<dependency>
-			    <groupId>org.eclipse.jgit</groupId>
-			    <artifactId>org.eclipse.jgit.ui</artifactId>
-			    <version>${org.eclipse.jgit.version}</version>
+				<groupId>org.eclipse.jgit</groupId>
+				<artifactId>org.eclipse.jgit.ui</artifactId>
+				<version>${org.eclipse.jgit.version}</version>
 			</dependency>
 
 			<dependency>
@@ -352,27 +353,27 @@
 				<artifactId>jgoodies-looks</artifactId>
 				<version>${com.jgoodies.jgoodies-looks.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>net.lingala.zip4j</groupId>
 				<artifactId>zip4j</artifactId>
 				<version>${net.lingala.zip4j.version}</version>
 			</dependency>
-			
+
 			<dependency>
-			  <groupId>com.github.davidmoten</groupId>
-			  <artifactId>rtree</artifactId>
-			  <version>${com.github.davidmoten.rtree.version}</version>
+				<groupId>com.github.davidmoten</groupId>
+				<artifactId>rtree</artifactId>
+				<version>${com.github.davidmoten.rtree.version}</version>
 			</dependency>
-			
+
 			<dependency>
-			    <groupId>guru.nidi</groupId>
-			    <artifactId>graphviz-java</artifactId>
-			    <version>${guru.nidi.graphviz-java.version}</version>
+				<groupId>guru.nidi</groupId>
+				<artifactId>graphviz-java</artifactId>
+				<version>${guru.nidi.graphviz-java.version}</version>
 			</dependency>
-			
+
 			<!-- log4j 2 -->
-			
+
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-core</artifactId>
@@ -397,15 +398,15 @@
 			</dependency>
 
 			<dependency>
-			    <groupId>com.atlassian.commonmark</groupId>
-			    <artifactId>commonmark-ext-gfm-tables</artifactId>
-			    <version>${com.atlassian.commonmark.version}</version>
+				<groupId>com.atlassian.commonmark</groupId>
+				<artifactId>commonmark-ext-gfm-tables</artifactId>
+				<version>${com.atlassian.commonmark.version}</version>
 			</dependency>
 
 			<dependency>
-			      <groupId>net.sourceforge.jexcelapi</groupId>
-			      <artifactId>jxl</artifactId>
-			      <version>${net.sourceforge.jexcelapi.version}</version>
+				<groupId>net.sourceforge.jexcelapi</groupId>
+				<artifactId>jxl</artifactId>
+				<version>${net.sourceforge.jexcelapi.version}</version>
 			</dependency>
 
 			<dependency>
@@ -413,61 +414,61 @@
 				<artifactId>jsoup</artifactId>
 				<version>${org.jsoup.jsoup.version}</version>
 			</dependency>
-			
+
 			<!-- java.xml.bind -->
 			<dependency>
-			    <groupId>jakarta.xml.bind</groupId>
-			    <artifactId>jakarta.xml.bind-api</artifactId>
-			    <version>${jaxb.version}</version>
+				<groupId>jakarta.xml.bind</groupId>
+				<artifactId>jakarta.xml.bind-api</artifactId>
+				<version>${jaxb.version}</version>
 			</dependency>
-			
+
 			<dependency>
-			    <groupId>com.sun.xml.bind</groupId>
-			    <artifactId>jaxb-impl</artifactId>
-			    <version>${jaxb.version}</version>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>${jaxb.version}</version>
 			</dependency>
-			
+
 			<!-- vlc4j -->
 			<dependency>
-		      <groupId>uk.co.caprica</groupId> 
-		      <artifactId>vlcj</artifactId> 
-		      <version>${uk.co.caprica.vlcj.version}</version>
-		    </dependency>
-		    
-		    <!-- jxbrowesr -->
-		    <dependency>
-		    	<groupId>com.teamdev</groupId>
-		    	<artifactId>jxbrowser</artifactId>
-		    	<version>${com.teamdev.jxbrowser.version}</version>
-		    </dependency>
-		    
-		    <dependency>
-		    	<groupId>com.teamdev</groupId>
-		    	<artifactId>jxbrowser</artifactId>
-		    	<version>${com.teamdev.jxbrowser.version}</version>
-		    	<classifier>mac</classifier>
-		    </dependency>
-		    
-		    <dependency>
-		    	<groupId>com.teamdev</groupId>
-		    	<artifactId>jxbrowser</artifactId>
-		    	<version>${com.teamdev.jxbrowser.version}</version>
-		    	<classifier>win64</classifier>
-		    </dependency>
-		    
-		    <dependency>
-		    	<groupId>com.teamdev</groupId>
-		    	<artifactId>jxbrowser</artifactId>
-		    	<version>${com.teamdev.jxbrowser.version}</version>
-		    	<classifier>linux-x64</classifier>
-		    </dependency>
-		    
-		    <dependency>
-		    	<groupId>com.teamdev</groupId>
-		    	<artifactId>jxbrowser-license-phon</artifactId>
-		    	<version>${com.teamdev.jxbrowser.license.version}</version>
-		    </dependency>
-		    
+				<groupId>uk.co.caprica</groupId>
+				<artifactId>vlcj</artifactId>
+				<version>${uk.co.caprica.vlcj.version}</version>
+			</dependency>
+
+			<!-- jxbrowesr -->
+			<dependency>
+				<groupId>com.teamdev</groupId>
+				<artifactId>jxbrowser</artifactId>
+				<version>${com.teamdev.jxbrowser.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.teamdev</groupId>
+				<artifactId>jxbrowser</artifactId>
+				<version>${com.teamdev.jxbrowser.version}</version>
+				<classifier>mac</classifier>
+			</dependency>
+
+			<dependency>
+				<groupId>com.teamdev</groupId>
+				<artifactId>jxbrowser</artifactId>
+				<version>${com.teamdev.jxbrowser.version}</version>
+				<classifier>win64</classifier>
+			</dependency>
+
+			<dependency>
+				<groupId>com.teamdev</groupId>
+				<artifactId>jxbrowser</artifactId>
+				<version>${com.teamdev.jxbrowser.version}</version>
+				<classifier>linux-x64</classifier>
+			</dependency>
+
+			<dependency>
+				<groupId>com.teamdev</groupId>
+				<artifactId>jxbrowser-license-phon</artifactId>
+				<version>${com.teamdev.jxbrowser.license.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -485,13 +486,13 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${org.apache.maven.plugins.maven-surefire-plugin.version}</version>
 				</plugin>
-				
+
 				<plugin>
 					<groupId>org.jvnet.jaxb2.maven2</groupId>
 					<artifactId>maven-jaxb2-plugin</artifactId>
 					<version>${org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version}</version>
 				</plugin>
-					
+
 				<plugin>
 					<groupId>org.antlr</groupId>
 					<artifactId>antlr3-maven-plugin</artifactId>
@@ -514,7 +515,7 @@
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${org.apache.maven.plugins.maven-dependency-plugin.version}</version>
 				</plugin>
-				
+
 			</plugins>
 
 		</pluginManagement>

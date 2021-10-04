@@ -1,177 +1,177 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>phon</artifactId>
-        <groupId>ca.phon</groupId>
-        <version>3.3.7-SNAPSHOT</version>
-        <relativePath>..</relativePath>
-    </parent>
-    <artifactId>phon-all</artifactId>
-    <packaging>pom</packaging>
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>phon</artifactId>
+		<groupId>ca.phon</groupId>
+		<version>3.3.7-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>phon-all</artifactId>
+	<packaging>pom</packaging>
 
-    <name>Phon</name>
-    <url>https://www.phon.ca</url>
-    <description>Phon is a software program that greatly facilitates a number of tasks related
+	<name>Phon</name>
+	<url>https://www.phon.ca</url>
+	<description>Phon is a software program that greatly facilitates a number of tasks related
         to the analysis of phonological data. Built to support research in phonological development
         (including babbling), second language acquisition, and phonological disorders, Phon can
         also be used to investigate virtually all types of phonological investigations (e.g.
         loanword phonology, fieldwork in phonology).
     </description>
 
-    <organization>
-        <name>Department of Linguistics, Memorial University of Newfoundland</name>
-        <url>https://www.mun.ca</url>
-    </organization>
+	<organization>
+		<name>Department of Linguistics, Memorial University of Newfoundland</name>
+		<url>https://www.mun.ca</url>
+	</organization>
 
-    <developers>
-        <developer>
-            <id>ghedlund</id>
-            <name>Greg Hedlund</name>
-            <email>ghedlund@mun.ca</email>
-            <timezone>-3.5</timezone>
-        </developer>
-        <developer>
-            <id>yrose</id>
-            <name>Yvan Rose</name>
-            <email>yrose@mun.ca</email>
-            <timezone>-3.5</timezone>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<id>ghedlund</id>
+			<name>Greg Hedlund</name>
+			<email>ghedlund@mun.ca</email>
+			<timezone>-3.5</timezone>
+		</developer>
+		<developer>
+			<id>yrose</id>
+			<name>Yvan Rose</name>
+			<email>yrose@mun.ca</email>
+			<timezone>-3.5</timezone>
+		</developer>
+	</developers>
 
-    <contributors></contributors>
+	<contributors/>
 
-    <licenses>
-        <license>
-            <name>GNU GPL v3.0+</name>
-            <distribution>repo</distribution>
-            <url>http://www.gnu.org/copyleft/gpl.html</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>GNU GPL v3.0+</name>
+			<distribution>repo</distribution>
+			<url>http://www.gnu.org/copyleft/gpl.html</url>
+		</license>
+	</licenses>
 
-    <distributionManagement>
-        <repository>
-            <id>phon.ca-release</id>
-            <name>Phon Release</name>
-            <url>http://phon.ucs.mun.ca/artifacts/libs-release-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>phon.ca-snapshot</id>
-            <name>Phon Snapshot</name>
-            <url>http://phon.ucs.mun.ca/artifacts/libs-snapshot-local</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>phon.ca-release</id>
+			<name>Phon Release</name>
+			<url>http://phon.ucs.mun.ca/artifacts/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>phon.ca-snapshot</id>
+			<name>Phon Snapshot</name>
+			<url>http://phon.ucs.mun.ca/artifacts/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>libs-release</name>
-            <url>http://phon.ucs.mun.ca/artifacts/libs-release</url>
-        </repository>
-        <repository>
-            <snapshots/>
-            <id>snapshots</id>
-            <name>libs-snapshot</name>
-            <url>http://phon.ucs.mun.ca/artifacts/libs-snapshot</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>plugins-release</name>
-            <url>http://phon.ucs.mun.ca/artifacts/plugins-release</url>
-        </pluginRepository>
-        <pluginRepository>
-            <snapshots/>
-            <id>snapshots</id>
-            <name>plugins-snapshot</name>
-            <url>http://phon.ucs.mun.ca/artifacts/plugins-snapshot</url>
-        </pluginRepository>
-    </pluginRepositories>
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>http://phon.ucs.mun.ca/artifacts/libs-release</url>
+		</repository>
+		<repository>
+			<snapshots/>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>http://phon.ucs.mun.ca/artifacts/libs-snapshot</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>plugins-release</name>
+			<url>http://phon.ucs.mun.ca/artifacts/plugins-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots/>
+			<id>snapshots</id>
+			<name>plugins-snapshot</name>
+			<url>http://phon.ucs.mun.ca/artifacts/plugins-snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
 
-    <properties>
-        <!-- Project settings -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.sourceVersion>11</project.build.sourceVersion>
-        <project.build.targetVersion>11</project.build.targetVersion>
+	<properties>
+		<!-- Project settings -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceVersion>11</project.build.sourceVersion>
+		<project.build.targetVersion>11</project.build.targetVersion>
 
-        <!-- Dependency versions -->
-        <ca.phon.phon-dict-data.version>40</ca.phon.phon-dict-data.version>
-        <ca.phon.app.version>${project.version}</ca.phon.app.version>
-        <ca.phon.phon-shell-plugin.version>21</ca.phon.phon-shell-plugin.version>
-        <ca.phon.phon-groovy-plugin.version>4</ca.phon.phon-groovy-plugin.version>
-        <ca.phon.phon-praat-plugin.version>56</ca.phon.phon-praat-plugin.version>
-        <ca.phon.phon-update-plugin.version>18</ca.phon.phon-update-plugin.version>
-        <ca.phon.phon-version-triggers.version>7</ca.phon.phon-version-triggers.version>
-        <ca.phon.phon-diarization-plugin.version>4</ca.phon.phon-diarization-plugin.version>
-        <ca.phon.csv.plugin.version>24</ca.phon.csv.plugin.version>
-        <ca.phon.phontalk.version>3.5.4-SNAPSHOT</ca.phon.phontalk.version>
-    </properties>
+		<!-- Dependency versions -->
+		<ca.phon.phon-dict-data.version>40</ca.phon.phon-dict-data.version>
+		<ca.phon.app.version>${project.version}</ca.phon.app.version>
+		<ca.phon.phon-shell-plugin.version>22</ca.phon.phon-shell-plugin.version>
+		<ca.phon.phon-groovy-plugin.version>4</ca.phon.phon-groovy-plugin.version>
+		<ca.phon.phon-praat-plugin.version>56</ca.phon.phon-praat-plugin.version>
+		<ca.phon.phon-update-plugin.version>18</ca.phon.phon-update-plugin.version>
+		<ca.phon.phon-version-triggers.version>7</ca.phon.phon-version-triggers.version>
+		<ca.phon.phon-diarization-plugin.version>4</ca.phon.phon-diarization-plugin.version>
+		<ca.phon.csv.plugin.version>24</ca.phon.csv.plugin.version>
+		<ca.phon.phontalk.version>3.5.4-SNAPSHOT</ca.phon.phontalk.version>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-app</artifactId>
-            <version>${ca.phon.app.version}</version>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-app</artifactId>
+			<version>${ca.phon.app.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-dict-data</artifactId>
-            <version>${ca.phon.phon-dict-data.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-dict-data</artifactId>
+			<version>${ca.phon.phon-dict-data.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-diarization-plugin</artifactId>
-            <version>${ca.phon.phon-diarization-plugin.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-diarization-plugin</artifactId>
+			<version>${ca.phon.phon-diarization-plugin.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-csv-plugin</artifactId>
-            <version>${ca.phon.csv.plugin.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-csv-plugin</artifactId>
+			<version>${ca.phon.csv.plugin.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-shell-plugin</artifactId>
-            <version>${ca.phon.phon-shell-plugin.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-shell-plugin</artifactId>
+			<version>${ca.phon.phon-shell-plugin.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-groovy-plugin</artifactId>
-            <version>${ca.phon.phon-groovy-plugin.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-groovy-plugin</artifactId>
+			<version>${ca.phon.phon-groovy-plugin.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-praat-plugin</artifactId>
-            <version>${ca.phon.phon-praat-plugin.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-praat-plugin</artifactId>
+			<version>${ca.phon.phon-praat-plugin.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phontalk-plugin</artifactId>
-            <version>${ca.phon.phontalk.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phontalk-plugin</artifactId>
+			<version>${ca.phon.phontalk.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>ca.phon</groupId>
-            <artifactId>phon-version-triggers</artifactId>
-            <version>${ca.phon.phon-version-triggers.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phon-version-triggers</artifactId>
+			<version>${ca.phon.phon-version-triggers.version}</version>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
 
-    <build/>
+	<build/>
 
 </project>
