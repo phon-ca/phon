@@ -444,23 +444,20 @@
 
 			<dependency>
 				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser</artifactId>
+				<artifactId>jxbrowser-mac</artifactId>
 				<version>${com.teamdev.jxbrowser.version}</version>
-				<classifier>mac</classifier>
 			</dependency>
 
 			<dependency>
 				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser</artifactId>
+				<artifactId>jxbrowser-win64</artifactId>
 				<version>${com.teamdev.jxbrowser.version}</version>
-				<classifier>win64</classifier>
 			</dependency>
 
 			<dependency>
 				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser</artifactId>
+				<artifactId>jxbrowser-linux-x64</artifactId>
 				<version>${com.teamdev.jxbrowser.version}</version>
-				<classifier>linux-x64</classifier>
 			</dependency>
 
 			<dependency>

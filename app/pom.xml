@@ -127,20 +127,17 @@
 
 		<dependency>
 			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser</artifactId>
-			<classifier>mac</classifier>
+			<artifactId>jxbrowser-mac</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser</artifactId>
-			<classifier>win64</classifier>
+			<artifactId>jxbrowser-win64</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser</artifactId>
-			<classifier>linux-x64</classifier>
+			<artifactId>jxbrowser-linux-x64</artifactId>
 		</dependency>
 
 		<dependency>
