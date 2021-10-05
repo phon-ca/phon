@@ -42,60 +42,6 @@
 
 	<contributors/>
 
-	<licenses>
-		<license>
-			<name>GNU GPL v3.0+</name>
-			<distribution>repo</distribution>
-			<url>http://www.gnu.org/copyleft/gpl.html</url>
-		</license>
-	</licenses>
-
-	<distributionManagement>
-		<repository>
-			<id>phon.ca-release</id>
-			<name>Phon Release</name>
-			<url>http://phon.ucs.mun.ca/artifacts/libs-release-local</url>
-		</repository>
-		<snapshotRepository>
-			<id>phon.ca-snapshot</id>
-			<name>Phon Snapshot</name>
-			<url>http://phon.ucs.mun.ca/artifacts/libs-snapshot-local</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>libs-release</name>
-			<url>http://phon.ucs.mun.ca/artifacts/libs-release</url>
-		</repository>
-		<repository>
-			<snapshots/>
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>http://phon.ucs.mun.ca/artifacts/libs-snapshot</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>plugins-release</name>
-			<url>http://phon.ucs.mun.ca/artifacts/plugins-release</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots/>
-			<id>snapshots</id>
-			<name>plugins-snapshot</name>
-			<url>http://phon.ucs.mun.ca/artifacts/plugins-snapshot</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<properties>
 		<!-- Project settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
