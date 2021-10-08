@@ -154,6 +154,15 @@ public interface SessionSPI {
 	 * @param participant
 	 */
 	public void addParticipant(Participant participant);
+
+	/**
+	 * Add participant at given index
+	 *
+	 * @param idx
+	 * @param participant
+	 *
+	 */
+	public void addParticipant(int idx, Participant participant);
 	
 	/**
 	 * Get the participant at the given index
@@ -162,6 +171,13 @@ public interface SessionSPI {
 	 * @return the specified participant
 	 */
 	public Participant getParticipant(int idx);
+
+	/**
+	 * Get the index of the given participant
+	 *
+	 * @return index of participant or -1 if not found
+	 */
+	public int getParticipantIndex(Participant participant);
 
 	/** Set the corpus */
 	public void setCorpus(String corpus);
@@ -202,8 +218,8 @@ public interface SessionSPI {
 	/**
 	 * Add a new record to the list in the given position.
 	 * 
+	 * @param pos
 	 * @param record
-	 * @param idx
 	 */
 	public void addRecord(int pos, Record record);
 	

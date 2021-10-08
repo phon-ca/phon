@@ -149,8 +149,16 @@ public final class Session extends ExtendableObject {
 		sessionImpl.addParticipant(participant);
 	}
 
+	public void addParticipant(int idx, Participant participant) {
+		sessionImpl.addParticipant(idx, participant);
+	}
+
 	public Participant getParticipant(int idx) {
 		return sessionImpl.getParticipant(idx);
+	}
+
+	public int getParticipantIndex(Participant participant) {
+		return sessionImpl.getParticipantIndex(participant);
 	}
 
 	public Participants getParticipants() {

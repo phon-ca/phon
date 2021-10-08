@@ -151,12 +151,24 @@ public class SessionImpl implements SessionSPI {
 
 	@Override
 	public void addParticipant(Participant participant) {
-		participants.add(participant);
+		if(!participants.contains(participant))
+			participants.add(participant);
+	}
+
+	@Override
+	public void addParticipant(int idx, Participant participant) {
+		if(!participants.contains(participant))
+			participants.add(idx, participant);
 	}
 
 	@Override
 	public Participant getParticipant(int idx) {
 		return participants.get(idx);
+	}
+
+	@Override
+	public int getParticipantIndex(Participant participant) {
+		return participants.indexOf(participant);
 	}
 	
 	@Override
