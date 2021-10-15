@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -98,7 +98,7 @@ public final class TimelineView extends EditorView {
 	private PhonTaskButton generateButton = null;
 
 	/* Additional menu handlers */
-	private final List<Consumer<MenuBuilder>> menuHandlers = new ArrayList<>();
+	private final List<BiConsumer<MenuBuilder, Boolean>> menuHandlers = new ArrayList<>();
 	
 	/**
 	 * Default {@link TimeUIModel} which should be
@@ -967,7 +967,7 @@ public final class TimelineView extends EditorView {
 		return this.contextMenuListener;
 	}
 
-	public void addMenuHandler(Consumer<MenuBuilder> handler) {
+	public void addMenuHandler(BiConsumer<MenuBuilder, Boolean> handler) {
 		this.menuHandlers.add(handler);
 	}
 
@@ -1029,7 +1029,7 @@ public final class TimelineView extends EditorView {
 
 		for(int i = 0; i < menuHandlers.size(); i++) {
 			if(i == 0) builder.addSeparator(".", "plugins");
-			menuHandlers.get(i).accept(builder);
+			menuHandlers.get(i).accept(builder, false);
 		}
 		
 		return menu;
@@ -1073,7 +1073,7 @@ public final class TimelineView extends EditorView {
 
 		for(int i = 0; i < menuHandlers.size(); i++) {
 			if(i == 0) builder.addSeparator(".", "plugins");
-			menuHandlers.get(i).accept(builder);
+			menuHandlers.get(i).accept(builder, true);
 		}
 		
 		contextMenu.show(me.getComponent(), me.getX(), me.getY());
