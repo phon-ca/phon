@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="diarization">
+    <title>Diarization (beta)</title>
+    <body>
+        <p>Diarization is the process of automatically detecting speakers and speech segments within
+            an audio file. Diarization actions are available from the <xref
+                href="timeline_view.dita">Timeline</xref> view via the
+                <uicontrol>Diarization</uicontrol> toolbar button.  When clicked the diarization
+            menu will be displayed.</p>
+    </body>
+
+    <topic id="wizard">
+        <title>Diarization Wizard</title>
+
+        <body>
+            <p>The diarization wizard assists with execution of available diarization tools. This
+                will be the first action in the diarization procedure.</p>
+
+            <p>Step one of the wizard is to select the desired diarization tool: <ul>
+                    <li>LIUM<p>The LIUM diarization tool (<xref
+                                href="https://projets-lium.univ-lemans.fr/spkdiarization/"
+                                format="html" scope="external"/>) is an embedded (i.e., offline)
+                            diarization tool which is packaged with Phon.</p></li>
+                    <li>Google Cloud Services (Speech to Text) - requires a Google Cloud Services
+                        account and Internet access (TODO)</li>
+                </ul>
+            </p>
+            <p>After clicking <uicontrol>Next</uicontrol> the selected diarization tool will execute
+                with output displayed in the <uicontrol>Log</uicontrol> (this may take some time and
+                will depend on length of audio.) Once the tool has completed <uicontrol>Diarizaiton
+                    Results</uicontrol> will be loaded in the <xref href="timeline_view.dita"
+                    >Timeline</xref> view. Results are also saved in the session resources folder as
+                    <filepath>__res/diarization/&lt;corpus>_&lt;session>.xml</filepath>. Results may
+                be modified saved, and recalled at a later time using the diarization menu.</p>
+        </body>
+    </topic>
+
+    <topic id="results">
+        <title>Modifying and Adding Diarization Results</title>
+
+        <body>
+            <p>Diarization results are not automatically added to the session. Results from the
+                diarization tool are loaded in the <xref href="timeline_view.dita">Timeline</xref>
+                view for review and modification when the diarization wizard has finished.
+                Diarization results will appear in place of the normal record tier and may be
+                modifed using typical mouse and keyboard interactions (see the <xref
+                    href="timeline_view.dita">Timeline</xref> view documentation for details on
+                modifying and playing record segments using keyboard and mouse.) A label titled
+                    <uicontrol>Diarization Results</uicontrol> will appear above the record grid to
+                indicate that results have been loaded. This label will include a '*' if the results
+                have been modfied.  Results may be saved using the appropariate option in the
+                diarization menu.</p>
+        </body>
+
+        <topic id="actions">
+            <title>Actions</title>
+
+            <body>
+                <p>Diarization actions are available from a contextual menu displayed when clicking
+                    the <uicontrol>Diarization</uicontrol> button in the Timeline view's toolbar or
+                    by clicking the <uicontrol>Diarization Results</uicontrol> label in the <xref
+                        href="timeline_view.dita">Timeline</xref> view.  Participant specific
+                    actions are available from the contextual menu displayed when clicking the
+                    participant name.</p>
+            </body>
+            
+            <topic id="merging_speakers">
+                <title>Merging Speakers</title>
+                
+                <body>
+                    <p>To merge speakers in diarization results, use the <uicontrol>Assign records to speaker</uicontrol> sub-menu of the
+                        speaker contextual menu and select a participant under <uicontrol>Diarization Participants</uicontrol>.</p>
+                </body>
+            </topic>
+            
+            <topic id="assign_speaker">
+                <title>Assign Records to Existing Speaker</title>
+                
+                <body>
+                    <p>To assign diarization results to an existing session participant, use the <uicontrol>Assign records to speaker</uicontrol> sub-menu of the
+                        speaker contextual menu and select a participant under <uicontrol>Session Participants</uicontrol>.</p>
+                </body>
+            </topic>
+           
+            <topic id="adding_records">
+                <title>Adding Results to Session</title>
+                
+                <body>
+                    <p>There are several methods for adding sessions:
+                    <ul>
+                        <li>Add all diarization results to session
+                        <p>Available from the diarization menu, this will add all diarization results to the session and close the results.</p></li>
+                        <li>All all results for speaker to session
+                        <p>Available from the diarization and speaker contextual menus; add all diarization results for a speaker to the session and remove them from the diarization results.
+                        Diarization results will be closed if all records have been added.</p></li>
+                        <li>Add specific records to session
+                        <p>Add individual records by selecting them and clicking the '+' icon dispayed above the selected records, or by pressing enter, or via the diarization menuu.
+                        Records will be removed from the diarization results and results will be closed if all records have been added.</p></li>
+                    </ul></p>
+                </body>
+            </topic>
+        </topic>
+    </topic>
+
+</topic>
