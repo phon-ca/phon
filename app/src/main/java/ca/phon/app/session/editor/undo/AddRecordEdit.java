@@ -32,7 +32,7 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	private final int index;
 	
 	private boolean fireEvent = true;
-	
+
 	public AddRecordEdit(SessionEditor editor) {
 		this(editor, null, -1);
 	}
@@ -64,7 +64,11 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	public String getRedoPresentationName() {
 		return "Redo add record " + record.getUuid().toString();
 	}
-	
+
+	public Record getRecord() {
+		return this.record;
+	}
+
 	@Override
 	public void undo() {
 		super.undo();

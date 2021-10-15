@@ -54,6 +54,9 @@ public class NewRecordAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final AddRecordEdit edit = new AddRecordEdit(getEditor());
 		getEditor().getUndoSupport().postEdit(edit);
+
+		int recordIndex = getEditor().getSession().getRecordPosition(edit.getRecord());
+		getEditor().setCurrentRecordIndex(recordIndex);
 	}
 
 }

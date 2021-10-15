@@ -258,9 +258,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new DelegateEditorAction(this, "onModifiedChanged");
 		getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, modifiedChangedAct);
 
-		final EditorAction recordAddedAct =
-				new DelegateEditorAction(this, "onRecordAdded");
-		getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordAddedAct);
+//		final EditorAction recordAddedAct =
+//				new DelegateEditorAction(this, "onRecordAdded");
+//		getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordAddedAct);
 
 		final EditorAction recordDeletedAct =
 				new DelegateEditorAction(this, "onRecordDeleted");
