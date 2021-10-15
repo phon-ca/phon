@@ -428,6 +428,9 @@ public class TimeUIModel {
 		
 		/* If false, the interval will not be repainted during event changes */
 		private boolean repaintOnTimeChange = true;
+
+		/* Visible */
+		private boolean visible = true;
 		
 		/* Owner, if not null interval will only be painted on owner component */
 		private TimeComponent owner = null;
@@ -493,6 +496,16 @@ public class TimeUIModel {
 			var oldVal = this.color;
 			this.color = color;
 			propSupport.firePropertyChange("color", oldVal, color);
+		}
+
+		public boolean isVisible() {
+			return this.visible;
+		}
+
+		public void setVisible(boolean visible) {
+			var oldVal = this.visible;
+			this.visible = visible;
+			propSupport.firePropertyChange("visible", oldVal, visible);
 		}
 		
 		public TimeComponent getOwner() {

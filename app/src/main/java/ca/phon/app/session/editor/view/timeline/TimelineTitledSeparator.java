@@ -14,7 +14,7 @@ import java.sql.Time;
 
 public class TimelineTitledSeparator extends TimeComponent {
 
-    private final static int LABEL_MARGIN = 10;
+    private final static int LABEL_MARGIN = 0;
     private final static int LABEL_PADDING = 5;
 
     private String title;
@@ -27,8 +27,14 @@ public class TimelineTitledSeparator extends TimeComponent {
 
     private int lineWidth;
 
+    private JLabel renderer;
+
     public TimelineTitledSeparator(TimeUIModel timeModel, String title, Icon icon, int horizontalLabelPosition, Color lineColor, int lineWidth) {
         super(timeModel);
+
+        this.renderer = new JLabel(title);
+        this.renderer.setOpaque(false);
+        this.renderer.setDoubleBuffered(false);
 
         this.title = title;
         this.icon = icon;
@@ -93,16 +99,17 @@ public class TimelineTitledSeparator extends TimeComponent {
         firePropertyChange("lineWidth", prev, lineWidth);
     }
 
-    private static class TimelineSeparatorUI extends TimeComponentUI {
+    public Rectangle getLabelRect() {
+        Dimension labelSize = renderer.getPreferredSize();
+        Rectangle labelBounds = new Rectangle(
+                getVisibleRect().x + LABEL_MARGIN, 0, labelSize.width, labelSize.height);
+        return labelBounds;
+    }
 
-        private JLabel renderer;
+    private class TimelineSeparatorUI extends TimeComponentUI {
 
         public TimelineSeparatorUI() {
             super();
-
-            this.renderer = new JLabel();
-            this.renderer.setOpaque(false);
-            this.renderer.setDoubleBuffered(false);
         }
 
         @Override
@@ -116,14 +123,13 @@ public class TimelineTitledSeparator extends TimeComponent {
                 g.fillRect(0, 0, (int) bounds.getWidth(), (int) bounds.getHeight());
             }
 
-            this.renderer.setIcon(separator.getIcon());
-            this.renderer.setText(separator.getTitle());
-            this.renderer.setFont(separator.getFont());
-            this.renderer.setForeground(separator.getForeground());
+            renderer.setIcon(separator.getIcon());
+            renderer.setText(separator.getTitle());
+            renderer.setFont(separator.getFont());
+            renderer.setForeground(separator.getForeground());
 
-            Dimension labelSize = this.renderer.getPreferredSize();
-            Rectangle labelBounds = new Rectangle(
-                    separator.getVisibleRect().x + LABEL_MARGIN, 0, labelSize.width, labelSize.height);
+            Dimension labelSize = renderer.getPreferredSize();
+            Rectangle labelBounds = getLabelRect();
 
             switch (separator.getHorizontalLabelPosition()) {
                 case SwingConstants.LEFT:
@@ -143,7 +149,7 @@ public class TimelineTitledSeparator extends TimeComponent {
                     break;
             }
 
-            SwingUtilities.paintComponent(g, this.renderer, separator, labelBounds);
+            SwingUtilities.paintComponent(g, renderer, separator, labelBounds);
         }
 
         private TimelineTitledSeparator getSeparator() {

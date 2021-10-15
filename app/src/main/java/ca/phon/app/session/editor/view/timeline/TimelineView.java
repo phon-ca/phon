@@ -21,7 +21,9 @@ import java.awt.event.*;
 import java.beans.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.Timer;
+import java.util.function.Consumer;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -94,6 +96,9 @@ public final class TimelineView extends EditorView {
 	private JPanel errorPanel;
 	private ErrorBanner messageButton = new ErrorBanner();
 	private PhonTaskButton generateButton = null;
+
+	/* Additional menu handlers */
+	private final List<Consumer<MenuBuilder>> menuHandlers = new ArrayList<>();
 	
 	/**
 	 * Default {@link TimeUIModel} which should be
@@ -957,6 +962,18 @@ public final class TimelineView extends EditorView {
 			}
 		}
 	}
+
+	public MouseListener getContextMenuListener() {
+		return this.contextMenuListener;
+	}
+
+	public void addMenuHandler(Consumer<MenuBuilder> handler) {
+		this.menuHandlers.add(handler);
+	}
+
+	public boolean removeMenuHandler(Consumer<MenuBuilder> handler) {
+		return this.menuHandlers.remove(handler);
+	}
 	
 	@Override
 	public JMenu getMenu() {
@@ -1009,6 +1026,11 @@ public final class TimelineView extends EditorView {
 		
 		builder.addItem(".", new ZoomAction(this, true));
 		builder.addItem(".", new ZoomAction(this, false));
+
+		for(int i = 0; i < menuHandlers.size(); i++) {
+			if(i == 0) builder.addSeparator(".", "plugins");
+			menuHandlers.get(i).accept(builder);
+		}
 		
 		return menu;
 	}
@@ -1048,6 +1070,11 @@ public final class TimelineView extends EditorView {
 		
 		builder.addItem(".", new ZoomAction(this, true));
 		builder.addItem(".", new ZoomAction(this, false));
+
+		for(int i = 0; i < menuHandlers.size(); i++) {
+			if(i == 0) builder.addSeparator(".", "plugins");
+			menuHandlers.get(i).accept(builder);
+		}
 		
 		contextMenu.show(me.getComponent(), me.getX(), me.getY());
 	}

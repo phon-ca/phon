@@ -1218,7 +1218,9 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	@RunOnEDT
 	public void onParticipantsChanged(EditorEvent event) {
+		updating = true;
 		setupSpeakerBoxModel();
+		updating = false;
 	}
 
 	@RunOnEDT

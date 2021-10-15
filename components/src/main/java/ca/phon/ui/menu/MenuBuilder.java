@@ -75,6 +75,17 @@ public final class MenuBuilder {
 		return rootRef.get();
 	}
 
+	/**
+	 * Clear root menu element
+	 */
+	public void removeAll() {
+		if(getRoot() instanceof JMenu) {
+			((JMenu)getRoot()).removeAll();
+		} else if(getRoot() instanceof JPopupMenu) {
+			((JPopupMenu)getRoot()).removeAll();
+		}
+	}
+
 	public JMenu addMenu(String path, String text) {
 		final Tuple<String, MenuElement> deepest = getDeepestMenuElement(getRoot(), path);
 		final MenuElement elem = deepest.getObj2();
@@ -214,7 +225,7 @@ public final class MenuBuilder {
 	 * the provied path.
 	 *
 	 * @param path
-	 * @param menuEle
+	 * @param menu
 	 */
 	public void appendSubItems(String path, MenuElement menu) {
 		appendSubItems(getRoot(), path, menu);

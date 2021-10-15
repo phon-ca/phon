@@ -56,15 +56,15 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	private final static int TIER_GAP = 5;
 
-	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordLabelTree;
+	protected RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordLabelTree;
 
-	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordTree;
-	
-	private RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> markerTree;
-	
-	private RTree<String, com.github.davidmoten.rtree.geometry.Rectangle> messageTree;
-	
-	private RTree<Action, com.github.davidmoten.rtree.geometry.Rectangle> actionsTree;
+	protected RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> recordTree;
+
+	protected RTree<Integer, com.github.davidmoten.rtree.geometry.Rectangle> markerTree;
+
+	protected RTree<String, com.github.davidmoten.rtree.geometry.Rectangle> messageTree;
+
+	protected RTree<Action, com.github.davidmoten.rtree.geometry.Rectangle> actionsTree;
 	
 	private Map<Integer, Rectangle2D> visibleRecords = Collections.synchronizedMap(new HashMap<>());
 	
@@ -126,6 +126,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		c.removeMouseMotionListener(mouseListener);
 		
 		recordGrid.getTimeModel().removePropertyChangeListener(propListener);
+	}
+
+	public RecordGrid getRecordGrid() {
+		return this.recordGrid;
 	}
 		
 	private boolean isRecordPressed(int recordIndex) {
@@ -851,7 +855,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		recordGrid.setSplitMode(false);
 	}
 	
-	private Rectangle2D paintRecordNumberLabel(Graphics2D g2, int recordIndex,
+	protected Rectangle2D paintRecordNumberLabel(Graphics2D g2, int recordIndex,
 			Icon icon, Color color, Rectangle2D segmentRect) {
 		final Font font = recordGrid.getFont();
 		if(font != null) {

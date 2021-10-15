@@ -180,6 +180,30 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				IconManager.getInstance().getIcon("actions/transform-move", IconSize.SMALL));
 		moveSegmentsButton = new JButton(moveSegmentsAct);
 		toolbar.add(moveSegmentsButton);
+
+		addComponentListener(new ComponentListener() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				if(splitButton != null) splitButton.setEnabled(true);
+				if(moveSegmentsButton != null) moveSegmentsButton.setEnabled(true);
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				if(splitButton != null) splitButton.setEnabled(false);
+				if(moveSegmentsButton != null) moveSegmentsButton.setEnabled(false);
+			}
+		});
 	}
 
 	public RecordGrid getRecordGrid() {
@@ -437,11 +461,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		if (isSplitModeActive()) {
 			onEndSplitRecord(pae);
 		} else if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			MediaPlayerEditorView mediaView = (MediaPlayerEditorView) getParentView().getEditor().getViewModel()
-					.getView(MediaPlayerEditorView.VIEW_TITLE);
-			if (mediaView.getPlayer().isPlaying()) {
-				mediaView.getPlayer().pause();
-				return;
+			SegmentPlayback segmentPlayback = getParentView().getEditor().getMediaModel().getSegmentPlayback();
+			if(segmentPlayback != null && segmentPlayback.isPlaying()) {
+				segmentPlayback.stopPlaying();
 			}
 		}
 		if(getSelectionModel().getSelectedItemsCount() > 1) {
@@ -673,8 +695,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private void updateCurrentRecordInterval(Record r) {
 		if(r == null) return;
 
-		if(currentRecordInterval != null)
+		boolean wasVisible = true;
+		if(currentRecordInterval != null) {
+			wasVisible = currentRecordInterval.isVisible();
 			getTimeModel().removeInterval(currentRecordInterval);
+		}
 
 		int rIdx = getParentView().getEditor().getCurrentRecordIndex();
 
@@ -707,6 +732,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		currentRecordInterval
 				.setColor(UIManager.getColor(recordGrid.hasFocus() ? TimelineViewColors.FOCUSED_INTERVAL_BACKGROUND
 						: TimelineViewColors.INTERVAL_BACKGROUND));
+		currentRecordInterval.setVisible(wasVisible);
 	}
 
 	public void setupRecord(Record r) {

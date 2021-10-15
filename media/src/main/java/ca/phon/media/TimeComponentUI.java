@@ -67,6 +67,14 @@ public class TimeComponentUI extends ComponentUI {
 		c.removeMouseListener(markerListener);
 		c.removeMouseMotionListener(markerListener);
 		timeComp.getTimeModel().removeTimeUIModelListener(timeModelListener);
+
+		for(Interval interval:timeComp.getTimeModel().getIntervals()) {
+			interval.removePropertyChangeListener(intervalTimeListener);
+		}
+
+		for(Marker marker:timeComp.getTimeModel().getMarkers()) {
+			marker.removePropertyChangeListener(markerTimeListener);
+		}
 		
 		timeComp = null;
 	}
@@ -102,7 +110,8 @@ public class TimeComponentUI extends ComponentUI {
 	
 	public void paintInterval(Graphics2D g2, Interval interval, boolean paintBackground) {
 		if(!timeComp.isRepaintAll() && interval.getOwner() != null && interval.getOwner() != timeComp) return;
-		
+		if(!interval.isVisible()) return;
+
 		if(paintBackground) {
 			g2.setColor(interval.getColor());
 			
