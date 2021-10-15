@@ -31,6 +31,7 @@
    <appContext helpID="concept_kzy_cnx_qp" path="praat_plugin/intensity_settings.html"/>
    <appContext helpID="concept_zqx_bnx_qp" path="praat_plugin/pitch_settings.html"/>
    <appContext helpID="timeline" path="session_editor/timeline_view.html"/>
+   <appContext helpID="diarization" path="session_editor/diarization.html"/>
    <appContext helpID="ipa-lookup" path="session_editor/ipa_lookup_view.html"/>
    <appContext helpID="find_and_replace"
                path="session_editor/find_and_replace_view.html"/>

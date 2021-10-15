@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.6-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_3.dmg" newVersion="3.3.6-beta.3" newMediaFileId="macos" fileSize="286874100" md5Sum="5f237cf888755e8eb0817855a111d1e5" sha256Sum="af3873ee02928ef3e344d86cb2a1fb37a1dd0080c892b352ed5640f6a13e9de0" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.5
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.7-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_1.dmg" newVersion="3.3.7-beta.1" newMediaFileId="macos" fileSize="334934834" md5Sum="da1362233f9716a8d4e978db0743e643" sha256Sum="1544460949145b03e14ae800f44bb911d4b973f318fe5e1af7bea4a593b43b84" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.6
+
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Added diarization plug-in
+
+## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
@@ -483,8 +488,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_6-beta_3.dmg" newVersion="3.3.6-beta.3" newMediaFileId="macos" fileSize="286874100" md5Sum="5f237cf888755e8eb0817855a111d1e5" sha256Sum="af3873ee02928ef3e344d86cb2a1fb37a1dd0080c892b352ed5640f6a13e9de0" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.5
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_1.dmg" newVersion="3.3.7-beta.1" newMediaFileId="macos" fileSize="334934834" md5Sum="da1362233f9716a8d4e978db0743e643" sha256Sum="1544460949145b03e14ae800f44bb911d4b973f318fe5e1af7bea4a593b43b84" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.3.6
+
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Added diarization plug-in
+
+## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
@@ -966,8 +976,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.exe" newVersion="3.3.6-beta.3" newMediaFileId="win64" fileSize="302348320" md5Sum="38f15650a43d12cf799251b837e9f41e" sha256Sum="77ea23596ddbec45f5dc0cc47b0e7e9381c47056926e3a9361f335e7807494af" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.5
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_1.exe" newVersion="3.3.7-beta.1" newMediaFileId="win64" fileSize="352124960" md5Sum="1f0091b75ac250ac719b81b1353fce3a" sha256Sum="179e654d7be6095e84bb206281b662f6918b7451580edf3c7a642906a0fca72b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.6
+
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Added diarization plug-in
+
+## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
@@ -1449,8 +1464,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.exe" newVersion="3.3.6-beta.3" newMediaFileId="win64" fileSize="302348320" md5Sum="38f15650a43d12cf799251b837e9f41e" sha256Sum="77ea23596ddbec45f5dc0cc47b0e7e9381c47056926e3a9361f335e7807494af" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.5
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_1.exe" newVersion="3.3.7-beta.1" newMediaFileId="win64" fileSize="352124960" md5Sum="1f0091b75ac250ac719b81b1353fce3a" sha256Sum="179e654d7be6095e84bb206281b662f6918b7451580edf3c7a642906a0fca72b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.6
+
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Added diarization plug-in
+
+## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
@@ -1932,8 +1952,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.exe" newVersion="3.3.6-beta.3" newMediaFileId="win64" fileSize="302348320" md5Sum="38f15650a43d12cf799251b837e9f41e" sha256Sum="77ea23596ddbec45f5dc0cc47b0e7e9381c47056926e3a9361f335e7807494af" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.5
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_1.exe" newVersion="3.3.7-beta.1" newMediaFileId="win64" fileSize="352124960" md5Sum="1f0091b75ac250ac719b81b1353fce3a" sha256Sum="179e654d7be6095e84bb206281b662f6918b7451580edf3c7a642906a0fca72b" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.3.6
+
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Added diarization plug-in
+
+## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
@@ -2415,8 +2440,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_6-beta_3.zip" newVersion="3.3.6-beta.3" newMediaFileId="win64zip" fileSize="301309498" md5Sum="eb7f08f4e6e0d5706227bc14567bb10e" sha256Sum="2aac535c3b8b642f0b6a621bbfa72037d66867dccc4723deae35cbf9fe34d0c9" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.5
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_1.zip" newVersion="3.3.7-beta.1" newMediaFileId="win64zip" fileSize="342259721" md5Sum="39e64b3431e5a033cdf68559fc233ed7" sha256Sum="2012a78ce57075db1deef6c3a27b39a79e8dc7919ec54bc91d51e9cff4e169a0" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.3.6
+
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Added diarization plug-in
+
+## Changes from 3.3.5
 
  * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
  * Fixed a regression issue with creating records via the Timeline waveform tier
