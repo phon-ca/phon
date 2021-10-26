@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.7-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_2.dmg" newVersion="3.3.7-beta.2" newMediaFileId="macos" fileSize="314192902" md5Sum="fca52a23eb69b2d41e8838b741782954" sha256Sum="59ea3db29b8c6c4af75f84cdc3203fd8bce201c6a4a6eeb29fdc3eabc95dc669" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.7-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_3.dmg" newVersion="3.3.7-beta.3" newMediaFileId="macos" fileSize="314195050" md5Sum="81cd1f949eb8e33d52403a4ef526e2da" sha256Sum="d12816210dc7ef1bb6fbef94edabc0417c84a53005ec2f0a1bcb12c58758af20" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
@@ -489,7 +489,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_2.dmg" newVersion="3.3.7-beta.2" newMediaFileId="macos" fileSize="314192902" md5Sum="fca52a23eb69b2d41e8838b741782954" sha256Sum="59ea3db29b8c6c4af75f84cdc3203fd8bce201c6a4a6eeb29fdc3eabc95dc669" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_3.dmg" newVersion="3.3.7-beta.3" newMediaFileId="macos" fileSize="314195050" md5Sum="81cd1f949eb8e33d52403a4ef526e2da" sha256Sum="d12816210dc7ef1bb6fbef94edabc0417c84a53005ec2f0a1bcb12c58758af20" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
@@ -978,7 +978,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_2.exe" newVersion="3.3.7-beta.2" newMediaFileId="win64" fileSize="323000352" md5Sum="e4ee90a05960d34b0c9745bd9b72ea32" sha256Sum="9eb2cacd543c1b9bdbe536771504503acdcaafcce66613299bce05c1b9770af3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.exe" newVersion="3.3.7-beta.3" newMediaFileId="win64" fileSize="323000352" md5Sum="0c0c54a854ab16d3ac920b8b18146928" sha256Sum="858941249debacc9db4ad12f11844bbc9d51c9f6d3477c927653865ff7c25ffa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
@@ -1467,7 +1467,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_2.exe" newVersion="3.3.7-beta.2" newMediaFileId="win64" fileSize="323000352" md5Sum="e4ee90a05960d34b0c9745bd9b72ea32" sha256Sum="9eb2cacd543c1b9bdbe536771504503acdcaafcce66613299bce05c1b9770af3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.exe" newVersion="3.3.7-beta.3" newMediaFileId="win64" fileSize="323000352" md5Sum="0c0c54a854ab16d3ac920b8b18146928" sha256Sum="858941249debacc9db4ad12f11844bbc9d51c9f6d3477c927653865ff7c25ffa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
@@ -1956,7 +1956,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_2.exe" newVersion="3.3.7-beta.2" newMediaFileId="win64" fileSize="323000352" md5Sum="e4ee90a05960d34b0c9745bd9b72ea32" sha256Sum="9eb2cacd543c1b9bdbe536771504503acdcaafcce66613299bce05c1b9770af3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.exe" newVersion="3.3.7-beta.3" newMediaFileId="win64" fileSize="323000352" md5Sum="0c0c54a854ab16d3ac920b8b18146928" sha256Sum="858941249debacc9db4ad12f11844bbc9d51c9f6d3477c927653865ff7c25ffa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
@@ -2445,7 +2445,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_2.zip" newVersion="3.3.7-beta.2" newMediaFileId="win64zip" fileSize="321958193" md5Sum="cfb37bb06eb2d9ee0871e91666a19a4f" sha256Sum="594a053bf34dcf3b3f09357e200e551f4a82ac2ad251c87f5d089c5771ab9b89" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.zip" newVersion="3.3.7-beta.3" newMediaFileId="win64zip" fileSize="321958645" md5Sum="ed5a51fa38a3672cd247dc89b188fd67" sha256Sum="2e467e7691c130eecda80321eaddc2a35ce4833e2c85bcc69538b78ea8474f5e" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
