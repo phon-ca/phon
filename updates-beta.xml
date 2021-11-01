@@ -8,7 +8,7 @@
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
    * Phon will perform a round-trip test before copying the TextGrid data from Praat
    * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
-   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
    * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
@@ -502,7 +502,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
    * Phon will perform a round-trip test before copying the TextGrid data from Praat
    * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
-   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
    * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
@@ -996,7 +996,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
    * Phon will perform a round-trip test before copying the TextGrid data from Praat
    * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
-   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
    * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
@@ -1490,7 +1490,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
    * Phon will perform a round-trip test before copying the TextGrid data from Praat
    * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
-   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
    * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
@@ -1984,7 +1984,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
    * Phon will perform a round-trip test before copying the TextGrid data from Praat
    * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
-   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
    * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
@@ -2478,7 +2478,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
    * Phon will perform a round-trip test before copying the TextGrid data from Praat
    * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
-   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
    * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
