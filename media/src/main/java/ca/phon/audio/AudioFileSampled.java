@@ -18,7 +18,7 @@ package ca.phon.audio;
 import java.io.*;
 import java.nio.BufferUnderflowException;
 
-public class AudioFileSampled implements Sampled {
+public final class AudioFileSampled extends AbstractSampled {
 
 	private final AudioFile audioFile;
 	
@@ -85,90 +85,6 @@ public class AudioFileSampled implements Sampled {
 	@Override
 	public void close() throws IOException {
 		audioFile.close();
-	}
-
-	@Override
-	public double maximumValue(int channel, int firstSample, int lastSample) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double maximumValue(int channel, float startTime, float endTime) {
-		double[] extrema = getWindowExtrema(channel, startTime, endTime);
-		return extrema[1];
-	}
-
-	@Override
-	public double minimumValue(int channel, int firstSample, int lastSample) {
-		return 0.0;
-	}
-
-	@Override
-	public double[] getWindowExtrema(int channel, int firstSample, int lastSample) {
-		double[] retVal = new double[2];
-		getWindowExtrema(channel, firstSample, lastSample, retVal);
-		return retVal;
-	}
-
-	@Override
-	public void getWindowExtrema(int channel, int firstSample, int lastSample, double[] extrema) {
-		int numSamples = (int)(lastSample - firstSample);
-		if(numSamples < 0) throw new ArrayIndexOutOfBoundsException();
-		
-		double[][] data = new double[getNumberOfChannels()][];
-		for(int i = 0; i < getNumberOfChannels(); i++) {
-			data[i] = new double[numSamples];
-		}
-		
-		try {
-			audioFile.seekToSample(firstSample);
-			audioFile.readSamples(data, 0, numSamples);
-			
-			for(int i = 0; i < numSamples; i++) {
-				extrema[0] = Math.min(extrema[0], data[channel][i]);
-				extrema[1] = Math.max(extrema[1], data[channel][i]);
-			}
-		} catch (IOException e) {
-		}
-	}
-
-	public double[][] getWindowExtrema(float firstTime, float endTime) {
-		return getWindowExtrema(sampleForTime(firstTime), sampleForTime(endTime));
-	}
-	
-	@Override
-	public double[][] getWindowExtrema(int firstSample, int lastSample) {
-		int numSamples = (int)(lastSample - firstSample);
-		double[][] retVal = new double[getNumberOfChannels()][];
-		for(int i = 0; i < getNumberOfChannels(); i++) {
-			retVal[i] = new double[2];
-		}
-		
-		double[][] data = new double[getNumberOfChannels()][];
-		for(int i = 0; i < getNumberOfChannels(); i++) {
-			data[i] = new double[numSamples];
-		}
-		
-		loadSampleData(data, 0, firstSample, numSamples);
-		for(int isamp = 0; isamp < numSamples; isamp++) {
-			for(int ichan = 0; ichan < getNumberOfChannels(); ichan++) {
-				retVal[ichan][0] = Math.min(retVal[ichan][0], data[ichan][isamp]);
-				retVal[ichan][1] = Math.max(retVal[ichan][1], data[ichan][isamp]);
-			}
-		}
-		
-		return retVal;
-	}
-	
-	@Override
-	public double[] getWindowExtrema(int channel, float startTime, float endTime) {
-		return getWindowExtrema(channel, sampleForTime(startTime), sampleForTime(endTime));
-	}
-
-	@Override
-	public void getWindowExtrema(int channel, float startTime, float endTime, double[] extrema) {
-		getWindowExtrema(channel, sampleForTime(startTime), sampleForTime(endTime), extrema);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package ca.phon.media;
+package ca.phon.audio;
 
 import ca.phon.audio.Sampled;
 
@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Empty audio samples of specified length and format.
  *
  */
-public class EmptySampled implements Sampled {
+public final class EmptySampled extends AbstractSampled {
 
 	private float length;
 
@@ -73,55 +73,10 @@ public class EmptySampled implements Sampled {
 	public void close() throws IOException {}
 
 	@Override
-	public double maximumValue(int channel, int firstSample, int lastSample) {
-		return 0.0;
-	}
-
-	@Override
-	public double maximumValue(int channel, float startTime, float endTime) {
-		return 0.0;
-	}
-
-	@Override
-	public double minimumValue(int channel, int firstSample, int lastSample) {
-		return 0.0;
-	}
-
-	@Override
 	public int loadSampleData(double[][] buffer, int offset, int firstSample, int numSamples) {
 		for(int i = 0;  i < buffer.length; i++)
 			Arrays.fill(buffer[i], 0.0);
 		return numSamples;
-	}
-
-	@Override
-	public double[][] getWindowExtrema(int firstSample, int lastSample) {
-		return new double[0][];
-	}
-
-	@Override
-	public double[][] getWindowExtrema(float startTime, float endTime) {
-		return new double[0][];
-	}
-
-	@Override
-	public double[] getWindowExtrema(int channel, int firstSample, int lastSample) {
-		return new double[0];
-	}
-
-	@Override
-	public void getWindowExtrema(int channel, int firstSample, int lastSample, double[] extrema) {
-		Arrays.fill(extrema, 0.0);
-	}
-
-	@Override
-	public double[] getWindowExtrema(int channel, float startTime, float endTime) {
-		return new double[0];
-	}
-
-	@Override
-	public void getWindowExtrema(int channel, float startTime, float endTime, double[] extrema) {
-		Arrays.fill(extrema, 0.0);
 	}
 
 }
