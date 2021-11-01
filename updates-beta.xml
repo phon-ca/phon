@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.7-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_3.dmg" newVersion="3.3.7-beta.3" newMediaFileId="macos" fileSize="314195050" md5Sum="81cd1f949eb8e33d52403a4ef526e2da" sha256Sum="d12816210dc7ef1bb6fbef94edabc0417c84a53005ec2f0a1bcb12c58758af20" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.7-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_4.dmg" newVersion="3.3.7-beta.4" newMediaFileId="macos" fileSize="326162768" md5Sum="d75f7301bcf7c014e79e2acca70035ec" sha256Sum="38e49ae263ad5b1fb608cd86dccf6f477c65fe9459abc5d8734e54a78aeb9971" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
 ## Changes from 3.3.5
@@ -489,11 +494,16 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_3.dmg" newVersion="3.3.7-beta.3" newMediaFileId="macos" fileSize="314195050" md5Sum="81cd1f949eb8e33d52403a4ef526e2da" sha256Sum="d12816210dc7ef1bb6fbef94edabc0417c84a53005ec2f0a1bcb12c58758af20" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_4.dmg" newVersion="3.3.7-beta.4" newMediaFileId="macos" fileSize="326162768" md5Sum="d75f7301bcf7c014e79e2acca70035ec" sha256Sum="38e49ae263ad5b1fb608cd86dccf6f477c65fe9459abc5d8734e54a78aeb9971" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
 ## Changes from 3.3.5
@@ -978,11 +988,16 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.exe" newVersion="3.3.7-beta.3" newMediaFileId="win64" fileSize="323000352" md5Sum="0c0c54a854ab16d3ac920b8b18146928" sha256Sum="858941249debacc9db4ad12f11844bbc9d51c9f6d3477c927653865ff7c25ffa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_4.exe" newVersion="3.3.7-beta.4" newMediaFileId="win64" fileSize="334532640" md5Sum="47e1609101e46db50f285fbfb050eef0" sha256Sum="6db188a76ca3c9fbfa5972ef6b3871b29960f7003afc5af4bb559e7c99ce54a7" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
 ## Changes from 3.3.5
@@ -1467,11 +1482,16 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.exe" newVersion="3.3.7-beta.3" newMediaFileId="win64" fileSize="323000352" md5Sum="0c0c54a854ab16d3ac920b8b18146928" sha256Sum="858941249debacc9db4ad12f11844bbc9d51c9f6d3477c927653865ff7c25ffa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_4.exe" newVersion="3.3.7-beta.4" newMediaFileId="win64" fileSize="334532640" md5Sum="47e1609101e46db50f285fbfb050eef0" sha256Sum="6db188a76ca3c9fbfa5972ef6b3871b29960f7003afc5af4bb559e7c99ce54a7" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
 ## Changes from 3.3.5
@@ -1956,11 +1976,16 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.exe" newVersion="3.3.7-beta.3" newMediaFileId="win64" fileSize="323000352" md5Sum="0c0c54a854ab16d3ac920b8b18146928" sha256Sum="858941249debacc9db4ad12f11844bbc9d51c9f6d3477c927653865ff7c25ffa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_4.exe" newVersion="3.3.7-beta.4" newMediaFileId="win64" fileSize="334532640" md5Sum="47e1609101e46db50f285fbfb050eef0" sha256Sum="6db188a76ca3c9fbfa5972ef6b3871b29960f7003afc5af4bb559e7c99ce54a7" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
 ## Changes from 3.3.5
@@ -2445,11 +2470,16 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_3.zip" newVersion="3.3.7-beta.3" newMediaFileId="win64zip" fileSize="321958645" md5Sum="ed5a51fa38a3672cd247dc89b188fd67" sha256Sum="2e467e7691c130eecda80321eaddc2a35ce4833e2c85bcc69538b78ea8474f5e" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_4.zip" newVersion="3.3.7-beta.4" newMediaFileId="win64zip" fileSize="333490520" md5Sum="3203f9d0fda16b00e3574234d34c0ff5" sha256Sum="eaa616e1259dae6c36eef76add7ca56327e35a3d49a8a6943ca3bffe3d8a1cd2" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TexgGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+   * A message asking the user to use utf16 file encodings has been added when sending TextGrid to Praat
  * Added diarization plug-in
 
 ## Changes from 3.3.5
