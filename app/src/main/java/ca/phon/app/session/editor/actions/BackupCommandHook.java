@@ -50,8 +50,8 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
         final LocalDateTime dateTime = LocalDateTime.now();
         final DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder();
         final String dateSuffix = formatterBuilder.appendPattern("yyyy").appendLiteral("-").appendPattern("MM").appendLiteral("-")
-            .appendPattern("dd").appendLiteral("_").appendPattern("HH").appendLiteral(".")
-            .appendPattern("mm").appendLiteral(".").appendPattern("ss").toFormatter().format(dateTime);
+            .appendPattern("dd").appendLiteral("_").appendPattern("HH").appendLiteral("-")
+            .appendPattern("mm").appendLiteral("-").appendPattern("ss").toFormatter().format(dateTime);
 
         final String zipName =
         		session.getName() + "_" + dateSuffix + ".xml";
@@ -66,7 +66,7 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
     			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
     			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
     			
-    			zipFile.createZipFile(new File(project.getLocation() + File.separator + "project.xml"), parameters);
+    			zipFile.createZipFile(new File(project.getLocation() + File.separator + "project.properties"), parameters);
         	}
         	// add to zip file
     		ZipParameters parameters = new ZipParameters();
