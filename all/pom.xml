@@ -53,7 +53,7 @@
 		<ca.phon.phon-dict-data.version>40</ca.phon.phon-dict-data.version>
 		<ca.phon.phon-shell-plugin.version>22</ca.phon.phon-shell-plugin.version>
 		<ca.phon.phon-groovy-plugin.version>5</ca.phon.phon-groovy-plugin.version>
-		<ca.phon.phon-praat-plugin.version>62</ca.phon.phon-praat-plugin.version>
+		<ca.phon.phon-praat-plugin.version>63</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-update-plugin.version>19</ca.phon.phon-update-plugin.version>
 		<ca.phon.phon-version-triggers.version>8</ca.phon.phon-version-triggers.version>
 		<ca.phon.phon-diarization-plugin.version>6-SNAPSHOT</ca.phon.phon-diarization-plugin.version>
