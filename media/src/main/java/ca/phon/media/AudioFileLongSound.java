@@ -19,19 +19,27 @@ import java.io.*;
 
 import ca.phon.audio.*;
 
-public class SampledLongSound extends LongSound {
+public class AudioFileLongSound extends LongSound {
 	
-	private Sampled sampled;
-	
-	private File file;
-	
-	public SampledLongSound(File file) throws IOException {
+	private final Sampled sampled;
+
+	private final AudioFile audioFile;
+
+	public AudioFileLongSound(AudioFile audioFile) throws IOException {
+		super(audioFile.getFile());
+		this.audioFile = audioFile;
+
+		this.sampled = new AudioFileSampled(audioFile);
+
+		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
+		putExtension(ExportSegment.class, new SampledExportSegment(sampled, audioFile.getAudioFileType(), audioFile.getAudioFileEncoding()));
+	}
+
+	public AudioFileLongSound(File file) throws IOException {
 		super(file);
-		this.file = file;
-		
-		AudioFile audioFile;
+
 		try {
-			audioFile = AudioIO.openAudioFile(file);
+			this.audioFile = AudioIO.openAudioFile(file);
 			this.sampled = new AudioFileSampled(audioFile);
 		} catch (UnsupportedFormatException | InvalidHeaderException e) {
 			throw new IOException(e);
@@ -46,10 +54,11 @@ public class SampledLongSound extends LongSound {
 		sampled.close();
 	}
 
+	@Override
 	public Sampled getSampled() {
 		return this.sampled;
 	}
-	
+
 	@Override
 	public int numberOfChannels() {
 		return sampled.getNumberOfChannels();

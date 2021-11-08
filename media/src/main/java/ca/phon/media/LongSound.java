@@ -18,6 +18,7 @@ package ca.phon.media;
 import java.io.*;
 import java.util.*;
 
+import ca.phon.audio.Sampled;
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
 import ca.phon.util.*;
@@ -49,7 +50,7 @@ public abstract class LongSound implements IExtendable {
 				throw new IOException(e);
 			}
 		} else {
-			return new SampledLongSound(file);
+			return new AudioFileLongSound(file);
 		}
 	}
 	
@@ -83,6 +84,13 @@ public abstract class LongSound implements IExtendable {
 	 * @return
 	 */
 	public abstract float length();
+
+	/**
+	 * As sampled
+	 *
+	 * @return return long sound data as a sampled object
+	 */
+	public abstract Sampled getSampled();
 	
 	/**
 	 * Extract portion of sound for analysis.

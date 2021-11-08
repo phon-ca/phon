@@ -23,7 +23,7 @@ public final class Resampler {
 	 *
 	 * @param sampled
 	 * @param newSampleRate
-	 * @param windowSize hann window size in samples
+	 * @param windowSize Hann window size in samples
 	 * @return Sampled a new sampled with given sample rate
 	 * @throws IOException
 	 */

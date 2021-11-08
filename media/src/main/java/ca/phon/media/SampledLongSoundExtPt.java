@@ -32,7 +32,7 @@ public class SampledLongSoundExtPt implements IPluginExtensionPoint<LongSound> {
 	public IPluginExtensionFactory<LongSound> getFactory() {
 		return (args) -> {
 			try {
-				return new SampledLongSound((File)args[0]);
+				return new AudioFileLongSound((File)args[0]);
 			} catch (IOException e) {
 				throw new IllegalArgumentException(e);
 			}
