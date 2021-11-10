@@ -55,6 +55,9 @@ import ca.phon.worker.PhonTask.*;
  */
 public class SpeechAnalysisEditorView extends EditorView {
 
+	/** Editor event sent when time model has been updated */
+	public final static String TIME_MODEL_UPDATED = "_SPEECH_ANALYSIS_TIME_MODEL_UPDATE_";
+
 	private static final long serialVersionUID = -1680881691504590317L;
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SpeechAnalysisEditorView.class.getName());
@@ -665,6 +668,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 		timeModel.setEndTime(endTime);
 		timeModel.setPixelsPerSecond(pxPerS);
 		scrollToTime(scrollTo);
+
+		getEditor().getEventManager().queueEvent(new EditorEvent(TIME_MODEL_UPDATED));
 	}
 	
 	public void update() {
