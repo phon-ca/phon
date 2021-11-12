@@ -667,7 +667,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 		timeModel.setStartTime(startTime);
 		timeModel.setEndTime(endTime);
 		timeModel.setPixelsPerSecond(pxPerS);
-		scrollToTime(scrollTo);
+
+		final float scrollToTime = scrollTo;
+		SwingUtilities.invokeLater(() -> scrollToTime(scrollToTime));
 
 		getEditor().getEventManager().queueEvent(new EditorEvent(TIME_MODEL_UPDATED));
 	}
@@ -1174,7 +1176,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		public boolean getScrollableTracksViewportHeight() {
 			return false;
 		}
-		
+
 	}
 	
 }
