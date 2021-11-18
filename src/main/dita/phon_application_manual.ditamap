@@ -40,7 +40,9 @@
                     <topicref href="praat_plugin/pitch_settings.dita"/>
                 </topicref>
                 <topicref href="session_editor/timeline_view.dita" format="dita">
-                    <topicref href="session_editor/diarization.dita"/>
+                    <topicref href="session_editor/diarization.dita">
+                        <topicref href="session_editor/gcs_account_setup.dita"/>
+                    </topicref>
                 </topicref>
                 <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
                 <topicref href="session_editor/find_and_replace_view.dita"/>
