@@ -15,12 +15,70 @@
             <p>The diarization wizard assists with execution of available diarization tools. This
                 will be the first action in the diarization procedure.</p>
             <p>Step one of the wizard is to select the desired diarization tool: <ul>
-                    <li>LIUM<p>The LIUM diarization tool (<xref
+                    <li><uicontrol>LIUM</uicontrol><p>The LIUM diarization tool (<xref
                                 href="https://projets-lium.univ-lemans.fr/spkdiarization/"
                                 format="html" scope="external"/>) is an embedded (i.e., offline)
-                            diarization tool which is packaged with Phon.</p></li>
-                    <li>Google Cloud Services (Speech to Text) - requires a Google Cloud Services
-                        account and Internet access (TODO)</li>
+                            diarization tool which is packaged with Phon.</p><ul id="ul_fry_pzb_qrb">
+                            <li><uicontrol>Do CE clustering</uicontrol>
+                                <p>Perform a final clustering step based on the C... Euler
+                                    method.</p></li>
+                            <li><uicontrol>Max speakers</uicontrol>
+                                <p>Results must conain no more than the specified number of
+                                    speakers. A value of <i>0</i> indicates this parameter is not
+                                    considered.</p></li>
+                        </ul></li>
+                    <li><uicontrol>Google Cloud Speech-to-Text</uicontrol><p>Requires a Google Cloud
+                            account and Internet access. Audio for the session will be uploaded and
+                            transcribed using Google Speech-to-Text. A Google Cloud account is
+                            required to use this function. See <xref href="gcs_account_setup.dita"/>
+                            for instructions on setting up Google Cloud for use with the diarization
+                            tool.</p><ul id="ul_z3f_pzb_qrb">
+                            <li><uicontrol>Project id</uicontrol> The project id for your Google
+                                Cloud project available from the <menucascade>
+                                    <uicontrol>IAM</uicontrol>
+                                    <uicontrol>Settings</uicontrol>
+                                </menucascade> page in your Google Cloud account page.</li>
+                            <li><uicontrol>Google Cloud service account credentials file</uicontrol>
+                                The service account credentials file (.json) created when <xref
+                                    href="gcs_account_setup.dita"/>.</li>
+                            <li><uicontrol>Google Cloud Storage bucket location</uicontrol> The
+                                storage bucket location if the audio for diarization is longer than
+                                60s. For best results choose the option closest to your geographical
+                                location.</li>
+                            <li><uicontrol>Language model</uicontrol> The language model used for
+                                Speech-to-Text transcription. (Only languages which have the
+                                diarization feature available are shown the list, more information
+                                can be found at <xref
+                                    href="https://cloud.google.com/speech-to-text/docs/basics#select-model"
+                                    format="html" scope="external"/>.)</li>
+                            <li><uicontrol>Audio format model</uicontrol> The format of the audio
+                                file. Choose the format most appropriate (for most people this will
+                                be <i>video</i>)<ul id="ul_wbr_2lc_qrb">
+                                    <li><i>default</i><p>Use this model if your audio does not fit any of the other models.
+For example, you can use this for long-form audio recordings that feature a single speaker only.
+The default model will produce transcription results for any type of audio, including audio such as
+video clips that has a separate model specifically tailored to it. However, recognizing video clip audio
+using the default model would like yield lower-quality results than using the video model. Ideally, the
+audio is high-fidelity, recorded at 16,000Hz or greater sampling rate.
+                                        </p></li>
+                                    <li><i>video</i><p>Use this model for transcribing audio from
+                                            video clips or other sources (such as podcasts) that
+                                            have multiple speakers. This model is also often the
+                                            best choice for audio that was recorded with a
+                                            high-quality microphone or that has lots of background
+                                            noise. For best results, provide audio recorded at
+                                            16,000Hz or greater sampling rate.</p></li>
+                                    <li><i>phone_call</i><p>Use this model for transcribing audio
+                                            from a phone call. Typically, phone audio is recorded at
+                                            8,000Hz sampling rate.</p></li>
+                                    <li><i>command_and_search</i><p>Use this model for transcribing
+                                            shorter audio clips. Some examples include voice
+                                            commands or voice search.</p></li>
+                                </ul></li>
+                            <li><uicontrol>Max speakers</uicontrol><p>Results must conain no more
+                                    than the specified number of speakers. A value of <i>0</i>
+                                    indicates this parameter is not considered.</p></li>
+                        </ul></li>
                 </ul>
             </p>
             <p>After clicking <uicontrol>Next</uicontrol> the selected diarization tool will execute
