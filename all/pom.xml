@@ -75,12 +75,6 @@
 
 		<dependency>
 			<groupId>ca.phon</groupId>
-			<artifactId>phon-diarization-plugin</artifactId>
-			<version>${ca.phon.phon-diarization-plugin.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ca.phon</groupId>
 			<artifactId>phon-csv-plugin</artifactId>
 			<version>${ca.phon.csv.plugin.version}</version>
 		</dependency>
