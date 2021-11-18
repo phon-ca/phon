@@ -4,11 +4,65 @@
     <title>Diarization (beta)</title>
     <body>
         <p>Diarization is the process of automatically detecting speakers and speech segments within
-            an audio file. Diarization actions are available from the <xref
+            an audio file. Diarization is available via the <codeph>phon-diarization-plugin</codeph>
+            which may be downloaded from <xref
+                href="https://github.com/phon-ca/phon-diarization-plugin/packages/1025013"
+                format="html" scope="external"/>. Diarization actions are available from the <xref
                 href="timeline_view.dita">Timeline</xref> view via the
                 <uicontrol>Diarization</uicontrol> toolbar button. When clicked the diarization menu
             will be displayed.</p>
     </body>
+    <topic id="install_diarization_plugin">
+        <title>Installing the Plug-in</title>
+        
+        <body>
+            <p>The following steps will outline how to install the diarization plug-in for the
+                current user: <ul>
+                    <li>Download the newest version of the diarization plug-in jar from <xref
+                            href="https://github.com/phon-ca/phon-diarization-plugin/packages/1025013"
+                            format="html" scope="external"/>. Choose the
+                            <filepath>phon-diarization-plugin-&lt;version>.jar</filepath> file from
+                        the right-hand side of the webpage.</li>
+                    <li>Copy this file into the Phon plug-ins folder for this user:<ul
+                            id="ul_sn1_mqd_qrb">
+                            <li><b>macos (Finder)</b><p>
+                                    <ol id="ol_pv1_5qd_qrb">
+                                        <li>Open a new <wintitle>Finder</wintitle> window and choose <menucascade>
+                                                <uicontrol>Go</uicontrol>
+                                                <uicontrol>Go to Folder...</uicontrol>
+                                            </menucascade> from the window menu</li>
+                                        <li>Type <filepath>~/Library/Application\
+                                                Support/Phon</filepath> in the dialog and press
+                                                <userinput>Enter</userinput></li>
+                                        <li>Create a new folder <filepath>plugins</filepath> if this
+                                            folder does not already exist</li>
+                                        <li>Copy the downloaded file,
+                                                <filepath>phon-diarization-plugin-&lt;version>.jar</filepath>
+                                            into the <filepath>plugins</filepath> folder.</li>
+                                        <li>Restart Phon</li>
+                                    </ol>
+                                </p></li>
+                            <li><b>macos (command line)</b><p>Copy and paste the following into a
+                                    new <wintitle>Terminal</wintitle> window (create destination
+                                    folder if it does not
+                                    exist:)<codeblock>cp ~/Downloads/phon-diarizaton-plugin-&lt;version>.jar ~/Library/Application\ Support/Phon/plugins/</codeblock></p></li>
+                            <li><b>windows</b><p>
+                                    <ol id="ol_imf_frd_qrb">
+                                        <li>Open a new <wintitle>Explorer</wintitle> window and type
+                                                <filepath>%APPDATA%/Phon</filepath> into the address
+                                            bar</li>
+                                        <li>Create a new folder <filepath>plugins</filepath> if this
+                                            folder does not already exist</li>
+                                        <li>Copy the downloaded file,
+                                                <filepath>phon-diarization-plugin-&lt;version>.jar</filepath>
+                                            into the <filepath>plugins</filepath> folder.</li>
+                                        <li>Restart Phon</li>
+                                    </ol>
+                                </p></li>
+                        </ul></li>
+                </ul></p>
+        </body>
+    </topic>
     <topic id="wizard">
         <title>Diarization Wizard</title>
         <body>
@@ -19,9 +73,6 @@
                                 href="https://projets-lium.univ-lemans.fr/spkdiarization/"
                                 format="html" scope="external"/>) is an embedded (i.e., offline)
                             diarization tool which is packaged with Phon.</p><ul id="ul_fry_pzb_qrb">
-                            <li><uicontrol>Do CE clustering</uicontrol>
-                                <p>Perform a final clustering step based on the C... Euler
-                                    method.</p></li>
                             <li><uicontrol>Max speakers</uicontrol>
                                 <p>Results must conain no more than the specified number of
                                     speakers. A value of <i>0</i> indicates this parameter is not
@@ -33,34 +84,39 @@
                             required to use this function. See <xref href="gcs_account_setup.dita"/>
                             for instructions on setting up Google Cloud for use with the diarization
                             tool.</p><ul id="ul_z3f_pzb_qrb">
-                            <li><uicontrol>Project id</uicontrol> The project id for your Google
-                                Cloud project available from the <menucascade>
-                                    <uicontrol>IAM</uicontrol>
-                                    <uicontrol>Settings</uicontrol>
-                                </menucascade> page in your Google Cloud account page.</li>
+                            <li><uicontrol>Project id</uicontrol>
+                                <p>The project id for your Google Cloud project available from the <menucascade>
+                                        <uicontrol>IAM</uicontrol>
+                                        <uicontrol>Settings</uicontrol>
+                                    </menucascade> page in your Google Cloud account page.</p></li>
                             <li><uicontrol>Google Cloud service account credentials file</uicontrol>
-                                The service account credentials file (.json) created when <xref
-                                    href="gcs_account_setup.dita"/>.</li>
-                            <li><uicontrol>Google Cloud Storage bucket location</uicontrol> The
-                                storage bucket location if the audio for diarization is longer than
-                                60s. For best results choose the option closest to your geographical
-                                location.</li>
-                            <li><uicontrol>Language model</uicontrol> The language model used for
-                                Speech-to-Text transcription. (Only languages which have the
-                                diarization feature available are shown the list, more information
-                                can be found at <xref
-                                    href="https://cloud.google.com/speech-to-text/docs/basics#select-model"
-                                    format="html" scope="external"/>.)</li>
-                            <li><uicontrol>Audio format model</uicontrol> The format of the audio
-                                file. Choose the format most appropriate (for most people this will
-                                be <i>video</i>)<ul id="ul_wbr_2lc_qrb">
-                                    <li><i>default</i><p>Use this model if your audio does not fit any of the other models.
-For example, you can use this for long-form audio recordings that feature a single speaker only.
-The default model will produce transcription results for any type of audio, including audio such as
-video clips that has a separate model specifically tailored to it. However, recognizing video clip audio
-using the default model would like yield lower-quality results than using the video model. Ideally, the
-audio is high-fidelity, recorded at 16,000Hz or greater sampling rate.
-                                        </p></li>
+                                <p>The service account credentials file (.json) created when <xref
+                                        href="gcs_account_setup.dita"/>.</p></li>
+                            <li><uicontrol>Google Cloud Storage bucket location</uicontrol>
+                                <p>The storage bucket location if the audio for diarization is
+                                    longer than 60s. For best results choose the option closest to
+                                    your geographical location.</p></li>
+                            <li><uicontrol>Language model</uicontrol>
+                                <p>The language model used for Speech-to-Text transcription. (Only
+                                    languages which have the diarization feature available are shown
+                                    the list, more information can be found at <xref
+                                        href="https://cloud.google.com/speech-to-text/docs/basics#select-model"
+                                        format="html" scope="external"/>.)</p></li>
+                            <li><uicontrol>Audio format model</uicontrol>
+                                <p>The format of the audio file. Choose the format most appropriate
+                                    (for most people this will be <i>video</i>)</p><ul
+                                    id="ul_wbr_2lc_qrb">
+                                    <li><i>default</i><p>Use this model if your audio does not fit
+                                            any of the other models. For example, you can use this
+                                            for long-form audio recordings that feature a single
+                                            speaker only. The default model will produce
+                                            transcription results for any type of audio, including
+                                            audio such as video clips that has a separate model
+                                            specifically tailored to it. However, recognizing video
+                                            clip audio using the default model would like yield
+                                            lower-quality results than using the video model.
+                                            Ideally, the audio is high-fidelity, recorded at
+                                            16,000Hz or greater sampling rate. </p></li>
                                     <li><i>video</i><p>Use this model for transcribing audio from
                                             video clips or other sources (such as podcasts) that
                                             have multiple speakers. This model is also often the
