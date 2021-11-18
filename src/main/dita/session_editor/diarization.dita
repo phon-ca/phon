@@ -31,7 +31,7 @@
                                                 <uicontrol>Go</uicontrol>
                                                 <uicontrol>Go to Folder...</uicontrol>
                                             </menucascade> from the window menu</li>
-                                        <li>Type <filepath>~/Library/Application\
+                                        <li>Type <filepath>~/Library/Application
                                                 Support/Phon</filepath> in the dialog and press
                                                 <userinput>Enter</userinput></li>
                                         <li>Create a new folder <filepath>plugins</filepath> if this
