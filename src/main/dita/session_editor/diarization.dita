@@ -45,7 +45,7 @@
                             <li><b>macos (command line)</b><p>Copy and paste the following into a
                                     new <wintitle>Terminal</wintitle> window (create destination
                                     folder if it does not
-                                    exist:)<codeblock>cp ~/Downloads/phon-diarizaton-plugin-&lt;version>.jar ~/Library/Application\ Support/Phon/plugins/</codeblock></p></li>
+                                    exist:)<codeblock>cp ~/Downloads/phon-diarization-plugin-&lt;version>.jar ~/Library/Application\ Support/Phon/plugins/</codeblock></p></li>
                             <li><b>windows</b><p>
                                     <ol id="ol_imf_frd_qrb">
                                         <li>Open a new <wintitle>Explorer</wintitle> window and type
@@ -100,7 +100,7 @@
                                 <p>The language model used for Speech-to-Text transcription. (Only
                                     languages which have the diarization feature available are shown
                                     the list, more information can be found at <xref
-                                        href="https://cloud.google.com/speech-to-text/docs/basics#select-model"
+                                        href="https://cloud.google.com/speech-to-text/docs/languages"
                                         format="html" scope="external"/>.)</p></li>
                             <li><uicontrol>Audio format model</uicontrol>
                                 <p>The format of the audio file. Choose the format most appropriate
