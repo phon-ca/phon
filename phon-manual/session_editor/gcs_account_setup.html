@@ -117,7 +117,7 @@ $(document).ready( function () {
                         </nav>
                     
                     
-                    <div class="col-lg-9 col-md-9 col-sm-12" id="wh_topic_body">
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
                         <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
     <h1 class="- topic/title title topictitle1" id="ariaid-title1">Setting Up Your Google Cloud Account</h1>
     <div class="- topic/body body">
@@ -131,39 +131,61 @@ $(document).ready( function () {
             </ol></div>
     </div>
     
-    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="gc_account_setup_steps">
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="gc_create_account">
         <h2 class="- topic/title title topictitle2" id="ariaid-title2">Account Setup Steps</h2>
         <div class="- topic/body body"><div class="- topic/p p">
-            <ol class="- topic/ol ol" id="gc_account_setup_steps__ol_omg_dqv_prb">
+            <ol class="- topic/ol ol" id="gc_create_account__ol_omg_dqv_prb">
                 <li class="- topic/li li">Goto <a class="- topic/xref xref" href="https://cloud.google.com" target="_blank" rel="external noopener">https://cloud.google.com</a>.  Sign
                     in to the Google account which will be the owner of the cloud services project</li>
                 <li class="- topic/li li">If you do not already have a Google Cloud account, click <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Get started for
-                    free</span>. Follow the three steps for setting up your account.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_mjc_vqv_prb" src="images/gcst_get_started.png" /><br /></li>
-                <li class="- topic/li li">At the end of the account setup process you will be brought to the Google Cloud
-                        Platform page as shown below. A new project named <em class="+ topic/ph hi-d/i ph i">My First Project</em>
-                        has already been created for you. (You may create a new project if you
-                        prefer, however that is not covered in this tutorial.) Click <span class="+ topic/ph ui-d/uicontrol ph uicontrol">APIs
-                            and Services</span> from the left-hand menu.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_ygb_mrv_prb" src="images/gcst_console.png" /><br /></li>
+                    free</span>. Follow the three steps for setting up your account.<br /><img class="- topic/image image" id="gc_create_account__image_mjc_vqv_prb" src="images/gcst_get_started.png" /><br /></li>
+            </ol>
+        </div>
+        </div>
+    </article>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="gc_enable_apis">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">Enable <em class="+ topic/ph hi-d/i ph i">Speech-to-Text API</em></h2>
+        <div class="- topic/body body"><div class="- topic/p p">
+            <ol class="- topic/ol ol" id="gc_enable_apis__ol_omg_dqv_prb2">
                 <li class="- topic/li li">From the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">APIs and Services</span> page, click the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Enable
                     APIs and Services</span> button. Search for 'Cloud Speech-to-Text API' and
                     click the first result. Enable the API by clicking the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Enable</span>
-                    button on information page for the API.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_mvw_msv_prb" src="images/gcst_apis.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_qlb_4sv_prb" src="images/gcst_api_page.png" /><br /></li>
+                    button on information page for the API.<br /><img class="- topic/image image" id="gc_enable_apis__image_mvw_msv_prb" src="images/gcst_apis.png" /><br /><br /><img class="- topic/image image" id="gc_enable_apis__image_qlb_4sv_prb" src="images/gcst_api_page.png" /><br /></li>
                 <li class="- topic/li li">Access the left-hand menu by clicking on the menu icon in the top-left corner of the
                     webpage. Then click <span class="+ topic/ph ui-d/uicontrol ph uicontrol">IAMs and Admin</span> then <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Service
-                        accounts</span><br /><img class="- topic/image image" id="gc_account_setup_steps__image_kgl_mtv_prb" src="images/gcst_service_accounts.png" /><br /></li>
+                        accounts</span><br /><img class="- topic/image image" id="gc_enable_apis__image_kgl_mtv_prb" src="images/gcst_service_accounts.png" /><br /></li>
+            </ol>
+        </div>
+        </div>
+    </article>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title4" id="gc_service_acct">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title4">Create Service Account</h2>
+        <div class="- topic/body body"><div class="- topic/p p">
+            <ol class="- topic/ol ol" id="gc_service_acct__ol_omg_dqv_prb3">
                 <li class="- topic/li li">Create a new service account for your project by clicking the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Create
-                            Service Account</span> button. Choose a name for the account and
-                        then add the <em class="+ topic/ph hi-d/i ph i">Cloud Storage Admin</em> and <em class="+ topic/ph hi-d/i ph i">Cloud Speech Client</em> roles
-                        for the account. You may leave the last step blank and click done.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_i4c_dvv_prb" src="images/gcst_service_account_1.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_f4w_dvv_prb" src="images/gcst_service_account_roles_1.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_up5_fvv_prb" src="images/gcst_service_account_roles_search.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_vgw_gvv_prb" src="images/gcst_service_account_roles_2.png" /><br /></li>
+                    Service Account</span> button. Choose a name for the account and
+                    then add the <em class="+ topic/ph hi-d/i ph i">Cloud Storage Admin</em> and <em class="+ topic/ph hi-d/i ph i">Cloud Speech Client</em> roles
+                    for the account. You may leave the last step blank and click done.<br /><img class="- topic/image image" id="gc_service_acct__image_i4c_dvv_prb" src="images/gcst_service_account_1.png" /><br /><br /><img class="- topic/image image" id="gc_service_acct__image_f4w_dvv_prb" src="images/gcst_service_account_roles_1.png" /><br /><br /><img class="- topic/image image" id="gc_service_acct__image_up5_fvv_prb" src="images/gcst_service_account_roles_search.png" /><br /><br /><img class="- topic/image image" id="gc_service_acct__image_vgw_gvv_prb" src="images/gcst_service_account_roles_2.png" /><br /></li>
                 <li class="- topic/li li">From the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Service Accounts</span> page click on the triple-dot icon
                     under <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Actions</span> in the row of the service account created in
                     the previous step. Click <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Manage Keys</span> and then <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">AddKey</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Create Key</span></span>. Select <span class="+ topic/ph ui-d/uicontrol ph uicontrol">JSON</span> for the format and then save the
-                    resulting download. You will need this file when using the diarization tool.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_inx_zvv_prb" src="images/gcst_service_account_manage_keys.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_dpn_jwv_prb" src="images/gcst_service_account_keys_1.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_ubh_kwv_prb" src="images/gcst_service_account_keys_2.png" /><br /><br /><img class="- topic/image image" id="gc_account_setup_steps__image_oxj_lwv_prb" src="images/gcst_service_account_keys_3.png" /><br /></li>
-                <li class="- topic/li li">Finally, take note of your project id. This can be found in your project
-                        settings page in the Google Cloud platform console and is different then
-                        your project name (<em class="+ topic/ph hi-d/i ph i">alert-snowfall-332412</em> in the example below.) If
-                        you forget, note this is also the same as the first portion of the
-                        downloaded .json filename - without the final <em class="+ topic/ph hi-d/i ph i">-XXXXXXX.json</em>.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_yv2_ywv_prb" src="images/gcst_project_settings.png" /><br /></li>
+                    resulting download. You will need this file when using the diarization tool.<br /><img class="- topic/image image" id="gc_service_acct__image_inx_zvv_prb" src="images/gcst_service_account_manage_keys.png" /><br /><br /><img class="- topic/image image" id="gc_service_acct__image_dpn_jwv_prb" src="images/gcst_service_account_keys_1.png" /><br /><br /><img class="- topic/image image" id="gc_service_acct__image_ubh_kwv_prb" src="images/gcst_service_account_keys_2.png" /><br /><br /><img class="- topic/image image" id="gc_service_acct__image_oxj_lwv_prb" src="images/gcst_service_account_keys_3.png" /><br /></li>
+            </ol>
+        </div>
+        </div>
+    </article>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="gc_account_setup_steps">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">Find Project Id</h2>
+        <div class="- topic/body body"><div class="- topic/p p">
+            <ol class="- topic/ol ol" id="gc_account_setup_steps__ol_omg_dqv_prb">
+                
+                <li class="- topic/li li">Finally, take note of your project id. This can be found under <span class="+ topic/ph ui-d/menucascade ph menucascade"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">IAM</span><abbr title="and then"> &gt; </abbr><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Settings</span></span> in the Google Cloud platform menu and is different then your
+                        project name (<em class="+ topic/ph hi-d/i ph i">alert-snowfall-332412</em> in the example below.) If you
+                        forget, note this is also the same as the first portion of the downloaded
+                        .json filename - without the final <em class="+ topic/ph hi-d/i ph i">-XXXXXXX.json</em>.<br /><img class="- topic/image image" id="gc_account_setup_steps__image_yv2_ywv_prb" src="images/gcst_project_settings.png" /><br /></li>
             </ol></div>
         </div>
     </article>
@@ -174,6 +196,10 @@ $(document).ready( function () {
                         
                         
                     </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#gc_create_account" data-tocid="gc_create_account">Account Setup Steps</a></li><li class="topic-item"><a href="#gc_enable_apis" data-tocid="gc_enable_apis">Enable <em class="+ topic/ph hi-d/i ph i">Speech-to-Text API</em></a></li><li class="topic-item"><a href="#gc_service_acct" data-tocid="gc_service_acct">Create Service Account</a></li><li class="topic-item"><a href="#gc_account_setup_steps" data-tocid="gc_account_setup_steps">Find Project Id</a></li></ul></div>
+                        </nav>
                     
                 </div>
             </div>
