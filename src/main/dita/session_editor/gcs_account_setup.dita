@@ -13,7 +13,7 @@
             </ol></p>
     </body>
     
-    <topic id="gc_account_setup_steps">
+    <topic id="gc_create_account">
         <title>Account Setup Steps</title>
         <body><p>
             <ol id="ol_omg_dqv_prb">
@@ -23,13 +23,15 @@
                     free</uicontrol>. Follow the three steps for setting up your account.<image
                         placement="break" href="images/gcst_get_started.png" id="image_mjc_vqv_prb"
                     /></li>
-                <li>At the end of the account setup process you will be brought to the Google Cloud
-                        Platform page as shown below. A new project named <i>My First Project</i>
-                        has already been created for you. (You may create a new project if you
-                        prefer, however that is not covered in this tutorial.) Click <uicontrol>APIs
-                            and Services</uicontrol> from the left-hand menu.<image
-                            placement="break" href="images/gcst_console.png" id="image_ygb_mrv_prb"
-                        /></li>
+            </ol>
+        </p>
+        </body>
+    </topic>
+    
+    <topic id="gc_enable_apis">
+        <title>Enable <i>Speech-to-Text API</i></title>
+        <body><p>
+            <ol id="ol_omg_dqv_prb2">
                 <li>From the <uicontrol>APIs and Services</uicontrol> page, click the <uicontrol>Enable
                     APIs and Services</uicontrol> button. Search for 'Cloud Speech-to-Text API' and
                     click the first result. Enable the API by clicking the <uicontrol>Enable</uicontrol>
@@ -40,18 +42,27 @@
                     webpage. Then click <uicontrol>IAMs and Admin</uicontrol> then <uicontrol>Service
                         accounts</uicontrol><image placement="break"
                             href="images/gcst_service_accounts.png" id="image_kgl_mtv_prb"/></li>
+            </ol>
+        </p>
+        </body>
+    </topic>
+    
+    <topic id="gc_service_acct">
+        <title>Create Service Account</title>
+        <body><p>
+            <ol id="ol_omg_dqv_prb3">
                 <li>Create a new service account for your project by clicking the <uicontrol>Create
-                            Service Account</uicontrol> button. Choose a name for the account and
-                        then add the <i>Cloud Storage Admin</i> and <i>Cloud Speech Client</i> roles
-                        for the account. You may leave the last step blank and click done.<image
-                            placement="break" href="images/gcst_service_account_1.png"
-                            id="image_i4c_dvv_prb"/><image placement="break"
+                    Service Account</uicontrol> button. Choose a name for the account and
+                    then add the <i>Cloud Storage Admin</i> and <i>Cloud Speech Client</i> roles
+                    for the account. You may leave the last step blank and click done.<image
+                        placement="break" href="images/gcst_service_account_1.png"
+                        id="image_i4c_dvv_prb"/><image placement="break"
                             href="images/gcst_service_account_roles_1.png" id="image_f4w_dvv_prb"
-                            /><image placement="break"
+                        /><image placement="break"
                             href="images/gcst_service_account_roles_search.png"
                             id="image_up5_fvv_prb"/><image placement="break"
-                            href="images/gcst_service_account_roles_2.png" id="image_vgw_gvv_prb"
-                        /></li>
+                                href="images/gcst_service_account_roles_2.png" id="image_vgw_gvv_prb"
+                            /></li>
                 <li>From the <uicontrol>Service Accounts</uicontrol> page click on the triple-dot icon
                     under <uicontrol>Actions</uicontrol> in the row of the service account created in
                     the previous step. Click <uicontrol>Manage Keys</uicontrol> and then <menucascade>
@@ -65,11 +76,23 @@
                                 placement="break" href="images/gcst_service_account_keys_2.png"
                                 id="image_ubh_kwv_prb"/><image placement="break"
                                     href="images/gcst_service_account_keys_3.png" id="image_oxj_lwv_prb"/></li>
-                <li>Finally, take note of your project id. This can be found in your project
-                        settings page in the Google Cloud platform console and is different then
-                        your project name (<i>alert-snowfall-332412</i> in the example below.) If
-                        you forget, note this is also the same as the first portion of the
-                        downloaded .json filename - without the final <i>-XXXXXXX.json</i>.<image
+            </ol>
+        </p>
+        </body>
+    </topic>
+    
+    <topic id="gc_account_setup_steps">
+        <title>Find Project Id</title>
+        <body><p>
+            <ol id="ol_omg_dqv_prb">
+                
+                <li>Finally, take note of your project id. This can be found under <menucascade>
+                            <uicontrol>IAM</uicontrol>
+                            <uicontrol>Settings</uicontrol>
+                        </menucascade> in the Google Cloud platform menu and is different then your
+                        project name (<i>alert-snowfall-332412</i> in the example below.) If you
+                        forget, note this is also the same as the first portion of the downloaded
+                        .json filename - without the final <i>-XXXXXXX.json</i>.<image
                             placement="break" href="images/gcst_project_settings.png"
                             id="image_yv2_ywv_prb"/></li>
             </ol></p>
