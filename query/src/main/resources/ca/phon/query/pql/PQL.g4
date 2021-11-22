@@ -1,5 +1,6 @@
 /*
- * An SQL-like query langauge for Phon
+ * A query langauge for Phon projects/sessions
+ *
  */
 grammar PQL;
 
@@ -25,16 +26,33 @@ search_by
 	;
 
 expr
+	:   plain_text_expr
+	|   ipa_expr
+	;
+
+plain_text_expr
 	:   QUOTED_STRING                   # PlainTextExpr
-	|   PHONEX SLASHED_STRING           # PhonexExpr
 	|   REGEX SLASHED_STRING            # RegexExpr
-	|   WORD SHAPE QUOTED_STRING        # WordShapeExpr
-	|   CV PATTERN QUOTED_STRING        # CVPatternExpr
+	;
+
+ipa_expr
+	:   PHONEX SLASHED_STRING                       # PhonexExpr
+	|   (WORD SHAPE|STRESS PATTERN) QUOTED_STRING   # WordShapeExpr
+	|   CV PATTERN QUOTED_STRING                    # CVPatternExpr
 	;
 
 tier_list
-	:   QUOTED_STRING (COMMA QUOTED_STRING)*    # TierList
-	|   STAR                                    # AllTiers
+	:   tier_name (COMMA tier_name)*    # TierList
+	|   STAR                            # AllTiers
+	;
+
+tier_name
+	:   ORTHOGRAPHY
+	|   IPATARGET
+	|   IPAACTUAL
+	|   ALIGNMENT
+	|   NOTES
+	|   QUOTED_STRING
 	;
 
 query_context
@@ -57,8 +75,8 @@ record_list
 	;
 
 record_or_range
-	:   INT                 # RecordNumber
-	|   INT RANGE_OP INT    # RecordRange
+	:   integer                     # RecordNumber
+	|   integer RANGE_OP integer    # RecordRange
 	;
 
 filter_blocks
@@ -74,7 +92,7 @@ filter_block
 	|   where_project
 	;
 
-containsOrEquals
+contains_or_equals
 	:   CONTAINS
 	|   EQUALS
 	;
@@ -84,7 +102,20 @@ where_project
 	;
 
 where_project_stmt
-	:   NAME NOT? containsOrEquals expr
+	:   where_project_or_stmt
+	;
+
+where_project_or_stmt
+	:   where_project_and_stmt (OR where_project_and_stmt)*
+	;
+
+where_project_and_stmt
+	:   where_project_unary_stmt (AND where_project_unary_stmt)*
+	;
+
+where_project_unary_stmt
+	:   NAME NOT? contains_or_equals plain_text_expr
+	|   OPEN_PAREN where_project_stmt CLOSE_PAREN
 	;
 
 where_session
@@ -92,25 +123,130 @@ where_session
 	;
 
 where_session_stmt
-	:   NAME NOT? containsOrEquals expr
-	|   DATE NOT? (AFTER|BEFORE) date
-	|   where_session_stmt (AND|OR) where_session_stmt
+	:   where_session_or_stmt
+	;
+
+where_session_or_stmt
+	:   where_session_and_stmt (OR where_session_and_stmt)*
+	;
+
+where_session_and_stmt
+	:   where_session_unary_stmt (AND where_session_unary_stmt)*
+	;
+
+where_session_unary_stmt
+	:   NAME NOT? contains_or_equals plain_text_expr
+	|   DATE NOT? (AFTER|BEFORE|EQUALS) date_expr
+	|   OPEN_PAREN where_session_stmt CLOSE_PAREN
 	;
 
 where_speaker
 	:   WHERE SPEAKER OPEN_BRACE where_speaker_stmt CLOSE_BRACE
 	;
 
+where_speaker_stmt
+	:   where_speaker_or_stmt
+	;
+
+where_speaker_or_stmt
+	:   where_speaker_and_stmt (OR where_speaker_and_stmt)*
+	;
+
+where_speaker_and_stmt
+	:   where_speaker_unary_stmt (AND where_speaker_unary_stmt)*
+	;
+
+where_speaker_unary_stmt
+	:   ID NOT? contains_or_equals plain_text_expr
+	|   ROLE NOT? IS QUOTED_STRING
+	|   NAME NOT? contains_or_equals plain_text_expr
+	|   AGE NOT? (EQUALS|GREATER THAN|LESS THAN) period_expr
+	|   BIRTHDAY NOT? (EQUALS|BEFORE|AFTER) date_expr
+	|   SEX NOT? IS (MALE|FEMALE)
+	|   LANGUAGE NOT? contains_or_equals plain_text_expr
+	|   EDUCATION NOT? contains_or_equals plain_text_expr
+	|   SES NOT? contains_or_equals plain_text_expr
+	|   OPEN_PAREN where_speaker_stmt CLOSE_PAREN
+	;
+
 where_group
 	:   WHERE GROUP OPEN_BRACE where_group_stmt CLOSE_BRACE
+	;
+
+where_group_stmt
+	:   where_group_or_stmt
+	;
+
+where_group_or_stmt
+	:   where_group_and_stmt (OR where_group_and_stmt)*
+	;
+
+where_group_and_stmt
+	:   where_group_unary_stmt (AND where_group_unary_stmt)*
+	;
+
+where_group_unary_stmt
+	:   tier_name? contains_or_equals expr
+	|   tier_name? WORD COUNT NOT? (EQUALS|GREATER THAN|LESS THAN) integer
+	|   SEGMENT LENGTH NOT? (EQUALS|GREATER THAN|LESS THAN) (number | period_expr)
+	|   SEGMENT START NOT? (EQUALS|GREATER THAN|LESS THAN) (number | period_expr)
+	|   SEGMENT END NOT? (EQUALS|GREATER THAN|LESS THAN) (number | period_expr)
+	|   OPEN_PAREN where_group_stmt CLOSE_PAREN
 	;
 
 where_word
 	:   WHERE WORD OPEN_BRACE where_word_stmt CLOSE_BRACE
 	;
 
+where_word_stmt
+	:   where_word_or_stmt
+	;
+
+where_word_or_stmt
+	:   where_word_and_stmt (OR where_word_and_stmt)*
+	;
+
+where_word_and_stmt
+	:   where_word_unary_stmt (AND where_word_unary_stmt)*
+	;
+
+where_word_unary_stmt
+	:   tier_name? contains_or_equals expr
+	|   tier_name? SYLLABLE COUNT NOT? (EQUALS|GREATER THAN|LESS THAN) number
+	|   tier_name? POSITION NOT? EQUALS (INITIAL|MEDIAL|FINAL|tier_name)
+	|   OPEN_PAREN where_word_stmt CLOSE_PAREN
+	;
+
 where_syllable
 	:   WHERE SYLLABLE OPEN_BRACE where_syllable_stmt CLOSE_BRACE
+	;
+
+where_syllable_stmt
+	:   where_syllable_or_stmt
+	;
+
+where_syllable_or_stmt
+	:   where_syllable_and_stmt (OR where_syllable_and_stmt)*
+	;
+
+where_syllable_and_stmt
+	:   where_syllable_unary_stmt (AND where_syllable_unary_stmt)*
+	;
+
+where_syllable_unary_stmt
+	:   tier_name? contains_or_equals expr
+	|   tier_name? STRESS NOT? EQUALS (PRIMARY|SECONDARY|UNSTRESSED|ALIGNED)
+	|   tier_name? TONE NUMBER NOT? EQUALS (number | ALIGNED)
+	|   tier_name? POSITION NOT? EQUALS (INITIAL|MEDIAL|FINAL|ALIGNED)
+	|   OPEN_PAREN where_syllable_stmt CLOSE_PAREN
+	;
+
+period_expr
+	:   QUOTED_STRING
+	;
+
+date_expr
+	:   QUOTED_STRING
 	;
 
 includes
@@ -131,7 +267,7 @@ function
 	;
 
 ppc
-	:   PPC empty_param_list
+	:   PPC OPEN_PAREN CLOSE_PAREN
 	;
 
 pmlu
@@ -139,71 +275,22 @@ pmlu
 	;
 
 dist
-	:   DIST empty_param_list
+	:   DIST OPEN_PAREN CLOSE_PAREN
 	;
 
-empty_param_list
-	:   OPEN_PAREN CLOSE_PAREN
+param_list
+	:   OPEN_PAREN param_value (COMMA param_value)* CLOSE_PAREN
+	;
+
+param_value
+	:   number
+	|   QUOTED_STRING
+	;
+
+integer
+	:   DIGIT+
 	;
 
 number
 	:   DIGIT+ (PERIOD DIGIT+)
 	;
-
-// TOKENS
-COMMA: ',';
-
-SHAPE: S H A P E;
-
-PATTERN: P A T T E R N;
-
-CV: C V;
-
-PHONEX: P H O N E X;
-
-REGEX: R E G E X;
-
-FIND: F I N D;
-
-IN: I N;
-
-WHERE: W H E R E;
-
-IS: I S;
-
-SELECT: S E L E C T;
-
-FROM: F R O M;
-
-GROUP: G R O U P;
-
-WORD: W O R D;
-
-SYLLABLE: S Y L L A B L E;
-
-fragment A: [Aa];
-fragment B: [Bb];
-fragment C: [Cc];
-fragment D: [Dd];
-fragment E: [Ee];
-fragment F: [Ff];
-fragment G: [Gg];
-fragment H: [Hh];
-fragment I: [Ii];
-fragment J: [Jj];
-fragment K: [Kk];
-fragment L: [Ll];
-fragment M: [Mm];
-fragment N: [Nn];
-fragment O: [Oo];
-fragment P: [Pp];
-fragment Q: [Qq];
-fragment R: [Rr];
-fragment S: [Ss];
-fragment T: [Tt];
-fragment U: [Uu];
-fragment V: [Vv];
-fragment W: [Ww];
-fragment X: [Xx];
-fragment Y: [Yy];
-fragment Z: [Zz];
