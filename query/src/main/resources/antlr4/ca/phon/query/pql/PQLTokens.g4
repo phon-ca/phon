@@ -1,6 +1,8 @@
 lexer grammar PQLTokens;
 
 // symbols
+BACKSLASH: '\\';
+
 CLOSE_BRACE: '}';
 
 CLOSE_PAREN: ')';
@@ -19,13 +21,35 @@ RANGE_OP: '..';
 
 STAR: '*';
 
+// ignore whitespace
+WS: [ \t\n] -> skip;
+
 // strings
+fragment
+HEX_LETTER
+	:   'a'..'f'
+	|   'A'..'F'
+	|   '0'..'9'
+	;
+
+HEX_CHAR
+	:   BACKSLASH 'u' HEX_LETTER HEX_LETTER HEX_LETTER HEX_LETTER
+	;
+
+ESC_SEQ
+	:   BACKSLASH ('b'|'t'|'n'|'f'|'r'|'"'|'\''|'\\')
+	;
+
 QUOTED_STRING
-	:   '"' (~[\\"] | '\\' [\\"])* '"'
+	:  '"' ( ESC_SEQ | HEX_CHAR | ~('"') )*? '"'
+	;
+
+SLASHED_ESC_SEQ
+	:   BACKSLASH ('/')
 	;
 
 SLASHED_STRING
-	:   '/' (~[\\/] | '\\' [\\/])* '/'
+	:   '/' ( SLASHED_ESC_SEQ | HEX_CHAR | ~('/') )*? '/'
 	;
 
 // tiers
@@ -82,6 +106,8 @@ ID: I D;
 
 IN: I N;
 
+INCLUDE: I N C L U D E;
+
 INITIAL: I N I T I A L;
 
 LANGUAGE: L A N G U A G E;
@@ -99,6 +125,8 @@ NUMBER: N U M B E R;
 OR: O R;
 
 PATTERN: P A T T E R N;
+
+PHONES: P H O N E S;
 
 PHONEX: P H O N E X;
 

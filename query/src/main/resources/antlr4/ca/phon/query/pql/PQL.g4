@@ -2,7 +2,9 @@
  * A query langauge for Phon projects/sessions
  *
  */
-grammar PQL;
+parser grammar PQL;
+
+options { tokenVocab=PQLTokens; }
 
 start
 	:   query EOF
@@ -31,12 +33,12 @@ expr
 	;
 
 plain_text_expr
-	:   QUOTED_STRING                   # PlainTextExpr
-	|   REGEX SLASHED_STRING            # RegexExpr
+	:   QUOTED_STRING                           # PlainTextExpr
+	|   REGEX (QUOTED_STRING|SLASHED_STRING)    # RegexExpr
 	;
 
 ipa_expr
-	:   PHONEX SLASHED_STRING                       # PhonexExpr
+	:   PHONEX (QUOTED_STRING|SLASHED_STRING)       # PhonexExpr
 	|   (WORD SHAPE|STRESS PATTERN) QUOTED_STRING   # WordShapeExpr
 	|   CV PATTERN QUOTED_STRING                    # CVPatternExpr
 	;
