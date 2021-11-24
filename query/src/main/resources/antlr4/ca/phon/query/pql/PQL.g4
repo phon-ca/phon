@@ -7,7 +7,7 @@ parser grammar PQL;
 options { tokenVocab=PQLTokens; }
 
 start
-	:   query EOF
+	:   query includes EOF
 	;
 
 query
@@ -20,7 +20,7 @@ find_query
 	;
 
 select_query
-	:   SELECT tier_list search_by? (FROM query_context)? filter_blocks includes
+	:   SELECT tier_list search_by? FROM session_or_record_list (INCLUDE EXCLUDED RECORDS)? filter_blocks
 	;
 
 search_by
@@ -57,7 +57,7 @@ tier_name
 	|   QUOTED_STRING
 	;
 
-query_context
+session_or_record_list
 	:   session_list
 	|   record_list
 	;
@@ -257,36 +257,7 @@ includes
 
 include_stmt
 	:   INCLUDE ALIGNED PHONES      # IncludeAlignedPhones
-	|   INCLUDE EXCLUDED RECORDS    # IncludeExcludedRecords
 	|   INCLUDE tier_list           # IncludeTiers
-	|   INCLUDE function            # IncludeFunction
-	;
-
-function
-	:   ppc
-	|   pmlu
-	|   dist
-	;
-
-ppc
-	:   PPC OPEN_PAREN CLOSE_PAREN
-	;
-
-pmlu
-	:   PMLU OPEN_PAREN number CLOSE_PAREN
-	;
-
-dist
-	:   DIST OPEN_PAREN CLOSE_PAREN
-	;
-
-param_list
-	:   OPEN_PAREN param_value (COMMA param_value)* CLOSE_PAREN
-	;
-
-param_value
-	:   number
-	|   QUOTED_STRING
 	;
 
 integer
@@ -294,5 +265,5 @@ integer
 	;
 
 number
-	:   DIGIT+ (PERIOD DIGIT+)
+	:   DIGIT+ (DOT DIGIT+)
 	;

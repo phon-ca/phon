@@ -9,6 +9,8 @@ CLOSE_PAREN: ')';
 
 COMMA: ',';
 
+DIGIT: '0'..'9';
+
 DOT: '.';
 
 HASH: '#';
@@ -45,7 +47,7 @@ QUOTED_STRING
 	;
 
 SLASHED_ESC_SEQ
-	:   BACKSLASH ('/')
+	:   BACKSLASH ('b'|'t'|'n'|'f'|'r'|'/')
 	;
 
 SLASHED_STRING
@@ -88,9 +90,17 @@ CV: C V;
 
 DATE: D A T E;
 
+DIST: D I S T;
+
 EDUCATION: E D U C A T I O N;
 
+END: E N D;
+
 EQUALS: E Q U A L S;
+
+EXCLUDED: E X C L U D E D;
+
+FEMALE: F E M A L E;
 
 FINAL: F I N A L;
 
@@ -110,9 +120,15 @@ INCLUDE: I N C L U D E;
 
 INITIAL: I N I T I A L;
 
+IS: I S;
+
 LANGUAGE: L A N G U A G E;
 
+LENGTH: L E N G T H;
+
 LESS: L E S S;
+
+MALE: M A L E;
 
 MEDIAL: M E D I A L;
 
@@ -130,11 +146,17 @@ PHONES: P H O N E S;
 
 PHONEX: P H O N E X;
 
+PMLU: P M L U;
+
 POSITION: P O S I T I O N;
+
+PPC: P P C;
 
 PRIMARY: P R I M A R Y;
 
 PROJECT: P R O J E C T;
+
+RECORDS: R E C O R D S;
 
 REGEX: R E G E X;
 
@@ -153,6 +175,8 @@ SHAPE: S H A P E;
 SESSION: S E S S I O N;
 
 SPEAKER: S P E A K E R;
+
+START: S T A R T;
 
 STRESS: S T R E S S;
 
