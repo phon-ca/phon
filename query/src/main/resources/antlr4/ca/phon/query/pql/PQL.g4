@@ -63,7 +63,7 @@ session_or_record_list
 	;
 
 session_list
-	:   session_name (COMMA session_name)   # SessionList
+	:   session_name (COMMA session_name)*   # SessionList
 	|   STAR DOT STAR                       # AllProjectSessions
 	;
 

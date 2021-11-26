@@ -17,7 +17,10 @@ public class TestPQL {
 	@Test
 	public void testSelectStatement() throws ParseException {
 		final String expr = """
-				SELECT IPATarget FROM *.* WHERE WORD { EQUALS STRESS PATTERN "AAA" }
+				SELECT IPATarget FROM "Anne.*"#1, 3, 5..10#
+				WHERE WORD {
+					EQUALS STRESS PATTERN "AAA"
+				}
 				""";
 		testExpr(expr);
 	}

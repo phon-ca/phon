@@ -27,6 +27,10 @@ public class PQLQuery {
 
 		PQL parser = new PQL(tokenStream);
 		PQL.StartContext ctx = parser.start();
+
+		PQLSessionCollector sessionCollector = new PQLSessionCollector();
+		ctx.accept(sessionCollector);
+
 		return new PQLQuery(pql, ctx);
 	}
 
