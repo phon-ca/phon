@@ -25,6 +25,7 @@ import java.util.stream.*;
 
 import javax.swing.*;
 
+import ca.phon.ui.action.PhonUIAction;
 import org.apache.commons.io.*;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.tools.debugger.*;
@@ -126,10 +127,16 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 		return this.scriptPanel;
 	}
 
+	@Override
+	public OpNode getOpNode() {
+		return this;
+	}
+
 	/**
 	 * Reload the input/output fields from the script.
 	 */
-	private void reloadFields() {
+	@Override
+	public void reloadFields() {
 		final PhonScript phonScript = getScript();
 		final PhonScriptContext scriptContext = phonScript.getContext();
 
@@ -242,7 +249,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 		scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
 		retVal.add(scriptScroller, BorderLayout.CENTER);
 
-		if(shouldShowEditor()) {
+		if(shouldShowDebug()) {
 			debugBox = new JCheckBox("Debug");
 			debugBox.setSelected(false);
 			debugBox.setToolTipText("Show debugger when executing this node");
@@ -259,28 +266,14 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 			act.putValue(DropDownButton.BUTTON_POPUP, editor);
 			act.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 			act.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-			
-			final DropDownButton showEditorBtn = new DropDownButton(act);
-			showEditorBtn.setOnlyPopup(true);
-			showEditorBtn.setToolTipText("Edit script");
-			showEditorBtn.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
-				if(!(Boolean)e.getNewValue()) {
-					try {
-						getScript().resetContext();
-						scriptPanel.updateParams();
-					} catch (PhonScriptException e1) {
-						Toolkit.getDefaultToolkit().beep();
-						LogUtil.severe(e1);
-					}
-				}
-			});
-			retVal.add(ButtonBarBuilder.buildOkCancelBar(showEditorBtn, debugBox), BorderLayout.SOUTH);
+
+			retVal.add(ButtonBarBuilder.buildOkBar(debugBox), BorderLayout.SOUTH);
 		}
 		
 		return retVal;
 	}
 	
-	private boolean shouldShowEditor() {
+	private boolean shouldShowDebug() {
 		return (CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor
 				|| PrefHelper.getBoolean("phon.debug", Boolean.FALSE));
 	}

@@ -25,7 +25,6 @@ import java.util.stream.*;
 
 import javax.swing.*;
 
-import org.fife.ui.rtextarea.*;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.tools.debugger.*;
 
@@ -44,7 +43,6 @@ import ca.phon.query.script.params.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.ui.*;
-import ca.phon.ui.action.*;
 import ca.phon.ui.layout.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
@@ -92,13 +90,28 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 		putField(scriptOutputField);
 		putField(paramsOutputField);
 
-		reloadFields();
+		try {
+			reloadFields();
+		} catch (PhonScriptException e) {
+			LogUtil.warning(e);
+		}
 
 		putExtension(NodeSettings.class, this);
 		putExtension(CanvasContextMenuExtension.class, this);
 	}
 
-	private void reloadFields() {
+	@Override
+	public OpNode getOpNode() {
+		return this;
+	}
+
+	@Override
+	public ScriptPanel getScriptPanel() {
+		return scriptPanel;
+	}
+
+	@Override
+	public void reloadFields() throws PhonScriptException {
 		final PhonScript phonScript = getScript();
 		final PhonScriptContext scriptContext = phonScript.getContext();
 
@@ -119,18 +132,15 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 		for(OutputField field:fixedOutputs) {
 			tempNode.putField(field);
 		}
-		try {
-			final Scriptable scope = scriptContext.getEvaluatedScope();
-			scriptContext.installParams(scope);
 
-			final InputFields inputFields = new InputFields(tempNode);
-			final OutputFields outputFields = new OutputFields(tempNode);
+		final Scriptable scope = scriptContext.getEvaluatedScope();
+		scriptContext.installParams(scope);
 
-			if(scriptContext.hasFunction(scope, "init", 2)) {
-				scriptContext.callFunction(scope, "init", inputFields, outputFields);
-			}
-		} catch (PhonScriptException e) {
-			LogUtil.severe( getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+		final InputFields inputFields = new InputFields(tempNode);
+		final OutputFields outputFields = new OutputFields(tempNode);
+
+		if(scriptContext.hasFunction(scope, "init", 2)) {
+			scriptContext.callFunction(scope, "init", inputFields, outputFields);
 		}
 
 		// check inputs
@@ -308,7 +318,13 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 
 	private ScriptPanel createScriptPanel() {
 		ScriptPanel retVal = new ScriptPanel(getScript());
-		retVal.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> reloadFields() );
+		retVal.addPropertyChangeListener(ScriptPanel.SCRIPT_PROP, e -> {
+			try {
+				reloadFields();
+			} catch (PhonScriptException ex) {
+				LogUtil.warning(ex);
+			}
+		});
 		
 		return retVal;		
 	}
@@ -321,7 +337,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 		scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
 		retVal.add(scriptScroller, BorderLayout.CENTER);
 
-		if(shouldShowEditor()) {
+		if(shouldShowDebug()) {
 			debugBox = new JCheckBox("Debug");
 			debugBox.setSelected(false);
 			debugBox.setToolTipText("Show debugger when executing this node");
@@ -337,29 +353,14 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 			act.putValue(DropDownButton.BUTTON_POPUP, editor);
 			act.putValue(DropDownButton.ARROW_ICON_GAP, 2);
 			act.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-			
-			final DropDownButton showEditorBtn = new DropDownButton(act);
-			showEditorBtn.setOnlyPopup(true);
-			showEditorBtn.setToolTipText("Edit script");
-			showEditorBtn.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
-				if(!(Boolean)e.getNewValue()) {
-					try {
-						getScript().resetContext();
-						scriptPanel.updateParams();
-						reloadFields();
-					} catch (PhonScriptException e1) {
-						Toolkit.getDefaultToolkit().beep();
-						LogUtil.severe(e1);
-					}
-				}
-			});
-			retVal.add(ButtonBarBuilder.buildOkCancelBar(showEditorBtn, debugBox), BorderLayout.SOUTH);
+
+			retVal.add(ButtonBarBuilder.buildOkBar(debugBox), BorderLayout.SOUTH);
 		}
 		
 		return retVal;
 	}
 	
-	private boolean shouldShowEditor() {
+	private boolean shouldShowDebug() {
 		return (CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor
 				|| PrefHelper.getBoolean("phon.debug", Boolean.FALSE));
 	}
@@ -424,7 +425,12 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 			addQueryLibrary();
 			if(scriptPanel != null)
 				scriptPanel.setScript(this.script);
-			reloadFields();
+			try {
+				reloadFields();
+			} catch (PhonScriptException e) {
+				LogUtil.warning(e);
+				return;
+			}
 
 			try {
 				final ScriptParameters scriptParams = getScript().getContext().getScriptParameters(
@@ -442,54 +448,8 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 		}
 	}
 
-	/* CanvasMenuExtension */
 	@Override
-	public void addContextMenuItems(JPopupMenu menu, GraphDocument document, MouseEvent me) {
-		// add edit script item
-		final PhonUIAction showEditorAct = new PhonUIAction(this, "showEditScriptWindow");
-		showEditorAct.putValue(PhonUIAction.NAME, "Edit script...");
-		showEditorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit script editor in new window.");
-		final JMenuItem showEditorItem = new JMenuItem(showEditorAct);
-		menu.add(showEditorItem);
+	public void addContextMenuItems(JPopupMenu jPopupMenu, GraphDocument graphDocument, MouseEvent mouseEvent) {
+
 	}
-	
-	public void showEditScriptWindow() {
-		final CommonModuleFrame cmf = new CommonModuleFrame("Edit Script : " + getName());
-		
-		// create editor
-		final RTextArea editor = ScriptEditorFactory.createEditorForScript(getScript(), false);
-		final RTextScrollPane scrollPane = new RTextScrollPane(editor);
-		
-		final PhonUIAction editOkAct = new PhonUIAction(this, "onCloseScript", editor);
-		editOkAct.putValue(PhonUIAction.NAME, "Ok");
-		editOkAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Finish editing and update script");
-		final JButton okBtn = new JButton(editOkAct);
-		okBtn.addActionListener( (e) -> {
-			getScript().setLength(0);
-			getScript().insert(0, editor.getText());
-			reloadFields();
-			
-			cmf.close();
-		});
-		
-		final PhonUIAction editCancelAct = new PhonUIAction(this, "onCloseScript");
-		editCancelAct.putValue(PhonUIAction.NAME, "Cancel");
-		editCancelAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cancel editing");
-		final JButton cancelBtn = new JButton(editCancelAct);
-		cancelBtn.addActionListener( (e) -> {
-			cmf.close();
-		});
-		
-		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(okBtn, cancelBtn);
-		
-		cmf.setLayout(new BorderLayout());
-		cmf.add(scrollPane, BorderLayout.CENTER);
-		cmf.add(buttonBar, BorderLayout.SOUTH);
-		cmf.pack();
-		cmf.setVisible(true);
-	}
-	
-	public void onCloseScript(PhonActionEvent pae) {
-	}
-	
 }

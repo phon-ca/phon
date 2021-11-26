@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.swing.*;
 
-import ca.phon.app.log.*;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.nodes.*;
 import ca.phon.app.opgraph.wizard.*;
@@ -41,8 +40,8 @@ import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.session.*;
-import ca.phon.session.Record;
 import ca.phon.ui.*;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
@@ -307,6 +306,12 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 	private QueryNodeSettingsPanel settingsPanel;
 	private ScriptPanel scriptPanel;
 	private QueryHistoryAndNameToolbar queryHistoryPanel;
+
+	public ScriptPanel getScriptPanel() { return scriptPanel; }
+
+	public OpNode getOpNode() { return this; }
+
+	public void reloadFields() throws PhonScriptException { }
 	
 	public QueryHistoryAndNameToolbar getQueryHistoryAndNameToolbar() {
 		return queryHistoryPanel;
@@ -324,43 +329,8 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 			JScrollPane scriptScroller = new JScrollPane(scriptPanel);
 			scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
 			settingsPanel.add(scriptScroller, BorderLayout.CENTER);
-			
-			if(shouldShowEditor()) {
-				final JComponent editor = ScriptEditorFactory.createEditorComponentForScript(scriptPanel.getScript());
-				final Action act = new AbstractAction() {
-					@Override
-					public void actionPerformed(ActionEvent e) {}
-				};
-				act.putValue(Action.NAME, "Edit script");
-				act.putValue(Action.SHORT_DESCRIPTION, "Show script editor");
-				act.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit", IconSize.SMALL));
-				act.putValue(DropDownButton.BUTTON_POPUP, editor);
-				act.putValue(DropDownButton.ARROW_ICON_GAP, 2);
-				act.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-				
-				final DropDownButton showEditorBtn = new DropDownButton(act);
-				showEditorBtn.setOnlyPopup(true);
-				showEditorBtn.setToolTipText("Edit script");
-				showEditorBtn.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
-					if(!(Boolean)e.getNewValue()) {
-						try {
-							scriptPanel.getScript().resetContext();
-							scriptPanel.updateParams();
-						} catch (PhonScriptException e1) {
-							Toolkit.getDefaultToolkit().beep();
-							LogUtil.severe(e1);
-						}
-					}
-				});
-				settingsPanel.add(ButtonBarBuilder.buildOkBar(showEditorBtn), BorderLayout.SOUTH);
-			}
 		}
 		return settingsPanel;
-	}
-	
-	private boolean shouldShowEditor() {
-		return (CommonModuleFrame.getCurrentFrame() instanceof OpgraphEditor
-				|| PrefHelper.getBoolean("phon.debug", Boolean.FALSE));
 	}
 
 	@Override

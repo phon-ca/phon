@@ -15,10 +15,18 @@
  */
 package ca.phon.app.opgraph.nodes;
 
+import ca.phon.app.query.ScriptPanel;
+import ca.phon.opgraph.OpNode;
 import ca.phon.script.*;
 
 public interface ScriptNode {
+
+	public OpNode getOpNode();
 	
 	public PhonScript getScript();
+
+	public ScriptPanel getScriptPanel();
+
+	public void reloadFields() throws PhonScriptException;
 
 }
