@@ -24,6 +24,7 @@ import javax.swing.*;
 import javax.swing.undo.*;
 
 import ca.phon.app.opgraph.library.*;
+import ca.phon.app.opgraph.nodes.ScriptNodeEditor;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.query.*;
 import ca.phon.opgraph.*;
@@ -34,6 +35,7 @@ import ca.phon.opgraph.app.edits.graph.*;
 import ca.phon.opgraph.app.extensions.*;
 import ca.phon.opgraph.extensions.*;
 import ca.phon.opgraph.library.*;
+import ca.phon.query.db.Script;
 import ca.phon.ui.jbreadcrumb.*;
 import ca.phon.util.*;
 
@@ -45,6 +47,8 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 	private Map<String, JComponent> viewMap;
 
 	private NodeSettingsPanel nodeSettingsPanel;
+
+	private OpgraphScriptEditor opgraphScriptEditor;
 
 	public static enum ViewLocation {
 		NORTH,
@@ -103,6 +107,7 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			viewMap.put("Connections", new JScrollPane(getNodeFieldsPanel()));
 			viewMap.put("Library", getLibraryView());
 			viewMap.put("Settings", getNodeSettings());
+			viewMap.put("Script Editor", getScriptNodeEditor());
 			viewMap.put("Outline", getGraphOutline());
 		}
 		return this.viewMap;
@@ -175,6 +180,13 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		return getViewMap().get(viewName);
 	}
 
+	public OpgraphScriptEditor getScriptNodeEditor() {
+		if(opgraphScriptEditor == null) {
+			opgraphScriptEditor = new OpgraphScriptEditor(getDocument());
+		}
+		return opgraphScriptEditor;
+	}
+
 	@Override
 	public GraphCanvas getCanvas() {
 		final GraphCanvas retVal = super.getCanvas();
@@ -218,6 +230,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal.setBounds(800, 0, 200, 200);
 			break;
 
+		case "Script Editor":
+			retVal.setBounds(800, 200, 200, 200);
+			break;
+
 		default:
 			retVal.setBounds(0, 0, 200, 200);
 			break;
@@ -257,6 +273,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal = ViewLocation.CENTER;
 			break;
 
+		case "Script Editor":
+			retVal = ViewLocation.WEST;
+			break;
+
 		case "Outline":
 			retVal = ViewLocation.WEST;
 			break;
@@ -294,6 +314,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			break;
 
 		case "Settings":
+			retVal = true;
+			break;
+
+		case "Script Editor":
 			retVal = true;
 			break;
 

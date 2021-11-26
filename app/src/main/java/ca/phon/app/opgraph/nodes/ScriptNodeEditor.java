@@ -3,15 +3,10 @@ package ca.phon.app.opgraph.nodes;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.ScriptEditorFactory;
 import ca.phon.script.*;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.nativedialogs.*;
-import org.apache.commons.logging.Log;
 import org.fife.ui.rtextarea.*;
-import org.mozilla.javascript.Script;
-import org.mozilla.javascript.typedarrays.NativeDataView;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -27,6 +22,8 @@ public class ScriptNodeEditor extends JPanel {
 
 	private volatile boolean hasChanges = false;
 
+	private JLabel currentNodeLabel;
+
 	private RTextArea editor;
 
 	private JTextArea errorArea;
@@ -41,6 +38,8 @@ public class ScriptNodeEditor extends JPanel {
 
 	private void init() {
 		setLayout(new BorderLayout());
+
+		currentNodeLabel = new JLabel();
 
 		editor = ScriptEditorFactory.createEditorForScript(new BasicScript(""), false);
 		final RTextScrollPane scrollPane = new RTextScrollPane(editor);
@@ -74,7 +73,7 @@ public class ScriptNodeEditor extends JPanel {
 		updateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Update script parameters, inputs and outputs");
 		updateButton = new JButton(updateAct);
 
-		final JComponent buttonBar = ButtonBarBuilder.buildOkBar(updateButton);
+		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(updateButton, currentNodeLabel);
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		bottomPanel.add(errorScroller, BorderLayout.CENTER);
@@ -85,17 +84,21 @@ public class ScriptNodeEditor extends JPanel {
 
 		addPropertyChangeListener("hasChanges", (e) -> {
 			if(this.updateButton != null)
-				this.updateButton.setEnabled(hasChanges);
+				this.updateButton.setEnabled(hasChanges && (scriptNode != null));
 		});
 		setHasChanges(false);
 
 		addPropertyChangeListener("scriptNode", (e) -> {
 			if(getScriptNode() == null) {
 				editor.setText("");
+				currentNodeLabel.setText("<html><i>No node selected</i></html>");
 			} else {
 				editor.setText(scriptNode.getScript().getScript());
 				editor.setCaretPosition(0);
+				currentNodeLabel.setText("<html>Current node: " + scriptNode.toOpNode().getName() + " (" + scriptNode.toOpNode().getId() + ")");
 			}
+			editor.discardAllEdits();
+
 			errorArea.setText("");
 			setHasChanges(false);
 		});
@@ -119,6 +122,14 @@ public class ScriptNodeEditor extends JPanel {
 		var oldVal = this.scriptNode;
 		this.scriptNode = scriptNode;
 		firePropertyChange("scriptNode", oldVal, scriptNode);
+	}
+
+	public String getText() {
+		return editor.getText();
+	}
+
+	public void setText(String text) {
+		editor.setText(text);
 	}
 
 	public void updateScript() {

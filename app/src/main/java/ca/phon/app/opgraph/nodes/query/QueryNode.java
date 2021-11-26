@@ -309,7 +309,7 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 
 	public ScriptPanel getScriptPanel() { return scriptPanel; }
 
-	public OpNode getOpNode() { return this; }
+	public OpNode toOpNode() { return this; }
 
 	public void reloadFields() throws PhonScriptException { }
 	

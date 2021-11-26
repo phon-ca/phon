@@ -128,7 +128,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 	}
 
 	@Override
-	public OpNode getOpNode() {
+	public OpNode toOpNode() {
 		return this;
 	}
 

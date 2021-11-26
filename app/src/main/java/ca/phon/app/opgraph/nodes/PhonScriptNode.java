@@ -101,7 +101,7 @@ public class PhonScriptNode extends OpNode implements NodeSettings, CanvasContex
 	}
 
 	@Override
-	public OpNode getOpNode() {
+	public OpNode toOpNode() {
 		return this;
 	}
 

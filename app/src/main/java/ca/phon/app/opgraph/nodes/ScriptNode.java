@@ -21,7 +21,7 @@ import ca.phon.script.*;
 
 public interface ScriptNode {
 
-	public OpNode getOpNode();
+	public OpNode toOpNode();
 	
 	public PhonScript getScript();
 
