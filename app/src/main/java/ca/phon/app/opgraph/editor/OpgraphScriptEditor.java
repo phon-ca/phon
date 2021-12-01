@@ -1,25 +1,59 @@
+/*
+ * Copyright (C) 2005-2021 Gregory Hedlund & Yvan Rose
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ *    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ca.phon.app.opgraph.editor;
 
 import ca.phon.app.opgraph.nodes.*;
 import ca.phon.opgraph.OpNode;
 import ca.phon.opgraph.app.GraphDocument;
-import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionListener;
-import ca.phon.query.db.Script;
+import ca.phon.opgraph.app.components.OpGraphTreeCellRenderer;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.*;
+import org.apache.commons.lang3.*;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class OpgraphScriptEditor extends JPanel {
 
-	private JComboBox<ScriptNode> scriptNodeBox;
-
-	private ScriptNodeEditor scriptNodeEditor;
-
 	private final GraphDocument graphDocument;
 
-	private final Map<ScriptNode, String> unsavedChanges = new LinkedHashMap<>();
+	private OpNode currentEditorNode = null;
+	private final Map<OpNode, ScriptNodeEditor> editorMap = new HashMap<>();
+
+	private JPanel topPanel;
+	private JButton updateButton;
+	private DropDownButton scriptTreeButton;
+	private JXTree scriptTree;
+	private JXLabel currentNodeLabel;
+
+	private JPanel cardPanel;
+	private CardLayout cardLayout;
+
+	private final static String NO_NODE_PANEL = "no_node_panel";
+	private JPanel noNodePanel;
 
 	public OpgraphScriptEditor(GraphDocument graphDocument) {
 		super();
@@ -31,86 +65,220 @@ public class OpgraphScriptEditor extends JPanel {
 	private void init() {
 		setLayout(new BorderLayout());
 
-		scriptNodeEditor = new ScriptNodeEditor();
+		cardLayout = new CardLayout();
+		cardPanel = new JPanel(cardLayout);
 
-		add(scriptNodeEditor, BorderLayout.CENTER);
+		GridBagConstraints gbc = new GridBagConstraints();
+		noNodePanel = new JPanel(new GridBagLayout());
+		noNodePanel.setPreferredSize(new Dimension(400, 0));
+		gbc.gridy = 0;
+		gbc.gridx = 0;
 
-		final ItemListener itemListener = new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					if(scriptNodeBox.getSelectedItem() != null && scriptNodeBox.getSelectedItem() != scriptNodeEditor.getScriptNode()) {
-						graphDocument.getSelectionModel().setSelectedNode(((ScriptNode)scriptNodeBox.getSelectedItem()).toOpNode());
-					}
-				}
-			}
-		};
+		JLabel noNodeLbl = new JLabel("No script node open");
+		noNodeLbl.setFont(noNodeLbl.getFont().deriveFont(Font.ITALIC));
+		noNodePanel.add(noNodeLbl, gbc);
 
-		scriptNodeBox = new JComboBox<>();
-		scriptNodeBox.setRenderer(new ScriptNodeCellRenderer());
-		scriptNodeBox.addItemListener(itemListener);
+		cardPanel.add(noNodePanel, NO_NODE_PANEL);
 
-		add(scriptNodeBox, BorderLayout.NORTH);
+		scriptTree = new JXTree();
+		ScriptEditorTreeModel treeModel = new ScriptEditorTreeModel(scriptTree, this.graphDocument.getRootGraph());
+		scriptTree.setModel(treeModel);
+		scriptTree.setCellRenderer(new ScriptTreeRenderer());
+		scriptTree.setVisibleRowCount(20);
+		scriptTree.setRootVisible(true);
+		scriptTree.addMouseListener(scriptTreeMouseHandler);
+		scriptTree.setScrollsOnExpand(true);
+		scriptTree.expandAll();
 
-		this.graphDocument.getSelectionModel().addSelectionListener(new GraphCanvasSelectionListener() {
+		JScrollPane scriptTreeScroller = new JScrollPane(scriptTree);
+		scriptTreeScroller.setPreferredSize(new Dimension(400, scriptTreeScroller.getPreferredSize().height));
 
-			@Override
-			public void nodeSelectionChanged(Collection<OpNode> oldSelection, Collection<OpNode> newSelection) {
-				if(scriptNodeEditor.getScriptNode() != null) {
-					if(scriptNodeEditor.hasChanges()
-						&& graphDocument.getSelectionModel().getSelectedNode() != scriptNodeEditor.getScriptNode().toOpNode()) {
-						unsavedChanges.put(scriptNodeEditor.getScriptNode(), scriptNodeEditor.getText());
-					} else {
-						unsavedChanges.remove(scriptNodeEditor.getScriptNode());
-					}
-				}
-				scriptNodeBox.removeItemListener(itemListener);
-				scriptNodeBox.removeAllItems();
-				if(newSelection.size() == 1) {
-					OpNode selectedNode = newSelection.iterator().next();
-					if(selectedNode instanceof ScriptNode && (scriptNodeEditor.getScriptNode() == null || selectedNode != scriptNodeEditor.getScriptNode().toOpNode())) {
-						scriptNodeBox.addItem((ScriptNode)selectedNode);
-						scriptNodeEditor.setScriptNode((ScriptNode) selectedNode);
-						if(unsavedChanges.get(scriptNodeEditor.getScriptNode()) != null) {
-							scriptNodeEditor.setText(unsavedChanges.get(scriptNodeEditor.getScriptNode()));
-							unsavedChanges.remove(scriptNodeEditor.getScriptNode());
-						}
-					} else {
-						scriptNodeEditor.setScriptNode(null);
-					}
-				} else {
-					scriptNodeEditor.setScriptNode(null);
-				}
+		final PhonUIAction dropDownAct = new PhonUIAction(this, "noop");
+		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
+		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, scriptTreeScroller);
+		dropDownAct.putValue(PhonUIAction.SMALL_ICON,
+				IconManager.getInstance().getIcon("opgraph/graph", IconSize.SMALL));
+		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show graph script editor tree");
+		scriptTreeButton = new DropDownButton(dropDownAct);
+		scriptTreeButton.setOnlyPopup(true);
 
-				unsavedChanges.keySet().forEach( (sn) -> {
-					if(sn == scriptNodeEditor.getScriptNode()) return;
-					scriptNodeBox.addItem(sn);
-				});
+		ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 
-				scriptNodeBox.setSelectedItem(scriptNodeEditor.getScriptNode());
-				scriptNodeBox.addItemListener(itemListener);
-			}
+		final PhonUIAction updateAct = new PhonUIAction(this, "updateCurrentEditor");
+		updateAct.putValue(PhonUIAction.NAME, "");
+		updateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Update script node with current text (F5)");
+		updateAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
+		updateButton = new JButton(updateAct);
+		updateButton.setEnabled(false);
 
-		});
+		currentNodeLabel = new JXLabel();
+		DropDownIcon nodeIcn = new DropDownIcon(IconManager.getInstance().getIcon("mimetypes/text-x-script", IconSize.SMALL), SwingConstants.BOTTOM);
+		currentNodeLabel.setIcon(nodeIcn);
+		currentNodeLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		currentNodeLabel.addMouseListener(scriptLabelMouseHandler);
+
+		topPanel = new JPanel(new GridBagLayout());
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.weightx = 0.0;
+		gbc.weighty = 0.0;
+		topPanel.add(updateButton, gbc);
+		gbc.insets = new Insets(0, 5, 0, 0);
+		++gbc.gridx;
+		topPanel.add(scriptTreeButton, gbc);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		++gbc.gridx;
+		topPanel.add(currentNodeLabel, gbc);
+
+		add(topPanel, BorderLayout.NORTH);
+		add(cardPanel, BorderLayout.CENTER);
+
+		updateButtonStates();
 	}
 
+	private void updateButtonStates() {
+		ScriptNodeEditor editor = currentEditor();
+		if(editor != null && editor.hasChanges()) {
+			updateButton.setEnabled(true);
+		} else {
+			updateButton.setEnabled(false);
+		}
+	}
 
-	private class ScriptNodeCellRenderer extends DefaultListCellRenderer {
+	private void updateLabel() {
+		ScriptNodeEditor currentEditor = currentEditor();
+		if(currentEditor != null) {
+			List<OpNode> nodePath = this.graphDocument.getRootGraph().getNodePath(this.currentEditorNode.getId());
+			String nodeAddr = nodePath.stream().map(OpNode::getName).collect(Collectors.joining("/"));
+			if(nodeAddr.length() > 256) {
+				nodeAddr = StringUtils.abbreviate(nodeAddr, nodeAddr.length() - 256, 256);
+			}
+			currentNodeLabel.setText(nodeAddr);
+			currentNodeLabel.setToolTipText(nodeAddr);
+		} else {
+			currentNodeLabel.setText("");
+		}
+	}
 
+	private ScriptNodeEditor currentEditor() {
+		if(currentEditorNode == null) return null;
+		return editorMap.get(currentEditorNode);
+	}
+
+	public void showScriptPopupMenu() {
+		JPopupMenu menu = new JPopupMenu();
+		MenuBuilder builder = new MenuBuilder(menu);
+		setupScriptPopupMenu(builder);
+		menu.show(currentNodeLabel, 0, currentNodeLabel.getHeight());
+	}
+
+	public void setupScriptPopupMenu(MenuBuilder builder) {
+		ScriptNodeEditor currentEditor = currentEditor();
+		for(OpNode node:editorMap.keySet()) {
+			ScriptNodeEditor editor = editorMap.get(node);
+
+			List<OpNode> nodePath = this.graphDocument.getRootGraph().getNodePath(node.getId());
+			String nodeAddr = nodePath.stream().map(OpNode::getName).collect(Collectors.joining("/"));
+
+			PhonUIAction act = new PhonUIAction(this, "onOpenScriptNode", node);
+			act.putValue(PhonUIAction.NAME, nodeAddr + (editor.hasChanges() ? " *" : ""));
+			act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open script for node " + node.getName());
+			act.putValue(PhonUIAction.SELECTED_KEY, editor == currentEditor);
+			builder.addItem(".", new JCheckBoxMenuItem(act));
+		}
+	}
+
+	public void updateCurrentEditor() {
+		ScriptNodeEditor editor = currentEditor();
+		if(editor != null && editor.hasChanges()) {
+			ScriptNodeEdit edit = new ScriptNodeEdit(editor);
+			this.graphDocument.getUndoSupport().postEdit(edit);
+		}
+	}
+
+	public void onOpenScriptNode(PhonActionEvent pae) {
+		openScriptNode((ScriptNode) pae.getData());
+	}
+
+	public void openScriptNode(ScriptNode scriptNode) {
+		ScriptNodeEditor currentEditor = currentEditor();
+		if(currentEditor != null) {
+			currentEditor.removePropertyChangeListener("hasChanges", changeListener);
+		}
+
+		if (!editorMap.containsKey(scriptNode)) {
+			ScriptNodeEditor editor = new ScriptNodeEditor();
+			editor.setScriptNode(scriptNode);
+
+			final PhonUIAction updateScriptAct = new PhonUIAction(this, "updateCurrentEditor");
+			editor.getActionMap().put("update_script", updateScriptAct);
+			editor.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+					.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "update_script");
+
+			editorMap.put(scriptNode.toOpNode(), editor);
+			cardPanel.add(editor, scriptNode.toOpNode().getId());
+		}
+		cardLayout.show(cardPanel, scriptNode.toOpNode().getId());
+		this.currentEditorNode = scriptNode.toOpNode();
+		editorMap.get(scriptNode.toOpNode()).addPropertyChangeListener("hasChanges", changeListener);
+		updateButtonStates();
+		updateLabel();
+	}
+
+	private class ScriptTreeRenderer extends OpGraphTreeCellRenderer {
 		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+			JLabel retVal = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-			if(value != null) {
-				ScriptNode scriptNode = (ScriptNode) value;
-				String text = scriptNode.toOpNode().getName() + " (" + scriptNode.toOpNode().getId() + ")";
-				text += (index == 0 && scriptNodeEditor.hasChanges() || index > 1 ? " *" : "");
-				retVal.setText(text);
+			if(value != null && value instanceof DefaultMutableTreeNode) {
+				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
+				if(treeNode.getUserObject() != null && treeNode.getUserObject() instanceof OpNode) {
+					OpNode node = (OpNode) treeNode.getUserObject();
+					if (leaf && editorMap.containsKey(node)) {
+						ScriptNodeEditor editor = editorMap.get(node);
+						if (editor.hasChanges())
+							retVal.setText(retVal.getText() + " *");
+					}
+				}
 			}
 
 			return retVal;
 		}
-
 	}
+
+	private final MouseInputAdapter scriptTreeMouseHandler = new MouseInputAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if(e.getClickCount() == 2) {
+				int row = scriptTree.getRowForLocation(e.getX(), e.getY());
+				if(row >= 0 && row < scriptTree.getRowCount()) {
+					TreePath treePath = scriptTree.getPathForRow(row);
+					if(treePath.getLastPathComponent() instanceof DefaultMutableTreeNode) {
+						DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+						if(treeNode.getUserObject() instanceof ScriptNode) {
+							openScriptNode((ScriptNode) treeNode.getUserObject());
+						}
+					}
+				}
+			}
+		}
+	};
+
+	private final MouseInputAdapter scriptLabelMouseHandler = new MouseInputAdapter() {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			showScriptPopupMenu();
+		}
+	};
+
+	private final PropertyChangeListener changeListener = (e) -> {
+		if(!"hasChanges".equals(e.getPropertyName())) return;
+		updateButtonStates();
+		updateLabel();
+	};
 
 }
