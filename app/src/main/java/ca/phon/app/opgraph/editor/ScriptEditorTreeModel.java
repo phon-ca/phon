@@ -195,6 +195,11 @@ public class ScriptEditorTreeModel extends DefaultTreeModel {
 		public void fieldRemoved(OpNode node, OutputField field) {
 		}
 
+		@Override
+		public void fieldRenamed(OpNode opNode, ContextualItem contextualItem) {
+
+		}
+
 	};
 
 	private final OpGraphListener graphListener = new OpGraphListener() {
