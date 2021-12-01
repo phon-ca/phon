@@ -16,7 +16,7 @@
 package ca.phon.app.opgraph.editor;
 
 import ca.phon.app.opgraph.nodes.*;
-import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.components.OpGraphTreeCellRenderer;
 import ca.phon.ui.*;
@@ -60,6 +60,7 @@ public class OpgraphScriptEditor extends JPanel {
 
 		this.graphDocument = graphDocument;
 		init();
+		this.graphDocument.getRootGraph().addGraphListener(graphListener);
 	}
 
 	private void init() {
@@ -157,7 +158,7 @@ public class OpgraphScriptEditor extends JPanel {
 			if(nodeAddr.length() > 256) {
 				nodeAddr = StringUtils.abbreviate(nodeAddr, nodeAddr.length() - 256, 256);
 			}
-			currentNodeLabel.setText(nodeAddr);
+			currentNodeLabel.setText(this.currentEditorNode.getName());
 			currentNodeLabel.setToolTipText(nodeAddr);
 		} else {
 			currentNodeLabel.setText("");
@@ -279,6 +280,45 @@ public class OpgraphScriptEditor extends JPanel {
 		if(!"hasChanges".equals(e.getPropertyName())) return;
 		updateButtonStates();
 		updateLabel();
+	};
+
+	private final OpGraphListener graphListener = new OpGraphListener() {
+		@Override
+		public void nodeAdded(OpGraph opGraph, OpNode opNode) {
+		}
+
+		@Override
+		public void nodeRemoved(OpGraph opGraph, OpNode opNode) {
+			ScriptNodeEditor currentEditor = currentEditor();
+			if(editorMap.containsKey(opNode)) {
+				ScriptNodeEditor removedEditor = editorMap.remove(opNode);
+				if(removedEditor == currentEditor) {
+					if(editorMap.keySet().size() > 0) {
+						openScriptNode((ScriptNode)editorMap.keySet().iterator().next());
+					} else {
+						cardLayout.show(cardPanel, NO_NODE_PANEL);
+						updateLabel();
+						updateButtonStates();
+					}
+				}
+			}
+		}
+
+		@Override
+		public void nodeSwapped(OpGraph opGraph, OpNode opNode, OpNode opNode1) {
+
+		}
+
+		@Override
+		public void linkAdded(OpGraph opGraph, OpLink opLink) {
+
+		}
+
+		@Override
+		public void linkRemoved(OpGraph opGraph, OpLink opLink) {
+
+		}
+
 	};
 
 }

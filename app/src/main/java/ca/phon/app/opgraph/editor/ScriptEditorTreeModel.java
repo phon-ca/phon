@@ -17,6 +17,7 @@
 package ca.phon.app.opgraph.editor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -114,7 +115,10 @@ public class ScriptEditorTreeModel extends DefaultTreeModel {
 	}
 
 	public void nodeWasAdded(OpGraph graph, OpNode node) {
-		final int nodeIdx = graph.getVertices().indexOf(node);
+		final int nodeIdx = graph.getVertices()
+				.stream().filter((v) -> v instanceof ScriptNode || v instanceof CompositeNode)
+				.collect(Collectors.toList()).indexOf(node);
+		if(nodeIdx < 0) return;
 
 		final DefaultMutableTreeNode parentNode = getMutableNode(graph);
 		final DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(node);
