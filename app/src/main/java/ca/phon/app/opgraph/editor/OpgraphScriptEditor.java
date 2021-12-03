@@ -158,7 +158,7 @@ public class OpgraphScriptEditor extends JPanel {
 			if(nodeAddr.length() > 256) {
 				nodeAddr = StringUtils.abbreviate(nodeAddr, nodeAddr.length() - 256, 256);
 			}
-			currentNodeLabel.setText(this.currentEditorNode.getName());
+			currentNodeLabel.setText(this.currentEditorNode.getName() + (currentEditor.hasChanges() ? " *" : ""));
 			currentNodeLabel.setToolTipText(nodeAddr);
 		} else {
 			currentNodeLabel.setText("");
@@ -209,6 +209,7 @@ public class OpgraphScriptEditor extends JPanel {
 		ScriptNodeEditor currentEditor = currentEditor();
 		if(currentEditor != null) {
 			currentEditor.removePropertyChangeListener("hasChanges", changeListener);
+			currentEditor.getScriptNode().toOpNode().removeNodeListener(nodeListener);
 		}
 
 		if (!editorMap.containsKey(scriptNode)) {
@@ -225,6 +226,7 @@ public class OpgraphScriptEditor extends JPanel {
 		}
 		cardLayout.show(cardPanel, scriptNode.toOpNode().getId());
 		this.currentEditorNode = scriptNode.toOpNode();
+		scriptNode.toOpNode().addNodeListener(nodeListener);
 		editorMap.get(scriptNode.toOpNode()).addPropertyChangeListener("hasChanges", changeListener);
 		updateButtonStates();
 		updateLabel();
@@ -319,6 +321,35 @@ public class OpgraphScriptEditor extends JPanel {
 
 		}
 
+	};
+
+	private final OpNodeListener nodeListener = new OpNodeAdapter() {
+		@Override
+		public void nodePropertyChanged(OpNode node, String propertyName, Object oldValue, Object newValue) {
+			if(propertyName.equals("name")) {
+				updateLabel();
+			}
+		}
+
+		@Override
+		public void fieldAdded(OpNode node, InputField field) {
+		}
+
+		@Override
+		public void fieldRemoved(OpNode node, InputField field) {
+		}
+
+		@Override
+		public void fieldAdded(OpNode node, OutputField field) {
+		}
+
+		@Override
+		public void fieldRemoved(OpNode node, OutputField field) {
+		}
+
+		@Override
+		public void fieldRenamed(OpNode node, ContextualItem field) {
+		}
 	};
 
 }
