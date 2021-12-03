@@ -49,7 +49,6 @@ public class ScriptEditorTreeModel extends DefaultTreeModel {
 				node.add(childNode);
 			} else if(childNode.getUserObject() instanceof CompositeNode) {
 				final OpGraph childGraph = ((CompositeNode)childNode.getUserObject()).getGraph();
-				childGraph.addGraphListener(graphListener);
 				setupTree(childNode, childGraph);
 				node.add(childNode);
 			}
